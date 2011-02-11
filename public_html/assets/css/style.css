@@ -1,0 +1,143 @@
+/*
+	960 Grid System ~ Text CSS.
+	Learn more ~ http://960.gs/
+
+	Licensed under GPL and MIT.
+*/
+
+/* `Basic HTML
+----------------------------------------------------------------------------------------------------*/
+
+body {
+	font: 13px/1.5 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+	background-color: #dbdcde;
+}
+a {
+	text-decoration: none;
+	color: #0077CC;
+}
+a:hover {
+	text-decoration: underline;
+}
+a:focus {
+	outline: 1px dotted;
+}
+
+hr {
+	border: 0 #ccc solid;
+	border-top-width: 1px;
+	clear: both;
+	height: 0;
+}
+
+/* `Headings
+----------------------------------------------------------------------------------------------------*/
+
+h1 {
+	font-size: 1.618em;
+}
+
+h2 {
+	font-size: 23px;
+}
+
+h3 {
+	font-size: 21px;
+}
+
+h4 {
+	font-size: 19px;
+}
+
+h5 {
+	font-size: 17px;
+}
+
+h6 {
+	font-size: 15px;
+}
+
+/* `Spacing
+----------------------------------------------------------------------------------------------------*/
+
+ol {
+	list-style: decimal;
+}
+
+ul {
+	list-style: disc;
+}
+
+li {
+	margin-left: 30px;
+}
+
+p,
+dl,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,dbdcde
+ol,
+ul,
+pre,
+table,
+address,
+fieldset {
+	margin-bottom: 20px;
+}
+
+#header {
+	background-color: #333738;
+	color: #fff;
+	padding: 0 1.618em;
+	margin: 0 -1em 1.618em -1em;
+}
+	#header h1 {
+		margin: 0.236em 0;
+	}
+.task {
+	display: block;
+	background-color: #fff;
+	color: #333;
+	text-decoration: none;
+	margin-bottom: 1.618em;
+	padding: 0.618em;
+	border: 1px solid #c5c5c5;
+	border-top-color: #ffffff;
+}
+	.task ul.tags li {
+		float: left;
+		list-style: none;
+		margin-left: 0;
+	}
+.title {
+	color: #0077CC;
+	font-size: 1.618em;
+}
+.title:hover {
+	text-decoration: underline;
+}
+.tag {
+	color: #333;
+	background-color: #fdfeff;
+	border-bottom: 1px solid #989898;
+	border-right: 1px solid #bababa;
+	padding: 0.236em;
+	list-style: none;
+}
+.ngo-name {
+	 	
+}
+/*
+4.236
+2.618
+1.618
+1
+0.618
+0.382
+0.236
+*/
