@@ -9,7 +9,9 @@
 ----------------------------------------------------------------------------------------------------*/
 
 body {
-	font: 13px/1.5 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+	font-family: 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+	font-size: 1em;
+	line-height: 1.6em;
 	background-color: #dbdcde;
 }
 a {
@@ -30,19 +32,21 @@ hr {
 	height: 0;
 }
 
+
 /* `Headings
 ----------------------------------------------------------------------------------------------------*/
-
-h1 {
-	font-size: 1.618em;
+h1, h2, h3, h4 {
+	font-weight: normal;
 }
 
 h2 {
-	font-size: 23px;
+	font-size: 1.618em;
+	margin-bottom: 1em;
 }
 
 h3 {
-	font-size: 21px;
+	font-size: 1.618em;
+	margin-bottom: 0.382em;
 }
 
 h4 {
@@ -75,30 +79,97 @@ li {
 p,
 dl,
 hr,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,dbdcde
 ol,
 ul,
 pre,
 table,
 address,
 fieldset {
-	margin-bottom: 20px;
+	margin-bottom: 1.618em;
 }
+
+/** Header **/
 
 #header {
 	background-color: #333738;
 	color: #fff;
 	padding: 0 1.618em;
-	margin: 0 -1em 1.618em -1em;
+	margin: 0 -1em 2.618em -1em;
 }
-	#header h1 {
-		margin: 0.236em 0;
-	}
+
+#header a {
+	color: #fff;
+}
+
+h1 {
+	/* The logo */
+	float: left;
+	font-size: 1em;
+	margin: 0.52em 1em 0.52em 0;
+	font-weight: bold;
+}
+	
+#header ul.nav {
+	float: left;
+	list-style: none;
+	margin: 0.382em;
+}
+
+#header ul.nav li
+{
+	float: left;
+	margin-left: 0;
+	margin-right: 0.618em;
+	
+}
+
+#header ul.nav li a
+{
+	display: block;
+	float: left;
+	padding: 0.146em 0.382em;
+	color: #333738;
+	background-color: #ccc;
+}
+
+#header ul.nav li a.active {
+	background-color: #fff;
+}
+
+#header ul.nav li a:hover {
+	background-color: #fff;
+}
+
+#header-right {
+	float: right;
+} 
+
+#tagline {
+	background-color: #fff;
+	clear:both;
+	color: #333;
+	font-size: 1em;
+    margin: 0 -1.618em;
+    padding: 1em 1.618em;
+}
+
+/** Footer **/
+#footer {
+	padding: 1.618em 1.618em;
+	margin: 2.618em -1em 0 -1em;
+	color: #555;
+	background-color: #efefef;
+}
+
+/** Stream View **/
+ul.tags {
+	list-style: none;
+}
+
+ul.tags li {
+	margin-left: 0;
+
+}
 .task {
 	display: block;
 	background-color: #fff;
@@ -109,30 +180,54 @@ fieldset {
 	border: 1px solid #c5c5c5;
 	border-top-color: #ffffff;
 }
-	.task ul.tags li {
-		float: left;
-		list-style: none;
-		margin-left: 0;
+	.task ul.tags {
+		min-height: 1.618em;
+		margin-bottom: 0;
 	}
-.title {
+	.task ul.tags li {
+		/*float: left;*/
+		display: inline;
+		margin-right: 0.236em;
+	}
+	.task p {
+		margin-bottom: 0.618em;
+	}
+h3.title {
 	color: #0077CC;
-	font-size: 1.618em;
 }
-.title:hover {
-	text-decoration: underline;
+.details {
+	float: right;
+}
+.time_since {
+	color: #888;
 }
 .tag {
-	color: #333;
+    background-color: #E0EAF1;
+    border-bottom: 1px solid #3E6D8E;
+    border-right: 1px solid #7F9FB6;
+    color: #3E6D8E;
+
+	/*
 	background-color: #fdfeff;
+	color: #333;
 	border-bottom: 1px solid #989898;
 	border-right: 1px solid #bababa;
+	*/
+	
 	padding: 0.236em;
 	list-style: none;
+	font-size: 0.8em;
 }
-.ngo-name {
-	 	
+.tag:hover {
+    background-color: #3E6D8E;
+    border-bottom: 1px solid #37607D;
+    border-right: 1px solid #37607D;
+    color: #E0EAF1;
+	/*text-decoration: none;*/
 }
+
 /*
+Ratios used:
 4.236
 2.618
 1.618
