@@ -20,7 +20,7 @@ class RosettaSmarty extends Smarty {
 	 */
 	public function display($template, $cache_id = null, $compile_id = null, $parent = null)
 	{
-		if ($this->db->ANALYSE_QUERIES)
+		if (isset($this->db) && $this->db->ANALYSE_QUERIES)
 		{
 			echo '.'.$this->db->RECORDED_EXPLAINS.'.';
 		}
