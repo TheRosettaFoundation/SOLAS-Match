@@ -1,6 +1,20 @@
 {include file="header.inc.tpl"}
 	<div class="grid_8">
-		<h2 class="section_top">Contribute</h2>
+		{if isset($tasks)}
+			<h2 class="section_top">Translation Tasks</h2>
+			{foreach from=$tasks item=task name=tasks_loop}
+				<div class="task">
+					<h3><a href="">{$task->title()}</a></h3>
+					<p class="details">
+						<span class="time_since">X days ago</span> <a href="">PeopleOrg</a>
+					</p>
+					<ul class="tags">
+						
+					</ul>
+				</div>
+			{/foreach}
+		{/if}
+	
 
 		<div class="task">
 			<h3><a href="#">Our Mission. Relieve poverty, support healthcar…</a></h3>
@@ -71,7 +85,6 @@
 		</div>
 	</div>
 	<div id="sidebar" class="grid_4">
-		<h2>Tags</h2>
 		<ul class="tags">
 			<li><a class="tag" href="tag-to-russian.html">To Russian</a> x 2</li>
 			<li><a class="tag" href="tag-to-russian.html">To Hindi</a></li>

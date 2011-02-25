@@ -1,17 +1,19 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT'].'/../library/MySQLHandler.class.php');
+require($_SERVER['DOCUMENT_ROOT'].'/../library/Stream.class.php');
+require($_SERVER['DOCUMENT_ROOT'].'/../library/Task.class.php');
 
 class RosettaSmarty extends Smarty {
 	var $set;
 	var $db;
+	var $sream;
 	
 	function initRosettaSmarty()
 	{
 		$this->set = new Settings();
-		/*
+		$this->stream = new Stream($this);
 		$this->db = new MySQLHandler();
 		$this->db->init();
-		*/
 	}
 	
 	/*

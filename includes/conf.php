@@ -1,13 +1,15 @@
 <?php
 
+/** TODO add conf.php to version control, and add a template version instead */
+
 /** Database **/
 $db = array();
-$db['database'] = '';
+$db['database'] = 'rosettaplatform';
 $db['server'] = 'localhost';
-$db['username'] = '';
-$db['password'] = '';
+$db['username'] = 'urosetta';
+$db['password'] = 'rTMnEJwFJZMmJEhU';
 $db['show_errors'] = 'y';
-$db['show_sql'] = 'y';
+$db['show_sql'] = 'n';
 $db['log_file'] = '';
 $db['analyse_queries'] = 'n';
 
