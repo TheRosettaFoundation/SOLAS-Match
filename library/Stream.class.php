@@ -27,4 +27,12 @@ class Stream
 	{
 		return $this->s->tasks->getLatestTasks($nb_items);
 	}
+	
+	/*
+	 * Return the list of (open) tasks that are tagged with a specific tag.
+	 */
+	public function getTaggedStream($tag_id, $nb_items)
+	{
+		return $this->s->tasks->getTaggedTasks($tag_id, $nb_items);
+	}
 }

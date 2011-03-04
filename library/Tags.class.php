@@ -98,7 +98,7 @@ class Tags
 	 */
 	function url($tag_id)
 	{
-		return '/tags/'.intval($tag_id).'/';		
+		return '/tag/'.intval($tag_id).'/';		
 	}
 	
 	/*

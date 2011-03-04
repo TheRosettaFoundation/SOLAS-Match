@@ -58,4 +58,31 @@ class Tasks
 		}
 		return $ret;
 	}
+	
+	/*
+	 * Return an array of tasks that are tagged with a certain tag.
+	 */
+	public function getTaggedTasks($tag_id, $nb_items = 10)
+	{
+		$ret = false;
+		$q = 'SELECT id
+				FROM task
+				WHERE id IN (
+					SELECT task_id
+					FROM task_tag
+					WHERE tag_id = '.intval($tag_id).'
+				) 
+				ORDER BY created_time DESC 
+				LIMIT '.$this->s->db->cleanse($nb_items);
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = array();
+			foreach($r as $row)
+			{
+				// Add a new Job object to the array to be returned.
+				$ret[] = new Task($this->s, $row['id']);
+			}
+		}
+		return $ret;
+	}
 }
