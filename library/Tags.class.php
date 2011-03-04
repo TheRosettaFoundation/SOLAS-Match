@@ -24,7 +24,7 @@ class Tags
 			{
 				$tag = trim($tag);
 				// Ask the database what the ID is by searching for the tag's text label
-				if ($tag_id = $this->getTagID($tag))
+				if ($tag_id = $this->tagIDFromLabel($tag))
 				{
 					$tag_ids[] = $tag_id;
 				}
@@ -43,7 +43,7 @@ class Tags
 		return $tag_ids;		
 	}
 	
-	function getTagID($label)
+	function tagIDFromLabel($label)
 	{
 		$ret = false;
 		$q = 'SELECT id
@@ -57,7 +57,7 @@ class Tags
 		return $ret;
 	}
 	
-	function getLabel($tag_id)
+	function label($tag_id)
 	{
 		$ret = false;
 		$q = 'SELECT label
@@ -93,10 +93,20 @@ class Tags
 	}
 	
 	/*
+	 * For a given tag, return its URL.
+	 */
+	function url($tag_id)
+	{
+		return '/tags/'.intval($tag_id).'/';		
+	}
+	
+	/*
 	 * Return the HTML to represent a tag.
 	 */
 	function tagHTML($tag_id)
 	{
-		return $this->getLabel($tag_id);
+		$label = $this->label($tag_id);
+		$url = $this->url($tag_id);
+		return '<a class="tag" href="'.$url.'"><span class="label">'.$label.'</span></a>';
 	}
 }

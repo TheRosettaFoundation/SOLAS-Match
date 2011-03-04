@@ -11,8 +11,8 @@
 					{assign var="tag_ids" value=$task->tagIDs()}
 					{if $tag_ids}
 						<ul class="tags">
-							{foreach from=tag_ids item=tag_id}
-								{$s->tags->tagHTML($tag_id)}hi
+							{foreach from=$tag_ids item=tag_id}
+								<li>{$s->tags->tagHTML($tag_id)}</a>
 							{/foreach}
 						</ul>
 					{/if}
