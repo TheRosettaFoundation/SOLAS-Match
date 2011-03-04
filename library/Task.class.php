@@ -33,13 +33,29 @@ class Task
 	function title()
 	{
 		$ret = '';
-		$q = 'SELECT content
+		$q = 'SELECT title
 				FROM task
 				WHERE id = '.$this->s->db->cleanse($this->id);
 		if ($r = $this->s->db->Select($q))
 		{
-			$text = $r[0]['content'];
-			return $text;
+			$text = $r[0]['title'];
+			$ret = $text;
+		}
+		return $ret;
+	}
+	
+	/*
+	 * Return the unix time stamp of when this task was created.
+	 */
+	function createdTime()
+	{
+		$ret = '';
+		$q = 'SELECT created_time
+				FROM task
+				WHERE id = '.$this->s->db->cleanse($this->id);
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = strtotime($r[0]['created_time']); // Converting to unix time string 
 		}
 		return $ret;
 	}

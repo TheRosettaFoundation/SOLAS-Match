@@ -10,7 +10,7 @@
 <body>
 <div class="container_12"><!-- setting up a grid of 12 columns -->
 	<div id="header" class="grid_12">
-		<h1>Rosetta Platform</h1>
+		<h1><a href="/">Rosetta Platform</a></h1>
 		<div id="header-right">
 			<a href="#">Log in</a>
 		</div>

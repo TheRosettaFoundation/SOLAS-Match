@@ -12,14 +12,14 @@ class Tasks
 		$this->s = &$smarty;
 	}
 
-	function create($content, $organisation_id, $tags)
+	function create($title, $organisation_id, $tags)
 	{
 		$ret = false;
-		$i = array();
-		$i['content'] = '\''.$this->s->db->cleanse($content).'\'';
-		$i['organisation_id'] = intval($organisation_id);
-		$i['created_time'] = 'NOW()';
-		if ($task_id = $this->s->db->Insert('task', $i))
+		$task = array();
+		$task['title'] = '\''.$this->s->db->cleanse($title).'\'';
+		$task['organisation_id'] = intval($organisation_id);
+		$task['created_time'] = 'NOW()';
+		if ($task_id = $this->s->db->Insert('task', $task))
 		{
 			$ret = $task_id;
 			// The task has been created. Now save what it was tagged with.
@@ -28,11 +28,11 @@ class Tasks
 				// We now have an array of tag_ids related to this task. Save this information to the datbase.
 				foreach ($tag_ids as $tag_id)
 				{
-					$i = array();
-					$i['task_id'] = intval($task_id);
-					$i['tag_id'] = intval($tag_id);
-					$i['created_time'] = 'NOW()';
-					$this->s->db->Insert('task_tag', $i);
+					$task_tag = array();
+					$task_tag['task_id'] = intval($task_id);
+					$task_tag['tag_id'] = intval($tag_id);
+					$task_tag['created_time'] = 'NOW()';
+					$this->s->db->Insert('task_tag', $task_tag);
 				}
 			// todo, now test if it's working!
 			}

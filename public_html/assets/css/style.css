@@ -12,7 +12,12 @@ body {
 	font-family: 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
 	font-size: 1em;
 	line-height: 1.6em;
-	background-color: #dbdcde;
+	background-color: /*#dbdcde*/#e9f0ff;
+}
+textarea {
+	font-family: 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+	font-size: 1em;
+	line-height: 1.2em;
 }
 a {
 	text-decoration: none;
@@ -179,6 +184,7 @@ ul.tags li {
 	padding: 0.618em;
 	border: 1px solid #c5c5c5;
 	border-top-color: #ffffff;
+	min-height: 4em;
 }
 	.task ul.tags {
 		min-height: 1.618em;
@@ -254,7 +260,7 @@ label {display: block; font-size: 1.5em; line-height: 1.618em; margin-top: 0.618
 input[type="text"], input[type="password"] {border:1px solid #CCCCCC; font-size:1.5em; width: 23em;  padding: 0.3em;}
 input[type="submit"] {border:1px solid #CCCCCC; background-color: #ffb13e; font-size:1.5em; padding: 0.3em 1.618em; margin-bottom: 0.618em;}
 input[type="submit"]:hover {background-color: #ff9c0a;}
-textarea { width: 23em;}
+textarea { width: 22em; font-size: 1.618em;}
 input:focus {border-width: 1px;border-style: solid;border-color: #aaa /*#008c00*/;}
 .input_translation:focus {border-top: 1px solid #e59e06; background-color: #FDF9C1;}
 .input_definition:focus {background-color: #DAFDCF;}

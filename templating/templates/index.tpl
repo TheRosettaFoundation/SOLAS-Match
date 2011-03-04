@@ -4,9 +4,9 @@
 			<h2 class="section_top">Translation Tasks</h2>
 			{foreach from=$tasks item=task name=tasks_loop}
 				<div class="task">
-					<h3><a href="">{$task->title()}</a></h3>
+					<h3><a href="{$task->url()}">{$task->title()}</a></h3>
 					<p class="details">
-						<span class="time_since">X days ago</span> <a href="">{$task->organisation()}</a>
+						<span class="time_since">{$s->io->timeSince($task->createdTime())} ago</span> <a href="">{$task->organisation()}</a>
 					</p>
 					{assign var="tag_ids" value=$task->tagIDs()}
 					{if $tag_ids}
@@ -19,7 +19,7 @@
 				</div>
 			{/foreach}
 		{/if}
-
+<!--
 		<div class="task">
 			<h3><a href="#">Our Mission. Relieve poverty, support healthcar…</a></h3>
 			<p class="details">
@@ -34,7 +34,6 @@
 			</ul>
 		</div>
 
-<!--
 		<div class="task">
 			<h3><a href="#">Our Mission. Relieve poverty, support healthcar…</a></h3>
 			<p class="details">
@@ -46,8 +45,7 @@
 				<li><a class="tag" href="tag-to-russian.html"></a></li>
 			</ul>
 		</div>
--->
-
+		
 		<div class="task">
 			<h3><a href="#">We are a registered charity, and a large enviro…</a></h3>
 			<p class="details">
@@ -87,6 +85,8 @@
 				<li><a class="tag" href="tag-to-russian.html">informal</a></li>
 			</ul>
 		</div>
+
+-->
 	</div>
 	<div id="sidebar" class="grid_4">
 		<p><a href="/mockup/pm.create-task.php">+ New task</a></p>

@@ -3,8 +3,8 @@
 		<h2>Create task</h2>
 		<form method="POST" action="/process/pm.create-task.php">
 			<fieldset>
-				<label for="content">Task Content</label>
-				<textarea name="content" id="content"></textarea>
+				<label for="content">Title</label>
+				<textarea wrap="hard" cols="1" rows="2" name="title"></textarea>
 				<label for="tags">Tags</label>
 				<input type="text" name="tags" id="tags">
 				<label for="organisation_id">Organisation</label>
