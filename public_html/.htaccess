@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^task/([0-9]+)/$ pages/task.php?task_id=$1

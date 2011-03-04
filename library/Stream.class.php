@@ -25,20 +25,6 @@ class Stream
 	
 	public function getGlobalStream($nb_items = 10)
 	{
-		$ret = false;
-		$q = 'SELECT id
-				FROM task
-				ORDER BY time_created DESC 
-				LIMIT '.$this->s->db->cleanse($nb_items);
-		if ($r = $this->s->db->Select($q))
-		{
-			$ret = array();
-			foreach($r as $row)
-			{
-				// Add a new Job object to the array to be returned.
-				$ret[] = new Task($this->s, $row['id']);
-			}
-		}
-		return $ret;
+		return $this->s->tasks->getLatestTasks($nb_items);
 	}
 }

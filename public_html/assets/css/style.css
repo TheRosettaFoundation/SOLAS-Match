@@ -202,29 +202,67 @@ h3.title {
 	color: #888;
 }
 .tag {
+    -moz-border-radius: 3px 3px 3px 3px;
+    background: none repeat scroll 0 0 #D0DBED;
+    border: 1px solid #BAC8E6;
+    color: #000000;
+    height: 1em;
+    line-height: 1em;
+    margin: 1px;
+    outline: medium none;
+    vertical-align: top;
+}
+
+.tag .label {
+    font-size: 0.8em;
+    height: 1em;
+    padding: 0 0.236em;
+    vertical-align: top;
+}
+/*
     background-color: #E0EAF1;
     border-bottom: 1px solid #3E6D8E;
     border-right: 1px solid #7F9FB6;
     color: #3E6D8E;
-
+	padding: 0.236em;
+	list-style: none;
+	font-size: 0.8em;
+*/
 	/*
+	OLD
 	background-color: #fdfeff;
 	color: #333;
 	border-bottom: 1px solid #989898;
 	border-right: 1px solid #bababa;
 	*/
 	
-	padding: 0.236em;
-	list-style: none;
-	font-size: 0.8em;
-}
 .tag:hover {
     background-color: #3E6D8E;
     border-bottom: 1px solid #37607D;
     border-right: 1px solid #37607D;
     color: #E0EAF1;
-	/*text-decoration: none;*/
+	text-decoration: none;
 }
+
+/***** Forms ****/
+form {width: 100%;}
+fieldset {margin: 0 0 2.618em 0;padding: 1em;border: 1px solid #ccc;background-color:#fff;}
+fieldset h3 {margin-top: 0.618em;}
+label {display: block; font-size: 1.5em; line-height: 1.618em; margin-top: 0.618em;}
+	.small_checkbox label {display: inline; font-size: 1em;}
+	label.radio {display: inline;}
+input[type="text"], input[type="password"] {border:1px solid #CCCCCC; font-size:1.5em; width: 23em;  padding: 0.3em;}
+input[type="submit"] {border:1px solid #CCCCCC; background-color: #ffb13e; font-size:1.5em; padding: 0.3em 1.618em; margin-bottom: 0.618em;}
+input[type="submit"]:hover {background-color: #ff9c0a;}
+textarea { width: 23em;}
+input:focus {border-width: 1px;border-style: solid;border-color: #aaa /*#008c00*/;}
+.input_translation:focus {border-top: 1px solid #e59e06; background-color: #FDF9C1;}
+.input_definition:focus {background-color: #DAFDCF;}
+input#headword:focus {background-color: #DAFDCF; border-top: 1px solid #23980A;}
+select {font-size: 1em;}
+p.desc {margin: -1.5em 0 1.5em 0;font-size: 85%;color: #AAAAAA;}
+.required {font-weight: bold; margin-left:-0.7em; color: #870000;}
+p.radio label {clear: right;}
 
 /*
 Ratios used:

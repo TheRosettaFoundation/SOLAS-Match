@@ -1,0 +1,102 @@
+<?php
+
+class Tags
+{
+	var $s;
+	function Tags(&$smarty)
+	{
+		$this->s = &$smarty;
+	}
+	
+	/*
+		Take a string typed in by the user, try to break it up and create tags from it.
+		Returns an array of matching tag_ids.
+		Basic format is that items are comma-delimited.
+	*/
+	function parse($str)
+	{
+		$tag_ids = false;
+		$str = $this->s->io->cleanseInput($str);
+		if ($tags = explode(',', $str))
+		{
+			$tag_ids = array();
+			foreach($tags as $tag)
+			{
+				$tag = trim($tag);
+				// Ask the database what the ID is by searching for the tag's text label
+				if ($tag_id = $this->getTagID($tag))
+				{
+					$tag_ids[] = $tag_id;
+				}
+				else
+				{
+					// Create this tag, and return its ID.
+					$i = array();
+					$i['label'] = '\''.$this->s->db->cleanse($tag).'\'';
+					if ($tag_id = $this->s->db->Insert('tag', $i))
+					{
+						$tag_ids[] = $tag_id;
+					}
+				}
+			}
+		}
+		return $tag_ids;		
+	}
+	
+	function getTagID($label)
+	{
+		$ret = false;
+		$q = 'SELECT id
+				FROM tag
+				WHERE label = \''.$this->s->db->cleanse($label).'\'
+				LIMIT 1';
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = $r[0]['id'];
+		}
+		return $ret;
+	}
+	
+	function getLabel($tag_id)
+	{
+		$ret = false;
+		$q = 'SELECT label
+				FROM tag
+				WHERE id = '.intval($tag_id).'
+				LIMIT 1';
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = $r[0]['label'];
+		}
+		return $ret;
+	}
+	
+	/*
+	 * Return an array of tag_ids related to a certain task.
+	 * Return false if nothing found.
+	 */
+	function taskTagIDs($task_id)
+	{
+		$ret = false;
+		$q = 'SELECT tag_id
+				FROM task_tag
+				WHERE task_id = '.intval($task_id);
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = array();
+			foreach($r as $row)
+			{
+				$ret[] = $row['tag_id'];
+			}
+		}
+		return $ret;
+	}
+	
+	/*
+	 * Return the HTML to represent a tag.
+	 */
+	function tagHTML($tag_id)
+	{
+		return $this->getLabel($tag_id);
+	}
+}

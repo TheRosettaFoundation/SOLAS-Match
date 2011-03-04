@@ -16,6 +16,11 @@ class Task
 		$this->setTaskID($task_id);
 	}
 	
+	function isInit()
+	{
+		return ( isset($this->id) && (intval($this->id)>0) );
+	}
+	
 	function setTaskID($task_id)
 	{
 		$this->id = intval($task_id);
@@ -28,14 +33,46 @@ class Task
 	function title()
 	{
 		$ret = '';
-		$q = 'SELECT text
+		$q = 'SELECT content
 				FROM task
 				WHERE id = '.$this->s->db->cleanse($this->id);
 		if ($r = $this->s->db->Select($q))
 		{
-			$text = $r[0]['text'];
+			$text = $r[0]['content'];
 			return $text;
 		}
-		return ret;
+		return $ret;
+	}
+	
+	private function organisationID()
+	{
+		$ret = '';
+		$q = 'SELECT organisation_id
+				FROM task
+				WHERE id = '.$this->s->db->cleanse($this->id);
+		if ($r = $this->s->db->Select($q))
+		{
+			$text = $r[0]['organisation_id'];
+			return $text;
+		}
+		return $ret;	
+	}
+	
+	/*
+		Return the string of the organisation's name who owns this task.
+	*/
+	function organisation()
+	{
+		return $this->s->orgs->name($this->organisationID());
+	}
+	
+	function url()
+	{
+		return '/task/'.$this->id.'/';
+	}
+
+	function tagIDs()
+	{
+		return $this->s->tags->taskTagIDs($this->id);
 	}
 }

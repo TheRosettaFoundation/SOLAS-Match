@@ -1,12 +1,20 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT'].'/../library/MySQLHandler.class.php');
+require($_SERVER['DOCUMENT_ROOT'].'/../library/IO.class.php');
+require($_SERVER['DOCUMENT_ROOT'].'/../library/Organisations.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Stream.class.php');
+require($_SERVER['DOCUMENT_ROOT'].'/../library/Tags.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Task.class.php');
+require($_SERVER['DOCUMENT_ROOT'].'/../library/Tasks.class.php');
 
 class RosettaSmarty extends Smarty {
 	var $set;
 	var $db;
-	var $sream;
+	var $io;
+	var $orgs;
+	var $stream;
+	var $tags;
+	var $tasks;
 	
 	function initRosettaSmarty()
 	{
@@ -14,6 +22,10 @@ class RosettaSmarty extends Smarty {
 		$this->stream = new Stream($this);
 		$this->db = new MySQLHandler();
 		$this->db->init();
+		$this->io = new IO($this);
+		$this->orgs = new Organisations($this);
+		$this->tags = new Tags($this);
+		$this->tasks = new Tasks($this);
 	}
 	
 	/*

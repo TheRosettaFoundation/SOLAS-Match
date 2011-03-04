@@ -6,15 +6,19 @@
 				<div class="task">
 					<h3><a href="">{$task->title()}</a></h3>
 					<p class="details">
-						<span class="time_since">X days ago</span> <a href="">PeopleOrg</a>
+						<span class="time_since">X days ago</span> <a href="">{$task->organisation()}</a>
 					</p>
-					<ul class="tags">
-						
-					</ul>
+					{assign var="tag_ids" value=$task->tagIDs()}
+					{if $tag_ids}
+						<ul class="tags">
+							{foreach from=tag_ids item=tag_id}
+								{$s->tags->tagHTML($tag_id)}hi
+							{/foreach}
+						</ul>
+					{/if}
 				</div>
 			{/foreach}
 		{/if}
-	
 
 		<div class="task">
 			<h3><a href="#">Our Mission. Relieve poverty, support healthcar…</a></h3>
@@ -22,11 +26,11 @@
 				<span class="time_since">1 day ago</span> <a href="#">PeopleOrg</a>
 			</p>
 			<ul class="tags">
-				<li><a class="tag" href="tag-to-russian.html">To Russian</a></li>
-				<li><a class="tag" href="tag-to-russian.html">From English</a></li>
-				<li><a class="tag" href="tag-to-russian.html">review</a></li>
-				<li><a class="tag" href="tag-to-russian.html">special olympics</a></li>
-				<li><a class="tag" href="tag-to-russian.html">informal</a></li>
+				<li><a class="tag" href="tag-to-russian.html"><span class="label">To Russian</span></a></li>
+				<li><a class="tag" href="tag-to-russian.html"><span class="label">From English</span></a></li>
+				<li><a class="tag" href="tag-to-russian.html"><span class="label">review</span></a></li>
+				<li><a class="tag" href="tag-to-russian.html"><span class="label">special olympics</span></a></li>
+				<li><a class="tag" href="tag-to-russian.html"><span class="label">informal</span></a></li>
 			</ul>
 		</div>
 
@@ -85,6 +89,8 @@
 		</div>
 	</div>
 	<div id="sidebar" class="grid_4">
+		<p><a href="/mockup/pm.create-task.php">+ New task</a></p>
+
 		<ul class="tags">
 			<li><a class="tag" href="tag-to-russian.html">To Russian</a> x 2</li>
 			<li><a class="tag" href="tag-to-russian.html">To Hindi</a></li>
