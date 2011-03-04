@@ -5,7 +5,7 @@
 			<fieldset>
 				<label for="content">Title</label>
 				<textarea wrap="hard" cols="1" rows="2" name="title"></textarea>
-				<label for="tags">Tags</label>
+				<label for="tags">Tags &ndash; separated by spaces</label>
 				<input type="text" name="tags" id="tags">
 				<label for="organisation_id">Organisation</label>
 				{assign var="organisation_ids" value=$s->orgs->organisationIDs()}

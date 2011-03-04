@@ -17,7 +17,8 @@ class Tags
 	{
 		$tag_ids = false;
 		$str = $this->s->io->cleanseInput($str);
-		if ($tags = explode(',', $str))
+		$str = str_replace(',', ' ', $str);
+		if ($tags = explode(' ', $str)) // Space is the delimiter
 		{
 			$tag_ids = array();
 			foreach($tags as $tag)
@@ -108,5 +109,28 @@ class Tags
 		$label = $this->label($tag_id);
 		$url = $this->url($tag_id);
 		return '<a class="tag" href="'.$url.'"><span class="label">'.$label.'</span></a>';
+	}
+	
+	/*
+	 * Return an array of (label, frequency) of tags, ordered by most frequent at top.
+	*/
+	function topTags($limit = 30)
+	{
+		$ret = false;
+		$q = 'SELECT tag_id, COUNT(tag_id) AS frequency
+				FROM task_tag
+				GROUP BY tag_id
+				ORDER BY frequency DESC
+				LIMIT '.intval($limit);
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = array();
+			foreach ($r as $row)
+			{
+				$ret[] = array('tag_id' => $row['tag_id'],
+								'frequency' => $row['frequency']);			
+			}
+		}
+		return $ret;
 	}
 }

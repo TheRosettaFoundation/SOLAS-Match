@@ -90,23 +90,16 @@
 	</div>
 	<div id="sidebar" class="grid_4">
 		<p><a href="/mockup/pm.create-task.php">+ New task</a></p>
-
-		<ul class="tags">
-			<li><a class="tag" href="tag-to-russian.html">To Russian</a> x 2</li>
-			<li><a class="tag" href="tag-to-russian.html">To Hindi</a></li>
-			<li><a class="tag" href="tag-to-russian.html">To English</a></li>
-			<li><a class="tag" href="tag-to-russian.html">From English</a> x 3</li>
-			<li><a class="tag" href="tag-to-russian.html">From French</a></li>
-		</ul>
-		<ul class="tags">
-			<li><a class="tag" href="tag-to-russian.html">translate</a> x 3</li>
-			<li><a class="tag" href="tag-to-russian.html">review</a></li>
-		</ul>
-		<ul class="tags">
-			<li><a class="tag" href="tag-to-russian.html">special olympics</a> x 2</li>
-			<li><a class="tag" href="tag-to-russian.html">informal</a> x 2</li>
-			<li><a class="tag" href="tag-to-russian.html">medical</a></li>
-			<li><a class="tag" href="tag-to-russian.html">inhouse</a></li>
-		</ul>
+		{if $top_tags}
+			<ul class="tags">
+				{foreach from=$top_tags item=tag_freq}
+					<li>{$s->tags->tagHTML($tag_freq.tag_id)}
+					{if $tag_freq.frequency > 1}
+					 x {$tag_freq.frequency}
+					{/if}
+					</li>
+				{/foreach}
+			</ul>
+		{/if}
 	</div>
 {include file="footer.inc.tpl"}

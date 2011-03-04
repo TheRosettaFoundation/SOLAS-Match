@@ -13,5 +13,5 @@ $task_id = $s->tasks->create($title, $organisation_id, $tags);
 $task = new Task($s, $task_id);
 
 // Forward the person to the task page.
-Header('Location: '.$task->url());
+Header('Location: /');
 die;

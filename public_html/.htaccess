@@ -1,2 +1,5 @@
 RewriteEngine On
 RewriteRule ^task/([0-9]+)/$ pages/task.php?task_id=$1
+
+# Redirect old page that was emailed out.
+Redirect 301 /mockup/index.html http://193.1.97.45:83/ 
