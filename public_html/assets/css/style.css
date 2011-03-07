@@ -201,7 +201,7 @@ ul.tags li {
 h3.title {
 	color: #0077CC;
 }
-.details {
+.task_details {
 	float: right;
 }
 .time_since {
@@ -269,6 +269,17 @@ select {font-size: 1em;}
 p.desc {margin: -1.5em 0 1.5em 0;font-size: 85%;color: #AAAAAA;}
 .required {font-weight: bold; margin-left:-0.7em; color: #870000;}
 p.radio label {clear: right;}
+
+/** Task Page **/
+body.task_page .task_content { 
+	background-color: #fff;
+	color: #333;
+	text-decoration: none;
+	margin-bottom: 1.618em;
+	padding: 0.618em;
+	border: 1px solid #c5c5c5;
+	border-top-color: #ffffff;
+}
 
 /*
 Ratios used:

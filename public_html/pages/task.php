@@ -14,4 +14,5 @@ if (!$task->isInit())
 }
 
 $s->assign('task', $task);
+$s->assign('body_class', 'task_page');
 $s->display('task.tpl');
