@@ -2,13 +2,15 @@
 	<div class="grid_8">
 		<h2>Create task</h2>
 		<form method="post" action="/process/pm.create-task.php" enctype="multipart/form-data">
+			{assign var='max_upload_file_size' value=$s->setting('files.max_upload_file_size')}
+			<input type="hidden" name="MAX_FILE_SIZE" value="{$max_upload_file_size}">
 			<fieldset>
 				<label for="content">Descriptive Title</label>
 				<textarea wrap="hard" cols="1" rows="2" name="title"></textarea>
 				
-				<p><label for="file">File to be translated</label>  
-				<input type="file" name="file" id="file"></p>
-				<p class="desc">Can be anything, even a .zip collection of files.</p>  
+				<p><label for="original_file">File to be translated</label>  
+				<input type="file" name="original_file" id="original_file"></p>
+				<p class="desc">Can be anything, even a .zip collection of files. Max file size {round($max_upload_file_size/1024, 1)}MB.</p>  
 						
 				<p><label for="tags">Tags</label>
 				<input type="text" name="tags" id="tags"></p>

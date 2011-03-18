@@ -6,6 +6,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/../library/Stream.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Tags.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Task.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Tasks.class.php');
+require($_SERVER['DOCUMENT_ROOT'].'/../library/URL.class.php');
 
 class RosettaSmarty extends Smarty {
 	var $set;
@@ -15,6 +16,7 @@ class RosettaSmarty extends Smarty {
 	var $stream;
 	var $tags;
 	var $tasks;
+	var $url;
 	
 	function initRosettaSmarty()
 	{
@@ -26,6 +28,7 @@ class RosettaSmarty extends Smarty {
 		$this->orgs = new Organisations($this);
 		$this->tags = new Tags($this);
 		$this->tasks = new Tasks($this);
+		$this->url = new URL($this);
 	}
 	
 	/*

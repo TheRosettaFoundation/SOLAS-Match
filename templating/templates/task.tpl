@@ -1,6 +1,6 @@
 {include file="header.inc.tpl"}
 <div class="grid_8 task_content">
-	<h2><a href="{$task->url()}">{$task->title()}</a></h2>
+	<h2>{$task->title()}</h2>
 	
 	<p class="details">
 		<span class="time_since">{$s->io->timeSince($task->createdTime())} ago</span> {$task->organisation()}

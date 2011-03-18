@@ -12,7 +12,7 @@ body {
 	font-family: 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
 	font-size: 1em;
 	line-height: 1.6em;
-	background-color: /*#dbdcde*/#e9f0ff;
+	background-color: /*#dbdcde*//*#e9f0ff*/#fffff7;
 }
 textarea {
 	font-family: 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
@@ -266,7 +266,7 @@ input:focus {border-width: 1px;border-style: solid;border-color: #aaa /*#008c00*
 .input_definition:focus {background-color: #DAFDCF;}
 input#headword:focus {background-color: #DAFDCF; border-top: 1px solid #23980A;}
 select {font-size: 1em;}
-p.desc {margin: -1.5em 0 1.5em 0;font-size: 85%;color: #AAAAAA;}
+p.desc {margin: -1.8em 0 1.5em 0;font-size: 85%;color: #AAAAAA;}
 .required {font-weight: bold; margin-left:-0.7em; color: #870000;}
 p.radio label {clear: right;}
 
