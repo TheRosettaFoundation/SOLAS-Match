@@ -5,6 +5,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/../library/Organisations.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Stream.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Tags.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Task.class.php');
+require($_SERVER['DOCUMENT_ROOT'].'/../library/TaskFile.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Tasks.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/URL.class.php');
 

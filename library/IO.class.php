@@ -104,7 +104,7 @@ class IO {
 	 * The file has been specified in a form element <input type="file" name="myfile">
 	 * We access that file through PHP's $_FILES array.
 	 */
-	function saveUploadedFile($myfile)
+	function saveUploadedFile($myfile, $org_id, $task_id)
 	{
 		/* 
 		 * Right now we're assuming that there's one file, but I think it can also be
@@ -113,9 +113,14 @@ class IO {
 		$ret = false;
 		if ($_FILES[$myfile]['error'] == UPLOAD_ERR_OK)
 		{
-			$uploaddir = $this->s->setting('files.upload_path'); // end in a trailing slash
-			$uploadfile = $uploaddir . basename($_FILES[$myfile]['name']);		
-			$ret = (move_uploaded_file($_FILES[$myfile]['tmp_name'], $uploadfile));
+			// Save this original file to upload_path/org-N/task-N
+			$uploaddir = $this->s->setting('files.upload_path').'org-'.intval($org_id).DIRECTORY_SEPARATOR.'task-'.intval($task_id);
+			if (mkdir($uploaddir, 0755, true))
+			{
+				$uploadfile = $uploaddir.DIRECTORY_SEPARATOR.basename($_FILES[$myfile]['name']);		
+				$ret = (move_uploaded_file($_FILES[$myfile]['tmp_name'], $uploadfile));
+				$this->s->tasks->recordUploadedFile($task_id, $uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
+			}
 		}
 		return $ret;
 	}

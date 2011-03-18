@@ -6,6 +6,7 @@
 require($_SERVER['DOCUMENT_ROOT'].'/../includes/smarty.php');
 $task_id = $s->io->get('task_id');
 $task = new Task($s, $task_id);
+$task_files = $task->files();
 
 if (!$task->isInit())
 {
@@ -14,5 +15,9 @@ if (!$task->isInit())
 }
 
 $s->assign('task', $task);
+if ($task_files)
+{
+	$s->assign('task_files', $task_files);
+}
 $s->assign('body_class', 'task_page');
 $s->display('task.tpl');

@@ -50,7 +50,8 @@ h2 {
 }
 
 h3 {
-	font-size: 1.618em;
+	font-size: 1em;
+	font-weight: bold;
 	margin-bottom: 0.382em;
 }
 
@@ -280,7 +281,7 @@ body.task_page .task_content {
 	border: 1px solid #c5c5c5;
 	border-top-color: #ffffff;
 }
-
+body.task_page .task_content h2 {margin-bottom: 0;} 
 /*
 Ratios used:
 4.236

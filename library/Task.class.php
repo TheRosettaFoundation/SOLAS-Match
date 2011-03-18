@@ -91,4 +91,25 @@ class Task
 	{
 		return $this->s->tags->taskTagIDs($this->id);
 	}
+	
+	/*
+	 * Return an array of TaskFile objects, or false if none found.
+	 */
+	function files()
+	{
+		$ret = false;
+		$q = 'SELECT *
+				FROM task_file
+				WHERE task_id = '.$this->s->db->cleanse($this->id);
+		if ($r = $this->s->db->Select($q))
+		{
+			$task_files = array();
+			foreach($r as $row)
+			{
+				$task_files[] = new TaskFile($this->s, $this->id, $row['file_id']);
+			}
+			$ret = $task_files;
+		}
+		return $ret;
+	}
 }

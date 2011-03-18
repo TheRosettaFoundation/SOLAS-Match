@@ -13,14 +13,12 @@
 			{/foreach}
 		</ul>
 	{/if}
-		
-	<form>
-		<input type="submit" value="Download to translate"> (no functionality)
-	</form>
 	
-	<form>
-		<input type="submit" value="Upload translated"> (no functionality)
-	</form>
-	
+	{if isset($task_files)}
+		{foreach from=$task_files item=task_file}
+			<h3>{$task_file->filename()}</h3>
+			<p><a href="{$task_file->url()}">Download the file to tranlate it.</a></p>
+		{/foreach}
+	{/if}	
 </div>
 {include file="footer.inc.tpl"}
