@@ -202,6 +202,10 @@ class MySQLHandler {
 				{
 					$ret = $result;
 				}
+				else
+				{
+					$ret = true;
+				}
 		  	}
 		}
 		return $ret;

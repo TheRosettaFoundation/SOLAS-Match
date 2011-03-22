@@ -85,17 +85,4 @@ class Tasks
 		}
 		return $ret;
 	}
-	
-	public function recordUploadedFile($task_id, $path, $filename, $content_type)
-	{
-		$ret = false;
-		$task_file = array();
-		$task_file['task_id'] = intval($task_id);
-		$task_file['path'] = '\''.$this->s->db->cleanse($path).'\'';
-		$task_file['filename'] = '\''.$this->s->db->cleanse($filename).'\'';
-		$task_file['content_type'] = '\''.$this->s->db->cleanse($content_type).'\'';
-		$task_file['user_id'] = 'NULL';
-		$task_file['upload_time'] = 'NOW()';
-		$this->s->db->Insert('task_file', $task_file);
-	}
 }

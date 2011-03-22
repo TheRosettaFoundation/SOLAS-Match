@@ -113,18 +113,80 @@ class IO {
 		$ret = false;
 		if ($_FILES[$myfile]['error'] == UPLOAD_ERR_OK)
 		{
-			// Save this original file to upload_path/org-N/task-N
-			$uploaddir = $this->s->setting('files.upload_path').'org-'.intval($org_id).DIRECTORY_SEPARATOR.'task-'.intval($task_id);
-			if (mkdir($uploaddir, 0755, true))
+			// Save this original file to upload_path/org-N/task-N/v-N
+			$uploaddir = TaskFile::absolutePath($this->s, $org_id, $task_id);
+			if ($this->saveUploadedFileToFS($uploaddir, $myfile))
 			{
-				$uploadfile = $uploaddir.DIRECTORY_SEPARATOR.basename($_FILES[$myfile]['name']);		
-				$ret = (move_uploaded_file($_FILES[$myfile]['tmp_name'], $uploadfile));
-				$this->s->tasks->recordUploadedFile($task_id, $uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
+				$task = new Task($this->s, $task_id);
+				$ret = $task->recordUploadedFile($uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
 			}
 		}
 		return $ret;
 	}
 	
+	/*
+	 * For a named filename, save file that have been uploaded by form submission.
+	 * The file has been specified in a form element <input type="file" name="myfile">
+	 * We access that file through PHP's $_FILES array.
+	 */
+	function saveUploadedEditedFile($myfile, &$task_file)
+	{
+		/* 
+		 * Right now we're assuming that there's one file, but I think it can also be
+		 * an array of multiple files.
+		 */
+		$ret = false;
+		if ($_FILES[$myfile]['error'] == UPLOAD_ERR_OK)
+		{
+			// Save this original file to upload_path/org-N/task-N/v-N
+			$version = $task_file->nextVersion();
+			$uploaddir = TaskFile::absolutePath($this->s, $task_file->organisationID(), $task_file->taskID(), $version);
+			if ($this->saveUploadedFileToFS($uploaddir, $myfile))
+			{
+				$ret = $task_file->recordNewlyUploadedVersion($version, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
+				//$task = new Tasks($this->s, $task_id);
+				//$ret = $task->recordUploadedFile($uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
+			}
+		}
+		return $ret;
+	}
+	
+	/*
+	 * $files_file is the name of the parameter of the file we want to access
+	 * in the $_FILES global array.
+	 */
+	private function saveUploadedFileToFS($uploaddir, $files_file)
+	{
+		$ret = false;
+		if ((is_dir($uploaddir)) ? true : mkdir($uploaddir, 0755, true))
+		{
+			$uploadfile = $uploaddir.DIRECTORY_SEPARATOR.basename($_FILES[$files_file]['name']);		
+			$ret = (move_uploaded_file($_FILES[$files_file]['tmp_name'], $uploadfile));
+		}
+		return $ret;
+	}
+	
+	/*
+	 * Pass a requested file back to the browser
+	 */
+	function downloadOriginalFile($absoluteFilePath, $contentType)
+	{
+		if ($fd = fopen ($absoluteFilePath, "r")) {
+			$fsize = filesize($absoluteFilePath);
+			$path_parts = pathinfo($absoluteFilePath);
+			$ext = strtolower($path_parts["extension"]);
+			header('Content-type: '.$contentType);
+			header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
+			header("Content-length: $fsize");
+			header("Cache-control: private"); //use this to open files directly
+			while(!feof($fd)) {
+				$buffer = fread($fd, 2048);
+				echo $buffer;
+			}
+		}
+		fclose ($fd);
+		return;
+	}
 	/*
 	function sendEmail($recipient, $subject, $body)
 	{
@@ -158,5 +220,4 @@ class IO {
 		}
 	}
 	*/
-	
 }

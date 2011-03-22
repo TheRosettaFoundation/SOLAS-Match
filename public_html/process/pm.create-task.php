@@ -14,7 +14,10 @@ $task_id = $s->tasks->create($title, $organisation_id, $tags);
 $task = new Task($s, $task_id);
 
 // Save the file
-$s->io->saveUploadedFile('original_file', $organisation_id, $task_id);
+if (!$s->io->saveUploadedFile('original_file', $organisation_id, $task_id))
+{
+	echo "Failed to upload file :("; die;
+}
 
 // Forward the person to the task page.
 Header('Location: /');

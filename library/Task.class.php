@@ -15,7 +15,7 @@ class Task
 		$this->s = &$smarty;
 		$this->setTaskID($task_id);
 	}
-	
+
 	function isInit()
 	{
 		return ( isset($this->id) && (intval($this->id)>0) );
@@ -60,18 +60,17 @@ class Task
 		return $ret;
 	}
 	
-	private function organisationID()
+	function organisationID()
 	{
-		$ret = '';
+		$ret = false;
 		$q = 'SELECT organisation_id
 				FROM task
-				WHERE id = '.$this->s->db->cleanse($this->id);
+				WHERE id ='.$this->s->db->cleanse($this->id);
 		if ($r = $this->s->db->Select($q))
 		{
-			$text = $r[0]['organisation_id'];
-			return $text;
+			$ret = $r[0]['organisation_id'];
 		}
-		return $ret;	
+		return $ret;		
 	}
 	
 	/*
@@ -84,12 +83,35 @@ class Task
 	
 	function url()
 	{
-		return '/task/'.$this->id.'/';
+		return $this->s->url->server().'/task/'.$this->id.'/';
 	}
 
 	function tagIDs()
 	{
 		return $this->s->tags->taskTagIDs($this->id);
+	}
+
+	function taskID()
+	{
+		return $this->id;		
+	}
+
+	public function recordUploadedFile($path, $filename, $content_type)
+	{
+		$ret = false;
+		$task_file = array();
+		$task_file['task_id'] = intval($this->taskID());
+		$task_file['path'] = '\''.$this->s->db->cleanse($path).'\'';
+		$task_file['filename'] = '\''.$this->s->db->cleanse($filename).'\'';
+		$task_file['content_type'] = '\''.$this->s->db->cleanse($content_type).'\'';
+		$task_file['user_id'] = 'NULL';
+		$task_file['upload_time'] = 'NOW()';
+		if ($file_id = $this->s->db->Insert('task_file', $task_file))
+		{
+			$task_file = new TaskFile($this->s, $this->taskID(), $file_id);
+			$ret = $task_file->recordNewlyUploadedVersion($task_file->nextVersion(), $filename, $content_type);
+		}
+		return $ret;
 	}
 	
 	/*
