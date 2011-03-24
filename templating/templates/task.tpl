@@ -17,14 +17,18 @@
 	
 			{if isset($task_files)}
 				{foreach from=$task_files item=task_file}
-					<h3>{$task_file->filename()}</h3>
+					<h3>{$task_file->filename(0)}</h3>
 					<ul>
-						<li><a href="{$task_file->url()}">Download the file to translate it.</a></li>
 						{assign var="times_downloaded" value=$task_file->timesDownloaded()}
 						{if $times_downloaded == 1}
-							<li><span class="time_since">Downloaded one time.</li>
+							<li><span class="time_since">Downloaded one time.</span></li>
 						{else if $times_downloaded > 1}
-							<li><span class="time_since">Downloaded {$times_downloaded} times.</li>
+							<li><span class="time_since">Downloaded {$times_downloaded} times.</span></li>
+						{/if}
+						{assign var="latest_version" value=$task_file->latestVersion()}
+						<li><em>Volunteers:</em> <a href="{$task_file->url()}">Download the file to translate it.</a></li>
+						{if $latest_version > 0}
+							<li><em>NGO:</em> <a href="{$task_file->urlVersion($latest_version)}">Download the latest translation.</a></li>
 						{/if}
 					</ul>
 					

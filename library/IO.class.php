@@ -140,12 +140,11 @@ class IO {
 		{
 			// Save this original file to upload_path/org-N/task-N/v-N
 			$version = $task_file->nextVersion();
+		echo "$version";
 			$uploaddir = TaskFile::absolutePath($this->s, $task_file->organisationID(), $task_file->taskID(), $version);
 			if ($this->saveUploadedFileToFS($uploaddir, $myfile))
 			{
 				$ret = $task_file->recordNewlyUploadedVersion($version, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
-				//$task = new Tasks($this->s, $task_id);
-				//$ret = $task->recordUploadedFile($uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
 			}
 		}
 		return $ret;
@@ -169,7 +168,7 @@ class IO {
 	/*
 	 * Pass a requested file back to the browser
 	 */
-	function downloadOriginalFile($absoluteFilePath, $contentType)
+	function downloadFile($absoluteFilePath, $contentType)
 	{
 		if ($fd = fopen ($absoluteFilePath, "r")) {
 			$fsize = filesize($absoluteFilePath);

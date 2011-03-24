@@ -6,9 +6,10 @@ require($_SERVER['DOCUMENT_ROOT'].'/../includes/smarty.php');
 
 $task_id = intval($s->io->get('task_id'));
 $file_id = intval($s->io->get('file_id'));
+$version_id = intval($s->io->get('version_id'));
 
 $task_file = new TaskFile($s, $task_id, $file_id);
-$s->io->downloadOriginalFile($task_file->absoluteFilePath(), $task_file->contentType());
-$task_file->recordDownload(0);
+$s->io->downloadFile($task_file->absoluteFilePath($version_id), $task_file->contentType($version_id));
+$task_file->recordDownload($version_id);
 
 die;

@@ -29,9 +29,9 @@ class TaskFile
 		return $task->organisationID();
 	}
 	
-	function absoluteFilePath()
+	function absoluteFilePath($version = 0)
 	{
-		return TaskFile::absolutePath($this->s, $this->organisationId(), $this->task_id).DIRECTORY_SEPARATOR.$this->filename();
+		return TaskFile::absolutePath($this->s, $this->organisationId(), $this->task_id, $version).DIRECTORY_SEPARATOR.$this->filename($version);
 	}
 	
 	static function absolutePath(&$s, $org_id, $task_id, $version = 0)
@@ -55,20 +55,31 @@ class TaskFile
 		 * more user friendly than that.
 		 */
 		$ret = 0; // Default (first) version is 0.
-		$q = 'SELECT max(version_id) as next_version
+		$latest_version = $this->latestVersion();
+		if ($latest_version !== false)
+		{
+			$ret = $latest_version + 1;
+		}
+		return $ret;
+	}
+	
+	function latestVersion()
+	{
+		$ret = false;
+		$q = 'SELECT max(version_id) as latest_version
 		 		FROM task_file_version
 		 		WHERE task_id ='.$this->s->db->cleanse($this->taskID()).'
 		 		AND file_id ='.$this->s->db->cleanse($this->fileID());
 		if ($r = $this->s->db->Select($q))
 		{
-			if ($r[0]['next_version'] != null)
+			if ($r[0]['latest_version'] != null)
 			{
-				$ret = intval($r[0]['next_version'])+1;
+				$ret = intval($r[0]['latest_version']);
 			}
 		}
 		return $ret;
 	}
-	
+		
 	function timesDownloaded()
 	{
 		$ret = 0;
@@ -113,13 +124,14 @@ class TaskFile
 	 * Check in the database the stored content type of this file.
 	 * Return false if not found.
 	 */
-	function contentType()
+	function contentType($version)
 	{
 		$ret = false;
 		$q = 'SELECT content_type
-				FROM task_file
+				FROM task_file_version
 				WHERE task_id = '.$this->s->db->cleanse($this->task_id).'
-				AND file_id = '.$this->s->db->cleanse($this->file_id);
+				AND file_id = '.$this->s->db->cleanse($this->file_id).'
+				AND version_id ='.$this->s->db->cleanse($version);
 		if ($r = $this->s->db->Select($q))
 		{
 			$ret = $r[0]['content_type'];			
@@ -127,13 +139,14 @@ class TaskFile
 		return $ret;
 	}
 	
-	function filename()
+	function filename($version)
 	{
 		$ret = false;
 		$q = 'SELECT filename
-				FROM task_file
+				FROM task_file_version
 				WHERE task_id = '.$this->s->db->cleanse($this->task_id).'
-				AND file_id = '.$this->s->db->cleanse($this->file_id);
+				AND file_id = '.$this->s->db->cleanse($this->file_id).'
+				AND version_id ='.$this->s->db->cleanse($version);
 		if ($r = $this->s->db->Select($q))
 		{
 			$ret = $r[0]['filename'];
@@ -147,5 +160,10 @@ class TaskFile
 	function url()
 	{
 		return '/process/download.task_file.php?task_id='.$this->task_id.'&file_id='.$this->file_id; // Not secure and should be improved.
+	}
+	
+	function urlVersion($version)
+	{
+		return '/process/download.task_file.php?task_id='.$this->task_id.'&file_id='.$this->file_id.'&version_id='.intval($version); // Not secure and should be improved.
 	}
 }

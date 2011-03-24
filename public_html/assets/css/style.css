@@ -171,11 +171,10 @@ h1 {
 ul.tags {
 	list-style: none;
 }
-
 ul.tags li {
 	margin-left: 0;
-
 }
+.tag-frequency {font-size: 0.8em;}
 .task {
 	display: block;
 	background-color: #fff;
@@ -217,14 +216,14 @@ h3.title {
     line-height: 1em;
     margin: 1px;
     outline: medium none;
-    vertical-align: top;
+    vertical-align: text-middle;
 }
 
 .tag .label {
     font-size: 0.8em;
     height: 1em;
     padding: 0 0.236em;
-    vertical-align: top;
+    vertical-align: text-top;
 }
 /*
     background-color: #E0EAF1;
@@ -281,9 +280,12 @@ body.task_page .task_content {
 	border: 1px solid #c5c5c5;
 	border-top-color: #ffffff;
 }
-body.task_page .task_content h2 {margin-bottom: 0;} 
+.task_content h2 {margin-bottom: 0;}
+body.task_page h2 {margin-bottom: 1em;} 
+body.task_page p.details {margin-bottom: 0;}
+
+/** Ratios used **/
 /*
-Ratios used:
 4.236
 2.618
 1.618
