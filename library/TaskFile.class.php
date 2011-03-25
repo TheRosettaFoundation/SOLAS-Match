@@ -139,7 +139,7 @@ class TaskFile
 		return $ret;
 	}
 	
-	function filename($version)
+	function filename($version = 0)
 	{
 		$ret = false;
 		$q = 'SELECT filename

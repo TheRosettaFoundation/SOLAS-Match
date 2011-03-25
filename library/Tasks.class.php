@@ -12,12 +12,16 @@ class Tasks
 		$this->s = &$smarty;
 	}
 
-	function create($title, $organisation_id, $tags)
+	function create($title, $organisation_id, $tags, $word_count)
 	{
 		$ret = false;
 		$task = array();
 		$task['title'] = '\''.$this->s->db->cleanse($title).'\'';
 		$task['organisation_id'] = intval($organisation_id);
+		if ($word_count)
+		{
+			$task['word_count'] = intval($word_count);	
+		}
 		$task['created_time'] = 'NOW()';
 		if ($task_id = $this->s->db->Insert('task', $task))
 		{

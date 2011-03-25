@@ -121,6 +121,13 @@ class IO {
 				$ret = $task->recordUploadedFile($uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
 			}
 		}
+		else if ($_FILES[$myfile]['error'] == UPLOAD_ERR_FORM_SIZE)
+		{
+			echo 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.<br />';
+			echo '<pre>';
+			print_r($_FILES);
+			echo '</pre>';
+		}
 		return $ret;
 	}
 	

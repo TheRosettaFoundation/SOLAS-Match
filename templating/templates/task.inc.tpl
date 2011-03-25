@@ -12,4 +12,18 @@
 			{/foreach}
 		</ul>
 	{/if}
+
+	{assign var="wordcount" value=$task->wordcount()}
+	{if $wordcount}
+		
+		{$wordcount|number_format} words
+	{/if}
+	
+	{assign var="task_files" value=$task->files()}
+	{if $task_files}
+		{foreach from=$task_files item=task_file}
+			&middot; {$task_file->filename()}
+		{/foreach}
+	{/if}
+	
 </div>

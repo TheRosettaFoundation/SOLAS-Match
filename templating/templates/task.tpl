@@ -34,7 +34,6 @@
 					
 					<form method="post" action="/process/upload.edited_file.php" enctype="multipart/form-data">
 						{assign var='max_upload_file_size' value=$s->setting('files.max_upload_file_size')}
-						<input type="hidden" name="MAX_FILE_SIZE" value="{$max_upload_file_size}">
 						<input type="hidden" name="task_id" value="{$task_file->taskID()}">
 						<input type="hidden" name="file_id" value="{$task_file->fileID()}">
 						<fieldset>

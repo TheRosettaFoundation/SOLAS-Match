@@ -60,6 +60,20 @@ class Task
 		return $ret;
 	}
 	
+	function wordcount()
+	{
+		$ret = false;
+		$q = 'SELECT word_count
+				FROM task
+				WHERE id = '.$this->s->db->cleanse($this->id).'
+				AND word_count IS NOT NULL';
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = $r[0]['word_count']; // Converting to unix time string 
+		}
+		return $ret;
+	}
+	
 	function organisationID()
 	{
 		$ret = false;

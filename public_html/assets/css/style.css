@@ -269,6 +269,7 @@ select {font-size: 1em;}
 p.desc {margin: -1.8em 0 1.5em 0;font-size: 85%;color: #AAAAAA;}
 .required {font-weight: bold; margin-left:-0.7em; color: #870000;}
 p.radio label {clear: right;}
+input#word_count {width: 5em;}
 
 /** Task Page **/
 body.task_page .task_content { 
