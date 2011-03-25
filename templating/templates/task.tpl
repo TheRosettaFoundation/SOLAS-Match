@@ -5,6 +5,10 @@
 	
 			<p class="details">
 				<span class="time_since">{$s->io->timeSince($task->createdTime())} ago</span> {$task->organisation()}
+					{assign var="wordcount" value=$task->wordcount()}
+					{if $wordcount}
+						&middot; {$wordcount|number_format} words
+					{/if}
 			</p>
 			{assign var="tag_ids" value=$task->tagIDs()}
 			{if $tag_ids}

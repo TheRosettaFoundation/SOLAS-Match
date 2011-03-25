@@ -15,7 +15,6 @@
 
 	{assign var="wordcount" value=$task->wordcount()}
 	{if $wordcount}
-		
 		{$wordcount|number_format} words
 	{/if}
 	

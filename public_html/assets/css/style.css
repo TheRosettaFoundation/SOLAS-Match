@@ -183,7 +183,7 @@ ul.tags li {
 	margin-bottom: 1.618em;
 	padding: 0.618em;
 	border: 1px solid #c5c5c5;
-	border-top-color: #ffffff;
+	border-top-color: #efefef;
 	min-height: 4em;
 }
 	.task ul.tags {
@@ -279,7 +279,7 @@ body.task_page .task_content {
 	margin-bottom: 1.618em;
 	padding: 0.618em;
 	border: 1px solid #c5c5c5;
-	border-top-color: #ffffff;
+	border-top-color: #efefef;
 }
 .task_content h2 {margin-bottom: 0;}
 body.task_page h2 {margin-bottom: 1em;} 
