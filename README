@@ -25,6 +25,7 @@ The Translation eXchange is written in PHP 5.2+ code and makes use of
 a MySQL 5+ database.
 
 System Requirements
+
   HTTP server (Apache, for example) with PHP 5.2+ interpreter
   MySQL database
   
@@ -41,11 +42,11 @@ noting in which folder you install the library files according to its
 installation instructions. The default location is 
 "/usr/local/lib/php/Smarty/".
 
-3. Download 960.css
+3. Download the 960 Grid System to a folder on your system (used for CSS layouts). Copy the 960.css file to ./public_html/assets/css/.
 
-2. Copy ./includes/conf.template.php to ./includes/conf.php
+4. Copy ./includes/conf.template.php to ./includes/conf.php
 
-3. In ./includes/conf.php, several settings need to be specified:
+5. In ./includes/conf.php, several settings need to be specified:
 
   Within the /** Database **/ section, set the:
   	Database name
@@ -59,18 +60,22 @@ installation instructions. The default location is
   Within the /** Smarty **/ section, set the:
   	Absolute path to Smarty's folder, noted in step 2. above.
 
-4. Use the file rosettaplatform.sql to set up the MySQL tables. For
+6. Use the file rosettaplatform.sql to set up the MySQL tables. For
 example, import the file using phpMyAdmin.
 
-5. Allow the web server user to write to ./uploads. For example:
+7. Allow the web server user to write to ./uploads. For example:
 chmod 777 uploads
 
-6. Allow the web server user to write to 
+8. Allow the web server user to write to 
 ./templating/templates_compiled. For example: 
 chmod 777 templating/templates_c
 
 == Contact
 
-Contact: Reinhard Schäler <reinhard.schaler@ul.ie>
+Contact:
 
-Coded by: Eoin Ó Conchúir <eoin.oconchuir@ul.ie>
+  Reinhard Schäler <reinhard.schaler@ul.ie>
+
+Coded by:
+
+  Eoin Ó Conchúir <eoin.oconchuir@ul.ie>
