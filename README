@@ -41,6 +41,8 @@ noting in which folder you install the library files according to its
 installation instructions. The default location is 
 "/usr/local/lib/php/Smarty/".
 
+3. Download 960.css
+
 2. Copy ./includes/conf.template.php to ./includes/conf.php
 
 3. In ./includes/conf.php, several settings need to be specified:
