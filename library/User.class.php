@@ -109,9 +109,9 @@ class User
 		if (!empty($this->id) && !empty($this->password))
 		{
 			$sql = 'SELECT id
-					FROM '.$this->s->db->cleanseSQL($this->table_name).'
-					WHERE id = '.$this->s->db->cleanseSQL($this->id).'
-					AND pw = \''.$this->s->db->cleanseSQL($this->password).'\'
+					FROM '.$this->s->db->cleanse($this->table_name).'
+					WHERE id = '.$this->s->db->cleanse($this->id).'
+					AND pw = \''.$this->s->db->cleanse($this->password).'\'
 					AND active = \'y\'';
 			$result = $this->s->db->Select($sql);
 			if (count($result) == 1 && intval($result[0]['id'])>0)
@@ -129,9 +129,9 @@ class User
 		if (!empty($email) && !empty($password))
 		{
 			$sql = 'SELECT id
-					FROM '.$this->s->db->cleanseSQL($this->table_name).'
-					WHERE email = \''.$this->s->db->cleanseSQL($email).'\'
-					AND pw = \''.$this->s->db->cleanseSQL($password).'\'
+					FROM '.$this->s->db->cleanse($this->table_name).'
+					WHERE email = \''.$this->s->db->cleanse($email).'\'
+					AND pw = \''.$this->s->db->cleanse($password).'\'
 					AND active = \'y\'';
 			$result = $this->s->db->Select($sql);
 			if (count($result) == 1 && intval($result[0]['id'])>0)
@@ -152,8 +152,8 @@ class User
 		if ($this->check_email($email))
 		{
 			$sql = 'SELECT id
-					FROM '.$this->s->db->cleanseSQL($this->table_name).'
-					WHERE email = \''.$this->s->db->cleanseSQL($email).'\'
+					FROM '.$this->s->db->cleanse($this->table_name).'
+					WHERE email = \''.$this->s->db->cleanse($email).'\'
 					AND active = \'y\'';
 			$result = $this->s->db->Select($sql);
 			if ((count($result) == 1) && ($result[0]['id'] > 0))
@@ -174,8 +174,8 @@ class User
 		if ($this->check_email($email))
 		{
 			$sql = 'SELECT id
-					FROM '.$this->s->db->cleanseSQL($this->table_name).'
-					WHERE email = \''.$this->s->db->cleanseSQL($email).'\'';
+					FROM '.$this->s->db->cleanse($this->table_name).'
+					WHERE email = \''.$this->s->db->cleanse($email).'\'';
 			$result = $this->s->db->Select($sql);
 			if ((count($result) == 1) && ($result[0]['id'] > 0))
 			{
@@ -195,8 +195,8 @@ class User
 		if ($this->check_email($email))
 		{
 			$sql = 'SELECT id
-					FROM '.$this->s->db->cleanseSQL($this->table_name).'
-					WHERE email = \''.$this->s->db->cleanseSQL($email).'\'
+					FROM '.$this->s->db->cleanse($this->table_name).'
+					WHERE email = \''.$this->s->db->cleanse($email).'\'
 					AND active = \'n\'';
 			$result = $this->s->db->Select($sql);
 			if ((count($result) == 1) && ($result[0]['id'] > 0))
@@ -213,8 +213,8 @@ class User
 		if (intval($id) > 0)
 		{
 			$sql = 'SELECT id
-					FROM '.$this->s->db->cleanseSQL($this->table_name).'
-					WHERE id = \''.$this->s->db->cleanseSQL($id).'\'
+					FROM '.$this->s->db->cleanse($this->table_name).'
+					WHERE id = \''.$this->s->db->cleanse($id).'\'
 					AND active = \'n\'';
 			$result = $this->s->db->Select($sql);
 			if ((count($result) == 1) && ($result[0]['id'] > 0))
@@ -231,8 +231,8 @@ class User
 		if (intval($id) > 0)
 		{
 			$sql = 'SELECT id
-					FROM '.$this->s->db->cleanseSQL($this->table_name).'
-					WHERE id = \''.$this->s->db->cleanseSQL($id).'\'';
+					FROM '.$this->s->db->cleanse($this->table_name).'
+					WHERE id = \''.$this->s->db->cleanse($id).'\'';
 			$result = $this->s->db->Select($sql);
 			if ((count($result) == 1) && ($result[0]['id'] > 0))
 			{
@@ -249,7 +249,7 @@ class User
 	 */
 	function check_email_to_validate()
 	{
-		$str = 'SELECT id FROM '.$this->table_name.' WHERE id='.$this->s->db->cleanseSQL($this->id).' AND tmp_mail <> \'\'';
+		$str = 'SELECT id FROM '.$this->table_name.' WHERE id='.$this->s->db->cleanse($this->id).' AND tmp_mail <> \'\'';
 		return $this->s->db->Select($str);
 	}
 	
@@ -260,7 +260,7 @@ class User
 	 */
 	function check_new_password_db()
 	{
-		$str = 'SELECT id FROM '.$this->table_name.' WHERE id='.$this->s->db->cleanseSQL($this->id).' AND MD5(pw) = \''.$this->s->db->cleanseSQL($this->password).'\'';
+		$str = 'SELECT id FROM '.$this->table_name.' WHERE id='.$this->s->db->cleanse($this->id).' AND MD5(pw) = \''.$this->s->db->cleanse($this->password).'\'';
 		return $this->s->db->Select($str);
 	}
 	
@@ -431,7 +431,7 @@ class User
 		// First check in the database for existing shared secret.
 		// If that doesn't exist, create one.
 		$cookie_shared_secret = '';
-		$str = 'SELECT cookie_shared_secret FROM user WHERE id='.$this->s->db->cleanseSQL($this->id).' LIMIT 1';
+		$str = 'SELECT cookie_shared_secret FROM user WHERE id='.$this->s->db->cleanse($this->id).' LIMIT 1';
 		$result = $this->s->db->Select($str);
 		if ($result)
 		{
@@ -450,13 +450,13 @@ class User
 	to verify them later. */
 	private function saveCookieSharedSecret($shared_secret)
 	{
-		$str = 'UPDATE user SET cookie_shared_secret=\''.$this->s->db->cleanseSQL($shared_secret).'\' WHERE id ='.$this->s->db->cleanseSQL($this->id).' LIMIT 1';
+		$str = 'UPDATE user SET cookie_shared_secret=\''.$this->s->db->cleanse($shared_secret).'\' WHERE id ='.$this->s->db->cleanse($this->id).' LIMIT 1';
 		return $this->s->db->Update($str);
 	}
 	
 	private function getUserPassword()
 	{
-		$str = 'SELECT pw FROM user WHERE id='.$this->s->db->cleanseSQL($this->id).' LIMIT 1';
+		$str = 'SELECT pw FROM user WHERE id='.$this->s->db->cleanse($this->id).' LIMIT 1';
 		$result = $this->s->db->Select($str);
 		return $result[0]['pw'];
 	}
@@ -489,7 +489,7 @@ class User
 	are correct. */
 	private function validate_cookie($cookie_shared_secret)
 	{
-		$str = 'SELECT id FROM user WHERE id='.$this->s->db->cleanseSQL($this->id).' AND cookie_shared_secret IS NOT NULL AND cookie_shared_secret=\''.$this->s->db->cleanseSQL($cookie_shared_secret).'\'';
+		$str = 'SELECT id FROM user WHERE id='.$this->s->db->cleanse($this->id).' AND cookie_shared_secret IS NOT NULL AND cookie_shared_secret=\''.$this->s->db->cleanse($cookie_shared_secret).'\'';
 		return (count($this->s->db->Select($str)) > 0);
 	}
 	
@@ -620,7 +620,7 @@ class User
 	function email()
 	{
 		$ret = false;
-		$str = 'SELECT email FROM '.$this->table_name.' WHERE id = '.$this->s->db->cleanseSQL($this->id);
+		$str = 'SELECT email FROM '.$this->table_name.' WHERE id = '.$this->s->db->cleanse($this->id);
 		$result = $this->s->db->Select($str);
 		if ($result)
 		{
@@ -632,7 +632,7 @@ class User
 	function userEmail($user_id)
 	{
 		$ret = false;
-		$str = 'SELECT email FROM '.$this->table_name.' WHERE id = '.$this->s->db->cleanseSQL($user_id);
+		$str = 'SELECT email FROM '.$this->table_name.' WHERE id = '.$this->s->db->cleanse($user_id);
 		$result = $this->s->db->Select($str);
 		if ($result)
 		{
@@ -661,7 +661,7 @@ class User
 			{
 				// Update the username.
 				$old_username = $this->user;
-				$str = 'UPDATE  '.$this->table_name.' SET login=\''.$this->s->db->cleanseSQL($new_login).'\' WHERE id='.$this->s->db->cleanseSQL($this->id);
+				$str = 'UPDATE  '.$this->table_name.' SET login=\''.$this->s->db->cleanse($new_login).'\' WHERE id='.$this->s->db->cleanse($this->id);
 				$this->s->db->Update($str);
 				Forum::changeUsername($this->smarty, $new_login, $old_username);
 			}
@@ -674,7 +674,7 @@ class User
 			{
 				// Ok, update password straight away.
 				$ins_password = md5($new_password);
-				$str = 'UPDATE '.$this->table_name.' SET pw=\''.$this->s->db->cleanseSQL($ins_password).'\' WHERE id='.$this->s->db->cleanseSQL($this->id);
+				$str = 'UPDATE '.$this->table_name.' SET pw=\''.$this->s->db->cleanse($ins_password).'\' WHERE id='.$this->s->db->cleanse($this->id);
 				$this->s->db->Update($str);
 				// Update session information.
 				$_SESSION['pw'] = $this->password = $ins_password;
@@ -702,7 +702,7 @@ class User
 				else
 				{	
 					// Go ahead with updating the email address.
-					$str = 'UPDATE '.$this->table_name.' SET tmp_mail = \''.$this->s->db->cleanseSQL($new_mail).'\' WHERE id='.$this->s->db->cleanseSQL($this->id);
+					$str = 'UPDATE '.$this->table_name.' SET tmp_mail = \''.$this->s->db->cleanse($new_mail).'\' WHERE id='.$this->s->db->cleanse($this->id);
 					$this->s->db->Update($str);
 					Forum::changeEmail($this->smarty, $new_mail);
 					// Send the confirmation email that they must
@@ -1004,7 +1004,7 @@ class User
 			$this->id = intval($key_id);
 			if ($this->check_email_to_validate())
 			{
-				$str = 'UPDATE '.$this->table_name.' SET email = tmp_mail, tmp_mail = \'\' WHERE id = '.$this->s->db->cleanseSQL($key_id).' AND MD5(pw) = \''.$this->s->db->cleanseSQL($validation_key).'\''; 
+				$str = 'UPDATE '.$this->table_name.' SET email = tmp_mail, tmp_mail = \'\' WHERE id = '.$this->s->db->cleanse($key_id).' AND MD5(pw) = \''.$this->s->db->cleanse($validation_key).'\''; 
 				//$upd_sql = sprintf("UPDATE %s SET email = tmp_mail, tmp_mail = '' WHERE id = %d AND MD5(pw) = %s", $this->table_name, $key_id, $this->ins_string($validation_key));
 				if ($this->s->db->Update($str))
 				{
@@ -1039,7 +1039,7 @@ class User
 				$this->id = $key_id;
 				if ($this->auto_activation)
 				{
-					$str = 'UPDATE '.$this->table_name.' SET active=\'y\' WHERE id='.$this->s->db->cleanseSQL($key_id).' AND MD5(pw)=\''.$this->s->db->cleanseSQL($activate_key).'\'';
+					$str = 'UPDATE '.$this->table_name.' SET active=\'y\' WHERE id='.$this->s->db->cleanse($key_id).' AND MD5(pw)=\''.$this->s->db->cleanse($activate_key).'\'';
 					if ($this->s->db->Update($str))
 					{
 						if ($this->send_confirmation($key_id))
@@ -1163,7 +1163,7 @@ class User
 		{
 			// Passwords match and conform to requirements.
 			// Go ahead updating this account's password.
-			$str = 'UPDATE '.$this->table_name.' SET pw = \''.$this->s->db->cleanseSQL(md5($new_pass)).'\' WHERE id = '.$this->s->db->cleanseSQL($user_id).' AND MD5(pw) = \''.$this->s->db->cleanseSQL($activation).'\' LIMIT 1';
+			$str = 'UPDATE '.$this->table_name.' SET pw = \''.$this->s->db->cleanse(md5($new_pass)).'\' WHERE id = '.$this->s->db->cleanse($user_id).' AND MD5(pw) = \''.$this->s->db->cleanse($activation).'\' LIMIT 1';
 			$this->s->db->Update($str);
 			$this->email();
 			

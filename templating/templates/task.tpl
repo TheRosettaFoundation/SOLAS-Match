@@ -10,9 +10,14 @@
 						&middot; {$wordcount|number_format} words
 					{/if}
 			</p>
+			
 			{assign var="tag_ids" value=$task->tagIDs()}
-			{if $tag_ids}
+			{assign var="target" value=$task->target()}
+			{if $tag_ids || $target}
 				<ul class="tags">
+					{if $target}
+						<li>{$s->tags->tagTargetHTML($target)}</li>
+					{/if}		
 					{foreach from=$tag_ids item=tag_id}
 						<li>{$s->tags->tagHTML($tag_id)}</li>
 					{/foreach}

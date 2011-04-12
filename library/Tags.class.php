@@ -111,6 +111,12 @@ class Tags
 		return '<a class="tag" href="'.$url.'"><span class="label">'.$label.'</span></a>';
 	}
 	
+	function tagTargetHTML($str)
+	{
+		$label = $str;
+		return '<div class="tag target"><span class="label">To '.$label.'</span></div>';
+	}
+	
 	/*
 	 * Return an array of (label, frequency) of tags, ordered by most frequent at top.
 	*/

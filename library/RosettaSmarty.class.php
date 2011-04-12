@@ -1,5 +1,5 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/../library/MySQLHandler.class.php');
+require($_SERVER['DOCUMENT_ROOT'].'/../library/MySQLWrapper.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/IO.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Organisations.class.php');
 require($_SERVER['DOCUMENT_ROOT'].'/../library/Stream.class.php');
@@ -23,7 +23,7 @@ class RosettaSmarty extends Smarty {
 	{
 		$this->set = new Settings();
 		$this->stream = new Stream($this);
-		$this->db = new MySQLHandler();
+		$this->db = new MySQLWrapper();
 		$this->db->init();
 		$this->io = new IO($this);
 		$this->orgs = new Organisations($this);
@@ -38,10 +38,6 @@ class RosettaSmarty extends Smarty {
 	 */
 	public function display($template, $cache_id = null, $compile_id = null, $parent = null)
 	{
-		if (isset($this->db) && $this->db->ANALYSE_QUERIES)
-		{
-			echo '.'.$this->db->RECORDED_EXPLAINS.'.';
-		}
 		parent::display($template, $cache_id, $compile_id, $parent);
 	}
 	

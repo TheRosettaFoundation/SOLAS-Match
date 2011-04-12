@@ -186,11 +186,13 @@ ul.tags li {
 	border-top-color: #efefef;
 	min-height: 4em;
 }
+	.task h3 {margin-top: 0.382em;}
+	.task h3 a {padding: 0.382em 0;}
 	.task ul.tags {
 		min-height: 1.618em;
 		margin-bottom: 0;
 	}
-	.task ul.tags li {
+	.task ul.tags li,  .task_content ul.tags li{
 		/*float: left;*/
 		display: inline;
 		margin-right: 0.236em;
@@ -203,6 +205,9 @@ h3.title {
 }
 .task_details {
 	float: right;
+}
+.task_summary {
+	color: #888;
 }
 .time_since {
 	color: #888;
@@ -218,6 +223,7 @@ h3.title {
     outline: medium none;
     vertical-align: text-middle;
 }
+div.tag {display: inline; cursor: default;}
 
 .tag .label {
     font-size: 0.8em;
@@ -242,7 +248,7 @@ h3.title {
 	border-right: 1px solid #bababa;
 	*/
 	
-.tag:hover {
+a.tag:hover, div.tag {
     background-color: #3E6D8E;
     border-bottom: 1px solid #37607D;
     border-right: 1px solid #37607D;

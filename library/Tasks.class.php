@@ -12,11 +12,19 @@ class Tasks
 		$this->s = &$smarty;
 	}
 
-	function create($title, $organisation_id, $tags, $word_count)
+	function create($title, $organisation_id, $tags, $source, $target, $word_count)
 	{
 		$ret = false;
 		$task = array();
 		$task['title'] = '\''.$this->s->db->cleanse($title).'\'';
+		if ($source)
+		{
+			$task['source'] = '\''.$this->s->db->cleanse($source).'\'';	
+		}
+		if ($target)
+		{
+			$task['target'] = '\''.$this->s->db->cleanse($target).'\'';	
+		}
 		$task['organisation_id'] = intval($organisation_id);
 		if ($word_count)
 		{

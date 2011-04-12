@@ -1,5 +1,5 @@
 {assign var="top_tags" value=$s->tags->topTags(30)}
-{if isset($top_tags)}
+{if is_array($top_tags)}
 	<ul class="tags">
 		{foreach from=$top_tags item=tag_freq}
 			<li>{$s->tags->tagHTML($tag_freq.tag_id)}

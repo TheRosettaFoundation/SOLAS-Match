@@ -74,6 +74,20 @@ class Task
 		return $ret;
 	}
 	
+	function target()
+	{
+		$ret = false;
+		$q = 'SELECT target
+				FROM task
+				WHERE id = '.$this->s->db->cleanse($this->id).'
+				AND target IS NOT NULL';
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = $r[0]['target']; // Converting to unix time string 
+		}
+		return $ret;
+	}
+	
 	function organisationID()
 	{
 		$ret = false;
