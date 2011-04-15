@@ -64,7 +64,7 @@ installation instructions. The default location is
   	site_key value, which should be a (random) string 60 to 80 
   	characters long.
 
-6. Use the file rosettaplatform.sql to set up the MySQL tables. For
+6. Use the file setup.sql to set up the MySQL tables. For
 example, import the file using phpMyAdmin.
 
 7. Allow the web server user to write to ./uploads. For example:
