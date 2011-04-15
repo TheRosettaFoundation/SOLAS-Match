@@ -59,6 +59,10 @@ installation instructions. The default location is
    
   Within the /** Smarty **/ section, set the:
   	Absolute path to Smarty's folder, noted in step 2. above.
+  	
+  Within the /** User session control **/ section, the the:
+  	site_key value, which should be a (random) string 60 to 80 
+  	characters long.
 
 6. Use the file rosettaplatform.sql to set up the MySQL tables. For
 example, import the file using phpMyAdmin.

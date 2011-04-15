@@ -3,34 +3,36 @@
 
 /** Database **/
 $db = array();
-$db['database'] = 'rosettaplatform';
-$db['server'] = 'localhost';
-$db['username'] = 'urosetta';
+$db['server'] = '';
+$db['database'] = '';
+$db['username'] = '';
 $db['password'] = '';
-$db['show_errors'] = 'y';
-$db['show_sql'] = 'n';
-$db['log_file'] = '';
-$db['analyse_queries'] = 'n';
 
-/** Email **/
-$email = array();
-$email['port'] = 25;
-$email['host'] = '';
-$email['username'] = '';
-$email['password'] = '';
+$db['show_errors'] = 'y'; // Set to n for production.
+$db['show_sql'] = 'n'; // Set to n for production. Spits out queries as they are executed.
+$db['log_file'] = '';
 
 /** Site **/
 $site = array();
-$site['name'] = '';
 $site['url'] = '';
-$site['title'] = '';
-$site['meta_desc'] = '';
-$site['meta_key'] = '';
+$site['name'] = 'Rosetta Translation eXchange';
+$site['title'] = 'Rosetta Translation eXchange'; // Default value for the <title></title> tag.
+$site['meta_desc'] = 'Help translate content for organisations looking to spread their cause.';
+$site['meta_key'] = 'rosetta foundation, translation, crowdsourcing, volunteer, translate';
+
+/** User session control **/
+$users = array();
+$users['site_key'] = ''; // Fill with a string 60 to 80 characters long. Unique for each installation. Used for password encryption.
+
+/** Files **/
+$files = array();
+$files['max_upload_file_size'] = 20480; // In bytes. Needs to related to php.ini values upload_max_filesize and post_max_size
+$files['upload_path'] = $_SERVER['DOCUMENT_ROOT'].'/../uploads/'; // No need to edit this
 
 /** Smarty **/
 $smarty = array();
-$smarty['lib'] = '/home/eoin/sites/rosettaplatform/Rosetta-Foundation/templating/Smarty-3.0.7/libs/';
-$smarty['templates'] = '/home/eoin/sites/rosettaplatform/Rosetta-Foundation/templating/';
+$smarty['lib'] = ''; // See explanation below
+$smarty['templates'] = $_SERVER['DOCUMENT_ROOT'].'/../templating/'; // Value doesn't need to be modified.
 /*
 	$smarty['lib']
 		The Smarty library files - downloaded from smarty.net
@@ -40,7 +42,6 @@ $smarty['templates'] = '/home/eoin/sites/rosettaplatform/Rosetta-Foundation/temp
 			Must end with a slash.
 	$smarty['templates']
 		The Smarty template files - designed for the site
-		Server default: /home/focloirg/smarty/
 		Note: You have to 'escape' backslashes such as 'C:\\http_root'
 		Must end with a slash.
 */

@@ -42,13 +42,12 @@
 					</ul>
 					
 					<form method="post" action="/process/upload.edited_file.php" enctype="multipart/form-data">
-						{assign var='max_upload_file_size' value=$s->setting('files.max_upload_file_size')}
 						<input type="hidden" name="task_id" value="{$task_file->taskID()}">
 						<input type="hidden" name="file_id" value="{$task_file->fileID()}">
 						<fieldset>
 							<p><label for="edited_file">Upload translated file</label>  
 							<input type="file" name="edited_file" id="edited_file"></p>
-							<p class="desc">Can be anything, even a .zip collection of files. Max file size {round($max_upload_file_size/1024, 1)}MB.</p>  
+							<p class="desc">Can be anything, even a .zip collection of files. Max file size {$s->io->maxFileSizeMB()}MB.</p>  
 							<input type="submit" value="Submit" name="submit">
 						</fieldset> 
 					</form>
@@ -58,7 +57,7 @@
 		</div>
 	</div>
 	<div id="sidebar" class="grid_4">
-		<p><a href="/mockup/pm.create-task.php">+ New task</a></p>
+		<p><a href="/task/create/">+ New task</a></p>
 	</div>
 
 {include file="footer.inc.tpl"}

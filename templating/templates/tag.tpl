@@ -9,7 +9,7 @@
 	{/if}
 </div>
 <div id="sidebar" class="grid_4">
-	<p><a href="/mockup/pm.create-task.php">+ New task</a></p>
+	<p><a href="/task/create/">+ New task</a></p>
 	<a href="/">All tasks</a>
 	{include file="tags.top-list.inc.tpl"}
 </div>

@@ -1,3 +1,6 @@
+-- CAUTION!
+-- Use to "start fresh" and remove existing tasks from system
+
 TRUNCATE TABLE `task`;
 TRUNCATE TABLE `tag`;
 TRUNCATE TABLE `task_file`;

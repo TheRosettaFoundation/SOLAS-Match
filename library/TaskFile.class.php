@@ -165,5 +165,5 @@ class TaskFile
 	function urlVersion($version)
 	{
 		return '/process/download.task_file.php?task_id='.$this->task_id.'&file_id='.$this->file_id.'&version_id='.intval($version); // Not secure and should be improved.
-	}
+	}	
 }

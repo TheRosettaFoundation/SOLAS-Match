@@ -10,9 +10,15 @@
 <body {if isset($body_class)}class="{$body_class}"{/if}>
 <div class="container_12"><!-- setting up a grid of 12 columns -->
 	<div id="header" class="grid_12">
-		<h1><a href="/">Translation eXchange</a></h1>
+		<h1><a href="/">Rosetta Translation eXchange</a></h1>
 		<div id="header-right">
-			<!--<a href="#">Log in</a>-->
+			{if $s->isLoggedIn()}
+				{$s->user->email()}
+				&middot; <a href="{$s->url->logout()}">Log out</a> 
+			{else}
+				<a href="{$s->url->login()}">Log in</a>
+				&middot; <a href="{$s->url->register()}">Register</a>
+			{/if}
 		</div>
 		<!--
 		<ul class="nav">

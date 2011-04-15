@@ -1,6 +1,13 @@
+# Disable listing of directory contents
+IndexIgnore *
+
 RewriteEngine On
 RewriteRule ^task/([0-9]+)/$ pages/task.php?task_id=$1
+RewriteRule ^task/create/$ pages/task.create.php
 RewriteRule ^tag/([0-9]+)/$ pages/tag.php?tag_id=$1
+RewriteRule ^login/?$ pages/login.php
+RewriteRule ^logout/?$ process/logout.php
+RewriteRule ^register/?$ pages/register.php
 RewriteRule ^assets/css/style.([0-9]+).css$ assets/css/style.css
 
 # Redirect old page that was emailed out.

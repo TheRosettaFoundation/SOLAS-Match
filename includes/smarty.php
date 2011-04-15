@@ -6,11 +6,6 @@ Include this script in normal site pages. It will make smarty
 available as the global $s variable.
 */
 
-if (!isset($_SESSION))
-{
-	session_start();
-}
-
 ############################################################
 # smarty-winxp.php
 #http://smarty.incutio.com/?page=SmartyFrequentlyAskedQuestions

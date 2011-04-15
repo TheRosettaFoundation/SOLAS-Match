@@ -193,37 +193,15 @@ class IO {
 		fclose ($fd);
 		return;
 	}
-	/*
-	function sendEmail($recipient, $subject, $body)
+	
+	function maxFileSizeMB()
 	{
-		require($_SERVER['DOCUMENT_ROOT'].'/library/phpmailer/class.phpmailer.php');
-		try
+		$ret = false;
+		if ($bytes = $this->s->setting('files.max_upload_file_size'))
 		{
-			$mail = new PHPMailer(true); //New instance, with exceptions enabled
-			$body             = preg_replace('/\\\\/','', $body); //Strip backslashes
-			$mail->IsSMTP();                           // tell the class to use SMTP
-			$mail->SMTPAuth   = true;                  // enable SMTP authentication
-			$mail->Port       = $this->s->set->get('email.port');  // set the SMTP server port
-			$mail->Host       = $this->s->set->get('email.host'); 	// SMTP server
-			$mail->Username   = $this->s->set->get('email.username'); // SMTP server username
-			$mail->Password   = $this->s->set->get('email.password'); // SMTP server password
-			//$mail->IsSendmail();  // tell the class to use Sendmail
-			$mail->AddReplyTo($this->s->set->get('site.email'),$this->s->set->get('site.name'));
-			$mail->From       = $this->s->set->get('site.email');
-			$mail->FromName   = $this->s->set->get('site.name');
-			$mail->AddAddress($recipient);
-			$mail->Subject    = $subject;
-			$mail->Body  	  = $body;
-			$mail->WordWrap   = 80; // set word wrap
-			$mail->IsHTML(false); // send as HTML
-			$mail->Send();
-			return true;
-		}
-		catch (phpmailerException $e)
-		{
-			//echo $e->errorMessage();
-			return false;
-		}
+			$ret = round($bytes/1024, 1);
+		}	
+		return $ret;
 	}
-	*/
+
 }

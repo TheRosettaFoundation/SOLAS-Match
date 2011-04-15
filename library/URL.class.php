@@ -40,6 +40,16 @@ class URL
 	
 	function login()
 	{
-		return $this->server().'/account/login/';
+		return $this->server().'/login/';
+	}
+
+	function logout()
+	{
+		return $this->server().'/logout/';
+	}
+
+	function register()
+	{
+		return $this->server().'/register/';
 	}
 }

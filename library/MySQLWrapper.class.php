@@ -197,7 +197,7 @@ class MySQLWrapper
 		{
 			$keys = implode(', ', array_keys($values));
 			$vals = implode(', ', array_values($values));
-			$q = 'INSERT INTO '.$this->cleanseSQL($table).'('.$keys.')'.' VALUES('.$vals.')';
+			$q = 'INSERT INTO '.$this->cleanse($table).'('.$keys.')'.' VALUES('.$vals.')';
 		}
 		return $this->insertStr($q);
 	}
