@@ -21,16 +21,18 @@ Development began February 2011.
 
 == Technical Documenation
 
-The Translation eXchange is written in PHP 5.2+ code and makes use of
+The Translation eXchange is written in PHP 5.3+ code and makes use of
 a MySQL 5+ database.
 
 System Requirements
 
-  HTTP server (Apache, for example) with PHP 5.2+ interpreter
-  MySQL database
+  HTTP server (Apache, for example) with PHP 5.3+ interpreter
+  MySQL 5+ database
   
+Note that the code may run on PHP 5.2, but this has not been tested.
+
 Several additional libraries also need to be installed alongside 
-Translation eXchange. See installation instructions.
+Translation eXchange. See the following installation instructions.
 
 == Installation
 
@@ -42,7 +44,8 @@ noting in which folder you install the library files according to its
 installation instructions. The default location is 
 "/usr/local/lib/php/Smarty/".
 
-3. Download the 960 Grid System to a folder on your system (used for CSS layouts). Copy the 960.css file to ./public_html/assets/css/.
+3. Download the 960 Grid System to a folder on your system (used for CSS
+layouts). Copy the 960.css file to ./public_html/assets/css/.
 
 4. Copy ./includes/conf.template.php to ./includes/conf.php
 
