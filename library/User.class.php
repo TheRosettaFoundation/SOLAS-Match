@@ -88,6 +88,20 @@ class User
 		return $ret;
 	}
 	
+	public static function validEmail($email)
+	{
+		$ret = false;
+		$ret = (strpos($email, '@')!==false && strpos($email, '.')!==false);
+		return $ret;
+	}
+	
+	public static function validPassword($password)
+	{
+		$ret = false;
+		$ret = (strlen($password)>0);
+		return $ret;
+	}
+	
 	public static function userExists(&$s, $email)
 	{
 		$ret = false;
