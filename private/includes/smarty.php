@@ -1,6 +1,5 @@
 <?php
-//echo realpath('../../library')." um ya"; die;
-require_once($_SERVER['DOCUMENT_ROOT'].'/../library/Settings.class.php');
+require_once(dirname(__FILE__).'/../library/Settings.class.php');
 /*
 Include this script in normal site pages. It will make smarty
 available as the global $s variable.
@@ -37,7 +36,7 @@ if (!defined('MY_DIR'))
 # Use Smarty.class.php in this file.
 #######################################
 require_once(SMARTY_DIR.'Smarty.class.php'); // TODO not being found
-require_once($_SERVER['DOCUMENT_ROOT'].'/../library/RosettaSmarty.class.php'); //$_SERVER['DOCUMENT_ROOT'].'/../library/
+require_once(dirname(__FILE__).'/../library/RosettaSmarty.class.php'); //$_SERVER['DOCUMENT_ROOT'].'/../library/
 
 ##############################
 # Create a new Smarty object

@@ -1,9 +1,10 @@
 <?php
+require('../private/includes/smarty.php');
 /*
  * Input: task_id
  * Page responsible for showing all the details of this particular task.
  */
-require($_SERVER['DOCUMENT_ROOT'].'/../includes/smarty.php');
+
 $task_id = $s->io->get('task_id');
 $task = new Task($s, $task_id);
 $task_files = $task->files();

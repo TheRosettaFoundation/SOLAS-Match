@@ -1,14 +1,14 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/../library/MySQLWrapper.class.php');
-require($_SERVER['DOCUMENT_ROOT'].'/../library/IO.class.php');
-require($_SERVER['DOCUMENT_ROOT'].'/../library/Organisations.class.php');
-require($_SERVER['DOCUMENT_ROOT'].'/../library/Stream.class.php');
-require($_SERVER['DOCUMENT_ROOT'].'/../library/Tags.class.php');
-require($_SERVER['DOCUMENT_ROOT'].'/../library/Task.class.php');
-require($_SERVER['DOCUMENT_ROOT'].'/../library/TaskFile.class.php');
-require($_SERVER['DOCUMENT_ROOT'].'/../library/Tasks.class.php');
-require($_SERVER['DOCUMENT_ROOT'].'/../library/URL.class.php');
-require($_SERVER['DOCUMENT_ROOT'].'/../library/User.class.php');
+require('MySQLWrapper.class.php');
+require('IO.class.php');
+require('Organisations.class.php');
+require('Stream.class.php');
+require('Tags.class.php');
+require('Task.class.php');
+require('TaskFile.class.php');
+require('Tasks.class.php');
+require('URL.class.php');
+require('User.class.php');
 
 class RosettaSmarty extends Smarty {
 	var $set;

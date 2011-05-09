@@ -1,5 +1,5 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/../includes/smarty.php');
+require('private/includes/smarty.php');
 
 if ($tasks = $s->stream->getStream(10))
 {

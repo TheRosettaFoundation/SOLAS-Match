@@ -2,7 +2,7 @@
 /* Process submitted form data to create a new task. 
 	Simple mockup functionality. Therefore, not much error checking happening. 
 */
-require($_SERVER['DOCUMENT_ROOT'].'/../includes/smarty.php');
+require('../private/includes/smarty.php');
 
 $task_id = intval($s->io->get('task_id'));
 $file_id = intval($s->io->get('file_id'));

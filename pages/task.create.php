@@ -1,5 +1,5 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/../includes/smarty.php');
+require('../private/includes/smarty.php');
 
 // Check permissions
 if (!$s->isLoggedIn())

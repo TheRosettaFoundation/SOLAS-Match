@@ -1,9 +1,9 @@
 <?php
+require('../private/includes/smarty.php');
 /*
  * Input: tag_id
  * Page responsible for showing a stream of tasks related to this tag.
  */
-require($_SERVER['DOCUMENT_ROOT'].'/../includes/smarty.php');
 $tag_id = $s->io->get('tag_id');
 if ($tasks = $s->stream->getTaggedStream($tag_id, 10))
 {

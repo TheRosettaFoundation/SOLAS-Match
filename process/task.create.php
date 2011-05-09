@@ -1,8 +1,8 @@
 <?php
+require('../private/includes/smarty.php');
 /* Process submitted form data to create a new task. 
 	Simple mockup functionality. Therefore, not much error checking happening. 
 */
-require($_SERVER['DOCUMENT_ROOT'].'/../includes/smarty.php');
 
 $title = $s->io->post('title');
 $tags = $s->io->post('tags');
