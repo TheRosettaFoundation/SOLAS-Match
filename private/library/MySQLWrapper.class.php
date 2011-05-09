@@ -83,7 +83,7 @@ class MySQLWrapper
 		else
 		{
 			// Success!
-			mysql_set_charset('utf8', $conn);
+			//mysql_set_charset('utf8', $conn);
 			$this->connection = $conn;
 			$ret = true;
 		}
