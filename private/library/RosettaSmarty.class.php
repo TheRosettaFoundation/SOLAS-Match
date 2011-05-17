@@ -8,7 +8,7 @@ require('Task.class.php');
 require('TaskFile.class.php');
 require('Tasks.class.php');
 require('URL.class.php');
-require('User.class.php');
+require('Users.class.php');
 
 class RosettaSmarty extends Smarty {
 	var $set;
@@ -19,7 +19,7 @@ class RosettaSmarty extends Smarty {
 	var $tags;
 	var $tasks;
 	var $url;
-	var $user;
+	var $users;
 	
 	function initRosettaSmarty()
 	{
@@ -32,17 +32,12 @@ class RosettaSmarty extends Smarty {
 		$this->tags = new Tags($this);
 		$this->tasks = new Tasks($this);
 		$this->url = new URL($this);
+		$this->users = new Users($this);
 		
 		// Start session management allowing for logging in.
 		if (!isset($_SESSION))
 		{
 			session_start();
-		}
-		
-		if (User::isLoggedIn())
-		{
-			$user_id = User::sessionUserID(); 
-			$this->user = new User($this, $user_id);
 		}
 	}
 	
@@ -62,10 +57,5 @@ class RosettaSmarty extends Smarty {
 		 * but this function allows simpler $s->setting('setting');
 		 */
 		return $this->set->get($set);
-	}
-	
-	function isLoggedIn()
-	{
-		return User::isLoggedIn();
 	}
 }

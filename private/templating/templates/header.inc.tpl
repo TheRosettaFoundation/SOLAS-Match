@@ -12,8 +12,8 @@
 	<div id="header" class="grid_12">
 		<h1><a href="/">Rosetta Translation eXchange</a></h1>
 		<div id="header-right">
-			{if $s->isLoggedIn()}
-				{$s->user->email()}
+			{if $s->users->currentUserID() !== false}
+				{$s->users->userEmail($s->users->currentUserID())}
 				&middot; <a href="{$s->url->logout()}">Log out</a> 
 			{else}
 				<a href="{$s->url->login()}">Log in</a>

@@ -1,6 +1,6 @@
 <?php
 require('../private/includes/smarty.php');
 
-$s->user->destroySession();
+$s->users->logOut();
 
 header('Location: '.$s->url->server());

@@ -2,7 +2,7 @@
 require('../private/includes/smarty.php');
 
 // Check permissions
-if (!$s->isLoggedIn())
+if (!$s->users->isLoggedIn())
 {
 	header('Location: '.$s->url->login());
 	die;

@@ -3,37 +3,15 @@ class User
 {
 	private $user_id;
 	private $email;
-	private $s;
 	
-	function User(&$smarty, $user_id)
+	public static function email(&$s, $user_id)
 	{
-		$this->s = &$smarty;
-		$this->init($user_id);
-	}
-	
-	private function init($user_id)
-	{
-		// Make sure the user exists in the database, then set the object.
-		$ret = false;
-		if (intval($user_id) >= 1)
-		{
-			// Check the database for the user.
-			$q = 'SELECT user_id, email
-					FROM user
-					WHERE user_id = '.$this->s->db->cleanse(intval($user_id));
-			if ($r = $this->s->db->Select($q))
-			{
-				$this->setUserID($user_id);
-				$this->setEmail($r[0]['email']);
-				$ret = true;
-			}
-		}
-		return $ret;
-	}
-	
-	public function email()
-	{
-		return $this->email;
+		// Check the database for the user.
+		$q = 'SELECT email
+				FROM user
+				WHERE user_id = '.$s->db->cleanse(intval($user_id)).'
+				AND email IS NOT NULL';
+		return ($r = $s->db->Select($q)) ? $r[0]['email'] : false;
 	}
 	
 	/*
@@ -42,7 +20,8 @@ class User
 	public function destroySession()
 	{
 		$_SESSION = array();
-		session_destroy();	
+		session_destroy();
+		return true;
 	}
 	
 	public static function login(&$s, $email, $password)
@@ -149,12 +128,6 @@ class User
 	public static function isLoggedIn()
 	{
 		return (isset($_SESSION['user_id']));
-	}
-	
-	public static function sessionUserID()
-	{
-		$user_id = intval($_SESSION['user_id']);
-		return ($user_id >= 1) ? $user_id : false;
 	}
 	
 	private function setUserID($user_id)
