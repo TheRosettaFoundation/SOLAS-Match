@@ -231,6 +231,7 @@ div.tag {display: inline; cursor: default;}
     padding: 0 0.236em;
     vertical-align: text-top;
 }
+form.language_filter input {font-size: 80%;}
 /*
     background-color: #E0EAF1;
     border-bottom: 1px solid #3E6D8E;

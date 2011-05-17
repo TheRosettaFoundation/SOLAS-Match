@@ -97,4 +97,44 @@ class Tasks
 		}
 		return $ret;
 	}
+	
+	/*
+	 * Get an array of all source languages of tasks in the database.
+	 */
+	public function allSourceLangauges()
+	{
+		$ret = false;
+		$q = 'SELECT DISTINCT(source)
+				FROM task';
+		if ($r = $this->s->db->Select($q))
+		{
+			$langs = array();
+			foreach ($r as $row)
+			{
+				$langs[] = $row[0];
+			}
+			$ret = $langs;
+		}
+		return $ret;	
+	}
+
+	/*
+	 * Get an array of all target languages of tasks in the database.
+	 */
+	public function allTargetLangauges()
+	{
+		$ret = false;
+		$q = 'SELECT DISTINCT(target)
+				FROM task';
+		if ($r = $this->s->db->Select($q))
+		{
+			$langs = array();
+			foreach ($r as $row)
+			{
+				$langs[] = $row[0];
+			}
+			$ret = $langs;
+		}
+		return $ret;	
+	}
 }
