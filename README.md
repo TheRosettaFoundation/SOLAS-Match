@@ -1,8 +1,56 @@
 Translation eXchange
 ====================
 
+What is this?
+-------------
+
+The Rosetta Foundation Translation eXchange is a web application. It
+is designed to be accessed by two groups: NGOs seeking to have content
+translated, and volunteer transators who may complete such tasks.
+Accessed through the browser, the application displays a list of
+translation tasks previously uploaded to the system. A task may have
+one resource file attached to it which can be downloaded, translated,
+and re-uploaded. Development began in February 2011.
+
+Copyright notice
+----------------
+
+© 2011 University of Limerick. All rights reserved. This material may 
+not be reproduced, displayed, modified or distributed without the 
+express prior written permission of the copyright holder.
+
+The copyright notice applies to all code in this distribution, unless
+explicitly stated otherwise.
+
+Technical Requirements
+----------------------
+
+The Translation eXchange is written in PHP 5.3+ code and makes use of
+a MySQL 5+ database.
+
+### System Requirements
+
+HTTP server (Apache, for example) with PHP 5.3+ interpreter MySQL 5+ 
+database
+
+Several additional libraries also need to be installed alongside 
+Translation eXchange. See the following installation instructions.
+
+Contact
+-------
+
+Contact:
+
+  Reinhard Schäler <reinhard.schaler@ul.ie>
+
+Coded by:
+
+  Eoin Ó Conchúir <eoin.oconchuir@ul.ie>
+
+
 Installation
 ------------
+
 Several components and directories need to be set up.
 
 ### Configure Apache
@@ -26,8 +74,9 @@ Several components and directories need to be set up.
 2. Edit conf.php with your configurations.
 3. Under database, enter your MySQL connection settings.
 4. Under the site section, enter the URL of the installation.
-5. Note the value of $files['max_upload_file_size'] for configuring PHP (see below).
-6. Under Smarty, set the appropriate value for $smarty['lib'].
+5. Under user session control, enter a long random string.
+6. Note the value of $files['max_upload_file_size'] for configuring PHP (see below).
+7. Under Smarty, set the appropriate value for $smarty['lib'].
 
 ### Configure PHP
 
@@ -35,3 +84,11 @@ Several components and directories need to be set up.
    php.ini is often found under /etc/php5/apache2/php.ini
 
 ### Set file/folder permissions
+
+1. $ chmod 777 ./private/uploads
+2. $ chmod 777 ./private/templating/templates_compiled
+
+### Install 960.css Grid System
+
+1. Download 960 Grid System from http://960.gs/
+2. Extract just the file 960.css to ./assets/css/
