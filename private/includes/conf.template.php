@@ -37,6 +37,7 @@ $smarty['templates'] = $_SERVER['DOCUMENT_ROOT'].'/../templating/'; // Value doe
 	$smarty['lib']
 		The Smarty library files - downloaded from smarty.net
 		Server default: /usr/local/lib/php/Smarty/
+		Ubuntu default: /usr/share/php/smarty3
 		Note: 
 			You have to 'escape' backslashes such as 'C:\\http_root'
 			Must end with a slash.
