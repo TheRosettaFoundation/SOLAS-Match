@@ -11,19 +11,16 @@
 					{/if}
 			</p>
 			
-			{assign var="tag_ids" value=$task->tagIDs()}
-			{assign var="target" value=$task->target()}
-			{if $tag_ids || $target}
-				<ul class="tags">
-					{if $target}
-						<li>{$s->tags->tagTargetHTML($target)}</li>
-					{/if}		
+			<ul class="tags">
+				<li>{$task->source()} to {$task->target()}</li>
+				{assign var="tag_ids" value=$task->tagIDs()}
+				{if $tag_ids}
 					{foreach from=$tag_ids item=tag_id}
 						<li>{$s->tags->tagHTML($tag_id)}</li>
 					{/foreach}
-				</ul>
-			{/if}
-	
+				{/if}
+			</ul>
+			
 			{if isset($task_files)}
 				{foreach from=$task_files item=task_file}
 					<h3>{$task_file->filename(0)}</h3>
