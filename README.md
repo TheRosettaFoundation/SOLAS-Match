@@ -60,7 +60,8 @@ Several components and directories need to be set up.
 
 ### Install Smarty PHP templating engine
 
-1. In Ubuntu: $ sudo apt-get install smarty3
+1. In Ubuntu: 
+	$ sudo apt-get install smarty3
 
 ### Set up the MySQL database
 
