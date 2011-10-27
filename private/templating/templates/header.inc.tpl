@@ -3,9 +3,9 @@
 <head>  
 	<meta charset="utf-8">  
 	<title>{if isset($title)}{$title}{else}Translation eXchange{/if}</title>
-	<link rel="stylesheet" type="text/css" media="all" href="/assets/css/reset.css">
-	<link rel="stylesheet" type="text/css" media="all" href="/assets/css/style.1.css">
-	<link rel="stylesheet" type="text/css" media="all" href="/assets/css/960.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/reset.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/style.1.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/960.css">
 </head>  
 <body {if isset($body_class)}class="{$body_class}"{/if}>
 <div class="container_12"><!-- setting up a grid of 12 columns -->
