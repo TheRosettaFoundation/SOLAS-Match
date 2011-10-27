@@ -17,11 +17,11 @@ class Tasks
 		$ret = false;
 		$task = array();
 		$task['title'] = '\''.$this->s->db->cleanse($title).'\'';
-		if ($source)
+		if ($source_id)
 		{
 			$task['source_id'] = '\''.$this->s->db->cleanse($source_id).'\'';	
 		}
-		if ($target)
+		if ($target_id)
 		{
 			$task['target_id'] = '\''.$this->s->db->cleanse($target_id).'\'';	
 		}
