@@ -6,7 +6,7 @@ Class Settings {
     var $_settings = array();
 
 	function Settings() {
-		$file = dirname(__FILE__).'/../includes/conf.php';
+		$file = dirname(__FILE__).'/includes/conf.php';
 		$this->load($file);
 	}
 
