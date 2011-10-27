@@ -1,4 +1,5 @@
 <?php
+require('Tag.class.php');
 
 class Tags
 {
@@ -150,6 +151,11 @@ class Tags
 	 */
 	function langID($lang, $str_lang_code = 'en')
 	{
-		return Tag::landID($this->s, $lang, $str_lang_code);
+		return Tag::langID($this->s, $lang, $str_lang_code);
+	}
+	
+	function langName($lang_id, $str_lang_code = 'en')
+	{
+		return Tag::langName($this->s, $lang_id, $str_lang_code);
 	}
 }

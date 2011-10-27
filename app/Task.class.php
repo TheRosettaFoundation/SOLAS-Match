@@ -69,21 +69,58 @@ class Task
 				AND word_count IS NOT NULL';
 		if ($r = $this->s->db->Select($q))
 		{
-			$ret = $r[0]['word_count']; // Converting to unix time string 
+			$ret = $r[0]['word_count'];
 		}
 		return $ret;
 	}
 	
+	function target_id()
+	{
+		$ret = false;
+		$q = 'SELECT target_id
+				FROM task
+				WHERE id = '.$this->s->db->cleanse($this->id).'
+				AND target_id IS NOT NULL';
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = $r[0][0];
+		}
+		return $ret;
+	}
+	
+	function source_id()
+	{
+		$ret = false;
+		$q = 'SELECT source_id
+				FROM task
+				WHERE id = '.$this->s->db->cleanse($this->id).'
+				AND source_id IS NOT NULL';
+		if ($r = $this->s->db->Select($q))
+		{
+			$ret = $r[0][0];
+		}
+		return $ret;
+	}
+	
+	/*
+	 * Return the natural language name of the target language.
+	 */
 	function target()
 	{
 		$ret = false;
-		$q = 'SELECT target
-				FROM task
-				WHERE id = '.$this->s->db->cleanse($this->id).'
-				AND target IS NOT NULL';
-		if ($r = $this->s->db->Select($q))
+		if ($target_id = $this->target_id())
 		{
-			$ret = $r[0]['target']; // Converting to unix time string 
+			$ret = $this->s->tags->langName($target_id);
+		}
+		return $ret;
+	}
+	
+	function source()
+	{
+		$ret = false;
+		if ($source_id = $this->source_id())
+		{
+			$ret = $this->s->tags->langName($source_id);
 		}
 		return $ret;
 	}

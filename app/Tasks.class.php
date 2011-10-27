@@ -12,18 +12,18 @@ class Tasks
 		$this->s = &$smarty;
 	}
 
-	function create($title, $organisation_id, $tags, $source, $target, $word_count)
+	function create($title, $organisation_id, $tags, $source_id, $target_id, $word_count)
 	{
 		$ret = false;
 		$task = array();
 		$task['title'] = '\''.$this->s->db->cleanse($title).'\'';
 		if ($source)
 		{
-			$task['source'] = '\''.$this->s->db->cleanse($source).'\'';	
+			$task['source_id'] = '\''.$this->s->db->cleanse($source_id).'\'';	
 		}
 		if ($target)
 		{
-			$task['target'] = '\''.$this->s->db->cleanse($target).'\'';	
+			$task['target_id'] = '\''.$this->s->db->cleanse($target_id).'\'';	
 		}
 		$task['organisation_id'] = intval($organisation_id);
 		if ($word_count)
@@ -100,8 +100,9 @@ class Tasks
 	
 	/*
 	 * Get an array of all source languages of tasks in the database.
+	 * TODO: needs to move to Tags class
 	 */
-	public function allSourceLangauges()
+	public function allSourceLangauges_OLD()
 	{
 		$ret = false;
 		$q = 'SELECT DISTINCT(source)
@@ -120,8 +121,9 @@ class Tasks
 
 	/*
 	 * Get an array of all target languages of tasks in the database.
+	 * TODO: needs to move to Tags class
 	 */
-	public function allTargetLangauges()
+	public function allTargetLangauges_OLD()
 	{
 		$ret = false;
 		$q = 'SELECT DISTINCT(target)

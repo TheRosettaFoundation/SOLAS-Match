@@ -4,9 +4,7 @@
 	{assign var="target" value=$task->target()}
 	{if $tag_ids || $target}
 		<ul class="tags">
-			{if $target}
-				<li>{$s->tags->tagTargetHTML($target)}</li>
-			{/if}		
+			<li>{$task->source()} to {$task->target()}</li>
 			{foreach from=$tag_ids item=tag_id}
 				<li>{$s->tags->tagHTML($tag_id)}</li>
 			{/foreach}
@@ -16,7 +14,6 @@
 	<p class="task_details">
 		<span class="time_since">{$s->io->timeSince($task->createdTime())} ago</span> {$task->organisation()}
 	</p>
-
 	<p class="task_summary">
 		{assign var="wordcount" value=$task->wordcount()}
 		{if $wordcount}
@@ -30,5 +27,4 @@
 			{/foreach}
 		{/if}
 	</p>
-	
 </div>

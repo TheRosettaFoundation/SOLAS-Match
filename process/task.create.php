@@ -12,7 +12,13 @@ $target = $s->io->post('target');
 $word_count = $s->io->post('word_count');
 $organisation_id = $s->io->post('organisation_id');
 
-$source_id = 
+$source_id = $s->tags->langID($source);
+$target_id = $s->tags->langID($target);
+
+if (!$source_id || !$target_id)
+{
+	echo "Sorry, a langauge you entered does not exist in our system. Functionality for adding a language still remains to be implemented. Please press back and enter a different languag name."; die;
+}
 
 // Put the task in the database.
 $task_id = $s->tasks->create($title, $organisation_id, $tags, $source_id, $target_id, $word_count);
