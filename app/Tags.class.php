@@ -12,6 +12,8 @@ class Tags
 		Take a string typed in by the user, try to break it up and create tags from it.
 		Returns an array of matching tag_ids.
 		Basic format is that items are comma-delimited.
+		
+		Also responsible to special Langauge tags for content.
 	*/
 	function parse($str)
 	{
@@ -138,5 +140,16 @@ class Tags
 			}
 		}
 		return $ret;
+	}
+	
+	/*
+	 * Give the string name of a langauge, return its ID.
+	 * @param $lang such as "English"
+	 * @param $str_lang_code is the langauge in which the language name is written in.
+	 * 			For example, is $lang contains "French", then the code of the langauge is in "en".
+	 */
+	function langID($lang, $str_lang_code = 'en')
+	{
+		return Tag::landID($this->s, $lang, $str_lang_code);
 	}
 }

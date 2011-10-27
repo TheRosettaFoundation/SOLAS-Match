@@ -12,7 +12,7 @@ $target = $s->io->post('target');
 $word_count = $s->io->post('word_count');
 $organisation_id = $s->io->post('organisation_id');
 
-$source_id = ...
+$source_id = 
 
 // Put the task in the database.
 $task_id = $s->tasks->create($title, $organisation_id, $tags, $source_id, $target_id, $word_count);
