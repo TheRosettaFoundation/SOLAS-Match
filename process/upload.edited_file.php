@@ -1,5 +1,5 @@
 <?php
-require('../private/includes/smarty.php');
+require('../app/includes/smarty.php');
 /* Process submitted form data to create a new task. 
 	Simple mockup functionality. Therefore, not much error checking happening. 
 */

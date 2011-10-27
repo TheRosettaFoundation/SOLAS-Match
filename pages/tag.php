@@ -1,5 +1,5 @@
 <?php
-require('../private/includes/smarty.php');
+require('../app/includes/smarty.php');
 /*
  * Input: tag_id
  * Page responsible for showing a stream of tasks related to this tag.

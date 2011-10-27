@@ -1,5 +1,5 @@
 <?php
-require('../private/includes/smarty.php');
+require('../app/includes/smarty.php');
 
 // User is trying to register.
 $email = $s->io->post('email');

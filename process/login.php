@@ -1,5 +1,5 @@
 <?php
-require('../private/includes/smarty.php');
+require('../app/includes/smarty.php');
 
 if (!empty($_POST['email']) && !empty($_POST['password']))
 {

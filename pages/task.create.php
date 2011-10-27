@@ -1,5 +1,5 @@
 <?php
-require('../private/includes/smarty.php');
+require('../app/includes/smarty.php');
 
 // Check permissions
 if (!$s->users->isLoggedIn())

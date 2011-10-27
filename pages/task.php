@@ -1,5 +1,5 @@
 <?php
-require('../private/includes/smarty.php');
+require('../app/includes/smarty.php');
 /*
  * Input: task_id
  * Page responsible for showing all the details of this particular task.
