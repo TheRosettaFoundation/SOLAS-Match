@@ -35,8 +35,8 @@ if (!defined('MY_DIR'))
 #######################################
 # Use Smarty.class.php in this file.
 #######################################
-require_once(SMARTY_DIR.'Smarty.class.php'); // TODO not being found
-require_once(dirname(__FILE__).'/../RosettaSmarty.class.php'); //$_SERVER['DOCUMENT_ROOT'].'/../library/
+require_once(SMARTY_DIR.'Smarty.class.php');
+require_once(dirname(__FILE__).'/../RosettaSmarty.class.php');
 
 ##############################
 # Create a new Smarty object
@@ -54,9 +54,10 @@ $s->debugging = false	; //Uncomment this if you want to see the debugging window
 # Setup the Smarty template engine's directory structure.
 # (gnd is my personal project directory!)
 ###########################################################
-$s->template_dir = MY_DIR.'templates';
-$s->compile_dir = MY_DIR.'templates_compiled';
-$s->config_dir = MY_DIR.'configs';
+
+$s->setTemplateDir(MY_DIR.'templates');
+$s->setCompileDir(MY_DIR.'templates_compiled');
+$s->setConfigDir(MY_DIR.'configs');
 
 $s->assign('s', $s); 
 /* Calling it just "smarty" would make Smarty access its default object, 

@@ -41,15 +41,6 @@ class RosettaSmarty extends Smarty {
 		}
 	}
 	
-	/*
-	 * Extends Smarty's display() method.
-	 * Custom function to get the text of all required interface texts.
-	 */
-	public function display($template, $cache_id = null, $compile_id = null, $parent = null)
-	{
-		parent::display($template, $cache_id, $compile_id, $parent);
-	}
-	
 	function setting($set)
 	{
 		/*
