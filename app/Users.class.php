@@ -20,7 +20,7 @@ class Users
 	
 	function currentUserID()
 	{
-		return (intval($_SESSION['user_id']) > 0) ? intval($_SESSION['user_id']) : false;
+		return (isset($_SESSION['user_id']) && intval($_SESSION['user_id']) > 0) ? intval($_SESSION['user_id']) : false;
 	}
 	
 	function isLoggedIn()

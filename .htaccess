@@ -12,9 +12,6 @@ RewriteRule ^logout/?$ process/logout.php
 RewriteRule ^register/?$ pages/register.php
 RewriteRule ^resources/css/style.([0-9]+).css$ resources/css/style.css
 
-# Redirect old page that was emailed out.
-Redirect 301 /mockup/index.html http://193.1.97.45:83/ 
-
 # Protect the README.md file
 <Files README.md>
 	Order Deny,Allow

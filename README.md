@@ -85,13 +85,13 @@ Several components and directories need to be set up.
 
 ### Configure PHP
 
-1. In php.ini set appropriate values for upload_max_filesize and post_max_size (such as 20M).
+ * In php.ini set appropriate values for upload_max_filesize and post_max_size (such as 20M).
    php.ini is often found under /etc/php5/apache2/php.ini
 
 ### Set file/folder permissions
 
-1. $ chmod 777 ./app/uploads
-2. $ chmod 777 ./app/templating/templates_compiled
+    chmod 777 ./app/uploads
+    chmod 777 ./app/templating/templates_compiled
 
 ### Install 960.css Grid System
 
