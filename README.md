@@ -55,19 +55,23 @@ Several components and directories need to be set up.
 
 ### Configure Apache
 
-1. Ensure that RewriteEngine is installed. If not:
+ * Ensure that RewriteEngine is installed. If not:
    $ sudo a2enmod rewrite
 
 ### Install Smarty PHP templating engine
 
-1. In Ubuntu: 
+ * In Ubuntu: 
 	$ sudo apt-get install smarty3
+
+**Or**
+
+ * Clone the git repository at https://github.com/eocdev/Smarty (git@github.com:eocdev/Smarty.git)
 
 ### Set up the MySQL database
 
 1. Set up a MySQL database.
 2. Create a user with all permissions.
-3. Import ./private/setup.sql (using phpMyAdmin, for example.)
+3. Import ./app/setup.sql (using phpMyAdmin, for example.)
 
 ### Configuration file
 
@@ -86,8 +90,8 @@ Several components and directories need to be set up.
 
 ### Set file/folder permissions
 
-1. $ chmod 777 ./private/uploads
-2. $ chmod 777 ./private/templating/templates_compiled
+1. $ chmod 777 ./app/uploads
+2. $ chmod 777 ./app/templating/templates_compiled
 
 ### Install 960.css Grid System
 

@@ -54,6 +54,7 @@ $s->debugging = false	; //Uncomment this if you want to see the debugging window
 # Setup the Smarty template engine's directory structure.
 # (gnd is my personal project directory!)
 ###########################################################
+
 $s->template_dir = MY_DIR.'templates';
 $s->compile_dir = MY_DIR.'templates_compiled';
 $s->config_dir = MY_DIR.'configs';
