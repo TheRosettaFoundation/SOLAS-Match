@@ -1,16 +1,20 @@
 php_flag display_errors on
 
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php [QSA,L]
+
 # Disable listing of directory contents
 IndexIgnore *
 
-RewriteEngine On
-RewriteRule ^task/([0-9]+)/$ pages/task.php?task_id=$1
-RewriteRule ^task/create/$ pages/task.create.php
-RewriteRule ^tag/([0-9]+)/$ pages/tag.php?tag_id=$1
-RewriteRule ^login/?$ pages/login.php
-RewriteRule ^logout/?$ process/logout.php
-RewriteRule ^register/?$ pages/register.php
-RewriteRule ^resources/css/style.([0-9]+).css$ resources/css/style.css
+#RewriteEngine On
+#RewriteRule ^task/([0-9]+)/$ pages/task.php?task_id=$1
+#RewriteRule ^task/create/$ pages/task.create.php
+#RewriteRule ^tag/([0-9]+)/$ pages/tag.php?tag_id=$1
+#RewriteRule ^login/?$ pages/login.php
+#RewriteRule ^logout/?$ process/logout.php
+#RewriteRule ^register/?$ pages/register.php
+#RewriteRule ^resources/css/style.([0-9]+).css$ resources/css/style.css
 
 # Protect the README.md file
 <Files README.md>

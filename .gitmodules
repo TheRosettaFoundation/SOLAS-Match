@@ -1,3 +1,6 @@
 [submodule "libs/Slim"]
 	path = libs/Slim
 	url = https://github.com/codeguy/Slim.git
+[submodule "libs/SlimExtras"]
+	path = libs/SlimExtras
+	url = https://github.com/codeguy/Slim-Extras.git

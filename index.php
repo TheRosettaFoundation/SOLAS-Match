@@ -1,8 +1,43 @@
 <?php
+require 'libs/Slim/Slim/Slim.php';
 require('app/includes/smarty.php');
 
-if ($tasks = $s->stream->getStream(10))
-{
-	$s->assign('tasks', $tasks);
-}
-$s->display('index.tpl');
+$app = new Slim(array(
+    'debug' => true
+    'mode' => 'development' // default is development. TODO get from config file, or set in environment...... $_ENV['SLIM_MODE'] = 'production';
+));
+
+/**
+ * Set up application modes, depending on whether we're in development or production.
+ */
+$app->configureMode('production', function () use ($app) {
+    $app->config(array(
+        'log.enable' => true,
+        'log.path' => '../logs', // Need to set this...
+        'debug' => false
+    ));
+});
+
+$app->configureMode('development', function () use ($app) {
+    $app->config(array(
+        'log.enable' => false,
+        'debug' => true
+    ));
+});
+
+/**
+ * Application routing
+ */
+$app->get('/', function () use ($app) {
+	/**
+	 * Home page functionality
+	 */
+	if ($tasks = $s->stream->getStream(10))
+	{
+		$s->assign('tasks', $tasks);
+	}
+	$s->display('index.tpl');
+    $app->render('foo.php');
+});
+
+$app->run();
