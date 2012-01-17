@@ -7,12 +7,10 @@
 */
 class Task
 {
-	var $s;
 	var $id;
 	
-	function Task(&$smarty, $task_id)
+	function Task($task_id)
 	{
-		$this->s = &$smarty;
 		$this->setTaskID($task_id);
 	}
 
@@ -33,10 +31,12 @@ class Task
 	function title()
 	{
 		$ret = '';
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT title
 				FROM task
-				WHERE id = '.$this->s->db->cleanse($this->id);
-		if ($r = $this->s->db->Select($q))
+				WHERE id = '.$db->cleanse($this->id);
+		if ($r = $db->Select($q))
 		{
 			$text = $r[0]['title'];
 			$ret = $text;
@@ -50,10 +50,12 @@ class Task
 	function createdTime()
 	{
 		$ret = '';
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT created_time
 				FROM task
-				WHERE id = '.$this->s->db->cleanse($this->id);
-		if ($r = $this->s->db->Select($q))
+				WHERE id = '.$db->cleanse($this->id);
+		if ($r = $db->Select($q))
 		{
 			$ret = strtotime($r[0]['created_time']); // Converting to unix time string 
 		}
@@ -63,11 +65,13 @@ class Task
 	function wordcount()
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT word_count
 				FROM task
-				WHERE id = '.$this->s->db->cleanse($this->id).'
+				WHERE id = '.$db->cleanse($this->id).'
 				AND word_count IS NOT NULL';
-		if ($r = $this->s->db->Select($q))
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0]['word_count'];
 		}
@@ -77,11 +81,13 @@ class Task
 	function target_id()
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT target_id
 				FROM task
-				WHERE id = '.$this->s->db->cleanse($this->id).'
+				WHERE id = '.$db->cleanse($this->id).'
 				AND target_id IS NOT NULL';
-		if ($r = $this->s->db->Select($q))
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0][0];
 		}
@@ -91,11 +97,13 @@ class Task
 	function source_id()
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT source_id
 				FROM task
-				WHERE id = '.$this->s->db->cleanse($this->id).'
+				WHERE id = '.$db->cleanse($this->id).'
 				AND source_id IS NOT NULL';
-		if ($r = $this->s->db->Select($q))
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0][0];
 		}
@@ -110,7 +118,8 @@ class Task
 		$ret = false;
 		if ($target_id = $this->target_id())
 		{
-			$ret = $this->s->tags->langName($target_id);
+			$tags = new Tags();
+			$ret = $tags->langName($target_id);
 		}
 		return $ret;
 	}
@@ -120,7 +129,8 @@ class Task
 		$ret = false;
 		if ($source_id = $this->source_id())
 		{
-			$ret = $this->s->tags->langName($source_id);
+			$tags = new Tags();
+			$ret = $tags->langName($source_id);
 		}
 		return $ret;
 	}
@@ -128,10 +138,12 @@ class Task
 	function organisationID()
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT organisation_id
 				FROM task
-				WHERE id ='.$this->s->db->cleanse($this->id);
-		if ($r = $this->s->db->Select($q))
+				WHERE id ='.$db->cleanse($this->id);
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0]['organisation_id'];
 		}
@@ -143,17 +155,20 @@ class Task
 	*/
 	function organisation()
 	{
-		return $this->s->orgs->name($this->organisationID());
+		$orgs = new Organisations();
+		return $orgs->name($this->organisationID());
 	}
 	
 	function url()
 	{
-		return $this->s->url->server().'/task/'.$this->id.'/';
+		$url = new URL();
+		return $url->server().'/task/'.$this->id.'/';
 	}
 
 	function tagIDs()
 	{
-		return $this->s->tags->taskTagIDs($this->id);
+		$tags = new Tags();
+		return $tags->taskTagIDs($this->id);
 	}
 
 	function taskID()
@@ -166,12 +181,12 @@ class Task
 		$ret = false;
 		$task_file = array();
 		$task_file['task_id'] = intval($this->taskID());
-		$task_file['path'] = '\''.$this->s->db->cleanse($path).'\'';
-		$task_file['filename'] = '\''.$this->s->db->cleanse($filename).'\'';
-		$task_file['content_type'] = '\''.$this->s->db->cleanse($content_type).'\'';
+		$task_file['path'] = '\''.$db->cleanse($path).'\'';
+		$task_file['filename'] = '\''.$db->cleanse($filename).'\'';
+		$task_file['content_type'] = '\''.$db->cleanse($content_type).'\'';
 		$task_file['user_id'] = 'NULL';
 		$task_file['upload_time'] = 'NOW()';
-		if ($file_id = $this->s->db->Insert('task_file', $task_file))
+		if ($file_id = $db->Insert('task_file', $task_file))
 		{
 			$task_file = new TaskFile($this->s, $this->taskID(), $file_id);
 			$ret = $task_file->recordNewlyUploadedVersion($task_file->nextVersion(), $filename, $content_type);
@@ -185,10 +200,12 @@ class Task
 	function files()
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT *
 				FROM task_file
-				WHERE task_id = '.$this->s->db->cleanse($this->id);
-		if ($r = $this->s->db->Select($q))
+				WHERE task_id = '.$db->cleanse($this->id);
+		if ($r = $db->Select($q))
 		{
 			$task_files = array();
 			foreach($r as $row)

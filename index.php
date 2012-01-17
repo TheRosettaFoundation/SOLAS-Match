@@ -1,13 +1,23 @@
 <?php
 require 'libs/Slim/Slim/Slim.php';
 require_once 'app/Views/SmartyView.php';
+require_once 'app/Settings.class.php';
+require_once 'app/MySQLWrapper.class.php';
 require_once 'app/Users.class.php';
 require_once 'app/URL.class.php';
-session_start();
+require_once 'app/Stream.class.php';
+require_once 'app/Tasks.class.php';
 
+/**
+ * Start the session
+ */
+session_start();
 // Can we get away from the app's old system?
 //require('app/includes/smarty.php');
 
+/**
+ * Initiate the app
+ */
 $app = new Slim(array(
     'debug' => true,
     'view' => new SmartyView(),
@@ -68,6 +78,10 @@ $app->get('/', function () use ($app) {
 	}
 	*/
 	//$s->display('index.tpl');
+    $stream = new Stream();
+    if ($tasks = $stream->getStream(10)) {
+        $app->view()->setData('tasks', $tasks);
+    }
     $app->render('index.tpl');
 });
 

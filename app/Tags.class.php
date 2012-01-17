@@ -3,12 +3,9 @@ require('Tag.class.php');
 
 class Tags
 {
-	var $s;
-	function Tags(&$smarty)
-	{
-		$this->s = &$smarty;
+	function __construct() {
 	}
-	
+
 	/*
 		Take a string typed in by the user, try to break it up and create tags from it.
 		Returns an array of matching tag_ids.
@@ -23,6 +20,8 @@ class Tags
 		$str = str_replace(',', ' ', $str);
 		if ($tags = explode(' ', $str)) // Space is the delimiter
 		{
+			$db = new MySQLWrapper();
+			$db->init();
 			$tag_ids = array();
 			foreach($tags as $tag)
 			{
@@ -36,8 +35,8 @@ class Tags
 				{
 					// Create this tag, and return its ID.
 					$i = array();
-					$i['label'] = '\''.$this->s->db->cleanse($tag).'\'';
-					if ($tag_id = $this->s->db->Insert('tag', $i))
+					$i['label'] = '\''.$db->cleanse($tag).'\'';
+					if ($tag_id = $db->Insert('tag', $i))
 					{
 						$tag_ids[] = $tag_id;
 					}
@@ -50,11 +49,13 @@ class Tags
 	function tagIDFromLabel($label)
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT id
 				FROM tag
-				WHERE label = \''.$this->s->db->cleanse($label).'\'
+				WHERE label = \''.$db->cleanse($label).'\'
 				LIMIT 1';
-		if ($r = $this->s->db->Select($q))
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0]['id'];
 		}
@@ -64,11 +65,13 @@ class Tags
 	function label($tag_id)
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT label
 				FROM tag
 				WHERE id = '.intval($tag_id).'
 				LIMIT 1';
-		if ($r = $this->s->db->Select($q))
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0]['label'];
 		}
@@ -82,10 +85,12 @@ class Tags
 	function taskTagIDs($task_id)
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT tag_id
 				FROM task_tag
 				WHERE task_id = '.intval($task_id);
-		if ($r = $this->s->db->Select($q))
+		if ($r = $db->Select($q))
 		{
 			$ret = array();
 			foreach($r as $row)
@@ -126,12 +131,14 @@ class Tags
 	function topTags($limit = 30)
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT tag_id, COUNT(tag_id) AS frequency
 				FROM task_tag
 				GROUP BY tag_id
 				ORDER BY frequency DESC
 				LIMIT '.intval($limit);
-		if ($r = $this->s->db->Select($q))
+		if ($r = $db->Select($q))
 		{
 			$ret = array();
 			foreach ($r as $row)
@@ -151,11 +158,11 @@ class Tags
 	 */
 	function langID($lang, $str_lang_code = 'en')
 	{
-		return Tag::langID($this->s, $lang, $str_lang_code);
+		return Tag::langID($lang, $str_lang_code);
 	}
 	
 	function langName($lang_id, $str_lang_code = 'en')
 	{
-		return Tag::langName($this->s, $lang_id, $str_lang_code);
+		return Tag::langName($lang_id, $str_lang_code);
 	}
 }

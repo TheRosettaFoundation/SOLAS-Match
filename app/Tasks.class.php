@@ -1,4 +1,5 @@
 <?php
+require 'Task.class.php';
 
 /*
 	Save to the database a new task. $tags is an array or tag_ids.
@@ -34,7 +35,8 @@ class Tasks
 		{
 			$ret = $task_id;
 			// The task has been created. Now save what it was tagged with.
-			if ($tag_ids = $this->s->tags->parse($tags))
+			$tags = new Tags();
+			if ($tag_ids = $tags->parse($tags))
 			{
 				// We now have an array of tag_ids related to this task. Save this information to the datbase.
 				foreach ($tag_ids as $tag_id)
@@ -66,7 +68,7 @@ class Tasks
 			foreach($r as $row)
 			{
 				// Add a new Job object to the array to be returned.
-				$ret[] = new Task($this->s, $row['id']);
+				$ret[] = new Task($row['id']);
 			}
 		}
 		return $ret;

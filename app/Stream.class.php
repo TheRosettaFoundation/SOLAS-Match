@@ -2,10 +2,8 @@
 
 class Stream
 {
-	var $s;
-	function Stream(&$smarty)
-	{
-		$this->s = &$smarty; 
+	
+	function __construct() {
 	}
 	
 	/*
@@ -25,7 +23,8 @@ class Stream
 	
 	public function getGlobalStream($nb_items = 10)
 	{
-		return $this->s->tasks->getLatestTasks($nb_items);
+		$tasks = new Tasks();
+		return $tasks->getLatestTasks($nb_items);
 	}
 	
 	/*
@@ -33,6 +32,7 @@ class Stream
 	 */
 	public function getTaggedStream($tag_id, $nb_items)
 	{
-		return $this->s->tasks->getTaggedTasks($tag_id, $nb_items);
+		$tasks = new Tasks();
+		return $tasks->getTaggedTasks($tag_id, $nb_items);
 	}
 }
