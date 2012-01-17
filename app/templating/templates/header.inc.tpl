@@ -14,10 +14,10 @@
 		<div id="header-right">
 			{if isset($user)}
 				{$user.email}
-				&middot; <a href="{$s->url->logout()}">Log out</a> 
+				&middot; <a href="{$url->logout()}">Log out</a> 
 			{else}
-				<a href="{$s->url->login()}">Log in</a>
-				&middot; <a href="{$s->url->register()}">Register</a>
+				<a href="{$url->login()}">Log in</a>
+				&middot; <a href="{$url->register()}">Register</a>
 			{/if}
 		</div>
 		<!--

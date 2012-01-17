@@ -4,10 +4,8 @@ class URL
 	/*
 	 *	Return the URL for different parts of the application.
 	*/
-	var $s;
-	function URL(&$smarty)
-	{
-		$this->s = &$smarty;
+
+	function __construct() {
 	}
 	
 	/*

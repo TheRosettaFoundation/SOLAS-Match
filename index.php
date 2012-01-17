@@ -2,6 +2,7 @@
 require 'libs/Slim/Slim/Slim.php';
 require_once 'app/Views/SmartyView.php';
 require_once 'app/Users.class.php';
+require_once 'app/URL.class.php';
 session_start();
 
 // Can we get away from the app's old system?
@@ -14,17 +15,26 @@ $app = new Slim(array(
 ));
 
 /**
+ * Set up application objects
+ * 
+ * Given that we don't have object factories implemented, we'll initialise them directly here.
+ */
+$users = new Users();
+$url = new URL();
+
+/**
  * General variables
  * Set up general variables to be used across templates.
  */
 $view = $app->view();
-$users = new Users();
+$view->setData('url', $url);
+$user = null;
 if ($user_id = $users->currentUserID()) {
     $user = array(
         'id' => $users->currentUserID(),
         'email' => $users->userEmail($user_id)
     );
-    $view->assign('user', $user);
+    $view->setData('user', $user);
 }
 
 /**
