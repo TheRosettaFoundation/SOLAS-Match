@@ -2,11 +2,8 @@
 
 class Organisations
 {
-	var $s;
-	function Organisations(&$smarty)
-	{
-		$this->s = &$smarty;
-	}
+	function __construct() {
+	}	
 	
 	/*
 		Return the string name of the oranisation.
@@ -15,10 +12,12 @@ class Organisations
 	function name($organisation_id)
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT name
 				FROM organisation
 				WHERE id = '.intval($organisation_id);
-		if ($r = $this->s->db->Select($q))
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0]['name'];
 		}
@@ -31,9 +30,11 @@ class Organisations
 	function organisationIDs()
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT id
 				FROM organisation';
-		if ($r = $this->s->db->Select($q))
+		if ($r = $db->Select($q))
 		{
 			$ret = array();
 			foreach ($r as $row)
