@@ -1,29 +1,28 @@
 <?php
 
+/*
+	Save to the database a new task. $tags is an array or tag_ids.
+*/	
 class Tasks
 {
-	/*
-		Save to the database a new task. $tags is an array or tag_ids.
-	*/
-	var $s;
 	
-	function Tasks(&$smarty)
-	{
-		$this->s = &$smarty;
+	function __construct() {
 	}
 
 	function create($title, $organisation_id, $tags, $source_id, $target_id, $word_count)
 	{
+		$db = new MySQLWrapper();
+		$db->init();
 		$ret = false;
 		$task = array();
-		$task['title'] = '\''.$this->s->db->cleanse($title).'\'';
+		$task['title'] = '\''.$db->cleanse($title).'\'';
 		if ($source_id)
 		{
-			$task['source_id'] = '\''.$this->s->db->cleanse($source_id).'\'';	
+			$task['source_id'] = '\''.$db->cleanse($source_id).'\'';	
 		}
 		if ($target_id)
 		{
-			$task['target_id'] = '\''.$this->s->db->cleanse($target_id).'\'';	
+			$task['target_id'] = '\''.$db->cleanse($target_id).'\'';	
 		}
 		$task['organisation_id'] = intval($organisation_id);
 		if ($word_count)
@@ -31,7 +30,7 @@ class Tasks
 			$task['word_count'] = intval($word_count);	
 		}
 		$task['created_time'] = 'NOW()';
-		if ($task_id = $this->s->db->Insert('task', $task))
+		if ($task_id = $db->Insert('task', $task))
 		{
 			$ret = $task_id;
 			// The task has been created. Now save what it was tagged with.
@@ -44,7 +43,7 @@ class Tasks
 					$task_tag['task_id'] = intval($task_id);
 					$task_tag['tag_id'] = intval($tag_id);
 					$task_tag['created_time'] = 'NOW()';
-					$this->s->db->Insert('task_tag', $task_tag);
+					$db->Insert('task_tag', $task_tag);
 				}
 			// todo, now test if it's working!
 			}
@@ -54,12 +53,14 @@ class Tasks
 
 	public function getLatestTasks($nb_items = 10)
 	{
+		$db = new MySQLWrapper();
+		$db->init();
 		$ret = false;
 		$q = 'SELECT id
 				FROM task
 				ORDER BY created_time DESC 
-				LIMIT '.$this->s->db->cleanse($nb_items);
-		if ($r = $this->s->db->Select($q))
+				LIMIT '.$db->cleanse($nb_items);
+		if ($r = $db->Select($q))
 		{
 			$ret = array();
 			foreach($r as $row)
@@ -76,6 +77,8 @@ class Tasks
 	 */
 	public function getTaggedTasks($tag_id, $nb_items = 10)
 	{
+		$db = new MySQLWrapper();
+		$db->init();
 		$ret = false;
 		$q = 'SELECT id
 				FROM task
@@ -85,8 +88,8 @@ class Tasks
 					WHERE tag_id = '.intval($tag_id).'
 				) 
 				ORDER BY created_time DESC 
-				LIMIT '.$this->s->db->cleanse($nb_items);
-		if ($r = $this->s->db->Select($q))
+				LIMIT '.$db->cleanse($nb_items);
+		if ($r = $db->Select($q))
 		{
 			$ret = array();
 			foreach($r as $row)
@@ -96,47 +99,5 @@ class Tasks
 			}
 		}
 		return $ret;
-	}
-	
-	/*
-	 * Get an array of all source languages of tasks in the database.
-	 * TODO: needs to move to Tags class
-	 */
-	public function allSourceLangauges_OLD()
-	{
-		$ret = false;
-		$q = 'SELECT DISTINCT(source)
-				FROM task';
-		if ($r = $this->s->db->Select($q))
-		{
-			$langs = array();
-			foreach ($r as $row)
-			{
-				$langs[] = $row[0];
-			}
-			$ret = $langs;
-		}
-		return $ret;	
-	}
-
-	/*
-	 * Get an array of all target languages of tasks in the database.
-	 * TODO: needs to move to Tags class
-	 */
-	public function allTargetLangauges_OLD()
-	{
-		$ret = false;
-		$q = 'SELECT DISTINCT(target)
-				FROM task';
-		if ($r = $this->s->db->Select($q))
-		{
-			$langs = array();
-			foreach ($r as $row)
-			{
-				$langs[] = $row[0];
-			}
-			$ret = $langs;
-		}
-		return $ret;	
 	}
 }
