@@ -4,13 +4,8 @@ require('User.class.php');
  * The control agent of users. The general business logic for users rests
  * here.
  */
-class Users
-{
-	var $s;
-	
-	function Users(&$smarty)
-	{
-		$this->s = &$smarty;
+class Users {
+	function __construct() {
 	}
 	
 	function logOut()

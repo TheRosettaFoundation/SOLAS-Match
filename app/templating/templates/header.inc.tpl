@@ -2,7 +2,7 @@
 <html lang="en">  
 <head>  
 	<meta charset="utf-8">  
-	<title>{if isset($title)}{$title}{else}SOLAS Match{/if}</title>
+	<title>{if isset($title)}{$title}{else}Solas Match{/if}</title>
 	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/reset.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/style.1.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/960.css">
@@ -10,10 +10,10 @@
 <body {if isset($body_class)}class="{$body_class}"{/if}>
 <div class="container_12"><!-- setting up a grid of 12 columns -->
 	<div id="header" class="grid_12">
-		<h1><a href="/">SOLAS Match</a></h1>
+		<h1><a href="/">Solas Match</a></h1>
 		<div id="header-right">
-			{if $s->users->currentUserID() !== false}
-				{$s->users->userEmail($s->users->currentUserID())}
+			{if isset($user)}
+				{$user.email}
 				&middot; <a href="{$s->url->logout()}">Log out</a> 
 			{else}
 				<a href="{$s->url->login()}">Log in</a>
