@@ -9,6 +9,7 @@ require_once 'app/Stream.class.php';
 require_once 'app/Tasks.class.php';
 require_once 'app/Tags.class.php';
 require_once 'app/IO.class.php';
+require_once 'app/Organisations.class.php';
 
 /**
  * Start the session

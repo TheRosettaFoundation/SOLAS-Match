@@ -210,7 +210,7 @@ class Task
 			$task_files = array();
 			foreach($r as $row)
 			{
-				$task_files[] = new TaskFile($this->s, $this->id, $row['file_id']);
+				$task_files[] = new TaskFile($this->id, $row['file_id']);
 			}
 			$ret = $task_files;
 		}

@@ -1,5 +1,6 @@
 <?php
 require 'Task.class.php';
+require 'TaskFile.class.php';
 
 /*
 	Save to the database a new task. $tags is an array or tag_ids.
