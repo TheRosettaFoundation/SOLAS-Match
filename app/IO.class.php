@@ -4,10 +4,8 @@
  * Input/Output including parsing input, and formatting output for URLs.
  */
 class IO {
-	var $s;
 	
-	function IO(&$smarty) {
-		$this->s = &$smarty;
+	function __construct() {
 	}
 
 	function get($get_var_name)
@@ -114,10 +112,10 @@ class IO {
 		if ($_FILES[$myfile]['error'] == UPLOAD_ERR_OK)
 		{
 			// Save this original file to upload_path/org-N/task-N/v-N
-			$uploaddir = TaskFile::absolutePath($this->s, $org_id, $task_id);
+			$uploaddir = TaskFile::absolutePath($org_id, $task_id);
 			if ($this->saveUploadedFileToFS($uploaddir, $myfile))
 			{
-				$task = new Task($this->s, $task_id);
+				$task = new Task($task_id);
 				$ret = $task->recordUploadedFile($uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
 			}
 		}

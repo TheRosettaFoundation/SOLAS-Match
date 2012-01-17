@@ -7,6 +7,8 @@ require_once 'app/Users.class.php';
 require_once 'app/URL.class.php';
 require_once 'app/Stream.class.php';
 require_once 'app/Tasks.class.php';
+require_once 'app/Tags.class.php';
+require_once 'app/IO.class.php';
 
 /**
  * Start the session
@@ -82,6 +84,10 @@ $app->get('/', function () use ($app) {
     if ($tasks = $stream->getStream(10)) {
         $app->view()->setData('tasks', $tasks);
     }
+    $tags = new Tags();
+    $app->view()->setData('tags', $tags);
+    $app->view()->setData('top_tags', $tags->topTags(30));
+    $app->view()->setData('io', new IO());
     $app->render('index.tpl');
 });
 

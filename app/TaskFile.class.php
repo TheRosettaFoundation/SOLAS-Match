@@ -2,13 +2,11 @@
 
 class TaskFile
 {
-	var $s;
 	var $task_id;
 	var $file_id;
 	
-	function TaskFile(&$smarty, $task_id, $file_id)
+	function TaskFile($task_id, $file_id)
 	{
-		$this->s = &$smarty;
 		$this->task_id = $task_id;
 		$this->file_id = $file_id;
 	}
@@ -25,19 +23,20 @@ class TaskFile
 	
 	function organisationID()
 	{
-		$task = new Task($this->s, $this->task_id);
+		$task = new Task($this->task_id);
 		return $task->organisationID();
 	}
 	
 	function absoluteFilePath($version = 0)
 	{
-		return TaskFile::absolutePath($this->s, $this->organisationId(), $this->task_id, $version).DIRECTORY_SEPARATOR.$this->filename($version);
+		return TaskFile::absolutePath($this->organisationId(), $this->task_id, $version).DIRECTORY_SEPARATOR.$this->filename($version);
 	}
 	
-	static function absolutePath(&$s, $org_id, $task_id, $version = 0)
+	static function absolutePath($org_id, $task_id, $version = 0)
 	{
 		// Not necessarily an existing path, but what it should be for this file.
-		return $s->setting('files.upload_path').'org-'.intval($org_id).DIRECTORY_SEPARATOR.'task-'.intval($task_id).DIRECTORY_SEPARATOR.'v-'.intval($version);
+		$settings = new Settings();
+		return $settings->setting('files.upload_path').'org-'.intval($org_id).DIRECTORY_SEPARATOR.'task-'.intval($task_id).DIRECTORY_SEPARATOR.'v-'.intval($version);
 	}
 	
 	/*
@@ -66,11 +65,13 @@ class TaskFile
 	function latestVersion()
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT max(version_id) as latest_version
 		 		FROM task_file_version
-		 		WHERE task_id ='.$this->s->db->cleanse($this->taskID()).'
-		 		AND file_id ='.$this->s->db->cleanse($this->fileID());
-		if ($r = $this->s->db->Select($q))
+		 		WHERE task_id ='.$db->cleanse($this->taskID()).'
+		 		AND file_id ='.$db->cleanse($this->fileID());
+		if ($r = $db->Select($q))
 		{
 			if ($r[0]['latest_version'] != null)
 			{
@@ -83,11 +84,13 @@ class TaskFile
 	function timesDownloaded()
 	{
 		$ret = 0;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT count(*) times_downloaded
 				FROM task_file_version_download
-				WHERE task_id='.$this->s->db->cleanse($this->taskID()).'
-				AND file_id='.$this->s->db->cleanse($this->fileID());
-		if ($r = $this->s->db->Select($q))
+				WHERE task_id='.$db->cleanse($this->taskID()).'
+				AND file_id='.$db->cleanse($this->fileID());
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0]['times_downloaded'];
 		}
@@ -97,26 +100,30 @@ class TaskFile
 	function recordDownload($version)
 	{
 		$down = array();
-		$down['task_id'] = $this->s->db->cleanse($this->taskID());
-		$down['file_id'] = $this->s->db->cleanse($this->fileID());
-		$down['version_id'] = $this->s->db->cleanse($version);
+		$db = new MySQLWrapper();
+		$db->init();
+		$down['task_id'] = $db->cleanse($this->taskID());
+		$down['file_id'] = $db->cleanse($this->fileID());
+		$down['version_id'] = $db->cleanse($version);
 		$down['user_id'] = 'NULL';
 		$down['time_downloaded'] = 'NOW()';
-		return $this->s->db->Insert('task_file_version_download', $down);
+		return $db->Insert('task_file_version_download', $down);
 	}
 
 	public function recordNewlyUploadedVersion($version, $filename, $content_type)
 	{
 		// Save file version
+		$db = new MySQLWrapper();
+		$db->init();
 		$task_file_version = array();
 		$task_file_version['task_id'] = intval($this->taskID());
 		$task_file_version['file_id'] = intval($this->fileID());
 		$task_file_version['version_id'] = intval($version);
-		$task_file_version['filename'] = '\''.$this->s->db->cleanse($filename).'\'';
-		$task_file_version['content_type'] = '\''.$this->s->db->cleanse($content_type).'\'';
+		$task_file_version['filename'] = '\''.$db->cleanse($filename).'\'';
+		$task_file_version['content_type'] = '\''.$db->cleanse($content_type).'\'';
 		$task_file_version['user_id'] = 'NULL';
 		$task_file_version['upload_time'] = 'NOW()';
-		$ret = $this->s->db->Insert('task_file_version', $task_file_version);
+		$ret = $db->Insert('task_file_version', $task_file_version);
 		return $ret;
 	}
 	
@@ -127,12 +134,14 @@ class TaskFile
 	function contentType($version)
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT content_type
 				FROM task_file_version
-				WHERE task_id = '.$this->s->db->cleanse($this->task_id).'
-				AND file_id = '.$this->s->db->cleanse($this->file_id).'
-				AND version_id ='.$this->s->db->cleanse($version);
-		if ($r = $this->s->db->Select($q))
+				WHERE task_id = '.$db->cleanse($this->task_id).'
+				AND file_id = '.$db->cleanse($this->file_id).'
+				AND version_id ='.$db->cleanse($version);
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0]['content_type'];			
 		}
@@ -142,12 +151,14 @@ class TaskFile
 	function filename($version = 0)
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT filename
 				FROM task_file_version
-				WHERE task_id = '.$this->s->db->cleanse($this->task_id).'
-				AND file_id = '.$this->s->db->cleanse($this->file_id).'
-				AND version_id ='.$this->s->db->cleanse($version);
-		if ($r = $this->s->db->Select($q))
+				WHERE task_id = '.$db->cleanse($this->task_id).'
+				AND file_id = '.$db->cleanse($this->file_id).'
+				AND version_id ='.$db->cleanse($version);
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0]['filename'];
 		}

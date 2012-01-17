@@ -6,13 +6,13 @@
 		<ul class="tags">
 			<li>{$task->source()} to {$task->target()}</li>
 			{foreach from=$tag_ids item=tag_id}
-				<li>{$s->tags->tagHTML($tag_id)}</li>
+				<li>{$tags->tagHTML($tag_id)}</li>
 			{/foreach}
 		</ul>
 	{/if}
 	<h3><a href="{$task->url()}">{$task->title()}</a></h3>
 	<p class="task_details">
-		<span class="time_since">{$s->io->timeSince($task->createdTime())} ago</span> {$task->organisation()}
+		<span class="time_since">{$io->timeSince($task->createdTime())} ago</span> {$task->organisation()}
 	</p>
 	<p class="task_summary">
 		{assign var="wordcount" value=$task->wordcount()}
