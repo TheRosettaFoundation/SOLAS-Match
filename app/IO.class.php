@@ -53,7 +53,7 @@ class IO {
 		return rawurldecode($text);
 	}
 	
-	function timeSince($unix_time)
+	static function timeSince($unix_time)
 	{
 		// From http://www.dreamincode.net/code/snippet86.htm
 		// Array of time period chunks
@@ -192,10 +192,15 @@ class IO {
 		return;
 	}
 	
-	function maxFileSizeMB()
+	/**
+	 * Return an integer value of the max file size that can be uploaded to the system,
+	 * denominated in megabytes.
+	 */
+	static function maxFileSizeMB()
 	{
 		$ret = false;
-		if ($bytes = $this->s->setting('files.max_upload_file_size'))
+		$settings = new Settings();
+		if ($bytes = $settings->get('files.max_upload_file_size'))
 		{
 			$ret = round($bytes/1024, 1);
 		}	

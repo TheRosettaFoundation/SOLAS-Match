@@ -71,6 +71,10 @@ $app->configureMode('development', function () use ($app) {
 /**
  * Application routing
  */
+
+/**
+ * Home page
+ */
 $app->get('/', function () use ($app) {
 	/**
 	 * Home page functionality
@@ -90,6 +94,31 @@ $app->get('/', function () use ($app) {
     $app->view()->setData('top_tags', $tags->topTags(30));
     $app->view()->setData('io', new IO());
     $app->render('index.tpl');
+});
+
+/**
+ * Task page
+ */
+#RewriteRule ^task/([0-9]+)/$ pages/task.php?task_id=$1
+$app->get('/task/:task_id/', function ($task_id) use ($app) {
+    $task = new Task($task_id);
+    
+    if (!$task->isInit())
+    {
+        // Make sure that we've been passed a correct task.
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $app->view()->setData('task', $task);
+    if ($task_files = $task->files())
+    {
+        $app->view()->setData('task_files', $task_files);
+    }
+    $app->view()->setData('max_file_size', IO::maxFileSizeMB());
+    $app->view()->setData('body_class', 'task_page');
+     $app->view()->setData('tags', new Tags());
+    $app->render('task.tpl');
 });
 
 $app->run();

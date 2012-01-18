@@ -61,6 +61,10 @@ class Task
 		}
 		return $ret;
 	}
+
+	function createdTimeAgo() {
+		return IO::timeSince($this->createdTime());
+	}
 	
 	function wordcount()
 	{

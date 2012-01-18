@@ -4,7 +4,7 @@
 			<h2>{$task->title()}</h2>
 	
 			<p class="details">
-				<span class="time_since">{$s->io->timeSince($task->createdTime())} ago</span> {$task->organisation()}
+				<span class="time_since">{$task->createdTimeAgo()} ago</span> {$task->organisation()}
 					{assign var="wordcount" value=$task->wordcount()}
 					{if $wordcount}
 						&middot; {$wordcount|number_format} words
@@ -16,7 +16,7 @@
 				{assign var="tag_ids" value=$task->tagIDs()}
 				{if $tag_ids}
 					{foreach from=$tag_ids item=tag_id}
-						<li>{$s->tags->tagHTML($tag_id)}</li>
+						<li>{$tags->tagHTML($tag_id)}</li>
 					{/foreach}
 				{/if}
 			</ul>
@@ -31,7 +31,7 @@
 						{else if $times_downloaded > 1}
 							<li><span class="time_since">Downloaded {$times_downloaded} times.</span></li>
 						{/if}
-						{if $s->users->currentUserID() !== false}
+						{if isset($user)}
 							{assign var="latest_version" value=$task_file->latestVersion()}
 							<li><em>Volunteers:</em> <a href="{$task_file->url()}">Download the file to translate it.</a></li>
 							{if $latest_version > 0}
@@ -48,7 +48,7 @@
 						<fieldset>
 							<p><label for="edited_file">Upload translated file</label>  
 							<input type="file" name="edited_file" id="edited_file"></p>
-							<p class="desc">Can be anything, even a .zip collection of files. Max file size {$s->io->maxFileSizeMB()}MB.</p>  
+							<p class="desc">Can be anything, even a .zip collection of files. Max file size {$max_file_size}MB.</p>  
 							<input type="submit" value="Submit" name="submit">
 						</fieldset> 
 					</form>
