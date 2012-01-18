@@ -38,6 +38,11 @@ $url = new URL();
 /**
  * General variables
  * Set up general variables to be used across templates.
+ * These configurations may be better done with a hook rule:
+ *      $app->hook('slim.before', function () use ($app) {
+ *          $app->view()->appendData(array('baseUrl' => '/base/url/here'));
+ *      });
+ *      // http://help.slimframework.com/discussions/questions/49-how-to-deal-with-base-path-and-different-routes
  */
 $view = $app->view();
 $view->setData('url', $url);
@@ -76,15 +81,6 @@ $app->configureMode('development', function () use ($app) {
  * Home page
  */
 $app->get('/', function () use ($app) {
-	/**
-	 * Home page functionality
-	 */
-	/*
-	if ($tasks = $s->stream->getStream(10) {
-		$s->assign('tasks', $tasks);
-	}
-	*/
-	//$s->display('index.tpl');
     $stream = new Stream();
     if ($tasks = $stream->getStream(10)) {
         $app->view()->setData('tasks', $tasks);
@@ -99,7 +95,6 @@ $app->get('/', function () use ($app) {
 /**
  * Task page
  */
-#RewriteRule ^task/([0-9]+)/$ pages/task.php?task_id=$1
 $app->get('/task/:task_id/', function ($task_id) use ($app) {
     $task = new Task($task_id);
     
@@ -120,5 +115,29 @@ $app->get('/task/:task_id/', function ($task_id) use ($app) {
      $app->view()->setData('tags', new Tags());
     $app->render('task.tpl');
 });
+
+/**
+ * Task create page
+ */
+$app->get('/task/create/', function () use ($app) {
+    // TODO
+    // Enforcing authenication:
+    // http://help.slimframework.com/discussions/problems/6-simple-user-login
+
+   // Check permissions
+   /*
+   if (!$s->users->isLoggedIn()) {
+       header('Location: '.$s->url->login());
+       die;
+   }
+    $s->display('task.create.tpl'); 
+    */
+
+});
+
+/**
+ * For login, and named routes, you can use the urlFor() method, in conjucuntion
+ * with Named Routes http://www.slimframework.com/documentation/develop
+ */
 
 $app->run();
