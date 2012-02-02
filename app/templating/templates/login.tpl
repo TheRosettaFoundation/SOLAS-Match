@@ -1,7 +1,7 @@
 {include file="header.inc.tpl"}
 <div class="grid_8">
 	<h2>Log In</h2>
-	<form method="post" action="/process/login.php">
+	<form method="post" action="{$url_login}">
 		<fieldset>
 			<p>
 				<label for="email">Email</label>

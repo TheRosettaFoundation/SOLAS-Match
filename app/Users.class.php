@@ -8,23 +8,19 @@ class Users {
 	function __construct() {
 	}
 	
-	function logOut()
-	{
+	function logOut() {
 		User::destroySession();
 	}
 	
-	function currentUserID()
-	{
+	function currentUserID() {
 		return (isset($_SESSION['user_id']) && intval($_SESSION['user_id']) > 0) ? intval($_SESSION['user_id']) : false;
 	}
 	
-	function isLoggedIn()
-	{
+	function isLoggedIn() {
 		return User::isLoggedIn();
 	}
 	
-	public function userEmail($user_id)
-	{
-		return User::email($this->s, $user_id);
+	public function userEmail($user_id)	{
+		return User::email($user_id);
 	}
 }

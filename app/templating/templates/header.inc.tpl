@@ -16,7 +16,7 @@
 				{$user.email}
 				&middot; <a href="{$url->logout()}">Log out</a> 
 			{else}
-				<a href="{$url->login()}">Log in</a>
+				<a href="{$url_login}">Log in</a>
 				&middot; <a href="{$url->register()}">Register</a>
 			{/if}
 		</div>

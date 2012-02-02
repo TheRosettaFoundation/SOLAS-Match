@@ -4,14 +4,16 @@ class User
 	private $user_id;
 	private $email;
 	
-	public static function email(&$s, $user_id)
+	public static function email($user_id)
 	{
 		// Check the database for the user.
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT email
 				FROM user
-				WHERE user_id = '.$s->db->cleanse(intval($user_id)).'
+				WHERE user_id = '.$db->cleanse(intval($user_id)).'
 				AND email IS NOT NULL';
-		return ($r = $s->db->Select($q)) ? $r[0]['email'] : false;
+		return ($r = $db->Select($q)) ? $r[0]['email'] : false;
 	}
 	
 	/*
@@ -24,22 +26,24 @@ class User
 		return true;
 	}
 	
-	public static function login(&$s, $email, $password)
-	{
+	public static function login($email, $password)	{
 		$ret = false;
 		// See if we can match the user with what's in the database.
-		$nonce = User::nonce($s, $email);
-		$hashed_password = User::hashPassword($s, $password, $nonce);
+		$nonce = User::nonce($email);
+		$db = new MySQLWrapper();
+		$db->init();
+		$hashed_password = User::hashPassword($password, $nonce);
 		$q = 'SELECT *
 				FROM user
-				WHERE email = \''.$s->db->cleanse($email).'\'
-				AND password = \''.$s->db->cleanse($hashed_password).'\'';
-		if ($r = $s->db->Select($q))
-		{
+				WHERE email = \''.$db->cleanse($email).'\'
+				AND password = \''.$db->cleanse($hashed_password).'\'';
+		if ($r = $db->Select($q)) {
 			$user_id = $r[0]['user_id'];
 			// Successfuly found a user matching the email and password.
 			User::setSession($user_id);
 			$ret = true;
+		} else {
+			throw new AuthenticationException('test');
 		}
 		return $ret;
 	}
@@ -112,13 +116,15 @@ class User
 		return mt_rand(0, $max_rand);
 	}
 	
-	private static function nonce(&$s, $email)
+	private static function nonce($email)
 	{
 		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
 		$q = 'SELECT nonce
 				FROM user
-				WHERE email = \''.$s->db->cleanse($email).'\'';
-		if ($r = $s->db->Select($q))
+				WHERE email = \''.$db->cleanse($email).'\'';
+		if ($r = $db->Select($q))
 		{
 			$ret = $r[0]['nonce'];
 		}
@@ -140,10 +146,11 @@ class User
 		$this->email = $email;
 	}
 
-	private static function hashPassword(&$s, $password, $nonce)
+	private static function hashPassword($password, $nonce)
 	{
 		// Thanks to http://stackoverflow.com/questions/401656/secure-hash-and-salt-for-php-passwords/401684#401684
-		$site_key = $s->setting('user.site_key');
+		$settings = new Settings();
+		$site_key = $settings->get('user.site_key');
 		return hash_hmac('sha512', $password . $nonce, $site_key);
 	}
 }
