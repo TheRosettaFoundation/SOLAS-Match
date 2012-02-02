@@ -19,7 +19,7 @@ class User
 	/*
 	 * Log the user out.
 	 */
-	public function destroySession()
+	public static function destroySession()
 	{
 		$_SESSION = array();
 		session_destroy();

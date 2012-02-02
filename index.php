@@ -125,7 +125,7 @@ $app->get('/login', function () use ($app) {
         $post = (object)$app->request()->post();
         try {
             User::login($post->email, $post->password);
-            $app->redirect('home');
+            $app->redirect('/');
         } catch (AuthenticationException $e) {
             $error = '<p>Unable to log in. Please check your email and password. <a href="' . $app->urlFor('login') . '">Try logging in again</a>.</p>';
             $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
@@ -136,6 +136,11 @@ $app->get('/login', function () use ($app) {
         $app->render('login.tpl');
     }
 })->via('GET','POST')->name('login');
+
+$app->get('/logout', function () use ($app) {
+    Users::logOut();
+    $app->redirect('/');
+})->name('logout');
 
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
@@ -166,6 +171,7 @@ $url = new URL();
 $view = $app->view();
 $view->appendData(array('url' => $url));
 $view->appendData(array('url_login' => $app->urlFor('login')));
+$view->appendData(array('url_logout' => $app->urlFor('logout')));
 $user = null;
 if ($user_id = $users->currentUserID()) {
     $user = array(

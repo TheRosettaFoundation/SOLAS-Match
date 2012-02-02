@@ -14,7 +14,7 @@
 		<div id="header-right">
 			{if isset($user)}
 				{$user.email}
-				&middot; <a href="{$url->logout()}">Log out</a> 
+				&middot; <a href="{$url_logout}">Log out</a> 
 			{else}
 				<a href="{$url_login}">Log in</a>
 				&middot; <a href="{$url->register()}">Register</a>

@@ -8,7 +8,7 @@ class Users {
 	function __construct() {
 	}
 	
-	function logOut() {
+	public static function logOut() {
 		User::destroySession();
 	}
 	
