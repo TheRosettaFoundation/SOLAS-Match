@@ -1,4 +1,5 @@
 <?php
+require_once 'TagsDao.class.php'; // TODO :) A "Tags" object could be just a wrapper for an array of strings.
 
 /*
 	One job (such as a document) will be broken into one or more tasks.
@@ -7,28 +8,162 @@
 */
 class Task
 {
-	var $id;
-	
-	function Task($task_id)
-	{
-		$this->setTaskID($task_id);
+	/**
+	 * Task id
+	 *
+	 * @var integer
+	 **/
+	var $_task_id;
+
+	/**
+	 * Title of task
+	 * @var string
+	 **/
+	var $_title;
+
+	/**
+	 * Organisation ID
+	 *
+	 * @var integer
+	 **/
+	var $_organisation_id;
+
+	/**
+	 * Source ID of source language
+	 *
+	 * @var integer
+	 **/
+	var $_source_id;
+
+	/**
+	 * Target ID of target language
+	 *
+	 * @var integer
+	 **/
+	var $_target_id;
+
+	/**
+	 * Array of related tags
+	 *
+	 * @var array of strings
+	 **/
+	var $_tags;
+
+	/**
+	 * Word count of task
+	 *
+	 * @var integer
+	 **/
+	var $_word_count;
+
+	function __construct($params = NULL) {
+		foreach ($params as $key => $value) {
+			$this->_setParam($key, $value);
+		}
 	}
 
-	function isInit()
+	function getTaskId() {
+		return $this->_task_id;
+	}
+
+	function setTaskId($task_id) {
+		$this->_task_id = $task_id;
+	}
+
+	public function setTitle($title) {
+		$this->_title = $title;
+	}
+
+	function setOrganisationId($organisation_id) {
+		$this->_organisation_id = $organisation_id;
+	}
+
+	/**
+	 * Set tags
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function setTags($tags)
 	{
-		return ( isset($this->id) && (intval($this->id)>0) );
+		$this->_tags = $tags;
+	}
+
+	/**
+	 * Set source ID of source language
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function setSourceId($source_id)
+	{
+		$this->_source_id = $source_id;
+	}
+
+	/**
+	 * Set target ID of target language
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function setTargetId($target_id)
+	{
+		$this->_target_id = $target_id;
+	}
+
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function setWordCount($word_count)
+	{
+		$this->_word_count = $word_count;
+	}
+
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	private function _setParam($key, $value)
+	{
+		$key_methods = array(
+			'task_id' 			=> 'setTaskId',
+			'title' 			=> 'setTitle',
+			'organisation_id' 	=> 'setOrganisationId',
+			'source_id'			=> 'setSourceId',
+			'target_id'			=> 'setTargetId',
+			'tags'				=> 'setTags',
+			'word_count'		=> 'setWordCount'
+		);
+
+		if (isset($key_methods[$key])) {
+			$this->$key_methods[$key]($value);	
+		}
+		else {
+			throw new InvalidArgumentException('No function to set ' . $key);
+		}
+		
 	}
 	
-	function setTaskID($task_id)
+	
+	/**
+	 * Old non-DAO code --------------------------------------------------------------------------
+	 */
+
+	function old_isInit()
 	{
-		$this->id = intval($task_id);
+		return ( isset($this->id) && (intval($this->id)>0) );
 	}
 	
 	/*
 		Return a short title for the task, suitable for display as a quick identifying summary.
 		Retuns an empty string if nothing found.
 	*/
-	function title()
+	function old_title()
 	{
 		$ret = '';
 		$db = new MySQLWrapper();
@@ -47,7 +182,7 @@ class Task
 	/*
 	 * Return the unix time stamp of when this task was created.
 	 */
-	function createdTime()
+	function old_createdTime()
 	{
 		$ret = '';
 		$db = new MySQLWrapper();
@@ -62,11 +197,11 @@ class Task
 		return $ret;
 	}
 
-	function createdTimeAgo() {
+	function old_createdTimeAgo() {
 		return IO::timeSince($this->createdTime());
 	}
 	
-	function wordcount()
+	function old_wordcount()
 	{
 		$ret = false;
 		$db = new MySQLWrapper();
@@ -82,7 +217,7 @@ class Task
 		return $ret;
 	}
 	
-	function target_id()
+	function old_target_id()
 	{
 		$ret = false;
 		$db = new MySQLWrapper();
@@ -98,7 +233,7 @@ class Task
 		return $ret;
 	}
 	
-	function source_id()
+	function old_source_id()
 	{
 		$ret = false;
 		$db = new MySQLWrapper();
@@ -117,7 +252,7 @@ class Task
 	/*
 	 * Return the natural language name of the target language.
 	 */
-	function target()
+	function old_target()
 	{
 		$ret = false;
 		if ($target_id = $this->target_id())
@@ -128,7 +263,7 @@ class Task
 		return $ret;
 	}
 	
-	function source()
+	function old_source()
 	{
 		$ret = false;
 		if ($source_id = $this->source_id())
@@ -139,7 +274,7 @@ class Task
 		return $ret;
 	}
 	
-	function organisationID()
+	function old_organisationID()
 	{
 		$ret = false;
 		$db = new MySQLWrapper();
@@ -157,30 +292,30 @@ class Task
 	/*
 		Return the string of the organisation's name who owns this task.
 	*/
-	function organisation()
+	function old_organisation()
 	{
 		$orgs = new Organisations();
 		return $orgs->name($this->organisationID());
 	}
 	
-	function url()
+	function old_url()
 	{
 		$url = new URL();
 		return $url->server().'/task/'.$this->id.'/';
 	}
 
-	function tagIDs()
+	function old_tagIDs()
 	{
 		$tags = new Tags();
 		return $tags->taskTagIDs($this->id);
 	}
 
-	function taskID()
+	function old_taskID()
 	{
 		return $this->id;		
 	}
 
-	public function recordUploadedFile($path, $filename, $content_type)
+	public function old_recordUploadedFile($path, $filename, $content_type)
 	{
 		$ret = false;
 		$task_file = array();
@@ -201,7 +336,7 @@ class Task
 	/*
 	 * Return an array of TaskFile objects, or false if none found.
 	 */
-	function files()
+	function old_files()
 	{
 		$ret = false;
 		$db = new MySQLWrapper();

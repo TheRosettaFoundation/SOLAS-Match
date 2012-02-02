@@ -1,9 +1,14 @@
 <?php
 require('Tag.class.php');
 
+/**
+ * Object
+ */
+
 class Tags
 {
-	function __construct() {
+	function __construct($tags) {
+
 	}
 
 	/*
@@ -13,37 +18,60 @@ class Tags
 		
 		Also responsible to special Langauge tags for content.
 	*/
-	function parse($str)
-	{
+	function parse($str) {
 		$tag_ids = false;
 		$str = $this->s->io->cleanseInput($str);
-		$str = str_replace(',', ' ', $str);
-		if ($tags = explode(' ', $str)) // Space is the delimiter
-		{
+		if ($tags = $this->tagsToArray($str)) {
 			$db = new MySQLWrapper();
 			$db->init();
 			$tag_ids = array();
-			foreach($tags as $tag)
-			{
-				$tag = trim($tag);
+			foreach($tags as $tag) {
 				// Ask the database what the ID is by searching for the tag's text label
-				if ($tag_id = $this->tagIDFromLabel($tag))
-				{
+				if ($tag_id = $this->tagIDFromLabel($tag)) {
 					$tag_ids[] = $tag_id;
 				}
-				else
-				{
-					// Create this tag, and return its ID.
-					$i = array();
-					$i['label'] = '\''.$db->cleanse($tag).'\'';
-					if ($tag_id = $db->Insert('tag', $i))
-					{
+				else {
+					if ($tag_id = $this->insertTag($tag)) {
 						$tag_ids[] = $tag_id;
 					}
 				}
 			}
 		}
 		return $tag_ids;		
+	}
+
+	/**
+	 * Convert a string of inputted tags into an array of strings
+	 *
+	 * @return array of strings
+	 * @author 
+	 **/
+	private function tagsToArray($tags)
+	{
+		$str = str_replace(',', ' ', $tags);
+		$arr = explode(' ', $str);
+		$trimmed = array();
+		foreach ($arr as $tag) {
+			if (strlen(trim($tag)) > 0) {
+				$trimmed[] = trim($tag);
+			}
+		}
+		return (count($trimmed) > 0) ? $trimmed : null;
+	}
+
+	/**
+	 * Insert new tag into database
+	 *
+	 * @return tag_id
+	 * @author 
+	 **/
+	private function insertTag($tag)
+	{
+		$i = array();
+		$i['label'] = '\''.$db->cleanse($tag).'\'';
+		$db = new MySQLWrapper();
+		$db->init();
+		return $db->Insert('tag', $i);
 	}
 	
 	function tagIDFromLabel($label)

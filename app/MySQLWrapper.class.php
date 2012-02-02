@@ -294,4 +294,8 @@ class MySQLWrapper
 	{
 		echo '<pre>'.$q.'</pre>';
 	}
+
+	function cleanseWrapStr($str) {
+		return '\'' . $this->cleanse($str) . '\'';
+	}
 }

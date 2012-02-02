@@ -42,6 +42,16 @@ $app->configureMode('development', function () use ($app) {
     ));
 });
 
+$authenticateForRole = function ( $role = 'member' ) {
+    return function () use ( $role ) {
+        $app = Slim::getInstance();
+        $users = new Users();
+        if (!$users->currentUserID()) {
+            $app->redirect('/login');    
+        }
+    };
+};
+
 $app->get('/', function () use ($app) {
     $stream = new Stream();
     if ($tasks = $stream->getStream(10)) {
@@ -61,7 +71,14 @@ $app->get('/task/create/', $authenticateForRole('organisation'), function () use
             echo "Sorry, a langauge you entered does not exist in our system. Functionality for adding a language still remains to be implemented. Please press back and enter a different languag name."; die;
         }
 
-        $task_id = $s->tasks->create($post->title, $post->organisation_id, $post->tags, $post->source_id, $post->target_id, $post->word_count);
+        $task_id = $s->tasks->create(array(
+            'title' => $post->title, 
+            'organisation_id' => $post->organisation_id, 
+            'tags' => $post->tags, 
+            'source_id' => $post->source_id, 
+            'target_id' => $post->target_id, 
+            'word_count' => $post->word_count)
+        );
         $task = new Task($task_id);
 
         // Save the file
@@ -117,16 +134,6 @@ $app->get('/logout', function () use ($app) {
     Users::logOut();
     $app->redirect('/');
 })->name('logout');
-
-$authenticateForRole = function ( $role = 'member' ) {
-    return function () use ( $role ) {
-        $app = Slim::getInstance();
-        $users = new Users();
-        if (!$users->currentUserID()) {
-            $app->redirect('/login');    
-        }
-    };
-};
 
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;

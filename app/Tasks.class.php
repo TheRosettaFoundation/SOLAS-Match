@@ -11,8 +11,7 @@ class Tasks
 	function __construct() {
 	}
 
-	function create($title, $organisation_id, $tags, $source_id, $target_id, $word_count)
-	{
+	function create($title, $organisation_id, $tags, $source_id, $target_id, $word_count) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$ret = false;
@@ -54,8 +53,7 @@ class Tasks
 		return $ret;
 	}
 
-	public function getLatestTasks($nb_items = 10)
-	{
+	public function getLatestTasks($nb_items = 10) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$ret = false;
@@ -78,8 +76,7 @@ class Tasks
 	/*
 	 * Return an array of tasks that are tagged with a certain tag.
 	 */
-	public function getTaggedTasks($tag_id, $nb_items = 10)
-	{
+	public function getTaggedTasks($tag_id, $nb_items = 10)	{
 		$db = new MySQLWrapper();
 		$db->init();
 		$ret = false;
@@ -92,11 +89,9 @@ class Tasks
 				) 
 				ORDER BY created_time DESC 
 				LIMIT '.$db->cleanse($nb_items);
-		if ($r = $db->Select($q))
-		{
+		if ($r = $db->Select($q)) {
 			$ret = array();
-			foreach($r as $row)
-			{
+			foreach($r as $row)	{
 				// Add a new Job object to the array to be returned.
 				$ret[] = new Task($this->s, $row['id']);
 			}
