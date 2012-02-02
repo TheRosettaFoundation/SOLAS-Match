@@ -27,19 +27,6 @@ $app = new Slim(array(
     'mode' => 'development' // default is development. TODO get from config file, or set in environment...... $_ENV['SLIM_MODE'] = 'production';
 ));
 
-$authenticateForRole = function ( $role = 'member' ) {
-    return function () use ( $role ) {
-        $app = Slim::getInstance();
-        $users = new Users();
-        if (!$users->currentUserID()) {
-            $app->redirect('login');    
-        }
-    };
-};
-
-/**
- * Set up application modes, depending on whether we're in development or production.
- */
 $app->configureMode('production', function () use ($app) {
     $app->config(array(
         'log.enable' => true,
@@ -55,13 +42,6 @@ $app->configureMode('development', function () use ($app) {
     ));
 });
 
-/**
- * Application routing
- */
-
-/**
- * Home page
- */
 $app->get('/', function () use ($app) {
     $stream = new Stream();
     if ($tasks = $stream->getStream(10)) {
@@ -74,30 +54,26 @@ $app->get('/', function () use ($app) {
     $app->render('index.tpl');
 })->name('home');
 
-/**
- * Task create page
- */
 $app->get('/task/create/', $authenticateForRole('organisation'), function () use ($app) {
-//$app->get('/task/create/', function () use ($app) {
-    // TODO
-    // Enforcing authenication:
-    // http://help.slimframework.com/discussions/problems/6-simple-user-login
+    $error = null;
+    if (isValidPost($app)) {
+        if (!$source_id || !$target_id) {
+            echo "Sorry, a langauge you entered does not exist in our system. Functionality for adding a language still remains to be implemented. Please press back and enter a different languag name."; die;
+        }
 
-   // Check permissions
-   /*
-   if (!$s->users->isLoggedIn()) {
-       header('Location: '.$s->url->login());
-       die;
-   }
-    $s->display('task.create.tpl'); 
-    */
-    $app->render('task.create.tpl');
+        $task_id = $s->tasks->create($post->title, $post->organisation_id, $post->tags, $post->source_id, $post->target_id, $post->word_count);
+        $task = new Task($task_id);
+
+        // Save the file
+        if (!IO::saveUploadedFile('original_file', $post->organisation_id, $task_id)) {
+            echo "Failed to upload file :("; die;
+        }      
+    }
+    else {
+        $app->render('task.create.tpl');
+    }
 });
 
-
-/**
- * Task page
- */
 $app->get('/task/:task_id/', function ($task_id) use ($app) {
     $task = new Task($task_id);
     
@@ -141,6 +117,16 @@ $app->get('/logout', function () use ($app) {
     Users::logOut();
     $app->redirect('/');
 })->name('logout');
+
+$authenticateForRole = function ( $role = 'member' ) {
+    return function () use ( $role ) {
+        $app = Slim::getInstance();
+        $users = new Users();
+        if (!$users->currentUserID()) {
+            $app->redirect('/login');    
+        }
+    };
+};
 
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
