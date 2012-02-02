@@ -55,6 +55,16 @@ if ($user_id = $users->currentUserID()) {
     $view->setData('user', $user);
 }
 
+$authenticateForRole = function ( $role = 'member' ) {
+    return function () use ( $role ) {
+        $app = Slim::getInstance();
+        $users = new Users();
+        if (!$users->currentUserID()) {
+            $app->redirect('/login');    
+        }
+    };
+};
+
 /**
  * Set up application modes, depending on whether we're in development or production.
  */
@@ -93,6 +103,27 @@ $app->get('/', function () use ($app) {
 });
 
 /**
+ * Task create page
+ */
+$app->get('/task/create/', $authenticateForRole('organisation'), function () use ($app) {
+//$app->get('/task/create/', function () use ($app) {
+    // TODO
+    // Enforcing authenication:
+    // http://help.slimframework.com/discussions/problems/6-simple-user-login
+
+   // Check permissions
+   /*
+   if (!$s->users->isLoggedIn()) {
+       header('Location: '.$s->url->login());
+       die;
+   }
+    $s->display('task.create.tpl'); 
+    */
+    $app->render('task.create.tpl');
+});
+
+
+/**
  * Task page
  */
 $app->get('/task/:task_id/', function ($task_id) use ($app) {
@@ -112,27 +143,12 @@ $app->get('/task/:task_id/', function ($task_id) use ($app) {
     }
     $app->view()->setData('max_file_size', IO::maxFileSizeMB());
     $app->view()->setData('body_class', 'task_page');
-     $app->view()->setData('tags', new Tags());
+    $app->view()->setData('tags', new Tags());
     $app->render('task.tpl');
 });
 
-/**
- * Task create page
- */
-$app->get('/task/create/', function () use ($app) {
-    // TODO
-    // Enforcing authenication:
-    // http://help.slimframework.com/discussions/problems/6-simple-user-login
-
-   // Check permissions
-   /*
-   if (!$s->users->isLoggedIn()) {
-       header('Location: '.$s->url->login());
-       die;
-   }
-    $s->display('task.create.tpl'); 
-    */
-
+$app->get('/login/', function () use ($app) {
+    $app->render('user.login.tpl');
 });
 
 /**
