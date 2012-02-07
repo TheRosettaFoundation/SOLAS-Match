@@ -6,10 +6,11 @@ require_once 'app/MySQLWrapper.class.php';
 require_once 'app/Users.class.php';
 require_once 'app/URL.class.php';
 require_once 'app/Stream.class.php';
-require_once 'app/Tasks.class.php';
-require_once 'app/Tags.class.php';
+require_once 'app/TaskDao.class.php';
+require_once 'app/TagsDao.class.php';
 require_once 'app/IO.class.php';
 require_once 'app/Organisations.class.php';
+require_once 'app/lib/Languages.class.php';
 
 /**
  * Start the session
@@ -67,29 +68,38 @@ $app->get('/', function () use ($app) {
 $app->get('/task/create/', $authenticateForRole('organisation'), function () use ($app) {
     $error = null;
     if (isValidPost($app)) {
+
+        $source_id = Languages::languageIdFromName($post->source);
+        $target_id = Languages::languageIdFromName($post->target);
+        
         if (!$source_id || !$target_id) {
             echo "Sorry, a langauge you entered does not exist in our system. Functionality for adding a language still remains to be implemented. Please press back and enter a different languag name."; die;
         }
 
-        $task_id = $s->tasks->create(array(
+        $task_dao = new TaskDao();
+        $task = $task_dao->create(array(
             'title' => $post->title, 
             'organisation_id' => $post->organisation_id, 
             'tags' => $post->tags, 
-            'source_id' => $post->source_id, 
-            'target_id' => $post->target_id, 
-            'word_count' => $post->word_count)
+            'source_id' => $source_id, 
+            'target_id' => $target_id, 
+            'word_count' => $post->word_count
+            )
         );
-        $task = new Task($task_id);
-
+        $task_id = $task->getTaskId();
+        
         // Save the file
         if (!IO::saveUploadedFile('original_file', $post->organisation_id, $task_id)) {
             echo "Failed to upload file :("; die;
-        }      
+        }
+
+        $app->redirect('/task/' . $task_id);
     }
     else {
+        $app->view()->appendData(array('url_task_create', $app->urlFor('task-create')));
         $app->render('task.create.tpl');
     }
-});
+})->via('GET','POST')->name('task-create');
 
 $app->get('/task/:task_id/', function ($task_id) use ($app) {
     $task = new Task($task_id);

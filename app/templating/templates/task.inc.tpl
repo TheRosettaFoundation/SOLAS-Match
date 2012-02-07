@@ -1,28 +1,31 @@
 {* Must have an object $task assigned by parent *}
 <div class="task">
-	{assign var="tag_ids" value=$task->tagIDs()}
-	{assign var="target" value=$task->target()}
-	{if $tag_ids || $target}
-		<ul class="tags">
-			<li>{$task->source()} to {$task->target()}</li>
-			{foreach from=$tag_ids item=tag_id}
-				<li>{$tags->tagHTML($tag_id)}</li>
-			{/foreach}
-		</ul>
-	{/if}
+	Task ID: {$task->getTaskId()}
+
+	<ul class="tags">
+		<li>
+			{Languages::languageNameFromId($task->getSourceId())} 
+			to 
+			{Languages::languageNameFromId($task->getTargetId())}
+		</li>
+		
+		{foreach from=$task->getTags() item=$tag}
+			// Include a tag template here instead of getting it from a class?
+
+			<li>{$tags->tagHTML($tag->getTagId())}</li>
+		{/foreach}
+	</ul>
 	<h3><a href="{$task->url()}">{$task->title()}</a></h3>
 	<p class="task_details">
 		<span class="time_since">{$io->timeSince($task->createdTime())} ago</span> {$task->organisation()}
 	</p>
 	<p class="task_summary">
-		{assign var="wordcount" value=$task->wordcount()}
-		{if $wordcount}
-			{$wordcount|number_format} words
+		{if $task->getWordcount()}
+			{$task->getWordcount()|number_format} words
 		{/if}
 	
-		{assign var="task_files" value=$task->files()}
-		{if $task_files}
-			{foreach from=$task_files item=task_file}
+		{if $task->files()}
+			{foreach from=$task->files() item=task_file}
 				&middot; {$task_file->filename()}
 			{/foreach}
 		{/if}

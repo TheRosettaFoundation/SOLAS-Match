@@ -1,7 +1,7 @@
 {include file="header.inc.tpl"}
 	<div class="grid_8">
 		<h2>Create task</h2>
-		<form method="post" action="/process/task.create.php" enctype="multipart/form-data">
+		<form method="post" action="{$url_task_create" enctype="multipart/form-data">
 			<fieldset>
 				<label for="content">Descriptive Title</label>
 				<textarea wrap="hard" cols="1" rows="2" name="title"></textarea>

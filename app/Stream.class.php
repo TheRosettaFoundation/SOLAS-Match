@@ -1,11 +1,7 @@
 <?php
 
 class Stream
-{
-	
-	function __construct() {
-	}
-	
+{	
 	/*
 		Get a list of tasks to display to the user.
 		
@@ -23,8 +19,8 @@ class Stream
 	
 	public function getGlobalStream($nb_items = 10)
 	{
-		$tasks = new Tasks();
-		return $tasks->getLatestTasks($nb_items);
+		$task_dao = new TaskDao();
+		return $task_dao->getLatestTasks($nb_items);
 	}
 	
 	/*
@@ -32,7 +28,7 @@ class Stream
 	 */
 	public function getTaggedStream($tag_id, $nb_items)
 	{
-		$tasks = new Tasks();
-		return $tasks->getTaggedTasks($tag_id, $nb_items);
+		$task_dao = new TaskDao();
+		return $task_dao->getTaggedTasks($tag_id, $nb_items);
 	}
 }

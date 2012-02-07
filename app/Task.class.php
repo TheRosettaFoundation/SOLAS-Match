@@ -49,6 +49,8 @@ class Task
 	 **/
 	var $_tags;
 
+	var $_created_time;
+
 	/**
 	 * Word count of task
 	 *
@@ -57,8 +59,10 @@ class Task
 	var $_word_count;
 
 	function __construct($params = NULL) {
-		foreach ($params as $key => $value) {
-			$this->_setParam($key, $value);
+		if (is_array($params)) {
+			foreach ($params as $key => $value) {
+				$this->_setParam($key, $value);
+			}	
 		}
 	}
 
@@ -100,6 +104,10 @@ class Task
 		$this->_source_id = $source_id;
 	}
 
+	public function getSourceId() {
+		return $this->_source_id;
+	}
+
 	/**
 	 * Set target ID of target language
 	 *
@@ -109,6 +117,10 @@ class Task
 	public function setTargetId($target_id)
 	{
 		$this->_target_id = $target_id;
+	}
+
+	public function getTargetId() {
+		return $this->_target_id;
 	}
 
 	/**
@@ -137,7 +149,8 @@ class Task
 			'source_id'			=> 'setSourceId',
 			'target_id'			=> 'setTargetId',
 			'tags'				=> 'setTags',
-			'word_count'		=> 'setWordCount'
+			'word_count'		=> 'setWordCount',
+			'created_time'		=> 'setCreatedTime',
 		);
 
 		if (isset($key_methods[$key])) {
@@ -146,7 +159,10 @@ class Task
 		else {
 			throw new InvalidArgumentException('No function to set ' . $key);
 		}
-		
+	}
+
+	public function setCreatedTime($created_time) {
+		$this->_created_time = $created_time;
 	}
 	
 	

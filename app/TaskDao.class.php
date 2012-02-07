@@ -10,21 +10,57 @@ require_once 'Task.class.php';
  **/
 class TaskDao
 {
-	function __construct() {
-		
-	}
-
 	/**
 	 * Get a Task object, save to databse.
 	 *
 	 * @return Task object
 	 * @author
 	 **/
-	public function create ($params)
+	public function create($params)
 	{
 		$task = new Task($params);
 		$this->save($task);
 		return $task;
+	}
+
+	public function find($params) {
+		$permitted_params = array(
+			'task_id'
+		);
+
+		if (!is_array($params)) {
+			throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
+		}
+
+		$where = array();
+		foreach($params as $key => $value) {
+			if (!in_array($key, $permitted_params)) {
+				throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
+			}
+		}
+
+		$db = new MySQLWrapper();
+		$db->init();
+		$query = 'SELECT *
+					FROM task
+					WHERE id = ' . $db->cleanse($params['task_id']);
+		
+		$ret = null;
+		if ($res = $db->Select($query)) {
+			$row = $res[0];
+			$task_data = array();
+			foreach($row as $col_name => $col_value) {
+				if ($col_name == 'id') {
+					$task_data['task_id'] = $col_value;
+				}
+				else if (!is_numeric($col_name) && !is_null($col_value)) {
+					$task_data[$col_name] = $col_value;
+				}
+			}
+
+			$ret = new Task($task_data);
+		}
+		return $ret;
 	}
 
 	/**
@@ -73,10 +109,55 @@ class TaskDao
 		if ($word_count = $task->getWordCount()) {
 			$insert['word_count'] = $db->cleanse($word_count);
 		}
-		if (count($insert) > 0) {
-			$db->insert('task', $insert);
+		$insert['created_time'] = 'NOW()';
+		$db->insert('task', $insert);
+	}
+
+	public function getLatestTasks($nb_items = 10) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$q 	= 'SELECT id
+				FROM task
+				ORDER BY created_time DESC 
+				LIMIT '.$db->cleanse($nb_items);
+		
+		$ret = false;
+		if ($r = $db->Select($q)) {
+			$ret = array();
+			foreach($r as $row)	{
+				// Add a new Job object to the array to be returned.
+				$task = self::find(array('task_id' => $row['id']));
+				if (!$task->getTaskId()) {
+					throw new Exception('Tried to create a task, but its ID is not set.');
+				}
+				$ret[] = $task;
+			}
 		}
-
-
+		return $ret;
+	}
+	
+	/*
+	 * Return an array of tasks that are tagged with a certain tag.
+	 */
+	public function getTaggedTasks($tag_id, $nb_items = 10)	{
+		$db = new MySQLWrapper();
+		$db->init();
+		$ret = false;
+		$q = 'SELECT id
+				FROM task
+				WHERE id IN (
+					SELECT task_id
+					FROM task_tag
+					WHERE tag_id = ' . intval($tag_id) . '
+				) 
+				ORDER BY created_time DESC 
+				LIMIT '.$db->cleanse($nb_items);
+		if ($r = $db->Select($q)) {
+			$ret = array();
+			foreach($r as $row)	{
+				$ret[] = self::find(array('task_id' => $row['id']));
+			}
+		}
+		return $ret;
 	}
 } // END TaskDao class 
