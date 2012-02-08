@@ -9,7 +9,7 @@ class Organisations
 		Return the string name of the oranisation.
 		Return false if organisation not found.
 	*/
-	function name($organisation_id)
+	public static function nameFromId($organisation_id)
 	{
 		$ret = false;
 		$db = new MySQLWrapper();
