@@ -53,6 +53,10 @@ class IO {
 		return rawurldecode($text);
 	}
 	
+	public static function timeSinceSqlTime($sql_string) {
+		return self::timeSince(strtotime($sql_string));
+	}
+
 	static function timeSince($unix_time)
 	{
 		// From http://www.dreamincode.net/code/snippet86.htm
