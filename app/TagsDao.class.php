@@ -137,29 +137,6 @@ class TagsDao {
 	}
 	
 	/*
-	 * Return an array of tag_ids related to a certain task.
-	 * Return false if nothing found.
-	 */
-	function taskTagIDs($task_id)
-	{
-		$ret = false;
-		$db = new MySQLWrapper();
-		$db->init();
-		$q = 'SELECT tag_id
-				FROM task_tag
-				WHERE task_id = '.intval($task_id);
-		if ($r = $db->Select($q))
-		{
-			$ret = array();
-			foreach($r as $row)
-			{
-				$ret[] = $row['tag_id'];
-			}
-		}
-		return $ret;
-	}
-	
-	/*
 	 * For a given tag, return its URL.
 	 */
 	function url($tag_id)

@@ -1,5 +1,6 @@
 <?php
 require_once 'Task.class.php';
+require_once 'TaskTags.class.php';
 
 
 /**
@@ -89,11 +90,7 @@ class TaskDao
 	{
 		$db = new MySQLHandler();
 		$db->init();
-		$insert = array();
-
-// TODO
-//'	tags'				=> 'setTags',
-			
+		$insert = array();		
 		if ($title = $task->getTitle()) {
 			$insert['title'] = $db->cleanseWrapStr($title);
 		}

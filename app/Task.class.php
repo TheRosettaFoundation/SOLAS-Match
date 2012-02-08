@@ -41,13 +41,6 @@ class Task
 	 **/
 	var $_target_id;
 
-	/**
-	 * Array of related tags
-	 *
-	 * @var array of strings
-	 **/
-	var $_tags;
-
 	var $_created_time;
 
 	/**
@@ -87,21 +80,6 @@ class Task
 
 	public function getOrganisationId() {
 		return $this->_organisation_id;
-	}
-
-	/**
-	 * Set tags
-	 *
-	 * @return void
-	 * @author 
-	 **/
-	public function setTags($tags)
-	{
-		$this->_tags = $tags;
-	}
-
-	public function getTags() {
-		return $this->_tags;
 	}
 
 	/**
