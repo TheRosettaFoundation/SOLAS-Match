@@ -9,7 +9,7 @@
 			{Languages::languageNameFromId($task->getTargetId())}
 		</li>
 		
-		{foreach from=$task->getTags() item=$tag}
+		{foreach from=$task->getTags() item=tag}
 			// Include a tag template here instead of getting it from a class?
 
 			<li>{$tags->tagHTML($tag->getTagId())}</li>
