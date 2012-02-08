@@ -1,5 +1,4 @@
 <?php
-require_once 'TagsDao.class.php'; // TODO :) A "Tags" object could be just a wrapper for an array of strings.
 
 /*
 	One job (such as a document) will be broken into one or more tasks.
