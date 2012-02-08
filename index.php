@@ -11,6 +11,8 @@ require_once 'app/TagsDao.class.php';
 require_once 'app/IO.class.php';
 require_once 'app/Organisations.class.php';
 require_once 'app/lib/Languages.class.php';
+require('app/TaskFiles.class.php');
+require('app/TaskFile.class.php');
 
 /**
  * Start the session
