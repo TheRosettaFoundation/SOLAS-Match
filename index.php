@@ -9,10 +9,10 @@ require 'app/TaskDao.class.php';
 require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
 require 'app/Organisations.class.php';
-require 'app/lib/Languages.class.php';
-require 'app/lib/URL.class.php';
 require('app/TaskFiles.class.php');
 require('app/TaskFile.class.php');
+require 'app/lib/Languages.class.php';
+require 'app/lib/URL.class.php';
 
 /**
  * Start the session

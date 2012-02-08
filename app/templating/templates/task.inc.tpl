@@ -2,13 +2,15 @@
 <div class="task">
 	<ul class="tags">
 		<li>
-			{Languages::languageNameFromId($task->getSourceId())} 
-			to 
-			{Languages::languageNameFromId($task->getTargetId())}
+			{if $task->areSourceAndTargetSet()}
+				{Languages::languageNameFromId($task->getSourceId())} 
+				to 
+				{Languages::languageNameFromId($task->getTargetId())}
+			{/if}
 		</li>
 		
 		{foreach from=$task->getTags() item=tag}
-			<li>{include file="inc.tag.tpl" tag_name=$tag_name}</li>
+			<li>{include file="inc.tag.tpl" tag_name=$tag}</li>
 		{/foreach}
 	</ul>
 	<h3><a href="/task/{$task->getTaskId()}/">{$task->getTitle()}</a></h3>
@@ -20,8 +22,8 @@
 			{$task->getWordcount()|number_format} words
 		{/if}
 	
-		{if $task->files()}
-			{foreach from=$task->files() item=task_file}
+		{if $files = TaskFiles::getTaskFiles($task)}
+			{foreach from=$files item=task_file}
 				&middot; {$task_file->filename()}
 			{/foreach}
 		{/if}

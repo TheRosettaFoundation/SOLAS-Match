@@ -10,10 +10,18 @@ class Tag {
 	}
 
 	public function setTagId($tag_id) {
-		$this->_tag_id;
+		$this->_tag_id = $tag_id;
 	}
 
 	public function setLabel($label) {
-		$this->_label;
+		$this->_label = $label;
+	}
+
+	public function getLabel() {
+		return $this->_label;
+	}
+
+	public function hasLabel() {
+		return (strlen($this->getLabel()) > 0);
 	}
 }

@@ -33,20 +33,28 @@ class URL
 
 	function login()
 	{
-		return $this->server().'/login/';
+		return self::server().'/login/';
 	}
 
 	function logout()
 	{
-		return $this->server().'/logout/';
+		return self::server().'/logout/';
 	}
 
 	function register()
 	{
-		return $this->server().'/register/';
+		return self::server().'/register/';
 	}
 
 	public static function tag($tag) {
-		return $this->server() . '/tag/' . $tag->getLabel() . '/';
+		if (!is_object($tag)) {
+			throw new InvalidArgumentException('Cannot generate a URL for a tag, as a tag object was not provided.');
+		}
+
+		if (!$tag->hasLabel()) {
+			throw new InvalidArgumentException('Cannot generate a URL for a tag, as the tag object does not have a label value set');
+		}
+
+		return self::server() . '/tag/' . $tag->getLabel() . '/';
 	}
 }

@@ -3,7 +3,21 @@ require('models/Tag.class.php');
 
 class TagsDao {
 	public function find($params) {
-
+		$tag_id = $params['tag_id'];
+		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
+		$q = 'SELECT *
+				FROM tag
+				WHERE tag_id = ' . $db->cleanse($tag_id) . '
+				LIMIT 1';
+		if ($r = $db->Select($q)) {
+			$tag_data = array();
+			$tag_data['tag_id'] = $r[0]['tag_id'];
+			$tag_data['label'] = $r[0]['label'];
+			$ret = new Tag($tag_data);
+		}
+		return $ret;
 	}
 
 	function getTopTags($limit = 30)
@@ -19,8 +33,9 @@ class TagsDao {
 		if ($r = $db->Select($q)) {
 			$ret = array();
 			foreach ($r as $row) {
-				$ret[] = array('tag_id' => $row['tag_id'],
-								'frequency' => $row['frequency']);
+				if ($tag = $this->find(array('tag_id' => $row['tag_id']))) {
+					$ret[] = $tag;
+				}
 			}
 		}
 		return $ret;

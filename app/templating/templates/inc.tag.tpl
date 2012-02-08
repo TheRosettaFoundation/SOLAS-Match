@@ -1,1 +1,1 @@
-<a class="tag" href="{URL::tag($tag)}"><span class="label">{$tag->getLabel()}</span></a>
+{if (isset($tag) && $tag->hasLabel())}<a class="tag" href="{URL::tag($tag)}"><span class="label">{$tag->getLabel()}</span></a>{/if}
