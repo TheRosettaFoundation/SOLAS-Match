@@ -1,0 +1,1 @@
+<a class="tag" href="{Tags::urlFromName($tag_name)}"><span class="label">{$tag_name}</span></a>

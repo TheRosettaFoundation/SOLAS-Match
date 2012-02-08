@@ -1,7 +1,5 @@
 {* Must have an object $task assigned by parent *}
 <div class="task">
-	Task ID: {$task->getTaskId()}
-
 	<ul class="tags">
 		<li>
 			{Languages::languageNameFromId($task->getSourceId())} 
@@ -10,14 +8,12 @@
 		</li>
 		
 		{foreach from=$task->getTags() item=tag}
-			// Include a tag template here instead of getting it from a class?
-
-			<li>{$tags->tagHTML($tag->getTagId())}</li>
+			<li>{include file="inc.tag.tpl" tag_name=$tag_name}</li>
 		{/foreach}
 	</ul>
-	<h3><a href="{$task->url()}">{$task->title()}</a></h3>
+	<h3><a href="/task/{$task->getTaskId()}/">{$task->getTitle()}</a></h3>
 	<p class="task_details">
-		<span class="time_since">{$io->timeSince($task->createdTime())} ago</span> {$task->organisation()}
+		<span class="time_since">{IO::timeSinceSqlTime($task->getCreatedTime())} ago</span> {Organisations::nameFromId($task->getOrganisationId())}
 	</p>
 	<p class="task_summary">
 		{if $task->getWordcount()}
