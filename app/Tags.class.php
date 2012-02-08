@@ -128,17 +128,7 @@ class Tags
 	{
 		return '/tag/'.intval($tag_id).'/';		
 	}
-	
-	/*
-	 * Return the HTML to represent a tag.
-	 */
-	function tagHTML($tag_id)
-	{
-		$label = $this->label($tag_id);
-		$url = $this->url($tag_id);
-		return '<a class="tag" href="'.$url.'"><span class="label">'.$label.'</span></a>';
-	}
-	
+
 	function tagTargetHTML($str)
 	{
 		$label = $str;

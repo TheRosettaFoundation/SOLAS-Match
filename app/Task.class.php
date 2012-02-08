@@ -78,8 +78,16 @@ class Task
 		$this->_title = $title;
 	}
 
-	function setOrganisationId($organisation_id) {
+	public function getTitle() {
+		return $this->_title;
+	}
+
+	public function setOrganisationId($organisation_id) {
 		$this->_organisation_id = $organisation_id;
+	}
+
+	public function getOrganisationId() {
+		return $this->_organisation_id;
 	}
 
 	/**
@@ -91,6 +99,10 @@ class Task
 	public function setTags($tags)
 	{
 		$this->_tags = $tags;
+	}
+
+	public function getTags() {
+		return $this->_tags;
 	}
 
 	/**
@@ -123,15 +135,13 @@ class Task
 		return $this->_target_id;
 	}
 
-	/**
-	 * undocumented function
-	 *
-	 * @return void
-	 * @author 
-	 **/
 	public function setWordCount($word_count)
 	{
 		$this->_word_count = $word_count;
+	}
+
+	public function getWordCount() {
+		return $this->_word_count;
 	}
 
 	/**
@@ -165,6 +175,9 @@ class Task
 		$this->_created_time = $created_time;
 	}
 	
+	public function getCreatedTime() {
+		return $this->_created_time;
+	}
 	
 	/**
 	 * Old non-DAO code --------------------------------------------------------------------------
