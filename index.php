@@ -1,16 +1,16 @@
 <?php
 require 'libs/Slim/Slim/Slim.php';
-require_once 'app/Views/SmartyView.php';
-require_once 'app/Settings.class.php';
-require_once 'app/MySQLWrapper.class.php';
-require_once 'app/Users.class.php';
-require_once 'app/URL.class.php';
-require_once 'app/Stream.class.php';
-require_once 'app/TaskDao.class.php';
-require_once 'app/TagsDao.class.php';
-require_once 'app/IO.class.php';
-require_once 'app/Organisations.class.php';
-require_once 'app/lib/Languages.class.php';
+require 'app/Views/SmartyView.php';
+require 'app/Settings.class.php';
+require 'app/MySQLWrapper.class.php';
+require 'app/Users.class.php';
+require 'app/Stream.class.php';
+require 'app/TaskDao.class.php';
+require 'app/TagsDao.class.php';
+require 'app/IO.class.php';
+require 'app/Organisations.class.php';
+require 'app/lib/Languages.class.php';
+require 'app/lib/URL.class.php';
 require('app/TaskFiles.class.php');
 require('app/TaskFile.class.php');
 
@@ -60,10 +60,8 @@ $app->get('/', function () use ($app) {
     if ($tasks = $stream->getStream(10)) {
         $app->view()->setData('tasks', $tasks);
     }
-    $tags = new Tags();
-    $app->view()->setData('tags', $tags);
-    $app->view()->setData('top_tags', $tags->topTags(30));
-    $app->view()->setData('io', new IO());
+    $tags_dao = new TagsDao();
+    $app->view()->setData('top_tags', $tags_dao->getTopTags(30));
     $app->render('index.tpl');
 })->name('home');
 
