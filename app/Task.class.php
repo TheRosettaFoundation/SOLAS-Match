@@ -179,6 +179,10 @@ class Task
 		return $this->_created_time;
 	}
 	
+	public function areSourceAndTargetSet() {
+		return ($this->getSourceId() && $this->getTargetId());
+	}
+
 	/**
 	 * Old non-DAO code --------------------------------------------------------------------------
 	 */
@@ -358,29 +362,6 @@ class Task
 		{
 			$task_file = new TaskFile($this->s, $this->taskID(), $file_id);
 			$ret = $task_file->recordNewlyUploadedVersion($task_file->nextVersion(), $filename, $content_type);
-		}
-		return $ret;
-	}
-	
-	/*
-	 * Return an array of TaskFile objects, or false if none found.
-	 */
-	function old_files()
-	{
-		$ret = false;
-		$db = new MySQLWrapper();
-		$db->init();
-		$q = 'SELECT *
-				FROM task_file
-				WHERE task_id = '.$db->cleanse($this->id);
-		if ($r = $db->Select($q))
-		{
-			$task_files = array();
-			foreach($r as $row)
-			{
-				$task_files[] = new TaskFile($this->id, $row['file_id']);
-			}
-			$ret = $task_files;
 		}
 		return $ret;
 	}
