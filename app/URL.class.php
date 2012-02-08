@@ -1,41 +1,36 @@
 <?php
 class URL 
 {
-	/*
-	 *	Return the URL for different parts of the application.
-	*/
-
-	function __construct() {
-	}
 	
-	/*
-	 * Returns the server address, without a trailing slash
-	 */
-	function server()
-	{
-		$url = false;
-		if (strlen($_SERVER['SERVER_NAME'])>0)
-		{
-			$url = 'http';
-			// Perhaps we're on https...
-			if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
-			{
-				$url .= 's';
+	public static function server() {
+		$url = null;
+		if (self::isServerNameSet()) {
+			$url = self::getHttpAccessProtocol();
+			$url .= $_SERVER['SERVER_NAME'];
+			if (!self::isAccessedOnPort80()) {
+			 	$url .= ':' . $_SERVER['SERVER_PORT'];
 			}
-			$url .= '://';
-			// Check the port
-			if ($_SERVER['SERVER_PORT'] != '80')
-			{
-		  		$url .= $_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
-		 	}
-		 	else
-		 	{
-			 	$url .= $_SERVER['SERVER_NAME'];
-		 	}
 		}
 		return $url;
 	}
 	
+	private static function isServerNameSet() {
+		return (strlen($_SERVER['SERVER_NAME']) > 0);
+	}
+
+	private static function getHttpAccessProtocol() {
+		if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+			return 'https://';
+		}
+		else {
+			return 'http://';
+		}
+	}
+
+	private static function isAccessedOnPort80() {
+		return ($_SERVER['SERVER_PORT'] == '80');
+	}
+
 	function login()
 	{
 		return $this->server().'/login/';
@@ -49,5 +44,9 @@ class URL
 	function register()
 	{
 		return $this->server().'/register/';
+	}
+
+	public static function tag($tag) {
+		return $this->server() . '/tag/' . $tag->getLabel() . '/';
 	}
 }
