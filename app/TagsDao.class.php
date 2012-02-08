@@ -1,4 +1,5 @@
 <?php
+require('models/Tag.class.php');
 
 class TagsDao {
 	public function find($params) {
