@@ -130,7 +130,7 @@ $app->get('/tag/:label/', function ($label) use ($app) {
     if ($tasks = TaskStream::getTaggedStream($tag->getTagId(), 10)) {
         $app->view()->setData('tasks', $tasks);
     }
-    $app->view()->setData('tag_id', $tag->getTagId());
+    $app->view()->setData('tag', $tag);
     $app->render('tag.tpl');
 });
 
