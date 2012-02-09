@@ -3,7 +3,7 @@ require 'libs/Slim/Slim/Slim.php';
 require 'app/Views/SmartyView.php';
 require 'app/Settings.class.php';
 require 'app/MySQLWrapper.class.php';
-require 'app/Users.class.php';
+require 'app/UserDao.class.php';
 require 'app/TaskStream.class.php';
 require 'app/TaskDao.class.php';
 require 'app/TagsDao.class.php';
@@ -13,6 +13,7 @@ require('app/TaskFiles.class.php');
 require('app/TaskFile.class.php');
 require 'app/lib/Languages.class.php';
 require 'app/lib/URL.class.php';
+require 'app/lib/Authentication.class.php';
 
 /**
  * Start the session
