@@ -4,7 +4,7 @@ require 'app/Views/SmartyView.php';
 require 'app/Settings.class.php';
 require 'app/MySQLWrapper.class.php';
 require 'app/Users.class.php';
-require 'app/Stream.class.php';
+require 'app/TaskStream.class.php';
 require 'app/TaskDao.class.php';
 require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
@@ -56,8 +56,7 @@ $authenticateForRole = function ( $role = 'member' ) {
 };
 
 $app->get('/', function () use ($app) {
-    $stream = new Stream();
-    if ($tasks = $stream->getStream(10)) {
+    if ($tasks = TaskStream::getStream(10)) {
         $app->view()->setData('tasks', $tasks);
     }
     $tags_dao = new TagsDao();
@@ -105,7 +104,6 @@ $app->get('/task/:task_id/', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
     if (!is_object($task)) {
-        // Make sure that we've been passed a correct task.
         header('HTTP/1.0 404 Not Found');
         die;
     }
@@ -118,6 +116,22 @@ $app->get('/task/:task_id/', function ($task_id) use ($app) {
     $app->view()->setData('max_file_size', IO::maxFileSizeMB());
     $app->view()->setData('body_class', 'task_page');
     $app->render('task.tpl');
+});
+
+$app->get('/tag/:label/', function ($label) use ($app) {
+    $tags_dao = new TagsDao();
+    $tag = $tags_dao->find(array('label' => $label));
+
+    if (!is_object($tag)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    if ($tasks = TaskStream::getTaggedStream($tag->getTagId(), 10)) {
+        $app->view()->setData('tasks', $tasks);
+    }
+    $app->view()->setData('tag_id', $tag->getTagId());
+    $app->render('tag.tpl');
 });
 
 $app->get('/login', function () use ($app) {

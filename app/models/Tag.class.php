@@ -13,6 +13,10 @@ class Tag {
 		$this->_tag_id = $tag_id;
 	}
 
+	public function getTagId() {
+		return $this->_tag_id;
+	}
+
 	public function setLabel($label) {
 		$this->_label = $label;
 	}

@@ -3,14 +3,26 @@ require('models/Tag.class.php');
 
 class TagsDao {
 	public function find($params) {
-		$tag_id = $params['tag_id'];
-		$ret = false;
+		$q = null;
 		$db = new MySQLWrapper();
 		$db->init();
-		$q = 'SELECT *
+		if (isset($params['tag_id'])) {
+			$q = 'SELECT *
 				FROM tag
-				WHERE tag_id = ' . $db->cleanse($tag_id) . '
+				WHERE tag_id = ' . $db->cleanse($params['tag_id']) . '
 				LIMIT 1';
+		}
+		else if (isset($params['label'])) {
+			$q = 'SELECT *
+				FROM tag
+				WHERE label = ' . $db->cleanseWrapStr($params['label']) . '
+				LIMIT 1';
+		}
+		else {
+			throw new InvalidArgumentException('Cannot find tag, as no valid search data was provided.');
+		}
+		
+		$ret = false;
 		if ($r = $db->Select($q)) {
 			$tag_data = array();
 			$tag_data['tag_id'] = $r[0]['tag_id'];

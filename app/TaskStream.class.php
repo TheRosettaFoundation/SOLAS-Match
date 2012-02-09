@@ -1,6 +1,6 @@
 <?php
 
-class Stream
+class TaskStream
 {	
 	/*
 		Get a list of tasks to display to the user.
