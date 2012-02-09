@@ -13,7 +13,7 @@ class TaskStream
 	*/
 	public static function getStream($nb_items = 10) {
 		// Simple stream, just get latest global jobs.
-		return $this->getGlobalStream($nb_items);
+		return self::getGlobalStream($nb_items);
 	}
 	
 	public static function getGlobalStream($nb_items = 10)	{
