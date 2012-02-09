@@ -11,14 +11,12 @@ class Stream
 		it. It's where the intelligence of the system will be required
 		to decide what is shown to whom.
 	*/
-	public function getStream($nb_items = 10)
-	{
+	public static function getStream($nb_items = 10) {
 		// Simple stream, just get latest global jobs.
 		return $this->getGlobalStream($nb_items);
 	}
 	
-	public function getGlobalStream($nb_items = 10)
-	{
+	public static function getGlobalStream($nb_items = 10)	{
 		$task_dao = new TaskDao();
 		return $task_dao->getLatestTasks($nb_items);
 	}
@@ -26,8 +24,7 @@ class Stream
 	/*
 	 * Return the list of (open) tasks that are tagged with a specific tag.
 	 */
-	public function getTaggedStream($tag_id, $nb_items)
-	{
+	public static function getTaggedStream($tag_id, $nb_items)	{
 		$task_dao = new TaskDao();
 		return $task_dao->getTaggedTasks($tag_id, $nb_items);
 	}
