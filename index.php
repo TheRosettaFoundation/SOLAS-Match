@@ -102,21 +102,21 @@ $app->get('/task/create/', $authenticateForRole('organisation'), function () use
 })->via('GET','POST')->name('task-create');
 
 $app->get('/task/:task_id/', function ($task_id) use ($app) {
-    $task = new Task($task_id);
-    
-    if (!$task->isInit()) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+    if (!is_object($task)) {
         // Make sure that we've been passed a correct task.
         header('HTTP/1.0 404 Not Found');
         die;
     }
 
     $app->view()->setData('task', $task);
-    if ($task_files = $task->files()) {
+
+    if ($task_files = TaskFiles::getTaskFiles($task)) {
         $app->view()->setData('task_files', $task_files);
     }
     $app->view()->setData('max_file_size', IO::maxFileSizeMB());
     $app->view()->setData('body_class', 'task_page');
-    $app->view()->setData('tags', new Tags());
     $app->render('task.tpl');
 });
 

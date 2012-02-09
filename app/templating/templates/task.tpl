@@ -1,24 +1,26 @@
 {include file="header.inc.tpl"}
 	<div class="grid_8">
 		<div class="task_content">
-			<h2>{$task->title()}</h2>
+			<h2>{$task->getTitle()}</h2>
 	
 			<p class="details">
-				<span class="time_since">{$task->createdTimeAgo()} ago</span> {$task->organisation()}
-					{assign var="wordcount" value=$task->wordcount()}
-					{if $wordcount}
-						&middot; {$wordcount|number_format} words
-					{/if}
+				<span class="time_since">{IO::timeSinceSqlTime($task->getCreatedTime())} ago</span>{Organisations::nameFromId($task->getOrganisationId())}
+				{assign var="wordcount" value=$task->getWordCount()}
+				{if $wordcount}
+					&middot; {$wordcount|number_format} words
+				{/if}
 			</p>
 			
 			<ul class="tags">
-				<li>{$task->source()} to {$task->target()}</li>
-				{assign var="tag_ids" value=$task->tagIDs()}
-				{if $tag_ids}
-					{foreach from=$tag_ids item=tag_id}
-						<li>{$tags->tagHTML($tag_id)}</li>
-					{/foreach}
+				{if $task->areSourceAndTargetSet()}
+					{Languages::languageNameFromId($task->getSourceId())} 
+					to 
+					{Languages::languageNameFromId($task->getTargetId())}
 				{/if}
+
+				{foreach from=TaskTags::getTags($task) item=tag}
+					<li>{include file="inc.tag.tpl" tag_name=$tag}</li>
+				{/foreach}
 			</ul>
 			
 			{if isset($task_files)}

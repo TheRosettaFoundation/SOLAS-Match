@@ -2,13 +2,13 @@
 <div class="task">
 	<h3><a href="/task/{$task->getTaskId()}/">{$task->getTitle()}</a></h3>
 	<ul class="tags">
-		<li>
-			{if $task->areSourceAndTargetSet()}
+		{if $task->areSourceAndTargetSet()}
+			<li>
 				{Languages::languageNameFromId($task->getSourceId())} 
 				to 
 				{Languages::languageNameFromId($task->getTargetId())}
-			{/if}
-		</li>
+			</li>
+		{/if}
 		
 		{foreach from=TaskTags::getTags($task) item=tag}
 			<li>{include file="inc.tag.tpl" tag_name=$tag}</li>
