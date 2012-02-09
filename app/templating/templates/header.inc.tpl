@@ -20,13 +20,6 @@
 				&middot; <a href="{$url->register()}">Register</a>
 			{/if}
 		</div>
-		<!--
-		<ul class="nav">
-			<li><a href="index.html" class="active">Contribute</a></li>
-			<li><a href="tags.html">Tags</a></li>
-			<li><a href="organizations.html">Organisations</a></li>
-		</ul>
-		-->
 		<div id="tagline">
 			NGOs need your help to help translate and review their content.
 	 	</div>

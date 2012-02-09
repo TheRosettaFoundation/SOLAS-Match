@@ -161,41 +161,25 @@ $app->get('/register', function () use ($app) {
     $error = null;
     if (isValidPost($app)) {
         $post = (object)$app->request()->post();
-        $email = $s->io->post('email');
-        $password = $s->io->post('password');
-        if (User::userExists($s, $email)) {
+        if (User::userExists($post->email)) {
             $error = 'You have already created an account. <a href="'.$s->url->login().'">Please log in.</a>';
-            echo $error;
-            die;
         }
-
-        if (!User::validEmail($email)) {
+        else if (!User::validEmail($post->email)) {
             $error = 'The email address you entered was not valid. Please press back and try again.';
-            echo $error;
-            die;
         }
-
-        if (!User::validPassword($password)) {
+        else if (!User::validPassword($post->password)) {
             $error = 'You didn\'t enter a password. Please press back and try again.';
-            echo $error;
-            die;
         }
-
-        if (User::create($s, $email, $password) >= 1) {
-            // Success.
-            if (User::login($s, $email, $password)) {
-                header('Location: '.$s->url->server()); 
+        if (User::create($post->email, $post->password) >= 1) {
+            if (User::login($$post->password, $post->password)) {
+                $app->redirect('/');
             }
             else {
                 $error = 'Tried to log you in immediately, but was unable to.';
-                echo $error;
-                die;
             }
         }
         else {
             $error = 'Unable to register.';
-            echo $error;
-            die;
         }
     }
     $app->render('register.tpl');
