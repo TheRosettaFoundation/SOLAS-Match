@@ -159,6 +159,10 @@ $app->get('/logout', function () use ($app) {
     $app->redirect('/');
 })->name('logout');
 
+$app->get('/register', function () use ($app) {
+    $app->render('register.tpl');
+})->via('GET', 'POST')->name('register');
+
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }
