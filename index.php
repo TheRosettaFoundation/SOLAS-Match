@@ -135,10 +135,8 @@ $app->get('/tag/:label/', function ($label) use ($app) {
 });
 
 $app->get('/login', function () use ($app) {
-    // Test for Post & make a cheap security check, to get avoid from bots
     $error = null;
     if (isValidPost($app)) {
-        // Don't forget to set the correct attributes in your form (name="user" + name="password")
         $post = (object)$app->request()->post();
         try {
             User::login($post->email, $post->password);
@@ -160,6 +158,46 @@ $app->get('/logout', function () use ($app) {
 })->name('logout');
 
 $app->get('/register', function () use ($app) {
+    $error = null;
+    if (isValidPost($app)) {
+        $post = (object)$app->request()->post();
+        $email = $s->io->post('email');
+        $password = $s->io->post('password');
+        if (User::userExists($s, $email)) {
+            $error = 'You have already created an account. <a href="'.$s->url->login().'">Please log in.</a>';
+            echo $error;
+            die;
+        }
+
+        if (!User::validEmail($email)) {
+            $error = 'The email address you entered was not valid. Please press back and try again.';
+            echo $error;
+            die;
+        }
+
+        if (!User::validPassword($password)) {
+            $error = 'You didn\'t enter a password. Please press back and try again.';
+            echo $error;
+            die;
+        }
+
+        if (User::create($s, $email, $password) >= 1) {
+            // Success.
+            if (User::login($s, $email, $password)) {
+                header('Location: '.$s->url->server()); 
+            }
+            else {
+                $error = 'Tried to log you in immediately, but was unable to.';
+                echo $error;
+                die;
+            }
+        }
+        else {
+            $error = 'Unable to register.';
+            echo $error;
+            die;
+        }
+    }
     $app->render('register.tpl');
 })->via('GET', 'POST')->name('register');
 
