@@ -9,12 +9,13 @@ require 'app/TaskDao.class.php';
 require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
 require 'app/Organisations.class.php';
-require('app/TaskFiles.class.php');
-require('app/TaskFile.class.php');
+require 'app/TaskFiles.class.php';
+require 'app/TaskFile.class.php';
 require 'app/lib/Languages.class.php';
 require 'app/lib/URL.class.php';
 require 'app/lib/Authentication.class.php';
 require 'app/lib/UserSession.class.php';
+require 'app/lib/Tags.class.php';
 
 /**
  * Start the session
@@ -69,37 +70,43 @@ $app->get('/', function () use ($app) {
 $app->get('/task/create/', $authenticateForRole('organisation'), function () use ($app) {
     $error = null;
     if (isValidPost($app)) {
-
+        $post = (object)$app->request()->post();
         $source_id = Languages::languageIdFromName($post->source);
         $target_id = Languages::languageIdFromName($post->target);
         
         if (!$source_id || !$target_id) {
-            echo "Sorry, a langauge you entered does not exist in our system. Functionality for adding a language still remains to be implemented. Please press back and enter a different languag name."; die;
+            $error = "Sorry, a langauge you entered does not exist in our system. Functionality for adding a language still remains to be implemented. Please press back and enter a different language name.";
         }
+        else {
+            $task_dao = new TaskDao();
+            $task = $task_dao->create(array(
+                'title' => $post->title,
+                'organisation_id' => $post->organisation_id,
+                'source_id' => $source_id,
+                'target_id' => $target_id,
+                'word_count' => $post->word_count
+                )
+            );
 
-        $task_dao = new TaskDao();
-        $task = $task_dao->create(array(
-            'title' => $post->title, 
-            'organisation_id' => $post->organisation_id, 
-            'tags' => $post->tags, 
-            'source_id' => $source_id, 
-            'target_id' => $target_id, 
-            'word_count' => $post->word_count
-            )
-        );
-        $task_id = $task->getTaskId();
-        
-        // Save the file
-        if (!IO::saveUploadedFile('original_file', $post->organisation_id, $task_id)) {
-            echo "Failed to upload file :("; die;
+            TaskTags::setTagsFromStr($task, $post->tags);
+            
+            // Save the file
+            if (!IO::saveUploadedFile('original_file', $post->organisation_id, $task->getTaskId())) {
+                $error = "Failed to upload file :(";
+            }
+
+            if (is_null($error)) {
+                $app->redirect('/task/' . $task_id);
+            }
+
         }
+    }
 
-        $app->redirect('/task/' . $task_id);
+    if (!is_null($error)) {
+        $app->view()->appendData(array('error' => $error));
     }
-    else {
-        $app->view()->appendData(array('url_task_create', $app->urlFor('task-create')));
-        $app->render('task.create.tpl');
-    }
+    $app->view()->appendData(array('url_task_create' => $app->urlFor('task-create')));
+    $app->render('task.create.tpl');
 })->via('GET','POST')->name('task-create');
 
 $app->get('/task/:task_id/', function ($task_id) use ($app) {
@@ -163,28 +170,39 @@ $app->get('/logout', function () use ($app) {
 
 $app->get('/register', function () use ($app) {
     $error = null;
+    $warning = null;
     if (isValidPost($app)) {
         $post = (object)$app->request()->post();
-        if (User::userExists($post->email)) {
-            $error = 'You have already created an account. <a href="'.$s->url->login().'">Please log in.</a>';
+        $user_dao = new UserDao();
+        if (is_object($user_dao->find(array('email' => $post->email)))) {
+            $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
         }
-        else if (!User::validEmail($post->email)) {
+        else if (!User::isValidEmail($post->email)) {
             $error = 'The email address you entered was not valid. Please press back and try again.';
         }
-        else if (!User::validPassword($post->password)) {
+        else if (!User::isValidPassword($post->password)) {
             $error = 'You didn\'t enter a password. Please press back and try again.';
         }
-        if (User::create($post->email, $post->password) >= 1) {
-            if (User::login($$post->password, $post->password)) {
-                $app->redirect('/');
+
+        if (is_null($error) && is_null($warning)) {
+            if ($user = $user_dao->create($post->email, $post->password)) {
+                if ($user_dao->login($user->getEmail(), $post->password)) {
+                    $app->redirect('/');
+                }
+                else {
+                    $error = 'Tried to log you in immediately, but was unable to.';
+                }
             }
             else {
-                $error = 'Tried to log you in immediately, but was unable to.';
+                $error = 'Unable to register.';
             }
-        }
-        else {
-            $error = 'Unable to register.';
-        }
+        } 
+    }
+    if ($error !== null) {
+        $app->view()->appendData(array('error' => $error));
+    }
+    if ($warning !== null) {
+        $app->view()->appendData(array('warning' => $warning));
     }
     $app->render('register.tpl');
 })->via('GET', 'POST')->name('register');
@@ -219,6 +237,7 @@ $view = $app->view();
 $view->appendData(array('url' => $url));
 $view->appendData(array('url_login' => $app->urlFor('login')));
 $view->appendData(array('url_logout' => $app->urlFor('logout')));
+$view->appendData(array('url_register' => $app->urlFor('register')));
 $user = null;
 if ($user = $user_dao->getCurrentUser()) {
     $view->appendData(array('user' => $user));

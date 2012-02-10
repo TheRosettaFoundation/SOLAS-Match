@@ -2,13 +2,11 @@
 
 class Languages {
 	public static function languageIdFromName($language_name) {
-		self::ensureLanguageIdIsValid($language_id);
-
 		$db 	= new MySQLWrapper();
 		$db->init();
 		$q 		= 'SELECT id
 					FROM language
-					WHERE en_name =  ' . $db->cleanseAndQuoteString($language_name);
+					WHERE en_name =  ' . $db->cleanseWrapStr($language_name);
 
 		$ret = null;
 		if ($r = $db->Select($q)) {

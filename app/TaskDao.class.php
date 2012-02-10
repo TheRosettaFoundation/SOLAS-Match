@@ -2,7 +2,6 @@
 require_once 'Task.class.php';
 require_once 'TaskTags.class.php';
 
-
 /**
  * Task Document Access Object for manipulating tasks.
  *
@@ -88,7 +87,7 @@ class TaskDao
 	 **/
 	private function _insert($task)
 	{
-		$db = new MySQLHandler();
+		$db = new MySQLWrapper();
 		$db->init();
 		$insert = array();		
 		if ($title = $task->getTitle()) {

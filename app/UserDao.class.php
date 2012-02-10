@@ -51,7 +51,7 @@ class UserDao {
 		}
 
 		$nonce = Authentication::generateNonce();
-		$password = Authentication::hashPassword($clear_password, $user_nonce);
+		$password = Authentication::hashPassword($clear_password, $nonce);
 		
 		$user_data = array(
 			'email' => $email,
@@ -71,11 +71,11 @@ class UserDao {
 		}
 	}
 
-	private static function _update($user) {
+	private function _update($user) {
 		echo "oops, still have to create _update";
 	}
 
-	private static function _insert($user_data) {
+	private function _insert($user) {
 		// The array that will contain values to be inserted to DB.
 		$db = new MySQLWrapper();
 		$db->init();
@@ -85,7 +85,7 @@ class UserDao {
 		$insert['password'] = $db->cleanseWrapStr($user->getPassword());
 		$insert['created_time'] = 'NOW()';
 		
-		if ($user_id = $s->db->Insert('user', $insert)) {
+		if ($user_id = $db->Insert('user', $insert)) {
 			return $this->find(array('user_id' => $user_id));
 		}
 		else {

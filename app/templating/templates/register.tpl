@@ -1,6 +1,12 @@
 {include file="header.inc.tpl"}
 <div class="grid_8">
 	<h2>Register</h2>
+	{if isset($error)}
+		<p class="error">{$error}</p>
+	{/if}
+	{if isset($warning)}
+		<p class="warning">{$warning}</p>
+	{/if}
 	<form method="post" action="/register">
 		<fieldset>
 			<p>

@@ -277,6 +277,20 @@ p.desc {margin: -1.8em 0 1.5em 0;font-size: 85%;color: #AAAAAA;}
 .required {font-weight: bold; margin-left:-0.7em; color: #870000;}
 p.radio label {clear: right;}
 input#word_count {width: 5em;}
+.warning, .error {
+	border: 1px solid;
+	margin: 10px 0px;
+	padding:15px 10px 15px 10px;
+}
+.warning {
+	color: #9F6000;
+	background-color: #FEEFB3;
+}
+.error {
+color: #D8000C;
+background-color: #FFBABA;
+background-image: url('error.png');
+}
 
 /** Task Page **/
 body.task_page .task_content { 

@@ -5,8 +5,12 @@ class Tag {
 	var $_label;
 
 	function __construct($params) {
-		$this->setTagId($params['tag_id']);
-		$this->setLabel($params['label']);
+		if (isset($params['tag_id'])) {
+			$this->setTagId($params['tag_id']);
+		}
+		if (isset($params['label'])) {
+			$this->setLabel($params['label']);
+		}
 	}
 
 	public function setTagId($tag_id) {
@@ -15,6 +19,10 @@ class Tag {
 
 	public function getTagId() {
 		return $this->_tag_id;
+	}
+
+	public function hasTagId() {
+		return (!is_null($this->_tag_id));
 	}
 
 	public function setLabel($label) {

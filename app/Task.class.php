@@ -135,7 +135,6 @@ class Task
 			'organisation_id' 	=> 'setOrganisationId',
 			'source_id'			=> 'setSourceId',
 			'target_id'			=> 'setTargetId',
-			'tags'				=> 'setTags',
 			'word_count'		=> 'setWordCount',
 			'created_time'		=> 'setCreatedTime',
 		);

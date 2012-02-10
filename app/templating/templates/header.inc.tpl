@@ -17,7 +17,7 @@
 				&middot; <a href="{$url_logout}">Log out</a> 
 			{else}
 				<a href="{$url_login}">Log in</a>
-				&middot; <a href="{$url->register()}">Register</a>
+				&middot; <a href="{$url_register}">Register</a>
 			{/if}
 		</div>
 		<div id="tagline">

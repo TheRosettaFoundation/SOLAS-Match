@@ -32,6 +32,30 @@ class TagsDao {
 		return $ret;
 	}
 
+	public function create($label) {
+		$tag = new Tag(array('label' => $label));
+		return $this->save($tag);
+	}
+
+	public function save($tag) {
+		if (!$tag->hasTagId()) {
+			return $this->_insert($tag);
+		}
+		else {
+			echo "Error: updating existing tag functionality not implemented."; die;
+		}
+	}
+
+	private function _insert($tag)
+	{
+		$db = new MySQLWrapper();
+		$db->init();
+		$i = array();
+		$i['label'] = $db->cleanseWrapStr($tag->getLabel());
+		$db->Insert('tag', $i);
+		return $this->find(array('label' => $tag->getLabel()));
+	}
+	
 	function getTopTags($limit = 30)
 	{
 		$ret = false;
@@ -53,8 +77,9 @@ class TagsDao {
 		return $ret;
 	}
 
-		/*
-		Take a string typed in by the user, try to break it up and create tags from it.
+	/*
+		Take a string typed in by the user, try to break it up and create tags 
+		from it.
 		Returns an array of matching tag_ids.
 		Basic format is that items are comma-delimited.
 		
@@ -82,40 +107,6 @@ class TagsDao {
 		return $tag_ids;		
 	}
 
-	/**
-	 * Convert a string of inputted tags into an array of strings
-	 *
-	 * @return array of strings
-	 * @author 
-	 **/
-	private function tagsToArray($tags)
-	{
-		$str = str_replace(',', ' ', $tags);
-		$arr = explode(' ', $str);
-		$trimmed = array();
-		foreach ($arr as $tag) {
-			if (strlen(trim($tag)) > 0) {
-				$trimmed[] = trim($tag);
-			}
-		}
-		return (count($trimmed) > 0) ? $trimmed : null;
-	}
-
-	/**
-	 * Insert new tag into database
-	 *
-	 * @return tag_id
-	 * @author 
-	 **/
-	private function insertTag($tag)
-	{
-		$i = array();
-		$i['label'] = '\''.$db->cleanse($tag).'\'';
-		$db = new MySQLWrapper();
-		$db->init();
-		return $db->Insert('tag', $i);
-	}
-	
 	function tagIDFromLabel($label)
 	{
 		$ret = false;
@@ -160,5 +151,22 @@ class TagsDao {
 	{
 		$label = $str;
 		return '<div class="tag target"><span class="label">To '.$label.'</span></div>';
+	}
+
+	public function createAnyNewTags($labels) {
+		$ret =  null;
+		if (is_array($labels)) {
+			$tags = array();
+			foreach($labels as $label) {
+				if ($tag = $this->find(array('label' => $label))) {
+					$tags[] = $tag;
+				}
+				else {
+					$tags[] = $this->create($label);
+				}
+			}
+			$ret = $tags;
+		}
+		return $ret;
 	}
 }
