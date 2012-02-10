@@ -106,7 +106,7 @@ class IO {
 	 * The file has been specified in a form element <input type="file" name="myfile">
 	 * We access that file through PHP's $_FILES array.
 	 */
-	function saveUploadedFile($myfile, $org_id, $task_id)
+	public static function saveUploadedFile($myfile, $org_id, $task_id)
 	{
 		/* 
 		 * Right now we're assuming that there's one file, but I think it can also be
@@ -117,7 +117,7 @@ class IO {
 		{
 			// Save this original file to upload_path/org-N/task-N/v-N
 			$uploaddir = TaskFile::absolutePath($org_id, $task_id);
-			if ($this->saveUploadedFileToFS($uploaddir, $myfile))
+			if (self::saveUploadedFileToFS($uploaddir, $myfile))
 			{
 				$task = new Task($task_id);
 				$ret = $task->recordUploadedFile($uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
@@ -163,7 +163,7 @@ class IO {
 	 * $files_file is the name of the parameter of the file we want to access
 	 * in the $_FILES global array.
 	 */
-	private function saveUploadedFileToFS($uploaddir, $files_file)
+	private static function saveUploadedFileToFS($uploaddir, $files_file)
 	{
 		$ret = false;
 		if ((is_dir($uploaddir)) ? true : mkdir($uploaddir, 0755, true))

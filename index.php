@@ -69,6 +69,12 @@ $app->get('/', function () use ($app) {
 
 $app->get('/task/create/', $authenticateForRole('organisation'), function () use ($app) {
     $error = null;
+
+Task submission failing with file upload, as the isValidPost check fails with the enctype set on the form.
+
+I've asked on:
+http://help.slimframework.com/discussions/problems/50-checking-for-a-post-while-the-form-is-set-to-enctypemultipartform-data
+
     if (isValidPost($app)) {
         $post = (object)$app->request()->post();
         $source_id = Languages::languageIdFromName($post->source);
@@ -90,7 +96,6 @@ $app->get('/task/create/', $authenticateForRole('organisation'), function () use
 
             TaskTags::setTagsFromStr($task, $post->tags);
             
-            // Save the file
             if (!IO::saveUploadedFile('original_file', $post->organisation_id, $task->getTaskId())) {
                 $error = "Failed to upload file :(";
             }

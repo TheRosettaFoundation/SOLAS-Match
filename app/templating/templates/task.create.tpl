@@ -4,7 +4,7 @@
 		{if isset($error)}
 			<p class="error">{$error}</p>
 		{/if}
-		<form method="post" action="{$url_task_create}">
+		<form method="post" action="{$url_task_create}" enctype="multipart/form-data">
 			<fieldset>
 				<label for="content">Descriptive Title</label>
 				<textarea wrap="hard" cols="1" rows="2" name="title"></textarea>
