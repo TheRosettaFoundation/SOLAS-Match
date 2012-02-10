@@ -14,6 +14,7 @@ require('app/TaskFile.class.php');
 require 'app/lib/Languages.class.php';
 require 'app/lib/URL.class.php';
 require 'app/lib/Authentication.class.php';
+require 'app/lib/UserSession.class.php';
 
 /**
  * Start the session
@@ -49,9 +50,9 @@ $app->configureMode('development', function () use ($app) {
 $authenticateForRole = function ( $role = 'member' ) {
     return function () use ( $role ) {
         $app = Slim::getInstance();
-        $users = new Users();
-        if (!$users->currentUserID()) {
-            $app->redirect('/login');    
+        $user_dao = new UserDao();
+        if (!is_object($user_dao->getCurrentUser())) {
+            $app->redirect('/login');
         }
     };
 };
@@ -140,7 +141,8 @@ $app->get('/login', function () use ($app) {
     if (isValidPost($app)) {
         $post = (object)$app->request()->post();
         try {
-            User::login($post->email, $post->password);
+            $user_dao = new UserDao();
+            $user_dao->login($post->email, $post->password);
             $app->redirect('/');
         } catch (AuthenticationException $e) {
             $error = '<p>Unable to log in. Please check your email and password. <a href="' . $app->urlFor('login') . '">Try logging in again</a>.</p>';
@@ -154,7 +156,8 @@ $app->get('/login', function () use ($app) {
 })->via('GET','POST')->name('login');
 
 $app->get('/logout', function () use ($app) {
-    Users::logOut();
+    $user_dao = new UserDao();
+    $user_dao->logout();
     $app->redirect('/');
 })->name('logout');
 
@@ -200,7 +203,7 @@ function isValidPost(&$app) {
  * 
  * Given that we don't have object factories implemented, we'll initialise them directly here.
  */
-$users = new Users();
+$user_dao = new UserDao();
 $url = new URL();
 
 /**
@@ -217,13 +220,8 @@ $view->appendData(array('url' => $url));
 $view->appendData(array('url_login' => $app->urlFor('login')));
 $view->appendData(array('url_logout' => $app->urlFor('logout')));
 $user = null;
-if ($user_id = $users->currentUserID()) {
-    $user = array(
-        'id' => $users->currentUserID(),
-        'email' => $users->userEmail($user_id)
-    );
+if ($user = $user_dao->getCurrentUser()) {
     $view->appendData(array('user' => $user));
 }
-
 
 $app->run();

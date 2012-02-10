@@ -13,7 +13,7 @@
 		<h1><a href="/">Solas Match</a></h1>
 		<div id="header-right">
 			{if isset($user)}
-				{$user.email}
+				{$user->getEmail()}
 				&middot; <a href="{$url_logout}">Log out</a> 
 			{else}
 				<a href="{$url_login}">Log in</a>

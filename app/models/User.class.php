@@ -29,6 +29,10 @@ class User
 		return $this->_user_id;
 	}
 
+	public static function isValidUserId($user_id) {
+		return (is_numeric($user_id) && $user_id > 0);
+	}
+
 	public function getEmail() {
 		return $this->_email;
 	}
@@ -45,7 +49,7 @@ class User
 	}
 
 	private static function emailContainsCharacter($email, $character) {
-		return strpos($email, $character) !== false
+		return (strpos($email, $character) !== false);
 	}
 	
 	public static function isValidPassword($password) {

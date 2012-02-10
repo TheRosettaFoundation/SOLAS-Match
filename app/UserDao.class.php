@@ -7,7 +7,13 @@ class UserDao {
 		$query = null;
 		$db = new MySQLWrapper();
 		$db->init();
-		if (isset($params['user_id'])) {
+		if (isset($params['user_id']) && isset($param['password'])) {
+			$query = 'SELECT *
+					FROM user
+					WHERE user_id = ' . $db->cleanse($params['user_id']) . '
+					AND password = ' . $db->cleanseWrapStr($params['password']);
+		}
+		else if (isset($params['user_id'])) {
 			$query = 'SELECT *
 						FROM user
 						WHERE user_id = ' . $db->cleanse($params['user_id']);
@@ -22,7 +28,7 @@ class UserDao {
 		}
 
 		$ret = null;
-		if ($r = $db->Select($q)) {
+		if ($r = $db->Select($query)) {
 			$user_data = array(
 				'user_id' => $r[0]['user_id'],
 				'email' => $r[0]['email'],
@@ -80,69 +86,55 @@ class UserDao {
 		$insert['created_time'] = 'NOW()';
 		
 		if ($user_id = $s->db->Insert('user', $insert)) {
-			return $this->find(array('user_id' => $user_id))
+			return $this->find(array('user_id' => $user_id));
 		}
 		else {
 			return null;
 		}
 	}
 	
-	public static function login($email, $password)	{
-		$ret = false;
-		// See if we can match the user with what's in the database.
-		$nonce = User::nonce($email);
-		$db = new MySQLWrapper();
-		$db->init();
-		$hashed_password = User::hashPassword($password, $nonce);
-		$q = 'SELECT *
-				FROM user
-				WHERE email = \''.$db->cleanse($email).'\'
-				AND password = \''.$db->cleanse($hashed_password).'\'';
-		if ($r = $db->Select($q)) {
-			$user_id = $r[0]['user_id'];
-			// Successfuly found a user matching the email and password.
-			User::setSession($user_id);
-			$ret = true;
-		} else {
-			throw new AuthenticationException('test');
-		}
-		return $ret;
-	}
-	
-	public static function logOut() {
-		User::destroySession();
-	}
-	
-	function currentUserID() {
-		return (isset($_SESSION['user_id']) && intval($_SESSION['user_id']) > 0) ? intval($_SESSION['user_id']) : false;
-	}
-	
-	public static function isLoggedIn()
-	{
-		return (isset($_SESSION['user_id']));
+	private function clearPasswordMatchesUsersPassword($user, $clear_password) {
+		$hashed_input_password = Authentication::hashPassword($clear_password, $user->getNonce());
+
+		return is_object(
+				$this->find(array(
+					'user_id' => $user->getUserId(),
+					'password' => $hashed_input_password
+				))
+		);
 	}
 
-	public static function destroySession() {
-		$_SESSION = array();
-		session_destroy();
+	public function login($email, $clear_password) {
+		$user = $this->find(array('email' => $email));
+
+		if (!is_object($user)) {
+			throw new InvalidArgumentException('Sorry, we could not find an account for that email address. Please check the provided address, or register for an account.');
+		}
+
+		if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
+			throw new InvalidArgumentException('Sorry, that password is incorrect. Please try again.');
+		}
+
+		UserSession::setSession($user->getUserId());
+
 		return true;
 	}
-		
-	public static function userExists(&$s, $email)
-	{
-		$ret = false;
-		$q = 'SELECT user_id
-				FROM user
-				WHERE email = \''.$s->db->cleanse($email).'\'';
-		if ($r = $s->db->Select($q))
-		{
-			$ret = true;
+	
+	public function logout() {
+		UserSession::destroySession();
+	}
+	
+	public function getCurrentUser() {
+		$ret = null;
+		if ($user_id = UserSession::getCurrentUserId()) {
+			$ret = $this->find(array('user_id' => $user_id));
 		}
 		return $ret;
 	}
-	
-	private static function setSession($user_id)
+
+	public static function isLoggedIn()
 	{
-		$_SESSION['user_id'] = $user_id;
+		return (!is_null(UserSession::getCurrentUserId()));
 	}
+
 }
