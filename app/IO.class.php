@@ -200,15 +200,14 @@ class IO {
 	 * Return an integer value of the max file size that can be uploaded to the system,
 	 * denominated in megabytes.
 	 */
-	static function maxFileSizeMB()
-	{
-		$ret = false;
+	public static function maxFileSizeMB() {
+		$bytes = self::maxFileSizeBytes();
+		return round($bytes/1024, 1);
+	}
+
+	public static function maxFileSizeBytes() {
 		$settings = new Settings();
-		if ($bytes = $settings->get('files.max_upload_file_size'))
-		{
-			$ret = round($bytes/1024, 1);
-		}	
-		return $ret;
+		return $settings->get('files.max_upload_file_size');
 	}
 
 }
