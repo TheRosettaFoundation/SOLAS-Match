@@ -5,12 +5,30 @@ class TaskFile
 	var $task_id;
 	var $file_id;
 	
-	function TaskFile($task_id, $file_id)
-	{
+	function TaskFile($task_id, $file_id) {
 		$this->task_id = $task_id;
 		$this->file_id = $file_id;
 	}
 	
+	public static function recordUploadedFile($task_id, $path, $filename, $content_type)
+	{
+		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
+		$task_file = array();
+		$task_file['task_id'] = intval($task_id);
+		$task_file['path'] = $db->cleanseWrapStr($path);
+		$task_file['filename'] = $db->cleanseWrapStr($filename);
+		$task_file['content_type'] = $db->cleanseWrapStr($content_type);
+		$task_file['user_id'] = 'NULL';
+		$task_file['upload_time'] = 'NOW()';
+		if ($file_id = $db->Insert('task_file', $task_file)) {
+			$task_file = new TaskFile($task_id, $file_id);
+			$ret = $task_file->recordNewlyUploadedVersion($task_file->nextVersion(), $filename, $content_type);
+		}
+		return $ret;
+	}
+
 	function taskID()
 	{
 		return intval($this->task_id);		
@@ -36,7 +54,7 @@ class TaskFile
 	{
 		// Not necessarily an existing path, but what it should be for this file.
 		$settings = new Settings();
-		return $settings->setting('files.upload_path').'org-'.intval($org_id).DIRECTORY_SEPARATOR.'task-'.intval($task_id).DIRECTORY_SEPARATOR.'v-'.intval($version);
+		return $settings->get('files.upload_path').'org-'.intval($org_id).DIRECTORY_SEPARATOR.'task-'.intval($task_id).DIRECTORY_SEPARATOR.'v-'.intval($version);
 	}
 	
 	/*

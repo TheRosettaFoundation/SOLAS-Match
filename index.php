@@ -72,6 +72,39 @@ $app->get('/', function () use ($app) {
 $app->get('/task/upload', $authenticateForRole('organisation'), function () use ($app) {
     $error = null;
     $form_file_field = 'new_task_file';
+    $organisation_id = 1; // TODO Implement organisation identification!
+
+    if (Upload::hasFileBeenSuccessfullyUploaded($form_file_field)) {
+        
+        $task_dao = new TaskDao();
+        $task = $task_dao->create(array(
+            'organisation_id' => $organisation_id,
+        ));
+
+        if (!IO::saveUploadedFile($form_file_field, $organisation_id, $task->getTaskId())) {
+            $error = "Failed to upload file :(";
+        }
+
+        if (is_null($error)) {
+            $app->redirect('/task/describe/' . $task->getTaskId() . '/');
+        }
+    }
+
+    if (!is_null($error)) {
+        $app->view()->appendData(array('error' => $error));
+    }
+    $app->view()->appendData(array(
+        'url_task_upload'       => $app->urlFor('task-upload'),
+        'max_file_size_bytes'   => IO::maxFileSizeBytes(),
+        'max_file_size_mb'      => IO::maxFileSizeMB(),
+        'form_file_field'       => $form_file_field
+    ));
+    $app->render('task.upload.tpl');
+})->via('GET','POST')->name('task-upload');
+
+$app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), function () use ($app) {
+    $error = null;
+    $form_file_field = 'new_task_file';
 
     if (Upload::hasFileBeenUploaded($form_file_field)) {
         echo "ok, we're submitting";die;
@@ -94,7 +127,7 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
                 'word_count' => $post->word_count
             ));
             TaskTags::setTagsFromStr($task, $post->tags);
-            if (!IO::saveUploadedFile('original_file', $post->organisation_id, $task->getTaskId())) {
+            if (!IO::saveUploadedFile($form_file_field, $post->organisation_id, $task->getTaskId())) {
                 $error = "Failed to upload file :(";
             }
             if (is_null($error)) {
@@ -113,7 +146,7 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
         'form_file_field'       => $form_file_field
     ));
     $app->render('task.upload.tpl');
-})->via('GET','POST')->name('task-upload');
+})->via('GET','POST')->name('task-describe');
 
 $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $task_dao = new TaskDao();

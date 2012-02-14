@@ -323,22 +323,4 @@ class Task
 	{
 		return $this->id;		
 	}
-
-	public function old_recordUploadedFile($path, $filename, $content_type)
-	{
-		$ret = false;
-		$task_file = array();
-		$task_file['task_id'] = intval($this->taskID());
-		$task_file['path'] = '\''.$db->cleanse($path).'\'';
-		$task_file['filename'] = '\''.$db->cleanse($filename).'\'';
-		$task_file['content_type'] = '\''.$db->cleanse($content_type).'\'';
-		$task_file['user_id'] = 'NULL';
-		$task_file['upload_time'] = 'NOW()';
-		if ($file_id = $db->Insert('task_file', $task_file))
-		{
-			$task_file = new TaskFile($this->s, $this->taskID(), $file_id);
-			$ret = $task_file->recordNewlyUploadedVersion($task_file->nextVersion(), $filename, $content_type);
-		}
-		return $ret;
-	}
 }

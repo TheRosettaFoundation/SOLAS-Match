@@ -106,25 +106,21 @@ class IO {
 	 * The file has been specified in a form element <input type="file" name="myfile">
 	 * We access that file through PHP's $_FILES array.
 	 */
-	public static function saveUploadedFile($myfile, $org_id, $task_id)
-	{
+	public static function saveUploadedFile($myfile, $org_id, $task_id) {
 		/* 
 		 * Right now we're assuming that there's one file, but I think it can also be
 		 * an array of multiple files.
 		 */
 		$ret = false;
-		if ($_FILES[$myfile]['error'] == UPLOAD_ERR_OK)
-		{
+		if (Upload::isUploadedWithoutError($myfile)) {
 			// Save this original file to upload_path/org-N/task-N/v-N
 			$uploaddir = TaskFile::absolutePath($org_id, $task_id);
 			if (self::saveUploadedFileToFS($uploaddir, $myfile))
 			{
-				$task = new Task($task_id);
-				$ret = $task->recordUploadedFile($uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
+				$ret = TaskFile::recordUploadedFile($task_id, $uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
 			}
 		}
-		else if ($_FILES[$myfile]['error'] == UPLOAD_ERR_FORM_SIZE)
-		{
+		else if ($_FILES[$myfile]['error'] == UPLOAD_ERR_FORM_SIZE) {
 			echo 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.<br />';
 			echo '<pre>';
 			print_r($_FILES);
