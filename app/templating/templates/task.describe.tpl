@@ -1,10 +1,10 @@
 {include file="header.inc.tpl"}
 	<div class="grid_8">
-		<h2>Create task</h2>
+		<h1>Describe your task</h1>
 		{if isset($error)}
 			<p class="error">{$error}</p>
 		{/if}
-		<form method="post" action="{$url_task_create}" enctype="multipart/form-data">
+		<form method="post" action="{$url_task_create}">
 			<fieldset>
 				<label for="content">Descriptive Title</label>
 				<textarea wrap="hard" cols="1" rows="2" name="title"></textarea>

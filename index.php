@@ -16,6 +16,7 @@ require 'app/lib/URL.class.php';
 require 'app/lib/Authentication.class.php';
 require 'app/lib/UserSession.class.php';
 require 'app/lib/Tags.class.php';
+require 'app/lib/Upload.class.php';
 
 /**
  * Start the session
@@ -64,22 +65,22 @@ $app->get('/', function () use ($app) {
     }
     $tags_dao = new TagsDao();
     $app->view()->setData('top_tags', $tags_dao->getTopTags(30));
+    $app->view()->appendData(array('url_task_upload' => $app->urlFor('task-upload')));
     $app->render('index.tpl');
 })->name('home');
 
-$app->get('/task/create/', $authenticateForRole('organisation'), function () use ($app) {
+$app->get('/task/upload', $authenticateForRole('organisation'), function () use ($app) {
     $error = null;
+    $form_file_field = 'new_task_file';
 
-Task submission failing with file upload, as the isValidPost check fails with the enctype set on the form.
-
-I've asked on:
-http://help.slimframework.com/discussions/problems/50-checking-for-a-post-while-the-form-is-set-to-enctypemultipartform-data
-
+    if (Upload::hasFileBeenUploaded($form_file_field)) {
+        echo "ok, we're submitting";die;
+    }
     if (isValidPost($app)) {
         $post = (object)$app->request()->post();
         $source_id = Languages::languageIdFromName($post->source);
         $target_id = Languages::languageIdFromName($post->target);
-        
+
         if (!$source_id || !$target_id) {
             $error = "Sorry, a langauge you entered does not exist in our system. Functionality for adding a language still remains to be implemented. Please press back and enter a different language name.";
         }
@@ -91,30 +92,30 @@ http://help.slimframework.com/discussions/problems/50-checking-for-a-post-while-
                 'source_id' => $source_id,
                 'target_id' => $target_id,
                 'word_count' => $post->word_count
-                )
-            );
-
+            ));
             TaskTags::setTagsFromStr($task, $post->tags);
-            
             if (!IO::saveUploadedFile('original_file', $post->organisation_id, $task->getTaskId())) {
                 $error = "Failed to upload file :(";
             }
-
             if (is_null($error)) {
                 $app->redirect('/task/' . $task_id);
             }
-
         }
     }
 
     if (!is_null($error)) {
         $app->view()->appendData(array('error' => $error));
     }
-    $app->view()->appendData(array('url_task_create' => $app->urlFor('task-create')));
-    $app->render('task.create.tpl');
-})->via('GET','POST')->name('task-create');
+    $app->view()->appendData(array(
+        'url_task_upload'       => $app->urlFor('task-upload'),
+        'max_file_size_bytes'   => IO::maxFileSizeBytes(),
+        'max_file_size_mb'      => IO::maxFileSizeMB(),
+        'form_file_field'       => $form_file_field
+    ));
+    $app->render('task.upload.tpl');
+})->via('GET','POST')->name('task-upload');
 
-$app->get('/task/:task_id/', function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
     if (!is_object($task)) {

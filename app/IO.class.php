@@ -149,7 +149,6 @@ class IO {
 		{
 			// Save this original file to upload_path/org-N/task-N/v-N
 			$version = $task_file->nextVersion();
-		echo "$version";
 			$uploaddir = TaskFile::absolutePath($this->s, $task_file->organisationID(), $task_file->taskID(), $version);
 			if ($this->saveUploadedFileToFS($uploaddir, $myfile))
 			{
