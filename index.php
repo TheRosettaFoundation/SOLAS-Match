@@ -75,8 +75,8 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
 
     if (Upload::hasFileBeenUploaded($form_file_field)) {
         echo "ok, we're submitting";die;
-    }
-    if (isValidPost($app)) {
+    
+        // Post probably won't work here....
         $post = (object)$app->request()->post();
         $source_id = Languages::languageIdFromName($post->source);
         $target_id = Languages::languageIdFromName($post->target);
