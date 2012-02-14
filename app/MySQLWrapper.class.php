@@ -26,8 +26,10 @@ class MySQLWrapper
 		$this->username = $settings->get('db.username');
 		$this->password = $settings->get('db.password');
 		$this->server = $settings->get('db.server');
-		$this->logfile = $settings->get('db.log_file'); // full path to debug logfile. Use only in debug mode!
 		$this->logging = (strlen($this->logfile)>0) ? true : false;
+		if ($this->logging) {
+			$this->logfile = $settings->get('db.log_file'); // full path to debug logfile. Use only in debug mode!
+		}
 		$this->show_errors = ($settings->get('db.show_errors') == 'y') ? true : false;
 		$this->show_sql = ($settings->get('db.show_sql') == 'y') ? true : false;
 	}
