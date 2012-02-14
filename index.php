@@ -74,14 +74,24 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
     $form_file_field = 'new_task_file';
     $organisation_id = 1; // TODO Implement organisation identification!
 
-    if (Upload::hasFileBeenSuccessfullyUploaded($form_file_field)) {
-        
+    if (Upload::hasFormBeenUploaded($form_file_field)) {
         $task_dao = new TaskDao();
         $task = $task_dao->create(array(
             'organisation_id' => $organisation_id,
         ));
+        try {
+            IO::saveUploadedFile($form_file_field, $organisation_id, $task->getTaskId();
+        }
+        catch {
 
-        if (!IO::saveUploadedFile($form_file_field, $organisation_id, $task->getTaskId())) {
+        }
+    }
+
+    if (Upload::hasFileBeenSuccessfullyUploaded($form_file_field)) {
+        
+        
+
+        if (!)) {
             $error = "Failed to upload file :(";
         }
 

@@ -106,34 +106,6 @@ class IO {
 	 * The file has been specified in a form element <input type="file" name="myfile">
 	 * We access that file through PHP's $_FILES array.
 	 */
-	public static function saveUploadedFile($myfile, $org_id, $task_id) {
-		/* 
-		 * Right now we're assuming that there's one file, but I think it can also be
-		 * an array of multiple files.
-		 */
-		$ret = false;
-		if (Upload::isUploadedWithoutError($myfile)) {
-			// Save this original file to upload_path/org-N/task-N/v-N
-			$uploaddir = TaskFile::absolutePath($org_id, $task_id);
-			if (self::saveUploadedFileToFS($uploaddir, $myfile))
-			{
-				$ret = TaskFile::recordUploadedFile($task_id, $uploaddir, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
-			}
-		}
-		else if ($_FILES[$myfile]['error'] == UPLOAD_ERR_FORM_SIZE) {
-			echo 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.<br />';
-			echo '<pre>';
-			print_r($_FILES);
-			echo '</pre>';
-		}
-		return $ret;
-	}
-	
-	/*
-	 * For a named filename, save file that have been uploaded by form submission.
-	 * The file has been specified in a form element <input type="file" name="myfile">
-	 * We access that file through PHP's $_FILES array.
-	 */
 	function saveUploadedEditedFile($myfile, &$task_file)
 	{
 		/* 
@@ -150,21 +122,6 @@ class IO {
 			{
 				$ret = $task_file->recordNewlyUploadedVersion($version, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
 			}
-		}
-		return $ret;
-	}
-	
-	/*
-	 * $files_file is the name of the parameter of the file we want to access
-	 * in the $_FILES global array.
-	 */
-	private static function saveUploadedFileToFS($uploaddir, $files_file)
-	{
-		$ret = false;
-		if ((is_dir($uploaddir)) ? true : mkdir($uploaddir, 0755, true))
-		{
-			$uploadfile = $uploaddir.DIRECTORY_SEPARATOR.basename($_FILES[$files_file]['name']);		
-			$ret = (move_uploaded_file($_FILES[$files_file]['tmp_name'], $uploadfile));
 		}
 		return $ret;
 	}
