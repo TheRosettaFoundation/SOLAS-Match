@@ -5,28 +5,35 @@
 Class Settings {
     var $_settings = array();
 
-	function Settings() {
-		$file = dirname(__FILE__).'/includes/conf.php';
-		$this->load($file);
-	}
+    function __construct() {
+        $file = dirname(__FILE__).'/includes/conf.php';
+        $this->load($file);
+    }
 
-    function get($var) {
-        $var = explode('.', $var);
-
-        $result = $this->_settings;
-        foreach ($var as $key) {
-            if (!isset($result[$key])) { return false; }
-
-            $result = $result[$key];
+    public function get($var) {
+        $result = $this->_retrieveValue($var);
+        if (is_null($result)) {
+            throw new BadMethodCallException('Could not load the requested setting ' . $var);
         }
-
         return $result;
     }
 
-	function load ($file) {
-        //if (file_exists($file) == false) { return false; }
+    private function _retrieveValue($var) {
+        $var = explode('.', $var);
+        if (isset($this->_settings[$var[0]][$var[1]])) {
+            return $this->_settings[$var[0]][$var[1]];
+        }
+        else {
+            return null;
+        }
+    }
 
-        // Include file
+    public function isSettingStored($var) {
+        $result = $this->_retrieveValue($var);
+        return (!empty($result));
+    }
+
+	function load($file) {
         require ($file);
         unset($file);
 
@@ -36,11 +43,7 @@ Class Settings {
         // Add to settings array
         foreach ($vars as $key => $val) {
             if ($key == 'this') continue;
-
             $this->_settings[$key] = $val;
         }
-
     }
-
 }
-
