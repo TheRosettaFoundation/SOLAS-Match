@@ -40,15 +40,14 @@ class Upload {
 		// Save this original file to upload_path/org-N/task-N/v-N
 		$uploaddir = TaskFile::absolutePath($org_id, $task_id);
 		self::_saveUploadedFileToFS($uploaddir, $field_name);
-		return TaskFile::recordUploadedFile($task_id, $uploaddir, $_FILES[$field_name]['name'], $_FILES[$field_name]['type']);			}
+		return TaskFile::recordUploadedFile($task_id, $uploaddir, $_FILES[$field_name]['name'], $_FILES[$field_name]['type']);
 	}
 
 	/*
 	 * $files_file is the name of the parameter of the file we want to access
 	 * in the $_FILES global array.
 	 */
-	private static function _saveUploadedFileToFS($uploaddir, $files_file)
-	{
+	private static function _saveUploadedFileToFS($uploaddir, $files_file) {
 		$ret = false;
 		if ((is_dir($uploaddir)) ? true : mkdir($uploaddir, 0755, true)) {
 			$uploadfile = $uploaddir.DIRECTORY_SEPARATOR.basename($_FILES[$files_file]['name']);		

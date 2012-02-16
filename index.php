@@ -80,23 +80,11 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
             'organisation_id' => $organisation_id,
         ));
         try {
-            IO::saveUploadedFile($form_file_field, $organisation_id, $task->getTaskId();
-        }
-        catch {
-
-        }
-    }
-
-    if (Upload::hasFileBeenSuccessfullyUploaded($form_file_field)) {
-        
-        
-
-        if (!)) {
-            $error = "Failed to upload file :(";
-        }
-
-        if (is_null($error)) {
+            IO::saveUploadedFile($form_file_field, $organisation_id, $task->getTaskId());
             $app->redirect('/task/describe/' . $task->getTaskId() . '/');
+        }
+        catch (Exception  $e) {
+            $error = 'File error: ' . $e->getMessage();
         }
     }
 
