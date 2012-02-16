@@ -1,7 +1,6 @@
 <?php
 
-class TaskFile
-{
+class TaskFile {
 	var $task_id;
 	var $file_id;
 	
@@ -10,8 +9,7 @@ class TaskFile
 		$this->file_id = $file_id;
 	}
 	
-	public static function recordUploadedFile($task_id, $path, $filename, $content_type)
-	{
+	public static function recordUploadedFile($task_id, $path, $filename, $content_type) {
 		$ret = false;
 		$db = new MySQLWrapper();
 		$db->init();

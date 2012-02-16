@@ -8,16 +8,14 @@ require_once 'TaskTags.class.php';
  * @package default
  * @author eoin.oconchuir@ul.ie
  **/
-class TaskDao
-{
+class TaskDao {
 	/**
 	 * Get a Task object, save to databse.
 	 *
 	 * @return Task object
 	 * @author
 	 **/
-	public function create($params)
-	{
+	public function create($params) {
 		$task = new Task($params);
 		$this->save($task);
 		return $task;
@@ -69,7 +67,7 @@ class TaskDao
 	 * @return void
 	 * @author 
 	 **/
-	public function save($task)
+	public function save(&$task)
 	{
 		if (is_null($task->getTaskId())) {
 			$this->_insert($task);
@@ -79,13 +77,52 @@ class TaskDao
 		}
 	}
 
+	private function _update($task) {
+		$task_dao = new TaskDao;
+		$existing_task = $task_dao->find(array('task_id' => $task->getTaskId()));
+
+		if (!is_object($existing_task)) {
+			throw new InvalidArgumentException('Cannot update task, as the provided task was not found in the database.');
+		}
+
+		$to_update = array();
+		$db = new MySQLWrapper();
+		$db->init();
+		if ($task->getSourceId() != $existing_task->getSourceId()) {
+			$to_update['source_id'] = $db->cleanse($task->getSourceId());
+		}
+		if ($task->getTargetId() != $existing_task->getTargetId()) {
+			$to_update['target_id'] = $db->cleanse($task->getTaskId());
+		}
+		if ($task->getTitle() != $existing_task->getTitle()) {
+			$to_update['title'] = $db->cleanseWrapStr($task->getTitle());
+		}
+		// TODO argh, tags......
+		if ($task->getWordCount() != $existing_task->getWordCount()) {
+			$to_update['word_count'] = $db->cleanse($task->getWordCount());
+		}
+
+		if (count($to_update) > 0) {
+			$set = array();
+			foreach ($to_update as $key => $value) {
+				$set[] = $key . ' = ' . $value;
+			}
+			$q = 'UPDATE task
+					SET ' . implode(', ', $set) . '
+					WHERE id = ' . $db->cleanse($task->getTaskId()) . '
+					LIMIT 1';
+
+			$db->Update($q);
+		}
+	}
+
 	/**
 	 * Insert task object into database
 	 *
 	 * @return void
 	 * @author 
 	 **/
-	private function _insert($task)
+	private function _insert(&$task)
 	{
 		$db = new MySQLWrapper();
 		$db->init();
@@ -106,7 +143,9 @@ class TaskDao
 			$insert['word_count'] = $db->cleanse($word_count);
 		}
 		$insert['created_time'] = 'NOW()';
-		$db->insert('task', $insert);
+		if ($task_id = $db->insert('task', $insert)) {
+			$task->setTaskId($task_id);
+		}
 	}
 
 	public function getLatestTasks($nb_items = 10) {

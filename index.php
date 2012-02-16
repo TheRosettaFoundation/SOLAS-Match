@@ -65,22 +65,21 @@ $app->get('/', function () use ($app) {
     }
     $tags_dao = new TagsDao();
     $app->view()->setData('top_tags', $tags_dao->getTopTags(30));
-    $app->view()->appendData(array('url_task_upload' => $app->urlFor('task-upload')));
     $app->render('index.tpl');
 })->name('home');
 
 $app->get('/task/upload', $authenticateForRole('organisation'), function () use ($app) {
     $error = null;
-    $form_file_field = 'new_task_file';
+    $field_name = 'new_task_file';
     $organisation_id = 1; // TODO Implement organisation identification!
 
-    if (Upload::hasFormBeenUploaded($form_file_field)) {
+    if (Upload::hasFormBeenSubmitted($field_name)) {
         $task_dao = new TaskDao();
         $task = $task_dao->create(array(
             'organisation_id' => $organisation_id,
         ));
         try {
-            IO::saveUploadedFile($form_file_field, $organisation_id, $task->getTaskId());
+            Upload::saveUploadedFile($field_name, $organisation_id, $task->getTaskId());
             $app->redirect('/task/describe/' . $task->getTaskId() . '/');
         }
         catch (Exception  $e) {
@@ -95,55 +94,47 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
         'url_task_upload'       => $app->urlFor('task-upload'),
         'max_file_size_bytes'   => IO::maxFileSizeBytes(),
         'max_file_size_mb'      => IO::maxFileSizeMB(),
-        'form_file_field'       => $form_file_field
+        'field_name'       => $field_name
     ));
     $app->render('task.upload.tpl');
 })->via('GET','POST')->name('task-upload');
 
-$app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), function () use ($app) {
-    $error = null;
-    $form_file_field = 'new_task_file';
+$app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), function ($task_id) use ($app) {
+    $error      = null;
+    $task_dao   = new TaskDao();
+    $task       = $task_dao->find(array('task_id' => $task_id));
 
-    if (Upload::hasFileBeenUploaded($form_file_field)) {
-        echo "ok, we're submitting";die;
-    
-        // Post probably won't work here....
+    if (!is_object($task)) {
+        $app->notFound();
+    }
+
+    if (isValidPost($app)) {
         $post = (object)$app->request()->post();
-        $source_id = Languages::languageIdFromName($post->source);
-        $target_id = Languages::languageIdFromName($post->target);
 
-        if (!$source_id || !$target_id) {
-            $error = "Sorry, a langauge you entered does not exist in our system. Functionality for adding a language still remains to be implemented. Please press back and enter a different language name.";
+        if (!is_null($post->source)) {
+            if ($source_id = Languages::languageIdFromName($post->source)) {
+                $task->setSourceId($source_id);
+            }
         }
-        else {
-            $task_dao = new TaskDao();
-            $task = $task_dao->create(array(
-                'title' => $post->title,
-                'organisation_id' => $post->organisation_id,
-                'source_id' => $source_id,
-                'target_id' => $target_id,
-                'word_count' => $post->word_count
-            ));
-            TaskTags::setTagsFromStr($task, $post->tags);
-            if (!IO::saveUploadedFile($form_file_field, $post->organisation_id, $task->getTaskId())) {
-                $error = "Failed to upload file :(";
+        if (!is_null($post->target)) {
+            if ($target_id = Languages::languageIdFromName($post->target)) {
+                $task->setTargetId($target_id);
             }
-            if (is_null($error)) {
-                $app->redirect('/task/' . $task_id);
-            }
+        }
+        $task->setTitle($post->title);
+        TaskTags::setTagsFromStr($task, $post->tags);
+        $task->setWordCount($post->word_count);
+        $task_dao->save($task);
+        if (is_null($error)) {
+            $app->redirect($app->urlFor('task', array('task_id' => $task_id)));
         }
     }
 
     if (!is_null($error)) {
         $app->view()->appendData(array('error' => $error));
     }
-    $app->view()->appendData(array(
-        'url_task_upload'       => $app->urlFor('task-upload'),
-        'max_file_size_bytes'   => IO::maxFileSizeBytes(),
-        'max_file_size_mb'      => IO::maxFileSizeMB(),
-        'form_file_field'       => $form_file_field
-    ));
-    $app->render('task.upload.tpl');
+    $app->view()->appendData(array('url_task_describe' => $app->urlFor('task-describe', array('task_id' => $task_id))));
+    $app->render('task.describe.tpl');
 })->via('GET','POST')->name('task-describe');
 
 $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
@@ -162,7 +153,7 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $app->view()->setData('max_file_size', IO::maxFileSizeMB());
     $app->view()->setData('body_class', 'task_page');
     $app->render('task.tpl');
-});
+})->name('task');
 
 $app->get('/tag/:label/', function ($label) use ($app) {
     $tags_dao = new TagsDao();
@@ -275,6 +266,8 @@ $view->appendData(array('url' => $url));
 $view->appendData(array('url_login' => $app->urlFor('login')));
 $view->appendData(array('url_logout' => $app->urlFor('logout')));
 $view->appendData(array('url_register' => $app->urlFor('register')));
+$view->appendData(array('url_task_upload' => $app->urlFor('task-upload')));
+
 $user = null;
 if ($user = $user_dao->getCurrentUser()) {
     $view->appendData(array('user' => $user));

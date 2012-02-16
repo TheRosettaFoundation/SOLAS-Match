@@ -6,9 +6,9 @@
 	{/if}
 	<form method="post" action="{$url_task_upload}" enctype="multipart/form-data">
 		<fieldset>
-			<p><label for="{$form_file_field}">Choose your file</label>  
+			<p><label for="{$field_name}">Choose your file</label>  
 			<input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}">
-			<input type="file" name="{$form_file_field}" id="{$form_file_field}"></p>
+			<input type="file" name="{$field_name}" id="{$field_name}"></p>
 			<p class="desc">Can be anything, even a .zip collection of files. Max file size {$max_file_size_mb}MB.</p>
 			
 			<input type="hidden" name="organisation_id" value="1">

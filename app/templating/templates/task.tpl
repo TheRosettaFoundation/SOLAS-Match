@@ -60,7 +60,7 @@
 		</div>
 	</div>
 	<div id="sidebar" class="grid_4">
-		<p><a href="/task/create/">+ New task</a></p>
+		<p><a href="{$url_task_upload}">+ New task</a></p>
 	</div>
 
 {include file="footer.inc.tpl"}
