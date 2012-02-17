@@ -47,14 +47,10 @@ class URL
 	}
 
 	public static function tag($tag) {
-		if (!is_object($tag)) {
-			throw new InvalidArgumentException('Cannot generate a URL for a tag, as a tag object was not provided.');
+		if (is_object($tag)) {
+			throw new InvalidArgumentException('Cannot generate a URL for a tag, as the tag should be a string and not an object.');
 		}
 
-		if (!$tag->hasLabel()) {
-			throw new InvalidArgumentException('Cannot generate a URL for a tag, as the tag object does not have a label value set');
-		}
-
-		return self::server() . '/tag/' . $tag->getLabel() . '/';
+		return self::server() . '/tag/' . IO::formatForUrl($tag) . '/';
 	}
 }

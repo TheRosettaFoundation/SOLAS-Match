@@ -271,6 +271,28 @@ class MySQLWrapper
 		return $ret;
 	}
 
+	function Delete($sql) {
+		$ret = false;
+		if ((empty($sql)) || (stripos($sql, 'delete')!=0)  || (empty($this->connection))) {
+			$this->error_msg = "\r\n" . 'SQL Statement is <code>null</code> or not a DELETE; ' . date('H:i:s');
+			$this->debug();
+		}
+		else {
+			$conn = $this->connection;
+		  	$results = mysql_query($sql,$conn);
+			if (!$results) {
+				$this->error_msg = "\r\n" . mysql_error()." - " . date('H:i:s');
+				$this->sql_errored = $sql;
+			  	$this->debug();
+			}
+			else
+			{
+				$ret = (mysql_affected_rows() != -1);
+			}
+		}
+		return $ret;
+	}
+
 	/*
 	 * Cleanes variable for SQL, so escapes quotation marks, etc.
 	 */

@@ -5,50 +5,15 @@
 	A task simply represents something that needs to get done in the system.
 	An example of a task is to translate a segment, or an entire document.
 */
-class Task
-{
-	/**
-	 * Task id
-	 *
-	 * @var integer
-	 **/
+class Task {
 	var $_task_id;
-
-	/**
-	 * Title of task
-	 * @var string
-	 **/
 	var $_title;
-
-	/**
-	 * Organisation ID
-	 *
-	 * @var integer
-	 **/
 	var $_organisation_id;
-
-	/**
-	 * Source ID of source language
-	 *
-	 * @var integer
-	 **/
 	var $_source_id;
-
-	/**
-	 * Target ID of target language
-	 *
-	 * @var integer
-	 **/
 	var $_target_id;
-
 	var $_created_time;
-
-	/**
-	 * Word count of task
-	 *
-	 * @var integer
-	 **/
 	var $_word_count;
+	var $_tags; // array of strings
 
 	function __construct($params = NULL) {
 		if (is_array($params)) {
@@ -82,12 +47,6 @@ class Task
 		return $this->_organisation_id;
 	}
 
-	/**
-	 * Set source ID of source language
-	 *
-	 * @return void
-	 * @author 
-	 **/
 	public function setSourceId($source_id)
 	{
 		$this->_source_id = $source_id;
@@ -97,12 +56,6 @@ class Task
 		return $this->_source_id;
 	}
 
-	/**
-	 * Set target ID of target language
-	 *
-	 * @return void
-	 * @author 
-	 **/
 	public function setTargetId($target_id)
 	{
 		$this->_target_id = $target_id;
@@ -137,6 +90,7 @@ class Task
 			'target_id'			=> 'setTargetId',
 			'word_count'		=> 'setWordCount',
 			'created_time'		=> 'setCreatedTime',
+			'tags'				=> 'setTags'
 		);
 
 		if (isset($key_methods[$key])) {
@@ -157,6 +111,16 @@ class Task
 	
 	public function areSourceAndTargetSet() {
 		return ($this->getSourceId() && $this->getTargetId());
+	}
+
+	public function setTags($tags) {
+		if (!is_null($tags) && is_array($tags)) {
+			$this->_tags = $tags;
+		}
+	}
+
+	public function getTags() {
+		return $this->_tags;
 	}
 
 	/**

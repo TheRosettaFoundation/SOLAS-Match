@@ -6,7 +6,7 @@ require 'app/MySQLWrapper.class.php';
 require 'app/UserDao.class.php';
 require 'app/TaskStream.class.php';
 require 'app/TaskDao.class.php';
-require 'app/TagsDao.class.php';
+//require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
 require 'app/Organisations.class.php';
 require 'app/TaskFiles.class.php';
@@ -63,8 +63,8 @@ $app->get('/', function () use ($app) {
     if ($tasks = TaskStream::getStream(10)) {
         $app->view()->setData('tasks', $tasks);
     }
-    $tags_dao = new TagsDao();
-    $app->view()->setData('top_tags', $tags_dao->getTopTags(30));
+    $task_dao = new TaskDao;
+    $app->view()->setData('top_tags', $task_dao->getTopTags(30));
     $app->render('index.tpl');
 })->name('home');
 
@@ -112,17 +112,15 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), func
         $post = (object)$app->request()->post();
 
         if (!is_null($post->source)) {
-            if ($source_id = Languages::languageIdFromName($post->source)) {
-                $task->setSourceId($source_id);
-            }
+            $source_id = Languages::saveLanguage($post->source);
+            $task->setSourceId($source_id);
         }
         if (!is_null($post->target)) {
-            if ($target_id = Languages::languageIdFromName($post->target)) {
-                $task->setTargetId($target_id);
-            }
+            $target_id = Languages::saveLanguage($post->target);
+            $task->setTargetId($target_id);
         }
         $task->setTitle($post->title);
-        TaskTags::setTagsFromStr($task, $post->tags);
+        $task->setTags(Tags::separateTags($post->tags));
         $task->setWordCount($post->word_count);
         $task_dao->save($task);
         if (is_null($error)) {

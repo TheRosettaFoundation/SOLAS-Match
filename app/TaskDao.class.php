@@ -1,6 +1,6 @@
 <?php
 require_once 'Task.class.php';
-require_once 'TaskTags.class.php';
+//require_once 'TaskTags.class.php';
 
 /**
  * Task Document Access Object for manipulating tasks.
@@ -56,9 +56,36 @@ class TaskDao {
 				}
 			}
 
+			if ($tags = $this->_fetchTags($params['task_id'])) {
+				$task_data['tags'] = $tags;
+			}
+
 			$ret = new Task($task_data);
 		}
 		return $ret;
+	}
+
+	private function _fetchTags($tag_id) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$query = 'SELECT t.label
+					FROM task_tag AS tt, tag AS t
+					WHERE tt.task_id = ' . $db->cleanse($tag_id) . '
+						AND tt.tag_id = t.tag_id';
+		$ret = null;
+		if ($result = $db->Select($query)) {
+			$ret = array();
+			foreach ($result as $row) {
+				$ret[] = $row['label'];
+			}
+		}
+
+		if (is_array($ret) && count($ret) > 0) {
+			return $ret;
+		}
+		else {
+			return null;
+		}
 	}
 
 	/**
@@ -97,7 +124,6 @@ class TaskDao {
 		if ($task->getTitle() != $existing_task->getTitle()) {
 			$to_update['title'] = $db->cleanseWrapStr($task->getTitle());
 		}
-		// TODO argh, tags......
 		if ($task->getWordCount() != $existing_task->getWordCount()) {
 			$to_update['word_count'] = $db->cleanse($task->getWordCount());
 		}
@@ -114,6 +140,78 @@ class TaskDao {
 
 			$db->Update($q);
 		}
+
+		$this->_updateTags($task);
+	}
+
+	private function _updateTags($task) {
+		$this->_unlinkStoredTags($task);
+		$this->_storeTagLinks($task);
+	}
+
+	private function _unlinkStoredTags($task) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$query = 'DELETE FROM task_tag
+					WHERE task_id = ' . $db->cleanse($task->getTaskId());
+		$db->Delete($query);
+	}
+
+	private function _storeTagLinks($task) {
+		if ($tags = $task->getTags()) {
+			if ($tag_ids = $this->_tagsToIds($tags)) {
+				$db = new MySQLWrapper;
+				$db->init();
+				foreach ($tag_ids as $tag_id) {
+					$ins = array();
+					$ins['task_id'] = $db->cleanse($task->getTaskId());
+					$ins['tag_id'] = $db->cleanse($tag_id);
+					$db->Insert('task_tag', $ins);
+				}
+			}
+		}
+	}
+
+	private function _tagsToIds($tags) {
+		$tag_ids = array();
+		foreach ($tags as $tag) {
+			if ($tag_id = $this->getTagId($tag)) {
+				$tag_ids[] = $tag_id;
+			}
+			else {
+				$tag_ids[] = $this->_createTag($tags);
+			}
+		}
+
+		if (count($tag_ids) > 0) {
+			return $tag_ids;
+		}
+		else {
+			return null;
+		}
+	}
+
+	public function getTagId($tag) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$q = 'SELECT tag_id
+				FROM tag
+				WHERE label = ' . $db->cleanseWrapStr($tag);
+
+		if ($r = $db->Select($q)) {
+			return $r[0]['tag_id'];
+		}
+		else {
+			return null;
+		}		
+	}
+
+	private function _createTag($tag) {
+		$db = new MySQLWrapper;
+		$db->init();
+		$ins = array();
+		$ins['label'] = $db->cleanseWrapStr($tag);
+		return $db->Insert('tag', $ins);
 	}
 
 	/**
@@ -195,4 +293,25 @@ class TaskDao {
 		}
 		return $ret;
 	}
+
+	function getTopTags($limit = 30) {
+		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
+		$q = 'SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
+				FROM task_tag AS tt, tag AS t
+				WHERE tt.tag_id = t.tag_id
+				GROUP BY tt.tag_id
+				ORDER BY frequency DESC
+				LIMIT '.intval($limit);
+		if ($r = $db->Select($q)) {
+			$ret = array();
+			foreach ($r as $row) {
+				$ret[] = $row['label'];
+			}
+		}
+		return $ret;
+	}
+
+
 } // END TaskDao class 

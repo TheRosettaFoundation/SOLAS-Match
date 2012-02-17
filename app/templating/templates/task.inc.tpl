@@ -10,7 +10,7 @@
 			</li>
 		{/if}
 		
-		{foreach from=TaskTags::getTags($task) item=tag}
+		{foreach from=$task->getTags() item=tag}
 			<li>{include file="inc.tag.tpl" tag_name=$tag}</li>
 		{/foreach}
 	</ul>

@@ -56,27 +56,6 @@ class TagsDao {
 		return $this->find(array('label' => $tag->getLabel()));
 	}
 	
-	function getTopTags($limit = 30)
-	{
-		$ret = false;
-		$db = new MySQLWrapper();
-		$db->init();
-		$q = 'SELECT tag_id, COUNT(tag_id) AS frequency
-				FROM task_tag
-				GROUP BY tag_id
-				ORDER BY frequency DESC
-				LIMIT '.intval($limit);
-		if ($r = $db->Select($q)) {
-			$ret = array();
-			foreach ($r as $row) {
-				if ($tag = $this->find(array('tag_id' => $row['tag_id']))) {
-					$ret[] = $tag;
-				}
-			}
-		}
-		return $ret;
-	}
-
 	/*
 		Take a string typed in by the user, try to break it up and create tags 
 		from it.

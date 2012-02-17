@@ -40,4 +40,21 @@ class Languages {
 			throw new InvalidArgumentException('A valid language id was expected.');
 		}
 	}
+
+	public static function saveLanguage($language_name) {
+		$language_id = self::languageIdFromName($language_name);
+		if (is_null(($language_id))) {
+			$language_id = self::_insert($language_name);
+		}
+		return $language_id;
+	}
+
+	private static function _insert($language_name) {
+		$db = new MySQLWrapper;
+		$db->init();
+		$ins = array();
+		$ins['en_name'] = $db->cleanseWrapStr($language_name);
+		$language_id = $db->Insert('language', $ins);
+		return $language_id;
+	}
 }

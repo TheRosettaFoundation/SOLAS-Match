@@ -21,12 +21,6 @@ class TaskTags {
 		return $ret;
 	}
 
-	public static function setTagsFromStr($task, $labels) {
-		$labels = Tags::separateLabels($labels);
-		$tags_dao = new TagsDao();
-		$tags = $tags_dao->createAnyNewTags($labels);
-	}
-
 	public static function dropTasksTags($task) {
 		if (!$task->hasTaskId()) {
 			throw new InvalidArgumentException('Cannot drop tags for a task, as task ID is not set.');

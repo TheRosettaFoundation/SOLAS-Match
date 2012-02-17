@@ -41,9 +41,7 @@ class IO {
 		return $str;
 	}
 
-	function formatForURL($text)
-	{
-		// Encodes the given text to be included as part of a URL
+	public static function formatForUrl($text) {
 		return rawurlencode($text);
 	}
 
