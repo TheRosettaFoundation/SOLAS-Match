@@ -9,8 +9,8 @@ require 'app/TaskDao.class.php';
 //require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
 require 'app/Organisations.class.php';
-require 'app/TaskFiles.class.php';
-require 'app/TaskFile.class.php';
+//require 'app/TaskFiles.class.php';
+//require 'app/TaskFile.class.php';
 require 'app/lib/Languages.class.php';
 require 'app/lib/URL.class.php';
 require 'app/lib/Authentication.class.php';
@@ -152,6 +152,41 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $app->view()->setData('body_class', 'task_page');
     $app->render('task.tpl');
 })->name('task');
+
+$app->get('/task/id/:task_id/download_file/:file_id/', $authenticateForRole('member'), function ($task_id, $file_id) use ($app) {
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $version            = 0;
+    $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version);
+    $file_content_type  = $task_dao->uploadedFileContentType($task, $file_id, $version);
+
+    IO::downloadFile($absolute_file_path, $file_content_type);
+
+    $task_file->logFileDownload($task, $file_id, $version);
+})->name('download-task');
+
+$app->get('/task/id/:task_id/download_file/:file_id/v/:version/', $authenticateForRole('member'), function ($task_id, $file_id, $version) use ($app) {
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $absolute_path      = Upload::absoluteFolderPathForUpload($task, $version);
+    $file_content_type  = $task_dao->uploadedFileContentType($task, $file_id, $version);
+
+    IO::downloadFile($absolute_path, $file_content_type);
+
+    $task_file->logFileDownload($task, $file_id, $version);
+})->name('download-task-version');
 
 $app->get('/tag/:label/', function ($label) use ($app) {
     $task_dao = new TaskDao;

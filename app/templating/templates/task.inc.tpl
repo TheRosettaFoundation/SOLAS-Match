@@ -1,6 +1,6 @@
 {* Must have an object $task assigned by parent *}
 <div class="task">
-	<h3><a href="/task/{$task->getTaskId()}/">{$task->getTitle()}</a></h3>
+	<h3><a href="/task/id/{$task->getTaskId()}/">{$task->getTitle()}</a></h3>
 	<ul class="tags">
 		{if $task->areSourceAndTargetSet()}
 			<li>

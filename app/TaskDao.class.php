@@ -119,7 +119,7 @@ class TaskDao {
 			$to_update['source_id'] = $db->cleanse($task->getSourceId());
 		}
 		if ($task->getTargetId() != $existing_task->getTargetId()) {
-			$to_update['target_id'] = $db->cleanse($task->getTaskId());
+			$to_update['target_id'] = $db->cleanse($task->getTargetId());
 		}
 		if ($task->getTitle() != $existing_task->getTitle()) {
 			$to_update['title'] = $db->cleanseWrapStr($task->getTitle());
@@ -214,14 +214,7 @@ class TaskDao {
 		return $db->Insert('tag', $ins);
 	}
 
-	/**
-	 * Insert task object into database
-	 *
-	 * @return void
-	 * @author 
-	 **/
-	private function _insert(&$task)
-	{
+	private function _insert(&$task) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$insert = array();		
@@ -320,5 +313,124 @@ class TaskDao {
 		return $ret;
 	}
 
+	public function logFileUpload($task, $path, $filename, $content_type) {
+		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
+		$task_file = array();
+		$task_file['task_id'] 		= $task->getTaskId();
+		$task_file['path'] 			= $db->cleanseWrapStr($path);
+		$task_file['filename'] 		= $db->cleanseWrapStr($filename);
+		$task_file['content_type'] 	= $db->cleanseWrapStr($content_type);
+		$task_file['user_id'] 		= 'NULL'; // TODO record user
+		$task_file['upload_time'] 	= 'NOW()';
+		if ($file_id = $db->Insert('task_file', $task_file)) {
+			$new_version = $this->_nextFileVersionNumber();
+			$ret = $this->recordNewlyUploadedVersion($task, $file_id, $next_version, $filename, $content_type);
+		}
+		return $ret;
+	}
 
-} // END TaskDao class 
+	/*
+	 * Check in the database the stored content type of this file.
+	 * Return false if not found.
+	 */
+	function uploadedFileContentType($task, $file_id, $version) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$q = 'SELECT content_type
+				FROM task_file_version
+				WHERE task_id = ' . $db->cleanse($task->getTaskId()) . '
+				AND file_id = ' . $db->cleanse($file_id) . '
+				AND version_id =' . $db->cleanse($version);
+		if ($r = $db->Select($q))
+		{
+			$ret = $r[0]['content_type'];			
+		}
+		return $ret;
+	}
+
+	/*
+	 * Return an integer value. Give the next version number when creating a file.
+	 * In other words, if there are versions 1-5 stored now, return 6, as that's
+	 * the next available value.
+	 */
+	private function nextFileVersionNumber($task, $file_id) {
+		/* I realise this code is dangerous and may cause problems futher down the line.
+		 * The code returns the next available version. However, if a second person
+		 * was also editing the file in parallel, it's possible that their 
+		 * version numbers will get mixed up, or that they get the same version number.
+		 * If that conflict happens, we'll simply reject the commit, or do something
+		 * more user friendly than that.
+		 */
+		return self::latestFileVersion($task, $file_id) + 1;
+	}
+
+	private function latestFileVersion($task, $file_id) {
+		$db = new MySQLWrapper();
+		$db->init();
+
+		$q = 'SELECT max(version_id) as latest_version
+		 		FROM task_file_version
+		 		WHERE task_id =' . $db->cleanse($task->getTaskId()) . '
+		 		AND file_id =' . $db->cleanse($file_id);
+		
+		if ($r = $db->Select($q) 
+				&& isset($r[0]['latest_version']) 
+				&& !is_null($r[0]['latest_version'])) {
+			return intval($r[0]['latest_version']);
+		}
+		else {
+			throw new InvalidArgumentException('Cannot return a file version, as no such file is on record.');
+		}
+	}
+
+	public function recordNewlyUploadedVersion($task, $file_id, $version, $filename, $content_type) {
+		// Save file version
+		$db = new MySQLWrapper();
+		$db->init();
+		$task_file_version = array();
+		$task_file_version['task_id'] 		= $db->cleanse($task->getTaskId());
+		$task_file_version['file_id'] 		= $db->cleanse($file_id);
+		$task_file_version['version_id'] 	= $db->clenase($version);
+		$task_file_version['filename'] 		= $db->cleanseWrapStr($filename);
+		$task_file_version['content_type'] 	= $db->cleanseWrapStr($content_type);
+		$task_file_version['user_id'] 		= 'NULL'; // TODO record user
+		$task_file_version['upload_time'] 	= 'NOW()';
+		$ret = $db->Insert('task_file_version', $task_file_version);
+		return $ret;
+	}
+
+	private function logFileDownload($task, $file_id, $version) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$down = array();
+		$down['task_id'] = $db->cleanse($task->getTaskId());
+		$down['file_id'] = $db->cleanse($file_id);
+		$down['version_id'] = $db->cleanse($version);
+		$down['user_id'] = 'NULL'; // TODO record user
+		$down['time_downloaded'] = 'NOW()';
+		return $db->Insert('task_file_version_download', $down);
+	}
+
+	private function getFilename($task, $version)
+	{
+		$db = new MySQLWrapper();
+		$db->init();
+		$q = 'SELECT filename
+				FROM task_file_version
+				WHERE task_id = ' . $db->cleanse($task->getTaskId())
+
+TODO forget about file_id, we don't want that. Or maybe we do. But as least we
+dont' want multiple files per task.......
+
+				 . ' AND file_id = ' . $db->cleanse($this->file_id) . '
+				AND version_id =' . $db->cleanse($version);
+		if ($r = $db->Select($q))
+		{
+			$ret = $r[0]['filename'];
+		}
+		return $ret;
+	}
+
+}

@@ -1,10 +1,13 @@
 {include file="header.inc.tpl"}
 	<div class="grid_8">
-		<div class="task_content">
-			<h2>{$task->getTitle()}</h2>
+
+		<h2>{$task->getTitle()}</h2>
 	
+		<div class="task_content">
+			
 			<p class="details">
-				<span class="time_since">{IO::timeSinceSqlTime($task->getCreatedTime())} ago</span>{Organisations::nameFromId($task->getOrganisationId())}
+				<span class="time_since">{IO::timeSinceSqlTime($task->getCreatedTime())} ago</span>
+				&middot; {Organisations::nameFromId($task->getOrganisationId())}
 				{assign var="wordcount" value=$task->getWordCount()}
 				{if $wordcount}
 					&middot; {$wordcount|number_format} words
@@ -21,28 +24,29 @@
 					<li>{include file="inc.tag.tpl" tag=$tag}</li>
 				{/foreach}
 			</ul>
-			
-			{if isset($task_files)}
-				{foreach from=$task_files item=task_file}
-					<h3>{$task_file->filename(0)}</h3>
-					<ul>
-						{assign var="times_downloaded" value=$task_file->timesDownloaded()}
-						{if $times_downloaded == 1}
-							<li><span class="time_since">Downloaded one time.</span></li>
-						{else if $times_downloaded > 1}
-							<li><span class="time_since">Downloaded {$times_downloaded} times.</span></li>
+
+		</div>
+
+		{if isset($task_files)}
+			{foreach from=$task_files item=task_file}
+				<h3>Task file: "{$task_file->filename(0)}"</h3>
+				<ul>
+					{assign var="times_downloaded" value=$task_file->timesDownloaded()}
+					{if $times_downloaded == 1}
+						<li><span class="time_since">Downloaded one time.</span></li>
+					{else if $times_downloaded > 1}
+						<li><span class="time_since">Downloaded {$times_downloaded} times.</span></li>
+					{/if}
+					{if isset($user)}
+						{assign var="latest_version" value=$task_file->latestVersion()}
+						<li><em>Volunteers:</em> <a href="{$task_file->url()}">Download the file to translate it.</a></li>
+						{if $latest_version > 0}
+							<li><em>NGO:</em> <a href="{$task_file->urlVersion($latest_version)}">Download the latest translation.</a></li>
 						{/if}
-						{if isset($user)}
-							{assign var="latest_version" value=$task_file->latestVersion()}
-							<li><em>Volunteers:</em> <a href="{$task_file->url()}">Download the file to translate it.</a></li>
-							{if $latest_version > 0}
-								<li><em>NGO:</em> <a href="{$task_file->urlVersion($latest_version)}">Download the latest translation.</a></li>
-							{/if}
-						{else}
-							Not logged in
-						{/if}
-					</ul>
-					
+					{/if}
+				</ul>
+				
+				{if isset($user)}
 					<form method="post" action="/process/upload.edited_file.php" enctype="multipart/form-data">
 						<input type="hidden" name="task_id" value="{$task_file->taskID()}">
 						<input type="hidden" name="file_id" value="{$task_file->fileID()}">
@@ -53,13 +57,17 @@
 							<input type="submit" value="Submit" name="submit">
 						</fieldset> 
 					</form>
-			
-				{/foreach}
-			{/if}
-		</div>
+				{else}
+					<p>Please <a href="/login">log in</a> to be able to accept translation jobs.</p>
+				{/if}
+		
+			{/foreach}
+		{/if}
 	</div>
 	<div id="sidebar" class="grid_4">
 		<p><a href="{$url_task_upload}">+ New task</a></p>
 	</div>
+
+
 
 {include file="footer.inc.tpl"}

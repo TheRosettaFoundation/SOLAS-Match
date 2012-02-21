@@ -127,8 +127,7 @@ class IO {
 	/*
 	 * Pass a requested file back to the browser
 	 */
-	function downloadFile($absoluteFilePath, $contentType)
-	{
+	public static function downloadFile($absoluteFilePath, $contentType) {
 		if ($fd = fopen ($absoluteFilePath, "r")) {
 			$fsize = filesize($absoluteFilePath);
 			$path_parts = pathinfo($absoluteFilePath);

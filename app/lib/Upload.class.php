@@ -26,33 +26,85 @@ class Upload {
 	 * The file has been specified in a form element <input type="file" name="myfile">
 	 * We access that file through PHP's $_FILES array.
 	 */
-	public static function saveUploadedFile($field_name, $org_id, $task_id) {
+	public static function saveSubmittedFile($form_file_field, $task) {
 		/* 
 		 * Right now we're assuming that there's one file, but I think it can also be
 		 * an array of multiple files.
 		 */
 		$ret = false;
 		
-		if ($_FILES[$field_name]['error'] == UPLOAD_ERR_FORM_SIZE) {
+		if ($_FILES[$form_file_field]['error'] == UPLOAD_ERR_FORM_SIZE) {
 			throw new Exception('Sorry, the file you tried uploading is too large. Please choose a smaller file, or break the file into sub-parts.');
 		}
+		
+		$file_name = $_FILES[$form_file_field]['name'];
+		$file_tmp_name = $_FILES[$form_file_field]['tmp_name'];
+		$version = 0;
+		self::_saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version);
 
-		// Save this original file to upload_path/org-N/task-N/v-N
-		$uploaddir = TaskFile::absolutePath($org_id, $task_id);
-		self::_saveUploadedFileToFS($uploaddir, $field_name);
-		return TaskFile::recordUploadedFile($task_id, $uploaddir, $_FILES[$field_name]['name'], $_FILES[$field_name]['type']);
+		$task_dao = new TaskDao;
+		$task_dao = logFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
+		return true;
 	}
 
 	/*
 	 * $files_file is the name of the parameter of the file we want to access
 	 * in the $_FILES global array.
 	 */
-	private static function _saveUploadedFileToFS($uploaddir, $files_file) {
-		$ret = false;
-		if ((is_dir($uploaddir)) ? true : mkdir($uploaddir, 0755, true)) {
-			$uploadfile = $uploaddir.DIRECTORY_SEPARATOR.basename($_FILES[$files_file]['name']);		
-			$ret = (move_uploaded_file($_FILES[$files_file]['tmp_name'], $uploadfile));
+	private static function _saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version) {
+		$upload_folder = self::absoluteFolderPathForUpload($task, $version = 0);
+		
+		if (!self::_folderPathForUploadExists($task, $version)) {
+			self::createFolderForUpload($task, $version);
 		}
-		return $ret;
+
+		$destination_path = self::absoluteFilePathForUpload($task, $version, $file_name);
+		move_uploaded_file($file_tmp_name, $destination_path);
 	}
+
+	private static function _folderPathForUploadExists($task, $version) {
+		$folder = self::absoluteFolderPathForUpload($task, $version = 0);;
+		return is_dir($folder);
+	}
+
+	private static function _createFolderForUpload($task, $version) {
+		$folder = self::absoluteFolderPathForUpload($task, $version);
+		
+		mkdir($upload_folder, 0755, true);
+		
+		if (self::_folderPathForUploadExists($task, $version)) {
+			return true;
+		}
+		else {
+			throw new Exception('Could not create the folder for the file upload. Check permissions.');
+		}
+	}
+
+	public static function absoluteFilePathForUpload($task, $version, $file_name) {
+		$folder = self::absoluteFolderPathForUpload($task, $version);
+		return $folder . DIRECTORY_SEPARATOR . basename($file_name);
+	}
+
+	public static function absoluteFolderPathForUpload($task, $version) {
+		if (!is_numeric($version) || $version < 0) {
+			throw new InvalidArgumentException('Cannot give an upload folder path as the version number was not specified.');
+		}
+
+		$settings 			= new Settings();
+		$uploads_folder 	= $settings->get('files.upload_path');
+		$org_folder 		= 'org-' . $task->getOrganisationId();
+		$task_folder 		= 'task-' . $task->getTaskId();
+		$version_folder		= 'v-' . $version;
+
+		return $uploads_folder 
+			. $org_folder . DIRECTORY_SEPARATOR 
+			. $task_folder . DIRECTORY_SEPARATOR 
+			. $version_folder;
+	}
+
+	public function absoluteFilePath($task, $file_id, $version) {
+		$upload_folder = self::absoluteFolderPathForUpload($task, $version);
+		return TaskFile::absolutePath($this->organisationId(), $this->task_id, $version).DIRECTORY_SEPARATOR.$this->filename($version);
+	}
+
 }
