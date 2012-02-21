@@ -154,18 +154,18 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
 })->name('task');
 
 $app->get('/tag/:label/', function ($label) use ($app) {
-    $tags_dao = new TagsDao();
-    $tag = $tags_dao->find(array('label' => $label));
+    $task_dao = new TaskDao;
+    $tag_id = $task_dao->getTagId($label);
 
-    if (!is_object($tag)) {
+    if (is_null($tag_id)) {
         header('HTTP/1.0 404 Not Found');
         die;
     }
 
-    if ($tasks = TaskStream::getTaggedStream($tag->getTagId(), 10)) {
+    if ($tasks = TaskStream::getTaggedStream($label, 10)) {
         $app->view()->setData('tasks', $tasks);
     }
-    $app->view()->setData('tag', $tag);
+    $app->view()->setData('tag', $label);
     $app->render('tag.tpl');
 });
 

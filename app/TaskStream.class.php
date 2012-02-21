@@ -24,8 +24,8 @@ class TaskStream
 	/*
 	 * Return the list of (open) tasks that are tagged with a specific tag.
 	 */
-	public static function getTaggedStream($tag_id, $nb_items)	{
+	public static function getTaggedStream($tag, $nb_items)	{
 		$task_dao = new TaskDao();
-		return $task_dao->getTaggedTasks($tag_id, $nb_items);
+		return $task_dao->getTaggedTasks($tag, $nb_items);
 	}
 }

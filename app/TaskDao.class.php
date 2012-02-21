@@ -272,7 +272,14 @@ class TaskDao {
 	/*
 	 * Return an array of tasks that are tagged with a certain tag.
 	 */
-	public function getTaggedTasks($tag_id, $nb_items = 10)	{
+	public function getTaggedTasks($tag, $nb_items = 10) {
+		$task_dao = new TaskDao;
+		$tag_id = $task_dao->getTagId($tag);
+
+		if (is_null($tag_id)) {
+			throw new InvalidArgumentException('Cannot get tasks tagged with ' . $tag . ' because no such tag is in the system.');
+		}
+
 		$db = new MySQLWrapper();
 		$db->init();
 		$ret = false;
@@ -281,7 +288,7 @@ class TaskDao {
 				WHERE id IN (
 					SELECT task_id
 					FROM task_tag
-					WHERE tag_id = ' . intval($tag_id) . '
+					WHERE tag_id = ' . $db->cleanse($tag_id) . '
 				) 
 				ORDER BY created_time DESC 
 				LIMIT '.$db->cleanse($nb_items);
