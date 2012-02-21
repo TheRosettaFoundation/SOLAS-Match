@@ -179,7 +179,7 @@ class TaskDao {
 				$tag_ids[] = $tag_id;
 			}
 			else {
-				$tag_ids[] = $this->_createTag($tags);
+				$tag_ids[] = $this->_createTag($tag);
 			}
 		}
 
