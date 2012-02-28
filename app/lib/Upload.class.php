@@ -31,19 +31,18 @@ class Upload {
 		 * Right now we're assuming that there's one file, but I think it can also be
 		 * an array of multiple files.
 		 */
-		$ret = false;
-		
 		if ($_FILES[$form_file_field]['error'] == UPLOAD_ERR_FORM_SIZE) {
 			throw new Exception('Sorry, the file you tried uploading is too large. Please choose a smaller file, or break the file into sub-parts.');
 		}
 		
-		$file_name = $_FILES[$form_file_field]['name'];
-		$file_tmp_name = $_FILES[$form_file_field]['tmp_name'];
-		$version = 0;
-		self::_saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version);
+		$file_name 		= $_FILES[$form_file_field]['name'];
+		$file_tmp_name 	= $_FILES[$form_file_field]['tmp_name'];
+		$task_dao 		= new TaskDao;
+		$version 		= $task_dao->nextFileVersionNumber($task);
 
-		$task_dao = new TaskDao;
+		self::_saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version);
 		$task_dao = logFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
+
 		return true;
 	}
 

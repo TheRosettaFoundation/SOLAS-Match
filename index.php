@@ -1,16 +1,20 @@
 <?php
 require 'libs/Slim/Slim/Slim.php';
-require 'app/Views/SmartyView.php';
+require 'libs/SlimExtras/Views/SmartyView.php';
+
+SmartyView::$smartyDirectory = '/home/eoin/sites/smarty/libs';
+SmartyView::$smartyCompileDirectory = '/home/eoin/sites/solasmatch/app/templating/templates_compiled';
+SmartyView::$smartyTemplatesDirectory = '/home/eoin/sites/solasmatch/app/templating/templates';
+SmartyView::$smartyExtensions = array(
+    dirname('libs/SlimExtras/Views/SmartyView.php') . '/Extension/Smarty'
+);
 require 'app/Settings.class.php';
 require 'app/MySQLWrapper.class.php';
 require 'app/UserDao.class.php';
 require 'app/TaskStream.class.php';
 require 'app/TaskDao.class.php';
-//require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
 require 'app/Organisations.class.php';
-//require 'app/TaskFiles.class.php';
-//require 'app/TaskFile.class.php';
 require 'app/lib/Languages.class.php';
 require 'app/lib/URL.class.php';
 require 'app/lib/Authentication.class.php';
@@ -145,7 +149,7 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
 
     $app->view()->setData('task', $task);
 
-    if ($task_files = TaskFiles::getTaskFiles($task)) {
+    if ($task_files = $task_dao->getTaskFiles($task)) {
         $app->view()->setData('task_files', $task_files);
     }
     $app->view()->setData('max_file_size', IO::maxFileSizeMB());
@@ -153,25 +157,7 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $app->render('task.tpl');
 })->name('task');
 
-$app->get('/task/id/:task_id/download_file/:file_id/', $authenticateForRole('member'), function ($task_id, $file_id) use ($app) {
-    $task_dao = new TaskDao;
-    $task = $task_dao->find(array('task_id' => $task_id));
-
-    if (!is_object($task)) {
-        header('HTTP/1.0 404 Not Found');
-        die;
-    }
-
-    $version            = 0;
-    $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version);
-    $file_content_type  = $task_dao->uploadedFileContentType($task, $file_id, $version);
-
-    IO::downloadFile($absolute_file_path, $file_content_type);
-
-    $task_file->logFileDownload($task, $file_id, $version);
-})->name('download-task');
-
-$app->get('/task/id/:task_id/download_file/:file_id/v/:version/', $authenticateForRole('member'), function ($task_id, $file_id, $version) use ($app) {
+$app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('member'), function ($task_id, $file_id, $version) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -181,12 +167,44 @@ $app->get('/task/id/:task_id/download_file/:file_id/v/:version/', $authenticateF
     }
 
     $absolute_path      = Upload::absoluteFolderPathForUpload($task, $version);
-    $file_content_type  = $task_dao->uploadedFileContentType($task, $file_id, $version);
+    $file_content_type  = $task_dao->uploadedFileContentType($task, $version);
 
     IO::downloadFile($absolute_path, $file_content_type);
 
-    $task_file->logFileDownload($task, $file_id, $version);
+    $task_file->logFileDownload($task, $version);
 })->name('download-task-version');
+
+$app->get('/task/id/:task_id/download-file/', $authenticateForRole('member'), function ($task_id, $file_id) use ($app) {
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $app->redirect($app->urlFor('download-task-version', array(
+        'task_id' => $task_id,
+        'version' => 0
+    )));
+
+})->name('download-task');
+
+$app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('member'), function ($task_id) use ($app) {
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $latest_version = $task_dao->nextFileVersionNumber($task);
+    $app->redirect($app->urlFor('download-task-version', array(
+        'task_id' => $task_id,
+        'version' => $latest_version
+    )));
+})->name('download-task-latest-version');
 
 $app->get('/tag/:label/', function ($label) use ($app) {
     $task_dao = new TaskDao;
@@ -273,37 +291,20 @@ function isValidPost(&$app) {
 }
 
 /**
- * For login, and named routes, you can use the urlFor() method, in conjucuntion
- * with Named Routes http://www.slimframework.com/documentation/develop
- */
-
-/**
  * Set up application objects
  * 
  * Given that we don't have object factories implemented, we'll initialise them directly here.
  */
-$user_dao = new UserDao();
-$url = new URL();
-
-/**
- * General variables
- * Set up general variables to be used across templates.
- * These configurations may be better done with a hook rule:
- *      $app->hook('slim.before', function () use ($app) {
- *          $app->view()->appendData(array('baseUrl' => '/base/url/here'));
- *      });
- *      // http://help.slimframework.com/discussions/questions/49-how-to-deal-with-base-path-and-different-routes
- */
-$view = $app->view();
-$view->appendData(array('url' => $url));
-$view->appendData(array('url_login' => $app->urlFor('login')));
-$view->appendData(array('url_logout' => $app->urlFor('logout')));
-$view->appendData(array('url_register' => $app->urlFor('register')));
-$view->appendData(array('url_task_upload' => $app->urlFor('task-upload')));
-
-$user = null;
-if ($user = $user_dao->getCurrentUser()) {
-    $view->appendData(array('user' => $user));
-}
+$app->hook('slim.before', function () use ($app) {
+    // Replace with: {urlFor name="task-upload"}
+    $app->view()->appendData(array('url_login' => $app->urlFor('login')));
+    $app->view()->appendData(array('url_logout' => $app->urlFor('logout')));
+    $app->view()->appendData(array('url_register' => $app->urlFor('register')));
+    $user_dao = new UserDao();
+    $user = null;
+    if ($user = $user_dao->getCurrentUser()) {
+        $app->view()->appendData(array('user' => $user));
+    }
+});
 
 $app->run();

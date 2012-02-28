@@ -21,11 +21,5 @@
 		{if $task->getWordcount()}
 			{$task->getWordcount()|number_format} words
 		{/if}
-	
-		{if $files = TaskFiles::getTaskFiles($task)}
-			{foreach from=$files item=task_file}
-				&middot; {$task_file->filename()}
-			{/foreach}
-		{/if}
 	</p>
 </div>

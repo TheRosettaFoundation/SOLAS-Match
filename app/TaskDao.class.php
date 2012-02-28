@@ -324,9 +324,9 @@ class TaskDao {
 		$task_file['content_type'] 	= $db->cleanseWrapStr($content_type);
 		$task_file['user_id'] 		= 'NULL'; // TODO record user
 		$task_file['upload_time'] 	= 'NOW()';
-		if ($file_id = $db->Insert('task_file', $task_file)) {
-			$new_version = $this->_nextFileVersionNumber();
-			$ret = $this->recordNewlyUploadedVersion($task, $file_id, $next_version, $filename, $content_type);
+		if ($db->Insert('task_file', $task_file)) {
+			$new_version = $this->nextFileVersionNumber($task);
+			$ret = $this->recordNewlyUploadedVersion($task, $next_version, $filename, $content_type);
 		}
 		return $ret;
 	}
@@ -335,19 +335,19 @@ class TaskDao {
 	 * Check in the database the stored content type of this file.
 	 * Return false if not found.
 	 */
-	function uploadedFileContentType($task, $file_id, $version) {
+	function uploadedFileContentType($task, $file_version) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$q = 'SELECT content_type
 				FROM task_file_version
 				WHERE task_id = ' . $db->cleanse($task->getTaskId()) . '
-				AND file_id = ' . $db->cleanse($file_id) . '
-				AND version_id =' . $db->cleanse($version);
-		if ($r = $db->Select($q))
-		{
-			$ret = $r[0]['content_type'];			
+				AND version_id =' . $db->cleanse($file_version);
+		if ($r = $db->Select($q)) {
+			return $r[0]['content_type'];			
 		}
-		return $ret;
+		else {
+			throw new InvalidArgumentException('Cannot look for the content type of a file, as that file was not found in the database.');			
+		}
 	}
 
 	/*
@@ -355,7 +355,7 @@ class TaskDao {
 	 * In other words, if there are versions 1-5 stored now, return 6, as that's
 	 * the next available value.
 	 */
-	private function nextFileVersionNumber($task, $file_id) {
+	public function nextFileVersionNumber($task) {
 		/* I realise this code is dangerous and may cause problems futher down the line.
 		 * The code returns the next available version. However, if a second person
 		 * was also editing the file in parallel, it's possible that their 
@@ -363,35 +363,37 @@ class TaskDao {
 		 * If that conflict happens, we'll simply reject the commit, or do something
 		 * more user friendly than that.
 		 */
-		return self::latestFileVersion($task, $file_id) + 1;
+		if ($latest_version = self::latestFileVersion($task)) {
+			return $latest_version + 1;
+		}
+		else {
+			return 0;
+		}
 	}
 
-	private function latestFileVersion($task, $file_id) {
+	private function latestFileVersion($task) {
 		$db = new MySQLWrapper();
 		$db->init();
 
 		$q = 'SELECT max(version_id) as latest_version
 		 		FROM task_file_version
-		 		WHERE task_id =' . $db->cleanse($task->getTaskId()) . '
-		 		AND file_id =' . $db->cleanse($file_id);
-		
-		if ($r = $db->Select($q) 
-				&& isset($r[0]['latest_version']) 
+		 		WHERE task_id =' . $db->cleanse($task->getTaskId());		
+		if ($r = $db->Select($q) && isset($r[0]['latest_version'])
 				&& !is_null($r[0]['latest_version'])) {
 			return intval($r[0]['latest_version']);
 		}
 		else {
-			throw new InvalidArgumentException('Cannot return a file version, as no such file is on record.');
+			return false;
 		}
 	}
 
-	public function recordNewlyUploadedVersion($task, $file_id, $version, $filename, $content_type) {
+	public function recordNewlyUploadedVersion($task, $version, $filename, $content_type) {
 		// Save file version
 		$db = new MySQLWrapper();
 		$db->init();
 		$task_file_version = array();
 		$task_file_version['task_id'] 		= $db->cleanse($task->getTaskId());
-		$task_file_version['version_id'] 	= $db->clenase($version);
+		$task_file_version['version_id'] 	= $db->cleanse($version);
 		$task_file_version['filename'] 		= $db->cleanseWrapStr($filename);
 		$task_file_version['content_type'] 	= $db->cleanseWrapStr($content_type);
 		$task_file_version['user_id'] 		= 'NULL'; // TODO record user
@@ -400,7 +402,7 @@ class TaskDao {
 		return $ret;
 	}
 
-	private function logFileDownload($task, $file_id, $version) {
+	private function logFileDownload($task, $version) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$down = array();
@@ -427,4 +429,23 @@ class TaskDao {
 		}
 	}
 
+	public function getTaskFiles($task) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$q = 'SELECT *
+				FROM task_file
+				WHERE task_id = '.$db->cleanse($task->getTaskId());
+		
+		$ret = false;
+		if ($r = $db->Select($q)) {
+			$task_files = array();
+			foreach($r as $row)	{
+				$task_files[] = array(
+					'filename' => $row['filename'],
+				);
+			}
+			$ret = $task_files;
+		}
+		return $ret;
+	}
 }

@@ -11,7 +11,7 @@
 	</div>
 	<div id="sidebar" class="grid_4">
 		<br><br>
-		<p><a href="{$url_task_upload}">+ Create new task</a></p>
+		<p><a href="{urlFor name="task-upload"}">+ Create new task</a></p>
 		{include file="tags.top-list.inc.tpl"}
 	</div>
 {include file="footer.inc.tpl"}

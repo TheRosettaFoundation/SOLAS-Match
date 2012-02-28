@@ -100,31 +100,6 @@ class IO {
 	}
 	
 	/*
-	 * For a named filename, save file that have been uploaded by form submission.
-	 * The file has been specified in a form element <input type="file" name="myfile">
-	 * We access that file through PHP's $_FILES array.
-	 */
-	function saveUploadedEditedFile($myfile, &$task_file)
-	{
-		/* 
-		 * Right now we're assuming that there's one file, but I think it can also be
-		 * an array of multiple files.
-		 */
-		$ret = false;
-		if ($_FILES[$myfile]['error'] == UPLOAD_ERR_OK)
-		{
-			// Save this original file to upload_path/org-N/task-N/v-N
-			$version = $task_file->nextVersion();
-			$uploaddir = TaskFile::absolutePath($this->s, $task_file->organisationID(), $task_file->taskID(), $version);
-			if ($this->saveUploadedFileToFS($uploaddir, $myfile))
-			{
-				$ret = $task_file->recordNewlyUploadedVersion($version, $_FILES[$myfile]['name'], $_FILES[$myfile]['type']);
-			}
-		}
-		return $ret;
-	}
-	
-	/*
 	 * Pass a requested file back to the browser
 	 */
 	public static function downloadFile($absoluteFilePath, $contentType) {
