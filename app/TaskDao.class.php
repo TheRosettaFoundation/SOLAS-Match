@@ -391,7 +391,6 @@ class TaskDao {
 		$db->init();
 		$task_file_version = array();
 		$task_file_version['task_id'] 		= $db->cleanse($task->getTaskId());
-		$task_file_version['file_id'] 		= $db->cleanse($file_id);
 		$task_file_version['version_id'] 	= $db->clenase($version);
 		$task_file_version['filename'] 		= $db->cleanseWrapStr($filename);
 		$task_file_version['content_type'] 	= $db->cleanseWrapStr($content_type);
@@ -406,31 +405,26 @@ class TaskDao {
 		$db->init();
 		$down = array();
 		$down['task_id'] = $db->cleanse($task->getTaskId());
-		$down['file_id'] = $db->cleanse($file_id);
 		$down['version_id'] = $db->cleanse($version);
 		$down['user_id'] = 'NULL'; // TODO record user
 		$down['time_downloaded'] = 'NOW()';
 		return $db->Insert('task_file_version_download', $down);
 	}
 
-	private function getFilename($task, $version)
-	{
+	private function getFilename($task, $version) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$q = 'SELECT filename
 				FROM task_file_version
 				WHERE task_id = ' . $db->cleanse($task->getTaskId())
-
-TODO forget about file_id, we don't want that. Or maybe we do. But as least we
-dont' want multiple files per task.......
-
-				 . ' AND file_id = ' . $db->cleanse($this->file_id) . '
-				AND version_id =' . $db->cleanse($version);
-		if ($r = $db->Select($q))
-		{
-			$ret = $r[0]['filename'];
+				 . ' AND version_id =' . $db->cleanse($version)
+				 . ' LIMIT 1';
+		if ($r = $db->Select($q)) {
+			return $r[0]['filename'];
 		}
-		return $ret;
+		else {
+			return null;			
+		}
 	}
 
 }

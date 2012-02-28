@@ -101,10 +101,4 @@ class Upload {
 			. $task_folder . DIRECTORY_SEPARATOR 
 			. $version_folder;
 	}
-
-	public function absoluteFilePath($task, $file_id, $version) {
-		$upload_folder = self::absoluteFolderPathForUpload($task, $version);
-		return TaskFile::absolutePath($this->organisationId(), $this->task_id, $version).DIRECTORY_SEPARATOR.$this->filename($version);
-	}
-
 }
