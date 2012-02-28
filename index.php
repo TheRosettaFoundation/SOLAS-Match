@@ -157,7 +157,7 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $app->render('task.tpl');
 })->name('task');
 
-$app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('member'), function ($task_id, $file_id, $version) use ($app) {
+$app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('member'), function ($task_id, $version) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -174,7 +174,7 @@ $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('m
     $task_file->logFileDownload($task, $version);
 })->name('download-task-version');
 
-$app->get('/task/id/:task_id/download-file/', $authenticateForRole('member'), function ($task_id, $file_id) use ($app) {
+$app->get('/task/id/:task_id/download-file/', $authenticateForRole('member'), function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
