@@ -326,7 +326,7 @@ class TaskDao {
 		$task_file['upload_time'] 	= 'NOW()';
 		if ($db->Insert('task_file', $task_file)) {
 			$new_version = $this->nextFileVersionNumber($task);
-			$ret = $this->recordNewlyUploadedVersion($task, $next_version, $filename, $content_type);
+			$ret = $this->recordNewlyUploadedVersion($task, $new_version, $filename, $content_type);
 		}
 		return $ret;
 	}
@@ -363,7 +363,8 @@ class TaskDao {
 		 * If that conflict happens, we'll simply reject the commit, or do something
 		 * more user friendly than that.
 		 */
-		if ($latest_version = self::latestFileVersion($task)) {
+		$latest_version = self::latestFileVersion($task);
+		if ($latest_version !== false) {
 			return $latest_version + 1;
 		}
 		else {
@@ -378,8 +379,7 @@ class TaskDao {
 		$q = 'SELECT max(version_id) as latest_version
 		 		FROM task_file_version
 		 		WHERE task_id =' . $db->cleanse($task->getTaskId());		
-		if ($r = $db->Select($q) && isset($r[0]['latest_version'])
-				&& !is_null($r[0]['latest_version'])) {
+		if ($r = $db->Select($q)) {
 			return intval($r[0]['latest_version']);
 		}
 		else {

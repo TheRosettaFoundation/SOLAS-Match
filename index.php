@@ -83,7 +83,7 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
             'organisation_id' => $organisation_id,
         ));
         try {
-            Upload::saveUploadedFile($field_name, $organisation_id, $task->getTaskId());
+            Upload::saveSubmittedFile($field_name, $task);
             $app->redirect('/task/describe/' . $task->getTaskId() . '/');
         }
         catch (Exception  $e) {
@@ -102,6 +102,30 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
     ));
     $app->render('task.upload.tpl');
 })->via('GET','POST')->name('task-upload');
+
+$app->get('/task/:task_id/upload-edited/', $authenticateForRole('organisation'), function ($task_id) use ($app) {
+    // !!!!!!!!!!!!!!!! Old code that needs updating
+    /*
+     * Process submitted form data to create a new task. 
+     * Simple mockup functionality. Therefore, not much error checking happening. 
+    */
+
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+    if (!is_object($task)) {
+        $app->notFound();
+    }
+
+    try {
+        Upload::saveSubmittedFile('edited_file', $task);
+    }
+    catch (Exception $e) {
+        echo $e->getMessage();
+        die;
+    }
+    
+    $app->redirect($app->urlFor('task', array('task_id' => $task->getTaskId())));
+})->via('POST')->name('task-upload-edited');
 
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), function ($task_id) use ($app) {
     $error      = null;

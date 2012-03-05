@@ -39,9 +39,10 @@ class Upload {
 		$file_tmp_name 	= $_FILES[$form_file_field]['tmp_name'];
 		$task_dao 		= new TaskDao;
 		$version 		= $task_dao->nextFileVersionNumber($task);
+		$upload_folder 	= self::absoluteFolderPathForUpload($task, $version);
 
 		self::_saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version);
-		$task_dao = logFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
+		$task_dao->logFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
 
 		return true;
 	}
@@ -51,24 +52,26 @@ class Upload {
 	 * in the $_FILES global array.
 	 */
 	private static function _saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version) {
-		$upload_folder = self::absoluteFolderPathForUpload($task, $version = 0);
+		$upload_folder = self::absoluteFolderPathForUpload($task, $version);
 		
 		if (!self::_folderPathForUploadExists($task, $version)) {
-			self::createFolderForUpload($task, $version);
+			self::_createFolderForUpload($task, $version);
 		}
 
 		$destination_path = self::absoluteFilePathForUpload($task, $version, $file_name);
-		move_uploaded_file($file_tmp_name, $destination_path);
+		
+		if (move_uploaded_file($file_tmp_name, $destination_path) == false) {
+			throw new Exception('Could not save uploaded file.');
+		}
 	}
 
 	private static function _folderPathForUploadExists($task, $version) {
-		$folder = self::absoluteFolderPathForUpload($task, $version = 0);;
+		$folder = self::absoluteFolderPathForUpload($task, $version);;
 		return is_dir($folder);
 	}
 
 	private static function _createFolderForUpload($task, $version) {
-		$folder = self::absoluteFolderPathForUpload($task, $version);
-		
+		$upload_folder = self::absoluteFolderPathForUpload($task, $version);
 		mkdir($upload_folder, 0755, true);
 		
 		if (self::_folderPathForUploadExists($task, $version)) {

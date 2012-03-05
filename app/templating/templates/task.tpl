@@ -1,6 +1,5 @@
 {include file="header.inc.tpl"}
 	<div class="grid_8">
-
 		<h2>{$task->getTitle()}</h2>
 	
 		<div class="task_content">
@@ -24,34 +23,36 @@
 					<li>{include file="inc.tag.tpl" tag=$tag}</li>
 				{/foreach}
 			</ul>
-
 		</div>
 
 		{if isset($task_files)}
 			{foreach from=$task_files item=task_file}
+				{assign var="task_id" value=$task->getTaskId()}
 				<h3>Task file: "{$task_file.filename}"</h3>
 				<ul>
 					{if isset($user)}
-						{assign var="task_id" value=$task->getTaskId()}
 						<li><em>Volunteers:</em> <a href="{urlFor name="download-task" options="task_id.$task_id"}">Download the file to translate it.</a></li>
 						<li><em>NGO:</em> <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">Download the latest translation.</a></li>
 					{/if}
 				</ul>
-				
+
 				{if isset($user)}
-					<form method="post" action="/process/upload.edited_file.php" enctype="multipart/form-data">
-						<input type="hidden" name="task_id" value="{$task_file->taskID()}">
+					<form method="post" action="{urlFor name="task-upload-edited" options="task_id.$task_id"}" enctype="multipart/form-data">
+						<input type="hidden" name="task_id" value="{$task->getTaskId()}">
 						<fieldset>
-							<p><label for="edited_file">Upload translated file</label>  
-							<input type="file" name="edited_file" id="edited_file"></p>
-							<p class="desc">Can be anything, even a .zip collection of files. Max file size {$max_file_size}MB.</p>  
+							<p>
+								<label for="edited_file">Upload translated file</label>
+								<input type="file" name="edited_file" id="edited_file">
+							</p>
+							<p class="desc">
+								Can be anything, even a .zip collection of files. Max file size {$max_file_size}MB.
+							</p>  
 							<input type="submit" value="Submit" name="submit">
 						</fieldset> 
 					</form>
 				{else}
-					<p>Please <a href="/login">log in</a> to be able to accept translation jobs.</p>
+					<p>Please <a href="{urlFor name="login"}">log in</a> to be able to accept translation jobs.</p>
 				{/if}
-		
 			{/foreach}
 		{/if}
 	</div>
