@@ -173,8 +173,9 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
 
     $app->view()->setData('task', $task);
 
-    if ($task_files = $task_dao->getTaskFiles($task)) {
-        $app->view()->setData('task_files', $task_files);
+    if ($task_file_info = $task_dao->getTaskFileInfo($task)) {
+        $app->view()->setData('task_file_info', $task_file_info);
+        $app->view()->setData('latest_version', $task_dao->getLatestFileVersion($task));
     }
     $app->view()->setData('max_file_size', IO::maxFileSizeMB());
     $app->view()->setData('body_class', 'task_page');
@@ -191,7 +192,8 @@ $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('m
     }
 
     $absolute_path      = Upload::absoluteFolderPathForUpload($task, $version);
-    $file_content_type  = $task_dao->uploadedFileContentType($task, $version);
+    $task_file_info = $task_dao->getTaskFileInfo($task, $version);
+    $file_content_type  = $task_file_info['content_type'];
 
     IO::downloadFile($absolute_path, $file_content_type);
 

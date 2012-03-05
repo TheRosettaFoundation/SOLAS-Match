@@ -42,7 +42,7 @@ class Upload {
 		$upload_folder 	= self::absoluteFolderPathForUpload($task, $version);
 
 		self::_saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version);
-		$task_dao->logFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
+		$task_dao->recordFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
 
 		return true;
 	}

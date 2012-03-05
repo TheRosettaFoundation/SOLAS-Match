@@ -313,41 +313,20 @@ class TaskDao {
 		return $ret;
 	}
 
-	public function logFileUpload($task, $path, $filename, $content_type) {
-		$ret = false;
+	public function recordFileUpload($task, $path, $filename, $content_type) {
+		$next_version = $this->nextFileVersionNumber($task);
 		$db = new MySQLWrapper();
 		$db->init();
-		$task_file = array();
-		$task_file['task_id'] 		= $task->getTaskId();
-		$task_file['path'] 			= $db->cleanseWrapStr($path);
-		$task_file['filename'] 		= $db->cleanseWrapStr($filename);
-		$task_file['content_type'] 	= $db->cleanseWrapStr($content_type);
-		$task_file['user_id'] 		= 'NULL'; // TODO record user
-		$task_file['upload_time'] 	= 'NOW()';
-		if ($db->Insert('task_file', $task_file)) {
-			$new_version = $this->nextFileVersionNumber($task);
-			$ret = $this->recordNewlyUploadedVersion($task, $new_version, $filename, $content_type);
-		}
-		return $ret;
-	}
 
-	/*
-	 * Check in the database the stored content type of this file.
-	 * Return false if not found.
-	 */
-	function uploadedFileContentType($task, $file_version) {
-		$db = new MySQLWrapper();
-		$db->init();
-		$q = 'SELECT content_type
-				FROM task_file_version
-				WHERE task_id = ' . $db->cleanse($task->getTaskId()) . '
-				AND version_id =' . $db->cleanse($file_version);
-		if ($r = $db->Select($q)) {
-			return $r[0]['content_type'];			
-		}
-		else {
-			throw new InvalidArgumentException('Cannot look for the content type of a file, as that file was not found in the database.');			
-		}
+		$task_file_version = array();
+		$task_file_version['task_id'] 		= $db->cleanse($task->getTaskId());
+		$task_file_version['version_id'] 	= $db->cleanse($next_version);
+		$task_file_version['filename'] 		= $db->cleanseWrapStr($filename);
+		$task_file_version['content_type'] 	= $db->cleanseWrapStr($content_type);
+		$task_file_version['user_id'] 		= 'NULL'; // TODO record user
+		$task_file_version['upload_time'] 	= 'NOW()';
+		$ret = $db->Insert('task_file_version', $task_file_version);
+		return $ret;
 	}
 
 	/*
@@ -363,7 +342,7 @@ class TaskDao {
 		 * If that conflict happens, we'll simply reject the commit, or do something
 		 * more user friendly than that.
 		 */
-		$latest_version = self::latestFileVersion($task);
+		$latest_version = self::getLatestFileVersion($task);
 		if ($latest_version !== false) {
 			return $latest_version + 1;
 		}
@@ -372,33 +351,19 @@ class TaskDao {
 		}
 	}
 
-	private function latestFileVersion($task) {
+	public function getLatestFileVersion($task) {
 		$db = new MySQLWrapper();
 		$db->init();
 
 		$q = 'SELECT max(version_id) as latest_version
 		 		FROM task_file_version
-		 		WHERE task_id =' . $db->cleanse($task->getTaskId());		
+		 		WHERE task_id = ' . $db->cleanse($task->getTaskId());
+		$ret = false;
 		if ($r = $db->Select($q)) {
-			return intval($r[0]['latest_version']);
+			if (is_numeric($r[0]['latest_version'])) {
+				$ret =  intval($r[0]['latest_version']);
+			}
 		}
-		else {
-			return false;
-		}
-	}
-
-	public function recordNewlyUploadedVersion($task, $version, $filename, $content_type) {
-		// Save file version
-		$db = new MySQLWrapper();
-		$db->init();
-		$task_file_version = array();
-		$task_file_version['task_id'] 		= $db->cleanse($task->getTaskId());
-		$task_file_version['version_id'] 	= $db->cleanse($version);
-		$task_file_version['filename'] 		= $db->cleanseWrapStr($filename);
-		$task_file_version['content_type'] 	= $db->cleanseWrapStr($content_type);
-		$task_file_version['user_id'] 		= 'NULL'; // TODO record user
-		$task_file_version['upload_time'] 	= 'NOW()';
-		$ret = $db->Insert('task_file_version', $task_file_version);
 		return $ret;
 	}
 
@@ -429,22 +394,24 @@ class TaskDao {
 		}
 	}
 
-	public function getTaskFiles($task) {
+	public function getTaskFileInfo($task, $version = 0) {
+		$ret = null;
 		$db = new MySQLWrapper();
 		$db->init();
 		$q = 'SELECT *
-				FROM task_file
-				WHERE task_id = '.$db->cleanse($task->getTaskId());
-		
+				FROM task_file_version
+				WHERE task_id = ' . $db->cleanse($task->getTaskId()) . '
+				AND version_id = ' . $db->cleanse($version) . '
+				LIMIT 1';
 		$ret = false;
 		if ($r = $db->Select($q)) {
-			$task_files = array();
-			foreach($r as $row)	{
-				$task_files[] = array(
-					'filename' => $row['filename'],
-				);
+			$file_info = array();
+			foreach($r[0] as $key => $value) {
+				if (!is_numeric($key)) {
+					$file_info[$key] = $value;
+				}
 			}
-			$ret = $task_files;
+			$ret = $file_info;
 		}
 		return $ret;
 	}
