@@ -367,7 +367,7 @@ class TaskDao {
 		return $ret;
 	}
 
-	private function logFileDownload($task, $version) {
+	public function logFileDownload($task, $version) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$down = array();

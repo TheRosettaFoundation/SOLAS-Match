@@ -106,7 +106,7 @@ class IO {
 		if ($fd = fopen ($absoluteFilePath, "r")) {
 			$fsize = filesize($absoluteFilePath);
 			$path_parts = pathinfo($absoluteFilePath);
-			$ext = strtolower($path_parts["extension"]);
+			$ext = strtolower($path_parts["extension"]); 
 			header('Content-type: '.$contentType);
 			header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
 			header("Content-length: $fsize");
@@ -115,6 +115,7 @@ class IO {
 				$buffer = fread($fd, 2048);
 				echo $buffer;
 			}
+			die; // TODO -> this die is to get around Slim's $app->reponse() header/body response. Is there a cleaner way to download files?
 		}
 		fclose ($fd);
 		return;
