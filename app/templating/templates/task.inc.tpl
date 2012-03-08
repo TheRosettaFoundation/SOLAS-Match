@@ -1,25 +1,23 @@
 {* Must have an object $task assigned by parent *}
 <div class="task">
-	<h3><a href="/task/id/{$task->getTaskId()}/">{$task->getTitle()}</a></h3>
-	<ul class="tags">
+	<h2><a href="/task/id/{$task->getTaskId()}/">{$task->getTitle()}</a></h2>
+	<p>
 		{if $task->areSourceAndTargetSet()}
-			<li>
-				{Languages::languageNameFromId($task->getSourceId())} 
-				to 
-				{Languages::languageNameFromId($task->getTargetId())}
-			</li>
+			{Languages::languageNameFromId($task->getSourceId())} 
+			to 
+			{Languages::languageNameFromId($task->getTargetId())}
 		{/if}
-		
+			
 		{foreach from=$task->getTags() item=tag}
-			<li>{include file="inc.tag.tpl" tag_name=$tag}</li>
+			<span class="label">{$tag}</span>
 		{/foreach}
-	</ul>
-	<p class="task_details">
-		<span class="time_since">{IO::timeSinceSqlTime($task->getCreatedTime())} ago</span> {Organisations::nameFromId($task->getOrganisationId())}
 	</p>
-	<p class="task_summary">
+	
+	<p class="task_details">
+		Added {IO::timeSinceSqlTime($task->getCreatedTime())} ago
+		&middot; By {Organisations::nameFromId($task->getOrganisationId())}
 		{if $task->getWordcount()}
-			{$task->getWordcount()|number_format} words
+			&middot; {$task->getWordcount()|number_format} words
 		{/if}
 	</p>
 </div>

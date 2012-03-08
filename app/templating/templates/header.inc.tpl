@@ -18,17 +18,20 @@
 	    	    <a class="brand" href="/">
 					Solas Match
 			    </a>
+			    <ul class="nav">
+			    	<li><a href="{urlFor name="home"}">Home</a></li>
+			    	<li><a href="{urlFor name="task-upload"}">Add new task</a></li>
+			    </ul>
 			    <ul class="nav pull-right">
 			    	{if isset($user)}
 						<li><a href="{$url_logout}">Log out</a></li>
 					{else}
-						<li><a href="{$url_login}">Log in</a></li>
 						<li><a href="{$url_register}">Register</a></li>
+						<li><a href="{$url_login}">Log in</a></li>
 					{/if}
 			    </ul>
 	    </div>
     </div>
-    
 </div>
 
 <div class="container">

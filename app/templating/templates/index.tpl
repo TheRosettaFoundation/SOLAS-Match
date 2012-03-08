@@ -9,12 +9,19 @@
 				<a class="btn btn-primary btn-large" href="{$url_register}">
 					Register to Volunteer
 				</a>
+				<a class="btn btn-large" href="{$url_login}">
+					Login
+				</a>
 			</p>
 		</div>
 	{/if}
+
 	<div class="span8">
 		{if isset($tasks)}
-			<h2 class="section_top">Translation Tasks</h2>
+		<section id="alerts">
+			<div class="page-header">
+				<h1>Translation tasks <small>Pick one that you could help translate</small></h1>
+			</div>
 			{if isset($tasks)}
 				{foreach from=$tasks item=task name=tasks_loop}
 					{include file="task.inc.tpl" task=$task}
@@ -22,8 +29,8 @@
 			{/if}
 		{/if}
 	</div>
+	
 	<div class="span4">
-		<p><a href="{urlFor name="task-upload"}">+ Create new task</a></p>
 		{include file="tags.top-list.inc.tpl"}
 	</div>
 </div>
