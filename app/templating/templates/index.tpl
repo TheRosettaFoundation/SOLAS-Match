@@ -1,5 +1,18 @@
 {include file="header.inc.tpl"}
-	<div class="grid_8">
+
+<div class="row">
+	{if !isset($user)}
+		<div class="hero-unit">
+			<h1>Help NGOs translate</h1>
+			<p>Non&ndash;governmental agencies need <em>your</em> translation skills.</p>
+			<p>
+				<a class="btn btn-primary btn-large" href="{$url_register}">
+					Register to Volunteer
+				</a>
+			</p>
+		</div>
+	{/if}
+	<div class="span8">
 		{if isset($tasks)}
 			<h2 class="section_top">Translation Tasks</h2>
 			{if isset($tasks)}
@@ -9,9 +22,10 @@
 			{/if}
 		{/if}
 	</div>
-	<div id="sidebar" class="grid_4">
-		<br><br>
+	<div class="span4">
 		<p><a href="{urlFor name="task-upload"}">+ Create new task</a></p>
 		{include file="tags.top-list.inc.tpl"}
 	</div>
+</div>
+
 {include file="footer.inc.tpl"}
