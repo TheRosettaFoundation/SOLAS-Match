@@ -54,12 +54,32 @@ $app->configureMode('development', function () use ($app) {
 });
 
 $authenticateForRole = function ( $role = 'member' ) {
+
+    /* Sample:
+
+        return function () use ( $role ) { 
+            $user = User::fetchFromDatabaseSomehow();
+            if ( $user->belongsToRole($role) === false ) { 
+                Slim::flash('error', 'Login required');
+                Slim::redirect('/login');
+            }   
+        }   
+
+    */
+
     return function () use ( $role ) {
         $app = Slim::getInstance();
         $user_dao = new UserDao();
-        if (!is_object($user_dao->getCurrentUser())) {
+        $current_user = $user_dao->getCurrentUser();
+    
+        if (!is_object($current_user)) {
             $app->redirect('/login');
         }
+        else if ($user_dao->belongsToRole($current_user, $role) === false) { 
+            Slim::flash('error', 'Login required');
+            Slim::redirect('/login');
+        }   
+
     };
 };
 
@@ -98,7 +118,7 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
         'url_task_upload'       => $app->urlFor('task-upload'),
         'max_file_size_bytes'   => IO::maxFileSizeBytes(),
         'max_file_size_mb'      => IO::maxFileSizeMB(),
-        'field_name'       => $field_name
+        'field_name'            => $field_name
     ));
     $app->render('task.upload.tpl');
 })->via('GET','POST')->name('task-upload');
