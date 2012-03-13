@@ -1,4 +1,4 @@
-{include file="header.inc.tpl"}
+{include file="header.tpl"}
 <div class="grid_8">
 	<h2>Upload a document to be translated</h2>
 	{if isset($error)}
@@ -16,4 +16,4 @@
 		</fieldset> 
 	</form>
 </div>
-{include file="footer.inc.tpl"}
+{include file="footer.tpl"}

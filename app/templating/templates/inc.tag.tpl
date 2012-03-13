@@ -1,1 +1,0 @@
-{if strlen($tag) > 0}<a class="tag" href="{URL::tag($tag)}"><span class="label">{$tag}</span></a>{/if}

@@ -18,7 +18,7 @@
 				{Languages::languageNameFromId($task->getTargetId())}
 			{/if}
 			{foreach from=$task->getTags() item=tag}
-				{include file="inc.tag.tpl" tag=$tag}
+				<a class="tag" href="{URL::tag($tag)}"><span class="label">{$tag}</span></a>
 			{/foreach}
 		</p>
 			

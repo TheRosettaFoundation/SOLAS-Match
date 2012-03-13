@@ -24,7 +24,7 @@
 			</div>
 			{if isset($tasks)}
 				{foreach from=$tasks item=task name=tasks_loop}
-					{include file="task.inc.tpl" task=$task}
+					{include file="task.summary-link.tpl" task=$task}
 				{/foreach}
 			{/if}
 		{/if}

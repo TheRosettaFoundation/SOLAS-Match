@@ -3,7 +3,7 @@
 	<ul class="nav nav-list unstyled">
 		{foreach from=$top_tags item=tag}
 			<li>
-				{include file="inc.tag.tpl" tag=$tag}
+				<a class="tag" href="{URL::tag($tag)}"><span class="label">{$tag}</span></a>
 			</li>
 		{/foreach}
 	</ul>

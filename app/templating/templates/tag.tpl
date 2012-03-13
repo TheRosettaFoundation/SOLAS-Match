@@ -4,7 +4,7 @@
 
 	{if $tasks}
 		{foreach from=$tasks item=task}
-			{include file="task.inc.tpl" task=$task}
+			{include file="task.summary-link.tpl" task=$task}
 		{/foreach}
 	{/if}
 </div>
