@@ -1,4 +1,4 @@
-{include file="header.inc.tpl"}
+{include file="header.tpl"}
 <div class="grid_8">
 	<h2>Log In</h2>
 	<form method="post" action="{$url_login}">
@@ -18,4 +18,4 @@
 <div id="sidebar" class="grid_4">
 	
 </div>
-{include file="footer.inc.tpl"}
+{include file="footer.tpl"}

@@ -1,4 +1,4 @@
-{include file="header.inc.tpl"}
+{include file="header.tpl"}
 
 <div class="row">
 	{if !isset($user)}
@@ -35,4 +35,4 @@
 	</div>
 </div>
 
-{include file="footer.inc.tpl"}
+{include file="footer.tpl"}

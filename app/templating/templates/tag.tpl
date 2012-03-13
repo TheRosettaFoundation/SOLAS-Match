@@ -1,4 +1,4 @@
-{include file="header.inc.tpl"}
+{include file="header.tpl"}
 <div class="grid_8">
 	<h2>All open items tagged with <em>{$tag}</em></h2>
 
@@ -13,4 +13,4 @@
 	<a href="/">All tasks</a>
 	{include file="tags.top-list.inc.tpl"}
 </div>
-{include file="footer.inc.tpl"}
+{include file="footer.tpl"}
