@@ -42,6 +42,11 @@ class Upload {
 		$upload_folder 	= self::absoluteFolderPathForUpload($task, $version);
 
 		self::_saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version);
+
+		Todo:
+		Implement check like this:
+		http://stackoverflow.com/questions/9688005/handling-an-exception-and-only-executing-code-if-an-exception-was-not-thrown
+
 		$task_dao->recordFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
 
 		return true;
