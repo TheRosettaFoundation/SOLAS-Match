@@ -118,7 +118,8 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
         if (!$upload_error) {
             $task_dao = new TaskDao();
             $task = $task_dao->create(array(
-                'organisation_id' => $organisation_id,
+                'organisation_id'   => $organisation_id,
+                'title'             => $_FILES[$field_name]['name']
             ));
             
             try {
@@ -130,6 +131,7 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
         }
 
         if (!$upload_error) {
+
             $app->redirect('/task/describe/' . $task->getTaskId() . '/');
         }
 
@@ -203,7 +205,11 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), func
     if (!is_null($error)) {
         $app->view()->appendData(array('error' => $error));
     }
-    $app->view()->appendData(array('url_task_describe' => $app->urlFor('task-describe', array('task_id' => $task_id))));
+    $app->view()->appendData(array(
+        'url_task_describe' => $app->urlFor('task-describe', array('task_id' => $task_id)),
+        'task'              => $task,
+    ));
+    
     $app->render('task.describe.tpl');
 })->via('GET','POST')->name('task-describe');
 
