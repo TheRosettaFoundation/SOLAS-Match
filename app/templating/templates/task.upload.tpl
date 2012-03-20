@@ -6,7 +6,10 @@
 
 <div class="grid_8">
 	{if isset($error)}
-		<p class="error">{$error}</p>
+		<div class="alert alert-error">
+			<h4>Error</h4>
+			<p>{$error}</p>
+		</div>
 	{/if}
 	<form class="well" method="post" action="{$url_task_upload}" enctype="multipart/form-data">
 		<p><label for="{$field_name}">Choose your file</label>  

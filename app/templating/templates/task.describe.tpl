@@ -2,10 +2,16 @@
 	<div class="grid_8">
 		<h2>Describe your task</h2>
 		{if isset($error)}
-			<p class="error">{$error}</p>
+			<div class="alert alert-error">
+				{$error}
+			</div>
 		{/if}
 		<form method="post" action="{$url_task_describe}">
 			<fieldset>
+				<label for="content">Descriptive Title</label>
+				<textarea wrap="hard" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
+				<p class="desc">You may replace the file name with something more descriptive.</p>  
+
 				<p>
 					<label for="source">From language</label>
 					<input type="text" name="source" id="source">
@@ -15,9 +21,6 @@
 					<label for="target">To language</label>
 					<input type="text" name="target" id="target">
 				</p>
-				
-				<label for="content">Descriptive Title</label>
-				<textarea wrap="hard" cols="1" rows="2" name="title"></textarea>
 				
 				<p>
 					<label for="tags">Tags</label>
