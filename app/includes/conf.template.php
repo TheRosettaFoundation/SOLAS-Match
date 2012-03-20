@@ -26,7 +26,6 @@ $users['site_key'] = ''; // Fill with a string 60 to 80 characters long. Unique 
 
 /** Files **/
 $files = array();
-$files['max_upload_file_size'] = 20480; // In bytes. Needs to related to php.ini values upload_max_filesize and post_max_size
 $files['upload_path'] = dirname(__FILE__).'/../uploads/'; // No need to edit this
 
 /** Smarty **/

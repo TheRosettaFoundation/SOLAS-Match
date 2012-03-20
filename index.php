@@ -73,7 +73,7 @@ $authenticateForRole = function ( $role = 'member' ) {
         $current_user = $user_dao->getCurrentUser();
     
         if (!is_object($current_user)) {
-            $app->redirect('/login');
+            $app->redirect($app->urlFor('login'));
         }
         else if ($user_dao->belongsToRole($current_user, $role) === false) { 
             Slim::flash('error', 'Login required');
@@ -96,8 +96,7 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
     $error_message = null;
     $field_name = 'new_task_file';
     $organisation_id = 1; // TODO Implement organisation identification!
-
-    if (Upload::hasFormBeenSubmitted($field_name)) {
+    if ($app->request()->isPost()) {
 
         /*
          * The new structure I need is:
@@ -126,6 +125,7 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
                 Upload::saveSubmittedFile($field_name, $task);
             }
             catch (Exception  $e) {
+                $upload_error = true;
                 $error_message = 'File error: ' . $e->getMessage();
             }
         }
@@ -134,7 +134,6 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
 
             $app->redirect('/task/describe/' . $task->getTaskId() . '/');
         }
-
     }
 
     if (!is_null($error_message)) {
@@ -142,8 +141,8 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
     }
     $app->view()->appendData(array(
         'url_task_upload'       => $app->urlFor('task-upload'),
-        'max_file_size_bytes'   => IO::maxFileSizeBytes(),
-        'max_file_size_mb'      => IO::maxFileSizeMB(),
+        'max_file_size_bytes'   => Upload::maxFileSizeBytes(),
+        'max_file_size_mb'      => Upload::maxFileSizeMB(),
         'field_name'            => $field_name
     ));
     $app->render('task.upload.tpl');
@@ -227,7 +226,7 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
         $app->view()->setData('task_file_info', $task_file_info);
         $app->view()->setData('latest_version', $task_dao->getLatestFileVersion($task));
     }
-    $app->view()->setData('max_file_size', IO::maxFileSizeMB());
+    $app->view()->setData('max_file_size', Upload::maxFileSizeMB());
     $app->view()->setData('body_class', 'task_page');
     $app->render('task.tpl');
 })->name('task');

@@ -1,9 +1,37 @@
 <?php
 
 class Upload {
+	public static function maxFileSizeBytes() {
+		$display_max_size = self::maxUploadSizeFromPHPSettings();
+		
+		switch ( substr($display_max_size,-1) ) {
+			case 'G':
+				$display_max_size = $display_max_size * 1024;
+			case 'M':
+				$display_max_size = $display_max_size * 1024;
+			case 'K':
+				$display_max_size = $display_max_size * 1024;
+		}
+		return $display_max_size;
+	}
+
+	/**
+	 * Return an integer value of the max file size that can be uploaded to the system,
+	 * denominated in megabytes.
+	 */
+	public static function maxFileSizeMB() {
+		$bytes = self::maxFileSizeBytes();
+		return round(($bytes/1024)/1024, 1);
+	}
+
+	private static function maxUploadSizeFromPHPSettings() {
+		return ini_get('post_max_size');
+	}
+
 	public static function validateFileHasBeenSuccessfullyUploaded($field_name) {
-		if (!self::hasFormBeenSubmitted($field_name)) {
-			throw new Exception('Cannot upload file, as it seems the form was not submitted.');
+		if (self::isPostTooLarge()) {
+			$max_file_size = ini_get('post_max_size');
+			throw new Exception('Sorry, the file you tried uploading is too large. The max file size is ' . $max_file_size . '. Please consider saving the file in multiple smaller parts for upload.');
 		}
 
 		if (!self::isUploadedFile($field_name)) {
@@ -14,6 +42,16 @@ class Upload {
 			$error_message = self::fileUploadErrorMessage($_FILES[$form_file_field]['error']);
 			throw new Exception('Sorry, we were not able to upload your file. Error: ' . $error_message);
 		}
+	}
+
+	/* Thanks to http://andrewcurioso.com/2010/06/detecting-file-size-overflow-in-php/ */
+	private static function isPostTooLarge() {
+		return ( 
+			$_SERVER['REQUEST_METHOD'] == 'POST' && 
+			empty($_POST) &&
+			empty($_FILES) && 
+			$_SERVER['CONTENT_LENGTH'] > 0
+		);
 	}
 
 	private static function fileUploadErrorMessage($error_code) {
@@ -35,10 +73,6 @@ class Upload {
 	        default:
 	            return 'Unknown upload error';
 	    }
-	}
-
-	public static function hasFormBeenSubmitted($field_name) {
-		return isset($_FILES[$field_name]);
 	}
 
 	public static function isUploadedFile($field_name) {
@@ -71,7 +105,6 @@ class Upload {
 
 		self::_saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version);
 
-		// TODO What does this line do, if the task is already being created elsewhere?
 		$task_dao->recordFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
 
 		return true;
