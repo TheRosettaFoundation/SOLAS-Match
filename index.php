@@ -2,9 +2,9 @@
 require 'libs/Slim/Slim/Slim.php';
 require 'libs/SlimExtras/Views/SmartyView.php';
 
-SmartyView::$smartyDirectory = '/home/eoin/sites/smarty/libs';
-SmartyView::$smartyCompileDirectory = '/home/eoin/sites/solasmatch/app/templating/templates_compiled';
-SmartyView::$smartyTemplatesDirectory = '/home/eoin/sites/solasmatch/app/templating/templates';
+SmartyView::$smartyDirectory = '/home/eoin/repos/smarty/libs';
+SmartyView::$smartyCompileDirectory = '/home/eoin/repos/solasmatch/app/templating/templates_compiled';
+SmartyView::$smartyTemplatesDirectory = '/home/eoin/repos/solasmatch/app/templating/templates';
 SmartyView::$smartyExtensions = array(
     dirname('libs/SlimExtras/Views/SmartyView.php') . '/Extension/Smarty'
 );
@@ -93,26 +93,50 @@ $app->get('/', function () use ($app) {
 })->name('home');
 
 $app->get('/task/upload', $authenticateForRole('organisation'), function () use ($app) {
-    $error = null;
+    $error_message = null;
     $field_name = 'new_task_file';
     $organisation_id = 1; // TODO Implement organisation identification!
 
     if (Upload::hasFormBeenSubmitted($field_name)) {
-        $task_dao = new TaskDao();
-        $task = $task_dao->create(array(
-            'organisation_id' => $organisation_id,
-        ));
+
+        /*
+         * The new structure I need is:
+         * 1. Validate that at least the file is uploaded correctly
+         * 2. Then I can try creating the new task and saving the file to disk.
+         * 3. If that fails, I need to delete the task again, I guess?
+         * 4. Elsewhere, we'll have to do checks whether the task has been described and thus ready to appear in the stream
+         */
+
+        $upload_error = false;
         try {
-            Upload::saveSubmittedFile($field_name, $task);
+            Upload::validateFileHasBeenSuccessfullyUploaded($field_name);
+        } catch (Exception $e) {
+            $upload_error = true;
+            $error_message = $e->getMessage();
+        }
+
+        if (!$upload_error) {
+            $task_dao = new TaskDao();
+            $task = $task_dao->create(array(
+                'organisation_id' => $organisation_id,
+            ));
+            
+            try {
+                Upload::saveSubmittedFile($field_name, $task);
+            }
+            catch (Exception  $e) {
+                $error_message = 'File error: ' . $e->getMessage();
+            }
+        }
+
+        if (!$upload_error) {
             $app->redirect('/task/describe/' . $task->getTaskId() . '/');
         }
-        catch (Exception  $e) {
-            $error = 'File error: ' . $e->getMessage();
-        }
+
     }
 
-    if (!is_null($error)) {
-        $app->view()->appendData(array('error' => $error));
+    if (!is_null($error_message)) {
+        $app->view()->appendData(array('error' => $error_message));
     }
     $app->view()->appendData(array(
         'url_task_upload'       => $app->urlFor('task-upload'),

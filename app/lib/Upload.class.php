@@ -1,12 +1,40 @@
 <?php
 
 class Upload {
-	public static function hasFileBeenSuccessfullyUploaded($field_name) {
-		return (
-			self::hasFormBeenSubmitted($field_name) 
-			&& self::isUploadedFile($field_name)
-			&& self::isUploadedWithoutError($field_name)
-		);
+	public static function validateFileHasBeenSuccessfullyUploaded($field_name) {
+		if (!self::hasFormBeenSubmitted($field_name)) {
+			throw new Exception('Cannot upload file, as it seems the form was not submitted.');
+		}
+
+		if (!self::isUploadedFile($field_name)) {
+			throw new Exception('You did not upload a file. Please try again.');
+		}
+
+		if (!self::isUploadedWithoutError($field_name)) {
+			$error_message = self::fileUploadErrorMessage($_FILES[$form_file_field]['error']);
+			throw new Exception('Sorry, we were not able to upload your file. Error: ' . $error_message);
+		}
+	}
+
+	private static function fileUploadErrorMessage($error_code) {
+	    switch ($error_code) {
+	        case UPLOAD_ERR_INI_SIZE:
+	            return 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+	        case UPLOAD_ERR_FORM_SIZE:
+	            return 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form';
+	        case UPLOAD_ERR_PARTIAL:
+	            return 'The uploaded file was only partially uploaded';
+	        case UPLOAD_ERR_NO_FILE:
+	            return 'No file was uploaded';
+	        case UPLOAD_ERR_NO_TMP_DIR:
+	            return 'Missing a temporary folder';
+	        case UPLOAD_ERR_CANT_WRITE:
+	            return 'Failed to write file to disk';
+	        case UPLOAD_ERR_EXTENSION:
+	            return 'File upload stopped by extension';
+	        default:
+	            return 'Unknown upload error';
+	    }
 	}
 
 	public static function hasFormBeenSubmitted($field_name) {
@@ -43,10 +71,7 @@ class Upload {
 
 		self::_saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version);
 
-		Todo:
-		Implement check like this:
-		http://stackoverflow.com/questions/9688005/handling-an-exception-and-only-executing-code-if-an-exception-was-not-thrown
-
+		// TODO What does this line do, if the task is already being created elsewhere?
 		$task_dao->recordFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
 
 		return true;
