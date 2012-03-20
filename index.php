@@ -98,14 +98,6 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
     $organisation_id = 1; // TODO Implement organisation identification!
     if ($app->request()->isPost()) {
 
-        /*
-         * The new structure I need is:
-         * 1. Validate that at least the file is uploaded correctly
-         * 2. Then I can try creating the new task and saving the file to disk.
-         * 3. If that fails, I need to delete the task again, I guess?
-         * 4. Elsewhere, we'll have to do checks whether the task has been described and thus ready to appear in the stream
-         */
-
         $upload_error = false;
         try {
             Upload::validateFileHasBeenSuccessfullyUploaded($field_name);
@@ -211,6 +203,16 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), func
     
     $app->render('task.describe.tpl');
 })->via('GET','POST')->name('task-describe');
+
+$app->get('/task/id/:task_id/uploaded/'), $authenticateForRole('organisation'), function ($task_id) use ($app) {
+
+    /*
+     * Todo:
+     *  Show a green success banner
+     *  Describe what they next need to do (wait)
+     */
+
+})->name('task-uploaded');
 
 $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
