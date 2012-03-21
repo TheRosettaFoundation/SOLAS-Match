@@ -53,7 +53,7 @@ $app->configureMode('development', function () use ($app) {
     ));
 });
 
-$authenticateForRole = function ( $role = 'member' ) {
+$authenticateForRole = function ( $role = 'translator' ) {
 
     /* Sample:
 
@@ -92,7 +92,7 @@ $app->get('/', function () use ($app) {
     $app->render('index.tpl');
 })->name('home');
 
-$app->get('/task/upload', $authenticateForRole('organisation'), function () use ($app) {
+$app->get('/task/upload', $authenticateForRole('organisation_member'), function () use ($app) {
     $error_message = null;
     $field_name = 'new_task_file';
     $organisation_id = 1; // TODO Implement organisation identification!
@@ -139,7 +139,7 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
     $app->render('task.upload.tpl');
 })->via('GET','POST')->name('task-upload');
 
-$app->get('/task/:task_id/upload-edited/', $authenticateForRole('organisation'), function ($task_id) use ($app) {
+$app->get('/task/:task_id/upload-edited/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
     // !!!!!!!!!!!!!!!! Old code that needs updating
     /*
      * Process submitted form data to create a new task. 
@@ -163,7 +163,7 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('organisation'),
     $app->redirect($app->urlFor('task', array('task_id' => $task->getTaskId())));
 })->via('POST')->name('task-upload-edited');
 
-$app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), function ($task_id) use ($app) {
+$app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
     $error      = null;
     $task_dao   = new TaskDao();
     $task       = $task_dao->find(array('task_id' => $task_id));
@@ -203,7 +203,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), func
     $app->render('task.describe.tpl');
 })->via('GET','POST')->name('task-describe');
 
-$app->get('/task/id/:task_id/uploaded/', $authenticateForRole('organisation'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/uploaded/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
 
     /*
      * Todo:
@@ -233,7 +233,7 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $app->render('task.tpl');
 })->name('task');
 
-$app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('member'), function ($task_id, $version) use ($app) {
+$app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('translator'), function ($task_id, $version) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -250,7 +250,7 @@ $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('m
     //die;
 })->name('download-task-version');
 
-$app->get('/task/id/:task_id/download-file/', $authenticateForRole('member'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator'), function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -266,7 +266,7 @@ $app->get('/task/id/:task_id/download-file/', $authenticateForRole('member'), fu
 
 })->name('download-task');
 
-$app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('member'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('translator'), function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 

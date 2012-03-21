@@ -14,7 +14,7 @@ class UserDao {
 					AND password = ' . $db->cleanseWrapStr($params['password']);
 		}
 		else if (isset($params['user_id']) && isset($params['role'])) {
-			if ($params['role'] == 'organisation') {
+			if ($params['role'] == 'organisation_member') {
 				$query = 'SELECT u.*
 							FROM user u, organisation_member om
 							WHERE u.user_id = ' . $db->cleanse($params['user_id']) . '
@@ -147,13 +147,13 @@ class UserDao {
 
 	public function belongsToRole($user, $role) {
 		$ret = false;
-		if ($role == 'member') {
+		if ($role == 'translator') {
 			$ret = true;
 		}
-		else if ($role == 'organisation') {
+		else if ($role == 'organisation_member') {
 			$user_found = $this->find(array(
 				'user_id' => $user->getUserId(),
-				'role' => 'organisation'
+				'role' => 'organisation_member'
 			));
 			if (is_object($user_found)) {
 				$ret = true;
