@@ -123,7 +123,6 @@ $app->get('/task/upload', $authenticateForRole('organisation'), function () use 
         }
 
         if (!$upload_error) {
-
             $app->redirect('/task/describe/' . $task->getTaskId() . '/');
         }
     }
@@ -189,7 +188,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), func
         $task->setWordCount($post->word_count);
         $task_dao->save($task);
         if (is_null($error)) {
-            $app->redirect($app->urlFor('task', array('task_id' => $task_id)));
+            $app->redirect($app->urlFor('task-uploaded', array('task_id' => $task_id)));
         }
     }
 
@@ -204,7 +203,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation'), func
     $app->render('task.describe.tpl');
 })->via('GET','POST')->name('task-describe');
 
-$app->get('/task/id/:task_id/uploaded/'), $authenticateForRole('organisation'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/uploaded/', $authenticateForRole('organisation'), function ($task_id) use ($app) {
 
     /*
      * Todo:
@@ -212,6 +211,7 @@ $app->get('/task/id/:task_id/uploaded/'), $authenticateForRole('organisation'), 
      *  Describe what they next need to do (wait)
      */
 
+    $app->render('task.uploaded.tpl');
 })->name('task-uploaded');
 
 $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
