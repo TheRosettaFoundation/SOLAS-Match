@@ -16,9 +16,9 @@ class UserDao {
 		else if (isset($params['user_id']) && isset($params['role'])) {
 			if ($params['role'] == 'organisation') {
 				$query = 'SELECT u.*
-							FROM user u, user_organisation uo
+							FROM user u, organisation_member om
 							WHERE u.user_id = ' . $db->cleanse($params['user_id']) . '
-							AND u.user_id = uo.user_id';
+							AND u.user_id = om.user_id';
 			}
 		}
 		else if (isset($params['user_id'])) {
