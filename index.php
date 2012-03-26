@@ -175,11 +175,11 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
     if (isValidPost($app)) {
         $post = (object)$app->request()->post();
 
-        if (!is_null($post->source)) {
+        if (!empty($post->source)) {
             $source_id = Languages::saveLanguage($post->source);
             $task->setSourceId($source_id);
         }
-        if (!is_null($post->target)) {
+        if (!empty($post->target)) {
             $target_id = Languages::saveLanguage($post->target);
             $task->setTargetId($target_id);
         }
