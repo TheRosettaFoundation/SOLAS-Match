@@ -10,10 +10,11 @@
 	</p>
 {/if}
 <p>
-	{if $task->areSourceAndTargetSet()}
-		{Languages::languageNameFromId($task->getSourceId())} 
-		to 
-		{Languages::languageNameFromId($task->getTargetId())}
+	{if $task->getSourceId()}
+		From {Languages::languageNameFromId($task->getSourceId())}
+	{/if}
+	{if $task->getTargetId()}
+		To {Languages::languageNameFromId($task->getTargetId())}
 	{/if}
 	{foreach from=$task->getTags() item=tag}
 		<a class="tag" href="{URL::tag($tag)}"><span class="label">{$tag}</span></a>
@@ -40,33 +41,11 @@
 			<p class="help-block">
 				Max file size {$max_file_size}MB.
 			</p> 
-			
 			<button type="submit" value="Submit" name="submit" class="btn">Submit</button>
 		</form>
-		
-	{/if}
-		
-	<ul>
-		{if isset($user)}
-		{/if}
-	</ul>
-
-	{if isset($user)}
-		
 	{else}
 		<p>Please <a href="{urlFor name="login"}">log in</a> to be able to accept translation jobs.</p>
 	{/if}
 {/if}
-
-<!--
-<div class="span4">
-	<h2>Admin section</h2>
-	{if $latest_version > 0}
-		<p><a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">Download the latest translation.</a></p>
-	{else}
-		<p>No translated files uploaded yet. Check back here again.</p>
-	{/if}
-</div>
--->
 
 {include file="footer.tpl"}

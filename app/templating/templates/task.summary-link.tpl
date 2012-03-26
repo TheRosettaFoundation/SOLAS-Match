@@ -2,12 +2,13 @@
 <div class="task">
 	<h2><a href="/task/id/{$task->getTaskId()}/">{$task->getTitle()}</a></h2>
 	<p>
-		{if $task->areSourceAndTargetSet()}
-			{Languages::languageNameFromId($task->getSourceId())} 
-			to 
-			{Languages::languageNameFromId($task->getTargetId())}
+		{if $task->getSourceId()}
+			From {Languages::languageNameFromId($task->getSourceId())}
 		{/if}
-			
+		{if $task->getTargetId()}
+			To {Languages::languageNameFromId($task->getTargetId())}
+		{/if}
+
 		{foreach from=$task->getTags() item=tag}
 			<span class="label">{$tag}</span>
 		{/foreach}
