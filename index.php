@@ -161,6 +161,55 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('organisation_me
     }
     
     $app->redirect($app->urlFor('task', array('task_id' => $task->getTaskId())));
+
+/*** Task Upload code, remove! ***/
+Take this code below, and apply it to the code above this comment.
+
+    $error_message = null;
+    $field_name = 'new_task_file';
+    $organisation_id = 1; // TODO Implement organisation identification!
+    if ($app->request()->isPost()) {
+
+        $upload_error = false;
+        try {
+            Upload::validateFileHasBeenSuccessfullyUploaded($field_name);
+        } catch (Exception $e) {
+            $upload_error = true;
+            $error_message = $e->getMessage();
+        }
+
+        if (!$upload_error) {
+            $task_dao = new TaskDao();
+            $task = $task_dao->create(array(
+                'organisation_id'   => $organisation_id,
+                'title'             => $_FILES[$field_name]['name']
+            ));
+            
+            try {
+                Upload::saveSubmittedFile($field_name, $task);
+            }
+            catch (Exception  $e) {
+                $upload_error = true;
+                $error_message = 'File error: ' . $e->getMessage();
+            }
+        }
+
+        if (!$upload_error) {
+            $app->redirect('/task/describe/' . $task->getTaskId() . '/');
+        }
+    }
+
+    if (!is_null($error_message)) {
+        $app->view()->appendData(array('error' => $error_message));
+    }
+    $app->view()->appendData(array(
+        'url_task_upload'       => $app->urlFor('task-upload'),
+        'max_file_size_bytes'   => Upload::maxFileSizeBytes(),
+        'max_file_size_mb'      => Upload::maxFileSizeMB(),
+        'field_name'            => $field_name
+    ));
+    $app->render('task.upload.tpl');
+
 })->via('POST')->name('task-upload-edited');
 
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
