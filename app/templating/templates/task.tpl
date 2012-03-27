@@ -34,6 +34,11 @@
 	{assign var="task_id" value=$task->getTaskId()}
 	{if isset($user)}
 		<hr>
+		{if isset($upload_error)}
+			<div class="alert alert-error">
+				<strong>Upload error</strong> {$upload_error}
+			</div>
+		{/if}
 		<h2>Finished translating? <small>Upload your changes</small></h2>
 		<form class="well" method="post" action="{urlFor name="task-upload-edited" options="task_id.$task_id"}" enctype="multipart/form-data">
 			<input type="hidden" name="task_id" value="{$task->getTaskId()}">

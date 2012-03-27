@@ -140,77 +140,51 @@ $app->get('/task/upload', $authenticateForRole('organisation_member'), function 
 })->via('GET','POST')->name('task-upload');
 
 $app->get('/task/:task_id/upload-edited/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
-    // !!!!!!!!!!!!!!!! Old code that needs updating
-    /*
-     * Process submitted form data to create a new task. 
-     * Simple mockup functionality. Therefore, not much error checking happening. 
-    */
-
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
     if (!is_object($task)) {
         $app->notFound();
     }
 
-    try {
-        Upload::saveSubmittedFile('edited_file', $task);
-    }
-    catch (Exception $e) {
-        echo $e->getMessage();
-        die;
-    }
-    
-    $app->redirect($app->urlFor('task', array('task_id' => $task->getTaskId())));
-
-/*** Task Upload code, remove! ***/
-Take this code below, and apply it to the code above this comment.
-
+    $field_name = 'edited_file';
     $error_message = null;
-    $field_name = 'new_task_file';
-    $organisation_id = 1; // TODO Implement organisation identification!
-    if ($app->request()->isPost()) {
 
-        $upload_error = false;
+    try {
+        Upload::validateFileHasBeenSuccessfullyUploaded($field_name);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
+
+    if (is_null($error_message)) {
         try {
-            Upload::validateFileHasBeenSuccessfullyUploaded($field_name);
-        } catch (Exception $e) {
-            $upload_error = true;
-            $error_message = $e->getMessage();
-        }
-
-        if (!$upload_error) {
-            $task_dao = new TaskDao();
-            $task = $task_dao->create(array(
-                'organisation_id'   => $organisation_id,
-                'title'             => $_FILES[$field_name]['name']
-            ));
-            
-            try {
-                Upload::saveSubmittedFile($field_name, $task);
-            }
-            catch (Exception  $e) {
-                $upload_error = true;
-                $error_message = 'File error: ' . $e->getMessage();
-            }
-        }
-
-        if (!$upload_error) {
-            $app->redirect('/task/describe/' . $task->getTaskId() . '/');
+            Upload::saveSubmittedFile($field_name, $task);
+        } catch (Exception  $e) {
+            $error_message = 'File error: ' . $e->getMessage();
         }
     }
 
-    if (!is_null($error_message)) {
-        $app->view()->appendData(array('error' => $error_message));
+    if (is_null($error_message)) {
+        $app->redirect('/task/uploaded-edit/');
     }
-    $app->view()->appendData(array(
-        'url_task_upload'       => $app->urlFor('task-upload'),
-        'max_file_size_bytes'   => Upload::maxFileSizeBytes(),
-        'max_file_size_mb'      => Upload::maxFileSizeMB(),
-        'field_name'            => $field_name
-    ));
-    $app->render('task.upload.tpl');
-
+    else {
+        $app->view()->setData('task', $task);
+        if ($task_file_info = $task_dao->getTaskFileInfo($task)) {
+            $app->view()->setData('task_file_info', $task_file_info);
+            $app->view()->setData('latest_version', $task_dao->getLatestFileVersion($task));
+        }
+        $app->view()->appendData(array(
+            'upload_error'                 => $error_message,
+            'max_file_size'         => Upload::maxFileSizeMB(),
+            'body_class'            => 'task_page'
+        ));
+        $app->render('task.tpl');
+    }
 })->via('POST')->name('task-upload-edited');
+
+$app->get('/task/uploaded-edit/', function () use ($app) {
+    $app->render('task.uploaded-edit.tpl');
+})->name('task-uploaded-edit');
+
 
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
     $error      = null;
