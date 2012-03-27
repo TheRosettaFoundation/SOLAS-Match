@@ -44,7 +44,13 @@
 			<button type="submit" value="Submit" name="submit" class="btn">Submit</button>
 		</form>
 	{else}
-		<p>Please <a href="{urlFor name="login"}">log in</a> to be able to accept translation jobs.</p>
+		<div class="page-header">
+			<h1>Participate in this task</h1>
+		</div>
+		<p>
+			<a class="btn btn-primary" href="{urlFor name="register"}">Register</a>
+			<a class="btn" href="{urlFor name="login"}">Log In</a>
+		</p>
 	{/if}
 {/if}
 
