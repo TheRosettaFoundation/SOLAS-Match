@@ -20,7 +20,9 @@
 		    </a>
 		    <ul class="nav">
 		    	<li><a href="{urlFor name="home"}">Home</a></li>
-		    	<li><a href="{urlFor name="task-upload"}">Add new task</a></li>
+		    	{if isset($user_is_organisation_member)}
+			    	<li><a href="{urlFor name="client-dashboard"}">Dashboard</a></li>
+		    	{/if}
 		    </ul>
 		    <ul class="nav pull-right">
 		    	{if isset($user)}

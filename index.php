@@ -76,8 +76,8 @@ $authenticateForRole = function ( $role = 'translator' ) {
             $app->redirect($app->urlFor('login'));
         }
         else if ($user_dao->belongsToRole($current_user, $role) === false) { 
-            Slim::flash('error', 'Login required');
-            Slim::redirect('/login');
+            $app->flash('error', 'Login required');
+            $app->redirect('/login');
         }   
 
     };
@@ -385,6 +385,10 @@ $app->get('/register', function () use ($app) {
     $app->render('register.tpl');
 })->via('GET', 'POST')->name('register');
 
+$app->get('/client/dashboard', $authenticateForRole('organisation_member'), function () use ($app) {
+    $app->render('client.dashboard.tpl');
+})->name('client-dashboard');
+
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }
@@ -396,13 +400,19 @@ function isValidPost(&$app) {
  */
 $app->hook('slim.before', function () use ($app) {
     // Replace with: {urlFor name="task-upload"}
-    $app->view()->appendData(array('url_login' => $app->urlFor('login')));
-    $app->view()->appendData(array('url_logout' => $app->urlFor('logout')));
-    $app->view()->appendData(array('url_register' => $app->urlFor('register')));
+    $app->view()->appendData(array(
+        'url_login' => $app->urlFor('login'),
+        'url_logout' => $app->urlFor('logout'),
+        'url_register' => $app->urlFor('register')
+    ));
     $user_dao = new UserDao();
-    $user = null;
-    if ($user = $user_dao->getCurrentUser()) {
-        $app->view()->appendData(array('user' => $user));
+    if ($current_user = $user_dao->getCurrentUser()) {
+        $app->view()->appendData(array('user' => $current_user));
+        if ($user_dao->belongsToRole($current_user, 'organisation_member')) {
+            $app->view()->appendData(array(
+                'user_is_organisation_member' => true
+            ));
+        }
     }
 });
 
