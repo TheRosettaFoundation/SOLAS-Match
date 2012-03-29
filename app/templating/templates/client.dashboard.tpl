@@ -18,7 +18,7 @@
 		{foreach from=$my_tasks item=task}
 			<tr>
 				<td>{$task->getTitle()}</td>
-				<td><span class="label">Fake status</span></td>
+				<td><span class="label label-success">Fake status</span></td>
 			</tr>
 		{/foreach}
 	</tbody>
