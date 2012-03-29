@@ -161,4 +161,20 @@ class UserDao {
 		}
 		return $ret;
 	}
+
+	public function findOrganisationsUserBelongsTo(User $user) {
+		$ret = null;
+		$db = new MySQLWrapper();
+		$db->init();
+		$query = 'SELECT organisation_id 
+					FROM organisation_member
+					WHERE user_id = ' . $db->cleanse($user->getUserId());
+		if ($result = $db->Select($query)) {
+			$ret = array();
+			foreach ($result as $row) {
+				$ret[] = $row['organisation_id'];
+			}
+		}
+		return $ret;
+	}
 }

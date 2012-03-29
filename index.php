@@ -386,6 +386,19 @@ $app->get('/register', function () use ($app) {
 })->via('GET', 'POST')->name('register');
 
 $app->get('/client/dashboard', $authenticateForRole('organisation_member'), function () use ($app) {
+    $user_dao           = new UserDao();
+    $task_dao           = new TaskDao;
+    $current_user       = $user_dao->getCurrentUser();
+    $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user);
+    $my_tasks           = $task_dao->findTasks(array(
+        'organisation_ids'  => $my_organisations
+    ));
+
+    if (!is_null($my_tasks)) {
+        $app->view()->appendData(array(
+            'my_tasks' => $my_tasks
+        ));
+    }
     $app->render('client.dashboard.tpl');
 })->name('client-dashboard');
 

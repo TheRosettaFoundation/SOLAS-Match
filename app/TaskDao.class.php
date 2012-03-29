@@ -21,9 +21,55 @@ class TaskDao {
 		return $task;
 	}
 
+/*
+New requirement:
+
+    $my_tasks           = $task_dao->find(array(
+        'user_id'           => $current_user->getUserId(),
+        'organisation_ids'  => $my_organisations
+    ));
+*/
+
+	public function findTasks($params) {
+		$permitted_params = array(
+			'organisation_ids'
+		);
+
+		if (!is_array($params)) {
+			throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
+		}
+
+		$where = array();
+		foreach($params as $key => $value) {
+			if (!in_array($key, $permitted_params)) {
+				throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
+			}
+		}
+
+		$tasks = null;
+
+		$organisation_ids = implode(',', $params['organisation_ids']);
+		$db = new MySQLWrapper();
+		$db->init();
+		$query = 'SELECT id
+					FROM task
+					WHERE organisation_id IN (' . $db->cleanse($organisation_ids) . ')';
+		if ($result = $db->Select($query)) {
+			$tasks = array();
+			foreach ($result as $row) {
+				$task = $this->find(array('task_id' => $row['id']));
+				if (is_object($task)) {
+					$tasks[] = $task;
+				}
+			}
+		}
+
+		return $tasks;
+	}
+
 	public function find($params) {
 		$permitted_params = array(
-			'task_id'
+			'task_id',
 		);
 
 		if (!is_array($params)) {
@@ -39,6 +85,7 @@ class TaskDao {
 
 		$db = new MySQLWrapper();
 		$db->init();
+
 		$query = 'SELECT *
 					FROM task
 					WHERE id = ' . $db->cleanse($params['task_id']);
