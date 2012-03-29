@@ -6,7 +6,7 @@
 {assign var="task_id" value=$task->getTaskId()}
 {if isset($user)}
 	<p>
-		<a href="{urlFor name="download-task" options="task_id.$task_id"}" class="btn btn-large btn-primary">Download and translate</a>
+		<a href="{urlFor name="download-task" options="task_id.$task_id"}" class="btn btn-large btn-primary"><i class="icon-download icon-white"></i> Download and translate</a>
 	</p>
 {/if}
 <p>
@@ -46,7 +46,7 @@
 			<p class="help-block">
 				Max file size {$max_file_size}MB.
 			</p> 
-			<button type="submit" value="Submit" name="submit" class="btn">Submit</button>
+			<button type="submit" value="Submit" name="submit" class="btn"><i class="icon-upload"></i> Submit</button>
 		</form>
 	{else}
 		<div class="page-header">

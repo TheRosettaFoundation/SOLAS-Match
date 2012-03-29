@@ -4,19 +4,21 @@
 	<h1>Dashboard <small>Overview of your tasks for translation</small></h1>
 </div>
 
-<a class="btn btn-primary" href="{urlFor name="task-upload"}">Add new task</a>
+<a class="btn btn-primary" href="{urlFor name="task-upload"}"><i class="icon-upload icon-white"></i> Add new task</a>
 
 {if isset($my_tasks)}
 	<table class="table table-striped">
 		<thead>
 		<tr>
 			<th>Task title</th>
+			<th>Status</th>
 		</tr>
 		</thead>
 	<tbody>
 		{foreach from=$my_tasks item=task}
 			<tr>
 				<td>{$task->getTitle()}</td>
+				<td><span class="label">Fake status</span></td>
 			</tr>
 		{/foreach}
 	</tbody>

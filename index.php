@@ -88,7 +88,10 @@ $app->get('/', function () use ($app) {
         $app->view()->setData('tasks', $tasks);
     }
     $task_dao = new TaskDao;
-    $app->view()->setData('top_tags', $task_dao->getTopTags(30));
+    $app->view()->appendData(array(
+        'top_tags' => $task_dao->getTopTags(30),
+        'current_page' => 'home'
+    ));
     $app->render('index.tpl');
 })->name('home');
 
@@ -399,6 +402,10 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
             'my_tasks' => $my_tasks
         ));
     }
+
+    $app->view()->appendData(array(
+        'current_page' => 'client-dashboard'
+    ));
     $app->render('client.dashboard.tpl');
 })->name('client-dashboard');
 

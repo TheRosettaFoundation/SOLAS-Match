@@ -19,9 +19,16 @@
 				Solas Match
 		    </a>
 		    <ul class="nav">
-		    	<li><a href="{urlFor name="home"}">Home</a></li>
+		    	<li
+		    		{if isset($current_page) && $current_page == 'home'}class="active"{/if}
+		    	>
+		    		<a href="{urlFor name="home"}">Home</a></li>
 		    	{if isset($user_is_organisation_member)}
-			    	<li><a href="{urlFor name="client-dashboard"}">Dashboard</a></li>
+			    	<li
+			    		{if isset($current_page) && $current_page == 'client-dashboard'}class="active"{/if}
+			    	>
+			    		<a href="{urlFor name="client-dashboard"}">Dashboard</a>
+			    	</li>
 		    	{/if}
 		    </ul>
 		    <ul class="nav pull-right">
