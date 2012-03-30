@@ -2,12 +2,13 @@
 require 'libs/Slim/Slim/Slim.php';
 require 'libs/SlimExtras/Views/SmartyView.php';
 
-SmartyView::$smartyDirectory = '/home/eoin/repos/smarty/libs';
-SmartyView::$smartyCompileDirectory = '/home/eoin/repos/solasmatch/app/templating/templates_compiled';
-SmartyView::$smartyTemplatesDirectory = '/home/eoin/repos/solasmatch/app/templating/templates';
+SmartyView::$smartyDirectory = 'libs/smarty/libs';
+SmartyView::$smartyCompileDirectory = 'app/templating/templates_compiled';
+SmartyView::$smartyTemplatesDirectory = 'app/templating/templates';
 SmartyView::$smartyExtensions = array(
     dirname('libs/SlimExtras/Views/SmartyView.php') . '/Extension/Smarty'
 );
+
 require 'app/Settings.class.php';
 require 'app/MySQLWrapper.class.php';
 require 'app/UserDao.class.php';
