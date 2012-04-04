@@ -27,21 +27,3 @@ $users['site_key'] = ''; // Fill with a string 60 to 80 characters long. Unique 
 /** Files **/
 $files = array();
 $files['upload_path'] = dirname(__FILE__).'/../uploads/'; // No need to edit this
-
-/** Smarty **/
-$smarty = array();
-$smarty['lib'] = ''; // See explanation below
-$smarty['templates'] = dirname(__FILE__).'/../templating/'; // Value doesn't need to be modified.
-/*
-	$smarty['lib']
-		The Smarty library files - downloaded from smarty.net
-		Server default: /usr/local/lib/php/Smarty/
-		Ubuntu default: /usr/share/php/smarty3
-		Note: 
-			You have to 'escape' backslashes such as 'C:\\http_root'
-			Must end with a slash.
-	$smarty['templates']
-		The Smarty template files - designed for the site
-		Note: You have to 'escape' backslashes such as 'C:\\http_root'
-		Must end with a slash.
-*/
