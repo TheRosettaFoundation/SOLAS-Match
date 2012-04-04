@@ -24,3 +24,5 @@ IndexIgnore *
 	Order Deny,Allow
 	Deny from all
 </Files>
+
+AllowOverride All
