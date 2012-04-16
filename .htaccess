@@ -4,7 +4,7 @@ php_flag display_errors on
 
 RewriteEngine On
 
-RewriteBase /~demomatc/
+# RewriteBase /~demomatc/ # <- option required on server with temp URL
 
 # Help us refresh the cached stylesheet when necessary by incrementing the variable in the URL.
 RewriteRule ^resources/css/style.([0-9]+).css$ resources/css/style.css
