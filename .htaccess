@@ -1,6 +1,10 @@
 php_flag display_errors on
 
+#DirectoryIndex index.php
+
 RewriteEngine On
+
+RewriteBase /~demomatc/
 
 # Help us refresh the cached stylesheet when necessary by incrementing the variable in the URL.
 RewriteRule ^resources/css/style.([0-9]+).css$ resources/css/style.css
@@ -25,4 +29,4 @@ IndexIgnore *
 	Deny from all
 </Files>
 
-AllowOverride All
+#AllowOverride All
