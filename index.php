@@ -321,7 +321,11 @@ $app->get('/tag/:label/', function ($label) use ($app) {
     if ($tasks = TaskStream::getTaggedStream($label, 10)) {
         $app->view()->setData('tasks', $tasks);
     }
-    $app->view()->setData('tag', $label);
+    $app->view()->appendData(array(
+        'tag' => $label,
+        'top_tags' => $task_dao->getTopTags(30),
+        'current_page' => 'home'
+    ));
     $app->render('tag.tpl');
 });
 

@@ -1,4 +1,5 @@
 {include file="header.tpl"}
+
 <div class="page-header">
 	<h1>{$task->getTitle()} <small>Translation task</small></h1>
 </div>

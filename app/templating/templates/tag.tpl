@@ -1,16 +1,20 @@
 {include file="header.tpl"}
-<div class="grid_8">
-	<h2>All open items tagged with <em>{$tag}</em></h2>
+<div class="page-header">
+	<h1>{$tag} <small>Find tasks tagged with this tag</small></h1>
+</div>
 
-	{if $tasks}
-		{foreach from=$tasks item=task}
-			{include file="task.summary-link.tpl" task=$task}
-		{/foreach}
-	{/if}
+<div class="row">
+	<div class="span8">
+		{if $tasks}
+			{foreach from=$tasks item=task}
+				{include file="task.summary-link.tpl" task=$task}
+			{/foreach}
+		{/if}
+	</div>
+
+	<div class="span4">
+		{include file="tags.top-list.inc.tpl"}
+	</div>
 </div>
-<div id="sidebar" class="grid_4">
-	<p><a href="{$url_task_upload}">+ New task</a></p>
-	<a href="/">All tasks</a>
-	{include file="tags.top-list.inc.tpl"}
-</div>
+
 {include file="footer.tpl"}
