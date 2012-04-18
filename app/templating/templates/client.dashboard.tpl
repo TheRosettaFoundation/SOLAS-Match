@@ -9,19 +9,20 @@
 {if isset($my_tasks)}
 	<table class="table table-striped">
 		<thead>
-		<tr>
-			<th>Task title</th>
-			<th>Status</th>
-		</tr>
-		</thead>
-	<tbody>
-		{foreach from=$my_tasks item=task}
 			<tr>
-				<td>{$task->getTitle()}</td>
-				<td><span class="label label-success">Fake status</span></td>
+				<th>Task title</th>
+				<th>Status</th>
 			</tr>
-		{/foreach}
-	</tbody>
+		</thead>
+		<tbody>
+			{foreach from=$my_tasks item=task}
+				<tr>
+					{assign var="task_id" value=$task->getTaskId()}
+					<td><a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a></td>
+					<td><a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">Latest&nbsp;version</a></td>
+				</tr>
+			{/foreach}
+		</tbody>
 	</table>
 {else}
 	<h2>What now?</h2>

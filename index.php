@@ -270,6 +270,11 @@ $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('t
     }
 
     $task_file_info         = $task_dao->getTaskFileInfo($task, $version);
+
+    if (empty($task_file_info)) {
+        throw new Exception("Task file info not set for.");
+    }
+
     $absolute_file_path     = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
     $file_content_type      = $task_file_info['content_type'];
     $task_dao->logFileDownload($task, $version);
@@ -302,7 +307,7 @@ $app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('
         die;
     }
 
-    $latest_version = $task_dao->nextFileVersionNumber($task);
+    $latest_version = $task_dao->getLatestFileVersion($task);
     $app->redirect($app->urlFor('download-task-version', array(
         'task_id' => $task_id,
         'version' => $latest_version
