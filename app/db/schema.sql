@@ -16,6 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `archived_task`
+--
+
+DROP TABLE IF EXISTS `archived_task`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `archived_task` (
+  `archived_task_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `task_id` bigint(20) NOT NULL,
+  `organisation_id` int(10) unsigned NOT NULL,
+  `title` text NOT NULL,
+  `word_count` int(10) unsigned DEFAULT NULL,
+  `source_id` int(10) unsigned DEFAULT NULL COMMENT 'foreign key from the `language` table',
+  `target_id` int(10) unsigned DEFAULT NULL COMMENT 'foreign key from the `language` table',
+  `created_time` datetime NOT NULL,
+  `archived_time` datetime NOT NULL,
+  PRIMARY KEY (`archived_task_id`),
+  KEY `source` (`source_id`),
+  KEY `target` (`target_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `language`
 --
 
@@ -204,4 +227,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-19 14:28:28
+-- Dump completed on 2012-04-20 16:22:37
