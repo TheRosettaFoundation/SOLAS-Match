@@ -298,6 +298,20 @@ $app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator')
 
 })->name('download-task');
 
+$app->get('/task/id/:task_id/mark-archived/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $task_dao->moveToArchive($task);
+
+    $app->redirect($ref = $app->request()->getReferrer());
+})->name('archive-task');
+
 $app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('translator'), function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
@@ -414,7 +428,8 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     }
 
     $app->view()->appendData(array(
-        'current_page' => 'client-dashboard'
+        'current_page'  => 'client-dashboard',
+        'task_dao'      => $task_dao
     ));
     $app->render('client.dashboard.tpl');
 })->name('client-dashboard');

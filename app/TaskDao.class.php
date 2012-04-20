@@ -48,18 +48,23 @@ New requirement:
 
 		$tasks = null;
 
+		// We're assuming that organisation_ids is always being provided.
 		$organisation_ids = implode(',', $params['organisation_ids']);
 		$db = new MySQLWrapper();
 		$db->init();
 		$query = 'SELECT id
 					FROM task
 					WHERE organisation_id IN (' . $db->cleanse($organisation_ids) . ')';
+
+		// Sort the output for a particular parameter?
 		if (!empty($sort_column)) {
 			$query .= ' ORDER BY ' . $db->cleanse($sort_column);
 			if (!empty($sort_direction)) {
 				$query .= ' ' . $db->cleanse($sort_direction);
 			}
 		}
+
+		// Get the result
 		if ($result = $db->Select($query)) {
 			$tasks = array();
 			foreach ($result as $row) {
@@ -418,6 +423,21 @@ New requirement:
 			}
 		}
 		return $ret;
+	}
+
+	public function moveToArchive($task) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$query = 'INSERT INTO `archived_task`
+	            		(task_id, organisation_id, title, word_count, source_id, target_id, created_time, archived_time)
+         			SELECT id, organisation_id, title, word_count, source_id, target_id, created_time, NOW()
+               		FROM task
+               		WHERE id = ' . $db->cleanse($task->getTaskId());
+		$db->insertStr($query);
+		$query = 'DELETE FROM `task`
+					WHERE id = ' . $db->cleanse($task->getTaskId()) .' 
+					LIMIT 1';
+		$db->Delete($query);
 	}
 
 	public function logFileDownload($task, $version) {
