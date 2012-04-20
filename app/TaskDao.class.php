@@ -30,7 +30,7 @@ New requirement:
     ));
 */
 
-	public function findTasks($params) {
+	public function findTasks($params, $sort_column = NULL, $sort_direction = NULL) {
 		$permitted_params = array(
 			'organisation_ids'
 		);
@@ -54,6 +54,12 @@ New requirement:
 		$query = 'SELECT id
 					FROM task
 					WHERE organisation_id IN (' . $db->cleanse($organisation_ids) . ')';
+		if (!empty($sort_column)) {
+			$query .= ' ORDER BY ' . $db->cleanse($sort_column);
+			if (!empty($sort_direction)) {
+				$query .= ' ' . $db->cleanse($sort_direction);
+			}
+		}
 		if ($result = $db->Select($query)) {
 			$tasks = array();
 			foreach ($result as $row) {

@@ -405,7 +405,7 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user);
     $my_tasks           = $task_dao->findTasks(array(
         'organisation_ids'  => $my_organisations
-    ));
+    ), 'created_time', 'DESC');
 
     if (!is_null($my_tasks)) {
         $app->view()->appendData(array(
