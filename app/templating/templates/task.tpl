@@ -51,7 +51,7 @@
 		</form>
 	{else}
 		<div class="page-header">
-			<h1>Participate in this task</h1>
+			<h1>Participate in this task <small>You need to be a member to volunteer for this task</small></h1>
 		</div>
 		<p>
 			<a class="btn btn-primary" href="{urlFor name="register"}">Register</a>
