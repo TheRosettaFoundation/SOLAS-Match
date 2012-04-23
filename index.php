@@ -189,7 +189,6 @@ $app->get('/task/uploaded-edit/', function () use ($app) {
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
 
-
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
     $error      = null;
     $task_dao   = new TaskDao();
@@ -259,6 +258,19 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $app->view()->setData('body_class', 'task_page');
     $app->render('task.tpl');
 })->name('task');
+
+$app->get('/task/id/:task_id/download-preview/', $authenticateForRole('translator'), function ($task_id) use ($app) {
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $app->view()->setData('task', $task);
+    $app->render('task.download-preview.tpl');
+})->name('download-task-preview');
 
 $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('translator'), function ($task_id, $version) use ($app) {
     $task_dao = new TaskDao;

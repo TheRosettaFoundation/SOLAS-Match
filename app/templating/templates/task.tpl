@@ -4,12 +4,6 @@
 	<h1>{$task->getTitle()} <small>Translation task</small></h1>
 </div>
 
-{assign var="task_id" value=$task->getTaskId()}
-{if isset($user)}
-	<p>
-		<a href="{urlFor name="download-task" options="task_id.$task_id"}" class="btn btn-large btn-primary"><i class="icon-download icon-white"></i> Download and translate</a>
-	</p>
-{/if}
 <p>
 	{if $task->getSourceId()}
 		From {Languages::languageNameFromId($task->getSourceId())}
@@ -30,6 +24,15 @@
 		&middot; {$wordcount|number_format} words
 	{/if}
 </p>
+
+{assign var="task_id" value=$task->getTaskId()}
+{if isset($user)}
+	<hr>
+	<h3>Are you interested in volunteering to translate this task?</h3>
+	<p>
+		<a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-large btn-primary"><i class="icon-download icon-white"></i> Download the file to preview</a>
+	</p>
+{/if}
 
 {if isset($task_file_info)}
 	{assign var="task_id" value=$task->getTaskId()}
