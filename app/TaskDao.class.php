@@ -488,4 +488,17 @@ New requirement:
 		}
 		return $ret;
 	}
+
+	public function claimTask($task, $user) {
+		$db = new MySQLWrapper();
+		$db->init();
+
+		$task_claim = array();
+		$task_claim['task_id'] 			= $db->cleanse($task->getTaskId());
+		$task_claim['user_id'] 			= $db->cleanse($user->getUserId());
+		$task_claim['claimed_time']	= 'NOW()';
+
+		$ret = $db->Insert('task_claim', $task_claim);
+		return $ret;
+	}
 }

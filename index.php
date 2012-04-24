@@ -294,6 +294,25 @@ $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('t
     //die;
 })->name('download-task-version');
 
+$app->post('/claim-task', $authenticateForRole('translator'), function () use ($app) {
+    // get task id
+    $task_id = $app->request()->post('task_id');
+
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $user_dao           = new UserDao();
+    $current_user       = $user_dao->getCurrentUser();
+    $task_dao->claimTask($task, $current_user);
+
+    echo "Task is now claimed. We should forward you to a confirmation screen, send you an email."
+})->name('claim-task');
+
 $app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator'), function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
