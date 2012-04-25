@@ -501,4 +501,19 @@ New requirement:
 		$ret = $db->Insert('task_claim', $task_claim);
 		return $ret;
 	}
+
+	public function hasUserClaimedTask($user, $task) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$query = 'SELECT user_id
+					FROM task_claim
+					WHERE task_id = ' . $db->cleanse($task->getTaskId()) . '
+					AND user_id = ' . $db->cleanse($user->getUserId());
+		if ($result = $db->Select($query)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

@@ -1,5 +1,4 @@
 {include file="header.tpl"}
-
 {assign var=task_id value=$task->getTaskId()}
 
 <section>
