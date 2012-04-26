@@ -35,7 +35,7 @@ CREATE TABLE `archived_task` (
   PRIMARY KEY (`archived_task_id`),
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,7 +112,7 @@ CREATE TABLE `tag` (
   `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `label` varchar(50) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`tag_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +133,7 @@ CREATE TABLE `task` (
   PRIMARY KEY (`id`),
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=114 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,8 +148,9 @@ CREATE TABLE `task_claim` (
   `task_id` bigint(20) NOT NULL,
   `user_id` int(11) NOT NULL,
   `claimed_time` datetime NOT NULL,
-  PRIMARY KEY (`claim_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`claim_id`),
+  KEY `task_user` (`task_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,4 +244,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-24 16:55:29
+-- Dump completed on 2012-04-26 10:27:58
