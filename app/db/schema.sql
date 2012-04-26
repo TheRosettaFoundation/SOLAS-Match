@@ -137,6 +137,22 @@ CREATE TABLE `task` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `task_claim`
+--
+
+DROP TABLE IF EXISTS `task_claim`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `task_claim` (
+  `claim_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `task_id` bigint(20) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `claimed_time` datetime NOT NULL,
+  PRIMARY KEY (`claim_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `task_file_version`
 --
 
@@ -227,4 +243,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-20 16:22:37
+-- Dump completed on 2012-04-24 16:55:29

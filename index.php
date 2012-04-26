@@ -189,7 +189,6 @@ $app->get('/task/uploaded-edit/', function () use ($app) {
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
 
-
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
     $error      = null;
     $task_dao   = new TaskDao();
@@ -231,13 +230,6 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
 })->via('GET','POST')->name('task-describe');
 
 $app->get('/task/id/:task_id/uploaded/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
-
-    /*
-     * Todo:
-     *  Show a green success banner
-     *  Describe what they next need to do (wait)
-     */
-
     $app->render('task.uploaded.tpl');
 })->name('task-uploaded');
 
@@ -252,13 +244,41 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
     $app->view()->setData('task', $task);
 
     if ($task_file_info = $task_dao->getTaskFileInfo($task)) {
-        $app->view()->setData('task_file_info', $task_file_info);
-        $app->view()->setData('latest_version', $task_dao->getLatestFileVersion($task));
+        $app->view()->appendData(array(
+            'task_file_info' => $task_file_info,
+            'latest_version' => $task_dao->getLatestFileVersion($task)
+        ));
     }
-    $app->view()->setData('max_file_size', Upload::maxFileSizeMB());
-    $app->view()->setData('body_class', 'task_page');
+
+    $user_dao = new UserDao();
+    if ($current_user = $user_dao->getCurrentUser()) {
+        if ($task_dao->hasUserClaimedTask($current_user, $task)) {
+            $app->view()->appendData(array(
+                'user_has_claimed_this_task' => true
+            ));
+        }
+    }
+
+    $app->view()->appendData(array(
+        'max_file_size' => Upload::maxFileSizeMB(),
+        'body_class'    => 'task_page'
+    ));
+
     $app->render('task.tpl');
 })->name('task');
+
+$app->get('/task/id/:task_id/download-preview/', $authenticateForRole('translator'), function ($task_id) use ($app) {
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $app->view()->setData('task', $task);
+    $app->render('task.download-preview.tpl');
+})->name('download-task-preview');
 
 $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('translator'), function ($task_id, $version) use ($app) {
     $task_dao = new TaskDao;
@@ -281,6 +301,39 @@ $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('t
     IO::downloadFile($absolute_file_path, $file_content_type);
     //die;
 })->name('download-task-version');
+
+$app->post('/claim-task', $authenticateForRole('translator'), function () use ($app) {
+    // get task id
+    $task_id = $app->request()->post('task_id');
+
+    $task_dao = new TaskDao;
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+
+    $user_dao           = new UserDao();
+    $current_user       = $user_dao->getCurrentUser();
+    $task_dao->claimTask($task, $current_user);
+   
+    $app->redirect($app->urlFor('task-claimed', array(
+        'task_id' => $task_id
+    )));
+
+})->name('claim-task');
+
+$app->get('/task/id/:task_id/claimed/', $authenticateForRole('translator'), function ($task_id) use ($app) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+    if (!is_object($task)) {
+        header('HTTP/1.0 404 Not Found');
+        die;
+    }
+    $app->view()->setData('task', $task);
+    $app->render('task.claimed.tpl');
+})->name('task-claimed');
 
 $app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator'), function ($task_id) use ($app) {
     $task_dao = new TaskDao;
