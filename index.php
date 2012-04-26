@@ -22,6 +22,7 @@ require 'app/lib/Authentication.class.php';
 require 'app/lib/UserSession.class.php';
 require 'app/lib/Tags.class.php';
 require 'app/lib/Upload.class.php';
+require 'app/lib/Email.class.php';
 
 /**
  * Start the session
@@ -317,7 +318,8 @@ $app->post('/claim-task', $authenticateForRole('translator'), function () use ($
     $user_dao           = new UserDao();
     $current_user       = $user_dao->getCurrentUser();
     $task_dao->claimTask($task, $current_user);
-   
+    Notify::notifyUserClaimedTask($current_user, $task);   
+
     $app->redirect($app->urlFor('task-claimed', array(
         'task_id' => $task_id
     )));
