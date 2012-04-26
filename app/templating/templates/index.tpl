@@ -18,7 +18,6 @@
 
 	<div class="span8">
 		{if isset($tasks)}
-		<section id="alerts">
 			<div class="page-header">
 				<h1>Translation tasks <small>Pick one that you could help translate</small></h1>
 			</div>
@@ -27,6 +26,8 @@
 					{include file="task.summary-link.tpl" task=$task}
 				{/foreach}
 			{/if}
+		{else}
+			{include file="task.empty-stream.tpl"}
 		{/if}
 	</div>
 	
