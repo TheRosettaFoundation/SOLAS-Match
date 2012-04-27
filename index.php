@@ -99,7 +99,12 @@ $app->get('/', function () use ($app) {
 $app->get('/task/upload', $authenticateForRole('organisation_member'), function () use ($app) {
     $error_message = null;
     $field_name = 'new_task_file';
-    $organisation_id = 1; // TODO Implement organisation identification!
+
+    $user_dao = new UserDao();
+    $current_user = $user_dao->getCurrentUser();
+    $my_organisations = $user_dao->findOrganisationsUserBelongsTo($current_user);
+    $organisation_id = $my_organisations[0]; // Not perfect, but it will do until someone appears in multiple organisations
+    
     if ($app->request()->isPost()) {
 
         $upload_error = false;
@@ -143,7 +148,7 @@ $app->get('/task/upload', $authenticateForRole('organisation_member'), function 
     $app->render('task.upload.tpl');
 })->via('GET','POST')->name('task-upload');
 
-$app->get('/task/:task_id/upload-edited/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
+$app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
     if (!is_object($task)) {
@@ -508,7 +513,8 @@ $app->hook('slim.before', function () use ($app) {
         $app->view()->appendData(array('user' => $current_user));
         if ($user_dao->belongsToRole($current_user, 'organisation_member')) {
             $app->view()->appendData(array(
-                'user_is_organisation_member' => true
+                'user_is_organisation_member' => true,
+                'user_organisations' => $user_dao->findOrganisationsUserBelongsTo($current_user)
             ));
         }
     }
