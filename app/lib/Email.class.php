@@ -33,7 +33,7 @@ class Email {
                 $mailResult = mail($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams);
         }
         catch (Exception $e) {
-                echo "Error sending email: " . $e->getMessage();
+                trigger_error("Error sending email: " . $e->getMessage(), E_USER_WARNING);
         }
     }    
 }
