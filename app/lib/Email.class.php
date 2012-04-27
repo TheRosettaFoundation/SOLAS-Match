@@ -28,6 +28,12 @@ class Email {
         }
         
         $mailParams = "-f$mailFrom";
-        $mailResult = mail($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams);
+ 
+        try {
+                $mailResult = mail($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams);
+        }
+        catch (Exception $e) {
+                echo "Error sending email: " . $e->getMessage();
+        }
     }    
 }
