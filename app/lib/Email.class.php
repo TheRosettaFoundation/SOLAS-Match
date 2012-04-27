@@ -1,7 +1,7 @@
 <?php
 
 class Email {
-    public function sendEmail($recipient, $subject, $body) {
+    public static function sendEmail($recipient, $subject, $body) {
         $mailTo         = $recipient;
         $mailSubject    = $subject;
         $mailBody       = $body;

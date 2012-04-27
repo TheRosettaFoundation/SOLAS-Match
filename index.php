@@ -67,7 +67,6 @@ $authenticateForRole = function ( $role = 'translator' ) {
                 Slim::redirect('/login');
             }   
         }   
-
     */
 
     return function () use ( $role ) {
@@ -82,7 +81,6 @@ $authenticateForRole = function ( $role = 'translator' ) {
             $app->flash('error', 'Login required');
             $app->redirect('/login');
         }   
-
     };
 };
 

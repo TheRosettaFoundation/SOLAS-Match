@@ -20,8 +20,8 @@ $site['title'] = 'Rosetta Translation eXchange'; // Default value for the <title
 $site['meta_desc'] = 'Help translate content for organisations looking to spread their cause.';
 $site['meta_key'] = 'rosetta foundation, translation, crowdsourcing, volunteer, translate';
 $site['system_email_address'] = 'eoin.oconchuir.ul@gmail.com';
-$site['notifications_monitor_email_address'] = 'eoin.oconchuir.ul+solasnotify@gmail.com';
 $site['system_email_name'] = 'Solas Match';
+$site['notifications_monitor_email_address'] = 'eoin.oconchuir.ul+solasnotify@gmail.com';
 
 /** User session control **/
 $users = array();
