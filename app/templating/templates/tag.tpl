@@ -5,10 +5,14 @@
 
 <div class="row">
 	<div class="span8">
-		{if $tasks}
+		{if isset($tasks)}
 			{foreach from=$tasks item=task}
 				{include file="task.summary-link.tpl" task=$task}
 			{/foreach}
+		{else}
+			<div class="alert alert-warning">
+				<strong>No open tasks</strong> Sorry, there are currently no open tasks for this label.
+			</div>
 		{/if}
 	</div>
 

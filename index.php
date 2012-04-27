@@ -397,7 +397,6 @@ $app->get('/tag/:label/', function ($label) use ($app) {
     $app->view()->appendData(array(
         'tag' => $label,
         'top_tags' => $task_dao->getTopTags(30),
-        'current_page' => 'home'
     ));
     $app->render('tag.tpl');
 });
