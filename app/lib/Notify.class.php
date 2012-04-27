@@ -1,8 +1,7 @@
 <?php
 
 class Notify {
-	public function notifyUserClaimedTask($user, $task) {
-		// Get claim email contents
+	public static function notifyUserClaimedTask($user, $task) {
 		$app 		= Slim::getInstance();
         $settings   = new Settings();
         $task_url 	= $app->urlFor('task', array('task_id' => $task->getTaskId()));
@@ -11,10 +10,10 @@ class Notify {
 			'site_name' => $settings->get('site.name'),
 			'task_url' => $task_url
 		));
-		$templating_engine = $app->view()->getInstance();
-		$email_body = $templating_engine->render('email.claimed-task.tpl');
+		$email_subject = "You have claimed a volunteer translation task, here's how to upload your translated file";
+		$email_body = $app->view()->fetch('email.claimed-task.tpl');
+		$user_email = $user->getEmail();
 
-		// Send the email
-		Email::
+		Email::sendEmail($user_email, $email_subject, $email_body);
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-require 'libs/Slim/Slim/Slim.php';
+require 'libs/SlimEoin/Slim/Slim.php';
 require 'libs/SlimExtras/Views/SmartyView.php';
 
 SmartyView::$smartyDirectory = 'libs/smarty/libs';
@@ -23,6 +23,7 @@ require 'app/lib/UserSession.class.php';
 require 'app/lib/Tags.class.php';
 require 'app/lib/Upload.class.php';
 require 'app/lib/Email.class.php';
+require 'app/lib/Notify.class.php';
 
 /**
  * Start the session
