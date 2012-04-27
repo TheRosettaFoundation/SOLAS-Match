@@ -297,11 +297,15 @@ New requirement:
 		}
 	}
 
-	public function getLatestTasks($nb_items = 10) {
+	public function getLatestAvailableTasks($nb_items = 10) {
 		$db = new MySQLWrapper();
 		$db->init();
-		$q 	= 'SELECT id
-				FROM task
+		$q 	= 'SELECT t.id
+				FROM task AS t
+				WHERE t.id NOT IN (
+					SELECT task_id
+					FROM task_claim
+				)
 				ORDER BY created_time DESC 
 				LIMIT '.$db->cleanse($nb_items);
 		

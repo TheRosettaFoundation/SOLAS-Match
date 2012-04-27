@@ -13,12 +13,8 @@ class TaskStream
 	*/
 	public static function getStream($nb_items = 10) {
 		// Simple stream, just get latest global jobs.
-		return self::getGlobalStream($nb_items);
-	}
-	
-	public static function getGlobalStream($nb_items = 10)	{
 		$task_dao = new TaskDao();
-		return $task_dao->getLatestTasks($nb_items);
+		return $task_dao->getLatestAvailableTasks($nb_items);
 	}
 	
 	/*
