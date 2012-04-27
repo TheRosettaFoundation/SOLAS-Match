@@ -22,9 +22,6 @@
 <div class="row">
 	<div class="span8">
 		{if isset($tasks)}
-			<div class="page-header">
-				<h1>Translation tasks <small>Pick one that you could help translate</small></h1>
-			</div>
 			{if isset($tasks)}
 				{foreach from=$tasks item=task name=tasks_loop}
 					{include file="task.summary-link.tpl" task=$task}
