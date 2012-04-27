@@ -32,7 +32,11 @@
 			{/if}
 		{else}
 			<div class="alert alert-warning">
-				<strong>No tasks available</strong> Please wait for organisations to upload more translation tasks.
+				{if isset($user_is_organisation_member)}
+					<strong>No open tasks</strong> You can upload a new task from your Dashboard in the navigation menu above.
+				{else}
+					<strong>No tasks available</strong> Please wait for organisations to upload more translation tasks.
+				{/if}
 			</div>
 		{/if}
 	</div>
