@@ -34,7 +34,7 @@
 				</p>
 				<p class="desc">Approximate, or leave black.</p>  
 				
-				<input type="submit" value="Save description" name="submit">
+				<button type="submit" value="Submit" name="submit" class="btn btn-primary"> Submit</button>
 			</fieldset> 
 		</form>
 	</div>
