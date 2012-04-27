@@ -4,7 +4,7 @@ class Notify {
 	public static function notifyUserClaimedTask($user, $task) {
 		$app 		= Slim::getInstance();
         $settings   = new Settings();
-        $task_url 	= $settings->get('site.name') . $app->urlFor('task', array('task_id' => $task->getTaskId()));
+        $task_url 	= $settings->get('site.url') . $app->urlFor('task', array('task_id' => $task->getTaskId()));
 
 		$app->view()->appendData(array(
 			'site_name' => $settings->get('site.name'),
