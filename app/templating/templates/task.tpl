@@ -28,7 +28,7 @@
 	</p>
 </section>
 
-{if isset($user_has_claimed_this_task)}
+{if isset($this_user_has_claimed_this_task)}
 	<div class="page-header">
 		<h1>Finished translating? <small>{$task_file_info.filename}</small></h1>
 	</div>
@@ -46,6 +46,10 @@
 		</p> 
 		<button type="submit" value="Submit" name="submit" class="btn btn-primary"><i class="icon-upload"></i> Upload the file I chose</button>
 	</form>
+{else if isset($task_is_claimed)}
+	<hr>
+	<h3>Task has been claimed by a volunteer</h3>
+	<p>Please continue to browse in search of open tasks.</p>	
 {else if isset($user)}
 	<hr>
 	<h3>Are you interested in volunteering to translate this task?</h3>

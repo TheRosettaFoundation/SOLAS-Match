@@ -524,4 +524,18 @@ New requirement:
 			return false;
 		}
 	}
+
+	public function taskIsClaimed($task) {
+		$db = new MySQLWrapper();
+		$db->init();
+		$query = 'SELECT user_id
+					FROM task_claim
+					WHERE task_id = ' . $db->cleanse($task->getTaskId());
+		if ($result = $db->Select($query)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

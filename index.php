@@ -255,12 +255,17 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
         ));
     }
 
-    $user_dao = new UserDao();
-    if ($current_user = $user_dao->getCurrentUser()) {
-        if ($task_dao->hasUserClaimedTask($current_user, $task)) {
-            $app->view()->appendData(array(
-                'user_has_claimed_this_task' => true
-            ));
+    if ($task_dao->taskIsClaimed($task)) {
+        $app->view()->appendData(array(
+            'task_is_claimed' => true
+        ));
+        $user_dao = new UserDao();
+        if ($current_user = $user_dao->getCurrentUser()) {
+            if ($task_dao->hasUserClaimedTask($current_user, $task)) {
+                $app->view()->appendData(array(
+                    'this_user_has_claimed_this_task' => true
+                ));
+            }
         }
     }
 
