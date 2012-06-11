@@ -95,5 +95,13 @@ Several components and directories need to be set up.
 
 ### Install 960.css Grid System
 
+This step is probably redundant, being replaced by Twitter Bootstrap. If you're working
+through these instructions, please review the generaly header template and correct these 
+nstructions as appropricate.
+
 1. Download 960 Grid System from http://960.gs/
 2. Extract just the file 960.css to ./assets/css/
+
+# Resources for future work
+
+[Twitter's Active Reputation System](https://github.com/twitter/activerecord-reputation-system)
