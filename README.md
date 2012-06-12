@@ -1,10 +1,10 @@
-Translation eXchange
+SOLAS Match
 ====================
 
 What is this?
 -------------
 
-The Rosetta Foundation Translation eXchange is a web application. It
+The Rosetta Foundation SOLAS Match is a web application. It
 is designed to be accessed by two groups: NGOs seeking to have content
 translated, and volunteer transators who may complete such tasks.
 Accessed through the browser, the application displays a list of
@@ -25,7 +25,7 @@ explicitly stated otherwise.
 Technical Requirements
 ----------------------
 
-The Translation eXchange is written in PHP 5.3+ code and makes use of
+SOLAS Match is written in PHP 5.3+ code and makes use of
 a MySQL 5+ database.
 
 ### System Requirements
@@ -34,7 +34,7 @@ HTTP server (Apache, for example) with PHP 5.3+ interpreter MySQL 5+
 database
 
 Several additional libraries also need to be installed alongside 
-Translation eXchange. See the following installation instructions.
+SOLAS Match. See the following installation instructions.
 
 Contact
 -------
