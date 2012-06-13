@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.61, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.63, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: solasmatch
 -- ------------------------------------------------------
--- Server version	5.1.61-0ubuntu0.11.04.1
+-- Server version	5.1.63-0ubuntu0.11.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -35,7 +35,7 @@ CREATE TABLE `archived_task` (
   PRIMARY KEY (`archived_task_id`),
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +133,7 @@ CREATE TABLE `task` (
   PRIMARY KEY (`id`),
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,7 +150,7 @@ CREATE TABLE `task_claim` (
   `claimed_time` datetime NOT NULL,
   PRIMARY KEY (`claim_id`),
   KEY `task_user` (`task_id`,`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -232,7 +232,7 @@ CREATE TABLE `user` (
   `created_time` datetime NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -244,4 +244,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-27 14:19:17
+-- Dump completed on 2012-06-13  9:59:51
