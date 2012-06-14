@@ -72,17 +72,15 @@ Further below in this document, there are also several resources for our work mo
 
 ## Configuration file
 
-1. Copy ./private/includes/conf.template.php to ./private/includes/conf.php
+1. Copy ./app/includes/conf.template.php to ./app/includes/conf.php
 2. Edit conf.php with your configurations.
 3. Under database, enter your MySQL connection settings.
 4. Under the site section, enter the URL of the installation.
 5. Under user session control, enter a long random string.
-6. Note the value of $files['max_upload_file_size'] for configuring PHP (see below).
-7. Under Smarty, set the appropriate value for $smarty['lib'].
 
 ## Configure PHP
 
- * In php.ini set appropriate values for upload_max_filesize and post_max_size (such as 20M).
+ * In php.ini set appropriate values for upload_max_filesize and post_max_size (such as 20M each).
    php.ini is often found under /etc/php5/apache2/php.ini
 
 ## Set file/folder permissions
