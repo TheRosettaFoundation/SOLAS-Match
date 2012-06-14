@@ -1,8 +1,9 @@
-# Translation eXchange
+SOLAS Match
+====================
 
 ## What is this?
 
-The Rosetta Foundation Translation eXchange is a web application. It
+The Rosetta Foundation SOLAS Match is a web application. It
 is designed to be accessed by two groups: NGOs seeking to have content
 translated, and volunteer transators who may complete such tasks.
 Accessed through the browser, the application displays a list of
@@ -21,7 +22,7 @@ explicitly stated otherwise.
 
 # Technical Requirements
 
-The Translation eXchange is written in PHP 5.3+ code and makes use of
+SOLAS Match is written in PHP 5.3+ code and makes use of
 a MySQL 5+ database.
 
 ## System Requirements
@@ -30,7 +31,7 @@ HTTP server (Apache, for example) with PHP 5.3+ interpreter MySQL 5+
 database
 
 Several additional libraries also need to be installed alongside 
-Translation eXchange. See the following installation instructions.
+SOLAS Match. See the following installation instructions.
 
 # Contact
 
@@ -124,3 +125,20 @@ and then branch from their a new feature branch. For example:
 Only when a branch is finished and ready for testing, we merge it into the `develop` branch.
 
 Once the feature is ready for production, it can be finally merged into the `master` branch.
+
+### Install sub modules on git
+
+1. Once the github version has been cloned locally the libs directory must be populated with 
+submodules
+2. in the root of the git tree run:
+	
+	git submodule init
+
+3. Then run:
+
+	git submodule update
+
+NOTE: Step 3 clones the repos into the correct place locally. You must share your public key 
+with github in order to complete the download. keys can be generated using ssh-keygen.
+NOTE: The error "Fatal: needed single revision" means that there is a file/files in the target 
+directory. Remove the offending files and rerun.
