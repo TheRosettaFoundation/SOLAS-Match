@@ -4,8 +4,8 @@
 	<meta charset="utf-8">  
 	<title>{if isset($title)}{$title}{else}Solas Match{/if}</title>
 
-	<link rel="stylesheet" type="text/css" media="all" href="/resources/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/style.1.css">
+	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css">
 	<!--<link rel="stylesheet" type="text/css" media="all" href="/resources/css/reset.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/style.1.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/960.css">-->
