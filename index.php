@@ -79,7 +79,7 @@ $authenticateForRole = function ( $role = 'translator' ) {
         }
         else if ($user_dao->belongsToRole($current_user, $role) === false) { 
             $app->flash('error', 'Login required');
-            $app->redirect('/login');
+            $app->redirect($app->urlFor('login'));
         }   
     };
 };
@@ -173,7 +173,7 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), f
     }
 
     if (is_null($error_message)) {
-        $app->redirect('/task/uploaded-edit/');
+        $app->redirect($app->urlFor('task-uploaded-edited'));
     }
     else {
         $app->view()->setData('task', $task);
@@ -455,7 +455,7 @@ $app->get('/register', function () use ($app) {
         if (is_null($error) && is_null($warning)) {
             if ($user = $user_dao->create($post->email, $post->password)) {
                 if ($user_dao->login($user->getEmail(), $post->password)) {
-                    $app->redirect('/');
+                    $app->redirect($app->urlFor('home'));
                 }
                 else {
                     $error = 'Tried to log you in immediately, but was unable to.';
