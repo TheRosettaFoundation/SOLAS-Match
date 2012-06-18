@@ -418,7 +418,7 @@ $app->get('/login', function () use ($app) {
         try {
             $user_dao = new UserDao();
             $user_dao->login($post->email, $post->password);
-            $app->redirect('/');
+            $app->redirect($app->urlFor("home"));
         } catch (AuthenticationException $e) {
             $error = '<p>Unable to log in. Please check your email and password. <a href="' . $app->urlFor('login') . '">Try logging in again</a>.</p>';
             $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
@@ -433,7 +433,7 @@ $app->get('/login', function () use ($app) {
 $app->get('/logout', function () use ($app) {
     $user_dao = new UserDao();
     $user_dao->logout();
-    $app->redirect('/');
+    $app->redirect($app->urlFor('home'));
 })->name('logout');
 
 $app->get('/register', function () use ($app) {
