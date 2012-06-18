@@ -132,7 +132,7 @@ $app->get('/task/upload', $authenticateForRole('organisation_member'), function 
         }
 
         if (!$upload_error) {
-            $app->redirect('/task/describe/' . $task->getTaskId() . '/');
+            $app->redirect($app->urlFor('task-describe', array('task_id' => $task->getTaskId())));
         }
     }
 
