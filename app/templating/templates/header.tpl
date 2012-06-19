@@ -30,6 +30,7 @@
 			    		<a href="{urlFor name="client-dashboard"}">Dashboard</a>
 			    	</li>
 		    	{/if}
+			<li class="active"><a href="{urlFor name='user-profile'}">Profile</a></li>
 		    </ul>
 		    <ul class="nav pull-right">
 		    	{if isset($user)}

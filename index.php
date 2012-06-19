@@ -501,6 +501,10 @@ function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }
 
+$app->get('/profile', function () use ($app) {
+    $app->render('user-profile.tpl');
+})->name('user-profile');
+
 /**
  * Set up application objects
  * 
