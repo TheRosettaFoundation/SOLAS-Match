@@ -497,13 +497,20 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     $app->render('client.dashboard.tpl');
 })->name('client-dashboard');
 
+$app->get('/profile', function () use ($app) {
+    if($app->request()->isPost()) {
+	$userName = $app->request()->post('name');
+	$userBio = $app->request()->post('bio');
+	if($userName != NULL && $userBio != NULL) {
+	    $app->redirect($app->urlFor('home'));
+	}
+    }
+    $app->render('user-profile.tpl');
+})->via('POST')->name('user-profile');
+
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }
-
-$app->get('/profile', function () use ($app) {
-    $app->render('user-profile.tpl');
-})->name('user-profile');
 
 /**
  * Set up application objects
