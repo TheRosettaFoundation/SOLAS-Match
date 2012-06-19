@@ -40,7 +40,9 @@ class UserDao {
 			$user_data = array(
 				'user_id' => $r[0]['user_id'],
 				'email' => $r[0]['email'],
-				'nonce' => $r[0]['nonce']
+				'nonce' => $r[0]['nonce'],
+				'display_name' => $r[0]['display_name'],
+				'biography' => $r[0]['biography']
 			);
 			$ret = new User($user_data);
 		}
@@ -80,7 +82,14 @@ class UserDao {
 	}
 
 	private function _update($user) {
-		echo "oops, still have to create _update";
+		$db = new MySQLWrapper();
+		$db->init();
+		$update = 'UPDATE user SET email='.$db->cleanseWrapStr($user->getEmail()).', 
+					display_name='.$db->cleanseWrapStr($user->getDisplayName()).', 
+					biography='.$db->cleanseWrapStr($user->getBiography()).' 
+					WHERE user_id='.$db->cleanse($user->getUserId()).' 
+					LIMIT 1' ;
+		return $db->Update($update);
 	}
 
 	private function _insert($user) {

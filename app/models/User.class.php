@@ -5,6 +5,8 @@ class User
 	var $_email;
 	var $_nonce;
 	var $_password;
+	var $_display_name;
+	var $_biography;
 	
 	public function __construct($params) {
 		if (isset($params['user_id'])) {
@@ -18,6 +20,12 @@ class User
 		}
 		if (isset($params['password'])) {
 			$this->setPassword($params['password']);
+		}
+		if (isset($params['display_name'])) {
+			$this->setDisplayName($params['display_name']);
+		}
+		if (isset($params['biography'])) {
+			$this->setBiography($params['biography']);
 		}
 	}
 
@@ -70,6 +78,22 @@ class User
 
 	public function getPassword() {
 		return $this->_password;
+	}
+
+	public function setDisplayName($name) {
+		$this->_display_name = $name;
+	}
+
+	public function getDisplayName() {
+		return $this->_display_name;
+	}
+
+	public function setBiography($bio) {
+		$this->_biography = $bio;
+	}
+
+	public function getBiography() {
+		return $this->_biography;
 	}
 
 }

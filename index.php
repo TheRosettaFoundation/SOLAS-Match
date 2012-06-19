@@ -498,13 +498,25 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
 })->name('client-dashboard');
 
 $app->get('/profile', function () use ($app) {
+    $warning = false;
     if($app->request()->isPost()) {
-	$userName = $app->request()->post('name');
+	$displayName = $app->request()->post('name');
 	$userBio = $app->request()->post('bio');
-	if($userName != NULL && $userBio != NULL) {
+	if($displayName != NULL && $userBio != NULL) {
+	    $user_dao = new UserDao();
+	    $currentUser = $user_dao->getCurrentUser();
+	    $currentUser->setDisplayName($displayName);
+	    $currentUser->setBiography($userBio);
+	    $user_dao->save($currentUser);
 	    $app->redirect($app->urlFor('home'));
 	}
+	else
+	{
+	    $warning = true;
+	}
     }
+    $app->view()->setData('warning', $warning);
+
     $app->render('user-profile.tpl');
 })->via('POST')->name('user-profile');
 
