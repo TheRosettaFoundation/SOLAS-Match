@@ -30,7 +30,9 @@
 			    		<a href="{urlFor name="client-dashboard"}">Dashboard</a>
 			    	</li>
 		    	{/if}
-			<li class="active"><a href="{urlFor name='user-profile'}">Profile</a></li>
+			<li {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if}>
+				<a href="{urlFor name='user-profile'}">Profile</a>
+			</li>
 		    </ul>
 		    <ul class="nav pull-right">
 		    	{if isset($user)}
