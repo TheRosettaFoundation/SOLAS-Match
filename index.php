@@ -499,24 +499,31 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
 
 $app->get('/profile', function () use ($app) {
     if($app->request()->isPost()) {
-	$user_dao = new UserDao();
-	$currentUser = $user_dao->getCurrentUser();
-	$displayName = $app->request()->post('name');
-	if($displayName != NULL)
-	{
+        $user_dao = new UserDao();
+        $currentUser = $user_dao->getCurrentUser();
+
+        $displayName = $app->request()->post('name');
+ 	if($displayName != NULL) {
 	    $currentUser->setDisplayName($displayName);
 	}
+
 	$userBio = $app->request()->post('bio');
-	if($userBio != NULL)
-	{
+	if($userBio != NULL) {
 	    $currentUser->setBiography($userBio);
 	}
+
+	$nativeLang = $app->request()->post('nLanguage');
+	if($nativeLang != NULL) {
+	    $currentUser->setNativeLanguage($nativeLang);
+	}
 	$user_dao->save($currentUser);
+
 	$app->redirect($app->urlFor('home'));
     }
-    $app->view()->setData('current_page',  'user-profile');
     $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
     $language = substr($language, 0, 5);
+  
+    $app->view()->setData('current_page',  'user-profile');
     $app->view()->appendData(array('language' => $language));
 
     $app->render('user-profile.tpl');

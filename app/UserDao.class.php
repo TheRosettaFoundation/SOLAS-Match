@@ -86,7 +86,8 @@ class UserDao {
 		$db->init();
 		$update = 'UPDATE user SET email='.$db->cleanseWrapStr($user->getEmail()).', 
 					display_name='.$db->cleanseWrapStr($user->getDisplayName()).', 
-					biography='.$db->cleanseWrapStr($user->getBiography()).' 
+					biography='.$db->cleanseWrapStr($user->getBiography()).',
+					native_language='.$db->cleanseWrapStr($user->getNativeLanguage()).' 
 					WHERE user_id='.$db->cleanse($user->getUserId()).' 
 					LIMIT 1' ;
 		return $db->Update($update);
@@ -184,6 +185,20 @@ class UserDao {
 				$ret[] = $row['organisation_id'];
 			}
 		}
+		return $ret;
+	}
+
+	public function getUserBadges(User $user) {
+		$ret = NULL;
+		$db = new MySQLWrapper();
+		$db->init();
+		$query = 'SELECT badge_id
+				FROM user_badges
+				WHERE user_id = '.$db->cleanse($user->getUserId());
+		if ($result = $db->Select($query)) {
+			//get badge info here
+		}
+
 		return $ret;
 	}
 }
