@@ -498,24 +498,26 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
 })->name('client-dashboard');
 
 $app->get('/profile', function () use ($app) {
-    $warning = false;
     if($app->request()->isPost()) {
+	$user_dao = new UserDao();
+	$currentUser = $user_dao->getCurrentUser();
 	$displayName = $app->request()->post('name');
-	$userBio = $app->request()->post('bio');
-	if($displayName != NULL && $userBio != NULL) {
-	    $user_dao = new UserDao();
-	    $currentUser = $user_dao->getCurrentUser();
-	    $currentUser->setDisplayName($displayName);
-	    $currentUser->setBiography($userBio);
-	    $user_dao->save($currentUser);
-	    $app->redirect($app->urlFor('home'));
-	}
-	else
+	if($displayName != NULL)
 	{
-	    $warning = true;
+	    $currentUser->setDisplayName($displayName);
 	}
+	$userBio = $app->request()->post('bio');
+	if($userBio != NULL)
+	{
+	    $currentUser->setBiography($userBio);
+	}
+	$user_dao->save($currentUser);
+	$app->redirect($app->urlFor('home'));
     }
-    $app->view()->setData('warning', $warning);
+    $app->view()->setData('current_page',  'user-profile');
+    $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+    $language = substr($language, 0, 5);
+    $app->view()->appendData(array('language' => $language));
 
     $app->render('user-profile.tpl');
 })->via('POST')->name('user-profile');
