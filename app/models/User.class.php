@@ -7,6 +7,7 @@ class User
 	var $_password;
 	var $_display_name;
 	var $_biography;
+	var $_native_language;
 	
 	public function __construct($params) {
 		if (isset($params['user_id'])) {
@@ -26,6 +27,9 @@ class User
 		}
 		if (isset($params['biography'])) {
 			$this->setBiography($params['biography']);
+		}
+		if (isset($params['native_language'])) {
+			$this->setNativeLanguage($params['native_language']);
 		}
 	}
 
@@ -94,6 +98,14 @@ class User
 
 	public function getBiography() {
 		return $this->_biography;
+	}
+
+	public function setNativeLanguage($lang) {
+		$this->_native_language = $lang;
+	}
+
+	public function getNativeLanguage() {
+		return $this->_native_language;
 	}
 
 }
