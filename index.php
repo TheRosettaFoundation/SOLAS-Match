@@ -11,6 +11,7 @@ SmartyView::$smartyExtensions = array(
 
 require 'app/Settings.class.php';
 require 'app/MySQLWrapper.class.php';
+require 'app/BadgeDao.class.php';
 require 'app/UserDao.class.php';
 require 'app/TaskStream.class.php';
 require 'app/TaskDao.class.php';
@@ -498,36 +499,58 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
 })->name('client-dashboard');
 
 $app->get('/profile', function () use ($app) {
+    $user_dao = new UserDao();
+    $currentUser = $user_dao->getCurrentUser();
     if($app->request()->isPost()) {
-        $user_dao = new UserDao();
-        $currentUser = $user_dao->getCurrentUser();
 
         $displayName = $app->request()->post('name');
- 	if($displayName != NULL) {
-	    $currentUser->setDisplayName($displayName);
-	}
+     	if($displayName != NULL) {
+    	    $currentUser->setDisplayName($displayName);
+    	}
 
-	$userBio = $app->request()->post('bio');
-	if($userBio != NULL) {
-	    $currentUser->setBiography($userBio);
-	}
+	    $userBio = $app->request()->post('bio');
+    	if($userBio != NULL) {
+    	    $currentUser->setBiography($userBio);
+    	}
 
-	$nativeLang = $app->request()->post('nLanguage');
-	if($nativeLang != NULL) {
-	    $currentUser->setNativeLanguage($nativeLang);
-	}
-	$user_dao->save($currentUser);
+    	$nativeLang = $app->request()->post('nLanguage');
+    	if($nativeLang != NULL) {
+    	    $currentUser->setNativeLanguage($nativeLang);
+    	}
+    	$user_dao->save($currentUser);
 
-	$app->redirect($app->urlFor('home'));
+    	$app->redirect($app->urlFor('home'));
     }
+    $badge_dao = new BadgeDao();
+
     $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
     $language = substr($language, 0, 5);
-  
+ 
+    $badgeIds = $user_dao->getUserBadges($currentUser);
+    $badges = array();
+    $i = 0;
+    foreach($badgeIds as $badge) {
+        $badges[$i] = $badge_dao->find(array('badge_id' => $badge['badge_id']));
+        $i++;
+    }
+
     $app->view()->setData('current_page',  'user-profile');
-    $app->view()->appendData(array('language' => $language));
+    $app->view()->appendData(array('language' => $language,
+                                    'badges' => $badges
+    ));
 
     $app->render('user-profile.tpl');
 })->via('POST')->name('user-profile');
+
+$app->get('/badge/list', function () use ($app) {
+    $badge_dao = new BadgeDao();
+    $badgeList = $badge_dao->getAllBadges();
+
+    $app->view()->setData('current_page', 'badge-list');
+    $app->view()->appendData(array('badgeList' => $badgeList));
+
+    $app->render('badge-list.tpl');
+})->name('badge-list');
 
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;

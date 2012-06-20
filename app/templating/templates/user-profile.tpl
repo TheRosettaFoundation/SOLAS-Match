@@ -20,9 +20,13 @@
 
 <h1>Badges</h1>
 
-{if isset($userBadges)}
+{if isset($badges)}
 
-	<p>Display the badges here</p>
+    {foreach $badges as $badge }
+    	<h3>{$badge->getTitle()}</h3><p>{$badge->getDescription()}</p>
+    {/foreach}
+
+    <p>For a full list of badges go <a href='badge/list'>here</a>.
 
 {else}
 

@@ -196,7 +196,7 @@ class UserDao {
 				FROM user_badges
 				WHERE user_id = '.$db->cleanse($user->getUserId());
 		if ($result = $db->Select($query)) {
-			//get badge info here
+			$ret = $result;
 		}
 
 		return $ret;
