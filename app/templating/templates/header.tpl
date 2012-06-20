@@ -15,7 +15,7 @@
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
 	    <div class="container">
-    	    <a class="brand" href="/">
+    	    <a class="brand" href="{urlFor name='home'}">
 				Solas Match
 		    </a>
 		    <ul class="nav">
