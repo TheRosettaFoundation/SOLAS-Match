@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h1>User Profile</h1>
+<div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>
 
 {if isset($warning) && $warning == true }
 	<p>Invalid input, please fill in all options below.</p>
@@ -18,7 +18,7 @@
 	</p>
 </form>
 
-<h1>Badges</h1>
+<div class='page-header'><h1>Badges<small> A list of badges you have attained</small></h1></div>
 
 {if isset($badges)}
 
@@ -33,5 +33,16 @@
 	<p>You do not have any badges to display. Try being more active to earn more badges</p>
 
 {/if}
+
+<div class='page-header'><h1>Organisations <small>A list of organisations you belong to</small></h1></div>
+
+{if isset($orgList)}
+    <ul>
+    {foreach $orgList as $org}
+        <li>{$org->getName()}</li>
+    {/foreach}
+    </ul>
+{/if}
+
 
 {include file='footer.tpl'}

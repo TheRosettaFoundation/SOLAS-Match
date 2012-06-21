@@ -12,6 +12,7 @@ SmartyView::$smartyExtensions = array(
 require 'app/Settings.class.php';
 require 'app/MySQLWrapper.class.php';
 require 'app/BadgeDao.class.php';
+require 'app/OrganisationDao.class.php';
 require 'app/UserDao.class.php';
 require 'app/TaskStream.class.php';
 require 'app/TaskDao.class.php';
@@ -522,9 +523,17 @@ $app->get('/profile', function () use ($app) {
     	$app->redirect($app->urlFor('home'));
     }
     $badge_dao = new BadgeDao();
+    $org_dao = new OrganisationDao();
 
     $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
     $language = substr($language, 0, 5);
+
+    $orgIds = $user_dao->findOrganisationsUserBelongsTo($currentUser);
+    $orgList = array();
+
+    foreach ($orgIds as $orgId) {
+        $orgList[] = $org_dao->find($orgId);
+    }
  
     $badgeIds = $user_dao->getUserBadges($currentUser);
     $badges = array();
@@ -535,8 +544,9 @@ $app->get('/profile', function () use ($app) {
     }
 
     $app->view()->setData('current_page',  'user-profile');
-    $app->view()->appendData(array('language' => $language,
-                                    'badges' => $badges
+    $app->view()->appendData(array('badges' => $badges,
+                                    'orgList' => $orgList,
+                                    'language' => $language
     ));
 
     $app->render('user-profile.tpl');
