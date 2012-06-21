@@ -175,7 +175,7 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), f
     }
 
     if (is_null($error_message)) {
-        $app->redirect($app->urlFor('task-uploaded-edited'));
+        $app->redirect($app->urlFor('task-uploaded-edit'));
     }
     else {
         $app->view()->setData('task', $task);
