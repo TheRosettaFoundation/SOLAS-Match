@@ -522,35 +522,22 @@ $app->get('/profile', function () use ($app) {
 
     	$app->redirect($app->urlFor('home'));
     }
-    $badge_dao = new BadgeDao();
-    $org_dao = new OrganisationDao();
 
-    $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-    $language = substr($language, 0, 5);
+    getUserDetails($app, $currentUser);
 
-    $orgIds = $user_dao->findOrganisationsUserBelongsTo($currentUser);
-    $orgList = array();
-
-    foreach ($orgIds as $orgId) {
-        $orgList[] = $org_dao->find($orgId);
-    }
- 
-    $badgeIds = $user_dao->getUserBadges($currentUser);
-    $badges = array();
-    $i = 0;
-    foreach($badgeIds as $badge) {
-        $badges[$i] = $badge_dao->find(array('badge_id' => $badge['badge_id']));
-        $i++;
-    }
-
-    $app->view()->setData('current_page',  'user-profile');
-    $app->view()->appendData(array('badges' => $badges,
-                                    'orgList' => $orgList,
-                                    'language' => $language
-    ));
+    $app->view()->appendData(array('current_page' => 'user-profile'));
 
     $app->render('user-profile.tpl');
 })->via('POST')->name('user-profile');
+
+$app->get('/profile/:user_id', function ($userId) use ($app) {
+    $user_dao = new UserDao();
+    $user = $user_dao->find(array('user_id' => $userId));
+
+    getUserDetails($app, $user);
+
+    $app->render('public-profile.tpl');
+})->name('public-profile');
 
 $app->get('/badge/list', function () use ($app) {
     $badge_dao = new BadgeDao();
@@ -564,6 +551,42 @@ $app->get('/badge/list', function () use ($app) {
 
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
+}
+
+function getUserDetails($app, $user)
+{
+    $user_dao = new UserDao();
+
+    $badge_dao = new BadgeDao();
+    $org_dao = new OrganisationDao();
+
+    $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+    $language = substr($language, 0, 5);
+ 
+    $orgIds = $user_dao->findOrganisationsUserBelongsTo($user);
+    $orgList = array();
+
+    if(count($orgIds) > 0) { 
+        foreach ($orgIds as $orgId) {
+            $orgList[] = $org_dao->find($orgId);
+        }
+    }
+ 
+    $badgeIds = $user_dao->getUserBadges($user);
+    $badges = array();
+    $i = 0;
+    if(count($badgeIds) > 0) {
+        foreach($badgeIds as $badge) {
+            $badges[$i] = $badge_dao->find(array('badge_id' => $badge['badge_id']));
+            $i++;
+        }
+    }
+ 
+    $app->view()->setData('user',  $user);
+    $app->view()->appendData(array('badges' => $badges,
+                                    'orgList' => $orgList,
+                                    'language' => $language
+    ));
 }
 
 /**

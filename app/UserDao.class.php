@@ -42,7 +42,8 @@ class UserDao {
 				'email' => $r[0]['email'],
 				'nonce' => $r[0]['nonce'],
 				'display_name' => $r[0]['display_name'],
-				'biography' => $r[0]['biography']
+				'biography' => $r[0]['biography'],
+                'native_language' => $r[0]['native_language']
 			);
 			$ret = new User($user_data);
 		}

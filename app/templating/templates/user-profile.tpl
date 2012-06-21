@@ -18,6 +18,11 @@
 	</p>
 </form>
 
+{if isset($user)}
+    {assign var="user_id" value=$user->getUserId()}
+    <p>To view your public profile click <a href="{urlFor name="public-profile" options="user_id.$user_id"}">here</a></p>
+{/if}
+
 <div class='page-header'><h1>Badges<small> A list of badges you have attained</small></h1></div>
 
 {if isset($badges)}
@@ -26,7 +31,7 @@
     	<h3>{$badge->getTitle()}</h3><p>{$badge->getDescription()}</p>
     {/foreach}
 
-    <p>For a full list of badges go <a href='badge/list'>here</a>.
+    <p>For a full list of badges go <a href='{urlFor name="badge-list"}'>here</a>.
 
 {else}
 
