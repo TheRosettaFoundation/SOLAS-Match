@@ -38,10 +38,10 @@
 		    </ul>
 		    <ul class="nav pull-right">
 		    	{if isset($user)}
-					<li><a href="{$url_logout}">Log out</a></li>
+					<li><a href="{urlFor name="logout"}">Log out</a></li>
 				{else}
-					<li><a href="{$url_register}">Register</a></li>
-					<li><a href="{$url_login}">Log in</a></li>
+					<li><a href="{urlFor name="register"}">Register</a></li>
+					<li><a href="{urlFor name="login"}">Log in</a></li>
 				{/if}
 		    </ul>
 	    </div>

@@ -411,7 +411,7 @@ $app->get('/tag/:label/', function ($label) use ($app) {
         'top_tags' => $task_dao->getTopTags(30),
     ));
     $app->render('tag.tpl');
-});
+})->name('tag-details');
 
 $app->get('/login', function () use ($app) {
     $error = null;

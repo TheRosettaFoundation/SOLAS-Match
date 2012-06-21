@@ -1,6 +1,7 @@
 {* Must have an object $task assigned by parent *}
 <div class="task">
-	<h2><a href="/task/id/{$task->getTaskId()}/">{$task->getTitle()}</a></h2>
+    {assign var='task_id' value=$task->getTaskId()}
+	<h2><a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a></h2>
 	<p>
 		{if $task->getSourceId()}
 			From {Languages::languageNameFromId($task->getSourceId())}

@@ -5,10 +5,10 @@
 		<h1>Help NGOs translate</h1>
 		<p>Non&ndash;governmental agencies need <em>your</em> translation skills.</p>
 		<p>
-			<a class="btn btn-primary btn-large" href="{$url_register}">
+			<a class="btn btn-primary btn-large" href="{urlFor name="register"}">
 				Register to Volunteer
 			</a>
-			<a class="btn btn-large" href="{$url_login}">
+			<a class="btn btn-large" href="{urlFor name="login"}">
 				Login
 			</a>
 		</p>
@@ -22,11 +22,9 @@
 <div class="row">
 	<div class="span8">
 		{if isset($tasks)}
-			{if isset($tasks)}
-				{foreach from=$tasks item=task name=tasks_loop}
-					{include file="task.summary-link.tpl" task=$task}
-				{/foreach}
-			{/if}
+			{foreach from=$tasks item=task name=tasks_loop}
+				{include file="task.summary-link.tpl" task=$task}
+			{/foreach}
 		{else}
 			<div class="alert alert-warning">
 				{if isset($user_is_organisation_member)}

@@ -3,7 +3,7 @@
 	<ul class="nav nav-list unstyled">
 		{foreach from=$top_tags item=tag}
 			<li>
-				<a class="tag" href="{URL::tag($tag)}"><span class="label">{$tag}</span></a>
+				<a class="tag" href="{urlFor name="tag-details" options="label.$tag"}"><span class="label">{$tag}</span></a>
 			</li>
 		{/foreach}
 	</ul>
