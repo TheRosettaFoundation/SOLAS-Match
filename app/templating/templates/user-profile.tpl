@@ -1,6 +1,14 @@
 {include file='header.tpl'}
 
-<div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>
+{if isset($user)}
+    {if $user->getDisplayName() != ''}
+        <div class='page-header'><h1>{$user->getDisplayName()} <small>Update your user settings here</small></h1></div>
+    {else}
+        <div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>
+    {/if}
+{else}
+    <div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>
+{/if}
 
 {if isset($warning) && $warning == true }
 	<p>Invalid input, please fill in all options below.</p>
@@ -23,7 +31,7 @@
     <p>To view your public profile click <a href="{urlFor name="public-profile" options="user_id.$user_id"}">here</a></p>
 {/if}
 
-<div class='page-header'><h1>Badges<small> A list of badges you have attained</small></h1></div>
+<div class='page-header'><h1>Badges<small> A list of badges you have earned</small></h1></div>
 
 {if isset($badges)}
 
