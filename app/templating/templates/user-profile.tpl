@@ -36,10 +36,11 @@
 {if isset($badges)}
 
     {foreach $badges as $badge }
-    	<h3>{$badge->getTitle()}</h3><p>{$badge->getDescription()}</p>
+    	<h3>{$badge->getTitle()}</h3>
+        <p>{$badge->getDescription()}</p>
     {/foreach}
 
-    <p>For a full list of badges go <a href='{urlFor name="badge-list"}'>here</a>.
+    <p>For a full list of badges go <a href='{urlFor name="badge-list"}'>here</a>.</p>
 
 {else}
 
