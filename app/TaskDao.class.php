@@ -103,23 +103,24 @@ New requirement:
 		
 		$ret = null;
 		if ($res = $db->Select($query)) {
-			$row = $res[0];
-			$task_data = array();
-			foreach($row as $col_name => $col_value) {
-				if ($col_name == 'id') {
-					$task_data['task_id'] = $col_value;
-				}
-				else if (!is_numeric($col_name) && !is_null($col_value)) {
-					$task_data[$col_name] = $col_value;
-				}
-			}
+    		$row = $res[0];
+	    	$task_data = array();
+    		foreach($row as $col_name => $col_value) {
+	    		if ($col_name == 'id') {
+		    		$task_data['task_id'] = $col_value;
+			    }
+    			else if (!is_numeric($col_name) && !is_null($col_value)) {
+	    			$task_data[$col_name] = $col_value;
+		    	}
+       		}
 
-			if ($tags = $this->_fetchTags($params['task_id'])) {
-				$task_data['tags'] = $tags;
-			}
+    		if ($tags = $this->_fetchTags($params['task_id'])) {
+	    		$task_data['tags'] = $tags;
+		    }
 
-			$ret = new Task($task_data);
-		}
+    		$ret = new Task($task_data);
+        }
+
 		return $ret;
 	}
 
@@ -379,7 +380,7 @@ New requirement:
 		return $ret;
 	}
 
-	public function recordFileUpload($task, $path, $filename, $content_type) {
+	public function recordFileUpload($task, $path, $filename, $content_type, $user_id) {
 		$next_version = $this->nextFileVersionNumber($task);
 		$db = new MySQLWrapper();
 		$db->init();
@@ -389,7 +390,7 @@ New requirement:
 		$task_file_version['version_id'] 	= $db->cleanse($next_version);
 		$task_file_version['filename'] 		= $db->cleanseWrapStr($filename);
 		$task_file_version['content_type'] 	= $db->cleanseWrapStr($content_type);
-		$task_file_version['user_id'] 		= 'NULL'; // TODO record user
+		$task_file_version['user_id'] 		= $db->cleanse($user_id);
 		$task_file_version['upload_time'] 	= 'NOW()';
 		$ret = $db->Insert('task_file_version', $task_file_version);
 		return $ret;
@@ -538,4 +539,47 @@ New requirement:
 			return false;
 		}
 	}
+
+    public function getUserTasks($user)
+    {
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT * 
+                    FROM task JOIN task_claim ON task_claim.task_id = task.id
+                    WHERE user_id = '.$db->cleanse($user->getUserId());
+        return $this->_parse_result_for_task($db->Select($query));
+    }
+
+    public function getUserArchivedTasks($user)
+    {
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT *
+                    FROM archived_task as a JOIN task_claim as c ON a.task_id = c.task_id
+                    WHERE user_id = '.$db->cleanse($user->getUserID());
+        return $this->_parse_result_for_task($db->Select($query));
+    }
+
+
+    private function _parse_result_for_task($sqlResult)
+    {
+        $ret = NULL;
+        $ret = array();
+        if($sqlResult) {
+            foreach($sqlResult as $row) {
+                $params = array();
+                $params['task_id'] = $row['task_id'];
+                $params['title'] = $row['title'];
+                $params['organisation_id'] = $row['organisation_id'];
+                $params['source_id'] = $row['source_id'];
+                $params['target_id'] = $row['target_id'];
+                $params['word_count'] = $row['word_count'];
+                $params['created_time'] = $row['created_time'];
+                $task = new Task($params);
+                $ret[] = $task;
+            }
+        }
+         
+        return $ret;
+    }
 }

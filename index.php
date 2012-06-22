@@ -125,7 +125,7 @@ $app->get('/task/upload', $authenticateForRole('organisation_member'), function 
             ));
             
             try {
-                Upload::saveSubmittedFile($field_name, $task);
+                Upload::saveSubmittedFile($field_name, $task, $current_user->getUserId());
             }
             catch (Exception  $e) {
                 $upload_error = true;
@@ -151,6 +151,9 @@ $app->get('/task/upload', $authenticateForRole('organisation_member'), function 
 })->via('GET','POST')->name('task-upload');
 
 $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), function ($task_id) use ($app) {
+    $userDao = new UserDao();
+    $currentUser = $userDao->getCurrentUser();
+
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
     if (!is_object($task)) {
@@ -168,7 +171,7 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), f
 
     if (is_null($error_message)) {
         try {
-            Upload::saveSubmittedFile($field_name, $task);
+            Upload::saveSubmittedFile($field_name, $task, $currentUser->getUserId());
         } catch (Exception  $e) {
             $error_message = 'File error: ' . $e->getMessage();
         }
@@ -525,7 +528,15 @@ $app->get('/profile', function () use ($app) {
 
     getUserDetails($app, $currentUser);
 
-    $app->view()->appendData(array('current_page' => 'user-profile'));
+    $task_dao = new TaskDao();
+    $activeJobs = $task_dao->getUserTasks($currentUser);
+
+    $archivedJobs = $task_dao->getUserArchivedTasks($currentUser);
+    
+    $app->view()->appendData(array('current_page' => 'user-profile',
+                                    'activeJobs' => $activeJobs,
+                                    'archivedJobs' => $archivedJobs
+    ));
 
     $app->render('user-profile.tpl');
 })->via('POST')->name('user-profile');

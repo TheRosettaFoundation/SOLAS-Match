@@ -31,32 +31,49 @@
     <p>To view your public profile click <a href="{urlFor name="public-profile" options="user_id.$user_id"}">here</a></p>
 {/if}
 
-<div class='page-header'><h1>Badges<small> A list of badges you have earned</small></h1></div>
-
 {if isset($badges)}
+    {if count($badges) > 0}
+        <div class='page-header'><h1>Badges<small> A list of badges you have earned</small></h1></div>
 
-    {foreach $badges as $badge }
-    	<h3>{$badge->getTitle()}</h3>
-        <p>{$badge->getDescription()}</p>
-    {/foreach}
+        {foreach $badges as $badge }
+    	    <h3>{$badge->getTitle()}</h3>
+            <p>{$badge->getDescription()}</p>
+        {/foreach}
 
-    <p>For a full list of badges go <a href='{urlFor name="badge-list"}'>here</a>.</p>
-
-{else}
-
-	<p>You do not have any badges to display. Try being more active to earn more badges</p>
-
+        <p>For a full list of badges go <a href='{urlFor name="badge-list"}'>here</a>.</p>
+    {/if}
 {/if}
-
-<div class='page-header'><h1>Organisations <small>A list of organisations you belong to</small></h1></div>
 
 {if isset($orgList)}
-    <ul>
-    {foreach $orgList as $org}
-        <li>{$org->getName()}</li>
-    {/foreach}
-    </ul>
+    {if count($orgList) > 0}
+        <div class='page-header'><h1>Organisations <small>A list of organisations you belong to</small></h1></div>
+
+        <ul>
+        {foreach $orgList as $org}
+            <li>{$org->getName()}</li>
+        {/foreach}
+        </ul>
+    {/if}
 {/if}
 
+{if isset($activeJobs)}
+    {if count($activeJobs) > 0}
+        <div class='page-header'><h1>Active Jobs <small>A list of jobs you are currently working on</small></h1></div>
+
+        {foreach $activeJobs as $job}
+            {include file="task.summary-link.tpl" task=$job}
+        {/foreach}
+    {/if}
+{/if}
+
+{if isset($archivedJobs)}
+    {if count($archivedJobs) > 0}
+        <div class='page-header'><h1>Archived Jobs <small>A list of jobs you have worked on in the past</small></h1></div>
+
+        {foreach $archivedJobs as $job}
+            {include file="task.summary-link.tpl" task=$job}
+        {/foreach}
+    {/if}
+{/if}
 
 {include file='footer.tpl'}

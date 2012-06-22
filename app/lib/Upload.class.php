@@ -88,7 +88,7 @@ class Upload {
 	 * The file has been specified in a form element <input type="file" name="myfile">
 	 * We access that file through PHP's $_FILES array.
 	 */
-	public static function saveSubmittedFile($form_file_field, $task) {
+	public static function saveSubmittedFile($form_file_field, $task, $user_id) {
 		/* 
 		 * Right now we're assuming that there's one file, but I think it can also be
 		 * an array of multiple files.
@@ -105,7 +105,7 @@ class Upload {
 
 		self::_saveSubmittedFileToFS($task, $file_name, $file_tmp_name, $version);
 
-		$task_dao->recordFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type']);
+		$task_dao->recordFileUpload($task, $upload_folder, $file_name, $_FILES[$form_file_field]['type'], $user_id);
 
 		return true;
 	}
