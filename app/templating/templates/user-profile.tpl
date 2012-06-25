@@ -1,11 +1,13 @@
 {include file='header.tpl'}
 
 {if isset($user)}
+    {assign var="user_id" value=$user->getUserId()}
     {if $user->getDisplayName() != ''}
-        <div class='page-header'><h1>{$user->getDisplayName()} <small>Update your user settings here</small></h1></div>
+        <div class='page-header'><h1>{$user->getDisplayName()} <small>Update your user settings here</small>
     {else}
-        <div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>
+        <div class='page-header'><h1>User Profile <small>Update your user settings here</small>
     {/if}
+    <a href='{urlFor name="public-profile" options="user_id.$user_id"}' class='pull-right btn btn-primary'>Public Profile</a></h1></div>
 {else}
     <div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>
 {/if}
@@ -25,11 +27,6 @@
 		<button type='submit' class='btn btn-primary' name='submit'>Update</button>
 	</p>
 </form>
-
-{if isset($user)}
-    {assign var="user_id" value=$user->getUserId()}
-    <p>To view your public profile click <a href="{urlFor name="public-profile" options="user_id.$user_id"}">here</a></p>
-{/if}
 
 {if isset($badges)}
     {if count($badges) > 0}
@@ -71,7 +68,7 @@
         <div class='page-header'><h1>Archived Jobs <small>A list of jobs you have worked on in the past</small></h1></div>
 
         {foreach $archivedJobs as $job}
-            {include file="task.summary-link.tpl" task=$job}
+            {include file="task.profile-display.tpl" task=$job}
         {/foreach}
     {/if}
 {/if}
