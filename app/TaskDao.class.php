@@ -546,8 +546,9 @@ New requirement:
         $db->init();
         $query = 'SELECT * 
                     FROM task JOIN task_claim ON task_claim.task_id = task.id
-                    WHERE user_id = '.$db->cleanse($user->getUserId());
-        return $this->_parse_result_for_task($db->Select($query));
+                    WHERE user_id = '.$db->cleanse($user->getUserId()).'
+                    LIMIT 0, 10';
+        return $this->_parse_result_for_user_task($db->Select($query));
     }
 
     public function getUserArchivedTasks($user)
@@ -556,12 +557,13 @@ New requirement:
         $db->init();
         $query = 'SELECT *
                     FROM archived_task as a JOIN task_claim as c ON a.task_id = c.task_id
-                    WHERE user_id = '.$db->cleanse($user->getUserID());
-        return $this->_parse_result_for_task($db->Select($query));
+                    WHERE user_id = '.$db->cleanse($user->getUserID()).'
+                    LIMIT 0, 10';
+        return $this->_parse_result_for_user_task($db->Select($query));
     }
 
 
-    private function _parse_result_for_task($sqlResult)
+    private function _parse_result_for_user_task($sqlResult)
     {
         $ret = NULL;
         $ret = array();
