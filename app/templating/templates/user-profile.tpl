@@ -30,14 +30,13 @@
 
 {if isset($badges)}
     {if count($badges) > 0}
-        <div class='page-header'><h1>Badges<small> A list of badges you have earned</small></h1></div>
+        <div class='page-header'><h1>Badges<small> A list of badges you have earned</small>
+        <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>Badge List</a></h1></div>
 
         {foreach $badges as $badge }
     	    <h3>{$badge->getTitle()}</h3>
             <p>{$badge->getDescription()}</p>
         {/foreach}
-
-        <p>For a full list of badges go <a href='{urlFor name="badge-list"}'>here</a>.</p>
     {/if}
 {/if}
 
