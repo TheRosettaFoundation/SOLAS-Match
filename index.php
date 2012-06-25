@@ -560,6 +560,16 @@ $app->get('/badge/list', function () use ($app) {
     $app->render('badge-list.tpl');
 })->name('badge-list');
 
+$app->get('/org/profile/:org_id', function ($org_id) use ($app) {
+    $org_dao = new OrganisationDao();
+    $org = $org_dao->find(array('id' => $org_id));
+
+    $app->view()->setData('current_page', 'org-public-profile');
+    $app->view()->appendData(array('org' => $org));
+
+    $app->render('org-public-profile.tpl');
+})->name('org-public-profile');
+
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }

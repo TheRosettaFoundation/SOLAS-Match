@@ -3,6 +3,8 @@ class Organisation
 {
     var $_id;
     var $_name;
+    var $_home_page;
+    var $_biography;
 
     public function __construct($params) {
         if(isset($params['id'])) {
@@ -10,6 +12,12 @@ class Organisation
         }
         if(isset($params['name'])) {
             $this->setName($params['name']);
+        }
+        if(isset($params['home_page'])) {
+            $this->setHomePage($params['home_page']);
+        }
+        if(isset($params['biography'])) {
+            $this->setBiography($params['biography']);
         }
     }
 
@@ -27,5 +35,21 @@ class Organisation
 
     public function setName($name) {
         $this->_name = $name;
+    }
+
+    public function getHomePage() {
+        return $this->_home_page;
+    }
+
+    public function setHomePage($home_page) {
+        $this->_home_page = $home_page;
+    }
+
+    public function getBiography() {
+        return $this->_biography;
+    }
+
+    public function setBiography($bio) {
+        $this->_biography = $bio;
     }
 }

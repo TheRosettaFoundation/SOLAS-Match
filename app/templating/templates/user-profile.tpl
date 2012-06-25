@@ -44,11 +44,17 @@
     {if count($orgList) > 0}
         <div class='page-header'><h1>Organisations <small>A list of organisations you belong to</small></h1></div>
 
-        <ul>
         {foreach $orgList as $org}
-            <li>{$org->getName()}</li>
+            {assign var="org_id" value=$org->getId()}
+            <h3><a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
+                {if $org->getHomePage() != ''}
+                    <small>
+                        <a href='{$org->getHomePage()}' class='pull-right btn btn-small'>Home Page</a>
+                    </small>
+                {/if}
+            <h3>
+            <p>{$org->getBiography()}</p>    
         {/foreach}
-        </ul>
     {/if}
 {/if}
 

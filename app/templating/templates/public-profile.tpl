@@ -7,7 +7,8 @@
 {/if}
     
 
-<h3>Public display name:</h3><p>{$user->getDisplayName()}</p>
+<h3>Public display name:</h3>
+<p>{$user->getDisplayName()}</p>
 
 {if $user->getNativeLanguage() != ''} 
     <h3>Native language: </h3>
