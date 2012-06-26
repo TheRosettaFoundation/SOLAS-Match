@@ -39,6 +39,21 @@ class OrganisationDao {
         return $ret;
     }
 
+    public function getOrgMembers($org_id) {
+        $ret = null;
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT user_id
+                    FROM organisation_member
+                    WHERE organisation_id='.$db->cleanse($org_id);
+
+        if($result = $db->Select($query)) {
+            $ret = $result;
+        }
+
+        return $ret;
+    }
+
     private function create_org_from_sql_result($result) {
         $org_data = array(
                     'id' => $result[0]['id'],
@@ -48,5 +63,40 @@ class OrganisationDao {
         );
 
         return new Organisation($org_data);
+    }
+
+    public function save($org) {
+        if(is_null($org->getId())) {
+            return $this->_insert($org);       //Create new organisation
+        } else {
+            return $this->_update($org);       //Update the data row
+        }
+    }
+
+    private function _insert($org) {
+        $db = new MySQLWrapper();
+        $db->init();
+        $insert = array();
+        $insert['name'] = $org->getName();
+        $insert['home_page'] = $org->getHomePage();
+        $insert['biography'] = $org->getBiography();
+
+        if($org_id = $db->Insert('organisation', $insert)) {
+            return $this->find(array('id' => $org_id));
+        } else {
+            return null;
+        }
+    }
+
+    private function _update($org) {
+        $db = new MySQLWrapper();
+        $db->init();
+        $update = 'UPDATE organisation
+                    SET name='.$db->cleanseWrapStr($org->getName()).',
+                    home_page='.$db->cleanseWrapStr($org->getHomePage()).',
+                    biography='.$db->cleanseWrapStr($org->getBiography()).'
+                    WHERE id='.$db->cleanse($org->getId()).'
+                    LIMIT 1';
+        return $db->Update($update);
     }
 }

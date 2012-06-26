@@ -564,11 +564,53 @@ $app->get('/org/profile/:org_id', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $org_id));
 
+    $user_dao = new UserDao();
+    $currentUser = $user_dao->getCurrentUser();
+
+    $org_member_ids = $org_dao->getOrgMembers($org->getId());
+
+    $org_members = array();
+    foreach($org_member_ids as $org_mem) {
+        $org_members[] = $org_mem['user_id'];
+    }
+
     $app->view()->setData('current_page', 'org-public-profile');
-    $app->view()->appendData(array('org' => $org));
+    $app->view()->appendData(array('org' => $org,
+                                    'org_members' => $org_members,
+                                    'current_user' => $currentUser 
+    ));
 
     $app->render('org-public-profile.tpl');
-})->name('org-public-profile');
+})->via('POST')->name('org-public-profile');
+
+$app->get('/org/private/:org_id', function ($org_id) use ($app) {
+    $org_dao = new OrganisationDao();
+    $org = $org_dao->find(array('id' => $org_id));
+   
+    if($app->request()->isPost()) {
+        $name = $app->request()->post('name');
+        if($name != NULL) {
+            $org->setName($name);
+        }
+
+        $home_page = $app->request()->post('home_page');
+        if($home_page != NULL) {
+            $org->setHomePage($home_page);
+        }
+
+        $bio = $app->request()->post('bio');
+        if($bio != NULL) {
+            $org->setBiography($bio);
+        }
+
+        $org_dao->save($org);
+    }
+    
+    $app->view()->setData('org', $org);
+
+    $app->render('org-private-profile.tpl');
+})->via('POST')->name('org-private-profile');
+
 
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
