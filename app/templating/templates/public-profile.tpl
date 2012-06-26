@@ -1,9 +1,15 @@
 {include file='header.tpl'}
 
-{if $user->getDisplayName() != ''}
-    <div class='page-header'><h1>{$user->getDisplayName()} <small>A member of SOLAS Match</small></h1></div>
-{else}
-    <div class='page-header'><h1>Public Profile<small>A member of SOLAS Match</small></h1></div>
+{if isset($user)}
+    <div class="page-header"><h1>
+    <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
+    {if $user->getDisplayName() != ''}
+        {$user->getDisplayName()}
+    {else}
+        Public Profile
+    {/if}
+    <small>A member of SOLAS Match</small>
+    </h1></div>
 {/if}
     
 

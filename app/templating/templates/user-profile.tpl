@@ -1,11 +1,13 @@
 {include file='header.tpl'}
 
 {if isset($user)}
+    <div class="page-header"><h1>
+    <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
     {assign var="user_id" value=$user->getUserId()}
     {if $user->getDisplayName() != ''}
-        <div class='page-header'><h1>{$user->getDisplayName()} <small>Update your user settings here</small>
+        {$user->getDisplayName()} <small>Update your user settings here</small>
     {else}
-        <div class='page-header'><h1>User Profile <small>Update your user settings here</small>
+        User Profile <small>Update your user settings here</small>
     {/if}
     <a href='{urlFor name="public-profile" options="user_id.$user_id"}' class='pull-right btn btn-primary'>Public Profile</a></h1></div>
 {else}
