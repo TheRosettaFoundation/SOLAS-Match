@@ -1,12 +1,12 @@
 ##!/bin/bash -e
 # -e means exit if any command fails
 DBHOST=localhost
-DBUSER=usolas
-DBPASS=rTMnEJwFJZMmJEhU # do this in a more secure fashion
-DBNAME=solasmatch
-GITREPO=/home/eoin/repos/solasmatch/app/db
+DBUSER=root
+DBPASS=root
+DBNAME=SolasMatch
+GITREPO=/opt/lampp/htdocs/SOLAS-Match/app/db
 cd $GITREPO
-mysqldump -h $DBHOST -u $DBUSER -p$DBPASS -d $DBNAME > $GITREPO/schema.sql # the -d flag means "no data"
+mysqldump -h $DBHOST -u $DBUSER -p$DBPASS -d $DBNAME --protocol=TCP > $GITREPO/schema.sql # the -d flag means "no data"
 echo "Dumped database schema to $GITREPO/schema.sql"
 git add schema.sql
 git commit -m "$DBNAME schema version update" # $(`date`)
