@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.63, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (i686)
 --
--- Host: localhost    Database: solasmatch
+-- Host: localhost    Database: SolasMatch
 -- ------------------------------------------------------
--- Server version	5.1.63-0ubuntu0.11.04.1
+-- Server version	5.5.16
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -35,7 +35,22 @@ CREATE TABLE `archived_task` (
   PRIMARY KEY (`archived_task_id`),
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `badges`
+--
+
+DROP TABLE IF EXISTS `badges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `badges` (
+  `badge_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(128) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`badge_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,7 +65,7 @@ CREATE TABLE `language` (
   `code` varchar(5) NOT NULL COMMENT '"en", for example',
   `en_name` varchar(255) NOT NULL COMMENT '"English", for example',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -82,8 +97,10 @@ DROP TABLE IF EXISTS `organisation`;
 CREATE TABLE `organisation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `home_page` text NOT NULL,
+  `biography` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,7 +129,7 @@ CREATE TABLE `tag` (
   `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `label` varchar(50) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`tag_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +150,7 @@ CREATE TABLE `task` (
   PRIMARY KEY (`id`),
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,7 +167,7 @@ CREATE TABLE `task_claim` (
   `claimed_time` datetime NOT NULL,
   PRIMARY KEY (`claim_id`),
   KEY `task_user` (`task_id`,`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,13 +243,30 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `display_name` varchar(128) DEFAULT NULL,
   `email` varchar(256) NOT NULL,
   `password` char(128) NOT NULL,
+  `biography` text,
+  `native_language` varchar(256) DEFAULT NULL,
   `nonce` int(11) unsigned NOT NULL,
   `created_time` datetime NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_badges`
+--
+
+DROP TABLE IF EXISTS `user_badges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_badges` (
+  `user_id` int(11) NOT NULL,
+  `badge_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`badge_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -244,4 +278,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-06-14 13:11:48
+-- Dump completed on 2012-06-28 10:38:48
