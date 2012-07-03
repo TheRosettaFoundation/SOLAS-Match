@@ -1,4 +1,4 @@
-{include file="header.tpl"}
+{include file="header.tpl" body_id="home"}
 
 {if !isset($user)}
 	<div class="hero-unit">
@@ -35,7 +35,7 @@
 			</div>
 		{/if}
 	</div>
-	
+
 	<div class="span4">
 		{include file="tags.top-list.inc.tpl"}
 	</div>
