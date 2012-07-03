@@ -4,3 +4,6 @@ body {
 section {
 	margin-bottom: 60px;
 }
+#tasks h2:not(:first-child) {
+    margin-top: 2em;
+}

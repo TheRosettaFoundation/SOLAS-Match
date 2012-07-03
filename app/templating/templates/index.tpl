@@ -22,9 +22,11 @@
 <div class="row">
 	<div class="span8">
 		{if isset($tasks)}
-			{foreach from=$tasks item=task name=tasks_loop}
-				{include file="task.summary-link.tpl" task=$task}
-			{/foreach}
+			<div id="tasks">
+				{foreach from=$tasks item=task name=tasks_loop}
+					{include file="task.summary-link.tpl" task=$task}
+				{/foreach}
+			</div>
 		{else}
 			<div class="alert alert-warning">
 				{if isset($user_is_organisation_member)}

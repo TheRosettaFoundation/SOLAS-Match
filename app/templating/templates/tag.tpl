@@ -6,9 +6,11 @@
 <div class="row">
 	<div class="span8">
 		{if isset($tasks)}
-			{foreach from=$tasks item=task}
-				{include file="task.summary-link.tpl" task=$task}
-			{/foreach}
+			<div id="tasks">
+				{foreach from=$tasks item=task}
+					{include file="task.summary-link.tpl" task=$task}
+				{/foreach}
+			</div>
 		{else}
 			<div class="alert alert-warning">
 				<strong>No open tasks</strong> Sorry, there are currently no open tasks for this label.

@@ -2,13 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>{if isset($title)}{$title}{else}Solas Match{/if}</title>
-
+	<title>{if isset($title)}{$title}{else}SOLAS Match{/if}</title>
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css">
-	<!--<link rel="stylesheet" type="text/css" media="all" href="/resources/css/reset.css">
-	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/style.1.css">
-	<link rel="stylesheet" type="text/css" media="all" href="/resources/css/960.css">-->
 </head>
 <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
 
@@ -16,7 +12,7 @@
     <div class="navbar-inner">
 	    <div class="container">
     	    <a class="brand" href="{urlFor name='home'}">
-				Solas Match
+				SOLAS Match
 		    </a>
 		    <ul class="nav">
 		    	<li
