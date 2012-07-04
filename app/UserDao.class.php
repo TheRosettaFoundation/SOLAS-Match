@@ -134,6 +134,10 @@ class UserDao {
 			throw new InvalidArgumentException('Sorry, that password is incorrect. Please try again.');
 		}
 
+        if ($clear_password === '') {
+            throw new InvalidArgumentException('Sorry, an empty password is not allowed. Please contact the site administrator for details');
+        }
+
 		UserSession::setSession($user->getUserId());
 
 		return true;
