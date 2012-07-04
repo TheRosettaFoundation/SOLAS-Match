@@ -60,6 +60,7 @@
 	<div class="page-header">
 		<h1>Participate in this task</h1>
 	</div>
+    <p>When you register, you'll be able to <strong>preview</strong> this task, and to translate it if you wish.</p>
 	<p>
 		<a class="btn btn-primary" href="{urlFor name="register"}">Register</a>
 		<a class="btn" href="{urlFor name="login"}">Log In</a>
