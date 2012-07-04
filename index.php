@@ -95,6 +95,11 @@ $app->get('/', function () use ($app) {
         'top_tags' => $task_dao->getTopTags(30),
         'current_page' => 'home'
     ));
+
+    if(!UserDao::isLoggedin()) {
+        $_SESSION['previous_page'] = 'home';
+    }
+
     $app->render('index.tpl');
 })->name('home');
 
@@ -272,6 +277,11 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
                 ));
             }
         }
+    }
+
+    if(!UserDao::isLoggedIn()) {
+        $_SESSION['previous_page'] = 'task';
+        $_SESSION['old_page_vars'] = array("task_id" => $task_id);
     }
 
     $app->view()->appendData(array(
@@ -460,6 +470,13 @@ $app->get('/register', function () use ($app) {
         if (is_null($error) && is_null($warning)) {
             if ($user = $user_dao->create($post->email, $post->password)) {
                 if ($user_dao->login($user->getEmail(), $post->password)) {
+                    if(isset($_SESSION['previous_page'])) {
+                        if(isset($_SESSION['old_page_vars'])) {
+                            $app->redirect($app->urlFor($_SESSION['previous_page'], $_SESSION['old_page_vars']));
+                        } else {
+                            $app->redirect($app->urlFor($_SESSION['previous_page']));
+                        }
+                    }
                     $app->redirect($app->urlFor('home'));
                 }
                 else {
@@ -469,7 +486,7 @@ $app->get('/register', function () use ($app) {
             else {
                 $error = 'Unable to register.';
             }
-        } 
+        }
     }
     if ($error !== null) {
         $app->view()->appendData(array('error' => $error));
