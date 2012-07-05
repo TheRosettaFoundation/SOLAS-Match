@@ -28,6 +28,19 @@
 	</p>
 </section>
 
+{if isset($file_previously_uploaded) && $file_previously_uploaded}
+    <div class="alert">
+        <p>Thanks for providing your translation for this task. 
+        {if isset($org_name)}
+            {$org_name}
+        {else}
+            This organisation
+        {/if}
+        will be able to use it for their benefit.</p>
+        <p><strong>Warning! </strong>Uploading a new version of the file will overwrite the old one.</p>
+    </div>
+{/if}
+
 {if isset($this_user_has_claimed_this_task)}
 	<div class="page-header">
 		<h1>Finished translating? <small>{$task_file_info.filename}</small></h1>

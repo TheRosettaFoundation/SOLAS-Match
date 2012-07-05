@@ -301,6 +301,16 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
         }
     }
 
+    if($task_dao->hasBeenUploaded($task->getTaskId(), $current_user->getUserId())) {
+        $org_dao = new OrganisationDao();
+        $org = $org_dao->find($task->getOrganisationId());
+        $app->view()->appendData(array(
+                        'file_previously_uploaded' => true,
+                        'org_name' => $org->getName()
+        ));
+
+    }
+
     if(!UserDao::isLoggedIn()) {
         $_SESSION['previous_page'] = 'task';
         $_SESSION['old_page_vars'] = array("task_id" => $task_id);

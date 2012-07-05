@@ -584,4 +584,22 @@ New requirement:
          
         return $ret;
     }
+
+    /*
+    * Check to see if a translation for this task has been uploaded before
+    */
+    public function hasBeenUploaded($task_id, $user_id)
+    {
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT *
+                    FROM task_file_version
+                    WHERE task_id = '.$db->cleanse($task_id).'
+                    AND user_id = '.$db->cleanse($user_id);
+        if(!$db->Select($query)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
