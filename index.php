@@ -80,20 +80,26 @@ $authenticateForRole = function ( $role = 'translator' ) {
 };
 
 function authUserForOrg($request, $response, $route) {
-    $app = Slim::getInstance();
-    $ret = false;
-    $user_dao = new UserDao();
-    $user = $user_dao->getCurrentUser();
-    if(is_object($user)) {
-        $params = $route->getParams();
-        if($params !== NULL) {
-            $org_id = $params['org_id'];
+    $params = $route->getParams();
+    if($params !== NULL) {
+        $org_id = $params['org_id'];
+        $user_dao = new UserDao();
+        $user = $user_dao->getCurrentUser();
+        if(is_object($user)) {
             if(in_array($org_id, $user_dao->findOrganisationsUserBelongsTo($user->getUserId()))) {
                 return true;
             }
         }
     }
-    $app->flash('error', "You are not authorised to view this profile. Only Organisation members may view this page.");
+
+    $app = Slim::getInstance();
+    $org_name = 'this organisation';
+    if(isset($org_id)) {
+        $org_dao = new OrganisationDao();
+        $org = $org_dao->find(array('id' => $org_id));
+        $org_name = $org->getName();
+    }
+    $app->flash('error', "You are not authorised to view this profile. Only members of ".$org_name." may view this page.");
     $app->redirect($app->urlFor('home'));
 }
 
