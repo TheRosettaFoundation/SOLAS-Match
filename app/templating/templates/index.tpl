@@ -15,6 +15,13 @@
 	</div>
 {/if}
 
+{if isset($flash['error'])}
+    <div class="alert alert-error">
+        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
+        <p><strong>Warning! </strong>{$flash['error']}</p>
+    </div>
+{/if}
+
 <div class="page-header">
 	<h1>Translation tasks <small>Claim a task, translate it, upload it</small></h1>
 </div>

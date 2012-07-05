@@ -58,19 +58,12 @@ $app->configureMode('development', function () use ($app) {
     ));
 });
 
+/*
+*
+*   Middleware - Used to authenticat users when entering restricted pages
+*
+*/
 $authenticateForRole = function ( $role = 'translator' ) {
-
-    /* Sample:
-
-        return function () use ( $role ) { 
-            $user = User::fetchFromDatabaseSomehow();
-            if ( $user->belongsToRole($role) === false ) { 
-                Slim::flash('error', 'Login required');
-                Slim::redirect('/login');
-            }   
-        }   
-    */
-
     return function () use ( $role ) {
         $app = Slim::getInstance();
         $user_dao = new UserDao();
@@ -86,6 +79,29 @@ $authenticateForRole = function ( $role = 'translator' ) {
     };
 };
 
+function authUserForOrg($request, $response, $route) {
+    $app = Slim::getInstance();
+    $ret = false;
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+    if(is_object($user)) {
+        $params = $route->getParams();
+        if($params !== NULL) {
+            $org_id = $params['org_id'];
+            if(in_array($org_id, $user_dao->findOrganisationsUserBelongsTo($user->getUserId()))) {
+                return true;
+            }
+        }
+    }
+    $app->flash('error', "You are not authorised to view this profile. Only Organisation members may view this page.");
+    $app->redirect($app->urlFor('home'));
+}
+
+/*
+*
+*   Routing options - List all URLs here
+*
+*/
 $app->get('/', function () use ($app) {
     if ($tasks = TaskStream::getStream(10)) {
         $app->view()->setData('tasks', $tasks);
@@ -109,7 +125,7 @@ $app->get('/task/upload', $authenticateForRole('organisation_member'), function 
 
     $user_dao = new UserDao();
     $current_user = $user_dao->getCurrentUser();
-    $my_organisations = $user_dao->findOrganisationsUserBelongsTo($current_user);
+    $my_organisations = $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId());
     $organisation_id = $my_organisations[0]; // Not perfect, but it will do until someone appears in multiple organisations
     
     if ($app->request()->isPost()) {
@@ -440,7 +456,6 @@ $app->get('/login', function () use ($app) {
             echo $error;
         }
     } else {
-        $app->view()->appendData(array('url_login', $app->urlFor('login')));
         $app->render('login.tpl');
     }
 })->via('GET','POST')->name('login');
@@ -501,7 +516,7 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     $user_dao           = new UserDao();
     $task_dao           = new TaskDao;
     $current_user       = $user_dao->getCurrentUser();
-    $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user);
+    $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId());
     $my_tasks           = $task_dao->findTasks(array(
         'organisation_ids'  => $my_organisations
     ), 'created_time', 'DESC');
@@ -577,7 +592,7 @@ $app->get('/badge/list', function () use ($app) {
     $app->render('badge-list.tpl');
 })->name('badge-list');
 
-$app->get('/org/profile/:org_id', function ($org_id) use ($app) {
+$app->get('/org/profile/:org_id', 'authUserForOrg', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $org_id));
 
@@ -600,7 +615,7 @@ $app->get('/org/profile/:org_id', function ($org_id) use ($app) {
     $app->render('org-public-profile.tpl');
 })->via('POST')->name('org-public-profile');
 
-$app->get('/org/private/:org_id', function ($org_id) use ($app) {
+$app->get('/org/private/:org_id', 'authUserForOrg', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $org_id));
    
@@ -643,7 +658,7 @@ function getUserDetails($app, $user)
     $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
     $language = substr($language, 0, 5);
  
-    $orgIds = $user_dao->findOrganisationsUserBelongsTo($user);
+    $orgIds = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
     $orgList = array();
 
     if(count($orgIds) > 0) { 
@@ -675,19 +690,13 @@ function getUserDetails($app, $user)
  * Given that we don't have object factories implemented, we'll initialise them directly here.
  */
 $app->hook('slim.before', function () use ($app) {
-    // Replace with: {urlFor name="task-upload"}
-    $app->view()->appendData(array(
-        'url_login' => $app->urlFor('login'),
-        'url_logout' => $app->urlFor('logout'),
-        'url_register' => $app->urlFor('register')
-    ));
     $user_dao = new UserDao();
     if ($current_user = $user_dao->getCurrentUser()) {
         $app->view()->appendData(array('user' => $current_user));
         if ($user_dao->belongsToRole($current_user, 'organisation_member')) {
             $app->view()->appendData(array(
                 'user_is_organisation_member' => true,
-                'user_organisations' => $user_dao->findOrganisationsUserBelongsTo($current_user)
+                'user_organisations' => $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId())
             ));
         }
     }

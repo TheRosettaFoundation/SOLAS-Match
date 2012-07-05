@@ -177,13 +177,13 @@ class UserDao {
 		return $ret;
 	}
 
-	public function findOrganisationsUserBelongsTo(User $user) {
+	public function findOrganisationsUserBelongsTo($user_id) {
 		$ret = null;
 		$db = new MySQLWrapper();
 		$db->init();
 		$query = 'SELECT organisation_id 
 					FROM organisation_member
-					WHERE user_id = ' . $db->cleanse($user->getUserId());
+					WHERE user_id = ' . $db->cleanse($user_id);
 		if ($result = $db->Select($query)) {
 			$ret = array();
 			foreach ($result as $row) {
