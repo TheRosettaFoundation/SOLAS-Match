@@ -9,7 +9,9 @@
         {else}
             User Profile <small>Update your user settings here</small>
         {/if}
-        <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='pull-right btn btn-primary'>Private Profile</a>
+        {if isset($private_access)}
+            <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Private Profile</a>
+        {/if}
     </h1></div>
 {else}
     <div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>

@@ -595,6 +595,10 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
                                     'archivedJobs' => $archivedJobs
     ));
 
+    if($user_dao->getCurrentUser()->getUserId() === $user_id) {
+        $app->view()->appendData(array('private_access' => true));
+    }
+
     $app->render('user-public-profile.tpl');
 })->name('user-public-profile');
 
