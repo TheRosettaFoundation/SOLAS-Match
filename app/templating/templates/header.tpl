@@ -32,7 +32,7 @@
 		    	{/if}
 			{if isset($user)}
 				<li {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if}>
-					<a href="{urlFor name='user-profile'}">Profile</a>
+					<a href="{urlFor name='user-public-profile'}">Profile</a>
 				</li>
 			{/if}
 		    </ul>

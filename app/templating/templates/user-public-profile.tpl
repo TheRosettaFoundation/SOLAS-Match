@@ -2,33 +2,32 @@
 
 {if isset($user)}
     <div class="page-header"><h1>
-    <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
-    {assign var="user_id" value=$user->getUserId()}
-    {if $user->getDisplayName() != ''}
-        {$user->getDisplayName()} <small>Update your user settings here</small>
-    {else}
-        User Profile <small>Update your user settings here</small>
-    {/if}
-    <a href='{urlFor name="public-profile" options="user_id.$user_id"}' class='pull-right btn btn-primary'>Public Profile</a></h1></div>
+        <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
+        {assign var="user_id" value=$user->getUserId()}
+        {if $user->getDisplayName() != ''}
+            {$user->getDisplayName()} <small>Update your user settings here</small>
+        {else}
+            User Profile <small>Update your user settings here</small>
+        {/if}
+        <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='pull-right btn btn-primary'>Private Profile</a>
+    </h1></div>
 {else}
     <div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>
 {/if}
 
-{if isset($warning) && $warning == true }
-	<p>Invalid input, please fill in all options below.</p>
+<h3>Public display name:</h3>
+<p>{$user->getDisplayName()}</p>
+ 
+{if $user->getNativeLanguage() != ''}
+    <h3>First Maternal Language: </h3>
+    <p>{$user->getNativeLanguage()}</p>
+{/if}
+ 
+{if $user->getBiography() != ''}
+    <h3>Biography:</h3>
+    <p>{$user->getBiography()}</p>
 {/if}
 
-<form method='post' action='{urlFor name='user-profile'}' class='well'>
-	<label for='name'>Public display name:</label>
-	<input type='text' name='name' id='name' placeholder='Name' />
-	<label for='nLanguage'>First Maternal Language:</label>
-	<input type='text' name='nLanguage' id='nLanguage' {if isset($language)} placeholder={$language} {/if}/>
-	<label for='bio'>Biography:</label>
-	<textarea name='bio' cols='40' rows='5'></textarea>
-	<p>
-		<button type='submit' class='btn btn-primary' name='submit'>Update</button>
-	</p>
-</form>
 
 {if isset($badges)}
     {if count($badges) > 0}

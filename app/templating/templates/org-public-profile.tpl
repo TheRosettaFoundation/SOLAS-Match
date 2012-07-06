@@ -14,7 +14,7 @@
     {/if}
     </h1></div>
 {else}
-    header({urlFor name='user-profile'});
+    header({urlFor name='user-public-profile'});
 {/if}
 
 <h3>Organisation Name</h3>

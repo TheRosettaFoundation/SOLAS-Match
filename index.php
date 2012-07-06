@@ -579,53 +579,54 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     $app->render('client.dashboard.tpl');
 })->name('client-dashboard');
 
-$app->get('/profile', function () use ($app) {
+$app->get('/profile/:user_id', function ($user_id) use ($app) {
     $user_dao = new UserDao();
-    $currentUser = $user_dao->getCurrentUser();
-    if($app->request()->isPost()) {
-
-        $displayName = $app->request()->post('name');
-     	if($displayName != NULL) {
-    	    $currentUser->setDisplayName($displayName);
-    	}
-
-	    $userBio = $app->request()->post('bio');
-    	if($userBio != NULL) {
-    	    $currentUser->setBiography($userBio);
-    	}
-
-    	$nativeLang = $app->request()->post('nLanguage');
-    	if($nativeLang != NULL) {
-    	    $currentUser->setNativeLanguage($nativeLang);
-    	}
-    	$user_dao->save($currentUser);
-
-    	$app->redirect($app->urlFor('home'));
-    }
-
-    getUserDetails($app, $currentUser);
+    $user = $user_dao->find(array('user_id' => $user_id));
+    
+    getUserDetails($app, $user);
 
     $task_dao = new TaskDao();
-    $activeJobs = $task_dao->getUserTasks($currentUser);
+    $activeJobs = $task_dao->getUserTasks($user);
 
-    $archivedJobs = $task_dao->getUserArchivedTasks($currentUser);
+    $archivedJobs = $task_dao->getUserArchivedTasks($user);
     
     $app->view()->appendData(array('current_page' => 'user-profile',
                                     'activeJobs' => $activeJobs,
                                     'archivedJobs' => $archivedJobs
     ));
 
-    $app->render('user-profile.tpl');
-})->via('POST')->name('user-profile');
+    $app->render('user-public-profile.tpl');
+})->name('user-public-profile');
 
-$app->get('/profile/:user_id', function ($userId) use ($app) {
+$app->get('/profile', function () use ($app) {
     $user_dao = new UserDao();
-    $user = $user_dao->find(array('user_id' => $userId));
+    $user = $user_dao->getCurrentUser();
+
+    if($app->request()->isPost()) {
+ 
+        $displayName = $app->request()->post('name');
+        if($displayName != NULL) {
+            $user->setDisplayName($displayName);
+        }
+ 
+        $userBio = $app->request()->post('bio');
+        if($userBio != NULL) {
+            $user->setBiography($userBio);
+        }
+ 
+        $nativeLang = $app->request()->post('nLanguage');
+        if($nativeLang != NULL) {
+            $user->setNativeLanguage($nativeLang);
+        }
+        $user_dao->save($user);
+
+        $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user->getUserId())));
+    }
 
     getUserDetails($app, $user);
 
-    $app->render('public-profile.tpl');
-})->name('public-profile');
+    $app->render('user-private-profile.tpl');
+})->via('POST')->name('user-private-profile');
 
 $app->get('/badge/list', function () use ($app) {
     $badge_dao = new BadgeDao();
