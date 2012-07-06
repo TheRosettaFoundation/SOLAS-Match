@@ -33,6 +33,8 @@
         placeholder='{$user->getBiography()}'
     {/if}
     ></textarea>
+    <p>Register with <a href="http://en.gravatar.com/" target="_blank">Gravatar</a> to choose your avatar</p>
+
     <p> 
         <button type='submit' class='btn btn-primary' name='submit'>Update</button>
     </p>

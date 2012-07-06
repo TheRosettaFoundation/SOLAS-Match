@@ -13,8 +13,6 @@
         <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Edit Profile</a>
     {/if}
     </h1></div>
-{else}
-    header({urlFor name='user-public-profile'});
 {/if}
 
 <h3>Organisation Name</h3>
