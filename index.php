@@ -375,6 +375,10 @@ $app->post('/claim-task', $authenticateForRole('translator'), function () use ($
     $task_dao->claimTask($task, $current_user);
     Notify::notifyUserClaimedTask($current_user, $task);   
 
+    $app->view()->appendData(array(
+                    'user' => $current_user
+    ));
+
     $app->redirect($app->urlFor('task-claimed', array(
         'task_id' => $task_id
     )));
@@ -383,6 +387,7 @@ $app->post('/claim-task', $authenticateForRole('translator'), function () use ($
 
 $app->get('/task/id/:task_id/claimed', $authenticateForRole('translator'), function ($task_id) use ($app) {
     $task_dao = new TaskDao();
+
     $task = $task_dao->find(array('task_id' => $task_id));
     if (!is_object($task)) {
         header('HTTP/1.0 404 Not Found');

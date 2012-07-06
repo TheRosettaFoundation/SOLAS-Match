@@ -19,14 +19,24 @@
 		{if $task->getTargetId()}
 			<li><strong>Translate the file</strong> to <strong>{Languages::languageNameFromId($task->getTargetId())}</strong> using your favourite translation software.</li>
 		{/if}
-		<li><strong>Upload your finished translated file</strong> to <a href="{urlFor name="task" options="task_id.$task_id"}">the task page</a>.</li>
+		<li><strong>Upload your finished translated file</strong> to the task page.</li>
 	</ol>
+
+    {if isset($user)}
+        <p>We have also emailed you these instructions to {$user->getEmail()}.</p>
+    {/if}
 </section>
 
 <section>
 	<h3>When you have finished translating the file you downloaded:</h3>
 
 	<p><a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">Visit the task page to upload my translation</a> <a href="{urlFor name="home"}" class="btn">Go back home</a> </p>
+    
+
 </section>
+
+    <p><small>(Can't find the file on your desktop? 
+    <a href="{urlFor name="download-task" options="task_id.$task_id"}">Download the file</a>
+    and save it to your desktop.)</small></p>
 
 {include file="footer.tpl"}

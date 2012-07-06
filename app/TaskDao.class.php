@@ -595,7 +595,8 @@ New requirement:
         $query = 'SELECT *
                     FROM task_file_version
                     WHERE task_id = '.$db->cleanse($task_id).'
-                    AND user_id = '.$db->cleanse($user_id);
+                    AND user_id = '.$db->cleanse($user_id).'
+                    AND version_id > 0';
         if(!$db->Select($query)) {
             return false;
         } else {
