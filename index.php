@@ -205,7 +205,7 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), f
     }
 
     if (is_null($error_message)) {
-        $app->redirect($app->urlFor('task-uploaded-edit'));
+        $app->redirect($app->urlFor('task-uploaded-edit', array('task_id' => $task_id)));
     }
     else {
         $app->view()->setData('task', $task);
@@ -222,8 +222,16 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), f
     }
 })->via('POST')->name('task-upload-edited');
 
-$app->get('/task/uploaded-edit/', function () use ($app) {
-    
+$app->get('/task/:task_id/uploaded-edit/', function ($task_id) use ($app) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+    $org_id = $task->getOrganisationId();
+
+    $org_dao = new OrganisationDao();
+    $org = $org_dao->find(array('id' => $org_id));
+    $org_name = $org->getName();
+
+    $app->view()->appendData(array('org_name' => $org_name));
 
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
