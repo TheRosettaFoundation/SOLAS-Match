@@ -17,7 +17,7 @@
 <p>{$user->getDisplayName()}</p>
 
 {if $user->getNativeLanguage() != ''} 
-    <h3>Native language: </h3>
+    <h3>First Maternal Language: </h3>
     <p>{$user->getNativeLanguage()}</p>
 {/if}
 
