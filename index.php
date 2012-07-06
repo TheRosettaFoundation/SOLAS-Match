@@ -223,6 +223,8 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), f
 })->via('POST')->name('task-upload-edited');
 
 $app->get('/task/uploaded-edit/', function () use ($app) {
+    
+
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
 

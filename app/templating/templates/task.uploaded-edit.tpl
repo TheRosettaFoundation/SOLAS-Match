@@ -15,8 +15,13 @@
 
 	<ol>
 		<li>Your task <strong>is complete</strong>.</li>
-		<li>The <strong>organisation will receive your work</strong> uploaded work.</li>
-		<li>If your work is suitable, the organisation will use your volunteered translation.</li>
+		<li>The <strong>organisation will receive your uploaded work</strong></li>
+        {if isset($org_name)}
+            <li>{$org_name}
+        {else}
+    		<li>The Organisation
+        {/if}
+        really appreciates being able to make use of your translation. Thanks so much.</li>
 	</ol>
 </section>
 
