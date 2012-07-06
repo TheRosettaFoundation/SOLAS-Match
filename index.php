@@ -297,18 +297,17 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
                 $app->view()->appendData(array(
                     'this_user_has_claimed_this_task' => true
                 ));
-            }
-        }
-    }
-
-    if($task_dao->hasBeenUploaded($task->getTaskId(), $current_user->getUserId())) {
-        $org_dao = new OrganisationDao();
-        $org = $org_dao->find($task->getOrganisationId());
-        $app->view()->appendData(array(
+                if($task_dao->hasBeenUploaded($task->getTaskId(), $current_user->getUserId())) {
+                    $org_dao = new OrganisationDao();
+                    $org = $org_dao->find($task->getOrganisationId());
+                    $app->view()->appendData(array(
                         'file_previously_uploaded' => true,
                         'org_name' => $org->getName()
-        ));
+                    ));
 
+                }
+            }
+        }
     }
 
     if(!UserDao::isLoggedIn()) {
@@ -382,7 +381,7 @@ $app->post('/claim-task', $authenticateForRole('translator'), function () use ($
 
 })->name('claim-task');
 
-$app->get('/task/id/:task_id/claimed/', $authenticateForRole('translator'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/claimed', $authenticateForRole('translator'), function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
     if (!is_object($task)) {
@@ -392,6 +391,21 @@ $app->get('/task/id/:task_id/claimed/', $authenticateForRole('translator'), func
     $app->view()->setData('task', $task);
     $app->render('task.claimed.tpl');
 })->name('task-claimed');
+
+/*
+ * Claim a task after downloading it
+ */
+$app->get('/task/claim/:task_id', $authenticateForRole('translator'), function ($task_id) use ($app) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+    if(!is_object($task)) {
+        header ('HTTP/1.0 404 Not Found');
+        die;
+    }
+    $app->view()->setData('task', $task);
+
+    $app->render('task.claim.tpl');
+})->name('task-claim-page');
 
 $app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator'), function ($task_id) use ($app) {
     $task_dao = new TaskDao;
