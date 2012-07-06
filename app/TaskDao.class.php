@@ -119,6 +119,7 @@ New requirement:
 		    }
 
     		$ret = new Task($task_data);
+            $ret->setStatus($this->getTaskStatus($ret->getTaskId()));
         }
 
 		return $ret;
@@ -578,6 +579,7 @@ New requirement:
                 $params['word_count'] = $row['word_count'];
                 $params['created_time'] = $row['created_time'];
                 $task = new Task($params);
+                $task->setStatus($this->getTaskStatus($task->getTaskId()));
                 $ret[] = $task;
             }
         }
@@ -590,13 +592,37 @@ New requirement:
     */
     public function hasBeenUploaded($task_id, $user_id)
     {
+        return $this->_check_task_file_version($task_id, $user_id);
+    }
+
+    private function getTaskStatus($task_id)
+    {
+        
+        if($this->_check_task_file_version($task_id)) {
+            return "Your translation is under review";
+        } else {
+            return "Awaiting your translation";
+        }
+    }
+
+    /*
+     * A private file for check if a task has been translated by checking 
+     * if a file has been uploaded for it. if user_id is null it will just 
+     * check on a task basis. The inclusion of the user_id allows several 
+     * people to work on the job at once
+     * Returns true if the file has been translated
+     */
+    private function _check_task_file_version($task_id, $user_id = null)
+    {
         $db = new MySQLWrapper();
         $db->init();
         $query = 'SELECT *
-                    FROM task_file_version
-                    WHERE task_id = '.$db->cleanse($task_id).'
-                    AND user_id = '.$db->cleanse($user_id).'
-                    AND version_id > 0';
+                FROM task_file_version
+                WHERE task_id = '.$db->cleanse($task_id).'
+                AND version_id > 0';
+        if(!is_null($user_id)) {
+            $query .= ' AND user_id = '.$db->cleanse($user_id);
+        }
         if(!$db->Select($query)) {
             return false;
         } else {

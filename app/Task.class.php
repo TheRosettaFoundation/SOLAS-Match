@@ -13,6 +13,7 @@ class Task {
 	var $_target_id;
 	var $_created_time;
 	var $_word_count;
+    var $_status;
 	var $_tags; // array of strings
 
 	function __construct($params = NULL) {
@@ -73,6 +74,14 @@ class Task {
 	public function getWordCount() {
 		return $this->_word_count;
 	}
+
+    public function getStatus() {
+        return $this->_status;
+    }
+
+    public function setStatus($status) {
+        $this->_status = $status;
+    }
 
 	/**
 	 * undocumented function

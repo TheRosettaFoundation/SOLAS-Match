@@ -54,7 +54,7 @@
                         <a href='{$org->getHomePage()}' class='pull-right btn btn-small'>Home Page</a>
                     </small>
                 {/if}
-            <h3>
+            </h3>
             <p>{$org->getBiography()}</p>    
         {/foreach}
     {/if}
@@ -65,7 +65,7 @@
         <div class='page-header'><h1>Active Jobs <small>A list of jobs you are currently working on</small></h1></div>
 
         {foreach $activeJobs as $job}
-            {include file="task.summary-link.tpl" task=$job}
+                {include file="task.summary-link.tpl" task=$job}
         {/foreach}
     {/if}
 {/if}

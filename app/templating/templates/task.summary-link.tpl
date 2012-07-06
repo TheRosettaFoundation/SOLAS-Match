@@ -14,6 +14,11 @@
 			<span class="label">{$tag}</span>
 		{/foreach}
 	</p>
+
+    {if $task->getStatus()}
+        <p><span class="label label-info">{$task->getStatus()}</span></p>
+    {/if}
+
 	
 	<p class="task_details">
 		Added {IO::timeSinceSqlTime($task->getCreatedTime())} ago
