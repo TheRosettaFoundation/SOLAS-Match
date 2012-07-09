@@ -341,12 +341,17 @@ New requirement:
 		$db->init();
 		$ret = false;
 		$q = 'SELECT id
-				FROM task
+				FROM task t
 				WHERE id IN (
 					SELECT task_id
 					FROM task_tag
 					WHERE tag_id = ' . $db->cleanse($tag_id) . '
-				) 
+				)
+                AND id NOT IN (
+                    SELECT task_id
+                    FROM task_claim
+                    WHERE task_id = t.id
+                ) 
 				ORDER BY created_time DESC 
 				LIMIT '.$db->cleanse($nb_items);
 		if ($r = $db->Select($q)) {
