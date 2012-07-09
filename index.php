@@ -17,6 +17,7 @@ require 'app/UserDao.class.php';
 require 'app/TaskStream.class.php';
 require 'app/TaskDao.class.php';
 require 'app/IO.class.php';
+require 'app/TipSelector.class.php';
 require 'app/Organisations.class.php';
 require 'app/lib/Languages.class.php';
 require 'app/lib/URL.class.php';
@@ -231,7 +232,13 @@ $app->get('/task/:task_id/uploaded-edit/', function ($task_id) use ($app) {
     $org = $org_dao->find(array('id' => $org_id));
     $org_name = $org->getName();
 
-    $app->view()->appendData(array('org_name' => $org_name));
+    $tip_selector = new TipSelector();
+    $tip = $tip_selector->selectTip();
+
+    $app->view()->appendData(array(
+                            'org_name' => $org_name,
+                            'tip' => $tip
+    ));
 
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
