@@ -636,10 +636,13 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
     $activeJobs = $task_dao->getUserTasks($user);
 
     $archivedJobs = $task_dao->getUserArchivedTasks($user);
-    
+
+    $user_tags = $user_dao->getUserTags($user->getUserId());
+
     $app->view()->appendData(array('current_page' => 'user-profile',
                                     'activeJobs' => $activeJobs,
-                                    'archivedJobs' => $archivedJobs
+                                    'archivedJobs' => $archivedJobs,
+                                    'user_tags' => $user_tags
     ));
 
     if($user_dao->getCurrentUser()->getUserId() === $user_id) {

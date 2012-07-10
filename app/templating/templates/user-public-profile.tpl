@@ -43,6 +43,22 @@
     {/if}
 {/if}
 
+{if isset($user_tags)}
+    {if count($user_tags) > 0}
+        <div class="page-header">
+            <h1>Tags<small> A list of preferred tags.</small>
+            <a href='' class="pull-right btn btn-primary">Manage Tags</a></h1>
+        </div>
+
+        {foreach $user_tags as $tag}
+            
+                <p><a class="tag" href="{urlFor name="tag-details" options="label.$tag"}"><span class="label">{$tag}</span></a></p>
+            
+        {/foreach}
+    {/if}
+{/if}
+
+
 {if isset($orgList)}
     {if count($orgList) > 0}
         <div class='page-header'><h1>Organisations <small>A list of organisations you belong to</small></h1></div>
