@@ -16,6 +16,7 @@ require 'app/OrganisationDao.class.php';
 require 'app/UserDao.class.php';
 require 'app/TaskStream.class.php';
 require 'app/TaskDao.class.php';
+require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
 require 'app/TipSelector.class.php';
 require 'app/Organisations.class.php';
@@ -121,6 +122,15 @@ $app->get('/', function () use ($app) {
 
     if(!UserDao::isLoggedin()) {
         $_SESSION['previous_page'] = 'home';
+    } else {
+        $user_dao = new UserDao();
+        $current_user = $user_dao->getCurrentUser();
+
+        $user_tags = $user_dao->getUserTags($current_user->getUserId());
+
+        $app->view()->appendData(array(
+            'user_tags' => $user_tags
+        ));
     }
 
     $app->render('index.tpl');
@@ -487,12 +497,42 @@ $app->get('/tag/:label/', function ($label) use ($app) {
     if ($tasks = TaskStream::getTaggedStream($label, 10)) {
         $app->view()->setData('tasks', $tasks);
     }
+
+    if($app->request()->isPost()) {
+        $tag_dao = new TagsDao();
+        $tag = $tag_dao->find(array('label' => $label));
+        
+        $user_dao = new UserDao();
+        $current_user = $user_dao->getCurrentUser();
+
+        $tag_id = $tag->getTagId();
+        $user_id = $current_user->getUserId();
+
+        if(!($user_dao->likeTag($user_id, $tag_id))) {
+            $displayName = $current_user->getDisplayName();
+            $warning = "Unable to save tag $label for user $displayName";
+            $app->view()->appendData(array('warning' => $warning));
+        }
+    }
+
+    if (UserDao::isLoggedIn()) {
+        $user_dao = new UserDao();
+        $current_user = $user_dao->getCurrentUser();
+        $user_id = $current_user->getUserId();
+
+        $user_tags = $user_dao->getUserTags($user_id);
+        $app->view()->appendData(array(
+            'user_tags' => $user_tags,
+            'user_id' => $user_id
+        ));
+    }
+
     $app->view()->appendData(array(
         'tag' => $label,
         'top_tags' => $task_dao->getTopTags(30),
     ));
     $app->render('tag.tpl');
-})->name('tag-details');
+})->via("POST")->name('tag-details');
 
 $app->get('/login', function () use ($app) {
     $error = null;

@@ -42,6 +42,10 @@
 			</div>
 		{/if}
 	</div>
+
+    <div class="span4">
+        {include file="tags.user-tags.inc.tpl"}
+    </div>
 	
 	<div class="span4">
 		{include file="tags.top-list.inc.tpl"}

@@ -206,4 +206,45 @@ class UserDao {
 
 		return $ret;
 	}
+
+    public function getUserTags($user_id)
+    {
+        $ret = null;
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT label
+                    FROM user_tag JOIN tag 
+                    ON user_tag.tag_id = tag.tag_id
+                    WHERE user_id = '.$db->cleanse($user_id);
+        if($result = $db->Select($query)) {
+            $ret = array();
+            foreach($result as $row) {
+                $ret[] = $row['label'];
+            }
+        }
+
+        return $ret;
+    }
+
+    public function likeTag($user_id, $tag_id)
+    {
+        $ret = false;
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT user_id, tag_id
+                    FROM user_tag
+                    WHERE user_id = '.$db->cleanse($user_id).'
+                    AND tag_id = '.$db->cleanse($tag_id);
+        if($db->Select($query)) {
+            $ret = true;
+        } else {
+            $insert = 'INSERT INTO user_tag (user_id, tag_id)
+                    VALUES ('.$db->cleanse($user_id).', '.$db->cleanse($tag_id).')';
+            if ($result = $db->insertStr($insert)) {
+                $ret = true;
+            }
+        }
+
+        return $ret;
+    }
 }
