@@ -3,7 +3,11 @@
 	<h1>{$tag} <small>Find tasks tagged with this tag</small>
     {if isset($user_id)}
         <form method="post" action="{urlFor name="tag-details" options="label.$tag"}" class="pull-right">
-        <button type="submit" class="pull-right btn btn-small" name="submit">Save Tag</button>
+        {if isset($subscribed)}
+            <button type="submit" class="pull-right btn btn-small" name="remove" title="Remove tag from preferred tags list">Unsubscribe</button>
+        {else}
+            <button type="submit" class="pull-right btn btn-small" name="save" title="Save the tag to a list of preferred tags">Save Tag</button>
+        {/if}
         </form>
     {/if}
     </h1>

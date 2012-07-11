@@ -226,6 +226,9 @@ class UserDao {
         return $ret;
     }
 
+    /*
+        Add the tag to a list of the user's preferred tags
+    */
     public function likeTag($user_id, $tag_id)
     {
         $ret = false;
@@ -243,6 +246,25 @@ class UserDao {
             if ($result = $db->insertStr($insert)) {
                 $ret = true;
             }
+        }
+
+        return $ret;
+    }
+
+    /*
+        The opposite of likeTag
+    */
+    public function removeTag($user_id, $tag_id)
+    {
+        $ret = false;
+        $db= new MySQLWrapper();
+        $db->init();
+        $delete = "DELETE
+                    FROM user_tag
+                    WHERE user_id=".$db->cleanse($user_id)."
+                    AND tag_id =".$db->cleanse($tag_id);
+        if($db->Delete($delete)) {
+            $ret = true;
         }
 
         return $ret;

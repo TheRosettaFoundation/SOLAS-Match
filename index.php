@@ -508,10 +508,20 @@ $app->get('/tag/:label/', function ($label) use ($app) {
         $tag_id = $tag->getTagId();
         $user_id = $current_user->getUserId();
 
-        if(!($user_dao->likeTag($user_id, $tag_id))) {
-            $displayName = $current_user->getDisplayName();
-            $warning = "Unable to save tag $label for user $displayName";
-            $app->view()->appendData(array('warning' => $warning));
+        if($app->request()->post('remove') !== NULL) {
+            if(!($user_dao->removeTag($user_id, $tag_id))) {
+                $displayName = $current_user->getDisplayName();
+                $warning = "Unable to remove tag, $label, for user $displayName";
+                $app->view()->appendData(array("warning" => $warning));
+            }
+        }
+
+        if($app->request()->post('save') !== NULL) {
+            if(!($user_dao->likeTag($user_id, $tag_id))) {
+                $displayName = $current_user->getDisplayName();
+                $warning = "Unable to save tag $label for user $displayName";
+                $app->view()->appendData(array('warning' => $warning));
+            }
         }
     }
 
@@ -525,6 +535,11 @@ $app->get('/tag/:label/', function ($label) use ($app) {
             'user_tags' => $user_tags,
             'user_id' => $user_id
         ));
+        if(in_array($label, $user_tags)) {
+            $app->view()->appendData(array(
+                'subscribed' => true
+            ));
+        }
     }
 
     $app->view()->appendData(array(
@@ -533,6 +548,24 @@ $app->get('/tag/:label/', function ($label) use ($app) {
     ));
     $app->render('tag.tpl');
 })->via("POST")->name('tag-details');
+
+$app->get('/all/tags', function () use ($app) {
+    $user_dao = new UserDao();
+    $tags_dao = new TagsDao();
+
+    $current_user = $user_dao->getCurrentUser();
+    $user_id = $current_user->getUserId();
+
+    $user_tags = $user_dao->getUserTags($user_id);
+    $all_tags = $tags_dao->getAllTags();
+
+    $app->view()->appendData(array(
+        'user_tags' => $user_tags,
+        'all_tags' => $all_tags
+    ));
+
+    $app->render('tag-list.tpl');
+})->name('tags-list');
 
 $app->get('/login', function () use ($app) {
     $error = null;

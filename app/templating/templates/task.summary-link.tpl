@@ -15,10 +15,11 @@
 		{/foreach}
 	</p>
 
-    {if $task->getStatus()}
-        <p><span class="label label-info">{$task->getStatus()}</span></p>
+    {if isset($current_page) AND $current_page == 'user-profile'}
+        {if $task->getStatus()}
+            <p><span class="label label-info">{$task->getStatus()}</span></p>
+        {/if}
     {/if}
-
 	
 	<p class="task_details">
 		Added {IO::timeSinceSqlTime($task->getCreatedTime())} ago
