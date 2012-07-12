@@ -41,6 +41,8 @@
     </div>
 {/if}
 
+<iframe src="http://docs.google.com/viewer?url={urlencode($file_preview_path)}&embedded=true" width="600" height="780" style="border: none;"></iframe-->
+
 {if isset($this_user_has_claimed_this_task)}
 	<div class="page-header">
 		<h1>Finished translating? <small>{$task_file_info.filename}</small></h1>
