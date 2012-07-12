@@ -4,3 +4,10 @@ body {
 section {
 	margin-bottom: 60px;
 }
+iframe {
+    display: block;
+    width: 800px;
+    height: 900px;
+    margin: 0 auto;
+    border: 0;
+}
