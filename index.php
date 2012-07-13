@@ -508,47 +508,24 @@ $app->get('/tag/:label/', function ($label) use ($app) {
         $app->view()->setData('tasks', $tasks);
     }
 
-    if($app->request()->isPost()) {
-        $tag_dao = new TagsDao();
-        $tag = $tag_dao->find(array('label' => $label));
-        
-        $user_dao = new UserDao();
-        $current_user = $user_dao->getCurrentUser();
-
-        $tag_id = $tag->getTagId();
-        $user_id = $current_user->getUserId();
-
-        if($app->request()->post('remove') !== NULL) {
-            if(!($user_dao->removeTag($user_id, $tag_id))) {
-                $displayName = $current_user->getDisplayName();
-                $warning = "Unable to remove tag, $label, for user $displayName";
-                $app->view()->appendData(array("warning" => $warning));
-            }
-        }
-
-        if($app->request()->post('save') !== NULL) {
-            if(!($user_dao->likeTag($user_id, $tag_id))) {
-                $displayName = $current_user->getDisplayName();
-                $warning = "Unable to save tag $label for user $displayName";
-                $app->view()->appendData(array('warning' => $warning));
-            }
-        }
-    }
-
     if (UserDao::isLoggedIn()) {
         $user_dao = new UserDao();
         $current_user = $user_dao->getCurrentUser();
         $user_id = $current_user->getUserId();
 
-        $user_tags = $user_dao->getUserTags($user_id);
         $app->view()->appendData(array(
-            'user_tags' => $user_tags,
             'user_id' => $user_id
         ));
-        if(in_array($label, $user_tags)) {
+        $user_tags = $user_dao->getUserTags($user_id);
+        if(count($user_tags) > 0) {
             $app->view()->appendData(array(
-                'subscribed' => true
+                'user_tags' => $user_tags
             ));
+            if(in_array($label, $user_tags)) {
+                $app->view()->appendData(array(
+                    'subscribed' => true
+                ));
+            }
         }
     }
 
@@ -558,6 +535,36 @@ $app->get('/tag/:label/', function ($label) use ($app) {
     ));
     $app->render('tag.tpl');
 })->via("POST")->name('tag-details');
+
+$app->get("/tag/:label/:subscribe", function ($label, $subscribe) use ($app) {
+    $tag_dao = new TagsDao();
+    $tag = $tag_dao->find(array('label' => $label));
+
+    $user_dao = new UserDao();
+    $current_user = $user_dao->getCurrentUser();
+
+    $tag_id = $tag->getTagId();
+    $user_id = $current_user->getUserId();
+
+    if($subscribe == "true") {
+        if(!($user_dao->likeTag($user_id, $tag_id))) {
+            $displayName = $current_user->getDisplayName();
+            $warning = "Unable to save tag, $label, for user $displayName";
+            $app->view()->appendData(array("warning" => $warning));
+        }
+    } 
+    
+    if($subscribe == "false") {
+        if(!($user_dao->removeTag($user_id, $tag_id))) {
+            $displayName = $current_user->getDisplayName();
+            $warning = "Unable to remove tag $label for user $displayName";
+            $app->view()->appendData(array('warning' => $warning));
+        }
+    }
+    
+    $app->response()->redirect($app->request()->getReferer());
+
+})->name('tag-subscribe');
 
 $app->get('/all/tags', function () use ($app) {
     $user_dao = new UserDao();

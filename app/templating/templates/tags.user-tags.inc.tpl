@@ -3,7 +3,10 @@
     <ul class="nav nav-list unstyled">
         {foreach from=$user_tags item=tag}
             <li>
-                <a class="tag" href="{urlFor name="tag-details" options="label.$tag"}"><span class="label">{$tag}</span></a>
+                <div class="tag">
+                    <a class="label" href="{urlFor name="tag-details" options="label.$tag"}">{$tag}</a>
+                    <a class="label label-close" href="{urlFor name="home"}tag/{$tag}/false" title="Click to remove tag from subscription list"><b>| x</b></a>
+                </div>
             </li>
         {/foreach}
     </ul>

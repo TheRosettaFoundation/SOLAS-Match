@@ -1,20 +1,20 @@
 {include file="header.tpl"}
 <div class="page-header">
 	<h1>Tasks related to "{$tag}" <small>Find tasks tagged with this tag</small>
-    {if isset($user_id)}
-    {/if}
     </h1>
 </div>
 
 <div class="row">
 	<div class="span8">
         {if isset($user_id)}
-            <form method="post" action="{urlFor name="tag-details" options="label.$tag"}">
             {if isset($subscribed)}
-                <button type="submit" class="btn btn-primary" name="remove" title="Remove tag from a list of tags you have subscribed to">Unsubscribe</button>
+                <a href="{urlFor name="home"}tag/{$tag}/false">
+                <button class="btn btn-primary" title="Remove tag from a list of tags you have subscribed to">Unsubscribe</button>
             {else}
-                <button type="submit" class="btn btn-primary" name="save" title="Save the tag to a list of subscribed tags">Subscribe to Tag</button>
+                <a href="{urlFor name="home"}tag/{$tag}/true">
+                <button class="btn btn-primary" title="Save the tag to a list of subscribed tags">Subscribe to Tag</button>
             {/if}
+            </a>
         {/if}
 
 		{if isset($tasks)}
@@ -31,10 +31,11 @@
         {/if}
 	</div>
 
-    <div class="span4">
-        {include file="tags.user-tags.inc.tpl"}
-    </div>
-	<div class="span4">
+    <div class="span4 pull-right">
+    {if isset($user_id)}
+            {include file="tags.user-tags.inc.tpl"}
+    {/if}
+
 		{include file="tags.top-list.inc.tpl"}
 	</div>
 </div>
