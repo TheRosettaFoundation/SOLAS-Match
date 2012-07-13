@@ -8,7 +8,7 @@
     {else}
         Public Profile
     {/if}
-    <small>A member of SOLAS Match</small>
+    <small>Update your personal details here</small>
     </h1></div>
 {/if}
 

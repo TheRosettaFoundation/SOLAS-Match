@@ -1,20 +1,22 @@
 {include file="header.tpl"}
 <div class="page-header">
-	<h1>{$tag} <small>Find tasks tagged with this tag</small>
+	<h1>Tasks related to "{$tag}" <small>Find tasks tagged with this tag</small>
     {if isset($user_id)}
-        <form method="post" action="{urlFor name="tag-details" options="label.$tag"}" class="pull-right">
-        {if isset($subscribed)}
-            <button type="submit" class="pull-right btn btn-small" name="remove" title="Remove tag from preferred tags list">Unsubscribe</button>
-        {else}
-            <button type="submit" class="pull-right btn btn-small" name="save" title="Save the tag to a list of preferred tags">Save Tag</button>
-        {/if}
-        </form>
     {/if}
     </h1>
 </div>
 
 <div class="row">
 	<div class="span8">
+        {if isset($user_id)}
+            <form method="post" action="{urlFor name="tag-details" options="label.$tag"}">
+            {if isset($subscribed)}
+                <button type="submit" class="btn btn-primary" name="remove" title="Remove tag from a list of tags you have subscribed to">Unsubscribe</button>
+            {else}
+                <button type="submit" class="btn btn-primary" name="save" title="Save the tag to a list of subscribed tags">Subscribe to Tag</button>
+            {/if}
+        {/if}
+
 		{if isset($tasks)}
 			{foreach from=$tasks item=task}
 				{include file="task.summary-link.tpl" task=$task}

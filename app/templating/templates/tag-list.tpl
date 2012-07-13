@@ -4,7 +4,7 @@
 </div>
 
 {if isset($user_tags)}
-    <h1>Preferred Tags <small>Tags that you like</small></h1>
+    <h1>Subscribed Tags <small>These tags are more likely to show up in your stream of tasks.</small></h1>
     <ul class="nav nav-list unstyled">
     {foreach $user_tags as $tag}
         <li>

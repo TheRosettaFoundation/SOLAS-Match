@@ -5,16 +5,17 @@
         <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
         {assign var="user_id" value=$user->getUserId()}
         {if $user->getDisplayName() != ''}
-            {$user->getDisplayName()} <small>Update your user settings here</small>
+            {$user->getDisplayName()}
         {else}
-            User Profile <small>Update your user settings here</small>
+            User Profile
         {/if}
+        <small>View user details here</small>
         {if isset($private_access)}
             <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Private Profile</a>
         {/if}
     </h1></div>
 {else}
-    <div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>
+    <div class='page-header'><h1>User Profile <small>View user details here</small></h1></div>
 {/if}
 
 <h3>Public display name:</h3>
@@ -46,7 +47,7 @@
 {if isset($user_tags)}
     {if count($user_tags) > 0}
         <div class="page-header">
-            <h1>Tags<small> A list of preferred tags.</small>
+            <h1>Tags<small> A list of tags you have subscribed to.</small>
             <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">Manage Tags</a></h1>
         </div>
 
