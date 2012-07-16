@@ -4,7 +4,7 @@ DBHOST=localhost
 DBUSER=root
 DBPASS=root
 DBNAME=SolasMatch
-GITREPO=/opt/lampp/htdocs/SOLAS-Match/app/db
+GITREPO=/opt/lampp/htdocs/SOLAS/app/db
 cd $GITREPO
 mysqldump -h $DBHOST -u $DBUSER -p$DBPASS -d $DBNAME --protocol=TCP > $GITREPO/schema.sql # the -d flag means "no data"
 echo "Dumped database schema to $GITREPO/schema.sql"
