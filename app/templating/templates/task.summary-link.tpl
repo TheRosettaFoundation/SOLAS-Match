@@ -11,7 +11,7 @@
 		{/if}
 
 		{foreach from=$task->getTags() item=tag}
-			<span class="label">{$tag}</span>
+			<a href="{urlFor name="tag-details" options="label.$tag"}" class="label"><span class="label">{$tag}</span></a>
 		{/foreach}
 	</p>
 
