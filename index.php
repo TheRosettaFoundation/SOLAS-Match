@@ -111,9 +111,6 @@ function authUserForOrg($request, $response, $route) {
 *
 */
 $app->get('/', function () use ($app) {
-    if ($tasks = TaskStream::getStream(10)) {
-        $app->view()->setData('tasks', $tasks);
-    }
     $task_dao = new TaskDao;
     $app->view()->appendData(array(
         'top_tags' => $task_dao->getTopTags(30),
@@ -122,9 +119,17 @@ $app->get('/', function () use ($app) {
 
     if(!UserDao::isLoggedin()) {
         $_SESSION['previous_page'] = 'home';
+
+        if($tasks = TaskStream::getStream(10)) {
+            $app->view()->setData('tasks', $tasks);
+        }
     } else {
         $user_dao = new UserDao();
         $current_user = $user_dao->getCurrentUser();
+
+        if($tasks = TaskStream::getUserStream($current_user->getUserId())) {
+            $app->view()->setData('tasks', $tasks);
+        }
 
         $user_tags = $user_dao->getUserTags($current_user->getUserId());
 

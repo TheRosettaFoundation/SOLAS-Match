@@ -325,7 +325,38 @@ New requirement:
 		}
 		return $ret;
 	}
-	
+
+    /*
+     * Returns an array of tasks ordered by the highest score related to the user
+     */
+    public function getUserTopTasks($user_id, $nb_items) {
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT t.id
+                    FROM task AS t JOIN user_task_score AS uts
+                    ON t.id = uts.task_id
+                    WHERE user_id = '.$db->cleanse($user_id).'
+                    AND t.id NOT IN (
+                        SELECT task_id
+                        FROM task_claim
+                    )
+                    ORDER BY uts.score DESC
+                    LIMIT '.$db->cleanse($nb_items);
+
+        $ret = false;
+        if ($result = $db->Select($query)) {
+            $ret = array();
+            foreach($result as $row) {
+                $task = self::find(array('task_id' => $row['id']));
+                if(!$task->getTaskId()) {
+                    throw new Exception('Tried to create a task, but its ID is not set.');
+                }
+                $ret[] = $task;
+            }
+        }
+        return $ret;
+    }
+
 	/*
 	 * Return an array of tasks that are tagged with a certain tag.
 	 */
