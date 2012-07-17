@@ -2,9 +2,24 @@
 
 import MySQLdb as mdb
 import sys
+import ConfigParser
+import string
 from sets import Set
 
 con = None
+settings = dict()
+
+#
+# Load the configuration file that stores the Database info
+#
+def LoadConfig():
+    file_name = "../includes/conf.ini"
+    parser = ConfigParser.ConfigParser()
+    parser.read(file_name)
+    for section in parser.sections():
+        name = string.lower(section)
+        for opt in parser.options(section):
+            settings[name + "." + string.lower(opt)] = string.strip(parser.get(section, opt)).replace("\"", '').replace("\'", '')
 
 #
 # this function returns a list of users in the system
@@ -131,7 +146,6 @@ def getScoreForUserTask(user_id, task_id):
          
         cur = con.cursor(mdb.cursors.DictCursor)
         query = "SELECT score FROM user_task_score WHERE user_id = %d AND task_id = %d" % (int(user_id), int(task_id))
-        print "\n\n\tQuery is: ", query
         cur.execute(query)
 
         if(cur.rowcount > 0):
@@ -143,40 +157,45 @@ def getScoreForUserTask(user_id, task_id):
     finally:
         if con:
             con.close()
-
-        return result
+        if(result != None):
+            return result[0]['score']
+        else:
+            return result
     
 def saveNewScore(user_id, task_id, score):
     previousScore = getScoreForUserTask(user_id, task_id)
-    if(previousScore != None):
-        query = "UPDATE user_task_score SET score=%d WHERE user_id=%d AND task_id=%d" % (int(score), int(user_id), int(task_id))
-    else:
-        query = "INSERT INTO user_task_score (user_id, task_id, score) VALUES (%d, %d, %d)" % (int(user_id), int(task_id), int(score))
-    try:
-        result = None
-        con = mdb.connect(unix_socket = "/opt/lampp/var/mysql/mysql.sock",
-                host = 'localhost',
-                user = 'test_user',
-                passwd = 'password',
-                db = 'SolasMatch')
+    if(previousScore != int(score)):
+        print "Updating score for user-task " + str(user_id) + "-" + str(task_id)  + " to " + str(score)
+        if(previousScore != None):
+            query = "UPDATE user_task_score SET score=%d WHERE user_id=%d AND task_id=%d" % (int(score), int(user_id), int(task_id))
+        else:
+            query = "INSERT INTO user_task_score (user_id, task_id, score) VALUES (%d, %d, %d)" % (int(user_id), int(task_id), int(score))
+        try:
+            result = None
+            con = mdb.connect(unix_socket = "/opt/lampp/var/mysql/mysql.sock",
+                    host = 'localhost',
+                    user = 'test_user',
+                    passwd = 'password',
+                    db = 'SolasMatch')
          
-        cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute(query)
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute(query)
 
-    except:
-        print "Error %d: %s" % (e.args[0],e.args[1])
-        sys.exit(1)
+        except:
+            print "Error %d: %s" % (e.args[0],e.args[1])
+            sys.exit(1)
 
-    finally:
-        if con:
-            con.commit()
-            con.close()
-
-        return result
+        finally:
+            if con:
+                con.commit()
+                con.close()
+    
+            return result
 
 #
 # Update the scores
 #
+LoadConfig()
 users = getUserList()       #get a list of all users
 for user in users:
     #Get the tags that user has subscribed to   
