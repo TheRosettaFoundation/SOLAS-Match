@@ -333,10 +333,12 @@ New requirement:
         $db = new MySQLWrapper();
         $db->init();
         $query = 'SELECT t.id
-                    FROM task AS t JOIN user_task_score AS uts
+                    FROM task AS t 
+                    LEFT JOIN (SELECT * 
+                        FROM  user_task_score
+                        WHERE user_id = '.$db->cleanse($user_id).') AS uts
                     ON t.id = uts.task_id
-                    WHERE user_id = '.$db->cleanse($user_id).'
-                    AND t.id NOT IN (
+                    WHERE t.id NOT IN (
                         SELECT task_id
                         FROM task_claim
                     )
