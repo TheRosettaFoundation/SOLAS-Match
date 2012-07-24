@@ -72,6 +72,7 @@ $authenticateForRole = function ( $role = 'translator' ) {
         $current_user = $user_dao->getCurrentUser();
     
         if (!is_object($current_user)) {
+            $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }
         else if ($user_dao->belongsToRole($current_user, $role) === false) { 
@@ -214,7 +215,8 @@ $app->get('/task/upload', $authenticateForRole('organisation_member'), function 
     $app->render('task.upload.tpl');
 })->via('GET','POST')->name('task-upload');
 
-$app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), function ($task_id) use ($app) {
+$app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), 
+            'authenticateUserForTask', function ($task_id) use ($app) {
     $userDao = new UserDao();
     $currentUser = $userDao->getCurrentUser();
 
@@ -259,7 +261,7 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'), f
     }
 })->via('POST')->name('task-upload-edited');
 
-$app->get('/task/:task_id/uploaded-edit/', function ($task_id) use ($app) {
+$app->get('/task/:task_id/uploaded-edit/', 'authenticateUserForTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
     $org_id = $task->getOrganisationId();
@@ -279,7 +281,8 @@ $app->get('/task/:task_id/uploaded-edit/', function ($task_id) use ($app) {
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
 
-$app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
+$app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'),
+            'authenticateUserForTask', function ($task_id) use ($app) {
     $error      = null;
     $task_dao   = new TaskDao();
     $task       = $task_dao->find(array('task_id' => $task_id));
@@ -319,7 +322,8 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
     $app->render('task.describe.tpl');
 })->via('GET','POST')->name('task-describe');
 
-$app->get('/task/id/:task_id/uploaded/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/uploaded/', $authenticateForRole('organisation_member'), 
+            'authenticateUserForTask', function ($task_id) use ($app) {
     $app->render('task.uploaded.tpl');
 })->name('task-uploaded');
 
@@ -386,7 +390,8 @@ $app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) u
     $app->render('task.tpl');
 })->name('task');
 
-$app->get('/task/id/:task_id/download-preview/', $authenticateForRole('translator'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/download-preview/', $authenticateForRole('translator'), 
+            'authenticateUserForTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -399,7 +404,8 @@ $app->get('/task/id/:task_id/download-preview/', $authenticateForRole('translato
     $app->render('task.download-preview.tpl');
 })->name('download-task-preview');
 
-$app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('translator'), function ($task_id, $version) use ($app) {
+$app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('translator'), 
+            'authenticateUserForTask', function ($task_id, $version) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -448,7 +454,8 @@ $app->post('/claim-task', $authenticateForRole('translator'), function () use ($
 
 })->name('claim-task');
 
-$app->get('/task/id/:task_id/claimed', $authenticateForRole('translator'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/claimed', $authenticateForRole('translator'), 
+            'authenticateUserForTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
 
     $task = $task_dao->find(array('task_id' => $task_id));
@@ -463,7 +470,8 @@ $app->get('/task/id/:task_id/claimed', $authenticateForRole('translator'), funct
 /*
  * Claim a task after downloading it
  */
-$app->get('/task/claim/:task_id', $authenticateForRole('translator'), function ($task_id) use ($app) {
+$app->get('/task/claim/:task_id', $authenticateForRole('translator'), 
+            'authenticateUserForTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
     if(!is_object($task)) {
@@ -475,7 +483,8 @@ $app->get('/task/claim/:task_id', $authenticateForRole('translator'), function (
     $app->render('task.claim.tpl');
 })->name('task-claim-page');
 
-$app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator'), 
+            'authenticateUserForTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -491,7 +500,8 @@ $app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator')
 
 })->name('download-task');
 
-$app->get('/task/id/:task_id/mark-archived/', $authenticateForRole('organisation_member'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/mark-archived/', $authenticateForRole('organisation_member'), 
+            'authenticateUserForTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -505,7 +515,8 @@ $app->get('/task/id/:task_id/mark-archived/', $authenticateForRole('organisation
     $app->redirect($ref = $app->request()->getReferrer());
 })->name('archive-task');
 
-$app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('translator'), function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('translator'), 
+            'authenticateUserForTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
