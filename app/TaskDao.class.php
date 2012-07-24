@@ -554,13 +554,13 @@ New requirement:
 		return $ret;
 	}
 
-	public function hasUserClaimedTask($user, $task) {
+	public function hasUserClaimedTask($user_id, $task_id) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$query = 'SELECT user_id
 					FROM task_claim
-					WHERE task_id = ' . $db->cleanse($task->getTaskId()) . '
-					AND user_id = ' . $db->cleanse($user->getUserId());
+					WHERE task_id = ' . $db->cleanse($task_id) . '
+					AND user_id = ' . $db->cleanse($user_id);
 		if ($result = $db->Select($query)) {
 			return true;
 		}
@@ -569,12 +569,12 @@ New requirement:
 		}
 	}
 
-	public function taskIsClaimed($task) {
+	public function taskIsClaimed($task_id) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$query = 'SELECT user_id
 					FROM task_claim
-					WHERE task_id = ' . $db->cleanse($task->getTaskId());
+					WHERE task_id = ' . $db->cleanse($task_id);
 		if ($result = $db->Select($query)) {
 			return true;
 		}

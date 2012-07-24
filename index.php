@@ -81,6 +81,28 @@ $authenticateForRole = function ( $role = 'translator' ) {
     };
 };
 
+function authenticateUserForTask($request, $response, $route) {
+    $app = Slim::getInstance();
+    $params = $route->getParams();
+    if($params !== NULL) {
+        $task_id = $params['task_id'];
+        $task_dao = new TaskDao();
+        if($task_dao->taskIsClaimed($task_id)) {
+            $user_dao = new UserDao();
+            $current_user = $user_dao->getCurrentUser();
+            if(!$task_dao->hasUserClaimedTask($current_user->getUserId(), $task_id)) {
+                $app->flash('error', 'This task has been claimed by another user');
+                $app->redirect($app->urlFor('home'));
+            }
+        }
+        return true;
+    } else {
+        $app->flash('error', 'Unable to find task');
+        $app->redirect($app->urlFor('home'));
+    }
+}
+
+
 function authUserForOrg($request, $response, $route) {
     $params = $route->getParams();
     if($params !== NULL) {
@@ -117,16 +139,15 @@ $app->get('/', function () use ($app) {
         'current_page' => 'home'
     ));
 
-    if(!UserDao::isLoggedin()) {
+    $user_dao = new UserDao();
+    $current_user = $user_dao->getCurrentUser();
+    if($current_user == null) {
         $_SESSION['previous_page'] = 'home';
 
         if($tasks = TaskStream::getStream(10)) {
             $app->view()->setData('tasks', $tasks);
         }
     } else {
-        $user_dao = new UserDao();
-        $current_user = $user_dao->getCurrentUser();
-
         if($tasks = TaskStream::getUserStream($current_user->getUserId())) {
             $app->view()->setData('tasks', $tasks);
         }
@@ -302,7 +323,7 @@ $app->get('/task/id/:task_id/uploaded/', $authenticateForRole('organisation_memb
     $app->render('task.uploaded.tpl');
 })->name('task-uploaded');
 
-$app->get('/task/id/:task_id/', function ($task_id) use ($app) {
+$app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
     if (!is_object($task)) {
@@ -329,13 +350,13 @@ $app->get('/task/id/:task_id/', function ($task_id) use ($app) {
         'file_name' => $task_file_info['filename']
     ));
 
-    if ($task_dao->taskIsClaimed($task)) {
+    if ($task_dao->taskIsClaimed($task->getTaskId())) {
         $app->view()->appendData(array(
             'task_is_claimed' => true
         ));
         $user_dao = new UserDao();
         if ($current_user = $user_dao->getCurrentUser()) {
-            if ($task_dao->hasUserClaimedTask($current_user, $task)) {
+            if ($task_dao->hasUserClaimedTask($current_user->getUserId(), $task->getTaskId())) {
                 $app->view()->appendData(array(
                     'this_user_has_claimed_this_task' => true
                 ));
@@ -685,8 +706,6 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
     $user_dao = new UserDao();
     $user = $user_dao->find(array('user_id' => $user_id));
     
-    getUserDetails($app, $user);
-
     $task_dao = new TaskDao();
     $activeJobs = $task_dao->getUserTasks($user);
 
@@ -694,7 +713,32 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
 
     $user_tags = $user_dao->getUserTags($user->getUserId());
 
-    $app->view()->appendData(array('current_page' => 'user-profile',
+    $badge_dao = new BadgeDao();
+    $org_dao = new OrganisationDao();
+    
+    $orgIds = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+    $orgList = array();
+    
+    if(count($orgIds) > 0) {
+        foreach ($orgIds as $orgId) {
+            $orgList[] = $org_dao->find(array('id' => $orgId));
+        }
+    }
+    
+    $badgeIds = $user_dao->getUserBadges($user);
+    $badges = array();
+    $i = 0;
+    if(count($badgeIds) > 0) {
+        foreach($badgeIds as $badge) {
+            $badges[$i] = $badge_dao->find(array('badge_id' => $badge['badge_id']));
+            $i++;
+        }
+    }
+    
+    $app->view()->setData('user',  $user);
+    $app->view()->appendData(array('badges' => $badges,
+                                    'orgList' => $orgList,
+                                    'current_page' => 'user-profile',
                                     'activeJobs' => $activeJobs,
                                     'archivedJobs' => $archivedJobs,
                                     'user_tags' => $user_tags
