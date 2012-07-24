@@ -22,13 +22,15 @@ def LoadConfig():
             settings[name + "." + string.lower(opt)] = string.strip(parser.get(section, opt)).replace("\"", '').replace("\'", '')
 
 def DBQuery(query):
+    con = None
     try:
         rows = None
-        con = mdb.connect(unix_socket = "/opt/lampp/var/mysql/mysql.sock",
-               host = settings['database.server'],
+        #Must specify read_default_group so that it will read my.cnf for the socket
+        con = mdb.connect(host = settings['database.server'],
                user = settings['database.username'],
                passwd = settings['database.password'],
-               db = settings['database.database'])
+               db = settings['database.database'],
+               read_default_group="client")
     
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute(query)
@@ -49,13 +51,14 @@ def DBQuery(query):
         return rows
 
 def DBAlterTable(update):
+    con = None
     try:
         result = None
-        con = mdb.connect(unix_socket = "/opt/lampp/var/mysql/mysql.sock",
-                host = 'localhost',
-                user = 'test_user',
-                passwd = 'password',
-                db = 'SolasMatch')
+        con = mdb.connect(host = settings['database.server'],
+                user = settings['database.username'],
+                passwd = settings['database.password'],
+                db = settings['database.database'],
+                read_default_group="client")
         
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute(update)
