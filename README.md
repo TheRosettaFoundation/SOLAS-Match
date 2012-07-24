@@ -13,8 +13,8 @@ and re-uploaded. Development began in February 2011.
 
 # Copyright notice
 
-© 2011 University of Limerick. All rights reserved. This material may 
-not be reproduced, displayed, modified or distributed without the 
+© 2011 University of Limerick. All rights reserved. This material may
+not be reproduced, displayed, modified or distributed without the
 express prior written permission of the copyright holder.
 
 The copyright notice applies to all code in this distribution, unless
@@ -27,10 +27,10 @@ a MySQL 5+ database.
 
 ## System Requirements
 
-HTTP server (Apache, for example) with PHP 5.3+ interpreter MySQL 5+ 
+HTTP server (Apache, for example) with PHP 5.3+ interpreter MySQL 5+
 database
 
-Several additional libraries also need to be installed alongside 
+Several additional libraries also need to be installed alongside
 SOLAS Match. See the following installation instructions.
 
 # Contact
@@ -57,7 +57,7 @@ Further below in this document, there are also several resources for our work mo
 
 ## Install Smarty PHP templating engine
 
- * In Ubuntu: 
+ * In Ubuntu:
 	$ sudo apt-get install smarty3
 
 **Or**
@@ -108,7 +108,7 @@ directory. Remove the offending files and rerun.
 ## Install 960.css Grid System
 
 This step is probably redundant, being replaced by Twitter Bootstrap. If you're working
-through these instructions, please review the generaly header template and correct these 
+through these instructions, please review the generaly header template and correct these
 nstructions as appropricate.
 
 1. Download 960 Grid System from http://960.gs/
@@ -120,23 +120,6 @@ nstructions as appropricate.
 
 # Collaborative source code management
 
-## git primers
-
-* [git - the simple guide](http://nvie.com/posts/a-successful-git-branching-model/)
-* [git - a primer](http://danielmiessler.com/study/git/)
-
-## Collaborative workflow
-
-We generally follow [A successful Git branching model](http://nvie.com/posts/a-successful-git-branching-model/).
-
-In this model, most of the work is done off the `develop` branch.
-
-For example, if you want to start working on a new feature, checkout the `develop` branch,
-and then branch from their a new feature branch. For example:
-
-    git checkout develop
-    git checkout -b my-new-feature-name
-    
-Only when a branch is finished and ready for testing, we merge it into the `develop` branch.
-
-Once the feature is ready for production, it can be finally merged into the `master` branch.
+Please see the wiki page [Contributing code](https://github.com/TheRosettaFoundation/SOLAS-Match/wiki/Contributing-code)
+for the standards followed by this project (such as git version control, and coding
+style).
