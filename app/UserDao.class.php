@@ -134,6 +134,10 @@ class UserDao {
 			throw new InvalidArgumentException('Sorry, that password is incorrect. Please try again.');
 		}
 
+        if ($clear_password === '') {
+            throw new InvalidArgumentException('Sorry, an empty password is not allowed. Please contact the site administrator for details');
+        }
+
 		UserSession::setSession($user->getUserId());
 
 		return true;
@@ -173,13 +177,13 @@ class UserDao {
 		return $ret;
 	}
 
-	public function findOrganisationsUserBelongsTo(User $user) {
+	public function findOrganisationsUserBelongsTo($user_id) {
 		$ret = null;
 		$db = new MySQLWrapper();
 		$db->init();
 		$query = 'SELECT organisation_id 
 					FROM organisation_member
-					WHERE user_id = ' . $db->cleanse($user->getUserId());
+					WHERE user_id = ' . $db->cleanse($user_id);
 		if ($result = $db->Select($query)) {
 			$ret = array();
 			foreach ($result as $row) {
@@ -202,4 +206,67 @@ class UserDao {
 
 		return $ret;
 	}
+
+    public function getUserTags($user_id)
+    {
+        $ret = null;
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT label
+                    FROM user_tag JOIN tag 
+                    ON user_tag.tag_id = tag.tag_id
+                    WHERE user_id = '.$db->cleanse($user_id);
+        if($result = $db->Select($query)) {
+            $ret = array();
+            foreach($result as $row) {
+                $ret[] = $row['label'];
+            }
+        }
+
+        return $ret;
+    }
+
+    /*
+        Add the tag to a list of the user's preferred tags
+    */
+    public function likeTag($user_id, $tag_id)
+    {
+        $ret = false;
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT user_id, tag_id
+                    FROM user_tag
+                    WHERE user_id = '.$db->cleanse($user_id).'
+                    AND tag_id = '.$db->cleanse($tag_id);
+        if($db->Select($query)) {
+            $ret = true;
+        } else {
+            $insert = 'INSERT INTO user_tag (user_id, tag_id)
+                    VALUES ('.$db->cleanse($user_id).', '.$db->cleanse($tag_id).')';
+            if ($result = $db->insertStr($insert)) {
+                $ret = true;
+            }
+        }
+
+        return $ret;
+    }
+
+    /*
+        The opposite of likeTag
+    */
+    public function removeTag($user_id, $tag_id)
+    {
+        $ret = false;
+        $db= new MySQLWrapper();
+        $db->init();
+        $delete = "DELETE
+                    FROM user_tag
+                    WHERE user_id=".$db->cleanse($user_id)."
+                    AND tag_id =".$db->cleanse($tag_id);
+        if($db->Delete($delete)) {
+            $ret = true;
+        }
+
+        return $ret;
+    }
 }

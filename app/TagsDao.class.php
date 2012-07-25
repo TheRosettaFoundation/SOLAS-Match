@@ -148,4 +148,21 @@ class TagsDao {
 		}
 		return $ret;
 	}
+
+    public function getAllTags()
+    {
+        $ret = false;
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT *
+                    FROM tag';
+        if($result = $db->Select($query)) {
+            $ret = array();
+            foreach($result as $row) {
+                $ret[] = $row['label'];
+            }
+        }
+
+        return $ret;
+    }
 }

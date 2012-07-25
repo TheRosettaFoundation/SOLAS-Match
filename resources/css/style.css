@@ -7,3 +7,22 @@ section {
 #tasks h2:not(:first-child) {
     margin-top: 2em;
 }
+iframe {
+    display: block;
+    width: 800px;
+    height: 900px;
+    margin: 0 auto;
+    border: 0;
+}
+.label-close {
+    color: white;
+    margin-left: -8px;
+}
+.label-close:hover {
+    background-color: red;
+}
+.tag {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+>>>>>>> user-profile

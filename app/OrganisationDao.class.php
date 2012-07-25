@@ -5,19 +5,20 @@ require('models/Organisation.class.php');
 class OrganisationDao {
     public function find($params) {
         $query = null;
+        $ret = null;
         $db = new MySQLWrapper();
         $db->init();
         if (isset($params['id'])) {
             $query = 'SELECT *
                         FROM organisation
                         WHERE id='.$params['id'];
-        }
+        
 
-        $ret = null;
-        if ($result = $db->Select($query)) {
+            if ($result = $db->Select($query)) {
 
-            $ret = $this->create_org_from_sql_result($result);
+                $ret = $this->create_org_from_sql_result($result);
 
+            }
         }
         return $ret;
     }

@@ -3,7 +3,7 @@
 	<h1>Log In <small>to Solas Match</small></h1>
 </div>
 
-<form method="post" action="{$url_login}">
+<form method="post" action="{urlFor name='login'}">
 	<label for="email">Email</label>
 	<input type="text" name="email" id="email">
 	<label for="password">Password</label>

@@ -6,7 +6,7 @@ Class Settings {
     var $_settings = array();
 
     function __construct() {
-        $file = dirname(__FILE__).'/includes/conf.php';
+        $file = dirname(__FILE__).'/includes/conf.ini';
         $this->load($file);
     }
 
@@ -20,30 +20,21 @@ Class Settings {
 
     private function _retrieveValue($var) {
         $var = explode('.', $var);
-        if (isset($this->_settings[$var[0]][$var[1]])) {
-            return $this->_settings[$var[0]][$var[1]];
+        if (isset($this->_settings[$var[1]])) {
+            return $this->_settings[$var[1]];
         }
         else {
             return null;
         }
     }
 
-    public function isSettingStored($var) {
-        $result = $this->_retrieveValue($var);
-        return (!empty($result));
-    }
-
 	function load($file) {
-        require ($file);
-        unset($file);
-
-        // Get declared variables
-        $vars = get_defined_vars();
-
-        // Add to settings array
-        foreach ($vars as $key => $val) {
-            if ($key == 'this') continue;
-            $this->_settings[$key] = $val;
+        if(file_exists($file)) {
+            $this->_settings = parse_ini_file($file);
+            //This updates the upload path to be absolute
+            $this->_settings['upload_path'] = __DIR__."/".$this->_settings['upload_path'];
+        } else {
+            echo "<p>Could not load ini file</p>";
         }
     }
 }

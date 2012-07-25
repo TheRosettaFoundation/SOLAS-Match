@@ -119,6 +119,7 @@ New requirement:
 		    }
 
     		$ret = new Task($task_data);
+            $ret->setStatus($this->getTaskStatus($ret->getTaskId()));
         }
 
 		return $ret;
@@ -324,7 +325,40 @@ New requirement:
 		}
 		return $ret;
 	}
-	
+
+    /*
+     * Returns an array of tasks ordered by the highest score related to the user
+     */
+    public function getUserTopTasks($user_id, $nb_items) {
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT t.id
+                    FROM task AS t 
+                    LEFT JOIN (SELECT * 
+                        FROM  user_task_score
+                        WHERE user_id = '.$db->cleanse($user_id).') AS uts
+                    ON t.id = uts.task_id
+                    WHERE t.id NOT IN (
+                        SELECT task_id
+                        FROM task_claim
+                    )
+                    ORDER BY uts.score DESC
+                    LIMIT '.$db->cleanse($nb_items);
+
+        $ret = false;
+        if ($result = $db->Select($query)) {
+            $ret = array();
+            foreach($result as $row) {
+                $task = self::find(array('task_id' => $row['id']));
+                if(!$task->getTaskId()) {
+                    throw new Exception('Tried to create a task, but its ID is not set.');
+                }
+                $ret[] = $task;
+            }
+        }
+        return $ret;
+    }
+
 	/*
 	 * Return an array of tasks that are tagged with a certain tag.
 	 */
@@ -340,12 +374,17 @@ New requirement:
 		$db->init();
 		$ret = false;
 		$q = 'SELECT id
-				FROM task
+				FROM task t
 				WHERE id IN (
 					SELECT task_id
 					FROM task_tag
 					WHERE tag_id = ' . $db->cleanse($tag_id) . '
-				) 
+				)
+                AND id NOT IN (
+                    SELECT task_id
+                    FROM task_claim
+                    WHERE task_id = t.id
+                ) 
 				ORDER BY created_time DESC 
 				LIMIT '.$db->cleanse($nb_items);
 		if ($r = $db->Select($q)) {
@@ -362,15 +401,19 @@ New requirement:
 		$db = new MySQLWrapper();
 		$db->init();
 		$q = 'SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
-				FROM task_tag AS tt, tag AS t
-				WHERE tt.tag_id = t.tag_id
-				AND tt.task_id IN (
-					SELECT id
-					FROM task
-				)
-				GROUP BY tt.tag_id
-				ORDER BY frequency DESC
-				LIMIT '.intval($limit);
+                FROM task_tag AS tt, tag AS t
+                WHERE tt.tag_id = t.tag_id
+                AND tt.task_id IN (
+                    SELECT id
+                    FROM task
+                )
+                AND tt.task_id NOT IN (
+                    SELECT task_id
+                    FROM task_claim
+                )
+                GROUP BY tt.tag_id
+                ORDER BY frequency DESC
+                LIMIT '.intval($limit);
 		if ($r = $db->Select($q)) {
 			$ret = array();
 			foreach ($r as $row) {
@@ -511,13 +554,13 @@ New requirement:
 		return $ret;
 	}
 
-	public function hasUserClaimedTask($user, $task) {
+	public function hasUserClaimedTask($user_id, $task_id) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$query = 'SELECT user_id
 					FROM task_claim
-					WHERE task_id = ' . $db->cleanse($task->getTaskId()) . '
-					AND user_id = ' . $db->cleanse($user->getUserId());
+					WHERE task_id = ' . $db->cleanse($task_id) . '
+					AND user_id = ' . $db->cleanse($user_id);
 		if ($result = $db->Select($query)) {
 			return true;
 		}
@@ -526,12 +569,12 @@ New requirement:
 		}
 	}
 
-	public function taskIsClaimed($task) {
+	public function taskIsClaimed($task_id) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$query = 'SELECT user_id
 					FROM task_claim
-					WHERE task_id = ' . $db->cleanse($task->getTaskId());
+					WHERE task_id = ' . $db->cleanse($task_id);
 		if ($result = $db->Select($query)) {
 			return true;
 		}
@@ -578,10 +621,54 @@ New requirement:
                 $params['word_count'] = $row['word_count'];
                 $params['created_time'] = $row['created_time'];
                 $task = new Task($params);
+                $task->setStatus($this->getTaskStatus($task->getTaskId()));
                 $ret[] = $task;
             }
         }
          
         return $ret;
+    }
+
+    /*
+    * Check to see if a translation for this task has been uploaded before
+    */
+    public function hasBeenUploaded($task_id, $user_id)
+    {
+        return $this->_check_task_file_version($task_id, $user_id);
+    }
+
+    private function getTaskStatus($task_id)
+    {
+        
+        if($this->_check_task_file_version($task_id)) {
+            return "Your translation is under review";
+        } else {
+            return "Awaiting your translation";
+        }
+    }
+
+    /*
+     * A private file for check if a task has been translated by checking 
+     * if a file has been uploaded for it. if user_id is null it will just 
+     * check on a task basis. The inclusion of the user_id allows several 
+     * people to work on the job at once
+     * Returns true if the file has been translated
+     */
+    private function _check_task_file_version($task_id, $user_id = null)
+    {
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = 'SELECT *
+                FROM task_file_version
+                WHERE task_id = '.$db->cleanse($task_id).'
+                AND version_id > 0';
+        if(!is_null($user_id)) {
+            $query .= ' AND user_id = '.$db->cleanse($user_id);
+        }
+        if(!$db->Select($query)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

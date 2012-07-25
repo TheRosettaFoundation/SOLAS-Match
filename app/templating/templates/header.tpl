@@ -26,9 +26,10 @@
 			    		<a href="{urlFor name="client-dashboard"}">Dashboard</a>
 			    	</li>
 		    	{/if}
-			{if UserDao::isLoggedIn()}
+			{if isset($user)}
+                {assign var="user_id" value=$user->getUserId()}
 				<li {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if}>
-					<a href="{urlFor name='user-profile'}">Profile</a>
+					<a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">Profile</a>
 				</li>
 			{/if}
 		    </ul>

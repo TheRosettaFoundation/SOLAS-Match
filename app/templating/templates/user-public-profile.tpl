@@ -2,33 +2,35 @@
 
 {if isset($user)}
     <div class="page-header"><h1>
-    <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
-    {assign var="user_id" value=$user->getUserId()}
-    {if $user->getDisplayName() != ''}
-        {$user->getDisplayName()} <small>Update your user settings here</small>
-    {else}
-        User Profile <small>Update your user settings here</small>
-    {/if}
-    <a href='{urlFor name="public-profile" options="user_id.$user_id"}' class='pull-right btn btn-primary'>Public Profile</a></h1></div>
+        <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
+        {assign var="user_id" value=$user->getUserId()}
+        {if $user->getDisplayName() != ''}
+            {$user->getDisplayName()}
+        {else}
+            User Profile
+        {/if}
+        <small>View user details here</small>
+        {if isset($private_access)}
+            <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Private Profile</a>
+        {/if}
+    </h1></div>
 {else}
-    <div class='page-header'><h1>User Profile <small>Update your user settings here</small></h1></div>
+    <div class='page-header'><h1>User Profile <small>View user details here</small></h1></div>
 {/if}
 
-{if isset($warning) && $warning == true }
-	<p>Invalid input, please fill in all options below.</p>
+<h3>Public display name:</h3>
+<p>{$user->getDisplayName()}</p>
+ 
+{if $user->getNativeLanguage() != ''}
+    <h3>First Maternal Language: </h3>
+    <p>{$user->getNativeLanguage()}</p>
+{/if}
+ 
+{if $user->getBiography() != ''}
+    <h3>Biography:</h3>
+    <p>{$user->getBiography()}</p>
 {/if}
 
-<form method='post' action='{urlFor name='user-profile'}' class='well'>
-	<label for='name'>Public display name:</label>
-	<input type='text' name='name' id='name' placeholder='Name' />
-	<label for='nLanguage'>Native Language:</label>
-	<input type='text' name='nLanguage' id='nLanguage' {if isset($language)} placeholder={$language} {/if}/>
-	<label for='bio'>Biography:</label>
-	<textarea name='bio' cols='40' rows='5'></textarea>
-	<p>
-		<button type='submit' class='btn btn-primary' name='submit'>Update</button>
-	</p>
-</form>
 
 {if isset($badges)}
     {if count($badges) > 0}
@@ -42,6 +44,22 @@
     {/if}
 {/if}
 
+{if isset($user_tags)}
+    {if count($user_tags) > 0}
+        <div class="page-header">
+            <h1>Tags<small> A list of tags you have subscribed to.</small>
+            <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">Manage Tags</a></h1>
+        </div>
+
+        {foreach $user_tags as $tag}
+            
+                <p><a class="tag" href="{urlFor name="tag-details" options="label.$tag"}"><span class="label">{$tag}</span></a></p>
+            
+        {/foreach}
+    {/if}
+{/if}
+
+
 {if isset($orgList)}
     {if count($orgList) > 0}
         <div class='page-header'><h1>Organisations <small>A list of organisations you belong to</small></h1></div>
@@ -54,7 +72,7 @@
                         <a href='{$org->getHomePage()}' class='pull-right btn btn-small'>Home Page</a>
                     </small>
                 {/if}
-            <h3>
+            </h3>
             <p>{$org->getBiography()}</p>    
         {/foreach}
     {/if}
@@ -65,7 +83,7 @@
         <div class='page-header'><h1>Active Jobs <small>A list of jobs you are currently working on</small></h1></div>
 
         {foreach $activeJobs as $job}
-            {include file="task.summary-link.tpl" task=$job}
+                {include file="task.summary-link.tpl" task=$job}
         {/foreach}
     {/if}
 {/if}

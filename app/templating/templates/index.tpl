@@ -15,6 +15,13 @@
 	</div>
 {/if}
 
+{if isset($flash['error'])}
+    <div class="alert alert-error">
+        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
+        <p><strong>Warning! </strong>{$flash['error']}</p>
+    </div>
+{/if}
+
 <div class="page-header">
 	<h1>Translation tasks <small>Claim a task, translate it, upload it</small></h1>
 </div>
@@ -38,9 +45,18 @@
 		{/if}
 	</div>
 
-	<div class="span4">
+    <div class="span4">
+        {include file="tags.user-tags.inc.tpl"}
+	
 		{include file="tags.top-list.inc.tpl"}
 	</div>
 </div>
+
+{if !isset($user)}
+    <div class="alert">
+        <p>Help us match you with the most suitable translation tasks.</p>
+        <p><a href={urlFor name="register"}>Register now</a> to find the jobs best suited to you.</p>
+    </div>
+{/if}
 
 {include file="footer.tpl"}
