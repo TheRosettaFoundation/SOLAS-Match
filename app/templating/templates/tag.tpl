@@ -6,7 +6,7 @@
 
 <div class="row">
 	<div class="span8">
-        {if isset($user_id)}
+        {if isset($user)}
             {if isset($subscribed)}
                 <a href="{urlFor name="home"}tag/{$tag}/false">
                 <button class="btn btn-primary" title="Remove tag from a list of tags you have subscribed to">Unsubscribe</button>
@@ -32,9 +32,9 @@
 	</div>
 
     <div class="span4 pull-right">
-    {if isset($user_id)}
+        {if isset($user)}
             {include file="tags.user-tags.inc.tpl"}
-    {/if}
+        {/if}
 
 		{include file="tags.top-list.inc.tpl"}
 	</div>

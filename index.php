@@ -444,10 +444,6 @@ $app->post('/claim-task', $authenticateForRole('translator'), function () use ($
     $task_dao->claimTask($task, $current_user);
     Notify::notifyUserClaimedTask($current_user, $task);   
 
-    $app->view()->appendData(array(
-                    'user' => $current_user
-    ));
-
     $app->redirect($app->urlFor('task-claimed', array(
         'task_id' => $task_id
     )));
@@ -746,9 +742,8 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
         }
     }
     
-    $app->view()->setData('user',  $user);
+    $app->view()->setData('orgList',  $orgList);
     $app->view()->appendData(array('badges' => $badges,
-                                    'orgList' => $orgList,
                                     'current_page' => 'user-profile',
                                     'activeJobs' => $activeJobs,
                                     'archivedJobs' => $archivedJobs,
@@ -763,10 +758,9 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
 })->name('user-public-profile');
 
 $app->get('/profile', function () use ($app) {
-    $user_dao = new UserDao();
-    $user = $user_dao->getCurrentUser();
-
     if($app->request()->isPost()) {
+        $user_dao = new UserDao();
+        $user = $user_dao->getCurrentUser();
  
         $displayName = $app->request()->post('name');
         if($displayName != NULL) {
@@ -786,8 +780,11 @@ $app->get('/profile', function () use ($app) {
 
         $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user->getUserId())));
     }
-
-    getUserDetails($app, $user);
+    
+    $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+    $language = substr($language, 0, 5);
+    
+    $app->view()->setData('language',  $language);
 
     $app->render('user-private-profile.tpl');
 })->via('POST')->name('user-private-profile');
@@ -819,7 +816,6 @@ $app->get('/org/profile/:org_id', 'authUserForOrg', function ($org_id) use ($app
     $app->view()->setData('current_page', 'org-public-profile');
     $app->view()->appendData(array('org' => $org,
                                     'org_members' => $org_members,
-                                    'current_user' => $currentUser 
     ));
 
     $app->render('org-public-profile.tpl');
@@ -856,42 +852,6 @@ $app->get('/org/private/:org_id', 'authUserForOrg', function ($org_id) use ($app
 
 function isValidPost(&$app) {
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
-}
-
-function getUserDetails($app, $user)
-{
-    $user_dao = new UserDao();
-
-    $badge_dao = new BadgeDao();
-    $org_dao = new OrganisationDao();
-
-    $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-    $language = substr($language, 0, 5);
- 
-    $orgIds = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
-    $orgList = array();
-
-    if(count($orgIds) > 0) { 
-        foreach ($orgIds as $orgId) {
-            $orgList[] = $org_dao->find($orgId);
-        }
-    }
- 
-    $badgeIds = $user_dao->getUserBadges($user);
-    $badges = array();
-    $i = 0;
-    if(count($badgeIds) > 0) {
-        foreach($badgeIds as $badge) {
-            $badges[$i] = $badge_dao->find(array('badge_id' => $badge['badge_id']));
-            $i++;
-        }
-    }
- 
-    $app->view()->setData('user',  $user);
-    $app->view()->appendData(array('badges' => $badges,
-                                    'orgList' => $orgList,
-                                    'language' => $language
-    ));
 }
 
 /**
