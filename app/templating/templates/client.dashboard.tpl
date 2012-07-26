@@ -5,18 +5,21 @@
 </div>
 
 {if isset($org_tasks)}
-    <a class="btn btn-primary" href="{urlFor name="task-upload"}"><i class="icon-upload icon-white"></i> Add new task</a>
     <table class="table table-striped">
     {foreach from=$org_tasks  key=org item=tasks}
-        {if count($tasks) > 0}
-            <thead>
-                <tr>
-                    <th>{$org}</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
+        <thead>
+            <tr>
+                <th>{$orgs[$org]->getName()}</th>
+                <th></th>
+                <th>
+                    <a class="btn btn-primary" href="{urlFor name="task-upload" options="org_id.$org"}">
+                        <i class="icon-upload icon-white"></i> Add new task
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {if !is_null($tasks)}
             {foreach from=$tasks item=task}
                 <tr>
                 {assign var="task_id" value=$task->getTaskId()}
@@ -44,8 +47,8 @@
                 {/if}
                 </tr>
             {/foreach}
-            </tbody>
         {/if}
+        </tbody>
     {/foreach}
     </table>
 {else}

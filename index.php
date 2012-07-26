@@ -163,14 +163,12 @@ $app->get('/', function () use ($app) {
     $app->render('index.tpl');
 })->name('home');
 
-$app->get('/task/upload', $authenticateForRole('organisation_member'), function () use ($app) {
+$app->get('/task/upload/:org_id', $authenticateForRole('organisation_member'), function ($org_id) use ($app) {
     $error_message = null;
     $field_name = 'new_task_file';
 
     $user_dao = new UserDao();
     $current_user = $user_dao->getCurrentUser();
-    $my_organisations = $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId());
-    $organisation_id = $my_organisations[0]; // Not perfect, but it will do until someone appears in multiple organisations
     
     if ($app->request()->isPost()) {
 
@@ -185,7 +183,7 @@ $app->get('/task/upload', $authenticateForRole('organisation_member'), function 
         if (!$upload_error) {
             $task_dao = new TaskDao();
             $task = $task_dao->create(array(
-                'organisation_id'   => $organisation_id,
+                'organisation_id'   => $org_id,
                 'title'             => $_FILES[$field_name]['name']
             ));
             
@@ -207,7 +205,7 @@ $app->get('/task/upload', $authenticateForRole('organisation_member'), function 
         $app->view()->appendData(array('error' => $error_message));
     }
     $app->view()->appendData(array(
-        'url_task_upload'       => $app->urlFor('task-upload'),
+        'url_task_upload'       => $app->urlFor('task-upload', array('org_id' => $org_id)),
         'max_file_size_bytes'   => Upload::maxFileSizeBytes(),
         'max_file_size_mb'      => Upload::maxFileSizeMB(),
         'field_name'            => $field_name
@@ -324,6 +322,14 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
 
 $app->get('/task/id/:task_id/uploaded/', $authenticateForRole('organisation_member'), 
             'authenticateUserForTask', function ($task_id) use ($app) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    $org_id = $task->getOrganisationId();
+    $app->view()->appendData(array(
+            'org_id' => $org_id
+    ));
+
     $app->render('task.uploaded.tpl');
 })->name('task-uploaded');
 
@@ -695,17 +701,18 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId());
 
     $org_tasks = array();
+    $orgs = array();
     foreach($my_organisations as $org_id) {
         $org = $org_dao->find(array('id' => $org_id));
         $my_org_tasks = $task_dao->findTasks(array('organisation_ids' => $org_id));
-        if(!is_null($my_org_tasks)) {
-            $org_tasks[$org->getName()] = $my_org_tasks;
-        }
+        $org_tasks[$org->getId()] = $my_org_tasks;
+        $orgs[$org->getId()] = $org;
     }
     
     if(count($org_tasks) > 0) {
         $app->view()->appendData(array(
                 'org_tasks' => $org_tasks,
+                'orgs' => $orgs,
                 'task_dao' => $task_dao
         ));
     }

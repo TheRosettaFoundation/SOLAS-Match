@@ -18,6 +18,6 @@
 	<li>This may take several days or weeks, depending on the job</li>
 </ol>
 
-<p><a href="{urlFor name="home"}" class="btn btn-primary">Back to Home</a> <a href="{urlFor name="task-upload"}" class="btn">Add a new task</a> </p>
+<p><a href="{urlFor name="home"}" class="btn btn-primary">Back to Home</a> <a href="{urlFor name="task-upload" options="org_id.$org_id"}" class="btn">Add a new task</a> </p>
 
 {include file="footer.tpl"}
