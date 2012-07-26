@@ -690,21 +690,28 @@ $app->get('/register', function () use ($app) {
 $app->get('/client/dashboard', $authenticateForRole('organisation_member'), function () use ($app) {
     $user_dao           = new UserDao();
     $task_dao           = new TaskDao;
+    $org_dao            = new OrganisationDao();
     $current_user       = $user_dao->getCurrentUser();
     $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId());
-    $my_tasks           = $task_dao->findTasks(array(
-        'organisation_ids'  => $my_organisations
-    ), 'created_time', 'DESC');
 
-    if (!is_null($my_tasks)) {
+    $org_tasks = array();
+    foreach($my_organisations as $org_id) {
+        $org = $org_dao->find(array('id' => $org_id));
+        $my_org_tasks = $task_dao->findTasks(array('organisation_ids' => $org_id));
+        if(!is_null($my_org_tasks)) {
+            $org_tasks[$org->getName()] = $my_org_tasks;
+        }
+    }
+    
+    if(count($org_tasks) > 0) {
         $app->view()->appendData(array(
-            'my_tasks' => $my_tasks
+                'org_tasks' => $org_tasks,
+                'task_dao' => $task_dao
         ));
     }
 
     $app->view()->appendData(array(
-        'current_page'  => 'client-dashboard',
-        'task_dao'      => $task_dao
+        'current_page'  => 'client-dashboard'
     ));
     $app->render('client.dashboard.tpl');
 })->name('client-dashboard');

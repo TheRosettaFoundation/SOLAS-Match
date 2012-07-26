@@ -48,8 +48,12 @@ New requirement:
 
 		$tasks = null;
 
+        $organisation_ids = $params['organisation_ids'];
+
 		// We're assuming that organisation_ids is always being provided.
-		$organisation_ids = implode(',', $params['organisation_ids']);
+        if(count($organisation_ids) > 1) {
+    		$organisation_ids = implode(',', $organisation_ids);
+        }
 		$db = new MySQLWrapper();
 		$db->init();
 		$query = 'SELECT id
