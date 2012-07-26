@@ -63,6 +63,11 @@
 {/if}
 
 {if isset($this_user_has_claimed_this_task)}
+    <h1>Misplaced the File?<small>Can't find it on your system?</h1>
+    <p>Click 
+        <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">here</a>
+        to re-download the file.
+    </p>
 	<div class="page-header">
 		<h1>Finished translating? <small>{$task_file_info.filename}</small></h1>
 	</div>
