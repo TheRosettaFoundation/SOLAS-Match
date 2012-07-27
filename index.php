@@ -803,6 +803,19 @@ $app->get('/profile', function () use ($app) {
     $app->render('user-private-profile.tpl');
 })->via('POST')->name('user-private-profile');
 
+$app->get('/tasks/active', function () use ($app) {
+    $task_dao = new TaskDao();
+    $user_dao = new UserDao();
+
+    $user = $user_dao->getCurrentUser();
+    $activeTasks = $task_dao->getUserTasks($user);
+
+    $app->view()->setData('active_tasks', $activeTasks);
+
+    $app->render('active-tasks.tpl');
+
+})->name('active-tasks');
+
 $app->get('/badge/list', function () use ($app) {
     $badge_dao = new BadgeDao();
     $badgeList = $badge_dao->getAllBadges();
