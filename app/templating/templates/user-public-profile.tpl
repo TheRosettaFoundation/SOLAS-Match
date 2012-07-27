@@ -80,7 +80,8 @@
 
 {if isset($activeJobs)}
     {if count($activeJobs) > 0}
-        <div class='page-header'><h1>Active Jobs <small>A list of jobs you are currently working on</small></h1></div>
+        <div class='page-header'><h1>Active Jobs <small>A list of jobs you are currently working on</small>
+        <a href='{urlFor name="active-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>Active Tasks</a></h1></div>
 
         {foreach $activeJobs as $job}
                 {include file="task.summary-link.tpl" task=$job}
@@ -90,7 +91,8 @@
 
 {if isset($archivedJobs)}
     {if count($archivedJobs) > 0}
-        <div class='page-header'><h1>Archived Jobs <small>A list of jobs you have worked on in the past</small></h1></div>
+        <div class='page-header'><h1>Archived Jobs <small>A list of jobs you have worked on in the past</small>
+        <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>Archived Tasks</a></h1></div>
 
         {foreach $archivedJobs as $job}
             {include file="task.profile-display.tpl" task=$job}

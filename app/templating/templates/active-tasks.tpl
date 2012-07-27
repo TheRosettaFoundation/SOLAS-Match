@@ -2,7 +2,6 @@
 
 <div class="page-header"><h1>
 {if isset($user)}
-    {assign var="user_id" value=$user->getUserId()}
     {if $user->getDisplayName() != ''}
         {$user->getDisplayName()}'s
     {else}
