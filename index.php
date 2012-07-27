@@ -803,17 +803,47 @@ $app->get('/profile', function () use ($app) {
     $app->render('user-private-profile.tpl');
 })->via('POST')->name('user-private-profile');
 
-$app->get('/tasks/active', function () use ($app) {
+$app->get('/tasks/active/p/:page_no', function ($page_no) use ($app) {
     $task_dao = new TaskDao();
     $user_dao = new UserDao();
 
     $user = $user_dao->getCurrentUser();
     $activeTasks = $task_dao->getUserTasks($user);
 
+    $tasks_per_page = 10;
+    $total_pages = ceil(count($activeTasks) / $tasks_per_page);
+
+    if($page_no < 1) {
+        $page_no = 1;
+    } elseif($page_no > $total_pages) {
+        $page_no = $total_pages;
+    }
+
+    $top = (($page_no - 1) * $tasks_per_page);
+    $bottom = $top + $tasks_per_page - 1;
+
+    if($top < 0) {
+        $top = 0;
+    } elseif($top > count($activeTasks) - 1) {
+        $top = count($activeTasks) - 1;
+    }
+
+    if($bottom < 0) {
+        $bottom = 0;
+    } elseif($bottom > count($activeTasks) - 1) {
+        $bottom = count($activeTasks) - 1;
+    }
+
+
     $app->view()->setData('active_tasks', $activeTasks);
+    $app->view()->appendData(array(
+                'page_no' => $page_no,
+                'last' => $total_pages,
+                'top' => $top,
+                'bottom' => $bottom
+    ));
 
     $app->render('active-tasks.tpl');
-
 })->name('active-tasks');
 
 $app->get('/badge/list', function () use ($app) {
