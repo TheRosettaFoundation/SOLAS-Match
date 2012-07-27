@@ -11,7 +11,7 @@
         {/if}
         <small>View user details here</small>
         {if isset($private_access)}
-            <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Private Profile</a>
+            <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Edit Details</a>
         {/if}
     </h1></div>
 {else}
