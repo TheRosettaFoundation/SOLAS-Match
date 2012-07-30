@@ -728,9 +728,9 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
     $user = $user_dao->find(array('user_id' => $user_id));
     
     $task_dao = new TaskDao();
-    $activeJobs = $task_dao->getUserTasks($user);
+    $activeJobs = $task_dao->getUserTasks($user, 10);
 
-    $archivedJobs = $task_dao->getUserArchivedTasks($user);
+    $archivedJobs = $task_dao->getUserArchivedTasks($user, 10);
 
     $user_tags = $user_dao->getUserTags($user->getUserId());
 
@@ -809,7 +809,7 @@ $app->get('/tasks/active/p/:page_no', function ($page_no) use ($app) {
     $user_dao = new UserDao();
 
     $user = $user_dao->getCurrentUser();
-    $activeTasks = TaskStream::getUserStream($user->getUserId());
+    $activeTasks = $task_dao->getUserTasks($user->getUserId());
 
     $tasks_per_page = 10;
     $total_pages = ceil(count($activeTasks) / $tasks_per_page);

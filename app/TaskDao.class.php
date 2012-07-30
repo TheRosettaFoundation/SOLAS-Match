@@ -589,25 +589,29 @@ New requirement:
 		}
 	}
 
-    public function getUserTasks($user)
+    public function getUserTasks($user, $limit = 0)
     {
         $db = new MySQLWrapper();
         $db->init();
         $query = 'SELECT * 
                     FROM task JOIN task_claim ON task_claim.task_id = task.id
-                    WHERE user_id = '.$db->cleanse($user->getUserId()).'
-                    LIMIT 0, 10';
+                    WHERE user_id = '.$db->cleanse($user->getUserId());
+        if($limit != 0) {
+            $query .= ' LIMIT 0, 10';
+        }
         return $this->_parse_result_for_user_task($db->Select($query));
     }
 
-    public function getUserArchivedTasks($user)
+    public function getUserArchivedTasks($user, $limit = 0)
     {
         $db = new MySQLWrapper();
         $db->init();
         $query = 'SELECT *
                     FROM archived_task as a JOIN task_claim as c ON a.task_id = c.task_id
-                    WHERE user_id = '.$db->cleanse($user->getUserID()).'
-                    LIMIT 0, 10';
+                    WHERE user_id = '.$db->cleanse($user->getUserID());
+        if($limit != 0) {
+            $query .= ' LIMIT 0, 10';
+        }
         return $this->_parse_result_for_user_task($db->Select($query));
     }
 
