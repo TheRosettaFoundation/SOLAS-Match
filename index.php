@@ -149,7 +149,7 @@ $app->get('/', function () use ($app) {
             $app->view()->setData('tasks', $tasks);
         }
     } else {
-        if($tasks = TaskStream::getUserStream($current_user->getUserId())) {
+        if($tasks = TaskStream::getUserStream($current_user->getUserId(), 10)) {
             $app->view()->setData('tasks', $tasks);
         }
 
@@ -808,7 +808,7 @@ $app->get('/tasks/active/p/:page_no', function ($page_no) use ($app) {
     $user_dao = new UserDao();
 
     $user = $user_dao->getCurrentUser();
-    $activeTasks = $task_dao->getUserTasks($user);
+    $activeTasks = TaskStream::getUserStream($user->getUserId());
 
     $tasks_per_page = 10;
     $total_pages = ceil(count($activeTasks) / $tasks_per_page);

@@ -20,7 +20,7 @@ class TaskStream
     /*
         Same as above except take the user's preferences into account
     */
-    public static function getUserStream($user_id, $nb_items = 10) {
+    public static function getUserStream($user_id, $nb_items = 0) {
         $task_dao = new TaskDao();
         return $task_dao->getUserTopTasks($user_id, $nb_items);
     }

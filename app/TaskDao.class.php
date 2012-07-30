@@ -346,8 +346,10 @@ New requirement:
                         SELECT task_id
                         FROM task_claim
                     )
-                    ORDER BY uts.score DESC
-                    LIMIT '.$db->cleanse($nb_items);
+                    ORDER BY uts.score DESC';
+        if($nb_items != 0) {
+            $query .= ' LIMIT '.$db->cleanse($nb_items);
+        }
 
         $ret = false;
         if ($result = $db->Select($query)) {
