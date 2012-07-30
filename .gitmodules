@@ -7,6 +7,3 @@
 [submodule "libs/smarty"]
 	path = libs/smarty
 	url = git@github.com:eocdev/Smarty.git
-[submodule "libs/SlimEoin"]
-	path = libs/SlimEoin
-	url = git@github.com:eocdev/Slim.git
