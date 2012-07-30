@@ -809,7 +809,7 @@ $app->get('/tasks/active/p/:page_no', function ($page_no) use ($app) {
     $user_dao = new UserDao();
 
     $user = $user_dao->getCurrentUser();
-    $activeTasks = $task_dao->getUserTasks($user->getUserId());
+    $activeTasks = $task_dao->getUserTasks($user);
 
     $tasks_per_page = 10;
     $total_pages = ceil(count($activeTasks) / $tasks_per_page);

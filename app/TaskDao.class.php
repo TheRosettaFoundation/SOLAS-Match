@@ -595,7 +595,8 @@ New requirement:
         $db->init();
         $query = 'SELECT * 
                     FROM task JOIN task_claim ON task_claim.task_id = task.id
-                    WHERE user_id = '.$db->cleanse($user->getUserId());
+                    WHERE user_id = '.$db->cleanse($user->getUserId()).'
+                    ORDER BY created_time DESC';
         if($limit != 0) {
             $query .= ' LIMIT 0, 10';
         }
@@ -608,7 +609,8 @@ New requirement:
         $db->init();
         $query = 'SELECT *
                     FROM archived_task as a JOIN task_claim as c ON a.task_id = c.task_id
-                    WHERE user_id = '.$db->cleanse($user->getUserID());
+                    WHERE user_id = '.$db->cleanse($user->getUserID()).'
+                    ORDER BY created_time DESC';
         if($limit != 0) {
             $query .= ' LIMIT 0, 10';
         }

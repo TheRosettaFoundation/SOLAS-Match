@@ -69,7 +69,7 @@
             <h3><a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
                 {if $org->getHomePage() != ''}
                     <small>
-                        <a href='{$org->getHomePage()}' class='pull-right btn btn-small'>Home Page</a>
+                        <a href='{$org->getHomePage()}' class='pull-right btn btn-small' target="_blank">Home Page</a>
                     </small>
                 {/if}
             </h3>
