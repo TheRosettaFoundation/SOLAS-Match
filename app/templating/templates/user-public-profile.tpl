@@ -1,11 +1,11 @@
 {include file='header.tpl'}
 
-{if isset($user)}
+{if isset($this_user)}
     <div class="page-header"><h1>
-        <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
-        {assign var="user_id" value=$user->getUserId()}
-        {if $user->getDisplayName() != ''}
-            {$user->getDisplayName()}
+        <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80&r=g" alt="" />
+        {assign var="user_id" value=$this_user->getUserId()}
+        {if $this_user->getDisplayName() != ''}
+            {$this_user->getDisplayName()}
         {else}
             User Profile
         {/if}
@@ -19,16 +19,16 @@
 {/if}
 
 <h3>Public display name:</h3>
-<p>{$user->getDisplayName()}</p>
+<p>{$this_user->getDisplayName()}</p>
  
-{if $user->getNativeLanguage() != ''}
+{if $this_user->getNativeLanguage() != ''}
     <h3>First Maternal Language: </h3>
-    <p>{$user->getNativeLanguage()}</p>
+    <p>{$this_user->getNativeLanguage()}</p>
 {/if}
  
-{if $user->getBiography() != ''}
+{if $this_user->getBiography() != ''}
     <h3>Biography:</h3>
-    <p>{$user->getBiography()}</p>
+    <p>{$this_user->getBiography()}</p>
 {/if}
 
 

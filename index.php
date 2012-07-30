@@ -761,7 +761,8 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
                                     'current_page' => 'user-profile',
                                     'activeJobs' => $activeJobs,
                                     'archivedJobs' => $archivedJobs,
-                                    'user_tags' => $user_tags
+                                    'user_tags' => $user_tags,
+                                    'this_user' => $user
     ));
 
     if($user_dao->getCurrentUser()->getUserId() === $user_id) {
