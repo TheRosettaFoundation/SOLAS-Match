@@ -72,8 +72,8 @@ Further below in this document, there are also several resources for our work mo
 
 ## Configuration file
 
-1. Copy ./app/includes/conf.template.php to ./app/includes/conf.php
-2. Edit conf.php with your configurations.
+1. Copy ./app/includes/conf.template.ini to ./app/includes/conf.ini
+2. Edit conf.ini with your configurations.
 3. Under database, enter your MySQL connection settings.
 4. Under the site section, enter the URL of the installation.
 5. Under user session control, enter a long random string.
@@ -112,7 +112,7 @@ through these instructions, please review the generaly header template and corre
 nstructions as appropricate.
 
 1. Download 960 Grid System from http://960.gs/
-2. Extract just the file 960.css to ./assets/css/
+2. Extract just the file 960.css to ./resources/css/
 
 # Resources for future work
 
