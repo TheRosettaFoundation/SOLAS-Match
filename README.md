@@ -124,8 +124,8 @@ can be left blank.
 
 Create a user by registering with the app. This can be done from the app itself instead of in
 phpmyadmin. Once a user has been created log in to phpmyadmin again and create a new entry in 
-the organisation_member table consisting of the org id from the organisation table and the user
-id from the user table._
+the organisation\_member table consisting of the org id from the organisation table and the user
+id from the user table.
 
 You can now upload files using the client dashboard while logged in as the organisation member
 
