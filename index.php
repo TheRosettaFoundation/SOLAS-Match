@@ -1,5 +1,5 @@
 <?php
-require 'libs/SlimEoin/Slim/Slim.php';
+require 'libs/Slim/Slim/Slim.php';
 require 'libs/SlimExtras/Views/SmartyView.php';
 
 SmartyView::$smartyDirectory = 'libs/smarty/libs';
