@@ -114,6 +114,21 @@ nstructions as appropricate.
 1. Download 960 Grid System from http://960.gs/
 2. Extract just the file 960.css to ./resources/css/
 
+# Create an Org Account
+
+Once the app has been configured and is running succesfully you must create an Organisation
+on the database. Tasks are uploaded by Organisation so it is not possible to upload a file
+without creating an Organisation. To do this create a new database entry in the organisation
+table consisting of the org name, home page and biography. The id is automatically generated
+can be left blank.
+
+Create a user by registering with the app. This can be done from the app itself instead of in
+phpmyadmin. Once a user has been created log in to phpmyadmin again and create a new entry in 
+the organisation_member table consisting of the org id from the organisation table and the user
+id from the user table._
+
+You can now upload files using the client dashboard while logged in as the organisation member
+
 # Resources for future work
 
 [Twitter's Active Reputation System](https://github.com/twitter/activerecord-reputation-system)
