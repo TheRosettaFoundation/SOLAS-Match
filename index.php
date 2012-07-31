@@ -91,6 +91,10 @@ function authenticateUserForTask($request, $response, $route) {
         if($task_dao->taskIsClaimed($task_id)) {
             $user_dao = new UserDao();
             $current_user = $user_dao->getCurrentUser();
+            if(!is_object($current_user)) {
+                $app->flash('error', 'Login required to access page');
+                $app->redirect($app->urlFor('login'));
+            }
             if(!$task_dao->hasUserClaimedTask($current_user->getUserId(), $task_id)) {
                 $app->flash('error', 'This task has been claimed by another user');
                 $app->redirect($app->urlFor('home'));
@@ -169,6 +173,11 @@ $app->get('/task/upload/:org_id', $authenticateForRole('organisation_member'), f
 
     $user_dao = new UserDao();
     $current_user = $user_dao->getCurrentUser();
+
+    if (!is_object($current_user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
     
     if ($app->request()->isPost()) {
 
@@ -218,6 +227,11 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'),
     $userDao = new UserDao();
     $currentUser = $userDao->getCurrentUser();
 
+    if (!is_object($currentUser)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
+
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
     if (!is_object($task)) {
@@ -263,6 +277,14 @@ $app->get('/task/:task_id/uploaded-edit/', 'authenticateUserForTask', function (
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
     $org_id = $task->getOrganisationId();
+
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+
+    if (!is_object($user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
 
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $org_id));
@@ -324,6 +346,14 @@ $app->get('/task/id/:task_id/uploaded/', $authenticateForRole('organisation_memb
             'authenticateUserForTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
+
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+
+    if (!is_object($user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
 
     $org_id = $task->getOrganisationId();
     $app->view()->appendData(array(
@@ -401,6 +431,14 @@ $app->get('/task/id/:task_id/download-preview/', $authenticateForRole('translato
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+
+    if (!is_object($user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
+
     if (!is_object($task)) {
         header('HTTP/1.0 404 Not Found');
         die;
@@ -418,6 +456,14 @@ $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('t
     if (!is_object($task)) {
         header('HTTP/1.0 404 Not Found');
         die;
+    }
+
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+
+    if (!is_object($user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
     }
 
     $task_file_info         = $task_dao->getTaskFileInfo($task, $version);
@@ -447,6 +493,12 @@ $app->post('/claim-task', $authenticateForRole('translator'), function () use ($
 
     $user_dao           = new UserDao();
     $current_user       = $user_dao->getCurrentUser();
+
+    if (!is_object($current_user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
+
     $task_dao->claimTask($task, $current_user);
     Notify::notifyUserClaimedTask($current_user, $task);   
 
@@ -465,6 +517,13 @@ $app->get('/task/id/:task_id/claimed', $authenticateForRole('translator'),
         header('HTTP/1.0 404 Not Found');
         die;
     }
+    $user_dao           = new UserDao();
+    $current_user       = $user_dao->getCurrentUser();
+
+    if (!is_object($current_user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
     $app->view()->setData('task', $task);
     $app->render('task.claimed.tpl');
 })->name('task-claimed');
@@ -480,6 +539,13 @@ $app->get('/task/claim/:task_id', $authenticateForRole('translator'),
         header ('HTTP/1.0 404 Not Found');
         die;
     }
+    $user_dao           = new UserDao();
+    $current_user       = $user_dao->getCurrentUser();
+
+    if (!is_object($current_user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
     $app->view()->setData('task', $task);
 
     $app->render('task.claim.tpl');
@@ -493,6 +559,13 @@ $app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator')
     if (!is_object($task)) {
         header('HTTP/1.0 404 Not Found');
         die;
+    }
+    $user_dao           = new UserDao();
+    $current_user       = $user_dao->getCurrentUser();
+
+    if (!is_object($current_user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
     }
 
     $app->redirect($app->urlFor('download-task-version', array(
@@ -511,6 +584,13 @@ $app->get('/task/id/:task_id/mark-archived/', $authenticateForRole('organisation
         header('HTTP/1.0 404 Not Found');
         die;
     }
+    $user_dao           = new UserDao();
+    $current_user       = $user_dao->getCurrentUser();
+
+    if (!is_object($current_user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
 
     $task_dao->moveToArchive($task);
 
@@ -525,6 +605,13 @@ $app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('
     if (!is_object($task)) {
         header('HTTP/1.0 404 Not Found');
         die;
+    }
+    $user_dao           = new UserDao();
+    $current_user       = $user_dao->getCurrentUser();
+
+    if (!is_object($current_user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
     }
 
     $latest_version = $task_dao->getLatestFileVersion($task);
@@ -581,6 +668,11 @@ $app->get("/tag/:label/:subscribe", function ($label, $subscribe) use ($app) {
 
     $user_dao = new UserDao();
     $current_user = $user_dao->getCurrentUser();
+
+    if (!is_object($current_user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
 
     $tag_id = $tag->getTagId();
     $user_id = $current_user->getUserId();
@@ -703,6 +795,10 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     $task_dao           = new TaskDao;
     $org_dao            = new OrganisationDao();
     $current_user       = $user_dao->getCurrentUser();
+    if (!is_object($current_user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
     $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId());
 
     $org_tasks = array();
@@ -778,10 +874,14 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
 })->name('user-public-profile');
 
 $app->get('/profile', function () use ($app) {
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+    if (!is_object($user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
+
     if($app->request()->isPost()) {
-        $user_dao = new UserDao();
-        $user = $user_dao->getCurrentUser();
- 
         $displayName = $app->request()->post('name');
         if($displayName != NULL) {
             $user->setDisplayName($displayName);
@@ -825,6 +925,10 @@ $app->get('/tasks/active/p/:page_no', function ($page_no) use ($app) {
     $user_dao = new UserDao();
 
     $user = $user_dao->getCurrentUser();
+    if (!is_object($user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
     $activeTasks = $task_dao->getUserTasks($user);
 
     $tasks_per_page = 10;
@@ -868,6 +972,10 @@ $app->get('/tasks/archive/p/:page_no', function ($page_no) use ($app) {
     $task_dao = new TaskDao();
 
     $user = $user_dao->getCurrentUser();
+    if (!is_object($user)) {
+        $app->flash('error', 'Login required to access page');
+        $app->redirect($app->urlFor('login'));
+    }
     $archived_tasks = $task_dao->getUserArchivedTasks($user);
 
     $tasks_per_page = 10;
