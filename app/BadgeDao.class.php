@@ -1,6 +1,7 @@
 <?php
 
 require('models/Badge.class.php');
+require('BadgeValidator.class.php');
 
 class BadgeDao
 {
@@ -36,5 +37,18 @@ class BadgeDao
                     FROM badges';
         $results = $db->Select($query);
         return $results;
+    }
+
+    public function assignBadge($user, $badge)
+    {
+        $badgeValidator = new BadgeValidator();
+        if($badgeValidator->validateUserBadge($user, $badge)) {
+            $db = new MySQLWrapper();
+            $db->init();
+            $query = "INSERT INTO user_badges (user_id, badge_id)
+                        VALUES (".$db->cleanse($user->getUserId()).", 
+                                ".$db->cleanse($badge->getBadgeId()).")";
+            $db->insertStr($query);
+        }
     }
 }

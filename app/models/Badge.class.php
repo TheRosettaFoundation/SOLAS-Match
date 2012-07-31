@@ -5,6 +5,11 @@ class Badge
     var $_title;
     var $_description;
 
+    //badge type = badge ID
+    const PROFILE_FILLER = 3;
+    const REGISTERED = 4;
+    const NATIVE_LANGUAGE = 5;
+
     public function __construct($params) {
         if(isset($params['badge_id'])) {
             $this->setBadgeId($params['badge_id']);

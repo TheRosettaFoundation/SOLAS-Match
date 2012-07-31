@@ -666,6 +666,11 @@ $app->get('/register', function () use ($app) {
         if (is_null($error) && is_null($warning)) {
             if ($user = $user_dao->create($post->email, $post->password)) {
                 if ($user_dao->login($user->getEmail(), $post->password)) {
+
+                    $badge_dao = new BadgeDao();
+                    $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
+                    $badge_dao->assignBadge($user, $badge);
+
                     if(isset($_SESSION['previous_page'])) {
                         if(isset($_SESSION['old_page_vars'])) {
                             $app->redirect($app->urlFor($_SESSION['previous_page'], $_SESSION['old_page_vars']));
