@@ -1,0 +1,17 @@
+{
+    "hash": "f5bb2dcfc23e1c2d07216580907c4cff",
+    "packages": [
+        {
+            "package": "eriknyk/smarty",
+            "version": "v3.1.8"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ]
+}
