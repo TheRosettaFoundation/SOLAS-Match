@@ -795,8 +795,19 @@ $app->get('/profile', function () use ($app) {
         $nativeLang = $app->request()->post('nLanguage');
         if($nativeLang != NULL) {
             $user->setNativeLanguage($nativeLang);
+            //assign a badge
+            $badge_dao = new BadgeDao();
+            $badge = $badge_dao->find(array('badge_id' => Badge::NATIVE_LANGUAGE));
+            $badge_dao->assignBadge($user, $badge);
         }
         $user_dao->save($user);
+
+        if($user->getDisplayName() != '' && $user->getBiography() != ''
+                && $user->getNativeLanguage() != '') {
+            $badge_dao = new BadgeDao();
+            $badge = $badge_dao->find(array('badge_id' => Badge::PROFILE_FILLER));
+            $badge_dao->assignBadge($user, $badge);
+        }
 
         $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user->getUserId())));
     }
