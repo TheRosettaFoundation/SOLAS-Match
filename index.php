@@ -750,14 +750,14 @@ $app->get('/register', function () use ($app) {
     if (isValidPost($app)) {
         $post = (object)$app->request()->post();
         $user_dao = new UserDao();
-        if (is_object($user_dao->find(array('email' => $post->email)))) {
-            $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
-        }
-        else if (!User::isValidEmail($post->email)) {
+        if (!User::isValidEmail($post->email)) {
             $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
         }
         else if (!User::isValidPassword($post->password)) {
             $error = 'You didn\'t enter a password. Please try again.';
+        }
+        else if (is_object($user_dao->find(array('email' => $post->email)))) {
+            $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
         }
 
         if (is_null($error) && is_null($warning)) {
