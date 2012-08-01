@@ -21,7 +21,7 @@ class UserDao {
 							AND u.user_id = om.user_id';
 			}
 		}
-		else if (isset($params['user_id']) && !isset($params['password']) {
+		else if (isset($params['user_id']) && !isset($params['password'])) {
 			$query = 'SELECT *
 						FROM user
 						WHERE user_id = ' . $db->cleanse($params['user_id']);
