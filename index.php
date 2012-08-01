@@ -723,9 +723,14 @@ $app->get('/login', function () use ($app) {
             $user_dao = new UserDao();
             $user_dao->login($post->email, $post->password);
             $app->redirect($app->urlFor("home"));
-        } catch (AuthenticationException $e) {
-            $error = '<p>Unable to log in. Please check your email and password. <a href="' . $app->urlFor('login') . '">Try logging in again</a>.</p>';
+        } catch (InvalidArgumentException $e) {
+            $error = '<p>Unable to log in. Please check your email and password.';
+            $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
+            $error .= ' or <a href="'.$app->urlFor('register').'">register</a> for an account.</p>';
             $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
+
+            $app->flash('error', $error);
+            $app->redirect($app->urlFor('login'));
             echo $error;
         }
     } else {
@@ -749,10 +754,10 @@ $app->get('/register', function () use ($app) {
             $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
         }
         else if (!User::isValidEmail($post->email)) {
-            $error = 'The email address you entered was not valid. Please press back and try again.';
+            $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
         }
         else if (!User::isValidPassword($post->password)) {
-            $error = 'You didn\'t enter a password. Please press back and try again.';
+            $error = 'You didn\'t enter a password. Please try again.';
         }
 
         if (is_null($error) && is_null($warning)) {
