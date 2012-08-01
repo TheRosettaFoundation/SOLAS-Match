@@ -45,6 +45,9 @@ CREATE TABLE IF NOT EXISTS `archived_task` (
 -- Table structure for table `badges`
 --
 
+-- Drop the table to avoid errors
+DROP TABLE IF EXISTS `badges`;
+
 CREATE TABLE IF NOT EXISTS `badges` (
   `badge_id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(128) NOT NULL,
