@@ -5,38 +5,47 @@ require('models/User.class.php');
 class UserDao {
 	public function find($params) {
 		$query = null;
-		$db = new MySQLWrapper();
+                $args = "";
+		$db = new PDOWrapper();
 		$db->init();
-		if (isset($params['user_id']) && isset($params['password'])) {
-			$query = 'SELECT *
-					FROM user
-					WHERE user_id = ' . $db->cleanse($params['user_id']) . '
-					AND password = ' . $db->cleanseWrapStr($params['password']);
-		}
-		else if (isset($params['user_id']) && isset($params['role'])) {
-			if ($params['role'] == 'organisation_member') {
-				$query = 'SELECT u.*
-							FROM user u, organisation_member om
-							WHERE u.user_id = ' . $db->cleanse($params['user_id']) . '
-							AND u.user_id = om.user_id';
-			}
-		}
-		else if (isset($params['user_id']) && !isset($params['password'])) {
-			$query = 'SELECT *
-						FROM user
-						WHERE user_id = ' . $db->cleanse($params['user_id']);
-		}
-		else if (isset($params['email'])) {
-			$query = 'SELECT *
-						FROM user
-						WHERE email = ' . $db->cleanseWrapStr($params['email']);
-		}
+                if (isset($params['user_id']) || isset($params['email'])) {
+                $args.=(isset($params['user_id'] )&&$params['user_id']!=null)?"{$db->cleanse($params['user_id'])}":"null";
+                $args.=(isset($params['password'] )&&$params['password']!=null)?",'{$db->cleanse($params['password'])}'":",null";
+                $args.=(isset($params['email'] )&&$params['email']!=null)?",'{$db->cleanse($params['email'])}'":",null";
+                $args.=(isset($params['role'] )&&$params['role'] == 'organisation_member')?",1":",0";
+                    
+                }
+                
+//		if (isset($params['user_id']) && isset($params['password'])) {
+//			$query = 'SELECT *
+//					FROM user
+//					WHERE user_id = ' . $db->cleanse($params['user_id']) . '
+//					AND password = ' . $db->cleanseWrapStr($params['password']);
+//		}
+//		else if (isset($params['user_id']) && isset($params['role'])) {
+//			if ($params['role'] == 'organisation_member') {
+//				$query = 'SELECT u.*
+//							FROM user u, organisation_member om
+//							WHERE u.user_id = ' . $db->cleanse($params['user_id']) . '
+//							AND u.user_id = om.user_id';
+//			}
+//		}
+//		else if (isset($params['user_id']) && !isset($params['password'])) {
+//			$query = 'SELECT *
+//						FROM user
+//						WHERE user_id = ' . $db->cleanse($params['user_id']);
+//		}
+//		else if (isset($params['email'])) {
+//			$query = 'SELECT *
+//						FROM user
+//						WHERE email = ' . $db->cleanseWrapStr($params['email']);
+//		}
 		else {
 			throw new InvalidArgumentException('Cannot search for user, as no valid parameters were given.');
 		}
 
 		$ret = null;
-		if ($r = $db->Select($query)) {
+		if ($r = $db->call("userFindByUserData",$args)) {
 			$user_data = array(
 				'user_id' => $r[0]['user_id'],
 				'email' => $r[0]['email'],
@@ -85,21 +94,14 @@ class UserDao {
 	private function _update($user) {
 		$db = new PDOWrapper();
 		$db->init();
-		$update = 'UPDATE user SET email='.$db->cleanseWrapStr($user->getEmail()).', 
-					display_name='.$db->cleanseWrapStr($user->getDisplayName()).', 
-					biography='.$db->cleanseWrapStr($user->getBiography()).',
-					native_language='.$db->cleanseWrapStr($user->getNativeLanguage()).' 
-					WHERE user_id='.$db->cleanse($user->getUserId()).' 
-					LIMIT 1' ;
-//		return $db->Update($update);
-                $result = $db->call('user_insert_and_update', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},{$db->cleanseWrapStr($user->getBiography())},{$db->cleanseWrapStr($user->getDisplayName())},{$db->cleanseWrapStr($user->getNativeLanguage())},{$db->cleanse($user->getUserId())}");
+                $result = $db->call('userInsertAndUpdate', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},{$db->cleanseWrapStr($user->getBiography())},{$db->cleanseWrapStr($user->getDisplayName())},{$db->cleanseWrapStr($user->getNativeLanguage())},{$db->cleanse($user->getUserId())}");
                 return $result[0]['user_id'];
 	}
 
 	private function _insert($user) {
 		$db = new PDOWrapper();
 		$db->init();
-		if ($user_id = $db->call('user_insert_and_update', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},NULL,NULL,NULL,NULL")) {
+		if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},NULL,NULL,NULL,NULL")) {
 			return $this->find(array('user_id' => $user_id[0]['user_id']));
 		}
 		else {

@@ -155,12 +155,12 @@ class PDOWrapper {
 	}
 
         function call($procedure,$procArgs){
-            $sql = "CALL $procedure($procArgs)";
+            $sql = "CALL $procedure ($procArgs)";
             if ($this->show_sql){
                 $this->showSQL($sql);
             }
             if ((empty($sql)) || (empty($this->connection))){
-                $this->error_msg = "\r\n" . "SQL Statement is <code>null</code> or not a SELECT - " . date('H:i:s');
+                $this->error_msg = "\r\n" . "SQL Statement is <code>null</code> or connection is null - " . date('H:i:s');
                 $this->sql_errored = $sql;
                 $this->debug();
                 return false;
