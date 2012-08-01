@@ -19,20 +19,22 @@
  
 <form method='post' action='{urlFor name='user-private-profile'}' class='well'>
     <label for='name'>Public display name:</label>
-    <input type='text' name='name' id='name' 
+    <input type='text' name='name' id='name'
     {if $user->getDisplayName() != ''}
-        placeholder='{$user->getDisplayName()}'
+        value='{$user->getDisplayName()}'
     {else}
         placeholder='Name'
     {/if} />
     <label for='nLanguage'>First Maternal Language:</label>
-    <input type='text' name='nLanguage' id='nLanguage' {if isset($language)} placeholder={$language} {/if}/>
+    <input type='text' name='nLanguage' id='nLanguage' 
+    {if $user->getNativeLanguage() != ''}
+        value={$user->getNativeLanguage()}
+    {elseif isset($language)} 
+        placeholder={$language} 
+    {/if} />
     <label for='bio'>Biography:</label>
-    <textarea name='bio' cols='40' rows='5' 
-    {if $user->getBiography() != ''}
-        placeholder='{$user->getBiography()}'
-    {/if}
-    ></textarea>
+    <textarea name='bio' cols='40' rows='5' {if $user->getBiography() == ''} placeholder="Enter Bio Here" {/if}
+    >{if $user->getBiography() != ''}{$user->getBiography()}{/if}</textarea>
     <p>Register with <a href="http://en.gravatar.com/" target="_blank">Gravatar</a> to choose your avatar</p>
 
     <p> 

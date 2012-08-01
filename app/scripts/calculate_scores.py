@@ -86,7 +86,7 @@ def getUserList():
 # This function returns the IDs of all active tasks
 #
 def getActiveTaskList():
-    query = "SELECT id FROM task"
+    query = "SELECT * FROM task"
     return DBQuery(query)
 
 #
@@ -103,6 +103,20 @@ def getUserTags(user_id):
     query = "SELECT tag_id FROM user_tag WHERE user_id = %d" % int(user_id)
     return DBQuery(query)
 
+#
+# Get the language string associated with the given id
+#
+def getLanguage(lang_id):
+    if(lang_id != None):
+        query = "SELECT en_name FROM language WHERE id = %d" % int(lang_id)
+        result = DBQuery(query)
+
+        if(result != None):
+            return result[0]['en_name']
+        else:
+            return result
+    else:
+        return None
 #
 # Get the current score ofr the user-task pair
 #
@@ -143,7 +157,8 @@ for user in users:
 
         #Calculate the new score and save it to the DB
         score = 0
-
+        
+        #Finding matching tags and increment score
         if(user_tags != None and task_tags != None):
             increment_value = 100
             for user_tag in user_tags:
@@ -152,5 +167,19 @@ for user in users:
                         score += increment_value
                         increment_value *= 0.75
 
-            saveNewScore(user['user_id'], task['id'], score)
+        #Check if the task is in the user's native language
+        user_language = user['native_language']
+        if(user_language != None):
+            task_source = getLanguage(task['source_id'])
+            if(task_source == None):
+                task_source = ''
+            task_target = getLanguage(task['target_id'])
+            if(task_target == None):
+                task_target = ''
+            if(str(user_language).lower() == str(task_source).lower() or str(user_language).lower() == str(task_target).lower()):
+                score += 300
+
+        #Save the score to the DB if it has changed
+        saveNewScore(user['user_id'], task['id'], score)
+
 

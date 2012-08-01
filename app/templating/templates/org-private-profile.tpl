@@ -17,16 +17,32 @@
 
 {assign var="org_id" value=$org->getId()}
 <form method='post' action='{urlFor name='org-private-profile' options="org_id.$org_id"}' class='well'>
-     <label for='name'>Public display name:</label>
-     <input type='text' name='name' id='name' placeholder='Name' />
-     <label for='home_page'>Home Page:</label>
-     <input type='text' name='home_page' id='home_page' placeholder='http://yoursite.com' />
-     <label for='bio'>Biography:</label>
-     <textarea name='bio' cols='40' rows='5'></textarea>
-     <p>
-         <button type='submit' class='btn btn-primary' name='submit'>Update</button>
-     </p>
- </form>
+    <label for='name'>Public display name:</label>
+    <input type='text' name='name' id='name' 
+    {if $org->getName() != ''}
+       value="{$org->getName()}"
+    {else}
+        placeholder='Organisation Name' 
+    {/if}
+    />
+    <label for='home_page'>Home Page:</label>
+    <input type='text' name='home_page' id='home_page'
+    {if $org->getHomePage() != ''}
+         value="{$org->getHomePage()}"
+    {else}
+        placeholder='http://yoursite.com'
+    {/if}
+    />
+    <label for='bio'>Biography:</label>
+    <textarea name='bio' cols='40' rows='5' 
+    {if $org->getBiography() == ''}
+        placeholder="Enter Organisation Biography Here"
+    {/if}
+    >{if $org->getBiography() != ''}{$org->getBiography()}{/if}</textarea>
+    <p>
+        <button type='submit' class='btn btn-primary' name='submit'>Update</button>
+    </p>
+</form>
 
 
 
