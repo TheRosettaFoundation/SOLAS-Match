@@ -96,16 +96,16 @@ class UserDao {
 
 	private function _insert($user) {
 		// The array that will contain values to be inserted to DB.
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$insert = array();
-		$insert['email'] = $db->cleanseWrapStr($user->getEmail());
-		$insert['nonce'] = $db->cleanse($user->getNonce());
-		$insert['password'] = $db->cleanseWrapStr($user->getPassword());
-		$insert['created_time'] = 'NOW()';
+//		$insert = array();
+//		$insert['email'] = $db->cleanseWrapStr($user->getEmail());
+//		$insert['nonce'] = $db->cleanse($user->getNonce());
+//		$insert['password'] = $db->cleanseWrapStr($user->getPassword());
+//		$insert['created_time'] = 'NOW()';
 		
-		if ($user_id = $db->Insert('user', $insert)) {
-			return $this->find(array('user_id' => $user_id));
+		if ($user_id = $db->call('user_insert_and_update', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},NULL,NULL,NULL,NULL")) {
+			return $this->find(array('user_id' => $user_id[0]['user_id']));
 		}
 		else {
 			return null;

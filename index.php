@@ -11,6 +11,7 @@ SmartyView::$smartyExtensions = array(
 
 require 'app/Settings.class.php';
 require 'app/MySQLWrapper.class.php';
+require 'app/PDOWrapper.class.php';
 require 'app/BadgeDao.class.php';
 require 'app/OrganisationDao.class.php';
 require 'app/UserDao.class.php';
