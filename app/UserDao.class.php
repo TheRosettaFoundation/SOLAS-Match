@@ -83,7 +83,7 @@ class UserDao {
 	}
 
 	private function _update($user) {
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
 		$update = 'UPDATE user SET email='.$db->cleanseWrapStr($user->getEmail()).', 
 					display_name='.$db->cleanseWrapStr($user->getDisplayName()).', 
@@ -91,19 +91,14 @@ class UserDao {
 					native_language='.$db->cleanseWrapStr($user->getNativeLanguage()).' 
 					WHERE user_id='.$db->cleanse($user->getUserId()).' 
 					LIMIT 1' ;
-		return $db->Update($update);
+//		return $db->Update($update);
+                $result = $db->call('user_insert_and_update', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},{$db->cleanseWrapStr($user->getBiography())},{$db->cleanseWrapStr($user->getDisplayName())},{$db->cleanseWrapStr($user->getNativeLanguage())},{$db->cleanse($user->getUserId())}");
+                return $result[0]['user_id'];
 	}
 
 	private function _insert($user) {
-		// The array that will contain values to be inserted to DB.
 		$db = new PDOWrapper();
 		$db->init();
-//		$insert = array();
-//		$insert['email'] = $db->cleanseWrapStr($user->getEmail());
-//		$insert['nonce'] = $db->cleanse($user->getNonce());
-//		$insert['password'] = $db->cleanseWrapStr($user->getPassword());
-//		$insert['created_time'] = 'NOW()';
-		
 		if ($user_id = $db->call('user_insert_and_update', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},NULL,NULL,NULL,NULL")) {
 			return $this->find(array('user_id' => $user_id[0]['user_id']));
 		}
