@@ -1071,6 +1071,7 @@ $app->get('/org/private/:org_id', 'authUserForOrg', function ($org_id) use ($app
         }
 
         $org_dao->save($org);
+        $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org->getId())));
     }
     
     $app->view()->setData('org', $org);
