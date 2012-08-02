@@ -255,6 +255,113 @@ CREATE TABLE IF NOT EXISTS `user_task_score` (
   PRIMARY KEY (`user_id`,`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+
+-- Dumping structure for procedure Solas-Match-Dev.userFindByUserData
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
+BEGIN
+	if(id is not null and pass is not null) then
+		select * from user where user_id = id and password= pass;
+   elseif(id is not null and role=1) then
+		select * from user where user_id = id and EXISTS (select * from organisation_member where user_id = id);
+	elseif(id is not null) then
+ 		select * from user where user_id = id;
+   elseif (email is not null) then
+   	select * from user u where u.email = email;
+	end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.userInsertAndUpdate
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(256), IN `id` INT)
+    COMMENT 'adds a user if it dosent exists. updates it if it allready exisits.'
+BEGIN
+	if pass='' then set pass=null;end if;
+	if bio='' then set bio=null;end if;
+	if id='' then set id=null;end if;
+	if nonce='' then set nonce=null;end if;
+	if name='' then set name=null;end if;
+	if email='' then set email=null;end if;
+	if lang='' then set lang=null;end if;
+	
+	if id is null and not exists(select * from user u where u.email= email)then
+	-- set insert
+	insert into user (email,nonce,password,created_time,display_name,biography,native_language) values (email,nonce,pass,NOW(),name,bio,lang);
+#	set @q="insert into user (email,nonce,password,created_time,display_name,biography,native_language) values ('"+email+"',"+nonce+",'"+pass+"',"+NOW()+",'"+name+"','"+bio+"','"+lang+"');";
+	else 
+		set @first = true;
+		set @q= "update user u set ";-- set update
+		if bio is not null then 
+#set paramaters to be updated
+			set @q = CONCAT(@q," u.biography='",bio,"'") ;
+			set @first = false;
+		end if;
+		if lang is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.native_language='",lang,"'") ;
+		end if;
+		if name is not null then 
+				if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.display_name='",name,"'");
+		
+		end if;
+		
+		if email is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.email='",email,"'");
+		
+		end if;
+		if nonce is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.nonce=",nonce) ;
+		
+		end if;
+		
+		if pass is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.password='",pass,"'");
+		
+		end if;
+#		set where
+	
+		if id is not null then 
+			set @q = CONCAT(@q," where  u.user_id= ",id);
+#    	allows email to be changed but not user_id
+		
+		elseif email is not null then 
+			set @q = CONCAT(@q," where  u.email= ,",email,"'");-- allows anything but email and user_id to change
+		else
+			set @q = CONCAT(@q," where  u.email= null AND u.user_id=null");-- will always fail to update anyting
+		end if;
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+
+	end if;
+	
+	select u.user_id from user u where u.email= email;
+END//
+DELIMITER ;
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
