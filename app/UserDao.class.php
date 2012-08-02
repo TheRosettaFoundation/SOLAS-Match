@@ -153,9 +153,6 @@ class UserDao {
 		$ret = null;
 		$db = new PDOWrapper();
 		$db->init();
-//		$query = 'SELECT organisation_id 
-//					FROM organisation_member
-//					WHERE user_id = ' . $db->cleanse($user_id);
 		if ($result = $db->call("findOrganisationsUserBelongsTo", $db->cleanse($user_id))) {
 			$ret = array();
 			foreach ($result as $row) {
@@ -167,12 +164,9 @@ class UserDao {
 
 	public function getUserBadges(User $user) {
 		$ret = NULL;
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$query = 'SELECT badge_id
-				FROM user_badges
-				WHERE user_id = '.$db->cleanse($user->getUserId());
-		if ($result = $db->Select($query)) {
+		if ($result = $db->call("getUserBadges", $db->cleanse($user->getUserId()))) {
 			$ret = $result;
 		}
 

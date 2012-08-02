@@ -258,6 +258,7 @@ CREATE TABLE IF NOT EXISTS `user_task_score` (
 
 
 -- Dumping structure for procedure Solas-Match-Dev.userFindByUserData
+DROP PROCEDURE IF EXISTS `userFindByUserData`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
 BEGIN
@@ -275,6 +276,7 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Dev.userInsertAndUpdate
+DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(256), IN `id` INT)
     COMMENT 'adds a user if it dosent exists. updates it if it allready exisits.'
@@ -362,12 +364,24 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Dev.findOrganisationsUserBelongsTo
+DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
 BEGIN
 	SELECT organisation_id
 	FROM organisation_member
 	WHERE user_id = id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getUserBadges
+DROP PROCEDURE IF EXISTS `getUserBadges`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserBadges`(IN `id` INT)
+BEGIN
+SELECT badge_id
+FROM user_badges
+WHERE user_id = id;
 END//
 DELIMITER ;
 
