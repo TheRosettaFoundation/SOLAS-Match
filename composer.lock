@@ -1,9 +1,9 @@
 {
-    "hash": "f5bb2dcfc23e1c2d07216580907c4cff",
+    "hash": "d1f76b960e76f7ffc14b91f3565cdbd2",
     "packages": [
         {
-            "package": "eriknyk/smarty",
-            "version": "v3.1.8"
+            "package": "smarty/smarty",
+            "version": "v3.1.11"
         }
     ],
     "packages-dev": null,
