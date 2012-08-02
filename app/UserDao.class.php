@@ -194,22 +194,11 @@ class UserDao {
     public function likeTag($user_id, $tag_id)
     {
         $ret = false;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = 'SELECT user_id, tag_id
-                    FROM user_tag
-                    WHERE user_id = '.$db->cleanse($user_id).'
-                    AND tag_id = '.$db->cleanse($tag_id);
-        if($db->Select($query)) {
-            $ret = true;
-        } else {
-            $insert = 'INSERT INTO user_tag (user_id, tag_id)
-                    VALUES ('.$db->cleanse($user_id).', '.$db->cleanse($tag_id).')';
-            if ($result = $db->insertStr($insert)) {
-                $ret = true;
-            }
+        if ($result = $db->call("userLikeTag", "{$db->cleanse($user_id)},{$db->cleanse($tag_id)}")) {
+            $ret = $result['result'];
         }
-
         return $ret;
     }
 

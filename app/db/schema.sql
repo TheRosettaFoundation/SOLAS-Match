@@ -396,6 +396,23 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.userLikeTag
+DROP PROCEDURE IF EXISTS `userLikeTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userLikeTag`(IN `id` INT, IN `tagID` INT)
+BEGIN
+	if not EXISTS(  SELECT user_id, tag_id
+	                FROM user_tag
+	                WHERE user_id = id
+	                AND tag_id = tagID) then                 
+		INSERT INTO user_tag (user_id, tag_id)VALUES (id,tagID);
+		select 1 as 'result';
+	else
+	select 0 as 'result';
+	end if;
+END//
+DELIMITER ;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
