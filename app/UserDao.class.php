@@ -15,31 +15,6 @@ class UserDao {
                 $args.=(isset($params['role'] )&&$params['role'] == 'organisation_member')?",1":",0";
                     
                 }
-                
-//		if (isset($params['user_id']) && isset($params['password'])) {
-//			$query = 'SELECT *
-//					FROM user
-//					WHERE user_id = ' . $db->cleanse($params['user_id']) . '
-//					AND password = ' . $db->cleanseWrapStr($params['password']);
-//		}
-//		else if (isset($params['user_id']) && isset($params['role'])) {
-//			if ($params['role'] == 'organisation_member') {
-//				$query = 'SELECT u.*
-//							FROM user u, organisation_member om
-//							WHERE u.user_id = ' . $db->cleanse($params['user_id']) . '
-//							AND u.user_id = om.user_id';
-//			}
-//		}
-//		else if (isset($params['user_id']) && !isset($params['password'])) {
-//			$query = 'SELECT *
-//						FROM user
-//						WHERE user_id = ' . $db->cleanse($params['user_id']);
-//		}
-//		else if (isset($params['email'])) {
-//			$query = 'SELECT *
-//						FROM user
-//						WHERE email = ' . $db->cleanseWrapStr($params['email']);
-//		}
 		else {
 			throw new InvalidArgumentException('Cannot search for user, as no valid parameters were given.');
 		}
@@ -176,12 +151,12 @@ class UserDao {
 
 	public function findOrganisationsUserBelongsTo($user_id) {
 		$ret = null;
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$query = 'SELECT organisation_id 
-					FROM organisation_member
-					WHERE user_id = ' . $db->cleanse($user_id);
-		if ($result = $db->Select($query)) {
+//		$query = 'SELECT organisation_id 
+//					FROM organisation_member
+//					WHERE user_id = ' . $db->cleanse($user_id);
+		if ($result = $db->call("findOrganisationsUserBelongsTo", $db->cleanse($user_id))) {
 			$ret = array();
 			foreach ($result as $row) {
 				$ret[] = $row['organisation_id'];
