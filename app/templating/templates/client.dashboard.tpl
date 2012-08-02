@@ -9,7 +9,11 @@
     {foreach from=$org_tasks  key=org item=tasks}
         <thead>
             <tr>
-                <th>{$orgs[$org]->getName()}</th>
+                <th>
+                    <a href="{urlFor name="org-public-profile" options="org_id.$org"}">
+                        <i class="icon-briefcase"></i> {$orgs[$org]->getName()}
+                    </a>
+                </th>
                 <th></th>
                 <th>
                     <a class="btn btn-primary" href="{urlFor name="task-upload" options="org_id.$org"}">
