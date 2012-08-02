@@ -197,7 +197,7 @@ class UserDao {
         $db = new PDOWrapper();
         $db->init();
         if ($result = $db->call("userLikeTag", "{$db->cleanse($user_id)},{$db->cleanse($tag_id)}")) {
-            $ret = $result['result'];
+            $ret = $result[0]['result'];
         }
         return $ret;
     }
@@ -208,14 +208,10 @@ class UserDao {
     public function removeTag($user_id, $tag_id)
     {
         $ret = false;
-        $db= new MySQLWrapper();
+        $db= new PDOWrapper();
         $db->init();
-        $delete = "DELETE
-                    FROM user_tag
-                    WHERE user_id=".$db->cleanse($user_id)."
-                    AND tag_id =".$db->cleanse($tag_id);
-        if($db->Delete($delete)) {
-            $ret = true;
+        if ($result = $db->call("removeUserTag", "{$db->cleanse($user_id)},{$db->cleanse($tag_id)}")) {
+            $ret = $result[0]['result'];
         }
 
         return $ret;

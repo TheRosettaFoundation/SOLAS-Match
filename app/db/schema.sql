@@ -413,6 +413,23 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.removeUserTag
+DROP PROCEDURE IF EXISTS `removeUserTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserTag`(IN `id` INT, IN `tagID` INT)
+    COMMENT 'unsubscripse a user for the given tag'
+BEGIN
+	if EXISTS(  SELECT user_id, tag_id
+	                FROM user_tag
+	                WHERE user_id = id
+	                AND tag_id = tagID) then                 
+		DELETE 	FROM user_tag	WHERE user_id=id AND tag_id =tagID; 
+		select 1 as 'result';
+	else
+	select 0 as 'result';
+	end if;
+END//
+DELIMITER ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
