@@ -176,13 +176,9 @@ class UserDao {
     public function getUserTags($user_id)
     {
         $ret = null;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = 'SELECT label
-                    FROM user_tag JOIN tag 
-                    ON user_tag.tag_id = tag.tag_id
-                    WHERE user_id = '.$db->cleanse($user_id);
-        if($result = $db->Select($query)) {
+        if($result = $db->call("getUserTags", $db->cleanse($user_id))) {
             $ret = array();
             foreach($result as $row) {
                 $ret[] = $row['label'];
