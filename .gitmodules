@@ -4,6 +4,3 @@
 [submodule "libs/SlimExtras"]
 	path = libs/SlimExtras
 	url = https://github.com/codeguy/Slim-Extras.git
-[submodule "libs/smarty"]
-	path = libs/smarty
-	url = git@github.com:spaceindaver/Smarty.git
