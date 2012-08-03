@@ -105,6 +105,11 @@ CREATE TABLE IF NOT EXISTS `organisation` (
   `biography` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+ALTER TABLE `organisation`
+	CHANGE COLUMN `name` `name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `id`,
+	CHANGE COLUMN `home_page` `home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `name`,
+	CHANGE COLUMN `biography` `biography` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
+	ADD UNIQUE INDEX `name` (`name`, `home_page`);
 
 --
 -- Table structure for table `organisation_member`
@@ -468,7 +473,59 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Dev.organisationInsertAndUpdate
+DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(255), IN `bio` TEXT)
+BEGIN
+	if id='' then set id=null;end if;
+	if url='' then set url=null;end if;
+	if companyName='' then set companyName=null;end if;
+	if bio='' then set bio=null;end if;
 
+	
+	if id is null and not exists(select * from organisation o where (o.home_page= url or o.home_page= concat("http://",url) ) and o.name=companyName)then
+	-- set insert
+	insert into organisation (name,home_page, biography) values (companyName,url,bio);
+
+	else 
+		set @first = true;
+		set @q= "update organisation o set ";-- set update
+		if bio is not null then 
+#set paramaters to be updated
+			set @q = CONCAT(@q," o.biography='",bio,"'") ;
+			set @first = false;
+		end if;
+		if url is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," o.home_page='",url,"'") ;
+		end if;
+		if companyName is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," o.name='",companyName,"'") ;
+		end if;
+	
+#		set where
+		if id is not null then 
+			set @q = CONCAT(@q," where  o.id= ",id);
+		elseif url is not null and companyName is not null then 
+			set @q = CONCAT(@q," where o.home_page='",url,"' and o.name='",companyName,"'");
+		end if;
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+#
+	end if;
+	
+	select o.id as 'result' from organisation o where (o.home_page= url or o.home_page= concat("http://",url) ) and o.name=companyName;
+END//
+DELIMITER ;
 
 -- Dumping structure for trigger Solas-Match-Dev.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
