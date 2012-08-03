@@ -431,6 +431,31 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for trigger Solas-Match-Dev.validateHomepageInsert
+DROP TRIGGER IF EXISTS `validateHomepageInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `organisation` FOR EACH ROW BEGIN
+	if (new.home_page not like "http://*" OR new.home_page not like "https://*") then
+	set new.home_page = concat("http://",new.home_page);
+	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+
+-- Dumping structure for trigger Solas-Match-Dev.validateHomepageUpdate
+DROP TRIGGER IF EXISTS `validateHomepageUpdate`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `organisation` FOR EACH ROW BEGIN
+	if (new.home_page not like "http://*" OR new.home_page not like "https://*") then
+	set new.home_page = concat("http://",new.home_page);
+	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
