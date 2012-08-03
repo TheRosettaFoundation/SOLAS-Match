@@ -1,6 +1,5 @@
 <?php
-require 'libs/Slim/Slim/Slim.php';
-require 'libs/SlimExtras/Views/SmartyView.php';
+require 'vendor/autoload.php';
 
 SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
 SmartyView::$smartyCompileDirectory = 'app/templating/templates_compiled';
