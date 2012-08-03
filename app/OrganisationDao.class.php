@@ -30,13 +30,9 @@ class OrganisationDao {
 
     public function getOrgMembers($org_id) {
         $ret = null;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = 'SELECT user_id
-                    FROM organisation_member
-                    WHERE organisation_id='.$db->cleanse($org_id);
-
-        if($result = $db->Select($query)) {
+        if($result = $db->call("getOrgMembers", $db->cleanse($org_id))) {
             $ret = $result;
         }
 

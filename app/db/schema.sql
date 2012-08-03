@@ -456,7 +456,16 @@ BEGIN
 END//
 DELIMITER ;
 
-
+-- Dumping structure for procedure Solas-Match-Dev.getOrgMembers
+DROP PROCEDURE IF EXISTS `getOrgMembers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `id` INT)
+BEGIN
+	SELECT user_id
+	FROM organisation_member 
+	WHERE organisation_id=id;
+END//
+DELIMITER ;
 
 
 
