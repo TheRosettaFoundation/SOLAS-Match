@@ -431,6 +431,23 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.findOganisation
+DROP PROCEDURE IF EXISTS `findOganisation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findOganisation`(IN `id` INT)
+    COMMENT 'finds an organisation by the data passed in.'
+BEGIN
+	SELECT *
+	FROM organisation o
+	WHERE o.id=id; 
+END//
+DELIMITER ;
+
+
+
+
+
+
 -- Dumping structure for trigger Solas-Match-Dev.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';

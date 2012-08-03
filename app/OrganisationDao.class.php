@@ -4,17 +4,11 @@ require('models/Organisation.class.php');
 
 class OrganisationDao {
     public function find($params) {
-        $query = null;
         $ret = null;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
         if (isset($params['id'])) {
-            $query = 'SELECT *
-                        FROM organisation
-                        WHERE id='.$params['id'];
-        
-
-            if ($result = $db->Select($query)) {
+            if ($result = $db->call("findOganisation", $db->cleanse($params['id']))) {
 
                 $ret = $this->create_org_from_sql_result($result);
 
