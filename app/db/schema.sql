@@ -443,6 +443,19 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getOrgByUser
+DROP PROCEDURE IF EXISTS `getOrgByUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgByUser`(IN `id` INT)
+BEGIN
+	SELECT *
+	FROM organisation o
+	WHERE o.id IN (SELECT organisation_id
+						 FROM organisation_member
+					 	 WHERE user_id=id); 
+END//
+DELIMITER ;
+
 
 
 

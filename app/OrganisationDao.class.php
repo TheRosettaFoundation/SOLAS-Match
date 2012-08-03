@@ -17,18 +17,12 @@ class OrganisationDao {
         return $ret;
     }
 
-    public function getOrgByUser($user_id) {
+    public function getOrgByUser($user_id) {//currently not used
         $ret = null;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = 'SELECT *
-                    FROM organisation
-                    WHERE id IN (SELECT organisation_id
-                                    FROM organisation_member
-                                    WHERE user_id='.$user_id.'
-        )';
         
-        if($result = $db->Select($query)) {
+        if($result = $db->call("getOrgByUser", $db->cleanse($user_id))) {
             $ret = $this->create_org_from_sql_result($result);
         }
         return $ret;
