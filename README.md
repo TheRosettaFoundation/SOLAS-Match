@@ -74,11 +74,17 @@ Further below in this document, there are also several resources for our work mo
 ## Install Smarty PHP templating engine
 
  * In Ubuntu:
-	$ sudo apt-get install smarty3
+    If subversion is not install run:
+    
+        $ sudo apt-get install subversion
 
-**Or**
+	In the root of the directory structure run:
 
- * Clone the git repository at https://github.com/eocdev/Smarty (git@github.com:eocdev/Smarty.git)
+        $ curl -s https://getcomposer.org/installer | php
+
+    Then run 
+        
+        $ php composer.phar install
 
 ## Set up the MySQL database
 

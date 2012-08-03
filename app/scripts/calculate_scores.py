@@ -4,6 +4,8 @@ import MySQLdb as mdb
 import sys
 import ConfigParser
 import string
+import time
+import math
 from sets import Set
 
 con = None
@@ -117,6 +119,16 @@ def getLanguage(lang_id):
             return result
     else:
         return None
+
+#
+# Get the time (in seconds) since the task was created
+#
+def getTaskActiveTimeSecs(created_time):
+    created_time = time.strptime(str(created_time), "%Y-%m-%d %H:%M:%S")    # generate time_struct from string
+    time_in_secs = time.mktime(created_time)    # convert time_struct to secs since epoch
+    current_time = time.time()                  # get current time
+    return current_time - time_in_secs
+
 #
 # Get the current score ofr the user-task pair
 #
@@ -178,6 +190,15 @@ for user in users:
                 task_target = ''
             if(str(user_language).lower() == str(task_source).lower() or str(user_language).lower() == str(task_target).lower()):
                 score += 300
+
+        #Increase score for older tasks
+        task_time = getTaskActiveTimeSecs(task['created_time'])
+        if(task_time > 0):
+            task_time /= 60     # convert to minutes
+            task_time /= 60     # convert to hours
+            task_time /= 24     # convert to days
+            score += math.floor(task_time)
+
 
         #Save the score to the DB if it has changed
         saveNewScore(user['user_id'], task['id'], score)

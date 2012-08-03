@@ -1,13 +1,13 @@
 <?php
-require 'libs/Slim/Slim/Slim.php';
-require 'libs/SlimExtras/Views/SmartyView.php';
+require "vendor/autoload.php";
 
-SmartyView::$smartyDirectory = 'libs/smarty/libs';
+SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
 SmartyView::$smartyCompileDirectory = 'app/templating/templates_compiled';
 SmartyView::$smartyTemplatesDirectory = 'app/templating/templates';
 SmartyView::$smartyExtensions = array(
-    dirname('libs/SlimExtras/Views/SmartyView.php') . '/Extension/Smarty'
+    'vendor/slim/extras/Views/Extension/Smarty'
 );
+
 
 require 'app/Settings.class.php';
 require 'app/MySQLWrapper.class.php';

@@ -1,0 +1,25 @@
+{
+    "hash": "b966ac41e5c2da3d393cc51f718ce88d",
+    "packages": [
+        {
+            "package": "slim/extras",
+            "version": "1.0.2"
+        },
+        {
+            "package": "slim/slim",
+            "version": "1.6.5"
+        },
+        {
+            "package": "smarty/smarty",
+            "version": "v3.1.11"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ]
+}

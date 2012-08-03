@@ -9,7 +9,11 @@
     {foreach from=$org_tasks  key=org item=tasks}
         <thead>
             <tr>
-                <th>{$orgs[$org]->getName()}</th>
+                <th>
+                    <a href="{urlFor name="org-public-profile" options="org_id.$org"}">
+                        <i class="icon-briefcase"></i> {$orgs[$org]->getName()}
+                    </a>
+                </th>
                 <th></th>
                 <th>
                     <a class="btn btn-primary" href="{urlFor name="task-upload" options="org_id.$org"}">
@@ -23,28 +27,26 @@
             {foreach from=$tasks item=task}
                 <tr>
                 {assign var="task_id" value=$task->getTaskId()}
-                {if $task_dao->getLatestFileVersion($task) > 0}
                     <td>
                         <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
                     </td>
-                    <td>
-                        <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
-                            Download&nbsp;updated&nbsp;file
-                        </a>
-                    </td>
+                    {if $task_dao->getLatestFileVersion($task) > 0}
+                        <td>
+                            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
+                                Download&nbsp;updated&nbsp;file
+                            </a>
+                        </td>
+                    {elseif $task_dao->taskIsClaimed($task_id)}
+                        <td>
+                            <p>Awaiting Translation</p>
+                        </td>
+                    {else}
+                        <td>
+                        </td>
+                    {/if}
                     <td>
                         <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-small">Archive</a>
                     </td>
-                {else}
-                    <td>
-                        <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-small">Archive</a>
-                    </td>
-                {/if}
                 </tr>
             {/foreach}
         {/if}
