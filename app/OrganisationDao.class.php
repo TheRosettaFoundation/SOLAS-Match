@@ -39,6 +39,46 @@ class OrganisationDao {
         return $ret;
     }
 
+    public function requestMembership($user_id, $org_id)
+    {
+        //Check if the user has already requested membership
+        $previous_requests = $this->getMembershipRequests($org_id);
+        if(!is_null($previous_requests)) {
+            foreach($previous_requests as $request) {
+                if($request['user_id'] == $user_id) {
+                    //User has already sent a request, return
+                    return true;
+                }
+            }
+        }
+        $db = new MySQLWrapper();
+        $db->init();
+        
+        $insert = "INSERT INTO org_request_queue (user_id, org_id)
+                    VALUES (".$db->cleanse($user_id).", ".$db->cleanse($org_id).")";
+        if($db->insertStr($insert)) {
+            return true;
+        } else {
+            return false;
+        }        
+    }
+        
+
+    private function getMembershipRequests($org_id)
+    {
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = "SELECT *
+                    FROM org_request_queue
+                    WHERE org_id = ".$db->cleanse($org_id);
+        $ret = null;
+        if($result = $db->Select($query)) {
+            $ret = $result;
+        }
+        echo "<p>Returning $ret</p>";
+        return $ret;
+    }
+
     private function create_org_from_sql_result($result) {
         $org_data = array(
                     'id' => $result[0]['id'],

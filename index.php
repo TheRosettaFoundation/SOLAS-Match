@@ -116,8 +116,11 @@ function authUserForOrg($request, $response, $route) {
         $user_dao = new UserDao();
         $user = $user_dao->getCurrentUser();
         if(is_object($user)) {
-            if(in_array($org_id, $user_dao->findOrganisationsUserBelongsTo($user->getUserId()))) {
-                return true;
+            $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+            if(!is_null($user_orgs)) {
+                if(in_array($org_id, $user_dao->findOrganisationsUserBelongsTo($user->getUserId()))) {
+                    return true;
+                }
             }
         }
     }
@@ -1040,7 +1043,7 @@ $app->get('/badge/list', function () use ($app) {
     $app->render('badge-list.tpl');
 })->name('badge-list');
 
-$app->get('/org/profile/:org_id', 'authUserForOrg', function ($org_id) use ($app) {
+$app->get('/org/profile/:org_id', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $org_id));
 
@@ -1090,6 +1093,23 @@ $app->get('/org/private/:org_id', 'authUserForOrg', function ($org_id) use ($app
 
     $app->render('org-private-profile.tpl');
 })->via('POST')->name('org-private-profile');
+
+$app->get('/org/request/:org_id', function ($org_id) use ($app) {
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+    $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+    if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
+        $org_dao = new OrganisationDao();
+        if($org_dao->requestMembership($user->getUserId(), $org_id)) {
+            echo "<h1>Success</h1>";
+        } else {
+            echo "<h1>Failure</h1>";
+        }
+    } else {
+        echo "<p>Already member of Org</p>";
+    }
+    $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
+})->name('org-request-membership');
 
 
 function isValidPost(&$app) {

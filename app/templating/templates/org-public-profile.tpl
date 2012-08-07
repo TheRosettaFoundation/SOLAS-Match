@@ -8,9 +8,11 @@
         Organisation Profile
     {/if}
     <small> An organisation on SOLAS Match </small>
+    {assign var="org_id" value=$org->getId()}
     {if in_array($user->getUserId(), $org_members)}
-        {assign var="org_id" value=$org->getId()}
         <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Edit Profile</a>
+    {else}
+        <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Request Membership</a>
     {/if}
     </h1></div>
 {/if}
