@@ -25,6 +25,10 @@ CREATE TABLE IF NOT EXISTS `archived_task` (
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `archived_task`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.archived_task: 0 rows
 /*!40000 ALTER TABLE `archived_task` DISABLE KEYS */;
@@ -37,7 +41,11 @@ CREATE TABLE IF NOT EXISTS `badges` (
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `description` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`badge_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `badges`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.badges: ~3 rows (approximately)
 /*!40000 ALTER TABLE `badges` DISABLE KEYS */;
@@ -59,6 +67,10 @@ CREATE TABLE IF NOT EXISTS `language` (
   `en_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '"English", for example',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `language`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.language: 0 rows
 /*!40000 ALTER TABLE `language` DISABLE KEYS */;
@@ -76,6 +88,10 @@ CREATE TABLE IF NOT EXISTS `old_task_file` (
   `upload_time` datetime NOT NULL,
   PRIMARY KEY (`task_id`,`file_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `old_task_file`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.old_task_file: 0 rows
 /*!40000 ALTER TABLE `old_task_file` DISABLE KEYS */;
@@ -91,6 +107,16 @@ CREATE TABLE IF NOT EXISTS `organisation` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`,`home_page`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `organisation`
+	CHANGE COLUMN `name` `name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `id`,
+	CHANGE COLUMN `home_page` `home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `name`,
+	CHANGE COLUMN `biography` `biography` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
+	ADD UNIQUE INDEX `name` (`name`, `home_page`);
+
+ALTER TABLE `organisation`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.organisation: 0 rows
 /*!40000 ALTER TABLE `organisation` DISABLE KEYS */;
@@ -107,6 +133,10 @@ CREATE TABLE IF NOT EXISTS `organisation_member` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `organisation_member`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.organisation_member: 0 rows
 /*!40000 ALTER TABLE `organisation_member` DISABLE KEYS */;
@@ -122,6 +152,10 @@ CREATE TABLE IF NOT EXISTS `tag` (
   `label` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`tag_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `tag`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.tag: 0 rows
 /*!40000 ALTER TABLE `tag` DISABLE KEYS */;
@@ -141,7 +175,10 @@ CREATE TABLE IF NOT EXISTS `task` (
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
+ALTER TABLE `task`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 -- Dumping data for table Solas-Match-test.task: 0 rows
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
@@ -156,6 +193,11 @@ CREATE TABLE IF NOT EXISTS `task_claim` (
   PRIMARY KEY (`claim_id`),
   KEY `task_user` (`task_id`,`user_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `task_claim`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.task_claim: 0 rows
 /*!40000 ALTER TABLE `task_claim` DISABLE KEYS */;
@@ -172,6 +214,10 @@ CREATE TABLE IF NOT EXISTS `task_file_version` (
   `upload_time` datetime NOT NULL,
   KEY `task_id` (`task_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `task_file_version`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.task_file_version: 0 rows
 /*!40000 ALTER TABLE `task_file_version` DISABLE KEYS */;
@@ -188,6 +234,11 @@ CREATE TABLE IF NOT EXISTS `task_file_version_download` (
   KEY `task_id` (`task_id`,`file_id`,`version_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+ALTER TABLE `task_file_version_download`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
+
 -- Dumping data for table Solas-Match-test.task_file_version_download: 0 rows
 /*!40000 ALTER TABLE `task_file_version_download` DISABLE KEYS */;
 /*!40000 ALTER TABLE `task_file_version_download` ENABLE KEYS */;
@@ -201,6 +252,11 @@ CREATE TABLE IF NOT EXISTS `task_tag` (
   UNIQUE KEY `task_tag` (`task_id`,`tag_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+ALTER TABLE `task_tag`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
+
 -- Dumping data for table Solas-Match-test.task_tag: 0 rows
 /*!40000 ALTER TABLE `task_tag` DISABLE KEYS */;
 /*!40000 ALTER TABLE `task_tag` ENABLE KEYS */;
@@ -212,6 +268,11 @@ CREATE TABLE IF NOT EXISTS `translator` (
   `role_added` datetime NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `translator`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.translator: 0 rows
 /*!40000 ALTER TABLE `translator` DISABLE KEYS */;
@@ -232,6 +293,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+ALTER TABLE `user`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
+
 
 
 
@@ -240,8 +306,12 @@ CREATE TABLE IF NOT EXISTS `user_badges` (
   `user_id` int(11) NOT NULL,
   `badge_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`badge_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+ALTER TABLE `user_badges`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 -- Dumping data for table Solas-Match-test.user_badges: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user_badges` DISABLE KEYS */;
 REPLACE INTO `user_badges` (`user_id`, `badge_id`) VALUES
@@ -254,7 +324,12 @@ CREATE TABLE IF NOT EXISTS `user_tag` (
   `user_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `user_tag`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.user_tag: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user_tag` DISABLE KEYS */;
@@ -267,7 +342,12 @@ CREATE TABLE IF NOT EXISTS `user_task_score` (
   `task_id` int(11) NOT NULL,
   `score` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`user_id`,`task_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `user_task_score`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping data for table Solas-Match-test.user_task_score: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user_task_score` DISABLE KEYS */;
