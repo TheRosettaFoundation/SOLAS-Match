@@ -26,11 +26,14 @@
 		{/if}
 	</p>
 
+    <h3>{$org->getName()} <small>Organisation Information</small></h3>
+    <p>{$org->getBiography()}</p>
+
 {if isset($file_previously_uploaded) && $file_previously_uploaded}
     <div class="alert">
         <p>Thanks for providing your translation for this task. 
-        {if isset($org_name)}
-            {$org_name}
+        {if $org != null && $org->getName() != ''}
+            {$org->getName()}
         {else}
             This organisation
         {/if}

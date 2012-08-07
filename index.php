@@ -372,7 +372,11 @@ $app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) u
         die;
     }
 
+    $org_dao = new OrganisationDao();
+    $org = $org_dao->find($task->getOrganisationId());
+
     $app->view()->setData('task', $task);
+    $app->view()->appendData(array('org' => $org));
 
     if ($task_file_info = $task_dao->getTaskFileInfo($task)) {
         $app->view()->appendData(array(
@@ -402,11 +406,8 @@ $app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) u
                     'this_user_has_claimed_this_task' => true
                 ));
                 if($task_dao->hasBeenUploaded($task->getTaskId(), $current_user->getUserId())) {
-                    $org_dao = new OrganisationDao();
-                    $org = $org_dao->find($task->getOrganisationId());
                     $app->view()->appendData(array(
-                        'file_previously_uploaded' => true,
-                        'org_name' => $org->getName()
+                        'file_previously_uploaded' => true
                     ));
 
                 }
