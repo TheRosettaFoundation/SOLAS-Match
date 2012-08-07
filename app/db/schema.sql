@@ -111,7 +111,7 @@ ALTER TABLE `organisation`
 	CHANGE COLUMN `name` `name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `id`,
 	CHANGE COLUMN `home_page` `home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `name`,
 	CHANGE COLUMN `biography` `biography` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
-	ADD UNIQUE INDEX `name` (`name`, `home_page`);
+	ADD UNIQUE INDEX (`name`, `home_page`);
 
 ALTER TABLE `organisation`
 	COLLATE='utf8_unicode_ci',
