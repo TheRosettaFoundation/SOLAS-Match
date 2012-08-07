@@ -33,7 +33,7 @@
 					<label for="tags">Tags</label>
 					<input type="text" name="tags" id="tags">
 				</p>
-				<p class="desc">Separated by spaces. For fultiword tags: join-with-hyphens</p>
+				<p class="desc">Separated by spaces. For multiword tags: join-with-hyphens</p>
 				
 				<p>
 					<label for="word_count">
