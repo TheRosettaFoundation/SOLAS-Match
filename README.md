@@ -94,23 +94,6 @@ Further below in this document, there are also several resources for our work mo
     chmod 777 ./app/uploads
     chmod 777 ./app/templating/templates_compiled
 
-### Install sub modules on git
-
-1. Once the github version has been cloned locally the libs directory must be populated with
-submodules
-2. in the root of the git tree run:
-
-        git submodule init
-
-3. Then run:
-
-        git submodule update
-
-NOTE: Step 3 clones the repos into the correct place locally. You must share your public key
-with github in order to complete the download. keys can be generated using ssh-keygen.
-NOTE: The error "Fatal: needed single revision" means that there is a file/files in the target
-directory. Remove the offending files and rerun.
-
 ## Install 960.css Grid System
 
 This step is probably redundant, being replaced by Twitter Bootstrap. If you're working
