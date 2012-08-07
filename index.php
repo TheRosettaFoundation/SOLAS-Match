@@ -1101,12 +1101,12 @@ $app->get('/org/request/:org_id', function ($org_id) use ($app) {
     if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
         $org_dao = new OrganisationDao();
         if($org_dao->requestMembership($user->getUserId(), $org_id)) {
-            echo "<h1>Success</h1>";
+            $app->flash("success", "Successfully requested membership.");
         } else {
-            echo "<h1>Failure</h1>";
+            $app->flash("error", "You have already sent a membership request to this Organisation");
         }
     } else {
-        echo "<p>Already member of Org</p>";
+        $app->flash("error", "You are already a member of this organisation");
     }
     $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
 })->name('org-request-membership');

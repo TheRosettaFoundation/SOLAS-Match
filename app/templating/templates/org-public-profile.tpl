@@ -1,6 +1,16 @@
 {include file='header.tpl'}
 
 {if isset($org)}
+    {if isset($flash['error'])}
+        <div class="alert alert-error">
+            {$flash['error']}
+        </div>
+    {/if}
+    {if isset($flash['success'])}
+        <div class="alert alert-success">
+            {$flash['success']}
+        </div>
+    {/if}
     <div class='page-header'><h1>
     {if $org->getName() != ''}
         {$org->getName()}

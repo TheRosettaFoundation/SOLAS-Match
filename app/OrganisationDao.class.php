@@ -47,7 +47,7 @@ class OrganisationDao {
             foreach($previous_requests as $request) {
                 if($request['user_id'] == $user_id) {
                     //User has already sent a request, return
-                    return true;
+                    return false;
                 }
             }
         }
