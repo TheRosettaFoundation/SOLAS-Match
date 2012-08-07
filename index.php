@@ -304,9 +304,11 @@ $app->get('/task/:task_id/uploaded-edit/', 'authenticateUserForTask', function (
 
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'),
             'authenticateUserForTask', function ($task_id) use ($app) {
-    $error      = null;
-    $task_dao   = new TaskDao();
-    $task       = $task_dao->find(array('task_id' => $task_id));
+    $error       = null;
+    $title_err   = null;
+    $word_count_err = null;
+    $task_dao    = new TaskDao();
+    $task        = $task_dao->find(array('task_id' => $task_id));
 
     if (!is_object($task)) {
         $app->notFound();
@@ -323,19 +325,27 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             $target_id = Languages::saveLanguage($post->target);
             $task->setTargetId($target_id);
         }
-        $task->setTitle($post->title);
+        if($post->title != '') {
+            $task->setTitle($post->title);
+        } else {
+            $title_err = "Title cannot be empty";
+        }
         $task->setTags(Tags::separateTags($post->tags));
-        $task->setWordCount($post->word_count);
+        if($post->word_count != '') {
+            $task->setWordCount($post->word_count);
+        } else {
+            $word_count_err = "Word Count cannot be blank";
+        }
         $task_dao->save($task);
-        if (is_null($error)) {
+        if (is_null($error) && is_null($title_err) && is_null($word_count_err)) {
             $app->redirect($app->urlFor('task-uploaded', array('task_id' => $task_id)));
         }
     }
 
-    if (!is_null($error)) {
-        $app->view()->appendData(array('error' => $error));
-    }
     $app->view()->appendData(array(
+        'error'             => $error,
+        'title_error'       => $title_err,
+        'word_count_err'    => $word_count_err,
         'url_task_describe' => $app->urlFor('task-describe', array('task_id' => $task_id)),
         'task'              => $task,
     ));
