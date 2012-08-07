@@ -25,7 +25,7 @@
     {else}
         placeholder='Name'
     {/if} />
-    <label for='nLanguage'>First Maternal Language:</label>
+    <label for='nLanguage'>Native Language:</label>
     <input type='text' name='nLanguage' id='nLanguage' 
     {if $user->getNativeLanguage() != ''}
         value={$user->getNativeLanguage()}
