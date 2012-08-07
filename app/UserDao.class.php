@@ -5,38 +5,22 @@ require('models/User.class.php');
 class UserDao {
 	public function find($params) {
 		$query = null;
-		$db = new MySQLWrapper();
+                $args = "";
+		$db = new PDOWrapper();
 		$db->init();
-		if (isset($params['user_id']) && isset($params['password'])) {
-			$query = 'SELECT *
-					FROM user
-					WHERE user_id = ' . $db->cleanse($params['user_id']) . '
-					AND password = ' . $db->cleanseWrapStr($params['password']);
-		}
-		else if (isset($params['user_id']) && isset($params['role'])) {
-			if ($params['role'] == 'organisation_member') {
-				$query = 'SELECT u.*
-							FROM user u, organisation_member om
-							WHERE u.user_id = ' . $db->cleanse($params['user_id']) . '
-							AND u.user_id = om.user_id';
-			}
-		}
-		else if (isset($params['user_id']) && !isset($params['password'])) {
-			$query = 'SELECT *
-						FROM user
-						WHERE user_id = ' . $db->cleanse($params['user_id']);
-		}
-		else if (isset($params['email'])) {
-			$query = 'SELECT *
-						FROM user
-						WHERE email = ' . $db->cleanseWrapStr($params['email']);
-		}
+                if (isset($params['user_id']) || isset($params['email'])) {
+                $args.=(isset($params['user_id'] )&&$params['user_id']!=null)?"{$db->cleanse($params['user_id'])}":"null";
+                $args.=(isset($params['password'] )&&$params['password']!=null)?",'{$db->cleanse($params['password'])}'":",null";
+                $args.=(isset($params['email'] )&&$params['email']!=null)?",'{$db->cleanse($params['email'])}'":",null";
+                $args.=(isset($params['role'] )&&$params['role'] == 'organisation_member')?",1":",0";
+                    
+                }
 		else {
 			throw new InvalidArgumentException('Cannot search for user, as no valid parameters were given.');
 		}
 
 		$ret = null;
-		if ($r = $db->Select($query)) {
+		if ($r = $db->call("userFindByUserData",$args)) {
 			$user_data = array(
 				'user_id' => $r[0]['user_id'],
 				'email' => $r[0]['email'],
@@ -83,29 +67,17 @@ class UserDao {
 	}
 
 	private function _update($user) {
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$update = 'UPDATE user SET email='.$db->cleanseWrapStr($user->getEmail()).', 
-					display_name='.$db->cleanseWrapStr($user->getDisplayName()).', 
-					biography='.$db->cleanseWrapStr($user->getBiography()).',
-					native_language='.$db->cleanseWrapStr($user->getNativeLanguage()).' 
-					WHERE user_id='.$db->cleanse($user->getUserId()).' 
-					LIMIT 1' ;
-		return $db->Update($update);
+                $result = $db->call('userInsertAndUpdate', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},{$db->cleanseWrapStr($user->getBiography())},{$db->cleanseWrapStr($user->getDisplayName())},{$db->cleanseWrapStr($user->getNativeLanguage())},{$db->cleanse($user->getUserId())}");
+                return $result[0]['user_id'];
 	}
 
 	private function _insert($user) {
-		// The array that will contain values to be inserted to DB.
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$insert = array();
-		$insert['email'] = $db->cleanseWrapStr($user->getEmail());
-		$insert['nonce'] = $db->cleanse($user->getNonce());
-		$insert['password'] = $db->cleanseWrapStr($user->getPassword());
-		$insert['created_time'] = 'NOW()';
-		
-		if ($user_id = $db->Insert('user', $insert)) {
-			return $this->find(array('user_id' => $user_id));
+		if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},NULL,NULL,NULL,NULL")) {
+			return $this->find(array('user_id' => $user_id[0]['user_id']));
 		}
 		else {
 			return null;
@@ -179,12 +151,9 @@ class UserDao {
 
 	public function findOrganisationsUserBelongsTo($user_id) {
 		$ret = null;
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$query = 'SELECT organisation_id 
-					FROM organisation_member
-					WHERE user_id = ' . $db->cleanse($user_id);
-		if ($result = $db->Select($query)) {
+		if ($result = $db->call("findOrganisationsUserBelongsTo", $db->cleanse($user_id))) {
 			$ret = array();
 			foreach ($result as $row) {
 				$ret[] = $row['organisation_id'];
@@ -195,12 +164,9 @@ class UserDao {
 
 	public function getUserBadges(User $user) {
 		$ret = NULL;
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$query = 'SELECT badge_id
-				FROM user_badges
-				WHERE user_id = '.$db->cleanse($user->getUserId());
-		if ($result = $db->Select($query)) {
+		if ($result = $db->call("getUserBadges", $db->cleanse($user->getUserId()))) {
 			$ret = $result;
 		}
 
@@ -210,13 +176,9 @@ class UserDao {
     public function getUserTags($user_id)
     {
         $ret = null;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = 'SELECT label
-                    FROM user_tag JOIN tag 
-                    ON user_tag.tag_id = tag.tag_id
-                    WHERE user_id = '.$db->cleanse($user_id);
-        if($result = $db->Select($query)) {
+        if($result = $db->call("getUserTags", $db->cleanse($user_id))) {
             $ret = array();
             foreach($result as $row) {
                 $ret[] = $row['label'];
@@ -232,22 +194,11 @@ class UserDao {
     public function likeTag($user_id, $tag_id)
     {
         $ret = false;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = 'SELECT user_id, tag_id
-                    FROM user_tag
-                    WHERE user_id = '.$db->cleanse($user_id).'
-                    AND tag_id = '.$db->cleanse($tag_id);
-        if($db->Select($query)) {
-            $ret = true;
-        } else {
-            $insert = 'INSERT INTO user_tag (user_id, tag_id)
-                    VALUES ('.$db->cleanse($user_id).', '.$db->cleanse($tag_id).')';
-            if ($result = $db->insertStr($insert)) {
-                $ret = true;
-            }
+        if ($result = $db->call("userLikeTag", "{$db->cleanse($user_id)},{$db->cleanse($tag_id)}")) {
+            $ret = $result[0]['result'];
         }
-
         return $ret;
     }
 
@@ -257,14 +208,10 @@ class UserDao {
     public function removeTag($user_id, $tag_id)
     {
         $ret = false;
-        $db= new MySQLWrapper();
+        $db= new PDOWrapper();
         $db->init();
-        $delete = "DELETE
-                    FROM user_tag
-                    WHERE user_id=".$db->cleanse($user_id)."
-                    AND tag_id =".$db->cleanse($tag_id);
-        if($db->Delete($delete)) {
-            $ret = true;
+        if ($result = $db->call("removeUserTag", "{$db->cleanse($user_id)},{$db->cleanse($tag_id)}")) {
+            $ret = $result[0]['result'];
         }
 
         return $ret;

@@ -11,6 +11,7 @@ SmartyView::$smartyExtensions = array(
 
 require 'app/Settings.class.php';
 require 'app/MySQLWrapper.class.php';
+require 'app/PDOWrapper.class.php';
 require 'app/BadgeDao.class.php';
 require 'app/OrganisationDao.class.php';
 require 'app/UserDao.class.php';
@@ -804,7 +805,7 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
         $app->flash('error', 'Login required to access page');
         $app->redirect($app->urlFor('login'));
     }
-    $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId());
+        $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId());
 
     $org_tasks = array();
     $orgs = array();

@@ -105,6 +105,11 @@ CREATE TABLE IF NOT EXISTS `organisation` (
   `biography` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+ALTER TABLE `organisation`
+	CHANGE COLUMN `name` `name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `id`,
+	CHANGE COLUMN `home_page` `home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `name`,
+	CHANGE COLUMN `biography` `biography` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
+	ADD UNIQUE INDEX `name` (`name`, `home_page`);
 
 --
 -- Table structure for table `organisation_member`
@@ -254,6 +259,298 @@ CREATE TABLE IF NOT EXISTS `user_task_score` (
   `score` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`user_id`,`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+-- Dumping structure for procedure Solas-Match-Dev.userFindByUserData
+DROP PROCEDURE IF EXISTS `userFindByUserData`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
+BEGIN
+	if(id is not null and pass is not null) then
+		select * from user where user_id = id and password= pass;
+   elseif(id is not null and role=1) then
+		select * from user where user_id = id and EXISTS (select * from organisation_member where user_id = id);
+	elseif(id is not null) then
+ 		select * from user where user_id = id;
+   elseif (email is not null) then
+   	select * from user u where u.email = email;
+	end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.userInsertAndUpdate
+DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(256), IN `id` INT)
+    COMMENT 'adds a user if it dosent exists. updates it if it allready exisits.'
+BEGIN
+	if pass='' then set pass=null;end if;
+	if bio='' then set bio=null;end if;
+	if id='' then set id=null;end if;
+	if nonce='' then set nonce=null;end if;
+	if name='' then set name=null;end if;
+	if email='' then set email=null;end if;
+	if lang='' then set lang=null;end if;
+	
+	if id is null and not exists(select * from user u where u.email= email)then
+	-- set insert
+	insert into user (email,nonce,password,created_time,display_name,biography,native_language) values (email,nonce,pass,NOW(),name,bio,lang);
+#	set @q="insert into user (email,nonce,password,created_time,display_name,biography,native_language) values ('"+email+"',"+nonce+",'"+pass+"',"+NOW()+",'"+name+"','"+bio+"','"+lang+"');";
+	else 
+		set @first = true;
+		set @q= "update user u set ";-- set update
+		if bio is not null then 
+#set paramaters to be updated
+			set @q = CONCAT(@q," u.biography='",bio,"'") ;
+			set @first = false;
+		end if;
+		if lang is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.native_language='",lang,"'") ;
+		end if;
+		if name is not null then 
+				if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.display_name='",name,"'");
+		
+		end if;
+		
+		if email is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.email='",email,"'");
+		
+		end if;
+		if nonce is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.nonce=",nonce) ;
+		
+		end if;
+		
+		if pass is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.password='",pass,"'");
+		
+		end if;
+#		set where
+	
+		if id is not null then 
+			set @q = CONCAT(@q," where  u.user_id= ",id);
+#    	allows email to be changed but not user_id
+		
+		elseif email is not null then 
+			set @q = CONCAT(@q," where  u.email= ,",email,"'");-- allows anything but email and user_id to change
+		else
+			set @q = CONCAT(@q," where  u.email= null AND u.user_id=null");-- will always fail to update anyting
+		end if;
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+
+	end if;
+	
+	select u.user_id from user u where u.email= email;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.findOrganisationsUserBelongsTo
+DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
+BEGIN
+	SELECT organisation_id
+	FROM organisation_member
+	WHERE user_id = id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getUserBadges
+DROP PROCEDURE IF EXISTS `getUserBadges`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserBadges`(IN `id` INT)
+BEGIN
+SELECT badge_id
+FROM user_badges
+WHERE user_id = id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT)
+BEGIN
+	SELECT label
+	FROM user_tag
+	JOIN tag ON user_tag.tag_id = tag.tag_id
+	WHERE user_id = id; 
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.userLikeTag
+DROP PROCEDURE IF EXISTS `userLikeTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userLikeTag`(IN `id` INT, IN `tagID` INT)
+BEGIN
+	if not EXISTS(  SELECT user_id, tag_id
+	                FROM user_tag
+	                WHERE user_id = id
+	                AND tag_id = tagID) then                 
+		INSERT INTO user_tag (user_id, tag_id)VALUES (id,tagID);
+		select 1 as 'result';
+	else
+	select 0 as 'result';
+	end if;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.removeUserTag
+DROP PROCEDURE IF EXISTS `removeUserTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserTag`(IN `id` INT, IN `tagID` INT)
+    COMMENT 'unsubscripse a user for the given tag'
+BEGIN
+	if EXISTS(  SELECT user_id, tag_id
+	                FROM user_tag
+	                WHERE user_id = id
+	                AND tag_id = tagID) then                 
+		DELETE 	FROM user_tag	WHERE user_id=id AND tag_id =tagID; 
+		select 1 as 'result';
+	else
+	select 0 as 'result';
+	end if;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.findOganisation
+DROP PROCEDURE IF EXISTS `findOganisation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findOganisation`(IN `id` INT)
+    COMMENT 'finds an organisation by the data passed in.'
+BEGIN
+	SELECT *
+	FROM organisation o
+	WHERE o.id=id; 
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getOrgByUser
+DROP PROCEDURE IF EXISTS `getOrgByUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgByUser`(IN `id` INT)
+BEGIN
+	SELECT *
+	FROM organisation o
+	WHERE o.id IN (SELECT organisation_id
+						 FROM organisation_member
+					 	 WHERE user_id=id); 
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getOrgMembers
+DROP PROCEDURE IF EXISTS `getOrgMembers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `id` INT)
+BEGIN
+	SELECT user_id
+	FROM organisation_member 
+	WHERE organisation_id=id;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.organisationInsertAndUpdate
+DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(255), IN `bio` TEXT)
+BEGIN
+	if id='' then set id=null;end if;
+	if url='' then set url=null;end if;
+	if companyName='' then set companyName=null;end if;
+	if bio='' then set bio=null;end if;
+
+	
+	if id is null and not exists(select * from organisation o where (o.home_page= url or o.home_page= concat("http://",url) ) and o.name=companyName)then
+	-- set insert
+	insert into organisation (name,home_page, biography) values (companyName,url,bio);
+
+	else 
+		set @first = true;
+		set @q= "update organisation o set ";-- set update
+		if bio is not null then 
+#set paramaters to be updated
+			set @q = CONCAT(@q," o.biography='",bio,"'") ;
+			set @first = false;
+		end if;
+		if url is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," o.home_page='",url,"'") ;
+		end if;
+		if companyName is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," o.name='",companyName,"'") ;
+		end if;
+	
+#		set where
+		if id is not null then 
+			set @q = CONCAT(@q," where  o.id= ",id);
+		elseif url is not null and companyName is not null then 
+			set @q = CONCAT(@q," where o.home_page='",url,"' and o.name='",companyName,"'");
+		end if;
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+#
+	end if;
+	
+	select o.id as 'result' from organisation o where (o.home_page= url or o.home_page= concat("http://",url) ) and o.name=companyName;
+END//
+DELIMITER ;
+
+-- Dumping structure for trigger Solas-Match-Dev.validateHomepageInsert
+DROP TRIGGER IF EXISTS `validateHomepageInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `organisation` FOR EACH ROW BEGIN
+	if (new.home_page not like "http://*" OR new.home_page not like "https://*") then
+	set new.home_page = concat("http://",new.home_page);
+	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+
+-- Dumping structure for trigger Solas-Match-Dev.validateHomepageUpdate
+DROP TRIGGER IF EXISTS `validateHomepageUpdate`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `organisation` FOR EACH ROW BEGIN
+	if (new.home_page not like "http://*" OR new.home_page not like "https://*") then
+	set new.home_page = concat("http://",new.home_page);
+	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

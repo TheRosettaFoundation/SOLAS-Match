@@ -55,6 +55,22 @@ Further below in this document, there are also several resources for our work mo
  * Ensure that RewriteEngine is installed. If not:
    $ sudo a2enmod rewrite
 
+## Alternitive Configure Lighttpd
+ * Ensure that url rewritting is enabled.
+    server.modules += ("mod_rewrite")
+
+ * update lighttpd.conf with the following rewite rules
+    url.rewrite-once = ( "resources/css/style.([0-9]+).css$" => "resources/css/style.css","^/?index.php/?$" => ""  )
+    url.rewrite-if-not-file = ( "/?index.php/.*" => "$1" ,"(.*)" => "index.php/$1")
+
+ * example vhost 
+   $HTTP["host"] == "php-workspace" {
+      server.document-root = "/home/sean/Dev/Git-Mannaged/SOLAS-Match/"
+      url.rewrite-once = ( "resources/css/style.([0-9]+).css$" => "resources/css/style.css","^/?index.php/?$" => ""  )
+      url.rewrite-if-not-file = ( "/?index.php/.*" => "$1" ,"(.*)" => "index.php/$1")
+   }
+
+
 ## Install Smarty PHP templating engine
 
  * In Ubuntu:
