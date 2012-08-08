@@ -42,6 +42,7 @@ Contact:
 Coded by:
 
   Eoin Ó Conchúir <eoin.oconchuir@ul.ie>
+  David O Carroll <david.ocarroll@ul.ie>
 
 
 # Installation
@@ -71,7 +72,7 @@ Further below in this document, there are also several resources for our work mo
    }
 
 
-## Install Smarty PHP templating engine
+## Install Solas Match Dependencies
 
  * In Ubuntu:
     If subversion is not install run:
@@ -103,6 +104,22 @@ SHOW GRANTS FOR 'tester'@'localhost';
 3. Under database, enter your MySQL connection settings.
 4. Under the site section, enter the URL of the installation.
 5. Under user session control, enter a long random string.
+
+## Add Cron Job
+
+The user's individual task stream is calculated by a python script which should be run at regular 
+intervals to keep everything up to date. This is achieved by adding it as a cron job.
+
+To edit your crontab file run:
+
+    crontab -e
+
+Choose your default editor and add the following line:
+
+    10 * * * * cd /absolute/path/to/SOLAS-Match/app/scripts/ && ./calculate_scores.py
+
+Change the path above so that it points to the correct location. This will run the python script 
+every hour at 10 past the hour.
 
 ## Configure PHP
 
