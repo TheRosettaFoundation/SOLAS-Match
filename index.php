@@ -1102,8 +1102,10 @@ $app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use
 
     $requests = $org_dao->getMembershipRequests($org_id);
     $user_list = array();
-    foreach($requests as $request) {
-        $user_list[] = $user_dao->find(array('user_id' => $request['user_id']));
+    if(count($requests) > 0) {
+        foreach($requests as $request) {
+            $user_list[] = $user_dao->find(array('user_id' => $request['user_id']));
+        }
     }
 
     $app->view()->setData('org', $org);
@@ -1111,6 +1113,19 @@ $app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use
 
     $app->render('org.request_queue.tpl');
 })->name('org-request-queue');
+
+$app->get('/org/:org_id/request/:user_id/:accept', function ($org_id, $user_id, $accept) use ($app) {
+    $org_dao = new OrganisationDao();
+    if($accept == "true") {
+        echo "<p>Accepting Request</p>";
+        $org_dao->acceptMemRequest($org_id, $user_id);
+    } else {
+        echo "<p>Refusing Request</p>";
+        $org_dao->refuseMemRequest($org_id, $user_id);
+    }
+    
+    $app->redirect($app->urlFor('org-request-queue', array('org_id' => $org_id)));
+})->name('org-process-request');
 
 $app->get('/org/request/:org_id', function ($org_id) use ($app) {
     $user_dao = new UserDao();

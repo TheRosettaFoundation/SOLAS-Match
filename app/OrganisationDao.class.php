@@ -79,6 +79,31 @@ class OrganisationDao {
         return $ret;
     }
 
+    public function acceptMemRequest($org_id, $user_id) {
+        $db = new MySQLWrapper();
+        $db->init();
+        //Add user as org member
+        $insert = "INSERT INTO organisation_member (user_id, organisation_id)
+                VALUES (".$db->cleanse($user_id).", ".$db->cleanse($org_id).")";
+        $db->insertStr($insert);
+
+        $this->removeMembershipRequest($org_id, $user_id);
+    }
+
+    public function refuseMemRequest($org_id, $user_id) {
+        //Simply remove the membership request
+        $this->removeMembershipRequest($org_id, $user_id);
+    }
+
+    private function removeMembershipRequest($org_id, $user_id) {
+        $db = new MySQLWrapper();
+        $db->init();
+        $delete = "DELETE FROM org_request_queue
+                WHERE user_id=".$db->cleanse($user_id)."
+                AND org_id=".$db->cleanse($org_id);
+        $db->Delete($delete);
+    }
+
     private function create_org_from_sql_result($result) {
         $org_data = array(
                     'id' => $result[0]['id'],
