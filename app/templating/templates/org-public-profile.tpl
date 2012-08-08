@@ -36,5 +36,8 @@
 <h3>Biography</h3>
 <p>{$org->getBiography()}</p>
 
+{if in_array($user->getUserId(), $org_members)}
+    <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class="btn btn-primary">View Membership Requests</a>
+{/if}
 
 {include file='footer.tpl'}

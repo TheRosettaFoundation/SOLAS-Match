@@ -1094,6 +1094,24 @@ $app->get('/org/private/:org_id', 'authUserForOrg', function ($org_id) use ($app
     $app->render('org-private-profile.tpl');
 })->via('POST')->name('org-private-profile');
 
+$app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use ($app) {
+    $org_dao = new OrganisationDao();
+    $org = $org_dao->find($org_id);
+
+    $user_dao = new UserDao();
+
+    $requests = $org_dao->getMembershipRequests($org_id);
+    $user_list = array();
+    foreach($requests as $request) {
+        $user_list[] = $user_dao->find(array('user_id' => $request['user_id']));
+    }
+
+    $app->view()->setData('org', $org);
+    $app->view()->appendData(array('user_list' => $user_list));
+
+    $app->render('org.request_queue.tpl');
+})->name('org-request-queue');
+
 $app->get('/org/request/:org_id', function ($org_id) use ($app) {
     $user_dao = new UserDao();
     $user = $user_dao->getCurrentUser();
