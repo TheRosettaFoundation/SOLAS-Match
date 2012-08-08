@@ -143,7 +143,25 @@ ALTER TABLE `organisation_member`
 /*!40000 ALTER TABLE `organisation_member` ENABLE KEYS */;
 
 
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `org_request_queue`
+--
+
+CREATE TABLE IF NOT EXISTS `org_request_queue` (
+  `request_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `org_id` int(11) NOT NULL,
+  `request_datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`request_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+ALTER TABLE `org_request_queue`
+	COLLATE=`utf8_unicode_ci`,
+	ENGINE=MyISAM,
+	CONVERT TO CHARSET utf8;
+
+-- --------------------------------------------------------
 
 
 -- Dumping structure for table Solas-Match-test.tag

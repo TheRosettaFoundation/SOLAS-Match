@@ -8,7 +8,14 @@
 		{/if}
 		<form method="post" action="{$url_task_describe}">
 			<fieldset>
-				<label for="content">Descriptive Title</label>
+				<label for="content">
+                    Descriptive Title
+                    {if !is_null($title_error)}
+                        <div class="alert alert-error">
+                            {$title_error}
+                        </div>
+                    {/if}
+                </label>
 				<textarea wrap="hard" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
 				<p class="desc">You may replace the file name with something more descriptive.</p>  
 
@@ -26,10 +33,17 @@
 					<label for="tags">Tags</label>
 					<input type="text" name="tags" id="tags">
 				</p>
-				<p class="desc">Separated by spaces. For fultiword tags: join-with-hyphens</p>
+				<p class="desc">Separated by spaces. For multiword tags: join-with-hyphens</p>
 				
 				<p>
-					<label for="word_count">Word count</label>  
+					<label for="word_count">
+                        Word count
+                        {if !is_null($word_count_err)}
+                            <div class="alert alert-error">
+                                {$word_count_err}
+                            </div>
+                        {/if}
+                    </label>  
 					<input type="text" name="word_count" id="word_count" maxlength="6">
 				</p>
 				<p class="desc">Approximate, or leave black.</p>  

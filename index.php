@@ -116,8 +116,11 @@ function authUserForOrg($request, $response, $route) {
         $user_dao = new UserDao();
         $user = $user_dao->getCurrentUser();
         if(is_object($user)) {
-            if(in_array($org_id, $user_dao->findOrganisationsUserBelongsTo($user->getUserId()))) {
-                return true;
+            $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+            if(!is_null($user_orgs)) {
+                if(in_array($org_id, $user_dao->findOrganisationsUserBelongsTo($user->getUserId()))) {
+                    return true;
+                }
             }
         }
     }
@@ -304,9 +307,11 @@ $app->get('/task/:task_id/uploaded-edit/', 'authenticateUserForTask', function (
 
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'),
             'authenticateUserForTask', function ($task_id) use ($app) {
-    $error      = null;
-    $task_dao   = new TaskDao();
-    $task       = $task_dao->find(array('task_id' => $task_id));
+    $error       = null;
+    $title_err   = null;
+    $word_count_err = null;
+    $task_dao    = new TaskDao();
+    $task        = $task_dao->find(array('task_id' => $task_id));
 
     if (!is_object($task)) {
         $app->notFound();
@@ -323,19 +328,27 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             $target_id = Languages::saveLanguage($post->target);
             $task->setTargetId($target_id);
         }
-        $task->setTitle($post->title);
+        if($post->title != '') {
+            $task->setTitle($post->title);
+        } else {
+            $title_err = "Title cannot be empty";
+        }
         $task->setTags(Tags::separateTags($post->tags));
-        $task->setWordCount($post->word_count);
+        if($post->word_count != '') {
+            $task->setWordCount($post->word_count);
+        } else {
+            $word_count_err = "Word Count cannot be blank";
+        }
         $task_dao->save($task);
-        if (is_null($error)) {
+        if (is_null($error) && is_null($title_err) && is_null($word_count_err)) {
             $app->redirect($app->urlFor('task-uploaded', array('task_id' => $task_id)));
         }
     }
 
-    if (!is_null($error)) {
-        $app->view()->appendData(array('error' => $error));
-    }
     $app->view()->appendData(array(
+        'error'             => $error,
+        'title_error'       => $title_err,
+        'word_count_err'    => $word_count_err,
         'url_task_describe' => $app->urlFor('task-describe', array('task_id' => $task_id)),
         'task'              => $task,
     ));
@@ -372,7 +385,11 @@ $app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) u
         die;
     }
 
+    $org_dao = new OrganisationDao();
+    $org = $org_dao->find($task->getOrganisationId());
+
     $app->view()->setData('task', $task);
+    $app->view()->appendData(array('org' => $org));
 
     if ($task_file_info = $task_dao->getTaskFileInfo($task)) {
         $app->view()->appendData(array(
@@ -402,11 +419,8 @@ $app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) u
                     'this_user_has_claimed_this_task' => true
                 ));
                 if($task_dao->hasBeenUploaded($task->getTaskId(), $current_user->getUserId())) {
-                    $org_dao = new OrganisationDao();
-                    $org = $org_dao->find($task->getOrganisationId());
                     $app->view()->appendData(array(
-                        'file_previously_uploaded' => true,
-                        'org_name' => $org->getName()
+                        'file_previously_uploaded' => true
                     ));
 
                 }
@@ -1029,7 +1043,7 @@ $app->get('/badge/list', function () use ($app) {
     $app->render('badge-list.tpl');
 })->name('badge-list');
 
-$app->get('/org/profile/:org_id', 'authUserForOrg', function ($org_id) use ($app) {
+$app->get('/org/profile/:org_id', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $org_id));
 
@@ -1079,6 +1093,56 @@ $app->get('/org/private/:org_id', 'authUserForOrg', function ($org_id) use ($app
 
     $app->render('org-private-profile.tpl');
 })->via('POST')->name('org-private-profile');
+
+$app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use ($app) {
+    $org_dao = new OrganisationDao();
+    $org = $org_dao->find($org_id);
+
+    $user_dao = new UserDao();
+
+    $requests = $org_dao->getMembershipRequests($org_id);
+    $user_list = array();
+    if(count($requests) > 0) {
+        foreach($requests as $request) {
+            $user_list[] = $user_dao->find(array('user_id' => $request['user_id']));
+        }
+    }
+
+    $app->view()->setData('org', $org);
+    $app->view()->appendData(array('user_list' => $user_list));
+
+    $app->render('org.request_queue.tpl');
+})->name('org-request-queue');
+
+$app->get('/org/:org_id/request/:user_id/:accept', function ($org_id, $user_id, $accept) use ($app) {
+    $org_dao = new OrganisationDao();
+    if($accept == "true") {
+        echo "<p>Accepting Request</p>";
+        $org_dao->acceptMemRequest($org_id, $user_id);
+    } else {
+        echo "<p>Refusing Request</p>";
+        $org_dao->refuseMemRequest($org_id, $user_id);
+    }
+    
+    $app->redirect($app->urlFor('org-request-queue', array('org_id' => $org_id)));
+})->name('org-process-request');
+
+$app->get('/org/request/:org_id', function ($org_id) use ($app) {
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+    $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+    if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
+        $org_dao = new OrganisationDao();
+        if($org_dao->requestMembership($user->getUserId(), $org_id)) {
+            $app->flash("success", "Successfully requested membership.");
+        } else {
+            $app->flash("error", "You have already sent a membership request to this Organisation");
+        }
+    } else {
+        $app->flash("error", "You are already a member of this organisation");
+    }
+    $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
+})->name('org-request-membership');
 
 
 function isValidPost(&$app) {

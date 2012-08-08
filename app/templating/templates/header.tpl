@@ -35,7 +35,17 @@
 		    </ul>
 		    <ul class="nav pull-right">
 		    	{if isset($user)}
-					<li><a href="{urlFor name="logout"}">Log out</a></li>
+                    <li>
+                        <a href="{urlFor name="logout"}">
+                            <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20&r=g" alt="" />
+                            {assign var="display_name" value=$user->getDisplayName()}
+                            {if $display_name != ""}
+                                {$user->getDisplayName()} - Log out
+                            {else}
+                                User - Log out
+                            {/if}
+                        </a>
+                    </li>
 				{else}
 					<li><a href="{urlFor name="register"}">Register</a></li>
 					<li><a href="{urlFor name="login"}">Log in</a></li>
