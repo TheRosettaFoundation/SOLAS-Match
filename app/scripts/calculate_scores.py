@@ -6,7 +6,6 @@ import ConfigParser
 import string
 import time
 import math
-from sets import Set
 
 con = None
 settings = dict()
