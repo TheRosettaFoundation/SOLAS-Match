@@ -14,7 +14,7 @@
                         <i class="icon-briefcase"></i> {$orgs[$org]->getName()}
                     </a>
                 </th>
-                <th></th>
+                <th>Task Status</th>
                 <th>
                     <a class="btn btn-primary" href="{urlFor name="task-upload" options="org_id.$org"}">
                         <i class="icon-upload icon-white"></i> Add new task
@@ -42,6 +42,7 @@
                         </td>
                     {else}
                         <td>
+                            <p>Task not Claimed</p>
                         </td>
                     {/if}
                     <td>
