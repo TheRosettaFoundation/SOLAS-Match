@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `organisation` (
 ALTER TABLE `organisation`
 	CHANGE COLUMN `name` `name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `id`,
 	CHANGE COLUMN `home_page` `home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `name`,
-	CHANGE COLUMN `biography` `biography` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
+	CHANGE COLUMN `biography` `biography` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
 	ADD UNIQUE INDEX (`name`, `home_page`);
 
 ALTER TABLE `organisation`
@@ -433,7 +433,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-test.organisationInsertAndUpdate
 DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(255), IN `bio` TEXT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(255), IN `bio` VARCHAR(4096))
 BEGIN
 	if id='' then set id=null;end if;
 	if url='' then set url=null;end if;
@@ -526,7 +526,6 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(256), IN `id` INT)
-    COMMENT 'adds a user if it dosent exists. updates it if it allready exisits.'
 BEGIN
 	if pass='' then set pass=null;end if;
 	if bio='' then set bio=null;end if;
@@ -539,7 +538,6 @@ BEGIN
 	if id is null and not exists(select * from user u where u.email= email)then
 	-- set insert
 	insert into user (email,nonce,password,created_time,display_name,biography,native_language) values (email,nonce,pass,NOW(),name,bio,lang);
-#	set @q="insert into user (email,nonce,password,created_time,display_name,biography,native_language) values ('"+email+"',"+nonce+",'"+pass+"',"+NOW()+",'"+name+"','"+bio+"','"+lang+"');";
 	else 
 		set @first = true;
 		set @q= "update user u set ";-- set update

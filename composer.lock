@@ -1,6 +1,12 @@
 {
-    "hash": "c1cbb0f8873dae8e9406d72261e673ec",
+    "hash": "6ba2224ba63ebd69f44fb0a99acaa680",
     "packages": [
+        {
+            "package": "lightopenid/lightopenid",
+            "version": "dev-composer",
+            "source-reference": "c46af663a4b57e22ee9d7472674c967e97887597",
+            "commit-date": "1332838638"
+        },
         {
             "package": "slim/extras",
             "version": "1.0.2"
@@ -19,7 +25,7 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ]
+    "stability-flags": {
+        "lightopenid/lightopenid": 20
+    }
 }

@@ -14,16 +14,23 @@
             "url": "git://github.com/codeguy/Slim-Extras.git",
             "type": "git",
             "reference": "master"
+        },
+        "source": {
+           "name": "lightopenid/lightopenid",
+	   "url": "git://gitorious.org/~makasim/lightopenid/makasims-lightopenid.git",
+           "type": "git",
+            "reference": "composer"
         }
     },
 
     "require": {
+        "lightopenid/lightopenid" : "dev-composer",
         "slim/slim": "1.6.2",
         "slim/extras": "1.0.*",
         "smarty/smarty": "3.1.*"
     },
     "autoload": {
-        "classmap": ["vendor/slim/extras/Views/SmartyView.php", "vendor/slim/slim/Slim/View.php"]
+        "classmap": ["vendor/slim/extras/Views/SmartyView.php", "vendor/slim/slim/Slim/View.php","vendor/lightopenid/lightopenid/openid.php"]
         
     },
 
