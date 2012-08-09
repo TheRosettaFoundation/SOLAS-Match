@@ -1,8 +1,8 @@
 {include file="header.tpl"}
-<script type="text/javascript" src="/resources/bootstrap/js/jquery-1.2.6.min.js"></script>
-<script type="text/javascript" src="/resources/bootstrap/js/openid-jquery.js"></script>
-<script type="text/javascript" src="/resources/bootstrap/js/openid-en.js"></script>
-<link type="text/css" rel="stylesheet" href="/resources/css/openid.css" />
+<script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/jquery-1.2.6.min.js"></script>
+<script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/openid-jquery.js"></script>
+<script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/openid-en.js"></script>
+<link type="text/css" rel="stylesheet" href="{urlFor name="home"}resources/css/openid.css" />
 <div class="page-header">
 	<h1>Log In <small>to Solas Match</small></h1>
 </div>
@@ -12,19 +12,6 @@
         <p><strong>Warning! </strong>{$flash['error']}</p>
     </div>
 {/if}
-
-<!--<form method="post" action="{urlFor name='login'}">
-    
-	<label for="email">Email</label>
-	<input type="text" name="email" id="email">
-	<p>
-		Openid:<button type="submit" class="btn btn-primary" name="submit">Log in</button>
-	</p>
-        
-        
-        
-</form>-->
-
 
         <!-- Simple OpenID Selector -->
 	<form action="{urlFor name='login'}" method="post" id="openid_form">
