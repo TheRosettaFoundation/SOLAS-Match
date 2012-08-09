@@ -474,6 +474,7 @@ BEGIN
 		if url is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
+			else
 				set @first = false;
 			end if;
 			set @q = CONCAT(@q," o.home_page='",url,"'") ;
@@ -481,6 +482,7 @@ BEGIN
 		if companyName is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
+			else
 				set @first = false;
 			end if;
 			set @q = CONCAT(@q," o.name='",companyName,"'") ;
@@ -544,6 +546,10 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(256), IN `id` INT)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
 BEGIN
 	if pass='' then set pass=null;end if;
 	if bio='' then set bio=null;end if;
@@ -556,6 +562,7 @@ BEGIN
 	if id is null and not exists(select * from user u where u.email= email)then
 	-- set insert
 	insert into user (email,nonce,password,created_time,display_name,biography,native_language) values (email,nonce,pass,NOW(),name,bio,lang);
+#	set @q="insert into user (email,nonce,password,created_time,display_name,biography,native_language) values ('"+email+"',"+nonce+",'"+pass+"',"+NOW()+",'"+name+"','"+bio+"','"+lang+"');";
 	else 
 		set @first = true;
 		set @q= "update user u set ";-- set update
@@ -567,6 +574,7 @@ BEGIN
 		if lang is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
+			else
 				set @first = false;
 			end if;
 			set @q = CONCAT(@q," u.native_language='",lang,"'") ;
@@ -574,6 +582,7 @@ BEGIN
 		if name is not null then 
 				if (@first = false) then 
 				set @q = CONCAT(@q,",");
+			else
 				set @first = false;
 			end if;
 			set @q = CONCAT(@q," u.display_name='",name,"'");
@@ -583,6 +592,7 @@ BEGIN
 		if email is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
+			else
 				set @first = false;
 			end if;
 			set @q = CONCAT(@q," u.email='",email,"'");
@@ -591,6 +601,7 @@ BEGIN
 		if nonce is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
+			else
 				set @first = false;
 			end if;
 			set @q = CONCAT(@q," u.nonce=",nonce) ;
@@ -600,6 +611,7 @@ BEGIN
 		if pass is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
+			else
 				set @first = false;
 			end if;
 			set @q = CONCAT(@q," u.password='",pass,"'");

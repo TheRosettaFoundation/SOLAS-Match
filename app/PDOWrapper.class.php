@@ -168,6 +168,7 @@ class PDOWrapper {
             $conn = $this->connection;
             $i = 0;
             $data = array();
+            
             foreach($conn->query( $sql ) as $row){
                     $data[$i] = $row;
                     $i++;
@@ -345,7 +346,10 @@ class PDOWrapper {
 	{
 		return (!$str) ? 'NULL' : $this->cleanse($str);
 	}
-
+        function cleanseNullOrWrapStr($str)
+	{
+		return (!$str) ? 'NULL' : $this->cleanseWrapStr($str);
+	}
 	function showSQL($q)
 	{
 		echo '<pre>'.$q.'</pre>';
