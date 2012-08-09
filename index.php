@@ -732,24 +732,49 @@ $app->get('/all/tags', function () use ($app) {
 
 $app->get('/login', function () use ($app) {
     $error = null;
-    if (isValidPost($app)) {
-        $post = (object)$app->request()->post();
-        try {
-            $user_dao = new UserDao();
-            $user_dao->login($post->email, $post->password);
-            $app->redirect($app->urlFor("home"));
-        } catch (InvalidArgumentException $e) {
-            $error = '<p>Unable to log in. Please check your email and password.';
-            $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
-            $error .= ' or <a href="'.$app->urlFor('register').'">register</a> for an account.</p>';
-            $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
+    $tempSettings=new Settings();
+    $openid = new LightOpenID('php-workspace');
+    if($tempSettings->get("site.openid")==='y'){
+        if ($app->request()->isPost()||$openid->mode) {
+            $post = (object)$app->request()->post();
+            try {
+                $user_dao = new UserDao();
+                $user_dao->OpenIDLogin($openid,$app);
+                $app->redirect($app->urlFor("home"));
+            } catch (InvalidArgumentException $e) {
+                $error = '<p>Unable to log in. Please check your email and password.';
+                $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
+                $error .= ' or <a href="'.$app->urlFor('register').'">register</a> for an account.</p>';
+                $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
 
-            $app->flash('error', $error);
-            $app->redirect($app->urlFor('login'));
-            echo $error;
+                $app->flash('error', $error);
+                $app->redirect($app->urlFor('login'));
+                echo $error;
+            }
+        } else {
+            $app->render('openIDLogin.tpl');
         }
-    } else {
-        $app->render('login.tpl');
+    }
+    else{
+        if (isValidPost($app)) {
+            $post = (object)$app->request()->post();
+            try {
+                $user_dao = new UserDao();
+                $user_dao->login($post->email, $post->password);
+                $app->redirect($app->urlFor("home"));
+            } catch (InvalidArgumentException $e) {
+                $error = '<p>Unable to log in. Please check your email and password.';
+                $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
+                $error .= ' or <a href="'.$app->urlFor('register').'">register</a> for an account.</p>';
+                $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
+
+                $app->flash('error', $error);
+                $app->redirect($app->urlFor('login'));
+                echo $error;
+            }
+        } else {
+            $app->render('login.tpl');
+        }
     }
 })->via('GET','POST')->name('login');
 

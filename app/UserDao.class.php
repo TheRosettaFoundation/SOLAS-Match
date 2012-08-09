@@ -69,14 +69,15 @@ class UserDao {
 	private function _update($user) {
 		$db = new PDOWrapper();
 		$db->init();
-                $result = $db->call('userInsertAndUpdate', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},{$db->cleanseWrapStr($user->getBiography())},{$db->cleanseWrapStr($user->getDisplayName())},{$db->cleanseWrapStr($user->getNativeLanguage())},{$db->cleanse($user->getUserId())}");
+                $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},{$db->cleanseNullOrWrapStr($user->getBiography())},{$db->cleanseNullOrWrapStr($user->getDisplayName())},{$db->cleanseNullOrWrapStr($user->getNativeLanguage())},{$db->cleanse($user->getUserId())}");
                 return $result[0]['user_id'];
 	}
 
 	private function _insert($user) {
 		$db = new PDOWrapper();
 		$db->init();
-		if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseWrapStr($user->getPassword())},NULL,NULL,NULL,NULL")) {
+		if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr
+                        ($user->getPassword())},NULL,NULL,NULL,NULL")) {
 			return $this->find(array('user_id' => $user_id[0]['user_id']));
 		}
 		else {
@@ -113,6 +114,35 @@ class UserDao {
 		UserSession::setSession($user->getUserId());
 
 		return true;
+	}
+        
+        
+        public function OpenIDLogin($openid,$app) {
+            if(!$openid->mode) {
+                try {
+                $openid->identity = $openid->data['openid_identifier'];
+                $openid->required = array('contact/email');
+                $url =$openid->authUrl();
+                $app->redirect($openid->authUrl());
+                }catch(ErrorException $e) {
+                    echo $e->getMessage();
+                }
+            } elseif($openid->mode == 'cancel') {
+                throw new InvalidArgumentException('User has canceled authentication!');
+                return false;
+            } else {
+                $retvals= $openid->getAttributes();
+                if($openid->validate()){
+                   $user = $this->find(array('email' => $retvals['contact/email']));
+                    if (!is_object($user)) {
+                        $user = $this->create($retvals['contact/email'],md5($retvals['contact/email']));
+                    }
+                    UserSession::setSession($user->getUserId());
+                }
+                return true;
+            }
+            
+            
 	}
 	
 	public function logout() {
