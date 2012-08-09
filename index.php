@@ -312,6 +312,8 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
     $word_count_err = null;
     $task_dao    = new TaskDao();
     $task        = $task_dao->find(array('task_id' => $task_id));
+    $language_list = Languages::getLanguageList();
+    sort($language_list);
 
     if (!is_object($task)) {
         $app->notFound();
@@ -351,6 +353,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         'word_count_err'    => $word_count_err,
         'url_task_describe' => $app->urlFor('task-describe', array('task_id' => $task_id)),
         'task'              => $task,
+        'languages'         => $language_list
     ));
     
     $app->render('task.describe.tpl');

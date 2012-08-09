@@ -31,6 +31,20 @@ class Languages {
 		return $ret;
 	}
 
+    public static function getLanguageList() {
+        $settings = new Settings();
+        $languages = null;
+        $language_file = $settings->get("files.languages");
+        if(file_exists($language_file)) {
+            $language_list = parse_ini_file($language_file);
+            $languages = array();
+            foreach($language_list as $language => $code) {
+                $languages[] = $language;
+            }
+        }
+        return $languages;
+    }
+
 	public static function isValidLanguageId($language_id) {
 		return (is_numeric($language_id) && $language_id > 0);
 	}

@@ -17,17 +17,35 @@
                     {/if}
                 </label>
 				<textarea wrap="hard" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
-				<p class="desc">You may replace the file name with something more descriptive.</p>  
+				<p class="desc">You may replace the file name with something more descriptive.</p>
 
-				<p>
-					<label for="source">From language</label>
-					<input type="text" name="source" id="source">
-				</p>
-				
-				<p>
-					<label for="target">To language</label>
-					<input type="text" name="target" id="target">
-				</p>
+                {if isset($languages)}
+                    <p>
+                        <label for="source">From language</label>
+                        <select name="source" id="source">
+                            {foreach $languages as $language}
+                                <option value="{$language}">{$language}</option>
+                            {/foreach}
+                        </select>
+                    </p>
+                    <p>
+                        <label for="target">To language</label>
+                        <select name="target" id="target">
+                            {foreach $languages as $language}
+                                <option value="{$language}">{$language}</option>
+                            {/foreach}
+                        </select>
+                    </p>
+                {else}
+    				<p>
+    					<label for="source">From language</label>
+    					<input type="text" name="source" id="source">
+    				</p>
+    				<p>
+    					<label for="target">To language</label>
+    					<input type="text" name="target" id="target">
+    				</p>
+                {/if}
 				
 				<p>
 					<label for="tags">Tags</label>
