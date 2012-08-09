@@ -313,7 +313,6 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
     $task_dao    = new TaskDao();
     $task        = $task_dao->find(array('task_id' => $task_id));
     $language_list = Languages::getLanguageList();
-    sort($language_list);
 
     if (!is_object($task)) {
         $app->notFound();
@@ -899,6 +898,8 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
 $app->get('/profile', function () use ($app) {
     $user_dao = new UserDao();
     $user = $user_dao->getCurrentUser();
+    $languages = Languages::getLanguageList();
+
     if (!is_object($user)) {
         $app->flash('error', 'Login required to access page');
         $app->redirect($app->urlFor('login'));
@@ -935,10 +936,7 @@ $app->get('/profile', function () use ($app) {
         $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user->getUserId())));
     }
     
-    $language = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-    $language = substr($language, 0, 5);
-    
-    $app->view()->setData('language',  $language);
+    $app->view()->setData('languages',  $languages);
 
     $app->render('user-private-profile.tpl');
 })->via('POST')->name('user-private-profile');

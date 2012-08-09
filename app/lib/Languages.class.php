@@ -42,6 +42,7 @@ class Languages {
                 $languages[] = $language;
             }
         }
+        sort($languages);
         return $languages;
     }
 

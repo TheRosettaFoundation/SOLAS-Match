@@ -26,12 +26,15 @@
         placeholder='Name'
     {/if} />
     <label for='nLanguage'>Native Language:</label>
-    <input type='text' name='nLanguage' id='nLanguage' 
-    {if $user->getNativeLanguage() != ''}
-        value={$user->getNativeLanguage()}
-    {elseif isset($language)} 
-        placeholder={$language} 
-    {/if} />
+    {if isset($languages)}
+        <select name="nLanguage" id="nLanguage">
+            {foreach $languages as $language}
+                <option value="{$language}">{$language}</option>
+            {/foreach}
+        </select>
+    {else}
+        <input type='text' name='nLanguage' id='nLanguage' value={$user->getNativeLanguage()} />
+    {/if}
     <label for='bio'>Biography:</label>
     <textarea name='bio' cols='40' rows='5' {if $user->getBiography() == ''} placeholder="Enter Bio Here" {/if}
     >{if $user->getBiography() != ''}{$user->getBiography()}{/if}</textarea>
