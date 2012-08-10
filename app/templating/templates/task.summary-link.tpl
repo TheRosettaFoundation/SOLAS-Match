@@ -23,7 +23,11 @@
 	
 	<p class="task_details">
 		Added {IO::timeSinceSqlTime($task->getCreatedTime())} ago
-		&middot; By {Organisations::nameFromId($task->getOrganisationId())}
+		&middot; By 
+        {assign var="org_id" value=$task->getOrganisationId()}
+        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+            {Organisations::nameFromId($task->getOrganisationId())}
+        </a>
 		{if $task->getWordcount()}
 			&middot; {$task->getWordcount()|number_format} words
 		{/if}

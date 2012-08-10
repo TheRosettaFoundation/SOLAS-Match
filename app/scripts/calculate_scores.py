@@ -154,6 +154,7 @@ def saveNewScore(user_id, task_id, score):
 #
 # Update the scores
 #
+start_time = time.time()
 LoadConfig()
 users = getUserList()       #get a list of all users
 for user in users:
@@ -202,4 +203,19 @@ for user in users:
         #Save the score to the DB if it has changed
         saveNewScore(user['user_id'], task['id'], score)
 
-
+end_time = time.time()
+running_time = end_time - start_time
+seconds = running_time % 60
+running_time /= 60
+minutes = running_time % 60
+running_time /= 60
+hours = running_time % 24
+time_string = ""
+if(hours > 1):
+    time_string += str(hours) + " hours, "
+if(minutes > 1):
+    time_string += str(minutes) + " minutes and "
+time_string += str(seconds) + " seconds"
+print "Total Running Time"
+print "==========================="
+print time_string
