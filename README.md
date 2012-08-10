@@ -103,10 +103,10 @@ SHOW GRANTS FOR 'tester'@'localhost';
 2.  Edit conf.ini with your configurations.
 3.  Under database, enter your MySQL connection settings.
 4.  Under the site section, enter the URL of the installation.
-4.1 Under the site section, you can choose to either set openid to 'y' or 'n'.
+4.1 Under the site section, you can choose to either set openid to 'y','n' or 'h'.
     setting openid='y' will configure the application to use openid as the login mechanisium.
-    Any value for openid other then 'y' will result in the applicataion falling back to its internal login mechanisium.
-    At present it is not possible to enable both.
+    setting openid='n' will configure the applicataion to fall back to its internal login mechanisium.
+    setting openid='h' will enable hybrid login.(both login options will be avaiable to the user).
 5.  Under user session control, enter a long random string.
 
 ## Add Cron Job

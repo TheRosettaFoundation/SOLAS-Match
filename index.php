@@ -736,48 +736,30 @@ $app->get('/login', function () use ($app) {
     $error = null;
     $tempSettings=new Settings();
     $openid = new LightOpenID($tempSettings->get("site.url"));
-    if($tempSettings->get("site.openid")==='y'){
-        if ($app->request()->isPost()||$openid->mode) {
+    $app->view()->setData('openid',$tempSettings->get("site.openid"));
+    try {
+        $user_dao = new UserDao();
+        if (isValidPost($app)){
             $post = (object)$app->request()->post();
-            try {
-                $user_dao = new UserDao();
-                $user_dao->OpenIDLogin($openid,$app);
-                $app->redirect($app->urlFor("home"));
-            } catch (InvalidArgumentException $e) {
-                $error = '<p>Unable to log in. Please check your email and password.';
-                $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
-                $error .= ' or <a href="'.$app->urlFor('register').'">register</a> for an account.</p>';
-                $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
+            $user_dao->login($post->email, $post->password);
+        } elseif($app->request()->isPost()||$openid->mode){
+            $user_dao->OpenIDLogin($openid,$app);
+        } else{
+             $app->render('login.tpl');
+             return;
+        }               
+        $app->redirect($app->urlFor("home"));
+    } catch (InvalidArgumentException $e) {
+        $error = '<p>Unable to log in. Please check your email and password.';
+        $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
+        $error .= ' or <a href="'.$app->urlFor('register').'">register</a> for an account.</p>';
+        $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
 
-                $app->flash('error', $error);
-                $app->redirect($app->urlFor('login'));
-                echo $error;
-            }
-        } else {
-            $app->render('openIDLogin.tpl');
-        }
+        $app->flash('error', $error);
+        $app->redirect($app->urlFor('login'));
+        echo $error;
     }
-    else{
-        if (isValidPost($app)) {
-            $post = (object)$app->request()->post();
-            try {
-                $user_dao = new UserDao();
-                $user_dao->login($post->email, $post->password);
-                $app->redirect($app->urlFor("home"));
-            } catch (InvalidArgumentException $e) {
-                $error = '<p>Unable to log in. Please check your email and password.';
-                $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
-                $error .= ' or <a href="'.$app->urlFor('register').'">register</a> for an account.</p>';
-                $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
-
-                $app->flash('error', $error);
-                $app->redirect($app->urlFor('login'));
-                echo $error;
-            }
-        } else {
-            $app->render('login.tpl');
-        }
-    }
+    
 })->via('GET','POST')->name('login');
 
 $app->get('/logout', function () use ($app) {
@@ -788,58 +770,56 @@ $app->get('/logout', function () use ($app) {
 
 $app->get('/register', function () use ($app) {
     $tempSettings=new Settings();
-    if($tempSettings->get("site.openid")==='y'){
-        $app->render('openIDLogin.tpl');
-    }else{
-        $error = null;
-        $warning = null;
-        if (isValidPost($app)) {
-            $post = (object)$app->request()->post();
-            $user_dao = new UserDao();
-            if (!User::isValidEmail($post->email)) {
-                $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
-            }
-            else if (!User::isValidPassword($post->password)) {
-                $error = 'You didn\'t enter a password. Please try again.';
-            }
-            else if (is_object($user_dao->find(array('email' => $post->email)))) {
-                $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
-            }
+    $app->view()->setData('openid',$tempSettings->get("site.openid"));
+    $error = null;
+    $warning = null;
+    if (isValidPost($app)) {
+        $post = (object)$app->request()->post();
+        $user_dao = new UserDao();
+        if (!User::isValidEmail($post->email)) {
+            $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
+        }
+        else if (!User::isValidPassword($post->password)) {
+            $error = 'You didn\'t enter a password. Please try again.';
+        }
+        else if (is_object($user_dao->find(array('email' => $post->email)))) {
+            $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
+        }
 
-            if (is_null($error) && is_null($warning)) {
-                if ($user = $user_dao->create($post->email, $post->password)) {
-                    if ($user_dao->login($user->getEmail(), $post->password)) {
+        if (is_null($error) && is_null($warning)) {
+            if ($user = $user_dao->create($post->email, $post->password)) {
+                if ($user_dao->login($user->getEmail(), $post->password)) {
 
-                        $badge_dao = new BadgeDao();
-                        $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
-                        $badge_dao->assignBadge($user, $badge);
+                    $badge_dao = new BadgeDao();
+                    $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
+                    $badge_dao->assignBadge($user, $badge);
 
-                        if(isset($_SESSION['previous_page'])) {
-                            if(isset($_SESSION['old_page_vars'])) {
-                                $app->redirect($app->urlFor($_SESSION['previous_page'], $_SESSION['old_page_vars']));
-                            } else {
-                                $app->redirect($app->urlFor($_SESSION['previous_page']));
-                            }
+                    if(isset($_SESSION['previous_page'])) {
+                        if(isset($_SESSION['old_page_vars'])) {
+                            $app->redirect($app->urlFor($_SESSION['previous_page'], $_SESSION['old_page_vars']));
+                        } else {
+                            $app->redirect($app->urlFor($_SESSION['previous_page']));
                         }
-                        $app->redirect($app->urlFor('home'));
                     }
-                    else {
-                        $error = 'Tried to log you in immediately, but was unable to.';
-                    }
+                    $app->redirect($app->urlFor('home'));
                 }
                 else {
-                    $error = 'Unable to register.';
+                    $error = 'Tried to log you in immediately, but was unable to.';
                 }
             }
+            else {
+                $error = 'Unable to register.';
+            }
         }
-        if ($error !== null) {
-            $app->view()->appendData(array('error' => $error));
-        }
-        if ($warning !== null) {
-            $app->view()->appendData(array('warning' => $warning));
-        }
-        $app->render('register.tpl');
     }
+    if ($error !== null) {
+        $app->view()->appendData(array('error' => $error));
+    }
+    if ($warning !== null) {
+        $app->view()->appendData(array('warning' => $warning));
+    }
+    $app->render('register.tpl');
+    
 })->via('GET', 'POST')->name('register');
 
 $app->get('/client/dashboard', $authenticateForRole('organisation_member'), function () use ($app) {
