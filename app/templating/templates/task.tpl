@@ -26,8 +26,24 @@
 		{/if}
 	</p>
 
-    <h3>{$org->getName()} <small>Organisation Information</small></h3>
-    <p>{$org->getBiography()}</p>
+    <h3>{$org->getName()} <small>Organisation Information</small>
+    {if $task->getReferencePage() != ''}
+        {assign var="ref" value=$task->getReferencePage()}
+        {assign var="button" value="Page Reference"}
+    {else}
+        {assign var="ref" value=$org->getHomePage()}
+        {assign var="button" value="Org Home Page"}
+    {/if}
+    {if $ref != ''}
+        <a target="_blank" class="btn pull-right" href="{$ref}">{$button}</a>
+    {/if}
+    </h3>
+    {if $org->getBiography() != ''}
+        <p><b>About the Organisation:</b> {$org->getBiography()}</p>
+    {/if}
+    {if $task->getImpact() != ''}
+        <p><b>Impact:</b> {$task->getImpact()}</p>
+    {/if}
 
 {if isset($file_previously_uploaded) && $file_previously_uploaded}
     <div class="alert">
