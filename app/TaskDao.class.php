@@ -189,6 +189,9 @@ New requirement:
 		if ($task->getTitle() != $existing_task->getTitle()) {
 			$to_update['title'] = $db->cleanseWrapStr($task->getTitle());
 		}
+        if ($task->getImpact() != $existing_task->getImpact()) {
+            $to_update['impact'] = $db->cleanseWrapStr($task->getImpact());
+        }
         if ($task->getReferencePage() != $existing_task->getReferencePage()) {
             $to_update['reference_page'] = $db->cleanseWrapStr($task->getReferencePage());
         }
@@ -296,6 +299,9 @@ New requirement:
 		if ($title = $task->getTitle()) {
 			$insert['title'] = $db->cleanseWrapStr($title);
 		}
+        if ($task->getImpact() != '') {
+            $insert['impact'] = $db->cleanseWrapStr($task->getImpact());
+        }
         if ($task->getReferencePage() != '') {
             $insert['reference_page'] = $db->cleanseWrapStr($task->getReferencePage());
         }
@@ -641,6 +647,8 @@ New requirement:
                 $params = array();
                 $params['task_id'] = $row['task_id'];
                 $params['title'] = $row['title'];
+                $params['impact'] = $row['impact'];
+                $params['reference_page'] = $row['reference_page'];
                 $params['organisation_id'] = $row['organisation_id'];
                 $params['source_id'] = $row['source_id'];
                 $params['target_id'] = $row['target_id'];

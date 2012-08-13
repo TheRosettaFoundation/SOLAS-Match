@@ -335,6 +335,10 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             $title_err = "Title cannot be empty";
         }
 
+        if($post->impact != '') {
+            $task->setImpact($post->impact);
+        }
+
         if($post->reference != '' && $post->reference != "http://") {
             $task->setReferencePage($post->reference);
         }

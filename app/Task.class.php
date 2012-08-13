@@ -8,6 +8,7 @@
 class Task {
 	var $_task_id;
 	var $_title;
+    var $_impact;
     var $_reference_page;
 	var $_organisation_id;
 	var $_source_id;
@@ -40,6 +41,14 @@ class Task {
 	public function getTitle() {
 		return $this->_title;
 	}
+
+    public function setImpact($impact) {
+        $this->_impact = $impact;
+    }
+
+    public function getImpact() {
+        return $this->_impact;
+    }
 
     public function setReferencePage($url) {
         $this->_reference_page = $url;
@@ -103,6 +112,7 @@ class Task {
 		$key_methods = array(
 			'task_id' 			=> 'setTaskId',
 			'title' 			=> 'setTitle',
+            'impact'            => 'setImpact',
             'reference_page'    => 'setReferencePage',
 			'organisation_id' 	=> 'setOrganisationId',
 			'source_id'			=> 'setSourceId',

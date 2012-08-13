@@ -19,6 +19,10 @@
 				<textarea wrap="hard" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
 				<p class="desc">You may replace the file name with something more descriptive.</p>
 
+                <label for="impact">Task Impact</label>
+                <p>Who and what will be affected by the translation of this task</p>
+                <textarea wrap="hard" cols="1" rows="2" name="impact">{$task->getImpact()}</textarea>
+
                 <label for="reference">Context Reference</label>
                 <p class="desc">Enter a URL that gives context to this task</p>
                 {if $task->getReferencePage() != '' }
