@@ -32,6 +32,13 @@
                 <option value="{$language}">{$language}</option>
             {/foreach}
         </select>
+        {if isset($countries)}
+            <select name="nLanguageCountry" id="nLanguageCountry">
+                {foreach $countries as $country}
+                    <option value="{$country}">{$country}</option>
+                {/foreach}
+            </select>
+        {/if}
     {else}
         <input type='text' name='nLanguage' id='nLanguage' value={$user->getNativeLanguage()} />
     {/if}

@@ -63,18 +63,33 @@ REPLACE INTO `badges` (`badge_id`, `title`, `description`) VALUES
 -- Dumping structure for table Solas-Match-test.language
 CREATE TABLE IF NOT EXISTS `language` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(5) COLLATE utf8_unicode_ci NOT NULL COMMENT '"en", for example',
+  `code` varchar(3) COLLATE utf8_unicode_ci NOT NULL COMMENT '"en", for example',
   `en_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '"English", for example',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ALTER TABLE `language`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+    ADD UNIQUE INDEX `code` (`code`),
+    CHANGE COLUMN `code` `code` VARCHAR(3) NOT NULL COMMENT '"en", for example' AFTER `id`,
+    COLLATE='utf8_unicode_ci',
+    ENGINE=InnoDB,
+    CONVERT TO CHARSET utf8;
+
+	
 
 -- Dumping data for table Solas-Match-test.language: 0 rows
 /*!40000 ALTER TABLE `language` DISABLE KEYS */;
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
+
+
+CREATE TABLE `country` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`code` VARCHAR(2) NOT NULL COMMENT '"IE", for example',
+	`en_name` VARCHAR(255) NOT NULL COMMENT '"Ireland", for example',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `code` (`code`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
 
 
 -- Dumping structure for table Solas-Match-test.old_task_file
