@@ -19,6 +19,15 @@
 				<textarea wrap="hard" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
 				<p class="desc">You may replace the file name with something more descriptive.</p>
 
+                <label for="reference">Context Reference</label>
+                <p class="desc">Enter a URL that gives context to this task</p>
+                {if $task->getReferencePage() != '' }
+                    {assign var="url_text" value=$task->getReferencePage()}
+                {else}
+                    {assign var="url_text" value="http://"}
+                {/if}
+                <textarea wrap="hard" cols="1" rows="2" name="reference">{$url_text}</textarea>
+
                 {if isset($languages)}
                     <p>
                         <label for="source">From language</label>

@@ -8,6 +8,7 @@
 class Task {
 	var $_task_id;
 	var $_title;
+    var $_reference_page;
 	var $_organisation_id;
 	var $_source_id;
 	var $_target_id;
@@ -39,6 +40,14 @@ class Task {
 	public function getTitle() {
 		return $this->_title;
 	}
+
+    public function setReferencePage($url) {
+        $this->_reference_page = $url;
+    }
+
+    public function getReferencePage() {
+        return $this->_reference_page;
+    }
 
 	public function setOrganisationId($organisation_id) {
 		$this->_organisation_id = $organisation_id;
@@ -94,6 +103,7 @@ class Task {
 		$key_methods = array(
 			'task_id' 			=> 'setTaskId',
 			'title' 			=> 'setTitle',
+            'reference_page'    => 'setReferencePage',
 			'organisation_id' 	=> 'setOrganisationId',
 			'source_id'			=> 'setSourceId',
 			'target_id'			=> 'setTargetId',
