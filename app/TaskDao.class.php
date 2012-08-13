@@ -166,6 +166,7 @@ New requirement:
 		else {
 			$this->_update($task);
 		}
+        $this->calculateTaskScore($task->getTaskId());
 	}
 
 	private function _update($task) {
@@ -207,6 +208,13 @@ New requirement:
 
 		$this->_updateTags($task);
 	}
+
+    private function calculateTaskScore($task_id)
+    {
+        $exec_path = __DIR__."/scripts/calculate_scores.py $task_id";
+        echo shell_exec($exec_path . "> /dev/null 2>/dev/null &");
+
+    }
 
 	private function _updateTags($task) {
 		$this->_unlinkStoredTags($task);
