@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import MySQLdb as mdb
-import sys
+import sys, os
 import ConfigParser
 import string
 import time
@@ -14,9 +14,12 @@ settings = dict()
 # Load the configuration file that stores the Database info
 #
 def LoadConfig():
-    file_name = "../includes/conf.ini"
+    path = os.path.abspath(sys.argv[0])     # get the path to the currently executing script
+    dir_file = os.path.split(path)          # Split up the file name and the path
+    file_name = "/../includes/conf.ini"     # Relative location
+    conf_file = dir_file[0] + file_name
     parser = ConfigParser.ConfigParser()
-    parser.read(file_name)
+    parser.read(conf_file)
     for section in parser.sections():
         name = string.lower(section)
         for opt in parser.options(section):
@@ -91,6 +94,13 @@ def getActiveTaskList():
     return DBQuery(query)
 
 #
+# This function returns the task identified by task_id
+#
+def getTaskById(task_id):
+    query = "SELECT * FROM task WHERE id = %d" % int(task_id)
+    return DBQuery(query)
+
+#
 # This function returns all the tags related to a specific task
 #
 def getTaskTags(task_id):
@@ -160,8 +170,12 @@ users = getUserList()       #get a list of all users
 for user in users:
     #Get the tags that user has subscribed to   
     user_tags = getUserTags(user['user_id'])
-    #Get all active tasks
-    tasks = getActiveTaskList()
+    if(len(sys.argv) < 2):
+        #Get all active tasks
+        tasks = getActiveTaskList()
+    else:
+        #Get the task_id from the command line
+        tasks = getTaskById(sys.argv[1])
 
     for task in tasks:
         #Get tags related to this task
@@ -198,7 +212,6 @@ for user in users:
             task_time /= 60     # convert to hours
             task_time /= 24     # convert to days
             score += math.floor(task_time)
-
 
         #Save the score to the DB if it has changed
         saveNewScore(user['user_id'], task['id'], score)
