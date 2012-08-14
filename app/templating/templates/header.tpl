@@ -8,12 +8,6 @@
     {if isset($extra_scripts)}
         {$extra_scripts}
     {/if}
-        {if isset($openid)&& ($openid==='y'||$openid==='h' )}
-            <script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/jquery-1.2.6.min.js"></script>
-            <script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/openid-jquery.js"></script>
-            <script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/openid-en.js"></script>
-            <link type="text/css" rel="stylesheet" href="{urlFor name="home"}resources/css/openid.css" />
-        {/if}
 
 </head>
 <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>

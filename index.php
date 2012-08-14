@@ -801,7 +801,20 @@ $app->get('/login', function () use ($app) {
     $error = null;
     $tempSettings=new Settings();
     $openid = new LightOpenID($tempSettings->get("site.url"));
-    $app->view()->setData('openid',$tempSettings->get("site.openid"));
+    $use_openid = $tempSettings->get("site.openid");
+    $app->view()->setData('openid', $use_openid);
+    if(isset($use_openid)) {
+        if($use_openid == 'y' || $use_openid == 'h') {
+            echo "<p>Setting Extra Scripts</p>";
+            $extra_scripts = "
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-jquery.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-en.js\"></script>
+                <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/openid.css\" />";
+            $app->view()->appendData(array('extra_scripts' => $extra_scripts));
+        }
+    }
+
     try {
         $user_dao = new UserDao();
         if (isValidPost($app)){
