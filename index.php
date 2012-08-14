@@ -355,13 +355,42 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         }
     }
 
+    $extra_scripts = "<script language='javascript'>
+    fields = 0;
+    function addInput() {
+        if (fields < 10) {
+            document.getElementById('text').innerHTML += '<label for=\"source' + fields + 1 + '\">To language</label>';
+            document.getElementById('text').innerHTML += '<select name=\"source' + fields + 1 + '\" id=\"source' + fields + 1 + '\">';
+            document.getElementById('text').innerHTML += '</select>';
+            var sel = document.getElementById('source' + fields + 1);
+            var options = sel.options;
+            var langs = ".json_encode($language_list).";
+            for (language in langs) {
+                var option = document.createElement('OPTION');
+                option.appendChild(document.createTextNode(langs[language]));
+                option.setAttribute('value', langs[language]);
+                sel.appendChild(option);
+            }
+            sel.options.selectedIndex=0;
+            fields += 1;
+        } else if (fields == 10) {
+            document.getElementById('text').innerHTML += '<br /><div class=\"alert alert-error\">';
+                document.getElementById('text').innerHTML += 'Only ' + fields + ' upload fields allowed.
+            document.getElementById('text').innerHTML += '</div>';
+            fields++;
+            document.form.add.disabled=true;
+        }
+    }
+    </script>";
+
     $app->view()->appendData(array(
         'error'             => $error,
         'title_error'       => $title_err,
         'word_count_err'    => $word_count_err,
         'url_task_describe' => $app->urlFor('task-describe', array('task_id' => $task_id)),
         'task'              => $task,
-        'languages'         => $language_list
+        'languages'         => $language_list,
+        'extra_scripts'     => $extra_scripts
     ));
     
     $app->render('task.describe.tpl');

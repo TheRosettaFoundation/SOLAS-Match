@@ -48,6 +48,9 @@
                                 <option value="{$language}">{$language}</option>
                             {/foreach}
                         </select>
+                        <div id="text">
+                        </div>
+                        <input type="button" onclick="addInput()" value="Add More Targets"/>
                     </p>
                 {else}
     				<p>

@@ -5,6 +5,9 @@
 	<title>{if isset($title)}{$title}{else}SOLAS Match{/if}</title>
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css">
+    {if isset($extra_scripts)}
+        {$extra_scripts}
+    {/if}
         {if isset($openid)&& ($openid==='y'||$openid==='h' )}
             <script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/jquery-1.2.6.min.js"></script>
             <script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/openid-jquery.js"></script>
