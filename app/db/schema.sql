@@ -664,6 +664,24 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.userHasBadge
+DROP PROCEDURE IF EXISTS `userHasBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userHasBadge`(IN `userID` INT, IN `badgeID` INT)
+BEGIN
+	Select EXISTS( SELECT 1 FROM user_badges WHERE user_id = userID AND badge_id = badgeID) as result;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.findBadge
+DROP PROCEDURE IF EXISTS `findBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findBadge`(IN `id` INT)
+    READS SQL DATA
+BEGIN
+SELECT * FROM badges WHERE badge_id=id;
+END//
+DELIMITER ;
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
