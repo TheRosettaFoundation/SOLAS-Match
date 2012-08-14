@@ -675,6 +675,41 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getCountries
+DROP PROCEDURE IF EXISTS `getCountries`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountries`()
+BEGIN
+SELECT  en_name as country, code FROM country order by en_name;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getLanguages
+DROP PROCEDURE IF EXISTS `getLanguages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguages`()
+BEGIN
+SELECT  en_name as language, code FROM language order by en_name;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getLCID
+DROP PROCEDURE IF EXISTS `getLCID`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLCID`(IN `lang` VARCHAR(128), IN `countryName` VARCHAR(128))
+BEGIN
+set @ll = "";
+set @cc = "";
+select c.code into @cc from country c where c.en_name = countryName;
+select l.code into @ll from language l where l.en_name = lang;
+select concat(@ll,"-",@cc) as lcid;
+END//
+DELIMITER ;
+
+
+
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;

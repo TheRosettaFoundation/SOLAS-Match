@@ -29,13 +29,13 @@
     {if isset($languages)}
         <select name="nLanguage" id="nLanguage">
             {foreach $languages as $language}
-                <option value="{$language}">{$language}</option>
+                <option value="{$language[1]}">{$language[0]}</option>
             {/foreach}
         </select>
         {if isset($countries)}
             <select name="nLanguageCountry" id="nLanguageCountry">
                 {foreach $countries as $country}
-                    <option value="{$country}">{$country}</option>
+                    <option value="{$country[1]}">{$country[0]}</option>
                 {/foreach}
             </select>
         {/if}

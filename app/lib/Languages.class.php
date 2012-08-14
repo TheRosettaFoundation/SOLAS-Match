@@ -36,7 +36,7 @@ class Languages {
 		$db->init();
 		$languages = array();
                 foreach($db->call("getLanguages", "") as $lcid) {
-                    $languages[] = $lcid[0];
+                    $languages[] = $lcid;
                 }
                 
 		return $languages;
@@ -47,29 +47,16 @@ class Languages {
 		$db->init();
 		$countries = array();
                 foreach($db->call("getCountries", "") as $lcid) {
-                    $countries[] = $lcid[0];
+                    $countries[] = $lcid;
                 }
                 
 		return $countries;
         }
-        public static function getlcid(&$lang,$country){
-            $settings = new Settings();
-            $result= "";
-             $language_file = $settings->get("files.languages");
-            if(file_exists($language_file)) {
-                $language_list = parse_ini_file($language_file);
-                foreach($language_list as $language => $code) {
-                    if($language==$lang)$result.=$code;
-                }
-            }
-            $country_file = $settings->get("files.countries");
-            if(file_exists($country_file)) {
-                $country_file = parse_ini_file($country_file);
-                foreach($country_file as $current => $code) {
-                   if($country==$current)$result="{$result}-{$code}";
-                }
-            }
-            return $result;
+        public static function getlcid($lang,$country){
+                $db = new PDOWrapper();
+		$db->init();
+		$lcid = $db->call("getLCID", "{$db->cleanseNullOrWrapStr($lang)},{$db->cleanseNullOrWrapStr($country)}");            
+		return $lcid[0]['lcid'];
         }
 
 	public static function isValidLanguageId($language_id) {

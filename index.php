@@ -930,7 +930,7 @@ $app->get('/profile', function () use ($app) {
         $nativeLang = $app->request()->post('nLanguage');
         $langCountry= $app->request()->post('nLanguageCountry');
         if($nativeLang != NULL&&$langCountry!= NULL) {
-            $user->setNativeLanguage(Languages::getlcid($nativeLang,$langCountry));
+            $user->setNativeLanguage("{$nativeLang}-{$langCountry}");
             //assign a badge
             $badge_dao = new BadgeDao();
             $badge = $badge_dao->find(array('badge_id' => Badge::NATIVE_LANGUAGE));
