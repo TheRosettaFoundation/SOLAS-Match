@@ -107,9 +107,9 @@ class UserDao {
 			throw new InvalidArgumentException('Sorry, that password is incorrect. Please try again.');
 		}
 
-        if ($clear_password === '') {
-            throw new InvalidArgumentException('Sorry, an empty password is not allowed. Please contact the site administrator for details');
-        }
+                if ($clear_password === '') {
+                    throw new InvalidArgumentException('Sorry, an empty password is not allowed. Please contact the site administrator for details');
+                }
 
 		UserSession::setSession($user->getUserId());
 
@@ -136,6 +136,9 @@ class UserDao {
                    $user = $this->find(array('email' => $retvals['contact/email']));
                     if (!is_object($user)) {
                         $user = $this->create($retvals['contact/email'],md5($retvals['contact/email']));
+                        $badge_dao = new BadgeDao();
+                        $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
+                        $badge_dao->assignBadge($user, $badge);
                     }
                     UserSession::setSession($user->getUserId());
                 }
