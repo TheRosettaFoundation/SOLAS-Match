@@ -14,15 +14,9 @@ class BadgeValidator
     private function userHasBadge($user, $badge)
     {
         $ret = false;
-        $db = new mySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = "SELECT *
-                    FROM user_badges
-                    WHERE user_id = ".$db->cleanse($user->getUserId())."
-                    AND badge_id = ".$db->cleanse($badge->getBadgeId());
-        if($result = $db->Select($query)) {
-            $ret = true;
-        }
-        return $ret;
+        $result = $db->call("userHasBadge", "{$db->cleanse($user->getUserId())},{$db->cleanse($badge->getBadgeId())}");
+        return $result[0]['result'];
     }
 }

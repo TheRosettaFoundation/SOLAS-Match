@@ -26,22 +26,23 @@ class Organisations
 	
 	/* 
 		Return an array of all organisation ids.
-	*/
-	function organisationIDs()
-	{
-		$ret = false;
-		$db = new MySQLWrapper();
-		$db->init();
-		$q = 'SELECT id
-				FROM organisation';
-		if ($r = $db->Select($q))
-		{
-			$ret = array();
-			foreach ($r as $row)
-			{
-				$ret[] = $row['id'];
-			}
-		}
-		return $ret;
-	}
+	*/ 
+        // not used should be deleted when file is deleted
+//	function organisationIDs()
+//	{
+//		$ret = false;
+//		$db = new MySQLWrapper();
+//		$db->init();
+//		$q = 'SELECT id
+//				FROM organisation';
+//		if ($r = $db->Select($q))
+//		{
+//			$ret = array();
+//			foreach ($r as $row)
+//			{
+//				$ret[] = $row['id'];
+//			}
+//		}
+//		return $ret;
+//	}
 }
