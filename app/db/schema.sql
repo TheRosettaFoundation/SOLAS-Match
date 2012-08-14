@@ -673,13 +673,30 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Dev.findBadge
-DROP PROCEDURE IF EXISTS `findBadge`;
+-- Dumping structure for procedure Solas-Match-Dev.getBadge
+DROP PROCEDURE IF EXISTS `getBadge`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findBadge`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBadge`(IN `id` INT, IN `name` VARCHAR(128), IN `des` VARCHAR(512))
     READS SQL DATA
 BEGIN
-SELECT * FROM badges WHERE badge_id=id;
+	if id='' then set id=null;end if;
+	if des='' then set des=null;end if;
+	if name='' then set name=null;end if;
+	set @q= "SELECT *FROM badges b where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and b.badge_id=",id) ;
+	end if;
+	if des is not null then 
+		set @q = CONCAT(@q," and b.description='",des,"'") ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and b.title='",name,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
