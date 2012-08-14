@@ -25,10 +25,6 @@
 </form>
 {/if}        
 {if isset($openid)&& ($openid==='y'||$openid==='h' )}
-<script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/jquery-1.2.6.min.js"></script>
-<script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/openid-jquery.js"></script>
-<script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/openid-en.js"></script>
-<link type="text/css" rel="stylesheet" href="{urlFor name="home"}resources/css/openid.css" />
         <!-- Simple OpenID Selector -->
 	<form action="{urlFor name='login'}" method="post" id="openid_form">
 		<input type="hidden" name="action" value="verify" />
@@ -49,12 +45,6 @@
 		</fieldset>
 	</form>
 	<!-- /Simple OpenID Selector -->
-<script type="text/javascript">
-		$(window).load(function() {
-			openid.init('openid_identifier');
-			openid.setDemoMode(false); //Stops form submission for client javascript-only test purposes
-		});
-	</script>
 {/if}
 
 {include file="footer.tpl"}
