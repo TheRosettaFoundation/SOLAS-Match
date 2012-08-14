@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `language` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ALTER TABLE `language`
-    ADD UNIQUE INDEX `code` (`code`),
+	 ADD UNIQUE INDEX (`code`),
     CHANGE COLUMN `code` `code` VARCHAR(3) NOT NULL COMMENT '"en", for example' AFTER `id`,
     COLLATE='utf8_unicode_ci',
     ENGINE=InnoDB,
@@ -83,7 +83,7 @@ ALTER TABLE `language`
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
 
 
-CREATE TABLE `country` (
+CREATE TABLE IF NOT EXISTS `country` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`code` VARCHAR(2) NOT NULL COMMENT '"IE", for example',
 	`en_name` VARCHAR(255) NOT NULL COMMENT '"Ireland", for example',
