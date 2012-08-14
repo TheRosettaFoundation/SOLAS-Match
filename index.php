@@ -334,6 +334,15 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         } else {
             $title_err = "Title cannot be empty";
         }
+
+        if($post->impact != '') {
+            $task->setImpact($post->impact);
+        }
+
+        if($post->reference != '' && $post->reference != "http://") {
+            $task->setReferencePage($post->reference);
+        }
+
         $task->setTags(Tags::separateTags($post->tags));
         if($post->word_count != '') {
             $task->setWordCount($post->word_count);
