@@ -42,8 +42,8 @@
                         </select>
                     </p>
                     <p>
-                        <label for="target">To language</label>
-                        <select name="target" id="target">
+                        <label for="target_0">To language</label>
+                        <select name="target_0" id="target_0">
                             {foreach $languages as $language}
                                 <option value="{$language}">{$language}</option>
                             {/foreach}

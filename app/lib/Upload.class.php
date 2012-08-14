@@ -110,6 +110,15 @@ class Upload {
 		return true;
 	}
 
+    public static function createFolderPath($task, $version = 0)
+    {
+        $upload_folder = self::absoluteFolderPathForUpload($task, $version);
+
+		if (!self::_folderPathForUploadExists($task, $version)) {
+			self::_createFolderForUpload($task, $version);
+		}
+    }
+
 	/*
 	 * $files_file is the name of the parameter of the file we want to access
 	 * in the $_FILES global array.

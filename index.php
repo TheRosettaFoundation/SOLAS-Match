@@ -325,10 +325,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             $source_id = Languages::saveLanguage($post->source);
             $task->setSourceId($source_id);
         }
-        if (!empty($post->target)) {
-            $target_id = Languages::saveLanguage($post->target);
-            $task->setTargetId($target_id);
-        }
+
         if($post->title != '') {
             $task->setTitle($post->title);
         } else {
@@ -349,20 +346,50 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         } else {
             $word_count_err = "Word Count cannot be blank";
         }
-        $task_dao->save($task);
+
+        $language_list = array();
+        $target_count = 0;
+        $target_val = $app->request()->post("target_$target_count");
+        while(isset($target_val)) {
+            if(!in_array($target_val, $language_list)) {
+                $language_list[] = $target_val;
+            }
+            $target_count += 1;
+            $target_val = $app->request()->post("target_$target_count");
+        }
+
+
+        if(count($language_list) > 1) {
+            foreach($language_list as $language) {
+                if($language == $language_list[0]) {   //if it is the first language add it to this task
+                    $target_id = Languages::saveLanguage($language_list[0]);
+                    $task->setTargetId($target_id);
+                    $task_dao->save($task);
+                } else {
+                    $language_id = Languages::saveLanguage($language);
+                    $task_dao->duplicateTaskForTarget($task, $language_id);
+                }
+            }
+        } else {
+            $target_id = Languages::saveLanguage($language_list[0]);
+            $task->setTargetId($target_id);
+            $task_dao->save($task);
+        }
+
         if (is_null($error) && is_null($title_err) && is_null($word_count_err)) {
             $app->redirect($app->urlFor('task-uploaded', array('task_id' => $task_id)));
         }
     }
 
-    $extra_scripts = "<script language='javascript'>
+    $extra_scripts = "
+    <script language='javascript'>
     fields = 0;
     function addInput() {
         if (fields < 10) {
-            document.getElementById('text').innerHTML += '<label for=\"source' + fields + 1 + '\">To language</label>';
-            document.getElementById('text').innerHTML += '<select name=\"source' + fields + 1 + '\" id=\"source' + fields + 1 + '\">';
+            document.getElementById('text').innerHTML += '<label for=\"target_' + (fields + 1) + '\">To language</label>';
+            document.getElementById('text').innerHTML += '<select name=\"target_' + (fields + 1) + '\" id=\"target_' + (fields + 1) + '\">';
             document.getElementById('text').innerHTML += '</select>';
-            var sel = document.getElementById('source' + fields + 1);
+            var sel = document.getElementById('target_' + (fields + 1));
             var options = sel.options;
             var langs = ".json_encode($language_list).";
             for (language in langs) {
@@ -375,7 +402,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             fields += 1;
         } else if (fields == 10) {
             document.getElementById('text').innerHTML += '<br /><div class=\"alert alert-error\">';
-                document.getElementById('text').innerHTML += 'Only ' + fields + ' upload fields allowed.
+                document.getElementById('text').innerHTML += 'Only ' + fields + ' upload fields allowed.';
             document.getElementById('text').innerHTML += '</div>';
             fields++;
             document.form.add.disabled=true;

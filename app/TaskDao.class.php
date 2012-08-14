@@ -169,6 +169,40 @@ New requirement:
         $this->calculateTaskScore($task->getTaskId());
 	}
 
+    /*
+     * Add an identicle entry with a different ID and target Language
+     * Used for bulk uploads
+     */
+    public function duplicateTaskForTarget($task, $language_id)
+    {
+        //Get the file info for original task
+        $task_file_info = $this->getTaskFileInfo($task);
+        //Get the file path to original upload
+        $old_file_path = Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
+
+        //Remove ID so a new one will be created
+        $task->setTaskId(null);
+        $task->setTargetId($language_id);
+        //Save the new Task
+        $this->save($task);
+
+        //Generate new file info and save it
+        $task_file_info['task_id'] = $task->getTaskId();
+        $task_file_info['upload_time'] = "\"".$task_file_info['upload_time']."\"";
+        $task_file_info['filename'] = "\"".$task_file_info['filename']."\"";
+        $task_file_info['content_type'] = "\"".$task_file_info['content_type']."\"";
+        $this->saveTaskFileInfo($task_file_info);
+
+        //Get the new path the file can be found at
+        $file_info = $this->getTaskFileInfo($task);
+        $new_file_path = Upload::absoluteFilePathForUpload($task, 0, $file_info['filename']);
+
+        Upload::createFolderPath($task);
+        if(!copy($old_file_path, $new_file_path)) {
+            $error = "Failed to copy file to new location";
+        }
+    }
+
 	private function _update($task) {
 		$task_dao = new TaskDao;
 		$existing_task = $task_dao->find(array('task_id' => $task->getTaskId()));
@@ -214,6 +248,7 @@ New requirement:
 
 		$this->_updateTags($task);
 	}
+
 
     private function calculateTaskScore($task_id)
     {
@@ -321,6 +356,8 @@ New requirement:
 		if ($task_id = $db->insert('task', $insert)) {
 			$task->setTaskId($task_id);
 		}
+		
+        $this->_updateTags($task);
 	}
 
 	public function getLatestAvailableTasks($nb_items = 10) {
@@ -544,6 +581,14 @@ New requirement:
 			return null;			
 		}
 	}
+
+    private function saveTaskFileInfo($task_file_info)
+    {
+        $ret = null;
+        $db = new MySQLWrapper();
+        $db->init();
+        $db->Insert('task_file_version', $task_file_info);
+    }
 
 	public function getTaskFileInfo($task, $version = 0) {
 		$ret = null;
