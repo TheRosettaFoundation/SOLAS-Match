@@ -704,8 +704,9 @@ DELIMITER ;
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
-CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `organisation` FOR EACH ROW BEGIN
-	if (new.home_page not like "http://*" OR new.home_page not like "https://*") then
+CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `organisation` FOR EACH ROW 
+BEGIN
+	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
 	set new.home_page = concat("http://",new.home_page);
 	end if;
 END//
@@ -717,8 +718,9 @@ SET SQL_MODE=@OLD_SQL_MODE;
 DROP TRIGGER IF EXISTS `validateHomepageUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
-CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `organisation` FOR EACH ROW BEGIN
-	if (new.home_page not like "http://*" OR new.home_page not like "https://*") then
+CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `organisation` FOR EACH ROW 
+BEGIN
+	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
 	set new.home_page = concat("http://",new.home_page);
 	end if;
 END//
