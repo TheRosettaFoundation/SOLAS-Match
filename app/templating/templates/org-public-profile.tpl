@@ -27,14 +27,39 @@
     </h1></div>
 {/if}
 
-<h3>Organisation Name</h3>
-<p>{$org->getName()}</p>
+{if $org->getName() != ''}
+    <h3>Organisation Name</h3>
+    <p>{$org->getName()}</p>
+{/if}
 
-<h3>Home Page</h3>
-<p><a href='{$org->getHomePage()}'>{$org->getHomePage()}</a></p>
+{if $org->getHomePage() != ''}
+    <h3>Home Page</h3>
+    <p><a href='{$org->getHomePage()}'>{$org->getHomePage()}</a></p>
+{/if}
 
-<h3>Biography</h3>
-<p>{$org->getBiography()}</p>
+{if $org->getBiography() != ''}
+    <h3>Biography</h3>
+    <p>{$org->getBiography()}</p>
+{/if}
+
+<h3>
+    Organisation Badges
+    <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn'>
+        Create Badge
+    </a>
+</h3>
+{if $org_badges != NULL && count($org_badges) > 0}
+    {foreach $org_badges as $badge}
+        <p>{$badge['title']}: {$badge['description']}</p>
+    {/foreach}
+    <br />
+{else}
+    <br />
+    <p class="alert alert-info">
+        There are no badges associated with this organisation.
+        Add organisation badges <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}">here</a>.
+    </p>
+{/if}
 
 {if in_array($user->getUserId(), $org_members)}
     <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class="btn btn-primary">View Membership Requests</a>
