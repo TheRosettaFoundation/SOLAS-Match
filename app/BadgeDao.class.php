@@ -33,9 +33,6 @@ class BadgeDao
         if($badgeValidator->validateUserBadge($user, $badge)) {
             $db = new PDOWrapper();
             $db->init();
-            $query = "INSERT INTO user_badges (user_id, badge_id)
-                        VALUES (".$db->cleanse($user->getUserId()).", 
-                                ".$db->cleanse($badge->getBadgeId()).")";
             $db->call("assignBadge", "{$db->cleanse($user->getUserId())},{$db->cleanse($badge->getBadgeId())}");
         }
     }

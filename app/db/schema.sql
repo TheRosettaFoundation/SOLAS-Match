@@ -709,6 +709,28 @@ INSERT INTO user_badges (user_id, badge_id) VALUES (uid,bid);
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getTag
+DROP PROCEDURE IF EXISTS `getTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTag`(IN `id` INT, IN `name` VARCHAR(50))
+BEGIN
+	if id='' then set id=null;end if;
+	if name='' then set name=null;end if;
+	set @q= "select t.tag_id , t.label from tag t where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and t.tag_id=",id) ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and t.label='",name,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
 
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert

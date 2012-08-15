@@ -3,36 +3,64 @@ require('models/Tag.class.php');
 
 class TagsDao {
 	public function find($params) {
-		$q = null;
-		$db = new MySQLWrapper();
+            $result = self::getTag($params);
+            return $result[0];
+//		$args = "";
+//		$db = new PDOWrapper();
+//		$db->init();
+//                if(!(isset($params['label'])||isset($params['tag_id']))) 
+//                    throw new InvalidArgumentException('Cannot find tag, as no valid search data was provided.');
+//                
+//                $args.=((isset($params['tag_id'])))?"{$db->cleanseNull($params['tag_id'])}":"null";
+//                $args.=(isset($params['label']))?",{$db->cleanseNullOrWrapStr($params['label'])}":",null";
+//                
+////                
+////		if (isset($params['tag_id'])) {
+////			$q = 'SELECT *
+////				FROM tag
+////				WHERE tag_id = ' . $db->cleanse($params['tag_id']) . '
+////				LIMIT 1';
+////		}
+////		else if (isset($params['label'])) {
+////			$q = 'SELECT *
+////				FROM tag
+////				WHERE label = ' . $db->cleanseWrapStr($params['label']) . '
+////				LIMIT 1';
+////		}
+////		else {
+////			throw new InvalidArgumentException('Cannot find tag, as no valid search data was provided.');
+////		}
+//		
+//		$ret = false;
+//		if ( $db->call("getTag", $args)) {
+//			$tag_data = array();
+//			$tag_data['tag_id'] = $r[0]['tag_id'];
+//			$tag_data['label'] = $r[0]['label'];
+//			$ret = new Tag($tag_data);
+//		}
+//		return $ret;
+	}
+        
+        public function getTag($params){
+            $args = "";
+		$db = new PDOWrapper();
 		$db->init();
-		if (isset($params['tag_id'])) {
-			$q = 'SELECT *
-				FROM tag
-				WHERE tag_id = ' . $db->cleanse($params['tag_id']) . '
-				LIMIT 1';
-		}
-		else if (isset($params['label'])) {
-			$q = 'SELECT *
-				FROM tag
-				WHERE label = ' . $db->cleanseWrapStr($params['label']) . '
-				LIMIT 1';
-		}
-		else {
-			throw new InvalidArgumentException('Cannot find tag, as no valid search data was provided.');
-		}
-		
-		$ret = false;
-		if ($r = $db->Select($q)) {
+//                if(!(isset($params['label'])||isset($params['tag_id']))) 
+//                    throw new InvalidArgumentException('Cannot find tag, as no valid search data was provided.');
+                
+                $args.=((isset($params['tag_id'])))?"{$db->cleanseNull($params['tag_id'])}":"null";
+                $args.=(isset($params['label']))?",{$db->cleanseNullOrWrapStr($params['label'])}":",null";
+                $ret = array();
+		foreach ( $db->call("getTag", $args) as $r) {
 			$tag_data = array();
-			$tag_data['tag_id'] = $r[0]['tag_id'];
-			$tag_data['label'] = $r[0]['label'];
-			$ret = new Tag($tag_data);
+			$tag_data['tag_id'] = $r['tag_id'];
+			$tag_data['label'] = $r['label'];
+			$ret []= new Tag($tag_data);
 		}
 		return $ret;
-	}
+        }
 
-	public function create($label) {
+        public function create($label) {
 		$tag = new Tag(array('label' => $label));
 		return $this->save($tag);
 	}
@@ -48,12 +76,13 @@ class TagsDao {
 
 	private function _insert($tag)
 	{
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$i = array();
-		$i['label'] = $db->cleanseWrapStr($tag->getLabel());
-		$db->Insert('tag', $i);
-		return $this->find(array('label' => $tag->getLabel()));
+                return $db->call("tagInsert", $db->cleanseWrapStr($tag->getLabel()));
+//		$i = array();
+//		$i['label'] = $db->cleanseWrapStr($tag->getLabel());
+//		$db->Insert('tag', $i);
+//		return $this->find(array('label' => $tag->getLabel()));
 	}
 	
 	/*
@@ -88,34 +117,14 @@ class TagsDao {
 
 	function tagIDFromLabel($label)
 	{
-		$ret = false;
-		$db = new MySQLWrapper();
-		$db->init();
-		$q = 'SELECT id
-				FROM tag
-				WHERE label = \''.$db->cleanse($label).'\'
-				LIMIT 1';
-		if ($r = $db->Select($q))
-		{
-			$ret = $r[0]['id'];
-		}
-		return $ret;
+		$result=self::getTag(array('label'=>$label));
+                return $result[0]['tag_id'];
 	}
 	
 	function label($tag_id)
 	{
-		$ret = false;
-		$db = new MySQLWrapper();
-		$db->init();
-		$q = 'SELECT label
-				FROM tag
-				WHERE id = '.intval($tag_id).'
-				LIMIT 1';
-		if ($r = $db->Select($q))
-		{
-			$ret = $r[0]['label'];
-		}
-		return $ret;
+		$result=self::getTag(array('tag_id'=>$tag_id));
+                return $result[0]['label'];
 	}
 	
 	/*
@@ -152,17 +161,9 @@ class TagsDao {
     public function getAllTags()
     {
         $ret = false;
-        $db = new MySQLWrapper();
-        $db->init();
-        $query = 'SELECT *
-                    FROM tag';
-        if($result = $db->Select($query)) {
-            $ret = array();
-            foreach($result as $row) {
-                $ret[] = $row['label'];
-            }
+        foreach(self::getTag(null) as $row) {
+            $ret[] = $row->getLabel();
         }
-
         return $ret;
     }
 }
