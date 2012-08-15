@@ -31,12 +31,12 @@ class BadgeDao
     {
         $badgeValidator = new BadgeValidator();
         if($badgeValidator->validateUserBadge($user, $badge)) {
-            $db = new MySQLWrapper();
+            $db = new PDOWrapper();
             $db->init();
             $query = "INSERT INTO user_badges (user_id, badge_id)
                         VALUES (".$db->cleanse($user->getUserId()).", 
                                 ".$db->cleanse($badge->getBadgeId()).")";
-            $db->insertStr($query);
+            $db->call("assignBadge", "{$db->cleanse($user->getUserId())},{$db->cleanse($badge->getBadgeId())}");
         }
     }
 }
