@@ -5,49 +5,12 @@ class TagsDao {
 	public function find($params) {
             $result = self::getTag($params);
             return $result[0];
-//		$args = "";
-//		$db = new PDOWrapper();
-//		$db->init();
-//                if(!(isset($params['label'])||isset($params['tag_id']))) 
-//                    throw new InvalidArgumentException('Cannot find tag, as no valid search data was provided.');
-//                
-//                $args.=((isset($params['tag_id'])))?"{$db->cleanseNull($params['tag_id'])}":"null";
-//                $args.=(isset($params['label']))?",{$db->cleanseNullOrWrapStr($params['label'])}":",null";
-//                
-////                
-////		if (isset($params['tag_id'])) {
-////			$q = 'SELECT *
-////				FROM tag
-////				WHERE tag_id = ' . $db->cleanse($params['tag_id']) . '
-////				LIMIT 1';
-////		}
-////		else if (isset($params['label'])) {
-////			$q = 'SELECT *
-////				FROM tag
-////				WHERE label = ' . $db->cleanseWrapStr($params['label']) . '
-////				LIMIT 1';
-////		}
-////		else {
-////			throw new InvalidArgumentException('Cannot find tag, as no valid search data was provided.');
-////		}
-//		
-//		$ret = false;
-//		if ( $db->call("getTag", $args)) {
-//			$tag_data = array();
-//			$tag_data['tag_id'] = $r[0]['tag_id'];
-//			$tag_data['label'] = $r[0]['label'];
-//			$ret = new Tag($tag_data);
-//		}
-//		return $ret;
 	}
         
         public function getTag($params){
             $args = "";
 		$db = new PDOWrapper();
 		$db->init();
-//                if(!(isset($params['label'])||isset($params['tag_id']))) 
-//                    throw new InvalidArgumentException('Cannot find tag, as no valid search data was provided.');
-                
                 $args.=((isset($params['tag_id'])))?"{$db->cleanseNull($params['tag_id'])}":"null";
                 $args.=(isset($params['label']))?",{$db->cleanseNullOrWrapStr($params['label'])}":",null";
                 $ret = array();
@@ -79,10 +42,6 @@ class TagsDao {
 		$db = new PDOWrapper();
 		$db->init();
                 return $db->call("tagInsert", $db->cleanseWrapStr($tag->getLabel()));
-//		$i = array();
-//		$i['label'] = $db->cleanseWrapStr($tag->getLabel());
-//		$db->Insert('tag', $i);
-//		return $this->find(array('label' => $tag->getLabel()));
 	}
 	
 	/*
