@@ -320,6 +320,67 @@ $app->get('/task/view/:task_id/', function ($task_id) use ($app) {
     $app->render('task.view.tpl');
 })->name('task-view');
 
+$app->get('/task/alter/:task_id/', function ($task_id) use ($app) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    $app->view()->setData('task', $task);
+
+    if(isValidPost($app)) {
+        $post = (object)$app->request()->post();
+
+        if($post->title != '') {
+            $task->setTitle($post->title);
+        }
+
+        if($post->impact != '') {
+            $task->setImpact($post->impact);
+        }
+
+        if($post->reference != '' && $post->reference != 'http://') {
+            $task->setReferencePage($post->reference);
+        }
+
+        if($post->source != '') {
+            $task->setSourceId(Languages::saveLanguage($post->source));
+        }
+
+        if($post->target != '') {
+            $task->setTargetId(Languages::saveLanguage($post->target));
+        }
+
+        if($post->tags != '') {
+            $task->setTags(Tags::separateTags($post->tags));
+        }
+
+        if($post->word_count != '') {
+            $task->setWordCount($post->word_count);
+        }
+
+        $task_dao->save($task);
+    }
+
+    $languages = Languages::getLanguageList();
+    $source_lang = Languages::languageNameFromId($task->getSourceId());
+    $target_lang = Languages::languageNameFromId($task->getTargetId());
+
+
+    $tags = $task->getTags();
+    $tag_list = '';
+    foreach($tags as $tag) {
+        $tag_list .= $tag . ' ';
+    }
+
+    $app->view()->appendData(array(
+            'languages'     => $languages,
+            'source_lang'   => $source_lang,
+            'target_lang'   => $target_lang,
+            'tag_list'      => $tag_list
+    ));
+
+    $app->render('task.alter.tpl');
+})->via('POST')->name('task-alter');
+
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'),
             'authenticateUserForTask', function ($task_id) use ($app) {
     $error       = null;
