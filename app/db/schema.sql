@@ -700,6 +700,17 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.assignBadge
+DROP PROCEDURE IF EXISTS `assignBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `assignBadge`(IN `uid` INT, IN `bid` INT)
+BEGIN
+INSERT INTO user_badges (user_id, badge_id) VALUES (uid,bid);
+END//
+DELIMITER ;
+
+
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
