@@ -731,6 +731,15 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.tagInsert
+DROP PROCEDURE IF EXISTS `tagInsert`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tagInsert`(IN `name` VARCHAR(50))
+BEGIN
+insert into tag (label) values (name);
+select tag_id from tag where lable=name;
+END//
+DELIMITER ;
 
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
