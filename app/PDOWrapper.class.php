@@ -168,10 +168,12 @@ class PDOWrapper {
             $conn = $this->connection;
             $i = 0;
             $data = array();
-            
-            foreach($conn->query( $sql ) as $row){
+
+            if($result = $conn->query($sql)) {
+                foreach($result as $row){
                     $data[$i] = $row;
                     $i++;
+                }
             }
             return empty($data) ? false : $data;
         }

@@ -305,6 +305,21 @@ $app->get('/task/:task_id/uploaded-edit/', 'authenticateUserForTask', function (
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
 
+$app->get('/task/view/:task_id/', function ($task_id) use ($app) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+    $app->view()->setData('task', $task);
+
+    $org_dao = new OrganisationDao();
+    $org = $org_dao->find(array('id' => $task->getOrganisationId()));
+
+    $app->view()->appendData(array(
+            'org' => $org
+    ));
+
+    $app->render('task.view.tpl');
+})->name('task-view');
+
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'),
             'authenticateUserForTask', function ($task_id) use ($app) {
     $error       = null;
@@ -805,7 +820,6 @@ $app->get('/login', function () use ($app) {
     $app->view()->setData('openid', $use_openid);
     if(isset($use_openid)) {
         if($use_openid == 'y' || $use_openid == 'h') {
-            echo "<p>Setting Extra Scripts</p>";
             $extra_scripts = "
                 <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
                 <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-jquery.js\"></script>
@@ -1185,7 +1199,7 @@ $app->get('/org/private/:org_id', 'authUserForOrg', function ($org_id) use ($app
 
 $app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
-    $org = $org_dao->find($org_id);
+    $org = $org_dao->find(array('id' => $org_id));
 
     $user_dao = new UserDao();
 

@@ -28,7 +28,7 @@
                 <tr>
                 {assign var="task_id" value=$task->getTaskId()}
                     <td>
-                        <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
+                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
                     </td>
                     {if $task_dao->getLatestFileVersion($task) > 0}
                         <td>
