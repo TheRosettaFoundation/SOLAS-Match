@@ -741,6 +741,29 @@ select tag_id from tag where lable=name;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getTasksByOrgIDs
+DROP PROCEDURE IF EXISTS `getTasksByOrgIDs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksByOrgIDs`(IN `orgIDs` VARCHAR(1028), IN `orderby` VARCHAR(256))
+    READS SQL DATA
+BEGIN
+	if orgIDs='' then set orgIDs=null;end if;
+	if orderby='' then set orderby=null;end if;
+	set @q= "SELECT id,organisation_id,title,word_count,source_id,target_id,created_time FROM task WHERE 1 ";-- set update
+	if orgIDs is not null then 
+		set @q = CONCAT(@q," and organisation_id IN (",orgIDs,")") ;
+	end if;
+
+	if orderby is not null then 
+		set @q = CONCAT(@q," order by ",orderby) ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;

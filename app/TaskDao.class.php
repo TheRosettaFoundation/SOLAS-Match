@@ -30,56 +30,60 @@ New requirement:
     ));
 */
 
-	public function findTasks($params, $sort_column = NULL, $sort_direction = NULL) {
-		$permitted_params = array(
-			'organisation_ids'
-		);
+	public function findTasksByOrg($params, $sort_column = NULL, $sort_direction = NULL) {
+            $permitted_params = array(
+                    'organisation_ids'
+            );
 
-		if (!is_array($params)) {
-			throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
-		}
+            if (!is_array($params)) {
+                    throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
+            }
 
-		$where = array();
-		foreach($params as $key => $value) {
-			if (!in_array($key, $permitted_params)) {
-				throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
-			}
-		}
+            $where = array();
+            foreach($params as $key => $value) {
+                    if (!in_array($key, $permitted_params)) {
+                            throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
+                    }
+            }
 
-		$tasks = null;
+            $tasks = null;
 
-        $organisation_ids = $params['organisation_ids'];
+            $organisation_ids = $params['organisation_ids'];
 
-		// We're assuming that organisation_ids is always being provided.
-        if(count($organisation_ids) > 1) {
-    		$organisation_ids = implode(',', $organisation_ids);
-        }
-		$db = new MySQLWrapper();
-		$db->init();
-		$query = 'SELECT id
-					FROM task
-					WHERE organisation_id IN (' . $db->cleanse($organisation_ids) . ')';
+                    // We're assuming that organisation_ids is always being provided.
+            if(count($organisation_ids) > 1) {
+                    $organisation_ids = implode(',', $organisation_ids);
+            }
+            $db = new PDOWrapper();
+            $db->init();
+            $args = $db->cleanse($organisation_ids);
+            $args .= empty($sort_column)?",null":"{$db->cleanse($sort_column)}";
+            $args .= (!empty($sort_column)&&empty($sort_direction))?" ":" {$db->cleanse($sort_direction)}";
+            if ($result = $db->call("getTasksByOrgIDs", $args)) {
+                    $tasks = array();
+                    foreach ($result as $row) {
+                        $task_data = array();
+                        foreach($row as $col_name => $col_value) {
+                            if ($col_name == 'id') {
+                                    $task_data['task_id'] = $col_value;
+                                }
+                            else if (!is_numeric($col_name) && !is_null($col_value)) {
+                                    $task_data[$col_name] = $col_value;
+                            }
+                        }
 
-		// Sort the output for a particular parameter?
-		if (!empty($sort_column)) {
-			$query .= ' ORDER BY ' . $db->cleanse($sort_column);
-			if (!empty($sort_direction)) {
-				$query .= ' ' . $db->cleanse($sort_direction);
-			}
-		}
+                        if ($tags = $this->_fetchTags($row['id'])) {
+                            $task_data['tags'] = $tags;
+                        }
 
-		// Get the result
-		if ($result = $db->Select($query)) {
-			$tasks = array();
-			foreach ($result as $row) {
-				$task = $this->find(array('task_id' => $row['id']));
-				if (is_object($task)) {
-					$tasks[] = $task;
-				}
-			}
-		}
+                        $task = new Task($task_data);
+                        if (is_object($task)) {
+                            $tasks[] = $task;
+                        }
+                    }
+            }
 
-		return $tasks;
+            return $tasks;
 	}
 
 	public function find($params) {

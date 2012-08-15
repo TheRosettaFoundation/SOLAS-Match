@@ -929,7 +929,7 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     $orgs = array();
     foreach($my_organisations as $org_id) {
         $org = $org_dao->find(array('id' => $org_id));
-        $my_org_tasks = $task_dao->findTasks(array('organisation_ids' => $org_id));
+        $my_org_tasks = $task_dao->findTasksByOrg(array('organisation_ids' => $org_id));
         $org_tasks[$org->getId()] = $my_org_tasks;
         $orgs[$org->getId()] = $org;
     }
