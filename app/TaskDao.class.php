@@ -101,39 +101,48 @@ New requirement:
 				throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
 			}
 		}
+                
+                $result = self::getTask($params);
+                return $result[0];
+	}
+        
+        public function getTask($params){
+            $db=new PDOWrapper();
+            $db->init();
+            $args ="";
+            $args .= isset ($params['task_id'])?"{$db->cleanseNull($params['task_id'])}":"null";
+            $args .= isset ($params['org_id'])?"{$db->cleanseNull($params['org_id'])}":",null";
+            $args .= isset ($params['title'])?"{$db->cleanseNullOrWrapStr($params['title'])}":",null";
+            $args .= isset ($params['word_count'])?"{$db->cleanseNull($params['word_count'])}":",null";
+            $args .= isset ($params['source_id'])?"{$db->cleanseNull($params['source_id'])}":",null";
+            $args .= isset ($params['target_id'])?"{$db->cleanseNull($params['target_id'])}":",null";
+            $args .= isset ($params['created_time'])?"{$db->cleanseNull($params['created_time'])}":",null";
+            $tasks = array();
+            foreach($db->call("getTask", $args) as $row){
+                $task_data = array();
+                        foreach($row as $col_name => $col_value) {
+                            if ($col_name == 'id') {
+                                    $task_data['task_id'] = $col_value;
+                                }
+                            else if (!is_numeric($col_name) && !is_null($col_value)) {
+                                    $task_data[$col_name] = $col_value;
+                            }
+                        }
 
-		$db = new MySQLWrapper();
-		$db->init();
+                        if ($tags = $this->_fetchTags($row['id'])) {
+                            $task_data['tags'] = $tags;
+                        }
 
-		$query = 'SELECT *
-					FROM task
-					WHERE id = ' . $db->cleanse($params['task_id']);
-		
-		$ret = null;
-		if ($res = $db->Select($query)) {
-    		$row = $res[0];
-	    	$task_data = array();
-    		foreach($row as $col_name => $col_value) {
-	    		if ($col_name == 'id') {
-		    		$task_data['task_id'] = $col_value;
-			    }
-    			else if (!is_numeric($col_name) && !is_null($col_value)) {
-	    			$task_data[$col_name] = $col_value;
-		    	}
-       		}
-
-    		if ($tags = $this->_fetchTags($params['task_id'])) {
-	    		$task_data['tags'] = $tags;
-		    }
-
-    		$ret = new Task($task_data);
-            $ret->setStatus($this->getTaskStatus($ret->getTaskId()));
+                        $task = new Task($task_data);
+                        if (is_object($task)) {
+                            $tasks[] = $task;
+                        }
+            }
+            return $tasks;
         }
 
-		return $ret;
-	}
 
-	private function _fetchTags($tag_id) {
+        private function _fetchTags($tag_id) {
 		$db = new MySQLWrapper();
 		$db->init();
 		$query = 'SELECT t.label

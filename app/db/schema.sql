@@ -765,6 +765,50 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Dev.getTask
+DROP PROCEDURE IF EXISTS `getTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME)
+    READS SQL DATA
+BEGIN
+	if id='' then set id=null;end if;
+	if orgID='' then set orgID=null;end if;
+	if name='' then set name=null;end if;
+	if sID='' then set sID=null;end if;
+	if tID='' then set tID=null;end if;
+	if wordCount='' then set wordCount=null;end if;
+	if created='' then set created=null;end if;
+	
+	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time from task t where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and t.id=",id) ;
+	end if;
+	if orgID is not null then 
+		set @q = CONCAT(@q," and t.orgisation_id=",orgID) ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and t.title='",name,"'") ;
+	end if;
+	if sID is not null then 
+		set @q = CONCAT(@q," and t.source_id=",sID) ;
+	end if;
+	if tID is not null then 
+		set @q = CONCAT(@q," and t.target_id=",tID) ;
+	end if;
+	if wordCount is not null then 
+		set @q = CONCAT(@q," and t.word_count=",wordCount) ;
+	end if;
+	if (created is not null  and created!='0000-00-00 00:00:00') then 
+		set @q = CONCAT(@q," and t.created_time='",created,"'") ;
+	end if;
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
