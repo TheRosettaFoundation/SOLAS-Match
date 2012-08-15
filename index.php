@@ -805,7 +805,6 @@ $app->get('/login', function () use ($app) {
     $app->view()->setData('openid', $use_openid);
     if(isset($use_openid)) {
         if($use_openid == 'y' || $use_openid == 'h') {
-            echo "<p>Setting Extra Scripts</p>";
             $extra_scripts = "
                 <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
                 <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-jquery.js\"></script>
