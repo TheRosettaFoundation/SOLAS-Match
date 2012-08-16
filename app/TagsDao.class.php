@@ -14,12 +14,15 @@ class TagsDao {
                 $args.=((isset($params['tag_id'])))?"{$db->cleanseNull($params['tag_id'])}":"null";
                 $args.=(isset($params['label']))?",{$db->cleanseNullOrWrapStr($params['label'])}":",null";
                 $ret = array();
-		foreach ( $db->call("getTag", $args) as $r) {
-			$tag_data = array();
-			$tag_data['tag_id'] = $r['tag_id'];
-			$tag_data['label'] = $r['label'];
-			$ret []= new Tag($tag_data);
-		}
+                $result=$db->call("getTag", $args);
+                if($result !=null){
+                    foreach ( $result as $r) {
+                            $tag_data = array();
+                            $tag_data['tag_id'] = $r['tag_id'];
+                            $tag_data['label'] = $r['label'];
+                            $ret []= new Tag($tag_data);
+                    }
+                }
 		return $ret;
         }
 
@@ -41,7 +44,8 @@ class TagsDao {
 	{
 		$db = new PDOWrapper();
 		$db->init();
-                return $db->call("tagInsert", $db->cleanseWrapStr($tag->getLabel()));
+                $id =$db->call("tagInsert", $db->cleanseWrapStr($tag->getLabel()));
+                return $id[0]['tag_id'];
 	}
 	
 	/*
@@ -74,13 +78,13 @@ class TagsDao {
 		return $tag_ids;		
 	}
 
-	function tagIDFromLabel($label)
+	public function tagIDFromLabel($label)
 	{
 		$result=self::getTag(array('label'=>$label));
-                return $result[0]['tag_id'];
+                return $result==null?null:$result[0]->getTagId();
 	}
 	
-	function label($tag_id)
+	public function label($tag_id)
 	{
 		$result=self::getTag(array('tag_id'=>$tag_id));
                 return $result[0]['label'];

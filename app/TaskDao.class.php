@@ -276,26 +276,13 @@ New requirement:
     }
 
     public function getTagId($tag) {
-            $db = new MySQLWrapper();
-            $db->init();
-            $q = 'SELECT tag_id
-                            FROM tag
-                            WHERE label = ' . $db->cleanseWrapStr($tag);
-
-            if ($r = $db->Select($q)) {
-                    return $r[0]['tag_id'];
-            }
-            else {
-                    return null;
-            }		
+            $tDAO = new TagsDao();
+            return $tDAO->tagIDFromLabel($tag);
     }
 
     private function _createTag($tag) {
-            $db = new MySQLWrapper;
-            $db->init();
-            $ins = array();
-            $ins['label'] = $db->cleanseWrapStr($tag);
-            return $db->Insert('tag', $ins);
+            $tDAO = new TagsDao();
+            return $tDAO->create($tag);
     }
 
     private function _insert(&$task) {

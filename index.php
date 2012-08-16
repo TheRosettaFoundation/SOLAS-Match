@@ -367,8 +367,10 @@ $app->get('/task/alter/:task_id/', function ($task_id) use ($app) {
 
     $tags = $task->getTags();
     $tag_list = '';
-    foreach($tags as $tag) {
-        $tag_list .= $tag . ' ';
+    if($tags!=null){
+        foreach($tags as $tag) {
+            $tag_list .= $tag . ' ';
+        }
     }
 
     $app->view()->appendData(array(

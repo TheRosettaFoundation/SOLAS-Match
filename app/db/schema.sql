@@ -756,7 +756,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tagInsert`(IN `name` VARCHAR(50))
 BEGIN
 insert into tag (label) values (name);
-select tag_id from tag where lable=name;
+select tag_id from tag where label=name;
 END//
 DELIMITER ;
 
