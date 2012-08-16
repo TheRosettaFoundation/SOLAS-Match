@@ -215,12 +215,12 @@ New requirement:
         }
     }
 
-	private function _update($task) {
-            $db = new PDOWrapper();
-            $db->init();
-            $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getTaskId())},{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())}");
-            $this->_updateTags($task);
-	}
+    private function _update($task) {
+        $db = new PDOWrapper();
+        $db->init();
+        $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getTaskId())},{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())}");
+        $this->_updateTags($task);
+    }
 
 
     private function calculateTaskScore($task_id)
@@ -230,135 +230,133 @@ New requirement:
 
     }
 
-	private function _updateTags($task) {
-		$this->_unlinkStoredTags($task);
-		$this->_storeTagLinks($task);
-	}
+    private function _updateTags($task) {
+            $this->_unlinkStoredTags($task);
+            $this->_storeTagLinks($task);
+    }
 
-	private function _unlinkStoredTags($task) {
-		$db = new MySQLWrapper();
-		$db->init();
-		$query = 'DELETE FROM task_tag
-					WHERE task_id = ' . $db->cleanse($task->getTaskId());
-		$db->Delete($query);
-	}
+    private function _unlinkStoredTags($task) {
+            $db = new PDOWrapper();
+            $db->init();
+            $db->call("unlinkStoredTags", "{$db->cleanse($task->getTaskId())}");
+    }
 
-	private function _storeTagLinks($task) {
-		if ($tags = $task->getTags()) {
-			if ($tag_ids = $this->_tagsToIds($tags)) {
-				$db = new MySQLWrapper;
-				$db->init();
-				foreach ($tag_ids as $tag_id) {
-					$ins = array();
-					$ins['task_id'] = $db->cleanse($task->getTaskId());
-					$ins['tag_id'] = $db->cleanse($tag_id);
-					$db->Insert('task_tag', $ins);
-				}
-			}
-		}
-	}
+    private function _storeTagLinks($task) {
+            if ($tags = $task->getTags()) {
+                    if ($tag_ids = $this->_tagsToIds($tags)) {
+                            $db = new MySQLWrapper;
+                            $db->init();
+                            foreach ($tag_ids as $tag_id) {
+                                    $ins = array();
+                                    $ins['task_id'] = $db->cleanse($task->getTaskId());
+                                    $ins['tag_id'] = $db->cleanse($tag_id);
+                                    $db->Insert('task_tag', $ins);
+                            }
+                    }
+            }
+    }
 
-	private function _tagsToIds($tags) {
-		$tag_ids = array();
-		foreach ($tags as $tag) {
-			if ($tag_id = $this->getTagId($tag)) {
-				$tag_ids[] = $tag_id;
-			}
-			else {
-				$tag_ids[] = $this->_createTag($tag);
-			}
-		}
+    private function _tagsToIds($tags) {
+            $tag_ids = array();
+            foreach ($tags as $tag) {
+                    if ($tag_id = $this->getTagId($tag)) {
+                            $tag_ids[] = $tag_id;
+                    }
+                    else {
+                            $tag_ids[] = $this->_createTag($tag);
+                    }
+            }
 
-		if (count($tag_ids) > 0) {
-			return $tag_ids;
-		}
-		else {
-			return null;
-		}
-	}
+            if (count($tag_ids) > 0) {
+                    return $tag_ids;
+            }
+            else {
+                    return null;
+            }
+    }
 
-	public function getTagId($tag) {
-		$db = new MySQLWrapper();
-		$db->init();
-		$q = 'SELECT tag_id
-				FROM tag
-				WHERE label = ' . $db->cleanseWrapStr($tag);
+    public function getTagId($tag) {
+            $db = new MySQLWrapper();
+            $db->init();
+            $q = 'SELECT tag_id
+                            FROM tag
+                            WHERE label = ' . $db->cleanseWrapStr($tag);
 
-		if ($r = $db->Select($q)) {
-			return $r[0]['tag_id'];
-		}
-		else {
-			return null;
-		}		
-	}
+            if ($r = $db->Select($q)) {
+                    return $r[0]['tag_id'];
+            }
+            else {
+                    return null;
+            }		
+    }
 
-	private function _createTag($tag) {
-		$db = new MySQLWrapper;
-		$db->init();
-		$ins = array();
-		$ins['label'] = $db->cleanseWrapStr($tag);
-		return $db->Insert('tag', $ins);
-	}
+    private function _createTag($tag) {
+            $db = new MySQLWrapper;
+            $db->init();
+            $ins = array();
+            $ins['label'] = $db->cleanseWrapStr($tag);
+            return $db->Insert('tag', $ins);
+    }
 
-	private function _insert(&$task) {
-		$db = new MySQLWrapper();
-		$db->init();
-		$insert = array();		
-		if ($title = $task->getTitle()) {
-			$insert['title'] = $db->cleanseWrapStr($title);
-		}
-        if ($task->getImpact() != '') {
-            $insert['impact'] = $db->cleanseWrapStr($task->getImpact());
-        }
-        if ($task->getReferencePage() != '') {
-            $insert['reference_page'] = $db->cleanseWrapStr($task->getReferencePage());
-        }
-		if ($organisation_id = $task->getOrganisationId()) {
-			$insert['organisation_id'] = $db->cleanse($organisation_id);
-		}
-		if ($source_id = $task->getSourceId()) {
-			$insert['source_id'] = $db->cleanse($source_id);
-		}
-		if ($target_id = $task->getTargetId()) {
-			$insert['target_id'] = $db->cleanse($target_id);
-		}
-		if ($word_count = $task->getWordCount()) {
-			$insert['word_count'] = $db->cleanse($word_count);
-		}
-		$insert['created_time'] = 'NOW()';
-		if ($task_id = $db->insert('task', $insert)) {
-			$task->setTaskId($task_id);
-		}
-		
-        $this->_updateTags($task);
-	}
+    private function _insert(&$task) {
+            $db = new MySQLWrapper();
+            $db->init();
+            $insert = array();		
+            if ($title = $task->getTitle()) {
+                    $insert['title'] = $db->cleanseWrapStr($title);
+            }
+    if ($task->getImpact() != '') {
+        $insert['impact'] = $db->cleanseWrapStr($task->getImpact());
+    }
+    if ($task->getReferencePage() != '') {
+        $insert['reference_page'] = $db->cleanseWrapStr($task->getReferencePage());
+    }
+            if ($organisation_id = $task->getOrganisationId()) {
+                    $insert['organisation_id'] = $db->cleanse($organisation_id);
+            }
+            if ($source_id = $task->getSourceId()) {
+                    $insert['source_id'] = $db->cleanse($source_id);
+            }
+            if ($target_id = $task->getTargetId()) {
+                    $insert['target_id'] = $db->cleanse($target_id);
+            }
+            if ($word_count = $task->getWordCount()) {
+                    $insert['word_count'] = $db->cleanse($word_count);
+            }
+            $insert['created_time'] = 'NOW()';
+            if ($task_id = $db->insert('task', $insert)) {
+                    $task->setTaskId($task_id);
+            }
 
-	public function getLatestAvailableTasks($nb_items = 10) {
-		$db = new MySQLWrapper();
-		$db->init();
-		$q 	= 'SELECT t.id
-				FROM task AS t
-				WHERE t.id NOT IN (
-					SELECT task_id
-					FROM task_claim
-				)
-				ORDER BY created_time DESC 
-				LIMIT '.$db->cleanse($nb_items);
-		
-		$ret = false;
-		if ($r = $db->Select($q)) {
-			$ret = array();
-			foreach($r as $row)	{
-				// Add a new Job object to the array to be returned.
-				$task = self::find(array('task_id' => $row['id']));
-				if (!$task->getTaskId()) {
-					throw new Exception('Tried to create a task, but its ID is not set.');
-				}
-				$ret[] = $task;
-			}
-		}
-		return $ret;
-	}
+    $this->_updateTags($task);
+    }
+
+    public function getLatestAvailableTasks($nb_items = 10) {
+            $db = new MySQLWrapper();
+            $db->init();
+            $q 	= 'SELECT t.id
+                            FROM task AS t
+                            WHERE t.id NOT IN (
+                                    SELECT task_id
+                                    FROM task_claim
+                            )
+                            ORDER BY created_time DESC 
+                            LIMIT '.$db->cleanse($nb_items);
+
+            $ret = false;
+            if ($r = $db->Select($q)) {
+                    $ret = array();
+                    foreach($r as $row)	{
+                            // Add a new Job object to the array to be returned.
+                            $task = self::find(array('task_id' => $row['id']));
+                            if (!$task->getTaskId()) {
+                                    throw new Exception('Tried to create a task, but its ID is not set.');
+                            }
+                            $ret[] = $task;
+                    }
+            }
+            return $ret;
+    }
 
     /*
      * Returns an array of tasks ordered by the highest score related to the user

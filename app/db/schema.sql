@@ -948,6 +948,15 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.unlinkStoredTags
+DROP PROCEDURE IF EXISTS `unlinkStoredTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkStoredTags`(IN `id` INT)
+    MODIFIES SQL DATA
+BEGIN
+DELETE FROM task_tag WHERE task_id = id;
+END//
+DELIMITER ;
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
