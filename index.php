@@ -320,6 +320,67 @@ $app->get('/task/view/:task_id/', function ($task_id) use ($app) {
     $app->render('task.view.tpl');
 })->name('task-view');
 
+$app->get('/task/alter/:task_id/', function ($task_id) use ($app) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    $app->view()->setData('task', $task);
+
+    if(isValidPost($app)) {
+        $post = (object)$app->request()->post();
+
+        if($post->title != '') {
+            $task->setTitle($post->title);
+        }
+
+        if($post->impact != '') {
+            $task->setImpact($post->impact);
+        }
+
+        if($post->reference != '' && $post->reference != 'http://') {
+            $task->setReferencePage($post->reference);
+        }
+
+        if($post->source != '') {
+            $task->setSourceId(Languages::saveLanguage($post->source));
+        }
+
+        if($post->target != '') {
+            $task->setTargetId(Languages::saveLanguage($post->target));
+        }
+
+        if($post->tags != '') {
+            $task->setTags(Tags::separateTags($post->tags));
+        }
+
+        if($post->word_count != '') {
+            $task->setWordCount($post->word_count);
+        }
+
+        $task_dao->save($task);
+    }
+
+    $languages = Languages::getLanguageList();
+    $source_lang = Languages::languageNameFromId($task->getSourceId());
+    $target_lang = Languages::languageNameFromId($task->getTargetId());
+
+
+    $tags = $task->getTags();
+    $tag_list = '';
+    foreach($tags as $tag) {
+        $tag_list .= $tag . ' ';
+    }
+
+    $app->view()->appendData(array(
+            'languages'     => $languages,
+            'source_lang'   => $source_lang,
+            'target_lang'   => $target_lang,
+            'tag_list'      => $tag_list
+    ));
+
+    $app->render('task.alter.tpl');
+})->via('POST')->name('task-alter');
+
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'),
             'authenticateUserForTask', function ($task_id) use ($app) {
     $error       = null;
@@ -1146,6 +1207,30 @@ $app->get('/badge/list', function () use ($app) {
     $app->render('badge-list.tpl');
 })->name('badge-list');
 
+$app->get('/org/create/badge/:org_id/', function ($org_id) use ($app) {
+    if(isValidPost($app)) {
+        $post = (object)$app->request()->post();
+
+        if($post->title == '' || $post->description == '') {
+            $app->flash('error', "All fields must be filled out");
+        } else {
+            $params = array();
+            $params['title'] = $post->title;
+            $params['description'] = $post->description;
+            $params['owner_id'] = $org_id;
+
+            $badge_dao = new BadgeDao();
+            $badge = new Badge($params);
+            $badge_dao->save($badge);
+            $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
+        }
+    }
+
+    $app->view()->setData('org_id', $org_id);
+
+    $app->render('org.create-badge.tpl');
+})->via('POST')->name('org-create-badge');
+
 $app->get('/org/profile/:org_id', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $org_id));
@@ -1153,16 +1238,22 @@ $app->get('/org/profile/:org_id', function ($org_id) use ($app) {
     $user_dao = new UserDao();
     $currentUser = $user_dao->getCurrentUser();
 
-    $org_member_ids = $org_dao->getOrgMembers($org->getId());
+    $badge_dao = new BadgeDao();
+    $org_badges = $badge_dao->getOrgBadges($org_id);
+
+    $org_member_ids = $org_dao->getOrgMembers($org_id);
 
     $org_members = array();
-    foreach($org_member_ids as $org_mem) {
-        $org_members[] = $org_mem['user_id'];
+    if(count($org_member_ids) > 0) {
+        foreach($org_member_ids as $org_mem) {
+            $org_members[] = $org_mem['user_id'];
+        }
     }
 
     $app->view()->setData('current_page', 'org-public-profile');
     $app->view()->appendData(array('org' => $org,
                                     'org_members' => $org_members,
+                                    'org_badges' => $org_badges
     ));
 
     $app->render('org-public-profile.tpl');

@@ -7,6 +7,10 @@
         Task {$task->getTaskId()}
     {/if}
     <small>Task Details</small>
+    {assign var="task_id" value=$task->getTaskId()}
+    <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
+        Edit Details
+    </a>
 </h1>
 
 {if isset($org)}
