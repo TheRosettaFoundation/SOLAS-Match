@@ -958,6 +958,16 @@ DELETE FROM task_tag WHERE task_id = id;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.storeTagLinks
+DROP PROCEDURE IF EXISTS `storeTagLinks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `storeTagLinks`(IN `taskID` INT, IN `tagID` INT)
+    MODIFIES SQL DATA
+BEGIN
+insert into task_tag  (task_id,tag_id) values (taskID,tagID);
+END//
+DELIMITER ;
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';

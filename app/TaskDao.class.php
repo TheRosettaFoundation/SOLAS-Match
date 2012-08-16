@@ -244,13 +244,13 @@ New requirement:
     private function _storeTagLinks($task) {
             if ($tags = $task->getTags()) {
                     if ($tag_ids = $this->_tagsToIds($tags)) {
-                            $db = new MySQLWrapper;
+                            $db = new PDOWrapper();
                             $db->init();
                             foreach ($tag_ids as $tag_id) {
                                     $ins = array();
                                     $ins['task_id'] = $db->cleanse($task->getTaskId());
                                     $ins['tag_id'] = $db->cleanse($tag_id);
-                                    $db->Insert('task_tag', $ins);
+                                    $db->call("storeTagLinks", "{$db->cleanse($task->getTaskId())},{$db->cleanse($tag_id)}");
                             }
                     }
             }
