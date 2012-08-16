@@ -50,7 +50,7 @@
 <h3>
     Organisation Badges
     {if in_array($user->getUserId(), $org_members)}
-        <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn'>
+        <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
             Create Badge
         </a>
     {/if}
@@ -60,7 +60,7 @@
         <p>
             {if in_array($user->getUserId(), $org_members)}
                 {assign var="badge_id" value=$badge['badge_id']}
-                <a href="{urlFor name="org-assign-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="btn">
+                <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="btn">
                     Assign
                 </a>
             {/if}
