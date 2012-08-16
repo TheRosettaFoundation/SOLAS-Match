@@ -288,39 +288,10 @@ New requirement:
     private function _insert(&$task) {
         $db = new PDOWrapper();
         $db->init();
-        $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getTaskId())},{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())}");
+        $result= $db->call("taskInsertAndUpdate", "null,{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},null,{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())}");
         $task->setTaskId($result[0]['id']);
         $this->_updateTags($task);
-//            $db = new MySQLWrapper();
-//            $db->init();
-//            $insert = array();		
-//            if ($title = $task->getTitle()) {
-//                    $insert['title'] = $db->cleanseWrapStr($title);
-//            }
-//    if ($task->getImpact() != '') {
-//        $insert['impact'] = $db->cleanseWrapStr($task->getImpact());
-//    }
-//    if ($task->getReferencePage() != '') {
-//        $insert['reference_page'] = $db->cleanseWrapStr($task->getReferencePage());
-//    }
-//            if ($organisation_id = $task->getOrganisationId()) {
-//                    $insert['organisation_id'] = $db->cleanse($organisation_id);
-//            }
-//            if ($source_id = $task->getSourceId()) {
-//                    $insert['source_id'] = $db->cleanse($source_id);
-//            }
-//            if ($target_id = $task->getTargetId()) {
-//                    $insert['target_id'] = $db->cleanse($target_id);
-//            }
-//            if ($word_count = $task->getWordCount()) {
-//                    $insert['word_count'] = $db->cleanse($word_count);
-//            }
-//            $insert['created_time'] = 'NOW()';
-//            if ($task_id = $db->insert('task', $insert)) {
-//                    $task->setTaskId($task_id);
-//            }
 
-    
     }
 
     public function getLatestAvailableTasks($nb_items = 10) {
