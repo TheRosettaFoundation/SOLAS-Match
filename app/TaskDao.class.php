@@ -142,15 +142,11 @@ New requirement:
         }
 
 
-        private function _fetchTags($tag_id) {
-		$db = new MySQLWrapper();
+        private function _fetchTags($task_id) {
+		$db = new PDOWrapper();
 		$db->init();
-		$query = 'SELECT t.label
-					FROM task_tag AS tt, tag AS t
-					WHERE tt.task_id = ' . $db->cleanse($tag_id) . '
-						AND tt.tag_id = t.tag_id';
 		$ret = null;
-		if ($result = $db->Select($query)) {
+		if ($result = $db->call("getTaskTags", "{$db->cleanseNull($task_id)}")) {
 			$ret = array();
 			foreach ($result as $row) {
 				$ret[] = $row['label'];

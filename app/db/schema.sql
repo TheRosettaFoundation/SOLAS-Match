@@ -808,6 +808,23 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getTaskTags
+DROP PROCEDURE IF EXISTS `getTaskTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTags`(IN `id` INT)
+BEGIN
+	if id='' then set id=null;end if;
+	set @q= "select t.tag_id , t.label from tag t join task_tag tt on t.tag_id= tt.tag_id where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and tt.task_id=",id) ;
+	end if;	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
