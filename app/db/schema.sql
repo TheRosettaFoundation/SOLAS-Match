@@ -786,7 +786,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Dev.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128))
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
@@ -796,8 +796,10 @@ BEGIN
 	if tID='' then set tID=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
+	if impact='' then set impact=null;end if;
+	if ref='' then set ref=null;end if;
 	
-	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time from task t where 1 ";-- set update
+	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page from task t where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -820,6 +822,13 @@ BEGIN
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
 		set @q = CONCAT(@q," and t.created_time='",created,"'") ;
 	end if;
+	if impact is not null then 
+		set @q = CONCAT(@q," and t.impactt=",impact) ;
+	end if;
+	if ref is not null then 
+		set @q = CONCAT(@q," and t.reference_page=",ref) ;
+	end if;
+	
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
@@ -830,7 +839,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Dev.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if orgID='' then set orgID=null;end if;
@@ -839,6 +848,8 @@ BEGIN
 	if tID='' then set tID=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
+	if impact='' then set impact=null;end if;
+	if ref='' then set ref=null;end if;
 	
 	if id is null then
 		insert into task (organisation_id,title,word_count,source_id,target_id,created_time)
@@ -886,6 +897,22 @@ BEGIN
 			end if;
 			set @q = CONCAT(@q," t.word_count=",wordCount) ;
 		end if;
+		if impact is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.impact='",impact,"'");
+		end if;
+		if ref is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.reference_page='",ref,"'") ;
+		end if;
 		if (created is not null  and created!='0000-00-00 00:00:00') then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
@@ -899,7 +926,7 @@ BEGIN
 		EXECUTE stmt;
 		DEALLOCATE PREPARE stmt;
 	end if;
-	call getTask(id,orgID,name,wordCount,sID,tID,created);
+	call getTask(id,orgID,name,wordCount,sID,tID,created,impact,ref);
 END//
 DELIMITER ;
 
