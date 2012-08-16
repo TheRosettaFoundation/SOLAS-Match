@@ -305,6 +305,82 @@ $app->get('/task/:task_id/uploaded-edit/', 'authenticateUserForTask', function (
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
 
+$app->get('/task/view/:task_id/', function ($task_id) use ($app) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+    $app->view()->setData('task', $task);
+
+    $org_dao = new OrganisationDao();
+    $org = $org_dao->find(array('id' => $task->getOrganisationId()));
+
+    $app->view()->appendData(array(
+            'org' => $org
+    ));
+
+    $app->render('task.view.tpl');
+})->name('task-view');
+
+$app->get('/task/alter/:task_id/', function ($task_id) use ($app) {
+    $task_dao = new TaskDao();
+    $task = $task_dao->find(array('task_id' => $task_id));
+
+    $app->view()->setData('task', $task);
+
+    if(isValidPost($app)) {
+        $post = (object)$app->request()->post();
+
+        if($post->title != '') {
+            $task->setTitle($post->title);
+        }
+
+        if($post->impact != '') {
+            $task->setImpact($post->impact);
+        }
+
+        if($post->reference != '' && $post->reference != 'http://') {
+            $task->setReferencePage($post->reference);
+        }
+
+        if($post->source != '') {
+            $task->setSourceId(Languages::saveLanguage($post->source));
+        }
+
+        if($post->target != '') {
+            $task->setTargetId(Languages::saveLanguage($post->target));
+        }
+
+        if($post->tags != '') {
+            $task->setTags(Tags::separateTags($post->tags));
+        }
+
+        if($post->word_count != '') {
+            $task->setWordCount($post->word_count);
+        }
+
+        $task_dao->save($task);
+    }
+
+    $languages = Languages::getLanguageList();
+    $source_lang = Languages::languageNameFromId($task->getSourceId());
+    $target_lang = Languages::languageNameFromId($task->getTargetId());
+
+
+    $tags = $task->getTags();
+    $tag_list = '';
+    foreach($tags as $tag) {
+        $tag_list .= $tag . ' ';
+    }
+
+    $app->view()->appendData(array(
+            'languages'     => $languages,
+            'source_lang'   => $source_lang,
+            'target_lang'   => $target_lang,
+            'tag_list'      => $tag_list
+    ));
+
+    $app->render('task.alter.tpl');
+})->via('POST')->name('task-alter');
+
 $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'),
             'authenticateUserForTask', function ($task_id) use ($app) {
     $error       = null;
@@ -325,10 +401,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             $source_id = Languages::saveLanguage($post->source);
             $task->setSourceId($source_id);
         }
-        if (!empty($post->target)) {
-            $target_id = Languages::saveLanguage($post->target);
-            $task->setTargetId($target_id);
-        }
+
         if($post->title != '') {
             $task->setTitle($post->title);
         } else {
@@ -349,11 +422,69 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         } else {
             $word_count_err = "Word Count cannot be blank";
         }
-        $task_dao->save($task);
+
+        $language_list = array();
+        $target_count = 0;
+        $target_val = $app->request()->post("target_$target_count");
+        while(isset($target_val)) {
+            if(!in_array($target_val, $language_list)) {
+                $language_list[] = $target_val;
+            }
+            $target_count += 1;
+            $target_val = $app->request()->post("target_$target_count");
+        }
+
+
+        if(count($language_list) > 1) {
+            foreach($language_list as $language) {
+                if($language == $language_list[0]) {   //if it is the first language add it to this task
+                    $target_id = Languages::saveLanguage($language_list[0]);
+                    $task->setTargetId($target_id);
+                    $task_dao->save($task);
+                } else {
+                    $language_id = Languages::saveLanguage($language);
+                    $task_dao->duplicateTaskForTarget($task, $language_id);
+                }
+            }
+        } else {
+            $target_id = Languages::saveLanguage($language_list[0]);
+            $task->setTargetId($target_id);
+            $task_dao->save($task);
+        }
+
         if (is_null($error) && is_null($title_err) && is_null($word_count_err)) {
             $app->redirect($app->urlFor('task-uploaded', array('task_id' => $task_id)));
         }
     }
+
+    $extra_scripts = "
+    <script language='javascript'>
+    fields = 0;
+    function addInput() {
+        if (fields < 10) {
+            document.getElementById('text').innerHTML += '<label for=\"target_' + (fields + 1) + '\">To language</label>';
+            document.getElementById('text').innerHTML += '<select name=\"target_' + (fields + 1) + '\" id=\"target_' + (fields + 1) + '\">';
+            document.getElementById('text').innerHTML += '</select>';
+            var sel = document.getElementById('target_' + (fields + 1));
+            var options = sel.options;
+            var langs = ".json_encode($language_list).";
+            for (language in langs) {
+                var option = document.createElement('OPTION');
+                option.appendChild(document.createTextNode(langs[language]));
+                option.setAttribute('value', langs[language]);
+                sel.appendChild(option);
+            }
+            sel.options.selectedIndex=0;
+            fields += 1;
+        } else if (fields == 10) {
+            document.getElementById('text').innerHTML += '<br /><div class=\"alert alert-error\">';
+                document.getElementById('text').innerHTML += 'Only ' + fields + ' upload fields allowed.';
+            document.getElementById('text').innerHTML += '</div>';
+            fields++;
+            document.form.add.disabled=true;
+        }
+    }
+    </script>";
 
     $app->view()->appendData(array(
         'error'             => $error,
@@ -361,7 +492,8 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         'word_count_err'    => $word_count_err,
         'url_task_describe' => $app->urlFor('task-describe', array('task_id' => $task_id)),
         'task'              => $task,
-        'languages'         => $language_list
+        'languages'         => $language_list,
+        'extra_scripts'     => $extra_scripts
     ));
     
     $app->render('task.describe.tpl');
@@ -745,7 +877,19 @@ $app->get('/login', function () use ($app) {
     $error = null;
     $tempSettings=new Settings();
     $openid = new LightOpenID($tempSettings->get("site.url"));
-    $app->view()->setData('openid',$tempSettings->get("site.openid"));
+    $use_openid = $tempSettings->get("site.openid");
+    $app->view()->setData('openid', $use_openid);
+    if(isset($use_openid)) {
+        if($use_openid == 'y' || $use_openid == 'h') {
+            $extra_scripts = "
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-jquery.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-en.js\"></script>
+                <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/openid.css\" />";
+            $app->view()->appendData(array('extra_scripts' => $extra_scripts));
+        }
+    }
+
     try {
         $user_dao = new UserDao();
         if (isValidPost($app)){
@@ -866,9 +1010,19 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
 })->name('client-dashboard');
 
 $app->get('/profile/:user_id', function ($user_id) use ($app) {
+    $badge_dao = new BadgeDao();
     $user_dao = new UserDao();
     $user = $user_dao->find(array('user_id' => $user_id));
-    
+
+    if($app->request()->isPost()) {
+        $post = (object) $app->request()->post();
+
+        if($post->badge_id != '') {
+            $badge = $badge_dao->find(array('badge_id' => $post->badge_id));
+            $badge_dao->removeUserBadge($user, $badge);
+        }
+    }
+
     $task_dao = new TaskDao();
     $activeJobs = $task_dao->getUserTasks($user, 10);
 
@@ -876,7 +1030,6 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
 
     $user_tags = $user_dao->getUserTags($user->getUserId());
 
-    $badge_dao = new BadgeDao();
     $org_dao = new OrganisationDao();
     
     $orgIds = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
@@ -897,6 +1050,9 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
             $i++;
         }
     }
+
+    $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
+    $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
     
     $app->view()->setData('orgList',  $orgList);
     $app->view()->appendData(array('badges' => $badges,
@@ -904,7 +1060,8 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
                                     'activeJobs' => $activeJobs,
                                     'archivedJobs' => $archivedJobs,
                                     'user_tags' => $user_tags,
-                                    'this_user' => $user
+                                    'this_user' => $user,
+                                    'extra_scripts' => $extra_scripts
     ));
 
     if($user_dao->getCurrentUser()->getUserId() === $user_id) {
@@ -912,7 +1069,7 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
     }
 
     $app->render('user-public-profile.tpl');
-})->name('user-public-profile');
+})->via('POST')->name('user-public-profile');
 
 $app->get('/profile', function () use ($app) {
     $user_dao = new UserDao();
@@ -1067,6 +1224,111 @@ $app->get('/badge/list', function () use ($app) {
     $app->render('badge-list.tpl');
 })->name('badge-list');
 
+$app->get('/org/create/badge/:org_id/', function ($org_id) use ($app) {
+    if(isValidPost($app)) {
+        $post = (object)$app->request()->post();
+
+        if($post->title == '' || $post->description == '') {
+            $app->flash('error', "All fields must be filled out");
+        } else {
+            $params = array();
+            $params['title'] = $post->title;
+            $params['description'] = $post->description;
+            $params['owner_id'] = $org_id;
+
+            $badge_dao = new BadgeDao();
+            $badge = new Badge($params);
+            $badge_dao->save($badge);
+            $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
+        }
+    }
+
+    $app->view()->setData('org_id', $org_id);
+
+    $app->render('org.create-badge.tpl');
+})->via('POST')->name('org-create-badge');
+
+$app->get('/org/:org_id/manage/:badge_id/', function ($org_id, $badge_id) use ($app) {
+    $badge_dao = new BadgeDao();
+    $badge = $badge_dao->find(array('badge_id' => $badge_id));
+
+    $user_dao = new UserDao();
+    $user_list = $user_dao->getUsersWithBadge($badge);
+
+    $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
+    $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
+
+    $app->view()->setData('badge', $badge);
+    $app->view()->appendData(array(
+            'org_id'        => $org_id,
+            'extra_scripts' =>$extra_scripts
+    ));
+
+    if($app->request()->isPost()) {
+        $post = (object) $app->request()->post();
+
+        if(isset($post->email) && $post->email != '') {
+            if(User::isValidEmail($post->email)) {
+                $user_dao = new UserDao();
+                $user = $user_dao->find(array('email' => $post->email));
+
+                if(!is_null($user)) {
+                    $user_badges = $user_dao->getUserBadges($user);
+                    $badge_ids = array();
+                    if(count($user_badges) > 0) {
+                        foreach($user_badges as $badge_tmp) {
+                            $badge_ids[] = $badge_tmp['badge_id'];
+                        }
+                    }
+
+                    if(!in_array($badge_id, $badge_ids)) {
+                        $badge_dao->assignBadge($user, $badge);
+    
+                        $user_name = '';
+                        if($user->getDisplayName() != '') {
+                            $user_name = $user->getDisplayName();
+                        } else {
+                            $user_name = $user->getEmail();
+                        }
+
+                        $app->flashNow('success', "Successfully Assigned Badge \"".$badge->getTitle()."\" to user $user_name");
+                    } else {
+                        $app->flashNow('error', 'The user '.$post->email.' already has that badge');
+                    }
+                } else {
+                    $app->flashNow('error', 
+                        'The email address '.$post->email.' is not registered on the system. 
+                        Are you using the correct email address?'
+                    );
+                }
+            } else {
+                $app->flashNow('error', "You did not enter a valid email address");
+            }
+        } elseif(isset($post->user_id) && $post->user_id != '') {
+            $user_dao = new UserDao();
+            $user = $user_dao->find(array('user_id' => $post->user_id));
+            $badge_dao->removeUserBadge($user, $badge);
+            $user_name = '';
+            if($user->getDisplayName() != '') {
+                $user_name = $user->getDisplayName();
+            } else {
+                $user_name = $user->getEmail();
+            }
+            $app->flashNow('success', "Successfully removed badge form user $user_name");
+        } else {
+            $app->flashNow('error', "Incorrect POST data");
+        }
+    }
+
+    $user_list = $user_dao->getUsersWithBadge($badge);
+
+    $app->view()->appendData(array(
+            'user_list' => $user_list
+    ));
+
+    $app->render('org.manage-badge.tpl');
+})->via("POST")->name('org-manage-badge');
+
 $app->get('/org/profile/:org_id', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $org_id));
@@ -1074,16 +1336,22 @@ $app->get('/org/profile/:org_id', function ($org_id) use ($app) {
     $user_dao = new UserDao();
     $currentUser = $user_dao->getCurrentUser();
 
-    $org_member_ids = $org_dao->getOrgMembers($org->getId());
+    $badge_dao = new BadgeDao();
+    $org_badges = $badge_dao->getOrgBadges($org_id);
+
+    $org_member_ids = $org_dao->getOrgMembers($org_id);
 
     $org_members = array();
-    foreach($org_member_ids as $org_mem) {
-        $org_members[] = $org_mem['user_id'];
+    if(count($org_member_ids) > 0) {
+        foreach($org_member_ids as $org_mem) {
+            $org_members[] = $org_mem['user_id'];
+        }
     }
 
     $app->view()->setData('current_page', 'org-public-profile');
     $app->view()->appendData(array('org' => $org,
                                     'org_members' => $org_members,
+                                    'org_badges' => $org_badges
     ));
 
     $app->render('org-public-profile.tpl');
@@ -1120,7 +1388,7 @@ $app->get('/org/private/:org_id', 'authUserForOrg', function ($org_id) use ($app
 
 $app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
-    $org = $org_dao->find($org_id);
+    $org = $org_dao->find(array('id' => $org_id));
 
     $user_dao = new UserDao();
 

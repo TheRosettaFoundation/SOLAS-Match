@@ -38,9 +38,18 @@
         <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>Badge List</a></h1></div>
 
         {foreach $badges as $badge }
-    	    <h3>{$badge->getTitle()}</h3>
+    	    <h3>{$badge->getTitle()}
+            {if !is_null($badge->getOwnerId())}
+                {assign var="user_id" value=$this_user->getUserId()}
+                <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
+                    <input type="hidden" name="badge_id" value="{$badge->getBadgeId()}" />
+                    <input type="submit" class="btn pull-right" value="Remove" onClick="return confirmPost()" />
+                </form>
+            {/if}
+            </h3>
             <p>{$badge->getDescription()}</p>
         {/foreach}
+        <hr />
     {/if}
 {/if}
 
