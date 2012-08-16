@@ -40,6 +40,7 @@ ALTER TABLE `archived_task`
 -- Dumping structure for table Solas-Match-test.badges
 CREATE TABLE IF NOT EXISTS `badges` (
   `badge_id` int(11) NOT NULL AUTO_INCREMENT,
+  `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `description` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`badge_id`)
