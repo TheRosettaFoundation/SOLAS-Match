@@ -20,6 +20,7 @@ class BadgeDao
         if($results = $db->Select($query)) {
             $badge_data = array(
                 'badge_id' => $results[0]['badge_id'],
+                'owner_id' => $results[0]['owner_id'],
                 'title' => $results[0]['title'],
                 'description' => $results[0]['description']
             );
@@ -76,6 +77,20 @@ class BadgeDao
                         VALUES (".$db->cleanse($user->getUserId()).", 
                                 ".$db->cleanse($badge->getBadgeId()).")";
             $db->insertStr($query);
+        }
+    }
+
+    public function removeUserBadge($user, $badge)
+    {
+        if(!is_null($badge->getOwnerId())) {
+            $db = new MySQLWrapper();
+            $db->init();
+            $delete = "DELETE FROM user_badges
+                        WHERE user_id=".$db->cleanse($user->getUserId())."
+                        AND badge_id=".$db->cleanse($badge->getBadgeId());
+            $db->Delete($delete);
+        } else {
+            echo "<p>Cannot remove system badges</p>";
         }
     }
 }
