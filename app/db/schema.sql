@@ -995,6 +995,26 @@ ORDER BY uts.score DESC limit lim;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getTaggedTasks
+DROP PROCEDURE IF EXISTS `getTaggedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `lim` INT)
+    READS SQL DATA
+BEGIN
+	SELECT id 
+	FROM task t join task_tag tt on tt.task_id=t.id
+	WHERE tt.tag_id=tID AND NOT  exists (
+							  	SELECT 1		
+								FROM task_claim
+								WHERE task_id = t.id
+							)
+	ORDER BY t.created_time DESC
+	LIMIT lim; 
+END//
+DELIMITER ;
+
+
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';

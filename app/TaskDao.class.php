@@ -343,24 +343,10 @@ New requirement:
 			throw new InvalidArgumentException('Cannot get tasks tagged with ' . $tag . ' because no such tag is in the system.');
 		}
 
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
 		$ret = false;
-		$q = 'SELECT id
-				FROM task t
-				WHERE id IN (
-					SELECT task_id
-					FROM task_tag
-					WHERE tag_id = ' . $db->cleanse($tag_id) . '
-				)
-                AND id NOT IN (
-                    SELECT task_id
-                    FROM task_claim
-                    WHERE task_id = t.id
-                ) 
-				ORDER BY created_time DESC 
-				LIMIT '.$db->cleanse($nb_items);
-		if ($r = $db->Select($q)) {
+		if ($r = $db->call("getTaggedTasks", "{$db->cleanse($tag_id)},{$db->cleanse($nb_items)}")) {
 			$ret = array();
 			foreach($r as $row)	{
 				$ret[] = self::find(array('task_id' => $row['id']));
