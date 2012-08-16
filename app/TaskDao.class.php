@@ -316,25 +316,10 @@ New requirement:
      * Returns an array of tasks ordered by the highest score related to the user
      */
     public function getUserTopTasks($user_id, $nb_items) {
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = 'SELECT t.id
-                    FROM task AS t 
-                    LEFT JOIN (SELECT * 
-                        FROM  user_task_score
-                        WHERE user_id = '.$db->cleanse($user_id).') AS uts
-                    ON t.id = uts.task_id
-                    WHERE t.id NOT IN (
-                        SELECT task_id
-                        FROM task_claim
-                    )
-                    ORDER BY uts.score DESC';
-        if($nb_items != 0) {
-            $query .= ' LIMIT '.$db->cleanse($nb_items);
-        }
-
         $ret = false;
-        if ($result = $db->Select($query)) {
+        if ($result = $db->call("getUserTopTasks", "{$db->cleanse($user_id)},{$db->cleanse($nb_items)}")) {
             $ret = array();
             foreach($result as $row) {
                 $task = self::find(array('task_id' => $row['id']));

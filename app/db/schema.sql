@@ -981,6 +981,19 @@ LIMIT lim;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getUserTopTasks
+DROP PROCEDURE IF EXISTS `getUserTopTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `lim` INT)
+    READS SQL DATA
+    COMMENT 'relpace with more effient code later'
+BEGIN
+SELECT t.id
+FROM task AS t LEFT JOIN (SELECT *FROM user_task_score WHERE user_id = uID) AS uts ON t.id = uts.task_id
+WHERE t.id NOT IN (SELECT task_id FROM task_claim)
+ORDER BY uts.score DESC limit lim;
+END//
+DELIMITER ;
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
