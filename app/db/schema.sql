@@ -968,6 +968,20 @@ insert into task_tag  (task_id,tag_id) values (taskID,tagID);
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getLatestAvailableTasks
+DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT)
+BEGIN
+SELECT t.id
+FROM task AS t
+WHERE t.id NOT IN (SELECT task_id FROM task_claim)						
+ORDER BY created_time DESC
+LIMIT lim;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';

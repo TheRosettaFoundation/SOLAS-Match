@@ -295,19 +295,10 @@ New requirement:
     }
 
     public function getLatestAvailableTasks($nb_items = 10) {
-            $db = new MySQLWrapper();
+            $db = new PDOWrapper();
             $db->init();
-            $q 	= 'SELECT t.id
-                            FROM task AS t
-                            WHERE t.id NOT IN (
-                                    SELECT task_id
-                                    FROM task_claim
-                            )
-                            ORDER BY created_time DESC 
-                            LIMIT '.$db->cleanse($nb_items);
-
             $ret = false;
-            if ($r = $db->Select($q)) {
+            if ($r = $db->call("getLatestAvailableTasks", "{$db->cleanse($nb_items)}")) {
                     $ret = array();
                     foreach($r as $row)	{
                             // Add a new Job object to the array to be returned.
