@@ -1010,9 +1010,19 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
 })->name('client-dashboard');
 
 $app->get('/profile/:user_id', function ($user_id) use ($app) {
+    $badge_dao = new BadgeDao();
     $user_dao = new UserDao();
     $user = $user_dao->find(array('user_id' => $user_id));
-    
+
+    if($app->request()->isPost()) {
+        $post = (object) $app->request()->post();
+
+        if($post->badge_id != '') {
+            $badge = $badge_dao->find(array('badge_id' => $post->badge_id));
+            $badge_dao->removeUserBadge($user, $badge);
+        }
+    }
+
     $task_dao = new TaskDao();
     $activeJobs = $task_dao->getUserTasks($user, 10);
 
@@ -1020,7 +1030,6 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
 
     $user_tags = $user_dao->getUserTags($user->getUserId());
 
-    $badge_dao = new BadgeDao();
     $org_dao = new OrganisationDao();
     
     $orgIds = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
@@ -1041,6 +1050,9 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
             $i++;
         }
     }
+
+    $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
+    $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
     
     $app->view()->setData('orgList',  $orgList);
     $app->view()->appendData(array('badges' => $badges,
@@ -1048,7 +1060,8 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
                                     'activeJobs' => $activeJobs,
                                     'archivedJobs' => $archivedJobs,
                                     'user_tags' => $user_tags,
-                                    'this_user' => $user
+                                    'this_user' => $user,
+                                    'extra_scripts' => $extra_scripts
     ));
 
     if($user_dao->getCurrentUser()->getUserId() === $user_id) {
@@ -1056,7 +1069,7 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
     }
 
     $app->render('user-public-profile.tpl');
-})->name('user-public-profile');
+})->via('POST')->name('user-public-profile');
 
 $app->get('/profile', function () use ($app) {
     $user_dao = new UserDao();
