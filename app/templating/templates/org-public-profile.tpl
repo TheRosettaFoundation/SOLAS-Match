@@ -11,6 +11,11 @@
             {$flash['success']}
         </div>
     {/if}
+    {if isset($flash['info'])}
+        <div class="alert alert-info">
+            {$flash['info']}
+        </div>
+    {/if}
     <div class='page-header'><h1>
     {if $org->getName() != ''}
         {$org->getName()}
@@ -44,13 +49,23 @@
 
 <h3>
     Organisation Badges
-    <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn'>
-        Create Badge
-    </a>
+    {if in_array($user->getUserId(), $org_members)}
+        <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn'>
+            Create Badge
+        </a>
+    {/if}
 </h3>
 {if $org_badges != NULL && count($org_badges) > 0}
     {foreach $org_badges as $badge}
-        <p>{$badge['title']}: {$badge['description']}</p>
+        <p>
+            {if in_array($user->getUserId(), $org_members)}
+                {assign var="badge_id" value=$badge['badge_id']}
+                <a href="{urlFor name="org-assign-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="btn">
+                    Assign
+                </a>
+            {/if}
+            {$badge['title']}: {$badge['description']}
+        </p>
     {/foreach}
     <br />
 {else}

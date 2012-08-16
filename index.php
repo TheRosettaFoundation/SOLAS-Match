@@ -1231,6 +1231,60 @@ $app->get('/org/create/badge/:org_id/', function ($org_id) use ($app) {
     $app->render('org.create-badge.tpl');
 })->via('POST')->name('org-create-badge');
 
+$app->get('/org/:org_id/assign/:badge_id/', function ($org_id, $badge_id) use ($app) {
+    $badge_dao = new BadgeDao();
+    $badge = $badge_dao->find(array('badge_id' => $badge_id));
+
+    $app->view()->setData('badge', $badge);
+    $app->view()->appendData(array(
+            'org_id' => $org_id
+    ));
+
+    if($app->request()->isPost()) {
+        $post = (object) $app->request()->post();
+
+        if(User::isValidEmail($post->email)) {
+            $user_dao = new UserDao();
+            $user = $user_dao->find(array('email' => $post->email));
+
+            if(!is_null($user)) {
+                $user_badges = $user_dao->getUserBadges($user);
+                $badge_ids = array();
+                if(count($user_badges) > 0) {
+                    foreach($user_badges as $badge_tmp) {
+                        $badge_ids[] = $badge_tmp['badge_id'];
+                    }
+                }
+
+                if(!in_array($badge_id, $badge_ids)) {
+                    $badge_dao->assignBadge($user, $badge);
+    
+                    $user_name = '';
+                    if($user->getDisplayName() != '') {
+                        $user_name = $user->getDisplayName();
+                    } else {
+                        $user_name = $user->getEmail();
+                    }
+
+                    $app->flash('info', "Successfully Assigned Badge \"".$badge->getTitle()."\" to user $user_name");
+                    $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
+                } else {
+                    $app->flashNow('error', 'The user '.$post->email.' already has that badge');
+                }
+            } else {
+                $app->flashNow('error', 
+                    'The email address '.$post->email.' is not registered on the system. 
+                    Are you using the correct email address?'
+                );
+            }
+        } else {
+            $app->flashNow('error', "You did not enter a valid email address");
+        }
+    }
+
+    $app->render('org.assign-badge.tpl');
+})->via("POST")->name('org-assign-badge');
+
 $app->get('/org/profile/:org_id', function ($org_id) use ($app) {
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $org_id));
