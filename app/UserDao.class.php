@@ -222,6 +222,26 @@ class UserDao {
     }
 
     /*
+        Get all users with $badge assigned
+    */
+    public function getUsersWithBadge($badge) {
+        $ret = null;
+        $db = new MySQLWrapper();
+        $db->init();
+        $query = "SELECT *
+                    FROM user JOIN user_badges
+                    ON user.user_id = user_badges.user_id
+                    WHERE badge_id = ".$db->cleanse($badge->getBadgeId());
+        if($result = $db->Select($query)) {
+            $ret = array();
+            foreach($result as $row) {
+                $ret[] = new User($row);
+            }
+        }
+        return $ret;
+    }
+
+    /*
         Add the tag to a list of the user's preferred tags
     */
     public function likeTag($user_id, $tag_id)
