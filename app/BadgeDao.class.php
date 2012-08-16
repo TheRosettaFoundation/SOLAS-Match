@@ -30,12 +30,6 @@ class BadgeDao
         $db->init();
         $result=$db->call("getBadge", "null,null,null");
         return $result;
-//        $db = new MySQLWrapper();
-//        $db->init();
-//        $query = 'SELECT *
-//                    FROM badges';
-//        $results = $db->Select($query);
-//        return $results;
     }
 
     public function getOrgBadges($org_id)

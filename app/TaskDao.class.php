@@ -117,6 +117,9 @@ New requirement:
             $args .= isset ($params['source_id'])?"{$db->cleanseNull($params['source_id'])}":",null";
             $args .= isset ($params['target_id'])?"{$db->cleanseNull($params['target_id'])}":",null";
             $args .= isset ($params['created_time'])?"{$db->cleanseNull($params['created_time'])}":",null";
+            $args .= isset ($params['impact'])?"{$db->cleanseNullOrWrapStr($params['impact'])}":",null";
+            $args .= isset ($params['reference_page'])?"{$db->cleanseNullOrWrapStr($params['reference_page'])}":",null";
+            
             $tasks = array();
             foreach($db->call("getTask", $args) as $row){
                 $task_data = array();
@@ -213,49 +216,10 @@ New requirement:
     }
 
 	private function _update($task) {
-		$task_dao = new TaskDao;
-		$existing_task = $task_dao->find(array('task_id' => $task->getTaskId()));
-
-		if (!is_object($existing_task)) {
-			throw new InvalidArgumentException('Cannot update task, as the provided task was not found in the database.');
-		}
-
-		$to_update = array();
-		$db = new MySQLWrapper();
-		$db->init();
-		if ($task->getSourceId() != $existing_task->getSourceId()) {
-			$to_update['source_id'] = $db->cleanse($task->getSourceId());
-		}
-		if ($task->getTargetId() != $existing_task->getTargetId()) {
-			$to_update['target_id'] = $db->cleanse($task->getTargetId());
-		}
-		if ($task->getTitle() != $existing_task->getTitle()) {
-			$to_update['title'] = $db->cleanseWrapStr($task->getTitle());
-		}
-        if ($task->getImpact() != $existing_task->getImpact()) {
-            $to_update['impact'] = $db->cleanseWrapStr($task->getImpact());
-        }
-        if ($task->getReferencePage() != $existing_task->getReferencePage()) {
-            $to_update['reference_page'] = $db->cleanseWrapStr($task->getReferencePage());
-        }
-		if ($task->getWordCount() != $existing_task->getWordCount()) {
-			$to_update['word_count'] = $db->cleanse($task->getWordCount());
-		}
-
-		if (count($to_update) > 0) {
-			$set = array();
-			foreach ($to_update as $key => $value) {
-				$set[] = $key . ' = ' . $value;
-			}
-			$q = 'UPDATE task
-					SET ' . implode(', ', $set) . '
-					WHERE id = ' . $db->cleanse($task->getTaskId()) . '
-					LIMIT 1';
-
-			$db->Update($q);
-		}
-
-		$this->_updateTags($task);
+            $db = new PDOWrapper();
+            $db->init();
+            $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getTaskId())},{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())}");
+            $this->_updateTags($task);
 	}
 
 

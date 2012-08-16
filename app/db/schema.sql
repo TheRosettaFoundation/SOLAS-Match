@@ -200,10 +200,28 @@ CREATE TABLE IF NOT EXISTS `task` (
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP PROCEDURE IF EXISTS addcol;
+DELIMITER //
+CREATE PROCEDURE addcol()
+BEGIN
+	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA like "Solas-Match%" and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+		ALTER TABLE `task`
+		    add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
+		    add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
+	end if;
+END//
+
+DELIMITER ;
+
+CALL addcol();
+
+DROP PROCEDURE addcol;
+
 ALTER TABLE `task`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+    COLLATE='utf8_unicode_ci',
+    ENGINE=InnoDB,
+    CONVERT TO CHARSET utf8;
 -- Dumping data for table Solas-Match-test.task: 0 rows
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
@@ -785,7 +803,7 @@ BEGIN
 		set @q = CONCAT(@q," and t.id=",id) ;
 	end if;
 	if orgID is not null then 
-		set @q = CONCAT(@q," and t.orgisation_id=",orgID) ;
+		set @q = CONCAT(@q," and t.organisation_id=",orgID) ;
 	end if;
 	if name is not null then 
 		set @q = CONCAT(@q," and t.title='",name,"'") ;
@@ -805,6 +823,83 @@ BEGIN
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.taskInsertAndUpdate
+DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME)
+BEGIN
+	if id='' then set id=null;end if;
+	if orgID='' then set orgID=null;end if;
+	if name='' then set name=null;end if;
+	if sID='' then set sID=null;end if;
+	if tID='' then set tID=null;end if;
+	if wordCount='' then set wordCount=null;end if;
+	if created='' then set created=null;end if;
+	
+	if id is null then
+		insert into task (organisation_id,title,word_count,source_id,target_id,created_time)
+		 values (orgID,name,wordCount,sID,tID,created);
+	elseif EXISTS (select 1 from task t where t.id=id) then
+		set @first = true;
+		set @q= "update task t set";-- set update
+		if orgID is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.organisation_id=",orgID) ;
+		end if;
+		if name is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.title='",name,"'") ;
+		end if;
+		if sID is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.source_id=",sID) ;
+		end if;
+		if tID is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.target_id=",tID) ;
+		end if;
+		if wordCount is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.word_count=",wordCount) ;
+		end if;
+		if (created is not null  and created!='0000-00-00 00:00:00') then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.created_time='",created,"'") ;
+		end if;
+		set @q = CONCAT(@q," where  t.id= ",id);
+		PREPARE stmt FROM @q;
+		EXECUTE stmt;
+		DEALLOCATE PREPARE stmt;
+	end if;
+	call getTask(id,orgID,name,wordCount,sID,tID,created);
 END//
 DELIMITER ;
 
