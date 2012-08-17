@@ -368,43 +368,16 @@ New requirement:
 		return $ret;
 	}
 
-	public function recordFileUpload($task, $path, $filename, $content_type, $user_id) {
-		$next_version = $this->nextFileVersionNumber($task);
-		$db = new MySQLWrapper();
+	public function recordFileUpload($task, $filename, $content_type, $user_id) {
+                $db = new PDOWrapper();
 		$db->init();
-
-		$task_file_version = array();
-		$task_file_version['task_id'] 		= $db->cleanse($task->getTaskId());
-		$task_file_version['version_id'] 	= $db->cleanse($next_version);
-		$task_file_version['filename'] 		= $db->cleanseWrapStr($filename);
-		$task_file_version['content_type'] 	= $db->cleanseWrapStr($content_type);
-		$task_file_version['user_id'] 		= $db->cleanse($user_id);
-		$task_file_version['upload_time'] 	= 'NOW()';
-		$ret = $db->Insert('task_file_version', $task_file_version);
-		return $ret;
-	}
-
-	/*
-	 * Return an integer value. Give the next version number when creating a file.
-	 * In other words, if there are versions 1-5 stored now, return 6, as that's
-	 * the next available value.
-	 */
-	public function nextFileVersionNumber($task) {
-		/* I realise this code is dangerous and may cause problems futher down the line.
-		 * The code returns the next available version. However, if a second person
-		 * was also editing the file in parallel, it's possible that their 
-		 * version numbers will get mixed up, or that they get the same version number.
-		 * If that conflict happens, we'll simply reject the commit, or do something
-		 * more user friendly than that.
-		 */
-		$latest_version = self::getLatestFileVersion($task);
-		if ($latest_version !== false) {
-			return $latest_version + 1;
-		}
-		else {
-			return 0;
-		}
-	}
+                $args = "";
+                $args .= "{$db->cleanse($task->getTaskId())}";
+                $args .= ",{$db->cleanseWrapStr($filename)}";
+                $args .= ",{$db->cleanseWrapStr($content_type)}";
+                $args .= ",{$db->cleanse($user_id)}";
+                return $db->call("recordFileUpload", $args);
+        }
 
 	public function getLatestFileVersion($task) {
 		$db = new MySQLWrapper();
