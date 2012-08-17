@@ -1113,6 +1113,44 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getTaskFileMetaData
+DROP PROCEDURE IF EXISTS `getTaskFileMetaData`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskFileMetaData`(IN `tID` INT, IN `vID` INT, IN `name` TEXT, IN `content` VARCHAR(255), IN `uID` INT, IN `uTime` DATETIME)
+    READS SQL DATA
+BEGIN
+	if tID='' then set tID=null;end if;
+	if vID='' then set vID=null;end if;
+	if name='' then set name=null;end if;
+	if content='' then set content=null;end if;
+	if uID='' then set uID=null;end if;
+	if uTime='' then set uTime=null;end if;
+		set @q= "select task_id, version_id, filename, content_type, user_id, upload_time from task_file_version t where 1 ";
+	if tID is not null then 
+		set @q = CONCAT(@q," and t.task_id=",tID) ;
+	end if;
+	if vID is not null then 
+		set @q = CONCAT(@q," and t.version_id=",vID) ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and t.filename='",name,"'") ;
+	end if;
+	if content is not null then 
+		set @q = CONCAT(@q," and t.content_type='",content,"'") ;
+	end if;
+	if uID is not null then 
+		set @q = CONCAT(@q," and t.user_id=",uID) ;
+	end if;
+	if (uTime is not null  and uTime!='0000-00-00 00:00:00')then 
+		set @q = CONCAT(@q," and t.upload_time='",uTime,"'") ;
+	end if;
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+	
+END//
+DELIMITER ;
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';

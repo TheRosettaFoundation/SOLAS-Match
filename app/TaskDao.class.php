@@ -404,14 +404,9 @@ New requirement:
 	}
 
 	private function getFilename($task, $version) {
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$q = 'SELECT filename
-				FROM task_file_version
-				WHERE task_id = ' . $db->cleanse($task->getTaskId())
-				 . ' AND version_id =' . $db->cleanse($version)
-				 . ' LIMIT 1';
-		if ($r = $db->Select($q)) {
+		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($task->getTaskId())},{$db->cleanse($version)}, null, null, null, null")) {
 			return $r[0]['filename'];
 		}
 		else {
@@ -419,25 +414,19 @@ New requirement:
 		}
 	}
 
-    private function saveTaskFileInfo($task_file_info)
-    {
-        $ret = null;
-        $db = new MySQLWrapper();
-        $db->init();
-        $db->Insert('task_file_version', $task_file_info);
-    }
+        private function saveTaskFileInfo($task_file_info)
+        {
+            $ret = null;
+            $db = new MySQLWrapper();
+            $db->init();
+            $db->Insert('task_file_version', $task_file_info);
+        }
 
 	public function getTaskFileInfo($task, $version = 0) {
-		$ret = null;
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$q = 'SELECT *
-				FROM task_file_version
-				WHERE task_id = ' . $db->cleanse($task->getTaskId()) . '
-				AND version_id = ' . $db->cleanse($version) . '
-				LIMIT 1';
 		$ret = false;
-		if ($r = $db->Select($q)) {
+		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($task->getTaskId())},{$db->cleanse($version)}, null, null, null, null")) {
 			$file_info = array();
 			foreach($r[0] as $key => $value) {
 				if (!is_numeric($key)) {
