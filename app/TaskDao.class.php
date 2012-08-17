@@ -380,14 +380,10 @@ New requirement:
         }
 
 	public function getLatestFileVersion($task) {
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-
-		$q = 'SELECT max(version_id) as latest_version
-		 		FROM task_file_version
-		 		WHERE task_id = ' . $db->cleanse($task->getTaskId());
 		$ret = false;
-		if ($r = $db->Select($q)) {
+		if ($r = $db->call("getLatestFileVersion", "{$db->cleanse($task->getTaskId())}")) {
 			if (is_numeric($r[0]['latest_version'])) {
 				$ret =  intval($r[0]['latest_version']);
 			}

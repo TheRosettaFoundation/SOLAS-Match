@@ -1051,23 +1051,39 @@ DELIMITER ;
 
 
 
--- Dumping structure for procedure Solas-Match-Dev.getTopTags
-DROP PROCEDURE IF EXISTS `getTopTags`;
+-- Dumping structure for procedure Solas-Match-Dev.getLatestFileVersion
+DROP PROCEDURE IF EXISTS `getLatestFileVersion`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
-    READS SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestFileVersion`(IN `id` INT)
 BEGIN
-SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
-FROM task_tag AS tt 
-join tag AS t on tt.tag_id = t.tag_id
-join task as tsk on tsk.id=tt.task_id
-WHERE not exists ( SELECT 1
-                    FROM task_claim tc
-                    where tc.task_id=tt.task_id
-                	)
-GROUP BY tt.tag_id
-ORDER BY frequency DESC
-LIMIT lim;
+	SELECT max(version_id) as latest_version FROM task_file_version WHERE task_id =id;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.recordFileUpload
+DROP PROCEDURE IF EXISTS `recordFileUpload`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN `name` TeXT, IN `content` VARCHAR(255), IN `uID` INT)
+    MODIFIES SQL DATA
+BEGIN
+set @maxVer =-1;
+if not exists (select 1 from task_file_version tfv where tfv.task_id=tID AND tfv.filename=name and tfv.content_type =content) then
+	INSERT INTO `task_file_version` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
+	VALUES (tID,1+@maxVer,name, content, uID, Now());
+else
+	
+	select tfv.version_id into @maxVer
+	from task_file_version tfv 
+	where tfv.task_id=tID 
+	AND tfv.filename=name 
+	and tfv.content_type =content 
+	order by tfv.version_id desc
+	limit 1;
+	INSERT INTO `task_file_version` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
+	VALUES (tID,1+@maxVer,name, content, uID, Now());
+end if;
+select 1+@maxVer as version;
 END//
 DELIMITER ;
 
