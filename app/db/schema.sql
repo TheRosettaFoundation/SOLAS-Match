@@ -50,6 +50,22 @@ ALTER TABLE `badges`
 	ENGINE=InnoDB,
 	CONVERT TO CHARSET utf8;
 
+DROP PROCEDURE IF EXISTS addcol;
+DELIMITER //
+CREATE PROCEDURE addcol()
+BEGIN
+	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='badges'and c.TABLE_SCHEMA like "Solas-Match%" and c.COLUMN_NAME="owner_id") then
+		ALTER TABLE `task`
+		    add column `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL;
+	end if;
+END//
+
+DELIMITER ;
+
+CALL addcol();
+
+DROP PROCEDURE addcol;
+
 -- Dumping data for table Solas-Match-test.badges: ~3 rows (approximately)
 /*!40000 ALTER TABLE `badges` DISABLE KEYS */;
 REPLACE INTO `badges` (`badge_id`, `title`, `description`) VALUES
