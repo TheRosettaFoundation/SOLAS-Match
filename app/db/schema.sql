@@ -1102,6 +1102,17 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.logFileDownload
+DROP PROCEDURE IF EXISTS `logFileDownload`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `logFileDownload`(IN `tID` INT, IN `vID` INT, IN `uID` INT)
+    MODIFIES SQL DATA
+BEGIN
+	insert into task_file_version_download (task_id,version_id,user_id,time_downloaded) 
+	values (tID,uID,vID,Now());
+END//
+DELIMITER ;
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';

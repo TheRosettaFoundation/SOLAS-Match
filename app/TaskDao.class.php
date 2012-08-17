@@ -398,14 +398,9 @@ New requirement:
 	}
 
 	public function logFileDownload($task, $version) {
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$down = array();
-		$down['task_id'] = $db->cleanse($task->getTaskId());
-		$down['version_id'] = $db->cleanse($version);
-		$down['user_id'] = 'NULL'; // TODO record user
-		$down['time_downloaded'] = 'NOW()';
-		return $db->Insert('task_file_version_download', $down);
+                $db->call("logFileDownload", "{$db->cleanse($task->getTaskId())},{$db->cleanse($version)},null");
 	}
 
 	private function getFilename($task, $version) {
