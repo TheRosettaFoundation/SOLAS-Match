@@ -392,18 +392,9 @@ New requirement:
 	}
 
 	public function moveToArchive($task) {
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$query = 'INSERT INTO `archived_task`
-	            		(task_id, organisation_id, title, word_count, source_id, target_id, created_time, archived_time)
-         			SELECT id, organisation_id, title, word_count, source_id, target_id, created_time, NOW()
-               		FROM task
-               		WHERE id = ' . $db->cleanse($task->getTaskId());
-		$db->insertStr($query);
-		$query = 'DELETE FROM `task`
-					WHERE id = ' . $db->cleanse($task->getTaskId()) .' 
-					LIMIT 1';
-		$db->Delete($query);
+                $db->call("archiveTask", "{$db->cleanse($task->getTaskId())}");
 	}
 
 	public function logFileDownload($task, $version) {

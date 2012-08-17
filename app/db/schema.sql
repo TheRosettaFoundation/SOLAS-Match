@@ -1087,6 +1087,21 @@ select 1+@maxVer as version;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.archiveTask
+DROP PROCEDURE IF EXISTS `archiveTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT)
+    MODIFIES SQL DATA
+BEGIN
+	INSERT INTO `archived_task`(task_id, organisation_id, title, word_count, source_id, target_id, created_time, archived_time)
+		SELECT id, organisation_id, title, word_count, source_id, target_id, created_time, NOW()
+		FROM task   WHERE id =tID;
+   
+   DELETE FROM task WHERE id = tID ;
+   DELETE FROM user_task_score WHERE task_id = tID;
+END//
+DELIMITER ;
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
