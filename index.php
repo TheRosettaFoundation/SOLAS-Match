@@ -1389,6 +1389,44 @@ $app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use
     $org = $org_dao->find(array('id' => $org_id));
 
     $user_dao = new UserDao();
+    
+    if($app->request()->isPost()) {
+        $post = (object)$app->request()->post();
+        
+        if(!is_null($post->email) && User::isValidEmail($post->email)) {
+            $user = $user_dao->find(array('email' => $post->email));
+
+            if(!is_null($user)) {
+                $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+
+                if($user->getDisplayName() != '') {
+                    $user_name = $user->getDisplayName();
+                } else {
+                    $user_name = $user->getEmail();
+                }
+                if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
+                    $org_dao->acceptMemRequest($org_id, $user->getUserId());
+
+                    if($org->getName() != '') {
+                        $org_name = $org->getName();
+                    } else {
+                        $org_name = "Organisation $org_id";
+                    }
+                    $app->flashNow('success', "Successfully added $user_name as a member of $org_name");
+                } else {
+                    $app->flashNow('error', "$user_name is already a member of this organisation");
+                }
+            } else {
+                $email = $post->email;
+                $app->flashNow('error', 
+                    "The email address $email is not registered with this system.
+                    Are you sure you have the right email addess?"
+                );
+            }
+        } else {
+            $app->flashNow('error', 'You did not enter a valid email address');
+        }
+    }
 
     $requests = $org_dao->getMembershipRequests($org_id);
     $user_list = array();
@@ -1402,7 +1440,7 @@ $app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use
     $app->view()->appendData(array('user_list' => $user_list));
 
     $app->render('org.request_queue.tpl');
-})->name('org-request-queue');
+})->via("POST")->name('org-request-queue');
 
 $app->get('/org/:org_id/request/:user_id/:accept', function ($org_id, $user_id, $accept) use ($app) {
     $org_dao = new OrganisationDao();
