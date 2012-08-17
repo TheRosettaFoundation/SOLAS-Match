@@ -118,7 +118,7 @@ function authUserForOrg($request, $response, $route) {
         if(is_object($user)) {
             $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
             if(!is_null($user_orgs)) {
-                if(in_array($org_id, $user_dao->findOrganisationsUserBelongsTo($user->getUserId()))) {
+                if(in_array($org_id, $user_orgs)) {
                     return true;
                 }
             }
@@ -130,7 +130,40 @@ function authUserForOrg($request, $response, $route) {
     if(isset($org_id)) {
         $org_dao = new OrganisationDao();
         $org = $org_dao->find(array('id' => $org_id));
-        $org_name = $org->getName();
+        $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
+    }
+    $app->flash('error', "You are not authorised to view this profile. Only members of ".$org_name." may view this page.");
+    $app->redirect($app->urlFor('home'));
+}
+
+/*
+ *  Middleware for ensuring the current user belongs to the Org that uploaded the associated Task
+ *  Used for altering task details
+ */
+function authUserForOrgTask($request, $response, $route) {
+    $params= $route->getParams();
+    if($params != NULL) {
+        $task_id = $params['task_id'];
+        $task_dao = new TaskDao();
+        $task = $task_dao->find(array('task_id' => $task_id));
+
+        $org_id = $task->getOrganisationId();
+        $user_dao = new UserDao();
+        $user = $user_dao->getCurrentUser();
+        if(is_object($user)) {
+            $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+            if(!is_null($user_orgs) && in_array($org_id, $user_orgs)) {
+                return true;
+            }
+        }
+    }
+
+    $app = Slim::getInstance();
+    $org_name = 'this organisation';
+    if(isset($org_id)) {
+        $org_dao = new OrganisationDao();
+        $org = $org_dao->find(array('id' => $org_id));
+        $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
     }
     $app->flash('error', "You are not authorised to view this profile. Only members of ".$org_name." may view this page.");
     $app->redirect($app->urlFor('home'));
@@ -320,7 +353,7 @@ $app->get('/task/view/:task_id/', function ($task_id) use ($app) {
     $app->render('task.view.tpl');
 })->name('task-view');
 
-$app->get('/task/alter/:task_id/', function ($task_id) use ($app) {
+$app->get('/task/alter/:task_id/', 'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -607,7 +640,7 @@ $app->get('/task/id/:task_id/download-preview/', $authenticateForRole('translato
 })->name('download-task-preview');
 
 $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('translator'), 
-            'authenticateUserForTask', function ($task_id, $version) use ($app) {
+            'authUserForOrgTask', function ($task_id, $version) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -734,7 +767,7 @@ $app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator')
 })->name('download-task');
 
 $app->get('/task/id/:task_id/mark-archived/', $authenticateForRole('organisation_member'), 
-            'authenticateUserForTask', function ($task_id) use ($app) {
+            'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -756,7 +789,7 @@ $app->get('/task/id/:task_id/mark-archived/', $authenticateForRole('organisation
 })->name('archive-task');
 
 $app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('translator'), 
-            'authenticateUserForTask', function ($task_id) use ($app) {
+            'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -1220,7 +1253,7 @@ $app->get('/badge/list', function () use ($app) {
     $app->render('badge-list.tpl');
 })->name('badge-list');
 
-$app->get('/org/create/badge/:org_id/', function ($org_id) use ($app) {
+$app->get('/org/create/badge/:org_id/', 'authUserForOrg', function ($org_id) use ($app) {
     if(isValidPost($app)) {
         $post = (object)$app->request()->post();
 
@@ -1244,7 +1277,7 @@ $app->get('/org/create/badge/:org_id/', function ($org_id) use ($app) {
     $app->render('org.create-badge.tpl');
 })->via('POST')->name('org-create-badge');
 
-$app->get('/org/:org_id/manage/:badge_id/', function ($org_id, $badge_id) use ($app) {
+$app->get('/org/:org_id/manage/:badge_id/', 'authUserForOrg', function ($org_id, $badge_id) use ($app) {
     $badge_dao = new BadgeDao();
     $badge = $badge_dao->find(array('badge_id' => $badge_id));
 
@@ -1440,7 +1473,7 @@ $app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use
     $app->render('org.request_queue.tpl');
 })->via("POST")->name('org-request-queue');
 
-$app->get('/org/:org_id/request/:user_id/:accept', function ($org_id, $user_id, $accept) use ($app) {
+$app->get('/org/:org_id/request/:user_id/:accept', 'authUserForOrg', function ($org_id, $user_id, $accept) use ($app) {
     $org_dao = new OrganisationDao();
     if($accept == "true") {
         echo "<p>Accepting Request</p>";
