@@ -1,5 +1,5 @@
 {
-    "hash": "c1cbb0f8873dae8e9406d72261e673ec",
+    "hash": "63aa23a2f69324c9c6a6a66083b5a28d",
     "packages": [
         {
             "package": "slim/extras",
@@ -7,7 +7,7 @@
         },
         {
             "package": "slim/slim",
-            "version": "1.6.2"
+            "version": "1.6.3"
         },
         {
             "package": "smarty/smarty",

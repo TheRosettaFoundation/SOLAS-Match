@@ -18,7 +18,7 @@
     },
 
     "require": {
-        "slim/slim": "1.6.2",
+        "slim/slim": "1.6.3",
         "slim/extras": "1.0.*",
         "smarty/smarty": "3.1.*"
     },
