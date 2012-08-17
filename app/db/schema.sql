@@ -1029,6 +1029,25 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getTopTags
+DROP PROCEDURE IF EXISTS `getTopTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
+    READS SQL DATA
+BEGIN
+SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
+FROM task_tag AS tt 
+join tag AS t on tt.tag_id = t.tag_id
+join task as tsk on tsk.id=tt.task_id
+WHERE not exists ( SELECT 1
+                    FROM task_claim tc
+                    where tc.task_id=tt.task_id
+                	)
+GROUP BY tt.tag_id
+ORDER BY frequency DESC
+LIMIT lim;
+END//
+DELIMITER ;
 
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert

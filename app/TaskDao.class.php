@@ -357,23 +357,9 @@ New requirement:
 
 	function getTopTags ($limit = 30) {
 		$ret = false;
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$q = 'SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
-                FROM task_tag AS tt, tag AS t
-                WHERE tt.tag_id = t.tag_id
-                AND tt.task_id IN (
-                    SELECT id
-                    FROM task
-                )
-                AND tt.task_id NOT IN (
-                    SELECT task_id
-                    FROM task_claim
-                )
-                GROUP BY tt.tag_id
-                ORDER BY frequency DESC
-                LIMIT '.intval($limit);
-		if ($r = $db->Select($q)) {
+		if ($r = $db->call("getTopTags", "{$db->cleanse($limit)}")) {
 			$ret = array();
 			foreach ($r as $row) {
 				$ret[] = $row['label'];
