@@ -1072,9 +1072,18 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Dev.getLatestFileVersion
 DROP PROCEDURE IF EXISTS `getLatestFileVersion`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestFileVersion`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestFileVersion`(IN `id` INT, IN `uID` INT)
 BEGIN
-	SELECT max(version_id) as latest_version FROM task_file_version WHERE task_id =id;
+	if uID='' then set uID=null;end if;
+	set @q= "SELECT max(version_id) as latest_version  FROM task_file_version tfv ";-- set update
+	set @q = CONCAT(@q," where tfv.task_id =",id);
+	if uID is not null then 
+		set @q = CONCAT(@q," and tfv.user_id=",uID);
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 

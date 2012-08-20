@@ -383,7 +383,7 @@ New requirement:
 		$db = new PDOWrapper();
 		$db->init();
 		$ret = false;
-		if ($r = $db->call("getLatestFileVersion", "{$db->cleanse($task->getTaskId())}")) {
+		if ($r = $db->call("getLatestFileVersion", "{$db->cleanse($task->getTaskId())},null")) {
 			if (is_numeric($r[0]['latest_version'])) {
 				$ret =  intval($r[0]['latest_version']);
 			}
@@ -442,7 +442,7 @@ New requirement:
 		$db = new PDOWrapper();
 		$db->init();
                 $ret = $db->call("claimTask", "{$db->cleanse($task->getTaskId())},{$db->cleanse($user->getUserId())}");
-		return $ret[0]['reslut'];
+		return $ret[0]['result'];
 	}
 
 	public function hasUserClaimedTask($user_id, $task_id) {
@@ -529,19 +529,9 @@ New requirement:
      */
     private function _check_task_file_version($task_id, $user_id = null)
     {
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = 'SELECT *
-                FROM task_file_version
-                WHERE task_id = '.$db->cleanse($task_id).'
-                AND version_id > 0';
-        if(!is_null($user_id)) {
-            $query .= ' AND user_id = '.$db->cleanse($user_id);
-        }
-        if(!$db->Select($query)) {
-            return false;
-        } else {
-            return true;
-        }
+        $result = $db->call("getLatestFileVersion","{$db->cleanse($task_id)},{$db->cleanseNull($user_id)}");
+        return $result[0]['latest_version']>0;
     }
 }
