@@ -1151,6 +1151,16 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.claimTask
+DROP PROCEDURE IF EXISTS `claimTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `claimTask`(IN `tID` INT, IN `uID` INT)
+BEGIN
+	insert into task_claim  (task_id,user_id) values (tID,uID);
+	select 1 as result;
+END//
+DELIMITER ;
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';

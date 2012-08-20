@@ -199,11 +199,11 @@ New requirement:
         $this->save($task);
 
         //Generate new file info and save it
-        $task_file_info['task_id'] = $task->getTaskId();
-        $task_file_info['upload_time'] = '"'.$task_file_info['upload_time'].'"';
-        $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
-        $task_file_info['content_type'] = '"'.$task_file_info['content_type'].'"';
         $this->recordFileUpload($task,$task_file_info['filename'],$task_file_info['content_type'],$_SESSION['user_id']);
+
+
+        
+        $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
 
         //Get the new path the file can be found at
         $file_info = $this->getTaskFileInfo($task);
@@ -439,16 +439,10 @@ New requirement:
 	}
 
 	public function claimTask($task, $user) {
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-
-		$task_claim = array();
-		$task_claim['task_id'] 			= $db->cleanse($task->getTaskId());
-		$task_claim['user_id'] 			= $db->cleanse($user->getUserId());
-		$task_claim['claimed_time']	= 'NOW()';
-
-		$ret = $db->Insert('task_claim', $task_claim);
-		return $ret;
+                $ret = $db->call("claimTask", "{$db->cleanse($task->getTaskId())},{$db->cleanse($user->getUserId())}");
+		return $ret[0]['reslut'];
 	}
 
 	public function hasUserClaimedTask($user_id, $task_id) {
