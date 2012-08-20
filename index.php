@@ -449,7 +449,20 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             $task->setReferencePage($post->reference);
         }
 
-        $task->setTags(Tags::separateTags($post->tags));
+        $tags = $post->tags;
+        if(is_null($tags)) {
+            $tags = '';
+        }
+
+        $task_file_info = $task_dao->getTaskFileInfo($task);
+        $filename = $task_file_info['filename'];
+        if($pos = strrpos($filename, '.')) {
+            $extension = substr($filename, $pos + 1);
+            $extension = strtolower($extension);
+            $tags .= " $extension";
+        }
+
+        $task->setTags(Tags::separateTags($tags));
         if($post->word_count != '') {
             $task->setWordCount($post->word_count);
         } else {
