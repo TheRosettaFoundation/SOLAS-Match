@@ -1075,17 +1075,24 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
         $post = (object) $app->request()->post();
 
         if(isset($post->track)) {
+            $task = $task_dao->find(array('task_id' => $post->task_id));
+            $task_title = '';
+            if($task->getTitle() != '') {
+                $task_title = $task->getTitle();
+            } else {
+                $task_title = "task ".$task->getTaskId();
+            }
             if($post->track == "Ignore") {
                 if($user_dao->ignoreTask($current_user->getUserId(), $post->task_id)) {
-                    $app->flashNow('success', 'No longer receiving notifications from task');
+                    $app->flashNow('success', 'No longer receiving notifications from '.$task_title.'.');
                 } else {
-                    $app->flashNow('error', 'Unable to unsubscribe from taks notifications');
+                    $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
                 }
             } elseif($post->track == "Track") {
                 if($user_dao->trackTask($current_user->getUserId(), $post->task_id)) {
-                    $app->flashNow('success', 'You will now receive notifications for task');
+                    $app->flashNow('success', 'You will now receive notifications for '.$task_title.'.');
                 } else {
-                    $app->flashNow('error', 'Unable to subscribe to task');
+                    $app->flashNow('error', 'Unable to subscribe to '.$task_title.'.');
                 }
             } else {
                 $app->flashNow('error', 'Invalid POST type');
