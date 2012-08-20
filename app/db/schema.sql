@@ -414,6 +414,17 @@ ALTER TABLE `user_tag`
 /*!40000 ALTER TABLE `user_tag` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user_tag` ENABLE KEYS */;
 
+CREATE TABLE IF NOT EXISTS `user_notifications` (
+    `user_id` int(11) NOT NULL,
+    `task_id` int (11) NOT NULL,
+    `created_time` datetime NOT NULL,
+    PRIMARY KEY (`user_id`, `task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `user_notifications`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=InnoDB,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping structure for table Solas-Match-test.user_task_score
 CREATE TABLE IF NOT EXISTS `user_task_score` (
@@ -1262,5 +1273,61 @@ BEGIN
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
+
+DROP PROCEDURE IF EXISTS `getUserNotifications`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserNotifications`(IN `id` INT)
+BEGIN
+	SELECT *
+	FROM user_notifications
+	WHERE user_id = id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `userSubscribedToTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToTask`(IN `userId` INT, IN `taskId` INT)
+BEGIN
+	if EXISTS (SELECT task_id 
+                	FROM user_notifications
+                	WHERE user_id = userId
+                    AND task_id = taskId) then
+		select 1 as 'result';
+	else
+    	select 0 as 'result';
+	end if;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `userNotificationsInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userNotificationsInsertAndUpdate`(IN `user_id` INT, IN `task_id` INT)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+BEGIN
+	insert into user_notifications  (user_id, task_id, created_time) values (user_id, task_id, NOW());
+    select 1 as "result";
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removeUserNotification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserNotification`(IN `userId` INT, IN `taskId` INT)
+    COMMENT 'Remove a task from the users notification list'
+BEGIN
+	if EXISTS(  SELECT *
+	                FROM user_notifications
+	                WHERE user_id = userId
+	                AND task_id = taskId) then                 
+		DELETE 	FROM user_notifications	WHERE user_id=userId AND task_id =taskId; 
+		select 1 as 'result';
+	else
+	select 0 as 'result';
+	end if;
+END//
+DELIMITER ;
+
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

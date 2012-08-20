@@ -165,7 +165,7 @@ function authUserForOrgTask($request, $response, $route) {
         $org = $org_dao->find(array('id' => $org_id));
         $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
     }
-    $app->flash('error', "You are not authorised to view this profile. Only members of ".$org_name." may view this page.");
+    $app->flash('error', "You are not authorised to view this page. Only members of ".$org_name." may view this page.");
     $app->redirect($app->urlFor('home'));
 }
 
@@ -338,20 +338,50 @@ $app->get('/task/:task_id/uploaded-edit/', 'authenticateUserForTask', function (
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
 
-$app->get('/task/view/:task_id/', function ($task_id) use ($app) {
+$app->get('/task/view/:task_id/', 'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
     $app->view()->setData('task', $task);
+
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+    if($app->request()->isPost()) {
+        $post = (object) $app->request()->post();
+
+        if(isset($post->notify) && $post->notify == "true") {
+
+            if($user_dao->trackTask($user->getUserId(), $task_id)) {
+                $app->flashNow("success", 
+                    "You are now tracking this task and will receive email notifications
+                    when its status changes.");
+            } else {
+                $app->flashNow("error", "Unable to register for notifications for this task.");
+            }
+        } else {
+
+            if($user_dao->ignoreTask($user->getUserId(), $task_id)) {
+                $app->flashNow("success", 
+                    "You are no longer tracking this task and will receive no
+                    further emails."
+                );
+            } else {
+                $app->flashNow("error", "Unable to unregister for this notification.");
+            }
+        }
+    }
+
+    $registered = $user_dao->isSubscribedToTask($user->getUserId(), $task_id);
 
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $task->getOrganisationId()));
 
     $app->view()->appendData(array(
-            'org' => $org
+            'org' => $org,
+            'registered' => $registered
     ));
 
     $app->render('task.view.tpl');
-})->name('task-view');
+})->via("POST")->name('task-view');
 
 $app->get('/task/alter/:task_id/', 'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
@@ -1042,12 +1072,42 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
         $org_tasks[$org->getId()] = $my_org_tasks;
         $orgs[$org->getId()] = $org;
     }
+
+    if($app->request()->isPost()) {
+        $post = (object) $app->request()->post();
+
+        if(isset($post->track)) {
+            $task = $task_dao->find(array('task_id' => $post->task_id));
+            $task_title = '';
+            if($task->getTitle() != '') {
+                $task_title = $task->getTitle();
+            } else {
+                $task_title = "task ".$task->getTaskId();
+            }
+            if($post->track == "Ignore") {
+                if($user_dao->ignoreTask($current_user->getUserId(), $post->task_id)) {
+                    $app->flashNow('success', 'No longer receiving notifications from '.$task_title.'.');
+                } else {
+                    $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
+                }
+            } elseif($post->track == "Track") {
+                if($user_dao->trackTask($current_user->getUserId(), $post->task_id)) {
+                    $app->flashNow('success', 'You will now receive notifications for '.$task_title.'.');
+                } else {
+                    $app->flashNow('error', 'Unable to subscribe to '.$task_title.'.');
+                }
+            } else {
+                $app->flashNow('error', 'Invalid POST type');
+            }
+        }
+    }
     
     if(count($org_tasks) > 0) {
         $app->view()->appendData(array(
                 'org_tasks' => $org_tasks,
                 'orgs' => $orgs,
-                'task_dao' => $task_dao
+                'task_dao' => $task_dao,
+                'user_dao' => $user_dao
         ));
     }
 
@@ -1055,7 +1115,7 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
         'current_page'  => 'client-dashboard'
     ));
     $app->render('client.dashboard.tpl');
-})->name('client-dashboard');
+})->via('POST')->name('client-dashboard');
 
 $app->get('/profile/:user_id', function ($user_id) use ($app) {
     $badge_dao = new BadgeDao();
