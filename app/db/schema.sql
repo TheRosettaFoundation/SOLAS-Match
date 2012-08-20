@@ -362,6 +362,17 @@ ALTER TABLE `user_tag`
 /*!40000 ALTER TABLE `user_tag` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user_tag` ENABLE KEYS */;
 
+CREATE TABLE IF NOT EXISTS `user_notifications` (
+    `user_id` int(11) NOT NULL,
+    `task_id` int (11) NOT NULL,
+    `created_time` datetime NOT NULL,
+    PRIMARY KEY (`user_id`, `task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `user_notifications`
+	COLLATE='utf8_unicode_ci',
+	ENGINE=InnoDB,
+	CONVERT TO CHARSET utf8;
 
 -- Dumping structure for table Solas-Match-test.user_task_score
 CREATE TABLE IF NOT EXISTS `user_task_score` (
