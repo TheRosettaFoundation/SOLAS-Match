@@ -200,10 +200,10 @@ New requirement:
 
         //Generate new file info and save it
         $task_file_info['task_id'] = $task->getTaskId();
-        $task_file_info['upload_time'] = "\"".$task_file_info['upload_time']."\"";
-        $task_file_info['filename'] = "\"".$task_file_info['filename']."\"";
-        $task_file_info['content_type'] = "\"".$task_file_info['content_type']."\"";
-        $this->saveTaskFileInfo($task_file_info);
+        $task_file_info['upload_time'] = '"'.$task_file_info['upload_time'].'"';
+        $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
+        $task_file_info['content_type'] = '"'.$task_file_info['content_type'].'"';
+        $this->recordFileUpload($task,$task_file_info['filename'],$task_file_info['content_type'],$_SESSION['user_id']);
 
         //Get the new path the file can be found at
         $file_info = $this->getTaskFileInfo($task);
@@ -375,7 +375,7 @@ New requirement:
                 $args .= "{$db->cleanse($task->getTaskId())}";
                 $args .= ",{$db->cleanseWrapStr($filename)}";
                 $args .= ",{$db->cleanseWrapStr($content_type)}";
-                $args .= ",{$db->cleanse($user_id)}";
+                $args .= ",{$db->cleanseNull($user_id)}";
                 return $db->call("recordFileUpload", $args);
         }
 
@@ -414,13 +414,13 @@ New requirement:
 		}
 	}
 
-        private function saveTaskFileInfo($task_file_info)
-        {
-            $ret = null;
-            $db = new MySQLWrapper();
-            $db->init();
-            $db->Insert('task_file_version', $task_file_info);
-        }
+//        private function saveTaskFileInfo($task_file_info)
+//        {
+//            $ret = null;
+//            $db = new MySQLWrapper();
+//            $db->init();
+//            $db->Insert('task_file_version', $task_file_info);
+//        }
 
 	public function getTaskFileInfo($task, $version = 0) {
 		$db = new PDOWrapper();
