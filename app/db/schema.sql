@@ -1174,6 +1174,15 @@ SELECT exists	(	select 1
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.taskIsClaimed
+DROP PROCEDURE IF EXISTS `taskIsClaimed`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskIsClaimed`(IN `tID` INT)
+BEGIN
+Select exists (SELECT 1	FROM task_claim WHERE task_id = tID) as result;
+END//
+DELIMITER ;
+
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
