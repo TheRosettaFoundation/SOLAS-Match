@@ -13,6 +13,18 @@
     </a>
 </h1>
 
+{if isset($flash['success'])}
+    <p class="alert alert-success">
+        {$flash['success']}
+    </p>
+{/if}
+
+{if isset($flash['error'])}
+    <p class="alert alert-error">
+        <b>Warning!</b> {$flash['error']}
+    </p>
+{/if}
+
 {if isset($org)}
     <h3>Organisation</h3>
     <p>
@@ -63,5 +75,30 @@
 
 <h3>Word Count</h3>
 <p>{$task->getWordCount()}</p>
+
+
+{if isset($user)}
+    <hr />
+
+    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" class="well">
+        {if isset($registered) && $registered == true}
+            <p>
+                <input type="hidden" name="notify" value="false" />
+                <input type="submit" class="btn btn-primary" value="Ignore Task" />
+                You are currently receiving notifications about this task
+            </p>
+        {else}
+            <p>
+                <input type="hidden" name="notify" value="true" />
+                <input type="submit" class="btn btn-primary" value="Track Task" />
+                You are not currently receiving notifications about this task
+            </p>
+        {/if}
+    </form>
+{else}
+    <p class="alert alert-info">
+        Please log in to register for notifications for this task
+    </p>
+{/if}
 
 {include file="footer.tpl"}
