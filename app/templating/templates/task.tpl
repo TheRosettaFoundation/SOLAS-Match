@@ -19,7 +19,7 @@
 		
 	<p>
 		<span class="time_since">{IO::timeSinceSqlTime($task->getCreatedTime())} ago</span>
-		&middot; {Organisations::nameFromId($task->getOrganisationId())}
+		&middot; {OrganisationDao::nameFromId($task->getOrganisationId())}
 		{assign var="wordcount" value=$task->getWordCount()}
 		{if $wordcount}
 			&middot; {$wordcount|number_format} words

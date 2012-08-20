@@ -16,6 +16,21 @@ class OrganisationDao {
         }
         return $ret;
     }
+    
+    public static function nameFromId($organisation_id)
+	{
+		$ret = false;
+		$db = new MySQLWrapper();
+		$db->init();
+		$q = 'SELECT name
+				FROM organisation
+				WHERE id = '.intval($organisation_id);
+		if ($r = $db->Select($q))
+		{
+			$ret = $r[0]['name'];
+		}
+		return $ret;
+	}
 
     public function getOrgByUser($user_id) {//currently not used
         $ret = null;

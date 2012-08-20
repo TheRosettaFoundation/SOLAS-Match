@@ -26,7 +26,7 @@
 		&middot; By 
         {assign var="org_id" value=$task->getOrganisationId()}
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-            {Organisations::nameFromId($task->getOrganisationId())}
+            {OrganisationDao::nameFromId($task->getOrganisationId())}
         </a>
 		{if $task->getWordcount()}
 			&middot; {$task->getWordcount()|number_format} words
