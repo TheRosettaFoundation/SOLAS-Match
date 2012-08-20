@@ -27,6 +27,24 @@ CREATE TABLE IF NOT EXISTS `archived_task` (
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP PROCEDURE IF EXISTS addcol;
+DELIMITER //
+CREATE PROCEDURE addcol()
+BEGIN
+	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='archived_task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+		ALTER TABLE `archived_task`
+		    add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
+		    add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
+	end if;
+END//
+
+DELIMITER ;
+
+CALL addcol();
+
+DROP PROCEDURE addcol;
+
 ALTER TABLE `archived_task`
 	COLLATE='utf8_unicode_ci',
 	ENGINE=InnoDB,
@@ -1180,6 +1198,32 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskIsClaimed`(IN `tID` INT)
 BEGIN
 Select exists (SELECT 1	FROM task_claim WHERE task_id = tID) as result;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getUserArchivedTasks
+DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT)
+BEGIN
+SELECT * FROM archived_task as a JOIN task_claim as c ON a.task_id = c.task_id
+WHERE user_id = uID
+ORDER BY created_time DESC
+limit lim;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.getUserTasks
+DROP PROCEDURE IF EXISTS `getUserTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT)
+BEGIN
+SELECT * 
+FROM task JOIN task_claim ON task_claim.task_id = task.id
+WHERE user_id = uID
+ORDER BY created_time DESC
+limit lim;
 END//
 DELIMITER ;
 
