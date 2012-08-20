@@ -215,30 +215,14 @@ New requirement:
     }
 
     private function _updateTags($task) {
-            $this->_unlinkStoredTags($task);
-            $this->_storeTagLinks($task);
-    }
-
-    private function _unlinkStoredTags($task) {
-            $db = new PDOWrapper();
-            $db->init();
-            $db->call("unlinkStoredTags", "{$db->cleanse($task->getTaskId())}");
-    }
-
-    private function _storeTagLinks($task) {
+            TaskTags::deleteTaskTags($task);
             if ($tags = $task->getTags()) {
                     if ($tag_ids = $this->_tagsToIds($tags)) {
-                            $db = new PDOWrapper();
-                            $db->init();
-                            foreach ($tag_ids as $tag_id) {
-                                    $ins = array();
-                                    $ins['task_id'] = $db->cleanse($task->getTaskId());
-                                    $ins['tag_id'] = $db->cleanse($tag_id);
-                                    $db->call("storeTagLinks", "{$db->cleanse($task->getTaskId())},{$db->cleanse($tag_id)}");
-                            }
+                          TaskTags::setTaskTags($task, $tag_ids);
                     }
             }
     }
+
 
     private function _tagsToIds($tags) {
             $tag_ids = array();
