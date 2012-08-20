@@ -1,27 +1,20 @@
 <?php
 
 class TaskTags {
-	public static function getTags($task) {
-		$db = new MySQLWrapper();
+	public static function getTags($task_id) {
+                $db = new PDOWrapper();
 		$db->init();
-		$q = 'SELECT tag_id
-				FROM task_tag
-				WHERE task_id = ' . $db->cleanse($task->getTaskId());
-		$ret = false;
-		if ($r = $db->Select($q))
-		{
+		$ret = null;
+		if ($result = $db->call("getTaskTags", "{$db->cleanseNull($task_id)}")) {
 			$ret = array();
-			$tags_dao = new TagsDao();
-			foreach($r as $row)	{
-				if ($tag = $tags_dao->find(array('tag_id' => $row['tag_id']))) {
-					$ret[] = $tag;
-				}
+			foreach ($result as $row) {
+				$ret[] = $row['label'];
 			}
 		}
 		return $ret;
 	}
 
-	public static function dropTasksTags($task) {
+	public static function deleteTasksTags($task) {
 		if (!$task->hasTaskId()) {
 			throw new InvalidArgumentException('Cannot drop tags for a task, as task ID is not set.');
 		}

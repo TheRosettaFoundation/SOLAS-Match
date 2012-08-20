@@ -1,5 +1,6 @@
 <?php
 require_once 'Task.class.php';
+require_once 'TaskTags.class.php';
 //require_once 'TaskTags.class.php';
 
 /**
@@ -71,8 +72,8 @@ New requirement:
                                     $task_data[$col_name] = $col_value;
                             }
                         }
-
-                        if ($tags = $this->_fetchTags($row['id'])) {
+                        
+                        if ($tags = TaskTags::getTags($row['id'])) {
                             $task_data['tags'] = $tags;
                         }
 
@@ -132,7 +133,7 @@ New requirement:
                             }
                         }
 
-                        if ($tags = $this->_fetchTags($row['id'])) {
+                        if ($tags = TaskTags::getTags($row['id'])) {
                             $task_data['tags'] = $tags;
                         }
 
@@ -145,24 +146,7 @@ New requirement:
         }
 
 
-        private function _fetchTags($task_id) {
-		$db = new PDOWrapper();
-		$db->init();
-		$ret = null;
-		if ($result = $db->call("getTaskTags", "{$db->cleanseNull($task_id)}")) {
-			$ret = array();
-			foreach ($result as $row) {
-				$ret[] = $row['label'];
-			}
-		}
-
-		if (is_array($ret) && count($ret) > 0) {
-			return $ret;
-		}
-		else {
-			return null;
-		}
-	}
+        
 
 	/**
 	 * Save task object to database (either insert of update)
