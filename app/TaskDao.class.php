@@ -446,18 +446,9 @@ New requirement:
 	}
 
 	public function hasUserClaimedTask($user_id, $task_id) {
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$query = 'SELECT user_id
-					FROM task_claim
-					WHERE task_id = ' . $db->cleanse($task_id) . '
-					AND user_id = ' . $db->cleanse($user_id);
-		if ($result = $db->Select($query)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+                return $db->call("hasUserClaimedTask", "{$db->cleanse($task_id)},{$db->cleanse($user_id)}");
 	}
 
 	public function taskIsClaimed($task_id) {

@@ -54,7 +54,7 @@ DROP PROCEDURE IF EXISTS addcol;
 DELIMITER //
 CREATE PROCEDURE addcol()
 BEGIN
-	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='badges'and c.TABLE_SCHEMA like "Solas-Match%" and c.COLUMN_NAME="owner_id") then
+	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='badges'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME="owner_id") then
 		ALTER TABLE `task`
 		    add column `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL;
 	end if;
@@ -222,7 +222,7 @@ DROP PROCEDURE IF EXISTS addcol;
 DELIMITER //
 CREATE PROCEDURE addcol()
 BEGIN
-	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA like "Solas-Match%" and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
 		ALTER TABLE `task`
 		    add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
 		    add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
@@ -1158,6 +1158,19 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `claimTask`(IN `tID` INT, IN `uID` I
 BEGIN
 	insert into task_claim  (task_id,user_id) values (tID,uID);
 	select 1 as result;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.hasUserClaimedTask
+DROP PROCEDURE IF EXISTS `hasUserClaimedTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `hasUserClaimedTask`(IN `tID` INT, IN `uID` INT)
+BEGIN
+SELECT exists	(	select 1
+                        FROM task_claim
+                        WHERE task_id = tID
+                        AND user_id = uID
+                 ) as result;
 END//
 DELIMITER ;
 
