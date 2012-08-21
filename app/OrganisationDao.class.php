@@ -95,12 +95,9 @@ class OrganisationDao {
     }
 
     private function removeMembershipRequest($org_id, $user_id) {
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $delete = "DELETE FROM org_request_queue
-                WHERE user_id=".$db->cleanse($user_id)."
-                AND org_id=".$db->cleanse($org_id);
-        $db->Delete($delete);
+        $db->call("removeMembershipRequest", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
     }
 
     private static function create_org_from_sql_result($result) {

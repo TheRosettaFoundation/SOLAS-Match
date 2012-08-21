@@ -1364,7 +1364,16 @@ BEGIN
 END//
 DELIMITER ;
 
-
+-- Dumping structure for procedure Solas-Match-Dev.removeMembershipRequest
+DROP PROCEDURE IF EXISTS `removeMembershipRequest`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeMembershipRequest`(IN `uID` INT, IN `orgID` INT)
+BEGIN
+	DELETE FROM org_request_queue
+   WHERE user_id=uID
+   AND org_id=orgID;
+END//
+DELIMITER ;
 
 ---------------------put triggers below this line------------------------------------------
 
