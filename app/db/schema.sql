@@ -1375,6 +1375,16 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.acceptMemRequest
+DROP PROCEDURE IF EXISTS `acceptMemRequest`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `acceptMemRequest`(IN `uID` INT, IN `orgID` INT)
+BEGIN
+	INSERT INTO organisation_member (user_id, organisation_id) VALUES (uID,orgID);
+	call removeMembershipRequest(uID,orgID);
+END//
+DELIMITER ;
+
 ---------------------put triggers below this line------------------------------------------
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
