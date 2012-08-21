@@ -19,7 +19,11 @@
 		
 	<p>
 		<span class="time_since">{IO::timeSinceSqlTime($task->getCreatedTime())} ago</span>
-		&middot; {Organisations::nameFromId($task->getOrganisationId())}
+		&middot;
+        {assign var="org_id" value=$task->getOrganisationId()}
+        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+            {Organisations::nameFromId($task->getOrganisationId())}
+        </a>
 		{assign var="wordcount" value=$task->getWordCount()}
 		{if $wordcount}
 			&middot; {$wordcount|number_format} words
