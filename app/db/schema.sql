@@ -1385,6 +1385,17 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.taskDownloadCount
+DROP PROCEDURE IF EXISTS `taskDownloadCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskDownloadCount`(IN `tID` INT)
+BEGIN
+	SELECT count(*) times_downloaded
+	FROM task_file_version_download
+	WHERE task_id = tID;
+END//
+DELIMITER ;
+
 ---------------------put triggers below this line------------------------------------------
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
