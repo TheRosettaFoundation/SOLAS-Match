@@ -1352,7 +1352,7 @@ $app->get('/org/create/badge/:org_id/', 'authUserForOrg', function ($org_id) use
 
             $badge_dao = new BadgeDao();
             $badge = new Badge($params);
-            $badge_dao->save($badge);
+            $badge_dao->addBadge($badge);
             $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
         }
     }

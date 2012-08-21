@@ -13,7 +13,7 @@ class BadgeDao
         return new Badge($result[0]);
     }
 
-    public function save($badge)
+    public function addBadge($badge)
     {
         $db = new MySQLWrapper();
         $db->init();
@@ -51,15 +51,10 @@ class BadgeDao
 
     public function removeUserBadge($user, $badge)
     {
-        if(!is_null($badge->getOwnerId())) {
-            $db = new MySQLWrapper();
-            $db->init();
-            $delete = "DELETE FROM user_badges
-                        WHERE user_id=".$db->cleanse($user->getUserId())."
-                        AND badge_id=".$db->cleanse($badge->getBadgeId());
-            $db->Delete($delete);
-        } else {
-            echo "<p>Cannot remove system badges</p>";
+        $db = new PDOWrapper();
+        $db->init();
+        if(!$db->call("removeUserBadge", "{$db->cleanse($user->getUserId())},{$db->cleanse($badge->getBadgeId())}")) {
+           echo "<p>Cannot remove system badges</p>";
         }
     }
 }

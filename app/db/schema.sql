@@ -1401,6 +1401,23 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.removeUserBadge
+DROP PROCEDURE IF EXISTS `removeUserBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserBadge`(IN `uID` INT, IN `bID` INT)
+BEGIN
+	set @owner = null;
+	select b.owner_id into @owner from badges b where b.badge_id=bID;
+	if @owner is not null  then
+		DELETE FROM user_badges
+		WHERE user_id=uID
+		AND badge_id=bID;
+	   select 1 as result;
+   else 
+	   select 0 as result;
+   end if;
+END//
+DELIMITER ;
 ---------------------put triggers below this line------------------------------------------
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert

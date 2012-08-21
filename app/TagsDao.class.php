@@ -60,8 +60,6 @@ class TagsDao {
 		$tag_ids = false;
 		$str = $this->s->io->cleanseInput($str);
 		if ($tags = $this->tagsToArray($str)) {
-			$db = new MySQLWrapper();
-			$db->init();
 			$tag_ids = array();
 			foreach($tags as $tag) {
 				// Ask the database what the ID is by searching for the tag's text label
