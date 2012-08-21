@@ -12,9 +12,11 @@
 		{if $task->getTargetId()}
 			To {Languages::languageNameFromId($task->getTargetId())}
 		{/if}
+        <div class="tag">
 		{foreach from=$task->getTags() item=tag}
-			<a class="tag" href="{urlFor name="tag-details" options="label.$tag"}"><span class="label">{$tag}</span></a>
+			<a href="{urlFor name="tag-details" options="label.$tag"}" class="label">{$tag}</a>
 		{/foreach}
+        </div>
 	</p>
 		
 	<p>
