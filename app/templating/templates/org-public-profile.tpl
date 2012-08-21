@@ -24,10 +24,12 @@
     {/if}
     <small> An organisation on SOLAS Match </small>
     {assign var="org_id" value=$org->getId()}
-    {if in_array($user->getUserId(), $org_members)}
-        <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Edit Profile</a>
-    {else}
-        <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Request Membership</a>
+    {if isset($user)}
+        {if in_array($user->getUserId(), $org_members)}
+            <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Edit Profile</a>
+        {else}
+            <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Request Membership</a>
+        {/if}
     {/if}
     </h1></div>
 {/if}
@@ -49,20 +51,24 @@
 
 <h3>
     Organisation Badges
-    {if in_array($user->getUserId(), $org_members)}
-        <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
-            Create Badge
-        </a>
+    {if isset($user)}
+        {if in_array($user->getUserId(), $org_members)}
+            <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
+                Create Badge
+            </a>
+        {/if}
     {/if}
 </h3>
 {if $org_badges != NULL && count($org_badges) > 0}
     {foreach $org_badges as $badge}
         <p>
-            {if in_array($user->getUserId(), $org_members)}
-                {assign var="badge_id" value=$badge['badge_id']}
-                <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="btn">
-                    Assign
-                </a>
+            {if isset($user)}
+                {if in_array($user->getUserId(), $org_members)}
+                    {assign var="badge_id" value=$badge['badge_id']}
+                    <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="btn">
+                        Assign
+                    </a>
+                {/if}
             {/if}
             {$badge['title']}: {$badge['description']}
         </p>
@@ -76,8 +82,10 @@
     </p>
 {/if}
 
-{if in_array($user->getUserId(), $org_members)}
-    <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class="btn btn-primary">View Membership Requests</a>
+{if isset($user)}
+    {if in_array($user->getUserId(), $org_members)}
+        <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class="btn btn-primary">View Membership Requests</a>
+    {/if}
 {/if}
 
 {include file='footer.tpl'}

@@ -7,13 +7,11 @@ class TaskFile {
 	}
 	
 	function timesDownloaded() {
-		$db = new MySQLWrapper();
+		$db = new PDOWrapper();
 		$db->init();
-		$q = 'SELECT count(*) times_downloaded
-				FROM task_file_version_download
-				WHERE task_id = ' . $db->cleanse($this->taskID());
-		if ($r = $db->Select($q)) {
-			$ret = $r[0]['times_downloaded'];
+		if ($r = $db->call("taskDownloadCount", "{$db->cleanse($this->taskID())}")) {
+                    $ret = $r[0]['times_downloaded'];
+                    return $ret;
 		}
 		else {
 			return null;

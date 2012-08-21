@@ -155,7 +155,11 @@ class PDOWrapper {
 	}
 
         function call($procedure,$procArgs){
-            $sql = "CALL $procedure ($procArgs)";
+            if(!is_array($procArgs)) {
+                $sql = "CALL $procedure ($procArgs)";
+            } else {
+                $sql = "CALL $procedure (".implode(', ', $procArgs).")";
+            }
             if ($this->show_sql){
                 $this->showSQL($sql);
             }

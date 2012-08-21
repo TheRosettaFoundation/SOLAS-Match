@@ -226,13 +226,9 @@ class UserDao {
     */
     public function getUsersWithBadge($badge) {
         $ret = null;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = "SELECT *
-                    FROM user JOIN user_badges
-                    ON user.user_id = user_badges.user_id
-                    WHERE badge_id = ".$db->cleanse($badge->getBadgeId());
-        if($result = $db->Select($query)) {
+        if($result = $db->call("getUsersWithBadge", "{$db->cleanse($badge->getBadgeId())}")) {
             $ret = array();
             foreach($result as $row) {
                 $ret[] = new User($row);
@@ -249,7 +245,10 @@ class UserDao {
         $ret = false;
         $db = new PDOWrapper();
         $db->init();
-        if ($result = $db->call("userLikeTag", "{$db->cleanse($user_id)},{$db->cleanse($tag_id)}")) {
+        $args = array();
+        $args['user_id'] = $db->cleanse($user_id);
+        $args['tag_id'] = $db->cleanse($tag_id);
+        if ($result = $db->call("userLikeTag", $args)) {
             $ret = $result[0]['result'];
         }
         return $ret;
@@ -264,6 +263,77 @@ class UserDao {
         $db= new PDOWrapper();
         $db->init();
         if ($result = $db->call("removeUserTag", "{$db->cleanse($user_id)},{$db->cleanse($tag_id)}")) {
+            $ret = $result[0]['result'];
+        }
+
+        return $ret;
+    }
+
+    /*
+        Get list of tasks in User's notification list
+    */
+    public function getUserNotificationList($user_id) 
+    {
+        $ret = null;
+        $db = new PDOWrapper();
+        $db->init();
+        $args = array();
+        $args['id'] = $user_id;
+        if($return = $db->call('getUserNotifications', $args)) {
+            $ret = $return;
+        }
+
+        return $ret;
+    }
+
+    /*
+        returns true if the user has registered for notifications for this task
+    */
+    public function isSubscribedToTask($user_id, $task_id)
+    {
+        $ret = false;
+        $db = new PDOWrapper();
+        $db->init();
+        $args = array();
+        $args[] = $user_id;
+        $args[] = $task_id;
+        if($result = $db->call('userSubscribedToTask', $args)) {
+            $ret = $result[0]['result'];
+        }
+
+        return $ret;
+    }
+
+    /*
+        Add the task to the user's notification List
+    */
+    public function trackTask($user_id, $task_id)
+    {
+        $ret = false;
+        $db = new PDOWrapper();
+        $db->init();
+        $args = array();
+        $args['user_id'] = $user_id;
+        $args['task_id'] = $task_id;
+        if ($result = $db->call("userNotificationsInsertAndUpdate", $args)) {
+            $ret = $result[0]['result'];
+        }
+
+        return $ret;
+    }
+
+    /*
+        Remove the task from the user's notification list
+    */
+    public function ignoreTask($user_id, $task_id)
+    {
+        $ret = false;
+        $db = new PDOWrapper();
+        $db->init();
+        $args = array();
+        $args['user_id'] = $user_id;
+        $args['task_id'] = $task_id;
+        if($result = $db->call("removeUserNotification", $args)) {
             $ret = $result[0]['result'];
         }
 

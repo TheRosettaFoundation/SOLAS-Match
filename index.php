@@ -10,7 +10,6 @@ SmartyView::$smartyExtensions = array(
 
 
 require 'app/Settings.class.php';
-require 'app/MySQLWrapper.class.php';
 require 'app/PDOWrapper.class.php';
 require 'app/BadgeDao.class.php';
 require 'app/OrganisationDao.class.php';
@@ -20,7 +19,6 @@ require 'app/TaskDao.class.php';
 require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
 require 'app/TipSelector.class.php';
-require 'app/Organisations.class.php';
 require 'app/lib/Languages.class.php';
 require 'app/lib/URL.class.php';
 require 'app/lib/Authentication.class.php';
@@ -118,7 +116,7 @@ function authUserForOrg($request, $response, $route) {
         if(is_object($user)) {
             $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
             if(!is_null($user_orgs)) {
-                if(in_array($org_id, $user_dao->findOrganisationsUserBelongsTo($user->getUserId()))) {
+                if(in_array($org_id, $user_orgs)) {
                     return true;
                 }
             }
@@ -130,9 +128,42 @@ function authUserForOrg($request, $response, $route) {
     if(isset($org_id)) {
         $org_dao = new OrganisationDao();
         $org = $org_dao->find(array('id' => $org_id));
-        $org_name = $org->getName();
+        $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
     }
     $app->flash('error', "You are not authorised to view this profile. Only members of ".$org_name." may view this page.");
+    $app->redirect($app->urlFor('home'));
+}
+
+/*
+ *  Middleware for ensuring the current user belongs to the Org that uploaded the associated Task
+ *  Used for altering task details
+ */
+function authUserForOrgTask($request, $response, $route) {
+    $params= $route->getParams();
+    if($params != NULL) {
+        $task_id = $params['task_id'];
+        $task_dao = new TaskDao();
+        $task = $task_dao->find(array('task_id' => $task_id));
+
+        $org_id = $task->getOrganisationId();
+        $user_dao = new UserDao();
+        $user = $user_dao->getCurrentUser();
+        if(is_object($user)) {
+            $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+            if(!is_null($user_orgs) && in_array($org_id, $user_orgs)) {
+                return true;
+            }
+        }
+    }
+
+    $app = Slim::getInstance();
+    $org_name = 'this organisation';
+    if(isset($org_id)) {
+        $org_dao = new OrganisationDao();
+        $org = $org_dao->find(array('id' => $org_id));
+        $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
+    }
+    $app->flash('error', "You are not authorised to view this page. Only members of ".$org_name." may view this page.");
     $app->redirect($app->urlFor('home'));
 }
 
@@ -305,22 +336,52 @@ $app->get('/task/:task_id/uploaded-edit/', 'authenticateUserForTask', function (
     $app->render('task.uploaded-edit.tpl');
 })->name('task-uploaded-edit');
 
-$app->get('/task/view/:task_id/', function ($task_id) use ($app) {
+$app->get('/task/view/:task_id/', 'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
     $app->view()->setData('task', $task);
+
+    $user_dao = new UserDao();
+    $user = $user_dao->getCurrentUser();
+    if($app->request()->isPost()) {
+        $post = (object) $app->request()->post();
+
+        if(isset($post->notify) && $post->notify == "true") {
+
+            if($user_dao->trackTask($user->getUserId(), $task_id)) {
+                $app->flashNow("success", 
+                    "You are now tracking this task and will receive email notifications
+                    when its status changes.");
+            } else {
+                $app->flashNow("error", "Unable to register for notifications for this task.");
+            }
+        } else {
+
+            if($user_dao->ignoreTask($user->getUserId(), $task_id)) {
+                $app->flashNow("success", 
+                    "You are no longer tracking this task and will receive no
+                    further emails."
+                );
+            } else {
+                $app->flashNow("error", "Unable to unregister for this notification.");
+            }
+        }
+    }
+
+    $registered = $user_dao->isSubscribedToTask($user->getUserId(), $task_id);
 
     $org_dao = new OrganisationDao();
     $org = $org_dao->find(array('id' => $task->getOrganisationId()));
 
     $app->view()->appendData(array(
-            'org' => $org
+            'org' => $org,
+            'registered' => $registered
     ));
 
     $app->render('task.view.tpl');
-})->name('task-view');
+})->via("POST")->name('task-view');
 
-$app->get('/task/alter/:task_id/', function ($task_id) use ($app) {
+$app->get('/task/alter/:task_id/', 'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -367,8 +428,10 @@ $app->get('/task/alter/:task_id/', function ($task_id) use ($app) {
 
     $tags = $task->getTags();
     $tag_list = '';
-    foreach($tags as $tag) {
-        $tag_list .= $tag . ' ';
+    if($tags!=null){
+        foreach($tags as $tag) {
+            $tag_list .= $tag . ' ';
+        }
     }
 
     $app->view()->appendData(array(
@@ -416,7 +479,20 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             $task->setReferencePage($post->reference);
         }
 
-        $task->setTags(Tags::separateTags($post->tags));
+        $tags = $post->tags;
+        if(is_null($tags)) {
+            $tags = '';
+        }
+
+        $task_file_info = $task_dao->getTaskFileInfo($task);
+        $filename = $task_file_info['filename'];
+        if($pos = strrpos($filename, '.')) {
+            $extension = substr($filename, $pos + 1);
+            $extension = strtolower($extension);
+            $tags .= " $extension";
+        }
+
+        $task->setTags(Tags::separateTags($tags));
         if($post->word_count != '') {
             $task->setWordCount($post->word_count);
         } else {
@@ -529,7 +605,7 @@ $app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) u
     }
 
     $org_dao = new OrganisationDao();
-    $org = $org_dao->find($task->getOrganisationId());
+    $org = $org_dao->find(array('id' => $task->getOrganisationId()));
 
     $app->view()->setData('task', $task);
     $app->view()->appendData(array('org' => $org));
@@ -607,7 +683,7 @@ $app->get('/task/id/:task_id/download-preview/', $authenticateForRole('translato
 })->name('download-task-preview');
 
 $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('translator'), 
-            'authenticateUserForTask', function ($task_id, $version) use ($app) {
+            'authUserForOrgTask', function ($task_id, $version) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -734,7 +810,7 @@ $app->get('/task/id/:task_id/download-file/', $authenticateForRole('translator')
 })->name('download-task');
 
 $app->get('/task/id/:task_id/mark-archived/', $authenticateForRole('organisation_member'), 
-            'authenticateUserForTask', function ($task_id) use ($app) {
+            'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -756,7 +832,7 @@ $app->get('/task/id/:task_id/mark-archived/', $authenticateForRole('organisation
 })->name('archive-task');
 
 $app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('translator'), 
-            'authenticateUserForTask', function ($task_id) use ($app) {
+            'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao;
     $task = $task_dao->find(array('task_id' => $task_id));
 
@@ -923,7 +999,18 @@ $app->get('/logout', function () use ($app) {
 
 $app->get('/register', function () use ($app) {
     $tempSettings=new Settings();
-    $app->view()->setData('openid',$tempSettings->get("site.openid"));
+    $use_openid = $tempSettings->get("site.openid");
+    $app->view()->setData('openid',$use_openid);
+     if(isset($use_openid)) {
+        if($use_openid == 'y' || $use_openid == 'h') {
+            $extra_scripts = "
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-jquery.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-en.js\"></script>
+                <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/openid.css\" />";
+            $app->view()->appendData(array('extra_scripts' => $extra_scripts));
+        }
+    }
     $error = null;
     $warning = null;
     if (isValidPost($app)) {
@@ -990,16 +1077,46 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     $orgs = array();
     foreach($my_organisations as $org_id) {
         $org = $org_dao->find(array('id' => $org_id));
-        $my_org_tasks = $task_dao->findTasks(array('organisation_ids' => $org_id));
+        $my_org_tasks = $task_dao->findTasksByOrg(array('organisation_ids' => $org_id));
         $org_tasks[$org->getId()] = $my_org_tasks;
         $orgs[$org->getId()] = $org;
+    }
+
+    if($app->request()->isPost()) {
+        $post = (object) $app->request()->post();
+
+        if(isset($post->track)) {
+            $task = $task_dao->find(array('task_id' => $post->task_id));
+            $task_title = '';
+            if($task->getTitle() != '') {
+                $task_title = $task->getTitle();
+            } else {
+                $task_title = "task ".$task->getTaskId();
+            }
+            if($post->track == "Ignore") {
+                if($user_dao->ignoreTask($current_user->getUserId(), $post->task_id)) {
+                    $app->flashNow('success', 'No longer receiving notifications from '.$task_title.'.');
+                } else {
+                    $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
+                }
+            } elseif($post->track == "Track") {
+                if($user_dao->trackTask($current_user->getUserId(), $post->task_id)) {
+                    $app->flashNow('success', 'You will now receive notifications for '.$task_title.'.');
+                } else {
+                    $app->flashNow('error', 'Unable to subscribe to '.$task_title.'.');
+                }
+            } else {
+                $app->flashNow('error', 'Invalid POST type');
+            }
+        }
     }
     
     if(count($org_tasks) > 0) {
         $app->view()->appendData(array(
                 'org_tasks' => $org_tasks,
                 'orgs' => $orgs,
-                'task_dao' => $task_dao
+                'task_dao' => $task_dao,
+                'user_dao' => $user_dao
         ));
     }
 
@@ -1007,7 +1124,7 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
         'current_page'  => 'client-dashboard'
     ));
     $app->render('client.dashboard.tpl');
-})->name('client-dashboard');
+})->via('POST')->name('client-dashboard');
 
 $app->get('/profile/:user_id', function ($user_id) use ($app) {
     $badge_dao = new BadgeDao();
@@ -1224,7 +1341,7 @@ $app->get('/badge/list', function () use ($app) {
     $app->render('badge-list.tpl');
 })->name('badge-list');
 
-$app->get('/org/create/badge/:org_id/', function ($org_id) use ($app) {
+$app->get('/org/create/badge/:org_id/', 'authUserForOrg', function ($org_id) use ($app) {
     if(isValidPost($app)) {
         $post = (object)$app->request()->post();
 
@@ -1238,7 +1355,7 @@ $app->get('/org/create/badge/:org_id/', function ($org_id) use ($app) {
 
             $badge_dao = new BadgeDao();
             $badge = new Badge($params);
-            $badge_dao->save($badge);
+            $badge_dao->addBadge($badge);
             $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
         }
     }
@@ -1248,7 +1365,7 @@ $app->get('/org/create/badge/:org_id/', function ($org_id) use ($app) {
     $app->render('org.create-badge.tpl');
 })->via('POST')->name('org-create-badge');
 
-$app->get('/org/:org_id/manage/:badge_id/', function ($org_id, $badge_id) use ($app) {
+$app->get('/org/:org_id/manage/:badge_id/', 'authUserForOrg', function ($org_id, $badge_id) use ($app) {
     $badge_dao = new BadgeDao();
     $badge = $badge_dao->find(array('badge_id' => $badge_id));
 
@@ -1391,6 +1508,44 @@ $app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use
     $org = $org_dao->find(array('id' => $org_id));
 
     $user_dao = new UserDao();
+    
+    if($app->request()->isPost()) {
+        $post = (object)$app->request()->post();
+        
+        if(!is_null($post->email) && User::isValidEmail($post->email)) {
+            $user = $user_dao->find(array('email' => $post->email));
+
+            if(!is_null($user)) {
+                $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+
+                if($user->getDisplayName() != '') {
+                    $user_name = $user->getDisplayName();
+                } else {
+                    $user_name = $user->getEmail();
+                }
+                if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
+                    $org_dao->acceptMemRequest($org_id, $user->getUserId());
+
+                    if($org->getName() != '') {
+                        $org_name = $org->getName();
+                    } else {
+                        $org_name = "Organisation $org_id";
+                    }
+                    $app->flashNow('success', "Successfully added $user_name as a member of $org_name");
+                } else {
+                    $app->flashNow('error', "$user_name is already a member of this organisation");
+                }
+            } else {
+                $email = $post->email;
+                $app->flashNow('error', 
+                    "The email address $email is not registered with this system.
+                    Are you sure you have the right email addess?"
+                );
+            }
+        } else {
+            $app->flashNow('error', 'You did not enter a valid email address');
+        }
+    }
 
     $requests = $org_dao->getMembershipRequests($org_id);
     $user_list = array();
@@ -1404,9 +1559,9 @@ $app->get('/org/request/queue/:org_id', 'authUserForOrg', function ($org_id) use
     $app->view()->appendData(array('user_list' => $user_list));
 
     $app->render('org.request_queue.tpl');
-})->name('org-request-queue');
+})->via("POST")->name('org-request-queue');
 
-$app->get('/org/:org_id/request/:user_id/:accept', function ($org_id, $user_id, $accept) use ($app) {
+$app->get('/org/:org_id/request/:user_id/:accept', 'authUserForOrg', function ($org_id, $user_id, $accept) use ($app) {
     $org_dao = new OrganisationDao();
     if($accept == "true") {
         echo "<p>Accepting Request</p>";

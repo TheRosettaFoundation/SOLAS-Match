@@ -1,5 +1,5 @@
 <?php
-require('MySQLWrapper.class.php');
+require('PDOWrapper.class.php');
 require('IO.class.php');
 require('Organisations.class.php');
 require('Stream.class.php');
@@ -25,7 +25,7 @@ class RosettaSmarty extends Smarty {
 	{
 		$this->set = new Settings();
 		$this->stream = new Stream($this);
-		$this->db = new MySQLWrapper();
+		$this->db = new PDOWrapper();
 		$this->db->init();
 		$this->io = new IO($this);
 		$this->orgs = new Organisations($this);

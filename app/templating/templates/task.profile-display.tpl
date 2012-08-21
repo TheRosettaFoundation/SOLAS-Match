@@ -17,7 +17,7 @@
 	
 	<p class="task_details">
 		Added {IO::timeSinceSqlTime($task->getCreatedTime())} ago
-		&middot; By {Organisations::nameFromId($task->getOrganisationId())}
+		&middot; By {OrganisationDao::nameFromId($task->getOrganisationId())}
 		{if $task->getWordcount()}
 			&middot; {$task->getWordcount()|number_format} words
 		{/if}

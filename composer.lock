@@ -1,5 +1,5 @@
 {
-    "hash": "b7274806f26e66e3d947e9f1905f3440",
+    "hash": "7eeab9551eb88433d75556fc6e252d64",
     "packages": [
         {
             "package": "lightopenid/lightopenid",
@@ -13,7 +13,7 @@
         },
         {
             "package": "slim/slim",
-            "version": "1.6.2"
+            "version": "1.6.3"
         },
         {
             "package": "smarty/smarty",
