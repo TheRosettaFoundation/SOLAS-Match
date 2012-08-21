@@ -15,13 +15,10 @@ class BadgeDao
 
     public function addBadge($badge)
     {
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $insert = array();
-        $insert['owner_id'] = $badge->getOwnerId();
-        $insert['title'] = "\"".$badge->getTitle()."\"";
-        $insert['description'] = "\"".$badge->getDescription()."\"";
-        $db->Insert('badges', $insert);
+        $result=$db->call("addBadge", "{$db->cleanseWrapStr($badge->getTitle())},{$db->cleanseWrapStr($badge->getDescription())},{$db->cleanseNull($badge->getOwnerId())}");
+        return $result[0]['result'];
     }
 
     public function getAllBadges()
