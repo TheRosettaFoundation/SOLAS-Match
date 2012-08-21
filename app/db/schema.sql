@@ -740,12 +740,13 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Dev.getBadge
 DROP PROCEDURE IF EXISTS `getBadge`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getBadge`(IN `id` INT, IN `name` VARCHAR(128), IN `des` VARCHAR(512))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBadge`(IN `id` INT, IN `name` VARCHAR(128), IN `des` VARCHAR(512), IN `orgID` INT)
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
 	if des='' then set des=null;end if;
 	if name='' then set name=null;end if;
+	if orgID='' then set orgID=null;end if;
 	set @q= "SELECT *FROM badges b where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
@@ -756,6 +757,10 @@ BEGIN
 	end if;
 	if name is not null then 
 		set @q = CONCAT(@q," and b.title='",name,"'") ;
+	end if;
+	
+	if orgID is not null then 
+		set @q = CONCAT(@q," and b.owner_id='",orgID,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;

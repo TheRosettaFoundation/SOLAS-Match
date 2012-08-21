@@ -28,24 +28,15 @@ class BadgeDao
     {
         $db = new PDOWrapper();
         $db->init();
-        $result=$db->call("getBadge", "null,null,null");
+        $result=$db->call("getBadge", "null,null,null,null");
         return $result;
     }
 
     public function getOrgBadges($org_id)
     {
-        $ret = NULL;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = "SELECT *
-                    FROM badges
-                    WHERE owner_id = ".$db->cleanse($org_id);
-
-        if($results = $db->Select($query)) {
-            $ret = $results;
-        }
-
-        return $results;
+        return $db->call("getBadge", "null,null,null,{$db->cleanse($org_id)}");
     }
 
     public function assignBadge($user, $badge)
