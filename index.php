@@ -605,7 +605,7 @@ $app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) u
     }
 
     $org_dao = new OrganisationDao();
-    $org = $org_dao->find($task->getOrganisationId());
+    $org = $org_dao->find(array('id' => $task->getOrganisationId()));
 
     $app->view()->setData('task', $task);
     $app->view()->appendData(array('org' => $org));
