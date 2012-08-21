@@ -382,13 +382,7 @@ New requirement:
 		}
 	}
 
-//        private function saveTaskFileInfo($task_file_info)
-//        {
-//            $ret = null;
-//            $db = new MySQLWrapper();
-//            $db->init();
-//            $db->Insert('task_file_version', $task_file_info);
-//        }
+
 
 	public function getTaskFileInfo($task, $version = 0) {
 		$db = new PDOWrapper();

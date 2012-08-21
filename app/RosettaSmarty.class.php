@@ -1,5 +1,5 @@
 <?php
-require('MySQLWrapper.class.php');
+require('PDOWrapper.class.php');
 require('IO.class.php');
 require('Organisations.class.php');
 require('Stream.class.php');
