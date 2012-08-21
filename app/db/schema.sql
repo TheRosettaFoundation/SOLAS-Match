@@ -1299,6 +1299,36 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Dev.getOrg
+DROP PROCEDURE IF EXISTS `getOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(50), IN `url` VARCHAR(50), IN `bio` vARCHAR(50))
+BEGIN
+	if id='' then set id=null;end if;
+	if name='' then set name=null;end if;
+	if url='' then set url=null;end if;
+	if bio='' then set bio=null;end if;
+	set @q= "select * from organisation o where 1 ";
+	if id is not null then 
+		set @q = CONCAT(@q," and o.id=",id) ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and o.name='",name,"'") ;
+	end if;
+	if url is not null then 
+		set @q = CONCAT(@q," and o.home_page='",url,"'") ;
+	end if;
+	if bio is not null then 
+		set @q = CONCAT(@q," and o.biography='",bio,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `userNotificationsInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userNotificationsInsertAndUpdate`(IN `user_id` INT, IN `task_id` INT)

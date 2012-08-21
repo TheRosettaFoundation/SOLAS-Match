@@ -19,19 +19,23 @@ class OrganisationDao {
     
     public static function nameFromId($organisation_id)
 	{
-		$ret = false;
-		$db = new MySQLWrapper();
-		$db->init();
-		$q = 'SELECT name
-				FROM organisation
-				WHERE id = '.intval($organisation_id);
-		if ($r = $db->Select($q))
-		{
-			$ret = $r[0]['name'];
-		}
-		return $ret;
+                $result = self::getOrg($organisation_id, null, null, null);
+                return $result[0]['name'];
 	}
-
+        
+    public static function getOrg($id,$name,$homepage,$bio){
+         $ret = array();
+        $db = new PDOWrapper();
+        $db->init();
+        
+        if($result = $db->call("getOrg", "{$db->cleanse($id)},{$db->cleanseNullOrWrapStr($name)},{$db->cleanseNullOrWrapStr($homepage)},{$db->cleanseNullOrWrapStr($bio)}")) {
+            foreach ($result as $row){
+                $ret[] = $this->create_org_from_sql_result($row);
+            }
+        }
+        return $ret;
+    }
+    
     public function getOrgByUser($user_id) {//currently not used
         $ret = null;
         $db = new PDOWrapper();
