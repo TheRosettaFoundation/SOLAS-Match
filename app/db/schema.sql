@@ -1493,7 +1493,7 @@ BEGIN
 	WHERE badge_id = bID;
 END//
 DELIMITER ;
----------------------put triggers below this line------------------------------------------
+
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
