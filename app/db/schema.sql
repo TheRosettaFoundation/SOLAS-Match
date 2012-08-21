@@ -1433,6 +1433,17 @@ end if;
 
 END//
 DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getUsersWithBadge
+DROP PROCEDURE IF EXISTS `getUsersWithBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersWithBadge`(IN `bID` INT)
+BEGIN
+	SELECT *
+	FROM user JOIN user_badges ON user.user_id = user_badges.user_id
+	WHERE badge_id = bID;
+END//
+DELIMITER ;
 ---------------------put triggers below this line------------------------------------------
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
