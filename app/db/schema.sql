@@ -1352,6 +1352,18 @@ DELIMITER ;
 
 
 
+-- Dumping structure for procedure Solas-Match-Dev.getMembershipRequests
+DROP PROCEDURE IF EXISTS `getMembershipRequests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMembershipRequests`(IN `orgID` INT)
+BEGIN
+	SELECT *
+	FROM org_request_queue
+   WHERE org_id = orgID
+   ORDER BY request_datetime DESC;
+END//
+DELIMITER ;
+
 
 
 ---------------------put triggers below this line------------------------------------------

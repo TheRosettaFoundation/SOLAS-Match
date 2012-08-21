@@ -69,15 +69,11 @@ class OrganisationDao {
 
     public function getMembershipRequests($org_id)
     {
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = "SELECT *
-                    FROM org_request_queue
-                    WHERE org_id = ".$db->cleanse($org_id)."
-                    ORDER BY request_datetime DESC";
         $ret = null;
-        if($result = $db->Select($query)) {
-            $ret = $result;
+        if($result = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
+                $ret = $result;
         }
         return $ret;
     }
