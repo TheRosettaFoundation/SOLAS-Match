@@ -20,7 +20,7 @@ class OrganisationDao {
     public static function nameFromId($organisation_id)
 	{
                 $result = self::getOrg($organisation_id, null, null, null);
-                return $result[0]['name'];
+                return $result[0]->getName();
 	}
         
     public static function getOrg($id,$name,$homepage,$bio){
@@ -30,7 +30,7 @@ class OrganisationDao {
         
         if($result = $db->call("getOrg", "{$db->cleanse($id)},{$db->cleanseNullOrWrapStr($name)},{$db->cleanseNullOrWrapStr($homepage)},{$db->cleanseNullOrWrapStr($bio)}")) {
             foreach ($result as $row){
-                $ret[] = $this->create_org_from_sql_result($row);
+                $ret[] = self::create_org_from_sql_result($row);
             }
         }
         return $ret;
@@ -123,7 +123,7 @@ class OrganisationDao {
         $db->Delete($delete);
     }
 
-    private function create_org_from_sql_result($result) {
+    private static function create_org_from_sql_result($result) {
         $org_data = array(
                     'id' => $result[0]['id'],
                     'name' => $result[0]['name'],

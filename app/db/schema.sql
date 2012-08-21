@@ -1274,6 +1274,19 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
+DROP TRIGGER IF EXISTS `removeTaskInfo`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `removeTaskInfo` AFTER DELETE ON `task` FOR EACH ROW BEGIN
+    DELETE FROM user_task_score WHERE task_id = old.id;
+    DELETE FROM task_claim WHERE task_id = old.id;
+    DELETE FROM task_file_version WHERE task_id = old.id;
+    DELETE FROM task_file_version_download WHERE task_id = old.id;
+    DELETE FROM task_tag WHERE task_id = old.id;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
 DROP PROCEDURE IF EXISTS `getUserNotifications`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserNotifications`(IN `id` INT)
