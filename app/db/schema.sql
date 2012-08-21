@@ -1247,45 +1247,7 @@ limit lim;
 END//
 DELIMITER ;
 
--- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
-DROP TRIGGER IF EXISTS `validateHomepageInsert`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
-DELIMITER //
-CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `organisation` FOR EACH ROW 
-BEGIN
-	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
-	set new.home_page = concat("http://",new.home_page);
-	end if;
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
 
-
--- Dumping structure for trigger Solas-Match-test.validateHomepageUpdate
-DROP TRIGGER IF EXISTS `validateHomepageUpdate`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
-DELIMITER //
-CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `organisation` FOR EACH ROW 
-BEGIN
-	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
-	set new.home_page = concat("http://",new.home_page);
-	end if;
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
-
-DROP TRIGGER IF EXISTS `removeTaskInfo`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
-DELIMITER //
-CREATE TRIGGER `removeTaskInfo` AFTER DELETE ON `task` FOR EACH ROW BEGIN
-    DELETE FROM user_task_score WHERE task_id = old.id;
-    DELETE FROM task_claim WHERE task_id = old.id;
-    DELETE FROM task_file_version WHERE task_id = old.id;
-    DELETE FROM task_file_version_download WHERE task_id = old.id;
-    DELETE FROM task_tag WHERE task_id = old.id;
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
 
 DROP PROCEDURE IF EXISTS `getUserNotifications`;
 DELIMITER //
@@ -1371,6 +1333,68 @@ BEGIN
 	end if;
 END//
 DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.requestMembership
+DROP PROCEDURE IF EXISTS `requestMembership`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `requestMembership`(IN `uID` INT, IN `orgID` INT)
+    MODIFIES SQL DATA
+BEGIN
+if not exists (select 1 from org_request_queue where user_id=uID and org_id=orgID) then
+	INSERT INTO org_request_queue (user_id, org_id) VALUES (uID, orgID);
+	select 1 as result;
+else 
+	select 0 as result;
+end if;
+END//
+DELIMITER ;
+
+
+
+
+
+---------------------put triggers below this line------------------------------------------
+
+-- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
+DROP TRIGGER IF EXISTS `validateHomepageInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `organisation` FOR EACH ROW 
+BEGIN
+	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
+	set new.home_page = concat("http://",new.home_page);
+	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+
+-- Dumping structure for trigger Solas-Match-test.validateHomepageUpdate
+DROP TRIGGER IF EXISTS `validateHomepageUpdate`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `organisation` FOR EACH ROW 
+BEGIN
+	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
+	set new.home_page = concat("http://",new.home_page);
+	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+DROP TRIGGER IF EXISTS `removeTaskInfo`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `removeTaskInfo` AFTER DELETE ON `task` FOR EACH ROW BEGIN
+    DELETE FROM user_task_score WHERE task_id = old.id;
+    DELETE FROM task_claim WHERE task_id = old.id;
+    DELETE FROM task_file_version WHERE task_id = old.id;
+    DELETE FROM task_file_version_download WHERE task_id = old.id;
+    DELETE FROM task_tag WHERE task_id = old.id;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
 
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

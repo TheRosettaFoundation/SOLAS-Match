@@ -60,26 +60,10 @@ class OrganisationDao {
 
     public function requestMembership($user_id, $org_id)
     {
-        //Check if the user has already requested membership
-        $previous_requests = $this->getMembershipRequests($org_id);
-        if(!is_null($previous_requests)) {
-            foreach($previous_requests as $request) {
-                if($request['user_id'] == $user_id) {
-                    //User has already sent a request, return
-                    return false;
-                }
-            }
-        }
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        
-        $insert = "INSERT INTO org_request_queue (user_id, org_id)
-                    VALUES (".$db->cleanse($user_id).", ".$db->cleanse($org_id).")";
-        if($db->insertStr($insert)) {
-            return true;
-        } else {
-            return false;
-        }        
+        $result = $db->call("requestMembership", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
+        return $result[0]['result'];
     }
         
 
