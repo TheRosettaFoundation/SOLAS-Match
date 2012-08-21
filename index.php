@@ -20,7 +20,6 @@ require 'app/TaskDao.class.php';
 require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
 require 'app/TipSelector.class.php';
-require 'app/Organisations.class.php';
 require 'app/lib/Languages.class.php';
 require 'app/lib/URL.class.php';
 require 'app/lib/Authentication.class.php';
@@ -1001,7 +1000,18 @@ $app->get('/logout', function () use ($app) {
 
 $app->get('/register', function () use ($app) {
     $tempSettings=new Settings();
-    $app->view()->setData('openid',$tempSettings->get("site.openid"));
+    $use_openid = $tempSettings->get("site.openid");
+    $app->view()->setData('openid',$use_openid);
+     if(isset($use_openid)) {
+        if($use_openid == 'y' || $use_openid == 'h') {
+            $extra_scripts = "
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-jquery.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-en.js\"></script>
+                <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/openid.css\" />";
+            $app->view()->appendData(array('extra_scripts' => $extra_scripts));
+        }
+    }
     $error = null;
     $warning = null;
     if (isValidPost($app)) {
