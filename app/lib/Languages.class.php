@@ -22,20 +22,33 @@ class Languages {
         return $result[0];
     }
 
-    public static function getLanguageList() {
-        $settings = new Settings();
-        $languages = null;
-        $language_file = $settings->get("files.languages");
-        if(file_exists($language_file)) {
-            $language_list = parse_ini_file($language_file);
-            $languages = array();
-            foreach($language_list as $language => $code) {
-                $languages[] = $language;
-            }
+        public static function getLanguageList() {
+               $db = new PDOWrapper();
+		$db->init();
+		$languages = array();
+                foreach($db->call("getLanguages", "") as $lcid) {
+                    $languages[] = $lcid;
+                }
+                
+		return $languages;
         }
-        sort($languages);
-        return $languages;
-    }
+
+        public static function getCountryList(){
+              $db = new PDOWrapper();
+		$db->init();
+		$countries = array();
+                foreach($db->call("getCountries", "") as $lcid) {
+                    $countries[] = $lcid;
+                }
+                
+		return $countries;
+        }
+        public static function getlcid($lang,$country){
+                $db = new PDOWrapper();
+		$db->init();
+		$lcid = $db->call("getLCID", "{$db->cleanseNullOrWrapStr($lang)},{$db->cleanseNullOrWrapStr($country)}");            
+		return $lcid[0]['lcid'];
+        }
 
 	public static function isValidLanguageId($language_id) {
 		return (is_numeric($language_id) && $language_id > 0);

@@ -1192,6 +1192,7 @@ $app->get('/profile', function () use ($app) {
     $user_dao = new UserDao();
     $user = $user_dao->getCurrentUser();
     $languages = Languages::getLanguageList();
+    $countries = Languages::getCountryList();
 
     if (!is_object($user)) {
         $app->flash('error', 'Login required to access page');
@@ -1210,8 +1211,9 @@ $app->get('/profile', function () use ($app) {
         }
  
         $nativeLang = $app->request()->post('nLanguage');
-        if($nativeLang != NULL) {
-            $user->setNativeLanguage($nativeLang);
+        $langCountry= $app->request()->post('nLanguageCountry');
+        if($nativeLang != NULL&&$langCountry!= NULL) {
+            $user->setNativeLanguage("{$nativeLang}-{$langCountry}");
             //assign a badge
             $badge_dao = new BadgeDao();
             $badge = $badge_dao->find(array('badge_id' => Badge::NATIVE_LANGUAGE));
@@ -1229,7 +1231,9 @@ $app->get('/profile', function () use ($app) {
         $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user->getUserId())));
     }
     
-    $app->view()->setData('languages',  $languages);
+    $app->view()->setData('languages',$languages);
+    $app->view()->setData('countries',$countries);
+    
 
     $app->render('user-private-profile.tpl');
 })->via('POST')->name('user-private-profile');
