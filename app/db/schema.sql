@@ -12,20 +12,19 @@
 
 -- Dumping structure for table Solas-Match-test.archived_task
 CREATE TABLE IF NOT EXISTS `archived_task` (
-  `archived_task_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `task_id` bigint(20) NOT NULL,
-  `organisation_id` int(10) unsigned NOT NULL,
-  `title` text COLLATE utf8_unicode_ci NOT NULL,
-  `impact` text COLLATE utf8_unicode_ci NOT NULL,
-  `reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `word_count` int(10) unsigned DEFAULT NULL,
-  `source_id` int(10) unsigned DEFAULT NULL COMMENT 'foreign key from the `language` table',
-  `target_id` int(10) unsigned DEFAULT NULL COMMENT 'foreign key from the `language` table',
-  `created_time` datetime NOT NULL,
-  `archived_time` datetime NOT NULL,
-  PRIMARY KEY (`archived_task_id`),
-  KEY `source` (`source_id`),
-  KEY `target` (`target_id`)
+	`archived_task_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`task_id` BIGINT(20) NOT NULL,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`title` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	`impact` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	`reference_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`word_count` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`source_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+	`target_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+	`created_time` DATETIME NOT NULL,
+	`archived_time` DATETIME NOT NULL,
+	PRIMARY KEY (`archived_task_id`),
+	UNIQUE INDEX `task_id` (`task_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP PROCEDURE IF EXISTS addcol;
@@ -45,7 +44,11 @@ CALL addcol();
 
 DROP PROCEDURE addcol;
 
-ALTER TABLE `archived_task` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+ALTER TABLE `archived_task` 
+	DROP INDEX `source`,
+	DROP INDEX `target`,
+	ADD UNIQUE INDEX `task_id` (`task_id`),
+        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.archived_task: 0 rows
 /*!40000 ALTER TABLE `archived_task` DISABLE KEYS */;
@@ -54,13 +57,17 @@ ALTER TABLE `archived_task` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8
 
 -- Dumping structure for table Solas-Match-test.badges
 CREATE TABLE IF NOT EXISTS `badges` (
-  `badge_id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `description` mediumtext COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`badge_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `badges` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+	`badge_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`owner_id` INT(11) NULL DEFAULT NULL,
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`description` MEDIUMTEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`badge_id`),
+	UNIQUE INDEX `badge` (`owner_id`, `title`)
+)
+ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ALTER TABLE `badges` 
+    	ADD UNIQUE INDEX `badge` (`owner_id`, `title`),
+        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 DROP PROCEDURE IF EXISTS addcol;
 DELIMITER //
 CREATE PROCEDURE addcol()
