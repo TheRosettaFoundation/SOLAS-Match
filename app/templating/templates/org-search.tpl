@@ -9,6 +9,8 @@
 <form class="well" method="post" action="{urlFor name="org-search"}">
     <label for="search_name">Organisation Name:</label>
     <input type="text" name="search_name" id="search_name" />
+    <br />
+    <input type="submit" name="submit" value="Search" class="btn btn-primary" />
 </form>
 
 {if isset($found_orgs)}
