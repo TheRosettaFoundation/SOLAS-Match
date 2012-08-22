@@ -71,7 +71,12 @@
 
 {if isset($orgList)}
     {if count($orgList) > 0}
-        <div class='page-header'><h1>Organisations <small>A list of organisations you belong to</small></h1></div>
+        <div class='page-header'>
+            <h1>
+                Organisations <small>A list of organisations you belong to</small>
+                <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">Search For Org</a>
+            </h1>
+        </div>
 
         {foreach $orgList as $org}
             {assign var="org_id" value=$org->getId()}
