@@ -770,5 +770,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `searchForOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchForOrg`(IN `org_name` VARCHAR(128))
+    COMMENT 'Search for an organisation by name'
+BEGIN
+	SELECT *
+	    FROM organisation
+	    WHERE name LIKE CONCAT('%', org_name, '%');
+END//
+DELIMITER ;
+
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
