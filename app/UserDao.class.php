@@ -226,13 +226,9 @@ class UserDao {
     */
     public function getUsersWithBadge($badge) {
         $ret = null;
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = "SELECT *
-                    FROM user JOIN user_badges
-                    ON user.user_id = user_badges.user_id
-                    WHERE badge_id = ".$db->cleanse($badge->getBadgeId());
-        if($result = $db->Select($query)) {
+        if($result = $db->call("getUsersWithBadge", "{$db->cleanse($badge->getBadgeId())}")) {
             $ret = array();
             foreach($result as $row) {
                 $ret[] = new User($row);

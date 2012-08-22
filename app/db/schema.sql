@@ -27,6 +27,24 @@ CREATE TABLE IF NOT EXISTS `archived_task` (
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP PROCEDURE IF EXISTS addcol;
+DELIMITER //
+CREATE PROCEDURE addcol()
+BEGIN
+	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='archived_task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+		ALTER TABLE `archived_task`
+		    add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
+		    add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
+	end if;
+END//
+
+DELIMITER ;
+
+CALL addcol();
+
+DROP PROCEDURE addcol;
+
 ALTER TABLE `archived_task`
 	COLLATE='utf8_unicode_ci',
 	ENGINE=InnoDB,
@@ -49,6 +67,22 @@ ALTER TABLE `badges`
 	COLLATE='utf8_unicode_ci',
 	ENGINE=InnoDB,
 	CONVERT TO CHARSET utf8;
+
+DROP PROCEDURE IF EXISTS addcol;
+DELIMITER //
+CREATE PROCEDURE addcol()
+BEGIN
+	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='badges'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME="owner_id") then
+		ALTER TABLE `task`
+		    add column `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL;
+	end if;
+END//
+
+DELIMITER ;
+
+CALL addcol();
+
+DROP PROCEDURE addcol;
 
 -- Dumping data for table Solas-Match-test.badges: ~3 rows (approximately)
 /*!40000 ALTER TABLE `badges` DISABLE KEYS */;
@@ -201,10 +235,28 @@ CREATE TABLE IF NOT EXISTS `task` (
   KEY `source` (`source_id`),
   KEY `target` (`target_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP PROCEDURE IF EXISTS addcol;
+DELIMITER //
+CREATE PROCEDURE addcol()
+BEGIN
+	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+		ALTER TABLE `task`
+		    add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
+		    add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
+	end if;
+END//
+
+DELIMITER ;
+
+CALL addcol();
+
+DROP PROCEDURE addcol;
+
 ALTER TABLE `task`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+    COLLATE='utf8_unicode_ci',
+    ENGINE=InnoDB,
+    CONVERT TO CHARSET utf8;
 -- Dumping data for table Solas-Match-test.task: 0 rows
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
@@ -676,44 +728,531 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
-DROP TRIGGER IF EXISTS `validateHomepageInsert`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+-- Dumping structure for procedure Solas-Match-Dev.userHasBadge
+DROP PROCEDURE IF EXISTS `userHasBadge`;
 DELIMITER //
-CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `organisation` FOR EACH ROW BEGIN
-	if (new.home_page not like "http://*" OR new.home_page not like "https://*") then
-	set new.home_page = concat("http://",new.home_page);
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userHasBadge`(IN `userID` INT, IN `badgeID` INT)
+BEGIN
+	Select EXISTS( SELECT 1 FROM user_badges WHERE user_id = userID AND badge_id = badgeID) as result;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getBadge
+DROP PROCEDURE IF EXISTS `getBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBadge`(IN `id` INT, IN `name` VARCHAR(128), IN `des` VARCHAR(512), IN `orgID` INT)
+    READS SQL DATA
+BEGIN
+	if id='' then set id=null;end if;
+	if des='' then set des=null;end if;
+	if name='' then set name=null;end if;
+	if orgID='' then set orgID=null;end if;
+	set @q= "SELECT *FROM badges b where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and b.badge_id=",id) ;
 	end if;
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
-
-
--- Dumping structure for trigger Solas-Match-test.validateHomepageUpdate
-DROP TRIGGER IF EXISTS `validateHomepageUpdate`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
-DELIMITER //
-CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `organisation` FOR EACH ROW BEGIN
-	if (new.home_page not like "http://*" OR new.home_page not like "https://*") then
-	set new.home_page = concat("http://",new.home_page);
+	if des is not null then 
+		set @q = CONCAT(@q," and b.description='",des,"'") ;
 	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and b.title='",name,"'") ;
+	end if;
+	
+	if orgID is not null then 
+		set @q = CONCAT(@q," and b.owner_id='",orgID,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
 
-DROP TRIGGER IF EXISTS `removeTaskInfo`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+-- Dumping structure for procedure Solas-Match-Dev.assignBadge
+DROP PROCEDURE IF EXISTS `assignBadge`;
 DELIMITER //
-CREATE TRIGGER `removeTaskInfo` AFTER DELETE ON `task` FOR EACH ROW BEGIN
-    DELETE FROM user_task_score WHERE task_id = old.id;
-    DELETE FROM task_claim WHERE task_id = old.id;
-    DELETE FROM task_file_version WHERE task_id = old.id;
-    DELETE FROM task_file_version_download WHERE task_id = old.id;
-    DELETE FROM task_tag WHERE task_id = old.id;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `assignBadge`(IN `uid` INT, IN `bid` INT)
+BEGIN
+INSERT INTO user_badges (user_id, badge_id) VALUES (uid,bid);
 END//
 DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
+
+-- Dumping structure for procedure Solas-Match-Dev.getTag
+DROP PROCEDURE IF EXISTS `getTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTag`(IN `id` INT, IN `name` VARCHAR(50))
+BEGIN
+	if id='' then set id=null;end if;
+	if name='' then set name=null;end if;
+	set @q= "select t.tag_id , t.label from tag t where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and t.tag_id=",id) ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and t.label='",name,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.tagInsert
+DROP PROCEDURE IF EXISTS `tagInsert`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tagInsert`(IN `name` VARCHAR(50))
+BEGIN
+insert into tag (label) values (name);
+select tag_id from tag where label=name;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getTasksByOrgIDs
+DROP PROCEDURE IF EXISTS `getTasksByOrgIDs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksByOrgIDs`(IN `orgIDs` VARCHAR(1028), IN `orderby` VARCHAR(256))
+    READS SQL DATA
+BEGIN
+	if orgIDs='' then set orgIDs=null;end if;
+	if orderby='' then set orderby=null;end if;
+	set @q= "SELECT id,organisation_id,title,word_count,source_id,target_id,created_time FROM task WHERE 1 ";-- set update
+	if orgIDs is not null then 
+		set @q = CONCAT(@q," and organisation_id IN (",orgIDs,")") ;
+	end if;
+
+	if orderby is not null then 
+		set @q = CONCAT(@q," order by ",orderby) ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.getTask
+DROP PROCEDURE IF EXISTS `getTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128))
+    READS SQL DATA
+BEGIN
+	if id='' then set id=null;end if;
+	if orgID='' then set orgID=null;end if;
+	if name='' then set name=null;end if;
+	if sID='' then set sID=null;end if;
+	if tID='' then set tID=null;end if;
+	if wordCount='' then set wordCount=null;end if;
+	if created='' then set created=null;end if;
+	if impact='' then set impact=null;end if;
+	if ref='' then set ref=null;end if;
+	
+	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page from task t where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and t.id=",id) ;
+	end if;
+	if orgID is not null then 
+		set @q = CONCAT(@q," and t.organisation_id=",orgID) ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and t.title='",name,"'") ;
+	end if;
+	if sID is not null then 
+		set @q = CONCAT(@q," and t.source_id=",sID) ;
+	end if;
+	if tID is not null then 
+		set @q = CONCAT(@q," and t.target_id=",tID) ;
+	end if;
+	if wordCount is not null then 
+		set @q = CONCAT(@q," and t.word_count=",wordCount) ;
+	end if;
+	if (created is not null  and created!='0000-00-00 00:00:00') then 
+		set @q = CONCAT(@q," and t.created_time='",created,"'") ;
+	end if;
+	if impact is not null then 
+		set @q = CONCAT(@q," and t.impactt=",impact) ;
+	end if;
+	if ref is not null then 
+		set @q = CONCAT(@q," and t.reference_page=",ref) ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.taskInsertAndUpdate
+DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128))
+BEGIN
+	if id='' then set id=null;end if;
+	if orgID='' then set orgID=null;end if;
+	if name='' then set name=null;end if;
+	if sID='' then set sID=null;end if;
+	if tID='' then set tID=null;end if;
+	if wordCount='' then set wordCount=null;end if;
+	if created='' then set created=null;end if;
+	if impact='' then set impact=null;end if;
+	if ref='' then set ref=null;end if;
+	
+	if id is null then
+		insert into task (organisation_id,title,word_count,source_id,target_id,created_time)
+		 values (orgID,name,wordCount,sID,tID,created);
+	elseif EXISTS (select 1 from task t where t.id=id) then
+		set @first = true;
+		set @q= "update task t set";-- set update
+		if orgID is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.organisation_id=",orgID) ;
+		end if;
+		if name is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.title='",name,"'") ;
+		end if;
+		if sID is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.source_id=",sID) ;
+		end if;
+		if tID is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.target_id=",tID) ;
+		end if;
+		if wordCount is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.word_count=",wordCount) ;
+		end if;
+		if impact is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.impact='",impact,"'");
+		end if;
+		if ref is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.reference_page='",ref,"'") ;
+		end if;
+		if (created is not null  and created!='0000-00-00 00:00:00') then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.created_time='",created,"'") ;
+		end if;
+		set @q = CONCAT(@q," where  t.id= ",id);
+		PREPARE stmt FROM @q;
+		EXECUTE stmt;
+		DEALLOCATE PREPARE stmt;
+	end if;
+	call getTask(id,orgID,name,wordCount,sID,tID,created,impact,ref);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getTaskTags
+DROP PROCEDURE IF EXISTS `getTaskTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTags`(IN `id` INT)
+BEGIN
+	if id='' then set id=null;end if;
+	set @q= "select t.tag_id , t.label from tag t join task_tag tt on t.tag_id= tt.tag_id where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and tt.task_id=",id) ;
+	end if;	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.unlinkStoredTags
+DROP PROCEDURE IF EXISTS `unlinkStoredTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkStoredTags`(IN `id` INT)
+    MODIFIES SQL DATA
+BEGIN
+DELETE FROM task_tag WHERE task_id = id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.storeTagLinks
+DROP PROCEDURE IF EXISTS `storeTagLinks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `storeTagLinks`(IN `taskID` INT, IN `tagID` INT)
+    MODIFIES SQL DATA
+BEGIN
+insert into task_tag  (task_id,tag_id) values (taskID,tagID);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getLatestAvailableTasks
+DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT)
+BEGIN
+SELECT t.id
+FROM task AS t
+WHERE t.id NOT IN (SELECT task_id FROM task_claim)						
+ORDER BY created_time DESC
+LIMIT lim;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getUserTopTasks
+DROP PROCEDURE IF EXISTS `getUserTopTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `lim` INT)
+    READS SQL DATA
+    COMMENT 'relpace with more effient code later'
+BEGIN
+SELECT t.id
+FROM task AS t LEFT JOIN (SELECT *FROM user_task_score WHERE user_id = uID) AS uts ON t.id = uts.task_id
+WHERE t.id NOT IN (SELECT task_id FROM task_claim)
+ORDER BY uts.score DESC limit lim;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getTaggedTasks
+DROP PROCEDURE IF EXISTS `getTaggedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `lim` INT)
+    READS SQL DATA
+BEGIN
+	SELECT id 
+	FROM task t join task_tag tt on tt.task_id=t.id
+	WHERE tt.tag_id=tID AND NOT  exists (
+							  	SELECT 1		
+								FROM task_claim
+								WHERE task_id = t.id
+							)
+	ORDER BY t.created_time DESC
+	LIMIT lim; 
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getTopTags
+DROP PROCEDURE IF EXISTS `getTopTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
+    READS SQL DATA
+BEGIN
+SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
+FROM task_tag AS tt 
+join tag AS t on tt.tag_id = t.tag_id
+join task as tsk on tsk.id=tt.task_id
+WHERE not exists ( SELECT 1
+                    FROM task_claim tc
+                    where tc.task_id=tt.task_id
+                	)
+GROUP BY tt.tag_id
+ORDER BY frequency DESC
+LIMIT lim;
+END//
+DELIMITER ;
+
+
+
+-- Dumping structure for procedure Solas-Match-Dev.getLatestFileVersion
+DROP PROCEDURE IF EXISTS `getLatestFileVersion`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestFileVersion`(IN `id` INT, IN `uID` INT)
+BEGIN
+	if uID='' then set uID=null;end if;
+	set @q= "SELECT max(version_id) as latest_version  FROM task_file_version tfv ";-- set update
+	set @q = CONCAT(@q," where tfv.task_id =",id);
+	if uID is not null then 
+		set @q = CONCAT(@q," and tfv.user_id=",uID);
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.recordFileUpload
+DROP PROCEDURE IF EXISTS `recordFileUpload`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN `name` TeXT, IN `content` VARCHAR(255), IN `uID` INT)
+    MODIFIES SQL DATA
+BEGIN
+set @maxVer =-1;
+if not exists (select 1 from task_file_version tfv where tfv.task_id=tID AND tfv.filename=name and tfv.content_type =content) then
+	INSERT INTO `task_file_version` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
+	VALUES (tID,1+@maxVer,name, content, uID, Now());
+else
+	
+	select tfv.version_id into @maxVer
+	from task_file_version tfv 
+	where tfv.task_id=tID 
+	AND tfv.filename=name 
+	and tfv.content_type =content 
+	order by tfv.version_id desc
+	limit 1;
+	INSERT INTO `task_file_version` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
+	VALUES (tID,1+@maxVer,name, content, uID, Now());
+end if;
+select 1+@maxVer as version;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.archiveTask
+DROP PROCEDURE IF EXISTS `archiveTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT)
+    MODIFIES SQL DATA
+BEGIN
+	INSERT INTO `archived_task`(task_id, organisation_id, title, word_count, source_id, target_id, created_time, archived_time)
+		SELECT id, organisation_id, title, word_count, source_id, target_id, created_time, NOW()
+		FROM task   WHERE id =tID;
+   
+   DELETE FROM task WHERE id = tID ;
+   DELETE FROM user_task_score WHERE task_id = tID;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.logFileDownload
+DROP PROCEDURE IF EXISTS `logFileDownload`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `logFileDownload`(IN `tID` INT, IN `vID` INT, IN `uID` INT)
+    MODIFIES SQL DATA
+BEGIN
+	insert into task_file_version_download (task_id,version_id,user_id,time_downloaded) 
+	values (tID,uID,vID,Now());
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getTaskFileMetaData
+DROP PROCEDURE IF EXISTS `getTaskFileMetaData`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskFileMetaData`(IN `tID` INT, IN `vID` INT, IN `name` TEXT, IN `content` VARCHAR(255), IN `uID` INT, IN `uTime` DATETIME)
+    READS SQL DATA
+BEGIN
+	if tID='' then set tID=null;end if;
+	if vID='' then set vID=null;end if;
+	if name='' then set name=null;end if;
+	if content='' then set content=null;end if;
+	if uID='' then set uID=null;end if;
+	if uTime='' then set uTime=null;end if;
+		set @q= "select task_id, version_id, filename, content_type, user_id, upload_time from task_file_version t where 1 ";
+	if tID is not null then 
+		set @q = CONCAT(@q," and t.task_id=",tID) ;
+	end if;
+	if vID is not null then 
+		set @q = CONCAT(@q," and t.version_id=",vID) ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and t.filename='",name,"'") ;
+	end if;
+	if content is not null then 
+		set @q = CONCAT(@q," and t.content_type='",content,"'") ;
+	end if;
+	if uID is not null then 
+		set @q = CONCAT(@q," and t.user_id=",uID) ;
+	end if;
+	if (uTime is not null  and uTime!='0000-00-00 00:00:00')then 
+		set @q = CONCAT(@q," and t.upload_time='",uTime,"'") ;
+	end if;
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+	
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.claimTask
+DROP PROCEDURE IF EXISTS `claimTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `claimTask`(IN `tID` INT, IN `uID` INT)
+BEGIN
+	insert into task_claim  (task_id,user_id) values (tID,uID);
+	select 1 as result;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.hasUserClaimedTask
+DROP PROCEDURE IF EXISTS `hasUserClaimedTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `hasUserClaimedTask`(IN `tID` INT, IN `uID` INT)
+BEGIN
+SELECT exists	(	select 1
+                        FROM task_claim
+                        WHERE task_id = tID
+                        AND user_id = uID
+                 ) as result;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.taskIsClaimed
+DROP PROCEDURE IF EXISTS `taskIsClaimed`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskIsClaimed`(IN `tID` INT)
+BEGIN
+Select exists (SELECT 1	FROM task_claim WHERE task_id = tID) as result;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getUserArchivedTasks
+DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT)
+BEGIN
+SELECT * FROM archived_task as a JOIN task_claim as c ON a.task_id = c.task_id
+WHERE user_id = uID
+ORDER BY created_time DESC
+limit lim;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.getUserTasks
+DROP PROCEDURE IF EXISTS `getUserTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT)
+BEGIN
+SELECT * 
+FROM task JOIN task_claim ON task_claim.task_id = task.id
+WHERE user_id = uID
+ORDER BY created_time DESC
+limit lim;
+END//
+DELIMITER ;
+
+
 
 DROP PROCEDURE IF EXISTS `getUserNotifications`;
 DELIMITER //
@@ -737,6 +1276,36 @@ BEGIN
 	else
     	select 0 as 'result';
 	end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.getOrg
+DROP PROCEDURE IF EXISTS `getOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(50), IN `url` VARCHAR(50), IN `bio` vARCHAR(50))
+BEGIN
+	if id='' then set id=null;end if;
+	if name='' then set name=null;end if;
+	if url='' then set url=null;end if;
+	if bio='' then set bio=null;end if;
+	set @q= "select * from organisation o where 1 ";
+	if id is not null then 
+		set @q = CONCAT(@q," and o.id=",id) ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and o.name='",name,"'") ;
+	end if;
+	if url is not null then 
+		set @q = CONCAT(@q," and o.home_page='",url,"'") ;
+	end if;
+	if bio is not null then 
+		set @q = CONCAT(@q," and o.biography='",bio,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -780,6 +1349,152 @@ BEGIN
 	    WHERE name LIKE CONCAT('%', org_name, '%');
 END//
 DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.requestMembership
+DROP PROCEDURE IF EXISTS `requestMembership`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `requestMembership`(IN `uID` INT, IN `orgID` INT)
+    MODIFIES SQL DATA
+BEGIN
+if not exists (select 1 from org_request_queue where user_id=uID and org_id=orgID) then
+	INSERT INTO org_request_queue (user_id, org_id) VALUES (uID, orgID);
+	select 1 as result;
+else 
+	select 0 as result;
+end if;
+END//
+DELIMITER ;
+
+
+
+-- Dumping structure for procedure Solas-Match-Dev.getMembershipRequests
+DROP PROCEDURE IF EXISTS `getMembershipRequests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMembershipRequests`(IN `orgID` INT)
+BEGIN
+	SELECT *
+	FROM org_request_queue
+   WHERE org_id = orgID
+   ORDER BY request_datetime DESC;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.removeMembershipRequest
+DROP PROCEDURE IF EXISTS `removeMembershipRequest`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeMembershipRequest`(IN `uID` INT, IN `orgID` INT)
+BEGIN
+	DELETE FROM org_request_queue
+   WHERE user_id=uID
+   AND org_id=orgID;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.acceptMemRequest
+DROP PROCEDURE IF EXISTS `acceptMemRequest`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `acceptMemRequest`(IN `uID` INT, IN `orgID` INT)
+BEGIN
+	INSERT INTO organisation_member (user_id, organisation_id) VALUES (uID,orgID);
+	call removeMembershipRequest(uID,orgID);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.taskDownloadCount
+DROP PROCEDURE IF EXISTS `taskDownloadCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskDownloadCount`(IN `tID` INT)
+BEGIN
+	SELECT count(*) times_downloaded
+	FROM task_file_version_download
+	WHERE task_id = tID;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.removeUserBadge
+DROP PROCEDURE IF EXISTS `removeUserBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserBadge`(IN `uID` INT, IN `bID` INT)
+BEGIN
+	set @owner = null;
+	select b.owner_id into @owner from badges b where b.badge_id=bID;
+	if @owner is not null  then
+		DELETE FROM user_badges
+		WHERE user_id=uID
+		AND badge_id=bID;
+	   select 1 as result;
+   else 
+	   select 0 as result;
+   end if;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.addBadge
+DROP PROCEDURE IF EXISTS `addBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addBadge`(IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` VARCHAR(50))
+BEGIN
+if not exists (select 1 from badges b where b.title=name and b.description=disc and b.owner_id=ownerID) then
+	insert into badges (title,description,owner_id) values (ownerID,name,disc);
+	select 1 as result;
+else
+	select 0 as result;
+end if;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getUsersWithBadge
+DROP PROCEDURE IF EXISTS `getUsersWithBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersWithBadge`(IN `bID` INT)
+BEGIN
+	SELECT *
+	FROM user JOIN user_badges ON user.user_id = user_badges.user_id
+	WHERE badge_id = bID;
+END//
+DELIMITER ;
+/*---------------------put triggers below this line------------------------------------------*/
+
+-- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
+DROP TRIGGER IF EXISTS `validateHomepageInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `organisation` FOR EACH ROW 
+BEGIN
+	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
+	set new.home_page = concat("http://",new.home_page);
+	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+
+-- Dumping structure for trigger Solas-Match-test.validateHomepageUpdate
+DROP TRIGGER IF EXISTS `validateHomepageUpdate`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `organisation` FOR EACH ROW 
+BEGIN
+	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
+	set new.home_page = concat("http://",new.home_page);
+	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+DROP TRIGGER IF EXISTS `removeTaskInfo`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `removeTaskInfo` AFTER DELETE ON `task` FOR EACH ROW BEGIN
+    DELETE FROM user_task_score WHERE task_id = old.id;
+    DELETE FROM task_claim WHERE task_id = old.id;
+    DELETE FROM task_file_version WHERE task_id = old.id;
+    DELETE FROM task_file_version_download WHERE task_id = old.id;
+    DELETE FROM task_tag WHERE task_id = old.id;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
 
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

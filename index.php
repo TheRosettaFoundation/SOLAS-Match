@@ -10,7 +10,6 @@ SmartyView::$smartyExtensions = array(
 
 
 require 'app/Settings.class.php';
-require 'app/MySQLWrapper.class.php';
 require 'app/PDOWrapper.class.php';
 require 'app/BadgeDao.class.php';
 require 'app/OrganisationDao.class.php';
@@ -20,7 +19,6 @@ require 'app/TaskDao.class.php';
 require 'app/TagsDao.class.php';
 require 'app/IO.class.php';
 require 'app/TipSelector.class.php';
-require 'app/Organisations.class.php';
 require 'app/lib/Languages.class.php';
 require 'app/lib/URL.class.php';
 require 'app/lib/Authentication.class.php';
@@ -430,8 +428,10 @@ $app->get('/task/alter/:task_id/', 'authUserForOrgTask', function ($task_id) use
 
     $tags = $task->getTags();
     $tag_list = '';
-    foreach($tags as $tag) {
-        $tag_list .= $tag . ' ';
+    if($tags!=null){
+        foreach($tags as $tag) {
+            $tag_list .= $tag . ' ';
+        }
     }
 
     $app->view()->appendData(array(
@@ -999,7 +999,18 @@ $app->get('/logout', function () use ($app) {
 
 $app->get('/register', function () use ($app) {
     $tempSettings=new Settings();
-    $app->view()->setData('openid',$tempSettings->get("site.openid"));
+    $use_openid = $tempSettings->get("site.openid");
+    $app->view()->setData('openid',$use_openid);
+     if(isset($use_openid)) {
+        if($use_openid == 'y' || $use_openid == 'h') {
+            $extra_scripts = "
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-jquery.js\"></script>
+                <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-en.js\"></script>
+                <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/openid.css\" />";
+            $app->view()->appendData(array('extra_scripts' => $extra_scripts));
+        }
+    }
     $error = null;
     $warning = null;
     if (isValidPost($app)) {
@@ -1066,7 +1077,7 @@ $app->get('/client/dashboard', $authenticateForRole('organisation_member'), func
     $orgs = array();
     foreach($my_organisations as $org_id) {
         $org = $org_dao->find(array('id' => $org_id));
-        $my_org_tasks = $task_dao->findTasks(array('organisation_ids' => $org_id));
+        $my_org_tasks = $task_dao->findTasksByOrg(array('organisation_ids' => $org_id));
         $org_tasks[$org->getId()] = $my_org_tasks;
         $orgs[$org->getId()] = $org;
     }
@@ -1359,7 +1370,7 @@ $app->get('/org/create/badge/:org_id/', 'authUserForOrg', function ($org_id) use
 
             $badge_dao = new BadgeDao();
             $badge = new Badge($params);
-            $badge_dao->save($badge);
+            $badge_dao->addBadge($badge);
             $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
         }
     }

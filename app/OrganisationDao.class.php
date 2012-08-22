@@ -16,7 +16,26 @@ class OrganisationDao {
         }
         return $ret;
     }
-
+    
+    public static function nameFromId($organisation_id)
+	{
+                $result = self::getOrg($organisation_id, null, null, null);
+                return $result[0]->getName();
+	}
+        
+    public static function getOrg($id,$name,$homepage,$bio){
+         $ret = array();
+        $db = new PDOWrapper();
+        $db->init();
+        
+        if($result = $db->call("getOrg", "{$db->cleanse($id)},{$db->cleanseNullOrWrapStr($name)},{$db->cleanseNullOrWrapStr($homepage)},{$db->cleanseNullOrWrapStr($bio)}")) {
+            foreach ($result as $row){
+                $ret[] = self::create_org_from_sql_result($row);
+            }
+        }
+        return $ret;
+    }
+    
     public function getOrgByUser($user_id) {//currently not used
         $ret = null;
         $db = new PDOWrapper();
@@ -56,54 +75,29 @@ class OrganisationDao {
 
     public function requestMembership($user_id, $org_id)
     {
-        //Check if the user has already requested membership
-        $previous_requests = $this->getMembershipRequests($org_id);
-        if(!is_null($previous_requests)) {
-            foreach($previous_requests as $request) {
-                if($request['user_id'] == $user_id) {
-                    //User has already sent a request, return
-                    return false;
-                }
-            }
-        }
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        
-        $insert = "INSERT INTO org_request_queue (user_id, org_id)
-                    VALUES (".$db->cleanse($user_id).", ".$db->cleanse($org_id).")";
-        if($db->insertStr($insert)) {
-            return true;
-        } else {
-            return false;
-        }        
+        $result = $db->call("requestMembership", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
+        return $result[0]['result'];
     }
         
 
     public function getMembershipRequests($org_id)
     {
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $query = "SELECT *
-                    FROM org_request_queue
-                    WHERE org_id = ".$db->cleanse($org_id)."
-                    ORDER BY request_datetime DESC";
         $ret = null;
-        if($result = $db->Select($query)) {
-            $ret = $result;
+        if($result = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
+                $ret = $result;
         }
         return $ret;
     }
 
     public function acceptMemRequest($org_id, $user_id) {
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        //Add user as org member
-        $insert = "INSERT INTO organisation_member (user_id, organisation_id)
-                VALUES (".$db->cleanse($user_id).", ".$db->cleanse($org_id).")";
-        $db->insertStr($insert);
-
-        $this->removeMembershipRequest($org_id, $user_id);
-    }
+        $db->call("acceptMemRequest", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
+   }
 
     public function refuseMemRequest($org_id, $user_id) {
         //Simply remove the membership request
@@ -111,15 +105,12 @@ class OrganisationDao {
     }
 
     private function removeMembershipRequest($org_id, $user_id) {
-        $db = new MySQLWrapper();
+        $db = new PDOWrapper();
         $db->init();
-        $delete = "DELETE FROM org_request_queue
-                WHERE user_id=".$db->cleanse($user_id)."
-                AND org_id=".$db->cleanse($org_id);
-        $db->Delete($delete);
+        $db->call("removeMembershipRequest", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
     }
 
-    private function create_org_from_sql_result($result) {
+    private static function create_org_from_sql_result($result) {
         $org_data = array(
                     'id' => $result[0]['id'],
                     'name' => $result[0]['name'],
