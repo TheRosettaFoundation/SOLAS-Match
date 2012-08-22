@@ -1341,6 +1341,25 @@ $app->get('/badge/list', function () use ($app) {
     $app->render('badge-list.tpl');
 })->name('badge-list');
 
+$app->get("/org/search/:org_id", function ($org_id) use ($app) {
+    if($app->request()->isPost()) {
+        $post = (object) $app->request()->post();
+
+        if(isset($post->search_name) && $post->search_name != '') {
+            $org_dao = new OrganisationDao();
+            $found_orgs = $org_dao->searchForOrg($post->search_name);
+
+            if(count($found_orgs) < 1) {
+                $app->flashNow('error', 'No Organisations found');
+            } else {
+                $app->view()->setData('found_orgs', $found_orgs);
+            }
+        }
+    }
+
+    $app->render('org-search.tpl');
+})->via('POST')->name('org-search');
+
 $app->get('/org/create/badge/:org_id/', 'authUserForOrg', function ($org_id) use ($app) {
     if(isValidPost($app)) {
         $post = (object)$app->request()->post();

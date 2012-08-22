@@ -12,40 +12,51 @@
 
 -- Dumping structure for table Solas-Match-test.archived_task
 CREATE TABLE IF NOT EXISTS `archived_task` (
-  `archived_task_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `task_id` bigint(20) NOT NULL,
-  `organisation_id` int(10) unsigned NOT NULL,
-  `title` text COLLATE utf8_unicode_ci NOT NULL,
-  `impact` text COLLATE utf8_unicode_ci NOT NULL,
-  `reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `word_count` int(10) unsigned DEFAULT NULL,
-  `source_id` int(10) unsigned DEFAULT NULL COMMENT 'foreign key from the `language` table',
-  `target_id` int(10) unsigned DEFAULT NULL COMMENT 'foreign key from the `language` table',
-  `created_time` datetime NOT NULL,
-  `archived_time` datetime NOT NULL,
-  PRIMARY KEY (`archived_task_id`),
-  KEY `source` (`source_id`),
-  KEY `target` (`target_id`)
+	`archived_task_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`task_id` BIGINT(20) NOT NULL,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`title` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	`impact` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	`reference_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`word_count` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`source_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+	`target_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+	`created_time` DATETIME NOT NULL,
+	`archived_time` DATETIME NOT NULL,
+	PRIMARY KEY (`archived_task_id`),
+	UNIQUE INDEX `task_id` (`task_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP PROCEDURE IF EXISTS addcol;
+DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
-CREATE PROCEDURE addcol()
+CREATE PROCEDURE alterTable()
 BEGIN
-	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='archived_task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+	if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='archived_task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
 		ALTER TABLE `archived_task`
 		    add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
 		    add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
 	end if;
+        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='source') then
+            ALTER TABLE `archived_task`
+            DROP INDEX `source`;
+        end if;
+        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='target') then
+            ALTER TABLE `archived_task`
+            DROP INDEX `target`;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='task_id') then
+            ALTER TABLE `archived_task`
+            ADD UNIQUE INDEX `task_id` (`task_id`);
+        end if;
+        ALTER TABLE `archived_task` 
+	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 END//
 
 DELIMITER ;
 
-CALL addcol();
+CALL alterTable();
 
-DROP PROCEDURE addcol;
-
-ALTER TABLE `archived_task` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+DROP PROCEDURE alterTable;
 
 -- Dumping data for table Solas-Match-test.archived_task: 0 rows
 /*!40000 ALTER TABLE `archived_task` DISABLE KEYS */;
@@ -54,28 +65,35 @@ ALTER TABLE `archived_task` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8
 
 -- Dumping structure for table Solas-Match-test.badges
 CREATE TABLE IF NOT EXISTS `badges` (
-  `badge_id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `description` mediumtext COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`badge_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `badges` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-DROP PROCEDURE IF EXISTS addcol;
+	`badge_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`owner_id` INT(11) NULL DEFAULT NULL,
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`description` MEDIUMTEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`badge_id`),
+	UNIQUE INDEX `badge` (`owner_id`, `title`)
+)
+ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
-CREATE PROCEDURE addcol()
+CREATE PROCEDURE alterTable()
 BEGIN
-	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='badges'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME="owner_id") then
-		ALTER TABLE `task`
+	if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='badges'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='owner_id') then
+		ALTER TABLE `badges`
 		    add column `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL;
 	end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='badges'and tc.CONSTRAINT_NAME='badge') then
+            ALTER TABLE `badges`
+            ADD UNIQUE INDEX `badge` (`owner_id`, `title`);
+        end if;
+        ALTER TABLE `badges` 
+	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 END//
 
 DELIMITER ;
 
-CALL addcol();
+CALL alterTable();
 
-DROP PROCEDURE addcol;
+DROP PROCEDURE alterTable;
 
 -- Dumping data for table Solas-Match-test.badges: ~3 rows (approximately)
 /*!40000 ALTER TABLE `badges` DISABLE KEYS */;
@@ -1332,6 +1350,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `searchForOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchForOrg`(IN `org_name` VARCHAR(128))
+    COMMENT 'Search for an organisation by name'
+BEGIN
+	SELECT *
+	    FROM organisation
+	    WHERE name LIKE CONCAT('%', org_name, '%');
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Dev.requestMembership
 DROP PROCEDURE IF EXISTS `requestMembership`;
@@ -1437,6 +1465,7 @@ BEGIN
 	WHERE badge_id = bID;
 END//
 DELIMITER ;
+/*---------------------put triggers below this line------------------------------------------*/
 
 
 -- Dumping structure for trigger Solas-Match-test.validateHomepageInsert
