@@ -45,10 +45,7 @@ CALL addcol();
 
 DROP PROCEDURE addcol;
 
-ALTER TABLE `archived_task`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `archived_task` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.archived_task: 0 rows
 /*!40000 ALTER TABLE `archived_task` DISABLE KEYS */;
@@ -63,11 +60,7 @@ CREATE TABLE IF NOT EXISTS `badges` (
   `description` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`badge_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `badges`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
-
+ALTER TABLE `badges` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 DROP PROCEDURE IF EXISTS addcol;
 DELIMITER //
 CREATE PROCEDURE addcol()
@@ -104,14 +97,12 @@ CREATE TABLE IF NOT EXISTS `language` (
   `en_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '"English", for example',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `language`
-	 ADD UNIQUE INDEX (`code`),
-    CHANGE COLUMN `code` `code` VARCHAR(3) NOT NULL COMMENT '"en", for example' AFTER `id`,
-    COLLATE='utf8_unicode_ci',
-    ENGINE=InnoDB,
-    CONVERT TO CHARSET utf8;
 
-	
+ALTER TABLE `language` 
+    ADD UNIQUE INDEX (`code`),
+    CHANGE COLUMN `code` `code` VARCHAR(3) NOT NULL COMMENT '"en", for example' AFTER `id`,
+    ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
 
 -- Dumping data for table Solas-Match-test.language: 0 rows
 /*!40000 ALTER TABLE `language` DISABLE KEYS */;
@@ -125,9 +116,9 @@ CREATE TABLE IF NOT EXISTS `country` (
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `code` (`code`)
 )
-COLLATE='utf8_general_ci'
+COLLATE='utf8_unicode_ci'
 ENGINE=InnoDB;
-
+ALTER TABLE `country` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping structure for table Solas-Match-test.old_task_file
 CREATE TABLE IF NOT EXISTS `old_task_file` (
@@ -144,9 +135,7 @@ ALTER TABLE `old_task_file`
 	CHANGE COLUMN `file_id` `file_id` INT(10) UNSIGNED NOT NULL AFTER `task_id`,
 	DROP PRIMARY KEY,
 	ADD PRIMARY KEY (`task_id`),
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.old_task_file: 0 rows
 /*!40000 ALTER TABLE `old_task_file` DISABLE KEYS */;
@@ -168,10 +157,7 @@ ALTER TABLE `organisation`
 	CHANGE COLUMN `biography` `biography` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
 	ADD UNIQUE INDEX (`name`, `home_page`);
 
-ALTER TABLE `organisation`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `organisation` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.organisation: 0 rows
 /*!40000 ALTER TABLE `organisation` DISABLE KEYS */;
@@ -188,10 +174,7 @@ CREATE TABLE IF NOT EXISTS `organisation_member` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `organisation_member`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `organisation_member` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.organisation_member: 0 rows
 /*!40000 ALTER TABLE `organisation_member` DISABLE KEYS */;
@@ -211,11 +194,7 @@ CREATE TABLE IF NOT EXISTS `org_request_queue` (
   `request_datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`request_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
-ALTER TABLE `org_request_queue`
-	COLLATE=`utf8_unicode_ci`,
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
-
+ALTER TABLE `org_request_queue` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 -- --------------------------------------------------------
 
 
@@ -225,10 +204,7 @@ CREATE TABLE IF NOT EXISTS `tag` (
   `label` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`tag_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `tag`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.tag: 0 rows
 /*!40000 ALTER TABLE `tag` DISABLE KEYS */;
@@ -268,10 +244,7 @@ CALL addcol();
 
 DROP PROCEDURE addcol;
 
-ALTER TABLE `task`
-    COLLATE='utf8_unicode_ci',
-    ENGINE=InnoDB,
-    CONVERT TO CHARSET utf8;
+ALTER TABLE `task` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 -- Dumping data for table Solas-Match-test.task: 0 rows
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
@@ -287,10 +260,7 @@ CREATE TABLE IF NOT EXISTS `task_claim` (
   KEY `task_user` (`task_id`,`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `task_claim`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `task_claim` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.task_claim: 0 rows
 /*!40000 ALTER TABLE `task_claim` DISABLE KEYS */;
@@ -307,10 +277,7 @@ CREATE TABLE IF NOT EXISTS `task_file_version` (
   `upload_time` datetime NOT NULL,
   KEY `task_id` (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `task_file_version`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `task_file_version` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.task_file_version: 0 rows
 /*!40000 ALTER TABLE `task_file_version` DISABLE KEYS */;
@@ -327,10 +294,7 @@ CREATE TABLE IF NOT EXISTS `task_file_version_download` (
   KEY `task_id` (`task_id`,`file_id`,`version_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `task_file_version_download`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `task_file_version_download` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.task_file_version_download: 0 rows
 /*!40000 ALTER TABLE `task_file_version_download` DISABLE KEYS */;
@@ -345,10 +309,7 @@ CREATE TABLE IF NOT EXISTS `task_tag` (
   UNIQUE KEY `task_tag` (`task_id`,`tag_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `task_tag`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `task_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.task_tag: 0 rows
 /*!40000 ALTER TABLE `task_tag` DISABLE KEYS */;
@@ -362,10 +323,7 @@ CREATE TABLE IF NOT EXISTS `translator` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `translator`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `translator` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.translator: 0 rows
 /*!40000 ALTER TABLE `translator` DISABLE KEYS */;
@@ -388,9 +346,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 ALTER TABLE `user`
         CHANGE COLUMN `email` `email` VARCHAR(128) NOT NULL AFTER `display_name`,
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 
 
@@ -402,10 +358,7 @@ CREATE TABLE IF NOT EXISTS `user_badges` (
   PRIMARY KEY (`user_id`,`badge_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `user_badges`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `user_badges` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 -- Dumping data for table Solas-Match-test.user_badges: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user_badges` DISABLE KEYS */;
 REPLACE INTO `user_badges` (`user_id`, `badge_id`) VALUES
@@ -420,10 +373,7 @@ CREATE TABLE IF NOT EXISTS `user_tag` (
   PRIMARY KEY (`user_id`,`tag_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `user_tag`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `user_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.user_tag: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user_tag` DISABLE KEYS */;
@@ -436,10 +386,7 @@ CREATE TABLE IF NOT EXISTS `user_notifications` (
     PRIMARY KEY (`user_id`, `task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `user_notifications`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `user_notifications` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping structure for table Solas-Match-test.user_task_score
 CREATE TABLE IF NOT EXISTS `user_task_score` (
@@ -449,10 +396,7 @@ CREATE TABLE IF NOT EXISTS `user_task_score` (
   PRIMARY KEY (`user_id`,`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `user_task_score`
-	COLLATE='utf8_unicode_ci',
-	ENGINE=InnoDB,
-	CONVERT TO CHARSET utf8;
+ALTER TABLE `user_task_score` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.user_task_score: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user_task_score` DISABLE KEYS */;
