@@ -58,6 +58,21 @@ class OrganisationDao {
         return $ret;
     }
 
+    public function searchForOrg($org_name)
+    {
+        $ret = null;
+        $db = new PDOWrapper();
+        $db->init();
+        if($result = $db->call("searchForOrg", $db->cleanseWrapStr($org_name))) {
+            $ret = array();
+            foreach($result as $row) {
+                $ret[] = new Organisation($row);
+            }
+        }
+
+        return $ret;
+    }
+
     public function requestMembership($user_id, $org_id)
     {
         $db = new PDOWrapper();
