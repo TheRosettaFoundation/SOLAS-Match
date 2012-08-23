@@ -37,7 +37,7 @@
                         <label for="source">From language</label>
                         <select name="source" id="source">
                             {foreach $languages as $language}
-                                <option value="{$language}">{$language}</option>
+                                <option value="{$language[0]}">{$language[0]}</option>
                             {/foreach}
                         </select>
                     </p>
@@ -45,7 +45,7 @@
                         <label for="target_0">To language</label>
                         <select name="target_0" id="target_0">
                             {foreach $languages as $language}
-                                <option value="{$language}">{$language}</option>
+                                <option value="{$language[0]}">{$language[0]}</option>
                             {/foreach}
                         </select>
                         <div id="text">

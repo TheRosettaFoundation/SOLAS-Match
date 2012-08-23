@@ -2,17 +2,13 @@
 
 class Languages {
 	public static function languageIdFromName($language_name) {
-		$db 	= new PDOWrapper();
-		$db->init();
 		$result = self::getLanguage(null,null,$language_name);
-		return $result[0];
+		return $result['id'];
 	}
 	
 	public static function languageNameFromId($language_id) {
-		$db 	= new PDOWrapper();
-		$db->init();
 		$result = self::getLanguage($language_id,null,null);
-		return $result[2];
+		return $result['en_name'];
 	}
         
     public static function getLanguage($id,$code,$name){

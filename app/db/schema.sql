@@ -1737,6 +1737,35 @@ BEGIN
 	WHERE badge_id = bID;
 END//
 DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.getLanguage
+DROP PROCEDURE IF EXISTS `getLanguage`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguage`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
+BEGIN
+	if id='' then set id=null;end if;
+	if code='' then set code=null;end if;
+	if name='' then set name=null;end if;
+	set @q= "select * from language l where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and l.id=",id) ;
+	end if;
+	if code is not null then 
+		set @q = CONCAT(@q," and l.code='",code,"'") ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and l.en_name='",name,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
 /*---------------------put triggers below this line------------------------------------------*/
 
 
