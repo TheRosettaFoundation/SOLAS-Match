@@ -28,11 +28,11 @@
     <label for="source">Source Language</label>
     <select name="source" id="source">
         {foreach $languages as $language}
-            <option value="{$language}"
+            <option value="{$language[0]}"
             {if $source_lang == $language}
                 selected="selected"
             {/if}>
-                {$language}
+                {$language[0]}
             </option>
         {/foreach}
     </select>
@@ -40,11 +40,11 @@
     <label for="target">Target Language</label>
     <select name="target" id="target">
         {foreach $languages as $language}
-            <option value="{$language}"
+            <option value="{$language[0]}"
             {if $target_lang == $language}
                 selected="selected"
             {/if}>
-                {$language}
+                {$language[0]}
             </option>
         {/foreach}
     </select>
