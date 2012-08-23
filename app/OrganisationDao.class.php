@@ -10,7 +10,7 @@ class OrganisationDao {
         if (isset($params['id'])) {
             if ($result = $db->call("findOganisation", $db->cleanse($params['id']))) {
 
-                $ret = $this->create_org_from_sql_result($result);
+                $ret = $this->create_org_from_sql_result($result[0]);
 
             }
         }
@@ -42,7 +42,7 @@ class OrganisationDao {
         $db->init();
         
         if($result = $db->call("getOrgByUser", $db->cleanse($user_id))) {
-            $ret = $this->create_org_from_sql_result($result);
+            $ret = $this->create_org_from_sql_result($result[0]);
         }
         return $ret;
     }
@@ -112,10 +112,10 @@ class OrganisationDao {
 
     private static function create_org_from_sql_result($result) {
         $org_data = array(
-                    'id' => $result[0]['id'],
-                    'name' => $result[0]['name'],
-                    'home_page' => $result[0]['home_page'],
-                    'biography' => $result[0]['biography']
+                    'id' => $result['id'],
+                    'name' => $result['name'],
+                    'home_page' => $result['home_page'],
+                    'biography' => $result['biography']
         );
 
         return new Organisation($org_data);
