@@ -116,10 +116,26 @@ CREATE TABLE IF NOT EXISTS `language` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `language` 
-    ADD UNIQUE INDEX (`code`),
-    CHANGE COLUMN `code` `code` VARCHAR(3) NOT NULL COMMENT '"en", for example' AFTER `id`,
-    ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='language'and tc.CONSTRAINT_NAME='code') then
+            ALTER TABLE `language` 
+            ADD UNIQUE INDEX `code` (`code`);
+        end if;
+        ALTER TABLE `language` 
+        CHANGE COLUMN `code` `code` VARCHAR(3) NOT NULL COMMENT '"en", for example' AFTER `id`,
+        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
+
 
 
 -- Dumping data for table Solas-Match-test.language: 0 rows
@@ -136,7 +152,24 @@ CREATE TABLE IF NOT EXISTS `country` (
 )
 COLLATE='utf8_unicode_ci'
 ENGINE=InnoDB;
-ALTER TABLE `country` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='country'and tc.CONSTRAINT_NAME='code') then
+            ALTER TABLE `country` 
+            ADD UNIQUE INDEX `code` (`code`);
+        end if;
+        ALTER TABLE `country` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
 
 -- Dumping structure for table Solas-Match-test.old_task_file
 CREATE TABLE IF NOT EXISTS `old_task_file` (
@@ -149,11 +182,25 @@ CREATE TABLE IF NOT EXISTS `old_task_file` (
   `upload_time` datetime NOT NULL,
   PRIMARY KEY (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `old_task_file`
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='old_task_file'and tc.CONSTRAINT_NAME='PRIMARY') then
+            ALTER TABLE `old_task_file` 
+            ADD PRIMARY KEY (`task_id`);
+        end if;
+        ALTER TABLE `old_task_file`
 	CHANGE COLUMN `file_id` `file_id` INT(10) UNSIGNED NOT NULL AFTER `task_id`,
-	DROP PRIMARY KEY,
-	ADD PRIMARY KEY (`task_id`),
 	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
 
 -- Dumping data for table Solas-Match-test.old_task_file: 0 rows
 /*!40000 ALTER TABLE `old_task_file` DISABLE KEYS */;
@@ -162,26 +209,43 @@ ALTER TABLE `old_task_file`
 
 -- Dumping structure for table Solas-Match-test.organisation
 CREATE TABLE IF NOT EXISTS `organisation` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `home_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `biography` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`,`home_page`)
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`biography` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `organisation`
-	CHANGE COLUMN `name` `name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `id`,
-	CHANGE COLUMN `home_page` `home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `name`,
-	CHANGE COLUMN `biography` `biography` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
-	ADD UNIQUE INDEX (`name`, `home_page`);
 
-ALTER TABLE `organisation` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
 -- Dumping data for table Solas-Match-test.organisation: 0 rows
 /*!40000 ALTER TABLE `organisation` DISABLE KEYS */;
 /*!40000 ALTER TABLE `organisation` ENABLE KEYS */;
 
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation'and tc.CONSTRAINT_NAME='name') then
+            ALTER TABLE `organisation` 
+            ADD UNIQUE INDEX `name` (`name`);
+        else 
+            ALTER TABLE `organisation` 
+            DROP INDEX `name`,
+            ADD UNIQUE INDEX `name` (`name`);
+        end if;
+        ALTER TABLE `organisation`
+	CHANGE COLUMN `name` `name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `id`,
+	CHANGE COLUMN `home_page` `home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `name`,
+	CHANGE COLUMN `biography` `biography` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
+        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+END//
 
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
 
 
 
@@ -192,8 +256,27 @@ CREATE TABLE IF NOT EXISTS `organisation_member` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `organisation_member` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation_member'and tc.CONSTRAINT_NAME='user_id') then
+            ALTER TABLE `organisation_member`
+            ADD UNIQUE INDEX `user_id` (`user_id`, `organisation_id`);
+        else 
+            ALTER TABLE `organisation_member`
+            DROP INDEX `user_id`,
+            ADD UNIQUE INDEX `user_id` (`user_id`, `organisation_id`);
+        end if;
+        ALTER TABLE `organisation_member` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
 -- Dumping data for table Solas-Match-test.organisation_member: 0 rows
 /*!40000 ALTER TABLE `organisation_member` DISABLE KEYS */;
 /*!40000 ALTER TABLE `organisation_member` ENABLE KEYS */;
@@ -206,23 +289,59 @@ ALTER TABLE `organisation_member` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE
 --
 
 CREATE TABLE IF NOT EXISTS `org_request_queue` (
-  `request_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `org_id` int(11) NOT NULL,
-  `request_datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`request_id`)
+	`request_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NOT NULL,
+	`org_id` INT(11) NOT NULL,
+	`request_datetime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`request_id`),
+	UNIQUE INDEX `userRequest` (`user_id`, `org_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
-ALTER TABLE `org_request_queue` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='org_request_queue'and tc.CONSTRAINT_NAME='userRequest') then
+            ALTER TABLE `org_request_queue`            
+            ADD UNIQUE INDEX `userRequest` (`user_id`, `org_id`);
+        end if;
+        ALTER TABLE `org_request_queue` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
 -- --------------------------------------------------------
 
 
 -- Dumping structure for table Solas-Match-test.tag
 CREATE TABLE IF NOT EXISTS `tag` (
-  `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `label` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`tag_id`)
+	`tag_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`label` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`tag_id`),
+	UNIQUE INDEX `label` (`label`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='tag'and tc.CONSTRAINT_NAME='label') then
+            ALTER TABLE `tag`
+            ADD UNIQUE INDEX `label` (`label`);
+        end if;
+        ALTER TABLE `tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
 
 -- Dumping data for table Solas-Match-test.tag: 0 rows
 /*!40000 ALTER TABLE `tag` DISABLE KEYS */;
@@ -231,38 +350,53 @@ ALTER TABLE `tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_c
 
 -- Dumping structure for table Solas-Match-test.task
 CREATE TABLE IF NOT EXISTS `task` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `organisation_id` int(10) unsigned NOT NULL,
-  `title` text COLLATE utf8_unicode_ci NOT NULL,
-  `impact` text COLLATE utf8_unicode_ci NOT NULL,
-  `reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `word_count` int(10) unsigned DEFAULT NULL,
-  `source_id` int(10) unsigned DEFAULT NULL COMMENT 'foreign key from the `language` table',
-  `target_id` int(10) unsigned DEFAULT NULL COMMENT 'foreign key from the `language` table',
-  `created_time` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `source` (`source_id`),
-  KEY `target` (`target_id`)
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`title` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci',
+	`impact` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	`reference_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`word_count` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`source_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+	`target_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+	`created_time` DATETIME NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP PROCEDURE IF EXISTS addcol;
+DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
-CREATE PROCEDURE addcol()
+CREATE PROCEDURE alterTable()
 BEGIN
-	if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+        ALTER TABLE `task` 
+        CHANGE COLUMN `title` `title` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `organisation_id`,
+        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
 		ALTER TABLE `task`
 		    add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
 		    add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
 	end if;
+	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='task') then
+            ALTER TABLE `task`
+            ADD UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`);
+        end if;
+        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='source') then
+            ALTER TABLE `task`
+            DROP INDEX `source`;
+        end if;
+        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='target') then
+            ALTER TABLE `task`
+            DROP INDEX `target`;
+        end if;
+        
 END//
 
 DELIMITER ;
 
-CALL addcol();
+CALL alterTable();
 
-DROP PROCEDURE addcol;
+DROP PROCEDURE alterTable;
 
-ALTER TABLE `task` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
 -- Dumping data for table Solas-Match-test.task: 0 rows
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
@@ -270,15 +404,36 @@ ALTER TABLE `task` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_
 
 -- Dumping structure for table Solas-Match-test.task_claim
 CREATE TABLE IF NOT EXISTS `task_claim` (
-  `claim_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `task_id` bigint(20) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `claimed_time` datetime NOT NULL,
-  PRIMARY KEY (`claim_id`),
-  KEY `task_user` (`task_id`,`user_id`)
+	`claim_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`task_id` BIGINT(20) NOT NULL,
+	`user_id` INT(11) NOT NULL,
+	`claimed_time` DATETIME NOT NULL,
+	PRIMARY KEY (`claim_id`),
+	UNIQUE INDEX `task` (`task_id`, `user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `task_claim` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_claim'and tc.CONSTRAINT_NAME='task') then
+            ALTER TABLE `task_claim`
+            ADD UNIQUE INDEX `task` (`task_id`, `user_id`);
+        end if;
+        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_claim'and tc.CONSTRAINT_NAME='task_user') then
+            ALTER TABLE `task_claim`
+            DROP INDEX `task_user`;
+        end if;
+        ALTER TABLE `task_claim` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+  
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
 
 -- Dumping data for table Solas-Match-test.task_claim: 0 rows
 /*!40000 ALTER TABLE `task_claim` DISABLE KEYS */;
@@ -287,15 +442,49 @@ ALTER TABLE `task_claim` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_un
 
 -- Dumping structure for table Solas-Match-test.task_file_version
 CREATE TABLE IF NOT EXISTS `task_file_version` (
-  `task_id` bigint(20) NOT NULL,
-  `version_id` int(11) NOT NULL COMMENT 'Gets incremented within the code',
-  `filename` text COLLATE utf8_unicode_ci NOT NULL,
-  `content_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `user_id` int(11) DEFAULT NULL COMMENT 'Null while we don''t have logging in',
-  `upload_time` datetime NOT NULL,
-  KEY `task_id` (`task_id`)
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`task_id` BIGINT(20) NOT NULL,
+	`version_id` INT(11) NOT NULL COMMENT 'Gets incremented within the code',
+	`filename` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	`content_type` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
+	`user_id` INT(11) NULL DEFAULT NULL COMMENT 'Null while we don\'t have logging in',
+	`upload_time` DATETIME NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ALTER TABLE `task_file_version` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='taskFile') then
+            ALTER TABLE `task_file_version`
+            ADD UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`);
+        end if;
+         if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='task_id') then
+            ALTER TABLE `task_file_version`
+            DROP INDEX `task_id`;
+        end if;
+        if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task_file_version'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
+            ALTER TABLE `task_file_version`
+            ADD COLUMN `id` BIGINT NULL AUTO_INCREMENT FIRST,
+            ADD PRIMARY KEY (`id`);
+	end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='PRIMARY') then
+            ALTER TABLE `task_file_version`
+            ADD PRIMARY KEY (`id`);
+        end if;
+        ALTER TABLE `task_file_version` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+  
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
 
 -- Dumping data for table Solas-Match-test.task_file_version: 0 rows
 /*!40000 ALTER TABLE `task_file_version` DISABLE KEYS */;
@@ -304,15 +493,49 @@ ALTER TABLE `task_file_version` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE '
 
 -- Dumping structure for table Solas-Match-test.task_file_version_download
 CREATE TABLE IF NOT EXISTS `task_file_version_download` (
-  `task_id` bigint(20) unsigned NOT NULL,
-  `file_id` int(10) unsigned NOT NULL,
-  `version_id` int(10) unsigned NOT NULL,
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `time_downloaded` datetime NOT NULL,
-  KEY `task_id` (`task_id`,`file_id`,`version_id`)
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`task_id` BIGINT(20) UNSIGNED NOT NULL,
+	`file_id` INT(10) UNSIGNED NOT NULL,
+	`version_id` INT(10) UNSIGNED NOT NULL,
+	`user_id` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`time_downloaded` DATETIME NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `download` (`user_id`, `version_id`, `file_id`, `task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `task_file_version_download` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='download') then
+            ALTER TABLE `task_file_version_download`
+            ADD UNIQUE INDEX `download` (`user_id`, `version_id`, `file_id`, `task_id`);
+        end if;
+         if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='task_id') then
+            ALTER TABLE `task_file_version_download`
+            DROP INDEX `task_id`;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='task_file_version_download'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
+            ALTER TABLE `task_file_version_download`
+            ADD COLUMN `id` BIGINT NULL AUTO_INCREMENT FIRST,
+            ADD PRIMARY KEY (`id`);
+	end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='PRIMARY') then
+            ALTER TABLE `task_file_version_download`
+            ADD PRIMARY KEY (`id`);
+        end if;
+        ALTER TABLE `task_file_version_download` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+ 	
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
+
 
 -- Dumping data for table Solas-Match-test.task_file_version_download: 0 rows
 /*!40000 ALTER TABLE `task_file_version_download` DISABLE KEYS */;
@@ -328,6 +551,7 @@ CREATE TABLE IF NOT EXISTS `task_tag` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `task_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
 
 -- Dumping data for table Solas-Match-test.task_tag: 0 rows
 /*!40000 ALTER TABLE `task_tag` DISABLE KEYS */;
@@ -371,27 +595,56 @@ ALTER TABLE `user`
 
 -- Dumping structure for table Solas-Match-test.user_badges
 CREATE TABLE IF NOT EXISTS `user_badges` (
-  `user_id` int(11) NOT NULL,
-  `badge_id` int(11) NOT NULL,
-  PRIMARY KEY (`user_id`,`badge_id`)
+	`user_id` INT(11) NOT NULL,
+	`badge_id` INT(11) NOT NULL,
+	UNIQUE INDEX `userBadge` (`user_id`, `badge_id`),
+	PRIMARY KEY (`user_id`, `badge_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `user_badges` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
--- Dumping data for table Solas-Match-test.user_badges: ~0 rows (approximately)
-/*!40000 ALTER TABLE `user_badges` DISABLE KEYS */;
-REPLACE INTO `user_badges` (`user_id`, `badge_id`) VALUES
-	(45, 4);
-/*!40000 ALTER TABLE `user_badges` ENABLE KEYS */;
 
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_badges'and tc.CONSTRAINT_NAME='userBadge') then
+            ALTER TABLE `user_badges`
+            ADD UNIQUE INDEX `userBadge` (`user_id`, `badge_id`);
+        end if;
+        ALTER TABLE `user_badges` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
 
 -- Dumping structure for table Solas-Match-test.user_tag
 CREATE TABLE IF NOT EXISTS `user_tag` (
-  `user_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL,
-  PRIMARY KEY (`user_id`,`tag_id`)
+	`user_id` INT(11) NOT NULL,
+	`tag_id` INT(11) NOT NULL,
+	PRIMARY KEY (`user_id`, `tag_id`),
+	UNIQUE INDEX `userTag` (`user_id`, `tag_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `user_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_tag'and tc.CONSTRAINT_NAME='userTag') then
+            ALTER TABLE `user_tag`
+            ADD UNIQUE INDEX `userTag` (`user_id`, `tag_id`);
+        end if;
+        ALTER TABLE `user_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
+
 
 -- Dumping data for table Solas-Match-test.user_tag: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user_tag` DISABLE KEYS */;
@@ -408,13 +661,32 @@ ALTER TABLE `user_notifications` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 
 
 -- Dumping structure for table Solas-Match-test.user_task_score
 CREATE TABLE IF NOT EXISTS `user_task_score` (
-  `user_id` int(11) NOT NULL,
-  `task_id` int(11) NOT NULL,
-  `score` int(11) NOT NULL DEFAULT '-1',
-  PRIMARY KEY (`user_id`,`task_id`)
+	`user_id` INT(11) NOT NULL,
+	`task_id` INT(11) NOT NULL,
+	`score` INT(11) NOT NULL DEFAULT '-1',
+	PRIMARY KEY (`user_id`, `task_id`),
+	UNIQUE INDEX `taskScore` (`task_id`, `user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `user_task_score` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_task_score'and tc.CONSTRAINT_NAME='taskScore') then
+           ALTER TABLE `user_task_score`
+	ADD UNIQUE INDEX `taskScore` (`task_id`, `user_id`);
+        end if;
+        ALTER TABLE `user_task_score` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
+
 
 -- Dumping data for table Solas-Match-test.user_task_score: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user_task_score` DISABLE KEYS */;
