@@ -1187,7 +1187,7 @@ BEGIN
 	
 	if id is null then
 		insert into task (organisation_id,title,word_count,source_id,target_id,created_time)
-		 values (orgID,name,wordCount,sID,tID,created);
+		 values (orgID,name,wordCount,sID,tID,now());
 	elseif EXISTS (select 1 from task t where t.id=id) then
 		set @first = true;
 		set @q= "update task t set";-- set update
