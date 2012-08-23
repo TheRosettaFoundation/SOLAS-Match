@@ -23,8 +23,9 @@ class OrganisationDao {
                 return $result[0]->getName();
 	}
         
-    public static function getOrg($id,$name,$homepage,$bio){
-         $ret = array();
+    public static function getOrg($id,$name,$homepage,$bio)
+    {
+        $ret = array();
         $db = new PDOWrapper();
         $db->init();
         
