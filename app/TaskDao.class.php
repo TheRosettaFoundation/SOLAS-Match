@@ -183,10 +183,8 @@ New requirement:
         $this->save($task);
 
         //Generate new file info and save it
-        $this->recordFileUpload($task,$task_file_info['filename'],$task_file_info['content_type'],$_SESSION['user_id']);
-
-
-        
+        TaskFile::recordFileUpload($task,$task_file_info['filename'],$task_file_info['content_type'],$_SESSION['user_id']);
+     
         $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
 
         //Get the new path the file can be found at
@@ -336,16 +334,16 @@ New requirement:
 		return $ret;
 	}
 
-	public function recordFileUpload($task, $filename, $content_type, $user_id) {
-                $db = new PDOWrapper();
-		$db->init();
-                $args = "";
-                $args .= "{$db->cleanse($task->getTaskId())}";
-                $args .= ",{$db->cleanseWrapStr($filename)}";
-                $args .= ",{$db->cleanseWrapStr($content_type)}";
-                $args .= ",{$db->cleanseNull($user_id)}";
-                return $db->call("recordFileUpload", $args);
-        }
+//	public function recordFileUpload($task, $filename, $content_type, $user_id) {
+//                $db = new PDOWrapper();
+//		$db->init();
+//                $args = "";
+//                $args .= "{$db->cleanse($task->getTaskId())}";
+//                $args .= ",{$db->cleanseWrapStr($filename)}";
+//                $args .= ",{$db->cleanseWrapStr($content_type)}";
+//                $args .= ",{$db->cleanseNull($user_id)}";
+//                return $db->call("recordFileUpload", $args);
+//        }
 
 	public function getLatestFileVersion($task) {
 		$db = new PDOWrapper();

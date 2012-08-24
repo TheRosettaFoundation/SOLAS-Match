@@ -99,8 +99,7 @@ class Upload {
 		
 		$file_name 		= $_FILES[$form_file_field]['name'];
 		$file_tmp_name 	= $_FILES[$form_file_field]['tmp_name'];
-		$task_dao 		= new TaskDao;
-		$version 		= $task_dao->recordFileUpload($task, $file_name, $_FILES[$form_file_field]['type'], $user_id);
+		$version 		= TaskFile::recordFileUpload($task, $file_name, $_FILES[$form_file_field]['type'], $user_id);
                 $version = $version[0]['version'];
 		$upload_folder 	= self::absoluteFolderPathForUpload($task, $version);
 

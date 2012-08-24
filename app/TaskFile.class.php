@@ -43,4 +43,15 @@ class TaskFile {
         $result = $db->call("getLatestFileVersion","{$db->cleanse($task_id)},{$db->cleanseNull($user_id)}");
         return $result[0]['latest_version']>0;
     }
+    
+    public static function recordFileUpload($task, $filename, $content_type, $user_id) {
+                $db = new PDOWrapper();
+		$db->init();
+                $args = "";
+                $args .= "{$db->cleanse($task->getTaskId())}";
+                $args .= ",{$db->cleanseWrapStr($filename)}";
+                $args .= ",{$db->cleanseWrapStr($content_type)}";
+                $args .= ",{$db->cleanseNull($user_id)}";
+                return $db->call("recordFileUpload", $args);
+    }
 }
