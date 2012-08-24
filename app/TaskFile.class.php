@@ -28,5 +28,19 @@ class TaskFile {
 	
 	function urlVersion($version) {
 		return $this->url() . 'v/' . intval($version) . '/';
-	}	
+	}
+        /*
+     * A private file for check if a task has been translated by checking 
+     * if a file has been uploaded for it. if user_id is null it will just 
+     * check on a task basis. The inclusion of the user_id allows several 
+     * people to work on the job at once
+     * Returns true if the file has been translated
+     */
+    public static function _check_task_file_version($task_id, $user_id = null)
+    {
+        $db = new PDOWrapper();
+        $db->init();
+        $result = $db->call("getLatestFileVersion","{$db->cleanse($task_id)},{$db->cleanseNull($user_id)}");
+        return $result[0]['latest_version']>0;
+    }
 }
