@@ -710,7 +710,7 @@ $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('t
 
     $absolute_file_path     = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
     $file_content_type      = $task_file_info['content_type'];
-    $task_dao->logFileDownload($task, $version);
+    TaskFile::logFileDownload($task, $version);
     IO::downloadFile($absolute_file_path, $file_content_type);
     //die;
 })->name('download-task-version');

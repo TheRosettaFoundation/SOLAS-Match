@@ -80,4 +80,11 @@ class TaskFile {
 			return null;			
 		}
 	}
+        
+        
+    public static function logFileDownload($task, $version) {
+            $db = new PDOWrapper();
+            $db->init();
+            $db->call("logFileDownload", "{$db->cleanse($task->getTaskId())},{$db->cleanse($version)},null");
+    }
 }
