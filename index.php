@@ -175,9 +175,8 @@ function authUserForOrgTask($request, $response, $route) {
 *
 */
 $app->get('/', function () use ($app) {
-    $task_dao = new TaskDao;
     $app->view()->appendData(array(
-        'top_tags' => $task_dao->getTopTags(30),
+        'top_tags' => TagsDao::getTopTags(30),
         'current_page' => 'home'
     ));
 
@@ -893,7 +892,7 @@ $app->get('/tag/:label/', function ($label) use ($app) {
 
     $app->view()->appendData(array(
         'tag' => $label,
-        'top_tags' => $task_dao->getTopTags(30),
+        'top_tags' => TagsDao::getTopTags(30),
     ));
     $app->render('tag.tpl');
 })->via("POST")->name('tag-details');

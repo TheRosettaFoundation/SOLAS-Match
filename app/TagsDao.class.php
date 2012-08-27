@@ -127,4 +127,17 @@ class TagsDao {
         }
         return $ret;
     }
+    
+    public static function getTopTags ($limit = 30) {
+		$ret = false;
+		$db = new PDOWrapper();
+		$db->init();
+		if ($r = $db->call("getTopTags", "{$db->cleanse($limit)}")) {
+			$ret = array();
+			foreach ($r as $row) {
+				$ret[] = $row['label'];
+			}
+		}
+		return $ret;
+	}
 }
