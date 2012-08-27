@@ -100,11 +100,11 @@ class UserDao {
 		$user = $this->find(array('email' => $email));
 
 		if (!is_object($user)) {
-			throw new InvalidArgumentException('Sorry, we could not find an account for that email address. Please check the provided address, or register for an account.');
+			throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
 		}
 
 		if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
-			throw new InvalidArgumentException('Sorry, that password is incorrect. Please try again.');
+			throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
 		}
 
                 if ($clear_password === '') {
