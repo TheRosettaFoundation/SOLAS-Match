@@ -70,4 +70,14 @@ class TaskFile {
 		}
 		return $ret;
     }
+    public static function getFilename($task, $version) {
+		$db = new PDOWrapper();
+		$db->init();
+		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($task->getTaskId())},{$db->cleanse($version)}, null, null, null, null")) {
+			return $r[0]['filename'];
+		}
+		else {
+			return null;			
+		}
+	}
 }
