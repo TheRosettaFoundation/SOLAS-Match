@@ -172,7 +172,7 @@ New requirement:
     public function duplicateTaskForTarget($task, $language_id)
     {
         //Get the file info for original task
-        $task_file_info = $this->getTaskFileInfo($task);
+        $task_file_info = TaskFile::getTaskFileInfo($task);
         //Get the file path to original upload
         $old_file_path = Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
 
@@ -188,7 +188,7 @@ New requirement:
         $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
 
         //Get the new path the file can be found at
-        $file_info = $this->getTaskFileInfo($task);
+        $file_info = TaskFile::getTaskFileInfo($task);
         $new_file_path = Upload::absoluteFilePathForUpload($task, 0, $file_info['filename']);
 
         Upload::createFolderPath($task);
@@ -334,17 +334,6 @@ New requirement:
 		return $ret;
 	}
 
-//	public function recordFileUpload($task, $filename, $content_type, $user_id) {
-//                $db = new PDOWrapper();
-//		$db->init();
-//                $args = "";
-//                $args .= "{$db->cleanse($task->getTaskId())}";
-//                $args .= ",{$db->cleanseWrapStr($filename)}";
-//                $args .= ",{$db->cleanseWrapStr($content_type)}";
-//                $args .= ",{$db->cleanseNull($user_id)}";
-//                return $db->call("recordFileUpload", $args);
-//        }
-
 	public function getLatestFileVersion($task) {
 		$db = new PDOWrapper();
 		$db->init();
@@ -378,24 +367,6 @@ New requirement:
 		else {
 			return null;			
 		}
-	}
-
-
-
-	public function getTaskFileInfo($task, $version = 0) {
-		$db = new PDOWrapper();
-		$db->init();
-		$ret = false;
-		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($task->getTaskId())},{$db->cleanse($version)}, null, null, null, null")) {
-			$file_info = array();
-			foreach($r[0] as $key => $value) {
-				if (!is_numeric($key)) {
-					$file_info[$key] = $value;
-				}
-			}
-			$ret = $file_info;
-		}
-		return $ret;
 	}
 
 	public function claimTask($task, $user) {

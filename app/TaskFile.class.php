@@ -54,4 +54,20 @@ class TaskFile {
                 $args .= ",{$db->cleanseNull($user_id)}";
                 return $db->call("recordFileUpload", $args);
     }
+    
+    public static function getTaskFileInfo($task, $version = 0) {
+		$db = new PDOWrapper();
+		$db->init();
+		$ret = false;
+		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($task->getTaskId())},{$db->cleanse($version)}, null, null, null, null")) {
+			$file_info = array();
+			foreach($r[0] as $key => $value) {
+				if (!is_numeric($key)) {
+					$file_info[$key] = $value;
+				}
+			}
+			$ret = $file_info;
+		}
+		return $ret;
+    }
 }

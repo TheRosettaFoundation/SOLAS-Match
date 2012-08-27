@@ -17,6 +17,7 @@ require 'app/UserDao.class.php';
 require 'app/TaskStream.class.php';
 require 'app/TaskDao.class.php';
 require 'app/TagsDao.class.php';
+require 'app/TaskFile.class.php';
 require 'app/IO.class.php';
 require 'app/TipSelector.class.php';
 require 'app/lib/Languages.class.php';
@@ -27,6 +28,7 @@ require 'app/lib/Tags.class.php';
 require 'app/lib/Upload.class.php';
 require 'app/lib/Email.class.php';
 require 'app/lib/Notify.class.php';
+
 
 /**
  * Start the session
@@ -295,7 +297,7 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'),
     }
     else {
         $app->view()->setData('task', $task);
-        if ($task_file_info = $task_dao->getTaskFileInfo($task)) {
+        if ($task_file_info = TaskFile::getTaskFileInfo($task)) {
             $app->view()->setData('task_file_info', $task_file_info);
             $app->view()->setData('latest_version', $task_dao->getLatestFileVersion($task));
         }
@@ -484,7 +486,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             $tags = '';
         }
 
-        $task_file_info = $task_dao->getTaskFileInfo($task);
+        $task_file_info = TaskFile::getTaskFileInfo($task);
         $filename = $task_file_info['filename'];
         if($pos = strrpos($filename, '.')) {
             $extension = substr($filename, $pos + 1);
@@ -610,14 +612,14 @@ $app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) u
     $app->view()->setData('task', $task);
     $app->view()->appendData(array('org' => $org));
 
-    if ($task_file_info = $task_dao->getTaskFileInfo($task)) {
+    if ($task_file_info = TaskFile::getTaskFileInfo($task)) {
         $app->view()->appendData(array(
             'task_file_info' => $task_file_info,
             'latest_version' => $task_dao->getLatestFileVersion($task)
         ));
     }
     
-    $task_file_info = $task_dao->getTaskFileInfo($task, 0);
+    $task_file_info = TaskFile::getTaskFileInfo($task, 0);
     $file_path = Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
     $searchStart = strlen($file_path) - strrpos($file_path, $task_file_info['filename']);
     $appPos = strrpos($file_path, "app", $searchStart);
@@ -700,7 +702,7 @@ $app->get('/task/id/:task_id/download-file/v/:version/', $authenticateForRole('t
         $app->redirect($app->urlFor('login'));
     }
 
-    $task_file_info         = $task_dao->getTaskFileInfo($task, $version);
+    $task_file_info         = TaskFile::getTaskFileInfo($task, $version);
 
     if (empty($task_file_info)) {
         throw new Exception("Task file info not set for.");
