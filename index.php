@@ -299,7 +299,7 @@ $app->get('/task/:task_id/upload-edited/', $authenticateForRole('translator'),
         $app->view()->setData('task', $task);
         if ($task_file_info = TaskFile::getTaskFileInfo($task)) {
             $app->view()->setData('task_file_info', $task_file_info);
-            $app->view()->setData('latest_version', $task_dao->getLatestFileVersion($task));
+            $app->view()->setData('latest_version', TaskFile::getLatestFileVersion($task));
         }
         $app->view()->appendData(array(
             'upload_error'                 => $error_message,
@@ -615,7 +615,7 @@ $app->get('/task/id/:task_id/', 'authenticateUserForTask', function ($task_id) u
     if ($task_file_info = TaskFile::getTaskFileInfo($task)) {
         $app->view()->appendData(array(
             'task_file_info' => $task_file_info,
-            'latest_version' => $task_dao->getLatestFileVersion($task)
+            'latest_version' => TaskFile::getLatestFileVersion($task)
         ));
     }
     
@@ -850,7 +850,7 @@ $app->get('/task/id/:task_id/download-task-latest-file/', $authenticateForRole('
         $app->redirect($app->urlFor('login'));
     }
 
-    $latest_version = $task_dao->getLatestFileVersion($task);
+    $latest_version = TaskFile::getLatestFileVersion($task);
     $app->redirect($app->urlFor('download-task-version', array(
         'task_id' => $task_id,
         'version' => $latest_version

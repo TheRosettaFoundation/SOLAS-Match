@@ -87,4 +87,16 @@ class TaskFile {
             $db->init();
             $db->call("logFileDownload", "{$db->cleanse($task->getTaskId())},{$db->cleanse($version)},null");
     }
+    
+    public static function getLatestFileVersion($task) {
+		$db = new PDOWrapper();
+		$db->init();
+		$ret = false;
+		if ($r = $db->call("getLatestFileVersion", "{$db->cleanse($task->getTaskId())},null")) {
+			if (is_numeric($r[0]['latest_version'])) {
+				$ret =  intval($r[0]['latest_version']);
+			}
+		}
+		return $ret;
+	}
 }

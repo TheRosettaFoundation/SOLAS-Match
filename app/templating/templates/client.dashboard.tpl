@@ -43,7 +43,7 @@
                     <td>
                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
                     </td>
-                    {if $task_dao->getLatestFileVersion($task) > 0}
+                    {if TaskFile::getLatestFileVersion($task) > 0}
                         <td>
                             <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
                                 Download&nbsp;updated&nbsp;file
