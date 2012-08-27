@@ -371,13 +371,23 @@ BEGIN
         CHANGE COLUMN `title` `title` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `organisation_id`,
         ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
         if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+            ALTER TABLE `task`
+            add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
+            add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
+	end if;
+        if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="sourceCountry" or c.COLUMN_NAME="targetCountry")) then
 		ALTER TABLE `task`
-		    add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
-		    add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
+                    ADD COLUMN `sourceCountry` INT NULL AFTER `created_time`,
+                    ADD COLUMN `targetCountry` INT NULL AFTER `sourceCountry`;
 	end if;
 	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='task') then
             ALTER TABLE `task`
-            ADD UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`);
+            ADD UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`);
+        end if;
+        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='task') then
+            ALTER TABLE `task`
+            DROP INDEX `task`,
+            ADD UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`);
         end if;
         if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='source') then
             ALTER TABLE `task`
@@ -1093,7 +1103,7 @@ select tag_id from tag where label=name;
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Dev.getTasksByOrgIDs
+-- Dumping structure for procedure Solas-Match-Test.getTasksByOrgIDs
 DROP PROCEDURE IF EXISTS `getTasksByOrgIDs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksByOrgIDs`(IN `orgIDs` VARCHAR(1028), IN `orderby` VARCHAR(256))
@@ -1101,7 +1111,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksByOrgIDs`(IN `orgIDs` VARCH
 BEGIN
 	if orgIDs='' then set orgIDs=null;end if;
 	if orderby='' then set orderby=null;end if;
-	set @q= "SELECT id,organisation_id,title,word_count,source_id,target_id,created_time FROM task WHERE 1 ";-- set update
+	set @q= "SELECT id,organisation_id,title,word_count,source_id,target_id,created_time, sourceCountry, targetCountry FROM task WHERE 1 ";-- set update
 	if orgIDs is not null then 
 		set @q = CONCAT(@q," and organisation_id IN (",orgIDs,")") ;
 	end if;
@@ -1117,10 +1127,10 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getTask
+-- Dumping structure for procedure Solas-Match-Test.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3))
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
@@ -1132,8 +1142,10 @@ BEGIN
 	if created='' then set created=null;end if;
 	if impact='' then set impact=null;end if;
 	if ref='' then set ref=null;end if;
+	if sCC='' then set sCC=null;end if;
+	if tCC='' then set tCC=null;end if;
 	
-	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page from task t where 1 ";-- set update
+	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page, sourceCountry, targetCountry from task t where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1150,6 +1162,16 @@ BEGIN
 	if tID is not null then 
 		set @q = CONCAT(@q," and t.target_id=",tID) ;
 	end if;
+	if sCC is not null then 
+		set @scid=null;
+			select c.id into @scid from country c where c.code=sCC;
+		set @q = CONCAT(@q," and t.sourceCountry=",@scid) ;
+	end if;
+	if tCC is not null then 
+		set @tcid=null;
+			select c.id into @tcid from country c where c.code=tCC;
+		set @q = CONCAT(@q," and t.targetCountry=",@tcid) ;
+	end if;
 	if wordCount is not null then 
 		set @q = CONCAT(@q," and t.word_count=",wordCount) ;
 	end if;
@@ -1157,10 +1179,10 @@ BEGIN
 		set @q = CONCAT(@q," and t.created_time='",created,"'") ;
 	end if;
 	if impact is not null then 
-		set @q = CONCAT(@q," and t.impactt=",impact) ;
+		set @q = CONCAT(@q," and t.impact='",impact,"'") ;
 	end if;
 	if ref is not null then 
-		set @q = CONCAT(@q," and t.reference_page=",ref) ;
+		set @q = CONCAT(@q," and t.reference_page='",ref,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1169,11 +1191,10 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Dev.taskInsertAndUpdate
+-- Dumping structure for procedure Solas-Match-Test.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3))
 BEGIN
 	if id='' then set id=null;end if;
 	if orgID='' then set orgID=null;end if;
@@ -1184,10 +1205,16 @@ BEGIN
 	if created='' then set created=null;end if;
 	if impact='' then set impact=null;end if;
 	if ref='' then set ref=null;end if;
+	if sCC='' then set sCC=null;end if;
+	if tCC='' then set tCC=null;end if;
 	
 	if id is null then
-		insert into task (organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page)
-		 values (orgID,name,wordCount,sID,tID,now(),impact,ref);
+		set @scid=null;
+			select c.id into @scid from country c where c.code=sCC;
+		set @tcid=null;
+			select c.id into @tcid from country c where c.code=tCC;
+		insert into task (organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page,sourceCountry,targetCountry)
+		 values (orgID,name,wordCount,sID,tID,now(),impact,ref,@scid,@tcid);
 	elseif EXISTS (select 1 from task t where t.id=id) then
 		set @first = true;
 		set @q= "update task t set";-- set update
@@ -1223,6 +1250,28 @@ BEGIN
 			end if;
 			set @q = CONCAT(@q," t.target_id=",tID) ;
 		end if;
+		
+		if sCC is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @scid=null;
+			select c.id into @scid from country c where c.code=sCC;
+			set @q = CONCAT(@q," t.sourceCountry=",@scid) ;
+		end if;
+		if tCC is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @tcid=null;
+			select c.id into @tcid from country c where c.code=tCC;
+			set @q = CONCAT(@q," t.targetCountry=",@tcid) ;
+		end if;
+		
 		if wordCount is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
@@ -1260,7 +1309,7 @@ BEGIN
 		EXECUTE stmt;
 		DEALLOCATE PREPARE stmt;
 	end if;
-	call getTask(id,orgID,name,wordCount,sID,tID,created,impact,ref);
+	call getTask(id,orgID,name,wordCount,sID,tID,created,impact,ref,sCC,tCC);
 END//
 DELIMITER ;
 

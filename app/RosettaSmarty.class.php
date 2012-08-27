@@ -4,7 +4,7 @@ require('IO.class.php');
 require('Organisations.class.php');
 require('Stream.class.php');
 require('Tags.class.php');
-require('Task.class.php');
+require('models/Task.class.php');
 require('TaskFile.class.php');
 require('Tasks.class.php');
 require('URL.class.php');

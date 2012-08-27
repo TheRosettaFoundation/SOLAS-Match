@@ -1,5 +1,5 @@
 <?php
-require_once 'Task.class.php';
+require_once 'models/Task.class.php';
 require_once 'TaskTags.class.php';
 //require_once 'TaskTags.class.php';
 
@@ -21,15 +21,6 @@ class TaskDao {
 		$this->save($task);
 		return $task;
 	}
-
-/*
-New requirement:
-
-    $my_tasks           = $task_dao->find(array(
-        'user_id'           => $current_user->getUserId(),
-        'organisation_ids'  => $my_organisations
-    ));
-*/
 
 	public function findTasksByOrg($params, $sort_column = NULL, $sort_direction = NULL) {
             $permitted_params = array(
@@ -112,14 +103,16 @@ New requirement:
             $db->init();
             $args ="";
             $args .= isset ($params['task_id'])?"{$db->cleanseNull($params['task_id'])}":"null";
-            $args .= isset ($params['org_id'])?"{$db->cleanseNull($params['org_id'])}":",null";
-            $args .= isset ($params['title'])?"{$db->cleanseNullOrWrapStr($params['title'])}":",null";
-            $args .= isset ($params['word_count'])?"{$db->cleanseNull($params['word_count'])}":",null";
-            $args .= isset ($params['source_id'])?"{$db->cleanseNull($params['source_id'])}":",null";
-            $args .= isset ($params['target_id'])?"{$db->cleanseNull($params['target_id'])}":",null";
-            $args .= isset ($params['created_time'])?"{$db->cleanseNull($params['created_time'])}":",null";
-            $args .= isset ($params['impact'])?"{$db->cleanseNullOrWrapStr($params['impact'])}":",null";
-            $args .= isset ($params['reference_page'])?"{$db->cleanseNullOrWrapStr($params['reference_page'])}":",null";
+            $args .= isset ($params['org_id'])?",{$db->cleanseNull($params['org_id'])}":",null";
+            $args .= isset ($params['title'])?",{$db->cleanseNullOrWrapStr($params['title'])}":",null";
+            $args .= isset ($params['word_count'])?",{$db->cleanseNull($params['word_count'])}":",null";
+            $args .= isset ($params['source_id'])?",{$db->cleanseNull($params['source_id'])}":",null";
+            $args .= isset ($params['target_id'])?",{$db->cleanseNull($params['target_id'])}":",null";
+            $args .= isset ($params['created_time'])?",{$db->cleanseNull($params['created_time'])}":",null";
+            $args .= isset ($params['impact'])?",{$db->cleanseNullOrWrapStr($params['impact'])}":",null";
+            $args .= isset ($params['reference_page'])?",{$db->cleanseNullOrWrapStr($params['reference_page'])}":",null";
+            $args .= isset ($params['sourceCountry'])?",{$db->cleanseNullOrWrapStr($params['sourceCountry'])}":",null";
+            $args .= isset ($params['targetCountry'])?",{$db->cleanseNullOrWrapStr($params['targetCountry'])}":",null";
             
             $tasks = array();
             foreach($db->call("getTask", $args) as $row){
@@ -200,7 +193,7 @@ New requirement:
     private function _update($task) {
         $db = new PDOWrapper();
         $db->init();
-        $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getTaskId())},{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())}");
+        $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getTaskId())},{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())},{$db->cleanseNullOrWrapStr($task->getSourceCountryCode())},{$db->cleanseNullOrWrapStr($task->getTargetCountryCode())}");
         $this->_updateTags($task);
     }
 
@@ -254,10 +247,9 @@ New requirement:
     private function _insert(&$task) {
         $db = new PDOWrapper();
         $db->init();
-        $result= $db->call("taskInsertAndUpdate", "null,{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},null,{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())}");
+        $result= $db->call("taskInsertAndUpdate", "null,{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())},{$db->cleanseNullOrWrapStr($task->getSourceCountryCode())},{$db->cleanseNullOrWrapStr($task->getTargetCountryCode())}");
         $task->setTaskId($result[0]['id']);
         $this->_updateTags($task);
-
     }
 
     public function getLatestAvailableTasks($nb_items = 10) {
@@ -321,30 +313,9 @@ New requirement:
 		return $ret;
 	}
 
-	function getTopTags ($limit = 30) {
-		$ret = false;
-		$db = new PDOWrapper();
-		$db->init();
-		if ($r = $db->call("getTopTags", "{$db->cleanse($limit)}")) {
-			$ret = array();
-			foreach ($r as $row) {
-				$ret[] = $row['label'];
-			}
-		}
-		return $ret;
-	}
+	
 
-	public function getLatestFileVersion($task) {
-		$db = new PDOWrapper();
-		$db->init();
-		$ret = false;
-		if ($r = $db->call("getLatestFileVersion", "{$db->cleanse($task->getTaskId())},null")) {
-			if (is_numeric($r[0]['latest_version'])) {
-				$ret =  intval($r[0]['latest_version']);
-			}
-		}
-		return $ret;
-	}
+	
 
 	public function moveToArchive($task) {
 		$db = new PDOWrapper();
@@ -352,22 +323,8 @@ New requirement:
                 $db->call("archiveTask", "{$db->cleanse($task->getTaskId())}");
 	}
 
-	public function logFileDownload($task, $version) {
-		$db = new PDOWrapper();
-		$db->init();
-                $db->call("logFileDownload", "{$db->cleanse($task->getTaskId())},{$db->cleanse($version)},null");
-	}
 
-	private function getFilename($task, $version) {
-		$db = new PDOWrapper();
-		$db->init();
-		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($task->getTaskId())},{$db->cleanse($version)}, null, null, null, null")) {
-			return $r[0]['filename'];
-		}
-		else {
-			return null;			
-		}
-	}
+	
 
 	public function claimTask($task, $user) {
 		$db = new PDOWrapper();

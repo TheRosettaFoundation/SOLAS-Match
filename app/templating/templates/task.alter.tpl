@@ -26,16 +26,23 @@
     <textarea wrap="hard" cols="1" rows="2" name="reference">{$url_text}</textarea>
 
     <label for="source">Source Language</label>
-    <select name="source" id="source">
-        {foreach $languages as $language}
-            <option value="{$language[0]}"
-            {if $source_lang == $language}
-                selected="selected"
-            {/if}>
-                {$language[0]}
-            </option>
-        {/foreach}
-    </select>
+        <select name="source" id="source">
+            {foreach $languages as $language}
+                <option value="{$language[0]}"
+                {if $source_lang == $language}
+                    selected="selected"
+                {/if}>
+                    {$language[0]}
+                </option>
+            {/foreach}
+        </select>
+    {if isset($countries)}
+        <select name="sourceCountry" id="sourceCountry">
+            {foreach $countries as $country}
+                <option value="{$country[1]}">{$country[0]}</option>
+            {/foreach}
+        </select>
+    {/if}
 
     <label for="target">Target Language</label>
     <select name="target" id="target">
@@ -48,6 +55,13 @@
             </option>
         {/foreach}
     </select>
+    {if isset($countries)}
+        <select name="targetCountry" id="targetCountry">
+            {foreach $countries as $country}
+                <option value="{$country[1]}">{$country[0]}</option>
+            {/foreach}
+        </select>
+    {/if}
 
     <label for="tags">Tags</label>
     <input type="text" name="tags" id="tags" value="{$tag_list}">

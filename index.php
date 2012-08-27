@@ -385,8 +385,9 @@ $app->get('/task/view/:task_id/', 'authUserForOrgTask', function ($task_id) use 
 $app->get('/task/alter/:task_id/', 'authUserForOrgTask', function ($task_id) use ($app) {
     $task_dao = new TaskDao();
     $task = $task_dao->find(array('task_id' => $task_id));
-
+    $countries = Languages::getCountryList();
     $app->view()->setData('task', $task);
+    $app->view()->setData('countries', $countries);
 
     if(isValidPost($app)) {
         $post = (object)$app->request()->post();
@@ -409,6 +410,14 @@ $app->get('/task/alter/:task_id/', 'authUserForOrgTask', function ($task_id) use
 
         if($post->target != '') {
             $task->setTargetId(Languages::saveLanguage($post->target));
+        }
+        
+        if($post->sourceCountry != '') {
+            $task->setSourceCountryCode($post->sourceCountry);
+        }
+
+        if($post->targetCountry != '') {
+            $task->setTargetCountryCode($post->targetCountry);
         }
 
         if($post->tags != '') {
