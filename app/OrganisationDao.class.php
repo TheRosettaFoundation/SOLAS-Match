@@ -110,6 +110,12 @@ class OrganisationDao {
         $db->init();
         $db->call("removeMembershipRequest", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
     }
+    
+    public static function revokeMembership($org_id, $user_id) {
+        $db = new PDOWrapper();
+        $db->init();
+        $db->call("revokeMembership", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
+    }
 
     private static function create_org_from_sql_result($result) {
         $org_data = array(

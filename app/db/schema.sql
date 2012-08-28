@@ -1814,6 +1814,20 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.revokeMembership
+DROP PROCEDURE IF EXISTS `revokeMembership`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `revokeMembership`(IN `uID` INT, IN `orgID` INT)
+BEGIN
+	if exists(select 1 from organisation_member om where om.user_id=uID and om.organisation_id = orgID) then
+		delete from organisation_member where user_id=uID and organisation_id = orgID;
+		select 1 as result;
+	else
+		select 0 as result;
+	end if;
+END//
+DELIMITER ;
+
 
 /*---------------------put triggers below this line------------------------------------------*/
 

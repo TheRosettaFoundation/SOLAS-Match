@@ -80,12 +80,16 @@
 
         {foreach $orgList as $org}
             {assign var="org_id" value=$org->getId()}
+            {assign var="user_id" value=$this_user->getUserId()}
             <h3><a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
                 {if $org->getHomePage() != ''}
                     <small>
                         <a href='{$org->getHomePage()}' class='pull-right btn btn-small' target="_blank">Home Page</a>
                     </small>
                 {/if}
+                <small>
+                    <a href='{urlFor name="leaveOrganisation" options="userID.$user_id|orgID.$org_id"}' class='pull-right btn btn-small' target="_self" onclick="return confirm('Are you sure you want to leave the organisation?')">leave org</a>
+                </small>
             </h3>
             <p>{$org->getBiography()}</p>    
         {/foreach}

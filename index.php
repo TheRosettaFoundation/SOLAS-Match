@@ -1007,6 +1007,12 @@ $app->get('/logout', function () use ($app) {
     $app->redirect($app->urlFor('home'));
 })->name('logout');
 
+$app->get('/leaveOrganisation/:userID/:orgID', function ($userID,$orgID) use ($app) {
+    OrganisationDao::revokeMembership($orgID, $userID);
+    $app->redirect($app->urlFor('user-public-profile',array('user_id' => $userID)));
+})->name('leaveOrganisation');
+
+
 $app->get('/register', function () use ($app) {
     $tempSettings=new Settings();
     $use_openid = $tempSettings->get("site.openid");
