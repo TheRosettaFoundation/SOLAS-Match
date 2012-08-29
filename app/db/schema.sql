@@ -66,17 +66,22 @@ DROP PROCEDURE alterTable;
 -- Dumping structure for table Solas-Match-test.badges
 CREATE TABLE IF NOT EXISTS `badges` (
 	`badge_id` INT(11) NOT NULL AUTO_INCREMENT,
-	`owner_id` INT(11) NULL DEFAULT NULL,
+	`owner_id` INT(11) UNSIGNED NULL DEFAULT NULL,
 	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
 	`description` MEDIUMTEXT NOT NULL COLLATE 'utf8_unicode_ci',
 	PRIMARY KEY (`badge_id`),
-	UNIQUE INDEX `badge` (`owner_id`, `title`)
+	UNIQUE INDEX `badge` (`owner_id`, `title`),
+	CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 )
 ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+        ALTER TABLE `badges` 
+        CHANGE COLUMN `owner_id` `owner_id` INT(11) UNSIGNED NULL AFTER `badge_id`,
+	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
 	if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='badges'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='owner_id') then
 		ALTER TABLE `badges`
 		    add column `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL;
@@ -85,8 +90,11 @@ BEGIN
             ALTER TABLE `badges`
             ADD UNIQUE INDEX `badge` (`owner_id`, `title`);
         end if;
-        ALTER TABLE `badges` 
-	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='badges'and tc.CONSTRAINT_NAME='FK_badges_organisation') then
+            ALTER TABLE `badges`
+            ADD CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        
 END//
 
 DELIMITER ;
@@ -251,10 +259,13 @@ DROP PROCEDURE alterTable;
 
 -- Dumping structure for table Solas-Match-test.organisation_member
 CREATE TABLE IF NOT EXISTS `organisation_member` (
-  `user_id` int(10) unsigned NOT NULL,
-  `organisation_id` int(10) unsigned NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  KEY `user_id` (`user_id`)
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
+	INDEX `FK_organisation_member_organisation` (`organisation_id`),
+	CONSTRAINT `FK_organisation_member_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
@@ -269,6 +280,14 @@ BEGIN
             DROP INDEX `user_id`,
             ADD UNIQUE INDEX `user_id` (`user_id`, `organisation_id`);
         end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation_member'and tc.CONSTRAINT_NAME='FK_organisation_member_user') then
+            ALTER TABLE `organisation_member`
+        	ADD CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if; 
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation_member'and tc.CONSTRAINT_NAME='FK_organisation_member_organisation') then
+            ALTER TABLE `organisation_member`
+            ADD CONSTRAINT `FK_organisation_member_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if; 
         ALTER TABLE `organisation_member` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 END//
 
@@ -290,22 +309,38 @@ DROP PROCEDURE alterTable;
 
 CREATE TABLE IF NOT EXISTS `org_request_queue` (
 	`request_id` INT(11) NOT NULL AUTO_INCREMENT,
-	`user_id` INT(11) NOT NULL,
-	`org_id` INT(11) NOT NULL,
+	`user_id` INT(11) UNSIGNED NOT NULL,
+	`org_id` INT(11) UNSIGNED NOT NULL,
 	`request_datetime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`request_id`),
-	UNIQUE INDEX `userRequest` (`user_id`, `org_id`)
+	UNIQUE INDEX `userRequest` (`user_id`, `org_id`),
+	INDEX `FK_org_request_queue_organisation` (`org_id`),
+	CONSTRAINT `FK_org_request_queue_organisation` FOREIGN KEY (`org_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_org_request_queue_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+        ALTER TABLE `org_request_queue` 
+        CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL AFTER `request_id`,
+	CHANGE COLUMN `org_id` `org_id` INT(11) UNSIGNED NOT NULL AFTER `user_id`,
+        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
 	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='org_request_queue'and tc.CONSTRAINT_NAME='userRequest') then
             ALTER TABLE `org_request_queue`            
             ADD UNIQUE INDEX `userRequest` (`user_id`, `org_id`);
         end if;
-        ALTER TABLE `org_request_queue` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='org_request_queue'and tc.CONSTRAINT_NAME='FK_org_request_queue_user') then
+            ALTER TABLE `org_request_queue`
+            ADD CONSTRAINT `FK_org_request_queue_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='org_request_queue'and tc.CONSTRAINT_NAME='FK_org_request_queue_organisation') then
+            ALTER TABLE `org_request_queue`
+            ADD CONSTRAINT `FK_org_request_queue_organisation` FOREIGN KEY (`org_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        
 END//
 
 DELIMITER ;
@@ -356,12 +391,23 @@ CREATE TABLE IF NOT EXISTS `task` (
 	`impact` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
 	`reference_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
 	`word_count` INT(10) UNSIGNED NULL DEFAULT NULL,
-	`source_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
-	`target_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+	`source_id` INT(10) UNSIGNED NOT NULL COMMENT 'foreign key from the `language` table',
+	`target_id` INT(10) UNSIGNED NOT NULL COMMENT 'foreign key from the `language` table',
 	`created_time` DATETIME NOT NULL,
+	`sourceCountry` INT(11) UNSIGNED NULL DEFAULT NULL,
+	`targetCountry` INT(11) UNSIGNED NULL DEFAULT NULL,
 	PRIMARY KEY (`id`),
-	UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`),
+	INDEX `FK_task_language` (`source_id`),
+	INDEX `FK_task_language_2` (`target_id`),
+	INDEX `FK_task_country` (`sourceCountry`),
+	INDEX `FK_task_country2` (`targetCountry`),
+	CONSTRAINT `FK_task_country2` FOREIGN KEY (`targetCountry`) REFERENCES `country` (`id`) ON UPDATE CASCADE,
+	CONSTRAINT `FK_task_country` FOREIGN KEY (`sourceCountry`) REFERENCES `country` (`id`) ON UPDATE CASCADE,
+	CONSTRAINT `FK_task_language` FOREIGN KEY (`source_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE,
+	CONSTRAINT `FK_task_language_2` FOREIGN KEY (`target_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE,
+	CONSTRAINT `FK_task_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
@@ -369,18 +415,22 @@ CREATE PROCEDURE alterTable()
 BEGIN
         ALTER TABLE `task` 
         CHANGE COLUMN `title` `title` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `organisation_id`,
+        CHANGE COLUMN `sourceCountry` `sourceCountry` INT UNSIGNED NULL DEFAULT NULL AFTER `created_time`,
+        CHANGE COLUMN `targetCountry` `targetCountry` INT UNSIGNED NULL DEFAULT NULL AFTER `sourceCountry`,
+        CHANGE COLUMN `source_id` `source_id` INT UNSIGNED NULL COMMENT 'foreign key from the `language` table' AFTER `word_count`,
+	CHANGE COLUMN `target_id` `target_id` INT UNSIGNED NULL COMMENT 'foreign key from the `language` table' AFTER `source_id`,
         ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
         if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
             ALTER TABLE `task`
             add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
             add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
-	end if;
+		  end if;
         if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="sourceCountry" or c.COLUMN_NAME="targetCountry")) then
-		ALTER TABLE `task`
-                    ADD COLUMN `sourceCountry` INT NULL AFTER `created_time`,
-                    ADD COLUMN `targetCountry` INT NULL AFTER `sourceCountry`;
-	end if;
-	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='task') then
+				ALTER TABLE `task`
+            ADD COLUMN `sourceCountry` INT NULL AFTER `created_time`,
+            ADD COLUMN `targetCountry` INT NULL AFTER `sourceCountry`;
+		  end if;
+		  if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='task') then
             ALTER TABLE `task`
             ADD UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`);
         end if;
@@ -397,7 +447,26 @@ BEGIN
             ALTER TABLE `task`
             DROP INDEX `target`;
         end if;
-        
+		  if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_organisation') then
+            ALTER TABLE `task`
+            ADD CONSTRAINT `FK_task_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_language') then
+            ALTER TABLE `task`
+            ADD CONSTRAINT `FK_task_language` FOREIGN KEY (`source_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_language_2') then
+            ALTER TABLE `task`
+            ADD CONSTRAINT `FK_task_language_2` FOREIGN KEY (`target_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_country') then
+            ALTER TABLE `task`
+            ADD CONSTRAINT `FK_task_country` FOREIGN KEY (`sourceCountry`) REFERENCES `country` (`id`) ON UPDATE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_country2') then
+            ALTER TABLE `task`
+            ADD CONSTRAINT `FK_task_country2` FOREIGN KEY (`targetCountry`) REFERENCES `country` (`id`) ON UPDATE CASCADE;
+        end if;
 END//
 
 DELIMITER ;
@@ -415,17 +484,24 @@ DROP PROCEDURE alterTable;
 -- Dumping structure for table Solas-Match-test.task_claim
 CREATE TABLE IF NOT EXISTS `task_claim` (
 	`claim_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`task_id` BIGINT(20) NOT NULL,
-	`user_id` INT(11) NOT NULL,
+	`task_id` BIGINT(20) UNSIGNED NOT NULL,
+	`user_id` INT(11) UNSIGNED NOT NULL,
 	`claimed_time` DATETIME NOT NULL,
 	PRIMARY KEY (`claim_id`),
-	UNIQUE INDEX `task` (`task_id`, `user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	UNIQUE INDEX `task` (`task_id`, `user_id`),
+	INDEX `FK_task_claim_user` (`user_id`),
+	CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+        ALTER TABLE `task_claim`
+            CHANGE COLUMN `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL AFTER `claim_id`,
+            CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL AFTER `task_id`, 
+            ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
         if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_claim'and tc.CONSTRAINT_NAME='task') then
             ALTER TABLE `task_claim`
             ADD UNIQUE INDEX `task` (`task_id`, `user_id`);
@@ -434,8 +510,14 @@ BEGIN
             ALTER TABLE `task_claim`
             DROP INDEX `task_user`;
         end if;
-        ALTER TABLE `task_claim` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-  
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_claim'and tc.CONSTRAINT_NAME='FK_task_claim_task') then
+            ALTER TABLE `task_claim`
+            ADD CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_claim'and tc.CONSTRAINT_NAME='FK_task_claim_user') then
+            ALTER TABLE `task_claim`
+            ADD CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
 END//
 
 DELIMITER ;
@@ -453,27 +535,32 @@ DROP PROCEDURE alterTable;
 -- Dumping structure for table Solas-Match-test.task_file_version
 CREATE TABLE IF NOT EXISTS `task_file_version` (
 	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-	`task_id` BIGINT(20) NOT NULL,
+	`task_id` BIGINT(20) UNSIGNED NOT NULL,
 	`version_id` INT(11) NOT NULL COMMENT 'Gets incremented within the code',
 	`filename` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
 	`content_type` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
-	`user_id` INT(11) NULL DEFAULT NULL COMMENT 'Null while we don\'t have logging in',
+	`user_id` INT(11) UNSIGNED NULL DEFAULT NULL COMMENT 'Null while we don\'t have logging in',
 	`upload_time` DATETIME NOT NULL,
 	PRIMARY KEY (`id`),
-	UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`)
+	UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`),
+	INDEX `FK_task_file_version_user` (`user_id`),
+	CONSTRAINT `FK_task_file_version_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_task_file_version_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-ALTER TABLE `task_file_version` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-
 
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+		  ALTER TABLE `task_file_version` 
+		  CHANGE COLUMN `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL AFTER `id`,
+		  CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NULL DEFAULT NULL COMMENT 'Null while we don\'t have logging in' AFTER `content_type`,
+		  ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
         if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='taskFile') then
             ALTER TABLE `task_file_version`
             ADD UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`);
         end if;
-         if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='task_id') then
+        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='task_id') then
             ALTER TABLE `task_file_version`
             DROP INDEX `task_id`;
         end if;
@@ -481,15 +568,20 @@ BEGIN
             ALTER TABLE `task_file_version`
             ADD COLUMN `id` BIGINT NULL AUTO_INCREMENT FIRST,
             ADD PRIMARY KEY (`id`);
-	end if;
+		  end if;
         if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='PRIMARY') then
             ALTER TABLE `task_file_version`
             ADD PRIMARY KEY (`id`);
         end if;
-        ALTER TABLE `task_file_version` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-  
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='FK_task_file_version_task') then
+            ALTER TABLE `task_file_version`
+				ADD CONSTRAINT `FK_task_file_version_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='FK_task_file_version_user') then
+            ALTER TABLE `task_file_version`
+				ADD CONSTRAINT `FK_task_file_version_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;    	
 END//
-
 DELIMITER ;
 
 CALL alterTable();
@@ -510,7 +602,10 @@ CREATE TABLE IF NOT EXISTS `task_file_version_download` (
 	`user_id` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`time_downloaded` DATETIME NOT NULL,
 	PRIMARY KEY (`id`),
-	UNIQUE INDEX `download` (`user_id`, `version_id`, `file_id`, `task_id`)
+	UNIQUE INDEX `download` (`user_id`, `version_id`, `file_id`, `task_id`),
+	INDEX `FK_task_file_version_download_task` (`task_id`),
+	CONSTRAINT `FK_task_file_version_download_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_task_file_version_download_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -518,32 +613,37 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='download') then
-            ALTER TABLE `task_file_version_download`
-            ADD UNIQUE INDEX `download` (`user_id`, `version_id`, `file_id`, `task_id`);
-        end if;
-         if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='task_id') then
-            ALTER TABLE `task_file_version_download`
-            DROP INDEX `task_id`;
-        end if;
-        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='task_file_version_download'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
-            ALTER TABLE `task_file_version_download`
-            ADD COLUMN `id` BIGINT NULL AUTO_INCREMENT FIRST,
-            ADD PRIMARY KEY (`id`);
-	end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='PRIMARY') then
-            ALTER TABLE `task_file_version_download`
-            ADD PRIMARY KEY (`id`);
-        end if;
-        ALTER TABLE `task_file_version_download` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
- 	
+     if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='download') then
+         ALTER TABLE `task_file_version_download`
+         ADD UNIQUE INDEX `download` (`user_id`, `version_id`, `file_id`, `task_id`);
+     end if;
+      if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='task_id') then
+         ALTER TABLE `task_file_version_download`
+         DROP INDEX `task_id`;
+     end if;
+     if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='task_file_version_download'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
+         ALTER TABLE `task_file_version_download`
+         ADD COLUMN `id` BIGINT NULL AUTO_INCREMENT FIRST,
+         ADD PRIMARY KEY (`id`);
+	  end if;
+     if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='PRIMARY') then
+         ALTER TABLE `task_file_version_download`
+         ADD PRIMARY KEY (`id`);
+     end if;
+     if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='FK_task_file_version_download_task') then
+        ALTER TABLE `task_file_version_download`
+        ADD CONSTRAINT `FK_task_file_version_download_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+     end if;
+     if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version_download'and tc.CONSTRAINT_NAME='FK_task_file_version_download_user') then
+        ALTER TABLE `task_file_version_download`
+        ADD CONSTRAINT `FK_task_file_version_download_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+     end if;
+     ALTER TABLE `task_file_version_download` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci'; 	
 END//
 
 DELIMITER ;
 
 CALL alterTable();
-
-DROP PROCEDURE alterTable;
 
 
 
@@ -554,13 +654,37 @@ DROP PROCEDURE alterTable;
 
 -- Dumping structure for table Solas-Match-test.task_tag
 CREATE TABLE IF NOT EXISTS `task_tag` (
-  `task_id` bigint(20) unsigned NOT NULL,
-  `tag_id` int(10) unsigned NOT NULL,
-  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY `task_tag` (`task_id`,`tag_id`)
+	`task_id` BIGINT(20) UNSIGNED NOT NULL,
+	`tag_id` INT(10) UNSIGNED NOT NULL,
+	`created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	UNIQUE INDEX `task_tag` (`task_id`, `tag_id`),
+	INDEX `FK_task_tag_tag` (`tag_id`),
+	CONSTRAINT `FK_task_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_task_tag_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `task_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+     ALTER TABLE `task_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+     if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_tag'and tc.CONSTRAINT_NAME='FK_task_tag_task') then
+        ALTER TABLE `task_tag`
+	ADD CONSTRAINT `FK_task_tag_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+     end if;
+     if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_tag'and tc.CONSTRAINT_NAME='FK_task_tag_tag') then
+        ALTER TABLE `task_tag`
+	ADD CONSTRAINT `FK_task_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+     end if;
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+
 
 
 -- Dumping data for table Solas-Match-test.task_tag: 0 rows
@@ -570,12 +694,35 @@ ALTER TABLE `task_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unic
 
 -- Dumping structure for table Solas-Match-test.translator
 CREATE TABLE IF NOT EXISTS `translator` (
-  `user_id` int(11) NOT NULL,
-  `role_added` datetime NOT NULL,
-  PRIMARY KEY (`user_id`)
+	`user_id` INT(11) UNSIGNED NOT NULL,
+	`role_added` DATETIME NOT NULL,
+	PRIMARY KEY (`user_id`),
+	UNIQUE INDEX `user` (`user_id`),
+	CONSTRAINT `FK_translator_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `translator` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    ALTER TABLE `translator` 
+    CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL FIRST,
+    ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='translator'and tc.CONSTRAINT_NAME='FK_translator_user') then
+        ALTER TABLE `translator`
+	ADD CONSTRAINT `FK_translator_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+    end if;
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='translator'and tc.CONSTRAINT_NAME='user') then
+        ALTER TABLE `translator`
+	ADD UNIQUE INDEX `user` (`user_id`);
+    end if;
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+
 
 -- Dumping data for table Solas-Match-test.translator: 0 rows
 /*!40000 ALTER TABLE `translator` DISABLE KEYS */;
@@ -616,11 +763,21 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_badges'and tc.CONSTRAINT_NAME='userBadge') then
-            ALTER TABLE `user_badges`
-            ADD UNIQUE INDEX `userBadge` (`user_id`, `badge_id`);
-        end if;
-        ALTER TABLE `user_badges` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+    ALTER TABLE `user_badges` 
+    CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL FIRST,
+    ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_badges'and tc.CONSTRAINT_NAME='userBadge') then
+        ALTER TABLE `user_badges`
+        ADD UNIQUE INDEX `userBadge` (`user_id`, `badge_id`);
+    end if;
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_badges'and tc.CONSTRAINT_NAME='FK_user_badges_user') then
+        ALTER TABLE `user_badges`
+        ADD CONSTRAINT `FK_user_badges_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+    end if;
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_badges'and tc.CONSTRAINT_NAME='FK_user_badges_badges') then
+        ALTER TABLE `user_badges`
+	ADD CONSTRAINT `FK_user_badges_badges` FOREIGN KEY (`badge_id`) REFERENCES `badges` (`badge_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+    end if;
 END//
 
 DELIMITER ;
@@ -641,11 +798,27 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+        ALTER TABLE `user_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='user_tag'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
+            ALTER TABLE `user_tag`
+            ADD COLUMN `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+            CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL AFTER `id`,
+            CHANGE COLUMN `tag_id` `tag_id` INT(11) UNSIGNED NOT NULL AFTER `user_id`,
+            DROP PRIMARY KEY,
+            ADD PRIMARY KEY (`id`);
+	end if;
         if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_tag'and tc.CONSTRAINT_NAME='userTag') then
             ALTER TABLE `user_tag`
             ADD UNIQUE INDEX `userTag` (`user_id`, `tag_id`);
         end if;
-        ALTER TABLE `user_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_tag'and tc.CONSTRAINT_NAME='FK_user_tag_user') then
+            ALTER TABLE `user_tag`
+            ADD CONSTRAINT `FK_user_tag_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_tag'and tc.CONSTRAINT_NAME='FK_user_tag_tag') then
+            ALTER TABLE `user_tag`
+            ADD CONSTRAINT `FK_user_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
 END//
 
 DELIMITER ;
@@ -661,13 +834,51 @@ DROP PROCEDURE alterTable;
 /*!40000 ALTER TABLE `user_tag` ENABLE KEYS */;
 
 CREATE TABLE IF NOT EXISTS `user_notifications` (
-    `user_id` int(11) NOT NULL,
-    `task_id` int (11) NOT NULL,
-    `created_time` datetime NOT NULL,
-    PRIMARY KEY (`user_id`, `task_id`)
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) UNSIGNED NOT NULL,
+	`task_id` BIGINT(11) UNSIGNED NOT NULL,
+	`created_time` DATETIME NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `user_id_task_id` (`user_id`, `task_id`),
+	INDEX `FK_user_notifications_task` (`task_id`),
+	CONSTRAINT `FK_user_notifications_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_user_notifications_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `user_notifications` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+        ALTER TABLE `user_notifications` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='user_notifications'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
+            ALTER TABLE `user_notifications`
+            ADD COLUMN `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+            CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL AFTER `id`,
+            CHANGE COLUMN `task_id` `task_id` BIGINT(11) UNSIGNED NOT NULL AFTER `user_id`,
+            DROP PRIMARY KEY,
+            ADD PRIMARY KEY (`id`),
+            ADD UNIQUE INDEX `user_id_task_id` (`user_id`, `task_id`);
+	end if;
+
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_notifications'and tc.CONSTRAINT_NAME='FK_user_notifications_user') then
+            ALTER TABLE `user_notifications`
+            ADD CONSTRAINT `FK_user_notifications_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_notifications'and tc.CONSTRAINT_NAME='FK_user_notifications_task') then
+            ALTER TABLE `user_notifications`
+            ADD CONSTRAINT `FK_user_notifications_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
+
 
 -- Dumping structure for table Solas-Match-test.user_task_score
 CREATE TABLE IF NOT EXISTS `user_task_score` (
@@ -682,12 +893,22 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+        ALTER TABLE `user_task_score` 
+        CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL FIRST,
+	CHANGE COLUMN `task_id` `task_id` BIGINT(11) UNSIGNED NOT NULL AFTER `user_id`,
+        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
         if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_task_score'and tc.CONSTRAINT_NAME='taskScore') then
-           ALTER TABLE `user_task_score`
-	ADD UNIQUE INDEX `taskScore` (`task_id`, `user_id`);
+            ALTER TABLE `user_task_score`
+            ADD UNIQUE INDEX `taskScore` (`task_id`, `user_id`);
         end if;
-        ALTER TABLE `user_task_score` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-        
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_task_score'and tc.CONSTRAINT_NAME='FK_user_task_score_user') then
+            ALTER TABLE `user_task_score`
+            ADD CONSTRAINT `FK_user_task_score_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_task_score'and tc.CONSTRAINT_NAME='FK_user_task_score_task') then
+            ALTER TABLE `user_task_score`
+            ADD CONSTRAINT `FK_user_task_score_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
 END//
 
 DELIMITER ;
@@ -1194,7 +1415,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impactValue` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3))
 BEGIN
 	if id='' then set id=null;end if;
 	if orgID='' then set orgID=null;end if;
@@ -1203,18 +1424,19 @@ BEGIN
 	if tID='' then set tID=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
-	if impact='' then set impact=null;end if;
+	if impactValue='' then set impactValue=null;end if;
 	if ref='' then set ref=null;end if;
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
-	
-	if id is null then
+        if id is null then
+		if impactValue is null then set impactValue="";end if;
+		if ref is null then set ref="";end if;
 		set @scid=null;
 			select c.id into @scid from country c where c.code=sCC;
 		set @tcid=null;
 			select c.id into @tcid from country c where c.code=tCC;
 		insert into task (organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page,sourceCountry,targetCountry)
-		 values (orgID,name,wordCount,sID,tID,now(),impact,ref,@scid,@tcid);
+		 values (orgID,name,wordCount,sID,tID,now(),impactValue,ref,@scid,@tcid);
 	elseif EXISTS (select 1 from task t where t.id=id) then
 		set @first = true;
 		set @q= "update task t set";-- set update
@@ -1280,13 +1502,13 @@ BEGIN
 			end if;
 			set @q = CONCAT(@q," t.word_count=",wordCount) ;
 		end if;
-		if impact is not null then 
+		if impactValue is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.impact='",impact,"'");
+			set @q = CONCAT(@q," t.impact='",impactValue,"'");
 		end if;
 		if ref is not null then 
 			if (@first = false) then 
@@ -1309,7 +1531,7 @@ BEGIN
 		EXECUTE stmt;
 		DEALLOCATE PREPARE stmt;
 	end if;
-	call getTask(id,orgID,name,wordCount,sID,tID,created,impact,ref,sCC,tCC);
+	call getTask(id,orgID,name,wordCount,sID,tID,created,impactValue,ref,sCC,tCC);
 END//
 DELIMITER ;
 
