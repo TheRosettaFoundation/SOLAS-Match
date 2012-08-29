@@ -1428,15 +1428,18 @@ BEGIN
 	if ref='' then set ref=null;end if;
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
-        if id is null then
+	
+	
+	if id is null then
 		if impactValue is null then set impactValue="";end if;
 		if ref is null then set ref="";end if;
+		if created is null or created ='0000-00-00 00:00:00' then set created=now();end if;
 		set @scid=null;
 			select c.id into @scid from country c where c.code=sCC;
 		set @tcid=null;
 			select c.id into @tcid from country c where c.code=tCC;
 		insert into task (organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page,sourceCountry,targetCountry)
-		 values (orgID,name,wordCount,sID,tID,now(),impactValue,ref,@scid,@tcid);
+		 values (orgID,name,wordCount,sID,tID,created,impactValue,ref,@scid,@tcid);
 	elseif EXISTS (select 1 from task t where t.id=id) then
 		set @first = true;
 		set @q= "update task t set";-- set update

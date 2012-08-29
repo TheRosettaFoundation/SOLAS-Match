@@ -40,6 +40,13 @@
                                 <option value="{$language[0]}">{$language[0]}</option>
                             {/foreach}
                         </select>
+                        {if isset($countries)}
+                            <select name="sourceCountry" id="sourceCountry">
+                                {foreach $countries as $country}
+                                    <option value="{$country[1]}">{$country[0]}</option>
+                                {/foreach}
+                            </select>
+                        {/if}
                     </p>
                     <p>
                         <label for="target_0">To language</label>
@@ -48,6 +55,13 @@
                                 <option value="{$language[0]}">{$language[0]}</option>
                             {/foreach}
                         </select>
+                        {if isset($countries)}
+                            <select name="targetCountry_0" id="targetCountry">
+                                {foreach $countries as $country}
+                                    <option value="{$country[1]}">{$country[0]}</option>
+                                {/foreach}
+                            </select>
+                        {/if}
                         <div id="text">
                         </div>
                         <input type="button" onclick="addInput()" value="Add More Targets"/>
@@ -56,10 +70,12 @@
     				<p>
     					<label for="source">From language</label>
     					<input type="text" name="source" id="source">
+                                        <input type="text" name="sourceCountry" id="source">
     				</p>
     				<p>
     					<label for="target">To language</label>
     					<input type="text" name="target" id="target">
+                                        <input type="text" name="targetCountry" id="source">
     				</p>
                 {/if}
 				

@@ -461,7 +461,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
     $word_count_err = null;
     $task_dao    = new TaskDao();
     $task        = $task_dao->find(array('task_id' => $task_id));
-    $language_list = Languages::getLanguageList();
+    
 
     if (!is_object($task)) {
         $app->notFound();
@@ -488,6 +488,14 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         if($post->reference != '' && $post->reference != "http://") {
             $task->setReferencePage($post->reference);
         }
+        
+        if(isset($post->sourceCountry)&&$post->sourceCountry != '') {
+            $task->setSourceCountryCode($post->sourceCountry);
+        }
+
+        if(isset($post->targetCountry)&&$post->targetCountry != '') {
+            $task->setTargetCountryCode($post->targetCountry);
+        }
 
         $tags = $post->tags;
         if(is_null($tags)) {
@@ -510,31 +518,37 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         }
 
         $language_list = array();
+        $country_list = array();
         $target_count = 0;
         $target_val = $app->request()->post("target_$target_count");
-        while(isset($target_val)) {
-            if(!in_array($target_val, $language_list)) {
-                $language_list[] = $target_val;
+        $targetCountry_val = $app->request()->post("targetCountry_$target_count");
+        while(isset($target_val)&&isset($targetCountry_val)) {
+            $temp=null;
+            if(!in_array(($temp=array("lang"=>$target_val,"country"=>$targetCountry_val)), $language_list)) {
+                $language_list[] = $temp;
             }
             $target_count += 1;
             $target_val = $app->request()->post("target_$target_count");
+            $targetCountry_val = $app->request()->post("targetCountry_$target_count");
         }
 
 
         if(count($language_list) > 1) {
             foreach($language_list as $language) {
                 if($language == $language_list[0]) {   //if it is the first language add it to this task
-                    $target_id = Languages::saveLanguage($language_list[0]);
+                    $target_id = Languages::saveLanguage($language_list[0]['lang']);
                     $task->setTargetId($target_id);
+                    $task->setTargetCountryCode($language['country']);
                     $task_dao->save($task);
                 } else {
-                    $language_id = Languages::saveLanguage($language);
-                    $task_dao->duplicateTaskForTarget($task, $language_id);
+                    $language_id = Languages::saveLanguage($language['lang']);
+                    $task_dao->duplicateTaskForTarget($task, $language_id,$language['country']);
                 }
             }
         } else {
-            $target_id = Languages::saveLanguage($language_list[0]);
+            $target_id = Languages::saveLanguage($language_list[0]['lang']);
             $task->setTargetId($target_id);
+            $task->setTargetCountryCode($language_list[0]['country']);
             $task_dao->save($task);
         }
 
@@ -542,7 +556,8 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             $app->redirect($app->urlFor('task-uploaded', array('task_id' => $task_id)));
         }
     }
-
+    $language_list = Languages::getLanguageList();
+    $countries= Languages::getCountryList();
     $extra_scripts = "
     <script language='javascript'>
     fields = 0;
@@ -556,8 +571,20 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
             var langs = ".json_encode($language_list).";
             for (language in langs) {
                 var option = document.createElement('OPTION');
-                option.appendChild(document.createTextNode(langs[language]));
-                option.setAttribute('value', langs[language]);
+                option.appendChild(document.createTextNode(langs[language][0]));
+                option.setAttribute('value', langs[language][0]);//should be 1 but requires changes to php and sql.
+                sel.appendChild(option);
+            }
+            sel.options.selectedIndex=0;
+            document.getElementById('text').innerHTML += '<select name=\"targetCountry_' + (fields + 1) + '\" id=\"targetCountry_' + (fields + 1) + '\">';
+            document.getElementById('text').innerHTML += '</select>';
+            sel = document.getElementById('targetCountry_' + (fields + 1));
+            options = sel.options;
+            var countries =".json_encode($countries).";
+            for (country in countries) {
+                var option = document.createElement('OPTION');
+                option.appendChild(document.createTextNode(countries[country][0]));
+                option.setAttribute('value', countries[country][1]);
                 sel.appendChild(option);
             }
             sel.options.selectedIndex=0;
@@ -571,7 +598,8 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         }
     }
     </script>";
-
+    
+    $countries= Languages::getCountryList();
     $app->view()->appendData(array(
         'error'             => $error,
         'title_error'       => $title_err,
@@ -579,6 +607,7 @@ $app->get('/task/describe/:task_id/', $authenticateForRole('organisation_member'
         'url_task_describe' => $app->urlFor('task-describe', array('task_id' => $task_id)),
         'task'              => $task,
         'languages'         => $language_list,
+        'countries'         => $countries,
         'extra_scripts'     => $extra_scripts
     ));
     

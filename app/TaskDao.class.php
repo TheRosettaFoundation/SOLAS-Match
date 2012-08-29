@@ -162,7 +162,7 @@ class TaskDao {
      * Add an identicle entry with a different ID and target Language
      * Used for bulk uploads
      */
-    public function duplicateTaskForTarget($task, $language_id)
+    public function duplicateTaskForTarget($task, $language_id,$countryCode)
     {
         //Get the file info for original task
         $task_file_info = TaskFile::getTaskFileInfo($task);
@@ -172,6 +172,7 @@ class TaskDao {
         //Remove ID so a new one will be created
         $task->setTaskId(null);
         $task->setTargetId($language_id);
+        $task->setTargetCountryCode($countryCode);
         //Save the new Task
         $this->save($task);
 
