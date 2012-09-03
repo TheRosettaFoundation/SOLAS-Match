@@ -2,7 +2,7 @@
 require_once 'models/Task.class.php';
 require_once 'TaskTags.class.php';
 //require_once 'TaskTags.class.php';
-
+require_once ('PDOWrapper.class.php');
 /**
  * Task Document Access Object for manipulating tasks.
  *

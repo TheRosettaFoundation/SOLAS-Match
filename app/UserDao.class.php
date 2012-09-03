@@ -1,6 +1,7 @@
 <?php
 
 require('models/User.class.php');
+require_once ('PDOWrapper.class.php');
 
 class UserDao {
 	public function find($params) {

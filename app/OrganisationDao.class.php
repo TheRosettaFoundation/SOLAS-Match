@@ -1,6 +1,7 @@
 <?php
 
 require('models/Organisation.class.php');
+require_once ('PDOWrapper.class.php');
 
 class OrganisationDao {
     public function find($params) {
