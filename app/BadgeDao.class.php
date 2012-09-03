@@ -10,7 +10,7 @@ class BadgeDao
     {
         $db = new PDOWrapper();
         $db->init();
-        $result=$db->call("getBadge", "{$db->cleanse($params['badge_id'])},null,null");
+        $result=$db->call("getBadge", "{$db->cleanse($params['badge_id'])},null,null,null");
         return new Badge($result[0]);
     }
 

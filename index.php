@@ -1179,9 +1179,14 @@ $app->get('/profile/:user_id', function ($user_id) use ($app) {
     if($app->request()->isPost()) {
         $post = (object) $app->request()->post();
 
-        if($post->badge_id != '') {
+        if(isset($post->badge_id) && $post->badge_id != '') {
             $badge = $badge_dao->find(array('badge_id' => $post->badge_id));
             $badge_dao->removeUserBadge($user, $badge);
+        }
+
+        if(isset($post->revoke)) {
+            $org_id = $post->org_id;
+            OrganisationDao::revokeMembership($org_id, $user_id);
         }
     }
 
