@@ -1996,7 +1996,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addBadge`(IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` VARCHAR(50))
 BEGIN
 if not exists (select 1 from badges b where b.title=name and b.description=disc and b.owner_id=ownerID) then
-	insert into badges (title,description,owner_id) values (ownerID,name,disc);
+	insert into badges (owner_id,title,description) values (ownerID,name,disc);
 	select 1 as result;
 else
 	select 0 as result;
