@@ -8,7 +8,7 @@ require_once 'XML/Serializer.php';
 
 class Dispatcher {
     private static $apiDispatcher = null;
-    public static function getDispatcher(){
+    public static function  getDispatcher(){
          if( Dispatcher::$apiDispatcher == null){
             Dispatcher::$apiDispatcher = new Slim(array(
                 'debug' => true,
@@ -17,9 +17,16 @@ class Dispatcher {
         }
         return Dispatcher::$apiDispatcher;
     }
-
-    public  static function init(){
-        require_once 'Users.php';
+    public static function init(){
+       $path = $_SERVER['PATH_INFO'];
+       $path = explode("/", $path);
+       $path =$path[1];
+       $initFunc = "Dispatcher::init_".$path;
+        call_user_func($initFunc); 
+        
+    }
+    public  static function init_v0(){
+        require_once 'v0/Users.php';
         Dispatcher::getDispatcher()->run();
     }
     
