@@ -30,34 +30,48 @@ class Dispatcher {
         Dispatcher::getDispatcher()->run();
     }
     
-    public static function sendResponce($headers,$body,$code,$format){
-        $format=  Dispatcher::getFormat($format);
+    public static function sendResponce($headers,$body,$code=200,$format=".json"){
+        $response = Dispatcher::getDispatcher()->response();
+        
+        $format=  Dispatcher::getFormat($format); 
         switch ($format){
             case FormatEnum::JSON: {
-                echo json_encode($body);
+                $response['Content-Type'] = 'application/json';
+                $body=json_encode($body);
                 break;
             }
             case FormatEnum::XML: {
                try{
-                  echo wddx_serialize_value($body);
+                  $response['Content-Type'] = 'application/xml';
+                  $body=wddx_serialize_value($body);
                } catch (Exception $e)  {  echo $e;}  
                 break;
             }
             
             case FormatEnum::HTML: {
                try{
-                  echo htmlspecialchars(wddx_serialize_value($body));
+                   $response['Content-Type'] = 'text/html';
+                  $body= htmlspecialchars(wddx_serialize_value($body));
                } catch (Exception $e)  {  echo $e;}  
                 break;
             }
             
             case FormatEnum::PHP:{
                try{
-                  echo serialize($body);
+                  $response['Content-Type'] = 'text/plain';
+                  $body=serialize($body);
                } catch (Exception $e)  {  echo $e;}  
                 break;
             }
         }
+        
+        if($headers!=null){
+            foreach($headers as $key=>$val){
+                $response[$key]=$val;
+            }
+        }
+        $response->body($body);
+        $response->status($code);
     }
     
     public static function register($httpMethod,$url,$function){
@@ -104,10 +118,10 @@ class Dispatcher {
     }
     public static function getFormat($format){
        if($format==".json") $format=  FormatEnum::JSON;
-       else if($format==".xml") $format=  FormatEnum::XML;
-       else if($format==".php") $format=  FormatEnum::PHP;
-       else if($format==".html") $format=  FormatEnum::HTML;
-       else if($format==".proto") $format=  FormatEnum::JSON;//change when implmented.
+       elseif(strcasecmp($format,'.xml')==0) $format=  FormatEnum::XML;
+       elseif(strcasecmp($format,'.php')==0) $format=  FormatEnum::PHP;
+       elseif(strcasecmp($format,'.html')==0) $format=  FormatEnum::HTML;
+       elseif(strcasecmp($format,'.proto')==0) $format=  FormatEnum::JSON;//change when implmented.
        else $format=  FormatEnum::JSON;
        return $format;
     }
