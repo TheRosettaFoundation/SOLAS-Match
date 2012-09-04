@@ -274,11 +274,11 @@ class TaskDao {
     /*
      * Returns an array of tasks ordered by the highest score related to the user
      */
-    public function getUserTopTasks($user_id, $nb_items) {
+    public function getUserTopTasks($user_id, $limit) {
         $db = new PDOWrapper();
         $db->init();
         $ret = false;
-        if ($result = $db->call("getUserTopTasks", "{$db->cleanse($user_id)},{$db->cleanse($nb_items)}")) {
+        if ($result = $db->call("getUserTopTasks", "{$db->cleanse($user_id)},{$db->cleanse($limit)}")) {
             $ret = array();
             foreach($result as $row) {
                 $task = self::find(array('task_id' => $row['id']));
@@ -294,10 +294,13 @@ class TaskDao {
 	/*
 	 * Return an array of tasks that are tagged with a certain tag.
 	 */
-	public function getTaggedTasks($tag, $nb_items = 10) {
+	public function getTaggedTasks($tag, $limit = 10) {
 		$task_dao = new TaskDao;
 		$tag_id = $task_dao->getTagId($tag);
-
+                return getTasksWithTag($tag_id,$limit);
+	}
+        
+        public function getTasksWithTag($tag_id, $limit = 10) {
 		if (is_null($tag_id)) {
 			throw new InvalidArgumentException('Cannot get tasks tagged with ' . $tag . ' because no such tag is in the system.');
 		}
@@ -305,7 +308,7 @@ class TaskDao {
 		$db = new PDOWrapper();
 		$db->init();
 		$ret = false;
-		if ($r = $db->call("getTaggedTasks", "{$db->cleanse($tag_id)},{$db->cleanse($nb_items)}")) {
+		if ($r = $db->call("getTaggedTasks", "{$db->cleanse($tag_id)},{$db->cleanse($limit)}")) {
 			$ret = array();
 			foreach($r as $row)	{
 				$ret[] = self::find(array('task_id' => $row['id']));
@@ -404,7 +407,7 @@ class TaskDao {
         return TaskFile::_check_task_file_version($task_id, $user_id);
     }
 
-    private function getTaskStatus($task_id)
+    public function getTaskStatus($task_id)
     {
         
         if(TaskFile::_check_task_file_version($task_id)) {

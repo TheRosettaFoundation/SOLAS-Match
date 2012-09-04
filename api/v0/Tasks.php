@@ -36,6 +36,12 @@ class Tasks {
             $dao = new TaskTags();
            Dispatcher::sendResponce(null, $dao->getTags($id), null, $format);
         },'getTasksTags');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/status(:format)/', function ($id,$format=".json"){
+            $dao = new TaskDao();
+           Dispatcher::sendResponce(null, $dao->getTaskStatus($id), null, $format);
+        },'getTaskStatus');
+        
 
     }
     

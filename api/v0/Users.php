@@ -48,11 +48,18 @@ class Users {
            Dispatcher::sendResponce(null, $dao->getUserTags($id), null, $format);
         },'getUsertags');
         
-         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tasks(:format)/', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tasks(:format)/', function ($id,$format=".json"){
            $dao = new TaskDao();
            Dispatcher::sendResponce(null, $dao->getUserTasksByID($id), null, $format);
         },'getUsertasks');
-
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/top_tasks(:format)/', function ($id,$format=".json"){
+            $limit=5;
+            if(isset ($_GET['limit'])&& is_numeric($_GET['limit'])) $limit= $_GET['limit'];
+            $dao = new TaskDao();
+            Dispatcher::sendResponce(null, $dao->getUserTopTasks($id,$limit), null, $format);
+        },'getUserTopTasks');
+        
     }
     
    
