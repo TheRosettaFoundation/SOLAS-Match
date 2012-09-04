@@ -27,6 +27,7 @@ class Dispatcher {
     }
     public  static function init_v0(){
         require_once 'v0/Users.php';
+        require_once 'v0/Tasks.php';
         Dispatcher::getDispatcher()->run();
     }
     
