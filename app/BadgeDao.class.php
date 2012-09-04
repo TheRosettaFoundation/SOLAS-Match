@@ -18,7 +18,7 @@ class BadgeDao
     {
         $db = new PDOWrapper();
         $db->init();
-        $result=$db->call("addBadge", "{$db->cleanseWrapStr($badge->getTitle())},{$db->cleanseWrapStr($badge->getDescription())},{$db->cleanseNull($badge->getOwnerId())}");
+        $result=$db->call("addBadge", "{$db->cleanseWrapStr($badge->getOwnerId())},{$db->cleanseWrapStr($badge->getTitle())},{$db->cleanseWrapStr($badge->getDescription())}");
         return $result[0]['result'];
     }
 
