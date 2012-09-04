@@ -39,9 +39,21 @@ class Dispatcher {
             }
             case FormatEnum::XML: {
                try{
-                $serializer = new XML_Serializer();
-                $serializer->serialize($body);
-                echo $serializer->getSerializedData();
+                  echo wddx_serialize_value($body);
+               } catch (Exception $e)  {  echo $e;}  
+                break;
+            }
+            
+            case FormatEnum::HTML: {
+               try{
+                  echo htmlspecialchars(wddx_serialize_value($body));
+               } catch (Exception $e)  {  echo $e;}  
+                break;
+            }
+            
+            case FormatEnum::PHP:{
+               try{
+                  echo serialize($body);
                } catch (Exception $e)  {  echo $e;}  
                 break;
             }
@@ -93,6 +105,9 @@ class Dispatcher {
     public static function getFormat($format){
        if($format==".json") $format=  FormatEnum::JSON;
        else if($format==".xml") $format=  FormatEnum::XML;
+       else if($format==".php") $format=  FormatEnum::PHP;
+       else if($format==".html") $format=  FormatEnum::HTML;
+       else if($format==".proto") $format=  FormatEnum::JSON;//change when implmented.
        else $format=  FormatEnum::JSON;
        return $format;
     }
