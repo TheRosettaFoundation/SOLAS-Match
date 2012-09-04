@@ -2,7 +2,9 @@
 require '../vendor/autoload.php';
 require '../app/Settings.class.php';
 require_once 'FormatEnum.php';
+require_once 'HttpMethodEnum.php';
 require_once 'XML/Serializer.php';
+
 
 class Dispatcher {
     private static $apiDispatcher = null;
@@ -22,6 +24,7 @@ class Dispatcher {
     }
     
     public static function sendResponce($headers,$body,$code,$format){
+        $format=  Dispatcher::getFormat($format);
         switch ($format){
             case FormatEnum::JSON: {
                 echo json_encode($body);
@@ -36,6 +39,55 @@ class Dispatcher {
                 break;
             }
         }
+    }
+    
+    public static function register($httpMethod,$url,$function){
+        switch($httpMethod){
+            case HttpMethodEnum::DELETE:{
+                Dispatcher::getDispatcher()->delete($url,$function);
+                break;
+            }
+            case HttpMethodEnum::GET:{
+                    Dispatcher::getDispatcher()->get($url,$function);
+                break;
+            }
+            case HttpMethodEnum::POST:{
+                Dispatcher::getDispatcher()->post($url,$function);
+                break;
+            }
+            case HttpMethodEnum::PUT:{
+                Dispatcher::getDispatcher()->put($url,$function);
+                break;
+            }
+        }
+    }
+    
+    public static function registerNamed($httpMethod,$url,$function,$name){
+        
+        switch($httpMethod){
+            case HttpMethodEnum::DELETE:{
+                Dispatcher::getDispatcher()->delete($url,$function)->name($name);
+                break;
+            }
+            case HttpMethodEnum::GET:{
+                    Dispatcher::getDispatcher()->get($url,$function)->name($name);
+                break;
+            }
+            case HttpMethodEnum::POST:{
+                Dispatcher::getDispatcher()->post($url,$function)->name($name);
+                break;
+            }
+            case HttpMethodEnum::PUT:{
+                Dispatcher::getDispatcher()->put($url,$function)->name($name);
+                break;
+            }
+        }
+    }
+    public static function getFormat($format){
+       if($format==".json") $format=  FormatEnum::JSON;
+       else if($format==".xml") $format=  FormatEnum::XML;
+       else $format=  FormatEnum::JSON;
+       return $format;
     }
     
 

@@ -197,10 +197,14 @@ class UserDao {
 	}
 
 	public function getUserBadges(User $user) {
+                return getUserBadgesbyID($user->getUserId());
+	}
+        
+        public function getUserBadgesbyID($user_id) {
 		$ret = NULL;
 		$db = new PDOWrapper();
 		$db->init();
-		if ($result = $db->call("getUserBadges", $db->cleanse($user->getUserId()))) {
+		if ($result = $db->call("getUserBadges", $db->cleanse($user_id))) {
 			$ret = $result;
 		}
 

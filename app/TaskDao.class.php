@@ -1,7 +1,7 @@
 <?php
 require_once 'models/Task.class.php';
 require_once 'TaskTags.class.php';
-//require_once 'TaskTags.class.php';
+require_once 'TaskFile.class.php';
 require_once ('PDOWrapper.class.php');
 /**
  * Task Document Access Object for manipulating tasks.
@@ -352,9 +352,14 @@ class TaskDao {
 
     public function getUserTasks($user, $limit = 10)
     {
+         return getUserTasksByID($user->getUserId(),$limit);
+    }
+    
+    public function getUserTasksByID($user_id, $limit = 10)
+    {
         $db = new PDOWrapper();
         $db->init();
-        return $this->_parse_result_for_user_task($db->call("getUserTasks", "{$db->cleanse($user->getUserId())},{$db->cleanse($limit)}"));
+        return $this->_parse_result_for_user_task($db->call("getUserTasks", "{$db->cleanse($user_id)},{$db->cleanse($limit)}"));
     }
 
     public function getUserArchivedTasks($user, $limit = 10)
