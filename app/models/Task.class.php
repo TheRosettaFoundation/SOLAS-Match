@@ -28,26 +28,11 @@ class Task {
             }
     }
 
-    function getSourceCountryCode() {
-        return $this->_sourceCountryCode;
-    }
-    function setSourceCountryCode($CountryCode){
-        $this->_sourceCountryCode = $CountryCode;
-    }
-
-    function getTargetCountryCode() {
-        return $this->_targetCountryCode;
-    }
-    function setTargetCountryCode($CountryCode){
-        $this->_targetCountryCode = $CountryCode;
-    }
-
-
-    function getTaskId() {
+    public function getTaskId() {
             return $this->_id;
     }
 
-    function setTaskId($task_id) {
+    public function setTaskId($task_id) {
             $this->_id = $task_id;
     }
 
@@ -99,6 +84,40 @@ class Task {
 
     public function getTargetId() {
             return $this->_targetID;
+    }
+
+    public function getSourceCountryCode() 
+    {
+        return $this->_sourceCountryCode;
+    }
+
+    public function setSourceCountryCode($CountryCode)
+    {
+        $this->_sourceCountryCode = $CountryCode;
+    }
+
+    public function getTargetCountryCode() 
+    {
+        return $this->_targetCountryCode;
+    }
+    
+    public function setTargetCountryCode($CountryCode)
+    {
+        $this->_targetCountryCode = $CountryCode;
+    }
+
+    public function getSourceLanguage()
+    {
+        $language = Languages::languageNameFromId($this->getSourceId());
+        $region = Languages::countryNameFromId($this->getSourceCountryCode());
+        return $language.' ('.$region.')';
+    }
+
+    public function getTargetLanguage()
+    {
+        $language = Languages::languageNameFromId($this->getTargetId());
+        $region = Languages::countryNameFromId($this->getTargetCountryCode());
+        return $language.' ('.$region.')';
     }
 
     public function setWordCount($word_count)
