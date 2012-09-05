@@ -745,7 +745,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `nonce` int(11) unsigned NOT NULL,
   `created_time` datetime NOT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  CONSTRAINT `FK_user_language` FOREIGN KEY (`native_lang_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_user_country` FOREIGN KEY (`native_region_id`) REFERENCES `country` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `user`
@@ -764,6 +766,16 @@ BEGIN
             DROP COLUMN `native_language`,
             ADD COLUMN `native_lang_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
             ADD COLUMN `native_region_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `country` table';
+    end if;
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc 
+                    where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user'and tc.CONSTRAINT_NAME='FK_user_language') then
+        ALTER TABLE `user`
+        ADD CONSTRAINT `FK_user_language` FOREIGN KEY (`native_lang_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+    end if;
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc 
+                    where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user'and tc.CONSTRAINT_NAME='FK_user_country') then
+        ALTER TABLE `user`
+        ADD CONSTRAINT `FK_user_country` FOREIGN KEY (`native_region_id`) REFERENCES `country` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
     end if;
 END//
 
