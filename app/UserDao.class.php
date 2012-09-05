@@ -27,7 +27,8 @@ class UserDao {
 				'nonce' => $r[0]['nonce'],
 				'display_name' => $r[0]['display_name'],
 				'biography' => $r[0]['biography'],
-                'native_language' => $r[0]['native_language']
+                'native_lang_id' => $r[0]['native_lang_id'],
+                'native_region_id' => $r[0]['native_region_id']
 			);
 			$ret = new User($user_data);
 		}
@@ -69,8 +70,12 @@ class UserDao {
 	private function _update($user) {
 		$db = new PDOWrapper();
 		$db->init();
-                $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},{$db->cleanseNullOrWrapStr($user->getBiography())},{$db->cleanseNullOrWrapStr($user->getDisplayName())},{$db->cleanseNullOrWrapStr($user->getNativeLanguage())},{$db->cleanse($user->getUserId())}");
-                return $result[0]['user_id'];
+        $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},
+                {$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},
+                {$db->cleanseNullOrWrapStr($user->getBiography())},{$db->cleanseNullOrWrapStr($user->getDisplayName())},
+                {$db->cleanseNullOrWrapStr($user->getNativeLanguageID())},{$db->cleanseNullOrWrapStr($user->getNativeRegionID())},
+                {$db->cleanse($user->getUserId())}");
+        return $result[0]['user_id'];
 	}
 
 	private function _insert($user) {

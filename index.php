@@ -1257,7 +1257,8 @@ $app->get('/profile', function () use ($app) {
         $nativeLang = $app->request()->post('nLanguage');
         $langCountry= $app->request()->post('nLanguageCountry');
         if($nativeLang != NULL&&$langCountry!= NULL) {
-            $user->setNativeLanguage("{$nativeLang}-{$langCountry}");
+            $user->setNativeLanguageID($nativeLang);
+            $user->setNativeRegionID($langCountry);
             //assign a badge
             $badge_dao = new BadgeDao();
             $badge = $badge_dao->find(array('badge_id' => Badge::NATIVE_LANGUAGE));
@@ -1266,7 +1267,7 @@ $app->get('/profile', function () use ($app) {
         $user_dao->save($user);
 
         if($user->getDisplayName() != '' && $user->getBiography() != ''
-                && $user->getNativeLanguage() != '') {
+                && $user->getNativeLanguageID() != '' && $user->getNativeRegionID() != '') {
             $badge_dao = new BadgeDao();
             $badge = $badge_dao->find(array('badge_id' => Badge::PROFILE_FILLER));
             $badge_dao->assignBadge($user, $badge);
