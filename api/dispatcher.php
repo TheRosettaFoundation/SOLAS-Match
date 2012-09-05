@@ -29,6 +29,8 @@ class Dispatcher {
         require_once 'v0/Users.php';
         require_once 'v0/Tasks.php';
         require_once 'v0/Tags.php';
+        require_once 'v0/Badges.php';
+        require_once 'v0/Orgs.php';
         Dispatcher::getDispatcher()->run();
     }
     

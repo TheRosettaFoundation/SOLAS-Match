@@ -197,7 +197,7 @@ class UserDao {
 	}
 
 	public function getUserBadges(User $user) {
-                return getUserBadgesbyID($user->getUserId());
+                return $this->getUserBadgesbyID($user->getUserId());
 	}
         
         public function getUserBadgesbyID($user_id) {
@@ -229,11 +229,13 @@ class UserDao {
     /*
         Get all users with $badge assigned
     */
-    public function getUsersWithBadge($badge) {
+    
+    
+    public function getUsersWithBadgeByID($badge_ID) {
         $ret = null;
         $db = new PDOWrapper();
         $db->init();
-        if($result = $db->call("getUsersWithBadge", "{$db->cleanse($badge->getBadgeId())}")) {
+        if($result = $db->call("getUsersWithBadge", "{$db->cleanse($badge_ID)}")) {
             $ret = array();
             foreach($result as $row) {
                 $ret[] = new User($row);
@@ -241,7 +243,10 @@ class UserDao {
         }
         return $ret;
     }
-
+    
+    public function getUsersWithBadge($badge) {
+        return $this->getUsersWithBadgeByID($badge->getBadgeId());
+    }
     /*
         Add the tag to a list of the user's preferred tags
     */

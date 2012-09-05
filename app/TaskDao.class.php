@@ -355,7 +355,7 @@ class TaskDao {
 
     public function getUserTasks($user, $limit = 10)
     {
-         return getUserTasksByID($user->getUserId(),$limit);
+         return $this->getUserTasksByID($user->getUserId(),$limit);
     }
     
     public function getUserTasksByID($user_id, $limit = 10)

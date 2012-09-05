@@ -9,25 +9,25 @@ SmartyView::$smartyExtensions = array(
 );
 
 
-require 'app/Settings.class.php';
-require 'app/PDOWrapper.class.php';
-require 'app/BadgeDao.class.php';
-require 'app/OrganisationDao.class.php';
-require 'app/UserDao.class.php';
-require 'app/TaskStream.class.php';
-require 'app/TaskDao.class.php';
-require 'app/TagsDao.class.php';
-require 'app/TaskFile.class.php';
-require 'app/IO.class.php';
-require 'app/TipSelector.class.php';
-require 'app/lib/Languages.class.php';
-require 'app/lib/URL.class.php';
-require 'app/lib/Authentication.class.php';
-require 'app/lib/UserSession.class.php';
-require 'app/lib/Tags.class.php';
-require 'app/lib/Upload.class.php';
-require 'app/lib/Email.class.php';
-require 'app/lib/Notify.class.php';
+require_once 'app/Settings.class.php';
+require_once 'app/PDOWrapper.class.php';
+require_once 'app/BadgeDao.class.php';
+require_once 'app/OrganisationDao.class.php';
+require_once 'app/UserDao.class.php';
+require_once 'app/TaskStream.class.php';
+require_once 'app/TaskDao.class.php';
+require_once 'app/TagsDao.class.php';
+require_once 'app/TaskFile.class.php';
+require_once 'app/IO.class.php';
+require_once 'app/TipSelector.class.php';
+require_once 'app/lib/Languages.class.php';
+require_once 'app/lib/URL.class.php';
+require_once 'app/lib/Authentication.class.php';
+require_once 'app/lib/UserSession.class.php';
+require_once 'app/lib/Tags.class.php';
+require_once 'app/lib/Upload.class.php';
+require_once 'app/lib/Email.class.php';
+require_once 'app/lib/Notify.class.php';
 
 
 /**

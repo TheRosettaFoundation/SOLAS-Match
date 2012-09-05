@@ -30,7 +30,7 @@ class OrganisationDao {
         $db = new PDOWrapper();
         $db->init();
         
-        if($result = $db->call("getOrg", "{$db->cleanse($id)},{$db->cleanseNullOrWrapStr($name)},{$db->cleanseNullOrWrapStr($homepage)},{$db->cleanseNullOrWrapStr($bio)}")) {
+        if($result = $db->call("getOrg", "{$db->cleanseNull($id)},{$db->cleanseNullOrWrapStr($name)},{$db->cleanseNullOrWrapStr($homepage)},{$db->cleanseNullOrWrapStr($bio)}")) {
             foreach ($result as $row){
                 $ret[] = self::create_org_from_sql_result($row);
             }
