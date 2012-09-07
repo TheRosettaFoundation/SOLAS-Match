@@ -1048,6 +1048,7 @@ BEGIN
 	
 	if id is null and not exists(select * from organisation o where (o.home_page= url or o.home_page= concat("http://",url) ) and o.name=companyName)then
 	-- set insert
+    if bio is null then set bio='';end if;
 	insert into organisation (name,home_page, biography) values (companyName,url,bio);
 
 	else 

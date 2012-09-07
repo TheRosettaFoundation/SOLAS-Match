@@ -1,7 +1,12 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-	<h1>Dashboard <small>Overview of your tasks for translation</small></h1>
+	<h1>
+        Dashboard <small>Overview of your tasks for translation</small>
+        <a href="{urlFor name="create-org"}" class="btn btn-primary pull-right">
+            Create Organisation
+        </a>
+    </h1>
 </div>
 
 {if isset($flash['success'])}

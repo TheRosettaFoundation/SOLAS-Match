@@ -6,11 +6,14 @@ class OrgRouteHandler
     {
         $app = Slim::getInstance();
 
+        $app->get('/org/create', 'authUserIsLoggedIn', array($this, 'createOrg')
+        )->via('POST')->name('create-org');
+
         $app->get('/org/request/:org_id', array($this, 'orgRequestMembership')
         )->name('org-request-membership');
 
-        $app->get('/org/:org_id/request/:user_id/:accept', 'authUserForOrg', array($this, 'orgProcessRequest')
-        )->name('org-process-request');
+        $app->get('/org/:org_id/request/:user_id/:accept', 'authUserForOrg', 
+        array($this, 'orgProcessRequest'))->name('org-process-request');
 
         $app->get('/org/request/queue/:org_id', 'authUserForOrg', array($this, 'orgRequestQueue')
         )->via("POST")->name('org-request-queue');
@@ -29,6 +32,54 @@ class OrgRouteHandler
 
         $app->get("/org/search", array($this, 'orgSearch')
         )->via('POST')->name('org-search');
+    }
+
+    public function createOrg()
+    {
+        $app = Slim::getInstance();
+
+        if($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+
+            $org = new Organisation(null);
+            if(isset($post->name) && $post->name != null) {
+                $org->setName($post->name);
+            }
+
+            if(isset($post->home_page) && ($post->home_page != '' || $post->home_page != 'http://')) {
+                $org->setHomePage($post->home_page);
+            }
+
+            if(isset($post->bio) && $post->bio != '') {
+                $org->setBiography($post->bio);
+            }
+
+            if($org->getName() != '') {
+                $org_dao = new OrganisationDao();
+                if(!is_object($org_dao->find(array('name' => $org->getName())))) {
+                    if($new_org = $org_dao->save($org))
+                    {
+                        $user_dao = new UserDao();
+                        $current_user = $user_dao->getCurrentUser();
+                        $org_dao->acceptMemRequest($new_org->getId(), $current_user->getUserId());
+                        $org_name = $org->getName();
+                        $app->flashNow('success', "Organisation \"$org_name\" has been created. 
+                                            Visit the <a href='".$app->urlFor("client-dashboard")."'>client dashboard</a> 
+                                            to start uploading tasks.");
+                    } else {
+                        $app->flashNow('error', "Unable to save Organisation.");
+                    }
+                } else {
+                    $org_name = $org->getName();
+                    $app->flashNow('error', "An Organisation named \"$org_name\" is already registered
+                                            with SOLAS Match. Please use a different name.");
+                }
+            } else {
+                $app->flashNow('error', "You must specify a name for the organisation.");
+            }
+        }
+        
+        $app->render('create-org.tpl');
     }
 
     public function orgRequestMembership($org_id)
