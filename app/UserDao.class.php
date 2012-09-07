@@ -219,7 +219,7 @@ class UserDao {
         if($result = $db->call("getUserTags", $db->cleanse($user_id))) {
             $ret = array();
             foreach($result as $row) {
-                $ret[] = $row['label'];
+                $ret[] = new Tag($row);
             }
         }
 
