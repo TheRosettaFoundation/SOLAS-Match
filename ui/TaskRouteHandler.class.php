@@ -202,6 +202,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
+        Notify::sendEmailNotifications($task, NotificationTypes::Archive);
         $task_dao->moveToArchive($task);
         
         $app->redirect($ref = $app->request()->getReferrer());
