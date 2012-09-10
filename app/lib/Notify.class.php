@@ -16,4 +16,28 @@ class Notify {
 
 		Email::sendEmail($user_email, $email_subject, $email_body);
 	}
+
+    public static function sendEmailNotifications($task, $notificationType)
+    {
+        $app = Slim::getInstance();
+
+        $task_dao = new TaskDao();
+        $subscribed_users = $task_dao->getSubscribedUsers($task->getTaskId());
+
+        $org_dao = new OrganisationDao();
+        $org = $org_dao->find(array('id' => $task->getOrganisationId()));
+
+        foreach($subscribed_users as $user) {
+            $app->view()->setData('user', $user);
+            $app->view()->appendData(array(
+                        'task' => $task,
+                        'org' => $org
+            ));
+            $email_subject = "A task's status has changed on SOLAS Match";
+            $email_body = $app->view()->fetch($notificationType);
+            $user_email = $user->getEmail();
+
+            Email::sendEmail($user_email, $email_subject, $email_body);
+        }
+    }
 }

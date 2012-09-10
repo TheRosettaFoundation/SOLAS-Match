@@ -392,6 +392,24 @@ class TaskDao {
     }
 
     /*
+       Get User Notification List for this task
+    */
+    public function getSubscribedUsers($task_id)
+    {
+        $ret = null;
+        $db = new PDOWrapper();
+        $db->init();
+        if($result = $db->call('getSubscribedUsers', "$task_id")) {
+            foreach($result as $row) {
+                $user_dao = new UserDao();
+                $ret[] = $user_dao->find($row);
+            }
+        }
+
+        return $ret;
+    }
+
+    /*
     * Check to see if a translation for this task has been uploaded before
     */
     public function hasBeenUploaded($task_id, $user_id)

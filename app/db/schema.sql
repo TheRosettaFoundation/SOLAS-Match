@@ -1881,6 +1881,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP Procedure IF EXISTS `getSubscribedUsers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscribedUsers`(IN `taskId` INT)
+BEGIN
+    SELECT *
+    FROM user_notifications
+    WHERE task_id = taskId;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Dev.getOrg
 DROP PROCEDURE IF EXISTS `getOrg`;

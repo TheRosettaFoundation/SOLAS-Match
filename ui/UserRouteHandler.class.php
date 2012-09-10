@@ -317,7 +317,7 @@ class UserRouteHandler
                     
         $task_dao = new TaskDao();
         $activeJobs = $task_dao->getUserTasks($user, 10);
-                   
+
         $archivedJobs = $task_dao->getUserArchivedTasks($user, 10);
                    
         $user_tags = $user_dao->getUserTags($user->getUserId());
