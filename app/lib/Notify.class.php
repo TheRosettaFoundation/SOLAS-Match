@@ -24,20 +24,32 @@ class Notify {
         $task_dao = new TaskDao();
         $subscribed_users = $task_dao->getSubscribedUsers($task->getTaskId());
 
+        $translator = null;
+        if($task_dao->taskIsClaimed($task->getTaskId())) {
+            $translator = $task_dao->getTaskTranslator($task->getTaskId());
+        }
+
+        $settings = new Settings();
+        $site_url = $settings->get('site.url');
+
         $org_dao = new OrganisationDao();
         $org = $org_dao->find(array('id' => $task->getOrganisationId()));
 
-        foreach($subscribed_users as $user) {
-            $app->view()->setData('user', $user);
-            $app->view()->appendData(array(
+        if(count($subscribed_users) > 0) {
+            foreach($subscribed_users as $user) {
+                $app->view()->setData('user', $user);
+                $app->view()->appendData(array(
                         'task' => $task,
-                        'org' => $org
-            ));
-            $email_subject = "A task's status has changed on SOLAS Match";
-            $email_body = $app->view()->fetch($notificationType);
-            $user_email = $user->getEmail();
+                        'translator' => $translator,
+                        'org' => $org,
+                        'site_url' => $site_url
+                ));
+                $email_subject = "A task's status has changed on SOLAS Match";
+                $email_body = $app->view()->fetch($notificationType);
+                $user_email = $user->getEmail();
 
-            Email::sendEmail($user_email, $email_subject, $email_body);
+                Email::sendEmail($user_email, $email_subject, $email_body);
+            }
         }
     }
 }

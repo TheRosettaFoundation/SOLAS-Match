@@ -5,7 +5,7 @@ require('models/User.class.php');
 class UserDao {
 	public function find($params) {
 		$query = null;
-                $args = "";
+        $args = "";
 		$db = new PDOWrapper();
 		$db->init();
                 if (isset($params['user_id']) || isset($params['email'])) {

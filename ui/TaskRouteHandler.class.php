@@ -305,6 +305,7 @@ class TaskRouteHandler
         
         $task_dao->claimTask($task, $current_user);
         Notify::notifyUserClaimedTask($current_user, $task);
+        Notify::sendEmailNotifications($task, NotificationTypes::Claim);
         
         $app->redirect($app->urlFor('task-claimed', array(
                 'task_id' => $task_id
