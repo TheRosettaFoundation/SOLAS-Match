@@ -13,14 +13,11 @@
         {/if}
         <p>{$user->getBiography()}</p>
         <p>View their <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">profile</a></p>
-        <p>
-            <a href="{urlFor name="org-process-request" options="org_id.$org_id|user_id.$user_id|accept.true"}" class="btn btn-primary">
-                Accept Request
-            </a>
-            <a href="{urlFor name="org-process-request" options="org_id.$org_id|user_id.$user_id|accept.false"}" class="btn btn-primary">
-                Refuse Request
-            </a>
-        </p>
+        <form method="post" action="{urlFor name="org-request-queue" options="org_id.$org_id"}">
+            <input type="hidden" name="user_id" value="{$user->getUserId()}" />
+            <input type="submit" name="accept" value="Accept Request" class="btn btn-primary" />
+            <input type="submit" name="refuse" value="Refuse Request" class="btn btn-primary" />
+        </form>
 
     {/foreach}
 {else}

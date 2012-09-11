@@ -35,7 +35,31 @@ class Notify
         $email_body = $app->view()->fetch('email.password-reset.tpl');
 
         Email::sendEmail($user_email, $email_subject, $email_body);
-    } 
+    }
+
+    public static function notifyUserOrgMembershipRequest($user, $org, $accepted)
+    {
+        $app = Slim::getInstance();
+
+        $settings = new Settings();
+        $site_url = $settings->get('site.url');
+
+        $app->view()->setData('site_url', $site_url);
+        $app->view()->appendData(array(
+                            'user' => $user,
+                            'org' => $org
+        ));
+
+        $user_email = $user->getEmail();
+        $email_subject = "SOLAS Match: Organisation Membership Request Feedback";
+        if($accepted) {
+            $email_body = $app->view()->fetch('email.org-membership-accepted.tpl');
+        } else {
+            $email_body = $app->view()->fetch("email.org-membership-refused.tpl");
+        }
+
+        Email::sendEmail($user_email, $email_subject, $email_body);
+    }
 
     public static function sendEmailNotifications($task, $notificationType)
     {

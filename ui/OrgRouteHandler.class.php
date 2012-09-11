@@ -102,21 +102,6 @@ class OrgRouteHandler
         $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
     }
 
-    //This should be remove so that it is handled in orgRequestQueue
-    public function orgProcessRequest($org_id, $user_id, $accept)
-    {
-        $app = Slim::getInstance();
-
-        $org_dao = new OrganisationDao();
-        if($accept == "true") {
-            $org_dao->acceptMemRequest($org_id, $user_id);
-        } else {
-            $org_dao->refuseMemRequest($org_id, $user_id);
-        }   
-        
-        $app->redirect($app->urlFor('org-request-queue', array('org_id' => $org_id)));
-    }
-
     public function orgRequestQueue($org_id)
     {
         $app = Slim::getInstance();
@@ -129,38 +114,58 @@ class OrgRouteHandler
         if($app->request()->isPost()) {
             $post = (object)$app->request()->post();
             
-            if(!is_null($post->email) && User::isValidEmail($post->email)) {
-                $user = $user_dao->find(array('email' => $post->email));
+            if(isset($post->email)) {
+                if(User::isValidEmail($post->email)) {
+                    $user = $user_dao->find(array('email' => $post->email));
                 
-                if(!is_null($user)) {
-                    $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+                    if(!is_null($user)) {
+                        $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
                     
-                    if($user->getDisplayName() != '') {
-                        $user_name = $user->getDisplayName();
-                    } else {
-                        $user_name = $user->getEmail();
-                    }   
-                    if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-                        $org_dao->acceptMemRequest($org_id, $user->getUserId());
-                    
-                        if($org->getName() != '') {
-                            $org_name = $org->getName();
+                        if($user->getDisplayName() != '') {
+                            $user_name = $user->getDisplayName();
                         } else {
-                            $org_name = "Organisation $org_id";
+                            $user_name = $user->getEmail();
                         }   
-                        $app->flashNow('success', "Successfully added $user_name as a member of $org_name");
+                        if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
+                            $org_dao->acceptMemRequest($org_id, $user->getUserId());
+                    
+                            if($org->getName() != '') {
+                                $org_name = $org->getName();
+                            } else {
+                                $org_name = "Organisation $org_id";
+                            }   
+                            $app->flashNow('success', "Successfully added $user_name as a member of $org_name");
+                        } else {
+                            $app->flashNow('error', "$user_name is already a member of this organisation");
+                        }   
                     } else {
-                        $app->flashNow('error', "$user_name is already a member of this organisation");
-                    }   
+                        $email = $post->email;
+                        $app->flashNow('error',
+                            "The email address $email is not registered with this system.
+                            Are you sure you have the right email addess?"
+                        );
+                    }
                 } else {
-                    $email = $post->email;
-                    $app->flashNow('error',
-                        "The email address $email is not registered with this system.
-                        Are you sure you have the right email addess?"
-                    );
+                    $app->flashNow('error', 'You did not enter a valid email address');
                 }
-            } else {
-                $app->flashNow('error', 'You did not enter a valid email address');
+            } elseif(isset($post->accept)) {
+                if($user_id = $post->user_id) {
+                    $org_dao->acceptMemRequest($org_id, $user_id);
+                    $user_dao = new UserDao();
+                    $user = $user_dao->find(array('user_id' => $user_id));
+                    Notify::notifyUserOrgMembershipRequest($user, $org, true);
+                } else {
+                    $app->flashNow("error", "Invalid User ID: $user_id");
+                }
+            } elseif(isset($post->refuse)) {
+                if($user_id = $post->user_id) {
+                    $org_dao->refuseMemRequest($org_id, $user_id);
+                    $user_dao = new UserDao();
+                    $user = $user_dao->find(array('user_id' => $user_id));
+                    Notify::notifyUserOrgMembershipRequest($user, $org, false);
+                } else {
+                    $app->flashNow("error", "Invalid User ID: $user_id");
+                }
             }
         }
         
