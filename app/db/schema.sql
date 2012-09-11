@@ -1828,6 +1828,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getTaskTranslator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTranslator` (IN `taskId` INT)
+BEGIN
+    SELECT user_id
+    FROM task_claim
+    WHERE task_id=taskId;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Dev.hasUserClaimedTask
 DROP PROCEDURE IF EXISTS `hasUserClaimedTask`;
 DELIMITER //
@@ -1900,6 +1910,16 @@ BEGIN
 	else
     	select 0 as 'result';
 	end if;
+END//
+DELIMITER ;
+
+DROP Procedure IF EXISTS `getSubscribedUsers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscribedUsers`(IN `taskId` INT)
+BEGIN
+    SELECT *
+    FROM user_notifications
+    WHERE task_id = taskId;
 END//
 DELIMITER ;
 

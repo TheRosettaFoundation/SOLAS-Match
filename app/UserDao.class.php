@@ -5,7 +5,7 @@ require('models/User.class.php');
 class UserDao {
 	public function find($params) {
 		$query = null;
-                $args = "";
+        $args = "";
 		$db = new PDOWrapper();
 		$db->init();
                 if (isset($params['user_id']) || isset($params['email'])) {
@@ -54,6 +54,7 @@ class UserDao {
 			'nonce' => $nonce,
 			'password' => $password
 		);
+
 		$user = new User($user_data);
 		return $this->save($user);
 	}
@@ -94,8 +95,7 @@ class UserDao {
 	private function _insert($user) {
 		$db = new PDOWrapper();
 		$db->init();
-		if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr
-                        ($user->getPassword())},NULL,NULL,NULL,NULL")) {
+		if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},NULL,NULL,NULL,NULL, NULL")) {
 			return $this->find(array('user_id' => $user_id[0]['user_id']));
 		}
 		else {

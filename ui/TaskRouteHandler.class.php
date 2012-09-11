@@ -202,6 +202,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
+        Notify::sendEmailNotifications($task, NotificationTypes::Archive);
         $task_dao->moveToArchive($task);
         
         $app->redirect($ref = $app->request()->getReferrer());
@@ -304,6 +305,7 @@ class TaskRouteHandler
         
         $task_dao->claimTask($task, $current_user);
         Notify::notifyUserClaimedTask($current_user, $task);
+        Notify::sendEmailNotifications($task, NotificationTypes::Claim);
         
         $app->redirect($app->urlFor('task-claimed', array(
                 'task_id' => $task_id
@@ -801,6 +803,7 @@ class TaskRouteHandler
         }
         
         if (is_null($error_message)) {
+            Notify::sendEmailNotifications($task, NotificationTypes::Upload);
             $app->redirect($app->urlFor('task-uploaded-edit', array('task_id' => $task_id)));
         } else {
             $app->view()->setData('task', $task);

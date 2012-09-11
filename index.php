@@ -28,6 +28,7 @@ require 'app/lib/Tags.class.php';
 require 'app/lib/Upload.class.php';
 require 'app/lib/Email.class.php';
 require 'app/lib/Notify.class.php';
+require 'app/lib/NotificationTypes.class.php';
 
 require 'ui/UserRouteHandler.class.php';
 require 'ui/OrgRouteHandler.class.php';

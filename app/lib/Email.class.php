@@ -24,7 +24,8 @@ class Email {
         $mailHeader .= "X-Sender-IP: {$_SERVER['REMOTE_ADDR']}\r\n";
 
         if (!empty($monitor_email_address)) {
-            $mailHeader .= "Bcc: " . $monitor_email_address . "\r\n";   
+            $mailHeader .= "Bcc: " . $monitor_email_address . "\r\n";  
+            $mailHeader .= "Content-type: text/html\r\n";
         }
         
         $mailParams = "-f$mailFrom";
