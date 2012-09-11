@@ -1584,11 +1584,10 @@ DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT)
 BEGIN
-SELECT t.id
-FROM task AS t
-WHERE t.id NOT IN (SELECT task_id FROM task_claim)						
-ORDER BY created_time DESC
-LIMIT lim;
+    set @q = Concat("SELECT t.id FROM task AS t WHERE t.id NOT IN (SELECT task_id FROM task_claim) ORDER BY created_time DESC LIMIT ",lim);
+    PREPARE stmt FROM @q;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -1599,10 +1598,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `
     READS SQL DATA
     COMMENT 'relpace with more effient code later'
 BEGIN
-SELECT t.id
-FROM task AS t LEFT JOIN (SELECT *FROM user_task_score WHERE user_id = uID) AS uts ON t.id = uts.task_id
-WHERE t.id NOT IN (SELECT task_id FROM task_claim)
-ORDER BY uts.score DESC limit lim;
+    set @q = Concat("SELECT t.id FROM task AS t LEFT JOIN (SELECT *FROM user_task_score WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM task_claim) ORDER BY uts.score DESC limit ",lim);
+    PREPARE stmt FROM @q;
+    set @uID=uID;
+    EXECUTE stmt using @uID;
+    DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -1612,15 +1612,19 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `lim` INT)
     READS SQL DATA
 BEGIN
-	SELECT id 
-	FROM task t join task_tag tt on tt.task_id=t.id
-	WHERE tt.tag_id=tID AND NOT  exists (
+	set @q = Concat("SELECT id 
+                         FROM task t join task_tag tt on tt.task_id=t.id
+                         WHERE tt.tag_id=? AND NOT  exists (
 							  	SELECT 1		
 								FROM task_claim
 								WHERE task_id = t.id
 							)
-	ORDER BY t.created_time DESC
-	LIMIT lim; 
+                         ORDER BY t.created_time DESC
+                         LIMIT ",lim);
+        PREPARE stmt FROM @q;
+        set @tID=tID;
+        EXECUTE stmt using @tID;
+        DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -1630,17 +1634,21 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
 BEGIN
-SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
-FROM task_tag AS tt 
-join tag AS t on tt.tag_id = t.tag_id
-join task as tsk on tsk.id=tt.task_id
-WHERE not exists ( SELECT 1
-                    FROM task_claim tc
-                    where tc.task_id=tt.task_id
-                	)
-GROUP BY tt.tag_id
-ORDER BY frequency DESC
-LIMIT lim;
+set @q = Concat("   SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
+                    FROM task_tag AS tt 
+                    join tag AS t on tt.tag_id = t.tag_id
+                    join task as tsk on tsk.id=tt.task_id
+                    WHERE not exists ( SELECT 1
+                                        FROM task_claim tc
+                                        where tc.task_id=tt.task_id
+                                        )
+                    GROUP BY tt.tag_id
+                    ORDER BY frequency DESC
+                    LIMIT ",lim);
+        PREPARE stmt FROM @q;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+
 END//
 DELIMITER ;
 
@@ -1792,10 +1800,16 @@ DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
-SELECT * FROM archived_task as a JOIN task_claim as c ON a.task_id = c.task_id
-WHERE user_id = uID
-ORDER BY created_time DESC
-limit lim;
+
+set @q=Concat("SELECT * FROM archived_task as a JOIN task_claim as c ON a.task_id = c.task_id
+                WHERE user_id = ?
+                ORDER BY created_time DESC
+                limit ", lim);
+        PREPARE stmt FROM @q;
+        set@uID = uID;
+	EXECUTE stmt using @uID;
+	DEALLOCATE PREPARE stmt;
+
 END//
 DELIMITER ;
 
@@ -1805,11 +1819,16 @@ DROP PROCEDURE IF EXISTS `getUserTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
-SELECT * 
-FROM task JOIN task_claim ON task_claim.task_id = task.id
-WHERE user_id = uID
-ORDER BY created_time DESC
-limit lim;
+
+set @q=Concat(" SELECT * 
+                FROM task JOIN task_claim ON task_claim.task_id = task.id
+                WHERE user_id = ?
+                ORDER BY created_time DESC
+                limit ", lim);
+        PREPARE stmt FROM @q;
+        set@uID = uID;
+	EXECUTE stmt using @uID;
+	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
