@@ -803,6 +803,7 @@ class TaskRouteHandler
         }
         
         if (is_null($error_message)) {
+            Notify::sendEmailNotifications($task, NotificationTypes::Upload);
             $app->redirect($app->urlFor('task-uploaded-edit', array('task_id' => $task_id)));
         } else {
             $app->view()->setData('task', $task);
