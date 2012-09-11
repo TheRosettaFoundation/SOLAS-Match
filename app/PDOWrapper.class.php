@@ -154,40 +154,12 @@ class PDOWrapper {
 		}
 	}
 
-//        function call($procedure,$procArgs){
-//            if(!is_array($procArgs)) {
-//                $sql = "CALL $procedure ($procArgs)";
-//            } else {
-//                $sql = "CALL $procedure (".implode(', ', $procArgs).")";
-//            }
-//            if ($this->show_sql){
-//                $this->showSQL($sql);
-//            }
-//            if ((empty($sql)) || (empty($this->connection))){
-//                $this->error_msg = "\r\n" . "SQL Statement is <code>null</code> or connection is null - " . date('H:i:s');
-//                $this->sql_errored = $sql;
-//                $this->debug();
-//                return false;
-//            }
-//            $conn = $this->connection;
-//            $i = 0;
-//            $data = array();
-//
-//            if($result = $conn->query($sql)) {
-//                foreach($result as $row){
-//                    $data[$i] = $row;
-//                    $i++;
-//                }
-//            }
-//            return empty($data) ? false : $data;
-//        }
-        
-        
-        
-        
         function call($procedure,$procArgs){
-            $sql = "CALL ? (?)";
-            
+            if(!is_array($procArgs)) {
+                $sql = "CALL $procedure ($procArgs)";
+            } else {
+                $sql = "CALL $procedure (".implode(', ', $procArgs).")";
+            }
             if ($this->show_sql){
                 $this->showSQL($sql);
             }
@@ -198,16 +170,20 @@ class PDOWrapper {
                 return false;
             }
             $conn = $this->connection;
-            if(is_array($procArgs)) $procArgs=implode(', ', $procArgs);
+            $i = 0;
             $data = array();
-            $stmt=$conn->prepare($sql);
-            if($result = $stmt->execute(array($procedure,$procArgs))) {
+
+            if($result = $conn->query($sql)) {
                 foreach($result as $row){
-                    $data[] = $row;
+                    $data[$i] = $row;
+                    $i++;
                 }
             }
             return empty($data) ? false : $data;
         }
+        
+        
+        
         
         
         
