@@ -37,17 +37,17 @@ class Dispatcher {
     public static function sendResponce($headers,$body,$code=200,$format=".json"){
         $response = Dispatcher::getDispatcher()->response();
         
-        $format=  Dispatcher::getFormat($format); 
-        switch ($format){
+        $formatCode=  Dispatcher::getFormat($format); 
+        switch ($formatCode){
             case FormatEnum::JSON: {
                 $response['Content-Type'] = 'application/json';
-                $body=json_encode($body);
+                $body=Dispatcher::serialiser($body,$format);
                 break;
             }
             case FormatEnum::XML: {
                try{
                   $response['Content-Type'] = 'application/xml';
-                  $body=wddx_serialize_value($body);
+                   $body=Dispatcher::serialiser($body,$format);
                } catch (Exception $e)  {  echo $e;}  
                 break;
             }
@@ -55,7 +55,7 @@ class Dispatcher {
             case FormatEnum::HTML: {
                try{
                    $response['Content-Type'] = 'text/html';
-                  $body= htmlspecialchars(wddx_serialize_value($body));
+                   $body=Dispatcher::serialiser($body,$format);
                } catch (Exception $e)  {  echo $e;}  
                 break;
             }
@@ -63,7 +63,7 @@ class Dispatcher {
             case FormatEnum::PHP:{
                try{
                   $response['Content-Type'] = 'text/plain';
-                  $body=serialize($body);
+                  $body=Dispatcher::serialiser($body,$format);
                } catch (Exception $e)  {  echo $e;}  
                 break;
             }
@@ -76,6 +76,95 @@ class Dispatcher {
         }
         $response->body($body);
         $response->status($code);
+    }
+    
+    public static function serialiser($body,$format=".json"){
+        $response = Dispatcher::getDispatcher()->response();
+        
+        $format=  Dispatcher::getFormat($format); 
+        switch ($format){
+            case FormatEnum::JSON: {
+                return json_encode($body);
+            }
+            case FormatEnum::XML: {
+               return wddx_serialize_value($body);
+            }
+            
+            case FormatEnum::HTML: {
+               return htmlspecialchars(wddx_serialize_value($body));
+            }
+            
+            case FormatEnum::PHP:{
+               return serialize($body);
+            }
+        }
+    }
+    public static function deserialiser($data,$format=".json"){
+        $format=  Dispatcher::getFormat($format); 
+        switch ($format){
+            case FormatEnum::JSON: {
+                try{
+                 return json_encode($body);
+                }catch (Exception $e){
+                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                }
+                break;
+            }
+            case FormatEnum::XML: {
+                try{
+                 return wddx_deserialize($body);
+                }catch (Exception $e){
+                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                }
+                break;
+            }
+            
+            case FormatEnum::HTML: {
+                try{
+                 return  wddx_deserialize(htmlspecialchars_decode($body));
+                }catch (Exception $e){
+                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                }
+                break;
+            }
+            
+            
+            
+            case FormatEnum::PHP:{
+              try{
+                 return unserialize($body);
+                }catch (Exception $e){
+                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                }
+                break;
+            }
+        }
+        
+    }
+    
+    public static function call($url,$data,$httpMethod,$queryArgs=array(), $format=".php"){
+        $url.=$format."?";
+        foreach ($queryArgs as $key=>$val) $url.=$key."=".$val."&";
+         switch($httpMethod){
+            case HttpMethodEnum::DELETE:{
+                $request = new HttpRequest($url,  HttpRequest::METH_DELETE);
+                return Dispatcher::deserialiser($request->send()->getBody(),$format);
+            }
+            case HttpMethodEnum::GET:{
+                $request = new HttpRequest($url,  HttpRequest::METH_GET);
+                return Dispatcher::deserialiser($request->send()->getBody(),$format);
+            }
+            case HttpMethodEnum::POST:{
+                $request = new HttpRequest($url,  HttpRequest::METH_POST);
+                $request->setRawPostData(Dispatcher::serialiser($data,$format));
+                return Dispatcher::deserialiser($request->send()->getBody(),$format);
+            }
+            case HttpMethodEnum::PUT:{
+                $request = new HttpRequest($url,  HttpRequest::METH_PUT);
+                $request->setPutData(Dispatcher::serialiser($data,$format));
+                return Dispatcher::deserialiser($request->send()->getBody(),$format);
+            }
+        } 
     }
     
     public static function register($httpMethod,$url,$function){
