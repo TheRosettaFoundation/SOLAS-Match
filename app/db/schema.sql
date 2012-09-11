@@ -785,6 +785,28 @@ CALL alterTable();
 
 DROP PROCEDURE alterTable;
 
+CREATE TABLE IF NOT EXISTS `password_reset_requests` (
+    `uid` CHAR(40) NOT NULL,
+    `user_id` INT(11) UNSIGNED NOT NULL,
+    PRIMARY KEY (`uid`, `user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='password_reset_requests'and tc.CONSTRAINT_NAME='FK_password_reset_user') then
+        ALTER TABLE `password_reset_requests`
+	ADD CONSTRAINT `FK_password_reset_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+    end if;
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
 -- Dumping structure for table Solas-Match-test.user_badges
 CREATE TABLE IF NOT EXISTS `user_badges` (
 	`user_id` INT(11) NOT NULL,
@@ -2107,6 +2129,43 @@ BEGIN
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `userId` INT(11))
+BEGIN
+	if unique_id='' then set unique_id=null;end if;
+    if userId='' then set userId=null;end if;
+    set @q= "SELECT * FROM password_reset_requests p WHERE 1 ";
+    if unique_id is not null then
+        set @q= CONCAT(@q," and p.uid='",unique_id,"'");
+    end if;
+    if userId is not null then
+        set @q= CONCAT(@q, " and p.user_id=", userId);
+    end if;
+
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addPasswordResetRequest`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
+BEGIN
+    INSERT INTO password_reset_requests (uid, user_id) VALUES (uniqueId,userId);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removePasswordResetRequest`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removePasswordResetRequest`(IN `userId` INT)
+BEGIN
+    DELETE FROM password_reset_requests 
+        WHERE user_id = userId;
 END//
 DELIMITER ;
 

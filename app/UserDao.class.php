@@ -58,6 +58,19 @@ class UserDao {
 		return $this->save($user);
 	}
 
+    public function changePassword($user_id, $password)
+    {
+        $user = $this->find(array('user_id' => $user_id));
+
+        $nonce = Authentication::generateNonce();
+        $pass = Authentication::hashPassword($password, $nonce);
+
+        $user->setNonce($nonce);
+        $user->setPassword($pass);
+
+        return $this->save($user);
+    }
+
 	public function save($user) {
 		if (is_null($user->getUserId())) {
 			return $this->_insert($user);
@@ -112,9 +125,9 @@ class UserDao {
 			throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
 		}
 
-                if ($clear_password === '') {
-                    throw new InvalidArgumentException('Sorry, an empty password is not allowed. Please contact the site administrator for details');
-                }
+        if ($clear_password === '') {
+            throw new InvalidArgumentException('Sorry, an empty password is not allowed. Please contact the site administrator for details');
+        }
 
 		UserSession::setSession($user->getUserId());
 
@@ -340,6 +353,61 @@ class UserDao {
         $args['task_id'] = $task_id;
         if($result = $db->call("removeUserNotification", $args)) {
             $ret = $result[0]['result'];
+        }
+
+        return $ret;
+    }
+
+    /*
+        Add password reset request to DB for this user
+    */
+    public function addPasswordResetRequest($unique_id, $user_id)
+    {
+        $db = new PDOWrapper();
+        $db->init();
+        $db->call("addPasswordResetRequest", "{$db->cleanseWrapStr($unique_id)}, {$db->cleanse($user_id)}");
+    }
+
+    public function removePasswordResetRequest($user_id)
+    {
+        $db = new PDOWrapper();
+        $db->init();
+        $db->call("removePasswordResetRequest", "{$db->cleanse($user_id)}");
+    }
+
+    /*
+        Check if a user has requested a password reset
+    */
+    public function hasRequestedPasswordReset($user)
+    {
+        $ret = false;
+        $args = array();
+        $args['user_id'] = $user->getUserId();
+        if($this->getPasswordResetRequests($args)) {
+            $ret = true;
+        }
+
+        return $ret;
+    }
+
+    /*
+        Get Password Reset Requests
+    */
+    public function getPasswordResetRequests($args)
+    {
+        $ret = false;
+        $db = new PDOWrapper();
+        $db->init();
+        if(isset($args['uid']) && $args['uid'] != '') {
+            $uid = $args['uid'];
+            if($result = $db->call("getPasswordResetRequests", "{$db->cleanseWrapStr($uid)}, null")) {
+                $ret = $result[0];
+            }
+        } elseif(isset($args['user_id']) && $args['user_id'] != '') {
+            $user_id = $args['user_id'];
+            if($result = $db->call("getPasswordResetRequests", "null, {$db->cleanse($user_id)}")) {
+                $ret = $result;
+            }
         }
 
         return $ret;

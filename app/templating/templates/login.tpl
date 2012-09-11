@@ -8,6 +8,21 @@
         <p><strong>Warning! </strong>{$flash['error']}</p>
     </div>
 {/if}
+
+{if isset($flash['info'])}
+    <div class="alert alert-info">
+        <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
+        <p><strong>NOTE: </strong>{$flash['info']}</p>
+    </div>
+{/if}
+
+{if isset($flash['success'])}
+    <div class="alert alert-success">
+        <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
+        <p><strong>NOTE: </strong>{$flash['success']}</p>
+    </div>
+{/if}
+
 {if isset($openid)&& ($openid==='n'||$openid==='h' )}
 <form method="post" action="{urlFor name='login'}">
 	<label for="email">Email</label>
@@ -15,7 +30,8 @@
 	<label for="password">Password</label>
 	<input type="password" name="password" id="password">
 	<p>
-		<button type="submit" class="btn btn-primary" name="submit">Log in</button>
+		<input type="submit" class="btn btn-primary" name="login" value="Log In"/>
+        <input type="submit" class="btn btn-primary" name="password_reset" value="Reset Password" />
 	</p>
 </form>
 {/if}

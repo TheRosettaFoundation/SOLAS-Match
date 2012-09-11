@@ -13,6 +13,9 @@ class UserRouteHandler
 
         $app->get('/register', array($this, 'register')
         )->via('GET', 'POST')->name('register');
+
+        $app->get('/:uid/password/reset', array($this, 'passwordReset')
+        )->via('POST')->name('password-reset');
         
         $app->get('/logout', array($this, 'logout'))->name('logout');
         
@@ -186,6 +189,46 @@ class UserRouteHandler
         }
         $app->render('register.tpl');
     }
+
+    public function passwordReset($uid)
+    {
+        $app = Slim::getInstance();
+
+        $user_dao = new UserDao();
+        $reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));
+
+        if(!isset($reset_request['user_id']) || $reset_request['user_id'] == '') {
+            $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
+            $app->redirect($app->urlFor('home'));
+        }
+        
+        $user_id = $reset_request['user_id'];
+
+        if($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+
+            if(isset($post->new_password) && User::isValidPassword($post->new_password)) {
+                if(isset($post->confirmation_password) && 
+                        $post->confirmation_password == $post->new_password) {
+                    if($user_dao->changePassword($user_id, $post->new_password)) {
+                        $user_dao->removePasswordResetRequest($user_id);
+                        $app->flash('success', "You have successfully changed your password");
+                        $app->redirect($app->urlFor('home'));
+                    } else {
+                        $app->flashNow('error', "Unable to change Password");
+                    }
+                } else {
+                    $app->flashNow('error', "The passwords entered do not match.
+                                        Please try again.");
+                }
+            } else {
+                $app->flashNow('error', "Please check the password provided, and try again. It was not found to be valid.");
+            }
+        }
+
+        $app->view()->setData('uid', $uid);
+        $app->render('password-reset.tpl');
+    }
     
     public function logout()
     {
@@ -220,14 +263,42 @@ class UserRouteHandler
             $user_dao = new UserDao();
             if (isValidPost($app)){
                 $post = (object)$app->request()->post();
-                $user_dao->login($post->email, $post->password);
+
+                if(isset($post->login)) {
+                    $user_dao->login($post->email, $post->password);
+                    $app->redirect($app->urlFor("home"));
+                } elseif(isset($post->password_reset)) {
+
+                    if(isset($post->email) && $post->email != '') {
+                        if($user = $user_dao->find(array('email' => $post->email))) {
+
+                            if(!$user_dao->hasRequestedPasswordReset($user)) {
+                            
+                                $uid = md5(uniqid(rand()));
+                                $user_dao->addPasswordResetRequest($uid, $user->getUserId());
+                                Notify::sendPasswordResetEmail($uid, $user);
+                                $app->flash('success', "Password reset request sent. Check your email
+                                                        for further instructions.");
+                                $app->redirect($app->urlFor('home'));
+                            } else {
+                                $app->flashNow('info', "Password reset request has already been sent.
+                                                Follow the link in the email that was sent to 
+                                                you to reset your password");
+                            }
+                        } else {
+                            //Couldn't find a user for that email address
+                            $app->flashNow('error', "Please enter a valid email address");
+                        }
+                    } else {
+                        //No email address given
+                        $app->flashNow('error', "Please enter a valid email address");
+                    }
+                }
             } elseif($app->request()->isPost()||$openid->mode){
                 $user_dao->OpenIDLogin($openid,$app);
-            } else{
-                $app->render('login.tpl');
-                return;
+                $app->redirect($app->urlFor("home"));
             }
-            $app->redirect($app->urlFor("home"));
+            $app->render('login.tpl');
         } catch (InvalidArgumentException $e) {
             $error = '<p>Unable to log in. Please check your email and password.';
             $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
