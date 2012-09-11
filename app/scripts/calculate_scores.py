@@ -194,16 +194,13 @@ for user in users:
                         increment_value *= 0.75
 
         #Check if the task is in the user's native language
-        user_language = user['native_language']
+        user_language = user['native_lang_id']
+        user_region = user['native_region_id']
         if(user_language != None):
-            task_source = getLanguage(task['source_id'])
-            if(task_source == None):
-                task_source = ''
-            task_target = getLanguage(task['target_id'])
-            if(task_target == None):
-                task_target = ''
-            if(str(user_language).lower() == str(task_source).lower() or str(user_language).lower() == str(task_target).lower()):
+            if(task['source_id'] == user_language or task['target_id'] == user_language):
                 score += 300
+                if(task['sourceCountry'] == user_region or task['targetCountry'] == user_region):
+                    score += 100
 
         #Increase score for older tasks
         task_time = getTaskActiveTimeSecs(task['created_time'])

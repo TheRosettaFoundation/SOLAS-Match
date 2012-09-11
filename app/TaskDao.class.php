@@ -298,7 +298,7 @@ class TaskDao {
 	public function getTaggedTasks($tag, $limit = 10) {
 		$task_dao = new TaskDao;
 		$tag_id = $task_dao->getTagId($tag);
-                return getTasksWithTag($tag_id,$limit);
+                return $this->getTasksWithTag($tag_id,$limit);
 	}
         
         public function getTasksWithTag($tag_id, $limit = 10) {
@@ -318,42 +318,45 @@ class TaskDao {
 		return $ret;
 	}
 
-	
-
-	
-
 	public function moveToArchive($task) {
 		$db = new PDOWrapper();
 		$db->init();
-                $db->call("archiveTask", "{$db->cleanse($task->getTaskId())}");
+        $db->call("archiveTask", "{$db->cleanse($task->getTaskId())}");
 	}
-
-
-	
 
 	public function claimTask($task, $user) {
 		$db = new PDOWrapper();
 		$db->init();
-                $ret = $db->call("claimTask", "{$db->cleanse($task->getTaskId())},{$db->cleanse($user->getUserId())}");
+        $ret = $db->call("claimTask", "{$db->cleanse($task->getTaskId())},{$db->cleanse($user->getUserId())}");
 		return $ret[0]['result'];
 	}
 
 	public function hasUserClaimedTask($user_id, $task_id) {
 		$db = new PDOWrapper();
 		$db->init();
-                $result = $db->call("hasUserClaimedTask", "{$db->cleanse($task_id)},{$db->cleanse($user_id)}");
-                return $result[0]['result'];
+        $result = $db->call("hasUserClaimedTask", "{$db->cleanse($task_id)},{$db->cleanse($user_id)}");
+        return $result[0]['result'];
 	}
 
 	public function taskIsClaimed($task_id) {
 		$db = new PDOWrapper();
 		$db->init();
-                $result =  $db->call("taskIsClaimed", "{$db->cleanse($task_id)}");
-                return $result[0]['result'];
+        $result =  $db->call("taskIsClaimed", "{$db->cleanse($task_id)}");
+        return $result[0]['result'];
 	}
-        
-        
 
+    public function getTaskTranslator($task_id)
+    {
+        $ret = null;
+        $db = new PDOWrapper();
+        $db->init();
+        if($result = $db->call('getTaskTranslator', "{$db->cleanse($task_id)}")) {
+            $user_dao = new UserDao();
+            $ret = $user_dao->find($result[0]);
+        }
+        return $ret;
+    }
+        
     public function getUserTasks($user, $limit = 10)
     {
          return $this->getUserTasksByID($user->getUserId(),$limit);
@@ -373,7 +376,6 @@ class TaskDao {
         return $this->_parse_result_for_user_task($db->call("getUserArchivedTasks", "{$db->cleanse($user->getUserId())},{$db->cleanse($limit)}"));
         
     }
-
 
     private function _parse_result_for_user_task($sqlResult)
     {
@@ -401,6 +403,24 @@ class TaskDao {
     }
 
     /*
+       Get User Notification List for this task
+    */
+    public function getSubscribedUsers($task_id)
+    {
+        $ret = null;
+        $db = new PDOWrapper();
+        $db->init();
+        if($result = $db->call('getSubscribedUsers', "$task_id")) {
+            foreach($result as $row) {
+                $user_dao = new UserDao();
+                $ret[] = $user_dao->find($row);
+            }
+        }
+
+        return $ret;
+    }
+
+    /*
     * Check to see if a translation for this task has been uploaded before
     */
     public function hasBeenUploaded($task_id, $user_id)
@@ -417,7 +437,7 @@ class TaskDao {
             return "Awaiting your translation";
         }
     }
-    
+ 
     public static function downloadTask($taskID,$version=0){
             $task_dao = new TaskDao;
             $task = $task_dao->find(array('task_id' => $taskID));
@@ -439,4 +459,5 @@ class TaskDao {
         }
 
   
+
 }

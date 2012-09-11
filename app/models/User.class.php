@@ -7,7 +7,8 @@ class User
 	var $_password;
 	var $_display_name;
 	var $_biography;
-	var $_native_language;
+	var $_native_language_id;
+    var $_native_region_id;
 	
 	public function __construct($params) {
 		if (isset($params['user_id'])) {
@@ -28,9 +29,12 @@ class User
 		if (isset($params['biography'])) {
 			$this->setBiography($params['biography']);
 		}
-		if (isset($params['native_language'])) {
-			$this->setNativeLanguage($params['native_language']);
+		if (isset($params['native_lang_id'])) {
+			$this->setNativeLanguageID($params['native_lang_id']);
 		}
+        if (isset($params['native_region_id'])) {
+            $this->setNativeRegionID($params['native_region_id']);
+        }
 	}
 
 	public function setUserId($user_id) {
@@ -100,12 +104,25 @@ class User
 		return $this->_biography;
 	}
 
-	public function setNativeLanguage($lang) {
-		$this->_native_language = $lang;
+    public function getNativeLanguage() {
+        $language = Languages::languageNameFromId($this->getNativeLanguageID());
+        $region = Languages::countryNameFromId($this->getNativeRegionID());
+        return $language.' ('.$region.')';
+    }
+
+	public function setNativeLanguageID($lang) {
+		$this->_native_language_id = $lang;
 	}
 
-	public function getNativeLanguage() {
-		return $this->_native_language;
+	public function getNativeLanguageID() {
+		return $this->_native_language_id;
 	}
 
+    public function setNativeRegionID($region) {
+        $this->_native_region_id = $region;
+    }
+
+    public function getNativeRegionID() {
+        return $this->_native_region_id;
+    }
 }

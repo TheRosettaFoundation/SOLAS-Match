@@ -66,12 +66,10 @@
 {/if}
 
 <h3>Source Language</h3>
-{assign var="source_id" value=$task->getSourceId()}
-<p>{Languages::languageNameFromId($source_id)}</p>
+<p>{$task->getSourceLanguage()}</p>
 
 <h3>Target Language</h3>
-{assign var="target_id" value=$task->getTargetId()}
-<p>{Languages::languageNameFromId($target_id)}</p>
+<p>{$task->getTargetLanguage()}</p>
 
 <h3>Word Count</h3>
 <p>{$task->getWordCount()}</p>

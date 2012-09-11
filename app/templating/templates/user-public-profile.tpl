@@ -61,9 +61,12 @@
         </div>
 
         {foreach $user_tags as $tag}
-            
-                <p><a class="tag" href="{urlFor name="tag-details" options="label.$tag"}"><span class="label">{$tag}</span></a></p>
-            
+            <p>
+                {assign var="tag_label" value=$tag->getLabel()}
+                <a class="tag" href="{urlFor name="tag-details" options="label.$tag_label"}">
+                    <span class="label">{$tag_label}</span>
+                </a>
+            </p>
         {/foreach}
     {/if}
 {/if}

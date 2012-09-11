@@ -8,26 +8,26 @@ class TagsDao {
             return $result[0];
 	}
         
-        public function getTag($params){
-            $args = "";
+    public function getTag($params){
+        $args = "";
 		$db = new PDOWrapper();
 		$db->init();
-                $args.=((isset($params['tag_id'])))?"{$db->cleanseNull($params['tag_id'])}":"null";
-                $args.=(isset($params['label']))?",{$db->cleanseNullOrWrapStr($params['label'])}":",null";
-                $ret = array();
-                $result=$db->call("getTag", $args);
-                if($result !=null){
-                    foreach ( $result as $r) {
-                            $tag_data = array();
-                            $tag_data['tag_id'] = $r['tag_id'];
-                            $tag_data['label'] = $r['label'];
-                            $ret []= new Tag($tag_data);
-                    }
-                }
-		return $ret;
+        $args.=((isset($params['tag_id'])))?"{$db->cleanseNull($params['tag_id'])}":"null";
+        $args.=(isset($params['label']))?",{$db->cleanseNullOrWrapStr($params['label'])}":",null";
+        $ret = array();
+        $result=$db->call("getTag", $args);
+        if($result !=null){
+            foreach ( $result as $r) {
+                $tag_data = array();
+                $tag_data['tag_id'] = $r['tag_id'];
+                $tag_data['label'] = $r['label'];
+                $ret []= new Tag($tag_data);
+            }
         }
+		return $ret;
+    }
 
-        public function create($label) {
+    public function create($label) {
 		$tag = new Tag(array('label' => $label));
 		return $this->save($tag);
 	}
@@ -136,7 +136,7 @@ class TagsDao {
 		if ($r = $db->call("getTopTags", "{$db->cleanse($limit)}")) {
 			$ret = array();
 			foreach ($r as $row) {
-				$ret[] = $row['label'];
+				$ret[] = new Tag($row);
 			}
 		}
 		return $ret;

@@ -28,18 +28,21 @@
     <label for="source">Source Language</label>
         <select name="source" id="source">
             {foreach $languages as $language}
-                <option value="{$language[0]}"
-                {if $source_lang == $language}
-                    selected="selected"
-                {/if}>
-                    {$language[0]}
-                </option>
+                {if $task->getSourceId() == $language[2]}
+                    <option value="{$language[2]}" selected="selected">{$language[0]}</option>
+                {else}
+                    <option value="{$language[2]}">{$language[0]}</option>
+                {/if}
             {/foreach}
         </select>
     {if isset($countries)}
         <select name="sourceCountry" id="sourceCountry">
             {foreach $countries as $country}
-                <option value="{$country[1]}">{$country[0]}</option>
+                {if $task->getSourceCountryCode() == $country[2]}
+                    <option value="{$country[2]}" selected="selected">{$country[0]}</option>
+                {else}
+                    <option value="{$country[2]}">{$country[0]}</option>
+                {/if}
             {/foreach}
         </select>
     {/if}
@@ -47,18 +50,21 @@
     <label for="target">Target Language</label>
     <select name="target" id="target">
         {foreach $languages as $language}
-            <option value="{$language[0]}"
-            {if $target_lang == $language}
-                selected="selected"
-            {/if}>
-                {$language[0]}
-            </option>
+            {if $task->getTargetId() == $language[2]}
+                <option value="{$language[2]}" selected="selected">{$language[0]}</option>
+            {else}
+                <option value="{$language[2]}">{$language[0]}</option>
+            {/if}
         {/foreach}
     </select>
     {if isset($countries)}
         <select name="targetCountry" id="targetCountry">
             {foreach $countries as $country}
-                <option value="{$country[1]}">{$country[0]}</option>
+                {if $task->getTargetCountryCode() == $country[2]}
+                    <option value="{$country[2]}" selected="selected">{$country[0]}</option>
+                {else}
+                    <option value="{$country[2]}">{$country[0]}</option>
+                {/if}
             {/foreach}
         </select>
     {/if}

@@ -14,6 +14,8 @@ class OrganisationDao {
                 $ret = $this->create_org_from_sql_result($result[0]);
 
             }
+        } elseif(isset($params['name'])) {
+            $ret = self::getOrg(null, $params['name'], null, null);
         }
         return $ret;
     }

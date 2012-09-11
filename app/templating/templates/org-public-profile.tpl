@@ -64,13 +64,13 @@
         <p>
             {if isset($user)}
                 {if in_array($user->getUserId(), $org_members)}
-                    {assign var="badge_id" value=$badge['badge_id']}
+                    {assign var="badge_id" value=$badge->getBadgeId()}
                     <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="btn">
                         Assign
                     </a>
                 {/if}
             {/if}
-            {$badge['title']}: {$badge['description']}
+            {$badge->getTitle()}: {$badge->getDescription()}
         </p>
     {/foreach}
     <br />

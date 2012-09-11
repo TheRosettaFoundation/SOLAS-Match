@@ -740,19 +740,72 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `password` char(128) COLLATE utf8_unicode_ci NOT NULL,
   `biography` text COLLATE utf8_unicode_ci,
-  `native_language` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `native_lang_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+  `native_region_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `country` table',
   `nonce` int(11) unsigned NOT NULL,
   `created_time` datetime NOT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  CONSTRAINT `FK_user_language` FOREIGN KEY (`native_lang_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_user_country` FOREIGN KEY (`native_region_id`) REFERENCES `country` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `user`
         CHANGE COLUMN `email` `email` VARCHAR(128) NOT NULL AFTER `display_name`,
 	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF EXISTS (SELECT * FROM information_schema.COLUMNS cols
+            WHERE cols.TABLE_SCHEMA = database()
+            AND cols.TABLE_NAME = 'user' 
+            AND cols.COLUMN_NAME = 'native_language') then
+        ALTER TABLE `user` 
+            DROP COLUMN `native_language`,
+            ADD COLUMN `native_lang_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+            ADD COLUMN `native_region_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `country` table';
+    end if;
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc 
+                    where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user'and tc.CONSTRAINT_NAME='FK_user_language') then
+        ALTER TABLE `user`
+        ADD CONSTRAINT `FK_user_language` FOREIGN KEY (`native_lang_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+    end if;
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc 
+                    where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user'and tc.CONSTRAINT_NAME='FK_user_country') then
+        ALTER TABLE `user`
+        ADD CONSTRAINT `FK_user_country` FOREIGN KEY (`native_region_id`) REFERENCES `country` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+    end if;
+END//
 
+DELIMITER ;
 
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
+CREATE TABLE IF NOT EXISTS `password_reset_requests` (
+    `uid` CHAR(40) NOT NULL,
+    `user_id` INT(11) UNSIGNED NOT NULL,
+    PRIMARY KEY (`uid`, `user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='password_reset_requests'and tc.CONSTRAINT_NAME='FK_password_reset_user') then
+        ALTER TABLE `password_reset_requests`
+	ADD CONSTRAINT `FK_password_reset_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+    end if;
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
 
 -- Dumping structure for table Solas-Match-test.user_badges
 CREATE TABLE IF NOT EXISTS `user_badges` (
@@ -1017,6 +1070,7 @@ BEGIN
 	
 	if id is null and not exists(select * from organisation o where (o.home_page= url or o.home_page= concat("http://",url) ) and o.name=companyName)then
 	-- set insert
+    if bio is null then set bio='';end if;
 	insert into organisation (name,home_page, biography) values (companyName,url,bio);
 
 	else 
@@ -1101,7 +1155,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-test.userInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(256), IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` INT, IN `region` INT, IN `id` INT)
 	LANGUAGE SQL
 	NOT DETERMINISTIC
 	CONTAINS SQL
@@ -1114,11 +1168,12 @@ BEGIN
 	if name='' then set name=null;end if;
 	if email='' then set email=null;end if;
 	if lang='' then set lang=null;end if;
+    if region='' then set region=null;end if;
 	
 	if id is null and not exists(select * from user u where u.email= email)then
 	-- set insert
-	insert into user (email,nonce,password,created_time,display_name,biography,native_language) values (email,nonce,pass,NOW(),name,bio,lang);
-#	set @q="insert into user (email,nonce,password,created_time,display_name,biography,native_language) values ('"+email+"',"+nonce+",'"+pass+"',"+NOW()+",'"+name+"','"+bio+"','"+lang+"');";
+	insert into user (email, nonce, password, created_time, display_name, biography, native_lang_id, native_region_id) 
+              values (email, nonce, pass, NOW(), name, bio, lang, region);
 	else 
 		set @first = true;
 		set @q= "update user u set ";-- set update
@@ -1133,7 +1188,15 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.native_language='",lang,"'") ;
+			set @q = CONCAT(@q," u.native_lang_id='",lang,"'") ;
+		end if;
+		if region is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.native_region_id='",region,"'") ;
 		end if;
 		if name is not null then 
 				if (@first = false) then 
@@ -1218,7 +1281,7 @@ DROP PROCEDURE IF EXISTS `getCountries`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountries`()
 BEGIN
-SELECT  en_name as country, code FROM country order by en_name;
+SELECT  en_name as country, code, id FROM country order by en_name;
 END//
 DELIMITER ;
 
@@ -1228,7 +1291,7 @@ DROP PROCEDURE IF EXISTS `getLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguages`()
 BEGIN
-SELECT  en_name as language, code FROM language order by en_name;
+SELECT  en_name as language, code, id FROM language order by en_name;
 END//
 DELIMITER ;
 
@@ -1773,6 +1836,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getTaskTranslator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTranslator` (IN `taskId` INT)
+BEGIN
+    SELECT user_id
+    FROM task_claim
+    WHERE task_id=taskId;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Dev.hasUserClaimedTask
 DROP PROCEDURE IF EXISTS `hasUserClaimedTask`;
 DELIMITER //
@@ -1856,6 +1929,16 @@ BEGIN
 	else
     	select 0 as 'result';
 	end if;
+END//
+DELIMITER ;
+
+DROP Procedure IF EXISTS `getSubscribedUsers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscribedUsers`(IN `taskId` INT)
+BEGIN
+    SELECT *
+    FROM user_notifications
+    WHERE task_id = taskId;
 END//
 DELIMITER ;
 
@@ -2059,6 +2142,69 @@ BEGIN
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Dev.getLanguage
+DROP PROCEDURE IF EXISTS `getCountry`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountry`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
+BEGIN
+	if id='' then set id=null;end if;
+	if code='' then set code=null;end if;
+	if name='' then set name=null;end if;
+	set @q= "select * from country c where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and c.id=",id) ;
+	end if;
+	if code is not null then 
+		set @q = CONCAT(@q," and c.code='",code,"'") ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and c.en_name='",name,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `userId` INT(11))
+BEGIN
+	if unique_id='' then set unique_id=null;end if;
+    if userId='' then set userId=null;end if;
+    set @q= "SELECT * FROM password_reset_requests p WHERE 1 ";
+    if unique_id is not null then
+        set @q= CONCAT(@q," and p.uid='",unique_id,"'");
+    end if;
+    if userId is not null then
+        set @q= CONCAT(@q, " and p.user_id=", userId);
+    end if;
+
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addPasswordResetRequest`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
+BEGIN
+    INSERT INTO password_reset_requests (uid, user_id) VALUES (uniqueId,userId);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removePasswordResetRequest`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removePasswordResetRequest`(IN `userId` INT)
+BEGIN
+    DELETE FROM password_reset_requests 
+        WHERE user_id = userId;
 END//
 DELIMITER ;
 

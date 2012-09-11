@@ -5,7 +5,7 @@ require_once 'FormatEnum.php';
 require_once 'HttpMethodEnum.php';
 require_once '../app/APIHelper.php';
 
-
+mb_internal_encoding("UTF-8");
 
 class Dispatcher {
     private static $apiDispatcher = null;

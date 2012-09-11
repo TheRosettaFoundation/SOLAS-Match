@@ -22,6 +22,20 @@
     </div>
 {/if}
 
+{if isset($flash['info'])}
+    <div class="alert alert-info">
+        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
+        <p><strong>NOTE: </strong>{$flash['info']}</p>
+    </div>
+{/if}
+
+{if isset($flash['success'])}
+    <div class="alert alert-success">
+        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
+        <p><strong>Success! </strong>{$flash['success']}</p>
+    </div>
+{/if}
+
 <div class="page-header">
 	<h1>
             Translation tasks <small>Claim a task, translate it, upload it</small>

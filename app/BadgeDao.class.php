@@ -34,7 +34,14 @@ class BadgeDao
     {
         $db = new PDOWrapper();
         $db->init();
-        return $db->call("getBadge", "null,null,null,{$db->cleanse($org_id)}");
+        $ret = null;
+        if($badge_array = $db->call("getBadge", "null,null,null,{$db->cleanse($org_id)}")) {
+            $ret = array();
+            foreach($badge_array as $badge) {
+                $ret[] = new Badge($badge);
+            }
+        } 
+        return $ret;
     }
 
     public function assignBadge($user, $badge)
