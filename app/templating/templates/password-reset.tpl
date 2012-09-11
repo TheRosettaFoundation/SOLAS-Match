@@ -36,7 +36,7 @@
     <input type="password" name="confirmation_password" />
 
     <p>
-        <input type="submit" class="btn btn-primary" />
+        <input type="submit" class="btn btn-primary" value="Change Password"/>
     </p>
 </form>
 
