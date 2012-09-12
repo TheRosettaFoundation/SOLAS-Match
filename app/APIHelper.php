@@ -11,9 +11,14 @@
  * @author sean
  */
 
-require_once 'FormatEnum.php';
-require_once 'HttpMethodEnum.php';
-require_once '../api/dispatcher.php';
+
+file_exists('FormatEnum.php')? require_once 'FormatEnum.php':'api/FormatEnum.php';
+file_exists('HttpMethodEnum.php')? require_once 'HttpMethodEnum.php':'api/HttpMethodEnum.php';
+
+
+
+
+//require_once '../api/dispatcher.php';
 class APIHelper {
     
     public static function serialiser($body,$format=".json"){
@@ -40,10 +45,10 @@ class APIHelper {
         switch ($format){
             case FormatEnum::JSON: {
                 try{
-                 return json_encode($body);
+                 return json_dencode($body);
                 }catch (Exception $e){
                     // change to exception and send responce from api
-                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                  //  Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
                 break;
             }
@@ -51,7 +56,7 @@ class APIHelper {
                 try{
                  return wddx_deserialize($body);
                 }catch (Exception $e){
-                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                    //Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
                 break;
             }
@@ -60,7 +65,7 @@ class APIHelper {
                 try{
                  return  wddx_deserialize(htmlspecialchars_decode($body));
                 }catch (Exception $e){
-                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                    //Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
                 break;
             }
@@ -71,7 +76,7 @@ class APIHelper {
               try{
                  return unserialize($body);
                 }catch (Exception $e){
-                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                    //Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
                 break;
             }
