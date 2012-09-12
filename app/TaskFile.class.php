@@ -1,5 +1,5 @@
 <?php
-
+require_once ('PDOWrapper.class.php');
 class TaskFile {
 
 	function taskID() {
@@ -89,14 +89,18 @@ class TaskFile {
     }
     
     public static function getLatestFileVersion($task) {
-		$db = new PDOWrapper();
-		$db->init();
-		$ret = false;
-		if ($r = $db->call("getLatestFileVersion", "{$db->cleanse($task->getTaskId())},null")) {
-			if (is_numeric($r[0]['latest_version'])) {
-				$ret =  intval($r[0]['latest_version']);
-			}
-		}
-		return $ret;
-	}
+	return TaskFile::getLatestFileVersionByTaskID($task->getTaskId());
+    }
+
+    public static function getLatestFileVersionByTaskID($task_id,$user_id=null) {
+            $db = new PDOWrapper();
+            $db->init();
+            $ret = false;
+            if ($r = $db->call("getLatestFileVersion", "{$db->cleanse($task_id)},{$db->cleanseNull($user_id)}")) {
+                    if (is_numeric($r[0]['latest_version'])) {
+                            $ret =  intval($r[0]['latest_version']);
+                    }
+            }
+            return $ret;
+    }
 }

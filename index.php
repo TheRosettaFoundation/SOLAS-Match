@@ -1,6 +1,8 @@
 <?php
 require "vendor/autoload.php";
 
+mb_internal_encoding("UTF-8");
+
 SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
 SmartyView::$smartyCompileDirectory = 'app/templating/templates_compiled';
 SmartyView::$smartyTemplatesDirectory = 'app/templating/templates';
@@ -9,32 +11,34 @@ SmartyView::$smartyExtensions = array(
 );
 
 
-require 'app/Settings.class.php';
-require 'app/PDOWrapper.class.php';
-require 'app/BadgeDao.class.php';
-require 'app/OrganisationDao.class.php';
-require 'app/UserDao.class.php';
-require 'app/TaskStream.class.php';
-require 'app/TaskDao.class.php';
-require 'app/TagsDao.class.php';
-require 'app/TaskFile.class.php';
-require 'app/IO.class.php';
-require 'app/TipSelector.class.php';
-require 'app/lib/Languages.class.php';
-require 'app/lib/URL.class.php';
-require 'app/lib/Authentication.class.php';
-require 'app/lib/UserSession.class.php';
-require 'app/lib/Tags.class.php';
-require 'app/lib/Upload.class.php';
-require 'app/lib/Email.class.php';
-require 'app/lib/Notify.class.php';
-require 'app/lib/NotificationTypes.class.php';
 
-require 'ui/UserRouteHandler.class.php';
-require 'ui/OrgRouteHandler.class.php';
-require 'ui/TaskRouteHandler.class.php';
-require 'ui/TagRouteHandler.class.php';
-require 'ui/BadgeRouteHandler.class.php';
+require_once 'app/Settings.class.php';
+require_once 'app/PDOWrapper.class.php';
+require_once 'app/BadgeDao.class.php';
+require_once 'app/OrganisationDao.class.php';
+require_once 'app/UserDao.class.php';
+require_once 'app/TaskStream.class.php';
+require_once 'app/TaskDao.class.php';
+require_once 'app/TagsDao.class.php';
+require_once 'app/TaskFile.class.php';
+require_once 'app/IO.class.php';
+require_once 'app/TipSelector.class.php';
+require_once 'app/lib/Languages.class.php';
+require_once 'app/lib/URL.class.php';
+require_once 'app/lib/Authentication.class.php';
+require_once 'app/lib/UserSession.class.php';
+require_once 'app/lib/Tags.class.php';
+require_once 'app/lib/Upload.class.php';
+require_once 'app/lib/Email.class.php';
+require_once 'app/lib/Notify.class.php';
+require_once 'app/lib/NotificationTypes.class.php';
+
+
+require_once 'ui/UserRouteHandler.class.php';
+require_once 'ui/OrgRouteHandler.class.php';
+require_once 'ui/TaskRouteHandler.class.php';
+require_once 'ui/TagRouteHandler.class.php';
+require_once 'ui/BadgeRouteHandler.class.php';
 
 /**
  * Start the session

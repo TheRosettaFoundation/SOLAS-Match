@@ -1,6 +1,7 @@
 <?php
 
 require('models/User.class.php');
+require_once ('PDOWrapper.class.php');
 
 class UserDao {
 	public function find($params) {
@@ -214,10 +215,14 @@ class UserDao {
 	}
 
 	public function getUserBadges(User $user) {
+                return $this->getUserBadgesbyID($user->getUserId());
+	}
+        
+        public function getUserBadgesbyID($user_id) {
 		$ret = NULL;
 		$db = new PDOWrapper();
 		$db->init();
-		if ($result = $db->call("getUserBadges", $db->cleanse($user->getUserId()))) {
+		if ($result = $db->call("getUserBadges", $db->cleanse($user_id))) {
 			$ret = $result;
 		}
 
@@ -242,11 +247,13 @@ class UserDao {
     /*
         Get all users with $badge assigned
     */
-    public function getUsersWithBadge($badge) {
+    
+    
+    public function getUsersWithBadgeByID($badge_ID) {
         $ret = null;
         $db = new PDOWrapper();
         $db->init();
-        if($result = $db->call("getUsersWithBadge", "{$db->cleanse($badge->getBadgeId())}")) {
+        if($result = $db->call("getUsersWithBadge", "{$db->cleanse($badge_ID)}")) {
             $ret = array();
             foreach($result as $row) {
                 $ret[] = new User($row);
@@ -254,7 +261,10 @@ class UserDao {
         }
         return $ret;
     }
-
+    
+    public function getUsersWithBadge($badge) {
+        return $this->getUsersWithBadgeByID($badge->getBadgeId());
+    }
     /*
         Add the tag to a list of the user's preferred tags
     */

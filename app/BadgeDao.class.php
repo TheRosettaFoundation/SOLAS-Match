@@ -2,6 +2,7 @@
 
 require('models/Badge.class.php');
 require('BadgeValidator.class.php');
+require_once ('PDOWrapper.class.php');
 
 class BadgeDao
 {
