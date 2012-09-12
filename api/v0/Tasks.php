@@ -24,6 +24,14 @@ class Tasks {
            Dispatcher::sendResponce(null, $dao->getTask(null), null, $format);
         },'getTasks');
         
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks(:format)/', function ($format=".json"){
+            $data=Dispatcher::getDispatcher()->request()->getBody();
+            $data= APIHelper::deserialiser($data, $format);
+            $dao = new TaskDao();
+            Dispatcher::sendResponce(null, $dao->create($data), null, $format);
+        },'createTasks');
+        
          Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/', function ($id,$format=".json"){
            if(!is_numeric($id)&& strstr($id, '.')){
                $id= explode('.', $id);

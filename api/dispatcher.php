@@ -19,7 +19,7 @@ class Dispatcher {
         return Dispatcher::$apiDispatcher;
     }
     public static function init(){
-       $path = $_SERVER['PATH_INFO'];
+       $path = Dispatcher::getDispatcher()->request()->getResourceUri();
        $path = explode("/", $path);
        $path =$path[1];
        $initFunc = "Dispatcher::init_".$path;

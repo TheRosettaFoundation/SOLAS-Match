@@ -18,6 +18,7 @@ class TaskDao {
 	 * @author
 	 **/
 	public function create($params) {
+//                $task   = (Task) $params;
 		$task = new Task($params);
 		$this->save($task);
 		return $task;

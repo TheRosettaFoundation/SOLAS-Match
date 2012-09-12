@@ -40,12 +40,12 @@ class APIHelper {
             }
         }
     }
-    public static function deserialiser($data,$format=".json"){
+    public static function deserialiser($body,$format=".json"){
         $format=  APIHelper::getFormat($format); 
         switch ($format){
             case FormatEnum::JSON: {
                 try{
-                 return json_dencode($body);
+                 return json_decode($body);
                 }catch (Exception $e){
                     // change to exception and send responce from api
                   //  Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
