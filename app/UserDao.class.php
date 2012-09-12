@@ -82,7 +82,7 @@ class UserDao {
 		$db = new PDOWrapper();
 		$db->init();
 		if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr
-                        ($user->getPassword())},NULL,NULL,NULL,NULL")) {
+                        ($user->getPassword())},NULL,NULL,NULL,NULL,NULL")) {
 			return $this->find(array('user_id' => $user_id[0]['user_id']));
 		}
 		else {
