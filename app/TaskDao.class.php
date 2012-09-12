@@ -18,8 +18,9 @@ class TaskDao {
 	 * @author
 	 **/
 	public function create($params) {
-//                $task   = (Task) $params;
-		$task = new Task($params);
+                if(!is_array($params)&&  is_object($params)){
+                    $task   = APIHelper::cast("Task", $params);
+                }else $task = new Task($params);
 		$this->save($task);
 		return $task;
 	}

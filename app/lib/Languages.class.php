@@ -15,6 +15,10 @@ class Languages {
         $result = self::getCountry($country_id, null, null);
         return $result['en_name'];
     }
+    public static function countryNameFromCode($countryCode) {
+        $result = self::getCountry(null, $countryCode, null);
+        return $result['en_name'];
+    }
         
     public static function getLanguage($id,$code,$name){
         $db = new PDOWrapper();
@@ -27,7 +31,7 @@ class Languages {
     public static function getCountry($id, $code, $name) {
         $db = new PDOWrapper();
         $db->init();
-        $result = $db->call("getCountry", "{$db->cleanse($id)}, {$db->cleanseNullOrWrapStr($code)},
+        $result = $db->call("getCountry", "{$db->cleanseNUll($id)}, {$db->cleanseNullOrWrapStr($code)},
                             {$db->cleanseNullOrWrapStr($name)}");
         return $result[0];
     }

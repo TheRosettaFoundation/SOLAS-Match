@@ -109,14 +109,14 @@ class Task {
     public function getSourceLanguage()
     {
         $language = Languages::languageNameFromId($this->getSourceId());
-        $region = Languages::countryNameFromId($this->getSourceCountryCode());
+        $region = Languages::countryNameFromCode($this->getSourceCountryCode());
         return $language.' ('.$region.')';
     }
 
     public function getTargetLanguage()
     {
         $language = Languages::languageNameFromId($this->getTargetId());
-        $region = Languages::countryNameFromId($this->getTargetCountryCode());
+        $region = Languages::countryNameFromCode($this->getTargetCountryCode());
         return $language.' ('.$region.')';
     }
 

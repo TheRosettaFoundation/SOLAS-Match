@@ -38,10 +38,10 @@
     {if isset($countries)}
         <select name="sourceCountry" id="sourceCountry">
             {foreach $countries as $country}
-                {if $task->getSourceCountryCode() == $country[2]}
-                    <option value="{$country[2]}" selected="selected">{$country[0]}</option>
+                {if $task->getSourceCountryCode() == $country['code']}
+                    <option value="{$country['code']}" selected="selected">{$country['country']}</option>
                 {else}
-                    <option value="{$country[2]}">{$country[0]}</option>
+                    <option value="{$country['code']}">{$country['country']}</option>
                 {/if}
             {/foreach}
         </select>
@@ -60,10 +60,10 @@
     {if isset($countries)}
         <select name="targetCountry" id="targetCountry">
             {foreach $countries as $country}
-                {if $task->getTargetCountryCode() == $country[2]}
-                    <option value="{$country[2]}" selected="selected">{$country[0]}</option>
+                {if $task->getTargetCountryCode() == $country['code']}
+                    <option value="{$country['code']}" selected="selected">{$country['country']}</option>
                 {else}
-                    <option value="{$country[2]}">{$country[0]}</option>
+                    <option value="{$country['code']}">{$country['country']}</option>
                 {/if}
             {/foreach}
         </select>
