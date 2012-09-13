@@ -9,35 +9,44 @@
 
 require_once 'HTTP/Request2.php';
 
+require_once 'app/Serializer.class.php';
+
 class APIClient
 {
-    public function call($url, $method = HTTP_Request2::METHOD_GET, 
-                    $data = null, $query_args = array(), $format = ".php")
-    {
-        $app = Slim::getInstance();
+    var $_serializer;
+    const API_VERSION = 'v0';
 
-        $settings = new Settings();
-        $request_url = $settings->get('site.api');
-        $request_url .= $url;
-        echo $request_url;
-        $request = new HTTP_Request2($request_url, $method);
-        $response = $request->send();
-        return $this->deserialize($response->getBody(), $format);
+    public function APIClient()
+    {
+        $this->_serializer = new Serializer();
     }
 
-    private function deserialize($data, $format = ".php")
+    public function call($url, $method = HTTP_Request2::METHOD_GET, 
+                    $data = null, $query_args = array(), $format = ".json")
     {
-        $ret = null;
-        switch ($format) {
-            case ".php": {
-                try {
-                    $ret = unserialize($data);
-                } catch (Exception $e) {
-                    echo "Failed to unserialize data: $data";
-                }
-                break;
-            }
+        $app = Slim::getInstance();
+        $settings = new Settings();
+
+        $request_url = $settings->get('site.api');
+        $request_url .= $url.$format.'/?';
+        $request = new HTTP_Request2($request_url, $method);
+
+        if($data != null) {
+            $request->addPostParameter($data);
         }
-        return $ret;
+
+        if(count($query_args) > 0) {
+            $url = $request->getUrl();
+            $url->setQueryVariables($query_args);
+        }
+
+        $response = $request->send();
+        $response_data = $this->_serializer->deserialize($response->getBody(), $format);
+        return $response_data;
+    }
+
+    public function cast($destination, $sourceObject)
+    {
+        return $this->_serializer->cast($destination, $sourceObject);
     }
 }

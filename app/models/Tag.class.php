@@ -4,7 +4,7 @@ class Tag {
 	var $_tag_id;
 	var $_label;
 
-	function __construct($params) {
+	function __construct($params = array()) {
 		if (isset($params['tag_id'])) {
 			$this->setTagId($params['tag_id']);
 		}

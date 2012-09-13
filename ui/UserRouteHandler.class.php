@@ -34,31 +34,45 @@ class UserRouteHandler
     public function home()
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
         $app->view()->appendData(array(
-            'top_tags' => TagsDao::getTopTags(30),
+            'top_tags' => TagsDao::getTopTags(30), //Change to API call when Limit and Offset are implemented
             'current_page' => 'home'
         ));
+
+        $current_user_id = UserSession::getCurrentUserID();
         
-        $user_dao = new UserDao();
-        $current_user = $user_dao->getCurrentUser();
-        if($current_user == null) {
+        if($current_user_id == null) {
             $_SESSION['previous_page'] = 'home';
             
-            if($tasks = TaskStream::getStream(10)) {
+            $url = "/".APIClient::API_VERSION."/tasks/";
+            $response = $client->call($url, HTTP_Request2::METHOD_GET, 
+                                null, array('limit' => 10));
+            foreach($response as $stdObject) {
+                $tasks[] = $client->cast('Task', $stdObject);
+            }
+
+            if($tasks) {
                 $app->view()->setData('tasks', $tasks);
             }
         } else {
-            if($tasks = TaskStream::getUserStream($current_user->getUserId(), 10)) {
+            $url = "/".APIClient::API_VERSION."/users/$current_user_id/top_tasks";
+            $response = $client->call($url, HTTP_Request2::METHOD_GET, null,
+                                    array('limit' => 10));
+            foreach($response as $stdObject) {
+                $tasks[] = $client->cast('Task', $stdObject);
+            }
+
+            if($tasks) {
                 $app->view()->setData('tasks', $tasks);
             }
 
-            $client = new APIClient();
-            $id = $current_user->getUserId();
-            $url = "/v0/users/$id/tags";
-            echo $client->call($url);
-            
-            $user_tags = $user_dao->getUserTags($current_user->getUserId());
+            $url = "/".APIClient::API_VERSION."/users/$current_user_id/tags";
+            $response = $client->call($url);
+            foreach($response as $stdObject) {
+                $user_tags[] = $client->cast('Tag', $stdObject);
+            }
             
             $app->view()->appendData(array(
                         'user_tags' => $user_tags
