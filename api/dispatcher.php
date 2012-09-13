@@ -7,14 +7,36 @@ require_once '../app/APIHelper.php';
 
 mb_internal_encoding("UTF-8");
 
+
 class Dispatcher {
     private static $apiDispatcher = null;
     public static function  getDispatcher(){
          if( Dispatcher::$apiDispatcher == null){
             Dispatcher::$apiDispatcher = new Slim(array(
-                'debug' => true,
-                'mode' => 'development' // default is development. TODO get from config file, or set in environment...... $_ENV['SLIM_MODE'] = 'production';
+                 'debug' => true
+                ,'view' => new SmartyView()
+                ,'mode' => 'development' // default is development. TODO get from config file, or set in environment...... $_ENV['SLIM_MODE'] = 'production';
             ));
+            SmartyView::$smartyDirectory = '../vendor/smarty/smarty/distribution/libs';
+            SmartyView::$smartyCompileDirectory = '../app/templating/templates_compiled';
+            SmartyView::$smartyTemplatesDirectory = '../app/templating/templates';
+            SmartyView::$smartyExtensions = array('../vendor/slim/extras/Views/Extension/Smarty');
+            $app = Dispatcher::$apiDispatcher;
+            Dispatcher::$apiDispatcher->configureMode('production', function () use ($app) {
+                $app->config(array(
+                    'log.enable' => true,
+                    'log.path' => '../../logs', // Need to set this...
+                    'debug' => false
+                ));
+            });
+
+            $app->configureMode('development', function () use ($app) {
+                $app->config(array(
+                    'log.enable' => false,
+                    'debug' => true
+                ));
+            });
+            
         }
         return Dispatcher::$apiDispatcher;
     }
