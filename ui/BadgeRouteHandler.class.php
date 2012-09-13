@@ -12,9 +12,14 @@ class BadgeRouteHandler
     public function badgeList()
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
-        $badge_dao = new BadgeDao();
-        $badgeList = $badge_dao->getAllBadges();
+        $badgeList = array();
+        $request = APIClient::API_VERSION."/badges";
+        $response = $client->call($request);
+        foreach($response as $stdObject) {
+            $badgeList[] = new Badge((array)$stdObject);
+        }
         
         $app->view()->setData('current_page', 'badge-list');
         $app->view()->appendData(array('badgeList' => $badgeList));
