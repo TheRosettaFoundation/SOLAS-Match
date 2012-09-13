@@ -1049,7 +1049,7 @@ DROP PROCEDURE IF EXISTS `getUserTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT)
 BEGIN
-	SELECT label
+	SELECT label ,tag.tag_id
 	FROM user_tag
 	JOIN tag ON user_tag.tag_id = tag.tag_id
 	WHERE user_id = id; 
