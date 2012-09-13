@@ -10,12 +10,27 @@
 
 class Serializer
 {
-    public function serialize($data, $format = FormatEnum::JSON)
+    public static function serialize($data, $format = FormatEnum::JSON)
     {
-        //serialize data here
+        $ret = null;
+        switch ($format) {
+            case FormatEnum::JSON: {
+                $ret = json_encode($data);
+            }
+            case FormatEnum::XML: {
+                $ret = wddx_serialize_value($data);
+            }
+            case FormatEnum::HTML: {
+                $ret = htmlspecialchars(wddx_serialize_value($data));
+            }
+            case FormatEnum::PHP: {
+                $ret = serialize($data);
+            }
+        }
+        return $ret;
     }
 
-    public function deserialize($data, $format = FormatEnum::JSON)
+    public static function deserialize($data, $format = FormatEnum::JSON)
     {
         //deserialize data here
         $ret = null;
@@ -23,6 +38,30 @@ class Serializer
             case FormatEnum::JSON: {
                 try {
                     $ret = json_decode($data);
+                } catch (Exception $e) {
+                    echo "Failed to unserialize data: $data";
+                }
+                break;
+            }
+            case FormatEnum::XML: {
+                try {
+                    $ret = wddx_deserialize($data);
+                } catch (Exception $e) {
+                    echo "Failed to unserialize data: $data";
+                }
+                break;
+            }
+            case FormatEnum::HTML: {
+                try {
+                    $ret = wddx_deserialize(htmlspecialchars_decode($data));
+                } catch (Exception $e) {
+                    echo "Failed to unserialize data: $data";
+                }
+                break;
+            }
+            case FormatEnum::PHP: {
+                try {
+                    $ret = unserialize($data);
                 } catch (Exception $e) {
                     echo "Failed to unserialize data: $data";
                 }
