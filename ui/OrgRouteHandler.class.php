@@ -5,8 +5,9 @@ class OrgRouteHandler
     public function init()
     {
         $app = Slim::getInstance();
+        $middleware = new Middleware();
 
-        $app->get('/org/create', 'authUserIsLoggedIn', array($this, 'createOrg')
+        $app->get('/org/create', array($middleware, 'authUserIsLoggedIn'), array($this, 'createOrg')
         )->via('POST')->name('create-org');
 
         $app->get('/org/request/:org_id', array($this, 'orgRequestMembership')
