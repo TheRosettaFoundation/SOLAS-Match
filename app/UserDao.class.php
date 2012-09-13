@@ -29,8 +29,8 @@ class UserDao {
 				'nonce' => $r[0]['nonce'],
 				'display_name' => $r[0]['display_name'],
 				'biography' => $r[0]['biography'],
-                'native_lang_id' => $r[0]['native_lang_id'],
-                'native_region_id' => $r[0]['native_region_id']
+                                'native_lang_id' => $r[0]['native_lang_id'],
+                                'native_region_id' => $r[0]['native_region_id']
 			);
 			$ret = new User($user_data);
 		}
@@ -148,6 +148,18 @@ class UserDao {
 			return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
 		}
 
+        	return $user;
+	}
+        
+         public function APIRegister($email, $clear_password) {
+		$user = $this->find(array('email' => $email));
+
+		if (!is_object($user)&& $clear_password!="") {
+			$user = $this->create($email,$clear_password);
+                        $badge_dao = new BadgeDao();
+                        $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
+                        $badge_dao->assignBadge($user, $badge);
+		}else $user = array("error"=>'sorry the account you enerted already exists. \n please login.');
         	return $user;
 	}
         

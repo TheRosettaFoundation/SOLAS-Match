@@ -6,15 +6,12 @@
  */
 
 /**
- * Description of Login
+ * Description of Register
  *
  * @author sean
  */
-
-require_once '../app/UserDao.class.php';
-class Login {
-    
-    public  $email;
+class Register {
+   public  $email;
     public  $pass;
     
     public function __construct() {
@@ -25,23 +22,22 @@ class Login {
     public static function init(){
       
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/login(:format)/', function ($format=".json"){
-            $data=new Login();
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/register(:format)/', function ($format=".json"){
+            $data=new Register();
            Dispatcher::sendResponce(null, $data, null, $format);
-        },'getLoginTemplate');
+        },'getRegisterTemplate');
         
         
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/login(:format)/', function ($format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/register(:format)/', function ($format=".json"){
                 $data=Dispatcher::getDispatcher()->request()->getBody();
                 $data= APIHelper::deserialiser($data, $format);
-                $data= APIHelper::cast("Login", $data);
+                $data= APIHelper::cast("Register", $data);
                 $dao = new UserDao;
-                Dispatcher::sendResponce(null, $dao->APILogin($data->email, $data->pass), null, $format);
-         },'login');
+                Dispatcher::sendResponce(null, $dao->APIRegister($data->email, $data->pass), null, $format);
+        },'register');
     }
     
-    
 }
-Login::init();
+Register::init();
 ?>
