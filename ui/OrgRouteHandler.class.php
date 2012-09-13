@@ -7,8 +7,8 @@ class OrgRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
 
-        $app->get('/org/create', array($middleware, 'authUserIsLoggedIn'), array($this, 'createOrg')
-        )->via('POST')->name('create-org');
+        $app->get('/org/create', array($middleware, 'authUserIsLoggedIn'), 
+        array($this, 'createOrg'))->via('POST')->name('create-org');
 
         $app->get('/org/request/:org_id', array($this, 'orgRequestMembership')
         )->name('org-request-membership');
@@ -57,12 +57,11 @@ class OrgRouteHandler
 
             if($org->getName() != '') {
                 $org_dao = new OrganisationDao();
-                if(!is_object($org_dao->find(array('name' => $org->getName())))) {
-                    if($new_org = $org_dao->save($org))
+                if(!is_object($org_dao->find(array('name' => $org->getName())))) {      //wait for API support
+                    if($new_org = $org_dao->save($org))     //wait for API support
                     {
-                        $user_dao = new UserDao();
-                        $current_user = $user_dao->getCurrentUser();
-                        $org_dao->acceptMemRequest($new_org->getId(), $current_user->getUserId());
+                        $user_id = UserSession::getCurrentUserID();
+                        $org_dao->acceptMemRequest($new_org->getId(), $user_id);    //wait for API support
                         $org_name = $org->getName();
                         $app->flashNow('success', "Organisation \"$org_name\" has been created. 
                                             Visit the <a href='".$app->urlFor("client-dashboard")."'>client dashboard</a> 
@@ -86,13 +85,18 @@ class OrgRouteHandler
     public function orgRequestMembership($org_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
-        $user_dao = new UserDao();
-        $user = $user_dao->getCurrentUser();
-        $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+        $user_id = UserSession::getCurrentUserID();
+        $request = APIClient::API_VERSION."/users/$user_id";
+        $response = $client->call($request);
+        $user = $client->cast('User', $response);
+        
+        $request = APIClient::API_VERSION."/users/$user_id/orgs";
+        $user_orgs = (array)$client->call($request);
         if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
             $org_dao = new OrganisationDao();
-            if($org_dao->requestMembership($user->getUserId(), $org_id)) {
+            if($org_dao->requestMembership($user->getUserId(), $org_id)) {  //wait for API support
                 $app->flash("success", "Successfully requested membership.");
             } else {
                 $app->flash("error", "You have already sent a membership request to this Organisation");
@@ -106,10 +110,12 @@ class OrgRouteHandler
     public function orgRequestQueue($org_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
-        $org_dao = new OrganisationDao();
-        $org = $org_dao->find(array('id' => $org_id));
-        
+        $request = APIClient::API_VERSION."/orgs/$org_id";
+        $response = $client->call($request);
+        $org = $client->cast('Organisation', $response[0]);
+
         $user_dao = new UserDao();
         
         if($app->request()->isPost()) {
@@ -117,10 +123,12 @@ class OrgRouteHandler
             
             if(isset($post->email)) {
                 if(User::isValidEmail($post->email)) {
-                    $user = $user_dao->find(array('email' => $post->email));
+                    $user = $user_dao->find(array('email' => $post->email));    //wait for API support
                 
                     if(!is_null($user)) {
-                        $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+                        $user_id = $user->getUserId();
+                        $request = APIClient::API_VERSION."/users/$user_id/orgs";
+                        $user_orgs = (array)$request;
                     
                         if($user->getDisplayName() != '') {
                             $user_name = $user->getDisplayName();
@@ -128,7 +136,7 @@ class OrgRouteHandler
                             $user_name = $user->getEmail();
                         }   
                         if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-                            $org_dao->acceptMemRequest($org_id, $user->getUserId());
+                            $org_dao->acceptMemRequest($org_id, $user->getUserId());    //wait for API support
                     
                             if($org->getName() != '') {
                                 $org_name = $org->getName();
@@ -151,18 +159,22 @@ class OrgRouteHandler
                 }
             } elseif(isset($post->accept)) {
                 if($user_id = $post->user_id) {
-                    $org_dao->acceptMemRequest($org_id, $user_id);
-                    $user_dao = new UserDao();
-                    $user = $user_dao->find(array('user_id' => $user_id));
+                    $org_dao->acceptMemRequest($org_id, $user_id);      //wait for API support
+
+                    $request = APIClient::API_VERSION."/users/$user_id";
+                    $response = $client->call($request);
+                    $user = $client->cast('User', $response);
                     Notify::notifyUserOrgMembershipRequest($user, $org, true);
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
             } elseif(isset($post->refuse)) {
                 if($user_id = $post->user_id) {
-                    $org_dao->refuseMemRequest($org_id, $user_id);
-                    $user_dao = new UserDao();
-                    $user = $user_dao->find(array('user_id' => $user_id));
+                    $org_dao->refuseMemRequest($org_id, $user_id);      //wait for API support
+                    
+                    $request = APIClient::API_VERSION."/users/$user_id";
+                    $response = $client->call($request);
+                    $user = $client->cast('User', $response);
                     Notify::notifyUserOrgMembershipRequest($user, $org, false);
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
@@ -170,7 +182,7 @@ class OrgRouteHandler
             }
         }
         
-        $requests = $org_dao->getMembershipRequests($org_id);
+        $requests = $org_dao->getMembershipRequests($org_id);       //wait for API support
         $user_list = array();
         if(count($requests) > 0) {
             foreach($requests as $request) {
