@@ -46,7 +46,7 @@ class UserRouteHandler
         if($current_user_id == null) {
             $_SESSION['previous_page'] = 'home';
             
-            $url = "/".APIClient::API_VERSION."/tasks/";
+            $url = APIClient::API_VERSION."/tasks/";
             $response = $client->call($url, HTTP_Request2::METHOD_GET, 
                                 null, array('limit' => 10));
             foreach($response as $stdObject) {
@@ -57,7 +57,7 @@ class UserRouteHandler
                 $app->view()->setData('tasks', $tasks);
             }
         } else {
-            $url = "/".APIClient::API_VERSION."/users/$current_user_id/top_tasks";
+            $url = APIClient::API_VERSION."/users/$current_user_id/top_tasks";
             $response = $client->call($url, HTTP_Request2::METHOD_GET, null,
                                     array('limit' => 10));
             foreach($response as $stdObject) {
@@ -68,7 +68,7 @@ class UserRouteHandler
                 $app->view()->setData('tasks', $tasks);
             }
 
-            $url = "/".APIClient::API_VERSION."/users/$current_user_id/tags";
+            $url = APIClient::API_VERSION."/users/$current_user_id/tags";
             $response = $client->call($url);
             foreach($response as $stdObject) {
                 $user_tags[] = $client->cast('Tag', $stdObject);
