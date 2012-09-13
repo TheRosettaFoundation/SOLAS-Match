@@ -1,5 +1,7 @@
 <?php
 
+require_once 'ui/APIClient.class.php';
+
 class UserRouteHandler
 {
     public function init()
@@ -50,6 +52,11 @@ class UserRouteHandler
             if($tasks = TaskStream::getUserStream($current_user->getUserId(), 10)) {
                 $app->view()->setData('tasks', $tasks);
             }
+
+            $client = new APIClient();
+            $id = $current_user->getUserId();
+            $url = "/v0/users/$id/tags";
+            echo $client->call($url);
             
             $user_tags = $user_dao->getUserTags($current_user->getUserId());
             
