@@ -11,9 +11,14 @@
  * @author sean
  */
 
-require_once 'FormatEnum.php';
-require_once 'HttpMethodEnum.php';
-require_once '../api/dispatcher.php';
+
+file_exists('FormatEnum.php')? require_once 'FormatEnum.php':'api/FormatEnum.php';
+file_exists('HttpMethodEnum.php')? require_once 'HttpMethodEnum.php':'api/HttpMethodEnum.php';
+
+
+
+
+//require_once '../api/dispatcher.php';
 class APIHelper {
     
     public static function serialiser($body,$format=".json"){
@@ -35,15 +40,15 @@ class APIHelper {
             }
         }
     }
-    public static function deserialiser($data,$format=".json"){
+    public static function deserialiser($body,$format=".json"){
         $format=  APIHelper::getFormat($format); 
         switch ($format){
             case FormatEnum::JSON: {
                 try{
-                 return json_encode($body);
+                 return json_decode($body);
                 }catch (Exception $e){
                     // change to exception and send responce from api
-                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                  //  Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
                 break;
             }
@@ -51,7 +56,7 @@ class APIHelper {
                 try{
                  return wddx_deserialize($body);
                 }catch (Exception $e){
-                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                    //Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
                 break;
             }
@@ -60,7 +65,7 @@ class APIHelper {
                 try{
                  return  wddx_deserialize(htmlspecialchars_decode($body));
                 }catch (Exception $e){
-                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                    //Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
                 break;
             }
@@ -71,7 +76,7 @@ class APIHelper {
               try{
                  return unserialize($body);
                 }catch (Exception $e){
-                    Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
+                    //Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
                 break;
             }
@@ -112,6 +117,29 @@ class APIHelper {
        elseif(strcasecmp($format,'.proto')==0) $format=  FormatEnum::JSON;//change when implmented.
        else $format=  FormatEnum::JSON;
        return $format;
+    }
+    
+    public static function cast($destination, $sourceObject)
+    {
+        if (is_string($destination)) {
+            $destination = new $destination();
+        }
+        $sourceReflection = new ReflectionObject($sourceObject);
+        $destinationReflection = new ReflectionObject($destination);
+        $sourceProperties = $sourceReflection->getProperties();
+        foreach ($sourceProperties as $sourceProperty) {
+            $sourceProperty->setAccessible(true);
+            $name = $sourceProperty->getName();
+            $value = $sourceProperty->getValue($sourceObject);
+            if ($destinationReflection->hasProperty($name)) {
+                $propDest = $destinationReflection->getProperty($name);
+                $propDest->setAccessible(true);
+                $propDest->setValue($destination,$value);
+            } else {
+                $destination->$name = $value;
+            }
+        }
+        return $destination;
     }
     
 }

@@ -12,6 +12,8 @@
  */
 require_once '../app/UserDao.class.php';
 require_once '../app/TaskDao.class.php';
+require_once '../app/lib/Notify.class.php';
+require_once '../app/lib/NotificationTypes.class.php';
 class Users {
    
 
@@ -52,6 +54,21 @@ class Users {
            $dao = new TaskDao();
            Dispatcher::sendResponce(null, $dao->getUserTasksByID($id), null, $format);
         },'getUsertasks');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tasks(:format)/', function ($id,$format=".json"){
+            $data=Dispatcher::getDispatcher()->request()->getBody();
+            $data= APIHelper::deserialiser($data, $format);
+            $data= APIHelper::cast("Task", $data);
+            $dao = new TaskDao;
+            Dispatcher::sendResponce(null, array("result"=>$dao->claimTaskbyID($data->getTaskId(), $id)), null, $format);
+            $dao = new UserDao();
+            Notify::notifyUserClaimedTask($dao->find(array("user_id"=>$id)), $data);
+            Notify::sendEmailNotifications($data, NotificationTypes::Claim);
+        },'userClaimTask');
+        
+        
+        
+        
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/top_tasks(:format)/', function ($id,$format=".json"){
             $limit=5;

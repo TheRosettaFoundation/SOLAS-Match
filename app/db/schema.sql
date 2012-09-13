@@ -1049,7 +1049,7 @@ DROP PROCEDURE IF EXISTS `getUserTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT)
 BEGIN
-	SELECT label
+	SELECT label ,tag.tag_id
 	FROM user_tag
 	JOIN tag ON user_tag.tag_id = tag.tag_id
 	WHERE user_id = id; 
@@ -1433,7 +1433,7 @@ BEGIN
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
 	
-	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page, sourceCountry, targetCountry from task t where 1 ";-- set update
+	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page, (select code from country where id =t.sourceCountry) as sourceCountry, (select code from country where id =t.targetCountry) as targetCountry from task t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;

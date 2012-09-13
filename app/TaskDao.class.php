@@ -18,7 +18,9 @@ class TaskDao {
 	 * @author
 	 **/
 	public function create($params) {
-		$task = new Task($params);
+                if(!is_array($params)&&  is_object($params)){
+                    $task   = APIHelper::cast("Task", $params);
+                }else $task = new Task($params);
 		$this->save($task);
 		return $task;
 	}
@@ -325,11 +327,16 @@ class TaskDao {
 	}
 
 	public function claimTask($task, $user) {
+                return $this->claimTaskbyID($task->getTaskId(), $user->getUserId());
+	}
+        
+        public function claimTaskbyID($task_id, $user_id) {
 		$db = new PDOWrapper();
 		$db->init();
-        $ret = $db->call("claimTask", "{$db->cleanse($task->getTaskId())},{$db->cleanse($user->getUserId())}");
+                $ret = $db->call("claimTask", "{$db->cleanse($task_id)},{$db->cleanse($user_id)}");
 		return $ret[0]['result'];
 	}
+        
 
 	public function hasUserClaimedTask($user_id, $task_id) {
 		$db = new PDOWrapper();
