@@ -99,7 +99,8 @@ class Dispatcher {
             }
         }
         $response->body($body);
-        $response->status($code);
+        
+        if($code!=null)$response->status($code);
     }
     
     
