@@ -1,7 +1,5 @@
 <?php
 
-require_once 'ui/APIClient.class.php';
-
 class UserRouteHandler
 {
     public function init()
@@ -85,21 +83,30 @@ class UserRouteHandler
     public function clientDashboard()
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
         $user_dao           = new UserDao();
         $task_dao           = new TaskDao;
         $org_dao            = new OrganisationDao();
+        $current_user_id    = UserSession::getCurrentUserID();
         $current_user       = $user_dao->getCurrentUser();
-        if (!is_object($current_user)) {
+        if (is_null($current_user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }
-        $my_organisations   = $user_dao->findOrganisationsUserBelongsTo($current_user->getUserId());
+
+        $url = APIClient::API_VERSION."/users/$current_user_id/orgs";
+        $my_organisations = $client->call($url);
         
         $org_tasks = array();
         $orgs = array();
         foreach($my_organisations as $org_id) {
-            $org = $org_dao->find(array('id' => $org_id));
+            $url = APIClient::API_VERSION."/orgs/$org_id";
+            $org_data = $client->call($url);
+            $org = $client->cast('Organisation', $org_data[0]);
+
+//          Wait for this to be exposed by API
+//            $url = APIClient::API_VERSION."/
             $my_org_tasks = $task_dao->findTasksByOrg(array('organisation_ids' => $org_id));
             $org_tasks[$org->getId()] = $my_org_tasks;
             $orgs[$org->getId()] = $org;
@@ -109,7 +116,11 @@ class UserRouteHandler
             $post = (object) $app->request()->post();
             
             if(isset($post->track)) {
-                $task = $task_dao->find(array('task_id' => $post->task_id));
+                $task_id = $post->task_id;
+                $url = APICLient::API_VERSION."/tasks/$task_id";
+                $response = $client->call($url);
+                $task = $client->cast('Task', $response[0]);
+
                 $task_title = '';
                 if($task->getTitle() != '') {
                     $task_title = $task->getTitle();
@@ -117,12 +128,14 @@ class UserRouteHandler
                     $task_title = "task ".$task->getTaskId();
                 }
                 if($post->track == "Ignore") {
+                    //Not currently exposed by API
                     if($user_dao->ignoreTask($current_user->getUserId(), $post->task_id)) {
                         $app->flashNow('success', 'No longer receiving notifications from '.$task_title.'.');
                     } else {
                         $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
                     }
                 } elseif($post->track == "Track") {
+                    //Not currently supported by API
                     if($user_dao->trackTask($current_user->getUserId(), $post->task_id)) {
                         $app->flashNow('success', 'You will now receive notifications for '.$task_title.'.');
                     } else {

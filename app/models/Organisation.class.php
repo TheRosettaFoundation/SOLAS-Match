@@ -6,7 +6,7 @@ class Organisation
     var $_home_page;
     var $_biography;
 
-    public function __construct($params) {
+    public function __construct($params = array()) {
         if(isset($params['id'])) {
             $this->setId($params['id']);
         }
