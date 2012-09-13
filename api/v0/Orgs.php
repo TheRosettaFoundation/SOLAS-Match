@@ -46,6 +46,11 @@ class Orgs {
            Dispatcher::sendResponce(null, $dao->getMembershipRequests($id), null, $format);
         },'getMembershipRequests');
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/tasks(:format)', function ($id,$format=".json"){
+           $dao = new TaskDao();
+           Dispatcher::sendResponce(null, $dao->findTasksByOrg(array("organisation_ids"=>$id)), null, $format);
+        },'getOrgTasks');
+        
         
     }
 }
