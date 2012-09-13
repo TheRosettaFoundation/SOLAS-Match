@@ -164,6 +164,7 @@ class UserRouteHandler
     public function register()
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
         
         $tempSettings=new Settings();
         $use_openid = $tempSettings->get("site.openid");
@@ -187,17 +188,20 @@ class UserRouteHandler
                 $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
             } else if (!User::isValidPassword($post->password)) {
                 $error = 'You didn\'t enter a password. Please try again.';
-            } else if (is_object($user_dao->find(array('email' => $post->email)))) {
+            } else if (is_object($user_dao->find(array('email' => $post->email)))) {    //wait for API support
                 $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
             }
             
             if (is_null($error) && is_null($warning)) {
-                if ($user = $user_dao->create($post->email, $post->password)) {
-                    if ($user_dao->login($user->getEmail(), $post->password)) {
+                if ($user = $user_dao->create($post->email, $post->password)) {     //wait for API support
+                    if ($user_dao->login($user->getEmail(), $post->password)) {     //wait for API support
                         
                         $badge_dao = new BadgeDao();
-                        $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
-                        $badge_dao->assignBadge($user, $badge);
+                        $badge_id = Badge::REGISTERED;
+                        $url = APIClient::API_VERSION."/badges/$badge_id";
+                        $response = $client->call($url);
+                        $badge = $client->cast('Badge', $response);
+                        $badge_dao->assignBadge($user, $badge);     //wait for API support || put in create function
                         
                         if(isset($_SESSION['previous_page'])) {
                             if(isset($_SESSION['old_page_vars'])) {
@@ -229,7 +233,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
 
         $user_dao = new UserDao();
-        $reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));
+        $reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));     //wait for API support
 
         if(!isset($reset_request['user_id']) || $reset_request['user_id'] == '') {
             $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
@@ -269,7 +273,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         
         $user_dao = new UserDao();
-        $user_dao->logout();
+        $user_dao->logout();        //wait for API support
         $app->redirect($app->urlFor('home'));
     }
 
@@ -299,17 +303,17 @@ class UserRouteHandler
                 $post = (object)$app->request()->post();
 
                 if(isset($post->login)) {
-                    $user_dao->login($post->email, $post->password);
+                    $user_dao->login($post->email, $post->password);        //wait for API support
                     $app->redirect($app->urlFor("home"));
                 } elseif(isset($post->password_reset)) {
 
                     if(isset($post->email) && $post->email != '') {
-                        if($user = $user_dao->find(array('email' => $post->email))) {
+                        if($user = $user_dao->find(array('email' => $post->email))) {   //wait for API support
 
-                            if(!$user_dao->hasRequestedPasswordReset($user)) {
+                            if(!$user_dao->hasRequestedPasswordReset($user)) {      //wait for API support
                             
                                 $uid = md5(uniqid(rand()));
-                                $user_dao->addPasswordResetRequest($uid, $user->getUserId());
+                                $user_dao->addPasswordResetRequest($uid, $user->getUserId());   //wait for API support
                                 Notify::sendPasswordResetEmail($uid, $user);
                                 $app->flash('success', "Password reset request sent. Check your email
                                                         for further instructions.");
@@ -329,7 +333,7 @@ class UserRouteHandler
                     }
                 }
             } elseif($app->request()->isPost()||$openid->mode){
-                $user_dao->OpenIDLogin($openid,$app);
+                $user_dao->OpenIDLogin($openid,$app);       //wait for API support
                 $app->redirect($app->urlFor("home"));
             }
             $app->render('login.tpl');
@@ -348,11 +352,16 @@ class UserRouteHandler
     public static function userPrivateProfile()
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
         $user_dao = new UserDao();
-        $user = $user_dao->getCurrentUser();
-        $languages = Languages::getLanguageList();
-        $countries = Languages::getCountryList();
+
+        $user_id = UserSession::getCurrentUserID();
+        $url = APIClient::API_VERSION."/users/$user_id";
+        $response = $client->call($url);
+        $user = $client->cast('User', $response);
+        $languages = Languages::getLanguageList();      //wait for API support
+        $countries = Languages::getCountryList();       //wait for API support
         
         if (!is_object($user)) {
             $app->flash('error', 'Login required to access page');
@@ -377,15 +386,21 @@ class UserRouteHandler
                 $user->setNativeRegionID($langCountry);
                 //assign a badge
                 $badge_dao = new BadgeDao();
-                $badge = $badge_dao->find(array('badge_id' => Badge::NATIVE_LANGUAGE));
-                $badge_dao->assignBadge($user, $badge);
+                $badge_id = Badge::NATIVE_LANGUAGE;
+                $url = APIClient::API_VERSION."/badges/$badge_id";
+                $response = $client->call($url);
+                $badge = $client->cast('Badge', $response);
+                $badge_dao->assignBadge($user, $badge);     //wait for API support || move to back end
             }
             $user_dao->save($user);
             
             if($user->getDisplayName() != '' && $user->getBiography() != ''
                     && $user->getNativeLanguageID() != '' && $user->getNativeRegionID() != '') {
                 $badge_dao = new BadgeDao();
-                $badge = $badge_dao->find(array('badge_id' => Badge::PROFILE_FILLER));
+                $badge_id = Badge::PROFILE_FILLER;
+                $url = APIClient::API_VERSION."/badges/$badge_id";
+                $response = $client->call($url);
+                $badge = $client->cast('Badge', $response);
                 $badge_dao->assignBadge($user, $badge);
             }
             
@@ -402,50 +417,69 @@ class UserRouteHandler
     public static function userPublicProfile($user_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
+
         $badge_dao = new BadgeDao();
         $user_dao = new UserDao();
-        $user = $user_dao->find(array('user_id' => $user_id));
+
+        $url = APIClient::API_VERSION."/users/$user_id";
+        $response = $client->call($url);
+        $user = $client->cast('User', $response);
         
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
             if(isset($post->badge_id) && $post->badge_id != '') {
-                $badge = $badge_dao->find(array('badge_id' => $post->badge_id));
-                $badge_dao->removeUserBadge($user, $badge);
+                $badge_id = $post->badge_id;
+                $url = APIClient::API_VERSION."/badges/$badge_id";
+                $response = $client->call($url);
+                $badge = $client->cast('Badge', $response);
+                $badge_dao->removeUserBadge($user, $badge);     //wait for API support
             }
                 
             if(isset($post->revoke)) {
                 $org_id = $post->org_id;
-                OrganisationDao::revokeMembership($org_id, $user_id);
+                OrganisationDao::revokeMembership($org_id, $user_id);   //wait for API support
             }
         }
                     
         $task_dao = new TaskDao();
-        $activeJobs = $task_dao->getUserTasks($user, 10);
+        $activeJobs = array();
+        $user_id = $user->getUserId();
+        $request = APIClient::API_VERSION."/users/$user_id/tasks";
+        $response = $client->call($request);
+        foreach($response as $stdObject) {
+            $activeJobs[] = $client->cast('Task', $stdObject);
+        }
 
-        $archivedJobs = $task_dao->getUserArchivedTasks($user, 10);
-                   
-        $user_tags = $user_dao->getUserTags($user->getUserId());
+        $archivedJobs = $task_dao->getUserArchivedTasks($user, 10);     //wait for API support
+         
+        $user_tags = array();
+        $request = APIClient::API_VERSION."/users/$user_id/tags";
+        $response = $client->call($request);
+        foreach($response as $stdObject) {
+            $user_tags[] = $client->cast('Tag', $stdObject);
+        }
                     
         $org_dao = new OrganisationDao();
-                    
-        $orgIds = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+                   
+        $request = APIClient::API_VERSION."/users/$user_id/orgs";
+        $orgIds = $client->call($request);        
+        
         $orgList = array();
-                    
         if(count($orgIds) > 0) {
             foreach ($orgIds as $orgId) {
-                $orgList[] = $org_dao->find(array('id' => $orgId));
+                $request = APIClient::API_VERSION."/orgs/$orgId";
+                $response = $client->call($request);
+                $orgList[] = $client->cast('Organisation', $response[0]);
             }
         }
-                            
-        $badgeIds = $user_dao->getUserBadges($user);
+        
         $badges = array();
-        $i = 0;
-        if(count($badgeIds) > 0) {
-            foreach($badgeIds as $badge) {
-                $badges[$i] = $badge_dao->find(array('badge_id' => $badge['badge_id']));
-                $i++;
-            }
+        $request = APIClient::API_VERSION."/users/$user_id/badges";
+        $response = $client->call($request);
+        foreach($response as $stdObject) {
+            $badges[] = $client->cast('Badge', $stdObject);
         }
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
@@ -461,7 +495,7 @@ class UserRouteHandler
                                     'extra_scripts' => $extra_scripts
         ));
                 
-        if($user_dao->getCurrentUser()->getUserId() === $user_id) {
+        if(UserSession::getCurrentUserID() === $user_id) {
             $app->view()->appendData(array('private_access' => true));
         }
                     

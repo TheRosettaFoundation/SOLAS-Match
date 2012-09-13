@@ -10,7 +10,7 @@ class User
 	var $_native_language_id;
     var $_native_region_id;
 	
-	public function __construct($params) {
+	public function __construct($params = array()) {
 		if (isset($params['user_id'])) {
 			$this->setUserId($params['user_id']);
 		}
