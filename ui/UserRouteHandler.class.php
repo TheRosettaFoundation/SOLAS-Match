@@ -5,11 +5,12 @@ class UserRouteHandler
     public function init()
     {
         $app = Slim::getInstance();
+        $middleware = new Middleware();
 
         $app->get('/', array($this, 'home'))->name('home');
 
-        $app->get('/client/dashboard', array($this, 'clientDashboard')
-        )->via('POST')->name('client-dashboard');
+        $app->get('/client/dashboard', array($middleware, 'authUserIsLoggedIn'), 
+        array($this, 'clientDashboard'))->via('POST')->name('client-dashboard');
 
         $app->get('/register', array($this, 'register')
         )->via('GET', 'POST')->name('register');
@@ -25,8 +26,8 @@ class UserRouteHandler
         $app->get('/profile/:user_id', array($this, 'userPublicProfile')
         )->via('POST')->name('user-public-profile');
 
-        $app->get('/profile', array($this, 'userPrivateProfile')
-        )->via('POST')->name('user-private-profile');
+        $app->get('/profile', array($middleware, 'authUserIsLoggedIn'), 
+        array($this, 'userPrivateProfile'))->via('POST')->name('user-private-profile');
     }
 
     public function home()

@@ -5,6 +5,7 @@ class TaskRouteHandler
     public function init()
     {
         $app = Slim::getInstance();
+        $middleware = new Middleware();
 
         $app->get('/tasks/archive/p/:page_no', array($this, 'archivedTasks')
         )->name('archived-tasks');
@@ -12,51 +13,51 @@ class TaskRouteHandler
         $app->get('/tasks/active/p/:page_no', array($this, 'activeTasks')
         )->name('active-tasks');
 
-        $app->get('/task/id/:task_id/download-task-latest-file/', 'authUserForOrgTask',
+        $app->get('/task/id/:task_id/download-task-latest-file/', array($middleware, 'authUserForOrgTask'),
         array($this, 'downloadTaskLatestVersion'))->name('download-task-latest-version');
 
-        $app->get('/task/id/:task_id/mark-archived/', 'authUserForOrgTask',
+        $app->get('/task/id/:task_id/mark-archived/', array($middleware, 'authUserForOrgTask'),
         array($this, 'archiveTask'))->name('archive-task');
 
-        $app->get('/task/id/:task_id/download-file/', 'authenticateUserForTask',
+        $app->get('/task/id/:task_id/download-file/', array($middleware, 'authenticateUserForTask'),
         array($this, 'downloadTask'))->name('download-task');
 
-        $app->get('/task/claim/:task_id', 'authenticateUserForTask',
+        $app->get('/task/claim/:task_id', array($middleware, 'authenticateUserForTask'),
         array($this, 'taskClaim'))->name('task-claim-page');
 
-        $app->get('/task/id/:task_id/claimed', 'authenticateUserForTask',
+        $app->get('/task/id/:task_id/claimed', array($middleware, 'authenticateUserForTask'),
         array($this, 'taskClaimed'))->name('task-claimed');
 
         $app->post('/claim-task', array($this, 'claimTask'))->name('claim-task');
 
-        $app->get('/task/id/:task_id/download-file/v/:version/', 'authUserForOrgTask',
+        $app->get('/task/id/:task_id/download-file/v/:version/', array($middleware, 'authUserForOrgTask'),
         array($this, 'downloadTaskVersion'))->name('download-task-version');
 
-        $app->get('/task/id/:task_id/download-preview/', 'authenticateUserForTask',
+        $app->get('/task/id/:task_id/download-preview/', array($middleware, 'authenticateUserForTask'),
         array($this, 'downloadTaskPreview'))->name('download-task-preview');
 
-        $app->get('/task/id/:task_id/', 'authenticateUserForTask',
+        $app->get('/task/id/:task_id/', array($middleware, 'authenticateUserForTask'),
         array($this, 'task'))->name('task');
 
-        $app->get('/task/id/:task_id/uploaded/', 'authenticateUserForTask',
+        $app->get('/task/id/:task_id/uploaded/', array($middleware, 'authenticateUserForTask'),
         array($this, 'taskUploaded'))->name('task-uploaded');
 
-        $app->get('/task/describe/:task_id/', 'authenticateUserForTask', 
+        $app->get('/task/describe/:task_id/', array($middleware, 'authenticateUserForTask'), 
         array($this, 'taskDescribe'))->via('GET','POST')->name('task-describe');
         
-        $app->get('/task/alter/:task_id/', 'authUserForOrgTask', 
+        $app->get('/task/alter/:task_id/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskAlter'))->via('POST')->name('task-alter');
 
-        $app->get('/task/view/:task_id/', 'authUserForOrgTask',
+        $app->get('/task/view/:task_id/', array($middleware, 'authUserForOrgTask'),
         array($this, 'taskView'))->via("POST")->name('task-view');
 
-        $app->get('/task/:task_id/uploaded-edit/', 'authenticateUserForTask',
+        $app->get('/task/:task_id/uploaded-edit/', array($middleware, 'authenticateUserForTask'),
         array($this, 'taskUploadedEdit'))->name('task-uploaded-edit');
 
-        $app->get('/task/:task_id/upload-edited/', 'authenticateUserForTask', 
+        $app->get('/task/:task_id/upload-edited/', array($middleware, 'authenticateUserForTask'), 
         array($this, 'taskUploadEdited'))->via('POST')->name('task-upload-edited');
 
-        $app->get('/task/upload/:org_id', 'authUserForOrg', 
+        $app->get('/task/upload/:org_id', array($middleware, 'authUserForOrg'), 
         array($this, 'taskUpload'))->via('GET','POST')->name('task-upload');
     }
 
