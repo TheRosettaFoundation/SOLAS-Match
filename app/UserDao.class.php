@@ -1,7 +1,8 @@
 <?php
 
-require('models/User.class.php');
-require_once ('PDOWrapper.class.php');
+require_once 'models/User.class.php';
+require_once 'PDOWrapper.class.php';
+require_once 'lib/Authentication.class.php';
 
 class UserDao {
 	public function find($params) {
@@ -85,7 +86,7 @@ class UserDao {
 	private function _update($user) {
 		$db = new PDOWrapper();
 		$db->init();
-        $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},
+                $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},
                 {$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},
                 {$db->cleanseNullOrWrapStr($user->getBiography())},{$db->cleanseNullOrWrapStr($user->getDisplayName())},
                 {$db->cleanseNullOrWrapStr($user->getNativeLanguageID())},{$db->cleanseNullOrWrapStr($user->getNativeRegionID())},
@@ -135,6 +136,21 @@ class UserDao {
 
 		return true;
 	}
+        
+        public function APIlogin($email, $clear_password) {
+		$user = $this->find(array('email' => $email));
+
+		if (!is_object($user)) {
+			return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+		}
+
+		if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
+			return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+		}
+
+        	return $user;
+	}
+        
         
         
         public function OpenIDLogin($openid,$app) {
