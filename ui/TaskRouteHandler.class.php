@@ -68,12 +68,13 @@ class TaskRouteHandler
         $user_dao = new UserDao();
         $task_dao = new TaskDao();
         
-        $user = $user_dao->getCurrentUser();
+        $user_id = UserSession::getCurrentUserID();
+        $user = $user_dao->getCurrentUser();    //can be removed when switched to API
         if (!is_object($user)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
-        $archived_tasks = $task_dao->getUserArchivedTasks($user);
+        $archived_tasks = $task_dao->getUserArchivedTasks($user);   //wait for API support
         
         $tasks_per_page = 10;
         $total_pages = ceil(count($archived_tasks) / $tasks_per_page);
@@ -112,16 +113,20 @@ class TaskRouteHandler
     public function activeTasks($page_no)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
-        $task_dao = new TaskDao();
-        $user_dao = new UserDao();
-        
-        $user = $user_dao->getCurrentUser();
-        if (!is_object($user)) {
+        $user_id = UserSession::getCurrentUserID();
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
-        }   
-        $activeTasks = $task_dao->getUserTasks($user);
+        }
+
+        $activeTasks = array();
+        $request = APIClient::API_VERSION."/users/$user_id/tasks";
+        $response = $client->call($request);
+        foreach($response as $stdObject) {
+            $activeTasks[] = $client->cast('Task', $stdObject);
+        }
         
         $tasks_per_page = 10;
         $total_pages = ceil(count($activeTasks) / $tasks_per_page);
@@ -161,23 +166,25 @@ class TaskRouteHandler
     public function downloadTaskLatestVersion($task_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
+
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response[0]);
     
-        $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $task_id));
-        
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
-        }   
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+        }
+
+        $user_id = UserSession::getCurrentUserID();
         
-        if (!is_object($current_user)) {
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
         
-        $latest_version = TaskFile::getLatestFileVersion($task);
+        $latest_version = TaskFile::getLatestFileVersion($task);    //wait for API support
         $app->redirect($app->urlFor('download-task-version', array(
                 'task_id' => $task_id,
                 'version' => $latest_version
@@ -187,24 +194,26 @@ class TaskRouteHandler
     public function archiveTask($task_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
         $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response[0]);
         
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
         }   
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+        $user_id = UserSession::getCurrentUserID();
         
-        if (!is_object($current_user)) {
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
         
         Notify::sendEmailNotifications($task, NotificationTypes::Archive);
-        $task_dao->moveToArchive($task);
+        $task_dao->moveToArchive($task);        //wait for API support
         
         $app->redirect($ref = $app->request()->getReferrer());
     }
@@ -212,18 +221,19 @@ class TaskRouteHandler
     public function downloadTask($task_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
         
-        $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response[0]);
         
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
         }
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+        $user_id = UserSession::getCurrentUserID();
         
-        if (!is_object($current_user)) {
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }
@@ -240,17 +250,19 @@ class TaskRouteHandler
     public function taskClaim($task_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
-        $task_dao = new TaskDao();
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response[0]);
+
         if(!is_object($task)) {
             header ('HTTP/1.0 404 Not Found');
             die;
         }
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+        $user_id = UserSession::getCurrentUserID();
         
-        if (!is_object($current_user)) {
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }
@@ -262,18 +274,21 @@ class TaskRouteHandler
     public function taskClaimed($task_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
         
         $task_dao = new TaskDao();
 
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->call('Task', $response[0]);
+
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
         }   
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
-        
-        if (!is_object($current_user)) {
+        $user_id = UserSession::getCurrentUserID();
+
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
@@ -284,26 +299,34 @@ class TaskRouteHandler
     public function claimTask()
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
         // get task id
         $task_id = $app->request()->post('task_id');
-        
-        $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response[0]);
         
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
         }   
-        
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+       
+        $user_id = UserSession::getCurrentUserID();
+        $request = APIClient::API_VERSION."/users/$user_id";
+        $response = $client->call($request);
+        $current_user = $client->cast('User', $response); 
         
         if (!is_object($current_user)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
         
+        //Untested
+        /*$request = APIClient::API_VERSION."/users/$user_id/tasks";
+        $post_data = $task;
+        $response = $client->call($request, HTTP_Request2::METHOD_POST, $post_data);*/
+
         $task_dao->claimTask($task, $current_user);
         Notify::notifyUserClaimedTask($current_user, $task);
         Notify::sendEmailNotifications($task, NotificationTypes::Claim);
