@@ -29,7 +29,7 @@ class Badges {
            Dispatcher::sendResponce(null, $dao->find(array('badge_id'=>$id)), null, $format);
         },'getBadge');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges/:id/users(:format)', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges/:id/users(:format)/', function ($id,$format=".json"){
            $dao = new UserDao();
            Dispatcher::sendResponce(null, $dao->getUsersWithBadgeByID($id), null, $format);
         },'getusersWithBadge');

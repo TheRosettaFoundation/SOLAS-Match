@@ -22,9 +22,11 @@ file_exists('HttpMethodEnum.php')? require_once 'HttpMethodEnum.php':'api/HttpMe
 class APIHelper {
     
     public static function serialiser($body,$format=".json"){
-        $format=  APIHelper::getFormat($format); 
+        $format=  APIHelper::getFormat($format);
+        if(is_array($body)&& count($body)==1) $body=$body[0];
         switch ($format){
             case FormatEnum::JSON: {
+                
                 return json_encode($body);
             }
             case FormatEnum::XML: {
