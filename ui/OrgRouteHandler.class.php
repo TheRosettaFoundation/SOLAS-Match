@@ -117,6 +117,7 @@ class OrgRouteHandler
         $org = $client->cast('Organisation', $response[0]);
 
         $user_dao = new UserDao();
+        $org_dao = new OrganisationDao();
         
         if($app->request()->isPost()) {
             $post = (object)$app->request()->post();
@@ -199,9 +200,11 @@ class OrgRouteHandler
     public function orgPrivateProfile($org_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
-        $org_dao = new OrganisationDao();
-        $org = $org_dao->find(array('id' => $org_id));
+        $request = APIClient::API_VERSION."/orgs/$org_id";
+        $response = $client->call($request);
+        $org = $client->cast('Organisation', $response[0]);
         
         if($app->request()->isPost()) {
             $name = $app->request()->post('name');
@@ -219,7 +222,8 @@ class OrgRouteHandler
                 $org->setBiography($bio);
             }   
             
-            $org_dao->save($org);
+            $org_dao = new OrganisationDao();
+            $org_dao->save($org);       //Wait for API support
             $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org->getId())));
         }   
         
@@ -231,16 +235,26 @@ class OrgRouteHandler
     public function orgPublicProfile($org_id)
     {
         $app = Slim::getInstance();
+        $client = new APICLient();
 
+        $request = APIClient::API_VERSION."/orgs/$org_id";
+        $response = $client->call($request);
+        $org = $client->cast('Organisation', $response[0]);
         $org_dao = new OrganisationDao();
-        $org = $org_dao->find(array('id' => $org_id));
-        
-        $user_dao = new UserDao();
-        $currentUser = $user_dao->getCurrentUser();
-        
+  
+        //wait for API support      
+//        $org_badges = array();
+//        $request = APIClient::API_VERSION."/orgs/$org_id/badges";
+//        $response = $client->call($request);
+//        foreach($response as $stdObject) {
+//            $org_badges[] = $client->cast('Badge', $stdObject);
+//        }
         $badge_dao = new BadgeDao();
         $org_badges = $badge_dao->getOrgBadges($org_id);
         
+        //wait for API support     
+//        $request = APIClient::API_VERSION."/orgs/$org_id/members";
+//        $org_member_ids = (array)$client->call($request);
         $org_member_ids = $org_dao->getOrgMembers($org_id);
         
         $org_members = array();
@@ -262,12 +276,21 @@ class OrgRouteHandler
     public function orgManageBadge($org_id, $badge_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
+        $request = APIClient::API_VERSION."/badges/$badge_id";
+        $response = $client->call($request);
+        $badge = $client->cast('Badge', $response);
         $badge_dao = new BadgeDao();
-        $badge = $badge_dao->find(array('badge_id' => $badge_id));
-        
+       
+//        $user_list = array();
+//        $request = APIClient::API_VERSION."/badges/$badge_id/users";
+//        $response = $client->call($request);
+//        foreach($response as $stdObject) {
+//            $user_list[] = $client->cast('User', $stdObject);
+//        }
         $user_dao = new UserDao();
-        $user_list = $user_dao->getUsersWithBadge($badge);
+        $user_list = $user_dao->getUsersWithBadge($badge);      //wait for API support (above)
         
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
@@ -283,20 +306,25 @@ class OrgRouteHandler
             
             if(isset($post->email) && $post->email != '') {
                 if(User::isValidEmail($post->email)) {
-                    $user_dao = new UserDao();
-                    $user = $user_dao->find(array('email' => $post->email));
+                    $user = $user_dao->find(array('email' => $post->email));    //wait for API support
                     
                     if(!is_null($user)) {
-                        $user_badges = $user_dao->getUserBadges($user);
+                        $user_badges = array();
+                        $user_id = $user->getUserId();
+                        $request = APIClient::API_VERSION."/users/$user_id/badges";
+                        $response = $client->call($request);
+                        foreach($response as $badge_data) {
+                            $user_badges[] = new Badge((array)$badge_data);
+                        }
                         $badge_ids = array();
                         if(count($user_badges) > 0) {
                             foreach($user_badges as $badge_tmp) {
-                                $badge_ids[] = $badge_tmp['badge_id'];
+                                $badge_ids[] = $badge_tmp->getBadgeId();
                             }
                         }
                         
                         if(!in_array($badge_id, $badge_ids)) {
-                            $badge_dao->assignBadge($user, $badge);
+                            $badge_dao->assignBadge($user, $badge);     //wait for API support
                             
                             $user_name = '';
                             if($user->getDisplayName() != '') {
@@ -319,9 +347,11 @@ class OrgRouteHandler
                     $app->flashNow('error', "You did not enter a valid email address");
                 }
             } elseif(isset($post->user_id) && $post->user_id != '') {
-                $user_dao = new UserDao();
-                $user = $user_dao->find(array('user_id' => $post->user_id));
-                $badge_dao->removeUserBadge($user, $badge);
+                $user_id = $post->user_id;
+                $request = APIClient::API_VERSION."/users/$user_id";
+                $response = $client->call($request);
+                $user = $client->cast('User', $response);
+                $badge_dao->removeUserBadge($user, $badge);     //wait for API support
                 $user_name = '';
                 if($user->getDisplayName() != '') {
                     $user_name = $user->getDisplayName();
@@ -334,6 +364,13 @@ class OrgRouteHandler
             }
         }
         
+        //wait for API support      
+//        $user_list = array();
+//        $request = APIClient::API_VERSION."/badges/".$badge->getBadgeId()."/users";
+//        $response = $client->call($request);
+//        foreach($response as $stdObject) {
+//            $user_list[] = $client->cast('User', $stdObject);
+//        }
         $user_list = $user_dao->getUsersWithBadge($badge);
         
         $app->view()->appendData(array(
@@ -360,7 +397,7 @@ class OrgRouteHandler
                 
                 $badge_dao = new BadgeDao();
                 $badge = new Badge($params);
-                $badge_dao->addBadge($badge);
+                $badge_dao->addBadge($badge);       //wait for API support
                 $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
             }
         }
@@ -379,7 +416,7 @@ class OrgRouteHandler
             
             if(isset($post->search_name) && $post->search_name != '') {
                 $org_dao = new OrganisationDao();
-                $found_orgs = $org_dao->searchForOrg($post->search_name);
+                $found_orgs = $org_dao->searchForOrg($post->search_name);       //wait for API support
                 
                 if(count($found_orgs) < 1) {
                     $app->flashNow('error', 'No Organisations found');

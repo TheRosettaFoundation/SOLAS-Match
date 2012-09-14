@@ -97,7 +97,7 @@ class UserRouteHandler
         }
 
         $url = APIClient::API_VERSION."/users/$current_user_id/orgs";
-        $my_organisations = $client->call($url);
+        $my_organisations = (array)$client->call($url);
         
         $org_tasks = array();
         $orgs = array();
