@@ -20,7 +20,8 @@
     <ul class="nav nav-list unstyled">
     {foreach $all_tags as $tag}
         <li>
-            <p><a class="tag label" href="{urlFor name="tag-details" options="label.$tag"}">{$tag}</a></p>
+            {assign var="tag_label" value=$tag->getLabel()}
+            <p><a class="tag label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a></p>
         </li>
     {/foreach}
     </ul>
