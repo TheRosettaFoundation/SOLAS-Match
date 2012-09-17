@@ -101,12 +101,14 @@ class TagRouteHandler
             if(count($user_tags) > 0) {
                 $app->view()->appendData(array(
                         'user_tags' => $user_tags
-                )); 
-                if(in_array($label, $user_tags)) {
-                    $app->view()->appendData(array(
-                           'subscribed' => true
-                    )); 
-                }   
+                ));
+                foreach($user_tags as $tag) {
+                    if($label == $tag->getLabel()) {
+                        $app->view()->appendData(array(
+                               'subscribed' => true
+                        )); 
+                    }   
+                }
             }   
         }   
         
