@@ -78,7 +78,11 @@
     <br />
     <p class="alert alert-info">
         There are no badges associated with this organisation.
-        Add organisation badges <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}">here</a>.
+        {if isset($user)}
+            {if in_array($user->getUserId(), $org_members)}
+                Add organisation badges <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}">here</a>.
+            {/if}
+        {/if}
     </p>
 {/if}
 
