@@ -39,7 +39,9 @@ class Tasks {
                $id=$id[0];
            }
            $dao = new TaskDao();
-           Dispatcher::sendResponce(null, $dao->getTask(array("task_id"=>$id)), null, $format);
+           $data= $dao->getTask(array("task_id"=>$id));
+           if(is_array($data))$data=$data[0];
+           Dispatcher::sendResponce(null, $data, null, $format);
         },'getTask');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/', function ($id,$format=".json"){
