@@ -28,7 +28,9 @@ class Orgs {
                $id=$id[0];
            }
            $dao = new OrganisationDao();
-           Dispatcher::sendResponce(null, $dao->getOrg($id, null, null, null), null, $format);
+           $data= $dao->getOrg($id, null, null, null);
+           if(is_array($data))$data=$data[0];
+           Dispatcher::sendResponce(null, $data, null, $format);
         },'getOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/badges(:format)/', function ($id,$format=".json"){
