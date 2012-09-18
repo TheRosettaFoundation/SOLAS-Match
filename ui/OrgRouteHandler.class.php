@@ -5,30 +5,31 @@ class OrgRouteHandler
     public function init()
     {
         $app = Slim::getInstance();
+        $middleware = new Middleware();
 
-        $app->get('/org/create', 'authUserIsLoggedIn', array($this, 'createOrg')
+        $app->get('/org/create', array($middleware, 'authUserIsLoggedIn'), array($this, 'createOrg')
         )->via('POST')->name('create-org');
 
         $app->get('/org/request/:org_id', array($this, 'orgRequestMembership')
         )->name('org-request-membership');
 
-        $app->get('/org/:org_id/request/:user_id/:accept', 'authUserForOrg', 
+        $app->get('/org/:org_id/request/:user_id/:accept', array($middleware, 'authUserForOrg'), 
         array($this, 'orgProcessRequest'))->name('org-process-request');
 
-        $app->get('/org/request/queue/:org_id', 'authUserForOrg', array($this, 'orgRequestQueue')
-        )->via("POST")->name('org-request-queue');
+        $app->get('/org/request/queue/:org_id', array($middleware, 'authUserForOrg'), 
+        array($this, 'orgRequestQueue'))->via("POST")->name('org-request-queue');
 
-        $app->get('/org/private/:org_id', 'authUserForOrg', array($this, 'orgPrivateProfile')
-        )->via('POST')->name('org-private-profile');
+        $app->get('/org/private/:org_id', array($middleware, 'authUserForOrg'), 
+        array($this, 'orgPrivateProfile'))->via('POST')->name('org-private-profile');
 
         $app->get('/org/profile/:org_id', array($this, 'orgPublicProfile')
         )->via('POST')->name('org-public-profile');
 
-        $app->get('/org/:org_id/manage/:badge_id/', 'authUserForOrg', array($this, 'orgManageBadge')
-        )->via("POST")->name('org-manage-badge');
+        $app->get('/org/:org_id/manage/:badge_id/', array($middleware, 'authUserForOrg'), 
+        array($this, 'orgManageBadge'))->via("POST")->name('org-manage-badge');
 
-        $app->get('/org/create/badge/:org_id/', 'authUserForOrg', array($this, 'orgCreateBadge')
-        )->via('POST')->name('org-create-badge');
+        $app->get('/org/create/badge/:org_id/', array($middleware, 'authUserForOrg'), 
+        array($this, 'orgCreateBadge'))->via('POST')->name('org-create-badge');
 
         $app->get("/org/search", array($this, 'orgSearch')
         )->via('POST')->name('org-search');
