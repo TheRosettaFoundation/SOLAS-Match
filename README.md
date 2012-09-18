@@ -107,6 +107,7 @@ SHOW GRANTS FOR 'tester'@'localhost';
     setting openid='y' will configure the application to use openid as the login mechanisium.
     setting openid='n' will configure the applicataion to fall back to its internal login mechanisium.
     setting openid='h' will enable hybrid login.(both login options will be avaiable to the user).
+4.2 for more reliable openid support install php5-curl. sudo apt-get install php5-curl(fixes issue with google/yahoo connection reset).
 5.  Under user session control, enter a long random string.
 
 ## Add Cron Job
