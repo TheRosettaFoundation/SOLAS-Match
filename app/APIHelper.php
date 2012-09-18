@@ -23,7 +23,7 @@ class APIHelper {
     
     public static function serialiser($body,$format=".json"){
         $format=  APIHelper::getFormat($format);
-        if(is_array($body)&& count($body)==1) $body=$body[0];
+        
         switch ($format){
             case FormatEnum::JSON: {
                 
