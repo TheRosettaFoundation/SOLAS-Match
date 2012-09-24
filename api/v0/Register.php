@@ -34,7 +34,9 @@ class Register {
                 $data= APIHelper::deserialiser($data, $format);
                 $data= APIHelper::cast("Register", $data);
                 $dao = new UserDao;
-                Dispatcher::sendResponce(null, $dao->APIRegister($data->email, $data->pass), null, $format);
+                $data= $dao->APIRegister($data->email, $data->pass);
+                if(is_array($data))$data=$data[0];
+                Dispatcher::sendResponce(null,$data, null, $format);
         },'register');
     }
     

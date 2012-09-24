@@ -31,7 +31,9 @@ class Users {
                $id=$id[0];
            }
            $dao = new UserDao();
-           Dispatcher::sendResponce(null, $dao->find(array("user_id"=>$id)), null, $format);
+           $data= $dao->find(array("user_id"=>$id));
+           if(is_array($data))$data=$data[0];
+           Dispatcher::sendResponce(null, $data, null, $format);
         },'getUser');
         
        
