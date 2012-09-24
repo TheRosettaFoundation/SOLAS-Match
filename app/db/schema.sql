@@ -1049,9 +1049,9 @@ DROP PROCEDURE IF EXISTS `getUserTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT)
 BEGIN
-	SELECT label
+	SELECT t.*
 	FROM user_tag
-	JOIN tag ON user_tag.tag_id = tag.tag_id
+	JOIN tag t ON user_tag.tag_id = t.tag_id
 	WHERE user_id = id; 
 END//
 DELIMITER ;

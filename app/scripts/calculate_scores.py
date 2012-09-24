@@ -25,6 +25,40 @@ def LoadConfig():
         for opt in parser.options(section):
             settings[name + "." + string.lower(opt)] = string.strip(parser.get(section, opt)).replace("\"", '').replace("\'", '')
 
+def DBCall(proc_name, args = ()):
+    query = "call %s(" % proc_name
+    query = query + str(args) + ")"
+    con = None
+    try:
+        rows = None
+        #Must specify read_default_group so that it will read my.cnf for the socket
+        con = mdb.connect(host = settings['database.server'],
+               user = settings['database.username'],
+               passwd = settings['database.password'],
+               db = settings['database.database'],
+               read_default_group="client")
+
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute(query)
+
+        row_count = int(cur.rowcount)
+
+        if(row_count > 0):
+            rows = cur.fetchall()
+        
+    except mdb.Error, e:
+        print "Error %d: %s" % (e.args[0],e.args[1])
+        sys.exit(1)
+
+    finally:
+        if cur:
+            cur.close()
+        if con:
+            con.close()
+
+        return rows
+
+
 def DBQuery(query):
     con = None
     try:
@@ -111,8 +145,9 @@ def getTaskTags(task_id):
 # Return tag ids of tags liked by the user
 #
 def getUserTags(user_id):
-    query = "SELECT tag_id FROM user_tag WHERE user_id = %d" % int(user_id)
-    return DBQuery(query)
+    return DBCall('getUserTags', (user_id))
+#    query = "SELECT tag_id FROM user_tag WHERE user_id = %d" % int(user_id)
+#    return DBQuery(query)
 
 #
 # Get the language string associated with the given id
