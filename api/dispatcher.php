@@ -56,7 +56,9 @@ class Dispatcher {
         require_once 'v0/Badges.php';
         require_once 'v0/Orgs.php';
         require_once 'v0/Login.php'; 
-        require_once 'v0/Register.php'; 
+        require_once 'v0/Register.php';
+        require_once 'v0/Langs.php';
+        require_once 'v0/Countries.php';
     }
     
     public static function sendResponce($headers,$body,$code=200,$format=".json"){
