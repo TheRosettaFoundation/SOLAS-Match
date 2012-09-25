@@ -121,13 +121,13 @@ def getActiveTaskList():
 # This function returns the task identified by task_id
 #
 def getTaskById(task_id):
-    DBCall('getTask', [task_id, 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
+    return DBCall('getTask', [task_id, 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
 
 #
 # This function returns all the tags related to a specific task
 #
 def getTaskTags(task_id):
-    DBCall('getTaskTags', [task_id])
+    return DBCall('getTaskTags', [task_id])
 
 #
 # Return tag ids of tags liked by the user
@@ -183,7 +183,7 @@ for user in users:
 
         #Calculate the new score and save it to the DB
         score = 0
-        
+
         #Finding matching tags and increment score
         if(user_tags != None and task_tags != None):
             increment_value = 100
