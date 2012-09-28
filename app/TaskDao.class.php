@@ -384,7 +384,7 @@ class TaskDao {
         
     }
 
-    private function _parse_result_for_user_task($sqlResult)
+   private function _parse_result_for_user_task($sqlResult)
     {
         $ret = NULL;
         $ret = array();

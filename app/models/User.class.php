@@ -11,31 +11,41 @@ class User
     var $_native_region_id;
 	
 	public function __construct($params) {
-		if (isset($params['user_id'])) {
-			$this->setUserId($params['user_id']);
-		}
-		if (isset($params['email'])) {
-			$this->setEmail($params['email']);
-		}
-		if (isset($params['nonce'])) {
-			$this->setNonce($params['nonce']);
-		}
-		if (isset($params['password'])) {
-			$this->setPassword($params['password']);
-		}
-		if (isset($params['display_name'])) {
-			$this->setDisplayName($params['display_name']);
-		}
-		if (isset($params['biography'])) {
-			$this->setBiography($params['biography']);
-		}
-		if (isset($params['native_lang_id'])) {
-			$this->setNativeLanguageID($params['native_lang_id']);
-		}
-        if (isset($params['native_region_id'])) {
-            $this->setNativeRegionID($params['native_region_id']);
-        }
+            if (isset($params['user_id'])) {
+                    $this->setUserId($params['user_id']);
+            }
+            if (isset($params['email'])) {
+                    $this->setEmail($params['email']);
+            }
+            if (isset($params['nonce'])) {
+                    $this->setNonce($params['nonce']);
+            }
+            if (isset($params['password'])) {
+                    $this->setPassword($params['password']);
+            }
+            if (isset($params['display_name'])) {
+                    $this->setDisplayName($params['display_name']);
+            }
+            if (isset($params['biography'])) {
+                    $this->setBiography($params['biography']);
+            }
+            if (isset($params['native_lang_id'])) {
+                    $this->setNativeLanguageID($params['native_lang_id']);
+            }
+            if (isset($params['native_region_id'])) {
+                $this->setNativeRegionID($params['native_region_id']);
+            }
 	}
+//        public function __construct() {
+//            $this->setUserId(null);
+//            $this->setEmail("");
+//            $this->setNonce(null);
+//            $this->setPassword("");
+//            $this->setDisplayName("");
+//            $this->setBiography("");
+//            $this->setNativeLanguageID(null);
+//            $this->setNativeRegionID(null);
+//	}
 
 	public function setUserId($user_id) {
 		$this->_user_id = $user_id;

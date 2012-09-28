@@ -2222,6 +2222,16 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getUserTrackedTasks
+DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTrackedTasks`(IN `id` INT)
+BEGIN
+	SELECT t.*
+	FROM user_notifications un join task t on un.task_id=t.id
+	WHERE user_id = id;
+END//
+DELIMITER ;
 
 /*---------------------put triggers below this line------------------------------------------*/
 

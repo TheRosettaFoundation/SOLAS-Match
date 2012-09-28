@@ -87,11 +87,11 @@ class UserDao {
 		$db = new PDOWrapper();
 		$db->init();
                 $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},
-                {$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},
+                {$db->cleanseNull($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},
                 {$db->cleanseNullOrWrapStr($user->getBiography())},{$db->cleanseNullOrWrapStr($user->getDisplayName())},
                 {$db->cleanseNullOrWrapStr($user->getNativeLanguageID())},{$db->cleanseNullOrWrapStr($user->getNativeRegionID())},
                 {$db->cleanse($user->getUserId())}");
-        return $result[0]['user_id'];
+                return $this->find(array('user_id' => $result[0]['user_id']));
 	}
 
 	private function _insert($user) {
@@ -272,7 +272,22 @@ class UserDao {
 
         return $ret;
     }
-
+    
+    public function getUser($user_id, $email,$nonce,$password,$display_name,$biography,$native_language_id, $native_region_id,$created){
+        $ret = null;
+        $db = new PDOWrapper();
+        $db->init();
+        if($result = $db->call("getUser", "{$db->cleanseNull($user_id)},{$db->cleanseNullOrWrapStr($display_name)},{$db->cleanseNullOrWrapStr($email)}"
+        .",{$db->cleanseNullOrWrapStr($password)},{$db->cleanseNullOrWrapStr($biography)},{$db->cleanseNull($nonce)},{$db->cleanseNull($created)}"
+        .",{$db->cleanseNull($native_language_id)},{$db->cleanseNull($native_region_id)}")) {
+            $ret = array();
+            foreach($result as $row) {
+                $ret[] = new User($row);
+            }
+        }
+        return $ret;
+        
+    }
     /*
         Get all users with $badge assigned
     */
@@ -396,6 +411,33 @@ class UserDao {
 
         return $ret;
     }
+    
+     public function getTrackedTasks($user_id)
+    {
+        $ret = array();
+        $db = new PDOWrapper();
+        $db->init();
+        $dao = new TaskDao();
+        if($result = $db->call("getUserTrackedTasks", "$user_id")) {
+            foreach($result as $row) {
+                $params = array();
+                $params['task_id'] = $row['id'];
+                $params['title'] = $row['title'];
+                $params['impact'] = $row['impact'];
+                $params['reference_page'] = $row['reference_page'];
+                $params['organisation_id'] = $row['organisation_id'];
+                $params['source_id'] = $row['source_id'];
+                $params['target_id'] = $row['target_id'];
+                $params['word_count'] = $row['word_count'];
+                $params['created_time'] = $row['created_time'];
+                $task = new Task($params);
+                $task->setStatus($dao->getTaskStatus($task->getTaskId()));
+                $ret[] = $task;
+            }
+        }
+
+        return $ret;
+    }
 
     /*
         Add password reset request to DB for this user
@@ -419,13 +461,15 @@ class UserDao {
     */
     public function hasRequestedPasswordReset($user)
     {
+        return $this->hasRequestedPasswordResetID($user->getUserId());
+    }
+    
+     public function hasRequestedPasswordResetID($user_id)
+    {
         $ret = false;
-        $args = array();
-        $args['user_id'] = $user->getUserId();
-        if($this->getPasswordResetRequests($args)) {
+        if($this->getPasswordResetRequests(array('user_id'=>$user_id))) {
             $ret = true;
         }
-
         return $ret;
     }
 
@@ -450,5 +494,16 @@ class UserDao {
         }
 
         return $ret;
+    }
+    
+     public function passwordReset($password,$key){
+                $dao = new UserDao;
+                $reset_request = $dao->getPasswordResetRequests(array('uid' => $key));
+                if(!isset($reset_request['user_id']) || $reset_request['user_id'] == ''||!User::isValidPassword($password)) {
+                    return array("result"=>0, "message"=> User::isValidPassword($password)?"Incorrect Unique ID. Are you sure you copied the URL correctly?":"Please check the password provided, and try again. It was not found to be valid.");
+                }elseif($dao->changePassword($reset_request['user_id'], $password)) {
+                        $dao->removePasswordResetRequest($reset_request['user_id']);
+                        return array("result"=>1,"message"=>"You have successfully changed your password");
+                     }   
     }
 }
