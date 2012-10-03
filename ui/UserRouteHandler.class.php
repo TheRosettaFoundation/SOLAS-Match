@@ -48,8 +48,12 @@ class UserRouteHandler
             $url = APIClient::API_VERSION."/tasks/";
             $response = $client->call($url, HTTP_Request2::METHOD_GET, 
                                 null, array('limit' => 10));
-            foreach($response as $stdObject) {
-                $tasks[] = $client->cast('Task', $stdObject);
+
+            $tasks = array();
+            if($response) {
+                foreach($response as $stdObject) {
+                    $tasks[] = $client->cast('Task', $stdObject);
+                }
             }
 
             if($tasks) {
@@ -69,9 +73,9 @@ class UserRouteHandler
 
             $url = APIClient::API_VERSION."/users/$current_user_id/tags";
             $response = $client->call($url);
-            foreach($response as $stdObject) {
-                $user_tags[] = $client->cast('Tag', $stdObject);
-            }
+                foreach($response as $stdObject) {
+                    $user_tags[] = $client->cast('Tag', $stdObject);
+                }
             
             $app->view()->appendData(array(
                         'user_tags' => $user_tags
