@@ -2315,6 +2315,15 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.deleteTask
+DROP PROCEDURE IF EXISTS `deleteTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTask`(IN `id` INT)
+BEGIN
+delete from task where task.id=id;
+END//
+DELIMITER ;
+
 /*---------------------put triggers below this line------------------------------------------*/
 
 

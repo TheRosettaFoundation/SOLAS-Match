@@ -191,7 +191,9 @@ class TaskDao {
         Upload::createFolderPath($task);
         if(!copy($old_file_path, $new_file_path)) {
             $error = "Failed to copy file to new location";
+            return 0;
         }
+        return 1;
     }
 
     private function _update($task) {
@@ -200,7 +202,12 @@ class TaskDao {
         $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getTaskId())},{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())},{$db->cleanseNullOrWrapStr($task->getSourceCountryCode())},{$db->cleanseNullOrWrapStr($task->getTargetCountryCode())}");
         $this->_updateTags($task);
     }
-
+    
+    public function delete($TaskID){
+        $db = new PDOWrapper();
+        $db->init();
+        $result= $db->call("deletTask", "{$db->cleanseNull($TaskID)}");
+    }
 
     private function calculateTaskScore($task_id)
     {
@@ -209,13 +216,16 @@ class TaskDao {
 
     }
 
-    private function _updateTags($task) {
+    public function _updateTags($task) {
             TaskTags::deleteTaskTags($task);
             if ($tags = $task->getTags()) {
                     if ($tag_ids = $this->_tagsToIds($tags)) {
                           TaskTags::setTaskTags($task, $tag_ids);
+                          return 1;
                     }
+                    return 0;
             }
+            return 0;
     }
 
 
@@ -323,7 +333,7 @@ class TaskDao {
 	public function moveToArchive($task) {
 		$db = new PDOWrapper();
 		$db->init();
-        $db->call("archiveTask", "{$db->cleanse($task->getTaskId())}");
+                $db->call("archiveTask", "{$db->cleanse($task->getTaskId())}");
 	}
 
 	public function claimTask($task, $user) {

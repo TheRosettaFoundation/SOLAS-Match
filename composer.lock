@@ -17,7 +17,7 @@
         },
         {
             "package": "smarty/smarty",
-            "version": "v3.1.11"
+            "version": "v3.1.12"
         }
     ],
     "packages-dev": null,
