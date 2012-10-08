@@ -63,8 +63,12 @@ class UserRouteHandler
             $url = APIClient::API_VERSION."/users/$current_user_id/top_tasks";
             $response = $client->call($url, HTTP_Request2::METHOD_GET, null,
                                     array('limit' => 10));
-            foreach($response as $stdObject) {
-                $tasks[] = $client->cast('Task', $stdObject);
+            
+            $tasks = array();
+            if($response) {
+                foreach($response as $stdObject) {
+                    $tasks[] = $client->cast('Task', $stdObject);
+                }
             }
 
             if($tasks) {
@@ -73,9 +77,13 @@ class UserRouteHandler
 
             $url = APIClient::API_VERSION."/users/$current_user_id/tags";
             $response = $client->call($url);
+            
+            $user_tags = array();
+            if($response) {
                 foreach($response as $stdObject) {
                     $user_tags[] = $client->cast('Tag', $stdObject);
                 }
+            }
             
             $app->view()->appendData(array(
                         'user_tags' => $user_tags
@@ -115,7 +123,7 @@ class UserRouteHandler
             $my_org_tasks = $task_dao->findTasksByOrg(array('organisation_ids' => $org_id));
             $org_tasks[$org->getId()] = $my_org_tasks;
             $orgs[$org->getId()] = $org;
-        }
+        }    
         
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -453,8 +461,11 @@ class UserRouteHandler
         $user_id = $user->getUserId();
         $request = APIClient::API_VERSION."/users/$user_id/tasks";
         $response = $client->call($request);
-        foreach($response as $stdObject) {
-            $activeJobs[] = $client->cast('Task', $stdObject);
+        
+        if($response) {
+            foreach($response as $stdObject) {
+                $activeJobs[] = $client->cast('Task', $stdObject);
+            }
         }
 
         $archivedJobs = $task_dao->getUserArchivedTasks($user, 10);     //wait for API support
@@ -462,10 +473,13 @@ class UserRouteHandler
         $user_tags = array();
         $request = APIClient::API_VERSION."/users/$user_id/tags";
         $response = $client->call($request);
-        foreach($response as $stdObject) {
-            $user_tags[] = $client->cast('Tag', $stdObject);
+        
+        if($response) {
+            foreach($response as $stdObject) {
+                $user_tags[] = $client->cast('Tag', $stdObject);
+            }
         }
-                    
+            
         $org_dao = new OrganisationDao();
                    
         $request = APIClient::API_VERSION."/users/$user_id/orgs";
@@ -483,8 +497,11 @@ class UserRouteHandler
         $badges = array();
         $request = APIClient::API_VERSION."/users/$user_id/badges";
         $response = $client->call($request);
-        foreach($response as $stdObject) {
-            $badges[] = $client->cast('Badge', $stdObject);
+        
+        if($response) {
+            foreach($response as $stdObject) {
+                $badges[] = $client->cast('Badge', $stdObject);
+            }
         }
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
