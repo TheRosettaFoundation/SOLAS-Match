@@ -54,7 +54,10 @@ Further below in this document, there are also several resources for our work mo
 ## Configure Apache
 
  * Ensure that RewriteEngine is installed. If not:
-   $ sudo a2enmod rewrite
+   sudo a2enmod rewrite
+   
+ * Enable X-Sendfile
+   sudo apt-get install libapache2-mod-xsendfile
 
 ## Alternitive Configure Lighttpd
  * Ensure that url rewritting is enabled.
@@ -92,6 +95,8 @@ Further below in this document, there are also several resources for our work mo
 1. Set up a MySQL database.
 2. Create a user with all permissions.
 3. Import ./app/db/schema.sql (using phpMyAdmin, for example.)
+3. Import ./app/db/languages.sql (using phpMyAdmin, for example.)
+3. Import ./app/db/countries.sql (using phpMyAdmin, for example.)
     
 GRANT EXECUTE, PROCESS, SELECT, SHOW DATABASES, SHOW VIEW, DELETE, INSERT, UPDATE, LOCK TABLES  ON *.* TO 'tester'@'localhost';
 FLUSH PRIVILEGES;

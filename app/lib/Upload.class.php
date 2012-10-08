@@ -83,7 +83,22 @@ class Upload {
 		return $_FILES[$field_name]['error'] == UPLOAD_ERR_OK;
 	}
 
-	/*
+	public static function apiSaveFile($task, $user_id,$file ,$filename) {
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime= $finfo->buffer($file);
+            $version = TaskFile::recordFileUpload($task, $filename, $mime, $user_id);
+            $version = $version[0]['version'];
+            $upload_folder     = self::absoluteFolderPathForUpload($task, $version);
+            if (!self::_folderPathForUploadExists($task, $version)) {
+                    self::_createFolderForUpload($task, $version);
+            }
+            $destination_path = self::absoluteFilePathForUpload($task, $version, $filename);
+            return file_put_contents($destination_path, $file)?1:0;
+    }
+        
+        
+        
+        /*
 	 * For a named filename, save file that have been uploaded by form submission.
 	 * The file has been specified in a form element <input type="file" name="myfile">
 	 * We access that file through PHP's $_FILES array.

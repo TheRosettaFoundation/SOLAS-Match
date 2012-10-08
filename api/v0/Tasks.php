@@ -15,12 +15,14 @@ require_once '../app/TaskDao.class.php';
 require_once '../app/TaskTags.class.php';
 require_once '../app/IO.class.php';
 require_once '../app/TaskFile.class.php';
+require_once '../app/lib/Upload.class.php';
 class Tasks {
   public static function init(){
         $dispatcher=Dispatcher::getDispatcher();
       
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks(:format)/', function ($format=".json"){
             $dao = new TaskDao();
+            xdebug_break();
            Dispatcher::sendResponce(null, $dao->getTask(null), null, $format);
         },'getTasks');
         
@@ -29,6 +31,7 @@ class Tasks {
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $data= APIHelper::deserialiser($data, $format);
             $dao = new TaskDao();
+            xdebug_break();
             Dispatcher::sendResponce(null, $dao->create($data), null, $format);
         },'createTasks');
         
@@ -68,6 +71,15 @@ class Tasks {
             if(isset ($_GET['version'])&& is_numeric($_GET['version'])) $version= $_GET['version'];
             TaskDao::downloadTask($id,$version);
         },'getTaskFile');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:userId/:filename', function ($id,$userId,$filename){
+            $data=Dispatcher::getDispatcher()->request()->getBody();
+            $dao = new TaskDao();
+            $task= $dao->getTask(array("task_id"=>$id));
+            if(is_array($task))$task=$task[0];
+            Upload::apiSaveFile($task, $userId, $data, $filename);
+        },'saveTaskFile');
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/version(:format)/', function ($id,$format=".json"){
             $userID=null;
             if(isset ($_GET['userID'])&& is_numeric($_GET['userID'])) $userID= $_GET['userID'];
@@ -87,7 +99,7 @@ class Tasks {
             $dao = new TaskDao();
             $result = $dao->delete($id);
             Dispatcher::sendResponce(null, array("result"=>$result,"message"=>$result==1?"delete sucessful":"delet failed"), null, $format);
-        },'addTarget');
+        },'deleteTask');
     }
     
    

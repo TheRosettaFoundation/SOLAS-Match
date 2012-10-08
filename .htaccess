@@ -3,6 +3,8 @@ php_flag display_errors on
 #DirectoryIndex index.php
 
 RewriteEngine On
+XSendFile On
+XSendFileAllowAbove on
 
 # RewriteBase /~demomatc/ # <- option required on server with temp URL
 
@@ -15,13 +17,6 @@ RewriteRule ^(.*)$ index.php [QSA,L]
 # Disable listing of directory contents
 IndexIgnore *
 
-#RewriteEngine On
-#RewriteRule ^task/([0-9]+)/$ pages/task.php?task_id=$1
-#RewriteRule ^task/create/$ pages/task.create.php
-#RewriteRule ^tag/([0-9]+)/$ pages/tag.php?tag_id=$1
-#RewriteRule ^login/?$ pages/login.php
-#RewriteRule ^logout/?$ process/logout.php
-#RewriteRule ^register/?$ pages/register.php
 
 # Protect the README.md file
 <Files README.md>
@@ -29,4 +24,4 @@ IndexIgnore *
 	Deny from all
 </Files>
 
-#AllowOverride All
+
