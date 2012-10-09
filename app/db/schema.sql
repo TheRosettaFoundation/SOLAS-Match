@@ -1037,8 +1037,8 @@ DROP PROCEDURE IF EXISTS `getUserBadges`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserBadges`(IN `id` INT)
 BEGIN
-SELECT badge_id
-FROM user_badges
+SELECT b.*
+FROM user_badges ub JOIN badges b ON ub.badge_id = b.badge_id
 WHERE user_id = id;
 END//
 DELIMITER ;

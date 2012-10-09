@@ -1,5 +1,6 @@
 <?php
 
+
 class UserRouteHandler
 {
     public function init()
@@ -410,7 +411,7 @@ class UserRouteHandler
         $i = 0;
         if(count($badgeIds) > 0) {
             foreach($badgeIds as $badge) {
-                $badges[$i] = $badge_dao->find(array('badge_id' => $badge['badge_id']));
+                $badges[$i] = new Badge($badge);
                 $i++;
             }
         }

@@ -265,7 +265,7 @@ class OrgRouteHandler
                     'org_id'        => $org_id,
                     'extra_scripts' =>$extra_scripts
         ));
-        
+
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
