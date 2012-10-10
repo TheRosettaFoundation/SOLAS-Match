@@ -206,7 +206,7 @@ class TaskDao {
     public function delete($TaskID){
         $db = new PDOWrapper();
         $db->init();
-        $result= $db->call("deletTask", "{$db->cleanseNull($TaskID)}");
+        $result= $db->call("deleteTask", "{$db->cleanseNull($TaskID)}");
     }
 
     private function calculateTaskScore($task_id)

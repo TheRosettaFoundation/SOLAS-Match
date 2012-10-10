@@ -98,7 +98,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/deleteTarget/', function ($languageCode,$countryCode,$format=".json"){
             $dao = new TaskDao();
             $result = $dao->delete($id);
-            Dispatcher::sendResponce(null, array("result"=>$result,"message"=>$result==1?"delete sucessful":"delet failed"), null, $format);
+            Dispatcher::sendResponce(null, array("result"=>$result,"message"=>$result==1?"delete successful":"delete failed"), null, $format);
         },'deleteTask');
     }
     
