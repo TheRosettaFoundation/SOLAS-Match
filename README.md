@@ -54,7 +54,10 @@ Further below in this document, there are also several resources for our work mo
 ## Configure Apache
 
  * Ensure that RewriteEngine is installed. If not:
-   $ sudo a2enmod rewrite
+   sudo a2enmod rewrite
+   
+ * Enable X-Sendfile
+   sudo apt-get install libapache2-mod-xsendfile
 
 ## Alternitive Configure Lighttpd
  * Ensure that url rewritting is enabled.
@@ -92,6 +95,8 @@ Further below in this document, there are also several resources for our work mo
 1. Set up a MySQL database.
 2. Create a user with all permissions.
 3. Import ./app/db/schema.sql (using phpMyAdmin, for example.)
+3. Import ./app/db/languages.sql (using phpMyAdmin, for example.)
+3. Import ./app/db/countries.sql (using phpMyAdmin, for example.)
     
 GRANT EXECUTE, PROCESS, SELECT, SHOW DATABASES, SHOW VIEW, DELETE, INSERT, UPDATE, LOCK TABLES  ON *.* TO 'tester'@'localhost';
 FLUSH PRIVILEGES;
@@ -107,6 +112,7 @@ SHOW GRANTS FOR 'tester'@'localhost';
     setting openid='y' will configure the application to use openid as the login mechanisium.
     setting openid='n' will configure the applicataion to fall back to its internal login mechanisium.
     setting openid='h' will enable hybrid login.(both login options will be avaiable to the user).
+4.2 for more reliable openid support install php5-curl. sudo apt-get install php5-curl(fixes issue with google/yahoo connection reset).
 5.  Under user session control, enter a long random string.
 
 ## Add Cron Job

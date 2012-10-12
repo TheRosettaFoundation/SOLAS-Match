@@ -121,18 +121,22 @@ class TagRouteHandler
             $user_tags = array();
             $request = APIClient::API_VERSION."/users/$user_id/tags";
             $response = $client->call($request);
-            foreach($response as $stdObject) {
-                $user_tags[] = $client->cast('Tag', $stdObject);
-            }
-            if(count($user_tags) > 0) {
-                $app->view()->appendData(array(
-                        'user_tags' => $user_tags
-                )); 
-                foreach($user_tags as $tag) {
-                    if($label == $tag->getLabel()) {
-                        $app->view()->appendData(array(
-                           'subscribed' => true
-                        )); 
+            
+            if($response) {
+                foreach($response as $stdObject) {
+                    $user_tags[] = $client->cast('Tag', $stdObject);
+                }
+                if(count($user_tags) > 0) {
+                    $app->view()->appendData(array(
+                            'user_tags' => $user_tags
+
+                    )); 
+                    foreach($user_tags as $tag) {
+                        if($label == $tag->getLabel()) {
+                            $app->view()->appendData(array(
+                               'subscribed' => true
+                            )); 
+                        }
                     }
                 }
             }
@@ -146,6 +150,7 @@ class TagRouteHandler
         foreach($response as $stdObject) {
             $top_tags[] = $client->cast('Tag', $stdObject);
         }*/
+
         
         $app->view()->appendData(array(
                  'tag' => $label,

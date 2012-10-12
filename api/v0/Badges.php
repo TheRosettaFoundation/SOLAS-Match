@@ -26,12 +26,15 @@ class Badges {
                $id=$id[0];
            }
            $dao = new BadgeDao();
-           Dispatcher::sendResponce(null, $dao->find(array('badge_id'=>$id)), null, $format);
+           $data= $dao->find(array('badge_id'=>$id));
+           if(is_array($data))$data=$data[0];
+           Dispatcher::sendResponce(null, $data, null, $format);
         },'getBadge');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges/:id/users(:format)', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges/:id/users(:format)/', function ($id,$format=".json"){
            $dao = new UserDao();
-           Dispatcher::sendResponce(null, $dao->getUsersWithBadgeByID($id), null, $format);
+           $data= $dao->getUsersWithBadgeByID($id);
+           Dispatcher::sendResponce(null, $data, null, $format);
         },'getusersWithBadge');
         
     }

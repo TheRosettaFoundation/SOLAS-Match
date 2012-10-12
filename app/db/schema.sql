@@ -1037,8 +1037,8 @@ DROP PROCEDURE IF EXISTS `getUserBadges`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserBadges`(IN `id` INT)
 BEGIN
-SELECT badge_id
-FROM user_badges
+SELECT b.*
+FROM user_badges ub JOIN badges b ON ub.badge_id = b.badge_id
 WHERE user_id = id;
 END//
 DELIMITER ;
@@ -1049,9 +1049,9 @@ DROP PROCEDURE IF EXISTS `getUserTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT)
 BEGIN
-	SELECT label ,tag.tag_id
+	SELECT t.*
 	FROM user_tag
-	JOIN tag ON user_tag.tag_id = tag.tag_id
+	JOIN tag t ON user_tag.tag_id = t.tag_id
 	WHERE user_id = id; 
 END//
 DELIMITER ;
@@ -1414,6 +1414,57 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser`(IN `id` INT, IN `name` VARCHAR(128), IN `mail` VARCHAR(128), 
+    IN `pass` char(128), IN `bio` TEXT, IN `nonce` INT, IN `created` DATETIME, IN `lang_id` INT, IN `region_id` INT)
+    READS SQL DATA
+BEGIN
+	if id='' then set id=null;end if;
+	if name='' then set name=null;end if;
+	if mail='' then set mail=null;end if;
+	if pass='' then set pass=null;end if;
+	if bio='' then set bio=null;end if;
+	if nonce='' then set nonce=null;end if;
+	if created='' then set created=null;end if;
+	if lang_id='' then set lang_id=null;end if;
+	if region_id='' then set region_id=null;end if;
+	
+	set @q= "select * from user u where 1 ";-- set update
+	if id is not null then 
+#set paramaters to be updated
+		set @q = CONCAT(@q," and u.user_id=",id) ;
+	end if;
+	if name is not null then 
+		set @q = CONCAT(@q," and u.display_name=",name) ;
+	end if;
+	if mail is not null then 
+		set @q = CONCAT(@q," and u.email=",mail) ;
+	end if;
+	if pass is not null then 
+		set @q = CONCAT(@q," and u.password=",pass) ;
+	end if;
+	if bio is not null then 
+		set @q = CONCAT(@q," and u.biography=",bio) ;
+	end if;
+	if nonce is not null then 
+		set @q = CONCAT(@q," and u.nonce=",nonce) ;
+	end if;
+	if (created is not null  and created!='0000-00-00 00:00:00') then 
+		set @q = CONCAT(@q," and u.created_time='",created,"'") ;
+	end if;
+	if lang_id is not null then 
+		set @q = CONCAT(@q," and u.native_lang_id=",lang_id) ;
+	end if;
+	if region_id is not null then 
+		set @q = CONCAT(@q," and u.native_region_id=",region_id) ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
@@ -1905,7 +1956,38 @@ set @q=Concat(" SELECT *
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getUserTaskScore`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskScore`(IN `uID` INT, IN `tID` INT)
+BEGIN
 
+	if uID='' then set uID=null;end if;
+    if tID='' then set tID=null;end if;
+	set @q= "select * from user_task_score where 1 ";
+	if uID is not null then 
+		set @q = CONCAT(@q," and user_id=",uID) ;
+	end if;
+	if tID is not null then 
+		set @q = CONCAT(@q," and task_id=",tID) ;
+	end if;
+    PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `saveUserTaskScore`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `saveUserTaskScore`(IN `uID` INT, IN `tID` INT, IN `points` INT)
+BEGIN
+    if not exists(SELECT * FROM user_task_score where user_id=uID and task_id=tID) then
+        insert into user_task_score (`user_id`, `task_id`, `score`)
+        VALUES (uID, tID, points);
+    else
+        UPDATE user_task_score SET score=points WHERE user_id=uID and task_id=tID;
+    end if;
+END//
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `getUserNotifications`;
 DELIMITER //
@@ -2222,6 +2304,25 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getUserTrackedTasks
+DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTrackedTasks`(IN `id` INT)
+BEGIN
+	SELECT t.*
+	FROM user_notifications un join task t on un.task_id=t.id
+	WHERE user_id = id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.deleteTask
+DROP PROCEDURE IF EXISTS `deleteTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTask`(IN `id` INT)
+BEGIN
+delete from task where task.id=id;
+END//
+DELIMITER ;
 
 /*---------------------put triggers below this line------------------------------------------*/
 

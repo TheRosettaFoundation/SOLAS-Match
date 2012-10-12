@@ -225,7 +225,7 @@ class TaskRouteHandler
         
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);
-        $task = $client->cast('Task', $response[0]);
+        $task = $client->cast('Task', $response);
         
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
@@ -254,7 +254,7 @@ class TaskRouteHandler
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);
-        $task = $client->cast('Task', $response[0]);
+        $task = $client->cast('Task', $response);
 
         if(!is_object($task)) {
             header ('HTTP/1.0 404 Not Found');
@@ -305,7 +305,7 @@ class TaskRouteHandler
         $task_id = $app->request()->post('task_id');
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);
-        $task = $client->cast('Task', $response[0]);
+        $task = $client->cast('Task', $response);
         
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');

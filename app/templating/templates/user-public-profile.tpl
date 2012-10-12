@@ -9,14 +9,20 @@
         {else}
             User Profile
         {/if}
-        <small>View user details here</small>
-        {if isset($private_access)}
-            <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Edit Details</a>
-        {/if}
+        <small>View user details here</small>       
+        <a href="{urlFor name="create-org"}" class="btn btn-primary pull-right">
+            Create Organisation
+        </a>
     </h1></div>
 {else}
     <div class='page-header'><h1>User Profile <small>View user details here</small></h1></div>
 {/if}
+
+<h1>
+    {if isset($private_access)}
+        <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Edit Details</a>
+    {/if}
+</h1>
 
 <h3>Public display name:</h3>
 <p>{$this_user->getDisplayName()}</p>
@@ -82,11 +88,15 @@
         </div>
 
         {foreach $orgList as $org}
-            {assign var="org_id" value=$org->getId()}
-            {assign var="user_id" value=$this_user->getUserId()}
-            <h3>
-                <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
-                <small>
+            <div class="row">
+                {assign var="org_id" value=$org->getId()}
+                {assign var="user_id" value=$this_user->getUserId()}
+                <div class="span8">
+                    <h3>
+                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
+                    </h3>
+                </div>
+                <div class="span4">
                     <form method="post" class="pull-right" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                         {if isset($private_access)}
                             <input type="hidden" name="org_id" value="{$org_id}" />
@@ -94,12 +104,14 @@
                                 onclick="return confirm('Are you sure you want to leave the organisation?')" />
                         {/if}
                     </form>
-                </small>
-            </h3>
-            <p>{$org->getBiography()}</p>
-            {if $org->getHomePage() != "http://"}
-                <p>Visit their <a href="{$org->getHomePage()}">home page</a>.</p>
-            {/if}
+                </div>
+                <div class="span8">
+                    <p>{$org->getBiography()}</p>
+                    {if $org->getHomePage() != "http://"}
+                        <p>Visit their <a href="{$org->getHomePage()}">home page</a>.</p>
+                    {/if}
+                </div>
+            </div>
         {/foreach}
     {/if}
 {/if}

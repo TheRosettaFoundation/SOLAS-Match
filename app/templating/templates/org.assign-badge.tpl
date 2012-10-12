@@ -9,7 +9,8 @@
 <p>Users are identified by their email address</p>
 
 {assign var="badge_id" value=$badge->getBadgeId()}
-<form method="post" action="{urlFor name="org-assign-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="well">
+badge id: {$badge_id}<br/>
+<form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="well">
     <label for="email">Enter a user's email address here to assign the badge to them</label>
     <input type='text' name='email' id='email' />
 

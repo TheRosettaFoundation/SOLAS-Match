@@ -114,7 +114,7 @@ class OrgRouteHandler
 
         $request = APIClient::API_VERSION."/orgs/$org_id";
         $response = $client->call($request);
-        $org = $client->cast('Organisation', $response[0]);
+        $org = $client->cast('Organisation', $response);
 
         $user_dao = new UserDao();
         $org_dao = new OrganisationDao();
@@ -239,7 +239,7 @@ class OrgRouteHandler
 
         $request = APIClient::API_VERSION."/orgs/$org_id";
         $response = $client->call($request);
-        $org = $client->cast('Organisation', $response[0]);
+        $org = $client->cast('Organisation', $response);
         $org_dao = new OrganisationDao();
   
         //wait for API support      
@@ -300,7 +300,7 @@ class OrgRouteHandler
                     'org_id'        => $org_id,
                     'extra_scripts' =>$extra_scripts
         ));
-        
+
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             

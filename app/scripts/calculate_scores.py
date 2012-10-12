@@ -25,7 +25,19 @@ def LoadConfig():
         for opt in parser.options(section):
             settings[name + "." + string.lower(opt)] = string.strip(parser.get(section, opt)).replace("\"", '').replace("\'", '')
 
-def DBQuery(query):
+def DBCall(proc_name, args = ()):
+    query = "call %s(" % proc_name
+
+    if len(args) > 1:
+        i = 0
+        while i < len(args):
+            query += str(args[i])
+            if i < len(args) - 1:
+                query += ", "
+            i += 1
+    else:
+        query = query + str(args[0])
+    query = query + ")"
     con = None
     try:
         rows = None
@@ -35,7 +47,7 @@ def DBQuery(query):
                passwd = settings['database.password'],
                db = settings['database.database'],
                read_default_group="client")
-    
+
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute(query)
 
@@ -49,85 +61,79 @@ def DBQuery(query):
         sys.exit(1)
 
     finally:
+        if cur:
+            cur.close()
         if con:
             con.close()
 
         return rows
 
-def DBAlterTable(update):
+def DBCallUpdate(proc_name, args = ()):
+    query = "call %s(" % proc_name
+
+    if len(args) > 1:
+        i = 0
+        while i < len(args):
+            query += str(args[i])
+            if i < len(args) - 1:
+                query += ", "
+            i += 1
+    else:
+        query = query + str(args[0])
+    query = query + ")"
     con = None
     try:
-        result = None
+        rows = None
+        #Must specify read_default_group so that it will read my.cnf for the socket
         con = mdb.connect(host = settings['database.server'],
-                user = settings['database.username'],
-                passwd = settings['database.password'],
-                db = settings['database.database'],
-                read_default_group="client")
-        
-        cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute(update)
+               user = settings['database.username'],
+               passwd = settings['database.password'],
+               db = settings['database.database'],
+               read_default_group="client")
 
-    except:
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute(query)
+
+    except mdb.Error, e:
         print "Error %d: %s" % (e.args[0],e.args[1])
         sys.exit(1)
 
     finally:
+        if cur:
+            cur.close()
         if con:
             con.commit()
             con.close()
-    
-        return result
-
-
 
 #
 # this function returns a list of users in the system
 #
 def getUserList():
-    query = "SELECT * FROM user"
-    return DBQuery(query)
+    return DBCall('getUser', ['null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
+
 #
 # This function returns the IDs of all active tasks
 #
 def getActiveTaskList():
-    query = "SELECT * FROM task"
-    return DBQuery(query)
+    return DBCall('getTask', ['null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
 
 #
 # This function returns the task identified by task_id
 #
 def getTaskById(task_id):
-    query = "SELECT * FROM task WHERE id = %d" % int(task_id)
-    return DBQuery(query)
+    return DBCall('getTask', [task_id, 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
 
 #
 # This function returns all the tags related to a specific task
 #
 def getTaskTags(task_id):
-    query = "SELECT tag_id FROM task_tag WHERE task_id = %d" % int(task_id)
-    return DBQuery(query)
+    return DBCall('getTaskTags', [task_id])
 
 #
 # Return tag ids of tags liked by the user
 #
 def getUserTags(user_id):
-    query = "SELECT tag_id FROM user_tag WHERE user_id = %d" % int(user_id)
-    return DBQuery(query)
-
-#
-# Get the language string associated with the given id
-#
-def getLanguage(lang_id):
-    if(lang_id != None):
-        query = "SELECT en_name FROM language WHERE id = %d" % int(lang_id)
-        result = DBQuery(query)
-
-        if(result != None):
-            return result[0]['en_name']
-        else:
-            return result
-    else:
-        return None
+    return DBCall('getUserTags', [int(user_id)])
 
 #
 # Get the time (in seconds) since the task was created
@@ -142,8 +148,7 @@ def getTaskActiveTimeSecs(created_time):
 # Get the current score ofr the user-task pair
 #
 def getScoreForUserTask(user_id, task_id):
-    query = "SELECT score FROM user_task_score WHERE user_id = %d AND task_id = %d" % (int(user_id), int(task_id))
-    result = DBQuery(query)
+    result = DBCall('getUserTaskScore', [user_id, task_id])
 
     if(result != None):
         return result[0]['score']
@@ -154,12 +159,7 @@ def saveNewScore(user_id, task_id, score):
     previousScore = getScoreForUserTask(user_id, task_id)
     if(previousScore != int(score)):
         print "Updating score for user-task " + str(user_id) + "-" + str(task_id)  + " to " + str(score)
-        if(previousScore != None):
-            query = "UPDATE user_task_score SET score=%d WHERE user_id=%d AND task_id=%d" % (int(score), int(user_id), int(task_id))
-        else:
-            query = "INSERT INTO user_task_score (user_id, task_id, score) VALUES (%d, %d, %d)" % (int(user_id), int(task_id), int(score))
-
-        DBAlterTable(query)
+        DBCallUpdate('saveUserTaskScore', [user_id, task_id, score])
 
 #
 # Update the scores
@@ -183,7 +183,7 @@ for user in users:
 
         #Calculate the new score and save it to the DB
         score = 0
-        
+
         #Finding matching tags and increment score
         if(user_tags != None and task_tags != None):
             increment_value = 100
@@ -209,6 +209,7 @@ for user in users:
             task_time /= 60     # convert to hours
             task_time /= 24     # convert to days
             score += math.floor(task_time)
+
 
         #Save the score to the DB if it has changed
         saveNewScore(user['user_id'], task['id'], score)

@@ -184,6 +184,9 @@ class PDOWrapper {
         
         
         
+        
+        
+        
 //	/*
 //	 * Given a SELECT statement in a string, execute it and return the result.
 //	 * Result is a multidimensional array containing the results array[row][fieldname/fieldindex]
@@ -341,7 +344,13 @@ class PDOWrapper {
 		{
 			$str = stripslashes($str);
 		}
-		return mysql_real_escape_string(strip_tags(trim($str)));
+		$special = array("\x00"=>'\x00', "\n"=>'\n', "\r"=>'\r', '\\'=>'\\\\', "'"=>"\'", '"'=>'\"', "\x1a"=>'\x1a');
+                $str=strip_tags(trim($str));
+                foreach ($special as $key=> $val){
+                    str_replace($key, $val, $str);
+                }
+                return $str;
+		//return mysql_real_escape_string(strip_tags(trim($str)));
 	}
 	
 	/*

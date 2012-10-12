@@ -28,23 +28,30 @@ class Orgs {
                $id=$id[0];
            }
            $dao = new OrganisationDao();
-           Dispatcher::sendResponce(null, $dao->getOrg($id, null, null, null), null, $format);
+           $data= $dao->getOrg($id, null, null, null);
+           if(is_array($data))$data=$data[0];
+           Dispatcher::sendResponce(null, $data, null, $format);
         },'getOrg');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/badges(:format)', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/badges(:format)/', function ($id,$format=".json"){
            $dao = new BadgeDao;
            Dispatcher::sendResponce(null, $dao->getOrgBadges($id), null, $format);
         },'getOrgBadges');    
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/members(:format)', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/members(:format)/', function ($id,$format=".json"){
            $dao = new OrganisationDao();
            Dispatcher::sendResponce(null, $dao->getOrgMembers($id), null, $format);
         },'getOrgMembers');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/requests(:format)', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/requests(:format)/', function ($id,$format=".json"){
            $dao = new OrganisationDao();
            Dispatcher::sendResponce(null, $dao->getMembershipRequests($id), null, $format);
         },'getMembershipRequests');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/tasks(:format)/', function ($id,$format=".json"){
+           $dao = new TaskDao();
+           Dispatcher::sendResponce(null, $dao->findTasksByOrg(array("organisation_ids"=>$id)), null, $format);
+        },'getOrgTasks');
         
         
     }

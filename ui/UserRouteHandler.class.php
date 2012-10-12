@@ -1,5 +1,6 @@
 <?php
 
+
 class UserRouteHandler
 {
     public function init()
@@ -45,7 +46,7 @@ class UserRouteHandler
         if($current_user_id == null) {
             $_SESSION['previous_page'] = 'home';
             
-            $url = APIClient::API_VERSION."/tasks/";
+            $url = APIClient::API_VERSION."/tasks";
             $response = $client->call($url, HTTP_Request2::METHOD_GET, 
                                 null, array('limit' => 10));
 
@@ -116,7 +117,7 @@ class UserRouteHandler
         foreach($my_organisations as $org_id) {
             $url = APIClient::API_VERSION."/orgs/$org_id";
             $org_data = $client->call($url);
-            $org = $client->cast('Organisation', $org_data[0]);
+            $org = $client->cast('Organisation', $org_data);
 
 //          Wait for this to be exposed by API
 //            $url = APIClient::API_VERSION."/
@@ -490,17 +491,17 @@ class UserRouteHandler
             foreach ($orgIds as $orgId) {
                 $request = APIClient::API_VERSION."/orgs/$orgId";
                 $response = $client->call($request);
-                $orgList[] = $client->cast('Organisation', $response[0]);
+                $orgList[] = $client->cast('Organisation', $response);
             }
         }
         
+        $badgeIds = $user_dao->getUserBadges($user);
         $badges = array();
-        $request = APIClient::API_VERSION."/users/$user_id/badges";
-        $response = $client->call($request);
-        
-        if($response) {
-            foreach($response as $stdObject) {
-                $badges[] = $client->cast('Badge', $stdObject);
+        $i = 0;
+        if(count($badgeIds) > 0) {
+            foreach($badgeIds as $badge) {
+                $badges[$i] = new Badge($badge);
+                $i++;
             }
         }
             

@@ -14,6 +14,7 @@
 
 file_exists('FormatEnum.php')? require_once 'FormatEnum.php':'api/FormatEnum.php';
 file_exists('HttpMethodEnum.php')? require_once 'HttpMethodEnum.php':'api/HttpMethodEnum.php';
+require_once '../app/lib/JsonToXml.php';
 
 
 
@@ -22,13 +23,17 @@ file_exists('HttpMethodEnum.php')? require_once 'HttpMethodEnum.php':'api/HttpMe
 class APIHelper {
     
     public static function serialiser($body,$format=".json"){
-        $format=  APIHelper::getFormat($format); 
+        $format=  APIHelper::getFormat($format);
+        
         switch ($format){
             case FormatEnum::JSON: {
+                
                 return json_encode($body);
             }
             case FormatEnum::XML: {
-               return wddx_serialize_value($body);
+                $data = json_encode($body);
+                $data =Json_to_xml::convert($data,'fragment');
+                return $data;
             }
             
             case FormatEnum::HTML: {
@@ -54,7 +59,10 @@ class APIHelper {
             }
             case FormatEnum::XML: {
                 try{
-                 return wddx_deserialize($body);
+//                $xslt = new XSLTProcessor();
+//                $xslt->importStylesheet(simplexml_load_file("xmlToJson.xsl"));
+//                $data= $xslt->transformToXml(new SimpleXMLElement()); 
+                 return json_decode(json_encode(simplexml_load_string($body)->xpath("//item")));
                 }catch (Exception $e){
                     //Dispatcher::sendResponce(null, "request format error. please resend in json or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
