@@ -1,7 +1,8 @@
 <?php
 
-require('models/User.class.php');
-require_once ('PDOWrapper.class.php');
+require_once 'models/User.class.php';
+require_once 'PDOWrapper.class.php';
+require_once 'lib/Authentication.class.php';
 
 class UserDao {
 	public function find($params) {

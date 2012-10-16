@@ -1484,7 +1484,7 @@ BEGIN
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
 	
-	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page, sourceCountry, targetCountry from task t where 1 ";-- set update
+	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page, (select code from country where id =t.sourceCountry) as sourceCountry, (select code from country where id =t.targetCountry) as targetCountry from task t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1794,7 +1794,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN 
     MODIFIES SQL DATA
 BEGIN
 set @maxVer =-1;
-if not exists (select 1 from task_file_version tfv where tfv.task_id=tID AND tfv.filename=name and tfv.content_type =content) then
+if not exists (select 1 from task_file_version tfv where tfv.task_id=tID) then
 	INSERT INTO `task_file_version` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
 	VALUES (tID,1+@maxVer,name, content, uID, Now());
 else

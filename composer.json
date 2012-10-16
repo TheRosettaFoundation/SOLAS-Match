@@ -28,7 +28,8 @@
         "lightopenid/lightopenid" : "dev-composer",
         "slim/slim": "1.6.3",
         "slim/extras": "1.0.*",
-        "smarty/smarty": "3.1.*"
+        "smarty/smarty": "3.1.*",
+        "videlalvaro/php-amqplib": "dev-master"
     },
     "autoload": {
         "classmap": ["vendor/slim/extras/Views/SmartyView.php", "vendor/slim/slim/Slim/View.php","vendor/lightopenid/lightopenid/openid.php"]
