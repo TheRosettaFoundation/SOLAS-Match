@@ -17,7 +17,7 @@
         },
         "source": {
            "name": "lightopenid/lightopenid",
-	   "url": "git://gitorious.org/~makasim/lightopenid/makasims-lightopenid.git",
+    	   "url": "http://jit.gitorious.org/~makasim/lightopenid/makasims-lightopenid.git",
            "type": "git",
             "reference": "composer"
         }
