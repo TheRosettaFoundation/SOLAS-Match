@@ -55,7 +55,7 @@
                             <select name="sourceCountry" id="sourceCountry">
                                 {foreach $countries as $country}
                                     <option value="{$country[1]}">{$country[0]}</option>
-                                {/foreach}
+                                {/foreach}                                
                             </select>
                         {/if}
                     </p>
@@ -71,11 +71,23 @@
                                 {foreach $countries as $country}
                                     <option value="{$country[1]}">{$country[0]}</option>
                                 {/foreach}
-                            </select>
+                            </select> 
+                            <!-- <input type="submit" class="btn-small" name="revoke" value="Remove" onclick="return confirm('Are you sure you want to remove this language translation?')" /> -->
+                            <!-- <input type="button" onclick="removeInput()" value="Remove" /> -->
                         {/if}
-                        <div id="text">
-                        </div>
-                        <input type="button" onclick="addInput()" value="Add More Targets"/>
+                        <div id="text0"></div>
+                        <div id="text1"></div>
+                        <div id="text2"></div>
+                        <div id="text3"></div>
+                        <div id="text4"></div>
+                        <div id="text5"></div>
+                        <div id="text6"></div>
+                        <div id="text7"></div>
+                        <div id="text8"></div>
+                        <div id="text9"></div>
+                        <div id="alertinfo" class="alert alert-info" style="display: none;">You have reached the maximum number of target translation fields allowed.</div>                       
+                        <input id="addMoreTargetsBtn" type="button" onclick="addInput()" value="Add More Targets"/>
+                        <input id="removeBottomTargetBtn" type="button" onclick="removeInput()" value="Remove" style="visibility: hidden;"/>
                     </p>
                     <p style="margin-bottom:30px;"></p>
                 {else}

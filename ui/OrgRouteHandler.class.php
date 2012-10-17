@@ -204,7 +204,7 @@ class OrgRouteHandler
 
         $request = APIClient::API_VERSION."/orgs/$org_id";
         $response = $client->call($request);
-        $org = $client->cast('Organisation', $response[0]);
+        $org = $client->cast('Organisation', $response);
         
         if($app->request()->isPost()) {
             $name = $app->request()->post('name');

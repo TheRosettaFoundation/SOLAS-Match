@@ -19,7 +19,7 @@ class TaskRouteHandler
         $app->get('/task/id/:task_id/mark-archived/', array($middleware, 'authUserForOrgTask'),
         array($this, 'archiveTask'))->name('archive-task');
 
-        $app->get('/task/id/:task_id/download-file/', array($middleware, 'authenticateUserForTask'),
+        $app->get('/task/id/:task_id/download-file-user/', array($middleware, 'authenticateUserForTask'),
         array($this, 'downloadTask'))->name('download-task');
 
         $app->get('/task/claim/:task_id', array($middleware, 'authenticateUserForTask'),
@@ -170,7 +170,7 @@ class TaskRouteHandler
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);
-        $task = $client->cast('Task', $response[0]);
+        $task = $client->cast('Task', $response);
     
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
@@ -199,7 +199,7 @@ class TaskRouteHandler
         $task_dao = new TaskDao;
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);
-        $task = $client->cast('Task', $response[0]);
+        $task = $client->cast('Task', $response);
         
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
@@ -220,7 +220,9 @@ class TaskRouteHandler
 
     public function downloadTask($task_id)
     {
+        
         $app = Slim::getInstance();
+        /*
         $client = new APIClient();
         
         $request = APIClient::API_VERSION."/tasks/$task_id";
@@ -237,11 +239,16 @@ class TaskRouteHandler
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }
+        */
         
-        $app->redirect($app->urlFor('download-task-version', array(
-                'task_id' => $task_id,
-                'version' => 0
-        )));
+        if (Middleware::authUserIsLoggedIn()) {            
+        
+        
+            $app->redirect($app->urlFor('download-task-version', array(
+                    'task_id' => $task_id,
+                    'version' => 0
+            )));
+        }
     }
 
     /*
@@ -280,8 +287,8 @@ class TaskRouteHandler
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);
-        $task = $client->call('Task', $response[0]);
-
+        //$task = $client->call('Task', $response);
+        $task = $client->cast('Task', $response);
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
@@ -300,6 +307,8 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
+        
+        $task_dao = new TaskDao();
 
         // get task id
         $task_id = $app->request()->post('task_id');
@@ -588,43 +597,90 @@ class TaskRouteHandler
         $countries= Languages::getCountryList();
         $extra_scripts = "
         <script language='javascript'>
-        fields = 0;
+        
+        var fields = 0;
+        var MAX_FIELDS = 10; 
+        var isRemoveButtonHidden = true;
+        
         function addInput() {
-            if (fields < 10) {
-                document.getElementById('text').innerHTML += '<label for=\"target_' + (fields + 1) + '\">To language</label>';
-                document.getElementById('text').innerHTML += '<select name=\"target_' + (fields + 1) + '\" id=\"target_' + (fields + 1) + '\">';
-                document.getElementById('text').innerHTML += '</select>';
+        
+            if(isRemoveButtonHidden) {
+                document.getElementById('removeBottomTargetBtn').style.visibility = 'visible';
+                isRemoveButtonHidden = false;
+            }
+        
+            if (fields < MAX_FIELDS) {
+                
+                document.getElementById('text' + fields).innerHTML += '<label for=\"target_' + (fields + 1) + '\"><b>To language</b></label>';
+                document.getElementById('text' + fields).innerHTML += '<select name=\"target_' + (fields + 1) + '\" id=\"target_' + (fields + 1) + '\">';
+                document.getElementById('text' + fields).innerHTML += '</select>';  
+                
                 var sel = document.getElementById('target_' + (fields + 1));
                 var options = sel.options;
                 var langs = ".json_encode($language_list).";
+                    
                 for (language in langs) {
                     var option = document.createElement('OPTION');
                     option.appendChild(document.createTextNode(langs[language][0]));
                     option.setAttribute('value', langs[language][0]);//should be 1 but requires changes to php and sql.
                     sel.appendChild(option);
                 }
+                
                 sel.options.selectedIndex=0;
-                document.getElementById('text').innerHTML += '<select name=\"targetCountry_' + (fields + 1) + '\" id=\"targetCountry_' + (fields + 1) + '\">';
-                document.getElementById('text').innerHTML += '</select>';
+                document.getElementById('text' + fields).innerHTML += '<select name=\"targetCountry_' + (fields + 1) + '\" id=\"targetCountry_' + (fields + 1) + '\">';
+                document.getElementById('text' + fields).innerHTML += '</select>';                
+                //document.getElementById('text' + fields).innerHTML += ' <input type=\"button\" onclick=\"removeInput(' + fields + ')\" value=\"Remove\" />';
+                //document.getElementById('text' + fields).innerHTML += fields; //debug
+                document.getElementById('text' + fields).innerHTML += '<p style\=\"margin-bottom:10px;\"></p>';                    
+                
                 sel = document.getElementById('targetCountry_' + (fields + 1));
-                options = sel.options;
+                options = sel.options;                
                 var countries =".json_encode($countries).";
+                    
                 for (country in countries) {
                     var option = document.createElement('OPTION');
                     option.appendChild(document.createTextNode(countries[country][0]));
                     option.setAttribute('value', countries[country][1]);
                     sel.appendChild(option);
                 }
-                sel.options.selectedIndex=0;
-                fields += 1;
-            } else if (fields == 10) {
-                document.getElementById('text').innerHTML += '<br /><div class=\"alert alert-error\">';
-                    document.getElementById('text').innerHTML += 'Only ' + fields + ' upload fields allowed.';
-                document.getElementById('text').innerHTML += '</div>';
-                fields++;
-                document.form.add.disabled=true;
+                
+                sel.options.selectedIndex=0;                
+                fields++;                
             }
-        }
+            
+            if(fields == MAX_FIELDS) {
+            
+                //document.getElementById('alertinfo').innerHTML += '<br /><div class=\"alert alert-info\">';
+                //document.getElementById('text' + fields).innerHTML += 'Only ' + fields + ' upload fields allowed.';
+                //document.getElementById('text' + fields).innerHTML += '</div>';
+                document.getElementById('alertinfo').style.display = 'block';
+                //fields++;
+                //document.form.add.disabled=true; // Causes javascript error 
+                document.getElementById('addMoreTargetsBtn').style.visibility = 'hidden';
+            }
+            
+        } 
+        </script>        
+        <script language='javascript'>        
+            
+                        
+            function removeInput() {  
+            
+                var id = fields-1;
+                document.getElementById('text' + id).innerHTML = '';   
+                
+                if(fields == MAX_FIELDS) {
+                    document.getElementById('addMoreTargetsBtn').style.visibility = 'visible';
+                    document.getElementById('alertinfo').style.display = 'none';
+                }
+                
+                fields--;
+                
+                if(fields == 0) {
+                    document.getElementById('removeBottomTargetBtn').style.visibility = 'hidden';
+                    isRemoveButtonHidden = true;
+                } 
+            }            
         </script>";
         
         $countries= Languages::getCountryList();

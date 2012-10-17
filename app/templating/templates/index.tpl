@@ -39,7 +39,7 @@
 <div class="page-header">
 	<h1>
             Translation tasks <small>Claim a task, translate it, upload it</small>
-            <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">Search For Org</a>
+            <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">Search for Organisations</a>
         </h1>
 </div>
 

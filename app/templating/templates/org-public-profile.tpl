@@ -51,6 +51,7 @@
 
 <h3>
     Organisation Badges
+    <p style="margin-bottom:10px;"></p>
     {if isset($user)}
         {if in_array($user->getUserId(), $org_members)}
             <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-primary'>

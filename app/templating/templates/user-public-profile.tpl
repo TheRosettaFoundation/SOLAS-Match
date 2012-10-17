@@ -37,7 +37,7 @@
     <p>{$this_user->getBiography()}</p>
 {/if}
 
-
+<p style="margin-bottom:50px;"></p>
 {if isset($badges)}
     {if count($badges) > 0}
         <div class='page-header'><h1>Badges<small> A list of badges you have earned</small>
@@ -55,7 +55,8 @@
             </h3>
             <p>{$badge->getDescription()}</p>
         {/foreach}
-        <hr />
+        <!-- <hr /> -->
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
 
@@ -77,13 +78,13 @@
     {/if}
 {/if}
 
-
+<p style="margin-bottom:50px;"></p>
 {if isset($orgList)}
     {if count($orgList) > 0}
         <div class='page-header'>
             <h1>
                 Organisations <small>A list of organisations you belong to</small>
-                <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">Search For Org</a>
+                <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">Search for Organisations</a>
             </h1>
         </div>
 
@@ -113,6 +114,7 @@
                 </div>
             </div>
         {/foreach}
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
 
@@ -127,6 +129,7 @@
         {foreach $activeJobs as $job}
                 {include file="task.summary-link.tpl" task=$job}
         {/foreach}
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
 
@@ -141,6 +144,7 @@
         {foreach $archivedJobs as $job}
             {include file="task.profile-display.tpl" task=$job}
         {/foreach}
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
 
