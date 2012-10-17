@@ -1,19 +1,7 @@
 <?php
 
-require_once(__DIR__ . '/../vendor/videlalvaro/php-amqplib/vendor/symfony/Symfony/Component/ClassLoader/UniversalClassLoader.php');
-
-use Symfony\Component\ClassLoader\UniversalClassLoader;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-
-$location = __DIR__. '/../vendor/videlalvaro/php-amqplib';
-
-$loader = new UniversalClassLoader();
-$loader->registerNamespaces(array(
-    'PhpAmqpLib' => $location
-));
-
-$loader->register();
 
 class MessagingClient
 {
