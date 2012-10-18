@@ -497,11 +497,11 @@ class UserRouteHandler
         
         $badgeIds = $user_dao->getUserBadges($user);
         $badges = array();
-        $i = 0;
         if(count($badgeIds) > 0) {
             foreach($badgeIds as $badge) {
-                $badges[$i] = new Badge($badge);
-                $i++;
+                $request = APIClient::API_VERSION."/badges/".$badge['badge_id'];
+                $response = $client->call($request);
+                $badges[] = $client->cast('Badge', $response);
             }
         }
             
