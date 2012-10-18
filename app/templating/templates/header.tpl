@@ -23,6 +23,14 @@
 		    		{if isset($current_page) && $current_page == 'home'}class="active"{/if}
 		    	>
 		    		<a href="{urlFor name="home"}">Home</a></li>
+
+				{if isset($user)}
+		            {assign var="user_id" value=$user->getUserId()}
+					<li {if isset($current_page) && $current_page == 'active-tasks'}class="active" {/if}>
+						<a href="{urlFor name="active-tasks" options="page_no.1"}">Active Tasks</a>
+					</li> <!--'{urlFor name="active-tasks" options="page_no.1"}' -->
+				{/if}
+
 		    	{if isset($user_is_organisation_member)}
 			    	<li
 			    		{if isset($current_page) && $current_page == 'client-dashboard'}class="active"{/if}

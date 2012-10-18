@@ -157,7 +157,8 @@ class TaskRouteHandler
                         'page_no' => $page_no,
                         'last' => $total_pages,
                         'top' => $top,
-                        'bottom' => $bottom
+                        'bottom' => $bottom,
+                        'current_page' => 'active-tasks'
         ));
         
         $app->render('active-tasks.tpl');

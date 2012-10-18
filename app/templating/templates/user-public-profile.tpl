@@ -41,7 +41,7 @@
 {if isset($badges)}
     {if count($badges) > 0}
         <div class='page-header'><h1>Badges<small> A list of badges you have earned</small>
-        <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>Badge List</a></h1></div>
+        <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>List All Badges</a></h1></div>
 
         {foreach $badges as $badge }
     	    <h3>{$badge->getTitle()}
@@ -64,7 +64,7 @@
     {if count($user_tags) > 0}
         <div class="page-header">
             <h1>Tags<small> A list of tags you have subscribed to.</small>
-            <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">Tag List</a></h1>
+            <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">List All Tags</a></h1>
         </div>
 
         {foreach $user_tags as $tag}
@@ -120,9 +120,9 @@
 
 {if isset($activeJobs)}
     {if count($activeJobs) > 0}
-        <div class='page-header'><h1>Active Jobs <small>A list of jobs you are currently working on</small>
+        <div class='page-header'><h1>Active Tasks <small>A list of tasks you are currently working on</small>
         {if isset($private_access)}
-            <a href='{urlFor name="active-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>Active Tasks</a>
+            <a href='{urlFor name="active-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>List All Active Tasks</a>
         {/if}
         </h1></div>
 
