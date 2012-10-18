@@ -159,8 +159,9 @@ class TaskDao {
 		}
 		else {
 			$this->_update($task);
+            //Only calc scores for tasks with MetaData
+            $this->calculateTaskScore($task->getTaskId());
 		}
-        $this->calculateTaskScore($task->getTaskId());
 	}
 
     /*
