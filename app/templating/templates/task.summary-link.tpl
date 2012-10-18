@@ -4,15 +4,16 @@
         <h2><a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a></h2>
         <p>
         	{if $task->getSourceId()}
-        		From {Languages::languageNameFromId($task->getSourceId())}
+        		From <b>{Languages::languageNameFromId($task->getSourceId())}</b>
         	{/if}
         	{if $task->getTargetId()}
-        		To {Languages::languageNameFromId($task->getTargetId())}
+        		To <b>{Languages::languageNameFromId($task->getTargetId())}</b>
         	{/if}
-
+                 <p>
 		    {foreach from=$task->getTags() item=tag}
 	    		<a href="{urlFor name="tag-details" options="label.$tag"}" class="label"><span class="label">{$tag}</span></a>
      		{/foreach}
+                </p>
     	</p>
 
     {if isset($current_page) AND $current_page == 'user-profile'}
@@ -32,4 +33,6 @@
 			&middot; {$task->getWordcount()|number_format} words
 		{/if}
 	</p>
+        <p style="margin-bottom:20px;"></p>
+        <hr>
 </div>

@@ -13,7 +13,7 @@
 <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
 
 <div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
+   <div class="navbar-inner">
 	    <div class="container">
     	    <a class="brand" href="{urlFor name='home'}">
 				SOLAS Match
