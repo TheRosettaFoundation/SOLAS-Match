@@ -48,6 +48,8 @@ class MessagingClient
             $conn = new AMQPConnection($this->host, $this->port, $this->user, $this->pass);
         } catch(AMQPException $e) {
             echo "ERROR: ".$e->getMessage();
+        } catch(Exception $e) {
+            echo "ERROR: ".$e->getMessage();
         }
 
         if($conn) {
