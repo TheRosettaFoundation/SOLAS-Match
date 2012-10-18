@@ -1794,7 +1794,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN 
     MODIFIES SQL DATA
 BEGIN
 set @maxVer =-1;
-if not exists (select 1 from task_file_version tfv where tfv.task_id=tID AND tfv.filename=name and tfv.content_type =content) then
+if not exists (select 1 from task_file_version tfv where tfv.task_id=tID) then
 	INSERT INTO `task_file_version` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
 	VALUES (tID,1+@maxVer,name, content, uID, Now());
 else

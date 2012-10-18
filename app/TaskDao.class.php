@@ -18,9 +18,11 @@ class TaskDao {
 	 * @author
 	 **/
 	public function create($params) {
-                if(!is_array($params)&&  is_object($params)){
-                    $task   = APIHelper::cast("Task", $params);
-                }else $task = new Task($params);
+        if(!is_array($params)&&  is_object($params)){
+            $task   = APIHelper::cast("Task", $params);
+        } else {
+            $task = new Task($params);
+        }
 		$this->save($task);
 		return $task;
 	}
@@ -211,9 +213,13 @@ class TaskDao {
 
     private function calculateTaskScore($task_id)
     {
-        $exec_path = __DIR__."/scripts/calculate_scores.py $task_id";
-        echo shell_exec($exec_path . "> /dev/null 2>/dev/null &");
-
+        $mMessagingClient = new MessagingClient();
+        if($mMessagingClient->init()) {
+            $message = $mMessagingClient->createMessageFromString($task_id);
+            $mMessagingClient->sendTopicMessage($message, $mMessagingClient->MainExchange, $mMessagingClient->TaskScoreTopic);
+        } else {
+            echo "Failed to Initialize messaging client";
+        }
     }
 
     public function _updateTags($task) {

@@ -126,7 +126,7 @@ class APIHelper {
        else $format=  FormatEnum::JSON;
        return $format;
     }
-    
+
     public static function cast($destination, $sourceObject)
     {
         if (is_string($destination)) {
@@ -149,7 +149,4 @@ class APIHelper {
         }
         return $destination;
     }
-    
 }
-
-?>

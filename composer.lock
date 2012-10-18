@@ -1,12 +1,12 @@
 {
-    "hash": "7eeab9551eb88433d75556fc6e252d64",
+    "hash": "a4f782903aa9e44ca9546c91c19be7ea",
     "packages": [
         {
             "name": "lightopenid/lightopenid",
             "version": "dev-composer",
             "source": {
                 "type": "git",
-                "url": "git://gitorious.org/~makasim/lightopenid/makasims-lightopenid.git",
+                "url": "http://jit.gitorious.org/~makasim/lightopenid/makasims-lightopenid.git",
                 "reference": "c46af663a4b57e22ee9d7472674c967e97887597"
             },
             "require": {
@@ -30,15 +30,21 @@
             "version": "1.0.2",
             "source": {
                 "type": "git",
-                "url": "git://github.com/codeguy/Slim-Extras.git",
+                "url": "https://github.com/codeguy/Slim-Extras",
                 "reference": "1.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/codeguy/Slim-Extras/zipball/1.0.2",
+                "reference": "1.0.2",
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.2.0"
             },
-            "time": "2012-02-23 16:10:48",
+            "time": "2012-02-23 08:10:48",
             "type": "library",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Twig_Extensions_": "Views/Extension/"
@@ -49,13 +55,14 @@
             ],
             "authors": [
                 {
+                    "name": "Andrew Smith",
+                    "email": "a.smith@silentworks.co.uk",
+                    "homepage": "http://www.silentworks.co.uk/"
+                },
+                {
                     "name": "Josh Lockhart",
                     "email": "info@joshlockhart.com",
                     "homepage": "http://www.joshlockhart.com/"
-                },
-                {
-                    "name": "Andrew Smith",
-                    "email": "a.smith@silentworks.co.uk"
                 }
             ],
             "description": "Extras package for Slim Framework",
@@ -82,7 +89,7 @@
             "require": {
                 "php": ">=5.2.0"
             },
-            "time": "2012-06-17 15:58:20",
+            "time": "2012-06-17 09:58:20",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -97,8 +104,7 @@
                 {
                     "name": "Josh Lockhart",
                     "email": "info@joshlockhart.com",
-                    "homepage": "http://www.joshlockhart.com/",
-                    "role": null
+                    "homepage": "http://www.joshlockhart.com/"
                 }
             ],
             "description": "Slim Framework, a micro framework for PHP 5",
@@ -150,6 +156,44 @@
             "keywords": [
                 "templating"
             ]
+        },
+        {
+            "name": "videlalvaro/php-amqplib",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/videlalvaro/php-amqplib.git",
+                "reference": "8a393d2e1c041b31186196cc67a17a880153ecea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/videlalvaro/php-amqplib/zipball/8a393d2e1c041b31186196cc67a17a880153ecea",
+                "reference": "8a393d2e1c041b31186196cc67a17a880153ecea",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "1350048962",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "PhpAmqpLib": ""
+                }
+            },
+            "authors": [
+                {
+                    "name": "Alvaro Videla"
+                }
+            ],
+            "description": "This library is a pure PHP implementation of the AMQP protocol. It's been tested against RabbitMQ.",
+            "homepage": "https://github.com/videlalvaro/php-amqplib/",
+            "keywords": [
+                "queue",
+                "rabbitmq",
+                "message"
+            ]
         }
     ],
     "packages-dev": null,
@@ -158,6 +202,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "lightopenid/lightopenid": 20
+        "lightopenid/lightopenid": 20,
+        "videlalvaro/php-amqplib": 20
     }
 }

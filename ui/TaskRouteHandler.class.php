@@ -30,8 +30,8 @@ class TaskRouteHandler
 
         $app->post('/claim-task', array($this, 'claimTask'))->name('claim-task');
 
-        $app->get('/task/id/:task_id/download-file/v/:version/', array($middleware, 'authUserForOrgTask'),
-        array($this, 'downloadTaskVersion'))->name('download-task-version');
+        $app->get('/task/id/:task_id/download-file/v/:version/', array($middleware, 'authUserIsLoggedIn'), 
+        array($middleware, 'authUserForTaskDownload'), array($this, 'downloadTaskVersion'))->name('download-task-version');
 
         $app->get('/task/id/:task_id/download-preview/', array($middleware, 'authenticateUserForTask'),
         array($this, 'downloadTaskPreview'))->name('download-task-preview');
