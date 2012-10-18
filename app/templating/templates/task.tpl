@@ -1,6 +1,8 @@
 {include file="header.tpl"}
 {assign var="task_id" value=$task->getTaskId()}
 
+{include file="handle-flash-messages.tpl"}
+
 <div class="page-header">
 	<h1>{$task->getTitle()} <small>Translation task</small></h1>
 </div>

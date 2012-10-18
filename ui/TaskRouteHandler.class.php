@@ -886,17 +886,8 @@ class TaskRouteHandler
             Notify::sendEmailNotifications($task, NotificationTypes::Upload);
             $app->redirect($app->urlFor('task-uploaded-edit', array('task_id' => $task_id)));
         } else {
-            $app->view()->setData('task', $task);
-            if ($task_file_info = TaskFile::getTaskFileInfo($task)) {
-                $app->view()->setData('task_file_info', $task_file_info);
-                $app->view()->setData('latest_version', TaskFile::getLatestFileVersion($task));
-            }
-            $app->view()->appendData(array(
-                    'upload_error'                 => $error_message,
-                    'max_file_size'         => Upload::maxFileSizeMB(),
-                    'body_class'            => 'task_page'
-            ));
-            $app->render('task.tpl');
+            $app->flash("error", $error_message);
+            $app->redirect($app->urlFor("task", array("task_id" => $task_id)));
         }
     }
 
