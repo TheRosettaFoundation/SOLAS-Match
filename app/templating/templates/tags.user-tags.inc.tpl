@@ -1,4 +1,4 @@
-{if isset($user_tags) AND is_array($user_tags)}
+{if isset($user_tags) AND is_array($user_tags) AND count($user_tags) > 0}
     <h3><i class="icon-tags"></i>Tags You Have Subscribed To</h3>
     <ul class="nav nav-list unstyled">
         {foreach $user_tags as $tag}
