@@ -133,7 +133,7 @@ class UserRouteHandler
                 $task_id = $post->task_id;
                 $url = APICLient::API_VERSION."/tasks/$task_id";
                 $response = $client->call($url);
-                $task = $client->cast('Task', $response[0]);
+                $task = $client->cast('Task', $response);
 
                 $task_title = '';
                 if($task->getTitle() != '') {
