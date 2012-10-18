@@ -34,10 +34,11 @@
 	</p>
 
     <h3>{$org->getName()} <small>Organisation Information</small>
+    {assign var="ref" value=''}
     {if $task->getReferencePage() != ''}
         {assign var="ref" value=$task->getReferencePage()}
         {assign var="button" value="Page Reference"}
-    {else}
+    {elseif $org->getHomePage() != 'http://'}
         {assign var="ref" value=$org->getHomePage()}
         {assign var="button" value="Org Home Page"}
     {/if}
