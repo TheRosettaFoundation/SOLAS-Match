@@ -64,7 +64,7 @@
     {if count($user_tags) > 0}
         <div class="page-header">
             <h1>Tags<small> A list of tags you have subscribed to.</small>
-            <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">Manage Tags</a></h1>
+            <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">Tag List</a></h1>
         </div>
 
         {foreach $user_tags as $tag}

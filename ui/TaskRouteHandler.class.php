@@ -548,9 +548,12 @@ class TaskRouteHandler
                 $tags .= " $extension";
             }
     
-            $task->setTags(Tags::separateTags($tags));
-            if($post->word_count != '') {
+            $task->setTags(Tags::separateTags($tags));            
+            
+            if(is_numeric($post->word_count)) {
                 $task->setWordCount($post->word_count);
+            } else if($post->word_count != '') {
+                $word_count_err = "Word Count must be numeric";
             } else {
                 $word_count_err = "Word Count cannot be blank";
             }
@@ -628,9 +631,7 @@ class TaskRouteHandler
                 
                 sel.options.selectedIndex=0;
                 document.getElementById('text' + fields).innerHTML += '<select name=\"targetCountry_' + (fields + 1) + '\" id=\"targetCountry_' + (fields + 1) + '\">';
-                document.getElementById('text' + fields).innerHTML += '</select>';                
-                //document.getElementById('text' + fields).innerHTML += ' <input type=\"button\" onclick=\"removeInput(' + fields + ')\" value=\"Remove\" />';
-                //document.getElementById('text' + fields).innerHTML += fields; //debug
+                document.getElementById('text' + fields).innerHTML += '</select>';
                 document.getElementById('text' + fields).innerHTML += '<p style\=\"margin-bottom:10px;\"></p>';                    
                 
                 sel = document.getElementById('targetCountry_' + (fields + 1));
@@ -649,20 +650,12 @@ class TaskRouteHandler
             }
             
             if(fields == MAX_FIELDS) {
-            
-                //document.getElementById('alertinfo').innerHTML += '<br /><div class=\"alert alert-info\">';
-                //document.getElementById('text' + fields).innerHTML += 'Only ' + fields + ' upload fields allowed.';
-                //document.getElementById('text' + fields).innerHTML += '</div>';
                 document.getElementById('alertinfo').style.display = 'block';
-                //fields++;
-                //document.form.add.disabled=true; // Causes javascript error 
-                document.getElementById('addMoreTargetsBtn').style.visibility = 'hidden';
-            }
-            
+                     document.getElementById('addMoreTargetsBtn').style.visibility = 'hidden';
+            }            
         } 
         </script>        
-        <script language='javascript'>        
-            
+        <script language='javascript'> 
                         
             function removeInput() {  
             
