@@ -44,21 +44,10 @@ class UserRouteHandler
         $current_user_id = UserSession::getCurrentUserID();
         
         if($current_user_id == null) {
-            $_SESSION['previous_page'] = 'home';
-            
-            $url = APIClient::API_VERSION."/tasks";
-            $response = $client->call($url, HTTP_Request2::METHOD_GET, 
-                                null, array('limit' => 10));
-
-            $tasks = array();
-            if($response) {
-                foreach($response as $stdObject) {
-                    $tasks[] = $client->cast('Task', $stdObject);
-                }
-            }
+            $tasks = TaskStream::getStream(10);
 
             if($tasks) {
-                $app->view()->setData('tasks', $tasks);
+                $app->view()->appendData(array('tasks' => $tasks));
             }
         } else {
             $url = APIClient::API_VERSION."/users/$current_user_id/top_tasks";
