@@ -137,7 +137,7 @@
     {if count($archivedJobs) > 0}
         <div class='page-header'><h1>Archived Jobs <small>A list of jobs you have worked on in the past</small>
         {if isset($private_access)}
-            <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>Archived Tasks</a>
+            <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>List All Archived Tasks</a>
         {/if}
         </h1></div>
 

@@ -50,16 +50,16 @@
                     {if TaskFile::getLatestFileVersion($task) > 0}
                         <td>
                             <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
-                                Download&nbsp;updated&nbsp;file
+                                <font color="Green">Download&nbsp;updated&nbsp;file</font>
                             </a>
                         </td>
                     {elseif $task_dao->taskIsClaimed($task_id)}
                         <td>
-                            <p>Awaiting Translation</p>
+                            <p><font color=#153E7E>Pending Translation</font></p>
                         </td>
                     {else}
                         <td>
-                            <p>Task not Claimed</p>
+                            <p><font color="Red">Task not Claimed</font></p>
                         </td>
                     {/if}
                     <td>
