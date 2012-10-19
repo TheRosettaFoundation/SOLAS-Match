@@ -1802,8 +1802,6 @@ else
 	select tfv.version_id into @maxVer
 	from task_file_version tfv 
 	where tfv.task_id=tID 
-	AND tfv.filename=name 
-	and tfv.content_type =content 
 	order by tfv.version_id desc
 	limit 1;
 	INSERT INTO `task_file_version` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
