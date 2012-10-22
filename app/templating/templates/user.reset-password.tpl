@@ -9,7 +9,8 @@
 <form class="well" action="{urlFor name="password-reset-request"}" method="post">
     <p>
         To reset your password enter the email address you registered with below.
-        When you  
+        When you click the button below you will receive an email to that email
+        address with a link to a page where you can reset your password. 
     </p>
     <label for="email">
         <h2>
