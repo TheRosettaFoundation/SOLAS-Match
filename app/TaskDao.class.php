@@ -214,12 +214,20 @@ class TaskDao {
 
     private function calculateTaskScore($task_id)
     {
-        $mMessagingClient = new MessagingClient();
-        if($mMessagingClient->init()) {
-            $message = $mMessagingClient->createMessageFromString($task_id);
-            $mMessagingClient->sendTopicMessage($message, $mMessagingClient->MainExchange, $mMessagingClient->TaskScoreTopic);
+        $settings = new Settings();
+        $use_backend = $settings->get('site.backend');
+        if(strcasecmp($use_backend, "y") == 0) {
+            $mMessagingClient = new MessagingClient();
+            if($mMessagingClient->init()) {
+                $message = $mMessagingClient->createMessageFromString($task_id);
+                $mMessagingClient->sendTopicMessage($message, $mMessagingClient->MainExchange, $mMessagingClient->TaskScoreTopic);
+            } else {
+                echo "Failed to Initialize messaging client";
+            }
         } else {
-            echo "Failed to Initialize messaging client";
+            //use the python script
+            $exec_path = __DIR__."/scripts/calculate_scores.py $task_id";
+            echo shell_exec($exec_path . "> /dev/null 2>/dev/null &");
         }
     }
 
