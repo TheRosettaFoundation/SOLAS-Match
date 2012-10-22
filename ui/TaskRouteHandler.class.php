@@ -740,6 +740,7 @@ class TaskRouteHandler
             }
             
             $task_dao->save($task);
+            $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
         }
          
         $languages = Languages::getLanguageList();
