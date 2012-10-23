@@ -696,7 +696,7 @@ class TaskRouteHandler
     public function taskAlter($task_id)
     {
         $app = Slim::getInstance();
-
+        $word_count_err = null;
         $task_dao = new TaskDao();
         $task = $task_dao->find(array('task_id' => $task_id));
         $app->view()->setData('task', $task);
@@ -736,12 +736,18 @@ class TaskRouteHandler
                 $task->setTags(Tags::separateTags($post->tags));
             }
             
-            if($post->word_count != '') {
+
+            if(is_numeric($post->word_count)) {
                 $task->setWordCount($post->word_count);
+                    $task_dao->save($task);
+                    $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+            } else if($post->word_count != '') {
+                $word_count_err = "Word Count must be numeric";
+            } else {
+                $word_count_err = "Word Count cannot be blank";
             }
             
-            $task_dao->save($task);
-            $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+
         }
          
         $languages = Languages::getLanguageList();
@@ -756,9 +762,10 @@ class TaskRouteHandler
         }
         
         $app->view()->appendData(array(
-                              'languages'     => $languages,
-                              'countries'     => $countries,
-                              'tag_list'      => $tag_list
+                              'languages'       => $languages,
+                              'countries'       => $countries,
+                              'tag_list'        => $tag_list,
+                              'word_count_err'  => $word_count_err,
         ));
         
         $app->render('task.alter.tpl');
