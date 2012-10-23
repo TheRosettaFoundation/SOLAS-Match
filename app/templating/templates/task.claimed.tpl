@@ -1,19 +1,21 @@
 {include file="header.tpl"}
 {assign var=task_id value=$task->getTaskId()}
 
-<div class="page-header">
-	<h1>Task claimed <small>Please translate it!</small></h1>
-</div>
+<section>
+    <div class="page-header">
+            <h1>Task claimed <small>Please translate it!</small></h1>
+    </div>
 
-<div class="alert alert-success">
-	<strong>Success</strong> You have claimed the task &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
-</div>
+    <div class="alert alert-success">
+            <strong>Success</strong> You have claimed the task &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
+    </div>
+</section>
 
 <section>
 	<h1>What now? <small>We need your translation</small></h1>
 
 	<p>This this what you need to do (as soon as possible):</p>
-
+        
 	<ol>
 		<li><strong>Open the file</strong> that you have already saved to your computer.</li>
 		{if $task->getTargetId()}
@@ -23,13 +25,13 @@
 	</ol>
 
     {if isset($user)}
-        <p>We have also emailed you these instructions to {$user->getEmail()}.</p>
+        <p>We have also emailed you these instructions to <b>{$user->getEmail()}</b>.</p>
     {/if}
 </section>
 
 <section>
 	<h3>When you have finished translating the file you downloaded:</h3>
-
+        <p></p>
 	<p><a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">Visit the task page to upload my translation</a> <a href="{urlFor name="home"}" class="btn">Go back home</a> </p>
     
 

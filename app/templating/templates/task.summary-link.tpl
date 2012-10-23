@@ -33,6 +33,5 @@
 			&middot; {$task->getWordcount()|number_format} words
 		{/if}
 	</p>
-        <p style="margin-bottom:20px;"></p>
-        <hr>
+        <p style="margin-bottom:40px;"></p>        
 </div>

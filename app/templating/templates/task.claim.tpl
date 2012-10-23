@@ -11,6 +11,7 @@
 	<h1>Do you want to translate this file? <small>After downloading</small></h1>
 	<hr>
 	<h3>Review this checklist for your downloaded file <small>Will you be able to translate this file?</small></h3>
+        <p style="margin-bottom:20px;"></p>
 	<ol>
 		<li>Can you <strong>open the file</strong> on your computer?</li>
 		<li><strong>Will you have enough time to translate</strong> this file? Check how long the file is.</li>
