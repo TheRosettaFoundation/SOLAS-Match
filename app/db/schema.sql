@@ -49,7 +49,7 @@ BEGIN
             ALTER TABLE `archived_task`
             ADD UNIQUE INDEX `task_id` (`task_id`);
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='user_id') then
+        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='archived_task'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME="user_id") then
             ALTER TABLE `archived_task`
             add column`user_id` INT(10) UNSIGNED DEFAULT NULL;
         end if;
