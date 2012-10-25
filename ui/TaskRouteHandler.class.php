@@ -427,10 +427,10 @@ class TaskRouteHandler
         }
         
         $task_file_info = TaskFile::getTaskFileInfo($task, 0);
-        $file_path = Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
-        $searchStart = strlen($file_path) - strrpos($file_path, $task_file_info['filename']);
-        $appPos = strrpos($file_path, "app", $searchStart);
-        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').substr($file_path, $appPos);
+        $file_path = dirname(Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']));
+        $appPos = strrpos($file_path, "app");
+        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
+                substr($file_path, $appPos).'/'.$task_file_info['filename'];
         $app->view()->appendData(array(
             'file_preview_path' => $file_path,
             'file_name' => $task_file_info['filename']
@@ -509,48 +509,12 @@ class TaskRouteHandler
         if (isValidPost($app)) {
             $post = (object)$app->request()->post();
 
-            if (!empty($post->source)) {
-                $source_id = Languages::saveLanguage($post->source);
-                $task->setSourceId($source_id);
-            }
-
             if($post->title != '') {
                 $task->setTitle($post->title);
             } else {
                 $title_err = "Title cannot be empty";
             }
 
-            if($post->impact != '') {
-                $task->setImpact($post->impact);
-            }
-
-            if($post->reference != '' && $post->reference != "http://") {
-                $task->setReferencePage($post->reference);
-            }
-        
-            if(isset($post->sourceCountry)&&$post->sourceCountry != '') {
-                $task->setSourceCountryCode($post->sourceCountry);
-            }
-
-            if(isset($post->targetCountry)&&$post->targetCountry != '') {
-                $task->setTargetCountryCode($post->targetCountry);
-            }
-
-            $tags = $post->tags;
-            if(is_null($tags)) {
-                $tags = '';
-            }
-
-            $task_file_info = TaskFile::getTaskFileInfo($task);
-            $filename = $task_file_info['filename'];
-            if($pos = strrpos($filename, '.')) {
-                $extension = substr($filename, $pos + 1);
-                $extension = strtolower($extension);
-                $tags .= " $extension";
-            }
-    
-            $task->setTags(Tags::separateTags($tags));            
-            
             if(is_numeric($post->word_count)) {
                 $task->setWordCount($post->word_count);
             } else if($post->word_count != '') {
@@ -558,42 +522,79 @@ class TaskRouteHandler
             } else {
                 $word_count_err = "Word Count cannot be blank";
             }
-    
-            $language_list = array();
-            $country_list = array();
-            $target_count = 0;
-            $target_val = $app->request()->post("target_$target_count");
-            $targetCountry_val = $app->request()->post("targetCountry_$target_count");
-            while(isset($target_val)&&isset($targetCountry_val)) {
-                $temp=null;
-                if(!in_array(($temp=array("lang"=>$target_val,"country"=>$targetCountry_val)), $language_list)) {
-                    $language_list[] = $temp;
+
+            if(is_null($word_count_err) && is_null($title_err))
+            {
+                if (!empty($post->source)) {
+                    $source_id = Languages::saveLanguage($post->source);
+                    $task->setSourceId($source_id);
                 }
-                $target_count += 1;
+
+                if($post->impact != '') {
+                    $task->setImpact($post->impact);
+                }
+
+                if($post->reference != '' && $post->reference != "http://") {
+                    $task->setReferencePage($post->reference);
+                }
+        
+                if(isset($post->sourceCountry)&&$post->sourceCountry != '') {
+                    $task->setSourceCountryCode($post->sourceCountry);
+                }
+
+                if(isset($post->targetCountry)&&$post->targetCountry != '') {
+                    $task->setTargetCountryCode($post->targetCountry);
+                }
+
+                $tags = $post->tags;
+                if(is_null($tags)) {
+                    $tags = '';
+                }
+
+                $task_file_info = TaskFile::getTaskFileInfo($task);
+                $filename = $task_file_info['filename'];
+                if($pos = strrpos($filename, '.')) {
+                    $extension = substr($filename, $pos + 1);
+                    $extension = strtolower($extension);
+                    $tags .= " $extension";
+                }
+    
+                $task->setTags(Tags::separateTags($tags));            
+                
+                $language_list = array();
+                $country_list = array();
+                $target_count = 0;
                 $target_val = $app->request()->post("target_$target_count");
                 $targetCountry_val = $app->request()->post("targetCountry_$target_count");
-            }
-    
-            if(count($language_list) > 1) {
-                foreach($language_list as $language) {
-                    if($language == $language_list[0]) {   //if it is the first language add it to this task
-                        $target_id = Languages::saveLanguage($language_list[0]['lang']);
-                        $task->setTargetId($target_id);
-                        $task->setTargetCountryCode($language['country']);
-                        $task_dao->save($task);
-                    } else {
-                        $language_id = Languages::saveLanguage($language['lang']);
-                        $task_dao->duplicateTaskForTarget($task, $language_id,$language['country']);
+                while(isset($target_val)&&isset($targetCountry_val)) {
+                    $temp=null;
+                    if(!in_array(($temp=array("lang"=>$target_val,"country"=>$targetCountry_val)), $language_list)) {
+                        $language_list[] = $temp;
                     }
+                    $target_count += 1;
+                    $target_val = $app->request()->post("target_$target_count");
+                    $targetCountry_val = $app->request()->post("targetCountry_$target_count");
                 }
-            } else {
-                $target_id = Languages::saveLanguage($language_list[0]['lang']);
-                $task->setTargetId($target_id);
-                $task->setTargetCountryCode($language_list[0]['country']);
-                $task_dao->save($task);
-            }
     
-            if (is_null($error) && is_null($title_err) && is_null($word_count_err)) {
+                if(count($language_list) > 1) {
+                    foreach($language_list as $language) {
+                        if($language == $language_list[0]) {   //if it is the first language add it to this task
+                            $target_id = Languages::saveLanguage($language_list[0]['lang']);
+                            $task->setTargetId($target_id);
+                            $task->setTargetCountryCode($language['country']);
+                            $task_dao->save($task);
+                        } else {
+                            $language_id = Languages::saveLanguage($language['lang']);
+                            $task_dao->duplicateTaskForTarget($task, $language_id,$language['country']);
+                        }
+                    }
+                } else {
+                    $target_id = Languages::saveLanguage($language_list[0]['lang']);
+                    $task->setTargetId($target_id);
+                    $task->setTargetCountryCode($language_list[0]['country']);
+                    $task_dao->save($task);
+                }
+    
                 $app->redirect($app->urlFor('task-uploaded', array('task_id' => $task_id)));
             }
         }
@@ -695,7 +696,7 @@ class TaskRouteHandler
     public function taskAlter($task_id)
     {
         $app = Slim::getInstance();
-
+        $word_count_err = null;
         $task_dao = new TaskDao();
         $task = $task_dao->find(array('task_id' => $task_id));
         $app->view()->setData('task', $task);
@@ -735,11 +736,18 @@ class TaskRouteHandler
                 $task->setTags(Tags::separateTags($post->tags));
             }
             
-            if($post->word_count != '') {
+
+            if(is_numeric($post->word_count)) {
                 $task->setWordCount($post->word_count);
+                    $task_dao->save($task);
+                    $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+            } else if($post->word_count != '') {
+                $word_count_err = "Word Count must be numeric";
+            } else {
+                $word_count_err = "Word Count cannot be blank";
             }
             
-            $task_dao->save($task);
+
         }
          
         $languages = Languages::getLanguageList();
@@ -754,9 +762,10 @@ class TaskRouteHandler
         }
         
         $app->view()->appendData(array(
-                              'languages'     => $languages,
-                              'countries'     => $countries,
-                              'tag_list'      => $tag_list
+                              'languages'       => $languages,
+                              'countries'       => $countries,
+                              'tag_list'        => $tag_list,
+                              'word_count_err'  => $word_count_err,
         ));
         
         $app->render('task.alter.tpl');

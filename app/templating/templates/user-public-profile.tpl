@@ -55,7 +55,6 @@
             </h3>
             <p>{$badge->getDescription()}</p>
         {/foreach}
-        <!-- <hr /> -->
         <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
@@ -75,10 +74,10 @@
                 </a>
             </p>
         {/foreach}
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
 
-<p style="margin-bottom:50px;"></p>
 {if isset($orgList)}
     {if count($orgList) > 0}
         <div class='page-header'>
@@ -107,12 +106,24 @@
                     </form>
                 </div>
                 <div class="span8">
-                    <p>{$org->getBiography()}</p>
+                    <p>
+                        {if $org->getBiography() == ''}
+                            This organisation does not have a biography listed.
+                        {else}                            
+                            {$org->getBiography()}
+                        {/if}
+                    </p>
+                     
+                    <p>
                     {if $org->getHomePage() != "http://"}
-                        <p>Visit their <a href="{$org->getHomePage()}">home page</a>.</p>
+                        Visit their <a href="{$org->getHomePage()}">home page</a>.
+                    {else}
+                        This organisation does not have a web site listed.
                     {/if}
+                    </p>
                 </div>
             </div>
+            <p style="margin-bottom:20px;"></p>
         {/foreach}
         <p style="margin-bottom:50px;"></p>
     {/if}

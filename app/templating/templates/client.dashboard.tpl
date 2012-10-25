@@ -26,6 +26,7 @@
         <thead>
             <tr>
                 <th>
+                    <p style="margin-bottom:40px;"></p>
                     <a href="{urlFor name="org-public-profile" options="org_id.$org"}">
                         <i class="icon-briefcase"></i> {$orgs[$org]->getName()}
                     </a>
@@ -77,6 +78,10 @@
                     </td>
                 </tr>
             {/foreach}
+        {else}
+            <td>
+                <p>This organisation has no tasks listed.</p>
+            </td>
         {/if}
         </tbody>
     {/foreach}
@@ -85,8 +90,6 @@
     <div class="alert alert-warning">
     <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new     task for that content.
     </div>
-       
-    <a class="btn btn-primary" href="{urlFor name="task-upload"}"><i class="icon-upload icon-white"></i> Add new task</a>
 {/if}
-
+<p style="margin-bottom:60px;"></p>
 {include file="footer.tpl"}

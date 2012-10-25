@@ -16,6 +16,7 @@ require_once '../app/TaskTags.class.php';
 require_once '../app/IO.class.php';
 require_once '../app/TaskFile.class.php';
 require_once '../app/lib/Upload.class.php';
+require_once '../app/TaskStream.class.php';
 class Tasks {
   public static function init(){
         $dispatcher=Dispatcher::getDispatcher();
@@ -33,6 +34,12 @@ class Tasks {
             Dispatcher::sendResponce(null, $dao->create($data), null, $format);
         },'createTasks');
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/top_tasks(:format)/', function ($format=".json"){
+            $limit=null;
+            if(isset ($_GET['limit'])&& is_numeric($_GET['limit'])) $limit= $_GET['limit'];
+           Dispatcher::sendResponce(null, TaskStream::getStream($limit), null, $format);
+        },'getTopTasks');
+        
          Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/', function ($id,$format=".json"){
            if(!is_numeric($id)&& strstr($id, '.')){
                $id= explode('.', $id);
@@ -41,7 +48,7 @@ class Tasks {
            }
            $dao = new TaskDao();
            $data= $dao->getTask(array("task_id"=>$id));
-           if(is_array($data))$data=$data[0];
+           if($data&&is_array($data))$data=$data[0];
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getTask');
         

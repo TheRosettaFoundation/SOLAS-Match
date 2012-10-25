@@ -18,6 +18,9 @@ class UserRouteHandler
 
         $app->get('/:uid/password/reset', array($this, 'passwordReset')
         )->via('POST')->name('password-reset');
+
+        $app->get('/password/reset', array($this, 'passResetRequest')
+        )->via('POST')->name('password-reset-request');
         
         $app->get('/logout', array($this, 'logout'))->name('logout');
         
@@ -270,6 +273,41 @@ class UserRouteHandler
         $app->view()->setData('uid', $uid);
         $app->render('password-reset.tpl');
     }
+
+    public function passResetRequest()
+    {
+        $app = Slim::getInstance();
+
+        $user_dao = new UserDao();
+
+        if($app->request()->isPost()) {
+            $post = (object)$app->request()->post();
+            if(isset($post->password_reset)) {
+                if(isset($post->email_address) && $post->email_address != '')       //wait for API support
+                {
+                    if($user = $user_dao->find(array('email' => $post->email_address))) {
+                        if(!$user_dao->hasRequestedPasswordReset($user)) {          //wait for API support
+                            $uid = md5(uniqid(rand()));
+                            $user_dao->addPasswordResetRequest($uid, $user->getUserId());   //wait for API support
+                            Notify::sendPasswordResetEmail($uid, $user);
+                            $app->flash('success', "Password reset request sent. Check your email
+                                                    for further instructions.");
+                            $app->redirect($app->urlFor('home'));
+                        } else {
+                            $app->flashNow('info', "Password reset request has already been sent.
+                                                     Follow the link in the email that was sent to
+                                                     you to reset your password");
+                        }
+                    } else {
+                        $app->flashNow("error", "Please enter a valid email address");
+                    }
+                } else {
+                    $app->flashNow("error", "Please enter a valid email address");
+                }
+            }
+        }
+        $app->render('user.reset-password.tpl');
+    }
     
     public function logout()
     {
@@ -309,31 +347,7 @@ class UserRouteHandler
                     $user_dao->login($post->email, $post->password);        //wait for API support
                     $app->redirect($app->urlFor("home"));
                 } elseif(isset($post->password_reset)) {
-
-                    if(isset($post->email) && $post->email != '') {
-                        if($user = $user_dao->find(array('email' => $post->email))) {   //wait for API support
-
-                            if(!$user_dao->hasRequestedPasswordReset($user)) {      //wait for API support
-                            
-                                $uid = md5(uniqid(rand()));
-                                $user_dao->addPasswordResetRequest($uid, $user->getUserId());   //wait for API support
-                                Notify::sendPasswordResetEmail($uid, $user);
-                                $app->flash('success', "Password reset request sent. Check your email
-                                                        for further instructions.");
-                                $app->redirect($app->urlFor('home'));
-                            } else {
-                                $app->flashNow('info', "Password reset request has already been sent.
-                                                Follow the link in the email that was sent to 
-                                                you to reset your password");
-                            }
-                        } else {
-                            //Couldn't find a user for that email address
-                            $app->flashNow('error', "Please enter a valid email address");
-                        }
-                    } else {
-                        //No email address given
-                        $app->flashNow('error', "Please enter a valid email address");
-                    }
+                    $app->redirect($app->urlFor('password-reset-request'));
                 }
             } elseif($app->request()->isPost()||$openid->mode){
                 $user_dao->OpenIDLogin($openid,$app);       //wait for API support
