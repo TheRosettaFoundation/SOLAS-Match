@@ -120,26 +120,30 @@ class TaskDao {
             $args .= isset ($params['targetCountry'])?",{$db->cleanseNullOrWrapStr($params['targetCountry'])}":",null";
             
             $tasks = array();
-            foreach($db->call("getTask", $args) as $row){
-                $task_data = array();
-                        foreach($row as $col_name => $col_value) {
-                            if ($col_name == 'id') {
-                                    $task_data['task_id'] = $col_value;
+            $result =$db->call("getTask", $args);
+            if($result){
+                foreach($result as $row){
+                    $task_data = array();
+                            foreach($row as $col_name => $col_value) {
+                                if ($col_name == 'id') {
+                                        $task_data['task_id'] = $col_value;
+                                    }
+                                else if (!is_numeric($col_name) && !is_null($col_value)) {
+                                        $task_data[$col_name] = $col_value;
                                 }
-                            else if (!is_numeric($col_name) && !is_null($col_value)) {
-                                    $task_data[$col_name] = $col_value;
                             }
-                        }
 
-                        if ($tags = TaskTags::getTags($row['id'])) {
-                            $task_data['tags'] = $tags;
-                        }
+                            if ($tags = TaskTags::getTags($row['id'])) {
+                                $task_data['tags'] = $tags;
+                            }
 
-                        $task = new Task($task_data);
-                        if (is_object($task)) {
-                            $tasks[] = $task;
-                        }
+                            $task = new Task($task_data);
+                            if (is_object($task)) {
+                                $tasks[] = $task;
+                            }
+                }
             }
+            if(sizeof($tasks)==0)$tasks=null;
             return $tasks;
         }
 
