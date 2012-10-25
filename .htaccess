@@ -3,8 +3,8 @@ php_flag display_errors on
 #DirectoryIndex index.php
 
 RewriteEngine On
-#XSendFile On
-#XSendFileAllowAbove on
+XSendFile on
+
 
 # RewriteBase /~demomatc/ # <- option required on server with temp URL
 
