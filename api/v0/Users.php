@@ -97,6 +97,15 @@ class Users {
         },'getUserTopTasks');
         
         
+         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/archived_tasks(:format)/', function ($id,$format=".json"){
+            $limit=5;
+            if(isset ($_GET['limit'])&& is_numeric($_GET['limit'])) $limit= $_GET['limit'];
+            $dao = new TaskDao();
+            $data=$dao->getUserArchivedTasksByID($id,$limit);
+            Dispatcher::sendResponce(null, $data , null, $format);
+        },'getUserArchivedTasks');
+        
+        
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/', function ($id,$format=".json"){
             if(!is_numeric($id)&& strstr($id, '.')){
                 $id= explode('.', $id);
