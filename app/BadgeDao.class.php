@@ -68,22 +68,5 @@ class BadgeDao
         $db = new PDOWrapper();
         $db->init();      
         $result = $db->call("deleteBadge", "{$db->cleanseNull($badgeID)}");
-    }
-    
-    /**
-     * Save badge object to database (either insert of update)
-     **/
-    public function save(&$task)
-    {
-            if (is_null($task->getTaskId())) {
-                    $this->_insert($task);
-            }
-            else {
-                    $this->_update($task);
-        //Only calc scores for tasks with MetaData
-        $this->calculateTaskScore($task->getTaskId());
-            }
     }    
-    
-    
 }
