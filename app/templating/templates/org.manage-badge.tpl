@@ -52,7 +52,7 @@
                     <div class="span4">
                         <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="">
                             <input type="hidden" name="user_id" value="{$user->getUserId()}" />
-                            <input type="submit" class="btn pull-right" value="Remove" onClick="return confirmPost()" />
+                            <input type="submit" class="btn btn-inverse pull-right" value="Remove" onClick="return confirmPost()" />
                         </form>
                     </div>
                 </li>

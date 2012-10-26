@@ -77,7 +77,7 @@
         <div class="alert alert-error">
             {$word_count_err}
         </div>
-    {/if}
+    {/if} 
     
     <label for="word_count">Word Count</label>
     <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}">

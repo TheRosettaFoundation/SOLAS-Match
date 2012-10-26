@@ -35,8 +35,10 @@
 			&middot; {$wordcount|number_format} words
 		{/if}
 	</p>
-        <p style="margin-bottom:40px;"></p>
+        <p style="margin-bottom:20px;"></p>
+        <hr>
     <h3>{$org->getName()} <small>Organisation Information</small>
+    <p style="margin-bottom:20px;"></p>
     {assign var="ref" value=''}
     {if $task->getReferencePage() != ''}
         {assign var="ref" value=$task->getReferencePage()}

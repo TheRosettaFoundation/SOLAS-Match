@@ -37,16 +37,19 @@
 {if $org->getName() != ''}
     <h3>Organisation Name</h3>
     <p>{$org->getName()}</p>
+    <p style="margin-bottom:20px;"></p>
 {/if}
 
 {if $org->getHomePage() != ''}
     <h3>Home Page</h3>
     <p><a href='{$org->getHomePage()}'>{$org->getHomePage()}</a></p>
+    <p style="margin-bottom:20px;"></p>
 {/if}
 
 {if $org->getBiography() != ''}
     <h3>Biography</h3>
     <p>{$org->getBiography()}</p>
+    <p style="margin-bottom:20px;"></p>
 {/if}
 
 <h3>
@@ -58,7 +61,7 @@
                 Create Badge
             </a>
         {/if} 
-        <p style="margin-bottom:10px;"></p>
+        <p style="margin-bottom:20px;"></p>
     {/if}
 </h3>
 {if $org_badges != NULL && count($org_badges) > 0}
@@ -67,13 +70,28 @@
             {if isset($user)}
                 {if in_array($user->getUserId(), $org_members)}
                     {assign var="badge_id" value=$badge->getBadgeId()}
-                    <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="btn">
-                        Assign
+                    {assign var="org_id" value=$org->getId()}
+                    
+                     <form method="post" class="pull-right" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                        {* {if isset($private_access)} *}
+                            <input type="hidden" name="badge_id" value="{$badge_id}" />
+                            <input type="submit" class='pull-right btn btn-inverse' name="deleteBadge" value="Delete"
+                              onclick="return confirm('Are you sure you want to delete this badge?')" />
+                        {* {/if} *}
+                    </form>    
+                    
+                    <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='pull-right btn'>
+                        Edit
                     </a>
+                    <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='pull-right btn'>
+                        Assign
+                    </a> 
                 {/if}
             {/if}
-            {$badge->getTitle()}: {$badge->getDescription()}
+            <p><b>Name:</b> {$badge->getTitle()}</p>
+            <p><b>Description:</b> {$badge->getDescription()}</p>
         </p>
+        <hr>
     {/foreach}
     <br />
 {else}
@@ -86,6 +104,7 @@
             {/if}
         {/if}
     </p>
+    <p style="margin-bottom:20px;"></p>
 {/if}
 
 {if isset($user)}

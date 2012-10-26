@@ -457,7 +457,7 @@ class UserRouteHandler
             if(isset($post->revoke)) {
                 $org_id = $post->org_id;
                 OrganisationDao::revokeMembership($org_id, $user_id);   //wait for API support
-            }
+            } 
         }
                     
         $task_dao = new TaskDao();

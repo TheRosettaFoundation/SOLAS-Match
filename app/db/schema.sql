@@ -49,9 +49,9 @@ BEGIN
             ALTER TABLE `archived_task`
             ADD UNIQUE INDEX `task_id` (`task_id`);
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='user_id') then
-            ALTER TABLE `archived_task`
-            add column`user_id` INT(10) UNSIGNED DEFAULT NULL;
+	if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='archived_task'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='user_id') then
+		ALTER TABLE `archived_task`
+		    add column`user_id` INT(10) UNSIGNED DEFAULT NULL;
         end if;
         ALTER TABLE `archived_task` 
 	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
@@ -2327,6 +2327,31 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTask`(IN `id` INT)
 BEGIN
 delete from task where task.id=id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.deleteBadge
+DROP PROCEDURE IF EXISTS `deleteBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteBadge`(IN `id` INT)
+BEGIN
+delete from badges where badge_id = id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.badgeInsertAndUpdate
+DROP PROCEDURE IF EXISTS `badgeInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `badgeInsertAndUpdate`(IN `badgeID` INT, IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` MEDIUMTEXT)
+BEGIN
+if not exists (select 1 from badges b where b.badge_id = badgeID) then
+	insert into badges (owner_id,title,description) values (ownerID,name,disc);
+	select 1 as result;
+else
+	update badges bg set bg.title = name, bg.description = disc
+	where bg.badge_id = badgeID;
+	select 1 as result;
+end if;
 END//
 DELIMITER ;
 

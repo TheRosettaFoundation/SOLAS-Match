@@ -7,6 +7,7 @@
     {foreach $badgeList as $badgeEntry}
         <h3>{$badgeEntry->getTitle()}</h3>
         <p>{$badgeEntry->getDescription()}</p>
+        <p style="margin-bottom:20px;"></p>
     {/foreach}
 {/if}
 

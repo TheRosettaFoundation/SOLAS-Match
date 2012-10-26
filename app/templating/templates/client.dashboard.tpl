@@ -67,14 +67,14 @@
                         <form method="post" action="{urlFor name="client-dashboard"}">
                             <input type="hidden" name="task_id" value="{$task_id}" />
                             {if $user_dao->isSubscribedToTask($user->getUserId(), $task_id)}
-                                <input class="btn" type="submit" name="track" value="Ignore" />
+                                <input class="btn btn-primary" type="submit" name="track" value="Ignore" />
                             {else}
                                 <input class="btn" type="submit" name="track" value="Track" />
                             {/if}
                         </form>
                     </td>
                     <td>
-                        <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-small">Archive</a>
+                        <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-inverse">Archive</a>
                     </td>
                 </tr>
             {/foreach}

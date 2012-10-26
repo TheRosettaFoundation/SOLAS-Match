@@ -427,10 +427,10 @@ class TaskRouteHandler
         }
         
         $task_file_info = TaskFile::getTaskFileInfo($task, 0);
-        $file_path = Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
-        $searchStart = strlen($file_path) - strrpos($file_path, $task_file_info['filename']);
-        $appPos = strrpos($file_path, "app", $searchStart);
-        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').substr($file_path, $appPos);
+        $file_path = dirname(Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']));
+        $appPos = strrpos($file_path, "app");
+        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
+                substr($file_path, $appPos).'/'.$task_file_info['filename'];
         $app->view()->appendData(array(
             'file_preview_path' => $file_path,
             'file_name' => $task_file_info['filename']
@@ -495,11 +495,11 @@ class TaskRouteHandler
     {
     	$app = Slim::getInstance();
 	
-    	$error       = null;
-    	$title_err   = null;
-	    $word_count_err = null;
-    	$task_dao    = new TaskDao();
-    	$task        = $task_dao->find(array('task_id' => $task_id));
+    	$error          = null;
+    	$title_err      = null;
+	$word_count_err = null;
+    	$task_dao       = new TaskDao();
+    	$task           = $task_dao->find(array('task_id' => $task_id));
     
 
     	if (!is_object($task)) {
@@ -515,14 +515,12 @@ class TaskRouteHandler
                 $title_err = "Title cannot be empty";
             }
 
-            if(is_numeric($post->word_count)) {
+            if(ctype_digit($post->word_count)) {
                 $task->setWordCount($post->word_count);
-            } else if($post->word_count != '') {
-                $word_count_err = "Word Count must be numeric";
-            } else {
-                $word_count_err = "Word Count cannot be blank";
+            } else if($post->word_count == '') {
+                $task->setWordCount($post->word_count);
             }
-
+            
             if(is_null($word_count_err) && is_null($title_err))
             {
                 if (!empty($post->source)) {
@@ -737,7 +735,7 @@ class TaskRouteHandler
             }
             
 
-            if(is_numeric($post->word_count)) {
+            if(ctype_digit($post->word_count)) {
                 $task->setWordCount($post->word_count);
                     $task_dao->save($task);
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));

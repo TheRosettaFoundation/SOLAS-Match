@@ -14,11 +14,11 @@ class BadgeDao
         return new Badge($result[0]);
     }
 
-    public function addBadge($badge)
+    public function insertAndUpdateBadge($badge)
     {
         $db = new PDOWrapper();
-        $db->init();
-        $result=$db->call("addBadge", "{$db->cleanseWrapStr($badge->getOwnerId())},{$db->cleanseWrapStr($badge->getTitle())},{$db->cleanseWrapStr($badge->getDescription())}");
+        $db->init();        
+        $result=$db->call("badgeInsertAndUpdate", "{$db->cleanseWrapStr($badge->getBadgeId())},{$db->cleanseWrapStr($badge->getOwnerId())},{$db->cleanseWrapStr($badge->getTitle())},{$db->cleanseWrapStr($badge->getDescription())}");
         return $result[0]['result'];
     }
 
@@ -62,4 +62,28 @@ class BadgeDao
            echo "<p>Cannot remove system badges</p>";
         }
     }
+    
+    public function deleteBadge($badgeID)
+    {
+        $db = new PDOWrapper();
+        $db->init();      
+        $result = $db->call("deleteBadge", "{$db->cleanseNull($badgeID)}");
+    }
+    
+    /**
+     * Save badge object to database (either insert of update)
+     **/
+    public function save(&$task)
+    {
+            if (is_null($task->getTaskId())) {
+                    $this->_insert($task);
+            }
+            else {
+                    $this->_update($task);
+        //Only calc scores for tasks with MetaData
+        $this->calculateTaskScore($task->getTaskId());
+            }
+    }    
+    
+    
 }
