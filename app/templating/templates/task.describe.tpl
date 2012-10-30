@@ -26,11 +26,11 @@
                 </label>
                 <p class="desc">You may replace the file name with something more descriptive.</p>
                 
-				<textarea wrap="hard" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>				
+				<textarea wrap="soft" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>				
                                 <p style="margin-bottom:30px;"></p>
                 <label for="impact"><h2>Task Impact</h2></label>
                 <p>Who and what will be affected by the translation of this task</p>
-                <textarea wrap="hard" cols="1" rows="2" name="impact">{$task->getImpact()}</textarea>
+                <textarea wrap="soft" cols="1" rows="2" name="impact">{$task->getImpact()}</textarea>
 
                 <p style="margin-bottom:30px;"></p>
                 <label for="reference"><h2>Context Reference</h2></label>
@@ -40,7 +40,7 @@
                 {else}
                     {assign var="url_text" value="http://"}
                 {/if}
-                <textarea wrap="hard" cols="1" rows="2" name="reference">{$url_text}</textarea>
+                <textarea wrap="soft" cols="1" rows="2" name="reference">{$url_text}</textarea>
 
                 <p style="margin-bottom:30px;"></p>
                 {if isset($languages)}
