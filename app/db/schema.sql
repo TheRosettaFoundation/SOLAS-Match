@@ -1753,7 +1753,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
 BEGIN
-set @q = Concat("   SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
+set @q = Concat("   SELECT t.label AS label,t.tag_id as tag_id, COUNT( tt.tag_id ) AS frequency
                     FROM task_tag AS tt 
                     join tag AS t on tt.tag_id = t.tag_id
                     join task as tsk on tsk.id=tt.task_id
@@ -1767,7 +1767,6 @@ set @q = Concat("   SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
         PREPARE stmt FROM @q;
         EXECUTE stmt;
         DEALLOCATE PREPARE stmt;
-
 END//
 DELIMITER ;
 

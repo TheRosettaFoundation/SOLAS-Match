@@ -40,7 +40,7 @@ class UserRouteHandler
         $client = new APIClient();
 
         $app->view()->appendData(array(
-            'top_tags' => TagsDao::getTopTags(30), //Change to API call when Limit and Offset are implemented
+            'top_tags' => TagsDao::getTopTags(30), //TODO use getTopTags api funchtion /v0/tags/topTags  optional limit=x
             'current_page' => 'home'
         ));
 

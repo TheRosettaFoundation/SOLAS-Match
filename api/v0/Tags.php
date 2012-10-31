@@ -29,6 +29,13 @@ class Tags {
             }
         },'getTags');
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/topTags(:format)/', function ($format=".json"){
+           $limit = 30;
+           if(isset ($_GET['limit'])&& is_numeric($_GET['limit'])) $limit= $_GET['limit'];
+           $data= TagsDao::getTopTags($limit);
+           Dispatcher::sendResponce(null, $data, null, $format);
+        },'getTopTags');
+        
          Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:id/', function ($id,$format=".json"){
            if(!is_numeric($id)&& strstr($id, '.')){
                $id= explode('.', $id);
@@ -47,6 +54,10 @@ class Tags {
             $dao = new TaskDao();
            Dispatcher::sendResponce(null,$dao->getTasksWithTag($id, $limit) , null, $format);
         },'getTaskForTag');
+        
+        
+         
+        
 
     }
     
