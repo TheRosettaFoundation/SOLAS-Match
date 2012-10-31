@@ -96,11 +96,11 @@
 <p style="margin-bottom:40px;"></p>
 {if isset($this_user_has_claimed_this_task)}
     <div class="page-header">
-        <h1>Misplaced the File?<small>Can't find it on your system?</h1>
+        <h1>Misplaced the original file? <small>Can't find it on your system?</h1>
     </div>
     <p>Click 
-        <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">here</a>
-        to re-download the file.
+        <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>
+        to re-download the original task file.
     </p>    
     
     <p style="margin-bottom:40px;"></p>
