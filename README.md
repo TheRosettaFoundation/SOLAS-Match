@@ -41,9 +41,9 @@ Contact:
 
 Coded by:
 
-  Eoin Ó Conchúir <eoin.oconchuir@ul.ie>
-  David O Carroll <david.ocarroll@ul.ie>
-
+  Eoin Ó Conchúir   <eoin.oconchuir@ul.ie>
+  David O Carroll   <david.ocarroll@ul.ie>
+  Sean Mooney       <Sean.Mooney@ul.ie>
 
 # Installation
 
@@ -58,6 +58,12 @@ Further below in this document, there are also several resources for our work mo
    
  * Enable X-Sendfile
    sudo apt-get install libapache2-mod-xsendfile
+    add path to upload directoy to vhost or httpd.conf eg 
+    <Directory /var/www/>
+		AllowOverride All
+		XSendFilePath /path/to/SOLAS-Match/app/uploads/
+    </Directory>
+
 
 ## Alternitive Configure Lighttpd
  * Ensure that url rewritting is enabled.

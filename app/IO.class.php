@@ -108,15 +108,11 @@ class IO {
 			$fsize = filesize($absoluteFilePath);
 			$path_parts = pathinfo($absoluteFilePath);
 			$ext = strtolower($path_parts["extension"]); 
-                        header("X-Sendfile: $absoluteFilePath");
-			header('Content-type: '.$contentType);
+                        header('Content-type: '.$contentType);
 			header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
 			header("Content-length: $fsize");
 			header("Cache-control: private"); //use this to open files directly
-//			while(!feof($fd)) {
-//				$buffer = fread($fd, 2048);
-//				echo $buffer;
-//			}
+                        header("X-Sendfile: $absoluteFilePath");
 			die; // TODO -> this die is to get around Slim's $app->reponse() header/body response. Is there a cleaner way to download files?
 		}
 		fclose ($fd);

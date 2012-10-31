@@ -11,7 +11,7 @@ class Badge
     const REGISTERED = 4;
     const NATIVE_LANGUAGE = 5;
 
-    public function __construct($params) {
+    public function __construct($params = array()) {
         if(isset($params['badge_id'])) {
             $this->setBadgeId($params['badge_id']);
         }

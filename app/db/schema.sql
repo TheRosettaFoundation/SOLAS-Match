@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `archived_task` (
 	`target_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
 	`created_time` DATETIME NOT NULL,
 	`archived_time` DATETIME NOT NULL,
+        `user_id` INT(10) UNSIGNED DEFAULT NULL,
 	PRIMARY KEY (`archived_task_id`),
 	UNIQUE INDEX `task_id` (`task_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -47,6 +48,10 @@ BEGIN
         if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='task_id') then
             ALTER TABLE `archived_task`
             ADD UNIQUE INDEX `task_id` (`task_id`);
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='user_id') then
+            ALTER TABLE `archived_task`
+            add column`user_id` INT(10) UNSIGNED DEFAULT NULL;
         end if;
         ALTER TABLE `archived_task` 
 	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
@@ -1794,7 +1799,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN 
     MODIFIES SQL DATA
 BEGIN
 set @maxVer =-1;
-if not exists (select 1 from task_file_version tfv where tfv.task_id=tID AND tfv.filename=name and tfv.content_type =content) then
+if not exists (select 1 from task_file_version tfv where tfv.task_id=tID) then
 	INSERT INTO `task_file_version` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
 	VALUES (tID,1+@maxVer,name, content, uID, Now());
 else
@@ -1802,8 +1807,6 @@ else
 	select tfv.version_id into @maxVer
 	from task_file_version tfv 
 	where tfv.task_id=tID 
-	AND tfv.filename=name 
-	and tfv.content_type =content 
 	order by tfv.version_id desc
 	limit 1;
 	INSERT INTO `task_file_version` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
@@ -1819,9 +1822,12 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT)
     MODIFIES SQL DATA
 BEGIN
-	INSERT INTO `archived_task`(task_id, organisation_id, title, word_count, source_id, target_id, created_time, archived_time)
-		SELECT id, organisation_id, title, word_count, source_id, target_id, created_time, NOW()
-		FROM task   WHERE id =tID;
+	INSERT INTO `archived_task`(task_id, organisation_id, title, word_count, source_id, target_id, created_time, archived_time, user_id)
+		
+		SELECT id, organisation_id, title, word_count, source_id, target_id, created_time, NOW(), tc.user_id
+		FROM task tt
+		LEFT JOIN task_claim tc ON tc.task_id = tt.id
+		WHERE id =tID;
    
    DELETE FROM task WHERE id = tID ;
    DELETE FROM user_task_score WHERE task_id = tID;
@@ -1925,7 +1931,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
 
-set @q=Concat("SELECT * FROM archived_task as a JOIN task_claim as c ON a.task_id = c.task_id
+set @q=Concat("SELECT * FROM archived_task as a 
                 WHERE user_id = ?
                 ORDER BY created_time DESC
                 limit ", lim);

@@ -4,14 +4,14 @@
 	<h2>{$task->getTitle()}</h2>
 	<p>
 		{if $task->getSourceId()}
-			From {Languages::languageNameFromId($task->getSourceId())}
+			From <b>{Languages::languageNameFromId($task->getSourceId())}</b>
 		{/if}
 		{if $task->getTargetId()}
-			To {Languages::languageNameFromId($task->getTargetId())}
-		{/if}
+			To <b>{Languages::languageNameFromId($task->getTargetId())}</b>
+		{/if}                
 
 		{foreach from=$task->getTags() item=tag}
-			<span class="label">{$tag}</span>
+			<span class="label">{$tag}</span>                        
 		{/foreach}
 	</p>
 	
@@ -21,5 +21,6 @@
 		{if $task->getWordcount()}
 			&middot; {$task->getWordcount()|number_format} words
 		{/if}
+                <p style="margin-bottom:30px;"></p>
 	</p>
 </div>

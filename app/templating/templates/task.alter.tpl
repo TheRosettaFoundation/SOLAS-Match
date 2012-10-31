@@ -2,7 +2,7 @@
 
 {assign var="task_id" value=$task->getTaskId()}
 <h1 class="page-header">
-    Task {$task->getTaskId()}
+    Task {$task->getTitle()}
     <small>Alter task details here</small>
     <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
         View Details
@@ -10,6 +10,7 @@
 </h1>
 
 <h3>Edit Task Details</h3>
+<p style="margin-bottom:20px;"></p>
 <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well">
     <label for="title">Title</label>
     <textarea wrap="hard" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
@@ -72,6 +73,12 @@
     <label for="tags">Tags</label>
     <input type="text" name="tags" id="tags" value="{$tag_list}">
 
+    {if !is_null($word_count_err)}
+        <div class="alert alert-error">
+            {$word_count_err}
+        </div>
+    {/if}
+    
     <label for="word_count">Word Count</label>
     <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}">
 

@@ -9,14 +9,20 @@
         {else}
             User Profile
         {/if}
-        <small>View user details here</small>
-        {if isset($private_access)}
-            <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Edit Details</a>
-        {/if}
+        <small>View user details here</small>       
+        <a href="{urlFor name="create-org"}" class="btn btn-primary pull-right">
+            Create Organisation
+        </a>
     </h1></div>
 {else}
     <div class='page-header'><h1>User Profile <small>View user details here</small></h1></div>
 {/if}
+
+<h1>
+    {if isset($private_access)}
+        <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Edit Details</a>
+    {/if}
+</h1>
 
 <h3>Public display name:</h3>
 <p>{$this_user->getDisplayName()}</p>
@@ -31,11 +37,11 @@
     <p>{$this_user->getBiography()}</p>
 {/if}
 
-
+<p style="margin-bottom:50px;"></p>
 {if isset($badges)}
     {if count($badges) > 0}
         <div class='page-header'><h1>Badges<small> A list of badges you have earned</small>
-        <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>Badge List</a></h1></div>
+        <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>List All Badges</a></h1></div>
 
         {foreach $badges as $badge }
     	    <h3>{$badge->getTitle()}
@@ -49,7 +55,7 @@
             </h3>
             <p>{$badge->getDescription()}</p>
         {/foreach}
-        <hr />
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
 
@@ -57,7 +63,7 @@
     {if count($user_tags) > 0}
         <div class="page-header">
             <h1>Tags<small> A list of tags you have subscribed to.</small>
-            <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">Manage Tags</a></h1>
+            <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">List All Tags</a></h1>
         </div>
 
         {foreach $user_tags as $tag}
@@ -68,16 +74,16 @@
                 </a>
             </p>
         {/foreach}
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
-
 
 {if isset($orgList)}
     {if count($orgList) > 0}
         <div class='page-header'>
             <h1>
                 Organisations <small>A list of organisations you belong to</small>
-                <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">Search For Org</a>
+                <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">Search for Organisations</a>
             </h1>
         </div>
 
@@ -100,27 +106,41 @@
                     </form>
                 </div>
                 <div class="span8">
-                    <p>{$org->getBiography()}</p>
+                    <p>
+                        {if $org->getBiography() == ''}
+                            This organisation does not have a biography listed.
+                        {else}                            
+                            {$org->getBiography()}
+                        {/if}
+                    </p>
+                     
+                    <p>
                     {if $org->getHomePage() != "http://"}
-                        <p>Visit their <a href="{$org->getHomePage()}">home page</a>.</p>
+                        Visit their <a href="{$org->getHomePage()}">home page</a>.
+                    {else}
+                        This organisation does not have a web site listed.
                     {/if}
+                    </p>
                 </div>
             </div>
+            <p style="margin-bottom:20px;"></p>
         {/foreach}
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
 
 {if isset($activeJobs)}
     {if count($activeJobs) > 0}
-        <div class='page-header'><h1>Active Jobs <small>A list of jobs you are currently working on</small>
+        <div class='page-header'><h1>Active Tasks <small>A list of tasks you are currently working on</small>
         {if isset($private_access)}
-            <a href='{urlFor name="active-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>Active Tasks</a>
+            <a href='{urlFor name="active-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>List All Active Tasks</a>
         {/if}
         </h1></div>
 
         {foreach $activeJobs as $job}
                 {include file="task.summary-link.tpl" task=$job}
         {/foreach}
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
 
@@ -128,13 +148,14 @@
     {if count($archivedJobs) > 0}
         <div class='page-header'><h1>Archived Jobs <small>A list of jobs you have worked on in the past</small>
         {if isset($private_access)}
-            <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>Archived Tasks</a>
+            <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>List All Archived Tasks</a>
         {/if}
         </h1></div>
 
         {foreach $archivedJobs as $job}
             {include file="task.profile-display.tpl" task=$job}
         {/foreach}
+        <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
 

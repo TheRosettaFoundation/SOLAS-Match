@@ -11,12 +11,13 @@
 <h1>What now? <small>Wait for translators</small></h1>
 
 <p>Here's what will now happen:</p>
-
+<p style="margin-bottom:20px;"></p>
 <ol>
-	<li>Volunteer translators will see the new job listed</li>
+	<li>Volunteer translators will see the new task listed</li>
 	<li>If a volunteer translator is interested, they will download your job and upload it</li>
-	<li>This may take several days or weeks, depending on the job</li>
+	<li>This may take several days or weeks, depending on the task</li>
 </ol>
+<p style="margin-bottom:20px;"></p>
 
 <p><a href="{urlFor name="home"}" class="btn btn-primary">Back to Home</a> <a href="{urlFor name="task-upload" options="org_id.$org_id"}" class="btn">Add a new task</a> </p>
 

@@ -1,16 +1,18 @@
 {include file="header.tpl"}
 {assign var="task_id" value=$task->getTaskId()}
 
+{include file="handle-flash-messages.tpl"}
+
 <div class="page-header">
-	<h1>{$task->getTitle()} <small>Translation task</small></h1>
+	<h1>{$task->getTitle()} <small>Translation task details</small></h1>
 </div>
 
 	<p>
 		{if $task->getSourceId()}
-			From {Languages::languageNameFromId($task->getSourceId())}
+			From <b>{Languages::languageNameFromId($task->getSourceId())}</b>
 		{/if}
 		{if $task->getTargetId()}
-			To {Languages::languageNameFromId($task->getTargetId())}
+			To <b>{Languages::languageNameFromId($task->getTargetId())}</b>
 		{/if}
         <div class="tag">
 		{foreach from=$task->getTags() item=tag}
@@ -24,6 +26,7 @@
 
 		&middot;
         {assign var="org_id" value=$task->getOrganisationId()}
+        
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
             {OrganisationDao::nameFromId($task->getOrganisationId())}
         </a>
@@ -32,14 +35,15 @@
 			&middot; {$wordcount|number_format} words
 		{/if}
 	</p>
-
+        <p style="margin-bottom:40px;"></p>
     <h3>{$org->getName()} <small>Organisation Information</small>
+    {assign var="ref" value=''}
     {if $task->getReferencePage() != ''}
         {assign var="ref" value=$task->getReferencePage()}
         {assign var="button" value="Page Reference"}
-    {else}
+    {elseif $org->getHomePage() != 'http://'}
         {assign var="ref" value=$org->getHomePage()}
-        {assign var="button" value="Org Home Page"}
+        {assign var="button" value="Organisation Home Page"}
     {/if}
     {if $ref != ''}
         <a target="_blank" class="btn pull-right" href="{$ref}">{$button}</a>
@@ -87,7 +91,7 @@
      <center><h2>Document Preview <small>{$file_name}</small></h2></center>
     <iframe src="http://docs.google.com/viewer?url={urlencode($file_preview_path)}&embedded=true" width="800" height="780" style="border: none;"></iframe>
 {/if}
-
+<p style="margin-bottom:40px;"></p>
 {if isset($this_user_has_claimed_this_task)}
     <div class="page-header">
         <h1>Misplaced the File?<small>Can't find it on your system?</h1>
@@ -95,7 +99,10 @@
     <p>Click 
         <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">here</a>
         to re-download the file.
-    </p>
+    </p>    
+    
+    <p style="margin-bottom:40px;"></p>
+    
 	<div class="page-header">
 		<h1>Finished translating? <small>{$task_file_info.filename}</small></h1>
 	</div>

@@ -33,7 +33,11 @@ require_once 'app/lib/Email.class.php';
 require_once 'app/lib/Notify.class.php';
 require_once 'app/lib/NotificationTypes.class.php';
 
+require_once 'HTTP/Request2.php';
+
+require_once 'ui/APIClient.class.php';
 require_once 'app/Middleware.class.php';
+require_once 'app/MessagingClient.class.php';
 
 require_once 'ui/UserRouteHandler.class.php';
 require_once 'ui/OrgRouteHandler.class.php';

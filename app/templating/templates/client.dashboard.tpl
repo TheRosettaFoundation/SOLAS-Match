@@ -3,11 +3,10 @@
 <div class="page-header">
 	<h1>
         Dashboard <small>Overview of your tasks for translation</small>
-        <a href="{urlFor name="create-org"}" class="btn btn-primary pull-right">
-            Create Organisation
-        </a>
+
     </h1>
 </div>
+
 
 {if isset($flash['success'])}
     <p class="alert alert-success">
@@ -27,6 +26,7 @@
         <thead>
             <tr>
                 <th>
+                    <p style="margin-bottom:40px;"></p>
                     <a href="{urlFor name="org-public-profile" options="org_id.$org"}">
                         <i class="icon-briefcase"></i> {$orgs[$org]->getName()}
                     </a>
@@ -51,16 +51,16 @@
                     {if TaskFile::getLatestFileVersion($task) > 0}
                         <td>
                             <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
-                                Download&nbsp;updated&nbsp;file
+                                <font color="Green">Download&nbsp;updated&nbsp;file</font>
                             </a>
                         </td>
                     {elseif $task_dao->taskIsClaimed($task_id)}
                         <td>
-                            <p>Awaiting Translation</p>
+                            <p><font color=#153E7E>Pending Translation</font></p>
                         </td>
                     {else}
                         <td>
-                            <p>Task not Claimed</p>
+                            <p><font color="Red">Task not Claimed</font></p>
                         </td>
                     {/if}
                     <td>
@@ -78,6 +78,10 @@
                     </td>
                 </tr>
             {/foreach}
+        {else}
+            <td>
+                <p>This organisation has no tasks listed.</p>
+            </td>
         {/if}
         </tbody>
     {/foreach}
@@ -86,8 +90,6 @@
     <div class="alert alert-warning">
     <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new     task for that content.
     </div>
-       
-    <a class="btn btn-primary" href="{urlFor name="task-upload"}"><i class="icon-upload icon-white"></i> Add new task</a>
 {/if}
-
+<p style="margin-bottom:60px;"></p>
 {include file="footer.tpl"}

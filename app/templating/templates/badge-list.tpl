@@ -5,8 +5,8 @@
 
 {if isset($badgeList)}
     {foreach $badgeList as $badgeEntry}
-        <h3>{$badgeEntry['title']}</h3>
-        <p>{$badgeEntry['description']}</p>
+        <h3>{$badgeEntry->getTitle()}</h3>
+        <p>{$badgeEntry->getDescription()}</p>
     {/foreach}
 {/if}
 

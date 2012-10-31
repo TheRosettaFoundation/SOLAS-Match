@@ -102,4 +102,31 @@ class Middleware
         $app->flash('error', "You are not authorised to view this page. Only members of ".$org_name." may view this page.");
         $app->redirect($app->urlFor('home'));
     }
+
+    public static function authUserForTaskDownload($request, $response, $route)
+    {
+        $params = $route->getParams();
+        if($params != NULL) {
+            $task_id = $params['task_id'];
+            $task_dao = new TaskDao();
+            $task = $task_dao->find(array('task_id' => $task_id));
+
+            $user_dao = new UserDao();
+            $user = $user_dao->getCurrentUser();
+            $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+            
+            //If the task has not been claimed yet then anyone can download it
+            if(!$task_dao->taskIsClaimed($task_id)) {
+                return true;
+            } elseif($task_dao->hasUserClaimedTask($user->getUserId(), $task_id)) {
+                return true;
+            } elseif(!is_null($user_orgs) && in_array($task->getOrganisationId(), $user_orgs)) {
+                return true;
+            }
+        }
+
+        $app = Slim::getInstance();
+        $app->flash('error', "You are not authorised to download this task");
+        $app->redirect($app->urlFor('home'));
+    }
 }

@@ -19,7 +19,7 @@ class TaskRouteHandler
         $app->get('/task/id/:task_id/mark-archived/', array($middleware, 'authUserForOrgTask'),
         array($this, 'archiveTask'))->name('archive-task');
 
-        $app->get('/task/id/:task_id/download-file/', array($middleware, 'authenticateUserForTask'),
+        $app->get('/task/id/:task_id/download-file-user/', array($middleware, 'authenticateUserForTask'),
         array($this, 'downloadTask'))->name('download-task');
 
         $app->get('/task/claim/:task_id', array($middleware, 'authenticateUserForTask'),
@@ -30,8 +30,8 @@ class TaskRouteHandler
 
         $app->post('/claim-task', array($this, 'claimTask'))->name('claim-task');
 
-        $app->get('/task/id/:task_id/download-file/v/:version/', array($middleware, 'authUserForOrgTask'),
-        array($this, 'downloadTaskVersion'))->name('download-task-version');
+        $app->get('/task/id/:task_id/download-file/v/:version/', array($middleware, 'authUserIsLoggedIn'), 
+        array($middleware, 'authUserForTaskDownload'), array($this, 'downloadTaskVersion'))->name('download-task-version');
 
         $app->get('/task/id/:task_id/download-preview/', array($middleware, 'authenticateUserForTask'),
         array($this, 'downloadTaskPreview'))->name('download-task-preview');
@@ -68,12 +68,13 @@ class TaskRouteHandler
         $user_dao = new UserDao();
         $task_dao = new TaskDao();
         
-        $user = $user_dao->getCurrentUser();
+        $user_id = UserSession::getCurrentUserID();
+        $user = $user_dao->getCurrentUser();    //can be removed when switched to API
         if (!is_object($user)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
-        $archived_tasks = $task_dao->getUserArchivedTasks($user);
+        $archived_tasks = $task_dao->getUserArchivedTasks($user);   //wait for API support
         
         $tasks_per_page = 10;
         $total_pages = ceil(count($archived_tasks) / $tasks_per_page);
@@ -112,16 +113,20 @@ class TaskRouteHandler
     public function activeTasks($page_no)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
-        $task_dao = new TaskDao();
-        $user_dao = new UserDao();
-        
-        $user = $user_dao->getCurrentUser();
-        if (!is_object($user)) {
+        $user_id = UserSession::getCurrentUserID();
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
-        }   
-        $activeTasks = $task_dao->getUserTasks($user);
+        }
+
+        $activeTasks = array();
+        $request = APIClient::API_VERSION."/users/$user_id/tasks";
+        $response = $client->call($request);
+        foreach($response as $stdObject) {
+            $activeTasks[] = $client->cast('Task', $stdObject);
+        }
         
         $tasks_per_page = 10;
         $total_pages = ceil(count($activeTasks) / $tasks_per_page);
@@ -152,7 +157,8 @@ class TaskRouteHandler
                         'page_no' => $page_no,
                         'last' => $total_pages,
                         'top' => $top,
-                        'bottom' => $bottom
+                        'bottom' => $bottom,
+                        'current_page' => 'active-tasks'
         ));
         
         $app->render('active-tasks.tpl');
@@ -161,23 +167,25 @@ class TaskRouteHandler
     public function downloadTaskLatestVersion($task_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
+
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response);
     
-        $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $task_id));
-        
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
-        }   
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+        }
+
+        $user_id = UserSession::getCurrentUserID();
         
-        if (!is_object($current_user)) {
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
         
-        $latest_version = TaskFile::getLatestFileVersion($task);
+        $latest_version = TaskFile::getLatestFileVersion($task);    //wait for API support
         $app->redirect($app->urlFor('download-task-version', array(
                 'task_id' => $task_id,
                 'version' => $latest_version
@@ -187,51 +195,61 @@ class TaskRouteHandler
     public function archiveTask($task_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
         $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response);
         
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
         }   
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+        $user_id = UserSession::getCurrentUserID();
         
-        if (!is_object($current_user)) {
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
         
         Notify::sendEmailNotifications($task, NotificationTypes::Archive);
-        $task_dao->moveToArchive($task);
+        $task_dao->moveToArchive($task);        //wait for API support
         
         $app->redirect($ref = $app->request()->getReferrer());
     }
 
     public function downloadTask($task_id)
     {
-        $app = Slim::getInstance();
         
-        $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $app = Slim::getInstance();
+        /*
+        $client = new APIClient();
+        
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response);
         
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
         }
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+        $user_id = UserSession::getCurrentUserID();
         
-        if (!is_object($current_user)) {
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }
+        */
         
-        $app->redirect($app->urlFor('download-task-version', array(
-                'task_id' => $task_id,
-                'version' => 0
-        )));
+        if (Middleware::authUserIsLoggedIn()) {            
+        
+        
+            $app->redirect($app->urlFor('download-task-version', array(
+                    'task_id' => $task_id,
+                    'version' => 0
+            )));
+        }
     }
 
     /*
@@ -240,17 +258,19 @@ class TaskRouteHandler
     public function taskClaim($task_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
-        $task_dao = new TaskDao();
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response);
+
         if(!is_object($task)) {
             header ('HTTP/1.0 404 Not Found');
             die;
         }
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+        $user_id = UserSession::getCurrentUserID();
         
-        if (!is_object($current_user)) {
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }
@@ -262,18 +282,21 @@ class TaskRouteHandler
     public function taskClaimed($task_id)
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
         
         $task_dao = new TaskDao();
 
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        //$task = $client->call('Task', $response);
+        $task = $client->cast('Task', $response);
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
         }   
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
-        
-        if (!is_object($current_user)) {
+        $user_id = UserSession::getCurrentUserID();
+
+        if (is_null($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
@@ -284,26 +307,36 @@ class TaskRouteHandler
     public function claimTask()
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
+        
+        $task_dao = new TaskDao();
 
         // get task id
         $task_id = $app->request()->post('task_id');
-        
-        $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $task_id));
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);
+        $task = $client->cast('Task', $response);
         
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
             die;
         }   
-        
-        $user_dao           = new UserDao();
-        $current_user       = $user_dao->getCurrentUser();
+       
+        $user_id = UserSession::getCurrentUserID();
+        $request = APIClient::API_VERSION."/users/$user_id";
+        $response = $client->call($request);
+        $current_user = $client->cast('User', $response); 
         
         if (!is_object($current_user)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
         
+        //Untested
+        /*$request = APIClient::API_VERSION."/users/$user_id/tasks";
+        $post_data = $task;
+        $response = $client->call($request, HTTP_Request2::METHOD_POST, $post_data);*/
+
         $task_dao->claimTask($task, $current_user);
         Notify::notifyUserClaimedTask($current_user, $task);
         Notify::sendEmailNotifications($task, NotificationTypes::Claim);
@@ -394,10 +427,10 @@ class TaskRouteHandler
         }
         
         $task_file_info = TaskFile::getTaskFileInfo($task, 0);
-        $file_path = Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
-        $searchStart = strlen($file_path) - strrpos($file_path, $task_file_info['filename']);
-        $appPos = strrpos($file_path, "app", $searchStart);
-        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').substr($file_path, $appPos);
+        $file_path = dirname(Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']));
+        $appPos = strrpos($file_path, "app");
+        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
+                substr($file_path, $appPos).'/'.$task_file_info['filename'];
         $app->view()->appendData(array(
             'file_preview_path' => $file_path,
             'file_name' => $task_file_info['filename']
@@ -476,88 +509,92 @@ class TaskRouteHandler
         if (isValidPost($app)) {
             $post = (object)$app->request()->post();
 
-            if (!empty($post->source)) {
-                $source_id = Languages::saveLanguage($post->source);
-                $task->setSourceId($source_id);
-            }
-
             if($post->title != '') {
                 $task->setTitle($post->title);
             } else {
                 $title_err = "Title cannot be empty";
             }
 
-            if($post->impact != '') {
-                $task->setImpact($post->impact);
-            }
-
-            if($post->reference != '' && $post->reference != "http://") {
-                $task->setReferencePage($post->reference);
-            }
-        
-            if(isset($post->sourceCountry)&&$post->sourceCountry != '') {
-                $task->setSourceCountryCode($post->sourceCountry);
-            }
-
-            if(isset($post->targetCountry)&&$post->targetCountry != '') {
-                $task->setTargetCountryCode($post->targetCountry);
-            }
-
-            $tags = $post->tags;
-            if(is_null($tags)) {
-                $tags = '';
-            }
-
-            $task_file_info = TaskFile::getTaskFileInfo($task);
-            $filename = $task_file_info['filename'];
-            if($pos = strrpos($filename, '.')) {
-                $extension = substr($filename, $pos + 1);
-                $extension = strtolower($extension);
-                $tags .= " $extension";
-            }
-    
-            $task->setTags(Tags::separateTags($tags));
-            if($post->word_count != '') {
+            if(is_numeric($post->word_count)) {
                 $task->setWordCount($post->word_count);
+            } else if($post->word_count != '') {
+                $word_count_err = "Word Count must be numeric";
             } else {
                 $word_count_err = "Word Count cannot be blank";
             }
-    
-            $language_list = array();
-            $country_list = array();
-            $target_count = 0;
-            $target_val = $app->request()->post("target_$target_count");
-            $targetCountry_val = $app->request()->post("targetCountry_$target_count");
-            while(isset($target_val)&&isset($targetCountry_val)) {
-                $temp=null;
-                if(!in_array(($temp=array("lang"=>$target_val,"country"=>$targetCountry_val)), $language_list)) {
-                    $language_list[] = $temp;
+
+            if(is_null($word_count_err) && is_null($title_err))
+            {
+                if (!empty($post->source)) {
+                    $source_id = Languages::saveLanguage($post->source);
+                    $task->setSourceId($source_id);
                 }
-                $target_count += 1;
+
+                if($post->impact != '') {
+                    $task->setImpact($post->impact);
+                }
+
+                if($post->reference != '' && $post->reference != "http://") {
+                    $task->setReferencePage($post->reference);
+                }
+        
+                if(isset($post->sourceCountry)&&$post->sourceCountry != '') {
+                    $task->setSourceCountryCode($post->sourceCountry);
+                }
+
+                if(isset($post->targetCountry)&&$post->targetCountry != '') {
+                    $task->setTargetCountryCode($post->targetCountry);
+                }
+
+                $tags = $post->tags;
+                if(is_null($tags)) {
+                    $tags = '';
+                }
+
+                $task_file_info = TaskFile::getTaskFileInfo($task);
+                $filename = $task_file_info['filename'];
+                if($pos = strrpos($filename, '.')) {
+                    $extension = substr($filename, $pos + 1);
+                    $extension = strtolower($extension);
+                    $tags .= " $extension";
+                }
+    
+                $task->setTags(Tags::separateTags($tags));            
+                
+                $language_list = array();
+                $country_list = array();
+                $target_count = 0;
                 $target_val = $app->request()->post("target_$target_count");
                 $targetCountry_val = $app->request()->post("targetCountry_$target_count");
-            }
-    
-            if(count($language_list) > 1) {
-                foreach($language_list as $language) {
-                    if($language == $language_list[0]) {   //if it is the first language add it to this task
-                        $target_id = Languages::saveLanguage($language_list[0]['lang']);
-                        $task->setTargetId($target_id);
-                        $task->setTargetCountryCode($language['country']);
-                        $task_dao->save($task);
-                    } else {
-                        $language_id = Languages::saveLanguage($language['lang']);
-                        $task_dao->duplicateTaskForTarget($task, $language_id,$language['country']);
+                while(isset($target_val)&&isset($targetCountry_val)) {
+                    $temp=null;
+                    if(!in_array(($temp=array("lang"=>$target_val,"country"=>$targetCountry_val)), $language_list)) {
+                        $language_list[] = $temp;
                     }
+                    $target_count += 1;
+                    $target_val = $app->request()->post("target_$target_count");
+                    $targetCountry_val = $app->request()->post("targetCountry_$target_count");
                 }
-            } else {
-                $target_id = Languages::saveLanguage($language_list[0]['lang']);
-                $task->setTargetId($target_id);
-                $task->setTargetCountryCode($language_list[0]['country']);
-                $task_dao->save($task);
-            }
     
-            if (is_null($error) && is_null($title_err) && is_null($word_count_err)) {
+                if(count($language_list) > 1) {
+                    foreach($language_list as $language) {
+                        if($language == $language_list[0]) {   //if it is the first language add it to this task
+                            $target_id = Languages::saveLanguage($language_list[0]['lang']);
+                            $task->setTargetId($target_id);
+                            $task->setTargetCountryCode($language['country']);
+                            $task_dao->save($task);
+                        } else {
+                            $language_id = Languages::saveLanguage($language['lang']);
+                            $task_dao->duplicateTaskForTarget($task, $language_id,$language['country']);
+                        }
+                    }
+                } else {
+                    $target_id = Languages::saveLanguage($language_list[0]['lang']);
+                    $task->setTargetId($target_id);
+                    $task->setTargetCountryCode($language_list[0]['country']);
+                    $task_dao->save($task);
+                }
+    
                 $app->redirect($app->urlFor('task-uploaded', array('task_id' => $task_id)));
             }
         }
@@ -565,43 +602,80 @@ class TaskRouteHandler
         $countries= Languages::getCountryList();
         $extra_scripts = "
         <script language='javascript'>
-        fields = 0;
+        
+        var fields = 0;
+        var MAX_FIELDS = 10; 
+        var isRemoveButtonHidden = true;
+        
         function addInput() {
-            if (fields < 10) {
-                document.getElementById('text').innerHTML += '<label for=\"target_' + (fields + 1) + '\">To language</label>';
-                document.getElementById('text').innerHTML += '<select name=\"target_' + (fields + 1) + '\" id=\"target_' + (fields + 1) + '\">';
-                document.getElementById('text').innerHTML += '</select>';
+        
+            if(isRemoveButtonHidden) {
+                document.getElementById('removeBottomTargetBtn').style.visibility = 'visible';
+                isRemoveButtonHidden = false;
+            }
+        
+            if (fields < MAX_FIELDS) {
+                
+                document.getElementById('text' + fields).innerHTML += '<label for=\"target_' + (fields + 1) + '\"><b>To language</b></label>';
+                document.getElementById('text' + fields).innerHTML += '<select name=\"target_' + (fields + 1) + '\" id=\"target_' + (fields + 1) + '\">';
+                document.getElementById('text' + fields).innerHTML += '</select>';  
+                
                 var sel = document.getElementById('target_' + (fields + 1));
                 var options = sel.options;
                 var langs = ".json_encode($language_list).";
+                    
                 for (language in langs) {
                     var option = document.createElement('OPTION');
                     option.appendChild(document.createTextNode(langs[language][0]));
                     option.setAttribute('value', langs[language][0]);//should be 1 but requires changes to php and sql.
                     sel.appendChild(option);
                 }
+                
                 sel.options.selectedIndex=0;
-                document.getElementById('text').innerHTML += '<select name=\"targetCountry_' + (fields + 1) + '\" id=\"targetCountry_' + (fields + 1) + '\">';
-                document.getElementById('text').innerHTML += '</select>';
+                document.getElementById('text' + fields).innerHTML += '<select name=\"targetCountry_' + (fields + 1) + '\" id=\"targetCountry_' + (fields + 1) + '\">';
+                document.getElementById('text' + fields).innerHTML += '</select>';
+                document.getElementById('text' + fields).innerHTML += '<p style\=\"margin-bottom:10px;\"></p>';                    
+                
                 sel = document.getElementById('targetCountry_' + (fields + 1));
-                options = sel.options;
+                options = sel.options;                
                 var countries =".json_encode($countries).";
+                    
                 for (country in countries) {
                     var option = document.createElement('OPTION');
                     option.appendChild(document.createTextNode(countries[country][0]));
                     option.setAttribute('value', countries[country][1]);
                     sel.appendChild(option);
                 }
-                sel.options.selectedIndex=0;
-                fields += 1;
-            } else if (fields == 10) {
-                document.getElementById('text').innerHTML += '<br /><div class=\"alert alert-error\">';
-                    document.getElementById('text').innerHTML += 'Only ' + fields + ' upload fields allowed.';
-                document.getElementById('text').innerHTML += '</div>';
-                fields++;
-                document.form.add.disabled=true;
+                
+                sel.options.selectedIndex=0;                
+                fields++;                
             }
-        }
+            
+            if(fields == MAX_FIELDS) {
+                document.getElementById('alertinfo').style.display = 'block';
+                     document.getElementById('addMoreTargetsBtn').style.visibility = 'hidden';
+            }            
+        } 
+        </script>        
+        <script language='javascript'> 
+                        
+            function removeInput() {  
+            
+                var id = fields-1;
+                document.getElementById('text' + id).innerHTML = '';   
+                
+                if(fields == MAX_FIELDS) {
+                    document.getElementById('addMoreTargetsBtn').style.visibility = 'visible';
+                    document.getElementById('alertinfo').style.display = 'none';
+                }
+                
+                fields--;
+                
+                if(fields == 0) {
+                    document.getElementById('removeBottomTargetBtn').style.visibility = 'hidden';
+                    isRemoveButtonHidden = true;
+                } 
+            }            
         </script>";
         
         $countries= Languages::getCountryList();
@@ -622,7 +696,7 @@ class TaskRouteHandler
     public function taskAlter($task_id)
     {
         $app = Slim::getInstance();
-
+        $word_count_err = null;
         $task_dao = new TaskDao();
         $task = $task_dao->find(array('task_id' => $task_id));
         $app->view()->setData('task', $task);
@@ -662,11 +736,18 @@ class TaskRouteHandler
                 $task->setTags(Tags::separateTags($post->tags));
             }
             
-            if($post->word_count != '') {
+
+            if(is_numeric($post->word_count)) {
                 $task->setWordCount($post->word_count);
+                    $task_dao->save($task);
+                    $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+            } else if($post->word_count != '') {
+                $word_count_err = "Word Count must be numeric";
+            } else {
+                $word_count_err = "Word Count cannot be blank";
             }
             
-            $task_dao->save($task);
+
         }
          
         $languages = Languages::getLanguageList();
@@ -681,9 +762,10 @@ class TaskRouteHandler
         }
         
         $app->view()->appendData(array(
-                              'languages'     => $languages,
-                              'countries'     => $countries,
-                              'tag_list'      => $tag_list
+                              'languages'       => $languages,
+                              'countries'       => $countries,
+                              'tag_list'        => $tag_list,
+                              'word_count_err'  => $word_count_err,
         ));
         
         $app->render('task.alter.tpl');
@@ -807,17 +889,8 @@ class TaskRouteHandler
             Notify::sendEmailNotifications($task, NotificationTypes::Upload);
             $app->redirect($app->urlFor('task-uploaded-edit', array('task_id' => $task_id)));
         } else {
-            $app->view()->setData('task', $task);
-            if ($task_file_info = TaskFile::getTaskFileInfo($task)) {
-                $app->view()->setData('task_file_info', $task_file_info);
-                $app->view()->setData('latest_version', TaskFile::getLatestFileVersion($task));
-            }
-            $app->view()->appendData(array(
-                    'upload_error'                 => $error_message,
-                    'max_file_size'         => Upload::maxFileSizeMB(),
-                    'body_class'            => 'task_page'
-            ));
-            $app->render('task.tpl');
+            $app->flash("error", $error_message);
+            $app->redirect($app->urlFor("task", array("task_id" => $task_id)));
         }
     }
 

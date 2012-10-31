@@ -18,9 +18,11 @@ class TaskDao {
 	 * @author
 	 **/
 	public function create($params) {
-                if(!is_array($params)&&  is_object($params)){
-                    $task   = APIHelper::cast("Task", $params);
-                }else $task = new Task($params);
+        if(!is_array($params)&&  is_object($params)){
+            $task   = APIHelper::cast("Task", $params);
+        } else {
+            $task = new Task($params);
+        }
 		$this->save($task);
 		return $task;
 	}
@@ -118,26 +120,30 @@ class TaskDao {
             $args .= isset ($params['targetCountry'])?",{$db->cleanseNullOrWrapStr($params['targetCountry'])}":",null";
             
             $tasks = array();
-            foreach($db->call("getTask", $args) as $row){
-                $task_data = array();
-                        foreach($row as $col_name => $col_value) {
-                            if ($col_name == 'id') {
-                                    $task_data['task_id'] = $col_value;
+            $result =$db->call("getTask", $args);
+            if($result){
+                foreach($result as $row){
+                    $task_data = array();
+                            foreach($row as $col_name => $col_value) {
+                                if ($col_name == 'id') {
+                                        $task_data['task_id'] = $col_value;
+                                    }
+                                else if (!is_numeric($col_name) && !is_null($col_value)) {
+                                        $task_data[$col_name] = $col_value;
                                 }
-                            else if (!is_numeric($col_name) && !is_null($col_value)) {
-                                    $task_data[$col_name] = $col_value;
                             }
-                        }
 
-                        if ($tags = TaskTags::getTags($row['id'])) {
-                            $task_data['tags'] = $tags;
-                        }
+                            if ($tags = TaskTags::getTags($row['id'])) {
+                                $task_data['tags'] = $tags;
+                            }
 
-                        $task = new Task($task_data);
-                        if (is_object($task)) {
-                            $tasks[] = $task;
-                        }
+                            $task = new Task($task_data);
+                            if (is_object($task)) {
+                                $tasks[] = $task;
+                            }
+                }
             }
+            if(sizeof($tasks)==0)$tasks=null;
             return $tasks;
         }
 
@@ -157,8 +163,9 @@ class TaskDao {
 		}
 		else {
 			$this->_update($task);
+            //Only calc scores for tasks with MetaData
+            $this->calculateTaskScore($task->getTaskId());
 		}
-        $this->calculateTaskScore($task->getTaskId());
 	}
 
     /*
@@ -212,9 +219,21 @@ class TaskDao {
 
     private function calculateTaskScore($task_id)
     {
-        $exec_path = __DIR__."/scripts/calculate_scores.py $task_id";
-        echo shell_exec($exec_path . "> /dev/null 2>/dev/null &");
-
+        $settings = new Settings();
+        $use_backend = $settings->get('site.backend');
+        if(strcasecmp($use_backend, "y") == 0) {
+            $mMessagingClient = new MessagingClient();
+            if($mMessagingClient->init()) {
+                $message = $mMessagingClient->createMessageFromString($task_id);
+                $mMessagingClient->sendTopicMessage($message, $mMessagingClient->MainExchange, $mMessagingClient->TaskScoreTopic);
+            } else {
+                echo "Failed to Initialize messaging client";
+            }
+        } else {
+            //use the python script
+            $exec_path = __DIR__."/scripts/calculate_scores.py $task_id";
+            echo shell_exec($exec_path . "> /dev/null 2>/dev/null &");
+        }
     }
 
     public function _updateTags($task) {
@@ -389,17 +408,22 @@ class TaskDao {
 
     public function getUserArchivedTasks($user, $limit = 10)
     {
+        return $this->getUserArchivedTasksByID($user->getUserId(),$limit);
+        
+    }
+     public function getUserArchivedTasksByID($user_id, $limit = 10)
+    {
         $db = new PDOWrapper();
         $db->init();
-        return $this->_parse_result_for_user_task($db->call("getUserArchivedTasks", "{$db->cleanse($user->getUserId())},{$db->cleanse($limit)}"));
+        return $this->_parse_result_for_user_task($db->call("getUserArchivedTasks", "{$db->cleanse($user_id)},{$db->cleanse($limit)}"));
         
     }
 
    private function _parse_result_for_user_task($sqlResult)
     {
         $ret = NULL;
-        $ret = array();
         if($sqlResult) {
+            $ret = array();
             foreach($sqlResult as $row) {
                 $params = array();
                 $params['task_id'] = $row['task_id'];
