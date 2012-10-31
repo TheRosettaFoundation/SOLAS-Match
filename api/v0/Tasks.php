@@ -22,7 +22,6 @@ class Tasks {
       
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks(:format)/', function ($format=".json"){
             $dao = new TaskDao();
-            xdebug_break();
            Dispatcher::sendResponce(null, $dao->getTask(null), null, $format);
         },'getTasks');
         
@@ -31,9 +30,19 @@ class Tasks {
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $data= APIHelper::deserialiser($data, $format);
             $dao = new TaskDao();
-            xdebug_break();
             Dispatcher::sendResponce(null, $dao->create($data), null, $format);
-        },'createTasks');
+        },'createTask');
+        
+         
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/', function ($id,$format=".json"){
+            if(!is_numeric($id)&& strstr($id, '.')){
+               $id= explode('.', $id);
+               $format='.'.$id[1];
+               $id=$id[0];
+            }
+            $dao = new TaskDao();
+            Dispatcher::sendResponce(null, $dao->delete($id), null, $format);
+        },'deleteTask');
         
          Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/', function ($id,$format=".json"){
            if(!is_numeric($id)&& strstr($id, '.')){
@@ -95,11 +104,6 @@ class Tasks {
             Dispatcher::sendResponce(null, array("result"=>$result,"message"=>$result==1?"duplicated sucessfully":"duplication failed"), null, $format);
         },'addTarget');
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/deleteTarget/', function ($languageCode,$countryCode,$format=".json"){
-            $dao = new TaskDao();
-            $result = $dao->delete($id);
-            Dispatcher::sendResponce(null, array("result"=>$result,"message"=>$result==1?"delete successful":"delete failed"), null, $format);
-        },'deleteTask');
     }
     
    
