@@ -2320,7 +2320,13 @@ DROP PROCEDURE IF EXISTS `deleteTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTask`(IN `id` INT)
 BEGIN
-delete from task where task.id=id;
+if EXISTS (select 1 from task where task.id=id) then
+	delete from task where task.id=id;
+	select 1 as result;
+else
+	select 0 as result;
+end if;
+
 END//
 DELIMITER ;
 
