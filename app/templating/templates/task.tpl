@@ -96,12 +96,18 @@
 <p style="margin-bottom:40px;"></p>
 {if isset($this_user_has_claimed_this_task)}
     <div class="page-header">
-        <h1>Misplaced the original file? <small>Can't find it on your system?</h1>
+        <h1>Can't find the task file? <small>Misplaced the original file or the latest uploaded file?</h1>
     </div>
     <p>Click 
         <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>
         to re-download the original task file.
-    </p>    
+    </p>  
+    {* //todo When API function is available
+    <p>Click 
+        <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">here</a>
+        to re-download the latest updated task file.
+    </p>   
+    *}
     
     <p style="margin-bottom:40px;"></p>
     

@@ -1,13 +1,11 @@
 {include file="header.tpl"}
 	<div class="grid_8">
-                <!-- <p style="margin-bottom:10px;"></p> -->
                 <div class="page-header">
                         <h1>
                             Describe your task <small>Provide as much information as possible</small>                        
                         </h1>
                 </div>           
-            
-		<!-- <h1>Describe your task</h1> -->
+
 		{if isset($error)}
 			<div class="alert alert-error">
 				{$error}
@@ -72,8 +70,6 @@
                                     <option value="{$country[1]}">{$country[0]}</option>
                                 {/foreach}
                             </select> 
-                            <!-- <input type="submit" class="btn-small" name="revoke" value="Remove" onclick="return confirm('Are you sure you want to remove this language translation?')" /> -->
-                            <!-- <input type="button" onclick="removeInput()" value="Remove" /> -->
                         {/if}
                         <div id="text0"></div>
                         <div id="text1"></div>

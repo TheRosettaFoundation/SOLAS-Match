@@ -13,16 +13,16 @@ class Badge
 
     public function __construct($params = array()) {
         if(isset($params['badge_id'])) {
-            $this->setBadgeId($params['badge_id']);
+            $this->_badge_id = $params['badge_id'];
         }
         if(isset($params['title'])) {
-            $this->setTitle($params['title']);
+            $this->_title = $params['title'];
         }
         if(isset($params['description'])) {
-            $this->setDescription($params['description']);
+            $this->_description = $params['description'];
         }
         if(isset($params['owner_id'])) {
-            $this->setOwnerId($params['owner_id']);
+            $this->_owner_id = $params['owner_id'];
         }
     }
 
