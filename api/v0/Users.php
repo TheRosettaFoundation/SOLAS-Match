@@ -190,11 +190,17 @@ class Users {
             Dispatcher::sendResponce(null, $data , null, $format);
         },'deleteUserTrackedTasksById');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/has_reset_request(:format)/', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/passwordResetRequest(:format)/', function ($id,$format=".json"){
             $dao = new UserDao();
             $data=$dao->hasRequestedPasswordResetID($id);
             Dispatcher::sendResponce(null, $data , null, $format);
-        },'hasUserRequestedPasswordResetID');
+        },'hasUserRequestedPasswordReset');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/passwordResetRequest(:format)/', function ($id,$format=".json"){
+            $dao = new UserDao();
+            $data=$dao->createPasswordReset($id);
+            Dispatcher::sendResponce(null, array("result"=>$data,"message"=>$data==1?"a password reset request has been create and sent to you contact address":"password reset request already exists") , null, $format);
+        },'createPasswordResetRequest');
         
     }
     

@@ -25,7 +25,7 @@ class Notify
 
         $settings = new Settings();
         $site_url = $settings->get('site.url');
-        $site_url .= $app->urlFor('password-reset', array('uid' => $uid));
+        $site_url .= "/$uid/password/reset";
 
         $app->view()->setData('site_url', $site_url);
         $app->view()->appendData(array('user' => $user));
