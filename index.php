@@ -11,7 +11,7 @@ SmartyView::$smartyExtensions = array(
 );
 
 
-
+//TODO remove all requires bar RoutHandlers
 require_once 'app/Settings.class.php';
 require_once 'app/PDOWrapper.class.php';
 require_once 'app/BadgeDao.class.php';

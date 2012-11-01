@@ -439,6 +439,17 @@ class UserDao {
         return $ret;
     }
 
+    public function createPasswordReset($user_id){
+        if(!$this->hasRequestedPasswordResetID($user_id)) {          //wait for API support
+            $uid = md5(uniqid(rand()));
+            $this->addPasswordResetRequest($uid, $user_id);   //wait for API support
+            Notify::sendPasswordResetEmail($uid, $this->getUser($user_id, null, null, null, null, null, null, null, null));
+            return 1;
+        }
+        return 0;
+    }
+    
+    
     /*
         Add password reset request to DB for this user
     */
