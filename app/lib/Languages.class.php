@@ -1,4 +1,5 @@
 <?php
+file_exists('app/models/Language.class.php') ? require('app/models/Language.class.php') : require('../app/models/Language.class.php');
 
 class Languages {
 	public static function languageIdFromName($language_name) {

@@ -11,11 +11,11 @@ class TaskRouteHandler
         )->name('archived-tasks');
 
         $app->get('/tasks/active/p/:page_no', array($this, 'activeTasks')
-        )->name('active-tasks');
+        )->name('active-tasks');        
 
         $app->get('/task/id/:task_id/download-task-latest-file/', array($middleware, 'authUserForOrgTask'),
         array($this, 'downloadTaskLatestVersion'))->name('download-task-latest-version');
-
+        
         $app->get('/task/id/:task_id/mark-archived/', array($middleware, 'authUserForOrgTask'),
         array($this, 'archiveTask'))->name('archive-task');
 
@@ -495,11 +495,11 @@ class TaskRouteHandler
     {
     	$app = Slim::getInstance();
 	
-    	$error       = null;
-    	$title_err   = null;
-	    $word_count_err = null;
-    	$task_dao    = new TaskDao();
-    	$task        = $task_dao->find(array('task_id' => $task_id));
+    	$error          = null;
+    	$title_err      = null;
+	$word_count_err = null;
+    	$task_dao       = new TaskDao();
+    	$task           = $task_dao->find(array('task_id' => $task_id));
     
 
     	if (!is_object($task)) {
@@ -515,14 +515,12 @@ class TaskRouteHandler
                 $title_err = "Title cannot be empty";
             }
 
-            if(is_numeric($post->word_count)) {
+            if(ctype_digit($post->word_count)) {
                 $task->setWordCount($post->word_count);
-            } else if($post->word_count != '') {
-                $word_count_err = "Word Count must be numeric";
-            } else {
-                $word_count_err = "Word Count cannot be blank";
+            } else if($post->word_count == '') {
+                $task->setWordCount($post->word_count);
             }
-
+            
             if(is_null($word_count_err) && is_null($title_err))
             {
                 if (!empty($post->source)) {
@@ -737,7 +735,7 @@ class TaskRouteHandler
             }
             
 
-            if(is_numeric($post->word_count)) {
+            if(ctype_digit($post->word_count)) {
                 $task->setWordCount($post->word_count);
                     $task_dao->save($task);
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
