@@ -312,9 +312,7 @@ class UserRouteHandler
     public function logout()
     {
         $app = Slim::getInstance();
-        
-        $user_dao = new UserDao();
-        $user_dao->logout();        //wait for API support
+        UserSession::destroySession();    //TODO revisit when oauth is in place
         $app->redirect($app->urlFor('home'));
     }
 
