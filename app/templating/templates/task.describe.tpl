@@ -1,13 +1,11 @@
 {include file="header.tpl"}
 	<div class="grid_8">
-                <!-- <p style="margin-bottom:10px;"></p> -->
                 <div class="page-header">
                         <h1>
                             Describe your task <small>Provide as much information as possible</small>                        
                         </h1>
                 </div>           
-            
-		<!-- <h1>Describe your task</h1> -->
+
 		{if isset($error)}
 			<div class="alert alert-error">
 				{$error}
@@ -26,11 +24,11 @@
                 </label>
                 <p class="desc">You may replace the file name with something more descriptive.</p>
                 
-				<textarea wrap="hard" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>				
+				<textarea wrap="soft" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>				
                                 <p style="margin-bottom:30px;"></p>
                 <label for="impact"><h2>Task Impact</h2></label>
                 <p>Who and what will be affected by the translation of this task</p>
-                <textarea wrap="hard" cols="1" rows="2" name="impact">{$task->getImpact()}</textarea>
+                <textarea wrap="soft" cols="1" rows="2" name="impact">{$task->getImpact()}</textarea>
 
                 <p style="margin-bottom:30px;"></p>
                 <label for="reference"><h2>Context Reference</h2></label>
@@ -40,7 +38,7 @@
                 {else}
                     {assign var="url_text" value="http://"}
                 {/if}
-                <textarea wrap="hard" cols="1" rows="2" name="reference">{$url_text}</textarea>
+                <textarea wrap="soft" cols="1" rows="2" name="reference">{$url_text}</textarea>
 
                 <p style="margin-bottom:30px;"></p>
                 {if isset($languages)}
@@ -72,8 +70,6 @@
                                     <option value="{$country[1]}">{$country[0]}</option>
                                 {/foreach}
                             </select> 
-                            <!-- <input type="submit" class="btn-small" name="revoke" value="Remove" onclick="return confirm('Are you sure you want to remove this language translation?')" /> -->
-                            <!-- <input type="button" onclick="removeInput()" value="Remove" /> -->
                         {/if}
                         <div id="text0"></div>
                         <div id="text1"></div>

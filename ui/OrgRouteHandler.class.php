@@ -33,6 +33,11 @@ class OrgRouteHandler
 
         $app->get("/org/search", array($this, 'orgSearch')
         )->via('POST')->name('org-search');
+        
+        $app->get('/org/:org_id/edit/:badge_id', array($middleware, 'authUserForOrg'), 
+        array($this, 'orgEditBadge'))->via("POST")->name('org-edit-badge');        
+        
+        
     }
 
     public function createOrg()
@@ -248,8 +253,39 @@ class OrgRouteHandler
 //        $response = $client->call($request);
 //        foreach($response as $stdObject) {
 //            $org_badges[] = $client->cast('Badge', $stdObject);
+//            
+//            
 //        }
+        
         $badge_dao = new BadgeDao();
+        
+         if($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+                   
+            if(isset($post->deleteBadge)) {
+                $badge_id = $post->badge_id;
+                $badge_dao->deleteBadge($badge_id);
+            } 
+            
+            if(isset($post->title) && isset($post->description)) {
+                
+                if($post->title == '' || $post->description == '') {
+                    $app->flash('error', "All fields must be filled out");
+                } else {
+                    $params = array();
+                    $params['badge_id'] = $post->badge_id;             
+                    $params['title'] = $post->title;
+                    $params['description'] = $post->description;
+                    $params['owner_id'] = null; 
+
+                    $badge_dao = new BadgeDao();
+                    $updatedBadge = new Badge($params);
+                    $badge_dao->insertAndUpdateBadge($updatedBadge);       //wait for API support
+                    $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
+                }
+            }
+        }       
+        
         $org_badges = $badge_dao->getOrgBadges($org_id);
         
         //wait for API support     
@@ -262,13 +298,13 @@ class OrgRouteHandler
             foreach($org_member_ids as $org_mem) {
                 $org_members[] = $org_mem['user_id'];
             }   
-        }   
+        }
         
         $app->view()->setData('current_page', 'org-public-profile');
         $app->view()->appendData(array('org' => $org,
                 'org_members' => $org_members,
                 'org_badges' => $org_badges
-        ));                             
+        ));
         
         $app->render('org-public-profile.tpl');
     }
@@ -397,7 +433,7 @@ class OrgRouteHandler
                 
                 $badge_dao = new BadgeDao();
                 $badge = new Badge($params);
-                $badge_dao->addBadge($badge);       //wait for API support
+                $badge_dao->insertAndUpdateBadge($badge);       //wait for API support
                 $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
             }
         }
@@ -428,4 +464,23 @@ class OrgRouteHandler
         
         $app->render('org-search.tpl');
     }
+    
+    public function orgEditBadge($org_id, $badge_id)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+        
+
+        $request = APIClient::API_VERSION."/badges/$badge_id";
+        $response = $client->call($request);
+        $badge = $client->cast('Badge', $response);
+
+        $app->view()->setData('badge', $badge);
+        
+        $app->view()->appendData(array('org_id' => $org_id));        
+        
+        $app->render('org.edit-badge.tpl');
+        
+    }
+    
 }

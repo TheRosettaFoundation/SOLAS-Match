@@ -8,16 +8,16 @@ class Organisation
 
     public function __construct($params = array()) {
         if(isset($params['id'])) {
-            $this->setId($params['id']);
+            $this->_id = $params['id'];
         }
         if(isset($params['name'])) {
-            $this->setName($params['name']);
+            $this->_name = $params['name'];
         }
         if(isset($params['home_page'])) {
-            $this->setHomePage($params['home_page']);
+            $this->_home_page = $params['home_page'];
         }
         if(isset($params['biography'])) {
-            $this->setBiography($params['biography']);
+            $this->_biography = $params['biography'];
         }
     }
 

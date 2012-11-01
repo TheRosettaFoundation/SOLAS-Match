@@ -214,6 +214,7 @@ class TaskDao {
         $db = new PDOWrapper();
         $db->init();
         $result= $db->call("deleteTask", "{$db->cleanseNull($TaskID)}");
+        return $result[0]["result"];
     }
 
     private function calculateTaskScore($task_id)
@@ -407,17 +408,22 @@ class TaskDao {
 
     public function getUserArchivedTasks($user, $limit = 10)
     {
+        return $this->getUserArchivedTasksByID($user->getUserId(),$limit);
+        
+    }
+     public function getUserArchivedTasksByID($user_id, $limit = 10)
+    {
         $db = new PDOWrapper();
         $db->init();
-        return $this->_parse_result_for_user_task($db->call("getUserArchivedTasks", "{$db->cleanse($user->getUserId())},{$db->cleanse($limit)}"));
+        return $this->_parse_result_for_user_task($db->call("getUserArchivedTasks", "{$db->cleanse($user_id)},{$db->cleanse($limit)}"));
         
     }
 
    private function _parse_result_for_user_task($sqlResult)
     {
         $ret = NULL;
-        $ret = array();
         if($sqlResult) {
+            $ret = array();
             foreach($sqlResult as $row) {
                 $params = array();
                 $params['task_id'] = $row['task_id'];

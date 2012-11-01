@@ -43,18 +43,20 @@
         <div class='page-header'><h1>Badges<small> A list of badges you have earned</small>
         <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>List All Badges</a></h1></div>
 
-        {foreach $badges as $badge }
-    	    <h3>{$badge->getTitle()}
+        {foreach $badges as $badge }     
+            
             {if !is_null($badge->getOwnerId())}
-                {assign var="user_id" value=$this_user->getUserId()}
+                {assign var="user_id" value=$this_user->getUserId()} 
                 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
                     <input type="hidden" name="badge_id" value="{$badge->getBadgeId()}" />
-                    <input type="submit" class="btn pull-right" value="Remove" onClick="return confirmPost()" />
+                    <input type="submit" class="btn btn-inverse pull-right" value="Remove" onClick="return confirmPost()" />
                 </form>
-            {/if}
-            </h3>
+            {/if}            
+    	    <h3>{$badge->getTitle()}</h3>            
             <p>{$badge->getDescription()}</p>
+            <p style="margin-bottom:20px;"></p>
         {/foreach}
+        
         <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}
@@ -100,7 +102,7 @@
                     <form method="post" class="pull-right" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                         {if isset($private_access)}
                             <input type="hidden" name="org_id" value="{$org_id}" />
-                            <input type="submit" class='pull-right btn btn-small' name="revoke" value="Leave Organisation"
+                            <input type="submit" class='pull-right btn btn-inverse' name="revoke" value="Leave Organisation"
                                 onclick="return confirm('Are you sure you want to leave the organisation?')" />
                         {/if}
                     </form>

@@ -1753,7 +1753,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
 BEGIN
-set @q = Concat("   SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
+set @q = Concat("   SELECT t.label AS label,t.tag_id as tag_id, COUNT( tt.tag_id ) AS frequency
                     FROM task_tag AS tt 
                     join tag AS t on tt.tag_id = t.tag_id
                     join task as tsk on tsk.id=tt.task_id
@@ -1767,7 +1767,6 @@ set @q = Concat("   SELECT t.label AS label, COUNT( tt.tag_id ) AS frequency
         PREPARE stmt FROM @q;
         EXECUTE stmt;
         DEALLOCATE PREPARE stmt;
-
 END//
 DELIMITER ;
 
@@ -2326,7 +2325,38 @@ DROP PROCEDURE IF EXISTS `deleteTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTask`(IN `id` INT)
 BEGIN
-delete from task where task.id=id;
+if EXISTS (select 1 from task where task.id=id) then
+	delete from task where task.id=id;
+	select 1 as result;
+else
+	select 0 as result;
+end if;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.deleteBadge
+DROP PROCEDURE IF EXISTS `deleteBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteBadge`(IN `id` INT)
+BEGIN
+delete from badges where badge_id = id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.badgeInsertAndUpdate
+DROP PROCEDURE IF EXISTS `badgeInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `badgeInsertAndUpdate`(IN `badgeID` INT, IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` MEDIUMTEXT)
+BEGIN
+if not exists (select 1 from badges b where b.badge_id = badgeID) then
+	insert into badges (owner_id,title,description) values (ownerID,name,disc);
+	select 1 as result;
+else
+	update badges bg set bg.title = name, bg.description = disc
+	where bg.badge_id = badgeID;
+	select 1 as result;
+end if;
 END//
 DELIMITER ;
 
