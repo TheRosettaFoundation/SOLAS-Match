@@ -46,11 +46,16 @@ class BadgeDao
 
     public function assignBadge($user, $badge)
     {
+        self::assignBadge($user->getUserId(),$badge->getBadgeId());
+    }
+    
+    public function assignBadgeByID($userID, $badgeID)
+    {
         $badgeValidator = new BadgeValidator();
-        if($badgeValidator->validateUserBadge($user, $badge)) {
+        if($badgeValidator->validateUserBadgeByID($userID, $badgeID)) {
             $db = new PDOWrapper();
             $db->init();
-            $db->call("assignBadge", "{$db->cleanse($user->getUserId())},{$db->cleanse($badge->getBadgeId())}");
+            $db->call("assignBadge", "{$db->cleanse($userID)},{$db->cleanse($badgeID)}");
         }
     }
 
