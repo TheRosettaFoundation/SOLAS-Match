@@ -66,6 +66,19 @@ class Users {
           Dispatcher::sendResponce(null, $dao->getUserBadgesbyID($id), null, $format);
         },'getUserbadges');
         
+         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/badges(:format)/', function ($id,$format=".json"){
+          $data=Dispatcher::getDispatcher()->request()->getBody();
+          $data= APIHelper::deserialiser($data, $format);
+          $data= APIHelper::cast("Badge", $data);
+          $dao = new BadgeDao();
+          Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $badge->getBadgeId()), null, $format);
+        },'addUserbadges');
+        
+         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/badges/:badge/', function ($id,$badge){
+          $dao = new BadgeDao();
+          Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $badge), null, $format);
+        },'addUserbadgesByID');
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tags(:format)/', function ($id,$format=".json"){
            $dao = new UserDao();
            Dispatcher::sendResponce(null, $dao->getUserTags($id), null, $format);
