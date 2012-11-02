@@ -1,6 +1,7 @@
 <?php
 
 require_once 'app/models/Register.class.php';
+require_once 'app/models/Login.class.php';
 
 class UserRouteHandler
 {
@@ -234,33 +235,17 @@ class UserRouteHandler
                 $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
             } elseif (!User::isValidPassword($post->password)) {
                 $error = 'You didn\'t enter a password. Please try again.';
-            } elseif ($client->call(APIClient::API_VERSION."/users/getByEmail/$post->email")) {
-                $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
             }
             
-            if (is_null($error) && is_null($warning)) {
+            if (is_null($error)) {
 
                 $request = APIClient::API_VERSION."/register";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, new Register($post->email, $post->password));                
                 if($response) {
-                    
-                    
-                    $request = APIClient::API_VERSION."/login";                     
-                    $userTemplate = $client->call($request, HTTP_Request2::METHOD_GET);
                 
                     $request = APIClient::API_VERSION."/login";             
-                    $userLogin = $client->call($request, HTTP_Request2::METHOD_POST, $userTemplate);                
-                    if($response) {                
-                    
-                //if ($user = $user_dao->create($post->email, $post->password)) {     //wait for API support
-                    //if ($user_dao->login($user->getEmail(), $post->password)) {     //wait for API support
-                        
-                        $badge_dao = new BadgeDao();
-                        $badge_id = Badge::REGISTERED;
-                        $url = APIClient::API_VERSION."/badges/$badge_id";
-                        $response = $client->call($url);
-                        $badge = $client->cast('Badge', $response);
-                        $badge_dao->assignBadge($user, $badge);     //wait for API support || put in create function
+                    $user = $client->call($request, HTTP_Request2::METHOD_POST, new Login($post->email, $post->password));                
+                    if($user) {  
                         
                         if(isset($_SESSION['previous_page'])) {
                             if(isset($_SESSION['old_page_vars'])) {
@@ -274,7 +259,7 @@ class UserRouteHandler
                         $error = 'Tried to log you in immediately, but was unable to.';
                     }
                 } else {
-                    $error = 'Unable to register.';
+                    $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
                 }
             }
         }

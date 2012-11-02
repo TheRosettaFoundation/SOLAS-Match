@@ -46,7 +46,7 @@ class BadgeDao
 
     public function assignBadge($user, $badge)
     {
-        self::assignBadge($user->getUserId(),$badge->getBadgeId());
+        self::assignBadgeByID($user->getUserId(),$badge->getBadgeId());
     }
     
     public function assignBadgeByID($userID, $badgeID)

@@ -14,9 +14,9 @@ class Register {
    public  $email;
    public  $pass;
     
-     public function __construct($e="",$p="") {
-         $this->pass=$p;
+     public function __construct($e="",$p="") {         
          $this->email=$e;
+         $this->pass=$p;
     }
     
     public static function init(){
@@ -35,7 +35,7 @@ class Register {
                 $data= APIHelper::cast("Register", $data);
                 $dao = new UserDao;
                 $data= $dao->APIRegister($data->email, $data->pass);
-                if(is_array($data))$data=$data[0];
+                if(is_array($data)&&isset ($data[0]))$data=$data[0];
                 Dispatcher::sendResponce(null,$data, null, $format);
         },'register');
     }

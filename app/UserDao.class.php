@@ -159,7 +159,7 @@ class UserDao {
                         $badge_dao = new BadgeDao();
                         $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
                         $badge_dao->assignBadge($user, $badge);
-		}else $user = array("error"=>'sorry the account you enerted already exists. \n please login.');
+		}else $user = null;//array("message"=>'sorry the account you enerted already exists. \n please login.',"status code"=>500);
         	return $user;
 	}
         

@@ -124,8 +124,11 @@ class TaskRouteHandler
         $activeTasks = array();
         $request = APIClient::API_VERSION."/users/$user_id/tasks";
         $response = $client->call($request);
-        foreach($response as $stdObject) {
-            $activeTasks[] = $client->cast('Task', $stdObject);
+        
+        if($response) {
+            foreach($response as $stdObject) {
+                $activeTasks[] = $client->cast('Task', $stdObject);
+            }
         }
         
         $tasks_per_page = 10;
