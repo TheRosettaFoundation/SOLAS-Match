@@ -1419,10 +1419,10 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure SolasMatch.getUser
 DROP PROCEDURE IF EXISTS `getUser`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser`(IN `id` INT, IN `name` VARCHAR(128), IN `mail` VARCHAR(128), 
-    IN `pass` char(128), IN `bio` TEXT, IN `nonce` INT, IN `created` DATETIME, IN `lang_id` INT, IN `region_id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser`(IN `id` INT, IN `name` VARCHAR(128), IN `mail` VARCHAR(128), IN `pass` char(128), IN `bio` TEXT, IN `nonce` INT, IN `created` DATETIME, IN `lang_id` INT, IN `region_id` INT)
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
@@ -1441,16 +1441,16 @@ BEGIN
 		set @q = CONCAT(@q," and u.user_id=",id) ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and u.display_name=",name) ;
+		set @q = CONCAT(@q," and u.display_name='",name,"'") ;
 	end if;
 	if mail is not null then 
-		set @q = CONCAT(@q," and u.email=",mail) ;
+		set @q = CONCAT(@q," and u.email='",mail,"'") ;
 	end if;
 	if pass is not null then 
-		set @q = CONCAT(@q," and u.password=",pass) ;
+		set @q = CONCAT(@q," and u.password='",pass,"'") ;
 	end if;
 	if bio is not null then 
-		set @q = CONCAT(@q," and u.biography=",bio) ;
+		set @q = CONCAT(@q," and u.biography='",bio,"'") ;
 	end if;
 	if nonce is not null then 
 		set @q = CONCAT(@q," and u.nonce=",nonce) ;

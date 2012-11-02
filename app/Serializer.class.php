@@ -16,15 +16,19 @@ class Serializer
         switch ($format) {
             case FormatEnum::JSON: {
                 $ret = json_encode($data);
+                break;
             }
             case FormatEnum::XML: {
                 $ret = wddx_serialize_value($data);
+                break;
             }
             case FormatEnum::HTML: {
                 $ret = htmlspecialchars(wddx_serialize_value($data));
+                break;
             }
             case FormatEnum::PHP: {
                 $ret = serialize($data);
+                break;
             }
         }
         return $ret;
@@ -93,5 +97,14 @@ class Serializer
         }
 
         return $destination;
+    }
+     public static function getFormat($format){
+       if($format==".json") $format=  FormatEnum::JSON;
+       elseif(strcasecmp($format,'.xml')==0) $format=  FormatEnum::XML;
+       elseif(strcasecmp($format,'.php')==0) $format=  FormatEnum::PHP;
+       elseif(strcasecmp($format,'.html')==0) $format=  FormatEnum::HTML;
+       elseif(strcasecmp($format,'.proto')==0) $format=  FormatEnum::JSON;//change when implmented.
+       else $format=  FormatEnum::JSON;
+       return $format;
     }
 }

@@ -30,7 +30,8 @@ class APIClient
         $request = new HTTP_Request2($request_url, $method);
 
         if($data != null) {
-            $request->addPostParameter($data);
+            $data=$this->_serializer->serialize($data, $this->_serializer->getFormat($format));
+            $request->setBody($data);
         }
 
         if(count($query_args) > 0) {

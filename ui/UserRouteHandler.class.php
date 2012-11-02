@@ -1,5 +1,6 @@
 <?php
 
+require_once 'app/models/Register.class.php';
 
 class UserRouteHandler
 {
@@ -38,9 +39,19 @@ class UserRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
+        
+        $request = APIClient::API_VERSION."/tags/topTags";
+        $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
+                                    array('limit' => 30));        
+        $top_tags = array();
+        if($response) {
+            foreach($response as $stdObject) {
+                $top_tags[] = $client->cast('Tag', $stdObject);
+            }
+        }        
 
         $app->view()->appendData(array(
-            'top_tags' => TagsDao::getTopTags(30), //TODO use getTopTags api funchtion /v0/tags/topTags  optional limit=x
+            'top_tags' => $top_tags,
             'current_page' => 'home'
         ));
 
@@ -95,7 +106,14 @@ class UserRouteHandler
         $task_dao           = new TaskDao;
         $org_dao            = new OrganisationDao();
         $current_user_id    = UserSession::getCurrentUserID();
-        $current_user       = $user_dao->getCurrentUser();
+        $current_user;
+        
+        
+        $request = APIClient::API_VERSION."/users/$current_user_id";
+        $response = $client->call($request);
+        $current_user = $client->cast('User', $response);
+        
+        
         if (is_null($current_user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
@@ -111,9 +129,25 @@ class UserRouteHandler
             $org_data = $client->call($url);
             $org = $client->cast('Organisation', $org_data);
 
-//          Wait for this to be exposed by API
-//            $url = APIClient::API_VERSION."/
-            $my_org_tasks = $task_dao->findTasksByOrg(array('organisation_ids' => $org_id));
+            $url = APIClient::API_VERSION."/orgs/$org_id/tasks";
+            $org_tasks_data = $client->call($url);        
+            $my_org_tasks = array();
+            if($org_tasks_data) {
+                foreach($org_tasks_data as $stdObject) {
+                    $my_org_tasks[] = $client->cast('Task', $stdObject);
+                }
+            }   
+            
+            $request = APIClient::API_VERSION."/tags/topTags";
+            $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
+                                        array('limit' => 30));        
+            $top_tags = array();
+            if($response) {
+                foreach($response as $stdObject) {
+                    $top_tags[] = $client->cast('Tag', $stdObject);
+                }
+            }            
+
             $org_tasks[$org->getId()] = $my_org_tasks;
             $orgs[$org->getId()] = $org;
         }    
@@ -134,15 +168,21 @@ class UserRouteHandler
                     $task_title = "task ".$task->getTaskId();
                 }
                 if($post->track == "Ignore") {
-                    //Not currently exposed by API
-                    if($user_dao->ignoreTask($current_user->getUserId(), $post->task_id)) {
+                   
+                    $request = APIClient::API_VERSION."/users/$current_user_id/tracked_tasks/$task_id";
+                    $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                    
+                    
+                    if($response) {
                         $app->flashNow('success', 'No longer receiving notifications from '.$task_title.'.');
                     } else {
                         $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
-                    }
+                    }                    
                 } elseif($post->track == "Track") {
-                    //Not currently supported by API
-                    if($user_dao->trackTask($current_user->getUserId(), $post->task_id)) {
+                    
+                    $request = APIClient::API_VERSION."/users/$current_user_id/tracked_tasks/$task_id";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT);     
+                    
+                    if($response) {
                         $app->flashNow('success', 'You will now receive notifications for '.$task_title.'.');
                     } else {
                         $app->flashNow('error', 'Unable to subscribe to '.$task_title.'.');
@@ -189,18 +229,31 @@ class UserRouteHandler
         $warning = null;
         if (isValidPost($app)) {
             $post = (object)$app->request()->post();
-            $user_dao = new UserDao();
+            
             if (!User::isValidEmail($post->email)) {
                 $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
-            } else if (!User::isValidPassword($post->password)) {
+            } elseif (!User::isValidPassword($post->password)) {
                 $error = 'You didn\'t enter a password. Please try again.';
-            } else if (is_object($user_dao->find(array('email' => $post->email)))) {    //wait for API support
+            } elseif ($client->call(APIClient::API_VERSION."/users/getByEmail/$post->email")) {
                 $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
             }
             
             if (is_null($error) && is_null($warning)) {
-                if ($user = $user_dao->create($post->email, $post->password)) {     //wait for API support
-                    if ($user_dao->login($user->getEmail(), $post->password)) {     //wait for API support
+
+                $request = APIClient::API_VERSION."/register";
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, new Register($post->email, $post->password));                
+                if($response) {
+                    
+                    
+                    $request = APIClient::API_VERSION."/login";                     
+                    $userTemplate = $client->call($request, HTTP_Request2::METHOD_GET);
+                
+                    $request = APIClient::API_VERSION."/login";             
+                    $userLogin = $client->call($request, HTTP_Request2::METHOD_POST, $userTemplate);                
+                    if($response) {                
+                    
+                //if ($user = $user_dao->create($post->email, $post->password)) {     //wait for API support
+                    //if ($user_dao->login($user->getEmail(), $post->password)) {     //wait for API support
                         
                         $badge_dao = new BadgeDao();
                         $badge_id = Badge::REGISTERED;
@@ -239,6 +292,21 @@ class UserRouteHandler
         $app = Slim::getInstance();
 
         $user_dao = new UserDao();
+        
+        /* TODO
+        $request = APIClient::API_VERSION."/users/$uid/has_reset_request";
+        $response = $client->call($request);        
+        $user_obj = $client->cast('User', $response);
+        
+        $reset_request = $user_obj->
+        */
+        //$my_org_tasks = array();
+        //if($org_tasks_data) {
+            //foreach($org_tasks_data as $stdObject) {
+                //$my_org_tasks[] = $client->cast('Task', $stdObject);
+            //}
+        //}         
+        
         $reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));     //wait for API support
 
         if(!isset($reset_request['user_id']) || $reset_request['user_id'] == '') {

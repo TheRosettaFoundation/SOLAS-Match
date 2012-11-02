@@ -12,11 +12,11 @@
  */
 class Register {
    public  $email;
-    public  $pass;
+   public  $pass;
     
-    public function __construct() {
-         $this->pass="";
-         $this->email="";
+     public function __construct($e="",$p="") {
+         $this->pass=$p;
+         $this->email=$e;
     }
     
     public static function init(){
