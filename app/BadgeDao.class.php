@@ -61,9 +61,14 @@ class BadgeDao
 
     public function removeUserBadge($user, $badge)
     {
+        $this->removeUserBadgeByID($user->getUserId(),$badge->getBadgeId());
+    }
+    
+    public function removeUserBadgeByID($userID, $badgeID)
+    {
         $db = new PDOWrapper();
         $db->init();
-        if(!$db->call("removeUserBadge", "{$db->cleanse($user->getUserId())},{$db->cleanse($badge->getBadgeId())}")) {
+        if(!$db->call("removeUserBadge", "{$db->cleanse($userID)},{$db->cleanse($badgeID)}")) {
            echo "<p>Cannot remove system badges</p>";
         }
     }
