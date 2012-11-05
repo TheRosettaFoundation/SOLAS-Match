@@ -351,9 +351,12 @@ class TaskDao {
 	}
 
 	public function moveToArchive($task) {
+		$this->moveToArchiveByID($task->getTaskId());
+	}
+        public function moveToArchiveByID($taskID) {
 		$db = new PDOWrapper();
 		$db->init();
-                $db->call("archiveTask", "{$db->cleanse($task->getTaskId())}");
+                $db->call("archiveTask", "{$db->cleanse($taskID)}");
 	}
 
 	public function claimTask($task, $user) {

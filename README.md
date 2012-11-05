@@ -58,7 +58,7 @@ Further below in this document, there are also several resources for our work mo
    
  * Enable X-Sendfile
    sudo apt-get install libapache2-mod-xsendfile
-    add path to upload directoy to vhost or httpd.conf eg 
+    add path to upload directoy to vour host apache2.conf,vHost or httpd.conf(recommended) eg 
     <Directory /var/www/>
 		AllowOverride All
 		XSendFilePath /path/to/SOLAS-Match/app/uploads/
@@ -73,7 +73,7 @@ Further below in this document, there are also several resources for our work mo
     url.rewrite-once = ( "resources/css/style.([0-9]+).css$" => "resources/css/style.css","^/?index.php/?$" => ""  )
     url.rewrite-if-not-file = ( "/?index.php/.*" => "$1" ,"(.*)" => "index.php/$1")
 
- * example vhost 
+ * example vHost 
    $HTTP["host"] == "php-workspace" {
       server.document-root = "/home/sean/Dev/Git-Mannaged/SOLAS-Match/"
       url.rewrite-once = ( "resources/css/style.([0-9]+).css$" => "resources/css/style.css","^/?index.php/?$" => ""  )
