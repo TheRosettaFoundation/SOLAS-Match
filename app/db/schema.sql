@@ -1698,12 +1698,17 @@ insert into task_tag  (task_id,tag_id) values (taskID,tagID);
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Dev.getLatestAvailableTasks
+-- Dumping structure for procedure Solas-Match-Test.getLatestAvailableTasks
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT)
 BEGIN
+	 if (lim= '') then set lim=null; end if;
+	 if(lim is not null) then
     set @q = Concat("SELECT t.id FROM task AS t WHERE t.id NOT IN (SELECT task_id FROM task_claim) ORDER BY created_time DESC LIMIT ",lim);
+    else
+    set @q = "SELECT t.id FROM task AS t WHERE t.id NOT IN (SELECT task_id FROM task_claim) ORDER BY created_time DESC ";
+    end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
