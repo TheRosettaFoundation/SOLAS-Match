@@ -79,7 +79,7 @@ class Users {
           Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $badge), null, $format);
         },'addUserbadgesByID');
         
-        Dispatcher::registerNamed(HttpMethodEnum::Delete, '/v0/users/:id/badges/:badge/', function ($id,$badge){
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/badges/:badge/', function ($id,$badge){
           $dao = new BadgeDao();
           Dispatcher::sendResponce(null, $dao->removeUserBadgeByID($id, $badge), null, $format);
         },'deleteUserbadgesByID');
