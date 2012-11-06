@@ -290,7 +290,8 @@ class UserRouteHandler
     public function passwordReset($uid)
     {
         $app = Slim::getInstance();
-
+        $client = new APIClient();
+        
         $user_dao = new UserDao();
         
         /*
@@ -305,9 +306,14 @@ class UserRouteHandler
             //foreach($org_tasks_data as $stdObject) {
                 //$my_org_tasks[] = $client->cast('Task', $stdObject);
             //}
-        //}         
+        //}
         
-        $reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));     //wait for API support
+        $request = APIClient::API_VERSION."/password_reset/$uid";
+        $response = $client->call($request);        
+        $reset_request = $client->cast('PasswordReset', $response);
+        // v0/password_reset/:key/
+        
+        //$reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));     //wait for API support
 
         if(!isset($reset_request['user_id']) || $reset_request['user_id'] == '') {
             $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
@@ -564,10 +570,11 @@ class UserRouteHandler
                 $response = $client->call($url);
                 $badge = $client->cast('Badge', $response);
                 
-                
+                // /v0/users/:id/badges/:badge/
                 //$request = APIClient::API_VERSION."/users/$user_id/badges";
-                //$response = $client->call($request, HTTP_Request2::METHOD_POST, $badge); 
+                //$response = $client->call($request, HTTP_Request2::METHOD_DELETE, $badge); 
                 $badge_dao->removeUserBadge($user, $badge);     //wait for API support
+                
             }
                 
             if(isset($post->revoke)) {
