@@ -1355,12 +1355,17 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Dev.assignBadge
+-- Dumping structure for procedure Solas-Match-Test.assignBadge
 DROP PROCEDURE IF EXISTS `assignBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `assignBadge`(IN `uid` INT, IN `bid` INT)
 BEGIN
-INSERT INTO user_badges (user_id, badge_id) VALUES (uid,bid);
+if not EXISTS (select 1 from user_badges where user_id=uid and badge_id=bid) then
+	INSERT INTO user_badges (user_id, badge_id) VALUES (uid,bid);
+	select 1 as result;
+else
+	select 0 as result;
+end if;
 END//
 DELIMITER ;
 
