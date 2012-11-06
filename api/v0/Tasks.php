@@ -127,7 +127,7 @@ class Tasks {
             }
        
            Dispatcher::sendResponce(null,$data, null, $format);
-        },'getTaskVersion');
+        },'getTaskClaimed');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/addTarget/:languageCode/:countryCode/', function ($languageCode,$countryCode,$format=".json"){
             $dao = new TaskDao();
