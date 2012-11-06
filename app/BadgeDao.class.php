@@ -55,8 +55,9 @@ class BadgeDao
         if($badgeValidator->validateUserBadgeByID($userID, $badgeID)) {
             $db = new PDOWrapper();
             $db->init();
-            $db->call("assignBadge", "{$db->cleanse($userID)},{$db->cleanse($badgeID)}");
+            if($result=$db->call("assignBadge", "{$db->cleanse($userID)},{$db->cleanse($badgeID)}")) return $result[0]['result'];
         }
+        return 0;
     }
 
     public function removeUserBadge($user, $badge)
@@ -68,9 +69,10 @@ class BadgeDao
     {
         $db = new PDOWrapper();
         $db->init();
-        if(!$db->call("removeUserBadge", "{$db->cleanse($userID)},{$db->cleanse($badgeID)}")) {
-           echo "<p>Cannot remove system badges</p>";
+        if($result=$db->call("removeUserBadge", "{$db->cleanse($userID)},{$db->cleanse($badgeID)}")) {
+          return $result[0]['result'];
         }
+        return 0;
     }
     
     public function deleteBadge($badgeID)

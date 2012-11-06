@@ -37,19 +37,20 @@ class Tasks {
             Dispatcher::sendResponce(null, $dao->create($data), null, $format);
         },'createTask');
         
-        
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:id/', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/', function ($id,$format=".json"){
             if(!is_numeric($id)&& strstr($id, '.')){
                $id= explode('.', $id);
                $format='.'.$id[1];
                $id=$id[0];
             }
             $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->moveToArchiveByID($task), null, $format);
-        },'archiveTask');
+            $data=Dispatcher::getDispatcher()->request()->getBody();
+            $data= APIHelper::deserialiser($data, $format);
+            $data = APIHelper::cast("Task", $data);
+            Dispatcher::sendResponce(null, $dao->save($data), null, $format);
+        },'updateTask');
         
-        
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/', function ($id,$format=".json"){
+         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/', function ($id,$format=".json"){
             if(!is_numeric($id)&& strstr($id, '.')){
                $id= explode('.', $id);
                $format='.'.$id[1];
@@ -58,6 +59,20 @@ class Tasks {
             $dao = new TaskDao();
             Dispatcher::sendResponce(null, $dao->delete($id), null, $format);
         },'deleteTask');
+        
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:id/', function ($id,$format=".json"){
+            if(!is_numeric($id)&& strstr($id, '.')){
+               $id= explode('.', $id);
+               $format='.'.$id[1];
+               $id=$id[0];
+            }
+            $dao = new TaskDao();
+            Dispatcher::sendResponce(null, $dao->moveToArchiveByID($id), null, $format);
+        },'archiveTask');
+        
+        
+       
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/top_tasks(:format)/', function ($format=".json"){
             $limit=null;
@@ -116,7 +131,7 @@ class Tasks {
            Dispatcher::sendResponce(null, array("version"=>TaskFile::getLatestFileVersionByTaskID($id,$userID)), null, $format);
         },'getTaskVersion');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/claimed/', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/claimed(:format)/', function ($id,$format=".json"){
 
             $data=null;
             $dao = new TaskDao();

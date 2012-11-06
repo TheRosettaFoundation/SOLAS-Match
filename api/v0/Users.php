@@ -74,12 +74,22 @@ class Users {
           Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $badge->getBadgeId()), null, $format);
         },'addUserbadges');
         
-         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/badges/:badge/', function ($id,$badge){
+         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/badges/:badge/', function ($id,$badge,$format=".json"){
+          if(!is_numeric($badge)&& strstr($badge, '.')){
+               $badge= explode('.', $badge);
+               $format='.'.$badge[1];
+               $badge=$badge[0];
+          }
           $dao = new BadgeDao();
           Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $badge), null, $format);
         },'addUserbadgesByID');
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/badges/:badge/', function ($id,$badge){
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/badges/:badge/', function ($id,$badge,$format=".json"){
+          if(!is_numeric($badge)&& strstr($badge, '.')){
+               $badge= explode('.', $badge);
+               $format='.'.$badge[1];
+               $badge=$badge[0];
+          }
           $dao = new BadgeDao();
           Dispatcher::sendResponce(null, $dao->removeUserBadgeByID($id, $badge), null, $format);
         },'deleteUserbadgesByID');
