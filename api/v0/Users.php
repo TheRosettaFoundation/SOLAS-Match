@@ -71,7 +71,7 @@ class Users {
           $data= APIHelper::deserialiser($data, $format);
           $data= APIHelper::cast("Badge", $data);
           $dao = new BadgeDao();
-          Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $badge->getBadgeId()), null, $format);
+          Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $data->getBadgeId()), null, $format);
         },'addUserbadges');
         
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/badges/:badge/', function ($id,$badge){

@@ -25,7 +25,7 @@ class User
                     $this->_password = $params['password'];
             }
             if (isset($params['display_name'])) {
-                    $this->_dislay_name = $params['display_name'];
+                    $this->_display_name = $params['display_name'];
             }
             if (isset($params['biography'])) {
                     $this->_biography = $params['biography'];
