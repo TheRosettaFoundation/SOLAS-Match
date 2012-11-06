@@ -20,6 +20,9 @@ require_once '../app/TaskStream.class.php';
 class Tasks {
   public static function init(){
         $dispatcher=Dispatcher::getDispatcher();
+        
+        
+      
       
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks(:format)/', function ($format=".json"){
             $dao = new TaskDao();
@@ -34,7 +37,18 @@ class Tasks {
             Dispatcher::sendResponce(null, $dao->create($data), null, $format);
         },'createTask');
         
-         
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:id/', function ($id,$format=".json"){
+            if(!is_numeric($id)&& strstr($id, '.')){
+               $id= explode('.', $id);
+               $format='.'.$id[1];
+               $id=$id[0];
+            }
+            $dao = new TaskDao();
+            Dispatcher::sendResponce(null, $dao->moveToArchiveByID($task), null, $format);
+        },'archiveTask');
+        
+        
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/', function ($id,$format=".json"){
             if(!is_numeric($id)&& strstr($id, '.')){
                $id= explode('.', $id);
@@ -100,6 +114,19 @@ class Tasks {
             $userID=null;
             if(isset ($_GET['userID'])&& is_numeric($_GET['userID'])) $userID= $_GET['userID'];
            Dispatcher::sendResponce(null, array("version"=>TaskFile::getLatestFileVersionByTaskID($id,$userID)), null, $format);
+        },'getTaskVersion');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/claimed/', function ($id,$format=".json"){
+
+            $data=null;
+            $dao = new TaskDao();
+            if(isset ($_GET['userID'])&& is_numeric($_GET['userID'])) {
+                $data=$dao->hasUserClaimedTask($_GET['userID'], $id);
+            }else{
+                $data=$dao->taskIsClaimed($id);
+            }
+       
+           Dispatcher::sendResponce(null,$data, null, $format);
         },'getTaskVersion');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/addTarget/:languageCode/:countryCode/', function ($languageCode,$countryCode,$format=".json"){
