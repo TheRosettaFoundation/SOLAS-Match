@@ -13,10 +13,10 @@
 <p style="margin-bottom:20px;"></p>
 <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well">
     <label for="title">Title</label>
-    <textarea wrap="hard" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
+    <textarea wrap="soft" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
 
     <label for="impact">Task Impact</label>
-    <textarea wrap="hard" cols="1" rows="2" name="impact">{$task->getImpact()}</textarea>
+    <textarea wrap="soft" cols="1" rows="2" name="impact">{$task->getImpact()}</textarea>
 
     <label for="reference">Context Reference</label>
     {if $task->getReferencePage() != '' }
@@ -24,7 +24,7 @@
     {else}
         {assign var="url_text" value="http://"}
     {/if}
-    <textarea wrap="hard" cols="1" rows="2" name="reference">{$url_text}</textarea>
+    <textarea wrap="soft" cols="1" rows="2" name="reference">{$url_text}</textarea>
 
     <label for="source">Source Language</label>
         <select name="source" id="source">

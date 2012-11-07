@@ -474,43 +474,7 @@ class OrgRouteHandler
         $request = APIClient::API_VERSION."/badges/$badge_id";
         $response = $client->call($request);
         $badge = $client->cast('Badge', $response);
-        //$badge_dao = new BadgeDao();
-        
-/*
-            if($post->title == '' || $post->description == '') {
-                $app->flash('error', "All fields must be filled out");
-            } else {
-                $params = array();
-                $params['badge_id'] = $badge_id;
-                $params['owner_id'] = null;                
-                $params['title'] = $post->title;
-                $params['description'] = $post->description;
-                
-                $badge_dao = new BadgeDao();
-                $updatedBadge = new Badge($params);
-                $badge_dao->insertAndUpdateBadge($updatedBadge);       //wait for API support
-                $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
-            }        
 
-        
-        if($app->request()->isPost()) {
-            $title = $app->request()->post('title');
-            if($title != NULL) {
-                $badge->setName($title);
-            }   
-            
-            $description = $app->request()->post('description');
-            if($description != NULL) {
-                $badge->setHomePage($description);
-            }
-            
-            $org_dao = new OrganisationDao();
-            $org_dao->save($org);       //Wait for API support
-            $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org->getId())));
-        }        
-        */
-        
-        
         $app->view()->setData('badge', $badge);
         
         $app->view()->appendData(array('org_id' => $org_id));        

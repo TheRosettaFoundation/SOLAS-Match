@@ -6,10 +6,10 @@ class Tag {
 
 	function __construct($params = array()) {
 		if (isset($params['tag_id'])) {
-			$this->setTagId($params['tag_id']);
+			$this->_tag_id = $params['tag_id'];
 		}
 		if (isset($params['label'])) {
-			$this->setLabel($params['label']);
+			$this->_label = $params['label'];
 		}
 	}
 

@@ -11,11 +11,11 @@ class TaskRouteHandler
         )->name('archived-tasks');
 
         $app->get('/tasks/active/p/:page_no', array($this, 'activeTasks')
-        )->name('active-tasks');
+        )->name('active-tasks');        
 
         $app->get('/task/id/:task_id/download-task-latest-file/', array($middleware, 'authUserForOrgTask'),
         array($this, 'downloadTaskLatestVersion'))->name('download-task-latest-version');
-
+        
         $app->get('/task/id/:task_id/mark-archived/', array($middleware, 'authUserForOrgTask'),
         array($this, 'archiveTask'))->name('archive-task');
 

@@ -1,41 +1,41 @@
 <?php
 class User
 {
-	var $_user_id;
-	var $_email;
-	var $_nonce;
-	var $_password;
-	var $_display_name;
-	var $_biography;
-	var $_native_language_id;
+    var $_user_id;
+    var $_email;
+    var $_nonce;
+    var $_password;
+    var $_display_name;
+    var $_biography;
+    var $_native_language_id;
     var $_native_region_id;
 	
 
 	public function __construct($params = array()) {
-		if (isset($params['user_id'])) {
-			$this->setUserId($params['user_id']);
-		}
-		if (isset($params['email'])) {
-			$this->setEmail($params['email']);
-		}
-		if (isset($params['nonce'])) {
-			$this->setNonce($params['nonce']);
-		}
-		if (isset($params['password'])) {
-			$this->setPassword($params['password']);
-		}
-		if (isset($params['display_name'])) {
-			$this->setDisplayName($params['display_name']);
-		}
-		if (isset($params['biography'])) {
-			$this->setBiography($params['biography']);
-		}
-		if (isset($params['native_lang_id'])) {
-			$this->setNativeLanguageID($params['native_lang_id']);
-		}
-        if (isset($params['native_region_id'])) {
-            $this->setNativeRegionID($params['native_region_id']);
-        }
+            if (isset($params['user_id'])) {
+                    $this->_user_id = $params['user_id'];
+            }
+            if (isset($params['email'])) {
+                    $this->_email = $params['email'];
+            }
+            if (isset($params['nonce'])) {
+                    $this->_nonce = $params['nonce'];
+            }
+            if (isset($params['password'])) {
+                    $this->_password = $params['password'];
+            }
+            if (isset($params['display_name'])) {
+                    $this->_dislay_name = $params['display_name'];
+            }
+            if (isset($params['biography'])) {
+                    $this->_biography = $params['biography'];
+            }
+            if (isset($params['native_lang_id'])) {
+                    $this->_native_language_id = $params['native_lang_id'];
+            }
+            if (isset($params['native_region_id'])) {
+                    $this->_native_region_id = $params['native_region_id'];
+            }
 	}
 
 	public function setUserId($user_id) {
