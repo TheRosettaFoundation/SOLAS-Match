@@ -1925,6 +1925,34 @@ Select exists (SELECT 1	FROM task_claim WHERE task_id = tID) as result;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getArchivedTasks
+DROP PROCEDURE IF EXISTS `getArchivedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTasks`(IN `arc_id` INT, IN `t_id` INT, IN `o_id` INT)
+BEGIN
+
+    if arc_id='' then set arc_id=null; end if;
+    if t_id='' then set t_id=null; end if;
+    if o_id='' then set o_id=null; end if;
+    set @q="SELECT * FROM archived_task
+                WHERE 1";
+    if arc_id is not null then
+        set @q=CONCAT(@q, " and archived_task_id=", arc_id);
+    end if;
+    if t_id is not null then
+        set @q=CONCAT(@q, " and task_id=", t_id);
+    end if;
+    if o_id is not null then
+        set @q=CONCAT(@q, " and organisation_id=", o_id);
+    end if;
+    
+    PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Dev.getUserArchivedTasks
 DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
 DELIMITER //
