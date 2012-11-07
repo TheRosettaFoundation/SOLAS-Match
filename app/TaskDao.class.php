@@ -172,7 +172,7 @@ class TaskDao {
      * Add an identicle entry with a different ID and target Language
      * Used for bulk uploads
      */
-    public function duplicateTaskForTarget($task, $language_id,$countryCode)
+    public function duplicateTaskForTarget($task, $language_id,$countryCode,$userID)
     {
         //Get the file info for original task
         $task_file_info = TaskFile::getTaskFileInfo($task);
@@ -187,19 +187,20 @@ class TaskDao {
         $this->save($task);
 
         //Generate new file info and save it
-        TaskFile::recordFileUpload($task,$task_file_info['filename'],$task_file_info['content_type'],$_SESSION['user_id']);
+        TaskFile::recordFileUpload($task,$task_file_info['filename'],$task_file_info['content_type'],$userID);
      
         $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
 
         //Get the new path the file can be found at
         $file_info = TaskFile::getTaskFileInfo($task);
         $new_file_path = Upload::absoluteFilePathForUpload($task, 0, $file_info['filename']);
-
+        
         Upload::createFolderPath($task);
-        if(!copy($old_file_path, $new_file_path)) {
-            $error = "Failed to copy file to new location";
-            return 0;
-        }
+//        if(!copy($old_file_path, $new_file_path)) {
+//            $error = "Failed to copy file to new location";
+//            return 0;
+//        }
+        echo $new_file_path;
         return 1;
     }
 

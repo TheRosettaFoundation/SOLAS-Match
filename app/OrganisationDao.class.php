@@ -26,6 +26,12 @@ class OrganisationDao {
                 return $result[0]->getName();
 	}
         
+    public static function getOrgByName($name)
+    {
+            $result = self::getOrg(null, $name, null, null);
+            return $result[0];
+    }
+        
     public static function getOrg($id,$name,$homepage,$bio)
     {
         $ret = array();
@@ -117,7 +123,9 @@ class OrganisationDao {
     public static function revokeMembership($org_id, $user_id) {
         $db = new PDOWrapper();
         $db->init();
-        $db->call("revokeMembership", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
+        if($result=$db->call("revokeMembership", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}")){
+            return $result[0]['result'];
+        }else return 0;
     }
 
     private static function create_org_from_sql_result($result) {
@@ -130,7 +138,8 @@ class OrganisationDao {
 
         return new Organisation($org_data);
     }
-
+   
+    
     public function save($org) {
         if(is_null($org->getId())) {
             return $this->_insert($org);       //Create new organisation
@@ -153,5 +162,10 @@ class OrganisationDao {
         $db = new PDOWrapper();
         $db->init();
         return $db->call("organisationInsertAndUpdate", "{$db->cleanse($org->getId())},'{$db->cleanse($org->getHomePage())}','{$db->cleanse($org->getName())}','{$db->cleanse($org->getBiography())}'");
+    }
+    public function delete($orgID){
+        $db = new PDOWrapper();
+        $db->init();
+        return $db->call("deleteOrg","{$db->cleanse($orgID)}" );
     }
 }

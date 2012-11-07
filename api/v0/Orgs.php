@@ -21,6 +21,39 @@ class Orgs {
            Dispatcher::sendResponce(null, $dao->getOrg(null, null, null, null), null, $format);
         },'getOrgs');
         
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs(:format)/', function ($format=".json"){
+            $data=Dispatcher::getDispatcher()->request()->getBody();
+            $data= APIHelper::deserialiser($data, $format);
+            $data = APIHelper::cast("Organisation", $data);
+            $data->setId(null);
+            $dao = new OrganisationDao();
+            Dispatcher::sendResponce(null, $dao->save($data), null, $format);
+        },'createOrg');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/', function ($id,$format=".json"){
+            if(!is_numeric($id)&& strstr($id, '.')){
+               $id= explode('.', $id);
+               $format='.'.$id[1];
+               $id=$id[0];
+            }
+            $data=Dispatcher::getDispatcher()->request()->getBody();
+            $data= APIHelper::deserialiser($data, $format);
+            $data = APIHelper::cast("Organisation", $data);
+            $dao = new OrganisationDao();
+            Dispatcher::sendResponce(null, $dao->save($data), null, $format);
+        },'updateorg');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:id/', function ($id,$format=".json"){
+            if(!is_numeric($id)&& strstr($id, '.')){
+               $id= explode('.', $id);
+               $format='.'.$id[1];
+               $id=$id[0];
+            }
+            $dao = new OrganisationDao();
+            Dispatcher::sendResponce(null, $dao->delete($id), null, $format);
+        },'deleteTask');
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/', function ($id,$format=".json"){
            if(!is_numeric($id)&& strstr($id, '.')){
                $id= explode('.', $id);
@@ -32,6 +65,24 @@ class Orgs {
            if(is_array($data))$data=$data[0];
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getOrg');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/getByName/:name/', function ($name,$format=".json"){
+           if(!is_numeric($name)&& strstr($name, '.')){
+               $temp = array();
+               $temp= explode('.', $name);
+               $lastIndex = sizeof($temp)-1;
+               if($lastIndex>1){
+                   $format='.'.$temp[$lastIndex];
+                   $name=$temp[0];
+                   for($i = 1; $i < $lastIndex; $i++){
+                       $name="{$name}.{$temp[$i]}";
+                   }
+               }
+           }
+           $data= OrganisationDao::getOrgByName($name);
+           if(is_array($data))$data=$data[0];
+           Dispatcher::sendResponce(null, $data, null, $format);
+        },'getOrgByName');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/badges(:format)/', function ($id,$format=".json"){
            $dao = new BadgeDao;
@@ -47,6 +98,36 @@ class Orgs {
            $dao = new OrganisationDao();
            Dispatcher::sendResponce(null, $dao->getMembershipRequests($id), null, $format);
         },'getMembershipRequests');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs/:id/requests/:uid/', function ($id,$uid,$format=".json"){
+           if(!is_numeric($uid)&& strstr($uid, '.')){
+              $uid= explode('.', $uid);
+              $format='.'.$uid[1];
+              $uid=$uid[0];
+           }
+           $dao = new OrganisationDao();
+           Dispatcher::sendResponce(null, $dao->requestMembership($uid, $id), null, $format);
+        },'createMembershipRequests');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/requests/:uid/', function ($id,$uid,$format=".json"){
+           if(!is_numeric($uid)&& strstr($uid, '.')){
+              $uid= explode('.', $uid);
+              $format='.'.$uid[1];
+              $uid=$uid[0];
+           }
+           $dao = new OrganisationDao();
+           Dispatcher::sendResponce(null, $dao->acceptMemRequest($id,$uid), null, $format);
+        },'acceptMembershipRequests');
+        
+         Dispatcher::registerNamed(HttpMethodEnum::delete, '/v0/orgs/:id/requests/:uid/', function ($id,$uid,$format=".json"){
+           if(!is_numeric($uid)&& strstr($uid, '.')){
+              $uid= explode('.', $uid);
+              $format='.'.$uid[1];
+              $uid=$uid[0];
+           }
+           $dao = new OrganisationDao();
+           Dispatcher::sendResponce(null, $dao->refuseMemRequest($id,$uid), null, $format);
+        },'rejectMembershipRequests');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/tasks(:format)/', function ($id,$format=".json"){
            $dao = new TaskDao();

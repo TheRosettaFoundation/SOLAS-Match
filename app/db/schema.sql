@@ -998,6 +998,19 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.deleteOrg
+DROP PROCEDURE IF EXISTS `deleteOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`()
+BEGIN
+if EXISTS (select 1 from organisation where organisation.id=id) then
+	delete from organisation where organisation.id=id;
+	select 1 as result;
+else
+	select 0 as result;
+end if;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-test.findOrganisationsUserBelongsTo
 DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
