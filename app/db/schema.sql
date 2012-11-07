@@ -1679,6 +1679,21 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.deleteTag
+DROP PROCEDURE IF EXISTS `deleteTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`()
+BEGIN
+if EXISTS (select 1 from tag where tag.tag_id=id) then
+	delete from tag where tag.tag_id=id;
+	select 1 as result;
+else
+	select 0 as result;
+end if;
+
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Dev.getTaskTags
 DROP PROCEDURE IF EXISTS `getTaskTags`;
 DELIMITER //

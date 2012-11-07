@@ -140,5 +140,18 @@ class TagsDao {
 			}
 		}
 		return $ret;
-	}
+                
+     }
+     
+     public function delete($id) {
+         $db = new PDOWrapper();
+         $db->init();
+         if ($r = $db->call("deleteTag", "{$db->cleanse($id)}")) {
+                 return $r[0]['result'];
+         }
+         return 0;
+     }
+     
+     
+        
 }
