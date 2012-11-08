@@ -98,8 +98,10 @@ class OrganisationDao {
         $db = new PDOWrapper();
         $db->init();
         $ret = null;
-        if($result = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
-                $ret = $result;
+        if($results = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
+            foreach($results as $result){  
+            $ret[] = new MembershipRequest($result);
+            }
         }
         return $ret;
     }
