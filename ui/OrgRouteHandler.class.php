@@ -43,6 +43,7 @@ class OrgRouteHandler
     public function createOrg()
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
 
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -62,11 +63,19 @@ class OrgRouteHandler
 
             if($org->getName() != '') {
                 $org_dao = new OrganisationDao();
-                if(!is_object($org_dao->find(array('name' => $org->getName())))) {      //wait for API support
-                    if($new_org = $org_dao->save($org))     //wait for API support
-                    {
+ 
+                $request = APIClient::API_VERSION."/orgs/getByName/{$org->getName()}";
+                $organisation = $client->call($request, HTTP_Request2::METHOD_GET);
+                  
+                if(!$organisation) {
+                    $request = APIClient::API_VERSION."/orgs";
+                    $response = $client->call($request, HTTP_Request2::METHOD_POST, $org);    
+                    $new_org = $client->cast('Organisation', $response);
+                    
+                    if($new_org) {
                         $user_id = UserSession::getCurrentUserID();
-                        $org_dao->acceptMemRequest($new_org->getId(), $user_id);    //wait for API support
+                        $request = APIClient::API_VERSION."/orgs/{$new_org->getId()}/requests/$user_id";
+                        $organisation = $client->call($request, HTTP_Request2::METHOD_PUT);                        
                         $org_name = $org->getName();
                         $app->flashNow('success', "Organisation \"$org_name\" has been created. 
                                             Visit the <a href='".$app->urlFor("client-dashboard")."'>client dashboard</a> 
@@ -100,8 +109,9 @@ class OrgRouteHandler
         $request = APIClient::API_VERSION."/users/$user_id/orgs";
         $user_orgs = (array)$client->call($request);
         if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-            $org_dao = new OrganisationDao();
-            if($org_dao->requestMembership($user->getUserId(), $org_id)) {  //wait for API support
+            $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+            $requestMembership = $client->call($request, HTTP_Request2::METHOD_POST);         
+            if($requestMembership) {
                 $app->flash("success", "Successfully requested membership.");
             } else {
                 $app->flash("error", "You have already sent a membership request to this Organisation");
@@ -128,13 +138,16 @@ class OrgRouteHandler
             $post = (object)$app->request()->post();
             
             if(isset($post->email)) {
-                if(User::isValidEmail($post->email)) {
-                    $user = $user_dao->find(array('email' => $post->email));    //wait for API support
+                if(User::isValidEmail($post->email)) {       
+                    $url = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
+                    $response = $client->call($url);
+                    $user = $client->cast('User', $response);
                 
                     if(!is_null($user)) {
                         $user_id = $user->getUserId();
                         $request = APIClient::API_VERSION."/users/$user_id/orgs";
-                        $user_orgs = (array)$request;
+                        $user_orgs = $client->call($request);
+                        //$user_orgs = (array)$response;
                     
                         if($user->getDisplayName() != '') {
                             $user_name = $user->getDisplayName();
@@ -142,8 +155,8 @@ class OrgRouteHandler
                             $user_name = $user->getEmail();
                         }   
                         if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-                            $org_dao->acceptMemRequest($org_id, $user->getUserId());    //wait for API support
-                    
+                            $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                            $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                             if($org->getName() != '') {
                                 $org_name = $org->getName();
                             } else {
@@ -165,8 +178,9 @@ class OrgRouteHandler
                 }
             } elseif(isset($post->accept)) {
                 if($user_id = $post->user_id) {
-                    $org_dao->acceptMemRequest($org_id, $user_id);      //wait for API support
-
+                    
+                    $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                     $request = APIClient::API_VERSION."/users/$user_id";
                     $response = $client->call($request);
                     $user = $client->cast('User', $response);
@@ -176,7 +190,8 @@ class OrgRouteHandler
                 }
             } elseif(isset($post->refuse)) {
                 if($user_id = $post->user_id) {
-                    $org_dao->refuseMemRequest($org_id, $user_id);      //wait for API support
+                    $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                    $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
                     
                     $request = APIClient::API_VERSION."/users/$user_id";
                     $response = $client->call($request);
@@ -187,12 +202,17 @@ class OrgRouteHandler
                 }
             }
         }
+        // HttpMethodEnum::GET, '/v0/orgs/:id/requests(:format)/'
+        $request = APIClient::API_VERSION."/orgs/$org_id/requests";
+        $requests = $client->call($request, HTTP_Request2::METHOD_GET);
         
-        $requests = $org_dao->getMembershipRequests($org_id);       //wait for API support
+        
+        //$requests = $org_dao->getMembershipRequests($org_id);       //wait for API support
         $user_list = array();
         if(count($requests) > 0) {
             foreach($requests as $request) {
-                $user_list[] = $user_dao->find(array('user_id' => $request['user_id']));
+                
+                $user_list[] = $client->cast('User', $request); //$user_dao->find(array('user_id' => $request['user_id']));
             }
         }
         
@@ -245,26 +265,14 @@ class OrgRouteHandler
         $request = APIClient::API_VERSION."/orgs/$org_id";
         $response = $client->call($request);
         $org = $client->cast('Organisation', $response);
-        $org_dao = new OrganisationDao();
-  
-        //wait for API support      
-//        $org_badges = array();
-//        $request = APIClient::API_VERSION."/orgs/$org_id/badges";
-//        $response = $client->call($request);
-//        foreach($response as $stdObject) {
-//            $org_badges[] = $client->cast('Badge', $stdObject);
-//            
-//            
-//        }
-        
-        $badge_dao = new BadgeDao();
         
          if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
                    
             if(isset($post->deleteBadge)) {
                 $badge_id = $post->badge_id;
-                $badge_dao->deleteBadge($badge_id);
+                $request = APIClient::API_VERSION."/badges/$badge_id";
+                $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
             } 
             
             if(isset($post->title) && isset($post->description)) {
@@ -278,28 +286,38 @@ class OrgRouteHandler
                     $params['description'] = $post->description;
                     $params['owner_id'] = null; 
 
-                    $badge_dao = new BadgeDao();
                     $updatedBadge = new Badge($params);
-                    $badge_dao->insertAndUpdateBadge($updatedBadge);       //wait for API support
+                    $request = APIClient::API_VERSION."/badges/{$post->badge_id}";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT, $updatedBadge); 
                     $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
                 }
             }
         }       
-        
-        $org_badges = $badge_dao->getOrgBadges($org_id);
-        
-        //wait for API support     
-//        $request = APIClient::API_VERSION."/orgs/$org_id/members";
-//        $org_member_ids = (array)$client->call($request);
-        $org_member_ids = $org_dao->getOrgMembers($org_id);
+      
+        $request = APIClient::API_VERSION."/orgs/$org_id/badges";
+        $badgeList = $client->call($request);
+     
+        $org_badges = array();
+        $request = APIClient::API_VERSION."/orgs/$org_id/badges";
+        $response = $client->call($request);
+        if($response) {
+            foreach($response as $stdObject) {
+                $org_badges[] = $client->cast('Badge', $stdObject);
+            }        
+        }
+
+        $request = APIClient::API_VERSION."/orgs/$org_id/members";
+        $orgMemberList = $client->call($request);
         
         $org_members = array();
-        if(count($org_member_ids) > 0) {
-            foreach($org_member_ids as $org_mem) {
-                $org_members[] = $org_mem['user_id'];
-            }   
-        }
-        
+        if(count($orgMemberList) > 0) {
+            $i = 0;
+            foreach ($orgMemberList as $stdObject) {
+                $org_members[] = $orgMemberList[$i]->user_id;
+                $i++;
+            }
+        }        
+
         $app->view()->setData('current_page', 'org-public-profile');
         $app->view()->appendData(array('org' => $org,
                 'org_members' => $org_members,

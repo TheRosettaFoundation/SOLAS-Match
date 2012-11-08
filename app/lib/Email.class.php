@@ -28,13 +28,34 @@ class Email {
             $mailHeader .= "Content-type: text/html\r\n";
         }
         
-        $mailParams = "-f$mailFrom";
+        $mailParams = "$mailFrom";
  
         try {
-                $mailResult = mail($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams);
+           $mailResult = Email::SendMail($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams);
         }
         catch (Exception $e) {
-                trigger_error("Error sending email: " . $e->getMessage(), E_USER_WARNING);
+            trigger_error("Error sending email: " . $e->getMessage(), E_USER_WARNING);
         }
-    }    
+    }
+    
+    static function SendMail ($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams)
+    {
+        $settings = new Settings();
+        if ($SMTPIN = fsockopen ($settings->get('messaging.host'), $settings->get('messaging.port')))
+        {
+            fputs ($SMTPIN, "EHLO ".$settings->get('messaging.host')."\r\n");
+            $talk["hello"] = fgets ( $SMTPIN,2048);
+            fputs ($SMTPIN, "MAIL FROM: <".$mailParams.">\r\n");
+            $talk["From"] = fgets ( $SMTPIN, 1024 );
+            fputs ($SMTPIN, "RCPT TO: <".$mailTo.">\r\n");
+            $talk["To"] = fgets ($SMTPIN, 1024);
+            fputs($SMTPIN, "DATA\r\n");
+            $talk["data"]=fgets( $SMTPIN,1024 );
+            fputs($SMTPIN, "To: <".$mailTo.">\r\nFrom: <".$mailParams.">\r\nSubject:".$mailSubject."\r\n\r\n\r\n".$mailBody."\r\n.\r\n");
+            $talk["send"]=fgets($SMTPIN,256);
+            fputs ($SMTPIN, "QUIT\r\n");
+            fclose($SMTPIN);
+        }
+        return $talk;
+    } 
 }

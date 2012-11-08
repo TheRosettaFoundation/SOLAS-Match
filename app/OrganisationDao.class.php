@@ -1,6 +1,7 @@
 <?php
 
 require('models/Organisation.class.php');
+require('models/MembershipRequest.class.php');
 require_once ('PDOWrapper.class.php');
 
 class OrganisationDao {
@@ -98,8 +99,10 @@ class OrganisationDao {
         $db = new PDOWrapper();
         $db->init();
         $ret = null;
-        if($result = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
-                $ret = $result;
+        if($results = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
+            foreach($results as $result){  
+            $ret[] = new MembershipRequest($result);
+            }
         }
         return $ret;
     }

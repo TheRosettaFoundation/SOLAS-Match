@@ -105,7 +105,6 @@ class UserRouteHandler
 
         $user_dao           = new UserDao();
         $task_dao           = new TaskDao;
-        $org_dao            = new OrganisationDao();
         $current_user_id    = UserSession::getCurrentUserID();
         $current_user;
         
@@ -137,6 +136,9 @@ class UserRouteHandler
                 foreach($org_tasks_data as $stdObject) {
                     $my_org_tasks[] = $client->cast('Task', $stdObject);
                 }
+            } else {
+                // If no org tasks, set to null
+                $my_org_tasks = null;
             }   
             
             $request = APIClient::API_VERSION."/tags/topTags";
@@ -245,7 +247,16 @@ class UserRouteHandler
                 
                     $request = APIClient::API_VERSION."/login";             
                     $user = $client->call($request, HTTP_Request2::METHOD_POST, new Login($post->email, $post->password));                
-                    if($user) {  
+
+                    try {
+                        
+                        if(!is_array($user) && !is_null($user)) {
+                            $user = $client->cast("User", $user);
+                            UserSession::setSession($user->getUserId());
+                        } else {
+                            throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');    
+                        }                    
+                                       
                         
                         if(isset($_SESSION['previous_page'])) {
                             if(isset($_SESSION['old_page_vars'])) {
@@ -255,8 +266,15 @@ class UserRouteHandler
                             }
                         }
                         $app->redirect($app->urlFor('home'));
-                    } else {
-                        $error = 'Tried to log you in immediately, but was unable to.';
+                    } catch (InvalidArgumentException $e) {
+                        $error = '<p>Unable to log in. Please check your email and password.';
+                        $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
+                        $error .= ' or <a href="'.$app->urlFor('register').'">register</a> for an account.</p>';
+                        $error .= '<p>System error: <em>' . $e->getMessage() .'</em></p>';
+
+                        $app->flash('error', $error);
+                        $app->redirect($app->urlFor('login'));
+                        echo $error;                                        
                     }
                 } else {
                     $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
@@ -275,24 +293,30 @@ class UserRouteHandler
     public function passwordReset($uid)
     {
         $app = Slim::getInstance();
-
+        $client = new APIClient();
+        
         $user_dao = new UserDao();
         
-        /* TODO
-        $request = APIClient::API_VERSION."/users/$uid/has_reset_request";
+        /*
+        $request = APIClient::API_VERSION."/users/$uid/passwordResetRequest";
         $response = $client->call($request);        
         $user_obj = $client->cast('User', $response);
-        
-        $reset_request = $user_obj->
         */
+        //$reset_request = $user_obj->
+        
         //$my_org_tasks = array();
         //if($org_tasks_data) {
             //foreach($org_tasks_data as $stdObject) {
                 //$my_org_tasks[] = $client->cast('Task', $stdObject);
             //}
-        //}         
+        //}
         
-        $reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));     //wait for API support
+        $request = APIClient::API_VERSION."/password_reset/$uid";
+        $response = $client->call($request);        
+        $reset_request = $client->cast('PasswordReset', $response);
+        // v0/password_reset/:key/
+        
+        //$reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));     //wait for API support
 
         if(!isset($reset_request['user_id']) || $reset_request['user_id'] == '') {
             $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
@@ -330,7 +354,8 @@ class UserRouteHandler
     public function passResetRequest()
     {
         $app = Slim::getInstance();
-
+        $client = new APIClient();
+        
         $user_dao = new UserDao();
 
         if($app->request()->isPost()) {
@@ -338,8 +363,19 @@ class UserRouteHandler
             if(isset($post->password_reset)) {
                 if(isset($post->email_address) && $post->email_address != '')       //wait for API support
                 {
-                    if($user = $user_dao->find(array('email' => $post->email_address))) {
-                        if(!$user_dao->hasRequestedPasswordReset($user)) {          //wait for API support
+                    $request = APIClient::API_VERSION."/users/getByEmail/{$post->email_address}";
+                    $response = $client->call($request, HTTP_Request2::METHOD_GET);
+                    $user = $client->cast('User', $response); 
+                    //if($user = $user_dao->find(array('email' => $post->email_address))) {
+                    if($user) {  
+                        // /v0/users/:id/passwordResetRequest(:format)/
+                        $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
+                        $hasUserRequestedPwReset = $client->call($request, HTTP_Request2::METHOD_GET);
+                        //$hasUserRequestedPwReset = $client->cast('User', $response);                         
+                        
+                        
+                        if (!$hasUserRequestedPwReset) {
+                            ////(!$user_dao->hasRequestedPasswordReset($user)) {          //wait for API support
                             $uid = md5(uniqid(rand()));
                             $user_dao->addPasswordResetRequest($uid, $user->getUserId());   //wait for API support
                             Notify::sendPasswordResetEmail($uid, $user);
@@ -372,6 +408,7 @@ class UserRouteHandler
     public function login()
     {
         $app = Slim::getInstance();
+        $client = new APIClient();
         
         $error = null;
         $tempSettings=new Settings();
@@ -390,18 +427,26 @@ class UserRouteHandler
         }
         
         try {
-            $user_dao = new UserDao();
             if (isValidPost($app)){
                 $post = (object)$app->request()->post();
 
                 if(isset($post->login)) {
-                    $user_dao->login($post->email, $post->password);        //wait for API support
+
+                    $request = APIClient::API_VERSION."/login";             
+                    $user = $client->call($request, HTTP_Request2::METHOD_POST, new Login($post->email, $post->password)); 
+                    if(!is_array($user) && !is_null($user)) {
+                        $user = $client->cast("User", $user);
+                        UserSession::setSession($user->getUserId());
+                    } else {
+                        throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');    
+                    }
+                    
                     $app->redirect($app->urlFor("home"));
                 } elseif(isset($post->password_reset)) {
                     $app->redirect($app->urlFor('password-reset-request'));
                 }
             } elseif($app->request()->isPost()||$openid->mode){
-                $user_dao->OpenIDLogin($openid,$app);       //wait for API support
+                $this->OpenIDLogin($openid,$app);
                 $app->redirect($app->urlFor("home"));
             }
             $app->render('login.tpl');
@@ -416,15 +461,45 @@ class UserRouteHandler
             echo $error;
         }
     }
+    
+    public function OpenIDLogin($openid,$app) {
+       
+        if(!$openid->mode) {
+            try {
+            $openid->identity = $openid->data['openid_identifier'];
+            $openid->required = array('contact/email');
+            $url =$openid->authUrl();
+            $app->redirect($openid->authUrl());
+            }catch(ErrorException $e) {
+                echo $e->getMessage();
+            }
+        } elseif($openid->mode == 'cancel') {
+            throw new InvalidArgumentException('User has canceled authentication!');
+            return false;
+        } else {
+            $retvals= $openid->getAttributes();
+            if($openid->validate()){
+                $client = new APIClient();
+                $request = APIClient::API_VERSION."/users/getByEmail/{$retvals['contact/email']}";
+                $response = $client->call($request);
+                if (!is_object($response)&&!is_array($response)) {
+                    $request = APIClient::API_VERSION."/register";
+                    $response = $client->call($request, HTTP_Request2::METHOD_POST, new Register($retvals['contact/email'],md5($retvals['contact/email'])));                    
+                }
+                $user = $client->cast("User", $response);
+                UserSession::setSession($user->getUserId());
+            }
+            return true;
+        }
+    }    
+    
 
     public static function userPrivateProfile()
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-
-        $user_dao = new UserDao();
-
         $user_id = UserSession::getCurrentUserID();
+        
         $url = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($url);
         $user = $client->cast('User', $response);
@@ -452,24 +527,31 @@ class UserRouteHandler
             if($nativeLang != NULL&&$langCountry!= NULL) {
                 $user->setNativeLanguageID($nativeLang);
                 $user->setNativeRegionID($langCountry);
-                //assign a badge
-                $badge_dao = new BadgeDao();
+
                 $badge_id = Badge::NATIVE_LANGUAGE;
                 $url = APIClient::API_VERSION."/badges/$badge_id";
                 $response = $client->call($url);
                 $badge = $client->cast('Badge', $response);
-                $badge_dao->assignBadge($user, $badge);     //wait for API support || move to back end
+                
+                $request = APIClient::API_VERSION."/users/$user_id/badges";
+                $client->call($request, HTTP_Request2::METHOD_POST, $badge);               
+
             }
-            $user_dao->save($user);
+            
+            $request = APIClient::API_VERSION."/users/$user_id";
+            $client->call($request, HTTP_Request2::METHOD_PUT, $user);
             
             if($user->getDisplayName() != '' && $user->getBiography() != ''
                     && $user->getNativeLanguageID() != '' && $user->getNativeRegionID() != '') {
-                $badge_dao = new BadgeDao();
+
                 $badge_id = Badge::PROFILE_FILLER;
                 $url = APIClient::API_VERSION."/badges/$badge_id";
                 $response = $client->call($url);
                 $badge = $client->cast('Badge', $response);
-                $badge_dao->assignBadge($user, $badge);
+                
+                $request = APIClient::API_VERSION."/users/$user_id/badges";
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $badge); 
+            
             }
             
             $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user->getUserId())));
@@ -487,33 +569,28 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
 
-        $badge_dao = new BadgeDao();
-        $user_dao = new UserDao();
-
         $url = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($url);
         $user = $client->cast('User', $response);
+        $user_id = $user->getUserId();
         
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
             if(isset($post->badge_id) && $post->badge_id != '') {
                 $badge_id = $post->badge_id;
-                $url = APIClient::API_VERSION."/badges/$badge_id";
-                $response = $client->call($url);
-                $badge = $client->cast('Badge', $response);
-                $badge_dao->removeUserBadge($user, $badge);     //wait for API support
+                $request = APIClient::API_VERSION."/users/$user_id/badges/$badge_id";
+                $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                 
             }
                 
             if(isset($post->revoke)) {
                 $org_id = $post->org_id;
-                OrganisationDao::revokeMembership($org_id, $user_id);   //wait for API support
+                $request = APIClient::API_VERSION."/users/leaveOrg/$user_id/$org_id";
+                $response = $client->call($request, HTTP_Request2::METHOD_DELETE); 
             } 
         }
                     
-        $task_dao = new TaskDao();
-        $activeJobs = array();
-        $user_id = $user->getUserId();
+        $activeJobs = array();        
         $request = APIClient::API_VERSION."/users/$user_id/tasks";
         $response = $client->call($request);
         
@@ -523,7 +600,15 @@ class UserRouteHandler
             }
         }
 
-        $archivedJobs = $task_dao->getUserArchivedTasks($user, 10);     //wait for API support
+        $archivedJobs = array();
+        $request = APIClient::API_VERSION."/users/$user_id/archived_tasks";
+        $response = $client->call($request, HTTP_Request2::METHOD_GET, null, array('limit' => 10 )); 
+        
+        if($response) {
+            foreach($response as $stdObject) {
+                $archivedJobs[] = $client->cast('Task', $stdObject);
+            }
+        }        
          
         $user_tags = array();
         $request = APIClient::API_VERSION."/users/$user_id/tags";
@@ -533,10 +618,8 @@ class UserRouteHandler
             foreach($response as $stdObject) {
                 $user_tags[] = $client->cast('Tag', $stdObject);
             }
-        }
-            
-        $org_dao = new OrganisationDao();
-                   
+        }            
+        
         $request = APIClient::API_VERSION."/users/$user_id/orgs";
         $orgIds = $client->call($request);        
         
@@ -549,15 +632,14 @@ class UserRouteHandler
             }
         }
         
-        $badgeIds = $user_dao->getUserBadges($user);
+        
+        $request = APIClient::API_VERSION."/users/$user_id/badges";
+        $badgeList = $client->call($request, HTTP_Request2::METHOD_GET);         
         $badges = array();
-        if(count($badgeIds) > 0) {
-            foreach($badgeIds as $badge) {
-                $request = APIClient::API_VERSION."/badges/".$badge['badge_id'];
-                $response = $client->call($request);
-                $badges[] = $client->cast('Badge', $response);
-            }
-        }
+        foreach($badgeList as $stdObject) {
+            $badges[] = new Badge((array)$stdObject);
+        }        
+        
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
@@ -578,4 +660,10 @@ class UserRouteHandler
                     
         $app->render('user-public-profile.tpl');
     }
+    
+
+    public static function isLoggedIn()
+    {
+        return (!is_null(UserSession::getCurrentUserId()));
+    }     
 }
