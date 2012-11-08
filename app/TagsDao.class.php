@@ -139,8 +139,7 @@ class TagsDao {
 				$ret[] = new Tag($row);
 			}
 		}
-		return $ret;
-                
+		return $ret;           
      }
      
      public function delete($id) {
