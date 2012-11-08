@@ -1,6 +1,7 @@
 <?php
 
 require('models/Organisation.class.php');
+require('models/MembershipRequest.class.php');
 require_once ('PDOWrapper.class.php');
 
 class OrganisationDao {
