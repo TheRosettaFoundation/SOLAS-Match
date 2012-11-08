@@ -1,18 +1,33 @@
 {
-    "hash": "a4f782903aa9e44ca9546c91c19be7ea",
+    "hash": "bb1e7387f11955d84cc695018c16a301",
     "packages": [
+        {
+            "name": "drslump/protobuf-php",
+            "version": "0.9.4",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/drslump/Protobuf-PHP.git",
+                "reference": "master"
+            },
+            "type": "git",
+            "installation-source": "source",
+            "autoload": {
+                "files": [
+                    "library/DrSlump/Protobuf.php"
+                ]
+            }
+        },
         {
             "name": "lightopenid/lightopenid",
             "version": "dev-composer",
             "source": {
                 "type": "git",
-                "url": "git://gitorious.org/~makasim/lightopenid/makasims-lightopenid.git",
+                "url": "git://jit.gitorious.org/~makasim/lightopenid/makasims-lightopenid.git",
                 "reference": "c46af663a4b57e22ee9d7472674c967e97887597"
             },
             "require": {
                 "php": ">=5.2.3"
             },
-            "time": "1332838638",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -23,22 +38,29 @@
             "homepage": "https://gitorious.org/lightopenid/lightopenid",
             "keywords": [
                 "openid"
-            ]
+            ],
+            "time": "1332838638"
         },
         {
             "name": "slim/extras",
             "version": "1.0.2",
             "source": {
                 "type": "git",
-                "url": "git://github.com/codeguy/Slim-Extras.git",
+                "url": "https://github.com/codeguy/Slim-Extras",
                 "reference": "1.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/codeguy/Slim-Extras/zipball/1.0.2",
+                "reference": "1.0.2",
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.2.0"
             },
-            "time": "2012-02-23 16:10:48",
+            "time": "2012-02-23 08:10:48",
             "type": "library",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Twig_Extensions_": "Views/Extension/"
@@ -49,13 +71,14 @@
             ],
             "authors": [
                 {
+                    "name": "Andrew Smith",
+                    "email": "a.smith@silentworks.co.uk",
+                    "homepage": "http://www.silentworks.co.uk/"
+                },
+                {
                     "name": "Josh Lockhart",
                     "email": "info@joshlockhart.com",
                     "homepage": "http://www.joshlockhart.com/"
-                },
-                {
-                    "name": "Andrew Smith",
-                    "email": "a.smith@silentworks.co.uk"
                 }
             ],
             "description": "Extras package for Slim Framework",
@@ -82,7 +105,7 @@
             "require": {
                 "php": ">=5.2.0"
             },
-            "time": "2012-06-17 15:58:20",
+            "time": "2012-06-17 09:58:20",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -97,8 +120,7 @@
                 {
                     "name": "Josh Lockhart",
                     "email": "info@joshlockhart.com",
-                    "homepage": "http://www.joshlockhart.com/",
-                    "role": null
+                    "homepage": "http://www.joshlockhart.com/"
                 }
             ],
             "description": "Slim Framework, a micro framework for PHP 5",
@@ -120,7 +142,7 @@
             "require": {
                 "php": ">=5.2"
             },
-            "time": "2012-09-25 22:13:16",
+            "time": "2012-09-25 21:13:16",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -157,18 +179,17 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/videlalvaro/php-amqplib.git",
-                "reference": "8a393d2e1c041b31186196cc67a17a880153ecea"
+                "reference": "237870120238f37d66703583ca0e186b4567b1a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/videlalvaro/php-amqplib/zipball/8a393d2e1c041b31186196cc67a17a880153ecea",
-                "reference": "8a393d2e1c041b31186196cc67a17a880153ecea",
+                "url": "https://github.com/videlalvaro/php-amqplib/zipball/237870120238f37d66703583ca0e186b4567b1a9",
+                "reference": "237870120238f37d66703583ca0e186b4567b1a9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "1350048962",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -187,7 +208,8 @@
                 "queue",
                 "rabbitmq",
                 "message"
-            ]
+            ],
+            "time": "1351776374"
         }
     ],
     "packages-dev": null,
