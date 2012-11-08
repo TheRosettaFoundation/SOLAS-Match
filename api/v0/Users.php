@@ -37,7 +37,7 @@ class Users {
         },'getUser');
         
         
-         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/leaveOrge/:id/:org/', function ($id,$org,$format=".json"){
+         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/leaveOrgr/:id/:org/', function ($id,$org,$format=".json"){
           if(!is_numeric($org)&& strstr($org, '.')){
                $taskID= explode('.', $org);
                $format='.'.$org[1];
