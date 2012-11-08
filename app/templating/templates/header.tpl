@@ -24,12 +24,7 @@
 		    	>
 		    		<a href="{urlFor name="home"}">Home</a></li>
 
-				{if isset($user)}
-		            {assign var="user_id" value=$user->getUserId()}
-					<li {if isset($current_page) && $current_page == 'active-tasks'}class="active" {/if}>
-						<a href="{urlFor name="active-tasks" options="page_no.1"}">Active Tasks</a>
-					</li> <!--'{urlFor name="active-tasks" options="page_no.1"}' -->
-				{/if}
+				
 
 		    	{if isset($user_is_organisation_member)}
 			    	<li
@@ -38,6 +33,12 @@
 			    		<a href="{urlFor name="client-dashboard"}">Dashboard</a>
 			    	</li>
 		    	{/if}
+                        {if isset($user)}
+		            {assign var="user_id" value=$user->getUserId()}
+					<li {if isset($current_page) && $current_page == 'active-tasks'}class="active" {/if}>
+						<a href="{urlFor name="active-tasks" options="page_no.1"}">Active Tasks</a>
+					</li> <!--'{urlFor name="active-tasks" options="page_no.1"}' -->
+				{/if}
 			{if isset($user)}
                 {assign var="user_id" value=$user->getUserId()}
 				<li {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if}>
