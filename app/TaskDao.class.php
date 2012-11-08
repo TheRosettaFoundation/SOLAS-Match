@@ -181,6 +181,7 @@ class TaskDao {
         $task->setTargetCountryCode($countryCode);
         //Save the new Task
         $this->save($task);
+        $this->calculateTaskScore($task->getTaskId());
 
         //Generate new file info and save it
         TaskFile::recordFileUpload($task,$task_file_info['filename'],$task_file_info['content_type'],$_SESSION['user_id']);

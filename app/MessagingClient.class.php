@@ -9,6 +9,8 @@ class MessagingClient
     public $AlertsExchange = "ALERTS";
 
     public $TaskScoreTopic = "task.score";
+    public $UserTaskClaimTopic = "email.user.task.claim";
+    public $PasswordResetTopic = "email.user.password-reset";
 
     private $connection;
 
@@ -83,5 +85,10 @@ class MessagingClient
     public function createMessageFromString($message)
     {
         return new AMQPMessage($message, array('content_type' => 'text/plain'));
+    }
+
+    public function createMessageFromProto($proto)
+    {
+        return new AMQPMessage($proto->serialize());
     }
 }
