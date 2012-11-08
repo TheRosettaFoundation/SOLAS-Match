@@ -8,16 +8,16 @@ class MembershipRequest
 
     public function __construct($params = array()) {
         if(isset($params['request_id'])) {
-            $this->$requestId = $params['request_id'];
+            $this->requestId = $params['request_id'];
         }
         if(isset($params['user_id'])) {
-            $this->$userId = $params['user_id'];
+            $this->userId = $params['user_id'];
         }
         if(isset($params['org_id'])) {
-            $this->$orgId = $params['org_id'];
+            $this->orgId = $params['org_id'];
         }
         if(isset($params['request_datetime'])) {
-            $this->$requestTime = $params['request_datetime'];
+            $this->requestTime = $params['request_datetime'];
         }
     }
     public function getRequestId() {
