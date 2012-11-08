@@ -29,7 +29,7 @@ class Tags {
             }
         },'getTags');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/getByLable/:label/', function ($label,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/getByLabel/:label/', function ($label,$format=".json"){
            if(!is_numeric($label)&& strstr($label, '.')){
                $temp = array();
                $temp= explode('.', $label);
@@ -46,7 +46,7 @@ class Tags {
            $data= $dao->find(array('label'=>$label));
            if(is_array($data))$data=$data[0];
            Dispatcher::sendResponce(null, $data, null, $format);
-        },'getTagByLable');
+        },'getTagByLabel');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/topTags(:format)/', function ($format=".json"){
            $limit = 30;

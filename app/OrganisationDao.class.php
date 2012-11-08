@@ -28,8 +28,9 @@ class OrganisationDao {
         
     public static function getOrgByName($name)
     {
-            $result = self::getOrg(null, $name, null, null);
-            return $result[0];
+            if($result = self::getOrg(null, $name, null, null)){
+                return $result[0];
+            }else return null;
     }
         
     public static function getOrg($id,$name,$homepage,$bio)

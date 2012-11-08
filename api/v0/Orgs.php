@@ -67,11 +67,11 @@ class Orgs {
         },'getOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/getByName/:name/', function ($name,$format=".json"){
-           if(!is_numeric($name)&& strstr($name, '.')){
+            if(!is_numeric($name)&& strstr($name, '.')){
                $temp = array();
                $temp= explode('.', $name);
                $lastIndex = sizeof($temp)-1;
-               if($lastIndex>1){
+               if($lastIndex>0){
                    $format='.'.$temp[$lastIndex];
                    $name=$temp[0];
                    for($i = 1; $i < $lastIndex; $i++){
@@ -119,7 +119,7 @@ class Orgs {
            Dispatcher::sendResponce(null, $dao->acceptMemRequest($id,$uid), null, $format);
         },'acceptMembershipRequests');
         
-         Dispatcher::registerNamed(HttpMethodEnum::delete, '/v0/orgs/:id/requests/:uid/', function ($id,$uid,$format=".json"){
+         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:id/requests/:uid/', function ($id,$uid,$format=".json"){
            if(!is_numeric($uid)&& strstr($uid, '.')){
               $uid= explode('.', $uid);
               $format='.'.$uid[1];
