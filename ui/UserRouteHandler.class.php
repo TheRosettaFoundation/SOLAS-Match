@@ -136,6 +136,9 @@ class UserRouteHandler
                 foreach($org_tasks_data as $stdObject) {
                     $my_org_tasks[] = $client->cast('Task', $stdObject);
                 }
+            } else {
+                // If no org tasks, set to null
+                $my_org_tasks = null;
             }   
             
             $request = APIClient::API_VERSION."/tags/topTags";
@@ -351,7 +354,8 @@ class UserRouteHandler
     public function passResetRequest()
     {
         $app = Slim::getInstance();
-
+        $client = new APIClient();
+        
         $user_dao = new UserDao();
 
         if($app->request()->isPost()) {
@@ -359,8 +363,19 @@ class UserRouteHandler
             if(isset($post->password_reset)) {
                 if(isset($post->email_address) && $post->email_address != '')       //wait for API support
                 {
-                    if($user = $user_dao->find(array('email' => $post->email_address))) {
-                        if(!$user_dao->hasRequestedPasswordReset($user)) {          //wait for API support
+                    $request = APIClient::API_VERSION."/users/getByEmail/{$post->email_address}";
+                    $response = $client->call($request, HTTP_Request2::METHOD_GET);
+                    $user = $client->cast('User', $response); 
+                    //if($user = $user_dao->find(array('email' => $post->email_address))) {
+                    if($user) {  
+                        // /v0/users/:id/passwordResetRequest(:format)/
+                        $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
+                        $hasUserRequestedPwReset = $client->call($request, HTTP_Request2::METHOD_GET);
+                        //$hasUserRequestedPwReset = $client->cast('User', $response);                         
+                        
+                        
+                        if (!$hasUserRequestedPwReset) {
+                            ////(!$user_dao->hasRequestedPasswordReset($user)) {          //wait for API support
                             $uid = md5(uniqid(rand()));
                             $user_dao->addPasswordResetRequest($uid, $user->getUserId());   //wait for API support
                             Notify::sendPasswordResetEmail($uid, $user);
@@ -483,8 +498,8 @@ class UserRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-
         $user_id = UserSession::getCurrentUserID();
+        
         $url = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($url);
         $user = $client->cast('User', $response);
@@ -554,38 +569,28 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
 
-        $badge_dao = new BadgeDao();
-        $user_dao = new UserDao();
-
         $url = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($url);
         $user = $client->cast('User', $response);
+        $user_id = $user->getUserId();
         
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
             if(isset($post->badge_id) && $post->badge_id != '') {
                 $badge_id = $post->badge_id;
-                $url = APIClient::API_VERSION."/badges/$badge_id";
-                $response = $client->call($url);
-                $badge = $client->cast('Badge', $response);
-                
-                // /v0/users/:id/badges/:badge/
-                //$request = APIClient::API_VERSION."/users/$user_id/badges";
-                //$response = $client->call($request, HTTP_Request2::METHOD_DELETE, $badge); 
-                $badge_dao->removeUserBadge($user, $badge);     //wait for API support
-                
+                $request = APIClient::API_VERSION."/users/$user_id/badges/$badge_id";
+                $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                 
             }
                 
             if(isset($post->revoke)) {
                 $org_id = $post->org_id;
-                OrganisationDao::revokeMembership($org_id, $user_id);   //wait for API support
+                $request = APIClient::API_VERSION."/users/leaveOrg/$user_id/$org_id";
+                $response = $client->call($request, HTTP_Request2::METHOD_DELETE); 
             } 
         }
                     
-        //$task_dao = new TaskDao();
-        $activeJobs = array();
-        $user_id = $user->getUserId();
+        $activeJobs = array();        
         $request = APIClient::API_VERSION."/users/$user_id/tasks";
         $response = $client->call($request);
         
@@ -613,10 +618,8 @@ class UserRouteHandler
             foreach($response as $stdObject) {
                 $user_tags[] = $client->cast('Tag', $stdObject);
             }
-        }
-            
-        //$org_dao = new OrganisationDao();
-                   
+        }            
+        
         $request = APIClient::API_VERSION."/users/$user_id/orgs";
         $orgIds = $client->call($request);        
         
@@ -629,18 +632,14 @@ class UserRouteHandler
             }
         }
         
-        //$request = APIClient::API_VERSION."/users/$user_id/badges";
-        //$test = $client->call($request, HTTP_Request2::METHOD_GET);        
         
-        $badgeIds = $user_dao->getUserBadges($user);
+        $request = APIClient::API_VERSION."/users/$user_id/badges";
+        $badgeList = $client->call($request, HTTP_Request2::METHOD_GET);         
         $badges = array();
-        if(count($badgeIds) > 0) {
-            foreach($badgeIds as $badge) {
-                $request = APIClient::API_VERSION."/badges/".$badge['badge_id'];
-                $response = $client->call($request);
-                $badges[] = $client->cast('Badge', $response);
-            }
-        }
+        foreach($badgeList as $stdObject) {
+            $badges[] = new Badge((array)$stdObject);
+        }        
+        
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
@@ -661,4 +660,10 @@ class UserRouteHandler
                     
         $app->render('user-public-profile.tpl');
     }
+    
+
+    public static function isLoggedIn()
+    {
+        return (!is_null(UserSession::getCurrentUserId()));
+    }     
 }
