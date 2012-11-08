@@ -42,7 +42,7 @@ class Orgs {
             $data = APIHelper::cast("Organisation", $data);
             $dao = new OrganisationDao();
             Dispatcher::sendResponce(null, $dao->save($data), null, $format);
-        },'updateorg');
+        },'updateOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:id/', function ($id,$format=".json"){
             if(!is_numeric($id)&& strstr($id, '.')){
@@ -52,7 +52,7 @@ class Orgs {
             }
             $dao = new OrganisationDao();
             Dispatcher::sendResponce(null, $dao->delete($id), null, $format);
-        },'deleteTask');
+        },'deleteOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/', function ($id,$format=".json"){
            if(!is_numeric($id)&& strstr($id, '.')){
