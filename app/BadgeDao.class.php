@@ -14,6 +14,8 @@ class BadgeDao
         return new Badge($result[0]);
     }
 
+   
+    
     public function insertAndUpdateBadge($badge)
     {
         $db = new PDOWrapper();

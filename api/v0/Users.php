@@ -37,6 +37,19 @@ class Users {
         },'getUser');
         
         
+         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/leaveOrge/:id/:org/', function ($id,$org,$format=".json"){
+          if(!is_numeric($org)&& strstr($org, '.')){
+               $taskID= explode('.', $org);
+               $format='.'.$org[1];
+               $org=$org[0];
+           }
+           $dao = new OrganisationDao();
+           $data= $dao->revokeMembership($org, $id);
+           if(is_array($data))$data=$data[0];
+           Dispatcher::sendResponce(null, $data, null, $format);
+        },'userLeaveOrg');
+        
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/getByEmail/:email/', function ($email,$format=".json"){
            if(!is_numeric($email)&& strstr($email, '.')){
                $temp = array();
@@ -56,6 +69,17 @@ class Users {
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getUserByEmail');
        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/subscribedToTask/:id/:taskID/', function ($id,$taskID,$format=".json"){
+           if(!is_numeric($taskID)&& strstr($taskID, '.')){
+               $taskID= explode('.', $taskID);
+               $format='.'.$taskID[1];
+               $taskID=$taskID[0];
+           }
+           $dao = new UserDao();
+           Dispatcher::sendResponce(null, $dao->isSubscribedToTask($id, $taskID), null, $format);
+        },'userSubscribedToTask');
+        
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/orgs(:format)/', function ($id,$format=".json"){
           $dao = new UserDao();
           Dispatcher::sendResponce(null, $dao->findOrganisationsUserBelongsTo($id), null, $format);

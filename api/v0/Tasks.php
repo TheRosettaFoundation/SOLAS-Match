@@ -144,12 +144,18 @@ class Tasks {
            Dispatcher::sendResponce(null,$data, null, $format);
         },'getTaskClaimed');
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/addTarget/:languageCode/:countryCode/', function ($languageCode,$countryCode,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/addTarget/:languageCode/:countryCode/:userID', function ($languageCode,$countryCode,$userID,$format=".json"){
+            if(!is_numeric($countryCode)&& strstr($countryCode, '.')){
+               $countryCode= explode('.', $countryCode);
+               $format='.'.$countryCode[1];
+               $countryCode=$countryCode[0];
+           }
             $dao = new TaskDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $data = APIHelper::deserialiser($data, $format);
-            $task = APIHelper::cast(new Task(), $params);
-            $result = $dao->duplicateTaskForTarget($task, $language_id, $countryCode);
+            $task = APIHelper::cast(new Task(), $data);
+            
+            $result = $dao->duplicateTaskForTarget($task, $languageCode, $countryCode,$userID);
             Dispatcher::sendResponce(null, array("result"=>$result,"message"=>$result==1?"duplicated sucessfully":"duplication failed"), null, $format);
         },'addTarget');
         

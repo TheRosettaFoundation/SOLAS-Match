@@ -29,6 +29,25 @@ class Tags {
             }
         },'getTags');
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/getByLable/:label/', function ($label,$format=".json"){
+           if(!is_numeric($label)&& strstr($label, '.')){
+               $temp = array();
+               $temp= explode('.', $label);
+               $lastIndex = sizeof($temp)-1;
+               if($lastIndex>1){
+                   $format='.'.$temp[$lastIndex];
+                   $label=$temp[0];
+                   for($i = 1; $i < $lastIndex; $i++){
+                       $label="{$label}.{$temp[$i]}";
+                   }
+               }
+           }
+           $dao = new TagsDao();
+           $data= $dao->find(array('label'=>$label));
+           if(is_array($data))$data=$data[0];
+           Dispatcher::sendResponce(null, $data, null, $format);
+        },'getTagByLable');
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/topTags(:format)/', function ($format=".json"){
            $limit = 30;
            if(isset ($_GET['limit'])&& is_numeric($_GET['limit'])) $limit= $_GET['limit'];
@@ -47,6 +66,38 @@ class Tags {
            if(is_array($data))$data=$data[0];
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getTag');
+        
+         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tags(:format)/', function ($format=".json"){
+            $data=Dispatcher::getDispatcher()->request()->getBody();
+            $data= APIHelper::deserialiser($data, $format);
+            $data = APIHelper::cast("Tag", $data);
+            $data->setBadgeId(null);
+            $dao = new TagsDao();
+            Dispatcher::sendResponce(null, $dao->save($tag), null, $format);
+        },'createTag');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tags/:id/', function ($id,$format=".json"){
+            if(!is_numeric($id)&& strstr($id, '.')){
+               $id= explode('.', $id);
+               $format='.'.$id[1];
+               $id=$id[0];
+            }
+            $data=Dispatcher::getDispatcher()->request()->getBody();
+            $data= APIHelper::deserialiser($data, $format);
+            $data = APIHelper::cast("Tag", $data);
+            $dao = new TagsDao();
+            Dispatcher::sendResponce(null, $dao->save($data), null, $format);
+        },'updateTag');
+        
+         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tags/:id/', function ($id,$format=".json"){
+            if(!is_numeric($id)&& strstr($id, '.')){
+               $id= explode('.', $id);
+               $format='.'.$id[1];
+               $id=$id[0];
+            }
+            $dao = new TagsDao();
+            Dispatcher::sendResponce(null, $dao->delete($id), null, $format);
+        },'deleteTag');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:id/tasks(:format)/', function ($id,$format=".json"){
             $limit=5;
