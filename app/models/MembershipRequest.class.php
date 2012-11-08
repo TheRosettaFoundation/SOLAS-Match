@@ -1,10 +1,10 @@
 <?php
 class MembershipRequest
 {
-    private $requestId;
-    private $userId;
-    private $orgId;
-    private $requestTime;
+    public $requestId;
+    public $userId;
+    public $orgId;
+    public $requestTime;
 
     public function __construct($params = array()) {
         if(isset($params['request_id'])) {

@@ -96,6 +96,7 @@ class Orgs {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/requests(:format)/', function ($id,$format=".json"){
            $dao = new OrganisationDao();
+           xdebug_break();
            Dispatcher::sendResponce(null, $dao->getMembershipRequests($id), null, $format);
         },'getMembershipRequests');
         
