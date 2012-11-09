@@ -13,6 +13,9 @@ class MessagingClient
     public $PasswordResetTopic = "email.user.password-reset";
     public $OrgMembershipAcceptedTopic = "email.org.membership.accepted";
     public $OrgMembershipRefusedTopic = "email.org.membership.rejected";
+    public $TaskArchivedTopic = "email.user.task.archived";
+    public $TaskClaimedTopic = "email.user.task.claimed";
+    public $TaskTranslationUploadedTopic = "email.user.task.translation-uploaded";
 
     private $connection;
 

@@ -12,6 +12,10 @@ require_once __DIR__.'/../protobufs/emails/UserTaskClaim.php';
 require_once __DIR__.'/../protobufs/emails/PasswordResetEmail.php';
 require_once __DIR__.'/../protobufs/emails/OrgMembershipAccepted.php';
 require_once __DIR__.'/../protobufs/emails/OrgMembershipRefused.php';
+require_once __DIR__.'/../protobufs/emails/OrgMembershipRefused.php';
+require_once __DIR__.'/../protobufs/emails/TaskArchived.php';
+require_once __DIR__.'/../protobufs/emails/TaskClaimed.php';
+require_once __DIR__.'/../protobufs/emails/TaskTranslationUploaded.php';
 
 class Notify 
 {
@@ -134,34 +138,86 @@ class Notify
     {
         $app = Slim::getInstance();
 
+        $settings = new Settings();
         $task_dao = new TaskDao();
         $subscribed_users = $task_dao->getSubscribedUsers($task->getTaskId());
 
-        $translator = null;
-        if($task_dao->taskIsClaimed($task->getTaskId())) {
-            $translator = $task_dao->getTaskTranslator($task->getTaskId());
-        }
-
-        $settings = new Settings();
-        $site_url = $settings->get('site.url');
-
-        $org_dao = new OrganisationDao();
-        $org = $org_dao->find(array('id' => $task->getOrganisationId()));
-
         if(count($subscribed_users) > 0) {
-            foreach($subscribed_users as $user) {
-                $app->view()->setData('user', $user);
-                $app->view()->appendData(array(
-                        'task' => $task,
-                        'translator' => $translator,
-                        'org' => $org,
-                        'site_url' => $site_url
-                ));
-                $email_subject = "A task's status has changed on SOLAS Match";
-                $email_body = $app->view()->fetch($notificationType);
-                $user_email = $user->getEmail();
 
-                Email::sendEmail($user_email, $email_subject, $email_body);
+            $use_backend = $settings->get('site.backend');
+            if(strcasecmp($use_backend, "y") == 0) {
+                $messagingClient = new MessagingClient();
+                if($messagingClient->init()) {
+                    switch($notificationType) {
+                        case NotificationTypes::Archive:
+                            $message_type = new TaskArchived();
+                            $message_type->task_id = $task->getTaskId();
+                            foreach($subscribed_users as $user) {
+                                $message_type->user_id = $user->getUserId();
+                                $message = $messagingClient->createMessageFromProto($message_type);
+                                $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                                        $messagingClient->TaskArchivedTopic);
+                            }
+                            break;
+                        case NotificationTypes::Claim:
+                            $message_type = new TaskClaimed();
+                            $message_type->task_id = $task->getTaskId();
+                            $translator = $task_dao->getTaskTranslator($task->getTaskId());
+                            $message_type->translator_id = $translator->getUserId();
+                            foreach($subscribed_users as $user) {
+                                $message_type->user_id = $user->getUserId();
+                                $message = $messagingClient->createMessageFromProto($message_type);
+                                $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                                        $messagingClient->TaskClaimedTopic);
+                            }
+                            break;
+                        case NotificationTypes::Upload:
+                            $message_type = new TaskTranslationUploaded();
+                            $message_type->task_id = $task->getTaskId();
+                            $translator = $task_dao->getTaskTranslator($task->getTaskId());
+                            $message_type->translator_id = $translator->getUserId();
+                            foreach($subscribed_users as $user) {
+                                $message_type->user_id = $user->getUserId();
+                                $message = $messagingClient->createMessageFromProto($message_type);
+                                $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                                        $messagingClient->TaskTranslationUploadedTopic);
+                            }
+                            break;
+                        default:
+                            echo "<p>Invalid email type</p>";
+                    }
+                } else {
+                    echo "<p>Failed to initialize messaging client</p>";
+                }
+            } else {
+                $app = Slim::getInstance();
+
+                $translator = null;
+                if($task_dao->taskIsClaimed($task->getTaskId())) {
+                    $translator = $task_dao->getTaskTranslator($task->getTaskId());
+                }
+
+                $site_url = $settings->get('site.url');
+    
+                $org_dao = new OrganisationDao();
+                $org = $org_dao->find(array('id' => $task->getOrganisationId()));
+
+                if(count($subscribed_users) > 0) {
+                    foreach($subscribed_users as $user) {
+                        $app->view()->setData('user', $user);
+                        $app->view()->appendData(array(
+                                'task' => $task,
+                                'translator' => $translator,
+                                'org' => $org,
+                                'site_url' => $site_url
+                        ));
+                        $email_subject = "A task's status has changed on SOLAS Match";
+                        $email_body = $app->view()->fetch($notificationType);
+                        $user_email = $user->getEmail();
+
+                        Email::sendEmail($user_email, $email_subject, $email_body);
+                    }
+                }
             }
         }
     }
