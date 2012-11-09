@@ -10,7 +10,9 @@
  *
  * @author sean
  */
-class PasswordReset {
+require_once '../app/models/PasswordResetRequest.class.php';
+require_once '../app/models/PasswordReset.class.php';
+class PasswordResetAPI {
     public  $pass;
     public  $key;
     
@@ -32,7 +34,9 @@ class PasswordReset {
                $key=$key[0];
            }
            $dao = new UserDao();
+           xdebug_break();
            $data = $dao->getPasswordResetRequests(array('uid'=>$key));
+           $data = new PasswordResetRequest($data['user_id'],$data['uid']);
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getResetRequest');
         
@@ -49,5 +53,5 @@ class PasswordReset {
     
    
 }
-PasswordReset::init();
+PasswordResetAPI::init();
 ?>

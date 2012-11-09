@@ -73,7 +73,7 @@ class Serializer
             }
         }
         if(!is_null($data)&& is_null($ret)){
-            if(strcasecmp($data, "null")) {
+            if(strcasecmp($data, "null")==0) {
                 $ret=null;
             }  else {
                 $ret=$data;

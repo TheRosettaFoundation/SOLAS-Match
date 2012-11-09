@@ -2,6 +2,8 @@
 
 require_once 'app/models/Register.class.php';
 require_once 'app/models/Login.class.php';
+require_once 'app/models/PasswordResetRequest.class.php';
+require_once 'app/models/PasswordReset.class.php';
 
 class UserRouteHandler
 {
@@ -103,8 +105,6 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
 
-        $user_dao           = new UserDao();
-        $task_dao           = new TaskDao;
         $current_user_id    = UserSession::getCurrentUserID();
         $current_user;
         
@@ -205,25 +205,21 @@ class UserRouteHandler
         if(count($org_tasks) > 0) {
             
             $templateData = array();
-//            xdebug_break();
             foreach($org_tasks as $org=>$taskArray){
                 $taskData = array();
                 foreach($taskArray as $task){
                     $temp = array();
                     $temp['task']=$task;
-                    $temp['translated']=TaskFile::getLatestFileVersion($task) > 0;
-                    $temp['taskClaimed']=$task_dao->taskIsClaimed($task->getTaskId());
-                    $temp['userSubscribedToTask']=$user_dao->isSubscribedToTask(UserSession::getCurrentUserID(), $task->getTaskId());
+                    $temp['translated']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/version")>0;
+                    $temp['taskClaimed']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/claimed")==1;//$task_dao->taskIsClaimed($task->getTaskId());
+                    $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getTaskId()}")==1;
                     $taskData[]=$temp;
                 }
                 $templateData[$org]=$taskData;
             }
             
             $app->view()->appendData(array(
-                 'org_tasks' => $org_tasks
-                ,'orgs' => $orgs
-                ,'task_dao' => $task_dao
-                ,'user_dao' => $user_dao
+                'orgs' => $orgs
                 ,'templateData' => $templateData
             ));
         }
@@ -334,21 +330,21 @@ class UserRouteHandler
                 //$my_org_tasks[] = $client->cast('Task', $stdObject);
             //}
         //}
-        
+        xdebug_break();
         $request = APIClient::API_VERSION."/password_reset/$uid";
         $response = $client->call($request);        
-        $reset_request = $client->cast('PasswordReset', $response);
+        $reset_request = $client->cast('PasswordResetRequest', $response);
         // v0/password_reset/:key/
         
         //$reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));     //wait for API support
 
-        if(!isset($reset_request['user_id']) || $reset_request['user_id'] == '') {
+        if($reset_request->getUserID()== '') {
             $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
             $app->redirect($app->urlFor('home'));
         }
         
-        $user_id = $reset_request['user_id'];
-
+        $user_id = $reset_request->getUserID();
+        $app->view()->setData("uid",$uid);
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
 
