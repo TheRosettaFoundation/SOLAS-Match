@@ -49,11 +49,11 @@ class TagRouteHandler
         $client = new APIClient();
         
         // /v0/tags/getByLable/:label/
-        //$request = APIClient::API_VERSION."/tags/getByLabel/$label";
-        //$response = $client->call($request);
-        //$tag = $client->cast('Tag', $response);
-        $tag_dao = new TagsDao();
-        $tag = $tag_dao->find(array('label' => $label));        //wait for API support
+        $request = APIClient::API_VERSION."/tags/getByLabel/$label";
+        $response = $client->call($request);
+        $tag = $client->cast('Tag', $response);
+        //$tag_dao = new TagsDao();
+        //$tag = $tag_dao->find(array('label' => $label));        //wait for API support
         
         $user_id = UserSession::getCurrentUserID();
         $request = APIClient::API_VERSION."/users/$user_id";
@@ -70,8 +70,8 @@ class TagRouteHandler
         $displayName = $current_user->getDisplayName();
         
         if($subscribe == "true") {
-            // /v0/users/:id/tags/:tagId/
-            //$request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
+            // HttpMethodEnum::POST, '/v0/users/:id/tags(:format)/
+            //$request = APIClient::API_VERSION."/users/$user_id/tags";
             //$response = $client->call($request, HTTP_Request2::METHOD_POST);            
             
             if(($user_dao->likeTag($user_id, $tag_id))) {       //wait for API support

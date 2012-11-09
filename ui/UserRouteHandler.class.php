@@ -119,17 +119,24 @@ class UserRouteHandler
             $app->redirect($app->urlFor('login'));
         }
 
+        $my_organisations = array();
         $url = APIClient::API_VERSION."/users/$current_user_id/orgs";
-        $my_organisations = (array)$client->call($url);
+        $response = $client->call($url);
+        if($response) {
+            foreach($response as $stdObject) {
+                $my_organisations[] = $client->cast('Organisation', $stdObject);
+            }
+        }
+        //$my_organisations = (array)$client->call($url);
         
         $org_tasks = array();
         $orgs = array();
-        foreach($my_organisations as $org_id) {
-            $url = APIClient::API_VERSION."/orgs/$org_id";
-            $org_data = $client->call($url);
-            $org = $client->cast('Organisation', $org_data);
+        foreach($my_organisations as $org) {
+            //$url = APIClient::API_VERSION."/orgs/$org_id";
+            //$org_data = $client->call($url);
+            $org = $client->cast('Organisation', $org);
 
-            $url = APIClient::API_VERSION."/orgs/$org_id/tasks";
+            $url = APIClient::API_VERSION."/orgs/{$org->getId()}/tasks";
             $org_tasks_data = $client->call($url);        
             $my_org_tasks = array();
             if($org_tasks_data) {
@@ -621,24 +628,23 @@ class UserRouteHandler
         }            
         
         $request = APIClient::API_VERSION."/users/$user_id/orgs";
-        $orgIds = $client->call($request);        
+        $orgs = $client->call($request);        
         
         $orgList = array();
-        if(count($orgIds) > 0) {
-            foreach ($orgIds as $orgId) {
-                $request = APIClient::API_VERSION."/orgs/$orgId";
-                $response = $client->call($request);
-                $orgList[] = $client->cast('Organisation', $response);
+        if(count($orgs) > 0) {
+            foreach ($orgs as $orgObjs) {
+                $orgList[] = $client->cast('Organisation', $orgObjs);
             }
         }
-        
         
         $request = APIClient::API_VERSION."/users/$user_id/badges";
         $badgeList = $client->call($request, HTTP_Request2::METHOD_GET);         
         $badges = array();
-        foreach($badgeList as $stdObject) {
-            $badges[] = new Badge((array)$stdObject);
-        }        
+        if($badgeList) {
+            foreach($badgeList as $stdObject) {
+                $badges[] = $client->cast('Badge', $stdObject);
+            }      
+        }
         
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");

@@ -18,7 +18,7 @@ class BadgeRouteHandler
         $request = APIClient::API_VERSION."/badges";
         $response = $client->call($request);
         foreach($response as $stdObject) {
-            $badgeList[] = new Badge((array)$stdObject);
+            $badgeList[] = $client->cast('Badge', $stdObject);
         }
         
         $app->view()->setData('current_page', 'badge-list');

@@ -6,8 +6,7 @@ class Middleware
     {
         $app = Slim::getInstance();
         
-        $user_dao = new UserDao();
-        if(!is_object($user_dao->getCurrentUser())) {
+        if(UserSession::getCurrentUserID()) {
             $app->flash('error', "Login required to access page");
             $app->redirect($app->urlFor('login'));
         }
@@ -22,6 +21,10 @@ class Middleware
         if($params !== NULL) {
             $task_id = $params['task_id'];
             $task_dao = new TaskDao();
+            
+            //$request = APIClient::API_VERSION."/users/$user_id/tasks";
+            //$response = $client->call($request, HTTP_Request2::METHOD_POST, $task);             
+            
             if($task_dao->taskIsClaimed($task_id)) {
                 $user_dao = new UserDao();
                 $current_user = $user_dao->getCurrentUser();
