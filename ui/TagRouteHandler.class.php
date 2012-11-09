@@ -47,19 +47,15 @@ class TagRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        
-        // /v0/tags/getByLable/:label/
+
         $request = APIClient::API_VERSION."/tags/getByLabel/$label";
         $response = $client->call($request);
         $tag = $client->cast('Tag', $response);
-        //$tag_dao = new TagsDao();
-        //$tag = $tag_dao->find(array('label' => $label));        //wait for API support
         
         $user_id = UserSession::getCurrentUserID();
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
         $current_user = $client->cast('User', $response);
-        $user_dao = new UserDao();
 
         if (!is_object($current_user)) {
             $app->flash('error', 'Login required to access page');
@@ -70,15 +66,12 @@ class TagRouteHandler
         $displayName = $current_user->getDisplayName();
         
         if($subscribe == "true") {
-            // HttpMethodEnum::POST, '/v0/users/:id/tags(:format)/
-            //$request = APIClient::API_VERSION."/users/$user_id/tags";
-            //$response = $client->call($request, HTTP_Request2::METHOD_POST);            
+            $request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
+            $userLikeTag = $client->call($request, HTTP_Request2::METHOD_PUT);            
             
-            if(($user_dao->likeTag($user_id, $tag_id))) {       //wait for API support
-                // put /v0/users/{id}/tags/{tagId}
+            if($userLikeTag) {
                 $request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT);                
-                
+                $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                 $app->flash('success', "Successfully added tag, $label, to subscription list");
             } else {
                 $app->flash('error', "Unable to save tag, $label, for user $displayName");
@@ -86,7 +79,9 @@ class TagRouteHandler
         }   
         
         if($subscribe == "false") {
-            if(($user_dao->removeTag($user_id, $tag_id))) {     //wait or API support
+            $request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
+            $removedTag = $client->call($request, HTTP_Request2::METHOD_DELETE);
+            if($removedTag) {
                 $app->flash('success', "Successfully removed tag $label for user $displayName");
             } else {
                 $app->flash('error', "Unable to remove tag $label for user $displayName");
@@ -101,31 +96,32 @@ class TagRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
 
-        $task_dao = new TaskDao;
-        $tag_id = $task_dao->getTagId($label);      //wait for API support
+        $request = APIClient::API_VERSION."/tags/getByLabel/$label";
+        $response = $client->call($request);
+        $tag = $client->cast('Tag', $response);
+        
+        $tag_id = $tag->getTagId();
         
         if (is_null($tag_id)) {
             header('HTTP/1.0 404 Not Found');
             die;
         }
 
-        //wait for API POST data support
-        /*$tasks = array();
+        $tasks = array();
         $request = APIClient::API_VERSION."/tags/$tag_id/tasks";
-        $post_data = array('limit' => 10);
-        $response = $client->call($request, HTTP_Request2::METHDO_POST, $post_data);
+        $data = array('limit' => 10);
+        $response = $client->call($request, HTTP_Request2::METHOD_GET, $data);
         foreach($response as $stdObject) {
             $tasks[] = $client->cast('Task', $stdObject);
-        }*/
-        
-        if ($tasks = TaskStream::getTaggedStream($label, 10)) {
+        }         
+         
+        if($tasks) {
             $app->view()->setData('tasks', $tasks);
-        }   
+        }  
         
-        if (UserDao::isLoggedIn()) {        //wait for API support
-            $user_dao = new UserDao();
-            $user_id = UserSession::getCurrentUserID();
-        
+        if(UserRouteHandler::isLoggedIn()) {
+
+            $user_id = UserSession::getCurrentUserID();        
             $app->view()->appendData(array(
                     'user_id' => $user_id
             ));
@@ -154,19 +150,17 @@ class TagRouteHandler
             }
         }
 
-        //wait for POST support in API
-        /*$top_tags = array();
-        $request = APIClient::API_VERSION."/tags";
-        $post_data = array('limit' => 30);
-        $response = $client->call($request, HTTP_Request2::METHOD_POST, $post_data);
+        $top_tags = array();
+        $request = APIClient::API_VERSION."/tags/topTags";
+        $data = array('limit' => 30);
+        $response = $client->call($request, HTTP_Request2::METHOD_GET, $data);
         foreach($response as $stdObject) {
             $top_tags[] = $client->cast('Tag', $stdObject);
-        }*/
-
+        }
         
         $app->view()->appendData(array(
                  'tag' => $label,
-                 'top_tags' => TagsDao::getTopTags(30),
+                 'top_tags' => $top_tags
         )); 
         $app->render('tag.tpl');
     }

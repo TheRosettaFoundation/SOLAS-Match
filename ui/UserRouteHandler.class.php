@@ -319,7 +319,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         
-        $user_dao = new UserDao();
+        //$user_dao = new UserDao();
         
         /*
         $request = APIClient::API_VERSION."/users/$uid/passwordResetRequest";
@@ -355,8 +355,14 @@ class UserRouteHandler
             if(isset($post->new_password) && User::isValidPassword($post->new_password)) {
                 if(isset($post->confirmation_password) && 
                         $post->confirmation_password == $post->new_password) {
-                    if($user_dao->changePassword($user_id, $post->new_password)) {
-                        $user_dao->removePasswordResetRequest($user_id);
+                    //if($user_dao->changePassword($user_id, $post->new_password)) {
+                        //$user_dao->removePasswordResetRequest($user_id);
+                    // HttpMethodEnum::POST, '/v0/password_reset(:format)/
+                    $request = APIClient::API_VERSION."/password_reset";
+                    $response = $client->call($request, HTTP_Request2::METHOD_POST, new PasswordReset($post->new_password, $uid));                     
+                    
+                    if($response) { 
+                    
                         $app->flash('success', "You have successfully changed your password");
                         $app->redirect($app->urlFor('home'));
                     } else {
@@ -369,9 +375,7 @@ class UserRouteHandler
             } else {
                 $app->flashNow('error', "Please check the password provided, and try again. It was not found to be valid.");
             }
-        }
-
-        $app->view()->setData('uid', $uid);
+        }        
         $app->render('password-reset.tpl');
     }
 
@@ -380,7 +384,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         
-        $user_dao = new UserDao();
+        //$user_dao = new UserDao();
 
         if($app->request()->isPost()) {
             $post = (object)$app->request()->post();
@@ -390,19 +394,14 @@ class UserRouteHandler
                     $request = APIClient::API_VERSION."/users/getByEmail/{$post->email_address}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
                     $user = $client->cast('User', $response); 
-                    //if($user = $user_dao->find(array('email' => $post->email_address))) {
+                    
                     if($user) {  
-                        // /v0/users/:id/passwordResetRequest(:format)/
                         $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
                         $hasUserRequestedPwReset = $client->call($request, HTTP_Request2::METHOD_GET);
-                        //$hasUserRequestedPwReset = $client->cast('User', $response);                         
                         
-                        
-                        if (!$hasUserRequestedPwReset) {
-                            ////(!$user_dao->hasRequestedPasswordReset($user)) {          //wait for API support
-                            $uid = md5(uniqid(rand()));
-                            $user_dao->addPasswordResetRequest($uid, $user->getUserId());   //wait for API support
-                            Notify::sendPasswordResetEmail($uid, $user);
+                        if (!$hasUserRequestedPwReset) {                            
+                            $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
+                            $response = $client->call($request, HTTP_Request2::METHOD_POST);                            
                             $app->flash('success', "Password reset request sent. Check your email
                                                     for further instructions.");
                             $app->redirect($app->urlFor('home'));
