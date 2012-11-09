@@ -17,10 +17,10 @@ class Middleware
     public static function authenticateUserForTask($request, $response, $route) 
     {
         $app = Slim::getInstance();
-        $params = $route->getParams();
-        $client = new APIClient();
+        $params = $route->getParams();        
         
         if($params !== NULL) {
+            $client = new APIClient();
             $task_id = $params['task_id'];
             $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
             $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);             
@@ -48,25 +48,25 @@ class Middleware
 
     public static function authUserForOrg($request, $response, $route) 
     {
-        $app = Slim::getInstance();
         $client = new APIClient();        
         $user_id = UserSession::getCurrentUserID();
                 
         $params = $route->getParams();
         if($params !== NULL) {
             $org_id = $params['org_id'];
-            //$user_dao = new UserDao();
-            //$user = $user_dao->getCurrentUser();
             if($user_id) {
-                // HttpMethodEnum::GET, '/v0/users/:id/orgs(:format)/'
+                $user_orgs = array();
                 $request = APIClient::API_VERSION."/users/$user_id/orgs";
-                $user_orgs = $client->call($request, HTTP_Request2::METHOD_GET);
-                
-                //$user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
-                
+                $orgs_list = $client->call($request, HTTP_Request2::METHOD_GET);
+                foreach($orgs_list as $stdObject) {
+                    $user_orgs[] = $client->cast('Organisation', $stdObject);
+                }
+
                 if(!is_null($user_orgs)) {
-                    if(in_array($org_id, $user_orgs)) {
-                        return true;
+                    foreach($user_orgs as $orgObject) {
+                        if($orgObject->getId() == $org_id) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -75,8 +75,9 @@ class Middleware
         $app = Slim::getInstance();
         $org_name = 'this organisation';
         if(isset($org_id)) {
-            $org_dao = new OrganisationDao();
-            $org = $org_dao->find(array('id' => $org_id));
+            $request = APIClient::API_VERSION."/orgs/$org_id";
+            $response = $client->call($request, HTTP_Request2::METHOD_GET);
+            $org = $client->cast('Organisation', $response);
             $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
         $app->flash('error', "You are not authorised to view this profile. Only members of ".$org_name." may view this page.");
@@ -89,28 +90,42 @@ class Middleware
      */
     public static function authUserForOrgTask($request, $response, $route) 
     {
+        $client = new APIClient();
+        
         $params= $route->getParams();
         if($params != NULL) {
             $task_id = $params['task_id'];
-            $task_dao = new TaskDao();
-            $task = $task_dao->find(array('task_id' => $task_id));
+            $request = APIClient::API_VERSION."/tasks/$task_id";
+            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
+            $task = $client->cast('Task', $response);
             
             $org_id = $task->getOrganisationId();
-            $user_dao = new UserDao();
-            $user = $user_dao->getCurrentUser();
-            if(is_object($user)) {
-                $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
-                if(!is_null($user_orgs) && in_array($org_id, $user_orgs)) {
-                    return true;
+            $user_id = UserSession::getCurrentUserID();
+
+            if($user_id) {
+                $user_orgs = array();
+                $request = APIClient::API_VERSION."/users/$user_id/orgs";
+                $orgs_list = $client->call($request, HTTP_Request2::METHOD_GET);  
+                foreach ($orgs_list as $orgObject) {
+                    $user_orgs[] = $client->cast('Organisation', $orgObject);
                 }
+                    
+                if(!is_null($user_orgs)) {
+                    foreach($user_orgs as $orgObject) {
+                        if($orgObject->getId() == $org_id) {
+                            return true;
+                        }
+                    }
+                }                
             }
         }
        
         $app = Slim::getInstance();
         $org_name = 'this organisation';
         if(isset($org_id)) {
-            $org_dao = new OrganisationDao();
-            $org = $org_dao->find(array('id' => $org_id));
+            $request = APIClient::API_VERSION."/orgs/$org_id";
+            $response = $client->call($request, HTTP_Request2::METHOD_GET);
+            $org = $client->cast('Organisation', $response);
             $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
         $app->flash('error', "You are not authorised to view this page. Only members of ".$org_name." may view this page.");
@@ -121,21 +136,36 @@ class Middleware
     {
         $params = $route->getParams();
         if($params != NULL) {
+            $client = new APIClient();            
             $task_id = $params['task_id'];
-            $task_dao = new TaskDao();
-            $task = $task_dao->find(array('task_id' => $task_id));
+            $user_id = UserSession::getCurrentUserID();
+            
+            $request = APIClient::API_VERSION."/tasks/$task_id";
+            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
+            $task = $client->cast('Task', $response);
 
-            $user_dao = new UserDao();
-            $user = $user_dao->getCurrentUser();
-            $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+            $user_orgs = array();
+            $request = APIClient::API_VERSION."/users/$user_id/orgs";
+            $orgs_list = $client->call($request, HTTP_Request2::METHOD_GET);  
+            foreach ($orgs_list as $orgObject) {
+                $user_orgs[] = $client->cast('Organisation', $orgObject);
+            }            
             
             //If the task has not been claimed yet then anyone can download it
-            if(!$task_dao->taskIsClaimed($task_id)) {
+            $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+            $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);            
+            $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+            $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET, $user_id);
+            if(!$taskClaimed) {
                 return true;
-            } elseif($task_dao->hasUserClaimedTask($user->getUserId(), $task_id)) {
+            } elseif($userClaimedTask) {
                 return true;
-            } elseif(!is_null($user_orgs) && in_array($task->getOrganisationId(), $user_orgs)) {
-                return true;
+            } elseif(!is_null($user_orgs)) {
+                foreach($user_orgs as $orgObject) {
+                    if($orgObject->getId() == $task->getOrganisationId()) {
+                        return true;
+                    }
+                }                
             }
         }
 

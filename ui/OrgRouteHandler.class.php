@@ -472,11 +472,7 @@ class OrgRouteHandler
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if(isset($post->search_name) && $post->search_name != '') {
-                // HttpMethodEnum::GET, '/v0/orgs/getByName/:name/
-                //$org_dao = new OrganisationDao();
-                //$found_orgs = $org_dao->searchForOrg($post->search_name);       //wait for API support
-                
+            if(isset($post->search_name) && $post->search_name != '') {                
                 $found_orgs = array();
                 $request = APIClient::API_VERSION."/orgs/getByName/{$post->search_name}";
                 $response = $client->call($request);
