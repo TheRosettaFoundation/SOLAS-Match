@@ -6,7 +6,7 @@ class Middleware
     {
         $app = Slim::getInstance();
         
-        if(UserSession::getCurrentUserID()) {
+        if(!UserSession::getCurrentUserID()) {
             $app->flash('error', "Login required to access page");
             $app->redirect($app->urlFor('login'));
         }
@@ -18,21 +18,23 @@ class Middleware
     {
         $app = Slim::getInstance();
         $params = $route->getParams();
+        $client = new APIClient();
+        
         if($params !== NULL) {
             $task_id = $params['task_id'];
-            $task_dao = new TaskDao();
+            $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+            $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);             
             
-            //$request = APIClient::API_VERSION."/users/$user_id/tasks";
-            //$response = $client->call($request, HTTP_Request2::METHOD_POST, $task);             
-            
-            if($task_dao->taskIsClaimed($task_id)) {
-                $user_dao = new UserDao();
-                $current_user = $user_dao->getCurrentUser();
-                if(!is_object($current_user)) {
+            if($taskClaimed) {
+                $user_id = UserSession::getCurrentUserID();
+                if(!($user_id)) {
                     $app->flash('error', 'Login required to access page');
                     $app->redirect($app->urlFor('login'));
                 }
-                if(!$task_dao->hasUserClaimedTask($current_user->getUserId(), $task_id)) {
+                $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+                $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET, $user_id);
+
+                if(!$userClaimedTask) {
                     $app->flash('error', 'This task has been claimed by another user');
                     $app->redirect($app->urlFor('home'));
                 }
@@ -46,13 +48,22 @@ class Middleware
 
     public static function authUserForOrg($request, $response, $route) 
     {
+        $app = Slim::getInstance();
+        $client = new APIClient();        
+        $user_id = UserSession::getCurrentUserID();
+                
         $params = $route->getParams();
         if($params !== NULL) {
             $org_id = $params['org_id'];
-            $user_dao = new UserDao();
-            $user = $user_dao->getCurrentUser();
-            if(is_object($user)) {
-                $user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+            //$user_dao = new UserDao();
+            //$user = $user_dao->getCurrentUser();
+            if($user_id) {
+                // HttpMethodEnum::GET, '/v0/users/:id/orgs(:format)/'
+                $request = APIClient::API_VERSION."/users/$user_id/orgs";
+                $user_orgs = $client->call($request, HTTP_Request2::METHOD_GET);
+                
+                //$user_orgs = $user_dao->findOrganisationsUserBelongsTo($user->getUserId());
+                
                 if(!is_null($user_orgs)) {
                     if(in_array($org_id, $user_orgs)) {
                         return true;
