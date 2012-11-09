@@ -28,8 +28,12 @@ class BadgeDao
     {
         $db = new PDOWrapper();
         $db->init();
-        $result=$db->call("getBadge", "null,null,null,null");
-        return $result;
+        $results=$db->call("getBadge", "null,null,null,null");
+        $ret=null;
+        foreach($results as $result){
+            $ret[]= new Badge($result);
+        }
+        return $ret;
     }
 
     public function getOrgBadges($org_id)

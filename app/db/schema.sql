@@ -277,7 +277,7 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
-			if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation_member'and tc.CONSTRAINT_NAME='user_id') then
+	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation_member'and tc.CONSTRAINT_NAME='user_id') then
             ALTER TABLE `organisation_member`
 				ADD UNIQUE INDEX `user_id` (`user_id`, `organisation_id`);
         else 
@@ -1012,14 +1012,14 @@ end if;
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-test.findOrganisationsUserBelongsTo
+-- Dumping structure for procedure Solas-Match-Test.findOrganisationsUserBelongsTo
 DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
 BEGIN
-	SELECT organisation_id
-	FROM organisation_member
-	WHERE user_id = id;
+	SELECT o.*
+	FROM organisation_member om join organisation o on om.organisation_id=o.id
+	WHERE om.user_id = id;
 END//
 DELIMITER ;
 

@@ -74,189 +74,190 @@ class UserDao {
         return $this->save($user);
     }
 
-	public function save($user) {
-		if (is_null($user->getUserId())) {
-			return $this->_insert($user);
-		}
-		else {
-			return $this->_update($user);
-		}
-	}
+    public function save($user) {
+            if (is_null($user->getUserId())) {
+                    return $this->_insert($user);
+            }
+            else {
+                    return $this->_update($user);
+            }
+    }
 
-	private function _update($user) {
-		$db = new PDOWrapper();
-		$db->init();
-                $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},
-                {$db->cleanseNull($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},
-                {$db->cleanseNullOrWrapStr($user->getBiography())},{$db->cleanseNullOrWrapStr($user->getDisplayName())},
-                {$db->cleanseNullOrWrapStr($user->getNativeLanguageID())},{$db->cleanseNullOrWrapStr($user->getNativeRegionID())},
-                {$db->cleanse($user->getUserId())}");
-                return $this->find(array('user_id' => $result[0]['user_id']));
-	}
+    private function _update($user) {
+            $db = new PDOWrapper();
+            $db->init();
+            $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},
+            {$db->cleanseNull($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},
+            {$db->cleanseNullOrWrapStr($user->getBiography())},{$db->cleanseNullOrWrapStr($user->getDisplayName())},
+            {$db->cleanseNullOrWrapStr($user->getNativeLanguageID())},{$db->cleanseNullOrWrapStr($user->getNativeRegionID())},
+            {$db->cleanse($user->getUserId())}");
+            return $this->find(array('user_id' => $result[0]['user_id']));
+    }
 
-	private function _insert($user) {
-		$db = new PDOWrapper();
-		$db->init();
-		if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr
-                        ($user->getPassword())},NULL,NULL,NULL,NULL,NULL")) {
-			return $this->find(array('user_id' => $user_id[0]['user_id']));
-		}
-		else {
-			return null;
-		}
-	}
-	
-	private function clearPasswordMatchesUsersPassword($user, $clear_password) {
-		$hashed_input_password = Authentication::hashPassword($clear_password, $user->getNonce());
+    private function _insert($user) {
+            $db = new PDOWrapper();
+            $db->init();
+            if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},{$db->cleanse($user->getNonce())},{$db->cleanseNullOrWrapStr
+                    ($user->getPassword())},NULL,NULL,NULL,NULL,NULL")) {
+                    return $this->find(array('user_id' => $user_id[0]['user_id']));
+            }
+            else {
+                    return null;
+            }
+    }
 
-		return is_object(
-				$this->find(array(
-					'user_id' => $user->getUserId(),
-					'password' => $hashed_input_password
-				))
-		);
-	}
+    private function clearPasswordMatchesUsersPassword($user, $clear_password) {
+            $hashed_input_password = Authentication::hashPassword($clear_password, $user->getNonce());
 
-	public function login($email, $clear_password) {
-		$user = $this->find(array('email' => $email));
+            return is_object(
+                            $this->find(array(
+                                    'user_id' => $user->getUserId(),
+                                    'password' => $hashed_input_password
+                            ))
+            );
+    }
 
-		if (!is_object($user)) {
-			throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
-		}
+    public function login($email, $clear_password) {
+            $user = $this->find(array('email' => $email));
 
-		if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
-			throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
-		}
+            if (!is_object($user)) {
+                    throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+            }
 
-        if ($clear_password === '') {
-            throw new InvalidArgumentException('Sorry, an empty password is not allowed. Please contact the site administrator for details');
+            if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
+                    throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+            }
+
+    if ($clear_password === '') {
+        throw new InvalidArgumentException('Sorry, an empty password is not allowed. Please contact the site administrator for details');
+    }
+
+            UserSession::setSession($user->getUserId());
+
+            return true;
+    }
+
+    public function APIlogin($email, $clear_password) {
+            $user = $this->find(array('email' => $email));
+
+            if (!is_object($user)) {
+                    return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+            }
+
+            if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
+                    return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+            }
+
+            return $user;
+    }
+
+     public function APIRegister($email, $clear_password) {
+            $user = $this->find(array('email' => $email));
+
+            if (!is_object($user)&& $clear_password!="") {
+                    $user = $this->create($email,$clear_password);
+                    $badge_dao = new BadgeDao();
+                    $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
+                    $badge_dao->assignBadge($user, $badge);
+            }else $user = null;//array("message"=>'sorry the account you enerted already exists. \n please login.',"status code"=>500);
+            return $user;
+    }
+
+
+
+    public function OpenIDLogin($openid,$app) {
+        if(!$openid->mode) {
+            try {
+            $openid->identity = $openid->data['openid_identifier'];
+            $openid->required = array('contact/email');
+            $url =$openid->authUrl();
+            $app->redirect($openid->authUrl());
+            }catch(ErrorException $e) {
+                echo $e->getMessage();
+            }
+        } elseif($openid->mode == 'cancel') {
+            throw new InvalidArgumentException('User has canceled authentication!');
+            return false;
+        } else {
+            $retvals= $openid->getAttributes();
+            if($openid->validate()){
+               $user = $this->find(array('email' => $retvals['contact/email']));
+                if (!is_object($user)) {
+                    $user = $this->create($retvals['contact/email'],md5($retvals['contact/email']));
+                    $badge_dao = new BadgeDao();
+                    $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
+                    $badge_dao->assignBadge($user, $badge);
+                }
+                UserSession::setSession($user->getUserId());
+            }
+            return true;
         }
 
-		UserSession::setSession($user->getUserId());
 
-		return true;
-	}
-        
-        public function APIlogin($email, $clear_password) {
-		$user = $this->find(array('email' => $email));
+    }
 
-		if (!is_object($user)) {
-			return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
-		}
+    public function logout() {
+            UserSession::destroySession();
+    }
 
-		if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
-			return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
-		}
-
-        	return $user;
-	}
-        
-         public function APIRegister($email, $clear_password) {
-		$user = $this->find(array('email' => $email));
-
-		if (!is_object($user)&& $clear_password!="") {
-			$user = $this->create($email,$clear_password);
-                        $badge_dao = new BadgeDao();
-                        $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
-                        $badge_dao->assignBadge($user, $badge);
-		}else $user = null;//array("message"=>'sorry the account you enerted already exists. \n please login.',"status code"=>500);
-        	return $user;
-	}
-        
-        
-        
-        public function OpenIDLogin($openid,$app) {
-            if(!$openid->mode) {
-                try {
-                $openid->identity = $openid->data['openid_identifier'];
-                $openid->required = array('contact/email');
-                $url =$openid->authUrl();
-                $app->redirect($openid->authUrl());
-                }catch(ErrorException $e) {
-                    echo $e->getMessage();
-                }
-            } elseif($openid->mode == 'cancel') {
-                throw new InvalidArgumentException('User has canceled authentication!');
-                return false;
-            } else {
-                $retvals= $openid->getAttributes();
-                if($openid->validate()){
-                   $user = $this->find(array('email' => $retvals['contact/email']));
-                    if (!is_object($user)) {
-                        $user = $this->create($retvals['contact/email'],md5($retvals['contact/email']));
-                        $badge_dao = new BadgeDao();
-                        $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
-                        $badge_dao->assignBadge($user, $badge);
-                    }
-                    UserSession::setSession($user->getUserId());
-                }
-                return true;
+    public function getCurrentUser() {
+            $ret = null;
+            if ($user_id = UserSession::getCurrentUserId()) {
+                    $ret = $this->find(array('user_id' => $user_id));
             }
-            
-            
-	}
-	
-	public function logout() {
-		UserSession::destroySession();
-	}
-	
-	public function getCurrentUser() {
-		$ret = null;
-		if ($user_id = UserSession::getCurrentUserId()) {
-			$ret = $this->find(array('user_id' => $user_id));
-		}
-		return $ret;
-	}
+            return $ret;
+    }
 
-	public static function isLoggedIn()
-	{
-		return (!is_null(UserSession::getCurrentUserId()));
-	}
+    public static function isLoggedIn()
+    {
+            return (!is_null(UserSession::getCurrentUserId()));
+    }
 
-	public function belongsToRole($user, $role) {
-		$ret = false;
-		if ($role == 'translator') {
-			$ret = true;
-		}
-		else if ($role == 'organisation_member') {
-			$user_found = $this->find(array(
-				'user_id' => $user->getUserId(),
-				'role' => 'organisation_member'
-			));
-			if (is_object($user_found)) {
-				$ret = true;
-			}
-		}
-		return $ret;
-	}
+    public function belongsToRole($user, $role) {
+            $ret = false;
+            if ($role == 'translator') {
+                    $ret = true;
+            }
+            else if ($role == 'organisation_member') {
+                    $user_found = $this->find(array(
+                            'user_id' => $user->getUserId(),
+                            'role' => 'organisation_member'
+                    ));
+                    if (is_object($user_found)) {
+                            $ret = true;
+                    }
+            }
+            return $ret;
+    }
 
-	public function findOrganisationsUserBelongsTo($user_id) {
-		$ret = null;
-		$db = new PDOWrapper();
-		$db->init();
-		if ($result = $db->call("findOrganisationsUserBelongsTo", $db->cleanse($user_id))) {
-			$ret = array();
-			foreach ($result as $row) {
-				$ret[] = $row['organisation_id'];
-			}
-		}
-		return $ret;
-	}
+    public function findOrganisationsUserBelongsTo($user_id) {
+            $ret = null;
+            $db = new PDOWrapper();
+            $db->init();
+            if ($result = $db->call("findOrganisationsUserBelongsTo", $db->cleanse($user_id))) {
+                    $ret = array();
+                    foreach ($result as $row) {
+                       $ret[] = new Organisation($row);
+                    }
+            }
+            return $ret;
+    }
 
-	public function getUserBadges(User $user) {
-                return $this->getUserBadgesbyID($user->getUserId());
-	}
-        
-        public function getUserBadgesbyID($user_id) {
-		$ret = NULL;
-		$db = new PDOWrapper();
-		$db->init();
-		if ($result = $db->call("getUserBadges", $db->cleanse($user_id))) {
-			$ret = $result;
-		}
+    public function getUserBadges(User $user) {
+            return $this->getUserBadgesbyID($user->getUserId());
+    }
 
-		return $ret;
-	}
+    public function getUserBadgesbyID($user_id) {
+            $ret = array();
+            $db = new PDOWrapper();
+            $db->init();
+            if ($result = $db->call("getUserBadges", $db->cleanse($user_id))) {
+                foreach ($result as $badge) {
+                   $ret[] = new Badge($badge);  
+                }
+            }
+            return $ret;
+    }
 
     public function getUserTags($user_id)
     {

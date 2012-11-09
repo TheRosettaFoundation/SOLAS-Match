@@ -79,7 +79,8 @@ class Orgs {
                    }
                }
            }
-           $data= OrganisationDao::getOrgByName($name);
+           $dao = new OrganisationDao();
+           $data= $dao->searchForOrg($name);
            if(is_array($data))$data=$data[0];
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getOrgByName');
