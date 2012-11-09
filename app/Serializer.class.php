@@ -72,6 +72,13 @@ class Serializer
                 break;
             }
         }
+        if(!is_null($data)&& is_null($ret)){
+            if(strcasecmp($data, "null")) {
+                $ret=null;
+            }  else {
+                $ret=$data;
+            }            
+        }        
         return $ret;
     }
 
