@@ -9,7 +9,9 @@ require_once __DIR__."/../../vendor/autoload.php";
 
 require_once __DIR__.'/../protobufs/emails/EmailMessage.php';
 require_once __DIR__.'/../protobufs/emails/UserTaskClaim.php';
-require_once __DIR__.'/../protobufs/emails/PasswordReset.php';
+require_once __DIR__.'/../protobufs/emails/PasswordResetEmail.php';
+require_once __DIR__.'/../protobufs/emails/OrgMembershipAccepted.php';
+require_once __DIR__.'/../protobufs/emails/OrgMembershipRefused.php';
 
 class Notify 
 {
@@ -53,7 +55,7 @@ class Notify
         if(strcasecmp($use_backend, "y") == 0) {
             $messagingClient = new MessagingClient();
             if($messagingClient->init()) {
-                $message_type = new PasswordReset();
+                $message_type = new PasswordResetEmail();
                 $message_type->user_id = $user->getUserId();
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
@@ -81,26 +83,51 @@ class Notify
 
     public static function notifyUserOrgMembershipRequest($user, $org, $accepted)
     {
-        $app = Slim::getInstance();
-
         $settings = new Settings();
-        $site_url = $settings->get('site.url');
+        $use_backend = $settings->get('site.backend');
+        if(strcasecmp($use_backend, "y") == 0) {
+            $messagingClient = new MessagingClient();
+            if($messagingClient->init()) {
+                if($accepted) {
+                    $message_type = new OrgMembershipAccepted();
+                    $message_type->user_id = $user->getUserId();
+                    $message_type->org_id = $org->getId();
+                    $message = $messagingClient->createMessageFromProto($message_type);
+                    $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
+                            $messagingClient->OrgMembershipAcceptedTopic);
+                } else {
+                    $message_type = new OrgMembershipRefused();
+                    $message_type->user_id = $user->getUserId();
+                    $message_type->org_id = $org->getId();
+                    $message = $messagingClient->createMessageFromProto($message_type);
+                    $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
+                            $messagingClient->OrgMembershipRefusedTopic);
+                }
+            } else {
+                echo "<p>Failed to initialize messaging client</p>";
+            }
+        } else {
+            $app = Slim::getInstance();
 
-        $app->view()->setData('site_url', $site_url);
-        $app->view()->appendData(array(
+            $settings = new Settings();
+            $site_url = $settings->get('site.url');
+
+            $app->view()->setData('site_url', $site_url);
+            $app->view()->appendData(array(
                             'user' => $user,
                             'org' => $org
-        ));
+            ));
 
-        $user_email = $user->getEmail();
-        $email_subject = "SOLAS Match: Organisation Membership Request Feedback";
-        if($accepted) {
-            $email_body = $app->view()->fetch('email.org-membership-accepted.tpl');
-        } else {
-            $email_body = $app->view()->fetch("email.org-membership-refused.tpl");
+            $user_email = $user->getEmail();
+            $email_subject = "SOLAS Match: Organisation Membership Request Feedback";
+            if($accepted) {
+                $email_body = $app->view()->fetch('email.org-membership-accepted.tpl');
+            } else {
+                $email_body = $app->view()->fetch("email.org-membership-refused.tpl");
+            }
+
+            Email::sendEmail($user_email, $email_subject, $email_body);
         }
-
-        Email::sendEmail($user_email, $email_subject, $email_body);
     }
 
     public static function sendEmailNotifications($task, $notificationType)
