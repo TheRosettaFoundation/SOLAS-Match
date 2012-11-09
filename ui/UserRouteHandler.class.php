@@ -203,11 +203,28 @@ class UserRouteHandler
             }
         }
         if(count($org_tasks) > 0) {
+            
+            $templateData = array();
+//            xdebug_break();
+            foreach($org_tasks as $org=>$taskArray){
+                $taskData = array();
+                foreach($taskArray as $task){
+                    $temp = array();
+                    $temp['task']=$task;
+                    $temp['translated']=TaskFile::getLatestFileVersion($task) > 0;
+                    $temp['taskClaimed']=$task_dao->taskIsClaimed($task->getTaskId());
+                    $temp['userSubscribedToTask']=$user_dao->isSubscribedToTask(UserSession::getCurrentUserID(), $task->getTaskId());
+                    $taskData[]=$temp;
+                }
+                $templateData[$org]=$taskData;
+            }
+            
             $app->view()->appendData(array(
-                'org_tasks' => $org_tasks,
-                'orgs' => $orgs,
-                'task_dao' => $task_dao,
-                'user_dao' => $user_dao
+                 'org_tasks' => $org_tasks
+                ,'orgs' => $orgs
+                ,'task_dao' => $task_dao
+                ,'user_dao' => $user_dao
+                ,'templateData' => $templateData
             ));
         }
         

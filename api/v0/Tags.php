@@ -34,7 +34,7 @@ class Tags {
                $temp = array();
                $temp= explode('.', $label);
                $lastIndex = sizeof($temp)-1;
-               if($lastIndex>1){
+               if($lastIndex>0){
                    $format='.'.$temp[$lastIndex];
                    $label=$temp[0];
                    for($i = 1; $i < $lastIndex; $i++){

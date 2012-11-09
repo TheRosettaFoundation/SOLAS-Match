@@ -81,7 +81,7 @@ class Orgs {
            }
            $dao = new OrganisationDao();
            $data= $dao->searchForOrg($name);
-           if(is_array($data))$data=$data[0];
+           if(!is_array($data)&& !is_null($data))$data=array($data);
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getOrgByName');
         
