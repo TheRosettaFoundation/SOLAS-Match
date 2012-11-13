@@ -2272,7 +2272,7 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getLanguage
+-- Dumping structure for procedure Solas-Match-Test.getLanguage
 DROP PROCEDURE IF EXISTS `getLanguage`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguage`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
@@ -2280,7 +2280,7 @@ BEGIN
 	if id='' then set id=null;end if;
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select * from language l where 1 ";-- set update
+	set @q= "select en_name as language, code, id from language l where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and l.id=",id) ;
@@ -2298,7 +2298,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Dev.getLanguage
+--- Dumping structure for procedure Solas-Match-Test.getCountry
 DROP PROCEDURE IF EXISTS `getCountry`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountry`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
@@ -2306,7 +2306,7 @@ BEGIN
 	if id='' then set id=null;end if;
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select * from country c where 1 ";-- set update
+	set @q= "select en_name as country, code, id from country c where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and c.id=",id) ;

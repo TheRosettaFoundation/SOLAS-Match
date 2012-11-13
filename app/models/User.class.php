@@ -106,8 +106,8 @@ class User
 	}
 
     public function getNativeLanguage() {
-        $language = Languages::languageNameFromId($this->getNativeLanguageID());
-        $region = Languages::countryNameFromId($this->getNativeRegionID());
+        $language = TemplateHelper::languageNameFromId($this->getNativeLanguageID());
+        $region = TemplateHelper::countryNameFromId($this->getNativeRegionID());
         return $language.' ('.$region.')';
     }
 

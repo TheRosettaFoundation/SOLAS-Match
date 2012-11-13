@@ -131,6 +131,12 @@ class Tasks {
            Dispatcher::sendResponce(null, TaskFile::getLatestFileVersionByTaskID($id,$userID), null, $format);
         },'getTaskVersion');
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/info(:format)/', function ($id,$format=".json"){
+            $version = 0;
+            if(isset ($_GET['version'])&& is_numeric($_GET['version'])) $version= $_GET['version'];
+            Dispatcher::sendResponce(null, TaskFile::getTaskFileInfoById($id,$version), null, $format);
+        },'getTaskInfo');
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/claimed(:format)/', function ($id,$format=".json"){
 
             $data=null;

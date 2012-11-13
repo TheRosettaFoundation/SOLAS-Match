@@ -9,10 +9,10 @@
 
 	<p>
 		{if $task->getSourceId()}
-			From <b>{Languages::languageNameFromId($task->getSourceId())}</b>
+			From <b>{TemplateHelper::languageNameFromId($task->getSourceId())}</b>
 		{/if}
 		{if $task->getTargetId()}
-			To <b>{Languages::languageNameFromId($task->getTargetId())}</b>
+			To <b>{TemplateHelper::languageNameFromId($task->getTargetId())}</b>
 		{/if}
         <div class="tag">
 		{foreach from=$task->getTags() item=tag}
@@ -22,13 +22,13 @@
 	</p>
 		
 	<p>
-		<span class="time_since">{IO::timeSinceSqlTime($task->getCreatedTime())} ago</span>
+		<span class="time_since">{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago</span>
 
 		&middot;
         {assign var="org_id" value=$task->getOrganisationId()}
         
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-            {OrganisationDao::nameFromId($task->getOrganisationId())}
+            {TemplateHelper::orgNameFromId($task->getOrganisationId())}
         </a>
 		{assign var="wordcount" value=$task->getWordCount()}
 		{if $wordcount}

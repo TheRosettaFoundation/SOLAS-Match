@@ -46,13 +46,13 @@
                         <label for="source"><b>From language</b></small></label>
                         <select name="source" id="source">
                             {foreach $languages as $language}
-                                <option value="{$language[0]}">{$language[0]}</option>
+                                    <option value="{$language->getCode()}">{$language->getEnName()}</option>
                             {/foreach}
                         </select>
                         {if isset($countries)}
                             <select name="sourceCountry" id="sourceCountry">
                                 {foreach $countries as $country}
-                                    <option value="{$country[1]}">{$country[0]}</option>
+                                     <option value="{$country->getCode()}">{$country->getEnName()}</option>
                                 {/foreach}                                
                             </select>
                         {/if}
@@ -61,13 +61,13 @@
                         <label for="target_0"><b>To language</b></label>
                         <select name="target_0" id="target_0">
                             {foreach $languages as $language}
-                                <option value="{$language[0]}">{$language[0]}</option>
+                                  <option value="{$language->getCode()}">{$language->getEnName()}</option>
                             {/foreach}
                         </select>
                         {if isset($countries)}
                             <select name="targetCountry_0" id="targetCountry">
                                 {foreach $countries as $country}
-                                    <option value="{$country[1]}">{$country[0]}</option>
+                                    <option value="{$country->getCode()}">{$country->getEnName()}</option>
                                 {/foreach}
                             </select> 
                         {/if}

@@ -198,11 +198,8 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $latest_version = TaskFile::getLatestFileVersion($task);    //wait for API support
-        $app->redirect($app->urlFor('download-task-version', array(
-                'task_id' => $task_id,
-                'version' => $latest_version
-        )));
+        $latest_version = $client->call(APIClient::API_VERSION."/task/$task_id/version");
+        $this->downloadTaskVersion($task_id,$latest_version);
     }
 
     public function archiveTask($task_id)
@@ -237,32 +234,9 @@ class TaskRouteHandler
     {
         
         $app = Slim::getInstance();
-        /*
-        $client = new APIClient();
-        
-        $request = APIClient::API_VERSION."/tasks/$task_id";
-        $response = $client->call($request);
-        $task = $client->cast('Task', $response);
-        
-        if (!is_object($task)) {
-            header('HTTP/1.0 404 Not Found');
-            die;
-        }
-        $user_id = UserSession::getCurrentUserID();
-        
-        if (is_null($user_id)) {
-            $app->flash('error', 'Login required to access page');
-            $app->redirect($app->urlFor('login'));
-        }
-        */
         
         if (Middleware::authUserIsLoggedIn()) {            
-        
-        
-            $app->redirect($app->urlFor('download-task-version', array(
-                    'task_id' => $task_id,
-                    'version' => 0
-            )));
+            $this->downloadTaskVersion($task_id,0);
         }
     }
 
@@ -289,7 +263,9 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }
         $app->view()->setData('task', $task);
-        
+        $app->view()->setData('sourceLanguage', $client->castCall("Language",APIClient::API_VERSION."/languages/{$task->getSourceId()}"));
+        $app->view()->setData('targetLanguage', $client->castCall("Language",APIClient::API_VERSION."/languages/{$task->getTargetId()}"));
+       
         $app->render('task.claim.tpl');
     }
 
@@ -332,11 +308,9 @@ class TaskRouteHandler
         }   
        
         $user_id = UserSession::getCurrentUserID();
-        $request = APIClient::API_VERSION."/users/$user_id";
-        $response = $client->call($request);
-        $current_user = $client->cast('User', $response); 
         
-        if (!is_object($current_user)) {
+        
+        if (!is_numeric($user_id)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
@@ -344,9 +318,6 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/users/$user_id/tasks";
         $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);        
 
-        Notify::notifyUserClaimedTask($current_user, $task);
-        Notify::sendEmailNotifications($task, NotificationTypes::Claim);
-        
         $app->redirect($app->urlFor('task-claimed', array(
                 'task_id' => $task_id
         )));
@@ -355,37 +326,8 @@ class TaskRouteHandler
     public function downloadTaskVersion($task_id, $version)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
-        $user_id = UserSession::getCurrentUserID();
-
-        $request = APIClient::API_VERSION."/tasks/$task_id";
-        $response = $client->call($request);     
-        $task = $client->cast('Task', $response);        
-        
-        $request = APIClient::API_VERSION."/users/$user_id";
-        $response = $client->call($request);
-        $user = $client->cast('User', $response);
-        
-        if (!is_object($task)) {
-            header('HTTP/1.0 404 Not Found');
-            die;
-        }           
-        
-        if (!is_object($user)) {
-            $app->flash('error', 'Login required to access page');
-            $app->redirect($app->urlFor('login'));
-        }   
-        
-        $task_file_info         = TaskFile::getTaskFileInfo($task, $version);
-         
-        if (empty($task_file_info)) {
-            throw new Exception("Task file info not set for.");
-        }   
-        
-        $absolute_file_path     = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
-        $file_content_type      = $task_file_info['content_type'];
-        TaskFile::logFileDownload($task, $version);
-        IO::downloadFile($absolute_file_path, $file_content_type);
+        $settings = new Settings();
+        $app->redirect($settings->get("site.api").APIClient::API_VERSION."/tasks/$task_id/file",HTTP_Request2::METHOD_GET,null,array("version"=>$version));   
     }
 
     public function downloadTaskPreview($task_id)
@@ -439,18 +381,19 @@ class TaskRouteHandler
         $app->view()->setData('task', $task);
         $app->view()->appendData(array('org' => $org));
         
-        if ($task_file_info = TaskFile::getTaskFileInfo($task)) {
+        if ($task_file_info = $client->call(APIClient::API_VERSION."tasks/$task_id/info")) {
             $app->view()->appendData(array(
                 'task_file_info' => $task_file_info,
-                'latest_version' => TaskFile::getLatestFileVersion($task)
+                'latest_version' => $client->call(APIClient::API_VERSION."tasks/$task_id/version")
             ));
         }
         
-        $task_file_info = TaskFile::getTaskFileInfo($task, 0);
-        $file_path = dirname(Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']));
-        $appPos = strrpos($file_path, "app");
-        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
-                substr($file_path, $appPos).'/'.$task_file_info['filename'];
+        $task_file_info = $client->call(APIClient::API_VERSION."tasks/$task_id/info",  HTTP_Request2::METHOD_GET,null,array("version"=>0));
+//        $file_path = dirname(Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']));
+//        $appPos = strrpos($file_path, "app");
+//        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
+//                substr($file_path, $appPos).'/'.$task_file_info['filename'];
+        $file_path= APIClient::API_VERSION."tasks/$task_id/file";
         $app->view()->appendData(array(
             'file_preview_path' => $file_path,
             'file_name' => $task_file_info['filename']
@@ -495,7 +438,7 @@ class TaskRouteHandler
         }
         
         $app->view()->appendData(array(
-                'max_file_size' => Upload::maxFileSizeMB(),
+                'max_file_size' => TemplateHelper::maxFileSizeMB(),
                 'body_class'    => 'task_page'
         ));
         
@@ -564,7 +507,7 @@ class TaskRouteHandler
             if(is_null($word_count_err) && is_null($title_err))
             {
                 if (!empty($post->source)) {
-                    $source_id = Languages::saveLanguage($post->source);
+                    $source_id = TemplateHelper::saveLanguage($post->source);
                     $task->setSourceId($source_id);
                 }
 
@@ -617,19 +560,19 @@ class TaskRouteHandler
                 if(count($language_list) > 1) {
                     foreach($language_list as $language) {
                         if($language == $language_list[0]) {   //if it is the first language add it to this task
-                            $target_id = Languages::saveLanguage($language_list[0]['lang']);
+                            $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
                             $task->setTargetId($target_id);
                             $task->setTargetCountryCode($language['country']);
                             $request = APIClient::API_VERSION."/tasks/$task_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
                         } else {
-                            $language_id = Languages::saveLanguage($language['lang']);                            
+                            $language_id = TemplateHelper::saveLanguage($language['lang']);                            
                             $request = APIClient::API_VERSION."/tasks/addTarget/$language_id/{$language['country']}";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
                         }
                     }
                 } else {
-                    $target_id = Languages::saveLanguage($language_list[0]['lang']);
+                    $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
                     $task->setTargetId($target_id);
                     $task->setTargetCountryCode($language_list[0]['country']);
                     
@@ -640,8 +583,8 @@ class TaskRouteHandler
                 $app->redirect($app->urlFor('task-uploaded', array('task_id' => $task_id)));
             }
         }
-        $language_list = Languages::getLanguageList();
-        $countries= Languages::getCountryList();
+        $language_list = TemplateHelper::getLanguageList();
+        $countries= TemplateHelper::getCountryList();
         $extra_scripts = "
         <script language='javascript'>
         
@@ -668,8 +611,8 @@ class TaskRouteHandler
                     
                 for (language in langs) {
                     var option = document.createElement('OPTION');
-                    option.appendChild(document.createTextNode(langs[language][0]));
-                    option.setAttribute('value', langs[language][0]);//should be 1 but requires changes to php and sql.
+                    option.appendChild(document.createTextNode(langs[language].name));
+                    option.setAttribute('value', langs[language].code);//should be 1 but requires changes to php and sql.
                     sel.appendChild(option);
                 }
                 
@@ -684,8 +627,8 @@ class TaskRouteHandler
                     
                 for (country in countries) {
                     var option = document.createElement('OPTION');
-                    option.appendChild(document.createTextNode(countries[country][0]));
-                    option.setAttribute('value', countries[country][1]);
+                    option.appendChild(document.createTextNode(countries[country].name));
+                    option.setAttribute('value', countries[country].code);
                     sel.appendChild(option);
                 }
                 
@@ -720,7 +663,7 @@ class TaskRouteHandler
             }            
         </script>";
         
-        $countries= Languages::getCountryList();
+        $countries= TemplateHelper::getCountryList();
         $app->view()->appendData(array(
             'error'             => $error,
             'title_error'       => $title_err,
@@ -797,9 +740,9 @@ class TaskRouteHandler
 
         }
          
-        $languages = Languages::getLanguageList();
-        $countries = Languages::getCountryList();
-        
+        $languages = TemplateHelper::getLanguageList();
+        $countries = TemplateHelper::getCountryList();
+       
         $tags = $task->getTags();
         $tag_list = '';
         if($tags!=null){

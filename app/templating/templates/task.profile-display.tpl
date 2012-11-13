@@ -4,10 +4,10 @@
 	<h2>{$task->getTitle()}</h2>
 	<p>
 		{if $task->getSourceId()}
-			From <b>{Languages::languageNameFromId($task->getSourceId())}</b>
+			From <b>{TemplateHelper::languageNameFromId($task->getSourceId())}</b>
 		{/if}
 		{if $task->getTargetId()}
-			To <b>{Languages::languageNameFromId($task->getTargetId())}</b>
+			To <b>{TemplateHelper::languageNameFromId($task->getTargetId())}</b>
 		{/if}                
 
 		{foreach from=$task->getTags() item=tag}
@@ -16,8 +16,8 @@
 	</p>
 	
 	<p class="task_details">
-		Added {IO::timeSinceSqlTime($task->getCreatedTime())} ago
-		&middot; By {OrganisationDao::nameFromId($task->getOrganisationId())}
+		Added {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago
+		&middot; By {TemplateHelper::orgNameFromId($task->getOrganisationId())}
 		{if $task->getWordcount()}
 			&middot; {$task->getWordcount()|number_format} words
 		{/if}

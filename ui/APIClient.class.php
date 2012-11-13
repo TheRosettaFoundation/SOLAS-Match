@@ -48,4 +48,19 @@ class APIClient
     {
         return $this->_serializer->cast($destination, $sourceObject);
     }
+    
+    public function castCall($destination,$url, $method = HTTP_Request2::METHOD_GET, 
+        $data = null, $query_args = array(), $format = ".json"){
+        $ret=null;
+        $result= $this->call($url, $method,$data, $query_args, $format);
+//        xdebug_break();
+        if(is_array($destination)){
+            if($result){
+                foreach($result as $row){
+                    $ret[]=$this->_serializer->cast($destination[0],$row);
+                }
+            }
+        }else $ret=$this->_serializer->cast($destination,$result);
+        return $ret; 
+    }
 }

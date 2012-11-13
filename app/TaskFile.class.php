@@ -56,10 +56,14 @@ class TaskFile {
     }
     
     public static function getTaskFileInfo($task, $version = 0) {
+		return TaskFile::getTaskFileInfoById($task->getTaskId(),$version);
+    }
+    
+    public static function getTaskFileInfoById($taskID, $version = 0) {
 		$db = new PDOWrapper();
 		$db->init();
 		$ret = false;
-		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($task->getTaskId())},{$db->cleanse($version)}, null, null, null, null")) {
+		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($taskID)},{$db->cleanse($version)}, null, null, null, null")) {
 			$file_info = array();
 			foreach($r[0] as $key => $value) {
 				if (!is_numeric($key)) {
@@ -70,6 +74,7 @@ class TaskFile {
 		}
 		return $ret;
     }
+    
     public static function getFilename($task, $version) {
 		$db = new PDOWrapper();
 		$db->init();

@@ -30,8 +30,11 @@ class Users {
                $format='.'.$id[1];
                $id=$id[0];
            }
+           $role=false;
+           if(isset ($_GET['role'])&& is_numeric($_GET['role'])) $role= $_GET['role'];
            $dao = new UserDao();
-           $data= $dao->find(array("user_id"=>$id));
+           if(!$role)$data= $dao->find(array("user_id"=>$id));
+           else $data= $dao->find(array("user_id"=>$id,"role"=>$role));
            if(is_array($data))$data=$data[0];
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getUser');

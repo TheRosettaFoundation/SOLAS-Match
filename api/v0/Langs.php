@@ -15,7 +15,9 @@ class Langs {
     public static function init(){
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages(:format)/', function ($format=".json"){
             $dao = new Languages();
-           Dispatcher::sendResponce(null, $dao->getLanguageList(), null, $format);
+            $data = $dao->getLanguageList();
+            $result=null;
+           Dispatcher::sendResponce(null,$data , null, $format);
         },'getLanguages');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/:id/', function ($id,$format=".json"){
@@ -24,9 +26,10 @@ class Langs {
                $format='.'.$id[1];
                $id=$id[0];
            }
-             $dao = new Languages();
+           $dao = new Languages();
            $data= $dao->getLanguage($id, null, null);
-           if(is_array($data)&&is_array($data[0]))$data=$data[0];
+           xdebug_break();
+           if(is_array($data))$data=$data[0];
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getLanguage');
       

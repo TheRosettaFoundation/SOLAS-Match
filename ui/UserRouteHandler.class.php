@@ -61,8 +61,8 @@ class UserRouteHandler
         $current_user_id = UserSession::getCurrentUserID();
         
         if($current_user_id == null) {
-            $tasks = TaskStream::getStream(10);
-
+            $tasks = $client->castCall(array("Task"), APIClient::API_VERSION."/tasks/top_tasks"
+                                       ,HTTP_Request2::METHOD_GET, null,array('limit' => 10));
             if($tasks) {
                 $app->view()->appendData(array('tasks' => $tasks));
             }
@@ -522,8 +522,8 @@ class UserRouteHandler
         $url = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($url);
         $user = $client->cast('User', $response);
-        $languages = Languages::getLanguageList();      //wait for API support
-        $countries = Languages::getCountryList();       //wait for API support
+        $languages = TemplateHelper::getLanguageList();      //wait for API support
+        $countries = TemplateHelper::getCountryList();       //wait for API support
         
         if (!is_object($user)) {
             $app->flash('error', 'Login required to access page');
