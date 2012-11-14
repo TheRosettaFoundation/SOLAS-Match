@@ -381,22 +381,22 @@ class TaskRouteHandler
         $app->view()->setData('task', $task);
         $app->view()->appendData(array('org' => $org));
         
-        if ($task_file_info = $client->call(APIClient::API_VERSION."tasks/$task_id/info")) {
+        if ($task_file_info = $client->castCall("TaskMetadata",APIClient::API_VERSION."/tasks/$task_id/info")) {
             $app->view()->appendData(array(
                 'task_file_info' => $task_file_info,
-                'latest_version' => $client->call(APIClient::API_VERSION."tasks/$task_id/version")
+                'latest_version' => $client->call(APIClient::API_VERSION."/tasks/$task_id/version")
             ));
         }
-        
-        $task_file_info = $client->call(APIClient::API_VERSION."tasks/$task_id/info",  HTTP_Request2::METHOD_GET,null,array("version"=>0));
+        $task_file_info = $client->castCall("TaskMetadata",APIClient::API_VERSION."/tasks/$task_id/info",  HTTP_Request2::METHOD_GET,null,array("version"=>0));
 //        $file_path = dirname(Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']));
 //        $appPos = strrpos($file_path, "app");
 //        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
 //                substr($file_path, $appPos).'/'.$task_file_info['filename'];
-        $file_path= APIClient::API_VERSION."tasks/$task_id/file";
+        $file_path= APIClient::API_VERSION."/tasks/$task_id/file";
+       
         $app->view()->appendData(array(
             'file_preview_path' => $file_path,
-            'file_name' => $task_file_info['filename']
+            'filename' => $task_file_info->getFilename()
         )); 
         
         $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
@@ -420,8 +420,8 @@ class TaskRouteHandler
                     ));
 
                     $request = APIClient::API_VERSION."/tasks/{$task->getTaskId()}/version";
-                    $response = $client->call($request, HTTP_Request2::METHOD_GET);
-                    $taskVersion = $response->version;
+                    $taskVersion = $client->call($request, HTTP_Request2::METHOD_GET);
+                    
                     
                     if($taskVersion > 0) {
                         $app->view()->appendData(array(
@@ -884,21 +884,24 @@ class TaskRouteHandler
         $error_message = null;
         
         try {
-            Upload::validateFileHasBeenSuccessfullyUploaded($field_name);
+            TemplateHelper::validateFileHasBeenSuccessfullyUploaded($field_name);
         } catch (Exception $e) {
             $error_message = $e->getMessage();
         }
         
         if (is_null($error_message)) {
             try {
-                Upload::saveSubmittedFile($field_name, $task, $currentUser->getUserId());
+                xdebug_break();
+                $filedata =file_get_contents($_FILES[$field_name]['tmp_name']);
+                $error_message=$client->call(APIClient::API_VERSION."/tasks/$task_id/file/$user_id/{$_FILES[$field_name]['name']}",HTTP_Request2::METHOD_POST,$filedata);
+//                TemplateHelper::saveSubmittedFile($field_name, $task, $currentUser->getUserId());
             } catch (Exception  $e) {
                 $error_message = 'File error: ' . $e->getMessage();
             }
         }
         
         if (is_null($error_message)) {
-            Notify::sendEmailNotifications($task, NotificationTypes::Upload);
+//            Notify::sendEmailNotifications($task, NotificationTypes::Upload);
             $app->redirect($app->urlFor('task-uploaded-edit', array('task_id' => $task_id)));
         } else {
             $app->flash("error", $error_message);

@@ -127,6 +127,62 @@ class TemplateHelper {
 	private static function maxUploadSizeFromPHPSettings() {
 		return ini_get('post_max_size');
 	}
+        
+        public static function validateFileHasBeenSuccessfullyUploaded($field_name) {
+		if (self::isPostTooLarge()) {
+			$max_file_size = ini_get('post_max_size');
+			throw new Exception('Sorry, the file you tried uploading is too large. The max file size is ' . $max_file_size . '. Please consider saving the file in multiple smaller parts for upload.');
+		}
+
+		if (!self::isUploadedFile($field_name)) {
+			throw new Exception('You did not upload a file. Please try again.');
+		}
+
+		if (!self::isUploadedWithoutError($field_name)) {
+			$error_message = self::fileUploadErrorMessage($_FILES[$form_file_field]['error']);
+			throw new Exception('Sorry, we were not able to upload your file. Error: ' . $error_message);
+		}
+	}
+
+	/* Thanks to http://andrewcurioso.com/2010/06/detecting-file-size-overflow-in-php/ */
+	private static function isPostTooLarge() {
+		return ( 
+			$_SERVER['REQUEST_METHOD'] == 'POST' && 
+			empty($_POST) &&
+			empty($_FILES) && 
+			$_SERVER['CONTENT_LENGTH'] > 0
+		);
+	}
+
+	private static function fileUploadErrorMessage($error_code) {
+	    switch ($error_code) {
+	        case UPLOAD_ERR_INI_SIZE:
+	            return 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+	        case UPLOAD_ERR_FORM_SIZE:
+	            return 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form';
+	        case UPLOAD_ERR_PARTIAL:
+	            return 'The uploaded file was only partially uploaded';
+	        case UPLOAD_ERR_NO_FILE:
+	            return 'No file was uploaded';
+	        case UPLOAD_ERR_NO_TMP_DIR:
+	            return 'Missing a temporary folder';
+	        case UPLOAD_ERR_CANT_WRITE:
+	            return 'Failed to write file to disk';
+	        case UPLOAD_ERR_EXTENSION:
+	            return 'File upload stopped by extension';
+	        default:
+	            return 'Unknown upload error';
+	    }
+	}
+
+	public static function isUploadedFile($field_name) {
+		return is_uploaded_file($_FILES[$field_name]['tmp_name']);
+	}
+
+	public static function isUploadedWithoutError($field_name) {
+		return $_FILES[$field_name]['error'] == UPLOAD_ERR_OK;
+	}
+
 }
 
 ?>

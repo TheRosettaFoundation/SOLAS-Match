@@ -53,6 +53,7 @@ require_once 'app/models/Organisation.class.php';
 require_once 'app/models/Badge.class.php';
 require_once 'app/models/Language.class.php';
 require_once 'app/models/Country.class.php';
+require_once 'app/models/TaskMetadata.php';
 
 /**
  * Start the session

@@ -17,6 +17,7 @@ require_once '../app/IO.class.php';
 require_once '../app/TaskFile.class.php';
 require_once '../app/lib/Upload.class.php';
 require_once '../app/TaskStream.class.php';
+require_once '../app/models/TaskMetadata.php';
 class Tasks {
   public static function init(){
         $dispatcher=Dispatcher::getDispatcher();
@@ -134,7 +135,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/info(:format)/', function ($id,$format=".json"){
             $version = 0;
             if(isset ($_GET['version'])&& is_numeric($_GET['version'])) $version= $_GET['version'];
-            Dispatcher::sendResponce(null, TaskFile::getTaskFileInfoById($id,$version), null, $format);
+            Dispatcher::sendResponce(null, new TaskMetadata(TaskFile::getTaskFileInfoById($id,$version)), null, $format);
         },'getTaskInfo');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/claimed(:format)/', function ($id,$format=".json"){
