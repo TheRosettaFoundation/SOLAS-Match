@@ -222,7 +222,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        Notify::sendEmailNotifications($task, NotificationTypes::Archive);
+//        Notify::sendEmailNotifications($task, NotificationTypes::Archive);
         
         $request = APIClient::API_VERSION."/tasks/archiveTask/$task_id";
         $response = $client->call($request, HTTP_Request2::METHOD_PUT);        
@@ -532,15 +532,15 @@ class TaskRouteHandler
                     $tags = '';
                 }
 
-                $task_file_info = TaskFile::getTaskFileInfo($task);
-                $filename = $task_file_info['filename'];
+                $task_file_info = $client->castCall("TaskMetadata",APIClient::API_VERSION."/tasks/$task_id/info");
+                $filename = $task_file_info->getFilename();
                 if($pos = strrpos($filename, '.')) {
                     $extension = substr($filename, $pos + 1);
                     $extension = strtolower($extension);
                     $tags .= " $extension";
                 }
     
-                $task->setTags(Tags::separateTags($tags));            
+                $task->setTags(TemplateHelper::separateTags($tags));            
                 
                 $language_list = array();
                 $country_list = array();
@@ -891,10 +891,9 @@ class TaskRouteHandler
         
         if (is_null($error_message)) {
             try {
-                xdebug_break();
+                //do not touch regards sean
                 $filedata =file_get_contents($_FILES[$field_name]['tmp_name']);
-                $error_message=$client->call(APIClient::API_VERSION."/tasks/$task_id/file/$user_id/{$_FILES[$field_name]['name']}",HTTP_Request2::METHOD_POST,$filedata);
-//                TemplateHelper::saveSubmittedFile($field_name, $task, $currentUser->getUserId());
+                $error_message=$client->call(APIClient::API_VERSION."/tasks/$task_id/file/{$_FILES[$field_name]['name']}/$user_id",HTTP_Request2::METHOD_PUT,null,null,null,$filedata);
             } catch (Exception  $e) {
                 $error_message = 'File error: ' . $e->getMessage();
             }
@@ -931,7 +930,7 @@ class TaskRouteHandler
             
             $upload_error = false;
             try {
-                Upload::validateFileHasBeenSuccessfullyUploaded($field_name);
+                TemplateHelper::validateFileHasBeenSuccessfullyUploaded($field_name);
             } catch (Exception $e) {
                 $upload_error = true;
                 $error_message = $e->getMessage();
@@ -948,7 +947,9 @@ class TaskRouteHandler
                 $task = $client->cast('Task', $response);
 
                 try {
-                    Upload::saveSubmittedFile($field_name, $task, $current_user->getUserId());
+                    
+                    $filedata =file_get_contents($_FILES[$field_name]['tmp_name']);
+                    $error_message=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/file/{$_FILES[$field_name]['name']}/$user_id",HTTP_Request2::METHOD_PUT,null,null,null,$filedata);
                 } catch (Exception  $e) {
                     $upload_error = true;
                     $error_message = 'File error: ' . $e->getMessage();
@@ -965,8 +966,8 @@ class TaskRouteHandler
         }
         $app->view()->appendData(array(
                'url_task_upload'       => $app->urlFor('task-upload', array('org_id' => $org_id)),
-               'max_file_size_bytes'   => Upload::maxFileSizeBytes(),
-               'max_file_size_mb'      => Upload::maxFileSizeMB(),
+               'max_file_size_bytes'   => TemplateHelper::maxFileSizeBytes(),
+               'max_file_size_mb'      => TemplateHelper::maxFileSizeMB(),
                'field_name'            => $field_name
         ));
         $app->render('task.upload.tpl');

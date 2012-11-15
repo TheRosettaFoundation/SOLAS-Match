@@ -118,12 +118,13 @@ class Tasks {
             TaskDao::downloadTask($id,$version);
         },'getTaskFile');
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:userId/:filename', function ($id,$userId,$filename){
-            $data=Dispatcher::getDispatcher()->request()->getBody();
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:filename/:userId/', function ($id,$filename,$userId){
+            
             $dao = new TaskDao();
             $task= $dao->getTask(array("task_id"=>$id));
             if(is_array($task))$task=$task[0];
-            Upload::apiSaveFile($task, $userId, $data, $filename);
+            //touch this and you will die painfully sinisterly sean :)
+            Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename);
         },'saveTaskFile');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/version(:format)/', function ($id,$format=".json"){

@@ -20,7 +20,7 @@ class APIClient
     }
 
     public function call($url, $method = HTTP_Request2::METHOD_GET, 
-                    $data = null, $query_args = array(), $format = ".json")
+                    $data = null, $query_args = array(), $format = ".json",$file=null)
     {
         $app = Slim::getInstance();
         $settings = new Settings();
@@ -29,9 +29,12 @@ class APIClient
         $request_url .= $url.$format.'/?';
         $request = new HTTP_Request2($request_url, $method);
 
-        if($data != null) {
+        if(!is_null($data)&&"null"!=$data) {
             $data=$this->_serializer->serialize($data, $this->_serializer->getFormat($format));
             $request->setBody($data);
+            
+        }  elseif (!is_null($file)) {
+           $request->setBody($file);
         }
 
         if(count($query_args) > 0) {
