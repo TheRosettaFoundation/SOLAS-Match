@@ -84,6 +84,7 @@ class Serializer
 
     public static function cast($destination, $sourceObject)
     {
+        if(is_null($destination)||is_null($sourceObject)) return null;
         if (is_string($destination)) {
             $destination = new $destination();
         }

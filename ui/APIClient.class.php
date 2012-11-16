@@ -43,7 +43,7 @@ class APIClient
         }
 
         $response = $request->send();
-        $response_data = $this->_serializer->deserialize($response->getBody(), $format);
+        $response_data = $this->_serializer->deserialize(trim($response->getBody()), $format);
         return $response_data;
     }
 
@@ -56,7 +56,7 @@ class APIClient
         $data = null, $query_args = array(), $format = ".json"){
         $ret=null;
         $result= $this->call($url, $method,$data, $query_args, $format);
-//        xdebug_break();
+        xdebug_break();
         if(is_array($destination)){
             if($result){
                 foreach($result as $row){

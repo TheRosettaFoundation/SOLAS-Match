@@ -29,20 +29,20 @@
     {if isset($languages)}
         <select name="nLanguage" id="nLanguage">
             {foreach $languages as $language}
-                {if $user->getNativeLanguageID() == $language->getCode()}
-                    <option value="{$language->getCode()}" selected="selected">{$language->getEnName()}</option>
+                {if $user->getNativeLanguageID() == $language->getID()}
+                    <option value="{$language->getID()}" selected="selected">{$language->getEnName()}</option>
                 {else}
-                    <option value="{$language->getCode()}">{$language->getEnName()}</option>
+                    <option value="{$language->getID()}">{$language->getEnName()}</option>
                 {/if}
             {/foreach}
         </select>
     {if isset($countries)}
         <select name="nLanguageCountry" id="nLanguageCountry">
             {foreach $countries as $country}
-                {if $user->getNativeRegionID() == $country->getCode()}
-                <option value="{$country->getCode()}" selected="selected">{$country->getEnName()}</option>
+                {if $user->getNativeRegionID() == $country->getID()}
+                <option value="{$country->getID()}" selected="selected">{$country->getEnName()}</option>
                 {else}
-                    <option value="{$country->getCode()}">{$country->getEnName()}</option>
+                    <option value="{$country->getID()}">{$country->getEnName()}</option>
                 {/if}
             {/foreach}
         </select>

@@ -31,8 +31,9 @@ class Users {
                $id=$id[0];
            }
            $role=false;
-           if(isset ($_GET['role'])&& is_numeric($_GET['role'])) $role= $_GET['role'];
+           if(isset ($_GET['role'])) $role= $_GET['role'];
            $dao = new UserDao();
+           xdebug_break();
            if(!$role)$data= $dao->find(array("user_id"=>$id));
            else $data= $dao->find(array("user_id"=>$id,"role"=>$role));
            if(is_array($data))$data=$data[0];

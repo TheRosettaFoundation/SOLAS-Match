@@ -207,13 +207,15 @@ class UserRouteHandler
             $templateData = array();
             foreach($org_tasks as $org=>$taskArray){
                 $taskData = array();
-                foreach($taskArray as $task){
-                    $temp = array();
-                    $temp['task']=$task;
-                    $temp['translated']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/version")>0;
-                    $temp['taskClaimed']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/claimed")==1;//$task_dao->taskIsClaimed($task->getTaskId());
-                    $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getTaskId()}")==1;
-                    $taskData[]=$temp;
+                if($taskArray){
+                    foreach($taskArray as $task){
+                        $temp = array();
+                        $temp['task']=$task;
+                        $temp['translated']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/version")>0;
+                        $temp['taskClaimed']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/claimed")==1;//$task_dao->taskIsClaimed($task->getTaskId());
+                        $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getTaskId()}")==1;
+                        $taskData[]=$temp;
+                    }
                 }
                 $templateData[$org]=$taskData;
             }
