@@ -54,6 +54,7 @@ require_once 'app/models/Badge.class.php';
 require_once 'app/models/Language.class.php';
 require_once 'app/models/Country.class.php';
 require_once 'app/models/TaskMetadata.php';
+require_once 'app/models/MembershipRequest.class.php';
 
 /**
  * Start the session
