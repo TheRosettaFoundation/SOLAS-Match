@@ -2298,7 +2298,7 @@ BEGIN
 END//
 DELIMITER ;
 
---- Dumping structure for procedure Solas-Match-Test.getCountry
+-- Dumping structure for procedure Solas-Match-Test.getCountry
 DROP PROCEDURE IF EXISTS `getCountry`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountry`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
