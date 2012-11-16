@@ -56,7 +56,6 @@ class APIClient
         $data = null, $query_args = array(), $format = ".json"){
         $ret=null;
         $result= $this->call($url, $method,$data, $query_args, $format);
-        xdebug_break();
         if(is_array($destination)){
             if($result){
                 foreach($result as $row){

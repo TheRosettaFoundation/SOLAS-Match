@@ -123,7 +123,6 @@ $app->hook('slim.before', function () use ($app) {
     $client = new APIClient();
     if (!is_null(UserSession::getCurrentUserID())&&$current_user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID())) {
         $app->view()->appendData(array('user' => $current_user));
-        xdebug_break();
         if ($client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID(),HTTP_Request2::METHOD_GET, null, array("role"=>'organisation_member'))) {
             $app->view()->appendData(array(
                 'user_is_organisation_member' => true,
