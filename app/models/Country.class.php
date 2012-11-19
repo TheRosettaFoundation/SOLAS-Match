@@ -1,44 +1,44 @@
 <?php
 class Country
 {
-    var $_id;
-    var $_code;
-    var $_en_name;
+    var $id;
+    var $code;
+    var $name;
     
     public function __construct($params = array()) {
         if(isset($params['id'])) {
-            $this->_id = $params['id'];
+            $this->id = $params['id'];
         }
         if(isset($params['code'])) {
-            $this->_code = $params['code'];
+            $this->code = $params['code'];
         }
-        if(isset($params['en_name'])) {
-            $this->_en_name = $params['en_name'];
+        if(isset($params['country'])) {
+            $this->name = $params['country'];
         }
     }
     
     public function setId($countryid) {
-        $this->_id = $countryid;
+        $this->id = $countryid;
     }
     
     public function getId() {
-        return $this->_id;
+        return $this->id;
     }
     
     public function setCode($code) {
-        $this->_code = $code;
+        $this->code = $code;
     }
     
     public function getCode() {
-        return $this->_code;
+        return $this->code;
     }
     
     public function setEnName($en_name) {
-        $this->_en_name = $en_name;
+        $this->name = $en_name;
     }
     
     public function getEnName() {
-        return $this->_en_name;
+        return $this->name;
     }
 }
 ?>

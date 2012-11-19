@@ -30,8 +30,12 @@ class Users {
                $format='.'.$id[1];
                $id=$id[0];
            }
+           $role=false;
+           if(isset ($_GET['role'])) $role= $_GET['role'];
            $dao = new UserDao();
-           $data= $dao->find(array("user_id"=>$id));
+           xdebug_break();
+           if(!$role)$data= $dao->find(array("user_id"=>$id));
+           else $data= $dao->find(array("user_id"=>$id,"role"=>$role));
            if(is_array($data))$data=$data[0];
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getUser');
@@ -244,7 +248,7 @@ class Users {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/passwordResetRequest(:format)/', function ($id,$format=".json"){
             $dao = new UserDao();
-            $data=$dao->hasRequestedPasswordResetID($id);
+            $data=$dao->hasRequestedPasswordResetID($id)?1:0;
             Dispatcher::sendResponce(null, $data , null, $format);
         },'hasUserRequestedPasswordReset');
         

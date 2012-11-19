@@ -179,7 +179,7 @@ class OrgRouteHandler
                     $request = APIClient::API_VERSION."/users/$user_id";
                     $response = $client->call($request);
                     $user = $client->cast('User', $response);
-                    Notify::notifyUserOrgMembershipRequest($user, $org, true);
+//                    Notify::notifyUserOrgMembershipRequest($user, $org, true);
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
@@ -191,7 +191,7 @@ class OrgRouteHandler
                     $request = APIClient::API_VERSION."/users/$user_id";
                     $response = $client->call($request);
                     $user = $client->cast('User', $response);
-                    Notify::notifyUserOrgMembershipRequest($user, $org, false);
+//                    Notify::notifyUserOrgMembershipRequest($user, $org, false);
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }

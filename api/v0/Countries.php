@@ -13,12 +13,12 @@
 require_once '../app/lib/Languages.class.php';
 class Countries {
     public static function init(){
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/Countries(:format)/', function ($format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/countries(:format)/', function ($format=".json"){
             $dao = new Languages();
            Dispatcher::sendResponce(null, $dao->getCountryList(), null, $format);
         },'getCountries');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/Countries/:id/', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/countries/:id/', function ($id,$format=".json"){
            if(!is_numeric($id)&& strstr($id, '.')){
                $id= explode('.', $id);
                $format='.'.$id[1];
@@ -30,7 +30,7 @@ class Countries {
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getCountry');
       
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/Countries/getByCode/:code/', function ($code,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/countries/getByCode/:code/', function ($code,$format=".json"){
            if(!is_numeric($code)&& strstr($code, '.')){
                $code= explode('.', $code);
                $format='.'.$code[1];

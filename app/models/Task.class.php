@@ -108,15 +108,15 @@ class Task {
 
     public function getSourceLanguage()
     {
-        $language = Languages::languageNameFromId($this->getSourceId());
-        $region = Languages::countryNameFromCode($this->getSourceCountryCode());
+        $language =  TemplateHelper::languageNameFromId($this->getSourceId());
+        $region =  TemplateHelper::countryNameFromCode($this->getSourceCountryCode());
         return $language.' ('.$region.')';
     }
 
     public function getTargetLanguage()
     {
-        $language = Languages::languageNameFromId($this->getTargetId());
-        $region = Languages::countryNameFromCode($this->getTargetCountryCode());
+        $language =  TemplateHelper::languageNameFromId($this->getTargetId());
+        $region =  TemplateHelper::countryNameFromCode($this->getTargetCountryCode());
         return $language.' ('.$region.')';
     }
 

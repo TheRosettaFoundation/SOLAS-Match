@@ -9,10 +9,12 @@
         {else}
             User Profile
         {/if}
-        <small>View user details here</small>       
-        <a href="{urlFor name="create-org"}" class="btn btn-primary pull-right">
-            Create Organisation
-        </a>
+        <small>View user details here</small>   
+        {if isset($private_access)}
+            <a href="{urlFor name="create-org"}" class="btn btn-primary pull-right">
+                Create Organisation
+            </a>
+        {/if}
     </h1></div>
 {else}
     <div class='page-header'><h1>User Profile <small>View user details here</small></h1></div>

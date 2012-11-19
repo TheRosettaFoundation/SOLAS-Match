@@ -111,11 +111,10 @@ class TagRouteHandler
         $request = APIClient::API_VERSION."/tags/$tag_id/tasks";
         $data = array('limit' => 10);
         $response = $client->call($request, HTTP_Request2::METHOD_GET, $data);
-        foreach($response as $stdObject) {
-            $tasks[] = $client->cast('Task', $stdObject);
-        }         
-         
-        if($tasks) {
+        if($response){
+            foreach($response as $stdObject) {
+                $tasks[] = $client->cast('Task', $stdObject);
+            }         
             $app->view()->setData('tasks', $tasks);
         }  
         
@@ -152,12 +151,7 @@ class TagRouteHandler
 
         $top_tags = array();
         $request = APIClient::API_VERSION."/tags/topTags";
-        $data = array('limit' => 30);
-        $response = $client->call($request, HTTP_Request2::METHOD_GET, $data);
-        foreach($response as $stdObject) {
-            $top_tags[] = $client->cast('Tag', $stdObject);
-        }
-        
+        $top_tags= $client->castCall(array("Tag"),$request, HTTP_Request2::METHOD_GET, null,array('limit' => 30));        
         $app->view()->appendData(array(
                  'tag' => $label,
                  'top_tags' => $top_tags

@@ -20,14 +20,15 @@
     </p>
 {/if}
 
-{if isset($org_tasks)}
+{if isset($templateData)}
     <table class="table table-striped">
-    {foreach from=$org_tasks  key=org item=tasks}
+    {foreach $templateData as  $org=>$tasksData}
+        {assign var="org_id" value=$org}
         <thead>
             <tr>
                 <th>
                     <p style="margin-bottom:40px;"></p>
-                    <a href="{urlFor name="org-public-profile" options="org_id.$org"}">
+                    <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                         <i class="icon-briefcase"></i> {$orgs[$org]->getName()}
                     </a>
                 </th>
@@ -41,20 +42,21 @@
             </tr>
         </thead>
         <tbody>
-        {if !is_null($tasks)}
-            {foreach from=$tasks item=task}
+        {if !is_null($tasksData)}
+            {foreach from=$tasksData item=data}
                 <tr>
-                {assign var="task_id" value=$task->getTaskId()}
+                {assign var="taskObject" value=$data['task']}
+                {assign var="task_id" value=$taskObject->getTaskId()}
                     <td>
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
+                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$taskObject->getTitle()}</a>
                     </td>
-                    {if TaskFile::getLatestFileVersion($task) > 0}
+                    {if $data['translated']}
                         <td>
                             <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
                                 <font color="Green">Download&nbsp;updated&nbsp;file</font>
                             </a>
                         </td>
-                    {elseif $task_dao->taskIsClaimed($task_id)}
+                    {elseif $data['taskClaimed']}
                         <td>
                             <p><font color=#153E7E>Pending Translation</font></p>
                         </td>
@@ -66,7 +68,7 @@
                     <td>
                         <form method="post" action="{urlFor name="client-dashboard"}">
                             <input type="hidden" name="task_id" value="{$task_id}" />
-                            {if $user_dao->isSubscribedToTask($user->getUserId(), $task_id)}
+                            {if $data['userSubscribedToTask']}
                                 <input class="btn btn-primary" type="submit" name="track" value="Ignore" />
                             {else}
                                 <input class="btn" type="submit" name="track" value="Track" />

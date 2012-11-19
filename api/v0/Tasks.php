@@ -17,6 +17,7 @@ require_once '../app/IO.class.php';
 require_once '../app/TaskFile.class.php';
 require_once '../app/lib/Upload.class.php';
 require_once '../app/TaskStream.class.php';
+require_once '../app/models/TaskMetadata.php';
 class Tasks {
   public static function init(){
         $dispatcher=Dispatcher::getDispatcher();
@@ -117,19 +118,26 @@ class Tasks {
             TaskDao::downloadTask($id,$version);
         },'getTaskFile');
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:userId/:filename', function ($id,$userId,$filename){
-            $data=Dispatcher::getDispatcher()->request()->getBody();
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:filename/:userId/', function ($id,$filename,$userId){
+            
             $dao = new TaskDao();
             $task= $dao->getTask(array("task_id"=>$id));
             if(is_array($task))$task=$task[0];
-            Upload::apiSaveFile($task, $userId, $data, $filename);
+            //touch this and you will die painfully sinisterly sean :)
+            Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename);
         },'saveTaskFile');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/version(:format)/', function ($id,$format=".json"){
             $userID=null;
             if(isset ($_GET['userID'])&& is_numeric($_GET['userID'])) $userID= $_GET['userID'];
-           Dispatcher::sendResponce(null, array("version"=>TaskFile::getLatestFileVersionByTaskID($id,$userID)), null, $format);
+           Dispatcher::sendResponce(null, TaskFile::getLatestFileVersionByTaskID($id,$userID), null, $format);
         },'getTaskVersion');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/info(:format)/', function ($id,$format=".json"){
+            $version = 0;
+            if(isset ($_GET['version'])&& is_numeric($_GET['version'])) $version= $_GET['version'];
+            Dispatcher::sendResponce(null, new TaskMetadata(TaskFile::getTaskFileInfoById($id,$version)), null, $format);
+        },'getTaskInfo');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/claimed(:format)/', function ($id,$format=".json"){
 

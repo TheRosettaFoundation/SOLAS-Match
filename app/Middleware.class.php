@@ -18,7 +18,7 @@ class Middleware
     {
         $app = Slim::getInstance();
         $params = $route->getParams();        
-        
+
         if($params !== NULL) {
             $client = new APIClient();
             $task_id = $params['task_id'];
@@ -27,12 +27,12 @@ class Middleware
             
             if($taskClaimed) {
                 $user_id = UserSession::getCurrentUserID();
-                if(!($user_id)) {
+                if(is_null($user_id)) {
                     $app->flash('error', 'Login required to access page');
                     $app->redirect($app->urlFor('login'));
                 }
                 $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
-                $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET, $user_id);
+                $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET,null,array("userID"=>$user_id));
 
                 if(!$userClaimedTask) {
                     $app->flash('error', 'This task has been claimed by another user');
@@ -50,7 +50,6 @@ class Middleware
     {
         $client = new APIClient();        
         $user_id = UserSession::getCurrentUserID();
-                
         $params = $route->getParams();
         if($params !== NULL) {
             $org_id = $params['org_id'];
@@ -91,7 +90,6 @@ class Middleware
     public static function authUserForOrgTask($request, $response, $route) 
     {
         $client = new APIClient();
-        
         $params= $route->getParams();
         if($params != NULL) {
             $task_id = $params['task_id'];

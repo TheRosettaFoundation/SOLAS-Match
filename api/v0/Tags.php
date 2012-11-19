@@ -34,7 +34,7 @@ class Tags {
                $temp = array();
                $temp= explode('.', $label);
                $lastIndex = sizeof($temp)-1;
-               if($lastIndex>1){
+               if($lastIndex>0){
                    $format='.'.$temp[$lastIndex];
                    $label=$temp[0];
                    for($i = 1; $i < $lastIndex; $i++){
@@ -51,6 +51,7 @@ class Tags {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/topTags(:format)/', function ($format=".json"){
            $limit = 30;
            if(isset ($_GET['limit'])&& is_numeric($_GET['limit'])) $limit= $_GET['limit'];
+           xdebug_break();
            $data= TagsDao::getTopTags($limit);
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getTopTags');

@@ -73,7 +73,7 @@ class Serializer
             }
         }
         if(!is_null($data)&& is_null($ret)){
-            if(strcasecmp($data, "null")) {
+            if(strcasecmp($data, "null")==0||$data="null") {
                 $ret=null;
             }  else {
                 $ret=$data;
@@ -84,6 +84,7 @@ class Serializer
 
     public static function cast($destination, $sourceObject)
     {
+        if(is_null($destination)||is_null($sourceObject)) return null;
         if (is_string($destination)) {
             $destination = new $destination();
         }

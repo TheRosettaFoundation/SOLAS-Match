@@ -1,24 +1,25 @@
 <?php
-file_exists('app/models/Language.class.php') ? require('app/models/Language.class.php') : require('../app/models/Language.class.php');
+require_once file_exists('app/models/Language.class.php') ? 'app/models/Language.class.php' : '../app/models/Language.class.php';
+require_once file_exists('app/models/Country.class.php') ? 'app/models/Country.class.php' : '../app/models/Country.class.php';
 
 class Languages {
-	public static function languageIdFromName($language_name) {
-		$result = self::getLanguage(null,null,$language_name);
-		return $result['id'];
-	}
-	
-	public static function languageNameFromId($language_id) {
-		$result = self::getLanguage($language_id,null,null);
-		return $result['en_name'];
-	}
+    public static function languageIdFromName($language_name) {
+            $result = self::getLanguage(null,null,$language_name);
+            return $result->getId();
+    }
+
+    public static function languageNameFromId($language_id) {
+            $result = self::getLanguage($language_id,null,null);
+            return $result->getEnName();
+    }
 
     public static function countryNameFromId($country_id) {
         $result = self::getCountry($country_id, null, null);
-        return $result['en_name'];
+        return $result->getEnName();
     }
     public static function countryNameFromCode($countryCode) {
         $result = self::getCountry(null, $countryCode, null);
-        return $result['en_name'];
+        return $result->getEnName();
     }
         
     public static function getLanguage($id,$code,$name){
@@ -26,7 +27,7 @@ class Languages {
         $db->init();
         $result =$db->call("getLanguage", "{$db->cleanseNullOrWrapStr($id)},{$db->cleanseNullOrWrapStr($code)},
                     {$db->cleanseNullOrWrapStr($name)}") ;
-        return $result[0];
+        return new Language($result[0]);
     }
 
     public static function getCountry($id, $code, $name) {
@@ -34,7 +35,7 @@ class Languages {
         $db->init();
         $result = $db->call("getCountry", "{$db->cleanseNUll($id)}, {$db->cleanseNullOrWrapStr($code)},
                             {$db->cleanseNullOrWrapStr($name)}");
-        return $result[0];
+        return new Country($result[0]);
     }
 
     public static function getLanguageList() {
@@ -42,7 +43,7 @@ class Languages {
 		$db->init();
 		$languages = array();
         foreach($db->call("getLanguages", "") as $lcid) {
-            $languages[] = $lcid;
+            $languages[] = new Language($lcid);
         }
                 
 		return $languages;
@@ -53,7 +54,7 @@ class Languages {
 		$db->init();
 		$countries = array();
         foreach($db->call("getCountries", "") as $lcid) {
-            $countries[] = $lcid;
+            $countries[] = new Country($lcid);
         }
                 
 		return $countries;
@@ -66,22 +67,22 @@ class Languages {
 		return $lcid[0]['lcid'];
     }
 
-	public static function isValidLanguageId($language_id) {
-		return (is_numeric($language_id) && $language_id > 0);
-	}
+    public static function isValidLanguageId($language_id) {
+            return (is_numeric($language_id) && $language_id > 0);
+    }
 
-	public static function ensureLanguageIdIsValid($language_id) {
-		if (!self::isValidLanguageId($language_id)) {
-			throw new InvalidArgumentException('A valid language id was expected.');
-		}
-	}
+    public static function ensureLanguageIdIsValid($language_id) {
+            if (!self::isValidLanguageId($language_id)) {
+                    throw new InvalidArgumentException('A valid language id was expected.');
+            }
+    }
 
-	public static function saveLanguage($language_name) {
-		$language_id = self::languageIdFromName($language_name);
-		if (is_null(($language_id))) {
-			throw new InvalidArgumentException('A valid language name was expected.');
-		}
-		return $language_id;
-	}
+    public static function saveLanguage($language_name) {
+            $language_id = self::languageIdFromName($language_name);
+            if (is_null(($language_id))) {
+                    throw new InvalidArgumentException('A valid language name was expected.');
+            }
+            return $language_id;
+    }
 
 }

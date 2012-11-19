@@ -176,7 +176,7 @@ class Upload {
 
 	public static function absoluteFolderPathForUpload($task, $version) {
 		if (!is_numeric($version) || $version < 0) {
-			throw new InvalidArgumentException('Cannot give an upload folder path as the version number was not specified.');
+			throw new InvalidArgumentException("Cannot give an upload folder path as the version number was not specified.version = $version");
 		}
 
 		$settings 			= new Settings();

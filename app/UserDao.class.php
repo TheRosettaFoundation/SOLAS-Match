@@ -315,16 +315,15 @@ class UserDao {
     */
     public function likeTag($user_id, $tag_id)
     {
-        $ret = false;
         $db = new PDOWrapper();
         $db->init();
         $args = array();
         $args['user_id'] = $db->cleanse($user_id);
         $args['tag_id'] = $db->cleanse($tag_id);
         if ($result = $db->call("userLikeTag", $args)) {
-            $ret = $result[0]['result'];
+            return $result[0]['result'];
         }
-        return $ret;
+        return 0;
     }
 
     /*
@@ -441,9 +440,9 @@ class UserDao {
     }
 
     public function createPasswordReset($user_id){
-        if(!$this->hasRequestedPasswordResetID($user_id)) {          //wait for API support
+        if(!$this->hasRequestedPasswordResetID($user_id)) {       
             $uid = md5(uniqid(rand()));
-            $this->addPasswordResetRequest($uid, $user_id);   //wait for API support
+            $this->addPasswordResetRequest($uid, $user_id);   
             Notify::sendPasswordResetEmail($uid, $this->getUser($user_id, null, null, null, null, null, null, null, null));
             return 1;
         }

@@ -9,10 +9,10 @@
 
 	<p>
 		{if $task->getSourceId()}
-			From <b>{Languages::languageNameFromId($task->getSourceId())}</b>
+			From <b>{TemplateHelper::languageNameFromId($task->getSourceId())}</b>
 		{/if}
 		{if $task->getTargetId()}
-			To <b>{Languages::languageNameFromId($task->getTargetId())}</b>
+			To <b>{TemplateHelper::languageNameFromId($task->getTargetId())}</b>
 		{/if}
         <div class="tag">
 		{foreach from=$task->getTags() item=tag}
@@ -22,13 +22,13 @@
 	</p>
 		
 	<p>
-		<span class="time_since">{IO::timeSinceSqlTime($task->getCreatedTime())} ago</span>
+		<span class="time_since">{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago</span>
 
 		&middot;
         {assign var="org_id" value=$task->getOrganisationId()}
         
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-            {OrganisationDao::nameFromId($task->getOrganisationId())}
+            {TemplateHelper::orgNameFromId($task->getOrganisationId())}
         </a>
 		{assign var="wordcount" value=$task->getWordCount()}
 		{if $wordcount}
@@ -90,7 +90,7 @@
         </p>
      {/if}
      <hr />
-     <center><h2>Document Preview <small>{$file_name}</small></h2></center>
+     <center><h2>Document Preview <small>{$filename}</small></h2></center>
     <iframe src="http://docs.google.com/viewer?url={urlencode($file_preview_path)}&embedded=true" width="800" height="780" style="border: none;"></iframe>
 {/if}
 <p style="margin-bottom:40px;"></p>
@@ -112,14 +112,14 @@
     <p style="margin-bottom:40px;"></p>
     
 	<div class="page-header">
-		<h1>Finished translating? <small>{$task_file_info.filename}</small></h1>
+		<h1>Finished translating? <small>{$filename}</small></h1>
 	</div>
 	{if isset($upload_error)}
 		<div class="alert alert-error">
 			<strong>Upload error</strong> {$upload_error}
 		</div>
 	{/if}
-	<h3>Upload your translated version of {$task_file_info.filename}</h3>
+	<h3>Upload your translated version of {$filename}</h3>
 	<form class="well" method="post" action="{urlFor name="task-upload-edited" options="task_id.$task_id"}" enctype="multipart/form-data">
 		<input type="hidden" name="task_id" value="{$task->getTaskId()}">
 		<input type="file" name="edited_file" id="edited_file">
