@@ -94,7 +94,7 @@ class TemplateHelper {
 
      public static function saveLanguage($languageCode) {
             $client = new APIClient();
-//            xdebug_break();
+
             $language = $client->castCall("Language", APIClient::API_VERSION."/languages/getByCode/$languageCode");
             if (is_null(($language))) {
                     throw new InvalidArgumentException('A valid language code was expected.');
