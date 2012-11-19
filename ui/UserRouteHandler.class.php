@@ -332,7 +332,7 @@ class UserRouteHandler
                 //$my_org_tasks[] = $client->cast('Task', $stdObject);
             //}
         //}
-        xdebug_break();
+        
         $request = APIClient::API_VERSION."/password_reset/$uid";
         $response = $client->call($request);        
         $reset_request = $client->cast('PasswordResetRequest', $response);

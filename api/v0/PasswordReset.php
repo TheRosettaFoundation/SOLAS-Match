@@ -34,7 +34,7 @@ class PasswordResetAPI {
                $key=$key[0];
            }
            $dao = new UserDao();
-           xdebug_break();
+           
            $data = $dao->getPasswordResetRequests(array('uid'=>$key));
            $data = new PasswordResetRequest($data['user_id'],$data['uid']);
            Dispatcher::sendResponce(null, $data, null, $format);

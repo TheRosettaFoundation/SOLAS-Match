@@ -28,7 +28,7 @@ class Langs {
            }
            $dao = new Languages();
            $data= $dao->getLanguage($id, null, null);
-           xdebug_break();
+         
            if(is_array($data))$data=$data[0];
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getLanguage');
