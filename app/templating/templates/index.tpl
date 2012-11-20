@@ -63,10 +63,12 @@
 	</div>
 
     <div class="span4">
-        {include file="tags.user-tags.inc.tpl"}
-	
-		{include file="tags.top-list.inc.tpl"}
-	</div>
+        {include file="tags.user-tags.inc.tpl"}	
+        {include file="tags.top-list.inc.tpl"}
+    </div>   
+    <div class="span4">  
+        {include file="statistics.tpl"}	
+    </div>
 </div>
 
 {if !isset($user)}
