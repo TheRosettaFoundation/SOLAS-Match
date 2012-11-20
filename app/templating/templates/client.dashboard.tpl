@@ -3,10 +3,8 @@
 <div class="page-header">
 	<h1>
         Dashboard <small>Overview of your tasks for translation</small>
-
     </h1>
 </div>
-
 
 {if isset($flash['success'])}
     <p class="alert alert-success">
@@ -35,9 +33,14 @@
                 <th>Task Status</th>
                 <th>Track Status</th>
                 <th>
-                    <a class="btn btn-primary" href="{urlFor name="task-upload" options="org_id.$org"}">
-                        <i class="icon-upload icon-white"></i> Add new task
+                    <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class="btn btn-primary">
+                        <i class="icon-wrench icon-white"></i> Edit Organisation
                     </a>
+                </th>
+                <th>                    
+                    <a class="btn btn-success" href="{urlFor name="task-upload" options="org_id.$org"}">
+                        <i class="icon-upload icon-white"></i> Add New Task
+                    </a>                    
                 </th>
             </tr>
         </thead>
@@ -71,12 +74,19 @@
                             {if $data['userSubscribedToTask']}
                                 <input class="btn btn-primary" type="submit" name="track" value="Ignore" />
                             {else}
-                                <input class="btn" type="submit" name="track" value="Track" />
+                                <input class="btn btn-small" type="submit" name="track" value="Track" />
                             {/if}
                         </form>
                     </td>
                     <td>
-                        <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-inverse">Archive</a>
+                        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btn btn-small">
+                            <i class="icon-wrench icon-black"></i> Edit Task
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-inverse">
+                            <i class="icon-fire icon-white"></i> Archive
+                        </a>
                     </td>
                 </tr>
             {/foreach}
