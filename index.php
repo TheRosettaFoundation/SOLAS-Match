@@ -120,6 +120,7 @@ function isValidPost(&$app) {
  */
 $app->hook('slim.before', function () use ($app) {
 //    $user_dao = new UserDao();
+
     $client = new APIClient();
     if (!is_null(UserSession::getCurrentUserID())&&$current_user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID())) {
         $app->view()->appendData(array('user' => $current_user));
