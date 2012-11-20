@@ -216,6 +216,8 @@ class UserRouteHandler
                         $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getTaskId()}")==1;
                         $taskData[]=$temp;
                     }
+                } else {
+                    $taskData = null;
                 }
                 $templateData[$org]=$taskData;
             }
