@@ -56,7 +56,7 @@
                     {if $data['translated']}
                         <td>
                             <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
-                                <font color="Green">Download&nbsp;updated&nbsp;file</font>
+                                <i class="icon-download icon-black"></i><font color="Green"> Download&nbsp;updated&nbsp;file</font>
                             </a>
                         </td>
                     {elseif $data['taskClaimed']}
@@ -72,9 +72,15 @@
                         <form method="post" action="{urlFor name="client-dashboard"}">
                             <input type="hidden" name="task_id" value="{$task_id}" />
                             {if $data['userSubscribedToTask']}
-                                <input class="btn btn-primary" type="submit" name="track" value="Ignore" />
+                                <input type="hidden" name="track" value="Ignore" />
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-primary">
+                                    <i class="icon-inbox icon-black"></i> Ignore
+                                </a>
                             {else}
-                                <input class="btn btn-small" type="submit" name="track" value="Track" />
+                                <input type="hidden" name="track" value="Track" />
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                                    <i class="icon-envelope icon-black"></i> Track
+                                </a>
                             {/if}
                         </form>
                     </td>

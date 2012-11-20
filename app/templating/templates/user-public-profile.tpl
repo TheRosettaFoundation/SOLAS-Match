@@ -116,8 +116,11 @@
                     <form method="post" class="pull-right" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                         {if isset($private_access)}
                             <input type="hidden" name="org_id" value="{$org_id}" />
-                            <input type="submit" class='pull-right btn btn-inverse' name="revoke" value="Leave Organisation"
-                                onclick="return confirm('Are you sure you want to leave the organisation?')" />
+                            <input type="hidden" name="revoke" value="Leave Organisation" 
+                                   onclick="return confirm('Are you sure you want to leave the organisation?')"/>
+                                <a href="#" onclick="this.parentNode.submit()" class="pull-right btn btn-inverse">
+                                    <i class="icon-fire icon-white"></i> Leave Organisation
+                                </a>
                         {/if}
                     </form>
                 </div>
@@ -166,7 +169,9 @@
     {if count($archivedJobs) > 0}
         <div class='page-header'><h1>Archived Jobs <small>A list of jobs you have worked on in the past</small>
         {if isset($private_access)}
-            <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>List All Archived Tasks</a>
+            <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
+                <i class="icon-list icon-white"></i> List All Archived Tasks
+            </a>
         {/if}
         </h1></div>
 

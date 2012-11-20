@@ -19,6 +19,10 @@
 
 		<input type="hidden" name="organisation_id" value="1">
 		<input class="btn btn-success" type="submit" value="Upload my selected file" name="submit">
+<!--                <input type="hidden" name="submit" value="Upload my selected file" />
+                <a href="#" onclick="this.parentNode.submit()" class="btn btn-success">
+                    <i class="icon-download icon-white"></i> Upload my selected file
+                </a>-->
 	</form>
 </div>
 {include file="footer.tpl"}
