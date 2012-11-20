@@ -475,11 +475,11 @@ class TaskRouteHandler
     public function taskDescribe($task_id)
     {
     	$app = Slim::getInstance();
-	$client = new APIClient();
+    	$client = new APIClient();
         
     	$error          = null;
     	$title_err      = null;
-	$word_count_err = null;
+	    $word_count_err = null;
         
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -722,7 +722,7 @@ class TaskRouteHandler
             }   
               
             if($post->tags != '') {
-                $task->setTags(Tags::separateTags($post->tags));
+                $task->setTags(TemplateHelper::separateTags($post->tags));
             }
             
 
