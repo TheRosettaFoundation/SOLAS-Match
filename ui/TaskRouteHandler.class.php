@@ -728,6 +728,7 @@ class TaskRouteHandler
             
 
             if(ctype_digit($post->word_count)) {
+                xdebug_break();
                 $task->setWordCount($post->word_count);                
                 $request = APIClient::API_VERSION."/tasks/$task_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);

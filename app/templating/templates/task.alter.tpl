@@ -29,10 +29,10 @@
     <label for="source">Source Language</label>
         <select name="source" id="source">
             {foreach $languages as $language}
-                {if $task->getSourceId() == $language->getCode()}
-                    <option value="{$language->getCode()}" selected="selected">{$language->getEnName()}</option>
+                {if $task->getSourceId() == $language->getId()}
+                    <option value="{$language->getId()}" selected="selected">{$language->getEnName()}</option>
                 {else}
-                    <option value="{$language->getCode()}">{$language->getEnName()}</option>
+                    <option value="{$language->getId()}">{$language->getEnName()}</option>
                 {/if}
             {/foreach}
         </select>
@@ -51,10 +51,10 @@
     <label for="target">Target Language</label>
     <select name="target" id="target">
         {foreach $languages as $language}
-            {if $task->getTargetId() == $language->getCode()}
-                    <option value="{$language->getCode()}" selected="selected">{$language->getEnName()}</option>
+            {if $task->getTargetId() == $language->getId()}
+                    <option value="{$language->getId()}" selected="selected">{$language->getEnName()}</option>
             {else}
-                <option value="{$language->getCode()}">{$language->getEnName()}</option>
+                <option value="{$language->getId()}">{$language->getEnName()}</option>
             {/if}
         {/foreach}
     </select>
