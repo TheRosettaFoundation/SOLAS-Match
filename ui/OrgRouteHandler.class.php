@@ -404,7 +404,7 @@ class OrgRouteHandler
                 $response = $client->call($request);
                 $user = $client->cast('User', $response);
                 
-                $request = APIClient::API_VERSION."/badges/$badge_id";
+                $request = APIClient::API_VERSION."/users/".$user_id."/badges/$badge_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
                 
                 $user_name = '';
