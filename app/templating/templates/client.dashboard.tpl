@@ -74,7 +74,7 @@
                             {if $data['userSubscribedToTask']}
                                 <input type="hidden" name="track" value="Ignore" />
                                 <a href="#" onclick="this.parentNode.submit()" class="btn btn-primary">
-                                    <i class="icon-inbox icon-black"></i> Ignore
+                                    <i class="icon-inbox icon-white"></i> Ignore
                                 </a>
                             {else}
                                 <input type="hidden" name="track" value="Track" />
