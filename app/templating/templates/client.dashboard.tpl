@@ -90,7 +90,7 @@
     </table>
 {else}
     <div class="alert alert-warning">
-    <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new     task for that content.
+    <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new task for that content.
     </div>
 {/if}
 <p style="margin-bottom:60px;"></p>

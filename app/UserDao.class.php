@@ -121,11 +121,11 @@ class UserDao {
             $user = $this->find(array('email' => $email));
 
             if (!is_object($user)) {
-                    throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+                    throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credentials used and try again.');
             }
 
             if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
-                    throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+                    throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credentials used and try again.');
             }
 
     if ($clear_password === '') {
@@ -141,11 +141,11 @@ class UserDao {
             $user = $this->find(array('email' => $email));
 
             if (!is_object($user)) {
-                    return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+                    return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credentials used and try again.');
             }
 
             if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
-                    return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');
+                    return array("error"=>'Sorry, the  password or username entered is incorrect. Please check the credentials used and try again.');
             }
 
             return $user;

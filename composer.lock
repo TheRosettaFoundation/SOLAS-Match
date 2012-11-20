@@ -1,5 +1,5 @@
 {
-    "hash": "bb1e7387f11955d84cc695018c16a301",
+    "hash": "44774bbd9e9ce93090b1d2700a7b6272",
     "packages": [
         {
             "name": "drslump/protobuf-php",
@@ -18,28 +18,44 @@
             }
         },
         {
-            "name": "lightopenid/lightopenid",
-            "version": "dev-composer",
+            "name": "fp/lightopenid",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git://jit.gitorious.org/~makasim/lightopenid/makasims-lightopenid.git",
-                "reference": "c46af663a4b57e22ee9d7472674c967e97887597"
+                "url": "https://github.com/formapro/LightOpenID",
+                "reference": "ad14146f9c93e90699888e150427aca431dc3c18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/formapro/LightOpenID/archive/ad14146f9c93e90699888e150427aca431dc3c18.zip",
+                "reference": "ad14146f9c93e90699888e150427aca431dc3c18",
+                "shasum": ""
             },
             "require": {
-                "php": ">=5.2.3"
+                "php": ">=5.2"
             },
+            "time": "1333528791",
             "type": "library",
             "installation-source": "source",
             "autoload": {
                 "classmap": [
-                    "./"
+                    "openid.php",
+                    "provider/provider.php"
                 ]
             },
-            "homepage": "https://gitorious.org/lightopenid/lightopenid",
-            "keywords": [
-                "openid"
+            "authors": [
+                {
+                    "name": "Mewp",
+                    "email": "mewp151+gitorious.org@gmail.com"
+                }
             ],
-            "time": "1332838638"
+            "description": "A PHP 5 library for easy openid authentication",
+            "homepage": "https://github.com/formapro/LightOpenID",
+            "keywords": [
+                "security",
+                "OpenId",
+                "Authentication"
+            ]
         },
         {
             "name": "slim/extras",
@@ -142,7 +158,7 @@
             "require": {
                 "php": ">=5.2"
             },
-            "time": "2012-09-25 21:13:16",
+            "time": "2012-09-25 22:13:16",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -183,13 +199,14 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/videlalvaro/php-amqplib/zipball/237870120238f37d66703583ca0e186b4567b1a9",
+                "url": "https://github.com/videlalvaro/php-amqplib/archive/237870120238f37d66703583ca0e186b4567b1a9.zip",
                 "reference": "237870120238f37d66703583ca0e186b4567b1a9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "time": "1351776374",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -208,8 +225,7 @@
                 "queue",
                 "rabbitmq",
                 "message"
-            ],
-            "time": "1351776374"
+            ]
         }
     ],
     "packages-dev": null,
@@ -218,7 +234,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "lightopenid/lightopenid": 20,
+        "fp/lightopenid": 20,
         "videlalvaro/php-amqplib": 20
     }
 }

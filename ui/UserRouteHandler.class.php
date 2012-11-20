@@ -216,6 +216,8 @@ class UserRouteHandler
                         $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getTaskId()}")==1;
                         $taskData[]=$temp;
                     }
+                } else {
+                    $taskData = null;
                 }
                 $templateData[$org]=$taskData;
             }
@@ -276,7 +278,7 @@ class UserRouteHandler
                             $user = $client->cast("User", $user);
                             UserSession::setSession($user->getUserId());
                         } else {
-                            throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');    
+                            throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credentials used and try again.');    
                         }                    
                                        
                         
@@ -459,7 +461,7 @@ class UserRouteHandler
                         $user = $client->cast("User", $user);
                         UserSession::setSession($user->getUserId());
                     } else {
-                        throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credientails used and try again.');    
+                        throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credentials used and try again.');    
                     }
                     
                     $app->redirect($app->urlFor("home"));
