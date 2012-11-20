@@ -39,7 +39,9 @@
 <div class="page-header">
 	<h1>
             Translation tasks <small>Claim a task, translate it, upload it</small>
-            <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">Search for Organisations</a>
+            <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
+                <i class="icon-search icon-white"></i> Search for Organisations
+            </a>
         </h1>
 </div>
 
@@ -63,10 +65,12 @@
 	</div>
 
     <div class="span4">
-        {include file="tags.user-tags.inc.tpl"}
-	
-		{include file="tags.top-list.inc.tpl"}
-	</div>
+        {include file="tags.user-tags.inc.tpl"}	
+        {include file="tags.top-list.inc.tpl"}
+    </div>   
+    <div class="span4" style="margin-top:20px;">  
+        {include file="statistics.tpl"}	
+    </div>
 </div>
 
 {if !isset($user)}

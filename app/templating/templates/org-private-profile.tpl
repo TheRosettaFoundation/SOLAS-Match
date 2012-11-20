@@ -9,8 +9,11 @@
     {/if}
     <small>Alter your organisation's profile here</small>
     {assign var="org_id" value=$org->getId()}
-    <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="pull-right btn btn-primary">Public Profile</a>
-    </h1></div>
+        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="pull-right btn btn-primary">
+            <i class="icon-list icon-white"></i> Public Profile
+            </a>
+        </h1>
+    </div>
 {else}
     header({urlFor name='home'});
 {/if}

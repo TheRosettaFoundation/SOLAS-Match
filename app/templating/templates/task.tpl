@@ -126,7 +126,7 @@
 		<p class="help-block">
 			Max file size {$max_file_size}MB.
 		</p> 
-		<button type="submit" value="Submit" name="submit" class="btn btn-primary"><i class="icon-upload"></i> Upload the file I chose</button>
+		<button type="submit" value="Submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload the file I chose</button>
 	</form>
 {else if isset($task_is_claimed)}
 	<hr>

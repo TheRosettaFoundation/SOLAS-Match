@@ -26,7 +26,9 @@
     {assign var="org_id" value=$org->getId()}
     {if isset($user)}
         {if in_array($user->getUserId(), $org_members)}
-            <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Edit Profile</a>
+            <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
+                <i class="icon-wrench icon-white"></i> Edit Profile
+            </a>
         {else}
             <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Request Membership</a>
         {/if}
@@ -57,8 +59,8 @@
     
     {if isset($user)}
         {if in_array($user->getUserId(), $org_members)}
-            <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
-                Create Badge
+            <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
+                <i class="icon-star icon-white"></i> Create Badge
             </a>
         {/if} 
         <p style="margin-bottom:20px;"></p>

@@ -18,7 +18,7 @@
 		<p class="help-block">Can be anything, even a .zip collection of files. Max file size {$max_file_size_mb}MB.</p>
 
 		<input type="hidden" name="organisation_id" value="1">
-		<input class="btn btn-primary" type="submit" value="Upload my selected file" name="submit">
+		<input class="btn btn-success" type="submit" value="Upload my selected file" name="submit">
 	</form>
 </div>
 {include file="footer.tpl"}

@@ -5,7 +5,7 @@
     Task {$task->getTitle()}
     <small>Alter task details here</small>
     <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-        View Details
+        <i class="icon-list icon-white"></i> View Details
     </a>
 </h1>
 

@@ -11,10 +11,10 @@
         {/if}
         <small>View user details here</small>   
         {if isset($private_access)}
-            <a href="{urlFor name="create-org"}" class="btn btn-primary pull-right">
-                Create Organisation
+            <a href="{urlFor name="create-org"}" class="btn btn-success pull-right">
+                <i class="icon-star icon-white"></i> Create Organisation
             </a>
-        {/if}
+        {/if} 
     </h1></div>
 {else}
     <div class='page-header'><h1>User Profile <small>View user details here</small></h1></div>
@@ -22,7 +22,9 @@
 
 <h1>
     {if isset($private_access)}
-        <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>Edit Details</a>
+        <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>
+            <i class="icon-wrench icon-white"></i> Edit Details
+        </a>
     {/if}
 </h1>
 
@@ -42,8 +44,13 @@
 <p style="margin-bottom:50px;"></p>
 {if isset($badges)}
     {if count($badges) > 0}
-        <div class='page-header'><h1>Badges<small> A list of badges you have earned</small>
-        <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>List All Badges</a></h1></div>
+        <div class='page-header'>
+            <h1>Badges<small> A list of badges you have earned</small>
+                <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>
+                    <i class="icon-list icon-white"></i> List All Badges
+                </a>
+            </h1>
+        </div>
 
         {foreach $badges as $badge }     
             
@@ -67,7 +74,10 @@
     {if count($user_tags) > 0}
         <div class="page-header">
             <h1>Tags<small> A list of tags you have subscribed to.</small>
-            <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">List All Tags</a></h1>
+                <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
+                    <i class="icon-list icon-white"></i> List All Tags
+                </a>
+            </h1>
         </div>
 
         {foreach $user_tags as $tag}
@@ -87,7 +97,9 @@
         <div class='page-header'>
             <h1>
                 Organisations <small>A list of organisations you belong to</small>
-                <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">Search for Organisations</a>
+                <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
+                    <i class="icon-search icon-white"></i> Search for Organisations
+                </a>
             </h1>
         </div>
 
@@ -137,7 +149,9 @@
     {if count($activeJobs) > 0}
         <div class='page-header'><h1>Active Tasks <small>A list of tasks you are currently working on</small>
         {if isset($private_access)}
-            <a href='{urlFor name="active-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>List All Active Tasks</a>
+            <a href='{urlFor name="active-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
+                <i class="icon-list icon-white"></i> List All Active Tasks
+            </a>
         {/if}
         </h1></div>
 
