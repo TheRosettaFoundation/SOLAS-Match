@@ -60,6 +60,7 @@ class Dispatcher {
         require_once 'v0/Langs.php';
         require_once 'v0/Countries.php';
         require_once 'v0/PasswordReset.php';
+        require_once 'v0/Stats.php';
     }
     
     public static function sendResponce($headers,$body,$code=200,$format=".json"){
