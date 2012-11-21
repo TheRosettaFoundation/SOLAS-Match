@@ -59,6 +59,7 @@
     {/if}
 
 {if isset($file_previously_uploaded) && $file_previously_uploaded}
+    <br />
     <div class="alert">
         <p>Thanks for providing your translation for this task. 
         {if $org != null && $org->getName() != ''}

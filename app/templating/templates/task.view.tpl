@@ -47,7 +47,7 @@
 {if $task->getReferencePage() != ''}
     <h3>Context Reference</h3>
     <p>
-        <a href="{$task->getReferencePage()}">{$task->getReferencePage()}</a>
+        <a target="_blank" href="{$task->getReferencePage()}">{$task->getReferencePage()}</a>
     </p>
 {/if}
 
