@@ -4,8 +4,8 @@ require "vendor/autoload.php";
 mb_internal_encoding("UTF-8");
 
 SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
-SmartyView::$smartyCompileDirectory = 'app/templating/templates_compiled';
-SmartyView::$smartyTemplatesDirectory = 'app/templating/templates';
+SmartyView::$smartyCompileDirectory = 'ui/templating/templates_compiled';
+SmartyView::$smartyTemplatesDirectory = 'ui/templating/templates';
 SmartyView::$smartyExtensions = array(
     'vendor/slim/extras/Views/Extension/Smarty'
 );
@@ -39,7 +39,7 @@ require_once 'ui/APIClient.class.php';
 require_once 'app/Middleware.class.php';
 require_once 'app/MessagingClient.class.php';
 
-require_once 'ui/templateHelper.php';
+require_once 'ui/TemplateHelper.php';
 require_once 'ui/UserRouteHandler.class.php';
 require_once 'ui/OrgRouteHandler.class.php';
 require_once 'ui/TaskRouteHandler.class.php';
