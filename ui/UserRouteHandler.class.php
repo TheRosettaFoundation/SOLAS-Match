@@ -44,7 +44,37 @@ class UserRouteHandler
         $client = new APIClient();        
         $settings = new Settings();
         
-        $use_statistics = $settings->get('site.statistics');    
+        $use_statistics = $settings->get('site.statistics'); 
+        
+        if($use_statistics == 'y') {
+            $request = APIClient::API_VERSION."/stats/totalUsers";
+            $total_users = $client->call($request, HTTP_Request2::METHOD_GET);      
+            
+            $request = APIClient::API_VERSION."/stats/totalOrgs";
+            $total_orgs = $client->call($request, HTTP_Request2::METHOD_GET);
+            
+//            //Wait for API Support            
+//            $request = APIClient::API_VERSION."/stats/totalArchivedTasks";
+//            $total_archived_tasks = $client->call($request, HTTP_Request2::METHOD_GET, $dateTime); 
+//            
+//            $request = APIClient::API_VERSION."/stats/totalClaimedTasks";
+//            $total_claimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET, $dateTime); 
+//            
+//            $request = APIClient::API_VERSION."/stats/totalUnclaimedTasks";
+//            $total_unclaimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET, $dateTime); 
+//            
+//            $request = APIClient::API_VERSION."/stats/totalTasks";
+//            $total_tasks = $client->call($request, HTTP_Request2::METHOD_GET, $dateTime);  
+//            
+            $app->view()->appendData(array(
+                        'total_users' => $total_users,
+                        'total_orgs' => $total_orgs,
+//                        'total_archived_tasks' => $total_archived_tasks,
+//                        'total_claimed_tasks' => $total_claimed_tasks,
+//                        'total_unclaimed_tasks' => $total_unclaimed_tasks,
+//                        'total_tasks' => $total_tasks
+            ));
+        }
         
         $request = APIClient::API_VERSION."/tags/topTags";
         $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
