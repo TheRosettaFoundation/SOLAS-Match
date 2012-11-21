@@ -11,36 +11,36 @@
  * @author sean
  */
 class StatDao {
-    public static function getTotalTasks($dateTime="")
+    public static function getTotalTasks($dateTime)
     {
         $ret = null;
         $db= new PDOWrapper();
         $db->init();
-        if ($result = $db->call("getTotalTasks", "{$db->cleanseWrapStr($dateTime)}")) {
+        if ($result = $db->call("getTotalTasks", "{$db->cleanseNullOrWrapStr($dateTime)}")) {
             $ret = $result[0]['result'];
         }
 
         return $ret;
     }
     
-    public static function getTotalArchivedTasks($dateTime="")
+    public static function getTotalArchivedTasks($dateTime)
     {
         $ret = null;
         $db= new PDOWrapper();
         $db->init();
-        if ($result = $db->call("getTotalArchivedTasks", "{$db->cleanseWrapStr($dateTime)}")) {
+        if ($result = $db->call("getTotalArchivedTasks", "{$db->cleanseNullOrWrapStr($dateTime)}")) {
             $ret = $result[0]['result'];
         }
 
         return $ret;
     }
     
-    public static function getTotalClaimedTasks($dateTime="")
+    public static function getTotalClaimedTasks($dateTime)
     {
         $ret = null;
         $db= new PDOWrapper();
         $db->init();
-        if ($result = $db->call("getTotalTasks", "{$db->cleanseWrapStr($dateTime)}")) {
+        if ($result = $db->call("getTotalClaimedTasks", "{$db->cleanseNullOrWrapStr($dateTime)}")) {
             $ret = $result[0]['result'];
         }
 
@@ -71,12 +71,12 @@ class StatDao {
         return $ret;
     }
     
-    public static function getTotalUnclaimedTasks($dateTime="")
+    public static function getTotalUnclaimedTasks($dateTime)
     {
         $ret = null;
         $db= new PDOWrapper();
         $db->init();
-        if ($result = $db->call("getTotalUnclaimedTasks", "{$db->cleanseWrapStr($dateTime)}")) {
+        if ($result = $db->call("getTotalUnclaimedTasks", "{$db->cleanseNullOrWrapStr($dateTime)}")) {
             $ret = $result[0]['result'];
         }
 

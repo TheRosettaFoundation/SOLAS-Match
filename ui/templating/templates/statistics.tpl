@@ -19,24 +19,24 @@
             <td>Tasks Uploaded:</td>
             <td>&nbsp;</td>
             <td>
-                <b></b>
+                <b>{$total_tasks}</b>
             </td>
         <tr>
             <td>Claimed Tasks:</td>
             <td>&nbsp;</td>
             <td>
-                <b></b>
+                <b>{$total_claimed_tasks}</b>
             </td>
         <tr>
             <td>Unclaimed Tasks:</td>
             <td>&nbsp;</td>
             <td>
-                <b></b>
+                <b>{$total_unclaimed_tasks}</b>
             </td>
         <tr>
             <td>Archived Tasks:</td>
             <td>&nbsp;</td>
             <td>
-                <b></b>
+                <b>{$total_archived_tasks}</b>
             </td>
     </table>
