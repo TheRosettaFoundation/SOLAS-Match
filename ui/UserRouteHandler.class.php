@@ -96,14 +96,17 @@ class UserRouteHandler
                 }
             }
             
+            /*
             if(strcasecmp($use_statistics, "y") == 0) {             
                 $app->view()->appendData(array(
                             'use_statistics' => $use_statistics
                 ));                
             }
+            */
             
             $app->view()->appendData(array(
-                        'user_tags' => $user_tags
+                        'user_tags' => $user_tags,
+                        'use_statistics' => $use_statistics
             ));
         }
         
