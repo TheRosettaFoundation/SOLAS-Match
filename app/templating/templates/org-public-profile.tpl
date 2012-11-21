@@ -44,7 +44,7 @@
 
 {if $org->getHomePage() != '' && $org->getHomePage() != 'http://'}
     <h3>Home Page</h3>
-    <p><a href='{$org->getHomePage()}'>{$org->getHomePage()}</a></p>
+    <p><a target="_blank" href='{$org->getHomePage()}'>{$org->getHomePage()}</a></p>
     <p style="margin-bottom:20px;"></p>
 {/if}
 
