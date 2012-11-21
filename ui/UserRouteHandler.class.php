@@ -41,7 +41,10 @@ class UserRouteHandler
     public function home()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIClient();        
+        $settings = new Settings();
+        
+        $use_statistics = $settings->get('site.statistics');    
         
         $request = APIClient::API_VERSION."/tags/topTags";
         $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
@@ -94,7 +97,8 @@ class UserRouteHandler
             }
             
             $app->view()->appendData(array(
-                        'user_tags' => $user_tags
+                        'user_tags' => $user_tags,
+                        'use_statistics' => $use_statistics
             ));
         }
         

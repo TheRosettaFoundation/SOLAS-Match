@@ -120,7 +120,9 @@
 				</p>
 				  
 				
-				<button type="submit" value="Submit" name="submit" class="btn btn-primary"> Submit</button>
+				<button type="submit" value="Submit" name="submit" class="btn btn-primary">
+                                    <i class="icon-upload icon-white"></i> Submit
+                                </button>
 			</fieldset> 
 		</form>
 	</div>

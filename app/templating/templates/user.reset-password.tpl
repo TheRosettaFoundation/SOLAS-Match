@@ -18,7 +18,8 @@
         </h2>
     </label>
     <p><input type="text" name="email_address" id="email_address" /></p>
-    <input type="submit" name="password_reset" value="Send Request" class="btn btn-primary"/>
+    <input type="submit" name="password_reset" value="    Send Request" class="btn btn-primary"/>
+    <i class="icon-share-alt icon-white" style="position:relative; right:116px; top:2px;"></i>     
 </form>
 
 {include file="footer.tpl"}

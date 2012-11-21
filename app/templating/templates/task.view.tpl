@@ -9,7 +9,7 @@
     <small>Task Details</small>
     {assign var="task_id" value=$task->getTaskId()}
     <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-        Edit Details
+        <i class="icon-wrench icon-white"></i> Edit Details
     </a>
 </h1>
 
@@ -82,20 +82,22 @@
         {if isset($registered) && $registered == true}
             <p>
                 <input type="hidden" name="notify" value="false" />
-                <input type="submit" class="btn btn-primary" value="Ignore Task" />
-                You are currently receiving notifications about this task
+                <input type="submit" class="btn btn-primary" value="    Ignore Task" />
+                You are currently receiving notifications about this task.
+                <i class="icon-inbox icon-white" style="position:relative; right:430px; top:2px;"></i> 
             </p>
         {else}
             <p>
                 <input type="hidden" name="notify" value="true" />
-                <input type="submit" class="btn btn-primary" value="Track Task" />
-                You are not currently receiving notifications about this task
+                <input type="submit" class="btn btn-primary" value="    Track Task" />
+                You are not currently receiving notifications about this task.
+                <i class="icon-envelope icon-white" style="position:relative; right:446px; top:2px;"></i> 
             </p>
         {/if}
     </form>
 {else}
     <p class="alert alert-info">
-        Please log in to register for notifications for this task
+        Please log in to register for notifications for this task.
     </p>
 {/if}
 

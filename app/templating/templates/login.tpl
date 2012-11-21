@@ -30,9 +30,12 @@
 	<label for="password">Password</label>
 	<input type="password" name="password" id="password">
 	<p>
-		<input type="submit" class="btn btn-primary" name="login" value="Log In"/>
-        <input type="submit" class="btn btn-primary" name="password_reset" value="Reset Password" />
+        <input type="submit" class="btn btn-primary" name="login" value="   Log In" />
+        <input type="submit" class="btn btn-inverse" name="password_reset" value="   Reset Password" />
+        <i class="icon-share icon-white" style="position:relative; right:200px;top:2px;"></i>
+        <i class="icon-exclamation-sign icon-white" style="position:relative; right:145px; top:2px;"></i>        
 	</p>
+
 </form>
 {/if}
 

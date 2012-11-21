@@ -20,7 +20,9 @@
 	<label for="password">Password</label>
 	<input type="password" name="password" id="password" placeholder="Your password">
 	<p>
-	<button type="submit" class="btn btn-primary" name="submit">Register</button>
+	<button type="submit" class="btn btn-success" name="submit">
+            <i class="icon-star icon-white"></i> Register
+        </button>
 </p>
 </form>
 {/if}        

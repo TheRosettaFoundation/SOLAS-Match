@@ -5,11 +5,11 @@
 		<h1>Help NGOs translate</h1>
 		<p>Non&ndash;governmental agencies need <em>your</em> translation skills.</p>
 		<p>
-			<a class="btn btn-primary btn-large" href="{urlFor name="register"}">
-				Register to Volunteer
+			<a class="btn btn-success btn-large" href="{urlFor name="register"}">
+				<i class="icon-star icon-white"></i> Register to Volunteer
 			</a>
-			<a class="btn btn-large" href="{urlFor name="login"}">
-				Login
+			<a class="btn btn-primary btn-large" href="{urlFor name="login"}">
+				<i class="icon-share icon-white"></i> Login
 			</a>
 		</p>
 	</div>
