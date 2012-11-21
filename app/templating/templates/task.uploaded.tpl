@@ -19,6 +19,13 @@
 </ol>
 <p style="margin-bottom:20px;"></p>
 
-<p><a href="{urlFor name="home"}" class="btn btn-primary">Back to Home</a> <a href="{urlFor name="task-upload" options="org_id.$org_id"}" class="btn">Add a new task</a> </p>
+<p>
+    <a href="{urlFor name="home"}" class="btn btn-primary">
+        <i class="icon-arrow-left icon-white"></i> Back to Home
+    </a>
+    <a href="{urlFor name="task-upload" options="org_id.$org_id"}" class="btn btn-success">
+        <i class="icon-circle-arrow-up icon-white"></i> Add New Task
+    </a> 
+</p>
 
 {include file="footer.tpl"}

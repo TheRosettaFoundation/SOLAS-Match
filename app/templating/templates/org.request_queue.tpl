@@ -15,8 +15,10 @@
         <p>View their <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">profile</a></p>
         <form method="post" action="{urlFor name="org-request-queue" options="org_id.$org_id"}">
             <input type="hidden" name="user_id" value="{$user->getUserId()}" />
-            <input type="submit" name="accept" value="Accept Request" class="btn btn-primary" />
-            <input type="submit" name="refuse" value="Refuse Request" class="btn btn-primary" />
+            <input type="submit" name="accept" value="    Accept Request" class="btn btn-primary" />
+            <input type="submit" name="refuse" value="    Refuse Request" class="btn btn-inverse" />
+            <i class="icon-ok-circle icon-white" style="position:relative; right:260px; top:2px;"></i>
+            <i class="icon-remove-circle icon-white" style="position:relative; right:145px; top:2px;"></i>
         </form>
 
     {/foreach}
@@ -40,7 +42,8 @@
     <input type="text" name="email" />
 
     <p>
-        <input type="submit" value="Add User" class="btn btn-primary" />
+        <input type="submit" value="    Add User" class="btn btn-primary" />
+        <i class="icon-plus-sign icon-white" style="position:relative; right:88px; top:2px;"></i>
     </p>
 </form>
 

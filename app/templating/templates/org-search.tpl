@@ -10,7 +10,8 @@
     <label for="search_name">Organisation Name:</label>
     <input type="text" name="search_name" id="search_name" style="height: 20px" />
     <br />
-    <input type="submit" name="submit" value="Search" class="btn btn-primary" />
+    <input type="submit" name="submit" value="    Search" class="btn btn-primary" />
+    <i class="icon-search icon-white" style="position:relative; right:75px; top:2px;"></i>
 </form>
 
 {if isset($found_orgs)}
