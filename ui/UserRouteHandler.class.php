@@ -45,7 +45,7 @@ class UserRouteHandler
         
         $request = APIClient::API_VERSION."/tags/topTags";
         $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
-                                    array('limit' => 30));        
+                                    array('limit' => 10));        
         $top_tags = array();
         if($response) {
             foreach($response as $stdObject) {
@@ -83,7 +83,8 @@ class UserRouteHandler
             }
 
             $url = APIClient::API_VERSION."/users/$current_user_id/tags";
-            $response = $client->call($url);
+            $response = $client->call($url, HTTP_Request2::METHOD_GET, null,
+                                    array('limit' => 10));
             
             $user_tags = array();
             if($response) {
