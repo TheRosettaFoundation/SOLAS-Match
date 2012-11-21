@@ -52,10 +52,11 @@ class UserRouteHandler
                 $top_tags[] = $client->cast('Tag', $stdObject);
             }
         }        
-
+        $settings = new Settings();
         $app->view()->appendData(array(
-            'top_tags' => $top_tags,
-            'current_page' => 'home'
+            'top_tags' => $top_tags
+            ,'current_page' => 'home'
+            ,'stats' => $settings->get("site.stats")
         ));
 
         $current_user_id = UserSession::getCurrentUserID();

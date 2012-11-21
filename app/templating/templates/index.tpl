@@ -67,10 +67,12 @@
     <div class="span4">
         {include file="tags.user-tags.inc.tpl"}	
         {include file="tags.top-list.inc.tpl"}
-    </div>   
+    </div>
+    {if isset($stats) && $stats=="y"}
     <div class="span4" style="margin-top:20px;">  
         {include file="statistics.tpl"}	
     </div>
+    {/if}
 </div>
 
 {if !isset($user)}
