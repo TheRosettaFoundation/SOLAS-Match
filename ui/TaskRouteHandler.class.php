@@ -19,8 +19,8 @@ class TaskRouteHandler
         $app->get('/task/id/:task_id/mark-archived/', array($middleware, 'authUserForOrgTask'),
         array($this, 'archiveTask'))->name('archive-task');
 
-        $app->get('/task/id/:task_id/download-file-user/', array($middleware, 'authenticateUserForTask'),
-        array($this, 'downloadTask'))->name('download-task');
+        $app->get('/task/id/:task_id/download-file-user/', array($middleware, 'authUserIsLoggedIn'), 
+        array($middleware, 'authenticateUserForTask'), array($this, 'downloadTask'))->name('download-task');
 
         $app->get('/task/claim/:task_id', array($middleware, 'authenticateUserForTask'),
         array($this, 'taskClaim'))->name('task-claim-page');
@@ -232,12 +232,7 @@ class TaskRouteHandler
 
     public function downloadTask($task_id)
     {
-        
-        $app = Slim::getInstance();
-        
-        if (Middleware::authUserIsLoggedIn()) {            
-            $this->downloadTaskVersion($task_id,0);
-        }
+        $this->downloadTaskVersion($task_id,0);
     }
 
     /*
@@ -327,7 +322,8 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $settings = new Settings();
-        $app->redirect($settings->get("site.api").APIClient::API_VERSION."/tasks/$task_id/file",HTTP_Request2::METHOD_GET,null,array("version"=>$version));   
+        $app->redirect($settings->get("site.api").APIClient::API_VERSION."/tasks/$task_id/file",
+                                    HTTP_Request2::METHOD_GET,null,array("version"=>$version));   
     }
 
     public function downloadTaskPreview($task_id)
