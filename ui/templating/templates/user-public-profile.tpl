@@ -135,7 +135,7 @@
                      
                     <p>
                     {if $org->getHomePage() != "http://"}
-                        Visit their <a href="{$org->getHomePage()}">home page</a>.
+                        Visit their <a target="_blank" href="{$org->getHomePage()}">home page</a>.
                     {else}
                         This organisation does not have a web site listed.
                     {/if}
