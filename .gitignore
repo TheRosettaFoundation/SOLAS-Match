@@ -2,5 +2,5 @@
 composer.phar
 vendor
 /nbproject/
-/app/templating/templates_compiled/
+/ui/templating/templates_compiled/
 

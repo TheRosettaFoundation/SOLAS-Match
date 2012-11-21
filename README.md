@@ -145,7 +145,7 @@ every hour at 10 past the hour.
 ## Set file/folder permissions
 
     chmod 777 ./app/uploads
-    chmod 777 ./app/templating/templates_compiled
+    chmod 777 ./ui/templating/templates_compiled
 
 ## Install 960.css Grid System
 

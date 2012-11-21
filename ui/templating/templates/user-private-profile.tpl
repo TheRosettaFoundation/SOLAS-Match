@@ -56,7 +56,9 @@
     <p>Register with <a href="http://en.gravatar.com/" target="_blank">Gravatar</a> to choose your avatar</p>
 
     <p> 
-        <button type='submit' class='btn btn-primary' name='submit'>Update</button>
+        <button type='submit' class='btn btn-primary' name='submit'>
+            <i class="icon-refresh icon-white"></i> Update
+        </button>
     </p>
 </form>
                   

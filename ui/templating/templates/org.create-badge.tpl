@@ -19,7 +19,9 @@
     <textarea name='description' cols='40' rows='5'></textarea>
 
     <p>
-        <button type='submit' class='btn btn-primary' name='submit'>Create</button>
+        <button type='submit' class='btn btn-success' name='submit'>
+            <i class="icon-star icon-white"></i> Create
+        </button>
     </p>
 </form>
 

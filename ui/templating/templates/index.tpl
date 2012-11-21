@@ -5,11 +5,11 @@
 		<h1>Help NGOs translate</h1>
 		<p>Non&ndash;governmental agencies need <em>your</em> translation skills.</p>
 		<p>
-			<a class="btn btn-primary btn-large" href="{urlFor name="register"}">
-				Register to Volunteer
+			<a class="btn btn-success btn-large" href="{urlFor name="register"}">
+				<i class="icon-star icon-white"></i> Register to Volunteer
 			</a>
-			<a class="btn btn-large" href="{urlFor name="login"}">
-				Login
+			<a class="btn btn-primary btn-large" href="{urlFor name="login"}">
+				<i class="icon-share icon-white"></i> Login
 			</a>
 		</p>
 	</div>
@@ -67,19 +67,20 @@
     <div class="span4">
         {include file="tags.user-tags.inc.tpl"}	
         {include file="tags.top-list.inc.tpl"}
+        {if isset($stats) && $stats=="y"}
+                {include file="statistics.tpl"}
+        {/if}
+    </div> 
+    <div class="span8">        
+        {if !isset($user)}
+            <div class="alert">
+                <p>Help us match you with the most suitable translation tasks.</p>
+                <p><a href={urlFor name="register"}>Register now</a> to find the jobs best suited to you.</p>
+            </div>
+        {/if}  
     </div>
-    {if isset($stats) && $stats=="y"}
-    <div class="span4" style="margin-top:20px;">  
-        {include file="statistics.tpl"}	
-    </div>
-    {/if}
 </div>
 
-{if !isset($user)}
-    <div class="alert">
-        <p>Help us match you with the most suitable translation tasks.</p>
-        <p><a href={urlFor name="register"}>Register now</a> to find the jobs best suited to you.</p>
-    </div>
-{/if}
+
 
 {include file="footer.tpl"}

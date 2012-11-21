@@ -83,7 +83,9 @@
     <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}">
 
     <p>
-        <button type="submit" value="Submit" name="submit" class="btn btn-primary"> Submit</button>
+        <button type="submit" value="Submit" name="submit" class="btn btn-primary">
+            <i class="icon-refresh icon-white"></i> Update
+        </button>
     </p>
 </form>
 

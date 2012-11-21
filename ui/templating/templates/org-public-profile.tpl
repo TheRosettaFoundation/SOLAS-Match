@@ -30,7 +30,9 @@
                 <i class="icon-wrench icon-white"></i> Edit Profile
             </a>
         {else}
-            <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='pull-right btn btn-primary'>Request Membership</a>
+            <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
+                <i class="icon-ok-circle icon-white"></i> Request Membership
+            </a>
         {/if}
     {/if}
     </h1></div>
@@ -73,21 +75,22 @@
                 {if in_array($user->getUserId(), $org_members)}
                     {assign var="badge_id" value=$badge->getBadgeId()}
                     {assign var="org_id" value=$org->getId()}
-                   
+                    
                     <div class="pull-right">
+                     <i class="icon-fire icon-white" style="position:relative; right:-190px; top:1px;"></i>   
                      <form method="post" class="pull-right" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                         {* {if isset($private_access)} *}
                             <input type="hidden" name="badge_id" value="{$badge_id}" />
-                            <input type="submit" class='btn btn-inverse' name="deleteBadge" value="Delete"
-                              onclick="return confirm('Are you sure you want to delete this badge?')" />
+                            <input type="submit" class='btn btn-inverse' name="deleteBadge" value="    Delete"
+                              onclick="return confirm('Are you sure you want to delete this badge?')" />                                 
                         {* {/if} *}
                     </form> 
                     
                     <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
-                        Edit
+                        <i class="icon-wrench icon-black"></i> Edit
                     </a>&nbsp;&nbsp;
                     <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
-                        Assign
+                        <i class="icon-plus-sign icon-black"></i> Assign
                     </a>&nbsp;&nbsp;
                     </div>
                 {/if}
@@ -113,7 +116,9 @@
 
 {if isset($user)}
     {if in_array($user->getUserId(), $org_members)}
-        <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class="btn btn-primary">View Membership Requests</a>
+        <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class="btn btn-primary">
+            <i class="icon-list icon-white"></i> View Membership Requests
+        </a>
     {/if}
 {/if}
 

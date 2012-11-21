@@ -24,14 +24,22 @@
         really appreciates being able to make use of your translation. Thanks so much.</li>
 	</ol>
 </section>
-<section>
+<section>    
     {if isset($tip)}
-        <p>{$tip}</p>
+        <hr>
+            <p><b>Correct Translations - They Matter!</b></p>
+            <p>
+                <i>{$tip}</i>
+            </p>
+        <hr>
     {/if}
 </section>
-
 <section>
-	<p><a href="{urlFor name="home"}" class="btn btn-primary">Find a New Task</a></p>
+	<p>
+            <a href="{urlFor name="home"}" class="btn btn-primary">
+                <i class="icon-search icon-white"></i> Find A New Task
+            </a>
+        </p>
 </section>
 
 {include file="footer.tpl"}

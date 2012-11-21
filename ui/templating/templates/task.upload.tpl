@@ -18,11 +18,8 @@
 		<p class="help-block">Can be anything, even a .zip collection of files. Max file size {$max_file_size_mb}MB.</p>
 
 		<input type="hidden" name="organisation_id" value="1">
-		<input class="btn btn-success" type="submit" value="Upload my selected file" name="submit">
-<!--                <input type="hidden" name="submit" value="Upload my selected file" />
-                <a href="#" onclick="this.parentNode.submit()" class="btn btn-success">
-                    <i class="icon-download icon-white"></i> Upload my selected file
-                </a>-->
+		<input class="btn btn-success" type="submit" value="    Upload my selected file" name="submit">
+                <i class="icon-upload icon-white" style="position:relative; right:170px; top:2px;"></i> 
 	</form>
 </div>
 {include file="footer.tpl"}

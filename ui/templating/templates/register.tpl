@@ -1,41 +1,31 @@
 {include file="header.tpl"}
 <div class="page-header">
-	<h1>Log In <small>to Solas Match</small></h1>
+	<h1>Register on Solas Match <small>As a volunteer translator</small></h1>
 </div>
-{if isset($flash['error'])}
-    <div class="alert alert-error">
-        <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-        <p><strong>Warning! </strong>{$flash['error']}</p>
-    </div>
-{/if}
 
-{if isset($flash['info'])}
-    <div class="alert alert-info">
-        <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-        <p><strong>NOTE: </strong>{$flash['info']}</p>
-    </div>
+{if isset($error)}
+	<div class="alert alert-error">
+		<strong>Error</strong> {$error}
+	</div>
 {/if}
-
-{if isset($flash['success'])}
-    <div class="alert alert-success">
-        <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-        <p><strong>NOTE: </strong>{$flash['success']}</p>
-    </div>
+{if isset($warning)}
+	<div class="alert">
+		<strong>Warning</strong> {$warning}
+	</div>
 {/if}
-
 {if isset($openid)&& ($openid==='n'||$openid==='h' )}
-<form method="post" action="{urlFor name='login'}">
+<form method="post" action="{urlFor name="register"}" class="well">
 	<label for="email">Email</label>
-	<input type="text" name="email" id="email">
+	<input type="text" name="email" id="email" placeholder="Your email">
 	<label for="password">Password</label>
-	<input type="password" name="password" id="password">
+	<input type="password" name="password" id="password" placeholder="Your password">
 	<p>
-		<input type="submit" class="btn btn-primary" name="login" value="Log In"/>
-        <input type="submit" class="btn btn-primary" name="password_reset" value="Reset Password" />
-	</p>
+	<button type="submit" class="btn btn-success" name="submit">
+            <i class="icon-star icon-white"></i> Register
+        </button>
+</p>
 </form>
-{/if}
-
+{/if}        
 {if isset($openid)&& ($openid==='y'||$openid==='h' )}
         <!-- Simple OpenID Selector -->
 	<form action="{urlFor name='login'}" method="post" id="openid_form">
@@ -58,4 +48,5 @@
 	</form>
 	<!-- /Simple OpenID Selector -->
 {/if}
+
 {include file="footer.tpl"}
