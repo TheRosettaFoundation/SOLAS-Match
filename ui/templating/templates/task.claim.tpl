@@ -29,8 +29,12 @@
 		</p>
 		<p>
 			<input type="hidden" name="task_id" value="{$task_id}">
-			<button type="submit" class="btn btn-primary">Yes, I promise I will translate this file</button>
-			<a href="{urlFor name="task" options="task_id.$task_id"}" class="btn">No, just bring me back to the task page</a>
+			<button type="submit" class="btn btn-primary">
+                            <i class="icon-ok-circle icon-white"></i> Yes, I promise I will translate this file
+                        </button>
+			<a href="{urlFor name="task" options="task_id.$task_id"}" class="btn">
+                            <i class="icon-ban-circle icon-black"></i> No, just bring me back to the task page
+                        </a>
 		</p>
 	</form>
 </section>
