@@ -32,9 +32,14 @@
 <section>
 	<h3>When you have finished translating the file you downloaded:</h3>
         <p></p>
-	<p><a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">Visit the task page to upload my translation</a> <a href="{urlFor name="home"}" class="btn">Go back home</a> </p>
-    
-
+	<p>
+            <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
+                <i class="icon-share-alt icon-white"></i> Visit The Task Page To Upload My Translation
+            </a>
+            <a href="{urlFor name="home"}" class="btn">
+                <i class="icon-arrow-left icon-black"></i> Go Back Home
+            </a>
+        </p>
 </section>
 
     <p><small>(Can't find the file on your desktop? 

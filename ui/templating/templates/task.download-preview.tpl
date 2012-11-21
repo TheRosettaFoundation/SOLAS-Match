@@ -17,7 +17,9 @@
 	<p>
         
         <p style="margin-bottom:20px;"></p>
-        <a class="btn btn-primary" href="{urlFor name="task-claim-page" options="task_id.$task_id"}">I have saved the file to my desktop</a>
+            <a class="btn btn-primary" href="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                <i class="icon-circle-arrow-down icon-white"></i> I Have Saved The File To My Desktop
+            </a>
 	</p>
 </section>
 
