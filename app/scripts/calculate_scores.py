@@ -133,7 +133,7 @@ def getTaskTags(task_id):
 # Return tag ids of tags liked by the user
 #
 def getUserTags(user_id):
-    return DBCall('getUserTags', [int(user_id)])
+    return DBCall('getUserTags', [int(user_id), 0])
 
 #
 # Get the time (in seconds) since the task was created
