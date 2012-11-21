@@ -5,7 +5,16 @@
 
 {if isset($badgeList)}
     {foreach $badgeList as $badgeEntry}
-        <h3>{$badgeEntry->getTitle()}</h3>
+        {if !is_null($badgeEntry->getOwnerId())}
+            <h3>
+                {assign var="org_id" value=$badgeEntry->getOwnerId()}
+                <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                    {$org_list[$org_id]->getName()}
+                </a>: {$badgeEntry->getTitle()}
+            </h3>
+        {else}
+            <h3>System Badge: {$badgeEntry->getTitle()}</h3>
+        {/if}
         <p>{$badgeEntry->getDescription()}</p>
         <p style="margin-bottom:20px;"></p>
     {/foreach}
