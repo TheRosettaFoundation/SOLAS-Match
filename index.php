@@ -122,12 +122,17 @@ $app->hook('slim.before', function () use ($app) {
 //    $user_dao = new UserDao();
 
     $client = new APIClient();
-    if (!is_null(UserSession::getCurrentUserID())&&$current_user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID())) {
+    if (!is_null(UserSession::getCurrentUserID()) &&
+            $current_user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID())) {
         $app->view()->appendData(array('user' => $current_user));
-        if ($client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID(),HTTP_Request2::METHOD_GET, null, array("role"=>'organisation_member'))) {
+        $user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID(),
+                        HTTP_Request2::METHOD_GET, null, array("role"=>'organisation_member'));
+        if ($user) {
+            $org_array = $client->castCall(Array("Organisation"), 
+                APIClient::API_VERSION."/users/".UserSession::getCurrentUserID()."orgs");
             $app->view()->appendData(array(
                 'user_is_organisation_member' => true,
-                'user_organisations' => $client->castCall(Array("Organisation"), APIClient::API_VERSION."/users/".UserSession::getCurrentUserID()."orgs")
+                'user_organisations' => $org_array
             ));
         }
     }
