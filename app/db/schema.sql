@@ -1062,15 +1062,21 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-test.getUserTags
+-- Dumping structure for procedure Solas-Match-Test.getUserTags
 DROP PROCEDURE IF EXISTS `getUserTags`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT, IN `lim` INT)
 BEGIN
-	SELECT t.*
-	FROM user_tag
-	JOIN tag t ON user_tag.tag_id = t.tag_id
-	WHERE user_id = id; 
+	 if (lim= '') then set lim=null; end if;
+	 if(lim is not null) then
+    set @q = Concat("SELECT t.*	FROM user_tag	JOIN tag t ON user_tag.tag_id = t.tag_id	WHERE user_id = ? LIMIT ",lim);
+    else
+    set @q = "SELECT t.*	FROM user_tag	JOIN tag t ON user_tag.tag_id = t.tag_id	WHERE user_id =  ?";
+    end if;
+    PREPARE stmt FROM @q;
+    set @id=id;
+    EXECUTE stmt using @id;
+    DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 

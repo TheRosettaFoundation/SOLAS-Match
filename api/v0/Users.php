@@ -123,8 +123,10 @@ class Users {
         },'deleteUserbadgesByID');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tags(:format)/', function ($id,$format=".json"){
+           $limit=null;
+           if(isset ($_GET['limit'])&& is_numeric($_GET['limit'])) $limit= $_GET['limit'];
            $dao = new UserDao();
-           Dispatcher::sendResponce(null, $dao->getUserTags($id), null, $format);
+           Dispatcher::sendResponce(null, $dao->getUserTags($id,$limit), null, $format);
         },'getUsertags');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tasks(:format)/', function ($id,$format=".json"){

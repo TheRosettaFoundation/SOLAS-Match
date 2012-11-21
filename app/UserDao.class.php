@@ -259,12 +259,12 @@ class UserDao {
             return $ret;
     }
 
-    public function getUserTags($user_id)
+    public function getUserTags($user_id,$limit=null)
     {
         $ret = null;
         $db = new PDOWrapper();
         $db->init();
-        if($result = $db->call("getUserTags", $db->cleanse($user_id))) {
+        if($result = $db->call("getUserTags", "{$db->cleanse($user_id)},{$db->cleanseNull($limit)}")) {
             $ret = array();
             foreach($result as $row) {
                 $ret[] = new Tag($row);
