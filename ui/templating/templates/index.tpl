@@ -67,17 +67,19 @@
     <div class="span4">
         {include file="tags.user-tags.inc.tpl"}	
         {include file="tags.top-list.inc.tpl"}
-    </div>   
-    <div class="span4" style="margin-top:20px;">  
-        {include file="statistics.tpl"}	
+        {include file="statistics.tpl"}
+    </div> 
+    <div class="span8">        
+        {if !isset($user)}
+            <div class="alert">
+                <p>Help us match you with the most suitable translation tasks.</p>
+                <p><a href={urlFor name="register"}>Register now</a> to find the jobs best suited to you.</p>
+            </div>
+        {/if}  
     </div>
+    
 </div>
 
-{if !isset($user)}
-    <div class="alert">
-        <p>Help us match you with the most suitable translation tasks.</p>
-        <p><a href={urlFor name="register"}>Register now</a> to find the jobs best suited to you.</p>
-    </div>
-{/if}
+
 
 {include file="footer.tpl"}

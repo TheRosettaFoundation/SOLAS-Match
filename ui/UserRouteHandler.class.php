@@ -88,7 +88,8 @@ class UserRouteHandler
 
         $app->view()->appendData(array(
             'top_tags' => $top_tags,
-            'current_page' => 'home'
+            'current_page' => 'home',
+            'use_statistics' => $use_statistics
         ));
 
         $current_user_id = UserSession::getCurrentUserID();
@@ -97,7 +98,9 @@ class UserRouteHandler
             $tasks = $client->castCall(array("Task"), APIClient::API_VERSION."/tasks/top_tasks"
                                        ,HTTP_Request2::METHOD_GET, null,array('limit' => 10));
             if($tasks) {
-                $app->view()->appendData(array('tasks' => $tasks));
+                $app->view()->appendData(array(
+                    'tasks' => $tasks
+                ));
             }
         } else {
             $url = APIClient::API_VERSION."/users/$current_user_id/top_tasks";
@@ -127,8 +130,7 @@ class UserRouteHandler
             }
             
             $app->view()->appendData(array(
-                        'user_tags' => $user_tags,
-                        'use_statistics' => $use_statistics
+                        'user_tags' => $user_tags
             ));
         }
         
