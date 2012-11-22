@@ -695,26 +695,7 @@ class UserRouteHandler
                 $org = $client->cast('Organisation', $mResponse);
                 $orgList[$badge->getOwnerId()] = $org;
             }
-        }        
-        
-        /*
-        
-        $orgList = array();
-        if(count($orgs) > 0) {
-            foreach ($orgs as $orgObjs) {
-                $orgList[] = $client->cast('Organisation', $orgObjs);
-            }
         }
-        
-        $request = APIClient::API_VERSION."/users/$user_id/badges";
-        $badgeList = $client->call($request, HTTP_Request2::METHOD_GET);         
-        $badges = array();
-        if($badgeList) {
-            foreach($badgeList as $stdObject) {
-                $badges[] = $client->cast('Badge', $stdObject);
-            }      
-        }
-        */
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
