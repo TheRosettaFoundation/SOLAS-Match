@@ -112,7 +112,7 @@ class Tasks {
            Dispatcher::sendResponce(null, array("status message"=>$dao->getTaskStatus($id)), null, $format);
         },'getTaskStatus');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/file/', function ($id,$format=".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/file(:format)/', function ($id,$format=".json"){
             $version=0;
             if(isset ($_GET['version'])&& is_numeric($_GET['version'])) $version= $_GET['version'];
             TaskDao::downloadTask($id,$version);

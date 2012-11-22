@@ -918,7 +918,6 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
         $current_user = $client->cast('User', $response);
-        
         if (!is_object($current_user)) {
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
