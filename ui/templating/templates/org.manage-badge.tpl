@@ -26,7 +26,9 @@
     {/if}
 
     <p>
-        <button type='submit' class='btn btn-primary' name='submit'>Assign</button>
+        <button type='submit' class='btn btn-primary' name='submit'>
+            <i class="icon-plus-sign icon-white"></i> Assign
+        </button>
     </p>
 </form>
 

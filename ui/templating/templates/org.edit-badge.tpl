@@ -21,7 +21,9 @@
     >{if $badge->getDescription() != ''}{$badge->getDescription()}{/if}</textarea>
     
     <p>
-        <button type='submit' class='btn btn-primary' name='submit'>Update</button>
+        <button type='submit' class='btn btn-primary' name='submit'>
+            <i class="icon-refresh icon-white"></i> Update
+        </button>
     </p>
 </form>
 
