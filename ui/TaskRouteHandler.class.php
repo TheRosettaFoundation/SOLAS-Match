@@ -913,7 +913,7 @@ class TaskRouteHandler
 
         $error_message = null;
         $field_name = 'new_task_file';
-        
+        xdebug_break();
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
         $current_user = $client->cast('User', $response);
@@ -945,7 +945,8 @@ class TaskRouteHandler
                 try {
                     
                     $filedata =file_get_contents($_FILES[$field_name]['tmp_name']);
-                    $error_message=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/file/{$_FILES[$field_name]['name']}/$user_id",HTTP_Request2::METHOD_PUT,null,null,null,$filedata);
+                    
+                    $error_message=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/file/".urlencode($_FILES[$field_name]['name'])."/$user_id",HTTP_Request2::METHOD_PUT,null,null,"",$filedata);
                 } catch (Exception  $e) {
                     $upload_error = true;
                     $error_message = 'File error: ' . $e->getMessage();
