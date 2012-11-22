@@ -198,7 +198,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $latest_version = $client->call(APIClient::API_VERSION."/task/$task_id/version");
+        $latest_version = $client->call(APIClient::API_VERSION."/tasks/$task_id/version");
         $this->downloadTaskVersion($task_id,$latest_version);
     }
 
@@ -322,8 +322,7 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $settings = new Settings();
-        $app->redirect($settings->get("site.api").APIClient::API_VERSION."/tasks/$task_id/file",
-                                    HTTP_Request2::METHOD_GET,null,array("version"=>$version));   
+        $app->redirect($settings->get("site.api").APIClient::API_VERSION."/tasks/$task_id/file/?version=$version");   
     }
 
     public function downloadTaskPreview($task_id)

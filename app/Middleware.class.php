@@ -56,11 +56,7 @@ class Middleware
             if($user_id) {
                 $user_orgs = array();
                 $request = APIClient::API_VERSION."/users/$user_id/orgs";
-                $orgs_list = $client->call($request, HTTP_Request2::METHOD_GET);
-                foreach($orgs_list as $stdObject) {
-                    $user_orgs[] = $client->cast('Organisation', $stdObject);
-                }
-
+                $user_orgs = $client->castCall(array('Organisation'),$request, HTTP_Request2::METHOD_GET);
                 if(!is_null($user_orgs)) {
                     foreach($user_orgs as $orgObject) {
                         if($orgObject->getId() == $org_id) {
@@ -75,8 +71,7 @@ class Middleware
         $org_name = 'this organisation';
         if(isset($org_id)) {
             $request = APIClient::API_VERSION."/orgs/$org_id";
-            $response = $client->call($request, HTTP_Request2::METHOD_GET);
-            $org = $client->cast('Organisation', $response);
+            $org = $client->castCall('Organisation',$request, HTTP_Request2::METHOD_GET);
             $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
         $app->flash('error', "You are not authorised to view this profile. Only members of ".$org_name." may view this page.");
@@ -103,11 +98,7 @@ class Middleware
             if($user_id) {
                 $user_orgs = array();
                 $request = APIClient::API_VERSION."/users/$user_id/orgs";
-                $orgs_list = $client->call($request, HTTP_Request2::METHOD_GET);  
-                foreach ($orgs_list as $orgObject) {
-                    $user_orgs[] = $client->cast('Organisation', $orgObject);
-                }
-                    
+                $user_orgs = $client->castCall(array('Organisation'),$request, HTTP_Request2::METHOD_GET);                    
                 if(!is_null($user_orgs)) {
                     foreach($user_orgs as $orgObject) {
                         if($orgObject->getId() == $org_id) {
@@ -122,8 +113,7 @@ class Middleware
         $org_name = 'this organisation';
         if(isset($org_id)) {
             $request = APIClient::API_VERSION."/orgs/$org_id";
-            $response = $client->call($request, HTTP_Request2::METHOD_GET);
-            $org = $client->cast('Organisation', $response);
+            $org = $client->castCall('Organisation',$request, HTTP_Request2::METHOD_GET);
             $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
         $app->flash('error', "You are not authorised to view this page. Only members of ".$org_name." may view this page.");
@@ -139,15 +129,11 @@ class Middleware
             $user_id = UserSession::getCurrentUserID();
             
             $request = APIClient::API_VERSION."/tasks/$task_id";
-            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
-            $task = $client->cast('Task', $response);
+            $task = $client->castCall('Task',$request, HTTP_Request2::METHOD_GET);
 
             $user_orgs = array();
             $request = APIClient::API_VERSION."/users/$user_id/orgs";
-            $orgs_list = $client->call($request, HTTP_Request2::METHOD_GET);  
-            foreach ($orgs_list as $orgObject) {
-                $user_orgs[] = $client->cast('Organisation', $orgObject);
-            }            
+            $user_orgs = $client->castCall(array('Organisation'),$request, HTTP_Request2::METHOD_GET);
             
             //If the task has not been claimed yet then anyone can download it
             $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
