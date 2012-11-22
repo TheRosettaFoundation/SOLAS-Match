@@ -59,10 +59,18 @@
                 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
                     <input type="hidden" name="badge_id" value="{$badge->getBadgeId()}" />
                     <input type="submit" class="btn btn-inverse pull-right" value="Remove" onClick="return confirmPost()" />
-                </form>
-            {/if}            
-    	    <h3>{$badge->getTitle()}</h3>            
-            <p>{$badge->getDescription()}</p>
+                </form>                    
+                {assign var="org_id" value=$badge->getOwnerId()}
+                <h3>
+                    <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                        {$orgList[$org_id]->getName()}
+                    </a>: {$badge->getTitle()}           
+                </h3>
+                <p>{$badge->getDescription()}</p>    
+            {else}
+                <h3>SOLAS Badge: {$badge->getTitle()}</h3>            
+                <p>{$badge->getDescription()}</p>                
+            {/if}
             <p style="margin-bottom:20px;"></p>
         {/foreach}
         

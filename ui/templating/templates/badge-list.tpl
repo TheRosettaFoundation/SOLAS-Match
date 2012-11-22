@@ -13,7 +13,7 @@
                 </a>: {$badgeEntry->getTitle()}
             </h3>
         {else}
-            <h3>System Badge: {$badgeEntry->getTitle()}</h3>
+            <h3>SOLAS Badge: {$badgeEntry->getTitle()}</h3>
         {/if}
         <p>{$badgeEntry->getDescription()}</p>
         <p style="margin-bottom:20px;"></p>

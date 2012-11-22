@@ -681,7 +681,24 @@ class UserRouteHandler
         }            
         
         $request = APIClient::API_VERSION."/users/$user_id/orgs";
-        $orgs = $client->call($request);        
+        $orgs = $client->call($request); 
+        
+        $badges = array();
+        $orgList = array();
+        $request = APIClient::API_VERSION."/users/$user_id/badges";
+        $response = $client->call($request);
+        foreach($response as $stdObject) {
+            $badge = $client->cast('Badge', $stdObject);
+            $badges[] = $badge;
+            if($badge->getOwnerId() != null) {
+                $mRequest = APIClient::API_VERSION."/orgs/".$badge->getOwnerId();
+                $mResponse = $client->call($mRequest);
+                $org = $client->cast('Organisation', $mResponse);
+                $orgList[$badge->getOwnerId()] = $org;
+            }
+        }        
+        
+        /*
         
         $orgList = array();
         if(count($orgs) > 0) {
@@ -698,7 +715,7 @@ class UserRouteHandler
                 $badges[] = $client->cast('Badge', $stdObject);
             }      
         }
-        
+        */
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
