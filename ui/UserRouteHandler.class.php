@@ -632,7 +632,6 @@ class UserRouteHandler
         $url = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($url);
         $user = $client->cast('User', $response);
-        $user_id = $user->getUserId();
         
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
