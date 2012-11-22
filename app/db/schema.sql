@@ -2459,9 +2459,10 @@ DROP PROCEDURE IF EXISTS `getTotalClaimedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalClaimedTasks`(IN `dateTime` DATETIME)
 BEGIN
+    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
     SET @claimedTasks = NULL;
     SELECT count(1) INTO @claimedTasks FROM task_claim tc
-    WHERE tc.created_time >= dateTime;
+    WHERE tc.claimed_time >= dateTime;
     SELECT @claimedTasks AS result;
 END//
 DELIMITER ;
@@ -2471,10 +2472,11 @@ DROP PROCEDURE IF EXISTS `getTotalUnclaimedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalUnclaimedTasks`(IN `dateTime` DATETIME)
 BEGIN
-	SET @unclaimedTasks = NULL;
-   SELECT count(1) INTO @unclaimedTasks FROM task t
-	WHERE t.created_time >= dateTime;	
-	SELECT @unclaimedTasks AS result;
+    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
+    SET @unclaimedTasks = NULL;
+    SELECT count(1) INTO @unclaimedTasks FROM task t JOIN task_claim ct
+    WHERE t.id != ct.task_id AND t.created_time >= dateTime;	
+    SELECT @unclaimedTasks AS result;
 END//
 DELIMITER ;
 
@@ -2483,10 +2485,11 @@ DROP PROCEDURE IF EXISTS `getTotalArchivedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalArchivedTasks`(IN `dateTime` DATETIME)
 BEGIN
-	SET @archivedTasks = NULL;
-   SELECT count(1) INTO @archivedTasks FROM archived_task ta
-	WHERE ta.created_time >= dateTime;
-	SELECT @archivedTasks AS result;
+    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
+    SET @archivedTasks = NULL;
+    SELECT count(1) INTO @archivedTasks FROM archived_task ta
+    WHERE ta.created_time >= dateTime;
+    SELECT @archivedTasks AS result;
 END//
 DELIMITER ;
 
@@ -2499,12 +2502,13 @@ BEGIN
     SET @claimedTasks = NULL;
     SET @unclaimedTasks = NULL;
     SET @archivedTasks = NULL;
+    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
 	
     SELECT count(1) INTO @claimedTasks FROM task_claim tc
-    WHERE tc.created_time >= dateTime;	
+    WHERE tc.claimed_time >= dateTime;	
 
-    SELECT count(1) INTO @unclaimedTasks FROM task t
-    WHERE t.created_time >= dateTime;
+    SELECT count(1) INTO @unclaimedTasks FROM task t JOIN task_claim ct
+    WHERE t.id != ct.task_id AND t.created_time >= dateTime;
 	
     SELECT count(1) INTO @archivedTasks FROM archived_task ta
     WHERE ta.created_time >= dateTime;	
