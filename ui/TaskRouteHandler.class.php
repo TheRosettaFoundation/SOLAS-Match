@@ -913,7 +913,7 @@ class TaskRouteHandler
 
         $error_message = null;
         $field_name = 'new_task_file';
-        xdebug_break();
+
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
         $current_user = $client->cast('User', $response);
