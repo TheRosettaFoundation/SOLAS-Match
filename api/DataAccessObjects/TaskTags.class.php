@@ -1,5 +1,7 @@
 <?php
-require_once ('PDOWrapper.class.php');
+
+require_once ('../Common/lib/PDOWrapper.class.php');
+
 class TaskTags {
 	public static function getTags($task_id) {
                 $db = new PDOWrapper();

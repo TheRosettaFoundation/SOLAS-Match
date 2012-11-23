@@ -132,7 +132,7 @@ To edit your crontab file run:
 
 Choose your default editor and add the following line:
 
-    10 * * * * cd /absolute/path/to/SOLAS-Match/app/scripts/ && ./calculate_scores.py
+    10 * * * * cd /absolute/path/to/SOLAS-Match/api/scripts/ && ./calculate_scores.py
 
 Change the path above so that it points to the correct location. This will run the python script 
 every hour at 10 past the hour.

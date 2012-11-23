@@ -1,9 +1,9 @@
 <?php
 
-require_once 'app/models/Register.class.php';
-require_once 'app/models/Login.class.php';
-require_once 'app/models/PasswordResetRequest.class.php';
-require_once 'app/models/PasswordReset.class.php';
+require_once 'Common/models/Register.class.php';
+require_once 'Common/models/Login.class.php';
+require_once 'Common/models/PasswordResetRequest.class.php';
+require_once 'Common/models/PasswordReset.class.php';
 
 class UserRouteHandler
 {

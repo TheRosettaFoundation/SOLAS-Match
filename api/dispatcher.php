@@ -1,9 +1,9 @@
 <?php
 require '../vendor/autoload.php';
-require '../app/Settings.class.php';
+require '../Common/Settings.class.php';
 require_once 'FormatEnum.php';
 require_once 'HttpMethodEnum.php';
-require_once '../app/APIHelper.php';
+require_once 'APIHelper.php';
 
 mb_internal_encoding("UTF-8");
 

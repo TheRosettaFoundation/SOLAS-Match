@@ -7,7 +7,7 @@
  *  @author: Dave O Carroll
  */
 
-require_once 'app/Serializer.class.php';
+require_once 'Serializer.class.php';
 
 class APIClient
 {

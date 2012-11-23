@@ -32,7 +32,7 @@ Class Settings {
         if(file_exists($file)) {
             $this->_settings = parse_ini_file($file);
             //This updates the upload path to be absolute
-            $this->_settings['upload_path'] = __DIR__."/".$this->_settings['upload_path'];
+            $this->_settings['upload_path'] = __DIR__."/../".$this->_settings['upload_path'];
         } else {
             echo "<p>Could not load ini file</p>";
         }

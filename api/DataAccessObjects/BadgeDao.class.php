@@ -1,8 +1,8 @@
 <?php
 
-require('models/Badge.class.php');
-require('BadgeValidator.class.php');
-require_once ('PDOWrapper.class.php');
+require '../Common/models/Badge.class.php';
+require 'BadgeValidator.class.php';
+require_once '../Common/lib/PDOWrapper.class.php';
 
 class BadgeDao
 {

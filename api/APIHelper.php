@@ -12,9 +12,9 @@
  */
 
 
-file_exists('FormatEnum.php')? require_once 'FormatEnum.php':'api/FormatEnum.php';
-file_exists('HttpMethodEnum.php')? require_once 'HttpMethodEnum.php':'api/HttpMethodEnum.php';
-require_once '../app/lib/JsonToXml.php';
+require_once 'FormatEnum.php';
+require_once 'HttpMethodEnum.php';
+require_once 'lib/JsonToXml.php';
 
 
 

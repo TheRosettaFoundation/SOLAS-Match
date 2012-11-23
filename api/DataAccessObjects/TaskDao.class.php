@@ -1,8 +1,8 @@
 <?php
-require_once 'models/Task.class.php';
+require_once '../Common/models/Task.class.php';
 require_once 'TaskTags.class.php';
 require_once 'TaskFile.class.php';
-require_once 'PDOWrapper.class.php';
+require_once '../Common/lib/PDOWrapper.class.php';
 require_once 'lib/Upload.class.php';
 /**
  * Task Document Access Object for manipulating tasks.
@@ -233,7 +233,7 @@ class TaskDao {
             }
         } else {
             //use the python script
-            $exec_path = __DIR__."/scripts/calculate_scores.py $task_id";
+            $exec_path = __DIR__."/../scripts/calculate_scores.py $task_id";
             echo shell_exec($exec_path . "> /dev/null 2>/dev/null &");
         }
     }

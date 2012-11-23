@@ -1,6 +1,6 @@
 <?php
-require('models/Tag.class.php');
-require_once ('PDOWrapper.class.php');
+require('../Common/models/Tag.class.php');
+require_once ('../Common/lib/PDOWrapper.class.php');
 
 class TagsDao {
 	public function find($params) {

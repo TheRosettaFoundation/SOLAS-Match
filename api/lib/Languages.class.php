@@ -1,6 +1,6 @@
 <?php
-require_once file_exists('app/models/Language.class.php') ? 'app/models/Language.class.php' : '../app/models/Language.class.php';
-require_once file_exists('app/models/Country.class.php') ? 'app/models/Country.class.php' : '../app/models/Country.class.php';
+require_once __DIR__.'/../../Common/models/Language.class.php';
+require_once __DIR__.'/../../Common/models/Country.class.php';
 
 class Languages {
     public static function languageIdFromName($language_name) {

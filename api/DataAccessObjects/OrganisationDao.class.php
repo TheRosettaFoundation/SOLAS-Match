@@ -1,8 +1,8 @@
 <?php
 
-require('models/Organisation.class.php');
-require('models/MembershipRequest.class.php');
-require_once ('PDOWrapper.class.php');
+require('../Common/models/Organisation.class.php');
+require('../Common/models/MembershipRequest.class.php');
+require_once ('../Common/lib/PDOWrapper.class.php');
 
 class OrganisationDao {
     public function find($params) {

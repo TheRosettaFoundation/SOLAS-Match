@@ -11,7 +11,7 @@
  * @author sean
  */
 
-require_once '../app/UserDao.class.php';
+require_once 'DataAccessObjects/UserDao.class.php';
 class Login {
     
     public  $email;

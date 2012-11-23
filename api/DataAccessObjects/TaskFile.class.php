@@ -1,5 +1,7 @@
 <?php
-require_once ('PDOWrapper.class.php');
+
+require_once ('../Common/lib/PDOWrapper.class.php');
+
 class TaskFile {
 
 	function taskID() {

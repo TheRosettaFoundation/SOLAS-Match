@@ -10,10 +10,10 @@
  *
  * @author sean
  */
-require_once '../app/UserDao.class.php';
-require_once '../app/TaskDao.class.php';
-require_once '../app/lib/Notify.class.php';
-require_once '../app/lib/NotificationTypes.class.php';
+require_once 'DataAccessObjects/UserDao.class.php';
+require_once 'DataAccessObjects/TaskDao.class.php';
+require_once 'lib/Notify.class.php';
+require_once 'lib/NotificationTypes.class.php';
 class Users {
    
 
