@@ -17,7 +17,7 @@
     {/if}
     . You can visit the translator's public profile
     {assign var="user_id" value=$translator->getUserId()}
-    <a href="{$site_url}{urlFor name="user-public-profile" options="user_id.$user_id"}">
+    <a href="{$site_url}{"/profile/$user_id"}">
         here
     </a>
     . You will be informed when a translation becomes available.

@@ -144,7 +144,7 @@ class Users {
             Notify::notifyUserClaimedTask($dao->find(array("user_id"=>$id)), $data);
             Notify::sendEmailNotifications($data, NotificationTypes::Claim);
         },'userClaimTask');
-        
+
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/top_tasks(:format)/', function ($id,$format=".json"){
             $limit=5;
