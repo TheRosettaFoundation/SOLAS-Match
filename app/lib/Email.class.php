@@ -41,10 +41,33 @@ class Email {
     static function SendMail ($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams)
     {
         $settings = new Settings();
-        if ($SMTPIN = fsockopen ($settings->get('messaging.host'), $settings->get('messaging.port')))
+        if ($SMTPIN = fsockopen ($settings->get('mail.smtp_server'), $settings->get('messaging.smtp_port')))
         {
-            fputs ($SMTPIN, "EHLO ".$settings->get('messaging.host')."\r\n");
+            fputs ($SMTPIN, "EHLO ".$settings->get('mail.smtp_server')."\r\n");
             $talk["hello"] = fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            $talk["hello"] .= fgets ( $SMTPIN,2048);
+            if(strpos($talk["hello"],"AUTH" )){
+                 $talk["hello"] .= fgets ( $SMTPIN,2048);
+                 $talk["hello"] .= fgets ( $SMTPIN,2048);
+                 fputs ($SMTPIN, "auth login\r\n");
+                 $talk["auth"] = fgets ( $SMTPIN, 2048);
+                 fputs ($SMTPIN, base64_encode($settings->get('mail.smtp_user'))."\r\n");
+                 $talk["username"] = fgets ( $SMTPIN, 2048 );
+                 fputs ($SMTPIN, base64_encode($settings->get('mail.smtp_pass'))."\r\n");
+                 $talk["pass"] = fgets ( $SMTPIN, 2048 );
+            }
+            
             fputs ($SMTPIN, "MAIL FROM: <".$mailParams.">\r\n");
             $talk["From"] = fgets ( $SMTPIN, 1024 );
             fputs ($SMTPIN, "RCPT TO: <".$mailTo.">\r\n");
