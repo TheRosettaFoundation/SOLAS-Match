@@ -2472,11 +2472,15 @@ DROP PROCEDURE IF EXISTS `getTotalUnclaimedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalUnclaimedTasks`(IN `dateTime` DATETIME)
 BEGIN
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-    SET @unclaimedTasks = NULL;
-    SELECT count(1) INTO @unclaimedTasks FROM task t JOIN task_claim ct
-    WHERE t.id != ct.task_id AND t.created_time >= dateTime;	
-    SELECT @unclaimedTasks AS result;
+   if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
+   SET @unclaimedTasks = NULL;
+   SELECT count(1) into @unclaimedTasks from task t
+	WHERE t.id NOT IN
+            (
+                SELECT task_id
+                FROM  task_claim
+            );
+	SELECT @unclaimedTasks AS result;	
 END//
 DELIMITER ;
 
@@ -2503,13 +2507,17 @@ BEGIN
     SET @unclaimedTasks = NULL;
     SET @archivedTasks = NULL;
     if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-	
+
     SELECT count(1) INTO @claimedTasks FROM task_claim tc
     WHERE tc.claimed_time >= dateTime;	
 
-    SELECT count(1) INTO @unclaimedTasks FROM task t JOIN task_claim ct
-    WHERE t.id != ct.task_id AND t.created_time >= dateTime;
-	
+    SELECT count(1) into @unclaimedTasks from task t
+    WHERE t.id NOT IN
+    (
+        SELECT task_id
+        FROM  task_claim
+    );
+
     SELECT count(1) INTO @archivedTasks FROM archived_task ta
     WHERE ta.created_time >= dateTime;	
 
