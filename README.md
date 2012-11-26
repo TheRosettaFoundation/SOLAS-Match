@@ -88,7 +88,7 @@ Further below in this document, there are also several resources for our work mo
     
         $ sudo apt-get install subversion
 
-	In the root of the directory structure run:
+	In api/ and ui/ do the following:
 
         $ curl -s https://getcomposer.org/installer | php
 

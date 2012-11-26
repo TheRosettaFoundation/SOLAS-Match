@@ -1,13 +1,13 @@
 <?php
-require "vendor/autoload.php";
+require "ui/vendor/autoload.php";
 
 mb_internal_encoding("UTF-8");
 
-SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
+SmartyView::$smartyDirectory = 'ui/vendor/smarty/smarty/distribution/libs';
 SmartyView::$smartyCompileDirectory = 'ui/templating/templates_compiled';
 SmartyView::$smartyTemplatesDirectory = 'ui/templating/templates';
 SmartyView::$smartyExtensions = array(
-    'vendor/slim/extras/Views/Extension/Smarty'
+    'ui/vendor/slim/extras/Views/Extension/Smarty'
 );
 
 

@@ -34,7 +34,7 @@
             "require": {
                 "php": ">=5.2"
             },
-            "time": "1333528791",
+            "time": "2012-04-04 08:39:51",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -206,7 +206,7 @@
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "1351776374",
+            "time": "2012-11-01 13:26:14",
             "type": "library",
             "installation-source": "source",
             "autoload": {
