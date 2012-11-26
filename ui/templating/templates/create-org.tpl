@@ -28,8 +28,7 @@
     <input type="text" name="home_page" value="http://" />
 
     <label for="bio">Biography:</label>
-    <textarea name="bio" cols="40" rows="5" placeholder="Explain what the purpose of your organisation is">
-    </textarea>
+    <textarea name="bio" cols="40" rows="5" placeholder="Explain what the purpose of your organisation is"></textarea>
 
     <p>
         <button type="submit" class="btn btn-success">
