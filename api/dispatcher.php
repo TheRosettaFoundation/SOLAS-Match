@@ -6,7 +6,9 @@ require_once 'HttpMethodEnum.php';
 require_once '../app/APIHelper.php';
 
 mb_internal_encoding("UTF-8");
-
+SmartyView::$smartyDirectory = '../vendor/smarty/smarty/distribution/libs';
+SmartyView::$smartyCompileDirectory = '../ui/templating/templates_compiled';
+SmartyView::$smartyTemplatesDirectory = '../ui/templating/templates';
 
 class Dispatcher {
     private static $apiDispatcher = null;
