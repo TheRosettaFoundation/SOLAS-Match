@@ -16,7 +16,6 @@ require_once 'HTTP/Request2.php';
 
 require_once 'Common/Settings.class.php';
 require_once 'Common/lib/Authentication.class.php';
-require_once 'Common/lib/MessagingClient.class.php';
 
 require_once 'ui/lib/TipSelector.class.php'; //jokes after upload
 require_once 'ui/lib/APIClient.class.php';

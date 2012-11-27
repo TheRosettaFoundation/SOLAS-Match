@@ -1,5 +1,5 @@
 {
-    "hash": "44774bbd9e9ce93090b1d2700a7b6272",
+    "hash": "0607a66787b11aac967376ec0ce33367",
     "packages": [
         {
             "name": "drslump/protobuf-php",
@@ -16,46 +16,6 @@
                     "library/DrSlump/Protobuf.php"
                 ]
             }
-        },
-        {
-            "name": "fp/lightopenid",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/formapro/LightOpenID",
-                "reference": "ad14146f9c93e90699888e150427aca431dc3c18"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/formapro/LightOpenID/archive/ad14146f9c93e90699888e150427aca431dc3c18.zip",
-                "reference": "ad14146f9c93e90699888e150427aca431dc3c18",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2"
-            },
-            "time": "2012-04-04 08:39:51",
-            "type": "library",
-            "installation-source": "source",
-            "autoload": {
-                "classmap": [
-                    "openid.php",
-                    "provider/provider.php"
-                ]
-            },
-            "authors": [
-                {
-                    "name": "Mewp",
-                    "email": "mewp151+gitorious.org@gmail.com"
-                }
-            ],
-            "description": "A PHP 5 library for easy openid authentication",
-            "homepage": "https://github.com/formapro/LightOpenID",
-            "keywords": [
-                "security",
-                "OpenId",
-                "Authentication"
-            ]
         },
         {
             "name": "slim/extras",
@@ -234,7 +194,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "fp/lightopenid": 20,
         "videlalvaro/php-amqplib": 20
     }
 }
