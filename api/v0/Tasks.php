@@ -153,11 +153,11 @@ class Tasks {
            Dispatcher::sendResponce(null,$data, null, $format);
         },'getTaskClaimed');
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/addTarget/:languageCode/:countryCode/:userID', function ($languageCode,$countryCode,$userID,$format=".json"){
-            if(!is_numeric($countryCode)&& strstr($countryCode, '.')){
-               $countryCode= explode('.', $countryCode);
-               $format='.'.$countryCode[1];
-               $countryCode=$countryCode[0];
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/addTarget/:languageCode/:countryCode/:userID/', function ($languageCode,$countryCode,$userID,$format=".json"){
+            if(!is_numeric($userID)&& strstr($userID, '.')){
+               $userID= explode('.', $userID);
+               $format='.'.$userID[1];
+               $userID=$userID[0];
            }
             $dao = new TaskDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();
