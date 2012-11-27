@@ -2,7 +2,12 @@
 	<div class="grid_8">
                 <div class="page-header">
                         <h1>
-                            Describe your task <small>Provide as much information as possible</small>                        
+                            Describe your task <small>Provide as much information as possible</small><br>   
+                            <small>
+                                Note:
+                                <font color='red'>*</font>
+                                Denotes required field.
+                            </small>
                         </h1>
                 </div>           
 
@@ -15,9 +20,9 @@
 		<form method="post" action="{$url_task_describe}">
 			<fieldset>
 				<label for="content">
-                    <h2>Descriptive Title</h2>
+                    <h2>Descriptive Title <font color='red'>*</font></h2>
                     {if !is_null($title_error)}
-                        <div class="alert alert-error">
+                        <div class="alert alert-error" style="width:131px">
                             {$title_error}
                         </div>
                     {/if}
@@ -43,7 +48,7 @@
                 <p style="margin-bottom:30px;"></p>
                 {if isset($languages)}
                     <p>
-                        <label for="source"><b>From language</b></small></label>
+                        <h2>From Language:</h2><br>
                         <select name="source" id="source">
                             {foreach $languages as $language}
                                     <option value="{$language->getCode()}">{$language->getEnName()}</option>
@@ -58,12 +63,12 @@
                         {/if}
                     </p>
                     <p>
-                        <label for="target_0"><b>To language</b></label>
-                        <select name="target_0" id="target_0">
-                            {foreach $languages as $language}
-                                  <option value="{$language->getCode()}">{$language->getEnName()}</option>
-                            {/foreach}
-                        </select>
+                        <h2>To Language(s):</h2><br>
+                            <select name="target_0" id="target_0">
+                                {foreach $languages as $language}
+                                      <option value="{$language->getCode()}">{$language->getEnName()}</option>
+                                {/foreach}
+                            </select>
                         {if isset($countries)}
                             <select name="targetCountry_0" id="targetCountry">
                                 {foreach $countries as $country}
@@ -81,8 +86,8 @@
                         <div id="text7"></div>
                         <div id="text8"></div>
                         <div id="text9"></div>
-                        <div id="alertinfo" class="alert alert-info" style="display: none;">You have reached the maximum number of target translation fields allowed.</div>                       
-                        <input id="addMoreTargetsBtn" type="button" onclick="addInput()" value="Add More Targets"/>
+                        <div id="alertinfo" class="alert alert-info" style="display: none;">You have reached the maximum number of target translation fields allowed.</div>  
+                        <input id="addMoreTargetsBtn" type="button" onclick="addInput()" value="Add More Target Languages"/>
                         <input id="removeBottomTargetBtn" type="button" onclick="removeInput()" value="Remove" style="visibility: hidden;"/>
                     </p>
                     <p style="margin-bottom:30px;"></p>
@@ -100,7 +105,7 @@
                 {/if}
 				
 				<p>
-					<label for="tags"><b>Tags</b></label>
+                                    <h2>Tags</h2>
                                         <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens</p>
 					<input type="text" name="tags" id="tags">
 				</p>
@@ -108,10 +113,10 @@
 				
 				<p>
 					<label for="word_count">
-                        <b>Word count</b>
-                        <p class="desc">Approximate, or leave black.</p>
+                        <h2>Word Count <font color='red'>*</font></h2>
+                        <p class="desc">Approximate, or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a></p>
                         {if !is_null($word_count_err)}
-                            <div class="alert alert-error">
+                            <div class="alert alert-error" style="width:144px">
                                 {$word_count_err}
                             </div>
                         {/if}

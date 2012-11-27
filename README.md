@@ -88,7 +88,7 @@ Further below in this document, there are also several resources for our work mo
     
         $ sudo apt-get install subversion
 
-	In the root of the directory structure run:
+	In api/ and ui/ do the following:
 
         $ curl -s https://getcomposer.org/installer | php
 
@@ -132,7 +132,7 @@ To edit your crontab file run:
 
 Choose your default editor and add the following line:
 
-    10 * * * * cd /absolute/path/to/SOLAS-Match/app/scripts/ && ./calculate_scores.py
+    10 * * * * cd /absolute/path/to/SOLAS-Match/api/scripts/ && ./calculate_scores.py
 
 Change the path above so that it points to the correct location. This will run the python script 
 every hour at 10 past the hour.

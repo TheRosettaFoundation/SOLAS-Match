@@ -10,7 +10,7 @@
  *
  * @author sean
  */
-require_once '../app/lib/Languages.class.php';
+require_once 'lib/Languages.class.php';
 class Langs {
     public static function init(){
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages(:format)/', function ($format=".json"){

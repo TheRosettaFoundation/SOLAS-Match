@@ -11,8 +11,8 @@
  * @author sean
  */
 
-require_once '../app/OrganisationDao.class.php';
-require_once '../app/BadgeDao.class.php';
+require_once 'DataAccessObjects/OrganisationDao.class.php';
+require_once 'DataAccessObjects/BadgeDao.class.php';
 
 class Orgs {
     public static function init(){

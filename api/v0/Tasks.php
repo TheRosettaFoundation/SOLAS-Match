@@ -11,13 +11,14 @@
  * @author sean
  */
 
-require_once '../app/TaskDao.class.php';
-require_once '../app/TaskTags.class.php';
-require_once '../app/IO.class.php';
-require_once '../app/TaskFile.class.php';
-require_once '../app/lib/Upload.class.php';
-require_once '../app/TaskStream.class.php';
-require_once '../app/models/TaskMetadata.php';
+require_once 'DataAccessObjects/TaskDao.class.php';
+require_once 'DataAccessObjects/TaskTags.class.php';
+require_once 'DataAccessObjects/TaskFile.class.php';
+require_once 'DataAccessObjects/TaskStream.class.php';
+require_once '../Common/models/TaskMetadata.php';
+require_once 'lib/IO.class.php';
+require_once 'lib/Upload.class.php';
+
 class Tasks {
   public static function init(){
         $dispatcher=Dispatcher::getDispatcher();
@@ -152,11 +153,11 @@ class Tasks {
            Dispatcher::sendResponce(null,$data, null, $format);
         },'getTaskClaimed');
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/addTarget/:languageCode/:countryCode/:userID', function ($languageCode,$countryCode,$userID,$format=".json"){
-            if(!is_numeric($countryCode)&& strstr($countryCode, '.')){
-               $countryCode= explode('.', $countryCode);
-               $format='.'.$countryCode[1];
-               $countryCode=$countryCode[0];
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/addTarget/:languageCode/:countryCode/:userID/', function ($languageCode,$countryCode,$userID,$format=".json"){
+            if(!is_numeric($userID)&& strstr($userID, '.')){
+               $userID= explode('.', $userID);
+               $format='.'.$userID[1];
+               $userID=$userID[0];
            }
             $dao = new TaskDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();

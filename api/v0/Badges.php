@@ -11,7 +11,7 @@
  * @author sean
  */
 
-require_once '../app/BadgeDao.class.php';
+require_once 'DataAccessObjects/BadgeDao.class.php';
 class Badges {
     public static function init(){
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges(:format)/', function ($format=".json"){

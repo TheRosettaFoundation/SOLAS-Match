@@ -1,48 +1,44 @@
 <?php
-require "vendor/autoload.php";
+require "ui/vendor/autoload.php";
 
 mb_internal_encoding("UTF-8");
 
-SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
+SmartyView::$smartyDirectory = 'ui/vendor/smarty/smarty/distribution/libs';
 SmartyView::$smartyCompileDirectory = 'ui/templating/templates_compiled';
 SmartyView::$smartyTemplatesDirectory = 'ui/templating/templates';
 SmartyView::$smartyExtensions = array(
-    'vendor/slim/extras/Views/Extension/Smarty'
+    'ui/vendor/slim/extras/Views/Extension/Smarty'
 );
 
 
 //TODO remove all requires bar RoutHandlers
-require_once 'app/Settings.class.php';
-
-require_once 'app/TipSelector.class.php'; //jokes after upload
-
-require_once 'app/lib/URL.class.php';
-require_once 'app/lib/Authentication.class.php';
-require_once 'app/lib/UserSession.class.php';
-
-
 require_once 'HTTP/Request2.php';
 
-require_once 'ui/APIClient.class.php';
-require_once 'app/Middleware.class.php';
-require_once 'app/MessagingClient.class.php';
+require_once 'Common/Settings.class.php';
+require_once 'Common/lib/Authentication.class.php';
 
-require_once 'ui/TemplateHelper.php';
-require_once 'ui/UserRouteHandler.class.php';
-require_once 'ui/OrgRouteHandler.class.php';
-require_once 'ui/TaskRouteHandler.class.php';
-require_once 'ui/TagRouteHandler.class.php';
-require_once 'ui/BadgeRouteHandler.class.php';
+require_once 'ui/lib/TipSelector.class.php'; //jokes after upload
+require_once 'ui/lib/APIClient.class.php';
+require_once 'ui/lib/Middleware.class.php';
+require_once 'ui/lib/TemplateHelper.php';
+require_once 'ui/lib/UserSession.class.php';
+require_once 'ui/lib/URL.class.php';
 
-require_once 'app/models/User.class.php';
-require_once 'app/models/Tag.class.php';
-require_once 'app/models/Task.class.php';
-require_once 'app/models/Organisation.class.php';
-require_once 'app/models/Badge.class.php';
-require_once 'app/models/Language.class.php';
-require_once 'app/models/Country.class.php';
-require_once 'app/models/TaskMetadata.php';
-require_once 'app/models/MembershipRequest.class.php';
+require_once 'ui/RouteHandlers/UserRouteHandler.class.php';
+require_once 'ui/RouteHandlers/OrgRouteHandler.class.php';
+require_once 'ui/RouteHandlers/TaskRouteHandler.class.php';
+require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
+require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
+
+require_once 'Common/models/User.class.php';
+require_once 'Common/models/Tag.class.php';
+require_once 'Common/models/Task.class.php';
+require_once 'Common/models/Organisation.class.php';
+require_once 'Common/models/Badge.class.php';
+require_once 'Common/models/Language.class.php';
+require_once 'Common/models/Country.class.php';
+require_once 'Common/models/TaskMetadata.php';
+require_once 'Common/models/MembershipRequest.class.php';
 
 /**
  * Start the session

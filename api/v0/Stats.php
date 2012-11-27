@@ -10,7 +10,7 @@
  *
  * @author sean
  */
-require_once '../app/StatDao.php';
+require_once 'DataAccessObjects/StatDao.php';
 class Stats {
    
     public static function init(){
