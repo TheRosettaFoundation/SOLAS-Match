@@ -7,8 +7,8 @@ require_once 'APIHelper.php';
 
 mb_internal_encoding("UTF-8");
 SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
-SmartyView::$smartyCompileDirectory = '../ui/templating/templates_compiled';
-SmartyView::$smartyTemplatesDirectory = '../ui/templating/templates';
+SmartyView::$smartyCompileDirectory = 'templating/templates_compiled';
+SmartyView::$smartyTemplatesDirectory = 'templating/templates';
 SmartyView::$smartyExtensions = array(
     'vendor/slim/extras/Views/Extension/Smarty'
 );
