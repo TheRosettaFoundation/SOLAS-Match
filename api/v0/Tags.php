@@ -10,8 +10,8 @@
  *
  * @author sean
  */
-require_once '../app/TagsDao.class.php';
-require_once '../app/TaskTags.class.php';
+require_once 'DataAccessObjects/TagsDao.class.php';
+require_once 'DataAccessObjects/TaskTags.class.php';
 class Tags {
   public static function init(){
         $dispatcher=Dispatcher::getDispatcher();
