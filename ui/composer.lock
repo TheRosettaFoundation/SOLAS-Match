@@ -1,0 +1,201 @@
+{
+    "hash": "acb882f7d47e55413f9898da47b07650",
+    "packages": [
+        {
+            "name": "drslump/protobuf-php",
+            "version": "0.9.4",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/drslump/Protobuf-PHP.git",
+                "reference": "master"
+            },
+            "type": "git",
+            "installation-source": "source",
+            "autoload": {
+                "files": [
+                    "library/DrSlump/Protobuf.php"
+                ]
+            }
+        },
+        {
+            "name": "fp/lightopenid",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/formapro/LightOpenID",
+                "reference": "ad14146f9c93e90699888e150427aca431dc3c18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/formapro/LightOpenID/archive/ad14146f9c93e90699888e150427aca431dc3c18.zip",
+                "reference": "ad14146f9c93e90699888e150427aca431dc3c18",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "time": "2012-04-04 08:39:51",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "classmap": [
+                    "openid.php",
+                    "provider/provider.php"
+                ]
+            },
+            "authors": [
+                {
+                    "name": "Mewp",
+                    "email": "mewp151+gitorious.org@gmail.com"
+                }
+            ],
+            "description": "A PHP 5 library for easy openid authentication",
+            "homepage": "https://github.com/formapro/LightOpenID",
+            "keywords": [
+                "security",
+                "OpenId",
+                "Authentication"
+            ]
+        },
+        {
+            "name": "slim/extras",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeguy/Slim-Extras",
+                "reference": "1.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/codeguy/Slim-Extras/zipball/1.0.2",
+                "reference": "1.0.2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "time": "2012-02-23 08:10:48",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Twig_Extensions_": "Views/Extension/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Smith",
+                    "email": "a.smith@silentworks.co.uk",
+                    "homepage": "http://www.silentworks.co.uk/"
+                },
+                {
+                    "name": "Josh Lockhart",
+                    "email": "info@joshlockhart.com",
+                    "homepage": "http://www.joshlockhart.com/"
+                }
+            ],
+            "description": "Extras package for Slim Framework",
+            "homepage": "http://github.com/codeguy/Slim-Extras",
+            "keywords": [
+                "templating",
+                "extensions"
+            ]
+        },
+        {
+            "name": "slim/slim",
+            "version": "1.6.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeguy/Slim",
+                "reference": "1.6.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/codeguy/Slim/zipball/1.6.3",
+                "reference": "1.6.3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "time": "2012-06-17 09:58:20",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Slim": "Slim/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Lockhart",
+                    "email": "info@joshlockhart.com",
+                    "homepage": "http://www.joshlockhart.com/"
+                }
+            ],
+            "description": "Slim Framework, a micro framework for PHP 5",
+            "homepage": "http://github.com/codeguy/Slim",
+            "keywords": [
+                "microframework",
+                "rest",
+                "router"
+            ]
+        },
+        {
+            "name": "smarty/smarty",
+            "version": "v3.1.12",
+            "source": {
+                "type": "svn",
+                "url": "http://smarty-php.googlecode.com/svn",
+                "reference": "/tags/v3.1.12/@4664"
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "time": "2012-09-25 22:13:16",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "classmap": [
+                    "distribution/libs/Smarty.class.php"
+                ]
+            },
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Monte Ohrt",
+                    "email": "monte@ohrt.com"
+                },
+                {
+                    "name": "Uwe Tews",
+                    "email": "uwe.tews@googlemail.com"
+                },
+                {
+                    "name": "Rodney Rehm",
+                    "email": "rodney.rehm@medialize.de"
+                }
+            ],
+            "description": "Smarty - the compiling PHP template engine",
+            "homepage": "http://www.smarty.net",
+            "keywords": [
+                "templating"
+            ]
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "fp/lightopenid": 20
+    }
+}

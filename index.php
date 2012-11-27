@@ -1,13 +1,13 @@
 <?php
-require "vendor/autoload.php";
+require "ui/vendor/autoload.php";
 
 mb_internal_encoding("UTF-8");
 
-SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
+SmartyView::$smartyDirectory = 'ui/vendor/smarty/smarty/distribution/libs';
 SmartyView::$smartyCompileDirectory = 'ui/templating/templates_compiled';
 SmartyView::$smartyTemplatesDirectory = 'ui/templating/templates';
 SmartyView::$smartyExtensions = array(
-    'vendor/slim/extras/Views/Extension/Smarty'
+    'ui/vendor/slim/extras/Views/Extension/Smarty'
 );
 
 
@@ -16,7 +16,6 @@ require_once 'HTTP/Request2.php';
 
 require_once 'Common/Settings.class.php';
 require_once 'Common/lib/Authentication.class.php';
-require_once 'Common/lib/MessagingClient.class.php';
 
 require_once 'ui/lib/TipSelector.class.php'; //jokes after upload
 require_once 'ui/lib/APIClient.class.php';
