@@ -3,7 +3,7 @@
 require_once 'Common/models/Register.class.php';
 require_once 'Common/models/Login.class.php';
 require_once 'Common/models/PasswordResetRequest.class.php';
-require_once 'Common/models/PasswordReset.class.php';
+require_once 'Common/models/PasswordReset.php';
 
 class UserRouteHandler
 {
@@ -356,28 +356,9 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         
-        //$user_dao = new UserDao();
-        
-        /*
-        $request = APIClient::API_VERSION."/users/$uid/passwordResetRequest";
-        $response = $client->call($request);        
-        $user_obj = $client->cast('User', $response);
-        */
-        //$reset_request = $user_obj->
-        
-        //$my_org_tasks = array();
-        //if($org_tasks_data) {
-            //foreach($org_tasks_data as $stdObject) {
-                //$my_org_tasks[] = $client->cast('Task', $stdObject);
-            //}
-        //}
-        
         $request = APIClient::API_VERSION."/password_reset/$uid";
         $response = $client->call($request);        
         $reset_request = $client->cast('PasswordResetRequest', $response);
-        // v0/password_reset/:key/
-        
-        //$reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));     //wait for API support
 
         if($reset_request->getUserID()== '') {
             $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
@@ -392,11 +373,14 @@ class UserRouteHandler
             if(isset($post->new_password) && User::isValidPassword($post->new_password)) {
                 if(isset($post->confirmation_password) && 
                         $post->confirmation_password == $post->new_password) {
-                    //if($user_dao->changePassword($user_id, $post->new_password)) {
-                        //$user_dao->removePasswordResetRequest($user_id);
-                    // HttpMethodEnum::POST, '/v0/password_reset(:format)/
+
+                    $data = array();
+                    $data['password'] = $post->new_password;
+                    $data['key'] = $uid;
+
                     $request = APIClient::API_VERSION."/password_reset";
-                    $response = $client->call($request, HTTP_Request2::METHOD_POST, new PasswordReset($post->new_password, $uid));                     
+                    $response = $client->call($request, HTTP_Request2::METHOD_POST, 
+                            ModelFactory::BuildModel("PasswordReset", $data));
                     
                     if($response) { 
                     

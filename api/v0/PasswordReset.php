@@ -11,7 +11,7 @@
  * @author sean
  */
 require_once '../Common/models/PasswordResetRequest.class.php';
-require_once '../Common/models/PasswordReset.class.php';
+require_once '../Common/models/PasswordReset.php';
 class PasswordResetAPI {
     public  $pass;
     public  $key;
@@ -23,7 +23,7 @@ class PasswordResetAPI {
     public static function init(){
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/password_reset(:format)/', function ($format=".json"){
-            $data=new PasswordReset();
+           $data= ModelFactory::BuildModel("PasswordReset", array());
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getResetTemplate');
 
@@ -45,7 +45,7 @@ class PasswordResetAPI {
                 $data= APIHelper::deserialiser($data, $format);
                 $data= APIHelper::cast("PasswordReset", $data);
                 $dao = new UserDao;
-                $result= $dao->passwordReset($data->pass,$data->key);
+                $result= $dao->passwordReset($data->getPassword(),$data->getKey());
                 Dispatcher::sendResponce(null, $result, null, $format);
          },'resetPassword');
          

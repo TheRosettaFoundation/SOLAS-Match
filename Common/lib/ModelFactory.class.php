@@ -17,6 +17,9 @@ class ModelFactory
             case "ArchivedTask":
                 $ret = ModelFactory::GenerateArchivedTask($modelData);
                 break;
+            case "PasswordReset":
+                $ret = ModelFactory::GeneratePasswordReset($modelData);
+                break;
             default:
                 echo "Unable to build model $modelName";
         }
@@ -76,6 +79,20 @@ class ModelFactory
         }
         if(isset($modelData['reference_page'])) {
             $ret->setReferencePage($modelData['reference_page']);
+        }
+
+        return $ret;
+    }
+
+    private static function GeneratePasswordReset($modelData)
+    {
+        $ret = new PasswordReset();
+        
+        if(isset($modelData['password'])) {
+            $ret->setPassword($modelData['password']);
+        }
+        if(isset($modelData['key'])) {
+            $ret->setKey($modelData['key']);
         }
 
         return $ret;
