@@ -10,12 +10,15 @@ SmartyView::$smartyExtensions = array(
     'ui/vendor/slim/extras/Views/Extension/Smarty'
 );
 
+\DrSlump\Protobuf::autoload();
+
 
 //TODO remove all requires bar RoutHandlers
 require_once 'HTTP/Request2.php';
 
 require_once 'Common/Settings.class.php';
 require_once 'Common/lib/Authentication.class.php';
+require_once 'Common/lib/ModelFactory.class.php';
 
 require_once 'ui/lib/TipSelector.class.php'; //jokes after upload
 require_once 'ui/lib/APIClient.class.php';
@@ -38,7 +41,7 @@ require_once 'Common/models/Badge.class.php';
 require_once 'Common/models/Language.class.php';
 require_once 'Common/models/Country.class.php';
 require_once 'Common/models/TaskMetadata.php';
-require_once 'Common/models/MembershipRequest.class.php';
+require_once 'Common/models/MembershipRequest.php';
 
 /**
  * Start the session

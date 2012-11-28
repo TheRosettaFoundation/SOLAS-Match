@@ -1,9 +1,5 @@
 <?php
 require 'vendor/autoload.php';
-require '../Common/Settings.class.php';
-require_once 'FormatEnum.php';
-require_once 'HttpMethodEnum.php';
-require_once 'APIHelper.php';
 
 mb_internal_encoding("UTF-8");
 SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
@@ -12,6 +8,14 @@ SmartyView::$smartyTemplatesDirectory = '../ui/templating/templates';
 SmartyView::$smartyExtensions = array(
     'vendor/slim/extras/Views/Extension/Smarty'
 );
+
+\DrSlump\Protobuf::autoload();
+
+require_once '../Common/Settings.class.php';
+require_once "../Common/lib/ModelFactory.class.php";
+require_once 'FormatEnum.php';
+require_once 'HttpMethodEnum.php';
+require_once 'APIHelper.php';
 
 class Dispatcher {
     private static $apiDispatcher = null;

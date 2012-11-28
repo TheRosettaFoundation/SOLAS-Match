@@ -1,8 +1,8 @@
 <?php
 
-require('../Common/models/Organisation.class.php');
-require('../Common/models/MembershipRequest.class.php');
-require_once ('../Common/lib/PDOWrapper.class.php');
+require_once '../Common/models/Organisation.class.php';
+require_once '../Common/models/MembershipRequest.php';
+require_once '../Common/lib/PDOWrapper.class.php';
 
 class OrganisationDao {
     public function find($params) {
@@ -101,7 +101,7 @@ class OrganisationDao {
         $ret = null;
         if($results = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
             foreach($results as $result){  
-            $ret[] = new MembershipRequest($result);
+                $ret[] = ModelFactory::BuildModel("MembershipRequest", $result);
             }
         }
         return $ret;
