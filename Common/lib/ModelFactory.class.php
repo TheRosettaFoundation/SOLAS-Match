@@ -10,6 +10,7 @@ require_once __DIR__."/../models/Language.php";
 require_once __DIR__."/../models/Login.php";
 require_once __DIR__."/../models/Badge.php";
 require_once __DIR__."/../models/Tag.php";
+require_once __DIR__."/../models/Organisation.php";
 
 class ModelFactory
 {
@@ -48,6 +49,9 @@ class ModelFactory
                 break;
             case "Tag":
                 $ret = ModelFactory::GenerateTag($modelData);
+                break;
+            case "Organisation":
+                $ret = ModelFactory::GenerateOrganisation($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -232,6 +236,26 @@ class ModelFactory
         }
         if(isset($modelData['label'])) {
             $ret->setLabel($modelData['label']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateOrganisation($modelData)
+    {
+        $ret = new Organisation();
+
+        if(isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
+        }
+        if(isset($modelData['name'])) {
+            $ret->setName($modelData['name']);
+        }
+        if(isset($modelData['home_page'])) {
+            $ret->setHomePage($modelData['home_page']);
+        }
+        if(isset($modelData['biography'])) {
+            $ret->setBiography($modelData['biography']);
         }
 
         return $ret;

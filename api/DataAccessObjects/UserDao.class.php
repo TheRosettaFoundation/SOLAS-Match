@@ -230,17 +230,18 @@ class UserDao {
             return $ret;
     }
 
-    public function findOrganisationsUserBelongsTo($user_id) {
-            $ret = null;
-            $db = new PDOWrapper();
-            $db->init();
-            if ($result = $db->call("findOrganisationsUserBelongsTo", $db->cleanse($user_id))) {
-                    $ret = array();
-                    foreach ($result as $row) {
-                       $ret[] = new Organisation($row);
-                    }
+    public function findOrganisationsUserBelongsTo($user_id) 
+    {
+        $ret = null;
+        $db = new PDOWrapper();
+        $db->init();
+        if ($result = $db->call("findOrganisationsUserBelongsTo", $db->cleanse($user_id))) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::BuildModel("Organisation", $row);
             }
-            return $ret;
+        }
+        return $ret;
     }
 
     public function getUserBadges(User $user) {
