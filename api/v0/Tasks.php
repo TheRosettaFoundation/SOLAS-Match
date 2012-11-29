@@ -175,5 +175,3 @@ class Tasks {
 }
 Tasks::init();
 ?>
-
-

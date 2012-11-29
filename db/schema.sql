@@ -979,7 +979,7 @@ CALL alterTable();
 
 DROP PROCEDURE alterTable;
 
-
+#----------------------------stored procedures-------------------------------
 
 -- Dumping data for table Solas-Match-test.user_task_score: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user_task_score` DISABLE KEYS */;
