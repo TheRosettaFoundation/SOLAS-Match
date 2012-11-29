@@ -472,10 +472,11 @@ class TaskRouteHandler
     {
     	$app = Slim::getInstance();
     	$client = new APIClient();
+        $user_id = UserSession::getCurrentUserID();
         
     	$error          = null;
     	$title_err      = null;
-	    $word_count_err = null;
+        $word_count_err = null;
         
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -491,13 +492,13 @@ class TaskRouteHandler
             if($post->title != '') {
                 $task->setTitle($post->title);
             } else {
-                $title_err = "Title cannot be empty";
+                $title_err = "Task title must be set!";
             }
 
             if(ctype_digit($post->word_count)) {
                 $task->setWordCount($post->word_count);
-            } else if($post->word_count == '') {
-                $task->setWordCount($post->word_count);
+            } else {
+                $word_count_err = "Word count must be set!";
             }
             
             if(is_null($word_count_err) && is_null($title_err))
@@ -562,8 +563,8 @@ class TaskRouteHandler
                             $request = APIClient::API_VERSION."/tasks/$task_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
                         } else {
-                            $language_id = TemplateHelper::saveLanguage($language['lang']);                            
-                            $request = APIClient::API_VERSION."/tasks/addTarget/$language_id/{$language['country']}";
+                            $language_id = TemplateHelper::saveLanguage($language['lang']);
+                            $request = APIClient::API_VERSION."/tasks/addTarget/$language_id/{$language['country']}/$user_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
                         }
                     }
@@ -597,7 +598,7 @@ class TaskRouteHandler
         
             if (fields < MAX_FIELDS) {
                 
-                document.getElementById('text' + fields).innerHTML += '<label for=\"target_' + (fields + 1) + '\"><b>To language</b></label>';
+                //document.getElementById('text' + fields).innerHTML += '<label for=\"target_' + (fields + 1) + '\"> + </label>; // + '\"><b>To language</b></label>';
                 document.getElementById('text' + fields).innerHTML += '<select name=\"target_' + (fields + 1) + '\" id=\"target_' + (fields + 1) + '\">';
                 document.getElementById('text' + fields).innerHTML += '</select>';  
                 

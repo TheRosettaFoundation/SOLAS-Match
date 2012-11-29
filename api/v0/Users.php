@@ -141,6 +141,7 @@ class Users {
             $dao = new TaskDao;
             Dispatcher::sendResponce(null, array("result"=>$dao->claimTaskbyID($data->getTaskId(), $id)), null, $format);
             $dao = new UserDao();
+            
             Notify::notifyUserClaimedTask($dao->find(array("user_id"=>$id)), $data);
             Notify::sendEmailNotifications($data, NotificationTypes::Claim);
         },'userClaimTask');
