@@ -16,7 +16,7 @@ settings = dict()
 def LoadConfig():
     path = os.path.abspath(sys.argv[0])     # get the path to the currently executing script
     dir_file = os.path.split(path)          # Split up the file name and the path
-    file_name = "/../includes/conf.ini"     # Relative location
+    file_name = "/../../Common/includes/conf.ini"     # Relative location
     conf_file = dir_file[0] + file_name
     parser = ConfigParser.ConfigParser()
     parser.read(conf_file)
