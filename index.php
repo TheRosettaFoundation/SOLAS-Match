@@ -19,6 +19,7 @@ require_once 'HTTP/Request2.php';
 require_once 'Common/Settings.class.php';
 require_once 'Common/lib/Authentication.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
+require_once 'Common/lib/BadgeTypes.class.php';
 
 require_once 'ui/lib/TipSelector.class.php'; //jokes after upload
 require_once 'ui/lib/APIClient.class.php';
@@ -37,7 +38,7 @@ require_once 'Common/models/User.class.php';
 require_once 'Common/models/Tag.class.php';
 require_once 'Common/models/Task.class.php';
 require_once 'Common/models/Organisation.class.php';
-require_once 'Common/models/Badge.class.php';
+require_once 'Common/models/Badge.php';
 require_once 'Common/models/Language.php';
 require_once 'Common/models/Country.php';
 require_once 'Common/models/TaskMetadata.class.php';

@@ -157,7 +157,7 @@ class UserDao {
             if (!is_object($user)&& $clear_password!="") {
                     $user = $this->create($email,$clear_password);
                     $badge_dao = new BadgeDao();
-                    $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
+                    $badge = $badge_dao->find(array('badge_id' => BadgeTypes::REGISTERED));
                     $badge_dao->assignBadge($user, $badge);
             }else $user = null;//array("message"=>'sorry the account you enerted already exists. \n please login.',"status code"=>500);
             return $user;
@@ -185,7 +185,7 @@ class UserDao {
                 if (!is_object($user)) {
                     $user = $this->create($retvals['contact/email'],md5($retvals['contact/email']));
                     $badge_dao = new BadgeDao();
-                    $badge = $badge_dao->find(array('badge_id' => Badge::REGISTERED));
+                    $badge = $badge_dao->find(array('badge_id' => BadgeTypes::REGISTERED));
                     $badge_dao->assignBadge($user, $badge);
                 }
                 UserSession::setSession($user->getUserId());
@@ -253,7 +253,7 @@ class UserDao {
             $db->init();
             if ($result = $db->call("getUserBadges", $db->cleanse($user_id))) {
                 foreach ($result as $badge) {
-                   $ret[] = new Badge($badge);  
+                   $ret[] = ModelFactory::BuildModel("Badge", $badge);
                 }
             }
             return $ret;
@@ -308,7 +308,7 @@ class UserDao {
     }
     
     public function getUsersWithBadge($badge) {
-        return $this->getUsersWithBadgeByID($badge->getBadgeId());
+        return $this->getUsersWithBadgeByID($badge->getId());
     }
     /*
         Add the tag to a list of the user's preferred tags

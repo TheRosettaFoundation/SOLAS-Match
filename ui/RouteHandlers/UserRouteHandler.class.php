@@ -593,7 +593,7 @@ class UserRouteHandler
                 $user->setNativeLanguageID($nativeLang);
                 $user->setNativeRegionID($langCountry);
 
-                $badge_id = Badge::NATIVE_LANGUAGE;
+                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
                 $url = APIClient::API_VERSION."/badges/$badge_id";
                 $response = $client->call($url);
                 $badge = $client->cast('Badge', $response);
@@ -609,7 +609,7 @@ class UserRouteHandler
             if($user->getDisplayName() != '' && $user->getBiography() != ''
                     && $user->getNativeLanguageID() != '' && $user->getNativeRegionID() != '') {
 
-                $badge_id = Badge::PROFILE_FILLER;
+                $badge_id = BadgeTypes::PROFILE_FILLER;
                 $url = APIClient::API_VERSION."/badges/$badge_id";
                 $response = $client->call($url);
                 $badge = $client->cast('Badge', $response);

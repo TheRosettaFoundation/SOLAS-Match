@@ -5,9 +5,9 @@
     <small>Edit organisation badge details</small>
 </h1>
 
-{* {assign var="badge_id" value=$badge->getBadgeId()} *}
+{* {assign var="badge_id" value=$badge->getId()} *}
 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="well">
-    <input type="hidden" name="badge_id" value="{$badge->getBadgeId()}" />    
+    <input type="hidden" name="badge_id" value="{$badge->getId()}" />    
     <label for='title'>Badge Title</label>
     <input type='text' name='title' id='title'
     {if $badge->getTitle() != ''}

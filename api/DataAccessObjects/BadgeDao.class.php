@@ -1,7 +1,7 @@
 <?php
 
-require '../Common/models/Badge.class.php';
-require 'BadgeValidator.class.php';
+require_once '../Common/models/Badge.php';
+require_once 'BadgeValidator.class.php';
 require_once '../Common/lib/PDOWrapper.class.php';
 
 class BadgeDao
@@ -11,7 +11,7 @@ class BadgeDao
         $db = new PDOWrapper();
         $db->init();
         $result=$db->call("getBadge", "{$db->cleanse($params['badge_id'])},null,null,null");
-        return new Badge($result[0]);
+        return ModelFactory::BuildModel("Badge", $result[0]);
     }
 
    
@@ -20,7 +20,7 @@ class BadgeDao
     {
         $db = new PDOWrapper();
         $db->init();        
-        $result=$db->call("badgeInsertAndUpdate", "{$db->cleanseWrapStr($badge->getBadgeId())},{$db->cleanseWrapStr($badge->getOwnerId())},{$db->cleanseWrapStr($badge->getTitle())},{$db->cleanseWrapStr($badge->getDescription())}");
+        $result=$db->call("badgeInsertAndUpdate", "{$db->cleanseWrapStr($badge->getId())},{$db->cleanseWrapStr($badge->getOwnerId())},{$db->cleanseWrapStr($badge->getTitle())},{$db->cleanseWrapStr($badge->getDescription())}");
         return $result[0]['result'];
     }
 
@@ -31,7 +31,7 @@ class BadgeDao
         $results=$db->call("getBadge", "null,null,null,null");
         $ret=null;
         foreach($results as $result){
-            $ret[]= new Badge($result);
+            $ret[]= ModelFactory::BuildModel("Badge", $result);
         }
         return $ret;
     }
@@ -44,7 +44,7 @@ class BadgeDao
         if($badge_array = $db->call("getBadge", "null,null,null,{$db->cleanse($org_id)}")) {
             $ret = array();
             foreach($badge_array as $badge) {
-                $ret[] = new Badge($badge);
+                $ret[] = ModelFactory::BuildModel("Badge", $badge);
             }
         } 
         return $ret;
@@ -52,7 +52,7 @@ class BadgeDao
 
     public function assignBadge($user, $badge)
     {
-        self::assignBadgeByID($user->getUserId(),$badge->getBadgeId());
+        self::assignBadgeByID($user->getUserId(),$badge->getId());
     }
     
     public function assignBadgeByID($userID, $badgeID)
@@ -68,7 +68,7 @@ class BadgeDao
 
     public function removeUserBadge($user, $badge)
     {
-        $this->removeUserBadgeByID($user->getUserId(),$badge->getBadgeId());
+        $this->removeUserBadgeByID($user->getUserId(),$badge->getId());
     }
     
     public function removeUserBadgeByID($userID, $badgeID)

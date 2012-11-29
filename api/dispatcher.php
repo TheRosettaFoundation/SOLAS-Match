@@ -14,6 +14,7 @@ SmartyView::$smartyExtensions = array(
 
 require_once '../Common/Settings.class.php';
 require_once "../Common/lib/ModelFactory.class.php";
+require_once "../Common/lib/BadgeTypes.class.php";
 require_once 'FormatEnum.php';
 require_once 'HttpMethodEnum.php';
 require_once 'APIHelper.php';

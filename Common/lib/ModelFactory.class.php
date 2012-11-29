@@ -8,6 +8,7 @@ require_once __DIR__."/../models/Register.php";
 require_once __DIR__."/../models/Country.php";
 require_once __DIR__."/../models/Language.php";
 require_once __DIR__."/../models/Login.php";
+require_once __DIR__."/../models/Badge.php";
 
 class ModelFactory
 {
@@ -40,6 +41,9 @@ class ModelFactory
                 break;
             case "Login":
                 $ret = ModelFactory::GenerateLogin($modelData);
+                break;
+            case "Badge":
+                $ret = ModelFactory::GenerateBadge($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -190,6 +194,26 @@ class ModelFactory
         }
         if(isset($modelData['password'])) {
             $ret->setPassword($modelData['password']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateBadge($modelData)
+    {
+        $ret = new Badge();
+
+        if(isset($modelData['badge_id'])) {
+            $ret->setId($modelData['badge_id']);
+        }
+        if(isset($modelData['title'])) {
+            $ret->setTitle($modelData['title']);
+        }
+        if(isset($modelData['description'])) {
+            $ret->setDescription($modelData['description']);
+        }
+        if(isset($modelData['owner_id'])) {
+            $ret->setOwnerId($modelData['owner_id']);
         }
 
         return $ret;
