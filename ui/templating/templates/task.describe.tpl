@@ -51,7 +51,7 @@
                         <h2>From Language:</h2><br>
                         <select name="source" id="source">
                             {foreach $languages as $language}
-                                    <option value="{$language->getCode()}">{$language->getEnName()}</option>
+                                    <option value="{$language->getCode()}">{$language->getName()}</option>
                             {/foreach}
                         </select>
                         {if isset($countries)}
@@ -66,7 +66,7 @@
                         <h2>To Language(s):</h2><br>
                             <select name="target_0" id="target_0">
                                 {foreach $languages as $language}
-                                      <option value="{$language->getCode()}">{$language->getEnName()}</option>
+                                      <option value="{$language->getCode()}">{$language->getName()}</option>
                                 {/foreach}
                             </select>
                         {if isset($countries)}

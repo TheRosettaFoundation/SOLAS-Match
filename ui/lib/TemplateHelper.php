@@ -61,7 +61,7 @@ class TemplateHelper {
     public static function languageNameFromId($languageID){
         $client = new APIClient();
         $result = $client->castCall("Language",  APIClient::API_VERSION."/languages/$languageID" );
-        return $result->getEnName();
+        return $result->getName();
     }
     public static function orgNameFromId($orgID){
         $client = new APIClient();

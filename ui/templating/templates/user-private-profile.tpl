@@ -30,9 +30,9 @@
         <select name="nLanguage" id="nLanguage">
             {foreach $languages as $language}
                 {if $user->getNativeLanguageID() == $language->getID()}
-                    <option value="{$language->getID()}" selected="selected">{$language->getEnName()}</option>
+                    <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
                 {else}
-                    <option value="{$language->getID()}">{$language->getEnName()}</option>
+                    <option value="{$language->getId()}">{$language->getName()}</option>
                 {/if}
             {/foreach}
         </select>

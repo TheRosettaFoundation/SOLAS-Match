@@ -4,6 +4,7 @@ require_once __DIR__."/../models/MembershipRequest.php";
 require_once __DIR__."/../models/ArchivedTask.php";
 require_once __DIR__."/../models/Register.php";
 require_once __DIR__."/../models/Country.php";
+require_once __DIR__."/../models/Language.php";
 
 class ModelFactory
 {
@@ -27,6 +28,9 @@ class ModelFactory
                 break;
             case "Country":
                 $ret = ModelFactory::GenerateCountry($modelData);
+                break;
+            case "Language":
+                $ret = ModelFactory::GenerateLanguage($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -132,6 +136,23 @@ class ModelFactory
         }
         if(isset($modelData['country'])) {
             $ret->setName($modelData['country']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateLanguage($modelData)
+    {
+        $ret = new Language();
+
+        if(isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
+        }
+        if(isset($modelData['code'])) {
+            $ret->setCode($modelData['code']);
+        }
+        if(isset($modelData['language'])) {
+            $ret->setName($modelData['language']);
         }
 
         return $ret;
