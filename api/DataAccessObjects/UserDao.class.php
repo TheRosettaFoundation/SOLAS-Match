@@ -495,12 +495,12 @@ class UserDao {
         if(isset($args['uid']) && $args['uid'] != '') {
             $uid = $args['uid'];
             if($result = $db->call("getPasswordResetRequests", "{$db->cleanseWrapStr($uid)}, null")) {
-                $ret = $result[0];
+                $ret = ModelFactory::BuildModel("PasswordResetRequest", $result[0]);
             }
         } elseif(isset($args['user_id']) && $args['user_id'] != '') {
             $user_id = $args['user_id'];
             if($result = $db->call("getPasswordResetRequests", "null, {$db->cleanse($user_id)}")) {
-                $ret = $result;
+                $ret = ModelFactory::BuildModel("PasswordResetRequest", $result);
             }
         }
 
@@ -510,10 +510,10 @@ class UserDao {
      public function passwordReset($password,$key){
                 $dao = new UserDao;
                 $reset_request = $dao->getPasswordResetRequests(array('uid' => $key));
-                if(!isset($reset_request['user_id']) || $reset_request['user_id'] == ''||!User::isValidPassword($password)) {
+                if($reset_request->getUserId() == ''||!User::isValidPassword($password)) {
                     return array("result"=>0, "message"=> User::isValidPassword($password)?"Incorrect Unique ID. Are you sure you copied the URL correctly?":"Please check the password provided, and try again. It was not found to be valid.");
-                }elseif($dao->changePassword($reset_request['user_id'], $password)) {
-                        $dao->removePasswordResetRequest($reset_request['user_id']);
+                }elseif($dao->changePassword($reset_request->getUserId(), $password)) {
+                        $dao->removePasswordResetRequest($reset_request->getUserId());
                         return array("result"=>1,"message"=>"You have successfully changed your password");
                      }   
     }

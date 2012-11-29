@@ -2,6 +2,8 @@
 
 require_once __DIR__."/../models/MembershipRequest.php";
 require_once __DIR__."/../models/ArchivedTask.php";
+require_once __DIR__."/../models/PasswordResetRequest.php";
+require_once __DIR__."/../models/PasswordReset.php";
 require_once __DIR__."/../models/Register.php";
 require_once __DIR__."/../models/Country.php";
 require_once __DIR__."/../models/Language.php";
@@ -23,6 +25,9 @@ class ModelFactory
                 break;
             case "PasswordReset":
                 $ret = ModelFactory::GeneratePasswordReset($modelData);
+                break;
+            case "PasswordResetRequest":
+                $ret = ModelFactory::GeneratePasswordResetRequest($modelData);
                 break;
             case "Register":
                 $ret = ModelFactory::GenerateRegister($modelData);
@@ -109,6 +114,20 @@ class ModelFactory
         }
         if(isset($modelData['key'])) {
             $ret->setKey($modelData['key']);
+        }
+
+        return $ret;
+    }
+
+    private static function GeneratePasswordResetRequest($modelData)
+    {
+        $ret = new PasswordResetRequest();
+
+        if(isset($modelData['user_id'])) {
+            $ret->setUserId($modelData['user_id']);
+        }
+        if(isset($modelData['uid'])) {
+            $ret->setKey($modelData['uid']);
         }
 
         return $ret;

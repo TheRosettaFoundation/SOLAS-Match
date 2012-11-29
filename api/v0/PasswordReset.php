@@ -10,7 +10,7 @@
  *
  * @author sean
  */
-require_once '../Common/models/PasswordResetRequest.class.php';
+require_once '../Common/models/PasswordResetRequest.php';
 require_once '../Common/models/PasswordReset.php';
 class PasswordResetAPI {
     public  $pass;
@@ -36,7 +36,6 @@ class PasswordResetAPI {
            $dao = new UserDao();
            
            $data = $dao->getPasswordResetRequests(array('uid'=>$key));
-           $data = new PasswordResetRequest($data['user_id'],$data['uid']);
            Dispatcher::sendResponce(null, $data, null, $format);
         },'getResetRequest');
         

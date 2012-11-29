@@ -2,7 +2,7 @@
 
 require_once 'Common/models/Register.php';
 require_once 'Common/models/Login.php';
-require_once 'Common/models/PasswordResetRequest.class.php';
+require_once 'Common/models/PasswordResetRequest.php';
 require_once 'Common/models/PasswordReset.php';
 
 class UserRouteHandler
@@ -371,12 +371,12 @@ class UserRouteHandler
         $response = $client->call($request);        
         $reset_request = $client->cast('PasswordResetRequest', $response);
 
-        if($reset_request->getUserID()== '') {
+        if($reset_request->getUserId()== '') {
             $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
             $app->redirect($app->urlFor('home'));
         }
         
-        $user_id = $reset_request->getUserID();
+        $user_id = $reset_request->getUserId();
         $app->view()->setData("uid",$uid);
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
