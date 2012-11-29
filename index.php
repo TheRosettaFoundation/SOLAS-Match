@@ -35,7 +35,7 @@ require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
 require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
 
 require_once 'Common/models/User.class.php';
-require_once 'Common/models/Tag.class.php';
+require_once 'Common/models/Tag.php';
 require_once 'Common/models/Task.class.php';
 require_once 'Common/models/Organisation.class.php';
 require_once 'Common/models/Badge.php';

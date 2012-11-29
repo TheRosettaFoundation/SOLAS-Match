@@ -267,7 +267,7 @@ class UserDao {
         if($result = $db->call("getUserTags", "{$db->cleanse($user_id)},{$db->cleanseNull($limit)}")) {
             $ret = array();
             foreach($result as $row) {
-                $ret[] = new Tag($row);
+                $ret[] = ModelFactory::BuildModel("Tag", $row);
             }
         }
 

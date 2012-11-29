@@ -9,6 +9,7 @@ require_once __DIR__."/../models/Country.php";
 require_once __DIR__."/../models/Language.php";
 require_once __DIR__."/../models/Login.php";
 require_once __DIR__."/../models/Badge.php";
+require_once __DIR__."/../models/Tag.php";
 
 class ModelFactory
 {
@@ -44,6 +45,9 @@ class ModelFactory
                 break;
             case "Badge":
                 $ret = ModelFactory::GenerateBadge($modelData);
+                break;
+            case "Tag":
+                $ret = ModelFactory::GenerateTag($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -214,6 +218,20 @@ class ModelFactory
         }
         if(isset($modelData['owner_id'])) {
             $ret->setOwnerId($modelData['owner_id']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateTag($modelData)
+    {
+        $ret = new Tag();
+
+        if(isset($modelData['tag_id'])) {
+            $ret->setId($modelData['tag_id']);
+        }
+        if(isset($modelData['label'])) {
+            $ret->setLabel($modelData['label']);
         }
 
         return $ret;

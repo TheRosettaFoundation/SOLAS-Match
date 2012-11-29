@@ -1,6 +1,6 @@
 <?php
-require('../Common/models/Tag.class.php');
-require_once ('../Common/lib/PDOWrapper.class.php');
+require_once '../Common/models/Tag.php';
+require_once '../Common/lib/PDOWrapper.class.php';
 
 class TagsDao {
 	public function find($params) {
@@ -21,19 +21,19 @@ class TagsDao {
                 $tag_data = array();
                 $tag_data['tag_id'] = $r['tag_id'];
                 $tag_data['label'] = $r['label'];
-                $ret []= new Tag($tag_data);
+                $ret[] = ModelFactory::BuildModel("Tag", $tag_data);
             }
         }
 		return $ret;
     }
 
     public function create($label) {
-		$tag = new Tag(array('label' => $label));
+		$tag = ModelFactory::BuildModel("Tag", (array('label' => $label)));
 		return $this->save($tag);
 	}
 
 	public function save($tag) {
-		if (!$tag->hasTagId()) {
+		if (!$tag->hasId()) {
 			return $this->_insert($tag);
 		}
 		else {
@@ -45,8 +45,8 @@ class TagsDao {
 	{
 		$db = new PDOWrapper();
 		$db->init();
-                $id =$db->call("tagInsert", $db->cleanseWrapStr($tag->getLabel()));
-                return $id[0]['tag_id'];
+        $id =$db->call("tagInsert", $db->cleanseWrapStr($tag->getLabel()));
+        return $id[0]['tag_id'];
 	}
 	
 	/*
@@ -80,7 +80,7 @@ class TagsDao {
 	public function tagIDFromLabel($label)
 	{
 		$result=self::getTag(array('label'=>$label));
-                return $result==null?null:$result[0]->getTagId();
+                return $result==null?null:$result[0]->getId();
 	}
 	
 	public function label($tag_id)
@@ -136,7 +136,7 @@ class TagsDao {
 		if ($r = $db->call("getTopTags", "{$db->cleanse($limit)}")) {
 			$ret = array();
 			foreach ($r as $row) {
-				$ret[] = new Tag($row);
+				$ret[] = ModelFactory::BuildModel("Tag", $row);
 			}
 		}
 		return $ret;           

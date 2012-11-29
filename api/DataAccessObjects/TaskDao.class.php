@@ -251,23 +251,22 @@ class TaskDao {
     }
 
 
-    private function _tagsToIds($tags) {
-            $tag_ids = array();
-            foreach ($tags as $tag) {
-                    if ($tag_id = $this->getTagId($tag)) {
-                            $tag_ids[] = $tag_id;
-                    }
-                    else {
-                            $tag_ids[] = $this->_createTag($tag);
-                    }
+    private function _tagsToIds($tags) 
+    {
+        $tag_ids = array();
+        foreach ($tags as $tag) {
+            if ($tag_id = $this->getTagId($tag)) {
+                $tag_ids[] = $tag_id;
+            } else {
+                $tag_ids[] = $this->_createTag($tag);
             }
+        }
 
-            if (count($tag_ids) > 0) {
-                    return $tag_ids;
-            }
-            else {
-                    return null;
-            }
+        if (count($tag_ids) > 0) {
+            return $tag_ids;
+        } else {
+            return null;
+        }
     }
 
     public function getTagId($tag) {

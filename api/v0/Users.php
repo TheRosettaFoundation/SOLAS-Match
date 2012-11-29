@@ -185,9 +185,9 @@ class Users {
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tags(:format)/', function ($id,$format=".json"){
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $data= APIHelper::deserialiser($data, $format);
-            $data= APIHelper::cast(new Tag(array()), $data);
+            $data= APIHelper::cast(new Tag(), $data);
             $dao = new UserDao();
-            $data = $dao->likeTag($id,$data->getTagId());
+            $data = $dao->likeTag($id,$data->getId());
             if(is_array($data))$data=$data[0];
             Dispatcher::sendResponce(null, $data, null, $format);
         },'addUsertag');
