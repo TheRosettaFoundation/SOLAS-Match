@@ -15,7 +15,7 @@ require_once 'DataAccessObjects/TaskDao.class.php';
 require_once 'DataAccessObjects/TaskTags.class.php';
 require_once 'DataAccessObjects/TaskFile.class.php';
 require_once 'DataAccessObjects/TaskStream.class.php';
-require_once '../Common/models/TaskMetadata.class.php';
+require_once '../Common/models/TaskMetadata.php';
 require_once 'lib/IO.class.php';
 require_once 'lib/Upload.class.php';
 
@@ -137,7 +137,8 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/info(:format)/', function ($id,$format=".json"){
             $version = 0;
             if(isset ($_GET['version'])&& is_numeric($_GET['version'])) $version= $_GET['version'];
-            Dispatcher::sendResponce(null, new TaskMetadata(TaskFile::getTaskFileInfoById($id,$version)), null, $format);
+            $taskMetadata = ModelFactory::BuildModel("TaskMetadata", TaskFile::getTaskFileInfoById($id,$version));
+            Dispatcher::sendResponce(null, $taskMetadata, null, $format);
         },'getTaskInfo');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/claimed(:format)/', function ($id,$format=".json"){

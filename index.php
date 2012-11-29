@@ -41,7 +41,7 @@ require_once 'Common/models/Organisation.php';
 require_once 'Common/models/Badge.php';
 require_once 'Common/models/Language.php';
 require_once 'Common/models/Country.php';
-require_once 'Common/models/TaskMetadata.class.php';
+require_once 'Common/models/TaskMetadata.php';
 require_once 'Common/models/MembershipRequest.php';
 
 /**

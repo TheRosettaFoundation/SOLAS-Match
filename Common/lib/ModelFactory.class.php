@@ -11,6 +11,7 @@ require_once __DIR__."/../models/Login.php";
 require_once __DIR__."/../models/Badge.php";
 require_once __DIR__."/../models/Tag.php";
 require_once __DIR__."/../models/Organisation.php";
+require_once __DIR__."/../models/TaskMetadata.php";
 
 class ModelFactory
 {
@@ -52,6 +53,9 @@ class ModelFactory
                 break;
             case "Organisation":
                 $ret = ModelFactory::GenerateOrganisation($modelData);
+                break;
+            case "TaskMetadata":
+                $ret = ModelFactory::GenerateTaskMetadata($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -256,6 +260,32 @@ class ModelFactory
         }
         if(isset($modelData['biography'])) {
             $ret->setBiography($modelData['biography']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateTaskMetadata($modelData)
+    {
+        $ret = new TaskMetadata();
+
+        if(isset($modelData['task_id'])) {
+            $ret->setId($modelData['task_id']);
+        }
+        if(isset($modelData['version_id'])) {
+            $ret->setVersion($modelData['version_id']);
+        }
+        if(isset($modelData['filename'])) {
+            $ret->setFilename($modelData['filename']);
+        }
+        if(isset($modelData['content_type'])) {
+            $ret->setContentType($modelData['content_type']);
+        }
+        if(isset($modelData['user_id'])) {
+            $ret->setUserId($modelData['user_id']);
+        }
+        if(isset($modelData['upload_time'])) {
+            $ret->setUploadTime($modelData['upload_time']);
         }
 
         return $ret;
