@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Common/models/Register.class.php';
+require_once 'Common/models/Register.php';
 require_once 'Common/models/Login.class.php';
 require_once 'Common/models/PasswordResetRequest.class.php';
 require_once 'Common/models/PasswordReset.php';
@@ -302,8 +302,14 @@ class UserRouteHandler
             
             if (is_null($error)) {
 
+                $registerData = array();
+                $registerData['email'] = $post->email;
+                $registerData['password'] = $post->password;
+                $register =  ModelFactory::BuildModel("Register", $registerData);
+
                 $request = APIClient::API_VERSION."/register";
-                $response = $client->call($request, HTTP_Request2::METHOD_POST, new Register($post->email, $post->password));                
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $register);
+
                 if($response) {
                 
                     $request = APIClient::API_VERSION."/login";             
@@ -527,8 +533,13 @@ class UserRouteHandler
                 $request = APIClient::API_VERSION."/users/getByEmail/{$retvals['contact/email']}";
                 $response = $client->call($request);
                 if (!is_object($response)&&!is_array($response)) {
+                    $registerData = array();
+                    $registerData['email'] = $retvals['contact/email'];
+                    $registerData['password'] = md5($retvals['contact/email']);
+
                     $request = APIClient::API_VERSION."/register";
-                    $response = $client->call($request, HTTP_Request2::METHOD_POST, new Register($retvals['contact/email'],md5($retvals['contact/email'])));                    
+                    $response = $client->call($request, HTTP_Request2::METHOD_POST, 
+                            ModelFactory::BuildModel("Register", $registerData));
                 }
                 $user = $client->cast("User", $response);
                 UserSession::setSession($user->getUserId());

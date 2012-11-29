@@ -10,7 +10,10 @@
  *
  * @author sean
  */
-class Register {
+
+require_once __DIR__."/../../Common/models/Register.php";
+
+class RegisterAPI {
    public  $email;
    public  $pass;
     
@@ -34,12 +37,11 @@ class Register {
                 $data= APIHelper::deserialiser($data, $format);
                 $data= APIHelper::cast("Register", $data);
                 $dao = new UserDao;
-                $data= $dao->APIRegister($data->email, $data->pass);
+                $data= $dao->APIRegister($data->getEmail(), $data->getPassword());
                 if(is_array($data)&&isset ($data[0]))$data=$data[0];
                 Dispatcher::sendResponce(null,$data, null, $format);
         },'register');
     }
     
 }
-Register::init();
-?>
+RegisterAPI::init();

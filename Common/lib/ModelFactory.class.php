@@ -2,6 +2,7 @@
 
 require_once __DIR__."/../models/MembershipRequest.php";
 require_once __DIR__."/../models/ArchivedTask.php";
+require_once __DIR__."/../models/Register.php";
 
 class ModelFactory
 {
@@ -19,6 +20,9 @@ class ModelFactory
                 break;
             case "PasswordReset":
                 $ret = ModelFactory::GeneratePasswordReset($modelData);
+                break;
+            case "Register":
+                $ret = ModelFactory::GenerateRegister($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -93,6 +97,20 @@ class ModelFactory
         }
         if(isset($modelData['key'])) {
             $ret->setKey($modelData['key']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateRegister($modelData)
+    {
+        $ret = new Register();
+
+        if(isset($modelData['email'])) {
+            $ret->setEmail($modelData['email']);
+        }
+        if(isset($modelData['password'])) {
+            $ret->setPassword($modelData['password']);
         }
 
         return $ret;
