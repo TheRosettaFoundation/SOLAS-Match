@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__.'/../../Common/models/Language.class.php';
-require_once __DIR__.'/../../Common/models/Country.class.php';
+require_once __DIR__.'/../../Common/models/Country.php';
 
 class Languages {
     public static function languageIdFromName($language_name) {
@@ -15,11 +15,11 @@ class Languages {
 
     public static function countryNameFromId($country_id) {
         $result = self::getCountry($country_id, null, null);
-        return $result->getEnName();
+        return $result->getName();
     }
     public static function countryNameFromCode($countryCode) {
         $result = self::getCountry(null, $countryCode, null);
-        return $result->getEnName();
+        return $result->getName();
     }
         
     public static function getLanguage($id,$code,$name){
@@ -35,7 +35,7 @@ class Languages {
         $db->init();
         $result = $db->call("getCountry", "{$db->cleanseNUll($id)}, {$db->cleanseNullOrWrapStr($code)},
                             {$db->cleanseNullOrWrapStr($name)}");
-        return new Country($result[0]);
+        return ModelFactory::BuildModel("Country", $result[0]);
     }
 
     public static function getLanguageList() {
@@ -54,7 +54,7 @@ class Languages {
 		$db->init();
 		$countries = array();
         foreach($db->call("getCountries", "") as $lcid) {
-            $countries[] = new Country($lcid);
+            $countries[] = ModelFactory::BuildModel('Country', $lcid);
         }
                 
 		return $countries;

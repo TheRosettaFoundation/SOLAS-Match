@@ -40,9 +40,9 @@
         <select name="sourceCountry" id="sourceCountry">
             {foreach $countries as $country}
                 {if $task->getSourceCountryCode() == $country->getCode()}
-                    <option value="{$country->getCode()}" selected="selected">{$country->getEnName()}</option>
+                    <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                 {else}
-                    <option value="{$country->getCode()}">{$country->getEnName()}</option>
+                    <option value="{$country->getCode()}">{$country->getName()}</option>
                 {/if}
             {/foreach}
         </select>
@@ -62,9 +62,9 @@
         <select name="targetCountry" id="targetCountry">
             {foreach $countries as $country}
                 {if $task->getTargetCountryCode() == $country->getCode()}
-                    <option value="{$country->getCode()}" selected="selected">{$country->getEnName()}</option>
+                    <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                 {else}
-                    <option value="{$country->getCode()}">{$country->getEnName()}</option>
+                    <option value="{$country->getCode()}">{$country->getName()}</option>
                 {/if}
             {/foreach}
         </select>

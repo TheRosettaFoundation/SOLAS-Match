@@ -57,7 +57,7 @@
                         {if isset($countries)}
                             <select name="sourceCountry" id="sourceCountry">
                                 {foreach $countries as $country}
-                                     <option value="{$country->getCode()}">{$country->getEnName()}</option>
+                                     <option value="{$country->getCode()}">{$country->getName()}</option>
                                 {/foreach}                                
                             </select>
                         {/if}
@@ -72,7 +72,7 @@
                         {if isset($countries)}
                             <select name="targetCountry_0" id="targetCountry">
                                 {foreach $countries as $country}
-                                    <option value="{$country->getCode()}">{$country->getEnName()}</option>
+                                    <option value="{$country->getCode()}">{$country->getName()}</option>
                                 {/foreach}
                             </select> 
                         {/if}

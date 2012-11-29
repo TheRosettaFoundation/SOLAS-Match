@@ -3,6 +3,7 @@
 require_once __DIR__."/../models/MembershipRequest.php";
 require_once __DIR__."/../models/ArchivedTask.php";
 require_once __DIR__."/../models/Register.php";
+require_once __DIR__."/../models/Country.php";
 
 class ModelFactory
 {
@@ -23,6 +24,9 @@ class ModelFactory
                 break;
             case "Register":
                 $ret = ModelFactory::GenerateRegister($modelData);
+                break;
+            case "Country":
+                $ret = ModelFactory::GenerateCountry($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -111,6 +115,23 @@ class ModelFactory
         }
         if(isset($modelData['password'])) {
             $ret->setPassword($modelData['password']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateCountry($modelData)
+    {
+        $ret = new Country();
+
+        if(isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
+        }
+        if(isset($modelData['code'])) {
+            $ret->setCode($modelData['code']);
+        }
+        if(isset($modelData['country'])) {
+            $ret->setName($modelData['country']);
         }
 
         return $ret;

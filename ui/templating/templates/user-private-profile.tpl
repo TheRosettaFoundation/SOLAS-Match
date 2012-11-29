@@ -39,10 +39,10 @@
     {if isset($countries)}
         <select name="nLanguageCountry" id="nLanguageCountry">
             {foreach $countries as $country}
-                {if $user->getNativeRegionID() == $country->getID()}
-                <option value="{$country->getID()}" selected="selected">{$country->getEnName()}</option>
+                {if $user->getNativeRegionID() == $country->getId()}
+                <option value="{$country->getId()}" selected="selected">{$country->getName()}</option>
                 {else}
-                    <option value="{$country->getID()}">{$country->getEnName()}</option>
+                    <option value="{$country->getId()}">{$country->getName()}</option>
                 {/if}
             {/foreach}
         </select>

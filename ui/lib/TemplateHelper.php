@@ -72,12 +72,12 @@ class TemplateHelper {
     public static function countryNameFromId($cID){
         $client = new APIClient();
         $result = $client->castCall("Country",  APIClient::API_VERSION."/countries/$cID" );
-        return $result->getEnName();
+        return $result->getName();
     }
      public static function countryNameFromCode($cc) {
         $client = new APIClient();
         $result = $client->castCall("Country",  APIClient::API_VERSION."/countries/getByCode/$cc" );
-        return $result->getEnName();
+        return $result->getName();
     }
      
      public static function getLanguageList() {
