@@ -1,7 +1,7 @@
 <?php
 
 require_once 'Common/models/Register.php';
-require_once 'Common/models/Login.class.php';
+require_once 'Common/models/Login.php';
 require_once 'Common/models/PasswordResetRequest.class.php';
 require_once 'Common/models/PasswordReset.php';
 
@@ -312,8 +312,13 @@ class UserRouteHandler
 
                 if($response) {
                 
+                    $loginData = array();
+                    $loginData['email'] = $post->email;
+                    $loginData['password'] = $post->password;
+                    $login = ModelFactory::BuildModel("Login", $loginData);
+
                     $request = APIClient::API_VERSION."/login";             
-                    $user = $client->call($request, HTTP_Request2::METHOD_POST, new Login($post->email, $post->password));                
+                    $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
 
                     try {
                         
@@ -482,8 +487,13 @@ class UserRouteHandler
 
                 if(isset($post->login)) {
 
+                    $loginData = array();
+                    $loginData['email'] = $post->email;
+                    $loginData['password'] = $post->password;
+                    $login = ModelFactory::BuildModel("Login", $loginData);
+
                     $request = APIClient::API_VERSION."/login";             
-                    $user = $client->call($request, HTTP_Request2::METHOD_POST, new Login($post->email, $post->password)); 
+                    $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
                     if(!is_array($user) && !is_null($user)) {
                         $user = $client->cast("User", $user);
                         UserSession::setSession($user->getUserId());

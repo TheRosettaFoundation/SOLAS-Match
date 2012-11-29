@@ -5,6 +5,7 @@ require_once __DIR__."/../models/ArchivedTask.php";
 require_once __DIR__."/../models/Register.php";
 require_once __DIR__."/../models/Country.php";
 require_once __DIR__."/../models/Language.php";
+require_once __DIR__."/../models/Login.php";
 
 class ModelFactory
 {
@@ -31,6 +32,9 @@ class ModelFactory
                 break;
             case "Language":
                 $ret = ModelFactory::GenerateLanguage($modelData);
+                break;
+            case "Login":
+                $ret = ModelFactory::GenerateLogin($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -153,6 +157,20 @@ class ModelFactory
         }
         if(isset($modelData['language'])) {
             $ret->setName($modelData['language']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateLogin($modelData)
+    {
+        $ret = new Login();
+
+        if(isset($modelData['email'])) {
+            $ret->setEmail($modelData['email']);
+        }
+        if(isset($modelData['password'])) {
+            $ret->setPassword($modelData['password']);
         }
 
         return $ret;

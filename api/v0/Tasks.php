@@ -15,7 +15,7 @@ require_once 'DataAccessObjects/TaskDao.class.php';
 require_once 'DataAccessObjects/TaskTags.class.php';
 require_once 'DataAccessObjects/TaskFile.class.php';
 require_once 'DataAccessObjects/TaskStream.class.php';
-require_once '../Common/models/TaskMetadata.php';
+require_once '../Common/models/TaskMetadata.class.php';
 require_once 'lib/IO.class.php';
 require_once 'lib/Upload.class.php';
 

@@ -12,7 +12,7 @@
  */
 
 require_once 'DataAccessObjects/UserDao.class.php';
-class Login {
+class LoginAPI {
     
     public  $email;
     public  $pass;
@@ -37,7 +37,7 @@ class Login {
                 $data= APIHelper::deserialiser($data, $format);
                 $data= APIHelper::cast("Login", $data);
                 $dao = new UserDao;
-                $data= $dao->APILogin($data->email, $data->pass);
+                $data= $dao->APILogin($data->getEmail(), $data->getPassword());
                 if(is_array($data))$data=$data[0];
                 Dispatcher::sendResponce(null, $data, null, $format);
          },'login');
@@ -45,5 +45,4 @@ class Login {
     
     
 }
-Login::init();
-?>
+LoginAPI::init();

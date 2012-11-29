@@ -40,7 +40,7 @@ require_once 'Common/models/Organisation.class.php';
 require_once 'Common/models/Badge.class.php';
 require_once 'Common/models/Language.php';
 require_once 'Common/models/Country.php';
-require_once 'Common/models/TaskMetadata.php';
+require_once 'Common/models/TaskMetadata.class.php';
 require_once 'Common/models/MembershipRequest.php';
 
 /**
