@@ -294,9 +294,9 @@ class UserRouteHandler
         if (isValidPost($app)) {
             $post = (object)$app->request()->post();
             
-            if (!User::isValidEmail($post->email)) {
+            if (!TemplateHelper::isValidEmail($post->email)) {
                 $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
-            } elseif (!User::isValidPassword($post->password)) {
+            } elseif (!TemplateHelper::isValidPassword($post->password)) {
                 $error = 'You didn\'t enter a password. Please try again.';
             }
             
@@ -381,7 +381,7 @@ class UserRouteHandler
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
 
-            if(isset($post->new_password) && User::isValidPassword($post->new_password)) {
+            if(isset($post->new_password) && TemplateHelper::isValidPassword($post->new_password)) {
                 if(isset($post->confirmation_password) && 
                         $post->confirmation_password == $post->new_password) {
 
@@ -416,12 +416,10 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         
-        //$user_dao = new UserDao();
-
         if($app->request()->isPost()) {
             $post = (object)$app->request()->post();
             if(isset($post->password_reset)) {
-                if(isset($post->email_address) && $post->email_address != '')       //wait for API support
+                if(isset($post->email_address) && $post->email_address != '')
                 {
                     $request = APIClient::API_VERSION."/users/getByEmail/{$post->email_address}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
@@ -590,8 +588,8 @@ class UserRouteHandler
             $nativeLang = $app->request()->post('nLanguage');
             $langCountry= $app->request()->post('nLanguageCountry');
             if($nativeLang != NULL&&$langCountry!= NULL) {
-                $user->setNativeLanguageID($nativeLang);
-                $user->setNativeRegionID($langCountry);
+                $user->setNativeLangId($nativeLang);
+                $user->setNativeRegionId($langCountry);
 
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
                 $url = APIClient::API_VERSION."/badges/$badge_id";
@@ -607,7 +605,7 @@ class UserRouteHandler
             $client->call($request, HTTP_Request2::METHOD_PUT, $user);
             
             if($user->getDisplayName() != '' && $user->getBiography() != ''
-                    && $user->getNativeLanguageID() != '' && $user->getNativeRegionID() != '') {
+                    && $user->getNativeLangId() != '' && $user->getNativeRegionId() != '') {
 
                 $badge_id = BadgeTypes::PROFILE_FILLER;
                 $url = APIClient::API_VERSION."/badges/$badge_id";

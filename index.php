@@ -34,7 +34,7 @@ require_once 'ui/RouteHandlers/TaskRouteHandler.class.php';
 require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
 require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
 
-require_once 'Common/models/User.class.php';
+require_once 'Common/models/User.php';
 require_once 'Common/models/Tag.php';
 require_once 'Common/models/Task.class.php';
 require_once 'Common/models/Organisation.php';
@@ -107,8 +107,6 @@ function isValidPost(&$app) {
  * Given that we don't have object factories implemented, we'll initialise them directly here.
  */
 $app->hook('slim.before', function () use ($app) {
-//    $user_dao = new UserDao();
-
     $client = new APIClient();
     if (!is_null(UserSession::getCurrentUserID()) &&
             $current_user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID())) {

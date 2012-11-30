@@ -173,11 +173,11 @@ class Users {
             }
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $data= APIHelper::deserialiser($data, $format);
-            $data= APIHelper::cast(new \User(array()), $data);
+            $data= APIHelper::cast("User", $data);
             $dao = new UserDao();
             $data->setUserId($id);
             $data = $dao->save($data);
-            $data= APIHelper::cast(new \User(array()), $data);
+            $data= APIHelper::cast("User", $data);
             if(is_array($data))$data=$data[0];
             Dispatcher::sendResponce(null, $data, null, $format);
         },'updateUser');

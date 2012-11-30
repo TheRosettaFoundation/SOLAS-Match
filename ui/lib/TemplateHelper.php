@@ -58,48 +58,82 @@ class TemplateHelper {
         }
         return $print;
     }
-    public static function languageNameFromId($languageID){
+
+    public static function isValidEmail($email) 
+    {
+        return (self::emailContainsCharacter($email, '@')
+            && 
+            self::emailContainsCharacter($email, '.')
+        );      
+    }
+
+    private static function emailContainsCharacter($email, $character) 
+    {
+        return (strpos($email, $character) !== false);
+    }
+
+    public static function isValidPassword($password) 
+    {
+        return (strlen($password) > 0);
+    }
+
+    public static function getNativeLanguage($user) {
+        $language = TemplateHelper::languageNameFromId($user->getNativeLangId());
+        $region = TemplateHelper::countryNameFromId($user->getNativeRegionId());
+        return $language.' ('.$region.')';
+    }
+
+    public static function languageNameFromId($languageID)
+    {
         $client = new APIClient();
         $result = $client->castCall("Language",  APIClient::API_VERSION."/languages/$languageID" );
         return $result->getName();
     }
-    public static function orgNameFromId($orgID){
+
+    public static function orgNameFromId($orgID)
+    {
         $client = new APIClient();
         $result = $client->castCall("Organisation",  APIClient::API_VERSION."/orgs/$orgID" );
         return $result->getName();
     }
-    
-    public static function countryNameFromId($cID){
+
+    public static function countryNameFromId($cID)
+    {
         $client = new APIClient();
         $result = $client->castCall("Country",  APIClient::API_VERSION."/countries/$cID" );
         return $result->getName();
     }
-     public static function countryNameFromCode($cc) {
+    
+    public static function countryNameFromCode($cc) 
+    {
         $client = new APIClient();
         $result = $client->castCall("Country",  APIClient::API_VERSION."/countries/getByCode/$cc" );
         return $result->getName();
     }
      
-     public static function getLanguageList() {
+    public static function getLanguageList() 
+    {
         $client = new APIClient();
         $result = $client->castCall(array("Language"),  APIClient::API_VERSION."/languages" );
         return $result;
     }
 
-    public static function getCountryList(){
+    public static function getCountryList()
+    {
         $client = new APIClient();
         $result = $client->castCall(array("Country"),  APIClient::API_VERSION."/countries" );
         return $result;
     }
 
-     public static function saveLanguage($languageCode) {
-            $client = new APIClient();
+    public static function saveLanguage($languageCode) 
+    {
+        $client = new APIClient();
 
-            $language = $client->castCall("Language", APIClient::API_VERSION."/languages/getByCode/$languageCode");
-            if (is_null(($language))) {
-                    throw new InvalidArgumentException('A valid language code was expected.');
-            }
-            return $language->getId();
+        $language = $client->castCall("Language", APIClient::API_VERSION."/languages/getByCode/$languageCode");
+        if (is_null(($language))) {
+            throw new InvalidArgumentException('A valid language code was expected.');
+        }
+        return $language->getId();
     }
     
     public static function maxFileSizeBytes() {
@@ -213,5 +247,3 @@ class TemplateHelper {
 	}
 
 }
-
-?>

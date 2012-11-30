@@ -12,6 +12,7 @@ require_once __DIR__."/../models/Badge.php";
 require_once __DIR__."/../models/Tag.php";
 require_once __DIR__."/../models/Organisation.php";
 require_once __DIR__."/../models/TaskMetadata.php";
+require_once __DIR__."/../models/User.php";
 
 class ModelFactory
 {
@@ -56,6 +57,9 @@ class ModelFactory
                 break;
             case "TaskMetadata":
                 $ret = ModelFactory::GenerateTaskMetadata($modelData);
+                break;
+            case "User":
+                $ret = ModelFactory::GenerateUser($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -286,6 +290,41 @@ class ModelFactory
         }
         if(isset($modelData['upload_time'])) {
             $ret->setUploadTime($modelData['upload_time']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateUser($modelData)
+    {
+        $ret = new User();
+
+        if(isset($modelData['user_id'])) {
+            $ret->setUserId($modelData['user_id']);
+        }
+        if(isset($modelData['email'])) {
+            $ret->setEmail($modelData['email']);
+        }
+        if(isset($modelData['nonce'])) {
+            $ret->setNonce($modelData['nonce']);
+        }
+        if(isset($modelData['password'])) {
+            $ret->setPassword($modelData['password']);
+        }
+        if(isset($modelData['display_name'])) {
+            $ret->setDisplayName($modelData['display_name']);
+        }
+        if(isset($modelData['biography'])) {
+            $ret->setBiography($modelData['biography']);
+        }
+        if(isset($modelData['native_lang_id'])) {
+            $ret->setNativeLangId($modelData['native_lang_id']);
+        }
+        if(isset($modelData['native_region_id'])) {
+            $ret->setNativeRegionId($modelData['native_region_id']);
+        }
+        if(isset($modelData['created_time'])) {
+            $ret->setCreatedTime($modelData['created_time']);
         }
 
         return $ret;

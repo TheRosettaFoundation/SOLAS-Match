@@ -31,9 +31,9 @@
 <h3>Public display name:</h3>
 <p>{$this_user->getDisplayName()}</p>
  
-{if $this_user->getNativeLanguage() != ''}
+{if TemplateHelper::getNativeLanguage($this_user) != ''}
     <h3>Native Language: </h3>
-    <p>{$this_user->getNativeLanguage()}</p>
+    <p>{TemplateHelper::getNativeLanguage($this_user)}</p>
 {/if}
  
 {if $this_user->getBiography() != ''}

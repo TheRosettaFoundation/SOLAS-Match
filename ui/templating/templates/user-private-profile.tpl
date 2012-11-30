@@ -29,7 +29,7 @@
     {if isset($languages)}
         <select name="nLanguage" id="nLanguage">
             {foreach $languages as $language}
-                {if $user->getNativeLanguageID() == $language->getID()}
+                {if $user->getNativeLangId() == $language->getID()}
                     <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
                 {else}
                     <option value="{$language->getId()}">{$language->getName()}</option>
@@ -39,7 +39,7 @@
     {if isset($countries)}
         <select name="nLanguageCountry" id="nLanguageCountry">
             {foreach $countries as $country}
-                {if $user->getNativeRegionID() == $country->getId()}
+                {if $user->getNativeRegionId() == $country->getId()}
                 <option value="{$country->getId()}" selected="selected">{$country->getName()}</option>
                 {else}
                     <option value="{$country->getId()}">{$country->getName()}</option>
@@ -48,7 +48,7 @@
         </select>
     {/if}
     {else}
-        <input type='text' name='nLanguage' id='nLanguage' value={$user->getNativeLanguage()} />
+        <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getNativeLanguage($user)} />
     {/if}
     <label for='bio'>Biography:</label>
     <textarea name='bio' cols='40' rows='5' {if $user->getBiography() == ''} placeholder="Enter Bio Here" {/if}

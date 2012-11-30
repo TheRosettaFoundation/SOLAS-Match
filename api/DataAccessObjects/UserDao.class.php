@@ -1,6 +1,6 @@
 <?php
 
-require_once '../Common/models/User.class.php';
+require_once '../Common/models/User.php';
 require_once '../Common/lib/PDOWrapper.class.php';
 require_once '../Common/lib/Authentication.class.php';
 
@@ -32,19 +32,13 @@ class UserDao {
                                 'native_lang_id' => $r[0]['native_lang_id'],
                                 'native_region_id' => $r[0]['native_region_id']
 			);
-			$ret = new User($user_data);
+			$ret = ModelFactory::BuildModel("User", $user_data);
 		}
 		return $ret;
 	}
 
 	public function create($email, $clear_password) {
-		if (!User::isValidEmail($email)) {
-			throw new InvalidArgumentException('Please check the email provided, and try again. It was not found to be valid.');
-		}
-		else if (!User::isValidPassword($clear_password)) {
-			throw new InvalidArgumentException('Please check the password provided, and try again. It was not found to be valid.');
-		}
-		else if (is_object($this->find(array('email' => $email)))) {
+		if (is_object($this->find(array('email' => $email)))) {
 			throw new InvalidArgumentException('Oops, you already have an account here with that email address. Please log in instread.');
 		}
 
@@ -57,7 +51,7 @@ class UserDao {
 			'password' => $password
 		);
 
-		$user = new User($user_data);
+		$user = ModelFactory::BuildModel("User", $user_data);
 		return $this->save($user);
 	}
 
@@ -89,7 +83,7 @@ class UserDao {
             $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},
             {$db->cleanseNull($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},
             {$db->cleanseNullOrWrapStr($user->getBiography())},{$db->cleanseNullOrWrapStr($user->getDisplayName())},
-            {$db->cleanseNullOrWrapStr($user->getNativeLanguageID())},{$db->cleanseNullOrWrapStr($user->getNativeRegionID())},
+            {$db->cleanseNullOrWrapStr($user->getNativeLangId())},{$db->cleanseNullOrWrapStr($user->getNativeRegionId())},
             {$db->cleanse($user->getUserId())}");
             return $this->find(array('user_id' => $result[0]['user_id']));
     }
@@ -284,7 +278,7 @@ class UserDao {
         .",{$db->cleanseNull($native_language_id)},{$db->cleanseNull($native_region_id)}")) {
             $ret = array();
             foreach($result as $row) {
-                $ret[] = new User($row);
+                $ret[] = ModelFactory::BuildModel("User", $row);
             }
         }
         return $ret;
@@ -302,7 +296,7 @@ class UserDao {
         if($result = $db->call("getUsersWithBadge", "{$db->cleanse($badge_ID)}")) {
             $ret = array();
             foreach($result as $row) {
-                $ret[] = new User($row);
+                $ret[] = ModelFactory::BuildModel("User", $row);
             }
         }
         return $ret;
@@ -511,8 +505,8 @@ class UserDao {
      public function passwordReset($password,$key){
                 $dao = new UserDao;
                 $reset_request = $dao->getPasswordResetRequests(array('uid' => $key));
-                if($reset_request->getUserId() == ''||!User::isValidPassword($password)) {
-                    return array("result"=>0, "message"=> User::isValidPassword($password)?"Incorrect Unique ID. Are you sure you copied the URL correctly?":"Please check the password provided, and try again. It was not found to be valid.");
+                if($reset_request->getUserId() == '') {
+                    return array("result"=>0, "message"=> "Incorrect Unique ID. Are you sure you copied the URL correctly?");
                 }elseif($dao->changePassword($reset_request->getUserId(), $password)) {
                         $dao->removePasswordResetRequest($reset_request->getUserId());
                         return array("result"=>1,"message"=>"You have successfully changed your password");

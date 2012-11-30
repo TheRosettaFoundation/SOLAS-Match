@@ -134,7 +134,7 @@ class OrgRouteHandler
             $post = (object)$app->request()->post();
             
             if(isset($post->email)) {
-                if(User::isValidEmail($post->email)) {       
+                if(TemplateHelper::isValidEmail($post->email)) {       
                     $url = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
                     $response = $client->call($url);
                     $user = $client->cast('User', $response);
@@ -353,7 +353,7 @@ class OrgRouteHandler
             $post = (object) $app->request()->post();
             
             if(isset($post->email) && $post->email != '') {
-                if(User::isValidEmail($post->email)) {
+                if(TemplateHelper::isValidEmail($post->email)) {
                     
                     $request = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
