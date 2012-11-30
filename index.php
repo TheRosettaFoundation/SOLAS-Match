@@ -10,12 +10,16 @@ SmartyView::$smartyExtensions = array(
     'ui/vendor/slim/extras/Views/Extension/Smarty'
 );
 
+\DrSlump\Protobuf::autoload();
+
 
 //TODO remove all requires bar RoutHandlers
 require_once 'HTTP/Request2.php';
 
 require_once 'Common/Settings.class.php';
 require_once 'Common/lib/Authentication.class.php';
+require_once 'Common/lib/ModelFactory.class.php';
+require_once 'Common/lib/BadgeTypes.class.php';
 
 require_once 'ui/lib/TipSelector.class.php'; //jokes after upload
 require_once 'ui/lib/APIClient.class.php';
@@ -30,15 +34,15 @@ require_once 'ui/RouteHandlers/TaskRouteHandler.class.php';
 require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
 require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
 
-require_once 'Common/models/User.class.php';
-require_once 'Common/models/Tag.class.php';
-require_once 'Common/models/Task.class.php';
-require_once 'Common/models/Organisation.class.php';
-require_once 'Common/models/Badge.class.php';
-require_once 'Common/models/Language.class.php';
-require_once 'Common/models/Country.class.php';
+require_once 'Common/models/User.php';
+require_once 'Common/models/Tag.php';
+require_once 'Common/models/Task.php';
+require_once 'Common/models/Organisation.php';
+require_once 'Common/models/Badge.php';
+require_once 'Common/models/Language.php';
+require_once 'Common/models/Country.php';
 require_once 'Common/models/TaskMetadata.php';
-require_once 'Common/models/MembershipRequest.class.php';
+require_once 'Common/models/MembershipRequest.php';
 
 /**
  * Start the session
@@ -103,8 +107,6 @@ function isValidPost(&$app) {
  * Given that we don't have object factories implemented, we'll initialise them directly here.
  */
 $app->hook('slim.before', function () use ($app) {
-//    $user_dao = new UserDao();
-
     $client = new APIClient();
     if (!is_null(UserSession::getCurrentUserID()) &&
             $current_user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID())) {

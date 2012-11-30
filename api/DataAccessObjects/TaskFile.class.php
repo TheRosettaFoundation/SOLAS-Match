@@ -46,19 +46,20 @@ class TaskFile {
         return $result[0]['latest_version']>0;
     }
     
-    public static function recordFileUpload($task, $filename, $content_type, $user_id) {
-                $db = new PDOWrapper();
+    public static function recordFileUpload($task, $filename, $content_type, $user_id) 
+    {
+        $db = new PDOWrapper();
 		$db->init();
-                $args = "";
-                $args .= "{$db->cleanse($task->getTaskId())}";
-                $args .= ",{$db->cleanseWrapStr($filename)}";
-                $args .= ",{$db->cleanseWrapStr($content_type)}";
-                $args .= ",{$db->cleanseNull($user_id)}";
-                return $db->call("recordFileUpload", $args);
+        $args = "";
+        $args .= "{$db->cleanse($task->getId())}";
+        $args .= ",{$db->cleanseWrapStr($filename)}";
+        $args .= ",{$db->cleanseWrapStr($content_type)}";
+        $args .= ",{$db->cleanseNull($user_id)}";
+        return $db->call("recordFileUpload", $args);
     }
     
     public static function getTaskFileInfo($task, $version = 0) {
-		return TaskFile::getTaskFileInfoById($task->getTaskId(),$version);
+		return TaskFile::getTaskFileInfoById($task->getId(),$version);
     }
     
     public static function getTaskFileInfoById($taskID, $version = 0) {
@@ -80,7 +81,7 @@ class TaskFile {
     public static function getFilename($task, $version) {
 		$db = new PDOWrapper();
 		$db->init();
-		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($task->getTaskId())},{$db->cleanse($version)}, null, null, null, null")) {
+		if ($r = $db->call("getTaskFileMetaData","{$db->cleanse($task->getId())},{$db->cleanse($version)}, null, null, null, null")) {
 			return $r[0]['filename'];
 		}
 		else {
@@ -92,11 +93,11 @@ class TaskFile {
     public static function logFileDownload($task, $version) {
             $db = new PDOWrapper();
             $db->init();
-            $db->call("logFileDownload", "{$db->cleanse($task->getTaskId())},{$db->cleanse($version)},null");
+            $db->call("logFileDownload", "{$db->cleanse($task->getId())},{$db->cleanse($version)},null");
     }
     
     public static function getLatestFileVersion($task) {
-	return TaskFile::getLatestFileVersionByTaskID($task->getTaskId());
+	return TaskFile::getLatestFileVersionByTaskID($task->getId());
     }
 
     public static function getLatestFileVersionByTaskID($task_id,$user_id=null) {

@@ -181,8 +181,8 @@ class Upload {
 
 		$settings 			= new Settings();
 		$uploads_folder 	= $settings->get('files.upload_path');
-		$org_folder 		= 'org-' . $task->getOrganisationId();
-		$task_folder 		= 'task-' . $task->getTaskId();
+		$org_folder 		= 'org-' . $task->getOrgId();
+		$task_folder 		= 'task-' . $task->getId();
 		$version_folder		= 'v-' . $version;
 
 		return $uploads_folder 

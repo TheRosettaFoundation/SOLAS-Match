@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 
-{assign var="task_id" value=$task->getTaskId()}
+{assign var="task_id" value=$task->getId()}
 <h1 class="page-header">
     Task {$task->getTitle()}
     <small>Alter task details here</small>
@@ -29,20 +29,20 @@
     <label for="source">Source Language</label>
         <select name="source" id="source">
             {foreach $languages as $language}
-                {if $task->getSourceId() == $language->getId()}
-                    <option value="{$language->getId()}" selected="selected">{$language->getEnName()}</option>
+                {if $task->getSourceLangId() == $language->getId()}
+                    <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
                 {else}
-                    <option value="{$language->getId()}">{$language->getEnName()}</option>
+                    <option value="{$language->getId()}">{$language->getName()}</option>
                 {/if}
             {/foreach}
         </select>
     {if isset($countries)}
         <select name="sourceCountry" id="sourceCountry">
             {foreach $countries as $country}
-                {if $task->getSourceCountryCode() == $country->getCode()}
-                    <option value="{$country->getCode()}" selected="selected">{$country->getEnName()}</option>
+                {if $task->getSourceRegionId() == $country->getCode()}
+                    <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                 {else}
-                    <option value="{$country->getCode()}">{$country->getEnName()}</option>
+                    <option value="{$country->getCode()}">{$country->getName()}</option>
                 {/if}
             {/foreach}
         </select>
@@ -51,20 +51,20 @@
     <label for="target">Target Language</label>
     <select name="target" id="target">
         {foreach $languages as $language}
-            {if $task->getTargetId() == $language->getId()}
-                    <option value="{$language->getId()}" selected="selected">{$language->getEnName()}</option>
+            {if $task->getTargetLangId() == $language->getId()}
+                    <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
             {else}
-                <option value="{$language->getId()}">{$language->getEnName()}</option>
+                <option value="{$language->getId()}">{$language->getName()}</option>
             {/if}
         {/foreach}
     </select>
     {if isset($countries)}
         <select name="targetCountry" id="targetCountry">
             {foreach $countries as $country}
-                {if $task->getTargetCountryCode() == $country->getCode()}
-                    <option value="{$country->getCode()}" selected="selected">{$country->getEnName()}</option>
+                {if $task->getTargetRegionId() == $country->getCode()}
+                    <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                 {else}
-                    <option value="{$country->getCode()}">{$country->getEnName()}</option>
+                    <option value="{$country->getCode()}">{$country->getName()}</option>
                 {/if}
             {/foreach}
         </select>

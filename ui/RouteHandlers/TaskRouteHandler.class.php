@@ -258,8 +258,8 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }
         $app->view()->setData('task', $task);
-        $app->view()->setData('sourceLanguage', $client->castCall("Language",APIClient::API_VERSION."/languages/{$task->getSourceId()}"));
-        $app->view()->setData('targetLanguage', $client->castCall("Language",APIClient::API_VERSION."/languages/{$task->getTargetId()}"));
+        $app->view()->setData('sourceLanguage', $client->castCall("Language",APIClient::API_VERSION."/languages/{$task->getSourceLangId()}"));
+        $app->view()->setData('targetLanguage', $client->castCall("Language",APIClient::API_VERSION."/languages/{$task->getTargetLangId()}"));
        
         $app->render('task.claim.tpl');
     }
@@ -369,7 +369,7 @@ class TaskRouteHandler
             die;
         }
 
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
+        $request = APIClient::API_VERSION."/orgs/{$task->getOrgId()}";
         $response = $client->call($request); 
         $org = $client->cast('Organisation', $response);
         
@@ -407,7 +407,7 @@ class TaskRouteHandler
             $user = $client->call($request, HTTP_Request2::METHOD_GET); 
             
             if ($user) {                
-                $request = APIClient::API_VERSION."/tasks/{$task->getTaskId()}/claimed";
+                $request = APIClient::API_VERSION."/tasks/{$task->getId()}/claimed";
                 $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET, null, array('userID' => $user_id));  
                 
                 if ($userClaimedTask) {
@@ -415,7 +415,7 @@ class TaskRouteHandler
                         'this_user_has_claimed_this_task' => true
                     ));
 
-                    $request = APIClient::API_VERSION."/tasks/{$task->getTaskId()}/version";
+                    $request = APIClient::API_VERSION."/tasks/{$task->getId()}/version";
                     $taskVersion = $client->call($request, HTTP_Request2::METHOD_GET);
                     
                     
@@ -460,7 +460,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $org_id = $task->getOrganisationId();
+        $org_id = $task->getOrgId();
         $app->view()->appendData(array(
                 'org_id' => $org_id
         ));     
@@ -505,7 +505,7 @@ class TaskRouteHandler
             {
                 if (!empty($post->source)) {
                     $source_id = TemplateHelper::saveLanguage($post->source);
-                    $task->setSourceId($source_id);
+                    $task->setSourceLangId($source_id);
                 }
 
                 if($post->impact != '') {
@@ -517,11 +517,11 @@ class TaskRouteHandler
                 }
         
                 if(isset($post->sourceCountry)&&$post->sourceCountry != '') {
-                    $task->setSourceCountryCode($post->sourceCountry);
+                    $task->setSourceRegionId($post->sourceCountry);
                 }
 
                 if(isset($post->targetCountry)&&$post->targetCountry != '') {
-                    $task->setTargetCountryCode($post->targetCountry);
+                    $task->setTargetRegionId($post->targetCountry);
                 }
 
                 $tags = $post->tags;
@@ -536,8 +536,11 @@ class TaskRouteHandler
                     $extension = strtolower($extension);
                     $tags .= " $extension";
                 }
-    
-                $task->setTags(TemplateHelper::separateTags($tags));            
+   
+                $tag_list = TemplateHelper::separateTags($tags);
+                foreach($tag_list as $tag) {
+                    $task->addTags($tag);
+                }
                 
                 $language_list = array();
                 $country_list = array();
@@ -558,8 +561,8 @@ class TaskRouteHandler
                     foreach($language_list as $language) {
                         if($language == $language_list[0]) {   //if it is the first language add it to this task
                             $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
-                            $task->setTargetId($target_id);
-                            $task->setTargetCountryCode($language['country']);
+                            $task->setTargetLangId($target_id);
+                            $task->setTargetRegionId($language['country']);
                             $request = APIClient::API_VERSION."/tasks/$task_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
                         } else {
@@ -570,8 +573,8 @@ class TaskRouteHandler
                     }
                 } else {
                     $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
-                    $task->setTargetId($target_id);
-                    $task->setTargetCountryCode($language_list[0]['country']);
+                    $task->setTargetLangId($target_id);
+                    $task->setTargetRegionId($language_list[0]['country']);
                     
                     $request = APIClient::API_VERSION."/tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
@@ -703,23 +706,26 @@ class TaskRouteHandler
             }
             
             if($post->source != '') {
-                $task->setSourceId($post->source);
+                $task->setSourceLangId($post->source);
             }
             
             if($post->target != '') {
-                $task->setTargetId($post->target);
+                $task->setTargetLangId($post->target);
             }   
              
             if($post->sourceCountry != '') {
-                $task->setSourceCountryCode($post->sourceCountry);
+                $task->setSourceRegionId($post->sourceCountry);
             }   
              
             if($post->targetCountry != '') {
-                $task->setTargetCountryCode($post->targetCountry);
+                $task->setTargetRegionId($post->targetCountry);
             }   
               
             if($post->tags != '') {
-                $task->setTags(TemplateHelper::separateTags($post->tags));
+                $tags = TemplateHelper::separateTags($post->tags);
+                foreach($tags as $tag) {
+                    $task->addTags($tag);
+                }
             }
             
 
@@ -778,7 +784,7 @@ class TaskRouteHandler
             $post = (object) $app->request()->post();
             
             if(isset($post->notify) && $post->notify == "true") {
-                $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/{$task->getTaskId()}";
+                $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/{$task->getId()}";
                 $userTrackTask = $client->call($request, HTTP_Request2::METHOD_PUT);
                 
                 if($userTrackTask) {
@@ -790,7 +796,7 @@ class TaskRouteHandler
                 }   
             } else {
 
-                $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/{$task->getTaskId()}";
+                $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/{$task->getId()}";
                 $userIgnoreTask = $client->call($request, HTTP_Request2::METHOD_DELETE);
                 
                 if($response) {
@@ -807,7 +813,7 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/users/subscribedToTask/{$user->getUserId()}/$task_id";
         $registered = $client->call($request);         
 
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
+        $request = APIClient::API_VERSION."/orgs/{$task->getOrgId()}";
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
 
@@ -828,7 +834,7 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
-        $org_id = $task->getOrganisationId();
+        $org_id = $task->getOrgId();
 
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
@@ -839,7 +845,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
+        $request = APIClient::API_VERSION."/orgs/{$task->getOrgId()}";
         $response = $client->call($request); 
         $org = $client->cast('Organisation', $response);
         $org_name = $org->getName();
@@ -934,12 +940,13 @@ class TaskRouteHandler
             }
             
             if (!$upload_error) {
+                $taskData = array();
+                $taskData['organisation_id'] = $org_id;
+                $taskData['title'] = $_FILES[$field_name]['name'];
+                $task = ModelFactory::BuildModel("Task", $taskData);
                 
                 $request = APIClient::API_VERSION."/tasks";
-                $response = $client->call($request, HTTP_Request2::METHOD_POST, new Task(array(
-                        'organisation_id' => $org_id,
-                        'title' => $_FILES[$field_name]['name']
-                )));
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
                 
                 $task = $client->cast('Task', $response);
 
@@ -947,7 +954,7 @@ class TaskRouteHandler
                     
                     $filedata =file_get_contents($_FILES[$field_name]['tmp_name']);
                     
-                    $error_message=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/file/".urlencode($_FILES[$field_name]['name'])."/$user_id",HTTP_Request2::METHOD_PUT,null,null,"",$filedata);
+                    $error_message=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/file/".urlencode($_FILES[$field_name]['name'])."/$user_id",HTTP_Request2::METHOD_PUT,null,null,"",$filedata);
                 } catch (Exception  $e) {
                     $upload_error = true;
                     $error_message = 'File error: ' . $e->getMessage();
@@ -955,7 +962,7 @@ class TaskRouteHandler
             }
             
             if (!$upload_error) {
-                $app->redirect($app->urlFor('task-describe', array('task_id' => $task->getTaskId())));
+                $app->redirect($app->urlFor('task-describe', array('task_id' => $task->getId())));
             }
         }
         

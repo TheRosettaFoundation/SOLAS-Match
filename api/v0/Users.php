@@ -99,7 +99,7 @@ class Users {
           $data= APIHelper::deserialiser($data, $format);
           $data= APIHelper::cast("Badge", $data);
           $dao = new BadgeDao();
-          Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $data->getBadgeId()), null, $format);
+          Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $data->getId()), null, $format);
         },'addUserbadges');
         
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/badges/:badge/', function ($id,$badge,$format=".json"){
@@ -139,7 +139,7 @@ class Users {
             $data= APIHelper::deserialiser($data, $format);
             $data= APIHelper::cast("Task", $data);
             $dao = new TaskDao;
-            Dispatcher::sendResponce(null, array("result"=>$dao->claimTaskbyID($data->getTaskId(), $id)), null, $format);
+            Dispatcher::sendResponce(null, array("result"=>$dao->claimTaskbyID($data->getId(), $id)), null, $format);
             $dao = new UserDao();
             
             Notify::notifyUserClaimedTask($dao->find(array("user_id"=>$id)), $data);
@@ -173,11 +173,11 @@ class Users {
             }
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $data= APIHelper::deserialiser($data, $format);
-            $data= APIHelper::cast(new \User(array()), $data);
+            $data= APIHelper::cast("User", $data);
             $dao = new UserDao();
             $data->setUserId($id);
             $data = $dao->save($data);
-            $data= APIHelper::cast(new \User(array()), $data);
+            $data= APIHelper::cast("User", $data);
             if(is_array($data))$data=$data[0];
             Dispatcher::sendResponce(null, $data, null, $format);
         },'updateUser');
@@ -185,9 +185,9 @@ class Users {
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tags(:format)/', function ($id,$format=".json"){
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $data= APIHelper::deserialiser($data, $format);
-            $data= APIHelper::cast(new Tag(array()), $data);
+            $data= APIHelper::cast(new Tag(), $data);
             $dao = new UserDao();
-            $data = $dao->likeTag($id,$data->getTagId());
+            $data = $dao->likeTag($id,$data->getId());
             if(is_array($data))$data=$data[0];
             Dispatcher::sendResponce(null, $data, null, $format);
         },'addUsertag');
@@ -225,7 +225,7 @@ class Users {
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $data= APIHelper::deserialiser($data, $format);
             $data= APIHelper::cast("Task", $data);
-            $data=$dao->trackTask($id, $data->getTaskId());
+            $data=$dao->trackTask($id, $data->getId());
             Dispatcher::sendResponce(null, $data , null, $format);
         },'addUserTrackedTasks');
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/tracked_tasks/:taskID/', function ($id,$taskID,$format=".json"){

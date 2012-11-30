@@ -62,7 +62,7 @@ class TagRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $tag_id = $tag->getTagId();
+        $tag_id = $tag->getId();
         $displayName = $current_user->getDisplayName();
         
         if($subscribe == "true") {
@@ -100,7 +100,7 @@ class TagRouteHandler
         $response = $client->call($request);
         $tag = $client->cast('Tag', $response);
         
-        $tag_id = $tag->getTagId();
+        $tag_id = $tag->getId();
         
         if (is_null($tag_id)) {
             header('HTTP/1.0 404 Not Found');

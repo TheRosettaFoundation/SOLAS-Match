@@ -4,7 +4,7 @@ class BadgeValidator
 {
     public function validateUserBadge($user, $badge)
     {
-       return self::validateUserBadgeByID($user->getUserId(),$badge->getBadgeId());
+       return self::validateUserBadgeByID($user->getUserId(),$badge->getId());
     }
     
     public function validateUserBadgeByID($userID, $badgeID)
@@ -14,7 +14,7 @@ class BadgeValidator
     
     private function userHasBadge($user, $badge)
     {
-      return self::userHasBadgeByID($user->getUserId(),$badge->getBadgeId());  
+      return self::userHasBadgeByID($user->getUserId(),$badge->getId());  
     }
     private function userHasBadgeByID($userID, $badgeID)
     {

@@ -4,10 +4,10 @@
     {if $task->getTitle() != ''}
         {$task->getTitle()}
     {else}
-        Task {$task->getTaskId()}
+        Task {$task->getId()}
     {/if}
     <small>Task Details</small>
-    {assign var="task_id" value=$task->getTaskId()}
+    {assign var="task_id" value=$task->getId()}
     <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
         <i class="icon-wrench icon-white"></i> Edit Details
     </a>
@@ -66,10 +66,10 @@
 {/if}
 
 <h3>Source Language</h3>
-<p>{$task->getSourceLanguage()}</p>
+<p>{TemplateHelper::getTaskSourceLanguage($task)}</p>
 
 <h3>Target Language</h3>
-<p>{$task->getTargetLanguage()}</p>
+<p>{TemplateHelper::getTaskTargetLanguage($task)}</p>
 
 <h3>Word Count</h3>
 <p>{$task->getWordCount()}</p>

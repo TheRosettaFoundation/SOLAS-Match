@@ -1,13 +1,13 @@
 {* Must have an object $task assigned by parent *}
 <div class="task">
-    {assign var='task_id' value=$task->getTaskId()}
+    {assign var='task_id' value=$task->getId()}
         <h2><a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a></h2>
         <p>
-        	{if $task->getSourceId()}
-        		From <b>{TemplateHelper::languageNameFromId($task->getSourceId())}</b>
+        	{if $task->getSourceLangId()}
+        		From <b>{TemplateHelper::languageNameFromId($task->getSourceLangId())}</b>
         	{/if}
-        	{if $task->getTargetId()}
-        		To <b>{TemplateHelper::languageNameFromId($task->getTargetId())}</b>
+        	{if $task->getTargetLangId()}
+        		To <b>{TemplateHelper::languageNameFromId($task->getTargetLangId())}</b>
         	{/if}
                  <p>
 		    {foreach from=$task->getTags() item=tag}
@@ -25,9 +25,9 @@
 	<p class="task_details">
 		Added {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago
 		&middot; By 
-        {assign var="org_id" value=$task->getOrganisationId()}
+        {assign var="org_id" value=$task->getOrgId()}
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-            {TemplateHelper::orgNameFromId($task->getOrganisationId())}
+            {TemplateHelper::orgNameFromId($task->getOrgId())}
         </a>
 		{if $task->getWordcount()}
 			&middot; {$task->getWordcount()|number_format} words

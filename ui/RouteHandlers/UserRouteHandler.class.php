@@ -1,9 +1,9 @@
 <?php
 
-require_once 'Common/models/Register.class.php';
-require_once 'Common/models/Login.class.php';
-require_once 'Common/models/PasswordResetRequest.class.php';
-require_once 'Common/models/PasswordReset.class.php';
+require_once 'Common/models/Register.php';
+require_once 'Common/models/Login.php';
+require_once 'Common/models/PasswordResetRequest.php';
+require_once 'Common/models/PasswordReset.php';
 
 class UserRouteHandler
 {
@@ -212,7 +212,7 @@ class UserRouteHandler
                 if($task->getTitle() != '') {
                     $task_title = $task->getTitle();
                 } else {
-                    $task_title = "task ".$task->getTaskId();
+                    $task_title = "task ".$task->getId();
                 }
                 if($post->track == "Ignore") {
                    
@@ -248,9 +248,9 @@ class UserRouteHandler
                     foreach($taskArray as $task){
                         $temp = array();
                         $temp['task']=$task;
-                        $temp['translated']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/version")>0;
-                        $temp['taskClaimed']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/claimed")==1;//$task_dao->taskIsClaimed($task->getTaskId());
-                        $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getTaskId()}")==1;
+                        $temp['translated']=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/version")>0;
+                        $temp['taskClaimed']=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/claimed")==1;
+                        $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getId()}")==1;
                         $taskData[]=$temp;
                     }
                 } else {
@@ -294,20 +294,31 @@ class UserRouteHandler
         if (isValidPost($app)) {
             $post = (object)$app->request()->post();
             
-            if (!User::isValidEmail($post->email)) {
+            if (!TemplateHelper::isValidEmail($post->email)) {
                 $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
-            } elseif (!User::isValidPassword($post->password)) {
+            } elseif (!TemplateHelper::isValidPassword($post->password)) {
                 $error = 'You didn\'t enter a password. Please try again.';
             }
             
             if (is_null($error)) {
 
+                $registerData = array();
+                $registerData['email'] = $post->email;
+                $registerData['password'] = $post->password;
+                $register =  ModelFactory::BuildModel("Register", $registerData);
+
                 $request = APIClient::API_VERSION."/register";
-                $response = $client->call($request, HTTP_Request2::METHOD_POST, new Register($post->email, $post->password));                
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $register);
+
                 if($response) {
                 
+                    $loginData = array();
+                    $loginData['email'] = $post->email;
+                    $loginData['password'] = $post->password;
+                    $login = ModelFactory::BuildModel("Login", $loginData);
+
                     $request = APIClient::API_VERSION."/login";             
-                    $user = $client->call($request, HTTP_Request2::METHOD_POST, new Login($post->email, $post->password));                
+                    $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
 
                     try {
                         
@@ -356,47 +367,31 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         
-        //$user_dao = new UserDao();
-        
-        /*
-        $request = APIClient::API_VERSION."/users/$uid/passwordResetRequest";
-        $response = $client->call($request);        
-        $user_obj = $client->cast('User', $response);
-        */
-        //$reset_request = $user_obj->
-        
-        //$my_org_tasks = array();
-        //if($org_tasks_data) {
-            //foreach($org_tasks_data as $stdObject) {
-                //$my_org_tasks[] = $client->cast('Task', $stdObject);
-            //}
-        //}
-        
         $request = APIClient::API_VERSION."/password_reset/$uid";
         $response = $client->call($request);        
         $reset_request = $client->cast('PasswordResetRequest', $response);
-        // v0/password_reset/:key/
-        
-        //$reset_request = $user_dao->getPasswordResetRequests(array('uid' => $uid));     //wait for API support
 
-        if($reset_request->getUserID()== '') {
+        if($reset_request->getUserId()== '') {
             $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
             $app->redirect($app->urlFor('home'));
         }
         
-        $user_id = $reset_request->getUserID();
+        $user_id = $reset_request->getUserId();
         $app->view()->setData("uid",$uid);
         if($app->request()->isPost()) {
             $post = (object) $app->request()->post();
 
-            if(isset($post->new_password) && User::isValidPassword($post->new_password)) {
+            if(isset($post->new_password) && TemplateHelper::isValidPassword($post->new_password)) {
                 if(isset($post->confirmation_password) && 
                         $post->confirmation_password == $post->new_password) {
-                    //if($user_dao->changePassword($user_id, $post->new_password)) {
-                        //$user_dao->removePasswordResetRequest($user_id);
-                    // HttpMethodEnum::POST, '/v0/password_reset(:format)/
+
+                    $data = array();
+                    $data['password'] = $post->new_password;
+                    $data['key'] = $uid;
+
                     $request = APIClient::API_VERSION."/password_reset";
-                    $response = $client->call($request, HTTP_Request2::METHOD_POST, new PasswordReset($post->new_password, $uid));                     
+                    $response = $client->call($request, HTTP_Request2::METHOD_POST, 
+                            ModelFactory::BuildModel("PasswordReset", $data));
                     
                     if($response) { 
                     
@@ -421,12 +416,10 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         
-        //$user_dao = new UserDao();
-
         if($app->request()->isPost()) {
             $post = (object)$app->request()->post();
             if(isset($post->password_reset)) {
-                if(isset($post->email_address) && $post->email_address != '')       //wait for API support
+                if(isset($post->email_address) && $post->email_address != '')
                 {
                     $request = APIClient::API_VERSION."/users/getByEmail/{$post->email_address}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
@@ -492,8 +485,13 @@ class UserRouteHandler
 
                 if(isset($post->login)) {
 
+                    $loginData = array();
+                    $loginData['email'] = $post->email;
+                    $loginData['password'] = $post->password;
+                    $login = ModelFactory::BuildModel("Login", $loginData);
+
                     $request = APIClient::API_VERSION."/login";             
-                    $user = $client->call($request, HTTP_Request2::METHOD_POST, new Login($post->email, $post->password)); 
+                    $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
                     if(!is_array($user) && !is_null($user)) {
                         $user = $client->cast("User", $user);
                         UserSession::setSession($user->getUserId());
@@ -543,8 +541,13 @@ class UserRouteHandler
                 $request = APIClient::API_VERSION."/users/getByEmail/{$retvals['contact/email']}";
                 $response = $client->call($request);
                 if (!is_object($response)&&!is_array($response)) {
+                    $registerData = array();
+                    $registerData['email'] = $retvals['contact/email'];
+                    $registerData['password'] = md5($retvals['contact/email']);
+
                     $request = APIClient::API_VERSION."/register";
-                    $response = $client->call($request, HTTP_Request2::METHOD_POST, new Register($retvals['contact/email'],md5($retvals['contact/email'])));                    
+                    $response = $client->call($request, HTTP_Request2::METHOD_POST, 
+                            ModelFactory::BuildModel("Register", $registerData));
                 }
                 $user = $client->cast("User", $response);
                 UserSession::setSession($user->getUserId());
@@ -585,10 +588,10 @@ class UserRouteHandler
             $nativeLang = $app->request()->post('nLanguage');
             $langCountry= $app->request()->post('nLanguageCountry');
             if($nativeLang != NULL&&$langCountry!= NULL) {
-                $user->setNativeLanguageID($nativeLang);
-                $user->setNativeRegionID($langCountry);
+                $user->setNativeLangId($nativeLang);
+                $user->setNativeRegionId($langCountry);
 
-                $badge_id = Badge::NATIVE_LANGUAGE;
+                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
                 $url = APIClient::API_VERSION."/badges/$badge_id";
                 $response = $client->call($url);
                 $badge = $client->cast('Badge', $response);
@@ -602,9 +605,9 @@ class UserRouteHandler
             $client->call($request, HTTP_Request2::METHOD_PUT, $user);
             
             if($user->getDisplayName() != '' && $user->getBiography() != ''
-                    && $user->getNativeLanguageID() != '' && $user->getNativeRegionID() != '') {
+                    && $user->getNativeLangId() != '' && $user->getNativeRegionId() != '') {
 
-                $badge_id = Badge::PROFILE_FILLER;
+                $badge_id = BadgeTypes::PROFILE_FILLER;
                 $url = APIClient::API_VERSION."/badges/$badge_id";
                 $response = $client->call($url);
                 $badge = $client->cast('Badge', $response);

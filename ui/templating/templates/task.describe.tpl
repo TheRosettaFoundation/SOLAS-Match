@@ -51,13 +51,13 @@
                         <h2>From Language:</h2><br>
                         <select name="source" id="source">
                             {foreach $languages as $language}
-                                    <option value="{$language->getCode()}">{$language->getEnName()}</option>
+                                    <option value="{$language->getCode()}">{$language->getName()}</option>
                             {/foreach}
                         </select>
                         {if isset($countries)}
                             <select name="sourceCountry" id="sourceCountry">
                                 {foreach $countries as $country}
-                                     <option value="{$country->getCode()}">{$country->getEnName()}</option>
+                                     <option value="{$country->getCode()}">{$country->getName()}</option>
                                 {/foreach}                                
                             </select>
                         {/if}
@@ -66,13 +66,13 @@
                         <h2>To Language(s):</h2><br>
                             <select name="target_0" id="target_0">
                                 {foreach $languages as $language}
-                                      <option value="{$language->getCode()}">{$language->getEnName()}</option>
+                                      <option value="{$language->getCode()}">{$language->getName()}</option>
                                 {/foreach}
                             </select>
                         {if isset($countries)}
                             <select name="targetCountry_0" id="targetCountry">
                                 {foreach $countries as $country}
-                                    <option value="{$country->getCode()}">{$country->getEnName()}</option>
+                                    <option value="{$country->getCode()}">{$country->getName()}</option>
                                 {/foreach}
                             </select> 
                         {/if}

@@ -1,5 +1,5 @@
 {include file="header.tpl"}
-{assign var="task_id" value=$task->getTaskId()}
+{assign var="task_id" value=$task->getId()}
 
 {include file="handle-flash-messages.tpl"}
 
@@ -8,11 +8,11 @@
 </div>
 
 	<p>
-		{if $task->getSourceId()}
-			From <b>{TemplateHelper::languageNameFromId($task->getSourceId())}</b>
+		{if $task->getSourceLangId()}
+			From <b>{TemplateHelper::languageNameFromId($task->getSourceLangId())}</b>
 		{/if}
-		{if $task->getTargetId()}
-			To <b>{TemplateHelper::languageNameFromId($task->getTargetId())}</b>
+		{if $task->getTargetLangId()}
+			To <b>{TemplateHelper::languageNameFromId($task->getTargetLangId())}</b>
 		{/if}
         <div class="tag">
 		{foreach from=$task->getTags() item=tag}
@@ -25,10 +25,10 @@
 		<span class="time_since">{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago</span>
 
 		&middot;
-        {assign var="org_id" value=$task->getOrganisationId()}
+        {assign var="org_id" value=$task->getOrgId()}
         
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-            {TemplateHelper::orgNameFromId($task->getOrganisationId())}
+            {TemplateHelper::orgNameFromId($task->getOrgId())}
         </a>
 		{assign var="wordcount" value=$task->getWordCount()}
 		{if $wordcount}
@@ -122,7 +122,7 @@
 	{/if}
 	<h3>Upload your translated version of {$filename}</h3>
 	<form class="well" method="post" action="{urlFor name="task-upload-edited" options="task_id.$task_id"}" enctype="multipart/form-data">
-		<input type="hidden" name="task_id" value="{$task->getTaskId()}">
+		<input type="hidden" name="task_id" value="{$task->getId()}">
 		<input type="file" name="edited_file" id="edited_file">
 		<p class="help-block">
 			Max file size {$max_file_size}MB.

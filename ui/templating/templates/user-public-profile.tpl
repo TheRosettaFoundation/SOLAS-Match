@@ -31,9 +31,9 @@
 <h3>Public display name:</h3>
 <p>{$this_user->getDisplayName()}</p>
  
-{if $this_user->getNativeLanguage() != ''}
+{if TemplateHelper::getNativeLanguage($this_user) != ''}
     <h3>Native Language: </h3>
-    <p>{$this_user->getNativeLanguage()}</p>
+    <p>{TemplateHelper::getNativeLanguage($this_user)}</p>
 {/if}
  
 {if $this_user->getBiography() != ''}
@@ -57,7 +57,7 @@
             {if !is_null($badge->getOwnerId())}
                 {assign var="user_id" value=$this_user->getUserId()} 
                 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
-                    <input type="hidden" name="badge_id" value="{$badge->getBadgeId()}" />
+                    <input type="hidden" name="badge_id" value="{$badge->getId()}" />
                     <input type="hidden" value="Remove" onClick="return confirmPost()" />
                     <a href="#" onclick="this.parentNode.submit()" class="pull-right btn btn-inverse">
                         <i class="icon-fire icon-white"></i> Remove Badge

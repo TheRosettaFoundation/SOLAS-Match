@@ -1,8 +1,8 @@
 <?php
 
-require('../Common/models/Organisation.class.php');
-require('../Common/models/MembershipRequest.class.php');
-require_once ('../Common/lib/PDOWrapper.class.php');
+require_once '../Common/models/Organisation.php';
+require_once '../Common/models/MembershipRequest.php';
+require_once '../Common/lib/PDOWrapper.class.php';
 
 class OrganisationDao {
     public function find($params) {
@@ -78,7 +78,7 @@ class OrganisationDao {
         if($result = $db->call("searchForOrg", $db->cleanseWrapStr($org_name))) {
             $ret = array();
             foreach($result as $row) {
-                $ret[] = new Organisation($row);
+                $ret[] = ModelFactory::BuildModel("Organisation", $row);
             }
         }
 
@@ -101,7 +101,7 @@ class OrganisationDao {
         $ret = null;
         if($results = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
             foreach($results as $result){  
-            $ret[] = new MembershipRequest($result);
+                $ret[] = ModelFactory::BuildModel("MembershipRequest", $result);
             }
         }
         return $ret;
@@ -140,7 +140,7 @@ class OrganisationDao {
                     'biography' => $result['biography']
         );
 
-        return new Organisation($org_data);
+        return ModelFactory::BuildModel("Organisation", $org_data);
     }
    
     

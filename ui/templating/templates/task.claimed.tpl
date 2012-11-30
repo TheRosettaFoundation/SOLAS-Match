@@ -1,5 +1,5 @@
 {include file="header.tpl"}
-{assign var=task_id value=$task->getTaskId()}
+{assign var=task_id value=$task->getId()}
 
 <section>
     <div class="page-header">
@@ -18,8 +18,8 @@
         
 	<ol>
 		<li><strong>Open the file</strong> that you have already saved to your computer.</li>
-		{if $task->getTargetId()}
-			<li><strong>Translate the file</strong> to <strong>{TemplateHelper::languageNameFromId($task->getTargetId())}</strong> using your favourite translation software.</li>
+		{if $task->getTargetLangId()}
+			<li><strong>Translate the file</strong> to <strong>{TemplateHelper::languageNameFromId($task->getTargetLangId())}</strong> using your favourite translation software.</li>
 		{/if}
 		<li><strong>Upload your finished translated file</strong> to the task page.</li>
 	</ol>

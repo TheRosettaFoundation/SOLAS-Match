@@ -29,26 +29,26 @@
     {if isset($languages)}
         <select name="nLanguage" id="nLanguage">
             {foreach $languages as $language}
-                {if $user->getNativeLanguageID() == $language->getID()}
-                    <option value="{$language->getID()}" selected="selected">{$language->getEnName()}</option>
+                {if $user->getNativeLangId() == $language->getID()}
+                    <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
                 {else}
-                    <option value="{$language->getID()}">{$language->getEnName()}</option>
+                    <option value="{$language->getId()}">{$language->getName()}</option>
                 {/if}
             {/foreach}
         </select>
     {if isset($countries)}
         <select name="nLanguageCountry" id="nLanguageCountry">
             {foreach $countries as $country}
-                {if $user->getNativeRegionID() == $country->getID()}
-                <option value="{$country->getID()}" selected="selected">{$country->getEnName()}</option>
+                {if $user->getNativeRegionId() == $country->getId()}
+                <option value="{$country->getId()}" selected="selected">{$country->getName()}</option>
                 {else}
-                    <option value="{$country->getID()}">{$country->getEnName()}</option>
+                    <option value="{$country->getId()}">{$country->getName()}</option>
                 {/if}
             {/foreach}
         </select>
     {/if}
     {else}
-        <input type='text' name='nLanguage' id='nLanguage' value={$user->getNativeLanguage()} />
+        <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getNativeLanguage($user)} />
     {/if}
     <label for='bio'>Biography:</label>
     <textarea name='bio' cols='40' rows='5' {if $user->getBiography() == ''} placeholder="Enter Bio Here" {/if}

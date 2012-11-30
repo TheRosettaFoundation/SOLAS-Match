@@ -134,7 +134,7 @@ class OrgRouteHandler
             $post = (object)$app->request()->post();
             
             if(isset($post->email)) {
-                if(User::isValidEmail($post->email)) {       
+                if(TemplateHelper::isValidEmail($post->email)) {       
                     $url = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
                     $response = $client->call($url);
                     $user = $client->cast('User', $response);
@@ -281,7 +281,7 @@ class OrgRouteHandler
                     $params['description'] = $post->description;
                     $params['owner_id'] = null; 
 
-                    $updatedBadge = new Badge($params);
+                    $updatedBadge = ModelFactory::BuildModel("Badge", $params);
                     $request = APIClient::API_VERSION."/badges/{$post->badge_id}";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $updatedBadge); 
                     $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
@@ -353,7 +353,7 @@ class OrgRouteHandler
             $post = (object) $app->request()->post();
             
             if(isset($post->email) && $post->email != '') {
-                if(User::isValidEmail($post->email)) {
+                if(TemplateHelper::isValidEmail($post->email)) {
                     
                     $request = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
@@ -370,7 +370,7 @@ class OrgRouteHandler
                         $badge_ids = array();
                         if(count($user_badges) > 0) {
                             foreach($user_badges as $badge_tmp) {
-                                $badge_ids[] = $badge_tmp->getBadgeId();
+                                $badge_ids[] = $badge_tmp->getId();
                             }
                         }
                         
@@ -420,7 +420,7 @@ class OrgRouteHandler
         }
     
         $user_list = array();
-        $request = APIClient::API_VERSION."/badges/{$badge->getBadgeId()}/users";
+        $request = APIClient::API_VERSION."/badges/{$badge->getId()}/users";
         $response = $client->call($request);        
         if($response) {
             foreach($response as $stdObject) {
@@ -451,8 +451,8 @@ class OrgRouteHandler
                 $params['description'] = $post->description;
                 $params['owner_id'] = $org_id;
 
-                $badge = new Badge($params);
-                $request = APIClient::API_VERSION."/badges/{$badge->getBadgeId()}";
+                $badge = ModelFactory::BuildModel("Badge", $params);
+                $request = APIClient::API_VERSION."/badges/{$badge->getId()}";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $badge);                
                 
                 $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));

@@ -1,5 +1,5 @@
 {include file="header.tpl"}
-{assign var=task_id value=$task->getTaskId()}
+{assign var=task_id value=$task->getId()}
 
 <section>
 	<div class="page-header">

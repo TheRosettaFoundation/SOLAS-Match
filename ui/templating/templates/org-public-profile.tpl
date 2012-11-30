@@ -73,7 +73,7 @@
         <p>
             {if isset($user)}
                 {if in_array($user->getUserId(), $org_members)}
-                    {assign var="badge_id" value=$badge->getBadgeId()}
+                    {assign var="badge_id" value=$badge->getId()}
                     {assign var="org_id" value=$org->getId()}
                     
                     <div class="pull-right">
