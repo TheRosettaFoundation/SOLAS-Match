@@ -9,7 +9,7 @@
 
 <p>
     A task that you are following on SOLAS Match has changed its state.
-    The task "{$task->getTitle()}{$task->getTaskId()}" has been claimed by
+    The task "{$task->getTitle()}{$task->getId()}" has been claimed by
     {if $translator && $translator->getDisplayName() != ''}
         {$translator->getDisplayName()}
     {else}

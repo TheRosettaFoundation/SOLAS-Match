@@ -1,5 +1,5 @@
 {include file="header.tpl"}
-{assign var=task_id value=$task->getTaskId()}
+{assign var=task_id value=$task->getId()}
 
 <section>
 	<div class="page-header">
@@ -15,7 +15,7 @@
 	<ol>
 		<li>Can you <strong>open the file</strong> on your computer?</li>
 		<li><strong>Will you have enough time to translate</strong> this file? Check how long the file is.</li>
-		{if $task->getTargetId()}
+		{if $task->getTargetLangId()}
 			<li>Do you think you're capable of translating this file <strong>to {$targetLanguage->getName()}</strong>?</li>
 		{/if}
 	</ol>

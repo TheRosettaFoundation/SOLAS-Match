@@ -77,6 +77,20 @@ class TemplateHelper {
         return (strlen($password) > 0);
     }
 
+    public static function getTaskSourceLanguage($task)
+    {
+        $language =  TemplateHelper::languageNameFromId($task->getSourceLangId());
+        $region =  TemplateHelper::countryNameFromCode($task->getSourceRegionId());
+        return $language.' ('.$region.')';
+    }
+
+    public static function getTaskTargetLanguage($task)
+    {
+        $language =  TemplateHelper::languageNameFromId($task->getTargetLangId());
+        $region =  TemplateHelper::countryNameFromCode($task->getTargetRegionId());
+        return $language.' ('.$region.')';
+    }
+
     public static function getNativeLanguage($user) {
         $language = TemplateHelper::languageNameFromId($user->getNativeLangId());
         $region = TemplateHelper::countryNameFromId($user->getNativeRegionId());

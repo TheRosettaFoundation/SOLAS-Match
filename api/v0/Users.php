@@ -139,7 +139,7 @@ class Users {
             $data= APIHelper::deserialiser($data, $format);
             $data= APIHelper::cast("Task", $data);
             $dao = new TaskDao;
-            Dispatcher::sendResponce(null, array("result"=>$dao->claimTaskbyID($data->getTaskId(), $id)), null, $format);
+            Dispatcher::sendResponce(null, array("result"=>$dao->claimTaskbyID($data->getId(), $id)), null, $format);
             $dao = new UserDao();
             
             Notify::notifyUserClaimedTask($dao->find(array("user_id"=>$id)), $data);
@@ -225,7 +225,7 @@ class Users {
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $data= APIHelper::deserialiser($data, $format);
             $data= APIHelper::cast("Task", $data);
-            $data=$dao->trackTask($id, $data->getTaskId());
+            $data=$dao->trackTask($id, $data->getId());
             Dispatcher::sendResponce(null, $data , null, $format);
         },'addUserTrackedTasks');
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/tracked_tasks/:taskID/', function ($id,$taskID,$format=".json"){

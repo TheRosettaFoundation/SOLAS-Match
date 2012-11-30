@@ -1,13 +1,13 @@
 {* Must have an object $task assigned by parent *}
 <div class="task">
-    {assign var='task_id' value=$task->getTaskId()}
+    {assign var='task_id' value=$task->getId()}
 	<h2>{$task->getTitle()}</h2>
 	<p>
-		{if $task->getSourceId()}
-			From <b>{TemplateHelper::languageNameFromId($task->getSourceId())}</b>
+		{if $task->getSourceLangId()}
+			From <b>{TemplateHelper::languageNameFromId($task->getSourceLangId())}</b>
 		{/if}
-		{if $task->getTargetId()}
-			To <b>{TemplateHelper::languageNameFromId($task->getTargetId())}</b>
+		{if $task->getTargetLangId()}
+			To <b>{TemplateHelper::languageNameFromId($task->getTargetLangId())}</b>
 		{/if}                
 
 		{foreach from=$task->getTags() item=tag}
@@ -17,7 +17,7 @@
 	
 	<p class="task_details">
 		Added {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago
-		&middot; By {TemplateHelper::orgNameFromId($task->getOrganisationId())}
+		&middot; By {TemplateHelper::orgNameFromId($task->getOrgId())}
 		{if $task->getWordcount()}
 			&middot; {$task->getWordcount()|number_format} words
 		{/if}

@@ -49,7 +49,7 @@
             {foreach from=$tasksData item=data}
                 <tr>
                 {assign var="taskObject" value=$data['task']}
-                {assign var="task_id" value=$taskObject->getTaskId()}
+                {assign var="task_id" value=$taskObject->getId()}
                     <td>
                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$taskObject->getTitle()}</a>
                     </td>

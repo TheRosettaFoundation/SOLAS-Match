@@ -1,5 +1,5 @@
 <?php
-require_once '../Common/models/Task.class.php';
+require_once '../Common/models/Task.php';
 require_once 'TaskTags.class.php';
 require_once 'TaskFile.class.php';
 require_once '../Common/lib/PDOWrapper.class.php';
@@ -21,7 +21,7 @@ class TaskDao {
         if(!is_array($params)&&  is_object($params)){
             $task   = APIHelper::cast("Task", $params);
         } else {
-            $task = new Task($params);
+            $task = ModelFactory::BuildModel("Task", $params);
         }
 		$this->save($task);
 		return $task;
@@ -73,7 +73,7 @@ class TaskDao {
                             $task_data['tags'] = $tags;
                         }
 
-                        $task = new Task($task_data);
+                        $task = ModelFactory::BuildModel("Task", $task_data);
                         if (is_object($task)) {
                             $tasks[] = $task;
                         }
@@ -137,7 +137,7 @@ class TaskDao {
                                 $task_data['tags'] = $tags;
                             }
 
-                            $task = new Task($task_data);
+                            $task = ModelFactory::BuildModel("Task", $task_data);
                             if (is_object($task)) {
                                 $tasks[] = $task;
                             }
@@ -158,13 +158,13 @@ class TaskDao {
 	 **/
 	public function save(&$task)
 	{
-		if (is_null($task->getTaskId())) {
+		if (is_null($task->getId())) {
 			$this->_insert($task);
 		}
 		else {
 			$this->_update($task);
             //Only calc scores for tasks with MetaData
-            $this->calculateTaskScore($task->getTaskId());
+            $this->calculateTaskScore($task->getId());
 		}
 	}
 
@@ -180,12 +180,12 @@ class TaskDao {
         $old_file_path = Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
 
         //Remove ID so a new one will be created
-        $task->setTaskId(null);
-        $task->setTargetId($language_id);
-        $task->setTargetCountryCode($countryCode);
+        $task->setId(null);
+        $task->setTargetLangId($language_id);
+        $task->setTargetRegionId($countryCode);
         //Save the new Task
         $this->save($task);
-        $this->calculateTaskScore($task->getTaskId());
+        $this->calculateTaskScore($task->getId());
 
         //Generate new file info and save it
         TaskFile::recordFileUpload($task,$task_file_info['filename'],$task_file_info['content_type'],$userID);
@@ -208,7 +208,7 @@ class TaskDao {
     private function _update($task) {
         $db = new PDOWrapper();
         $db->init();
-        $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getTaskId())},{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())},{$db->cleanseNullOrWrapStr($task->getSourceCountryCode())},{$db->cleanseNullOrWrapStr($task->getTargetCountryCode())}");
+        $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getId())},{$db->cleanseNull($task->getOrgId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceLangId())},{$db->cleanseNull($task->getTargetLangId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())},{$db->cleanseNullOrWrapStr($task->getSourceRegionId())},{$db->cleanseNullOrWrapStr($task->getTargetRegionId())}");
         $this->_updateTags($task);
     }
     
@@ -282,8 +282,13 @@ class TaskDao {
     private function _insert(&$task) {
         $db = new PDOWrapper();
         $db->init();
-        $result= $db->call("taskInsertAndUpdate", "null,{$db->cleanseNull($task->getOrganisationId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceId())},{$db->cleanseNull($task->getTargetId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())},{$db->cleanseNullOrWrapStr($task->getSourceCountryCode())},{$db->cleanseNullOrWrapStr($task->getTargetCountryCode())}");
-        $task->setTaskId($result[0]['id']);
+        $result= $db->call("taskInsertAndUpdate", "null,".$db->cleanseNull($task->getOrgId()).",".
+                $db->cleanseNullOrWrapStr($task->getTitle()).",".$db->cleanseNull($task->getWordCount()).",".
+                $db->cleanseNull($task->getSourceLangId()).",".$db->cleanseNull($task->getTargetLangId()).",".
+                $db->cleanseNullOrWrapStr($task->getCreatedTime()).",".$db->cleanseNullOrWrapStr($task->getImpact()).",".
+                $db->cleanseNullOrWrapStr($task->getReferencePage()).",".$db->cleanseNullOrWrapStr($task->getSourceRegionId()).",".
+                $db->cleanseNullOrWrapStr($task->getTargetRegionId()));
+        $task->setId($result[0]['id']);
         $this->_updateTags($task);
     }
 
@@ -296,7 +301,7 @@ class TaskDao {
                     foreach($r as $row)	{
                             // Add a new Job object to the array to be returned.
                             $task = self::find(array('task_id' => $row['id']));
-                            if (!$task->getTaskId()) {
+                            if (!$task->getId()) {
                                     throw new Exception('Tried to create a task, but its ID is not set.');
                             }
                             $ret[] = $task;
@@ -316,7 +321,7 @@ class TaskDao {
             $ret = array();
             foreach($result as $row) {
                 $task = self::find(array('task_id' => $row['id']));
-                if(!$task->getTaskId()) {
+                if(!$task->getId()) {
                     throw new Exception('Tried to create a task, but its ID is not set.');
                 }
                 $ret[] = $task;
@@ -352,7 +357,7 @@ class TaskDao {
 	}
 
 	public function moveToArchive($task) {
-		$this->moveToArchiveByID($task->getTaskId());
+		$this->moveToArchiveByID($task->getId());
 	}
         public function moveToArchiveByID($taskID) {
 		$db = new PDOWrapper();
@@ -361,7 +366,7 @@ class TaskDao {
 	}
 
 	public function claimTask($task, $user) {
-                return $this->claimTaskbyID($task->getTaskId(), $user->getUserId());
+                return $this->claimTaskbyID($task->getId(), $user->getUserId());
 	}
         
         public function claimTaskbyID($task_id, $user_id) {
@@ -439,8 +444,8 @@ class TaskDao {
                 $params['target_id'] = $row['target_id'];
                 $params['word_count'] = $row['word_count'];
                 $params['created_time'] = $row['created_time'];
-                $task = new Task($params);
-                $task->setStatus($this->getTaskStatus($task->getTaskId()));
+                $task = ModelFactory::BuildModel("Task", $params);
+                $task->setStatus($this->getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }

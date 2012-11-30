@@ -19,12 +19,12 @@ class TaskTags {
 	public static function deleteTaskTags($task) {
             $db = new PDOWrapper();
             $db->init();
-            $db->call("unlinkStoredTags", "{$db->cleanse($task->getTaskId())}");
+            $db->call("unlinkStoredTags", "{$db->cleanse($task->getId())}");
 	}
 
 	public static function setTaskTags($task, $tag_ids) {
 		foreach ($tag_ids as $tag_id) {
-			self::setTaskTag($task->getTaskId(), $tag_id);
+			self::setTaskTag($task->getId(), $tag_id);
 		}
 	}
 

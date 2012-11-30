@@ -212,7 +212,7 @@ class UserRouteHandler
                 if($task->getTitle() != '') {
                     $task_title = $task->getTitle();
                 } else {
-                    $task_title = "task ".$task->getTaskId();
+                    $task_title = "task ".$task->getId();
                 }
                 if($post->track == "Ignore") {
                    
@@ -248,9 +248,9 @@ class UserRouteHandler
                     foreach($taskArray as $task){
                         $temp = array();
                         $temp['task']=$task;
-                        $temp['translated']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/version")>0;
-                        $temp['taskClaimed']=$client->call(APIClient::API_VERSION."/tasks/{$task->getTaskId()}/claimed")==1;//$task_dao->taskIsClaimed($task->getTaskId());
-                        $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getTaskId()}")==1;
+                        $temp['translated']=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/version")>0;
+                        $temp['taskClaimed']=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/claimed")==1;
+                        $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getId()}")==1;
                         $taskData[]=$temp;
                     }
                 } else {

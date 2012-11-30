@@ -13,6 +13,7 @@ require_once __DIR__."/../models/Tag.php";
 require_once __DIR__."/../models/Organisation.php";
 require_once __DIR__."/../models/TaskMetadata.php";
 require_once __DIR__."/../models/User.php";
+require_once __DIR__."/../models/Task.php";
 
 class ModelFactory
 {
@@ -60,6 +61,9 @@ class ModelFactory
                 break;
             case "User":
                 $ret = ModelFactory::GenerateUser($modelData);
+                break;
+            case "Task":
+                $ret = ModelFactory::GenerateTask($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -325,6 +329,52 @@ class ModelFactory
         }
         if(isset($modelData['created_time'])) {
             $ret->setCreatedTime($modelData['created_time']);
+        }
+
+        return $ret;
+    }
+
+    private static function GenerateTask($modelData)
+    {
+        $ret = new Task();
+
+        if(isset($modelData['task_id'])) {
+            $ret->setId($modelData['task_id']);
+        }
+        if(isset($modelData['organisation_id'])) {
+            $ret->setOrgId($modelData['organisation_id']);
+        }
+        if(isset($modelData['title'])) {
+            $ret->setTitle($modelData['title']);
+        }
+        if(isset($modelData['word_count'])) {
+            $ret->setWordCount($modelData['word_count']);
+        }
+        if(isset($modelData['source_id'])) {
+            $ret->setSourceLangId($modelData['source_id']);
+        }
+        if(isset($modelData['target_id'])) {
+            $ret->setTargetLangId($modelData['target_id']);
+        }
+        if(isset($modelData['created_time'])) {
+            $ret->setCreatedTime($modelData['created_time']);
+        }
+        if(isset($modelData['impact'])) {
+            $ret->setImpact($modelData['impact']);
+        }
+        if(isset($modelData['reference_page'])) {
+            $ret->setReferencePage($modelData['reference_page']);
+        }
+        if(isset($modelData['sourceCountry'])) {
+            $ret->setSourceRegionId($modelData['sourceCountry']);
+        }
+        if(isset($modelData['targetCountry'])) {
+            $ret->setTargetRegionId($modelData['targetCountry']);
+        }
+        if(isset($modelData['tags'])) {
+            foreach($modelData['tags'] as $tag) {
+                $ret->addTags($tag);
+            }
         }
 
         return $ret;

@@ -92,7 +92,7 @@ class Middleware
             $response = $client->call($request, HTTP_Request2::METHOD_GET);   
             $task = $client->cast('Task', $response);
             
-            $org_id = $task->getOrganisationId();
+            $org_id = $task->getOrgId();
             $user_id = UserSession::getCurrentUserID();
 
             if($user_id) {
@@ -146,7 +146,7 @@ class Middleware
                 return true;
             } elseif(!is_null($user_orgs)) {
                 foreach($user_orgs as $orgObject) {
-                    if($orgObject->getId() == $task->getOrganisationId()) {
+                    if($orgObject->getId() == $task->getOrgId()) {
                         return true;
                     }
                 }                

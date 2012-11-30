@@ -425,8 +425,8 @@ class UserDao {
                 $params['target_id'] = $row['target_id'];
                 $params['word_count'] = $row['word_count'];
                 $params['created_time'] = $row['created_time'];
-                $task = new Task($params);
-                $task->setStatus($dao->getTaskStatus($task->getTaskId()));
+                $task = ModelFactory::BuildModel("Task", $params);
+                $task->setStatus($dao->getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }

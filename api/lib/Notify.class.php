@@ -27,7 +27,7 @@ class Notify
             if($messagingClient->init()) {
                 $message_type = new UserTaskClaim();
                 $message_type->user_id = $user->getUserId();
-                $message_type->task_id = $task->getTaskId();
+                $message_type->task_id = $task->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                         $messagingClient->UserTaskClaimTopic);
@@ -37,7 +37,7 @@ class Notify
         } else {
         	$app 		= Slim::getInstance();
             $settings   = new Settings();
-            $task_url 	= $settings->get('site.url') .  "/task/id/{$task->getTaskId()}/";
+            $task_url 	= $settings->get('site.url') .  "/task/id/{$task->getId()}/";
 
             $app->view()->appendData(array(
                     'site_name' => $settings->get('site.name'),
@@ -141,7 +141,7 @@ class Notify
 
         $settings = new Settings();
         $task_dao = new TaskDao();
-        $subscribed_users = $task_dao->getSubscribedUsers($task->getTaskId());
+        $subscribed_users = $task_dao->getSubscribedUsers($task->getId());
 
         if(count($subscribed_users) > 0) {
 
@@ -152,7 +152,7 @@ class Notify
                     switch($notificationType) {
                         case NotificationTypes::Archive:
                             $message_type = new TaskArchived();
-                            $message_type->task_id = $task->getTaskId();
+                            $message_type->task_id = $task->getId();
                             foreach($subscribed_users as $user) {
                                 $message_type->user_id = $user->getUserId();
                                 $message = $messagingClient->createMessageFromProto($message_type);
@@ -162,8 +162,8 @@ class Notify
                             break;
                         case NotificationTypes::Claim:
                             $message_type = new TaskClaimed();
-                            $message_type->task_id = $task->getTaskId();
-                            $translator = $task_dao->getTaskTranslator($task->getTaskId());
+                            $message_type->task_id = $task->getId();
+                            $translator = $task_dao->getTaskTranslator($task->getId());
                             $message_type->translator_id = $translator->getUserId();
                             foreach($subscribed_users as $user) {
                                 $message_type->user_id = $user->getUserId();
@@ -174,8 +174,8 @@ class Notify
                             break;
                         case NotificationTypes::Upload:
                             $message_type = new TaskTranslationUploaded();
-                            $message_type->task_id = $task->getTaskId();
-                            $translator = $task_dao->getTaskTranslator($task->getTaskId());
+                            $message_type->task_id = $task->getId();
+                            $translator = $task_dao->getTaskTranslator($task->getId());
                             $message_type->translator_id = $translator->getUserId();
                             foreach($subscribed_users as $user) {
                                 $message_type->user_id = $user->getUserId();
@@ -194,14 +194,14 @@ class Notify
                 $app = Slim::getInstance();
 
                 $translator = null;
-                if($task_dao->taskIsClaimed($task->getTaskId())) {
-                    $translator = $task_dao->getTaskTranslator($task->getTaskId());
+                if($task_dao->taskIsClaimed($task->getId())) {
+                    $translator = $task_dao->getTaskTranslator($task->getId());
                 }
 
                 $site_url = $settings->get('site.url');
     
                 $org_dao = new OrganisationDao();
-                $org = $org_dao->find(array('id' => $task->getOrganisationId()));
+                $org = $org_dao->find(array('id' => $task->getOrgId()));
 
                 if(count($subscribed_users) > 0) {
                     foreach($subscribed_users as $user) {
