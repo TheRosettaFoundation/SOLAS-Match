@@ -197,11 +197,10 @@ class TaskDao {
         $new_file_path = Upload::absoluteFilePathForUpload($task, 0, $file_info['filename']);
         
         Upload::createFolderPath($task);
-//        if(!copy($old_file_path, $new_file_path)) {
-//            $error = "Failed to copy file to new location";
-//            return 0;
-//        }
-        echo $new_file_path;
+        if(!copy($old_file_path, $new_file_path)) {
+            $error = "Failed to copy file to new location";
+            return 0;
+        }
         return 1;
     }
 
