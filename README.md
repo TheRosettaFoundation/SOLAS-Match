@@ -61,7 +61,7 @@ Further below in this document, there are also several resources for our work mo
     add path to upload directoy to vour host apache2.conf,vHost or httpd.conf(recommended) eg 
     <Directory /var/www/>
 		AllowOverride All
-		XSendFilePath /path/to/SOLAS-Match/app/uploads/
+		XSendFilePath /path/to/SOLAS-Match/uploads/
     </Directory>
 
 
