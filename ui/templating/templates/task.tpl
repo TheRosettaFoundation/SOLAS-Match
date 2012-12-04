@@ -80,6 +80,9 @@
             <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-large btn-primary">
             <i class="icon-download icon-white"></i> Download the file to preview</a>
         </p>
+        <hr />
+        <center><h2>Document Preview <small>{$filename}</small></h2></center>
+        <iframe src="http://docs.google.com/viewer?url={urlencode($file_preview_path)}&embedded=true" width="800" height="780" style="border: none;"></iframe>
     {else}
         <div class="page-header">
             <h1>Participate in this task</h1>
@@ -89,10 +92,7 @@
             <a class="btn btn-primary" href="{urlFor name="register"}">Register</a>
             <a class="btn" href="{urlFor name="login"}">Log In</a>
         </p>
-     {/if}
-     <hr />
-     <center><h2>Document Preview <small>{$filename}</small></h2></center>
-    <iframe src="http://docs.google.com/viewer?url={urlencode($file_preview_path)}&embedded=true" width="800" height="780" style="border: none;"></iframe>
+    {/if}
 {/if}
 <p style="margin-bottom:40px;"></p>
 {if isset($this_user_has_claimed_this_task)}
