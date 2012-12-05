@@ -12,7 +12,7 @@ class TipSelector
     {
         $this->_tip_list = array();
 
-        $tip_file = __DIR__.'/../resources/tips/tips.txt';
+        $tip_file = __DIR__.'/../../resources/tips/tips.txt';
         $handle = fopen($tip_file, 'r');
 
         while($tmp = fgets($handle)) {
