@@ -683,7 +683,14 @@ class UserRouteHandler
         }            
         
         $request = APIClient::API_VERSION."/users/$user_id/orgs";
-        $orgs = $client->call($request); 
+        $orgs = $client->call($request);
+
+        $user_orgs = array();
+        if($orgs) {
+            foreach($orgs as $org) {
+                $user_orgs[] = $client->cast('Organisation', $org);
+            }
+        }
         
         $badges = array();
         $orgList = array();
@@ -702,9 +709,10 @@ class UserRouteHandler
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
-              
+
         $app->view()->setData('orgList',  $orgList);
         $app->view()->appendData(array('badges' => $badges,
+                                    'user_orgs' => $user_orgs,
                                     'current_page' => 'user-profile',
                                     'activeJobs' => $activeJobs,
                                     'archivedJobs' => $archivedJobs,

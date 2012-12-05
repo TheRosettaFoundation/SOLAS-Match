@@ -103,8 +103,8 @@
     {/if}
 {/if}
 
-{if isset($orgList)}
-    {if count($orgList) > 0}
+{if isset($user_orgs)}
+    {if count($user_orgs) > 0}
         <div class='page-header'>
             <h1>
                 Organisations <small>A list of organisations you belong to</small>
@@ -114,7 +114,7 @@
             </h1>
         </div>
 
-        {foreach $orgList as $org}
+        {foreach $user_orgs as $org}
             <div class="row">
                 {assign var="org_id" value=$org->getId()}
                 {assign var="user_id" value=$this_user->getUserId()}
