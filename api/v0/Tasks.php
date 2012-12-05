@@ -124,6 +124,7 @@ class Tasks {
             $dao = new TaskDao();
             $task= $dao->getTask(array("task_id"=>$id));
             if(is_array($task))$task=$task[0];
+            Notify::sendEmailNotifications($task, NotificationTypes::Upload);
             //touch this and you will die painfully sinisterly sean :)
             Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename);
         },'saveTaskFile');
