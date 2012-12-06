@@ -112,23 +112,27 @@ class Orgs {
         },'createMembershipRequests');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/requests/:uid/', function ($id,$uid,$format=".json"){
-           if(!is_numeric($uid)&& strstr($uid, '.')){
-              $uid= explode('.', $uid);
-              $format='.'.$uid[1];
-              $uid=$uid[0];
-           }
-           $dao = new OrganisationDao();
-           Dispatcher::sendResponce(null, $dao->acceptMemRequest($id,$uid), null, $format);
+            if(!is_numeric($uid)&& strstr($uid, '.')){
+                $uid= explode('.', $uid);
+                $format='.'.$uid[1];
+                $uid=$uid[0];
+            }
+            Notify::notifyUserOrgMembershipRequest($uid, $id, true);
+
+            $dao = new OrganisationDao();
+            Dispatcher::sendResponce(null, $dao->acceptMemRequest($id,$uid), null, $format);
         },'acceptMembershipRequests');
         
          Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:id/requests/:uid/', function ($id,$uid,$format=".json"){
-           if(!is_numeric($uid)&& strstr($uid, '.')){
-              $uid= explode('.', $uid);
-              $format='.'.$uid[1];
-              $uid=$uid[0];
-           }
-           $dao = new OrganisationDao();
-           Dispatcher::sendResponce(null, $dao->refuseMemRequest($id,$uid), null, $format);
+            if(!is_numeric($uid)&& strstr($uid, '.')){
+                $uid= explode('.', $uid);
+                $format='.'.$uid[1];
+                $uid=$uid[0];
+            }
+            Notify::notifyUserOrgMembershipRequest($uid, $id, false);
+
+            $dao = new OrganisationDao();
+            Dispatcher::sendResponce(null, $dao->refuseMemRequest($id,$uid), null, $format);
         },'rejectMembershipRequests');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/tasks(:format)/', function ($id,$format=".json"){

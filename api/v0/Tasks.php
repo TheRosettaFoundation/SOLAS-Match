@@ -70,6 +70,8 @@ class Tasks {
                $id=$id[0];
             }
             $dao = new TaskDao();
+            $task = $dao->find(array('task_id' => $id));
+            Notify::sendEmailNotifications($task, NotificationTypes::Archive);
             Dispatcher::sendResponce(null, $dao->moveToArchiveByID($id), null, $format);
         },'archiveTask');
         

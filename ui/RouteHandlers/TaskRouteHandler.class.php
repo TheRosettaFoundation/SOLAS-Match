@@ -222,8 +222,6 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-//        Notify::sendEmailNotifications($task, NotificationTypes::Archive);
-        
         $request = APIClient::API_VERSION."/tasks/archiveTask/$task_id";
         $response = $client->call($request, HTTP_Request2::METHOD_PUT);        
         
@@ -904,7 +902,6 @@ class TaskRouteHandler
         }
         
         if (is_null($error_message)) {
-//            Notify::sendEmailNotifications($task, NotificationTypes::Upload);
             $app->redirect($app->urlFor('task-uploaded-edit', array('task_id' => $task_id)));
         } else {
             $app->flash("error", $error_message);

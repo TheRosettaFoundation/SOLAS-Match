@@ -86,8 +86,14 @@ class Notify
         }
     }
 
-    public static function notifyUserOrgMembershipRequest($user, $org, $accepted)
+    public static function notifyUserOrgMembershipRequest($user_id, $org_id, $accepted)
     {
+        $org_dao = new OrganisationDao();
+        $org = $org_dao->find(array('id' => $org_id));
+
+        $user_dao = new UserDao();
+        $user = $user_dao->find(array('user_id' => $user_id));
+
         $settings = new Settings();
         $use_backend = $settings->get('site.backend');
         if(strcasecmp($use_backend, "y") == 0) {

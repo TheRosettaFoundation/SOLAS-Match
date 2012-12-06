@@ -83,8 +83,9 @@ class TaskDao {
             return $tasks;
 	}
 
-	public function find($params) {
-		$permitted_params = array(
+    public function find($params) 
+    {
+	    $permitted_params = array(
 			'task_id',
 		);
 
@@ -99,9 +100,9 @@ class TaskDao {
 			}
 		}
                 
-                $result = self::getTask($params);
-                return $result[0];
-	}
+        $result = self::getTask($params);
+        return $result[0];
+   }
         
         public function getTask($params){
             $db=new PDOWrapper();
