@@ -356,13 +356,18 @@ class TaskDao {
 		return $ret;
 	}
 
-	public function moveToArchive($task) {
+	public function moveToArchive($task) 
+    {
 		$this->moveToArchiveByID($task->getId());
 	}
-        public function moveToArchiveByID($taskID) {
+
+    public function moveToArchiveByID($taskID) 
+    {
+        $task = $this->find(array("task_id" => $taskID));
+        Notify::sendEmailNotifications($task, NotificationTypes::Archive);
 		$db = new PDOWrapper();
 		$db->init();
-                $db->call("archiveTask", "{$db->cleanse($taskID)}");
+        $db->call("archiveTask", "{$db->cleanse($taskID)}");
 	}
 
 	public function claimTask($task, $user) {
