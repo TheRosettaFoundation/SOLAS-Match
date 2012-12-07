@@ -368,10 +368,10 @@ class UserRouteHandler
         $client = new APIClient();
         
         $request = APIClient::API_VERSION."/password_reset/$uid";
-        $response = $client->call($request);        
-        $reset_request = $client->cast('PasswordResetRequest', $response);
-
-        if($reset_request->getUserId()== '') {
+        $response = $client->call($request);
+        if(is_object($response)) {
+            $reset_request = $client->cast('PasswordResetRequest', $response);
+        } else {
             $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
             $app->redirect($app->urlFor('home'));
         }

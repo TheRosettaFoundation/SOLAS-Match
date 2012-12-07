@@ -51,9 +51,11 @@ class Notify
         }
 	}
 
-    public static function sendPasswordResetEmail($uid, $user)
+    public static function sendPasswordResetEmail($uid, $user_id)
     {
         $settings = new Settings();
+        $userDao = new UserDao();
+        $user = $userDao->find(array('user_id' => $user_id));
 
         $use_backend = $settings->get('site.backend');
         if(strcasecmp($use_backend, "y") == 0) {

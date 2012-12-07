@@ -438,7 +438,7 @@ class UserDao {
         if(!$this->hasRequestedPasswordResetID($user_id)) {       
             $uid = md5(uniqid(rand()));
             $this->addPasswordResetRequest($uid, $user_id);   
-            Notify::sendPasswordResetEmail($uid, $this->getUser($user_id, null, null, null, null, null, null, null, null));
+            Notify::sendPasswordResetEmail($uid, $user_id);
             return 1;
         }
         return 0;
