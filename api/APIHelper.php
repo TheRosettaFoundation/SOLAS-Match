@@ -32,7 +32,7 @@ class APIHelper {
             }
             case FormatEnum::XML: {
                 $data = json_encode($body);
-                $data =Json_to_xml::convert($data,'fragment');
+                $data =JsonToXml::convert($data,'fragment');
                 return $data;
             }
             

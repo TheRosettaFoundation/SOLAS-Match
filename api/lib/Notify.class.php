@@ -1,4 +1,5 @@
 <?php
+
 require_once 'Email.class.php';
 require_once 'HTTP/Request2.php';
 require_once __DIR__.'/MessagingClient.class.php';
@@ -22,9 +23,9 @@ class Notify
     {
         $settings = new Settings();
         $use_backend = $settings->get('site.backend');
-        if(strcasecmp($use_backend, "y") == 0) {
+        if (strcasecmp($use_backend, "y") == 0) {
             $messagingClient = new MessagingClient();
-            if($messagingClient->init()) {
+            if ($messagingClient->init()) {
                 $message_type = new UserTaskClaim();
                 $message_type->user_id = $user->getUserId();
                 $message_type->task_id = $task->getId();
@@ -35,7 +36,7 @@ class Notify
                 echo "<p>Failed to initialize messaging client</p>";
             }
         } else {
-        	$app 		= Slim::getInstance();
+            $app        = Slim::getInstance();
             $settings   = new Settings();
             $task_url 	= $settings->get('site.url') .  "/task/id/{$task->getId()}/";
 
@@ -49,7 +50,7 @@ class Notify
 
             Email::sendEmail($user_email, $email_subject, $email_body);
         }
-	}
+    }
 
     public static function sendPasswordResetEmail($uid, $user_id)
     {
@@ -58,9 +59,9 @@ class Notify
         $user = $userDao->find(array('user_id' => $user_id));
 
         $use_backend = $settings->get('site.backend');
-        if(strcasecmp($use_backend, "y") == 0) {
+        if (strcasecmp($use_backend, "y") == 0) {
             $messagingClient = new MessagingClient();
-            if($messagingClient->init()) {
+            if ($messagingClient->init()) {
                 $message_type = new PasswordResetEmail();
                 $message_type->user_id = $user->getUserId();
                 $message = $messagingClient->createMessageFromProto($message_type);
@@ -75,7 +76,6 @@ class Notify
             $settings = new Settings();
             $site_url = $settings->get('site.url');
             $site_url .= "/$uid/password/reset";
-
 
             $app->view()->setData('site_url', $site_url);
             $app->view()->appendData(array('user' => $user));
@@ -98,10 +98,10 @@ class Notify
 
         $settings = new Settings();
         $use_backend = $settings->get('site.backend');
-        if(strcasecmp($use_backend, "y") == 0) {
+        if (strcasecmp($use_backend, "y") == 0) {
             $messagingClient = new MessagingClient();
-            if($messagingClient->init()) {
-                if($accepted) {
+            if ($messagingClient->init()) {
+                if ($accepted) {
                     $message_type = new OrgMembershipAccepted();
                     $message_type->user_id = $user->getUserId();
                     $message_type->org_id = $org->getId();
@@ -133,7 +133,7 @@ class Notify
 
             $user_email = $user->getEmail();
             $email_subject = "SOLAS Match: Organisation Membership Request Feedback";
-            if($accepted) {
+            if ($accepted) {
                 $email_body = $app->view()->fetch('email.org-membership-accepted.tpl');
             } else {
                 $email_body = $app->view()->fetch("email.org-membership-refused.tpl");
@@ -151,47 +151,51 @@ class Notify
         $task_dao = new TaskDao();
         $subscribed_users = $task_dao->getSubscribedUsers($task->getId());
 
-        if(count($subscribed_users) > 0) {
+        if (count($subscribed_users) > 0) {
 
             $use_backend = $settings->get('site.backend');
-            if(strcasecmp($use_backend, "y") == 0) {
+            if (strcasecmp($use_backend, "y") == 0) {
                 $messagingClient = new MessagingClient();
-                if($messagingClient->init()) {
-                    switch($notificationType) {
+                if ($messagingClient->init()) {
+                    switch ($notificationType) {
+                        
                         case NotificationTypes::ARCHIVE:
                             $message_type = new TaskArchived();
                             $message_type->task_id = $task->getId();
-                            foreach($subscribed_users as $user) {
+                            foreach ($subscribed_users as $user) {
                                 $message_type->user_id = $user->getUserId();
                                 $message = $messagingClient->createMessageFromProto($message_type);
                                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
                                         $messagingClient->TaskArchivedTopic);
                             }
                             break;
+                            
                         case NotificationTypes::CLAIM:
                             $message_type = new TaskClaimed();
                             $message_type->task_id = $task->getId();
                             $translator = $task_dao->getTaskTranslator($task->getId());
                             $message_type->translator_id = $translator->getUserId();
-                            foreach($subscribed_users as $user) {
+                            foreach ($subscribed_users as $user) {
                                 $message_type->user_id = $user->getUserId();
                                 $message = $messagingClient->createMessageFromProto($message_type);
                                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
                                         $messagingClient->TaskClaimedTopic);
                             }
                             break;
+                            
                         case NotificationTypes::UPLOAD:
                             $message_type = new TaskTranslationUploaded();
                             $message_type->task_id = $task->getId();
                             $translator = $task_dao->getTaskTranslator($task->getId());
                             $message_type->translator_id = $translator->getUserId();
-                            foreach($subscribed_users as $user) {
+                            foreach ($subscribed_users as $user) {
                                 $message_type->user_id = $user->getUserId();
                                 $message = $messagingClient->createMessageFromProto($message_type);
                                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
                                         $messagingClient->TaskTranslationUploadedTopic);
                             }
                             break;
+                            
                         default:
                             echo "<p>Invalid email type</p>";
                     }
@@ -202,7 +206,7 @@ class Notify
                 $app = Slim::getInstance();
 
                 $translator = null;
-                if($task_dao->taskIsClaimed($task->getId())) {
+                if ($task_dao->taskIsClaimed($task->getId())) {
                     $translator = $task_dao->getTaskTranslator($task->getId());
                 }
 
@@ -211,8 +215,8 @@ class Notify
                 $org_dao = new OrganisationDao();
                 $org = $org_dao->find(array('id' => $task->getOrgId()));
 
-                if(count($subscribed_users) > 0) {
-                    foreach($subscribed_users as $user) {
+                if (count($subscribed_users) > 0) {
+                    foreach ($subscribed_users as $user) {
                         $app->view()->setData('user', $user);
                         $app->view()->appendData(array(
                                 'task' => $task,

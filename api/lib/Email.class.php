@@ -1,7 +1,9 @@
 <?php
 
 class Email {
-    public static function sendEmail($recipient, $subject, $body) {
+    
+    public static function sendEmail($recipient, $subject, $body)
+    {
         $mailTo         = $recipient;
         $mailSubject    = $subject;
         $mailBody       = $body;
@@ -31,51 +33,50 @@ class Email {
         $mailParams = "$mailFrom";
  
         try {
-           $mailResult = Email::SendMail($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams);
-        }
-        catch (Exception $e) {
+            $mailResult = Email::sendMail($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams);
+        } catch (Exception $e) {
             trigger_error("Error sending email: " . $e->getMessage(), E_USER_WARNING);
         }
     }
-    
-    static function SendMail ($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams)
+
+    public static function sendMail ($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams)
     {
         $settings = new Settings();
-        if ($SMTPIN = fsockopen ($settings->get('mail.smtp_server'), $settings->get('messaging.smtp_port')))
-        {
+        if ($SMTPIN = fsockopen ($settings->get('mail.smtp_server'), $settings->get('messaging.smtp_port'))) {
             fputs ($SMTPIN, "EHLO ".$settings->get('mail.smtp_server')."\r\n");
-            $talk["hello"] = fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            $talk["hello"] .= fgets ( $SMTPIN,2048);
-            if(strpos($talk["hello"],"AUTH" )){
-                 $talk["hello"] .= fgets ( $SMTPIN,2048);
-                 $talk["hello"] .= fgets ( $SMTPIN,2048);
-                 fputs ($SMTPIN, "auth login\r\n");
-                 $talk["auth"] = fgets ( $SMTPIN, 2048);
-                 fputs ($SMTPIN, base64_encode($settings->get('mail.smtp_user'))."\r\n");
-                 $talk["username"] = fgets ( $SMTPIN, 2048 );
-                 fputs ($SMTPIN, base64_encode($settings->get('mail.smtp_pass'))."\r\n");
-                 $talk["pass"] = fgets ( $SMTPIN, 2048 );
+            $talk["hello"] = fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            $talk["hello"] .= fgets($SMTPIN, 2048);
+            if (strpos($talk["hello"], "AUTH" )) {
+                $talk["hello"] .= fgets($SMTPIN, 2048);
+                $talk["hello"] .= fgets($SMTPIN, 2048);
+                fputs ($SMTPIN, "auth login\r\n");
+                $talk["auth"] = fgets($SMTPIN, 2048);
+                fputs ($SMTPIN, base64_encode($settings->get('mail.smtp_user'))."\r\n");
+                $talk["username"] = fgets($SMTPIN, 2048 );
+                fputs ($SMTPIN, base64_encode($settings->get('mail.smtp_pass'))."\r\n");
+                $talk["pass"] = fgets($SMTPIN, 2048 );
             }
             
             fputs ($SMTPIN, "MAIL FROM: <".$mailParams.">\r\n");
-            $talk["From"] = fgets ( $SMTPIN, 1024 );
+            $talk["From"] = fgets ($SMTPIN, 1024 );
             fputs ($SMTPIN, "RCPT TO: <".$mailTo.">\r\n");
             $talk["To"] = fgets ($SMTPIN, 1024);
             fputs($SMTPIN, "DATA\r\n");
-            $talk["data"]=fgets( $SMTPIN,1024 );
-            fputs($SMTPIN, "To: <".$mailTo.">\r\nFrom: <".$mailParams.">\r\nSubject:".$mailSubject."\r\n\r\n\r\n".$mailBody."\r\n.\r\n");
-            $talk["send"]=fgets($SMTPIN,256);
+            $talk["data"] = fgets($SMTPIN, 1024 );
+            fputs($SMTPIN, "To: <".$mailTo.">\r\nFrom: <".$mailParams.">\r\nSubject:"
+                                    .$mailSubject."\r\n\r\n\r\n".$mailBody."\r\n.\r\n");
+            $talk["send"] = fgets($SMTPIN, 256);
             fputs ($SMTPIN, "QUIT\r\n");
             fclose($SMTPIN);
         }

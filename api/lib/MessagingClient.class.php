@@ -25,7 +25,7 @@ class MessagingClient
     private $pass;
     private $vhost;
 
-    public function MessagingClient()
+    public function messagingClient()
     {
         $settings = new Settings();
         $this->host = $settings->get('messaging.host');
@@ -33,7 +33,7 @@ class MessagingClient
         $this->user = $settings->get('messaging.mess_user');
         $this->pass = $settings->get('messaging.mess_pass');
         $vhost = $settings->get('messaging.virtualhost');
-        if($vhost != '') {
+        if ($vhost != '') {
             $this->vhost = $vhost;
         }
     }
@@ -53,13 +53,13 @@ class MessagingClient
 
         try {
             $conn = new AMQPConnection($this->host, $this->port, $this->user, $this->pass);
-        } catch(AMQPException $e) {
+        } catch (AMQPException $e) {
             echo "ERROR: ".$e->getMessage();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             echo "ERROR: ".$e->getMessage();
         }
 
-        if($conn) {
+        if ($conn) {
             $this->connection = $conn;
             $ret = true;
         }
