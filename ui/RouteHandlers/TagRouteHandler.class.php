@@ -24,14 +24,14 @@ class TagRouteHandler
         $user_tags = array();
         $request = APIClient::API_VERSION."/users/$user_id/tags";
         $response = $client->call($request);
-        foreach($response as $stdObject) {
+        foreach ($response as $stdObject) {
             $user_tags[] = $client->cast('Tag', $stdObject);
         }
 
         $all_tags = array();
         $request = APIClient::API_VERSION."/tags";
         $response = $client->call($request);
-        foreach($response as $stdObject) {
+        foreach ($response as $stdObject) {
             $all_tags[] = $client->cast('Tag', $stdObject);
         }
         
@@ -65,11 +65,11 @@ class TagRouteHandler
         $tag_id = $tag->getId();
         $displayName = $current_user->getDisplayName();
         
-        if($subscribe == "true") {
+        if ($subscribe == "true") {
             $request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
             $userLikeTag = $client->call($request, HTTP_Request2::METHOD_PUT);            
             
-            if($userLikeTag) {
+            if ($userLikeTag) {
                 $request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                 $app->flash('success', "Successfully added tag, $label, to subscription list");
@@ -78,10 +78,10 @@ class TagRouteHandler
             }   
         }   
         
-        if($subscribe == "false") {
+        if ($subscribe == "false") {
             $request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
             $removedTag = $client->call($request, HTTP_Request2::METHOD_DELETE);
-            if($removedTag) {
+            if ($removedTag) {
                 $app->flash('success', "Successfully removed tag $label for user $displayName");
             } else {
                 $app->flash('error', "Unable to remove tag $label for user $displayName");
@@ -111,14 +111,14 @@ class TagRouteHandler
         $request = APIClient::API_VERSION."/tags/$tag_id/tasks";
         $data = array('limit' => 10);
         $response = $client->call($request, HTTP_Request2::METHOD_GET, $data);
-        if($response){
-            foreach($response as $stdObject) {
+        if ($response) {
+            foreach ($response as $stdObject) {
                 $tasks[] = $client->cast('Task', $stdObject);
             }         
             $app->view()->setData('tasks', $tasks);
         }  
         
-        if(UserRouteHandler::isLoggedIn()) {
+        if (UserRouteHandler::isLoggedIn()) {
 
             $user_id = UserSession::getCurrentUserID();        
             $app->view()->appendData(array(
@@ -129,17 +129,17 @@ class TagRouteHandler
             $request = APIClient::API_VERSION."/users/$user_id/tags";
             $response = $client->call($request);
             
-            if($response) {
-                foreach($response as $stdObject) {
+            if ($response) {
+                foreach ($response as $stdObject) {
                     $user_tags[] = $client->cast('Tag', $stdObject);
                 }
-                if(count($user_tags) > 0) {
+                if (count($user_tags) > 0) {
                     $app->view()->appendData(array(
                             'user_tags' => $user_tags
 
                     )); 
-                    foreach($user_tags as $tag) {
-                        if($label == $tag->getLabel()) {
+                    foreach ($user_tags as $tag) {
+                        if ($label == $tag->getLabel()) {
                             $app->view()->appendData(array(
                                'subscribed' => true
                             )); 
@@ -151,7 +151,7 @@ class TagRouteHandler
 
         $top_tags = array();
         $request = APIClient::API_VERSION."/tags/topTags";
-        $top_tags= $client->castCall(array("Tag"),$request, HTTP_Request2::METHOD_GET, null,array('limit' => 30));        
+        $top_tags= $client->castCall(array("Tag"), $request, HTTP_Request2::METHOD_GET, null, array('limit' => 30));
         $app->view()->appendData(array(
                  'tag' => $label,
                  'top_tags' => $top_tags

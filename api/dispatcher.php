@@ -62,7 +62,7 @@ class Dispatcher {
         Dispatcher::getDispatcher()->run();        
     }
     
-    public static function initV0()
+    public static function init_v0() // Change Name to conform to PSR
     {
         require_once 'v0/Users.php';
         require_once 'v0/Tasks.php';
