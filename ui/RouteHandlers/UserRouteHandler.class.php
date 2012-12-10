@@ -504,7 +504,7 @@ class UserRouteHandler
                     $app->redirect($app->urlFor('password-reset-request'));
                 }
             } elseif($app->request()->isPost()||$openid->mode){
-                $this->OpenIDLogin($openid,$app);
+                $this->openIdLogin($openid,$app);
                 $app->redirect($app->urlFor("home"));
             }
             $app->render('login.tpl');
@@ -520,7 +520,7 @@ class UserRouteHandler
         }
     }
     
-    public function OpenIDLogin($openid,$app) {
+    public function openIdLogin($openid,$app) {
        
         if(!$openid->mode) {
             try {

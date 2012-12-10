@@ -158,7 +158,7 @@ class Notify
                 $messagingClient = new MessagingClient();
                 if($messagingClient->init()) {
                     switch($notificationType) {
-                        case NotificationTypes::Archive:
+                        case NotificationTypes::ARCHIVE:
                             $message_type = new TaskArchived();
                             $message_type->task_id = $task->getId();
                             foreach($subscribed_users as $user) {
@@ -168,7 +168,7 @@ class Notify
                                         $messagingClient->TaskArchivedTopic);
                             }
                             break;
-                        case NotificationTypes::Claim:
+                        case NotificationTypes::CLAIM:
                             $message_type = new TaskClaimed();
                             $message_type->task_id = $task->getId();
                             $translator = $task_dao->getTaskTranslator($task->getId());
@@ -180,7 +180,7 @@ class Notify
                                         $messagingClient->TaskClaimedTopic);
                             }
                             break;
-                        case NotificationTypes::Upload:
+                        case NotificationTypes::UPLOAD:
                             $message_type = new TaskTranslationUploaded();
                             $message_type->task_id = $task->getId();
                             $translator = $task_dao->getTaskTranslator($task->getId());

@@ -143,7 +143,7 @@ class Users {
             $dao = new UserDao();
             
             Notify::notifyUserClaimedTask($dao->find(array("user_id"=>$id)), $data);
-            Notify::sendEmailNotifications($data, NotificationTypes::Claim);
+            Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
         },'userClaimTask');
 
         

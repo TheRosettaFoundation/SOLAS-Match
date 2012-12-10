@@ -104,7 +104,7 @@ class Tasks {
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $data= APIHelper::deserialiser($data, $format);
             $task   = APIHelper::cast(new Task(), $params);
-            $result = $dao->_updateTags($task);
+            $result = $dao->updateTags($task);
             Dispatcher::sendResponce(null, array("result"=>$result,"message"=>result==1?"update suceeded":"update failed"), null, $format);
         },'setTasksTags');
         
@@ -124,7 +124,7 @@ class Tasks {
             $dao = new TaskDao();
             $task= $dao->getTask(array("task_id"=>$id));
             if(is_array($task))$task=$task[0];
-            Notify::sendEmailNotifications($task, NotificationTypes::Upload);
+            Notify::sendEmailNotifications($task, NotificationTypes::UPLOAD);
             //touch this and you will die painfully sinisterly sean :)
             Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename);
         },'saveTaskFile');

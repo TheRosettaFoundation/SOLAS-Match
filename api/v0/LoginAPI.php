@@ -37,7 +37,7 @@ class LoginAPI {
                 $data= APIHelper::deserialiser($data, $format);
                 $data= APIHelper::cast("Login", $data);
                 $dao = new UserDao;
-                $data= $dao->APILogin($data->getEmail(), $data->getPassword());
+                $data= $dao->apiLogin($data->getEmail(), $data->getPassword());
                 if(is_array($data))$data=$data[0];
                 Dispatcher::sendResponce(null, $data, null, $format);
          },'login');
