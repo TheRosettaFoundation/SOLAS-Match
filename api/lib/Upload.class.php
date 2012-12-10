@@ -9,13 +9,10 @@ class Upload {
         switch (substr($display_max_size, -1)) {
             case 'G':
                 $display_max_size = $display_max_size * 1024;
-                break;
             case 'M':
                 $display_max_size = $display_max_size * 1024;
-                break;
             case 'K':
                 $display_max_size = $display_max_size * 1024;
-                break;
         }
         return $display_max_size;
     }
