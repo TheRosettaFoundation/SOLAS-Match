@@ -434,14 +434,12 @@ class UserDao {
         return $ret;
     }
 
-    public function createPasswordReset($user_id){
-        if(!$this->hasRequestedPasswordResetID($user_id)) {       
-            $uid = md5(uniqid(rand()));
-            $this->addPasswordResetRequest($uid, $user_id);   
-            Notify::sendPasswordResetEmail($uid, $user_id);
-            return 1;
-        }
-        return 0;
+    public function createPasswordReset($user_id)
+    {
+        $uid = md5(uniqid(rand()));
+        $this->addPasswordResetRequest($uid, $user_id);   
+        Notify::sendPasswordResetEmail($uid, $user_id);
+        return 1;
     }
     
     
@@ -495,14 +493,14 @@ class UserDao {
         } elseif(isset($args['user_id']) && $args['user_id'] != '') {
             $user_id = $args['user_id'];
             if($result = $db->call("getPasswordResetRequests", "null, {$db->cleanse($user_id)}")) {
-                $ret = ModelFactory::BuildModel("PasswordResetRequest", $result);
+                $ret = ModelFactory::BuildModel("PasswordResetRequest", $result[0]);
             }
         }
 
         return $ret;
     }
     
-     public function passwordReset($password,$key){
+    public function passwordReset($password,$key){
                 $dao = new UserDao;
                 $reset_request = $dao->getPasswordResetRequests(array('uid' => $key));
                 if($reset_request->getUserId() == '') {

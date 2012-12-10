@@ -420,17 +420,25 @@ class UserRouteHandler
                     if($user) {  
                         $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
                         $hasUserRequestedPwReset = $client->call($request, HTTP_Request2::METHOD_GET);
-                        
-                        if (!$hasUserRequestedPwReset) {                            
+
+                        $message = "";
+                        if (!$hasUserRequestedPwReset) {
+                            //send request
                             $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
-                            $response = $client->call($request, HTTP_Request2::METHOD_POST);                            
+                            $client->call($request, HTTP_Request2::METHOD_POST);
                             $app->flash('success', "Password reset request sent. Check your email
                                                     for further instructions.");
                             $app->redirect($app->urlFor('home'));
                         } else {
-                            $app->flashNow('info', "Password reset request has already been sent.
-                                                     Follow the link in the email that was sent to
-                                                     you to reset your password");
+                            //get request time
+                            $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest/time";
+                            $response = $client->call($request, HTTP_Request2::METHOD_GET);
+                            $app->flashNow('info', "Password reset request was already sent on $response.
+                                                     Another email has been sent to your contact address.
+                                                     Follow the link in this email to reset your password");
+                            //Send request
+                            $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
+                            $client->call($request, HTTP_Request2::METHOD_POST);
                         }
                     } else {
                         $app->flashNow("error", "Please enter a valid email address");

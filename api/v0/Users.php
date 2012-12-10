@@ -254,6 +254,12 @@ class Users {
             $data=$dao->hasRequestedPasswordResetID($id)?1:0;
             Dispatcher::sendResponce(null, $data , null, $format);
         },'hasUserRequestedPasswordReset');
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/passwordResetRequest/time(:format)/', function ($id,$format=".json"){
+            $dao = new UserDao();
+            $resetRequest=$dao->getPasswordResetRequests(array('user_id' => $id));
+            Dispatcher::sendResponce(null, $resetRequest->getRequestTime(), null, $format);
+        }, "PasswordResetRequestTime");
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/passwordResetRequest(:format)/', function ($id,$format=".json"){
             $dao = new UserDao();
