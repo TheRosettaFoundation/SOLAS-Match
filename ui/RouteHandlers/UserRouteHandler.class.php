@@ -143,9 +143,6 @@ class UserRouteHandler
         $client = new APIClient();
 
         $current_user_id    = UserSession::getCurrentUserID();
-        $current_user;
-        
-        
         $request = APIClient::API_VERSION."/users/$current_user_id";
         $response = $client->call($request);
         $current_user = $client->cast('User', $response);
@@ -164,15 +161,10 @@ class UserRouteHandler
                 $my_organisations[] = $client->cast('Organisation', $stdObject);
             }
         }
-        //$my_organisations = (array)$client->call($url);
         
         $org_tasks = array();
         $orgs = array();
         foreach($my_organisations as $org) {
-            //$url = APIClient::API_VERSION."/orgs/$org_id";
-            //$org_data = $client->call($url);
-            $org = $client->cast('Organisation', $org);
-
             $url = APIClient::API_VERSION."/orgs/{$org->getId()}/tasks";
             $org_tasks_data = $client->call($url);        
             $my_org_tasks = array();
@@ -260,8 +252,8 @@ class UserRouteHandler
             }
             
             $app->view()->appendData(array(
-                'orgs' => $orgs
-                ,'templateData' => $templateData
+                'orgs' => $orgs,
+                'templateData' => $templateData
             ));
         }
         

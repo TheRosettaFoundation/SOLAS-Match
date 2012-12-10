@@ -18,16 +18,16 @@
     </p>
 {/if}
 
-{if isset($templateData)}
+{if isset($orgs)}
     <table class="table table-striped">
-    {foreach $templateData as  $org=>$tasksData}
-        {assign var="org_id" value=$org}
+    {foreach $orgs as $org}
+        {assign var="org_id" value=$org->getId()}
         <thead>
             <tr>
                 <th>
                     <p style="margin-bottom:40px;"></p>
                     <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                        <i class="icon-briefcase"></i> {$orgs[$org]->getName()}
+                        <i class="icon-briefcase"></i> {$org->getName()}
                     </a>
                 </th>
                 <th>Task Status</th>
@@ -38,13 +38,14 @@
                     </a>
                 </th>
                 <th>                    
-                    <a class="btn btn-success" href="{urlFor name="task-upload" options="org_id.$org"}">
+                    <a class="btn btn-success" href="{urlFor name="task-upload" options="org_id.$org_id"}">
                         <i class="icon-upload icon-white"></i> Add New Task
                     </a>                    
                 </th>
             </tr>
         </thead>
         <tbody>
+        {assign var="tasksData" value=$templateData[$org_id]}
         {if !is_null($tasksData)}
             {foreach from=$tasksData item=data}
                 <tr>
@@ -97,7 +98,7 @@
                 </tr>
             {/foreach}
         {else}
-            <td>
+            <td colspan="5">
                 <p>This organisation has no tasks listed.</p>
             </td>
         {/if}
