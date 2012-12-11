@@ -47,29 +47,16 @@ class Dispatcher {
         }
         return Dispatcher::$apiDispatcher;
     }
+    
     public static function init(){
        $path = Dispatcher::getDispatcher()->request()->getResourceUri();
        $path = explode("/", $path);
        $path =$path[1];
-       $initFunc = "Dispatcher::init_".$path;
-       call_user_func($initFunc); 
-       Dispatcher::getDispatcher()->run();
+       $providerNames = Dispatcher::readProviders("$path/");
+       Dispatcher::autoRequire($providerNames,"$path/");
+       Dispatcher::getDispatcher()->run();  
+    }
         
-    }
-    public  static function init_v0(){
-        require_once 'v0/Users.php';
-        require_once 'v0/Tasks.php';
-        require_once 'v0/Tags.php';
-        require_once 'v0/Badges.php';
-        require_once 'v0/Orgs.php';
-        require_once 'v0/LoginAPI.php'; 
-        require_once 'v0/RegisterAPI.php';
-        require_once 'v0/Langs.php';
-        require_once 'v0/Countries.php';
-        require_once 'v0/PasswordReset.php';
-        require_once 'v0/Stats.php';
-    }
-    
     public static function sendResponce($headers,$body,$code=200,$format=".json"){
         $response = Dispatcher::getDispatcher()->response();
         
@@ -159,8 +146,44 @@ class Dispatcher {
             }
         }
     }
-   
-
+    
+    public static function clenseArgs($index,$httpMethod=null,$default=null){
+        $req=Dispatcher::getDispatcher()->request();
+        switch ($httpMethod){
+            case HttpMethodEnum::GET:{
+                 $result = $req->get('paramName');
+                 return is_null($result) ? $default : $result; 
+            }
+            case HttpMethodEnum::POST:{
+                $result = $req->post('paramName');
+                return is_null($result) ? $default : $result; 
+            }
+            case HttpMethodEnum::PUT:{
+               $result = $req->put('paramName');
+               return is_null($result) ? $default : $result; 
+            }
+            default:{
+               $result = $req->params('paramName');
+               return is_null($result) ? $default : $result; 
+            }
+        }
+    }
+    
+    private static function autoRequire(array $providers,$root="providers") {
+        foreach($providers as $provider){
+            require_once $root.$provider.".php";
+        }
+    }
+    
+    private static function readProviders($root){
+        $temp= scandir($root);
+        $ret=array();
+        foreach ($temp as $provider) {
+            if($provider!="."&&$provider!="..") $ret[]=substr($provider, 0, sizeof($provider)-5);
+        }
+        return $ret;
+    }
+ 
 }
 Dispatcher::init();
 
