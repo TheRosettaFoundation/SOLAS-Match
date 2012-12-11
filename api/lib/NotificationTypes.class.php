@@ -2,7 +2,7 @@
 
 class NotificationTypes
 {
-    const Archive = "email.task-archived.tpl";
-    const Claim = "email.task-claimed-by-user.tpl";
-    const Upload = "email.task-translation-uploaded.tpl";
+    const ARCHIVE   = "email.task-archived.tpl";
+    const CLAIM     = "email.task-claimed-by-user.tpl";
+    const UPLOAD    = "email.task-translation-uploaded.tpl";
 }

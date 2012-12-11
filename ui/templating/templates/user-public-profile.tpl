@@ -103,8 +103,8 @@
     {/if}
 {/if}
 
-{if isset($orgList)}
-    {if count($orgList) > 0}
+{if isset($user_orgs)}
+    {if count($user_orgs) > 0}
         <div class='page-header'>
             <h1>
                 Organisations <small>A list of organisations you belong to</small>
@@ -114,7 +114,7 @@
             </h1>
         </div>
 
-        {foreach $orgList as $org}
+        {foreach $user_orgs as $org}
             <div class="row">
                 {assign var="org_id" value=$org->getId()}
                 {assign var="user_id" value=$this_user->getUserId()}
@@ -126,13 +126,11 @@
                 <div class="span4">
                     <form method="post" class="pull-right" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                         {if isset($private_access)}
+                            <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
                             <input type="hidden" name="org_id" value="{$org_id}" />
-                            <input type="hidden" name="revoke" value="Leave Organisation" 
+                            <input type="submit" class='btn btn-inverse' name="revoke" value="    Leave Organisation" 
                                    onclick="return confirm('Are you sure you want to leave the organisation?')"/>
-                                <a href="#" onclick="this.parentNode.submit()" class="pull-right btn btn-inverse">
-                                    <i class="icon-fire icon-white"></i> Leave Organisation
-                                </a>
-                        {/if}
+                        {/if}                      
                     </form>
                 </div>
                 <div class="span8">

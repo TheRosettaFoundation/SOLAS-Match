@@ -1,191 +1,180 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of PDOWrapper
  *
  * @author sean
  */
+
 class PDOWrapper {
-   private $database;
-	private $username;
-	private $password;
-	private $server;
+    
+    private $database;
+    private $username;
+    private $password;
+    private $server;
 
-	private $logfile = ''; 
-	private $logging = false; // debug on or off
-	private $show_errors = false; // output errors. true/false
-	private $show_sql = false; // turn off for production version.
-	private $use_permanent_connection = false;
+    private $logfile                    = ''; 
+    private $logging                    = false; // debug on or off
+    private $show_errors                = false; // output errors. true/false
+    private $show_sql                   = false; // turn off for production version.
+    private $use_permanent_connection   = false;
 
-	// Do not change the variables below
-	private $connection;
-	private $FILE_HANDLER;
-	private $ERROR_MSG = '';
-	private $sql_errored = ''; // Filled with the query that failed
-	
-	function __construct(){
-		// Set up the connection
-		$settings = new Settings();
-		$this->database = $settings->get('db.database');
-		$this->username = $settings->get('db.username');
-		$this->password = $settings->get('db.password');
-		$this->server = $settings->get('db.server');
-		$this->logging = (strlen($this->logfile)>0) ? true : false;
-		if ($this->logging) {
-			$this->logfile = $settings->get('db.log_file'); // full path to debug logfile. Use only in debug mode!
-		}
-		$this->show_errors = ($settings->get('db.show_errors') == 'y') ? true : false;
-		$this->show_sql = ($settings->get('db.show_sql') == 'y') ? true : false;
-	}
-	
-	/*
-	 * Call init() on the new MySQLWrapper object in order to establish 
-	 * the DB connection.
-	 */
-	function init()
-	{
-		$this->initLogfile();
-		$ret = $this->openConnection();
-		// Unset connection details for security
-		$this->database = false;
-		$this->username = false;
-		$this->password = false;		  	
-		return $ret;
-	}
+    // Do not change the variables below
+    private $connection;
+    private $FILE_HANDLER;
+    private $ERROR_MSG      = '';
+    private $sql_errored    = ''; // Filled with the query that failed
 
-	/*
-	 * If you have to connect to a non-default DB, call this function
-	 * instead of init().
-	 */
-	function initSelectDB($db, $username, $password)
-	{
-		$this->database = $db;
-		$this->username = $username;
-		$this->password = $password;
-		$this->init();
-	}
+    public function __construct()
+    {
+        // Set up the connection
+        $settings = new Settings();
+        $this->database = $settings->get('db.database');
+        $this->username = $settings->get('db.username');
+        $this->password = $settings->get('db.password');
+        $this->server = $settings->get('db.server');
+        $this->logging = (strlen($this->logfile)>0) ? true : false;
+        if ($this->logging) {
+            $this->logfile = $settings->get('db.log_file'); // full path to debug logfile. Use only in debug mode!
+        }
+        $this->show_errors = ($settings->get('db.show_errors') == 'y') ? true : false;
+        $this->show_sql = ($settings->get('db.show_sql') == 'y') ? true : false;
+    }
 
-	/*
-	 * Connect to the database itself.
-	 */
-	function openConnection()
-	{
-		$conn = false;
-		$ret = false;
-		if ($this->use_permanent_connection)
-		{
-			$conn = new PDO("mysql:host={$this->server};dbname={$this->database}",$this->username,$this->password,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",PDO::ATTR_PERSISTENT => true));  
-		}
-		else
-		{
-			$conn = new PDO("mysql:host={$this->server};dbname={$this->database}",$this->username,$this->password,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  
-		}
-		if (!$conn)
-		{
-			$this->error_msg = "\r\n" . "Unable to connect to database - " . date('H:i:s');
-			$this->debug();
-			$ret = false;
-		}
-		else
-		{
-			// Success!
-			//mysql_set_charset('utf8', $conn);
-			$this->connection = $conn;
-			$ret = true;
-		}
-		return $ret;
-	}
+    /*
+     * Call init() on the new MySQLWrapper object in order to establish 
+     * the DB connection.
+     */
+    public function init()
+    {
+        $this->initLogfile();
+        $ret = $this->openConnection();
+        // Unset connection details for security
+        $this->database = false;
+        $this->username = false;
+        $this->password = false;		  	
+        return $ret;
+    }
 
-	/*
-	 * Initial the log file.
-	 */
-	function initLogfile()
-	{
-		if ($this->logging)
-		{
-			$this->file_handler = fopen($this->logfile,'a') ;
-			$this->debug();
-		}
-	}
+    /*
+     * If you have to connect to a non-default DB, call this function
+     * instead of init().
+     */
+    private function initSelectDB($db, $username, $password)
+    {
+        $this->database = $db;
+        $this->username = $username;
+        $this->password = $password;
+        $this->init();
+    }
 
-	/*
-	 * Discrepency: this function is currently NOT called, as
-	 * no database "close connection" call is made.
-	 */
-	function logfileClose()
-	{
-		if ($this->logging && $this->file_handler)
-		{
-	  		fclose($this->file_handler);
-		}
-	}
-
-	/*
-	 * Logs and displays errors.
-	 * Prerequisite: initLogfile() should have been called by now.
-	 */
-	function debug()
-	{
-		// Spit out the error to the browsers - probably not very wise for a production system.
-		if ($this->show_errors)
-		{
-			echo $this->error_msg;
-			if (strlen($this->sql_errored) > 0)
-			{
-				echo '<br>' . $this->sql_errored;
-			}
-		}
-		// Write to the logging file.
-		if ($this->logging)
-		{
-			if ($this->file_handler)
-			{
-				fwrite($this->file_handler, $this->error_msg);
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
-
-        function call($procedure,$procArgs){
-            if(!is_array($procArgs)) {
-                $sql = "CALL $procedure ($procArgs)";
-            } else {
-                $sql = "CALL $procedure (".implode(', ', $procArgs).")";
-            }
-            if ($this->show_sql){
-                $this->showSQL($sql);
-            }
-            if ((empty($sql)) || (empty($this->connection))){
-                $this->error_msg = "\r\n" . "SQL Statement is <code>null</code> or connection is null - " . date('H:i:s');
-                $this->sql_errored = $sql;
-                $this->debug();
-                return false;
-            }
-            $conn = $this->connection;
-            $i = 0;
-            $data = array();
-            
-            if($result = $conn->query($sql)) {
-                foreach($result as $row){
-                    $data[$i] = $row;
-                    $i++;
-                }
-            }
-            return empty($data) ? false : $data;
+    /*
+     * Connect to the database itself.
+     */
+    private function openConnection()
+    {
+        $conn = false;
+        $ret = false;
+    
+        if ($this->use_permanent_connection) {
+            $conn = new PDO("mysql:host={$this->server};dbname={$this->database}",
+                            $this->username, $this->password,
+                            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", PDO::ATTR_PERSISTENT => true));  
+        } else {
+            $conn = new PDO("mysql:host={$this->server};dbname={$this->database}",
+                            $this->username, $this->password,
+                            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  
         }
         
+        if (!$conn) {
+            $this->error_msg = "\r\n" . "Unable to connect to database - " . date('H:i:s');
+            $this->debug();
+            $ret = false;
+        } else {
+            // Success!
+            //mysql_set_charset('utf8', $conn);
+            $this->connection = $conn;
+            $ret = true;
+        }
+        return $ret;
+    }
+
+    /*
+     * Initial the log file.
+     */
+    private function initLogfile()
+    {
+        if ($this->logging) {
+            $this->file_handler = fopen($this->logfile, 'a') ;
+            $this->debug();
+        }
+    }
+
+    /*
+     * Discrepency: this function is currently NOT called, as
+     * no database "close connection" call is made.
+     */
+    private function logfileClose()
+    {
+        if ($this->logging && $this->file_handler) {
+            fclose($this->file_handler);
+        }
+    }
+
+    /*
+     * Logs and displays errors.
+     * Prerequisite: initLogfile() should have been called by now.
+     */
+    private function debug()
+    {
+        // Spit out the error to the browsers - probably not very wise for a production system.
+        if ($this->show_errors) {
+            echo $this->error_msg;
+            if (strlen($this->sql_errored) > 0) {
+                echo '<br>' . $this->sql_errored;
+            }
+        }
+        // Write to the logging file.
+        if ($this->logging) {
+            if ($this->file_handler) {
+                fwrite($this->file_handler, $this->error_msg);
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function call($procedure,$procArgs)
+    {
+        if (!is_array($procArgs)) {
+            $sql = "CALL $procedure ($procArgs)";
+        } else {
+            $sql = "CALL $procedure (".implode(', ', $procArgs).")";
+        }
         
+        if ($this->show_sql) {
+            $this->showSQL($sql);
+        }
         
+        if ((empty($sql)) || (empty($this->connection))) {
+            $this->error_msg = "\r\n" . "SQL Statement is <code>null</code> or connection is null - " . date('H:i:s');
+            $this->sql_errored = $sql;
+            $this->debug();
+            return false;
+        }
         
-        
+        $conn = $this->connection;
+        $i = 0;
+        $data = array();
+
+        if ($result = $conn->query($sql)) {
+            foreach ($result as $row) {
+                $data[$i] = $row;
+                $i++;
+            }
+        }
+        return empty($data) ? false : $data;
+    }
         
 //	/*
 //	 * Given a SELECT statement in a string, execute it and return the result.
@@ -335,44 +324,44 @@ class PDOWrapper {
 //		return $ret;
 //	}
 
-	/*
-	 * Cleanes variable for SQL, so escapes quotation marks, etc.
-	 */
-	function cleanse($str)
-	{
-		if (get_magic_quotes_gpc())
-		{
-			$str = stripslashes($str);
-		}
-		$special = array("\x00"=>'\x00', "\n"=>'\n', "\r"=>'\r', '\\'=>'\\\\', "'"=>"\'", '"'=>'\"', "\x1a"=>'\x1a');
-                $str=strip_tags(trim($str));
-                foreach ($special as $key=> $val){
-                    str_replace($key, $val, $str);
-                }
-                return $str;
-		//return mysql_real_escape_string(strip_tags(trim($str)));
-	}
-	
-	/*
-	 * If the string isn't empty, cleanse it. Otherwise, return NULL to
-	 * be included directly in an SQL query.
-	 */
-	function cleanseNull($str)
-	{
-		return (!$str) ? 'NULL' : $this->cleanse($str);
-	}
-        function cleanseNullOrWrapStr($str)
-	{
-		return (!$str) ? 'NULL' : $this->cleanseWrapStr($str);
-	}
-	function showSQL($q)
-	{
-		echo '<pre>'.$q.'</pre>';
-	}
+    /*
+     * Cleanes variable for SQL, so escapes quotation marks, etc.
+     */
+    public function cleanse($str)
+    {
+        if (get_magic_quotes_gpc()) {
+            $str = stripslashes($str);
+        }
+        $special = array("\x00"=>'\x00', "\n"=>'\n', "\r"=>'\r', '\\'=>'\\\\', "'"=>"\'", '"'=>'\"', "\x1a"=>'\x1a');
+        $str = strip_tags(trim($str));
+        foreach ($special as $key => $val) {
+            str_replace($key, $val, $str);
+        }
+        return $str;
+        //return mysql_real_escape_string(strip_tags(trim($str)));
+    }
 
-	function cleanseWrapStr($str) {
-		return '\'' . $this->cleanse($str) . '\'';
-	}
+    /*
+     * If the string isn't empty, cleanse it. Otherwise, return NULL to
+     * be included directly in an SQL query.
+     */
+    public function cleanseNull($str)
+    {
+        return (!$str) ? 'NULL' : $this->cleanse($str);
+    }
+    
+    public function cleanseNullOrWrapStr($str)
+    {
+        return (!$str) ? 'NULL' : $this->cleanseWrapStr($str);
+    }
+    
+    private function showSQL($q)
+    {
+        echo '<pre>'.$q.'</pre>';
+    }
+
+    public function cleanseWrapStr($str)
+    {
+        return '\'' . $this->cleanse($str) . '\'';
+    }
 }
-
-?>

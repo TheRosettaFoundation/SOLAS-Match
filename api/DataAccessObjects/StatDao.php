@@ -11,6 +11,7 @@
  * @author sean
  */
 class StatDao {
+    
     public static function getTotalTasks($dateTime)
     {
         $ret = null;
@@ -83,5 +84,3 @@ class StatDao {
         return $ret;
     }
 }
-
-?>

@@ -35,9 +35,7 @@ class OrgRouteHandler
         )->via('POST')->name('org-search');
         
         $app->get('/org/:org_id/edit/:badge_id', array($middleware, 'authUserForOrg'), 
-        array($this, 'orgEditBadge'))->via("POST")->name('org-edit-badge');        
-        
-        
+        array($this, 'orgEditBadge'))->via("POST")->name('org-edit-badge');         
     }
 
     public function createOrg()
@@ -45,40 +43,40 @@ class OrgRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
 
-        if($app->request()->isPost()) {
+        if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
 
             $org = new Organisation(null);
-            if(isset($post->name) && $post->name != null) {
+            if (isset($post->name) && $post->name != null) {
                 $org->setName($post->name);
             }
 
-            if(isset($post->home_page) && ($post->home_page != '' || $post->home_page != 'http://')) {
+            if (isset($post->home_page) && ($post->home_page != '' || $post->home_page != 'http://')) {
                 $org->setHomePage($post->home_page);
             }
 
-            if(isset($post->bio) && $post->bio != '') {
+            if (isset($post->bio) && $post->bio != '') {
                 $org->setBiography($post->bio);
             }
 
-            if($org->getName() != '') {
+            if ($org->getName() != '') {
  
                 $request = APIClient::API_VERSION."/orgs/getByName/{$org->getName()}";
                 $organisation = $client->call($request, HTTP_Request2::METHOD_GET);
                   
-                if(!$organisation) {
+                if (!$organisation) {
                     $request = APIClient::API_VERSION."/orgs";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, $org);    
                     $new_org = $client->cast('Organisation', $response);
                     
-                    if($new_org) {
+                    if ($new_org) {
                         $user_id = UserSession::getCurrentUserID();
                         $request = APIClient::API_VERSION."/orgs/{$new_org->getId()}/requests/$user_id";
                         $organisation = $client->call($request, HTTP_Request2::METHOD_PUT);                        
                         $org_name = $org->getName();
                         $app->flashNow('success', "Organisation \"$org_name\" has been created. 
-                                            Visit the <a href='".$app->urlFor("client-dashboard")."'>client dashboard</a> 
-                                            to start uploading tasks.");
+                                            Visit the <a href='".$app->urlFor("client-dashboard").
+                                            "'>client dashboard</a> to start uploading tasks.");
                     } else {
                         $app->flashNow('error', "Unable to save Organisation.");
                     }
@@ -90,8 +88,7 @@ class OrgRouteHandler
             } else {
                 $app->flashNow('error', "You must specify a name for the organisation.");
             }
-        }
-        
+        }        
         $app->render('create-org.tpl');
     }
 
@@ -106,11 +103,11 @@ class OrgRouteHandler
         $user = $client->cast('User', $response);
         
         $request = APIClient::API_VERSION."/users/$user_id/orgs";
-        $user_orgs = (array)$client->call($request);
-        if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
+        $user_orgs = (array) $client->call($request);
+        if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
             $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
             $requestMembership = $client->call($request, HTTP_Request2::METHOD_POST);         
-            if($requestMembership) {
+            if ($requestMembership) {
                 $app->flash("success", "Successfully requested membership.");
             } else {
                 $app->flash("error", "You have already sent a membership request to this Organisation");
@@ -130,29 +127,29 @@ class OrgRouteHandler
         $response = $client->call($request);
         $org = $client->cast('Organisation', $response);
         
-        if($app->request()->isPost()) {
-            $post = (object)$app->request()->post();
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
             
-            if(isset($post->email)) {
-                if(TemplateHelper::isValidEmail($post->email)) {       
+            if (isset($post->email)) {
+                if (TemplateHelper::isValidEmail($post->email)) {       
                     $url = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
                     $response = $client->call($url);
                     $user = $client->cast('User', $response);
                 
-                    if(!is_null($user)) {
+                    if (!is_null($user)) {
                         $user_id = $user->getUserId();
                         $request = APIClient::API_VERSION."/users/$user_id/orgs";
                         $user_orgs = $client->call($request);
                     
-                        if($user->getDisplayName() != '') {
+                        if ($user->getDisplayName() != '') {
                             $user_name = $user->getDisplayName();
                         } else {
                             $user_name = $user->getEmail();
                         }   
-                        if(is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
+                        if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
                             $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_PUT);
-                            if($org->getName() != '') {
+                            if ($org->getName() != '') {
                                 $org_name = $org->getName();
                             } else {
                                 $org_name = "Organisation $org_id";
@@ -171,27 +168,25 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow('error', 'You did not enter a valid email address');
                 }
-            } elseif(isset($post->accept)) {
-                if($user_id = $post->user_id) {
+            } elseif (isset($post->accept)) {
+                if ($user_id = $post->user_id) {
                     
                     $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                     $request = APIClient::API_VERSION."/users/$user_id";
                     $response = $client->call($request);
                     $user = $client->cast('User', $response);
-//                    Notify::notifyUserOrgMembershipRequest($user, $org, true);
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
-            } elseif(isset($post->refuse)) {
-                if($user_id = $post->user_id) {
+            } elseif (isset($post->refuse)) {
+                if ($user_id = $post->user_id) {
                     $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
                     
                     $request = APIClient::API_VERSION."/users/$user_id";
                     $response = $client->call($request);
                     $user = $client->cast('User', $response);
-//                    Notify::notifyUserOrgMembershipRequest($user, $org, false);
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
@@ -202,8 +197,8 @@ class OrgRouteHandler
         $requests = $client->call($request, HTTP_Request2::METHOD_GET);
 
         $user_list = array();
-        if(count($requests) > 0) {
-            foreach($requests as $request) {
+        if (count($requests) > 0) {
+            foreach ($requests as $request) {
                 $memRequest =$client->cast('MembershipRequest', $request);
                 $request = APIClient::API_VERSION."/users/{$memRequest->getUserId()}";
                 $user = $client->call($request);
@@ -226,19 +221,19 @@ class OrgRouteHandler
         $response = $client->call($request);
         $org = $client->cast('Organisation', $response);
         
-        if($app->request()->isPost()) {
+        if ($app->request()->isPost()) {
             $name = $app->request()->post('name');
-            if($name != NULL) {
+            if ($name != null) {
                 $org->setName($name);
             }   
             
             $home_page = $app->request()->post('home_page');
-            if($home_page != NULL) {
+            if ($home_page != null) {
                 $org->setHomePage($home_page);
             }   
             
             $bio = $app->request()->post('bio');
-            if($bio != NULL) {
+            if ($bio != null) {
                 $org->setBiography($bio);
             }  
             
@@ -247,8 +242,7 @@ class OrgRouteHandler
             $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org->getId())));
         }   
         
-        $app->view()->setData('org', $org);
-        
+        $app->view()->setData('org', $org);        
         $app->render('org-private-profile.tpl');
     }
 
@@ -261,18 +255,18 @@ class OrgRouteHandler
         $response = $client->call($request);
         $org = $client->cast('Organisation', $response);
         
-         if($app->request()->isPost()) {
+        if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
                    
-            if(isset($post->deleteBadge)) {
+            if (isset($post->deleteBadge)) {
                 $badge_id = $post->badge_id;
                 $request = APIClient::API_VERSION."/badges/$badge_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
             } 
             
-            if(isset($post->title) && isset($post->description)) {
+            if (isset($post->title) && isset($post->description)) {
                 
-                if($post->title == '' || $post->description == '') {
+                if ($post->title == '' || $post->description == '') {
                     $app->flash('error', "All fields must be filled out");
                 } else {
                     $params = array();
@@ -281,7 +275,7 @@ class OrgRouteHandler
                     $params['description'] = $post->description;
                     $params['owner_id'] = null; 
 
-                    $updatedBadge = ModelFactory::BuildModel("Badge", $params);
+                    $updatedBadge = ModelFactory::buildModel("Badge", $params);
                     $request = APIClient::API_VERSION."/badges/{$post->badge_id}";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $updatedBadge); 
                     $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
@@ -295,8 +289,8 @@ class OrgRouteHandler
         $org_badges = array();
         $request = APIClient::API_VERSION."/orgs/$org_id/badges";
         $response = $client->call($request);
-        if($response) {
-            foreach($response as $stdObject) {
+        if ($response) {
+            foreach ($response as $stdObject) {
                 $org_badges[] = $client->cast('Badge', $stdObject);
             }        
         }
@@ -305,7 +299,7 @@ class OrgRouteHandler
         $orgMemberList = $client->call($request);
         
         $org_members = array();
-        if(count($orgMemberList) > 0) {
+        if (count($orgMemberList) > 0) {
             $i = 0;
             foreach ($orgMemberList as $stdObject) {
                 $org_members[] = $orgMemberList[$i]->user_id;
@@ -334,8 +328,8 @@ class OrgRouteHandler
         $user_list = array();
         $request = APIClient::API_VERSION."/badges/$badge_id/users";
         $response = $client->call($request);
-        if($response) {
-            foreach($response as $stdObject) {
+        if ($response) {
+            foreach ($response as $stdObject) {
                 $user_list[] = $client->cast('User', $stdObject);
             }
         }
@@ -349,43 +343,44 @@ class OrgRouteHandler
                     'extra_scripts' =>$extra_scripts
         ));
 
-        if($app->request()->isPost()) {
+        if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if(isset($post->email) && $post->email != '') {
-                if(TemplateHelper::isValidEmail($post->email)) {
+            if (isset($post->email) && $post->email != '') {
+                if (TemplateHelper::isValidEmail($post->email)) {
                     
                     $request = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
                     
-                    if(!is_null($response)) {
+                    if (!is_null($response)) {
                         $user = $client->cast('User', $response);
                         $user_badges = array();
                         $user_id = $user->getUserId();
                         $request = APIClient::API_VERSION."/users/$user_id/badges";
                         $response = $client->call($request);
-                        foreach($response as $badge_data) {
+                        foreach ($response as $badge_data) {
                             $user_badges[] = $client->cast('Badge', $badge_data);                           
                         }
                         $badge_ids = array();
-                        if(count($user_badges) > 0) {
-                            foreach($user_badges as $badge_tmp) {
+                        if (count($user_badges) > 0) {
+                            foreach ($user_badges as $badge_tmp) {
                                 $badge_ids[] = $badge_tmp->getId();
                             }
                         }
                         
-                        if(!in_array($badge_id, $badge_ids)) {
+                        if (!in_array($badge_id, $badge_ids)) {
                             $request = APIClient::API_VERSION."/users/$user_id/badges";
-                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $badge);                            
+                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $badge);
                             
                             $user_name = '';
-                            if($user->getDisplayName() != '') {
+                            if ($user->getDisplayName() != '') {
                                 $user_name = $user->getDisplayName();
                             } else {
                                 $user_name = $user->getEmail();
                             }
                             
-                            $app->flashNow('success', "Successfully Assigned Badge \"".$badge->getTitle()."\" to user $user_name");
+                            $app->flashNow('success', "Successfully Assigned Badge \"".
+                                            $badge->getTitle()."\" to user $user_name");
                         } else {
                             $app->flashNow('error', 'The user '.$post->email.' already has that badge');
                         }
@@ -398,7 +393,7 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow('error', "You did not enter a valid email address");
                 }
-            } elseif(isset($post->user_id) && $post->user_id != '') {
+            } elseif (isset($post->user_id) && $post->user_id != '') {
                 $user_id = $post->user_id;
                 $request = APIClient::API_VERSION."/users/$user_id";
                 $response = $client->call($request);
@@ -408,7 +403,7 @@ class OrgRouteHandler
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
                 
                 $user_name = '';
-                if($user->getDisplayName() != '') {
+                if ($user->getDisplayName() != '') {
                     $user_name = $user->getDisplayName();
                 } else {
                     $user_name = $user->getEmail();
@@ -422,8 +417,8 @@ class OrgRouteHandler
         $user_list = array();
         $request = APIClient::API_VERSION."/badges/{$badge->getId()}/users";
         $response = $client->call($request);        
-        if($response) {
-            foreach($response as $stdObject) {
+        if ($response) {
+            foreach ($response as $stdObject) {
                 $user_list[] = $client->cast('User', $stdObject);
             }
         }
@@ -440,10 +435,10 @@ class OrgRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
 
-        if(isValidPost($app)) {
-            $post = (object)$app->request()->post();
+        if (isValidPost($app)) {
+            $post = (object) $app->request()->post();
             
-            if($post->title == '' || $post->description == '') {
+            if ($post->title == '' || $post->description == '') {
                 $app->flash('error', "All fields must be filled out");
             } else {
                 $params = array();
@@ -451,7 +446,7 @@ class OrgRouteHandler
                 $params['description'] = $post->description;
                 $params['owner_id'] = $org_id;
 
-                $badge = ModelFactory::BuildModel("Badge", $params);
+                $badge = ModelFactory::buildModel("Badge", $params);
                 $request = APIClient::API_VERSION."/badges/{$badge->getId()}";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $badge);                
                 
@@ -459,8 +454,7 @@ class OrgRouteHandler
             }
         }
         
-        $app->view()->setData('org_id', $org_id);
-        
+        $app->view()->setData('org_id', $org_id);        
         $app->render('org.create-badge.tpl');
     }
 
@@ -469,27 +463,26 @@ class OrgRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
 
-        if($app->request()->isPost()) {
+        if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if(isset($post->search_name) && $post->search_name != '') {                
+            if (isset($post->search_name) && $post->search_name != '') {                
                 $found_orgs = array();
                 $request = APIClient::API_VERSION."/orgs/getByName/{$post->search_name}";
                 $response = $client->call($request);
-                if($response) {
-                    foreach($response as $stdObject) {
+                if ($response) {
+                    foreach ($response as $stdObject) {
                         $found_orgs[] = $client->cast('Organisation', $stdObject);
                     }
                 }                
                 
-                if(count($found_orgs) < 1) {
+                if (count($found_orgs) < 1) {
                     $app->flashNow('error', 'No Organisations found');
                 } else {
                     $app->view()->setData('found_orgs', $found_orgs);
                 }
             }
-        }
-        
+        }        
         $app->render('org-search.tpl');
     }
     
@@ -502,12 +495,9 @@ class OrgRouteHandler
         $response = $client->call($request);
         $badge = $client->cast('Badge', $response);
 
-        $app->view()->setData('badge', $badge);
-        
+        $app->view()->setData('badge', $badge);        
         $app->view()->appendData(array('org_id' => $org_id));        
         
-        $app->render('org.edit-badge.tpl');
-        
-    }
-    
+        $app->render('org.edit-badge.tpl');        
+    }    
 }

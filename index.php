@@ -1,4 +1,5 @@
 <?php
+
 require "ui/vendor/autoload.php";
 
 mb_internal_encoding("UTF-8");
@@ -57,7 +58,9 @@ session_start();
 $app = new Slim(array(
     'debug' => true,
     'view' => new SmartyView(),
-    'mode' => 'development' // default is development. TODO get from config file, or set in environment...... $_ENV['SLIM_MODE'] = 'production';
+    'mode' => 'development' // default is development.
+    //                   TODO get from config file, or set in environment..
+    //                   .... $_ENV['SLIM_MODE'] = 'production';
 ));
 
 $app->configureMode('production', function () use ($app) {
@@ -97,7 +100,8 @@ $app->configureMode('development', function () use ($app) {
     $route_handler->init();
 }
 
-function isValidPost(&$app) {
+function isValidPost(&$app)
+{
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }
 
@@ -106,10 +110,11 @@ function isValidPost(&$app) {
  * 
  * Given that we don't have object factories implemented, we'll initialise them directly here.
  */
-$app->hook('slim.before', function () use ($app) {
+$app->hook('slim.before', function () use ($app)
+{
     $client = new APIClient();
     if (!is_null(UserSession::getCurrentUserID()) &&
-            $current_user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID())) {
+        $current_user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID())) {
         $app->view()->appendData(array('user' => $current_user));
         $user = $client->castCall("User", APIClient::API_VERSION."/users/".UserSession::getCurrentUserID(),
                         HTTP_Request2::METHOD_GET, null, array("role"=>'organisation_member'));

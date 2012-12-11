@@ -793,6 +793,7 @@ DROP PROCEDURE alterTable;
 CREATE TABLE IF NOT EXISTS `password_reset_requests` (
     `uid` CHAR(40) NOT NULL,
     `user_id` INT(11) UNSIGNED NOT NULL,
+    `request_time` datetime NOT NULL,
     PRIMARY KEY (`uid`, `user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -803,6 +804,13 @@ BEGIN
     if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='password_reset_requests'and tc.CONSTRAINT_NAME='FK_password_reset_user') then
         ALTER TABLE `password_reset_requests`
 	ADD CONSTRAINT `FK_password_reset_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+    end if;
+    if NOT EXISTS (SELECT * FROM information_schema.COLUMNS cols
+        WHERE cols.TABLE_SCHEMA = database()
+        AND cols.TABLE_NAME = 'password_reset_requests'
+        AND cols.COLUMN_NAME = 'request_time') then
+    ALTER TABLE `password_reset_requests`
+        ADD COLUMN `request_time` datetime NOT NULL;
     end if;
 END//
 
@@ -2354,7 +2362,7 @@ DROP PROCEDURE IF EXISTS `addPasswordResetRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
 BEGIN
-    INSERT INTO password_reset_requests (uid, user_id) VALUES (uniqueId,userId);
+    INSERT INTO password_reset_requests (uid, user_id, request_time) VALUES (uniqueId,userId,NOW());
 END//
 DELIMITER ;
 

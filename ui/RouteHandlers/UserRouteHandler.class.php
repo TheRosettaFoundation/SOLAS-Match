@@ -29,7 +29,7 @@ class UserRouteHandler
         $app->get('/logout', array($this, 'logout'))->name('logout');
         
         $app->get('/login', array($this, 'login')
-        )->via('GET','POST')->name('login');
+        )->via('GET', 'POST')->name('login');
 
         $app->get('/profile/:user_id', array($this, 'userPublicProfile')
         )->via('POST')->name('user-public-profile');
@@ -46,7 +46,7 @@ class UserRouteHandler
         
         $use_statistics = $settings->get('site.stats'); 
         
-        if($use_statistics == 'y') {
+        if ($use_statistics == 'y') {
             $request = APIClient::API_VERSION."/stats/totalUsers";
             $total_users = $client->call($request, HTTP_Request2::METHOD_GET);      
             
@@ -81,8 +81,8 @@ class UserRouteHandler
         $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
                                     array('limit' => 10));        
         $top_tags = array();
-        if($response) {
-            foreach($response as $stdObject) {
+        if ($response) {
+            foreach ($response as $stdObject) {
                 $top_tags[] = $client->cast('Tag', $stdObject);
             }
         }        
@@ -94,10 +94,10 @@ class UserRouteHandler
 
         $current_user_id = UserSession::getCurrentUserID();
         
-        if($current_user_id == null) {
-            $tasks = $client->castCall(array("Task"), APIClient::API_VERSION."/tasks/top_tasks"
-                                       ,HTTP_Request2::METHOD_GET, null,array('limit' => 10));
-            if($tasks) {
+        if ($current_user_id == null) {
+            $tasks = $client->castCall(array("Task"), APIClient::API_VERSION."/tasks/top_tasks",
+                    HTTP_Request2::METHOD_GET, null, array('limit' => 10));
+            if ($tasks) {
                 $app->view()->appendData(array(
                     'tasks' => $tasks
                 ));
@@ -108,13 +108,13 @@ class UserRouteHandler
                                     array('limit' => 10));
             
             $tasks = array();
-            if($response) {
-                foreach($response as $stdObject) {
+            if ($response) {
+                foreach ($response as $stdObject) {
                     $tasks[] = $client->cast('Task', $stdObject);
                 }
             }
 
-            if($tasks) {
+            if ($tasks) {
                 $app->view()->setData('tasks', $tasks);
             }
 
@@ -123,8 +123,8 @@ class UserRouteHandler
                                     array('limit' => 10));
             
             $user_tags = array();
-            if($response) {
-                foreach($response as $stdObject) {
+            if ($response) {
+                foreach ($response as $stdObject) {
                     $user_tags[] = $client->cast('Tag', $stdObject);
                 }
             }
@@ -143,13 +143,10 @@ class UserRouteHandler
         $client = new APIClient();
 
         $current_user_id    = UserSession::getCurrentUserID();
-        $current_user;
-        
-        
+
         $request = APIClient::API_VERSION."/users/$current_user_id";
         $response = $client->call($request);
-        $current_user = $client->cast('User', $response);
-        
+        $current_user = $client->cast('User', $response);        
         
         if (is_null($current_user_id)) {
             $app->flash('error', 'Login required to access page');
@@ -159,25 +156,22 @@ class UserRouteHandler
         $my_organisations = array();
         $url = APIClient::API_VERSION."/users/$current_user_id/orgs";
         $response = $client->call($url);
-        if($response) {
-            foreach($response as $stdObject) {
+        if ($response) {
+            foreach ($response as $stdObject) {
                 $my_organisations[] = $client->cast('Organisation', $stdObject);
             }
         }
-        //$my_organisations = (array)$client->call($url);
         
         $org_tasks = array();
         $orgs = array();
-        foreach($my_organisations as $org) {
-            //$url = APIClient::API_VERSION."/orgs/$org_id";
-            //$org_data = $client->call($url);
-            $org = $client->cast('Organisation', $org);
+
+        foreach ($my_organisations as $org) {
 
             $url = APIClient::API_VERSION."/orgs/{$org->getId()}/tasks";
             $org_tasks_data = $client->call($url);        
             $my_org_tasks = array();
-            if($org_tasks_data) {
-                foreach($org_tasks_data as $stdObject) {
+            if ($org_tasks_data) {
+                foreach ($org_tasks_data as $stdObject) {
                     $my_org_tasks[] = $client->cast('Task', $stdObject);
                 }
             } else {
@@ -189,8 +183,8 @@ class UserRouteHandler
             $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
                                         array('limit' => 30));        
             $top_tags = array();
-            if($response) {
-                foreach($response as $stdObject) {
+            if ($response) {
+                foreach ($response as $stdObject) {
                     $top_tags[] = $client->cast('Tag', $stdObject);
                 }
             }            
@@ -199,37 +193,37 @@ class UserRouteHandler
             $orgs[$org->getId()] = $org;
         }    
         
-        if($app->request()->isPost()) {
+        if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if(isset($post->track)) {
+            if (isset($post->track)) {
                 $task_id = $post->task_id;
                 $url = APICLient::API_VERSION."/tasks/$task_id";
                 $response = $client->call($url);
                 $task = $client->cast('Task', $response);
 
                 $task_title = '';
-                if($task->getTitle() != '') {
+                if ($task->getTitle() != '') {
                     $task_title = $task->getTitle();
                 } else {
                     $task_title = "task ".$task->getId();
                 }
-                if($post->track == "Ignore") {
+                if ($post->track == "Ignore") {
                    
                     $request = APIClient::API_VERSION."/users/$current_user_id/tracked_tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                    
                     
-                    if($response) {
+                    if ($response) {
                         $app->flashNow('success', 'No longer receiving notifications from '.$task_title.'.');
                     } else {
                         $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
                     }                    
-                } elseif($post->track == "Track") {
+                } elseif ($post->track == "Track") {
                     
                     $request = APIClient::API_VERSION."/users/$current_user_id/tracked_tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT);     
                     
-                    if($response) {
+                    if ($response) {
                         $app->flashNow('success', 'You will now receive notifications for '.$task_title.'.');
                     } else {
                         $app->flashNow('error', 'Unable to subscribe to '.$task_title.'.');
@@ -239,29 +233,34 @@ class UserRouteHandler
                 }
             }
         }
-        if(count($org_tasks) > 0) {
+        if (count($org_tasks) > 0) {
             
             $templateData = array();
-            foreach($org_tasks as $org=>$taskArray){
+            foreach ($org_tasks as $org => $taskArray) {
                 $taskData = array();
-                if($taskArray){
-                    foreach($taskArray as $task){
+                if ($taskArray) {
+                    foreach ($taskArray as $task) {
                         $temp = array();
                         $temp['task']=$task;
-                        $temp['translated']=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/version")>0;
-                        $temp['taskClaimed']=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/claimed")==1;
-                        $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION."/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getId()}")==1;
+                        $temp['translated']=$client->call(APIClient::API_VERSION.
+                                "/tasks/{$task->getId()}/version") > 0;
+                                
+                        $temp['taskClaimed']=$client->call(APIClient::API_VERSION.
+                                "/tasks/{$task->getId()}/claimed") == 1;
+                                
+                        $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION.
+                                "/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getId()}") == 1;
                         $taskData[]=$temp;
                     }
                 } else {
                     $taskData = null;
                 }
-                $templateData[$org]=$taskData;
+                $templateData[$org] = $taskData;
             }
             
             $app->view()->appendData(array(
-                'orgs' => $orgs
-                ,'templateData' => $templateData
+                'orgs' => $orgs,
+                'templateData' => $templateData
             ));
         }
         
@@ -276,23 +275,27 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         
-        $tempSettings=new Settings();
+        $tempSettings = new Settings();
         $use_openid = $tempSettings->get("site.openid");
-        $app->view()->setData('openid',$use_openid);
-        if(isset($use_openid)) {
-            if($use_openid == 'y' || $use_openid == 'h') {
+        $app->view()->setData('openid', $use_openid);
+        if (isset($use_openid)) {
+            if ($use_openid == 'y' || $use_openid == 'h') {
                 $extra_scripts = "
-                    <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
-                    <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-jquery.js\"></script>
-                    <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-en.js\"></script>
-                    <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/openid.css\" />";
+                    <script type=\"text/javascript\" src=\"".$app->urlFor("home").
+                        "resources/bootstrap/js/jquery-1.2.6.min.js\"></script>                            
+                    <script type=\"text/javascript\" src=\"".$app->urlFor("home").
+                        "resources/bootstrap/js/openid-jquery.js\"></script>                            
+                    <script type=\"text/javascript\" src=\"".$app->urlFor("home").
+                        "resources/bootstrap/js/openid-en.js\"></script>                            
+                    <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".$app->urlFor("home").
+                        "resources/css/openid.css\" />";
                 $app->view()->appendData(array('extra_scripts' => $extra_scripts));
             }   
         }   
         $error = null;
         $warning = null;
         if (isValidPost($app)) {
-            $post = (object)$app->request()->post();
+            $post = (object) $app->request()->post();
             
             if (!TemplateHelper::isValidEmail($post->email)) {
                 $error = 'The email address you entered was not valid. Please cheak for typos and try again.';
@@ -305,33 +308,33 @@ class UserRouteHandler
                 $registerData = array();
                 $registerData['email'] = $post->email;
                 $registerData['password'] = $post->password;
-                $register =  ModelFactory::BuildModel("Register", $registerData);
+                $register =  ModelFactory::buildModel("Register", $registerData);
 
                 $request = APIClient::API_VERSION."/register";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, $register);
 
-                if($response) {
+                if ($response) {
                 
                     $loginData = array();
                     $loginData['email'] = $post->email;
                     $loginData['password'] = $post->password;
-                    $login = ModelFactory::BuildModel("Login", $loginData);
+                    $login = ModelFactory::buildModel("Login", $loginData);
 
                     $request = APIClient::API_VERSION."/login";             
                     $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
 
-                    try {
-                        
-                        if(!is_array($user) && !is_null($user)) {
+                    try {                        
+                        if (!is_array($user) && !is_null($user)) {
                             $user = $client->cast("User", $user);
                             UserSession::setSession($user->getUserId());
                         } else {
-                            throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credentials used and try again.');    
+                            throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect.
+                                                                Please check the credentials used and try again.');    
                         }                    
                                        
                         
-                        if(isset($_SESSION['previous_page'])) {
-                            if(isset($_SESSION['old_page_vars'])) {
+                        if (isset($_SESSION['previous_page'])) {
+                            if (isset($_SESSION['old_page_vars'])) {
                                 $app->redirect($app->urlFor($_SESSION['previous_page'], $_SESSION['old_page_vars']));
                             } else {
                                 $app->redirect($app->urlFor($_SESSION['previous_page']));
@@ -349,7 +352,8 @@ class UserRouteHandler
                         echo $error;                                        
                     }
                 } else {
-                    $warning = 'You have already created an account. <a href="' . $app->urlFor('login') . '">Please log in.</a>';
+                    $warning = 'You have already created an account.
+                        <a href="' . $app->urlFor('login') . '">Please log in.</a>';
                 }
             }
         }
@@ -368,21 +372,21 @@ class UserRouteHandler
         $client = new APIClient();
         
         $request = APIClient::API_VERSION."/password_reset/$uid";
-        $response = $client->call($request);        
-        $reset_request = $client->cast('PasswordResetRequest', $response);
-
-        if($reset_request->getUserId()== '') {
+        $response = $client->call($request);
+        if (is_object($response)) {
+            $reset_request = $client->cast('PasswordResetRequest', $response);
+        } else {
             $app->flash('error', "Incorrect Unique ID. Are you sure you copied the URL correctly?");
             $app->redirect($app->urlFor('home'));
         }
         
         $user_id = $reset_request->getUserId();
-        $app->view()->setData("uid",$uid);
-        if($app->request()->isPost()) {
+        $app->view()->setData("uid", $uid);
+        if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
 
-            if(isset($post->new_password) && TemplateHelper::isValidPassword($post->new_password)) {
-                if(isset($post->confirmation_password) && 
+            if (isset($post->new_password) && TemplateHelper::isValidPassword($post->new_password)) {
+                if (isset($post->confirmation_password) && 
                         $post->confirmation_password == $post->new_password) {
 
                     $data = array();
@@ -391,9 +395,9 @@ class UserRouteHandler
 
                     $request = APIClient::API_VERSION."/password_reset";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, 
-                            ModelFactory::BuildModel("PasswordReset", $data));
+                            ModelFactory::buildModel("PasswordReset", $data));
                     
-                    if($response) { 
+                    if ($response) {
                     
                         $app->flash('success', "You have successfully changed your password");
                         $app->redirect($app->urlFor('home'));
@@ -405,7 +409,8 @@ class UserRouteHandler
                                         Please try again.");
                 }
             } else {
-                $app->flashNow('error', "Please check the password provided, and try again. It was not found to be valid.");
+                $app->flashNow('error', "Please check the password provided, and try again.
+                                It was not found to be valid.");
             }
         }        
         $app->render('password-reset.tpl');
@@ -416,29 +421,36 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         
-        if($app->request()->isPost()) {
-            $post = (object)$app->request()->post();
-            if(isset($post->password_reset)) {
-                if(isset($post->email_address) && $post->email_address != '')
-                {
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+            if (isset($post->password_reset)) {
+                if (isset($post->email_address) && $post->email_address != '') {
                     $request = APIClient::API_VERSION."/users/getByEmail/{$post->email_address}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
                     $user = $client->cast('User', $response); 
                     
-                    if($user) {  
+                    if ($user) {  
                         $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
                         $hasUserRequestedPwReset = $client->call($request, HTTP_Request2::METHOD_GET);
-                        
-                        if (!$hasUserRequestedPwReset) {                            
+
+                        $message = "";
+                        if (!$hasUserRequestedPwReset) {
+                            //send request
                             $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
-                            $response = $client->call($request, HTTP_Request2::METHOD_POST);                            
+                            $client->call($request, HTTP_Request2::METHOD_POST);
                             $app->flash('success', "Password reset request sent. Check your email
                                                     for further instructions.");
                             $app->redirect($app->urlFor('home'));
                         } else {
-                            $app->flashNow('info', "Password reset request has already been sent.
-                                                     Follow the link in the email that was sent to
-                                                     you to reset your password");
+                            //get request time
+                            $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest/time";
+                            $response = $client->call($request, HTTP_Request2::METHOD_GET);
+                            $app->flashNow('info', "Password reset request was already sent on $response.
+                                                     Another email has been sent to your contact address.
+                                                     Follow the link in this email to reset your password");
+                            //Send request
+                            $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
+                            $client->call($request, HTTP_Request2::METHOD_POST);
                         }
                     } else {
                         $app->flashNow("error", "Please enter a valid email address");
@@ -468,43 +480,48 @@ class UserRouteHandler
         $openid = new LightOpenID($tempSettings->get("site.url"));
         $use_openid = $tempSettings->get("site.openid");
         $app->view()->setData('openid', $use_openid);
-        if(isset($use_openid)) {
-            if($use_openid == 'y' || $use_openid == 'h') {
+        if (isset($use_openid)) {
+            if ($use_openid == 'y' || $use_openid == 'h') {
                 $extra_scripts = "
-                    <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
-                    <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-jquery.js\"></script>
-                    <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/openid-en.js\"></script>
-                    <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/openid.css\" />";
+                    <script type=\"text/javascript\" src=\"".$app->urlFor("home").
+                        "resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
+                    <script type=\"text/javascript\" src=\"".$app->urlFor("home").
+                        "resources/bootstrap/js/openid-jquery.js\"></script>
+                    <script type=\"text/javascript\" src=\"".$app->urlFor("home").
+                        "resources/bootstrap/js/openid-en.js\"></script>
+                    <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".
+                        $app->urlFor("home")."resources/css/openid.css\" />";
                 $app->view()->appendData(array('extra_scripts' => $extra_scripts));
             }
         }
         
         try {
-            if (isValidPost($app)){
-                $post = (object)$app->request()->post();
+            if (isValidPost($app)) {
+                $post = (object) $app->request()->post();
 
-                if(isset($post->login)) {
+                if (isset($post->login)) {
 
                     $loginData = array();
                     $loginData['email'] = $post->email;
                     $loginData['password'] = $post->password;
-                    $login = ModelFactory::BuildModel("Login", $loginData);
+                    $login = ModelFactory::buildModel("Login", $loginData);
 
                     $request = APIClient::API_VERSION."/login";             
                     $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
-                    if(!is_array($user) && !is_null($user)) {
+                    if (!is_array($user) && !is_null($user)) {
                         $user = $client->cast("User", $user);
                         UserSession::setSession($user->getUserId());
                     } else {
-                        throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect. Please check the credentials used and try again.');    
+                        throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect.
+                            Please check the credentials used and try again.');    
                     }
                     
                     $app->redirect($app->urlFor("home"));
-                } elseif(isset($post->password_reset)) {
+                } elseif (isset($post->password_reset)) {
                     $app->redirect($app->urlFor('password-reset-request'));
                 }
-            } elseif($app->request()->isPost()||$openid->mode){
-                $this->OpenIDLogin($openid,$app);
+            } elseif ($app->request()->isPost() || $openid->mode) {
+                $this->openIdLogin($openid, $app);
                 $app->redirect($app->urlFor("home"));
             }
             $app->render('login.tpl');
@@ -520,23 +537,23 @@ class UserRouteHandler
         }
     }
     
-    public function OpenIDLogin($openid,$app) {
-       
-        if(!$openid->mode) {
+    public function openIdLogin($openid, $app)
+    {       
+        if (!$openid->mode) {
             try {
-            $openid->identity = $openid->data['openid_identifier'];
-            $openid->required = array('contact/email');
-            $url =$openid->authUrl();
-            $app->redirect($openid->authUrl());
-            }catch(ErrorException $e) {
+                $openid->identity = $openid->data['openid_identifier'];
+                $openid->required = array('contact/email');
+                $url = $openid->authUrl();
+                $app->redirect($openid->authUrl());
+            } catch (ErrorException $e) {
                 echo $e->getMessage();
             }
-        } elseif($openid->mode == 'cancel') {
+        } elseif ($openid->mode == 'cancel') {
             throw new InvalidArgumentException('User has canceled authentication!');
             return false;
         } else {
             $retvals= $openid->getAttributes();
-            if($openid->validate()){
+            if ($openid->validate()) {
                 $client = new APIClient();
                 $request = APIClient::API_VERSION."/users/getByEmail/{$retvals['contact/email']}";
                 $response = $client->call($request);
@@ -547,15 +564,14 @@ class UserRouteHandler
 
                     $request = APIClient::API_VERSION."/register";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, 
-                            ModelFactory::BuildModel("Register", $registerData));
+                            ModelFactory::buildModel("Register", $registerData));
                 }
                 $user = $client->cast("User", $response);
                 UserSession::setSession($user->getUserId());
             }
             return true;
         }
-    }    
-    
+    }        
 
     public static function userPrivateProfile()
     {
@@ -574,20 +590,20 @@ class UserRouteHandler
             $app->redirect($app->urlFor('login'));
         }
         
-        if($app->request()->isPost()) {
+        if ($app->request()->isPost()) {
             $displayName = $app->request()->post('name');
-            if($displayName != NULL) {
+            if ($displayName != null) {
                 $user->setDisplayName($displayName);
             }
             
             $userBio = $app->request()->post('bio');
-            if($userBio != NULL) {
+            if ($userBio != null) {
                 $user->setBiography($userBio);
             }
             
             $nativeLang = $app->request()->post('nLanguage');
             $langCountry= $app->request()->post('nLanguageCountry');
-            if($nativeLang != NULL&&$langCountry!= NULL) {
+            if ($nativeLang != null && $langCountry != null) {
                 $user->setNativeLangId($nativeLang);
                 $user->setNativeRegionId($langCountry);
 
@@ -604,7 +620,7 @@ class UserRouteHandler
             $request = APIClient::API_VERSION."/users/$user_id";
             $client->call($request, HTTP_Request2::METHOD_PUT, $user);
             
-            if($user->getDisplayName() != '' && $user->getBiography() != ''
+            if ($user->getDisplayName() != '' && $user->getBiography() != ''
                     && $user->getNativeLangId() != '' && $user->getNativeRegionId() != '') {
 
                 $badge_id = BadgeTypes::PROFILE_FILLER;
@@ -620,8 +636,8 @@ class UserRouteHandler
             $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user->getUserId())));
         }
         
-        $app->view()->setData('languages',$languages);
-        $app->view()->setData('countries',$countries);
+        $app->view()->setData('languages', $languages);
+        $app->view()->setData('countries', $countries);
         
        
         $app->render('user-private-profile.tpl');
@@ -636,16 +652,16 @@ class UserRouteHandler
         $response = $client->call($url);
         $user = $client->cast('User', $response);
         
-        if($app->request()->isPost()) {
+        if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if(isset($post->badge_id) && $post->badge_id != '') {
+            if (isset($post->badge_id) && $post->badge_id != '') {
                 $badge_id = $post->badge_id;
                 $request = APIClient::API_VERSION."/users/$user_id/badges/$badge_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                 
             }
                 
-            if(isset($post->revoke)) {
+            if (isset($post->revoke)) {
                 $org_id = $post->org_id;
                 $request = APIClient::API_VERSION."/users/leaveOrg/$user_id/$org_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE); 
@@ -656,8 +672,8 @@ class UserRouteHandler
         $request = APIClient::API_VERSION."/users/$user_id/tasks";
         $response = $client->call($request);
         
-        if($response) {
-            foreach($response as $stdObject) {
+        if ($response) {
+            foreach ($response as $stdObject) {
                 $activeJobs[] = $client->cast('Task', $stdObject);
             }
         }
@@ -666,8 +682,8 @@ class UserRouteHandler
         $request = APIClient::API_VERSION."/users/$user_id/archived_tasks";
         $response = $client->call($request, HTTP_Request2::METHOD_GET, null, array('limit' => 10 )); 
         
-        if($response) {
-            foreach($response as $stdObject) {
+        if ($response) {
+            foreach ($response as $stdObject) {
                 $archivedJobs[] = $client->cast('Task', $stdObject);
             }
         }        
@@ -676,23 +692,30 @@ class UserRouteHandler
         $request = APIClient::API_VERSION."/users/$user_id/tags";
         $response = $client->call($request);
         
-        if($response) {
-            foreach($response as $stdObject) {
+        if ($response) {
+            foreach ($response as $stdObject) {
                 $user_tags[] = $client->cast('Tag', $stdObject);
             }
         }            
         
         $request = APIClient::API_VERSION."/users/$user_id/orgs";
-        $orgs = $client->call($request); 
+        $orgs = $client->call($request);
+
+        $user_orgs = array();
+        if ($orgs) {
+            foreach ($orgs as $org) {
+                $user_orgs[] = $client->cast('Organisation', $org);
+            }
+        }
         
         $badges = array();
         $orgList = array();
         $request = APIClient::API_VERSION."/users/$user_id/badges";
         $response = $client->call($request);
-        foreach($response as $stdObject) {
+        foreach ($response as $stdObject) {
             $badge = $client->cast('Badge', $stdObject);
             $badges[] = $badge;
-            if($badge->getOwnerId() != null) {
+            if ($badge->getOwnerId() != null) {
                 $mRequest = APIClient::API_VERSION."/orgs/".$badge->getOwnerId();
                 $mResponse = $client->call($mRequest);
                 $org = $client->cast('Organisation', $mResponse);
@@ -702,9 +725,10 @@ class UserRouteHandler
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
-              
-        $app->view()->setData('orgList',  $orgList);
+
+        $app->view()->setData('orgList', $orgList);
         $app->view()->appendData(array('badges' => $badges,
+                                    'user_orgs' => $user_orgs,
                                     'current_page' => 'user-profile',
                                     'activeJobs' => $activeJobs,
                                     'archivedJobs' => $archivedJobs,
@@ -713,7 +737,7 @@ class UserRouteHandler
                                     'extra_scripts' => $extra_scripts
         ));
                 
-        if(UserSession::getCurrentUserID() === $user_id) {
+        if (UserSession::getCurrentUserID() === $user_id) {
             $app->view()->appendData(array('private_access' => true));
         }
                     

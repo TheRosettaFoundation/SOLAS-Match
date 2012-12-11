@@ -1,178 +1,186 @@
 <?php
+
 require_once '../Common/models/Task.php';
 require_once 'TaskTags.class.php';
 require_once 'TaskFile.class.php';
 require_once '../Common/lib/PDOWrapper.class.php';
 require_once 'lib/Upload.class.php';
+
 /**
  * Task Document Access Object for manipulating tasks.
  *
  * @package default
  * @author eoin.oconchuir@ul.ie
  **/
+
 class TaskDao {
-	/**
-	 * Get a Task object, save to databse.
-	 *
-	 * @return Task object
-	 * @author
-	 **/
-	public function create($params) {
-        if(!is_array($params)&&  is_object($params)){
+    
+    /**
+     * Get a Task object, save to databse.
+     *
+     * @return Task object
+     * @author
+     **/
+    public function create($params)
+    {
+        if (!is_array($params) && is_object($params)) {
             $task   = APIHelper::cast("Task", $params);
         } else {
-            $task = ModelFactory::BuildModel("Task", $params);
+            $task = ModelFactory::buildModel("Task", $params);
         }
-		$this->save($task);
-		return $task;
-	}
-
-	public function findTasksByOrg($params, $sort_column = NULL, $sort_direction = NULL) {
-            $permitted_params = array(
-                    'organisation_ids'
-            );
-
-            if (!is_array($params)) {
-                    throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
-            }
-
-            $where = array();
-            foreach($params as $key => $value) {
-                    if (!in_array($key, $permitted_params)) {
-                            throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
-                    }
-            }
-
-            $tasks = null;
-
-            $organisation_ids = $params['organisation_ids'];
-
-                    // We're assuming that organisation_ids is always being provided.
-            if(count($organisation_ids) > 1) {
-                    $organisation_ids = implode(',', $organisation_ids);
-            }
-            $db = new PDOWrapper();
-            $db->init();
-            $args = $db->cleanse($organisation_ids);
-            $args .= empty($sort_column)?",null":"{$db->cleanse($sort_column)}";
-            $args .= (!empty($sort_column)&&empty($sort_direction))?" ":" {$db->cleanse($sort_direction)}";
-            if ($result = $db->call("getTasksByOrgIDs", $args)) {
-                    $tasks = array();
-                    foreach ($result as $row) {
-                        $task_data = array();
-                        foreach($row as $col_name => $col_value) {
-                            if ($col_name == 'id') {
-                                    $task_data['task_id'] = $col_value;
-                                }
-                            else if (!is_numeric($col_name) && !is_null($col_value)) {
-                                    $task_data[$col_name] = $col_value;
-                            }
-                        }
-                        
-                        if ($tags = TaskTags::getTags($row['id'])) {
-                            $task_data['tags'] = $tags;
-                        }
-
-                        $task = ModelFactory::BuildModel("Task", $task_data);
-                        if (is_object($task)) {
-                            $tasks[] = $task;
-                        }
-                    }
-            }
-
-            return $tasks;
-	}
-
-	public function find($params) {
-		$permitted_params = array(
-			'task_id',
-		);
-
-		if (!is_array($params)) {
-			throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
-		}
-
-		$where = array();
-		foreach($params as $key => $value) {
-			if (!in_array($key, $permitted_params)) {
-				throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
-			}
-		}
-                
-                $result = self::getTask($params);
-                return $result[0];
-	}
         
-        public function getTask($params){
-            $db=new PDOWrapper();
-            $db->init();
-            $args ="";
-            $args .= isset ($params['task_id'])?"{$db->cleanseNull($params['task_id'])}":"null";
-            $args .= isset ($params['org_id'])?",{$db->cleanseNull($params['org_id'])}":",null";
-            $args .= isset ($params['title'])?",{$db->cleanseNullOrWrapStr($params['title'])}":",null";
-            $args .= isset ($params['word_count'])?",{$db->cleanseNull($params['word_count'])}":",null";
-            $args .= isset ($params['source_id'])?",{$db->cleanseNull($params['source_id'])}":",null";
-            $args .= isset ($params['target_id'])?",{$db->cleanseNull($params['target_id'])}":",null";
-            $args .= isset ($params['created_time'])?",{$db->cleanseNull($params['created_time'])}":",null";
-            $args .= isset ($params['impact'])?",{$db->cleanseNullOrWrapStr($params['impact'])}":",null";
-            $args .= isset ($params['reference_page'])?",{$db->cleanseNullOrWrapStr($params['reference_page'])}":",null";
-            $args .= isset ($params['sourceCountry'])?",{$db->cleanseNullOrWrapStr($params['sourceCountry'])}":",null";
-            $args .= isset ($params['targetCountry'])?",{$db->cleanseNullOrWrapStr($params['targetCountry'])}":",null";
-            
+        $this->save($task);
+        return $task;
+    }
+
+    public function findTasksByOrg($params, $sort_column = null, $sort_direction = null)
+    {
+        $permitted_params = array(
+                'organisation_ids'
+        );
+
+        if (!is_array($params)) {
+            throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
+        }
+
+        $where = array();
+        foreach ($params as $key => $value) {
+            if (!in_array($key, $permitted_params)) {
+                throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
+            }
+        }
+
+        $tasks = null;
+        $organisation_ids = $params['organisation_ids'];
+        
+        // We're assuming that organisation_ids is always being provided.
+        if (count($organisation_ids) > 1) {
+            $organisation_ids = implode(',', $organisation_ids);
+        }
+        
+        $db = new PDOWrapper();
+        $db->init();
+        $args = $db->cleanse($organisation_ids);
+        $args .= empty($sort_column) ? ",null" : "{$db->cleanse($sort_column)}";
+        $args .= (!empty($sort_column) && empty($sort_direction)) ? " " : " {$db->cleanse($sort_direction)}";
+        if ($result = $db->call("getTasksByOrgIDs", $args)) {
             $tasks = array();
-            $result =$db->call("getTask", $args);
-            if($result){
-                foreach($result as $row){
-                    $task_data = array();
-                            foreach($row as $col_name => $col_value) {
-                                if ($col_name == 'id') {
-                                        $task_data['task_id'] = $col_value;
-                                    }
-                                else if (!is_numeric($col_name) && !is_null($col_value)) {
-                                        $task_data[$col_name] = $col_value;
-                                }
-                            }
+            foreach ($result as $row) {
+                $task_data = array();
+                foreach ($row as $col_name => $col_value) {
+                    if ($col_name == 'id') {
+                        $task_data['task_id'] = $col_value;
+                    } else if (!is_numeric($col_name) && !is_null($col_value)) {
+                        $task_data[$col_name] = $col_value;
+                    }
+                }
 
-                            if ($tags = TaskTags::getTags($row['id'])) {
-                                $task_data['tags'] = $tags;
-                            }
+                if ($tags = TaskTags::getTags($row['id'])) {
+                    $task_data['tags'] = $tags;
+                }
 
-                            $task = ModelFactory::BuildModel("Task", $task_data);
-                            if (is_object($task)) {
-                                $tasks[] = $task;
-                            }
+                $task = ModelFactory::buildModel("Task", $task_data);
+                if (is_object($task)) {
+                    $tasks[] = $task;
                 }
             }
-            if(sizeof($tasks)==0)$tasks=null;
-            return $tasks;
         }
 
+        return $tasks;
+    }
 
+    public function find($params) 
+    {
+        $permitted_params = array(
+                    'task_id',
+            );
+
+        if (!is_array($params)) {
+            throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
+        }
+
+        $where = array();
+        foreach ($params as $key => $value) {
+            if (!in_array($key, $permitted_params)) {
+                throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
+            }
+        }
+
+        $result = self::getTask($params);
+        return $result[0];
+    }
         
+    public function getTask($params)
+    {
+        $db = new PDOWrapper();
+        $db->init();
+        $args = "";
+        $args .= isset($params['task_id'])?"{$db->cleanseNull($params['task_id'])}":"null";
+        $args .= isset($params['org_id'])?",{$db->cleanseNull($params['org_id'])}":",null";
+        $args .= isset($params['title'])?",{$db->cleanseNullOrWrapStr($params['title'])}":",null";
+        $args .= isset($params['word_count'])?",{$db->cleanseNull($params['word_count'])}":",null";
+        $args .= isset($params['source_id'])?",{$db->cleanseNull($params['source_id'])}":",null";
+        $args .= isset($params['target_id'])?",{$db->cleanseNull($params['target_id'])}":",null";
+        $args .= isset($params['created_time'])?",{$db->cleanseNull($params['created_time'])}":",null";
+        $args .= isset($params['impact'])?",{$db->cleanseNullOrWrapStr($params['impact'])}":",null";
+        $args .= isset($params['reference_page'])?",{$db->cleanseNullOrWrapStr($params['reference_page'])}":",null";
+        $args .= isset($params['sourceCountry'])?",{$db->cleanseNullOrWrapStr($params['sourceCountry'])}":",null";
+        $args .= isset($params['targetCountry'])?",{$db->cleanseNullOrWrapStr($params['targetCountry'])}":",null";
 
-	/**
-	 * Save task object to database (either insert of update)
-	 *
-	 * @return void
-	 * @author 
-	 **/
-	public function save(&$task)
-	{
-		if (is_null($task->getId())) {
-			$this->_insert($task);
-		}
-		else {
-			$this->_update($task);
+        $tasks = array();
+        $result = $db->call("getTask", $args);
+        if ($result) {
+            foreach ($result as $row) {
+                $task_data = array();
+                
+                foreach ($row as $col_name => $col_value) {
+                    if ($col_name == 'id') {
+                        $task_data['task_id'] = $col_value;
+                    } else if (!is_numeric($col_name) && !is_null($col_value)) {
+                        $task_data[$col_name] = $col_value;
+                    }
+                }
+
+                if ($tags = TaskTags::getTags($row['id'])) {
+                    $task_data['tags'] = $tags;
+                }
+
+                $task = ModelFactory::buildModel("Task", $task_data);
+                if (is_object($task)) {
+                    $tasks[] = $task;
+                }
+            }
+        }
+        
+        if (sizeof($tasks) == 0) {
+            $tasks=null;
+        }
+        
+        return $tasks;
+    }
+    
+    /**
+     * Save task object to database (either insert of update)
+     *
+     * @return void
+     * @author 
+     **/
+    public function save(&$task)
+    {
+        if (is_null($task->getId())) {
+            $this->insert($task);
+        } else {
+            $this->update($task);
             //Only calc scores for tasks with MetaData
             $this->calculateTaskScore($task->getId());
-		}
-	}
+        }
+    }
 
     /*
      * Add an identicle entry with a different ID and target Language
      * Used for bulk uploads
      */
-    public function duplicateTaskForTarget($task, $language_id,$countryCode,$userID)
+    public function duplicateTaskForTarget($task, $language_id, $countryCode, $userID)
     {
         //Get the file info for original task
         $task_file_info = TaskFile::getTaskFileInfo($task);
@@ -188,7 +196,7 @@ class TaskDao {
         $this->calculateTaskScore($task->getId());
 
         //Generate new file info and save it
-        TaskFile::recordFileUpload($task,$task_file_info['filename'],$task_file_info['content_type'],$userID);
+        TaskFile::recordFileUpload($task, $task_file_info['filename'], $task_file_info['content_type'], $userID);
      
         $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
 
@@ -197,21 +205,34 @@ class TaskDao {
         $new_file_path = Upload::absoluteFilePathForUpload($task, 0, $file_info['filename']);
         
         Upload::createFolderPath($task);
-        if(!copy($old_file_path, $new_file_path)) {
+        if (!copy($old_file_path, $new_file_path)) {
             $error = "Failed to copy file to new location";
             return 0;
         }
+        
         return 1;
     }
 
-    private function _update($task) {
+    private function update($task)
+    {
         $db = new PDOWrapper();
         $db->init();
-        $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getId())},{$db->cleanseNull($task->getOrgId())},{$db->cleanseNullOrWrapStr($task->getTitle())},{$db->cleanseNull($task->getWordCount())},{$db->cleanseNull($task->getSourceLangId())},{$db->cleanseNull($task->getTargetLangId())},{$db->cleanseNullOrWrapStr($task->getCreatedTime())},{$db->cleanseNullOrWrapStr($task->getImpact())},{$db->cleanseNullOrWrapStr($task->getReferencePage())},{$db->cleanseNullOrWrapStr($task->getSourceRegionId())},{$db->cleanseNullOrWrapStr($task->getTargetRegionId())}");
-        $this->_updateTags($task);
+        $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getId())}
+                                                ,{$db->cleanseNull($task->getOrgId())}
+                                                ,{$db->cleanseNullOrWrapStr($task->getTitle())}
+                                                ,{$db->cleanseNull($task->getWordCount())}
+                                                ,{$db->cleanseNull($task->getSourceLangId())}
+                                                ,{$db->cleanseNull($task->getTargetLangId())}
+                                                ,{$db->cleanseNullOrWrapStr($task->getCreatedTime())}
+                                                ,{$db->cleanseNullOrWrapStr($task->getImpact())}
+                                                ,{$db->cleanseNullOrWrapStr($task->getReferencePage())}
+                                                ,{$db->cleanseNullOrWrapStr($task->getSourceRegionId())}
+                                                ,{$db->cleanseNullOrWrapStr($task->getTargetRegionId())}");
+        $this->updateTags($task);
     }
     
-    public function delete($TaskID){
+    public function delete($TaskID)
+    {
         $db = new PDOWrapper();
         $db->init();
         $result= $db->call("deleteTask", "{$db->cleanseNull($TaskID)}");
@@ -222,11 +243,13 @@ class TaskDao {
     {
         $settings = new Settings();
         $use_backend = $settings->get('site.backend');
-        if(strcasecmp($use_backend, "y") == 0) {
+        if (strcasecmp($use_backend, "y") == 0) {
             $mMessagingClient = new MessagingClient();
-            if($mMessagingClient->init()) {
+            if ($mMessagingClient->init()) {
                 $message = $mMessagingClient->createMessageFromString($task_id);
-                $mMessagingClient->sendTopicMessage($message, $mMessagingClient->MainExchange, $mMessagingClient->TaskScoreTopic);
+                $mMessagingClient->sendTopicMessage($message, 
+                                                    $mMessagingClient->MainExchange, 
+                                                    $mMessagingClient->TaskScoreTopic);
             } else {
                 echo "Failed to Initialize messaging client";
             }
@@ -237,27 +260,27 @@ class TaskDao {
         }
     }
 
-    public function _updateTags($task) {
-            TaskTags::deleteTaskTags($task);
-            if ($tags = $task->getTags()) {
-                    if ($tag_ids = $this->_tagsToIds($tags)) {
-                          TaskTags::setTaskTags($task, $tag_ids);
-                          return 1;
-                    }
-                    return 0;
+    public function updateTags($task)
+    {
+        TaskTags::deleteTaskTags($task);
+        if ($tags = $task->getTags()) {
+            if ($tag_ids = $this->tagsToIds($tags)) {
+                TaskTags::setTaskTags($task, $tag_ids);
+                return 1;
             }
             return 0;
+        }
+        return 0;
     }
 
-
-    private function _tagsToIds($tags) 
+    private function tagsToIds($tags) 
     {
         $tag_ids = array();
         foreach ($tags as $tag) {
             if ($tag_id = $this->getTagId($tag)) {
                 $tag_ids[] = $tag_id;
             } else {
-                $tag_ids[] = $this->_createTag($tag);
+                $tag_ids[] = $this->createTag($tag);
             }
         }
 
@@ -268,59 +291,47 @@ class TaskDao {
         }
     }
 
-    public function getTagId($tag) {
-            $tDAO = new TagsDao();
-            return $tDAO->tagIDFromLabel($tag);
+    public function getTagId($tag)
+    {
+        $tDAO = new TagsDao();
+        return $tDAO->tagIDFromLabel($tag);
     }
 
-    private function _createTag($tag) {
-            $tDAO = new TagsDao();
-            return $tDAO->create($tag);
+    private function createTag($tag)
+    {
+        $tDAO = new TagsDao();
+        return $tDAO->create($tag);
     }
 
-    private function _insert(&$task) {
+    private function insert(&$task)
+    {
         $db = new PDOWrapper();
         $db->init();
-        $result= $db->call("taskInsertAndUpdate", "null,".$db->cleanseNull($task->getOrgId()).",".
-                $db->cleanseNullOrWrapStr($task->getTitle()).",".$db->cleanseNull($task->getWordCount()).",".
-                $db->cleanseNull($task->getSourceLangId()).",".$db->cleanseNull($task->getTargetLangId()).",".
-                $db->cleanseNullOrWrapStr($task->getCreatedTime()).",".$db->cleanseNullOrWrapStr($task->getImpact()).",".
-                $db->cleanseNullOrWrapStr($task->getReferencePage()).",".$db->cleanseNullOrWrapStr($task->getSourceRegionId()).",".
-                $db->cleanseNullOrWrapStr($task->getTargetRegionId()));
+        $result= $db->call("taskInsertAndUpdate", "null,".$db->cleanseNull($task->getOrgId()).
+            ",".$db->cleanseNullOrWrapStr($task->getTitle()).
+            ",".$db->cleanseNull($task->getWordCount()).
+            ",".$db->cleanseNull($task->getSourceLangId()).
+            ",".$db->cleanseNull($task->getTargetLangId()).
+            ",".$db->cleanseNullOrWrapStr($task->getCreatedTime()).
+            ",".$db->cleanseNullOrWrapStr($task->getImpact()).
+            ",".$db->cleanseNullOrWrapStr($task->getReferencePage()).
+            ",".$db->cleanseNullOrWrapStr($task->getSourceRegionId()).
+            ",".$db->cleanseNullOrWrapStr($task->getTargetRegionId()));
         $task->setId($result[0]['id']);
-        $this->_updateTags($task);
+        $this->updateTags($task);
     }
 
-    public function getLatestAvailableTasks($nb_items = 10) {
-            $db = new PDOWrapper();
-            $db->init();
-            $ret = false;
-            if ($r = $db->call("getLatestAvailableTasks", "{$db->cleanse($nb_items)}")) {
-                    $ret = array();
-                    foreach($r as $row)	{
-                            // Add a new Job object to the array to be returned.
-                            $task = self::find(array('task_id' => $row['id']));
-                            if (!$task->getId()) {
-                                    throw new Exception('Tried to create a task, but its ID is not set.');
-                            }
-                            $ret[] = $task;
-                    }
-            }
-            return $ret;
-    }
-
-    /*
-     * Returns an array of tasks ordered by the highest score related to the user
-     */
-    public function getUserTopTasks($user_id, $limit) {
+    public function getLatestAvailableTasks($nb_items = 10)
+    {
         $db = new PDOWrapper();
         $db->init();
         $ret = false;
-        if ($result = $db->call("getUserTopTasks", "{$db->cleanse($user_id)},{$db->cleanse($limit)}")) {
+        if ($r = $db->call("getLatestAvailableTasks", "{$db->cleanse($nb_items)}")) {
             $ret = array();
-            foreach($result as $row) {
+            foreach ($r as $row) {
+                // Add a new Job object to the array to be returned.
                 $task = self::find(array('task_id' => $row['id']));
-                if(!$task->getId()) {
+                if (!$task->getId()) {
                     throw new Exception('Tried to create a task, but its ID is not set.');
                 }
                 $ret[] = $task;
@@ -329,73 +340,107 @@ class TaskDao {
         return $ret;
     }
 
-	/*
-	 * Return an array of tasks that are tagged with a certain tag.
-	 */
-	public function getTaggedTasks($tag, $limit = 10) {
-		$task_dao = new TaskDao;
-		$tag_id = $task_dao->getTagId($tag);
-                return $this->getTasksWithTag($tag_id,$limit);
-	}
+    /*
+     * Returns an array of tasks ordered by the highest score related to the user
+     */
+    public function getUserTopTasks($user_id, $limit)
+    {
+        $db = new PDOWrapper();
+        $db->init();
+        $ret = false;
+        if ($result = $db->call("getUserTopTasks", "{$db->cleanse($user_id)},{$db->cleanse($limit)}")) {
+            $ret = array();
+            foreach ($result as $row) {
+                $task = self::find(array('task_id' => $row['id']));
+                if (!$task->getId()) {
+                    throw new Exception('Tried to create a task, but its ID is not set.');
+                }
+                $ret[] = $task;
+            }
+        }
+        return $ret;
+    }
+
+    /*
+     * Return an array of tasks that are tagged with a certain tag.
+     */
+    public function getTaggedTasks($tag, $limit = 10)
+    {
+        $task_dao = new TaskDao;
+        $tag_id = $task_dao->getTagId($tag);
+        return $this->getTasksWithTag($tag_id, $limit);
+    }
         
-        public function getTasksWithTag($tag_id, $limit = 10) {
-		if (is_null($tag_id)) {
-			throw new InvalidArgumentException('Cannot get tasks tagged with ' . $tag . ' because no such tag is in the system.');
-		}
+    public function getTasksWithTag($tag_id, $limit = 10)
+    {
+        if (is_null($tag_id)) {
+            throw new InvalidArgumentException('Cannot get tasks tagged with '
+                                                . $tag .
+                                                ' because no such tag is in the system.');
+        }
 
-		$db = new PDOWrapper();
-		$db->init();
-		$ret = false;
-		if ($r = $db->call("getTaggedTasks", "{$db->cleanse($tag_id)},{$db->cleanse($limit)}")) {
-			$ret = array();
-			foreach($r as $row)	{
-				$ret[] = self::find(array('task_id' => $row['id']));
-			}
-		}
-		return $ret;
-	}
+        $db = new PDOWrapper();
+        $db->init();
+        $ret = false;
+        if ($r = $db->call("getTaggedTasks", "{$db->cleanse($tag_id)},{$db->cleanse($limit)}")) {
+            $ret = array();
+            foreach ($r as $row) {
+                    $ret[] = self::find(array('task_id' => $row['id']));
+            }
+        }
+        return $ret;
+    }
 
-	public function moveToArchive($task) {
-		$this->moveToArchiveByID($task->getId());
-	}
-        public function moveToArchiveByID($taskID) {
-		$db = new PDOWrapper();
-		$db->init();
-                $db->call("archiveTask", "{$db->cleanse($taskID)}");
-	}
+    public function moveToArchive($task) 
+    {
+        $this->moveToArchiveByID($task->getId());
+    }
 
-	public function claimTask($task, $user) {
-                return $this->claimTaskbyID($task->getId(), $user->getUserId());
-	}
+    public function moveToArchiveByID($taskID) 
+    {
+        $task = $this->find(array("task_id" => $taskID));
+        Notify::sendEmailNotifications($task, NotificationTypes::ARCHIVE);
+        $db = new PDOWrapper();
+        $db->init();
+        $db->call("archiveTask", "{$db->cleanse($taskID)}");
+    }
+
+    public function claimTask($task, $user)
+    {
+        return $this->claimTaskbyID($task->getId(), $user->getUserId());
+    }
         
-        public function claimTaskbyID($task_id, $user_id) {
-		$db = new PDOWrapper();
-		$db->init();
-                $ret = $db->call("claimTask", "{$db->cleanse($task_id)},{$db->cleanse($user_id)}");
-		return $ret[0]['result'];
-	}
+    public function claimTaskbyID($task_id, $user_id)
+    {
+        $db = new PDOWrapper();
+        $db->init();
+        $ret = $db->call("claimTask", "{$db->cleanse($task_id)},{$db->cleanse($user_id)}");
+        return $ret[0]['result'];
+    }
         
 
-	public function hasUserClaimedTask($user_id, $task_id) {
-		$db = new PDOWrapper();
-		$db->init();
+    public function hasUserClaimedTask($user_id, $task_id)
+    {
+        $db = new PDOWrapper();
+        $db->init();
         $result = $db->call("hasUserClaimedTask", "{$db->cleanse($task_id)},{$db->cleanse($user_id)}");
         return $result[0]['result'];
-	}
+    }
 
-	public function taskIsClaimed($task_id) {
-		$db = new PDOWrapper();
-		$db->init();
+    public function taskIsClaimed($task_id)
+    {
+        $db = new PDOWrapper();
+        $db->init();
         $result =  $db->call("taskIsClaimed", "{$db->cleanse($task_id)}");
         return $result[0]['result'];
-	}
+    }
 
     public function getTaskTranslator($task_id)
     {
         $ret = null;
         $db = new PDOWrapper();
         $db->init();
-        if($result = $db->call('getTaskTranslator', "{$db->cleanse($task_id)}")) {
+        if ($result = $db->call('getTaskTranslator', "{$db->cleanse($task_id)}")) {
             $user_dao = new UserDao();
             $ret = $user_dao->find($result[0]);
         }
@@ -404,35 +449,37 @@ class TaskDao {
         
     public function getUserTasks($user, $limit = 10)
     {
-         return $this->getUserTasksByID($user->getUserId(),$limit);
+        return $this->getUserTasksByID($user->getUserId(), $limit);
     }
     
     public function getUserTasksByID($user_id, $limit = 10)
     {
         $db = new PDOWrapper();
         $db->init();
-        return $this->_parse_result_for_user_task($db->call("getUserTasks", "{$db->cleanse($user_id)},{$db->cleanse($limit)}"));
+        return $this->parseResultForUserTask($db->call("getUserTasks",
+                                                "{$db->cleanse($user_id)}
+                                                ,{$db->cleanse($limit)}"));
     }
 
     public function getUserArchivedTasks($user, $limit = 10)
     {
-        return $this->getUserArchivedTasksByID($user->getUserId(),$limit);
-        
+        return $this->getUserArchivedTasksByID($user->getUserId(), $limit);        
     }
-     public function getUserArchivedTasksByID($user_id, $limit = 10)
+    
+    public function getUserArchivedTasksByID($user_id, $limit = 10)
     {
         $db = new PDOWrapper();
         $db->init();
-        return $this->_parse_result_for_user_task($db->call("getUserArchivedTasks", "{$db->cleanse($user_id)},{$db->cleanse($limit)}"));
-        
+        return $this->parseResultForUserTask($db->call("getUserArchivedTasks", 
+                                                        "{$db->cleanse($user_id)},{$db->cleanse($limit)}"));        
     }
 
-   private function _parse_result_for_user_task($sqlResult)
-    {
-        $ret = NULL;
-        if($sqlResult) {
+    private function parseResultForUserTask($sqlResult)
+    {   
+        $ret = null;
+        if ($sqlResult) {
             $ret = array();
-            foreach($sqlResult as $row) {
+            foreach ($sqlResult as $row) {
                 $params = array();
                 $params['task_id'] = $row['task_id'];
                 $params['title'] = $row['title'];
@@ -443,14 +490,14 @@ class TaskDao {
                 $params['target_id'] = $row['target_id'];
                 $params['word_count'] = $row['word_count'];
                 $params['created_time'] = $row['created_time'];
-                $task = ModelFactory::BuildModel("Task", $params);
+                $task = ModelFactory::buildModel("Task", $params);
                 $task->setStatus($this->getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }
-         
+
         return $ret;
-    }
+     }
 
     /*
        Get User Notification List for this task
@@ -460,8 +507,8 @@ class TaskDao {
         $ret = null;
         $db = new PDOWrapper();
         $db->init();
-        if($result = $db->call('getSubscribedUsers', "$task_id")) {
-            foreach($result as $row) {
+        if ($result = $db->call('getSubscribedUsers', "$task_id")) {
+            foreach ($result as $row) {
                 $user_dao = new UserDao();
                 $ret[] = $user_dao->find($row);
             }
@@ -475,39 +522,37 @@ class TaskDao {
     */
     public function hasBeenUploaded($task_id, $user_id)
     {
-        return TaskFile::_check_task_file_version($task_id, $user_id);
+        return TaskFile::checkTaskFileVersion($task_id, $user_id);
     }
 
     public function getTaskStatus($task_id)
     {
-        
-        if(TaskFile::_check_task_file_version($task_id)) {
+        if (TaskFile::checkTaskFileVersion($task_id)) {
             return "Your translation is under review";
         } else {
             return "Awaiting your translation";
         }
     }
  
-    public static function downloadTask($taskID,$version=0){
-            $task_dao = new TaskDao;
-            $task = $task_dao->find(array('task_id' => $taskID));
+    public static function downloadTask($taskID,$version=0)
+    {
+        $task_dao = new TaskDao;
+        $task = $task_dao->find(array('task_id' => $taskID));
 
-            if (!is_object($task)) {
-                header('HTTP/1.0 404 Not Found');
-                die;
-            }
-            $task_file_info         = TaskFile::getTaskFileInfo($task, $version);
+        if (!is_object($task)) {
+            header('HTTP/1.0 404 Not Found');
+            die;
+        }
+        
+        $task_file_info = TaskFile::getTaskFileInfo($task, $version);
 
-            if (empty($task_file_info)) {
-                throw new Exception("Task file info not set for.");
-            }
-
-            $absolute_file_path     = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
-            $file_content_type      = $task_file_info['content_type'];
-            TaskFile::logFileDownload($task, $version);
-            IO::downloadFile($absolute_file_path, $file_content_type);
+        if (empty($task_file_info)) {
+            throw new Exception("Task file info not set for.");
         }
 
-  
-
+        $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
+        $file_content_type = $task_file_info['content_type'];
+        TaskFile::logFileDownload($task, $version);
+        IO::downloadFile($absolute_file_path, $file_content_type);
+    }
 }

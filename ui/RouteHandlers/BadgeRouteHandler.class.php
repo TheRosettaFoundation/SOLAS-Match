@@ -5,7 +5,6 @@ class BadgeRouteHandler
     public function init()
     {
         $app = Slim::getInstance();
-
         $app->get('/badge/list', array($this, 'badgeList'))->name('badge-list');
     }
 
@@ -18,10 +17,10 @@ class BadgeRouteHandler
         $org_list = array();
         $request = APIClient::API_VERSION."/badges";
         $response = $client->call($request);
-        foreach($response as $stdObject) {
+        foreach ($response as $stdObject) {
             $badge = $client->cast('Badge', $stdObject);
             $badgeList[] = $badge;
-            if($badge->getOwnerId() != null) {
+            if ($badge->getOwnerId() != null) {
                 $mRequest = APIClient::API_VERSION."/orgs/".$badge->getOwnerId();
                 $mResponse = $client->call($mRequest);
                 $org = $client->cast('Organisation', $mResponse);
