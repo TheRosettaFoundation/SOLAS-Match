@@ -170,7 +170,7 @@ class Dispatcher {
             }
         }
     }
-<<<<<<< HEAD
+
     
     public static function clenseArgs($index,$httpMethod=null,$default=null){
         $req=Dispatcher::getDispatcher()->request();
@@ -208,8 +208,6 @@ class Dispatcher {
         }
         return $ret;
     }
- 
-=======
->>>>>>> 59400af09b1ed038f2476d54874d6c3d923a553b
+
 }
 Dispatcher::init();

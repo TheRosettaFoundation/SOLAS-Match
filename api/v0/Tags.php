@@ -15,15 +15,9 @@ class Tags {
     {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags(:format)/',
                                                         function ($format = ".json") {
-            $limit = 20;
-            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
-                $limit= $_GET['limit'];
-            }
+            $limit = Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,20);
 
-            $topTags = false;
-            if (isset($_GET['topTags']) && strcasecmp($_GET['topTags'], 'true') == 0) {
-                $topTags = true;
-            }
+            $topTags = Dispatcher::clenseArgs('topTags',  HttpMethodEnum::GET,false);
 
             $dao = new TagsDao();
             if ($topTags) {
@@ -58,11 +52,7 @@ class Tags {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/topTags(:format)/',
                                                         function ($format = ".json") {
-            $limit = 30;
-            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
-                $limit= $_GET['limit'];
-            }
-
+            $limit = Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,30);
             $data= TagsDao::getTopTags($limit);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTopTags');
@@ -120,11 +110,7 @@ class Tags {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:id/tasks(:format)/',
                                                         function ($id,$format=".json") {
-            
-            $limit = 5;
-            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
-                $limit = $_GET['limit'];
-            }
+            $limit = Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,5);
             $dao = new TaskDao();
             Dispatcher::sendResponce(null, $dao->getTasksWithTag($id, $limit), null, $format);
         }, 'getTaskForTag');
