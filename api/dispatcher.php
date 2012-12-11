@@ -176,19 +176,19 @@ class Dispatcher {
         $req=Dispatcher::getDispatcher()->request();
         switch ($httpMethod){
             case HttpMethodEnum::GET:{
-                 $result = $req->get('paramName');
+                 $result = $req->get($index);
                  return is_null($result) ? $default : $result; 
             }
             case HttpMethodEnum::POST:{
-                $result = $req->post('paramName');
+                $result = $req->post($index);
                 return is_null($result) ? $default : $result; 
             }
             case HttpMethodEnum::PUT:{
-               $result = $req->put('paramName');
+               $result = $req->put($index);
                return is_null($result) ? $default : $result; 
             }
             default:{
-               $result = $req->params('paramName');
+               $result = $req->params($index);
                return is_null($result) ? $default : $result; 
             }
         }
