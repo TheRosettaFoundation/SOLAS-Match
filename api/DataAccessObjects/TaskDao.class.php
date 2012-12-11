@@ -26,7 +26,7 @@ class TaskDao {
         if (!is_array($params) && is_object($params)) {
             $task   = APIHelper::cast("Task", $params);
         } else {
-            $task = ModelFactory::BuildModel("Task", $params);
+            $task = ModelFactory::buildModel("Task", $params);
         }
         
         $this->save($task);
@@ -79,7 +79,7 @@ class TaskDao {
                     $task_data['tags'] = $tags;
                 }
 
-                $task = ModelFactory::BuildModel("Task", $task_data);
+                $task = ModelFactory::buildModel("Task", $task_data);
                 if (is_object($task)) {
                     $tasks[] = $task;
                 }
@@ -115,17 +115,17 @@ class TaskDao {
         $db = new PDOWrapper();
         $db->init();
         $args = "";
-        $args .= isset ($params['task_id'])?"{$db->cleanseNull($params['task_id'])}":"null";
-        $args .= isset ($params['org_id'])?",{$db->cleanseNull($params['org_id'])}":",null";
-        $args .= isset ($params['title'])?",{$db->cleanseNullOrWrapStr($params['title'])}":",null";
-        $args .= isset ($params['word_count'])?",{$db->cleanseNull($params['word_count'])}":",null";
-        $args .= isset ($params['source_id'])?",{$db->cleanseNull($params['source_id'])}":",null";
-        $args .= isset ($params['target_id'])?",{$db->cleanseNull($params['target_id'])}":",null";
-        $args .= isset ($params['created_time'])?",{$db->cleanseNull($params['created_time'])}":",null";
-        $args .= isset ($params['impact'])?",{$db->cleanseNullOrWrapStr($params['impact'])}":",null";
-        $args .= isset ($params['reference_page'])?",{$db->cleanseNullOrWrapStr($params['reference_page'])}":",null";
-        $args .= isset ($params['sourceCountry'])?",{$db->cleanseNullOrWrapStr($params['sourceCountry'])}":",null";
-        $args .= isset ($params['targetCountry'])?",{$db->cleanseNullOrWrapStr($params['targetCountry'])}":",null";
+        $args .= isset($params['task_id'])?"{$db->cleanseNull($params['task_id'])}":"null";
+        $args .= isset($params['org_id'])?",{$db->cleanseNull($params['org_id'])}":",null";
+        $args .= isset($params['title'])?",{$db->cleanseNullOrWrapStr($params['title'])}":",null";
+        $args .= isset($params['word_count'])?",{$db->cleanseNull($params['word_count'])}":",null";
+        $args .= isset($params['source_id'])?",{$db->cleanseNull($params['source_id'])}":",null";
+        $args .= isset($params['target_id'])?",{$db->cleanseNull($params['target_id'])}":",null";
+        $args .= isset($params['created_time'])?",{$db->cleanseNull($params['created_time'])}":",null";
+        $args .= isset($params['impact'])?",{$db->cleanseNullOrWrapStr($params['impact'])}":",null";
+        $args .= isset($params['reference_page'])?",{$db->cleanseNullOrWrapStr($params['reference_page'])}":",null";
+        $args .= isset($params['sourceCountry'])?",{$db->cleanseNullOrWrapStr($params['sourceCountry'])}":",null";
+        $args .= isset($params['targetCountry'])?",{$db->cleanseNullOrWrapStr($params['targetCountry'])}":",null";
 
         $tasks = array();
         $result = $db->call("getTask", $args);
@@ -145,7 +145,7 @@ class TaskDao {
                     $task_data['tags'] = $tags;
                 }
 
-                $task = ModelFactory::BuildModel("Task", $task_data);
+                $task = ModelFactory::buildModel("Task", $task_data);
                 if (is_object($task)) {
                     $tasks[] = $task;
                 }
@@ -490,7 +490,7 @@ class TaskDao {
                 $params['target_id'] = $row['target_id'];
                 $params['word_count'] = $row['word_count'];
                 $params['created_time'] = $row['created_time'];
-                $task = ModelFactory::BuildModel("Task", $params);
+                $task = ModelFactory::buildModel("Task", $params);
                 $task->setStatus($this->getTaskStatus($task->getId()));
                 $ret[] = $task;
             }

@@ -31,7 +31,7 @@ class Users {
             }
             
             $role = false;
-            if (isset ($_GET['role'])) {
+            if (isset($_GET['role'])) {
                 $role= $_GET['role'];
             }
             
@@ -147,7 +147,7 @@ class Users {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
             $limit = null;
-            if (isset ($_GET['limit']) && is_numeric($_GET['limit'])) {
+            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
                 $limit = $_GET['limit'];
             }
             $dao = new UserDao();
@@ -179,7 +179,7 @@ class Users {
                                                         function ($id, $format = ".json") {
             
             $limit = 5;
-            if (isset ($_GET['limit']) && is_numeric($_GET['limit'])) {
+            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
                 $limit = $_GET['limit'];
             }
             $dao = new TaskDao();
@@ -192,7 +192,7 @@ class Users {
                                                         function ($id, $format = ".json") {
             
             $limit=5;
-            if (isset ($_GET['limit']) && is_numeric($_GET['limit'])) {
+            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
                 $limit= $_GET['limit'];
             }
             $dao = new TaskDao();

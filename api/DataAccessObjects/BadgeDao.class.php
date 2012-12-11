@@ -11,7 +11,7 @@ class BadgeDao
         $db = new PDOWrapper();
         $db->init();
         $result=$db->call("getBadge", "{$db->cleanse($params['badge_id'])},null,null,null");
-        return ModelFactory::BuildModel("Badge", $result[0]);
+        return ModelFactory::buildModel("Badge", $result[0]);
     }
     
     public function insertAndUpdateBadge($badge)
@@ -32,7 +32,7 @@ class BadgeDao
         $results=$db->call("getBadge", "null,null,null,null");
         $ret = null;
         foreach ($results as $result) {
-            $ret[]= ModelFactory::BuildModel("Badge", $result);
+            $ret[]= ModelFactory::buildModel("Badge", $result);
         }
         
         return $ret;
@@ -46,7 +46,7 @@ class BadgeDao
         if ($badge_array = $db->call("getBadge", "null,null,null,{$db->cleanse($org_id)}")) {
             $ret = array();
             foreach ($badge_array as $badge) {
-                $ret[] = ModelFactory::BuildModel("Badge", $badge);
+                $ret[] = ModelFactory::buildModel("Badge", $badge);
             }
         } 
         

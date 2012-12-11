@@ -16,12 +16,12 @@ class Tags {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags(:format)/',
                                                         function ($format = ".json") {
             $limit = 20;
-            if (isset ($_GET['limit']) && is_numeric($_GET['limit'])) {
+            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
                 $limit= $_GET['limit'];
             }
 
             $topTags = false;
-            if (isset ($_GET['topTags']) && strcasecmp($_GET['topTags'], 'true') == 0) {
+            if (isset($_GET['topTags']) && strcasecmp($_GET['topTags'], 'true') == 0) {
                 $topTags = true;
             }
 
@@ -59,7 +59,7 @@ class Tags {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/topTags(:format)/',
                                                         function ($format = ".json") {
             $limit = 30;
-            if (isset ($_GET['limit']) && is_numeric($_GET['limit'])) {
+            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
                 $limit= $_GET['limit'];
             }
 
@@ -122,7 +122,7 @@ class Tags {
                                                         function ($id,$format=".json") {
             
             $limit = 5;
-            if (isset ($_GET['limit']) && is_numeric($_GET['limit'])) {
+            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
                 $limit = $_GET['limit'];
             }
             $dao = new TaskDao();

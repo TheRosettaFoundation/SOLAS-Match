@@ -128,7 +128,7 @@ class Upload {
         $file_name 	= $_FILES[$form_file_field]['name'];
         $file_tmp_name 	= $_FILES[$form_file_field]['tmp_name'];
         $version 	= TaskFile::recordFileUpload($task, $file_name, $_FILES[$form_file_field]['type'], $user_id);
-        $version = $version[0]['version'];
+        $version        = $version[0]['version'];
         $upload_folder 	= self::absoluteFolderPathForUpload($task, $version);
 
         self::saveSubmittedFileToFs($task, $file_name, $file_tmp_name, $version);

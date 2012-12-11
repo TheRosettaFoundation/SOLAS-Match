@@ -201,7 +201,7 @@ class UserRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if (isset ($post->track)) {
+            if (isset($post->track)) {
                 $task_id = $post->task_id;
                 $url = APICLient::API_VERSION."/tasks/$task_id";
                 $response = $client->call($url);
@@ -283,7 +283,7 @@ class UserRouteHandler
         $tempSettings = new Settings();
         $use_openid = $tempSettings->get("site.openid");
         $app->view()->setData('openid', $use_openid);
-        if (isset ($use_openid)) {
+        if (isset($use_openid)) {
             if ($use_openid == 'y' || $use_openid == 'h') {
                 $extra_scripts = "
                     <script type=\"text/javascript\" src=\"".$app->urlFor("home").
@@ -313,7 +313,7 @@ class UserRouteHandler
                 $registerData = array();
                 $registerData['email'] = $post->email;
                 $registerData['password'] = $post->password;
-                $register =  ModelFactory::BuildModel("Register", $registerData);
+                $register =  ModelFactory::buildModel("Register", $registerData);
 
                 $request = APIClient::API_VERSION."/register";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, $register);
@@ -323,7 +323,7 @@ class UserRouteHandler
                     $loginData = array();
                     $loginData['email'] = $post->email;
                     $loginData['password'] = $post->password;
-                    $login = ModelFactory::BuildModel("Login", $loginData);
+                    $login = ModelFactory::buildModel("Login", $loginData);
 
                     $request = APIClient::API_VERSION."/login";             
                     $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
@@ -338,8 +338,8 @@ class UserRouteHandler
                         }                    
                                        
                         
-                        if (isset ($_SESSION['previous_page'])) {
-                            if (isset ($_SESSION['old_page_vars'])) {
+                        if (isset($_SESSION['previous_page'])) {
+                            if (isset($_SESSION['old_page_vars'])) {
                                 $app->redirect($app->urlFor($_SESSION['previous_page'], $_SESSION['old_page_vars']));
                             } else {
                                 $app->redirect($app->urlFor($_SESSION['previous_page']));
@@ -400,7 +400,7 @@ class UserRouteHandler
 
                     $request = APIClient::API_VERSION."/password_reset";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, 
-                            ModelFactory::BuildModel("PasswordReset", $data));
+                            ModelFactory::buildModel("PasswordReset", $data));
                     
                     if ($response) {
                     
@@ -428,8 +428,8 @@ class UserRouteHandler
         
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
-            if (isset ($post->password_reset)) {
-                if (isset ($post->email_address) && $post->email_address != '') {
+            if (isset($post->password_reset)) {
+                if (isset($post->email_address) && $post->email_address != '') {
                     $request = APIClient::API_VERSION."/users/getByEmail/{$post->email_address}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
                     $user = $client->cast('User', $response); 
@@ -477,7 +477,7 @@ class UserRouteHandler
         $openid = new LightOpenID($tempSettings->get("site.url"));
         $use_openid = $tempSettings->get("site.openid");
         $app->view()->setData('openid', $use_openid);
-        if (isset ($use_openid)) {
+        if (isset($use_openid)) {
             if ($use_openid == 'y' || $use_openid == 'h') {
                 $extra_scripts = "
                     <script type=\"text/javascript\" src=\"".$app->urlFor("home").
@@ -496,12 +496,12 @@ class UserRouteHandler
             if (isValidPost($app)) {
                 $post = (object) $app->request()->post();
 
-                if (isset ($post->login)) {
+                if (isset($post->login)) {
 
                     $loginData = array();
                     $loginData['email'] = $post->email;
                     $loginData['password'] = $post->password;
-                    $login = ModelFactory::BuildModel("Login", $loginData);
+                    $login = ModelFactory::buildModel("Login", $loginData);
 
                     $request = APIClient::API_VERSION."/login";             
                     $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
@@ -514,7 +514,7 @@ class UserRouteHandler
                     }
                     
                     $app->redirect($app->urlFor("home"));
-                } elseif (isset ($post->password_reset)) {
+                } elseif (isset($post->password_reset)) {
                     $app->redirect($app->urlFor('password-reset-request'));
                 }
             } elseif ($app->request()->isPost() || $openid->mode) {
@@ -561,7 +561,7 @@ class UserRouteHandler
 
                     $request = APIClient::API_VERSION."/register";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, 
-                            ModelFactory::BuildModel("Register", $registerData));
+                            ModelFactory::buildModel("Register", $registerData));
                 }
                 $user = $client->cast("User", $response);
                 UserSession::setSession($user->getUserId());
@@ -652,13 +652,13 @@ class UserRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if (isset ($post->badge_id) && $post->badge_id != '') {
+            if (isset($post->badge_id) && $post->badge_id != '') {
                 $badge_id = $post->badge_id;
                 $request = APIClient::API_VERSION."/users/$user_id/badges/$badge_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                 
             }
                 
-            if (isset ($post->revoke)) {
+            if (isset($post->revoke)) {
                 $org_id = $post->org_id;
                 $request = APIClient::API_VERSION."/users/leaveOrg/$user_id/$org_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE); 

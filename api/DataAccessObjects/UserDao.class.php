@@ -37,7 +37,7 @@ class UserDao {
                     'native_lang_id' => $r[0]['native_lang_id'],
                     'native_region_id' => $r[0]['native_region_id']
             );
-            $ret = ModelFactory::BuildModel("User", $user_data);
+            $ret = ModelFactory::buildModel("User", $user_data);
         }
         return $ret;
     }
@@ -58,7 +58,7 @@ class UserDao {
                 'password' => $password
         );
 
-        $user = ModelFactory::BuildModel("User", $user_data);
+        $user = ModelFactory::buildModel("User", $user_data);
         return $this->save($user);
     }
 
@@ -253,7 +253,7 @@ class UserDao {
         if ($result = $db->call("findOrganisationsUserBelongsTo", $db->cleanse($user_id))) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::BuildModel("Organisation", $row);
+                $ret[] = ModelFactory::buildModel("Organisation", $row);
             }
         }
         return $ret;
@@ -271,7 +271,7 @@ class UserDao {
         $db->init();
         if ($result = $db->call("getUserBadges", $db->cleanse($user_id))) {
             foreach ($result as $badge) {
-                $ret[] = ModelFactory::BuildModel("Badge", $badge);
+                $ret[] = ModelFactory::buildModel("Badge", $badge);
             }
         }
         return $ret;
@@ -285,7 +285,7 @@ class UserDao {
         if ($result = $db->call("getUserTags", "{$db->cleanse($user_id)},{$db->cleanseNull($limit)}")) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::BuildModel("Tag", $row);
+                $ret[] = ModelFactory::buildModel("Tag", $row);
             }
         }
 
@@ -308,7 +308,7 @@ class UserDao {
                                 ,{$db->cleanseNull($native_region_id)}")) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::BuildModel("User", $row);
+                $ret[] = ModelFactory::buildModel("User", $row);
             }
         }
         return $ret;        
@@ -325,7 +325,7 @@ class UserDao {
         if ($result = $db->call("getUsersWithBadge", "{$db->cleanse($badge_ID)}")) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::BuildModel("User", $row);
+                $ret[] = ModelFactory::buildModel("User", $row);
             }
         }
         return $ret;
@@ -456,7 +456,7 @@ class UserDao {
                 $params['target_id'] = $row['target_id'];
                 $params['word_count'] = $row['word_count'];
                 $params['created_time'] = $row['created_time'];
-                $task = ModelFactory::BuildModel("Task", $params);
+                $task = ModelFactory::buildModel("Task", $params);
                 $task->setStatus($dao->getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
@@ -522,12 +522,12 @@ class UserDao {
         if (isset($args['uid']) && $args['uid'] != '') {
             $uid = $args['uid'];
             if ($result = $db->call("getPasswordResetRequests", "{$db->cleanseWrapStr($uid)}, null")) {
-                $ret = ModelFactory::BuildModel("PasswordResetRequest", $result[0]);
+                $ret = ModelFactory::buildModel("PasswordResetRequest", $result[0]);
             }
         } elseif (isset($args['user_id']) && $args['user_id'] != '') {
             $user_id = $args['user_id'];
             if ($result = $db->call("getPasswordResetRequests", "null, {$db->cleanse($user_id)}")) {
-                $ret = ModelFactory::BuildModel("PasswordResetRequest", $result);
+                $ret = ModelFactory::buildModel("PasswordResetRequest", $result);
             }
         }
 

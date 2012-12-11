@@ -25,7 +25,7 @@ class TagsDao {
                 $tag_data = array();
                 $tag_data['tag_id'] = $r['tag_id'];
                 $tag_data['label'] = $r['label'];
-                $ret[] = ModelFactory::BuildModel("Tag", $tag_data);
+                $ret[] = ModelFactory::buildModel("Tag", $tag_data);
             }
         }
         
@@ -34,7 +34,7 @@ class TagsDao {
 
     public function create($label)
     {
-        $tag = ModelFactory::BuildModel("Tag", (array('label' => $label)));
+        $tag = ModelFactory::buildModel("Tag", (array('label' => $label)));
         return $this->save($tag);
     }
 
@@ -145,7 +145,7 @@ class TagsDao {
         if ($r = $db->call("getTopTags", "{$db->cleanse($limit)}")) {
             $ret = array();
             foreach ($r as $row) {
-                $ret[] = ModelFactory::BuildModel("Tag", $row);
+                $ret[] = ModelFactory::buildModel("Tag", $row);
             }
         }
         return $ret;           

@@ -35,7 +35,7 @@ class Languages {
         $result = $db->call("getLanguage", "{$db->cleanseNullOrWrapStr($id)}
                                             ,{$db->cleanseNullOrWrapStr($code)}
                                             ,{$db->cleanseNullOrWrapStr($name)}");
-        return ModelFactory::BuildModel("Language", $result[0]);
+        return ModelFactory::buildModel("Language", $result[0]);
     }
 
     public static function getCountry($id, $code, $name)
@@ -45,7 +45,7 @@ class Languages {
         $result = $db->call("getCountry", "{$db->cleanseNUll($id)}
                                             ,{$db->cleanseNullOrWrapStr($code)}
                                             ,{$db->cleanseNullOrWrapStr($name)}");
-        return ModelFactory::BuildModel("Country", $result[0]);
+        return ModelFactory::buildModel("Country", $result[0]);
     }
 
     public static function getLanguageList()
@@ -54,7 +54,7 @@ class Languages {
         $db->init();
         $languages = array();
         foreach ($db->call("getLanguages", "") as $lcid) {
-            $languages[] = ModelFactory::BuildModel("Language", $lcid);
+            $languages[] = ModelFactory::buildModel("Language", $lcid);
         }
 
         return $languages;
@@ -66,7 +66,7 @@ class Languages {
         $db->init();
         $countries = array();
         foreach ($db->call("getCountries", "") as $lcid) {
-            $countries[] = ModelFactory::BuildModel('Country', $lcid);
+            $countries[] = ModelFactory::buildModel('Country', $lcid);
         }
                 
         return $countries;

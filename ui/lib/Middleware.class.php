@@ -6,11 +6,10 @@ class Middleware
     {
         $app = Slim::getInstance();
         
-        if(!UserSession::getCurrentUserID()) {
+        if (!UserSession::getCurrentUserID()) {
             $app->flash('error', "Login required to access page");
             $app->redirect($app->urlFor('login'));
-        }
-        
+        }        
         return true;
     }
 
@@ -19,22 +18,23 @@ class Middleware
         $app = Slim::getInstance();
         $params = $route->getParams();        
 
-        if($params !== NULL) {
+        if ($params !== null) {
             $client = new APIClient();
             $task_id = $params['task_id'];
             $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
             $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);             
             
-            if($taskClaimed) {
+            if ($taskClaimed) {
                 $user_id = UserSession::getCurrentUserID();
-                if(is_null($user_id)) {
+                if (is_null($user_id)) {
                     $app->flash('error', 'Login required to access page');
                     $app->redirect($app->urlFor('login'));
                 }
                 $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
-                $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET,null,array("userID"=>$user_id));
+                $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET,
+                                                null, array("userID" => $user_id));
 
-                if(!$userClaimedTask) {
+                if (!$userClaimedTask) {
                     $app->flash('error', 'This task has been claimed by another user');
                     $app->redirect($app->urlFor('home'));
                 }
@@ -51,15 +51,15 @@ class Middleware
         $client = new APIClient();        
         $user_id = UserSession::getCurrentUserID();
         $params = $route->getParams();
-        if($params !== NULL) {
+        if ($params !== null) {
             $org_id = $params['org_id'];
-            if($user_id) {
+            if ($user_id) {
                 $user_orgs = array();
                 $request = APIClient::API_VERSION."/users/$user_id/orgs";
-                $user_orgs = $client->castCall(array('Organisation'),$request, HTTP_Request2::METHOD_GET);
-                if(!is_null($user_orgs)) {
-                    foreach($user_orgs as $orgObject) {
-                        if($orgObject->getId() == $org_id) {
+                $user_orgs = $client->castCall(array('Organisation'), $request, HTTP_Request2::METHOD_GET);
+                if (!is_null($user_orgs)) {
+                    foreach ($user_orgs as $orgObject) {
+                        if ($orgObject->getId() == $org_id) {
                             return true;
                         }
                     }
@@ -69,12 +69,14 @@ class Middleware
         
         $app = Slim::getInstance();
         $org_name = 'this organisation';
-        if(isset($org_id)) {
+        if (isset($org_id)) {
             $request = APIClient::API_VERSION."/orgs/$org_id";
-            $org = $client->castCall('Organisation',$request, HTTP_Request2::METHOD_GET);
-            $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
+            $org = $client->castCall('Organisation', $request, HTTP_Request2::METHOD_GET);
+            $org_name = "<a href=\"".$app->urlFor('org-public-profile',
+                                                    array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
-        $app->flash('error', "You are not authorised to view this profile. Only members of ".$org_name." may view this page.");
+        $app->flash('error', "You are not authorised to view this profile.
+                    Only members of ".$org_name." may view this page.");
         $app->redirect($app->urlFor('home'));
     }
 
@@ -86,7 +88,7 @@ class Middleware
     {
         $client = new APIClient();
         $params= $route->getParams();
-        if($params != NULL) {
+        if ($params != null) {
             $task_id = $params['task_id'];
             $request = APIClient::API_VERSION."/tasks/$task_id";
             $response = $client->call($request, HTTP_Request2::METHOD_GET);   
@@ -95,13 +97,13 @@ class Middleware
             $org_id = $task->getOrgId();
             $user_id = UserSession::getCurrentUserID();
 
-            if($user_id) {
+            if ($user_id) {
                 $user_orgs = array();
                 $request = APIClient::API_VERSION."/users/$user_id/orgs";
-                $user_orgs = $client->castCall(array('Organisation'),$request, HTTP_Request2::METHOD_GET);                    
-                if(!is_null($user_orgs)) {
-                    foreach($user_orgs as $orgObject) {
-                        if($orgObject->getId() == $org_id) {
+                $user_orgs = $client->castCall(array('Organisation'), $request, HTTP_Request2::METHOD_GET);
+                if (!is_null($user_orgs)) {
+                    foreach ($user_orgs as $orgObject) {
+                        if ($orgObject->getId() == $org_id) {
                             return true;
                         }
                     }
@@ -111,42 +113,44 @@ class Middleware
        
         $app = Slim::getInstance();
         $org_name = 'this organisation';
-        if(isset($org_id)) {
+        if (isset($org_id)) {
             $request = APIClient::API_VERSION."/orgs/$org_id";
-            $org = $client->castCall('Organisation',$request, HTTP_Request2::METHOD_GET);
-            $org_name = "<a href=\"".$app->urlFor('org-public-profile', array('org_id' => $org_id))."\">".$org->getName()."</a>";
+            $org = $client->castCall('Organisation', $request, HTTP_Request2::METHOD_GET);
+            $org_name = "<a href=\"".$app->urlFor('org-public-profile',
+                                                    array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
-        $app->flash('error', "You are not authorised to view this page. Only members of ".$org_name." may view this page.");
+        $app->flash('error', "You are not authorised to view this page.
+                    Only members of ".$org_name." may view this page.");
         $app->redirect($app->urlFor('home'));
     }
 
     public static function authUserForTaskDownload($request, $response, $route)
     {
         $params = $route->getParams();
-        if($params != NULL) {
+        if ($params != null) {
             $client = new APIClient();            
             $task_id = $params['task_id'];
             $user_id = UserSession::getCurrentUserID();
             
             $request = APIClient::API_VERSION."/tasks/$task_id";
-            $task = $client->castCall('Task',$request, HTTP_Request2::METHOD_GET);
+            $task = $client->castCall('Task', $request, HTTP_Request2::METHOD_GET);
 
             $user_orgs = array();
             $request = APIClient::API_VERSION."/users/$user_id/orgs";
-            $user_orgs = $client->castCall(array('Organisation'),$request, HTTP_Request2::METHOD_GET);
+            $user_orgs = $client->castCall(array('Organisation'), $request, HTTP_Request2::METHOD_GET);
             
             //If the task has not been claimed yet then anyone can download it
             $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
             $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);            
             $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
             $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET, $user_id);
-            if(!$taskClaimed) {
+            if (!$taskClaimed) {
                 return true;
-            } elseif($userClaimedTask) {
+            } elseif ($userClaimedTask) {
                 return true;
-            } elseif(!is_null($user_orgs)) {
-                foreach($user_orgs as $orgObject) {
-                    if($orgObject->getId() == $task->getOrgId()) {
+            } elseif (!is_null($user_orgs)) {
+                foreach ($user_orgs as $orgObject) {
+                    if ($orgObject->getId() == $task->getOrgId()) {
                         return true;
                     }
                 }                

@@ -551,7 +551,7 @@ class TaskRouteHandler
                 $target_count = 0;
                 $target_val = $app->request()->post("target_$target_count");
                 $targetCountry_val = $app->request()->post("targetCountry_$target_count");
-                while (isset ($target_val) && isset ($targetCountry_val)) {
+                while (isset($target_val) && isset($targetCountry_val)) {
                     $temp=null;
                     if (!in_array(($temp = array("lang" => $target_val,
                                                 "country" => $targetCountry_val)),
@@ -793,7 +793,7 @@ class TaskRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if (isset ($post->notify) && $post->notify == "true") {
+            if (isset($post->notify) && $post->notify == "true") {
                 $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/{$task->getId()}";
                 $userTrackTask = $client->call($request, HTTP_Request2::METHOD_PUT);
                 
@@ -953,7 +953,7 @@ class TaskRouteHandler
                 $taskData = array();
                 $taskData['organisation_id'] = $org_id;
                 $taskData['title'] = $_FILES[$field_name]['name'];
-                $task = ModelFactory::BuildModel("Task", $taskData);
+                $task = ModelFactory::buildModel("Task", $taskData);
                 
                 $request = APIClient::API_VERSION."/tasks";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);

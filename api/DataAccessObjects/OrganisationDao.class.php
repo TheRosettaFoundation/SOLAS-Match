@@ -88,7 +88,7 @@ class OrganisationDao {
         if ($result = $db->call("searchForOrg", $db->cleanseWrapStr($org_name))) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::BuildModel("Organisation", $row);
+                $ret[] = ModelFactory::buildModel("Organisation", $row);
             }
         }
         
@@ -111,7 +111,7 @@ class OrganisationDao {
         $ret = null;
         if ($results = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
             foreach ($results as $result) {  
-                $ret[] = ModelFactory::BuildModel("MembershipRequest", $result);
+                $ret[] = ModelFactory::buildModel("MembershipRequest", $result);
             }
         }
         
@@ -158,7 +158,7 @@ class OrganisationDao {
                     'biography' => $result['biography']
         );
 
-        return ModelFactory::BuildModel("Organisation", $org_data);
+        return ModelFactory::buildModel("Organisation", $org_data);
     }
    
     

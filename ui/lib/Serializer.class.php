@@ -6,7 +6,7 @@
  * @author: Dave O Carroll
  */
 
- require_once 'FormatEnum.class.php';
+require_once 'FormatEnum.class.php';
 
 class Serializer
 {
@@ -72,10 +72,10 @@ class Serializer
                 break;
             }
         }
-        if(!is_null($data)&& is_null($ret)){
-            if(strcasecmp($data, "null")==0||$data="null") {
+        if (!is_null($data) && is_null($ret)) {
+            if (strcasecmp($data, "null") == 0 || $data = "null") {
                 $ret=null;
-            }  else {
+            } else {
                 $ret=$data;
             }            
         }        
@@ -84,10 +84,14 @@ class Serializer
 
     public static function cast($destination, $sourceObject)
     {
-        if(is_null($destination)||is_null($sourceObject)) return null;
+        if (is_null($destination) || is_null($sourceObject)) {
+            return null;
+        }
+        
         if (is_string($destination)) {
             $destination = new $destination();
         }
+        
         $sourceReflection = new ReflectionObject($sourceObject);
         $destinationReflection = new ReflectionObject($destination);
         $sourceProperties = $sourceReflection->getProperties();
@@ -98,21 +102,29 @@ class Serializer
             if ($destinationReflection->hasProperty($name)) {
                 $propDest = $destinationReflection->getProperty($name);
                 $propDest->setAccessible(true);
-                $propDest->setValue($destination,$value);
+                $propDest->setValue($destination, $value);
             } else {
                 $destination->$name = $value;
             }
         }
-
         return $destination;
     }
-     public static function getFormat($format){
-       if($format==".json") $format=  FormatEnum::JSON;
-       elseif(strcasecmp($format,'.xml')==0) $format=  FormatEnum::XML;
-       elseif(strcasecmp($format,'.php')==0) $format=  FormatEnum::PHP;
-       elseif(strcasecmp($format,'.html')==0) $format=  FormatEnum::HTML;
-       elseif(strcasecmp($format,'.proto')==0) $format=  FormatEnum::JSON;//change when implmented.
-       else $format=  FormatEnum::JSON;
-       return $format;
+    
+    public static function getFormat($format)
+    {
+        if ($format == ".json") {
+            $format = FormatEnum::JSON;
+        } elseif (strcasecmp($format, '.xml') == 0) {
+            $format = FormatEnum::XML;
+        } elseif (strcasecmp($format, '.php') == 0) {
+            $format = FormatEnum::PHP;
+        } elseif (strcasecmp($format, '.html') == 0) {
+            $format = FormatEnum::HTML;
+        } elseif (strcasecmp($format, '.proto') == 0) {
+            $format = FormatEnum::JSON;//change when implmented.
+        } else {
+            $format = FormatEnum::JSON;
+        }
+        return $format;
     }
 }

@@ -179,7 +179,7 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
-            } elseif (isset ($post->refuse)) {
+            } elseif (isset($post->refuse)) {
                 if ($user_id = $post->user_id) {
                     $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
@@ -258,13 +258,13 @@ class OrgRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
                    
-            if (isset ($post->deleteBadge)) {
+            if (isset($post->deleteBadge)) {
                 $badge_id = $post->badge_id;
                 $request = APIClient::API_VERSION."/badges/$badge_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
             } 
             
-            if (isset ($post->title) && isset ($post->description)) {
+            if (isset($post->title) && isset($post->description)) {
                 
                 if ($post->title == '' || $post->description == '') {
                     $app->flash('error', "All fields must be filled out");
@@ -275,7 +275,7 @@ class OrgRouteHandler
                     $params['description'] = $post->description;
                     $params['owner_id'] = null; 
 
-                    $updatedBadge = ModelFactory::BuildModel("Badge", $params);
+                    $updatedBadge = ModelFactory::buildModel("Badge", $params);
                     $request = APIClient::API_VERSION."/badges/{$post->badge_id}";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $updatedBadge); 
                     $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
@@ -346,7 +346,7 @@ class OrgRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if (isset ($post->email) && $post->email != '') {
+            if (isset($post->email) && $post->email != '') {
                 if (TemplateHelper::isValidEmail($post->email)) {
                     
                     $request = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
@@ -393,7 +393,7 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow('error', "You did not enter a valid email address");
                 }
-            } elseif (isset ($post->user_id) && $post->user_id != '') {
+            } elseif (isset($post->user_id) && $post->user_id != '') {
                 $user_id = $post->user_id;
                 $request = APIClient::API_VERSION."/users/$user_id";
                 $response = $client->call($request);
@@ -446,7 +446,7 @@ class OrgRouteHandler
                 $params['description'] = $post->description;
                 $params['owner_id'] = $org_id;
 
-                $badge = ModelFactory::BuildModel("Badge", $params);
+                $badge = ModelFactory::buildModel("Badge", $params);
                 $request = APIClient::API_VERSION."/badges/{$badge->getId()}";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $badge);                
                 

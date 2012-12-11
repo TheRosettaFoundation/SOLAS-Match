@@ -25,7 +25,7 @@ class PasswordResetAPI {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/password_reset(:format)/',
                                                         function ($format = ".json") {
             
-            $data = ModelFactory::BuildModel("PasswordReset", array());
+            $data = ModelFactory::buildModel("PasswordReset", array());
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getResetTemplate');
 

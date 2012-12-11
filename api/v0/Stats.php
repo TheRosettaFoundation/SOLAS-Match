@@ -16,7 +16,7 @@ class Stats {
                                                         function ($format = ".json") {
 
             $datetime = null;
-            if (isset ($_GET['datetime'])) {
+            if (isset($_GET['datetime'])) {
                 $datetime = $_GET['datetime'];
             }
             $data = StatDao::getTotalTasks($datetime);
@@ -27,7 +27,7 @@ class Stats {
                                                         function ($format = ".json") {
             
             $datetime = null;
-            if (isset ($_GET['datetime'])) {
+            if (isset($_GET['datetime'])) {
                 $datetime = $_GET['datetime'];
             }
             $data = StatDao::getTotalArchivedTasks($datetime);
@@ -38,7 +38,7 @@ class Stats {
                                                         function ($format = ".json") {
             
             $datetime = null;
-            if (isset ($_GET['datetime'])) {
+            if (isset($_GET['datetime'])) {
                 $datetime= $_GET['datetime'];
             }
             $data = StatDao::getTotalClaimedTasks($datetime);
@@ -49,7 +49,7 @@ class Stats {
                                                         function ($format = ".json") {
             
             $datetime = null;
-            if (isset ($_GET['datetime'])) {
+            if (isset($_GET['datetime'])) {
                 $datetime= $_GET['datetime'];
             }
             $data = StatDao::getTotalUnclaimedTasks($datetime);

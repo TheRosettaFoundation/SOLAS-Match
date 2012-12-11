@@ -75,7 +75,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/top_tasks(:format)/',
                                                         function ($format = ".json") {
             $limit = null;
-            if (isset ($_GET['limit'])&& is_numeric($_GET['limit'])) {
+            if (isset($_GET['limit'])&& is_numeric($_GET['limit'])) {
                 $limit = $_GET['limit'];
             }
             Dispatcher::sendResponce(null, TaskStream::getStream($limit), null, $format);
@@ -124,7 +124,7 @@ class Tasks {
                                                         function ($id, $format=".json") {
             
             $version = 0;
-            if (isset ($_GET['version']) && is_numeric($_GET['version'])) {
+            if (isset($_GET['version']) && is_numeric($_GET['version'])) {
                 $version= $_GET['version'];
             }
             TaskDao::downloadTask($id, $version);
@@ -147,7 +147,7 @@ class Tasks {
                                                         function ($id, $format = ".json") {
             
             $userID = null;
-            if (isset ($_GET['userID']) && is_numeric($_GET['userID'])) {
+            if (isset($_GET['userID']) && is_numeric($_GET['userID'])) {
                 $userID = $_GET['userID'];
             }
             Dispatcher::sendResponce(null, TaskFile::getLatestFileVersionByTaskID($id, $userID), null, $format);
@@ -156,10 +156,10 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/info(:format)/',
                                                         function ($id, $format = ".json") {
             $version = 0;
-            if (isset ($_GET['version']) && is_numeric($_GET['version'])) {
+            if (isset($_GET['version']) && is_numeric($_GET['version'])) {
                 $version = $_GET['version'];
             }
-            $taskMetadata = ModelFactory::BuildModel("TaskMetadata", TaskFile::getTaskFileInfoById($id, $version));
+            $taskMetadata = ModelFactory::buildModel("TaskMetadata", TaskFile::getTaskFileInfoById($id, $version));
             Dispatcher::sendResponce(null, $taskMetadata, null, $format);
         }, 'getTaskInfo');
         
@@ -168,7 +168,7 @@ class Tasks {
 
             $data = null;
             $dao = new TaskDao();
-            if (isset ($_GET['userID']) && is_numeric($_GET['userID'])) {
+            if (isset($_GET['userID']) && is_numeric($_GET['userID'])) {
                 $data = $dao->hasUserClaimedTask($_GET['userID'], $id);
             } else {
                 $data = $dao->taskIsClaimed($id);
