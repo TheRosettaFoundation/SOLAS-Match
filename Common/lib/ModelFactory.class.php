@@ -153,6 +153,9 @@ class ModelFactory
         if (isset($modelData['uid'])) {
             $ret->setKey($modelData['uid']);
         }
+        if(isset($modelData['request_time'])) {
+            $ret->setRequestTime($modelData['request_time']);
+        }
 
         return $ret;
     }

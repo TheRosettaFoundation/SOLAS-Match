@@ -467,15 +467,11 @@ class UserDao {
 
     public function createPasswordReset($user_id)
     {
-        if (!$this->hasRequestedPasswordResetID($user_id)) {       
-            $uid = md5(uniqid(rand()));
-            $this->addPasswordResetRequest($uid, $user_id);   
-            Notify::sendPasswordResetEmail($uid, $user_id);
-            return 1;
-        }
-        return 0;
-    }
-    
+        $uid = md5(uniqid(rand()));
+        $this->addPasswordResetRequest($uid, $user_id);   
+        Notify::sendPasswordResetEmail($uid, $user_id);
+        return 1;
+    }    
     
     /*
         Add password reset request to DB for this user
@@ -526,23 +522,23 @@ class UserDao {
             }
         } elseif (isset($args['user_id']) && $args['user_id'] != '') {
             $user_id = $args['user_id'];
+
             if ($result = $db->call("getPasswordResetRequests", "null, {$db->cleanse($user_id)}")) {
-                $ret = ModelFactory::buildModel("PasswordResetRequest", $result);
+                $ret = ModelFactory::buildModel("PasswordResetRequest", $result[0]);
             }
         }
-
         return $ret;
-    }
-    
+    }    
+
     public function passwordReset($password, $key)
     {
         $dao = new UserDao;
         $reset_request = $dao->getPasswordResetRequests(array('uid' => $key));
         if ($reset_request->getUserId() == '') {
-            return array("result"=> 0, "message"=> "Incorrect Unique ID. Are you sure you copied the URL correctly?");
-        } elseif ($dao->changePassword($reset_request->getUserId(), $password)) {
+            return array("result" => 0, "message" => "Incorrect Unique ID. Are you sure you copied the URL correctly?");
+        } elseif($dao->changePassword($reset_request->getUserId(), $password)) {
             $dao->removePasswordResetRequest($reset_request->getUserId());
             return array("result" => 1, "message" => "You have successfully changed your password");
-        }   
+        }
     }
 }
