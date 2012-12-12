@@ -30,11 +30,7 @@ class Users {
                 $id = $id[0];
             }
             
-            $role = false;
-            if (isset($_GET['role'])) {
-                $role= $_GET['role'];
-            }
-            
+            $role = Dispatcher::clenseArgs('role',  HttpMethodEnum::GET,false);
             $dao = new UserDao();
             if (!$role) {
                 $data= $dao->find(array("user_id" => $id));
@@ -146,10 +142,7 @@ class Users {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
-            $limit = null;
-            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
-                $limit = $_GET['limit'];
-            }
+            $limit = Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,null);
             $dao = new UserDao();
             Dispatcher::sendResponce(null, $dao->getUserTags($id, $limit), null, $format);
         }, 'getUsertags');
@@ -178,10 +171,7 @@ class Users {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/top_tasks(:format)/',
                                                         function ($id, $format = ".json") {
             
-            $limit = 5;
-            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
-                $limit = $_GET['limit'];
-            }
+            $limit = Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,5);
             $dao = new TaskDao();
             $data = $dao->getUserTopTasks($id, $limit);
             Dispatcher::sendResponce(null, $data, null, $format);
@@ -191,10 +181,7 @@ class Users {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/archived_tasks(:format)/',
                                                         function ($id, $format = ".json") {
             
-            $limit=5;
-            if (isset($_GET['limit']) && is_numeric($_GET['limit'])) {
-                $limit= $_GET['limit'];
-            }
+            $limit=Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,5);
             $dao = new TaskDao();
             $data=$dao->getUserArchivedTasksByID($id, $limit);
             Dispatcher::sendResponce(null, $data, null, $format);
