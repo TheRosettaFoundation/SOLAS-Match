@@ -1,23 +1,17 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of StatDao
  *
  * @author sean
  */
+
 class StatDao {
     
     public static function getTotalTasks($dateTime)
     {
         $ret = null;
-        $db= new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getTotalTasks", "{$db->cleanseNullOrWrapStr($dateTime)}")) {
+        if ($result = PDOWrapper::call("getTotalTasks", PDOWrapper::cleanseNullOrWrapStr($dateTime))) {
             $ret = $result[0]['result'];
         }
 
@@ -27,9 +21,7 @@ class StatDao {
     public static function getTotalArchivedTasks($dateTime)
     {
         $ret = null;
-        $db= new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getTotalArchivedTasks", "{$db->cleanseNullOrWrapStr($dateTime)}")) {
+        if ($result = PDOWrapper::call("getTotalArchivedTasks", PDOWrapper::cleanseNullOrWrapStr($dateTime))) {
             $ret = $result[0]['result'];
         }
 
@@ -39,9 +31,7 @@ class StatDao {
     public static function getTotalClaimedTasks($dateTime)
     {
         $ret = null;
-        $db= new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getTotalClaimedTasks", "{$db->cleanseNullOrWrapStr($dateTime)}")) {
+        if ($result = PDOWrapper::call("getTotalClaimedTasks", PDOWrapper::cleanseNullOrWrapStr($dateTime))) {
             $ret = $result[0]['result'];
         }
 
@@ -51,9 +41,7 @@ class StatDao {
     public static function getTotalOrgs()
     {
         $ret = null;
-        $db= new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getTotalOrgs", "")) {
+        if ($result = PDOWrapper::call("getTotalOrgs", "")) {
             $ret = $result[0]['result'];
         }
 
@@ -63,9 +51,7 @@ class StatDao {
     public static function getTotalUsers()
     {
         $ret = null;
-        $db= new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getTotalUsers", "")) {
+        if ($result = PDOWrapper::call("getTotalUsers", "")) {
             $ret = $result[0]['result'];
         }
 
@@ -75,9 +61,7 @@ class StatDao {
     public static function getTotalUnclaimedTasks($dateTime)
     {
         $ret = null;
-        $db= new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getTotalUnclaimedTasks", "{$db->cleanseNullOrWrapStr($dateTime)}")) {
+        if ($result = PDOWrapper::call("getTotalUnclaimedTasks", PDOWrapper::cleanseNullOrWrapStr($dateTime))) {
             $ret = $result[0]['result'];
         }
 

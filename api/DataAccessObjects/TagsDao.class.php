@@ -14,12 +14,10 @@ class TagsDao {
     public function getTag($params)
     {
         $args = "";
-        $db = new PDOWrapper();
-        $db->init();
-        $args .= ((isset($params['tag_id']))) ? "{$db->cleanseNull($params['tag_id'])}" : "null";
-        $args .= (isset($params['label'])) ? ",{$db->cleanseNullOrWrapStr($params['label'])}" : ",null";
+        $args .= ((isset($params['tag_id']))) ? PDOWrapper::cleanseNull($params['tag_id']) : "null";
+        $args .= (isset($params['label'])) ? ",".PDOWrapper::cleanseNullOrWrapStr($params['label']) : ",null";
         $ret = array();
-        $result = $db->call("getTag", $args);
+        $result = PDOWrapper::call("getTag", $args);
         if ($result != null) {
             foreach ($result as $r) {
                 $tag_data = array();
@@ -49,9 +47,7 @@ class TagsDao {
 
     private function insert($tag)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $id =$db->call("tagInsert", $db->cleanseWrapStr($tag->getLabel()));
+        $id = PDOWrapper::call("tagInsert", PDOWrapper::cleanseWrapStr($tag->getLabel()));
         return $id[0]['tag_id'];
     }
     
@@ -140,9 +136,7 @@ class TagsDao {
     public static function getTopTags ($limit = 30)
     {
         $ret = false;
-        $db = new PDOWrapper();
-        $db->init();
-        if ($r = $db->call("getTopTags", "{$db->cleanse($limit)}")) {
+        if ($r = PDOWrapper::call("getTopTags", PDOWrapper::cleanse($limit))) {
             $ret = array();
             foreach ($r as $row) {
                 $ret[] = ModelFactory::buildModel("Tag", $row);
@@ -153,9 +147,7 @@ class TagsDao {
 
     public function delete($id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        if ($r = $db->call("deleteTag", "{$db->cleanse($id)}")) {
+        if ($r = PDOWrapper::call("deleteTag", PDOWrapper::cleanse($id))) {
             return $r[0]['result'];
         }
         return 0;

@@ -7,12 +7,9 @@
  */
 
 class PDOWrapper {
-    
-    private $database;
-    private $username;
-    private $password;
-    private $server;
 
+    private static $instance = null;
+    
     private $logfile                    = ''; 
     private $logging                    = false; // debug on or off
     private $show_errors                = false; // output errors. true/false
@@ -25,47 +22,38 @@ class PDOWrapper {
     private $ERROR_MSG      = '';
     private $sql_errored    = ''; // Filled with the query that failed
 
-    public function __construct()
+    private function __construct()
     {
         // Set up the connection
         $settings = new Settings();
-        $this->database = $settings->get('db.database');
-        $this->username = $settings->get('db.username');
-        $this->password = $settings->get('db.password');
-        $this->server = $settings->get('db.server');
         $this->logging = (strlen($this->logfile)>0) ? true : false;
         if ($this->logging) {
             $this->logfile = $settings->get('db.log_file'); // full path to debug logfile. Use only in debug mode!
         }
         $this->show_errors = ($settings->get('db.show_errors') == 'y') ? true : false;
         $this->show_sql = ($settings->get('db.show_sql') == 'y') ? true : false;
+        $this->init();
     }
 
     /*
      * Call init() on the new MySQLWrapper object in order to establish 
      * the DB connection.
      */
-    public function init()
+    private function init()
     {
         $this->initLogfile();
-        $ret = $this->openConnection();
-        // Unset connection details for security
-        $this->database = false;
-        $this->username = false;
-        $this->password = false;		  	
+        $ret = $this->openConnection();		  	
         return $ret;
     }
-
-    /*
-     * If you have to connect to a non-default DB, call this function
-     * instead of init().
-     */
-    private function initSelectDB($db, $username, $password)
+    
+    public static function getInstance()
     {
-        $this->database = $db;
-        $this->username = $username;
-        $this->password = $password;
-        $this->init();
+        if (!is_null(PDOWrapper::$instance)) {
+            return PDOWrapper::$instance;
+        } else {
+            PDOWrapper::$instance = new PDOWrapper();
+            return PDOWrapper::$instance;
+        }
     }
 
     /*
@@ -73,16 +61,17 @@ class PDOWrapper {
      */
     private function openConnection()
     {
+        $settings = new Settings();
         $conn = false;
-        $ret = false;
-    
+        $ret = false;       
+        
         if ($this->use_permanent_connection) {
-            $conn = new PDO("mysql:host={$this->server};dbname={$this->database}",
-                            $this->username, $this->password,
+            $conn = new PDO("mysql:host={$settings->get('db.server')};dbname={$settings->get('db.database')}",
+                            $settings->get('db.username'), $settings->get('db.password'),
                             array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", PDO::ATTR_PERSISTENT => true));  
         } else {
-            $conn = new PDO("mysql:host={$this->server};dbname={$this->database}",
-                            $this->username, $this->password,
+            $conn = new PDO("mysql:host={$settings->get('db.server')};dbname={$settings->get('db.database')}",
+                            $settings->get('db.username'), $settings->get('db.password'),
                             array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  
         }
         
@@ -144,26 +133,27 @@ class PDOWrapper {
         }
     }
 
-    public function call($procedure,$procArgs)
-    {
+    public static function call($procedure, $procArgs)
+    {    
+        $db = PDOWrapper::getInstance();
         if (!is_array($procArgs)) {
             $sql = "CALL $procedure ($procArgs)";
         } else {
             $sql = "CALL $procedure (".implode(', ', $procArgs).")";
         }
         
-        if ($this->show_sql) {
-            $this->showSQL($sql);
+        if ($db->show_sql) {
+            $db->showSQL($sql);
         }
         
-        if ((empty($sql)) || (empty($this->connection))) {
-            $this->error_msg = "\r\n" . "SQL Statement is <code>null</code> or connection is null - " . date('H:i:s');
-            $this->sql_errored = $sql;
-            $this->debug();
+        if ((empty($sql)) || (empty($db->connection))) {
+            $db->error_msg = "\r\n" . "SQL Statement is <code>null</code> or connection is null - " . date('H:i:s');
+            $db->sql_errored = $sql;
+            $db->debug();
             return false;
         }
         
-        $conn = $this->connection;
+        $conn = $db->connection;
         $i = 0;
         $data = array();
 
@@ -175,159 +165,11 @@ class PDOWrapper {
         }
         return empty($data) ? false : $data;
     }
-        
-//	/*
-//	 * Given a SELECT statement in a string, execute it and return the result.
-//	 * Result is a multidimensional array containing the results array[row][fieldname/fieldindex]
-//	 */
-//	function Select($sql)
-//	{
-//		if ($this->show_sql)
-//		{
-//			$this->showSQL($sql);
-//		}
-//		if ((empty($sql)) || (stripos($sql, 'select')!=0) || (empty($this->connection)))
-//		{
-//			$this->error_msg = "\r\n" . "SQL Statement is <code>null</code> or not a SELECT - " . date('H:i:s');
-//			$this->sql_errored = $sql;
-//			$this->debug();
-//			return false;
-//		}
-//		else
-//		{
-//			$conn = $this->connection;
-//			$results = mysql_query($sql,$conn);
-//			if ((!$results) || (empty($results)))
-//			{
-//				$this->error_msg = "\r\n" . mysql_error(). '; ' . date('H:i:s');
-//				$this->sql_errored = $sql;
-//		  		$this->debug();
-//				return false;
-//			}
-//			else
-//			{
-//				$i = 0;
-//				$data = array();
-//				while ($row = mysql_fetch_array($results))
-//				{
-//					$data[$i] = $row;
-//					$i++;
-//				}
-//				mysql_free_result($results);
-//				return empty($data) ? false : $data;
-//			}
-//		}
-//	}
-//
-//	/*
-//	 * Given the names of the table, and an array of key => value,
-//	 * insert those values into the database.
-//	 */
-//	function Insert($table, $values)
-//	{
-//		$q = '';
-//		if ((is_array($values)) && (count($values)>0))
-//		{
-//			$keys = implode(', ', array_keys($values));
-//			$vals = implode(', ', array_values($values));
-//			$q = 'INSERT INTO '.$this->cleanse($table).'('.$keys.')'.' VALUES('.$vals.')';
-//		}
-//		return $this->insertStr($q);
-//	}
-//	
-//	/*
-//	 * Given an actual SQL insert query as a string, execute it.
-//	 */
-//	function insertStr($sql)
-//	{
-//		$ret = false;
-//		if ((empty($sql)) || (stripos($sql, 'insert')!=0) || (empty($this->connection)))
-//		{
-//			$this->error_msg = "\r\n" . 'SQL Statement is <code>null</code> or not an INSERT; ' . date('H:i:s');
-//			$this->sql_errored = $sql;
-//			$this->debug();
-//		}
-//		else
-//		{
-//			$conn = $this->connection;
-//			$results = mysql_query($sql, $conn);
-//			if (!$results)
-//			{
-//				$this->error_msg = "\r\n" . mysql_error(). '; ' . date('H:i:s');
-//				$this->sql_errored = $sql;
-//				$this->debug();
-//			} 
-//			else
-//			{
-//				$result = mysql_insert_id();
-//				if ($result > 0)
-//				{
-//					$ret = $result;
-//				}
-//				else
-//				{
-//					$ret = true;
-//				}
-//		  	}
-//		}
-//		return $ret;
-//	}
-//
-//	/*
-//	 * Execute an UPDATE statement. Returns true if successful, else false.
-//	 */	
-//	function Update($sql)
-//	{
-//		$ret = false;
-//		if ((empty($sql)) || (stripos($sql, 'update')!=0)  || (empty($this->connection)))
-//		{
-//			$this->error_msg = "\r\n" . 'SQL Statement is <code>null</code> or not an UPDATE; ' . date('H:i:s');
-//			$this->debug();
-//		}
-//		else
-//		{
-//			$conn = $this->connection;
-//		  	$results = mysql_query($sql,$conn);
-//			if (!$results)
-//			{
-//				$this->error_msg = "\r\n" . mysql_error()." - " . date('H:i:s');
-//				$this->sql_errored = $sql;
-//			  	$this->debug();
-//			}
-//			else
-//			{
-//				$ret = (mysql_affected_rows() != -1);
-//			}
-//		}
-//		return $ret;
-//	}
-//
-//	function Delete($sql) {
-//		$ret = false;
-//		if ((empty($sql)) || (stripos($sql, 'delete')!=0)  || (empty($this->connection))) {
-//			$this->error_msg = "\r\n" . 'SQL Statement is <code>null</code> or not a DELETE; ' . date('H:i:s');
-//			$this->debug();
-//		}
-//		else {
-//			$conn = $this->connection;
-//		  	$results = mysql_query($sql,$conn);
-//			if (!$results) {
-//				$this->error_msg = "\r\n" . mysql_error()." - " . date('H:i:s');
-//				$this->sql_errored = $sql;
-//			  	$this->debug();
-//			}
-//			else
-//			{
-//				$ret = (mysql_affected_rows() != -1);
-//			}
-//		}
-//		return $ret;
-//	}
 
     /*
      * Cleanes variable for SQL, so escapes quotation marks, etc.
      */
-    public function cleanse($str)
+    public static function cleanse($str)
     {
         if (get_magic_quotes_gpc()) {
             $str = stripslashes($str);
@@ -345,14 +187,14 @@ class PDOWrapper {
      * If the string isn't empty, cleanse it. Otherwise, return NULL to
      * be included directly in an SQL query.
      */
-    public function cleanseNull($str)
+    public static function cleanseNull($str)
     {
-        return (!$str) ? 'NULL' : $this->cleanse($str);
+        return (!$str) ? 'NULL' : PDOWrapper::cleanse($str);
     }
     
-    public function cleanseNullOrWrapStr($str)
+    public static function cleanseNullOrWrapStr($str)
     {
-        return (!$str) ? 'NULL' : $this->cleanseWrapStr($str);
+        return (!$str) ? 'NULL' : PDOWrapper::cleanseWrapStr($str);
     }
     
     private function showSQL($q)
@@ -360,8 +202,8 @@ class PDOWrapper {
         echo '<pre>'.$q.'</pre>';
     }
 
-    public function cleanseWrapStr($str)
+    public static function cleanseWrapStr($str)
     {
-        return '\'' . $this->cleanse($str) . '\'';
+        return '\'' . PDOWrapper::cleanse($str) . '\'';
     }
 }

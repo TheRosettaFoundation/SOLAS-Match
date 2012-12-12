@@ -6,10 +6,8 @@ class TaskTags {
     
     public static function getTags($task_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
         $ret = null;
-        if ($result = $db->call("getTaskTags", "{$db->cleanseNull($task_id)}")) {
+        if ($result = PDOWrapper::call("getTaskTags", PDOWrapper::cleanseNull($task_id))) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = $row['label'];
@@ -20,9 +18,7 @@ class TaskTags {
 
     public static function deleteTaskTags($task)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $db->call("unlinkStoredTags", "{$db->cleanse($task->getId())}");
+        PDOWrapper::call("unlinkStoredTags", PDOWrapper::cleanse($task->getId()));
     }
 
     public static function setTaskTags($task, $tag_ids)
@@ -34,8 +30,6 @@ class TaskTags {
 
     public static function setTaskTag($task_id, $tag_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $db->call("storeTagLinks", "{$db->cleanse($task_id)},{$db->cleanse($tag_id)}");
+        PDOWrapper::call("storeTagLinks", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanse($tag_id));
     }
 }

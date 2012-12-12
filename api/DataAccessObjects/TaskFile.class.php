@@ -10,11 +10,8 @@ class TaskFile {
     }
     
     public function timesDownloaded() // Should be package protected
-    {
-        $db = new PDOWrapper();
-        $db->init();
-        
-        if ($r = $db->call("taskDownloadCount", "{$db->cleanse($this->taskID())}")) {
+    {     
+        if ($r = PDOWrapper::call("taskDownloadCount", PDOWrapper::cleanse($this->taskID()))) {
             $ret = $r[0]['times_downloaded'];
             return $ret;
         } else {
@@ -43,22 +40,19 @@ class TaskFile {
      */
     public static function checkTaskFileVersion($task_id, $user_id = null)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result = $db->call("getLatestFileVersion", "{$db->cleanse($task_id)},{$db->cleanseNull($user_id)}");
+        $result = PDOWrapper::call("getLatestFileVersion", PDOWrapper::cleanse($task_id)
+                                    .",".PDOWrapper::cleanseNull($user_id));
         return $result[0]['latest_version'] > 0;
     }
     
     public static function recordFileUpload($task, $filename, $content_type, $user_id) 
     {
-        $db = new PDOWrapper();
-        $db->init();
         $args = "";
-        $args .= "{$db->cleanse($task->getId())}";
-        $args .= ",{$db->cleanseWrapStr($filename)}";
-        $args .= ",{$db->cleanseWrapStr($content_type)}";
-        $args .= ",{$db->cleanseNull($user_id)}";
-        return $db->call("recordFileUpload", $args);
+        $args .= PDOWrapper::cleanse($task->getId());
+        $args .= ",".PDOWrapper::cleanseWrapStr($filename);
+        $args .= ",".PDOWrapper::cleanseWrapStr($content_type);
+        $args .= ",".PDOWrapper::cleanseNull($user_id);
+        return PDOWrapper::call("recordFileUpload", $args);
     }
     
     public static function getTaskFileInfo($task, $version = 0)
@@ -68,12 +62,10 @@ class TaskFile {
     
     public static function getTaskFileInfoById($taskID, $version = 0)
     {
-        $db = new PDOWrapper();
-        $db->init();
         $ret = false;
-        if ($r = $db->call("getTaskFileMetaData", "{$db->cleanse($taskID)}
-                                                    ,{$db->cleanse($version)}
-                                                    ,null, null, null, null")) {
+        if ($r = PDOWrapper::call("getTaskFileMetaData", PDOWrapper::cleanse($taskID)
+                                                    .",".PDOWrapper::cleanse($version)
+                                                    .",null, null, null, null")) {
             $file_info = array();
             foreach ($r[0] as $key => $value) {
                 if (!is_numeric($key)) {
@@ -87,11 +79,9 @@ class TaskFile {
     
     public static function getFilename($task, $version)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        if ($r = $db->call("getTaskFileMetaData", "{$db->cleanse($task->getId())}
-                                                    ,{$db->cleanse($version)}
-                                                    , null, null, null, null")) {
+        if ($r = PDOWrapper::call("getTaskFileMetaData", PDOWrapper::cleanse($task->getId())
+                                                    .",".PDOWrapper::cleanse($version)
+                                                    .",null, null, null, null")) {
             return $r[0]['filename'];
         } else {
             return null;			
@@ -100,9 +90,8 @@ class TaskFile {
         
     public static function logFileDownload($task, $version)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $db->call("logFileDownload", "{$db->cleanse($task->getId())},{$db->cleanse($version)},null");
+        PDOWrapper::call("logFileDownload", PDOWrapper::cleanse($task->getId())
+                                            .",".PDOWrapper::cleanse($version).",null");
     }
     
     public static function getLatestFileVersion($task)
@@ -112,10 +101,9 @@ class TaskFile {
 
     public static function getLatestFileVersionByTaskID($task_id,$user_id=null)
     {
-        $db = new PDOWrapper();
-        $db->init();
         $ret = false;
-        if ($r = $db->call("getLatestFileVersion", "{$db->cleanse($task_id)},{$db->cleanseNull($user_id)}")) {
+        if ($r = PDOWrapper::call("getLatestFileVersion", PDOWrapper::cleanse($task_id)
+                                    .",".PDOWrapper::cleanseNull($user_id))) {
             if (is_numeric($r[0]['latest_version'])) {
                 $ret =  intval($r[0]['latest_version']);
             }

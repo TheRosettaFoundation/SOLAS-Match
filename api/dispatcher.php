@@ -53,7 +53,8 @@ class Dispatcher {
     }
     
 
-    public static function init(){
+    public static function init()
+    {
        $path = Dispatcher::getDispatcher()->request()->getResourceUri();
        $path = explode("/", $path);
        $path =$path[1];
@@ -114,7 +115,7 @@ class Dispatcher {
         }
         $response->body($body);
         
-        if ($code!=null) {
+        if ($code != null) {
             $response->status($code);
         }
     }
@@ -172,39 +173,44 @@ class Dispatcher {
     }
 
     
-    public static function clenseArgs($index,$httpMethod=null,$default=null){
-        $req=Dispatcher::getDispatcher()->request();
+    public static function clenseArgs($index, $httpMethod=null, $default=null)
+    {
+        $req = Dispatcher::getDispatcher()->request();
         switch ($httpMethod){
-            case HttpMethodEnum::GET:{
+            case HttpMethodEnum::GET : {
                  $result = $req->get($index);
                  return is_null($result) ? $default : $result; 
             }
-            case HttpMethodEnum::POST:{
+            case HttpMethodEnum::POST : {
                 $result = $req->post($index);
                 return is_null($result) ? $default : $result; 
             }
-            case HttpMethodEnum::PUT:{
+            case HttpMethodEnum::PUT : {
                $result = $req->put($index);
                return is_null($result) ? $default : $result; 
             }
-            default:{
+            default : {
                $result = $req->params($index);
                return is_null($result) ? $default : $result; 
             }
         }
     }
     
-    private static function autoRequire(array $providers,$root="providers") {
-        foreach($providers as $provider){
+    private static function autoRequire(array $providers, $root = "providers")
+    {
+        foreach ($providers as $provider) {
             require_once $root.$provider.".php";
         }
     }
     
-    private static function readProviders($root){
-        $temp= scandir($root);
-        $ret=array();
+    private static function readProviders($root)
+    {
+        $temp = scandir($root);
+        $ret = array();
         foreach ($temp as $provider) {
-            if($provider!="."&&$provider!="..") $ret[]=substr($provider, 0, sizeof($provider)-5);
+            if ($provider != "." && $provider != "..") {
+                $ret[] = substr($provider, 0, sizeof($provider)-5);
+            }
         }
         return $ret;
     }

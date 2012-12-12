@@ -9,10 +9,8 @@ class OrganisationDao {
     public function find($params)
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
         if (isset($params['id'])) {
-            if ($result = $db->call("findOganisation", $db->cleanse($params['id']))) {
+            if ($result = PDOWrapper::call("findOganisation", PDOWrapper::cleanse($params['id']))) {
                 $ret = $this->create_org_from_sql_result($result[0]);
             }
         } elseif (isset($params['name'])) {
@@ -40,13 +38,11 @@ class OrganisationDao {
     public static function getOrg($id, $name, $homepage, $bio)
     {
         $ret = array();
-        $db = new PDOWrapper();
-        $db->init();
         
-        if ($result = $db->call("getOrg", "{$db->cleanseNull($id)}
-                                        ,{$db->cleanseNullOrWrapStr($name)}
-                                        ,{$db->cleanseNullOrWrapStr($homepage)}
-                                        ,{$db->cleanseNullOrWrapStr($bio)}")) {
+        if ($result = PDOWrapper::call("getOrg", PDOWrapper::cleanseNull($id)
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($name)
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($homepage)
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($bio))) {
             foreach ($result as $row) {
                 $ret[] = self::createOrgFromSqlResult($row);
             }
@@ -58,22 +54,17 @@ class OrganisationDao {
     public function getOrgByUser($user_id) //currently not used
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
         
-        if ($result = $db->call("getOrgByUser", $db->cleanse($user_id))) {
+        if ($result = PDOWrapper::call("getOrgByUser", PDOWrapper::cleanse($user_id))) {
             $ret = $this->create_org_from_sql_result($result[0]);
-        }
-        
+        }        
         return $ret;
     }
 
     public function getOrgMembers($org_id)
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getOrgMembers", $db->cleanse($org_id))) {
+        if ($result = PDOWrapper::call("getOrgMembers", PDOWrapper::cleanse($org_id))) {
             $ret = $result;
         }
         
@@ -83,9 +74,7 @@ class OrganisationDao {
     public function searchForOrg($org_name)
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("searchForOrg", $db->cleanseWrapStr($org_name))) {
+        if ($result = PDOWrapper::call("searchForOrg", PDOWrapper::cleanseWrapStr($org_name))) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Organisation", $row);
@@ -97,19 +86,15 @@ class OrganisationDao {
 
     public function requestMembership($user_id, $org_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result = $db->call("requestMembership", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");        
+        $result = PDOWrapper::call("requestMembership", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));
         return $result[0]['result'];
     }
         
 
     public function getMembershipRequests($org_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
         $ret = null;
-        if ($results = $db->call("getMembershipRequests", "{$db->cleanse($org_id)}")) {
+        if ($results = PDOWrapper::call("getMembershipRequests", PDOWrapper::cleanse($org_id))) {
             foreach ($results as $result) {  
                 $ret[] = ModelFactory::buildModel("MembershipRequest", $result);
             }
@@ -120,9 +105,7 @@ class OrganisationDao {
 
     public function acceptMemRequest($org_id, $user_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $db->call("acceptMemRequest", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
+        PDOWrapper::call("acceptMemRequest", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));
     }
 
     public function refuseMemRequest($org_id, $user_id)
@@ -133,16 +116,13 @@ class OrganisationDao {
 
     private function removeMembershipRequest($org_id, $user_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $db->call("removeMembershipRequest", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}");
+        PDOWrapper::call("removeMembershipRequest", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));
     }
     
     public static function revokeMembership($org_id, $user_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result=$db->call("revokeMembership", "{$db->cleanse($user_id)},{$db->cleanse($org_id)}")) {
+        if ($result = PDOWrapper::call("revokeMembership", PDOWrapper::cleanse($user_id).
+                                        ",".PDOWrapper::cleanse($org_id))) {
             return $result[0]['result'];
         } else {
             return 0;
@@ -173,12 +153,10 @@ class OrganisationDao {
 
     private function insert($org)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        if ($org_id = $db->call("organisationInsertAndUpdate",
-                                "null,'{$db->cleanse($org->getHomePage())}
-                                ','{$db->cleanse($org->getName())}
-                                ','{$db->cleanse($org->getBiography())}'")) {
+        if ($org_id = PDOWrapper::call("organisationInsertAndUpdate",
+                                "null,".PDOWrapper::cleanse($org->getHomePage())
+                                .",".PDOWrapper::cleanse($org->getName())
+                                .",".PDOWrapper::cleanse($org->getBiography()))) {
             return $this->find(array('id' => $org_id[0]['result']));
         } else {
             return null;
@@ -186,19 +164,15 @@ class OrganisationDao {
     }
 
     private function update($org)
-    {
-        $db = new PDOWrapper();
-        $db->init();        
-        return $db->call("organisationInsertAndUpdate", "{$db->cleanse($org->getId())}
-                                                    ,'{$db->cleanse($org->getHomePage())}
-                                                    ','{$db->cleanse($org->getName())}
-                                                    ','{$db->cleanse($org->getBiography())}'");
+    {     
+        return PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanse($org->getId())
+                                                    .",".PDOWrapper::cleanse($org->getHomePage())
+                                                    .",".PDOWrapper::cleanse($org->getName())
+                                                    .",".PDOWrapper::cleanse($org->getBiography()));
     }
     
     public function delete($orgID)
-    {
-        $db = new PDOWrapper();
-        $db->init();        
-        return $db->call("deleteOrg", "{$db->cleanse($orgID)}");
+    {      
+        return PDOWrapper::call("deleteOrg", PDOWrapper::cleanse($orgID));
     }
 }
