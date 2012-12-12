@@ -86,8 +86,10 @@ class UserDao {
     {
         $result = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
         PDOWrapper::cleanseNull($user->getNonce()).",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
-        PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
-        PDOWrapper::cleanseNullOrWrapStr($user->getNativeLangId()).",".PDOWrapper::cleanseNullOrWrapStr($user->getNativeRegionId()).",".
+        PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".
+        PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
+        PDOWrapper::cleanseNullOrWrapStr($user->getNativeLangId()).",".
+        PDOWrapper::cleanseNullOrWrapStr($user->getNativeRegionId()).",".
         PDOWrapper::cleanse($user->getUserId()));
         return $this->find(array('user_id' => $result[0]['user_id']));
     }
@@ -95,9 +97,9 @@ class UserDao {
     private function insert($user) 
     {
         if ($user_id = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
-                                                        .",".PDOWrapper::cleanse($user->getNonce())
-                                                        .",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword())
-                                                        .",null,null,null,null,null")) {
+                                        .",".PDOWrapper::cleanse($user->getNonce())
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword())
+                                        .",null,null,null,null,null")) {
             return $this->find(array('user_id' => $user_id[0]['user_id']));
         } else {
             return null;
@@ -451,7 +453,8 @@ class UserDao {
     */
     public function addPasswordResetRequest($unique_id, $user_id)
     {
-        PDOWrapper::call("addPasswordResetRequest", PDOWrapper::cleanseWrapStr($unique_id).",".PDOWrapper::cleanse($user_id));
+        PDOWrapper::call("addPasswordResetRequest", PDOWrapper::cleanseWrapStr($unique_id)
+                        .",".PDOWrapper::cleanse($user_id));
     }
 
     public function removePasswordResetRequest($user_id)
@@ -503,7 +506,7 @@ class UserDao {
         $reset_request = $dao->getPasswordResetRequests(array('uid' => $key));
         if ($reset_request->getUserId() == '') {
             return array("result" => 0, "message" => "Incorrect Unique ID. Are you sure you copied the URL correctly?");
-        } elseif($dao->changePassword($reset_request->getUserId(), $password)) {
+        } elseif ($dao->changePassword($reset_request->getUserId(), $password)) {
             $dao->removePasswordResetRequest($reset_request->getUserId());
             return array("result" => 1, "message" => "You have successfully changed your password");
         }

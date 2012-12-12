@@ -111,17 +111,28 @@ class TaskDao {
     public function getTask($params)
     {
         $args = "";
-        $args .= isset($params['task_id'])?PDOWrapper::cleanseNull($params['task_id']):"null";
-        $args .= isset($params['org_id'])?",".PDOWrapper::cleanseNull($params['org_id']):",null";
-        $args .= isset($params['title'])?",".PDOWrapper::cleanseNullOrWrapStr($params['title']):",null";
-        $args .= isset($params['word_count'])?",".PDOWrapper::cleanseNull($params['word_count']):",null";
-        $args .= isset($params['source_id'])?",".PDOWrapper::cleanseNull($params['source_id']):",null";
-        $args .= isset($params['target_id'])?",".PDOWrapper::cleanseNull($params['target_id']):",null";
-        $args .= isset($params['created_time'])?",".PDOWrapper::cleanseNull($params['created_time']):",null";
-        $args .= isset($params['impact'])?",".PDOWrapper::cleanseNullOrWrapStr($params['impact']):",null";
-        $args .= isset($params['reference_page'])?",".PDOWrapper::cleanseNullOrWrapStr($params['reference_page']):",null";
-        $args .= isset($params['sourceCountry'])?",".PDOWrapper::cleanseNullOrWrapStr($params['sourceCountry']):",null";
-        $args .= isset($params['targetCountry'])?",".PDOWrapper::cleanseNullOrWrapStr($params['targetCountry']):",null";
+        $args .= isset($params['task_id']) ?
+            PDOWrapper::cleanseNull($params['task_id']) : "null";        
+        $args .= isset($params['org_id']) ?
+            ",".PDOWrapper::cleanseNull($params['org_id']) : ",null";
+        $args .= isset($params['title']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['title']) : ",null";
+        $args .= isset($params['word_count']) ?
+            ",".PDOWrapper::cleanseNull($params['word_count']) : ",null";
+        $args .= isset($params['source_id']) ?
+            ",".PDOWrapper::cleanseNull($params['source_id']) : ",null";
+        $args .= isset($params['target_id']) ?
+            ",".PDOWrapper::cleanseNull($params['target_id']) : ",null";
+        $args .= isset($params['created_time']) ?
+            ",".PDOWrapper::cleanseNull($params['created_time']) : ",null";
+        $args .= isset($params['impact']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['impact']) : ",null";
+        $args .= isset($params['reference_page']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['reference_page']) : ",null";
+        $args .= isset($params['sourceCountry']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['sourceCountry']) : ",null";
+        $args .= isset($params['targetCountry']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['targetCountry']) : ",null";
 
         $tasks = array();
         $result = PDOWrapper::call("getTask", $args);
@@ -334,7 +345,8 @@ class TaskDao {
     public function getUserTopTasks($user_id, $limit)
     {
         $ret = false;
-        if ($result = PDOWrapper::call("getUserTopTasks", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($limit))) {
+        if ($result = PDOWrapper::call("getUserTopTasks", PDOWrapper::cleanse($user_id)
+                                        .",".PDOWrapper::cleanse($limit))) {
             $ret = array();
             foreach ($result as $row) {
                 $task = self::find(array('task_id' => $row['id']));
@@ -401,7 +413,8 @@ class TaskDao {
 
     public function hasUserClaimedTask($user_id, $task_id)
     {
-        $result = PDOWrapper::call("hasUserClaimedTask", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanse($user_id));
+        $result = PDOWrapper::call("hasUserClaimedTask", PDOWrapper::cleanse($task_id)
+                                    .",".PDOWrapper::cleanse($user_id));
         return $result[0]['result'];
     }
 
@@ -441,7 +454,7 @@ class TaskDao {
     public function getUserArchivedTasksByID($user_id, $limit = 10)
     {
         return $this->parseResultForUserTask(PDOWrapper::call("getUserArchivedTasks", 
-                                                        PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($limit)));        
+                                            PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($limit)));
     }
 
     private function parseResultForUserTask($sqlResult)

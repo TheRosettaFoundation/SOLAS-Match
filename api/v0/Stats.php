@@ -15,7 +15,7 @@ class Stats {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/stats/totalTasks(:format)/',
                                                         function ($format = ".json") {
 
-            $datetime = Dispatcher::clenseArgs('datetime',  HttpMethodEnum::GET,null);
+            $datetime = Dispatcher::clenseArgs('datetime', HttpMethodEnum::GET, null);
             $data = StatDao::getTotalTasks($datetime);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTotalTasks');
@@ -23,7 +23,7 @@ class Stats {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/stats/totalArchivedTasks(:format)/',
                                                         function ($format = ".json") {
             
-            $datetime = Dispatcher::clenseArgs('datetime',  HttpMethodEnum::GET,null);
+            $datetime = Dispatcher::clenseArgs('datetime', HttpMethodEnum::GET, null);
             $data = StatDao::getTotalArchivedTasks($datetime);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTotalArchivedTasks');
@@ -31,7 +31,7 @@ class Stats {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/stats/totalClaimedTasks(:format)/',
                                                         function ($format = ".json") {
             
-            $datetime = _Dispatcher::clenseArgs('datetime',  HttpMethodEnum::GET,null);
+            $datetime = _Dispatcher::clenseArgs('datetime', HttpMethodEnum::GET, null);
             $data = StatDao::getTotalClaimedTasks($datetime);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTotalClaimedTasks');
@@ -39,7 +39,7 @@ class Stats {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/stats/totalUnclaimedTasks(:format)/',
                                                         function ($format = ".json") {
             
-            $datetime = Dispatcher::clenseArgs('datetime',  HttpMethodEnum::GET,null);
+            $datetime = Dispatcher::clenseArgs('datetime', HttpMethodEnum::GET, null);
             $data = StatDao::getTotalUnclaimedTasks($datetime);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTotalUnclaimedTasks');

@@ -22,7 +22,7 @@ class Users {
         }, 'getUsers');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/',
-                                                        function ($id,$format = ".json") {
+                                                        function ($id, $format = ".json") {
             
             if (!is_numeric($id) && strstr($id, '.')) {
                 $id = explode('.', $id);
@@ -30,12 +30,12 @@ class Users {
                 $id = $id[0];
             }
             
-            $role = Dispatcher::clenseArgs('role',  HttpMethodEnum::GET,false);
+            $role = Dispatcher::clenseArgs('role', HttpMethodEnum::GET, false);
             $dao = new UserDao();
             if (!$role) {
-                $data= $dao->find(array("user_id" => $id));
+                $data = $dao->find(array("user_id" => $id));
             } else {
-                $data= $dao->find(array("user_id" => $id,
+                $data = $dao->find(array("user_id" => $id,
                                         "role" => $role));
             }
             if (is_array($data)) {
@@ -78,7 +78,7 @@ class Users {
             $dao = new UserDao();
             $data = $dao->getUser(null, $email, null, null, null, null, null, null, null);
             if (is_array($data)) {
-                $data=$data[0];
+                $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserByEmail');
@@ -86,7 +86,7 @@ class Users {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/subscribedToTask/:id/:taskID/',
                                                         function ($id, $taskID, $format = ".json") {
 
-            if (!is_numeric($taskID)&& strstr($taskID, '.')) {
+            if (!is_numeric($taskID) && strstr($taskID, '.')) {
                 $taskID = explode('.', $taskID);
                 $format = '.'.$taskID[1];
                 $taskID = $taskID[0];
@@ -142,7 +142,7 @@ class Users {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
-            $limit = Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,null);
+            $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
             $dao = new UserDao();
             Dispatcher::sendResponce(null, $dao->getUserTags($id, $limit), null, $format);
         }, 'getUsertags');
@@ -171,7 +171,7 @@ class Users {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/top_tasks(:format)/',
                                                         function ($id, $format = ".json") {
             
-            $limit = Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,5);
+            $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
             $dao = new TaskDao();
             $data = $dao->getUserTopTasks($id, $limit);
             Dispatcher::sendResponce(null, $data, null, $format);
@@ -181,9 +181,9 @@ class Users {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/archived_tasks(:format)/',
                                                         function ($id, $format = ".json") {
             
-            $limit=Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,5);
+            $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
             $dao = new TaskDao();
-            $data=$dao->getUserArchivedTasksByID($id, $limit);
+            $data = $dao->getUserArchivedTasksByID($id, $limit);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserArchivedTasks');
         
@@ -216,7 +216,7 @@ class Users {
             $dao = new UserDao();
             $data = $dao->likeTag($id, $data->getId());
             if (is_array($data)) {
-                $data=$data[0];
+                $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'addUsertag');
@@ -246,7 +246,7 @@ class Users {
             $dao = new UserDao();
             $data = $dao->removeTag($id, $tagId);
             if (is_array($data)) {
-                $data=$data[0];
+                $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'deleteUserTagById');

@@ -37,7 +37,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/',
                                                         function ($id, $format = ".json") {
             
-            if (!is_numeric($id)&& strstr($id, '.')) {
+            if (!is_numeric($id) && strstr($id, '.')) {
                 $id = explode('.', $id);
                 $format = '.'.$id[1];
                 $id = $id[0];
@@ -63,7 +63,7 @@ class Tasks {
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:id/',
                                                         function ($id, $format = ".json") {
-            if (!is_numeric($id)&& strstr($id, '.')) {
+            if (!is_numeric($id) && strstr($id, '.')) {
                 $id = explode('.', $id);
                 $format = '.'.$id[1];
                 $id = $id[0];
@@ -74,14 +74,14 @@ class Tasks {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/top_tasks(:format)/',
                                                         function ($format = ".json") {
-            $limit = Dispatcher::clenseArgs('limit',  HttpMethodEnum::GET,null);
+            $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
             Dispatcher::sendResponce(null, TaskStream::getStream($limit), null, $format);
         }, 'getTopTasks');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/',
                                                         function ($id, $format = ".json") {
 
-            if (!is_numeric($id)&& strstr($id, '.')) {
+            if (!is_numeric($id) && strstr($id, '.')) {
                 $id = explode('.', $id);
                 $format = '.'.$id[1];
                 $id = $id[0];
@@ -120,7 +120,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/file(:format)/',
                                                         function ($id, $format=".json") {
             
-            $version = Dispatcher::clenseArgs('version',  HttpMethodEnum::GET,0);
+            $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, 0);
             TaskDao::downloadTask($id, $version);
         }, 'getTaskFile');
         
@@ -140,13 +140,13 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/version(:format)/',
                                                         function ($id, $format = ".json") {
             
-            $userID =Dispatcher::clenseArgs('userID',  HttpMethodEnum::GET,null);
+            $userID =Dispatcher::clenseArgs('userID', HttpMethodEnum::GET, null);
             Dispatcher::sendResponce(null, TaskFile::getLatestFileVersionByTaskID($id, $userID), null, $format);
         }, 'getTaskVersion');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/info(:format)/',
                                                         function ($id, $format = ".json") {
-            $version = Dispatcher::clenseArgs('version',  HttpMethodEnum::GET,0);
+            $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, 0);
             $taskMetadata = ModelFactory::buildModel("TaskMetadata", TaskFile::getTaskFileInfoById($id, $version));
             Dispatcher::sendResponce(null, $taskMetadata, null, $format);
         }, 'getTaskInfo');
@@ -156,7 +156,7 @@ class Tasks {
 
             $data = null;
             $dao = new TaskDao();
-            $userID = Dispatcher::clenseArgs('userID',  HttpMethodEnum::GET,null);
+            $userID = Dispatcher::clenseArgs('userID', HttpMethodEnum::GET, null);
             if (is_numeric($userID)) {
                 $data = $dao->hasUserClaimedTask($userID, $id);
             } else {

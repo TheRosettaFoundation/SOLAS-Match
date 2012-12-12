@@ -71,7 +71,7 @@ class BadgeDao
     {
         if ($result = PDOWrapper::call("removeUserBadge", PDOWrapper::cleanse($userID)
                                                         .",".PDOWrapper::cleanse($badgeID))) {
-          return $result[0]['result'];
+            return $result[0]['result'];
         }
         
         return 0;

@@ -40,7 +40,8 @@ class TaskFile {
      */
     public static function checkTaskFileVersion($task_id, $user_id = null)
     {
-        $result = PDOWrapper::call("getLatestFileVersion", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanseNull($user_id));
+        $result = PDOWrapper::call("getLatestFileVersion", PDOWrapper::cleanse($task_id)
+                                    .",".PDOWrapper::cleanseNull($user_id));
         return $result[0]['latest_version'] > 0;
     }
     
@@ -89,7 +90,8 @@ class TaskFile {
         
     public static function logFileDownload($task, $version)
     {
-        PDOWrapper::call("logFileDownload", PDOWrapper::cleanse($task->getId()).",".PDOWrapper::cleanse($version).",null");
+        PDOWrapper::call("logFileDownload", PDOWrapper::cleanse($task->getId())
+                                            .",".PDOWrapper::cleanse($version).",null");
     }
     
     public static function getLatestFileVersion($task)
@@ -100,7 +102,8 @@ class TaskFile {
     public static function getLatestFileVersionByTaskID($task_id,$user_id=null)
     {
         $ret = false;
-        if ($r = PDOWrapper::call("getLatestFileVersion", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanseNull($user_id))) {
+        if ($r = PDOWrapper::call("getLatestFileVersion", PDOWrapper::cleanse($task_id)
+                                    .",".PDOWrapper::cleanseNull($user_id))) {
             if (is_numeric($r[0]['latest_version'])) {
                 $ret =  intval($r[0]['latest_version']);
             }

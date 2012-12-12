@@ -86,7 +86,7 @@ class OrganisationDao {
 
     public function requestMembership($user_id, $org_id)
     {
-        $result = PDOWrapper::call("requestMembership", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));        
+        $result = PDOWrapper::call("requestMembership", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));
         return $result[0]['result'];
     }
         
