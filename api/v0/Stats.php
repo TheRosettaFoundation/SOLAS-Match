@@ -31,7 +31,7 @@ class Stats {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/stats/totalClaimedTasks(:format)/',
                                                         function ($format = ".json") {
             
-            $datetime = _Dispatcher::clenseArgs('datetime', HttpMethodEnum::GET, null);
+            $datetime = Dispatcher::clenseArgs('datetime', HttpMethodEnum::GET, null);
             $data = StatDao::getTotalClaimedTasks($datetime);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTotalClaimedTasks');
