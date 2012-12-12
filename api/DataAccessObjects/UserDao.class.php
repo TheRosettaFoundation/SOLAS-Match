@@ -10,16 +10,14 @@ class UserDao {
     {
         $query = null;
         $args = "";
-        $db = new PDOWrapper();
-        $db->init();
         
         if (isset($params['user_id']) || isset($params['email'])) {
             $args.=(isset($params['user_id']) && $params['user_id'] != null) ? 
-                                            "{$db->cleanse($params['user_id'])}" : "null";
+                                            PDOWrapper::cleanse($params['user_id']) : "null";
             $args.=(isset($params['password']) && $params['password'] != null) ?
-                                            ",'{$db->cleanse($params['password'])}'" : ",null";
+                                            ",".PDOWrapper::cleanseNullOrWrapStr($params['password']) : ",null";
             $args.=(isset($params['email']) && $params['email'] != null) ?
-                                            ",'{$db->cleanse($params['email'])}'" : ",null";
+                                            ",".PDOWrapper::cleanseNullOrWrapStr($params['email']) : ",null";
             $args.=(isset($params['role']) && $params['role'] == 'organisation_member') ? 
                                             ",1" : ",0";
         } else {
@@ -27,7 +25,7 @@ class UserDao {
         }
 
         $ret = null;
-        if ($r = $db->call("userFindByUserData", $args)) {
+        if ($r = PDOWrapper::call("userFindByUserData", $args)) {
             $user_data = array(
                     'user_id' => $r[0]['user_id'],
                     'email' => $r[0]['email'],
@@ -86,24 +84,20 @@ class UserDao {
 
     private function update($user)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())},
-        {$db->cleanseNull($user->getNonce())},{$db->cleanseNullOrWrapStr($user->getPassword())},
-        {$db->cleanseNullOrWrapStr($user->getBiography())},{$db->cleanseNullOrWrapStr($user->getDisplayName())},
-        {$db->cleanseNullOrWrapStr($user->getNativeLangId())},{$db->cleanseNullOrWrapStr($user->getNativeRegionId())},
-        {$db->cleanse($user->getUserId())}");
+        $result = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
+        PDOWrapper::cleanseNull($user->getNonce()).",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
+        PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
+        PDOWrapper::cleanseNullOrWrapStr($user->getNativeLangId()).",".PDOWrapper::cleanseNullOrWrapStr($user->getNativeRegionId()).",".
+        PDOWrapper::cleanse($user->getUserId()));
         return $this->find(array('user_id' => $result[0]['user_id']));
     }
 
     private function insert($user) 
     {
-        $db = new PDOWrapper();
-        $db->init();
-        if ($user_id = $db->call('userInsertAndUpdate', "{$db->cleanseNullOrWrapStr($user->getEmail())}
-                                                        ,{$db->cleanse($user->getNonce())}
-                                                        ,{$db->cleanseNullOrWrapStr($user->getPassword())}
-                                                        ,null,null,null,null,null")) {
+        if ($user_id = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
+                                                        .",".PDOWrapper::cleanse($user->getNonce())
+                                                        .",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword())
+                                                        .",null,null,null,null,null")) {
             return $this->find(array('user_id' => $user_id[0]['user_id']));
         } else {
             return null;
@@ -150,13 +144,13 @@ class UserDao {
         $user = $this->find(array('email' => $email));
 
         if (!is_object($user)) {
-            return array("error"=>'Sorry, the  password or username entered is incorrect.
-                                    Please check the credentials used and try again.');
+            return array("error"=>"Sorry, the  password $clear_password or username $email entered is incorrect.
+                                    Please check the credentials used and try again.");
         }
 
         if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
-            return array("error"=>'Sorry, the  password or username entered is incorrect.
-                                    Please check the credentials used and try again.');
+            return array("error"=>"Sorry, the  password or username entered is incorrect.
+                                    Please check the credentials used and try again.");
         }
 
         return $user;
@@ -166,7 +160,7 @@ class UserDao {
     {
         $user = $this->find(array('email' => $email));
 
-        if (!is_object($user)&& $clear_password!="") {
+        if (!is_object($user) && $clear_password != "") {
             $user = $this->create($email, $clear_password);
             $badge_dao = new BadgeDao();
             $badge = $badge_dao->find(array('badge_id' => BadgeTypes::REGISTERED));
@@ -248,9 +242,7 @@ class UserDao {
     public function findOrganisationsUserBelongsTo($user_id) 
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("findOrganisationsUserBelongsTo", $db->cleanse($user_id))) {
+        if ($result = PDOWrapper::call("findOrganisationsUserBelongsTo", PDOWrapper::cleanse($user_id))) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Organisation", $row);
@@ -267,9 +259,7 @@ class UserDao {
     public function getUserBadgesbyID($user_id)
     {
         $ret = array();
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getUserBadges", $db->cleanse($user_id))) {
+        if ($result = PDOWrapper::call("getUserBadges", PDOWrapper::cleanse($user_id))) {
             foreach ($result as $badge) {
                 $ret[] = ModelFactory::buildModel("Badge", $badge);
             }
@@ -280,9 +270,8 @@ class UserDao {
     public function getUserTags($user_id, $limit=null)
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getUserTags", "{$db->cleanse($user_id)},{$db->cleanseNull($limit)}")) {
+        if ($result = PDOWrapper::call("getUserTags", PDOWrapper::cleanse($user_id)
+                                                    .",".PDOWrapper::cleanseNull($limit))) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Tag", $row);
@@ -296,16 +285,15 @@ class UserDao {
                             , $native_language_id, $native_region_id, $created)
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getUser", "{$db->cleanseNull($user_id)},{$db->cleanseNullOrWrapStr($display_name)}
-                                ,{$db->cleanseNullOrWrapStr($email)}"."
-                                ,{$db->cleanseNullOrWrapStr($password)}
-                                ,{$db->cleanseNullOrWrapStr($biography)}
-                                ,{$db->cleanseNull($nonce)}
-                                ,{$db->cleanseNull($created)}"."
-                                ,{$db->cleanseNull($native_language_id)}
-                                ,{$db->cleanseNull($native_region_id)}")) {
+        if ($result = PDOWrapper::call("getUser", PDOWrapper::cleanseNull($user_id)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($display_name)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($email)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($password)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($biography)
+                                .",".PDOWrapper::cleanseNull($nonce)
+                                .",".PDOWrapper::cleanseNull($created)
+                                .",".PDOWrapper::cleanseNull($native_language_id)
+                                .",".PDOWrapper::cleanseNull($native_region_id))) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("User", $row);
@@ -320,9 +308,7 @@ class UserDao {
     public function getUsersWithBadgeByID($badge_ID)
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("getUsersWithBadge", "{$db->cleanse($badge_ID)}")) {
+        if ($result = PDOWrapper::call("getUsersWithBadge", PDOWrapper::cleanse($badge_ID))) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("User", $row);
@@ -341,12 +327,10 @@ class UserDao {
     */
     public function likeTag($user_id, $tag_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
         $args = array();
-        $args['user_id'] = $db->cleanse($user_id);
-        $args['tag_id'] = $db->cleanse($tag_id);
-        if ($result = $db->call("userLikeTag", $args)) {
+        $args['user_id'] = PDOWrapper::cleanse($user_id);
+        $args['tag_id'] = PDOWrapper::cleanse($tag_id);
+        if ($result = PDOWrapper::call("userLikeTag", $args)) {
             return $result[0]['result'];
         }
         return 0;
@@ -358,9 +342,8 @@ class UserDao {
     public function removeTag($user_id, $tag_id)
     {
         $ret = false;
-        $db= new PDOWrapper();
-        $db->init();
-        if ($result = $db->call("removeUserTag", "{$db->cleanse($user_id)},{$db->cleanse($tag_id)}")) {
+        if ($result = PDOWrapper::call("removeUserTag", PDOWrapper::cleanse($user_id).","
+                                        .PDOWrapper::cleanse($tag_id))) {
             $ret = $result[0]['result'];
         }
 
@@ -373,11 +356,9 @@ class UserDao {
     public function getUserNotificationList($user_id) 
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
         $args = array();
         $args['id'] = $user_id;
-        if ($return = $db->call('getUserNotifications', $args)) {
+        if ($return = PDOWrapper::call('getUserNotifications', $args)) {
             $ret = $return;
         }
 
@@ -390,12 +371,10 @@ class UserDao {
     public function isSubscribedToTask($user_id, $task_id)
     {
         $ret = false;
-        $db = new PDOWrapper();
-        $db->init();
         $args = array();
         $args[] = $user_id;
         $args[] = $task_id;
-        if ($result = $db->call('userSubscribedToTask', $args)) {
+        if ($result = PDOWrapper::call('userSubscribedToTask', $args)) {
             $ret = $result[0]['result'];
         }
 
@@ -408,12 +387,10 @@ class UserDao {
     public function trackTask($user_id, $task_id)
     {
         $ret = false;
-        $db = new PDOWrapper();
-        $db->init();
         $args = array();
         $args['user_id'] = $user_id;
         $args['task_id'] = $task_id;
-        if ($result = $db->call("userNotificationsInsertAndUpdate", $args)) {
+        if ($result = PDOWrapper::call("userNotificationsInsertAndUpdate", $args)) {
             $ret = $result[0]['result'];
         }
 
@@ -426,12 +403,10 @@ class UserDao {
     public function ignoreTask($user_id, $task_id)
     {
         $ret = false;
-        $db = new PDOWrapper();
-        $db->init();
         $args = array();
         $args['user_id'] = $user_id;
         $args['task_id'] = $task_id;
-        if ($result = $db->call("removeUserNotification", $args)) {
+        if ($result = PDOWrapper::call("removeUserNotification", $args)) {
             $ret = $result[0]['result'];
         }
 
@@ -441,10 +416,8 @@ class UserDao {
     public function getTrackedTasks($user_id)
     {
         $ret = array();
-        $db = new PDOWrapper();
-        $db->init();
         $dao = new TaskDao();
-        if ($result = $db->call("getUserTrackedTasks", "$user_id")) {
+        if ($result = PDOWrapper::call("getUserTrackedTasks", "$user_id")) {
             foreach ($result as $row) {
                 $params = array();
                 $params['task_id'] = $row['id'];
@@ -478,16 +451,12 @@ class UserDao {
     */
     public function addPasswordResetRequest($unique_id, $user_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $db->call("addPasswordResetRequest", "{$db->cleanseWrapStr($unique_id)}, {$db->cleanse($user_id)}");
+        PDOWrapper::call("addPasswordResetRequest", PDOWrapper::cleanseWrapStr($unique_id).",".PDOWrapper::cleanse($user_id));
     }
 
     public function removePasswordResetRequest($user_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $db->call("removePasswordResetRequest", "{$db->cleanse($user_id)}");
+        PDOWrapper::call("removePasswordResetRequest", PDOWrapper::cleanse($user_id));
     }
 
     /*
@@ -513,17 +482,15 @@ class UserDao {
     public function getPasswordResetRequests($args)
     {
         $ret = false;
-        $db = new PDOWrapper();
-        $db->init();
         if (isset($args['uid']) && $args['uid'] != '') {
             $uid = $args['uid'];
-            if ($result = $db->call("getPasswordResetRequests", "{$db->cleanseWrapStr($uid)}, null")) {
+            if ($result = PDOWrapper::call("getPasswordResetRequests", PDOWrapper::cleanseWrapStr($uid).",null")) {
                 $ret = ModelFactory::buildModel("PasswordResetRequest", $result[0]);
             }
         } elseif (isset($args['user_id']) && $args['user_id'] != '') {
             $user_id = $args['user_id'];
 
-            if ($result = $db->call("getPasswordResetRequests", "null, {$db->cleanse($user_id)}")) {
+            if ($result = PDOWrapper::call("getPasswordResetRequests", "null,".PDOWrapper::cleanse($user_id))) {
                 $ret = ModelFactory::buildModel("PasswordResetRequest", $result[0]);
             }
         }

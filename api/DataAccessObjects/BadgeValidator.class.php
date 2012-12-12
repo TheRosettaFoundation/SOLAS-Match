@@ -19,9 +19,7 @@ class BadgeValidator
     
     private function userHasBadgeByID($userID, $badgeID)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result = $db->call("userHasBadge", "{$db->cleanse($userID)},{$db->cleanse($badgeID)}");
+        $result = PDOWrapper::call("userHasBadge", PDOWrapper::cleanse($userID).",".PDOWrapper::cleanse($badgeID));
         return $result[0]['result'];
     }
 }

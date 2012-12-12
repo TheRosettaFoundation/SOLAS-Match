@@ -30,30 +30,24 @@ class Languages {
         
     public static function getLanguage($id,$code,$name)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result = $db->call("getLanguage", "{$db->cleanseNullOrWrapStr($id)}
-                                            ,{$db->cleanseNullOrWrapStr($code)}
-                                            ,{$db->cleanseNullOrWrapStr($name)}");
+        $result = PDOWrapper::call("getLanguage", PDOWrapper::cleanseNullOrWrapStr($id)
+                                            .",".PDOWrapper::cleanseNullOrWrapStr($code)
+                                            .",".PDOWrapper::cleanseNullOrWrapStr($name));
         return ModelFactory::buildModel("Language", $result[0]);
     }
 
     public static function getCountry($id, $code, $name)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result = $db->call("getCountry", "{$db->cleanseNUll($id)}
-                                            ,{$db->cleanseNullOrWrapStr($code)}
-                                            ,{$db->cleanseNullOrWrapStr($name)}");
+        $result = PDOWrapper::call("getCountry", PDOWrapper::cleanseNUll($id)
+                                            .",".PDOWrapper::cleanseNullOrWrapStr($code)
+                                            .",".PDOWrapper::cleanseNullOrWrapStr($name));
         return ModelFactory::buildModel("Country", $result[0]);
     }
 
     public static function getLanguageList()
     {
-        $db = new PDOWrapper();
-        $db->init();
         $languages = array();
-        foreach ($db->call("getLanguages", "") as $lcid) {
+        foreach (PDOWrapper::call("getLanguages", "") as $lcid) {
             $languages[] = ModelFactory::buildModel("Language", $lcid);
         }
 
@@ -62,10 +56,8 @@ class Languages {
 
     public static function getCountryList()
     {
-        $db = new PDOWrapper();
-        $db->init();
         $countries = array();
-        foreach ($db->call("getCountries", "") as $lcid) {
+        foreach (PDOWrapper::call("getCountries", "") as $lcid) {
             $countries[] = ModelFactory::buildModel('Country', $lcid);
         }
                 
@@ -74,10 +66,8 @@ class Languages {
 
     public static function getlcid($lang,$country)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $lcid = $db->call("getLCID", "{$db->cleanseNullOrWrapStr($lang)},
-                                        {$db->cleanseNullOrWrapStr($country)}");            
+        $lcid = PDOWrapper::call("getLCID", PDOWrapper::cleanseNullOrWrapStr($lang).",".
+                                        PDOWrapper::cleanseNullOrWrapStr($country));            
         return $lcid[0]['lcid'];
     }
 

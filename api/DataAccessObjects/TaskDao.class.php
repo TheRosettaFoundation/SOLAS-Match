@@ -58,12 +58,10 @@ class TaskDao {
             $organisation_ids = implode(',', $organisation_ids);
         }
         
-        $db = new PDOWrapper();
-        $db->init();
-        $args = $db->cleanse($organisation_ids);
-        $args .= empty($sort_column) ? ",null" : "{$db->cleanse($sort_column)}";
-        $args .= (!empty($sort_column) && empty($sort_direction)) ? " " : " {$db->cleanse($sort_direction)}";
-        if ($result = $db->call("getTasksByOrgIDs", $args)) {
+        $args = PDOWrapper::cleanse($organisation_ids);
+        $args .= empty($sort_column) ? ",null" : PDOWrapper::cleanse($sort_column);
+        $args .= (!empty($sort_column) && empty($sort_direction)) ? " " : PDOWrapper::cleanse($sort_direction);
+        if ($result = PDOWrapper::call("getTasksByOrgIDs", $args)) {
             $tasks = array();
             foreach ($result as $row) {
                 $task_data = array();
@@ -112,23 +110,21 @@ class TaskDao {
         
     public function getTask($params)
     {
-        $db = new PDOWrapper();
-        $db->init();
         $args = "";
-        $args .= isset($params['task_id'])?"{$db->cleanseNull($params['task_id'])}":"null";
-        $args .= isset($params['org_id'])?",{$db->cleanseNull($params['org_id'])}":",null";
-        $args .= isset($params['title'])?",{$db->cleanseNullOrWrapStr($params['title'])}":",null";
-        $args .= isset($params['word_count'])?",{$db->cleanseNull($params['word_count'])}":",null";
-        $args .= isset($params['source_id'])?",{$db->cleanseNull($params['source_id'])}":",null";
-        $args .= isset($params['target_id'])?",{$db->cleanseNull($params['target_id'])}":",null";
-        $args .= isset($params['created_time'])?",{$db->cleanseNull($params['created_time'])}":",null";
-        $args .= isset($params['impact'])?",{$db->cleanseNullOrWrapStr($params['impact'])}":",null";
-        $args .= isset($params['reference_page'])?",{$db->cleanseNullOrWrapStr($params['reference_page'])}":",null";
-        $args .= isset($params['sourceCountry'])?",{$db->cleanseNullOrWrapStr($params['sourceCountry'])}":",null";
-        $args .= isset($params['targetCountry'])?",{$db->cleanseNullOrWrapStr($params['targetCountry'])}":",null";
+        $args .= isset($params['task_id'])?PDOWrapper::cleanseNull($params['task_id']):"null";
+        $args .= isset($params['org_id'])?",".PDOWrapper::cleanseNull($params['org_id']):",null";
+        $args .= isset($params['title'])?",".PDOWrapper::cleanseNullOrWrapStr($params['title']):",null";
+        $args .= isset($params['word_count'])?",".PDOWrapper::cleanseNull($params['word_count']):",null";
+        $args .= isset($params['source_id'])?",".PDOWrapper::cleanseNull($params['source_id']):",null";
+        $args .= isset($params['target_id'])?",".PDOWrapper::cleanseNull($params['target_id']):",null";
+        $args .= isset($params['created_time'])?",".PDOWrapper::cleanseNull($params['created_time']):",null";
+        $args .= isset($params['impact'])?",".PDOWrapper::cleanseNullOrWrapStr($params['impact']):",null";
+        $args .= isset($params['reference_page'])?",".PDOWrapper::cleanseNullOrWrapStr($params['reference_page']):",null";
+        $args .= isset($params['sourceCountry'])?",".PDOWrapper::cleanseNullOrWrapStr($params['sourceCountry']):",null";
+        $args .= isset($params['targetCountry'])?",".PDOWrapper::cleanseNullOrWrapStr($params['targetCountry']):",null";
 
         $tasks = array();
-        $result = $db->call("getTask", $args);
+        $result = PDOWrapper::call("getTask", $args);
         if ($result) {
             foreach ($result as $row) {
                 $task_data = array();
@@ -215,27 +211,23 @@ class TaskDao {
 
     private function update($task)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result= $db->call("taskInsertAndUpdate", "{$db->cleanseNull($task->getId())}
-                                                ,{$db->cleanseNull($task->getOrgId())}
-                                                ,{$db->cleanseNullOrWrapStr($task->getTitle())}
-                                                ,{$db->cleanseNull($task->getWordCount())}
-                                                ,{$db->cleanseNull($task->getSourceLangId())}
-                                                ,{$db->cleanseNull($task->getTargetLangId())}
-                                                ,{$db->cleanseNullOrWrapStr($task->getCreatedTime())}
-                                                ,{$db->cleanseNullOrWrapStr($task->getImpact())}
-                                                ,{$db->cleanseNullOrWrapStr($task->getReferencePage())}
-                                                ,{$db->cleanseNullOrWrapStr($task->getSourceRegionId())}
-                                                ,{$db->cleanseNullOrWrapStr($task->getTargetRegionId())}");
+        $result= PDOWrapper::call("taskInsertAndUpdate", PDOWrapper::cleanseNull($task->getId())
+                                                .",".PDOWrapper::cleanseNull($task->getOrgId())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
+                                                .",".PDOWrapper::cleanseNull($task->getWordCount())
+                                                .",".PDOWrapper::cleanseNull($task->getSourceLangId())
+                                                .",".PDOWrapper::cleanseNull($task->getTargetLangId())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getImpact())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getReferencePage())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceRegionId())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetRegionId()));
         $this->updateTags($task);
     }
     
     public function delete($TaskID)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result= $db->call("deleteTask", "{$db->cleanseNull($TaskID)}");
+        $result= PDOWrapper::call("deleteTask", PDOWrapper::cleanseNull($TaskID));
         return $result[0]["result"];
     }
 
@@ -305,28 +297,24 @@ class TaskDao {
 
     private function insert(&$task)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result= $db->call("taskInsertAndUpdate", "null,".$db->cleanseNull($task->getOrgId()).
-            ",".$db->cleanseNullOrWrapStr($task->getTitle()).
-            ",".$db->cleanseNull($task->getWordCount()).
-            ",".$db->cleanseNull($task->getSourceLangId()).
-            ",".$db->cleanseNull($task->getTargetLangId()).
-            ",".$db->cleanseNullOrWrapStr($task->getCreatedTime()).
-            ",".$db->cleanseNullOrWrapStr($task->getImpact()).
-            ",".$db->cleanseNullOrWrapStr($task->getReferencePage()).
-            ",".$db->cleanseNullOrWrapStr($task->getSourceRegionId()).
-            ",".$db->cleanseNullOrWrapStr($task->getTargetRegionId()));
+        $result = PDOWrapper::call("taskInsertAndUpdate", "null,".PDOWrapper::cleanseNull($task->getOrgId()).
+            ",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle()).
+            ",".PDOWrapper::cleanseNull($task->getWordCount()).
+            ",".PDOWrapper::cleanseNull($task->getSourceLangId()).
+            ",".PDOWrapper::cleanseNull($task->getTargetLangId()).
+            ",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime()).
+            ",".PDOWrapper::cleanseNullOrWrapStr($task->getImpact()).
+            ",".PDOWrapper::cleanseNullOrWrapStr($task->getReferencePage()).
+            ",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceRegionId()).
+            ",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetRegionId()));
         $task->setId($result[0]['id']);
         $this->updateTags($task);
     }
 
     public function getLatestAvailableTasks($nb_items = 10)
     {
-        $db = new PDOWrapper();
-        $db->init();
         $ret = false;
-        if ($r = $db->call("getLatestAvailableTasks", "{$db->cleanse($nb_items)}")) {
+        if ($r = PDOWrapper::call("getLatestAvailableTasks", PDOWrapper::cleanse($nb_items))) {
             $ret = array();
             foreach ($r as $row) {
                 // Add a new Job object to the array to be returned.
@@ -345,10 +333,8 @@ class TaskDao {
      */
     public function getUserTopTasks($user_id, $limit)
     {
-        $db = new PDOWrapper();
-        $db->init();
         $ret = false;
-        if ($result = $db->call("getUserTopTasks", "{$db->cleanse($user_id)},{$db->cleanse($limit)}")) {
+        if ($result = PDOWrapper::call("getUserTopTasks", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($limit))) {
             $ret = array();
             foreach ($result as $row) {
                 $task = self::find(array('task_id' => $row['id']));
@@ -379,10 +365,8 @@ class TaskDao {
                                                 ' because no such tag is in the system.');
         }
 
-        $db = new PDOWrapper();
-        $db->init();
         $ret = false;
-        if ($r = $db->call("getTaggedTasks", "{$db->cleanse($tag_id)},{$db->cleanse($limit)}")) {
+        if ($r = PDOWrapper::call("getTaggedTasks", PDOWrapper::cleanse($tag_id).",".PDOWrapper::cleanse($limit))) {
             $ret = array();
             foreach ($r as $row) {
                     $ret[] = self::find(array('task_id' => $row['id']));
@@ -400,9 +384,7 @@ class TaskDao {
     {
         $task = $this->find(array("task_id" => $taskID));
         Notify::sendEmailNotifications($task, NotificationTypes::ARCHIVE);
-        $db = new PDOWrapper();
-        $db->init();
-        $db->call("archiveTask", "{$db->cleanse($taskID)}");
+        PDOWrapper::call("archiveTask", PDOWrapper::cleanse($taskID));
     }
 
     public function claimTask($task, $user)
@@ -412,35 +394,27 @@ class TaskDao {
         
     public function claimTaskbyID($task_id, $user_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $ret = $db->call("claimTask", "{$db->cleanse($task_id)},{$db->cleanse($user_id)}");
+        $ret = PDOWrapper::call("claimTask", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanse($user_id));
         return $ret[0]['result'];
     }
         
 
     public function hasUserClaimedTask($user_id, $task_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result = $db->call("hasUserClaimedTask", "{$db->cleanse($task_id)},{$db->cleanse($user_id)}");
+        $result = PDOWrapper::call("hasUserClaimedTask", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanse($user_id));
         return $result[0]['result'];
     }
 
     public function taskIsClaimed($task_id)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        $result =  $db->call("taskIsClaimed", "{$db->cleanse($task_id)}");
+        $result =  PDOWrapper::call("taskIsClaimed", PDOWrapper::cleanse($task_id));
         return $result[0]['result'];
     }
 
     public function getTaskTranslator($task_id)
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result = $db->call('getTaskTranslator', "{$db->cleanse($task_id)}")) {
+        if ($result = PDOWrapper::call('getTaskTranslator', PDOWrapper::cleanse($task_id))) {
             $user_dao = new UserDao();
             $ret = $user_dao->find($result[0]);
         }
@@ -454,11 +428,9 @@ class TaskDao {
     
     public function getUserTasksByID($user_id, $limit = 10)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        return $this->parseResultForUserTask($db->call("getUserTasks",
-                                                "{$db->cleanse($user_id)}
-                                                ,{$db->cleanse($limit)}"));
+        return $this->parseResultForUserTask(PDOWrapper::call("getUserTasks",
+                                                PDOWrapper::cleanse($user_id)
+                                                .",".PDOWrapper::cleanse($limit)));
     }
 
     public function getUserArchivedTasks($user, $limit = 10)
@@ -468,10 +440,8 @@ class TaskDao {
     
     public function getUserArchivedTasksByID($user_id, $limit = 10)
     {
-        $db = new PDOWrapper();
-        $db->init();
-        return $this->parseResultForUserTask($db->call("getUserArchivedTasks", 
-                                                        "{$db->cleanse($user_id)},{$db->cleanse($limit)}"));        
+        return $this->parseResultForUserTask(PDOWrapper::call("getUserArchivedTasks", 
+                                                        PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($limit)));        
     }
 
     private function parseResultForUserTask($sqlResult)
@@ -505,9 +475,8 @@ class TaskDao {
     public function getSubscribedUsers($task_id)
     {
         $ret = null;
-        $db = new PDOWrapper();
-        $db->init();
-        if ($result = $db->call('getSubscribedUsers', "$task_id")) {
+
+        if ($result = PDOWrapper::call('getSubscribedUsers', "$task_id")) {
             foreach ($result as $row) {
                 $user_dao = new UserDao();
                 $ret[] = $user_dao->find($row);
