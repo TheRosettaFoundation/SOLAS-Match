@@ -89,8 +89,12 @@
         </div>
         <p>When you register, you'll be able to <strong>preview</strong> this task, and to translate it if you wish.</p>
         <p>
-            <a class="btn btn-primary" href="{urlFor name="register"}">Register</a>
-            <a class="btn" href="{urlFor name="login"}">Log In</a>
+            <a class="btn btn-success btn-large" href="{urlFor name="register"}">
+                    <i class="icon-star icon-white"></i> Register to Volunteer
+            </a>
+            <a class="btn btn-primary btn-large" href="{urlFor name="login"}">
+                    <i class="icon-share icon-white"></i> Login
+            </a>
         </p>
     {/if}
 {/if}
