@@ -77,8 +77,15 @@
         <hr />
         <h3>Are you interested in volunteering to translate this task?</h3>
         <p> 
+            
             <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-large btn-primary">
-            <i class="icon-download icon-white"></i> Download the file to preview</a>
+            <i class="icon-download icon-white"></i> Download to Preview</a>
+
+            {if ($converter == "y")}
+                <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}?convertToXliff=true" class="btn btn-large btn-primary">
+                <i class="icon-download icon-white"></i> Download as XLIFF</a>   
+            {/if}
+            
         </p>
         <hr />
         <center><h2>Document Preview <small>{$filename}</small></h2></center>
