@@ -918,10 +918,23 @@ class TaskRouteHandler
         
         if (is_null($error_message)) {
             try {
-                //do not touch regards sean
-                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
-                $error_message = $client->call(APIClient::API_VERSION."/tasks/$task_id/file/{$_FILES[$field_name]
-                                        ['name']}/$user_id", HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
+                if ($app->request()->isPost()) {
+                    $post = (object) $app->request()->post();
+                    $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
+                    
+                    if ($post->submit == 'XLIFF') {
+                        $request = APIClient::API_VERSION."/tasks/$task_id/file/?convertFileXliff=true";
+                        $response = $client->call($request, HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
+                        //APIClient::API_VERSION"/tasks/$task_id/file/?version=$version&convertToXliff=$convert")
+                    } else if ($post->submit == 'submit') {
+                        //do not touch regards sean                        
+                        $error_message = $client->call(APIClient::API_VERSION.
+                        "/tasks/$task_id/file/{$_FILES[$field_name]['name']}/$user_id",
+                        HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
+                    }
+                }
+                
+
             } catch (Exception  $e) {
                 $error_message = 'File error: ' . $e->getMessage();
             }
