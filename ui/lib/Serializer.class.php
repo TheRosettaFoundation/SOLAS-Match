@@ -87,11 +87,13 @@ class Serializer
         if (is_null($destination) || is_null($sourceObject)) {
             return null;
         }
+       
         
         if (is_string($destination)) {
             $destination = new $destination();
         }
-        
+        if(gettype($destination)==gettype($sourceObject)) return $sourceObject;
+         
         $sourceReflection = new ReflectionObject($sourceObject);
         $destinationReflection = new ReflectionObject($destination);
         $sourceProperties = $sourceReflection->getProperties();
