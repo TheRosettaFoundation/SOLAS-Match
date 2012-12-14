@@ -13,6 +13,7 @@ require_once 'DataAccessObjects/TaskStream.class.php';
 require_once '../Common/models/TaskMetadata.php';
 require_once 'lib/IO.class.php';
 require_once 'lib/Upload.class.php';
+require_once 'lib/FormatConverter.php';
 
 class Tasks {
     
@@ -121,7 +122,12 @@ class Tasks {
                                                         function ($id, $format=".json") {
             
             $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, 0);
-            TaskDao::downloadTask($id, $version);
+            $convert = Dispatcher::clenseArgs('convertToXliff', HttpMethodEnum::GET, false);
+            if($convert){
+                TaskDao::downloadConvertedTask($id, $version);
+            }else{
+                TaskDao::downloadTask($id, $version);
+            }
         }, 'getTaskFile');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:filename/:userId/',
@@ -133,8 +139,13 @@ class Tasks {
                 $task = $task[0];
             }
             Notify::sendEmailNotifications($task, NotificationTypes::UPLOAD);
+            $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
+            if($convert){
+                Upload::apiSaveFile($task, $userId, FormatConverter::convertFromXliff(Dispatcher::getDispatcher()->request()->getBody()), $filename);
+            }else{
             //touch this and you will die painfully sinisterly sean :)
-            Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename);
+                Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename);
+            }
         }, 'saveTaskFile');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/version(:format)/',

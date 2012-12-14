@@ -537,4 +537,27 @@ class TaskDao {
         TaskFile::logFileDownload($task, $version);
         IO::downloadFile($absolute_file_path, $file_content_type);
     }
+    
+    public static function downloadConvertedTask($taskID,$version=0)
+    {
+        $task_dao = new TaskDao;
+        $task = $task_dao->find(array('task_id' => $taskID));
+
+        if (!is_object($task)) {
+            header('HTTP/1.0 404 Not Found');
+            die;
+        }
+        
+        $task_file_info = TaskFile::getTaskFileInfo($task, $version);
+
+        if (empty($task_file_info)) {
+            throw new Exception("Task file info not set for.");
+        }
+
+        $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
+        $file_content_type = $task_file_info['content_type'];
+        TaskFile::logFileDownload($task, $version);
+        IO::downloadConvertedFile($absolute_file_path, $file_content_type);
+    }
+    
 }

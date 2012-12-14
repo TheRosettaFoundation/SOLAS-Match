@@ -72,14 +72,14 @@ class Dispatcher {
         switch ($formatCode){
             
             case FormatEnum::JSON: {
-                $response['Content-Type'] = 'application/json';
+                $response['Content-Type'] = 'application/json; charset=utf-8';
                 $body = APIHelper::serialiser($body, $format);
                 break;
             }
             
             case FormatEnum::XML: {
                 try {
-                    $response['Content-Type'] = 'application/xml';
+                    $response['Content-Type'] = 'application/xml; charset=utf-8';
                     $body = APIHelper::serialiser($body, $format);
                 } catch (Exception $e) {
                     echo $e;
@@ -89,7 +89,7 @@ class Dispatcher {
             
             case FormatEnum::HTML: {
                 try {
-                    $response['Content-Type'] = 'text/html';
+                    $response['Content-Type'] = 'text/html; charset=utf-8';
                     $body = APIHelper::serialiser($body, $format);
                 } catch (Exception $e) {
                     echo $e;                    
@@ -99,7 +99,7 @@ class Dispatcher {
             
             case FormatEnum::PHP:{
                 try {
-                    $response['Content-Type'] = 'text/plain';
+                    $response['Content-Type'] = 'text/html; charset=utf-8';
                     $body = APIHelper::serialiser($body, $format);
                 } catch (Exception $e) {
                     echo $e;                   
