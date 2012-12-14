@@ -73,7 +73,7 @@ class Serializer
             }
         }
         if (!is_null($data) && is_null($ret)) {
-            if (strcasecmp($data, "null") == 0 || $data == "null") {
+            if (strcasecmp($data, "null") == 0 || $data == "null"||(FormatEnum::PHP==$format&&$data=="N;")) {
                 $ret=null;
             } else {
                 $ret=$data;
