@@ -10,7 +10,9 @@
 
     <p>Please <strong>download the file to your desktop.</strong></p>
 
-    <p>If you want to start again, <a href="{urlFor name="download-task" options="task_id.$task_id"}">download the file preview again.</a></p>
+    <p>If you want to start again, <a href="{urlFor name="download-task" options="task_id.$task_id"}">download the file preview.</a></p>
+    
+    <p>If you want to start again, <a href="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff={$convert}">download the file as XLIFF.</a></p>
 
         <p style="margin-bottom:40px;"></p>
 	<h2>When you have saved the file to your desktop...</h2>
@@ -23,6 +25,6 @@
 	</p>
 </section>
 
-<iframe src="{urlFor name="download-task" options="task_id.$task_id"}" width="1" height="1" frameborder="no"></iframe>
+<iframe src="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff={$convert}" width="1" height="1" frameborder="no"></iframe>
 
 {include file="footer.tpl"}

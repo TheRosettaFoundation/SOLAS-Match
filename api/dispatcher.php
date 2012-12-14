@@ -208,7 +208,7 @@ class Dispatcher {
         $temp = scandir($root);
         $ret = array();
         foreach ($temp as $provider) {
-            if ($provider != "." && $provider != "..") {
+            if ($provider != "." && $provider != ".." && strncmp($provider, ".", 1)) {
                 $ret[] = substr($provider, 0, sizeof($provider)-5);
             }
         }

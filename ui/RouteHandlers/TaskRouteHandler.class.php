@@ -231,7 +231,9 @@ class TaskRouteHandler
 
     public function downloadTask($task_id)
     {
-        $this->downloadTaskVersion($task_id, 0);
+        $app = Slim::getInstance();
+        $convert = $app->request()->get("convertToXliff");
+        $this->downloadTaskVersion($task_id, 0, $convert);
     }
 
     /*
@@ -320,18 +322,19 @@ class TaskRouteHandler
         )));
     }
 
-    public function downloadTaskVersion($task_id, $version)
+    public function downloadTaskVersion($task_id, $version, $convert = false)
     {
         $app = Slim::getInstance();
         $settings = new Settings();
-        $app->redirect($settings->get("site.api").APIClient::API_VERSION."/tasks/$task_id/file/?version=$version");   
+        $app->redirect($settings->get("site.api").APIClient::API_VERSION.
+                                                "/tasks/$task_id/file/?version=$version&convertToXliff=$convert");   
     }
 
     public function downloadTaskPreview($task_id)
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        $user_id = UserSession::getCurrentUserID();
+        $user_id = UserSession::getCurrentUserID(); 
         
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
@@ -341,6 +344,12 @@ class TaskRouteHandler
         $response = $client->call($request);     
         $task = $client->cast('Task', $response); 
         
+        $convert = $app->request()->get("convertToXliff");
+        if (!is_null($convert)) {
+            $app->view()->setData('convert', $convert);
+        } else {
+            $app->view()->setData('convert', "false");
+        }
         
         if (!is_object($user)) {
             $app->flash('error', 'Login required to access page');
@@ -361,6 +370,9 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID();
+        
+        $settings = new Settings();
+        $useConverter = $settings->get('converter.converter_enabled');          
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -440,7 +452,8 @@ class TaskRouteHandler
         
         $app->view()->appendData(array(
                 'max_file_size' => TemplateHelper::maxFileSizeMB(),
-                'body_class'    => 'task_page'
+                'body_class'    => 'task_page',
+                'converter'     => $useConverter
         ));
         
         $app->render('task.tpl');
@@ -905,10 +918,23 @@ class TaskRouteHandler
         
         if (is_null($error_message)) {
             try {
-                //do not touch regards sean
-                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
-                $error_message = $client->call(APIClient::API_VERSION."/tasks/$task_id/file/{$_FILES[$field_name]
-                                        ['name']}/$user_id", HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
+                if ($app->request()->isPost()) {
+                    $post = (object) $app->request()->post();
+                    $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
+                    
+                    if ($post->submit == 'XLIFF') {
+                        $request = APIClient::API_VERSION."/tasks/$task_id/file/?convertFileXliff=true";
+                        $response = $client->call($request, HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
+                        //APIClient::API_VERSION"/tasks/$task_id/file/?version=$version&convertToXliff=$convert")
+                    } else if ($post->submit == 'submit') {
+                        //do not touch regards sean                        
+                        $error_message = $client->call(APIClient::API_VERSION.
+                        "/tasks/$task_id/file/{$_FILES[$field_name]['name']}/$user_id",
+                        HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
+                    }
+                }
+                
+
             } catch (Exception  $e) {
                 $error_message = 'File error: ' . $e->getMessage();
             }

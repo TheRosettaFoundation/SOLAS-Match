@@ -75,6 +75,7 @@ class Tasks {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/top_tasks(:format)/',
                                                         function ($format = ".json") {
+            
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
             Dispatcher::sendResponce(null, TaskStream::getStream($limit), null, $format);
         }, 'getTopTasks');
@@ -151,12 +152,13 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/version(:format)/',
                                                         function ($id, $format = ".json") {
             
-            $userID =Dispatcher::clenseArgs('userID', HttpMethodEnum::GET, null);
+            $userID = Dispatcher::clenseArgs('userID', HttpMethodEnum::GET, null);
             Dispatcher::sendResponce(null, TaskFile::getLatestFileVersionByTaskID($id, $userID), null, $format);
         }, 'getTaskVersion');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/info(:format)/',
                                                         function ($id, $format = ".json") {
+            
             $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, 0);
             $taskMetadata = ModelFactory::buildModel("TaskMetadata", TaskFile::getTaskFileInfoById($id, $version));
             Dispatcher::sendResponce(null, $taskMetadata, null, $format);

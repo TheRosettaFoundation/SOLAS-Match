@@ -66,8 +66,7 @@
                 {assign var="org_id" value=$badge->getOwnerId()}
                 <h3>
                     <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                        {$orgList[$org_id]->getName()}
-                    </a>: {$badge->getTitle()}           
+                        {$orgList[$org_id]->getName()}</a>: {$badge->getTitle()}           
                 </h3>
                 <p>{$badge->getDescription()}</p>    
             {else}

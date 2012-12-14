@@ -77,8 +77,15 @@
         <hr />
         <h3>Are you interested in volunteering to translate this task?</h3>
         <p> 
+            
             <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-large btn-primary">
-            <i class="icon-download icon-white"></i> Download the file to preview</a>
+            <i class="icon-download icon-white"></i> Download to Preview</a>
+
+            {if ($converter == "y")}
+                <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}?convertToXliff=true" class="btn btn-large btn-primary">
+                <i class="icon-download icon-white"></i> Download as XLIFF</a>   
+            {/if}
+            
         </p>
         <hr />
         <center><h2>Document Preview <small>{$filename}</small></h2></center>
@@ -105,14 +112,27 @@
     </div>
     <p>Click 
         <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>
-        to re-download the original task file.
-    </p>  
-    {* //todo When API function is available
+        to re-download the <b>original task file</b>.
+    </p> 
+
+    {if ($converter == "y")}
+    <p>Click
+        <a href="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true">here</a>   
+        to re-download the <b>original task file</b> as XLIFF.
+    </p>     
+    {/if}  
+    
     <p>Click 
         <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">here</a>
-        to re-download the latest updated task file.
-    </p>   
-    *}
+        to re-download the <b>latest uploaded file</b>.
+    </p> 
+    
+    {if ($converter == "y")}
+    <p>Click
+        <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}?convertToXliff=true">here</a>   
+        to re-download the <b>latest uploaded file</b> as XLIFF.
+    </p>     
+    {/if}
     
     <p style="margin-bottom:40px;"></p>
     
@@ -131,7 +151,10 @@
 		<p class="help-block">
 			Max file size {$max_file_size}MB.
 		</p> 
-		<button type="submit" value="Submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload the file I chose</button>
+		<button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload</button>
+                {if ($converter == "y")}
+                <button type="submit" value="XLIFF" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload as XLIFF</button>
+                {/if}
 	</form>
 {else if isset($task_is_claimed)}
 	<hr>
