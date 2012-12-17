@@ -5,6 +5,7 @@
  *  Makes HTTP requests to the API server and handles serialization and deserialization
  *
  *  @author: Dave O Carroll
+ * 
  */
 
 require_once 'Serializer.class.php';
