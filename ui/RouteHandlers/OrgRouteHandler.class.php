@@ -293,12 +293,12 @@ class OrgRouteHandler
         }
 
         $request = APIClient::API_VERSION."/orgs/$org_id/members";
-        $orgMemberList = $client->call($request);
+        $orgMemberList = $client->castCall(array('User'), $request);
         
         $org_members = array();
         if (count($orgMemberList) > 0) {
-            foreach ($orgMemberList as $stdObject) {
-                $org_members[] = $stdObject['user_id'];
+            foreach ($orgMemberList as $usrObject) {
+                $org_members[] = $usrObject->getUserId();
             }
         }        
 
@@ -442,8 +442,8 @@ class OrgRouteHandler
                 $params['owner_id'] = $org_id;
 
                 $badge = ModelFactory::buildModel("Badge", $params);
-                $request = APIClient::API_VERSION."/badges/{$badge->getId()}";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $badge);                
+                $request = APIClient::API_VERSION."/badges";
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $badge);                
                 
                 $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
             }

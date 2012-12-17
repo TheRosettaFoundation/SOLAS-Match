@@ -25,7 +25,7 @@ class Badges {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $data = APIHelper::deserialiser($data, $format);
             $data = APIHelper::cast("Badge", $data);
-            $data->setBadgeId(null);
+            $data->setId(null);
             $dao = new BadgeDao();
             Dispatcher::sendResponce(null, $dao->insertAndUpdateBadge($data), null, $format);
         }, 'createBadge');

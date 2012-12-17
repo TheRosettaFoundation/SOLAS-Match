@@ -949,10 +949,10 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 /*!40000 ALTER TABLE `UserTaskScores` ENABLE KEYS */;
 
 
--- Dumping structure for procedure Solas-Match-test.findOganisation
-DROP PROCEDURE IF EXISTS `findOganisation`;
+-- Dumping structure for procedure Solas-Match-test.findOrganisation
+DROP PROCEDURE IF EXISTS `findOrganisation`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findOganisation`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisation`(IN `id` INT)
     COMMENT 'finds an organisation by the data passed in.'
 BEGIN
 	SELECT *
@@ -2536,3 +2536,7 @@ DELIMITER ;
 CALL removeOldTables();
 DROP PROCEDURE removeOldTables;
 
+/* Remove when necessary*/
+
+
+DROP PROCEDURE IF EXISTS `findOganisation`;

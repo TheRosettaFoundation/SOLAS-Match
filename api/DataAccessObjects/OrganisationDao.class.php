@@ -10,8 +10,8 @@ class OrganisationDao {
     {
         $ret = null;
         if (isset($params['id'])) {
-            if ($result = PDOWrapper::call("findOganisation", PDOWrapper::cleanse($params['id']))) {
-                $ret = $this->create_org_from_sql_result($result[0]);
+            if ($result = PDOWrapper::call("findOrganisation", PDOWrapper::cleanse($params['id']))) {
+                $ret = $this->createOrgFromSqlResult($result[0]);
             }
         } elseif (isset($params['name'])) {
             $ret = self::getOrg(null, $params['name'], null, null);
@@ -56,7 +56,7 @@ class OrganisationDao {
         $ret = null;
         
         if ($result = PDOWrapper::call("getOrgByUser", PDOWrapper::cleanse($user_id))) {
-            $ret = $this->create_org_from_sql_result($result[0]);
+            $ret = $this->createOrgFromSqlResult($result[0]);
         }        
         return $ret;
     }
@@ -154,9 +154,9 @@ class OrganisationDao {
     private function insert($org)
     {
         if ($org_id = PDOWrapper::call("organisationInsertAndUpdate",
-                                "null,".PDOWrapper::cleanse($org->getHomePage())
-                                .",".PDOWrapper::cleanse($org->getName())
-                                .",".PDOWrapper::cleanse($org->getBiography()))) {
+                                "null,".PDOWrapper::cleanseNullOrWrapStr($org->getHomePage())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography()))) {
             return $this->find(array('id' => $org_id[0]['result']));
         } else {
             return null;
@@ -166,9 +166,9 @@ class OrganisationDao {
     private function update($org)
     {     
         return PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanse($org->getId())
-                                                    .",".PDOWrapper::cleanse($org->getHomePage())
-                                                    .",".PDOWrapper::cleanse($org->getName())
-                                                    .",".PDOWrapper::cleanse($org->getBiography()));
+                                                    .",".PDOWrapper::cleanseWrapStr($org->getHomePage())
+                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
+                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography()));
     }
     
     public function delete($orgID)
