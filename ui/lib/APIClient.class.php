@@ -41,9 +41,10 @@ class APIClient
             $url = $request->getUrl();
             $url->setQueryVariables($query_args);
         }
+        
 
         $response = $request->send();
-        $response_data = $this->_serializer->deserialize(trim($response->getBody()), $format);
+        $response_data = $this->_serializer->deserialize(trim($response->getBody()), Serializer::getFormat($format));
         return $response_data;
     }
 
@@ -63,7 +64,9 @@ class APIClient
                     $ret[]=$this->_serializer->cast($destination[0], $row);
                 }
             }
-        } else {
+        } elseif (is_array($result)) { 
+            $ret = $this->_serializer->cast($destination, $result[0]);
+        }else{
             $ret = $this->_serializer->cast($destination, $result);
         }
         return $ret; 

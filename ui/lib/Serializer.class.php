@@ -49,7 +49,21 @@ class Serializer
             }
             case FormatEnum::XML: {
                 try {
-                    $ret = wddx_deserialize($data);
+                    if($data!="<data></data>"){
+                       
+                        $array=json_decode(json_encode(simplexml_load_string($data)->xpath("//item")));
+                        if(!empty ($array)) {
+                            $ret=$array;
+                        }
+                        else{
+                            $ret = json_decode(json_encode(simplexml_load_string($data)->xpath("//data")));
+                            if(is_array($ret)) {
+                                $ret=$ret[0];
+                            }
+                        }
+                    }else{
+                        $ret=null;
+                    }
                 } catch (Exception $e) {
                     echo "Failed to unserialize data: $data";
                 }
@@ -57,7 +71,7 @@ class Serializer
             }
             case FormatEnum::HTML: {
                 try {
-                    $ret = wddx_deserialize(htmlspecialchars_decode($data));
+                    $ret = json_decode(json_encode(simplexml_load_string(htmlspecialchars_decode($data))->xpath("//data")));
                 } catch (Exception $e) {
                     echo "Failed to unserialize data: $data";
                 }
@@ -73,12 +87,25 @@ class Serializer
             }
         }
         if (!is_null($data) && is_null($ret)) {
-            if (strcasecmp($data, "null") == 0 || $data = "null") {
+            if (strcasecmp($data, "null") == 0 || $data == "null"||(FormatEnum::PHP==$format&&$data=="N;")) {
                 $ret=null;
-            } else {
+            } elseif(!(FormatEnum::XML==$format)&&$data=="<data></data>") {
                 $ret=$data;
             }            
-        }        
+        }
+        if(FormatEnum::XML==$format&&is_object($ret)&& is_a($ret, "stdClass")){
+            $sourceReflection = new ReflectionObject($ret);
+            $sourceProperties = $sourceReflection->getProperties();
+            if(sizeof($sourceProperties)==1){
+                foreach ($sourceProperties as $sourceProperty) {
+                    $sourceProperty->setAccessible(true);
+                    if($sourceProperty->getName()=="0"){
+                        $ret=$sourceProperty->getValue($ret);
+                    }
+                }
+                
+            }
+        }
         return $ret;
     }
 
@@ -87,11 +114,13 @@ class Serializer
         if (is_null($destination) || is_null($sourceObject)) {
             return null;
         }
+       
         
         if (is_string($destination)) {
             $destination = new $destination();
         }
-        
+        if(is_object($sourceObject)&&get_class($destination)==get_class($sourceObject)) return $sourceObject;
+         
         $sourceReflection = new ReflectionObject($sourceObject);
         $destinationReflection = new ReflectionObject($destination);
         $sourceProperties = $sourceReflection->getProperties();
@@ -102,7 +131,12 @@ class Serializer
             if ($destinationReflection->hasProperty($name)) {
                 $propDest = $destinationReflection->getProperty($name);
                 $propDest->setAccessible(true);
-                $propDest->setValue($destination, $value);
+                
+                if(is_object($value)&&get_class($value)=="stdClass"){
+                    $propDest->setValue($destination, null);
+                }else{
+                    $propDest->setValue($destination, $value);
+                }
             } else {
                 $destination->$name = $value;
             }
