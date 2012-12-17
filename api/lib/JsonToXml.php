@@ -18,11 +18,11 @@ class JsonToXml
         self::$dom->preserveWhiteSpace = false; // Manuel - This is needed for formatOutput
 
         // remove callback functions from JSONP
-        if (preg_match('/(\{|\[).*(\}|\])/s', $json, $matches)) {
-            $json = $matches[0];
-        } else {
-            throw new Exception('JSON not formatted correctly');
-        }
+//        if (preg_match('/(\{|\[).*(\}|\])/s', $json, $matches)) {
+//            $json = $matches[0];
+//        } elseif($json!="null" && !is_numeric (str_replace ('"', '', $json))&&"false"!=$json&&"true"!=$json) {
+//            throw new Exception('JSON not formatted correctly');
+//        }
         
         if (is_string($json)) {
             $data = json_decode($json);
@@ -54,6 +54,7 @@ class JsonToXml
                 $element->appendChild($var_element);
             }
         } else {
+//            if($data==null) $data="null";
             $element->appendChild(self::$dom->createTextNode($data));
         }
         return $element;

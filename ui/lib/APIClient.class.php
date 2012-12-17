@@ -20,7 +20,7 @@ class APIClient
     }     
 
     public function call($url, $method = HTTP_Request2::METHOD_GET, 
-                    $data = null, $query_args = array(), $format = ".php", $file = null)
+                    $data = null, $query_args = array(), $format = ".json", $file = null)
     {
         $app = Slim::getInstance();
         $settings = new Settings();
@@ -54,7 +54,7 @@ class APIClient
     }
     
     public function castCall($destination, $url, $method = HTTP_Request2::METHOD_GET, 
-        $data = null, $query_args = array(), $format = ".php")
+        $data = null, $query_args = array(), $format = ".json")
     {
         $ret = null;
         $result = $this->call($url, $method, $data, $query_args, $format);
@@ -64,7 +64,9 @@ class APIClient
                     $ret[]=$this->_serializer->cast($destination[0], $row);
                 }
             }
-        } else {
+        } elseif (is_array($result)) { 
+            $ret = $this->_serializer->cast($destination, $result[0]);
+        }else{
             $ret = $this->_serializer->cast($destination, $result);
         }
         return $ret; 
