@@ -282,10 +282,7 @@ class OrgRouteHandler
                 }
             }
         }       
-      
-        $request = APIClient::API_VERSION."/orgs/$org_id/badges";
-        $badgeList = $client->call($request);
-     
+
         $org_badges = array();
         $request = APIClient::API_VERSION."/orgs/$org_id/badges";
         $response = $client->call($request);
@@ -300,10 +297,8 @@ class OrgRouteHandler
         
         $org_members = array();
         if (count($orgMemberList) > 0) {
-            $i = 0;
             foreach ($orgMemberList as $stdObject) {
-                $org_members[] = $orgMemberList[$i]->user_id;
-                $i++;
+                $org_members[] = $stdObject['user_id'];
             }
         }        
 
