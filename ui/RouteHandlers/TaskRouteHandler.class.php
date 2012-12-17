@@ -707,6 +707,16 @@ class TaskRouteHandler
         $client = new APIClient();
         $word_count_err = null;
 
+        $extra_scripts = "
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
+        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+        <script type=\"text/javascript\">
+            window.onload = function() {
+                new datepickr(\"deadline\");
+            };
+        </script>
+        ";
+
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
@@ -779,6 +789,7 @@ class TaskRouteHandler
         }
         
         $app->view()->appendData(array(
+                              'extra_scripts'   => $extra_scripts,
                               'languages'       => $languages,
                               'countries'       => $countries,
                               'tag_list'        => $tag_list,
