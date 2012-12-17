@@ -1006,8 +1006,8 @@ DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `id` INT)
 BEGIN
-	SELECT user_id
-	FROM OrganisationMembers 
+	SELECT u.*
+	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.user_id
 	WHERE organisation_id=id;
 END//
 DELIMITER ;
