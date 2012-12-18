@@ -492,13 +492,27 @@ class TaskRouteHandler
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID();
 
+        $extra_scripts = "
+         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
+         <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+         <script type=\"text/javascript\">
+             window.onload = function() {
+                 new datepickr(\"deadline_date\");
+             };
+         </script>
+         ";
+
         $error          = null;
         $title_err      = null;
         $word_count_err = null;
+        $deadlineError  = null;
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
+
+        $deadlineDate = date("F dS, Y", strtotime($task->getDeadline()));
+        $deadlineTime = date("H:i", strtotime($task->getDeadline()));
 
         if (!is_object($task)) {
             $app->notFound();
@@ -518,8 +532,31 @@ class TaskRouteHandler
             } else {
                 $word_count_err = "Word count must be set!";
             }
+
+            $deadline = "";
+            if ($post->deadline_date != '') {
+                $deadline = strtotime($post->deadline_date);
+                
+                if($deadline) {
+                    if ($post->deadline_time != '') {
+                        if (TemplateHelper::isValidTime($post->deadline_time) == true) {
+                            $deadline = TemplateHelper::addTimeToUnixTime($deadline, $post->deadline_time);
+                        } else {
+                            $deadlineError = "Invalid time format. Please enter time in a 24-hour format like ";
+                            $deadlineError .= "this 16:30";
+                        }
+                    }
+                } else {
+                    $deadline = "";
+                    $deadlineError = "Invalid date format";
+                }
+            }
             
-            if (is_null($word_count_err) && is_null($title_err)) {
+            if($deadline != "" && $deadlineError == "") {
+                $task->setDeadline(date("Y-m-d H:i:s", $deadline));
+            }
+            
+            if (is_null($word_count_err) && is_null($title_err) && is_null($deadlineError)) {
                 if (!empty($post->source)) {
                     $source_id = TemplateHelper::saveLanguage($post->source);
                     $task->setSourceLangId($source_id);
@@ -685,7 +722,7 @@ class TaskRouteHandler
                 } 
             }            
         </script>";
-        
+
         $countries= TemplateHelper::getCountryList();
         $app->view()->appendData(array(
             'error'             => $error,
@@ -695,6 +732,8 @@ class TaskRouteHandler
             'task'              => $task,
             'languages'         => $language_list,
             'countries'         => $countries,
+            'deadlineDate'      => $deadlineDate,
+            'deadlineTime'      => $deadlineTime,
             'extra_scripts'     => $extra_scripts
         ));
         
@@ -706,13 +745,14 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $word_count_err = null;
+        $deadlineError = "";
 
         $extra_scripts = "
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
         <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
         <script type=\"text/javascript\">
             window.onload = function() {
-                new datepickr(\"deadline\");
+                new datepickr(\"deadline_date\");
             };
         </script>
         ";
@@ -721,6 +761,9 @@ class TaskRouteHandler
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
         
+        $deadlineDate = date("F dS, Y", strtotime($task->getDeadline()));
+        $deadlineTime = date("H:i", strtotime($task->getDeadline()));
+
         $app->view()->setData('task', $task);
         
         if (isValidPost($app)) {
@@ -732,6 +775,29 @@ class TaskRouteHandler
             
             if ($post->impact != '') {
                 $task->setImpact($post->impact);
+            }
+
+            $deadline = "";
+            if ($post->deadline_date != '') {
+                $deadline = strtotime($post->deadline_date);
+
+                if($deadline) {
+                    if ($post->deadline_time != '') {
+                        if (TemplateHelper::isValidTime($post->deadline_time) == true) {
+                            $deadline = TemplateHelper::addTimeToUnixTime($deadline, $post->deadline_time);
+                        } else {
+                            $deadlineError = "Invalid time format. Please enter time in a 24-hour format like ";
+                            $deadlineError .= "this 16:30";
+                        }
+                    }
+                } else {
+                    $deadline = "";
+                    $deadlineError = "Invalid date format";
+                }
+            }
+
+            if($deadline != "" && $deadlineError == "") {
+                $task->setDeadline(date("Y-m-d H:i:s", $deadline));
             }
             
             if ($post->reference != '' && $post->reference != 'http://') {
@@ -763,18 +829,18 @@ class TaskRouteHandler
             
 
             if (ctype_digit($post->word_count)) {
-                
                 $task->setWordCount($post->word_count);                
-                $request = APIClient::API_VERSION."/tasks/$task_id";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
-                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
             } else if ($post->word_count != '') {
                 $word_count_err = "Word Count must be numeric";
             } else {
                 $word_count_err = "Word Count cannot be blank";
             }
-            
 
+            if ($word_count_err == '' && $deadlineError == '') {
+                $request = APIClient::API_VERSION."/tasks/$task_id";
+                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
+                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+            }
         }
          
         $languages = TemplateHelper::getLanguageList();
@@ -794,6 +860,9 @@ class TaskRouteHandler
                               'countries'       => $countries,
                               'tag_list'        => $tag_list,
                               'word_count_err'  => $word_count_err,
+                              'deadlineDate'    => $deadlineDate,
+                              'deadlineTime'    => $deadlineTime,
+                              'deadline_error'  => $deadlineError
         ));
         
         $app->render('task.alter.tpl');
@@ -990,11 +1059,12 @@ class TaskRouteHandler
                 $taskData = array();
                 $taskData['organisation_id'] = $org_id;
                 $taskData['title'] = $_FILES[$field_name]['name'];
+                $taskData['deadline'] = date("Y-m-d H:i:s", strtotime("+1 week"));
                 $task = ModelFactory::buildModel("Task", $taskData);
                 
                 $request = APIClient::API_VERSION."/tasks";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
-                
+
                 $task = $client->cast('Task', $response);
 
                 try {                    

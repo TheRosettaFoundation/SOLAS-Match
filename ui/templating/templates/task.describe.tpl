@@ -100,21 +100,39 @@
     				<p>
     					<label for="target">To language</label>
     					<input type="text" name="target" id="target">
-                                        <input type="text" name="targetCountry" id="source">
+                        <input type="text" name="targetCountry" id="source">
     				</p>
                 {/if}
 				
 				<p>
-                                    <h2>Tags</h2>
-                                        <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens</p>
+                    <h2>Tags</h2>
+                    <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens</p>
 					<input type="text" name="tags" id="tags">
 				</p>
 				<p style="margin-bottom:30px;"></p>
+
+                <p>
+                    <h2>Deadline</h2>
+                    {if isset($deadline_error) && $deadline_error != ""}
+                        <div class="alert alert-error">
+                            {$deadline_error}
+                        </div>
+                    {/if}
+                    <p>
+                        Date: <input name="deadline_date" id="deadline_date" type="text" value="{$deadlineDate}" />
+                        Time: <input name="deadline_time" type="text" value="{$deadlineTime}" />
+                    </p>
+                </p>
 				
 				<p>
 					<label for="word_count">
                         <h2>Word Count <font color='red'>*</font></h2>
-                        <p class="desc">Approximate, or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a></p>
+                        <p class="desc">
+                            Approximate, or use a site such as 
+                            <a href="http://wordcounttool.net/" target="_blank">
+                                Word Count Tool
+                            </a>
+                        </p>
                         {if !is_null($word_count_err)}
                             <div class="alert alert-error" style="width:144px">
                                 {$word_count_err}

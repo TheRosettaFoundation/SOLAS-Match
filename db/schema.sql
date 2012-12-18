@@ -402,6 +402,11 @@ BEGIN
 		RENAME TABLE `task` TO `Tasks`;
 	END IF;
         
+        if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='Tasks'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="deadline")) then
+            ALTER TABLE `Tasks`
+            ADD COLUMN `deadline` DATETIME NOT NULL AFTER `target_id`;
+        end if;
+
         if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='Tasks'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="sourceCountry" or c.COLUMN_NAME="targetCountry")) then
 				ALTER TABLE `Tasks`
             ADD COLUMN `sourceCountry` INT NULL AFTER `created_time`,
@@ -476,6 +481,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 	`word_count` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`source_id` INT(10) UNSIGNED NOT NULL COMMENT 'foreign key from the `Languages` table',
 	`target_id` INT(10) UNSIGNED NOT NULL COMMENT 'foreign key from the `Languages` table',
+    `deadline` DATETIME NOT NULL,
 	`created_time` DATETIME NOT NULL,
 	`sourceCountry` INT(11) UNSIGNED NULL DEFAULT NULL,
 	`targetCountry` INT(11) UNSIGNED NULL DEFAULT NULL,
@@ -1461,7 +1467,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `deadlineTime` DATETIME, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3))
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
@@ -1476,7 +1482,7 @@ BEGIN
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
 	
-	set @q= "select id,organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page, (select code from Countries where id =t.sourceCountry) as sourceCountry, (select code from Countries where id =t.targetCountry) as targetCountry from Tasks t where 1";-- set update
+	set @q= "select id,organisation_id,title,word_count,source_id,target_id,deadline,created_time,impact,reference_page, (select code from Countries where id =t.sourceCountry) as sourceCountry, (select code from Countries where id =t.targetCountry) as targetCountry from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1506,6 +1512,9 @@ BEGIN
 	if wordCount is not null then 
 		set @q = CONCAT(@q," and t.word_count=",wordCount) ;
 	end if;
+    if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
+        set @q = CONCAT(@q," and t.deadline='",deadlineTime,"'") ;
+    end if;
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
 		set @q = CONCAT(@q," and t.created_time='",created,"'") ;
 	end if;
@@ -1525,7 +1534,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impactValue` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `deadlineTime` DATETIME, IN `created` DATETIME, IN `impactValue` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3))
 BEGIN
 	if id='' then set id=null;end if;
 	if orgID='' then set orgID=null;end if;
@@ -1533,6 +1542,7 @@ BEGIN
 	if sID='' then set sID=null;end if;
 	if tID='' then set tID=null;end if;
 	if wordCount='' then set wordCount=null;end if;
+    if deadlineTime="" then set deadlineTime=null;end if;
 	if created='' then set created=null;end if;
 	if impactValue='' then set impactValue=null;end if;
 	if ref='' then set ref=null;end if;
@@ -1548,8 +1558,8 @@ BEGIN
 			select c.id into @scid from Countries c where c.code=sCC;
 		set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
-		insert into Tasks (organisation_id,title,word_count,source_id,target_id,created_time,impact,reference_page,sourceCountry,targetCountry)
-		 values (orgID,name,wordCount,sID,tID,created,impactValue,ref,@scid,@tcid);
+		insert into Tasks (organisation_id,title,word_count,source_id,target_id,deadline,created_time,impact,reference_page,sourceCountry,targetCountry)
+		 values (orgID,name,wordCount,sID,tID,deadlineTime,created,impactValue,ref,@scid,@tcid);
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 		set @first = true;
 		set @q= "update Tasks t set";-- set update
@@ -1631,6 +1641,14 @@ BEGIN
 			end if;
 			set @q = CONCAT(@q," t.reference_page='",ref,"'") ;
 		end if;
+        if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
+            if (@first = false) then
+                set @q = CONCAT(@q,",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q," t.deadline='",deadlineTime,"'") ;
+        end if;
 		if (created is not null  and created!='0000-00-00 00:00:00') then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
@@ -1644,7 +1662,7 @@ BEGIN
 		EXECUTE stmt;
 		DEALLOCATE PREPARE stmt;
 	end if;
-	call getTask(id,orgID,name,wordCount,sID,tID,created,impactValue,ref,sCC,tCC);
+	call getTask(id,orgID,name,wordCount,sID,tID,deadlineTime,created,impactValue,ref,sCC,tCC);
 END//
 DELIMITER ;
 

@@ -141,7 +141,7 @@ class PDOWrapper {
         } else {
             $sql = "CALL $procedure (".implode(', ', $procArgs).")";
         }
-        
+
         if ($db->show_sql) {
             $db->showSQL($sql);
         }

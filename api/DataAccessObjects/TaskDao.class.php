@@ -124,6 +124,8 @@ class TaskDao {
             ",".PDOWrapper::cleanseNull($params['source_id']) : ",null";
         $args .= isset($params['target_id']) ?
             ",".PDOWrapper::cleanseNull($params['target_id']) : ",null";
+        $args .= isset($params['deadline']) ?
+            ",".PDOWrapper::cleanseNull($params['deadline']) : ",null";
         $args .= isset($params['created_time']) ?
             ",".PDOWrapper::cleanseNull($params['created_time']) : ",null";
         $args .= isset($params['impact']) ?
@@ -229,6 +231,7 @@ class TaskDao {
                                                 .",".PDOWrapper::cleanseNull($task->getWordCount())
                                                 .",".PDOWrapper::cleanseNull($task->getSourceLangId())
                                                 .",".PDOWrapper::cleanseNull($task->getTargetLangId())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getImpact())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getReferencePage())
@@ -316,6 +319,7 @@ class TaskDao {
             ",".PDOWrapper::cleanseNull($task->getWordCount()).
             ",".PDOWrapper::cleanseNull($task->getSourceLangId()).
             ",".PDOWrapper::cleanseNull($task->getTargetLangId()).
+            ",".PDOWrapper::cleanseNullOrWrapStr($deadline).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getImpact()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getReferencePage()).
