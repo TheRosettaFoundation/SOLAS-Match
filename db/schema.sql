@@ -1725,9 +1725,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` I
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY created_time DESC LIMIT ",lim);
+    set @q = Concat("SELECT t.id FROM Tasks AS t WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY created_time DESC LIMIT ",lim);
     else
-    set @q = "SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY created_time DESC ";
+    set @q = "SELECT t.id FROM Tasks AS t WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY created_time DESC ";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -1742,7 +1742,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `
     READS SQL DATA
     COMMENT 'relpace with more effient code later'
 BEGIN
-    set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT *FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY uts.score DESC limit ",lim);
+    set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT *FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY uts.score DESC limit ",lim);
     PREPARE stmt FROM @q;
     set @uID=uID;
     EXECUTE stmt using @uID;
