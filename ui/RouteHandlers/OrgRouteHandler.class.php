@@ -89,7 +89,7 @@ class OrgRouteHandler
                 $app->flashNow('error', "You must specify a name for the organisation.");
             }
         }        
-        $app->render('create-org.tpl');
+       $app->render('create-org.tpl');
     }
 
     public function orgRequestMembership($org_id)

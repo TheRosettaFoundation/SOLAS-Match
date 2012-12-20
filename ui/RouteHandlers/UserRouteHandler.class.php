@@ -156,10 +156,12 @@ class UserRouteHandler
         $my_organisations = array();
         $url = APIClient::API_VERSION."/users/$current_user_id/orgs";
         $response = $client->call($url);
-        if ($response) {
+        if (is_array($response)) {
             foreach ($response as $stdObject) {
                 $my_organisations[] = $client->cast('Organisation', $stdObject);
             }
+        }elseif(is_string ($response)){
+            $my_organisations = $client->cast('Organisation', $response);
         }
         
         $org_tasks = array();
@@ -557,7 +559,7 @@ class UserRouteHandler
                 $client = new APIClient();
                 $request = APIClient::API_VERSION."/users/getByEmail/{$retvals['contact/email']}";
                 $response = $client->call($request);
-                if (!is_object($response)&&!is_array($response)) {
+                if (is_null($response)) {
                     $registerData = array();
                     $registerData['email'] = $retvals['contact/email'];
                     $registerData['password'] = md5($retvals['contact/email']);

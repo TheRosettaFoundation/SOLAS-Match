@@ -37,17 +37,31 @@ class APIHelper {
             case FormatEnum::PHP:{
                 return serialize($body);
             }
+            
+            case FormatEnum::PROTOBUFS: {
+                if(is_object($body)) return $body->serialize();
+                elseif (is_array($body)) {
+                    $ret = array();
+                    foreach ($body as $obj){
+                        $ret[]=$obj->serialize();
+                    }
+                    return $ret;
+                }else{
+                    return $body;
+                }
+            }
         }
     }
     
     public static function deserialiser($body, $format = ".json")
     {
         $format = APIHelper::getFormat($format); 
+        $ret=null;
         switch ($format) {
             
             case FormatEnum::JSON: {
                 try {
-                    return json_decode($body);
+                    $ret= json_decode($body);
                 } catch (Exception $e) {
                     // change to exception and send responce from api
                     //  Dispatcher::sendResponce(null, "request format error.
@@ -62,7 +76,7 @@ class APIHelper {
                     // $xslt = new XSLTProcessor();
                     // $xslt->importStylesheet(simplexml_load_file("xmlToJson.xsl"));
                     // $data= $xslt->transformToXml(new SimpleXMLElement()); 
-                    return json_decode(json_encode(simplexml_load_string($body)->xpath("//item")));
+                    $ret= json_decode(json_encode(simplexml_load_string($body)->xpath("//item")));
                 } catch (Exception $e) {
                     //Dispatcher::sendResponce(null, "request format error. please resend in json or
                     // append .xml,.php,.html,.proto or .json as appropriate",400,".json");
@@ -72,7 +86,7 @@ class APIHelper {
             
             case FormatEnum::HTML: {
                 try {
-                    return  wddx_deserialize(htmlspecialchars_decode($body));
+                    $ret=  wddx_deserialize(htmlspecialchars_decode($body));
                 } catch (Exception $e) {
                     //Dispatcher::sendResponce(null, "request format error. please resend in json
                     // or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
@@ -82,14 +96,24 @@ class APIHelper {
             
             case FormatEnum::PHP: {
                 try {
-                    return unserialize($body);
+                    $ret= unserialize($body);
                 } catch (Exception $e) {
                     //Dispatcher::sendResponce(null, "request format error. please resend in json
                     // or append .xml,.php,.html,.proto or .json as appropriate",400,".json");
                 }
                 break;
             }
-        }        
+            
+            
+        } 
+         if (!is_null($body) && is_null($ret)) {
+                if (strcasecmp($body, "null") == 0 || $body == "null"||(FormatEnum::PHP==$format&&$body=="N;")) {
+                    $ret=null;
+                } elseif(!(FormatEnum::XML==$format)&&$body=="<data></data>") {
+                    $ret=$body;
+                }            
+            }
+            return $ret;
     }
     
     public static function call($url, $data, $httpMethod, $queryArgs = array(), $format = ".php")
@@ -133,7 +157,7 @@ class APIHelper {
         } elseif (strcasecmp($format, '.html') == 0) {
             $format = FormatEnum::HTML;
         } elseif (strcasecmp($format, '.proto') == 0) {
-            $format = FormatEnum::JSON; //change when implmented.
+            $format = FormatEnum::PROTOBUFS; //change when implmented.
         } else {
             $format = FormatEnum::JSON;
         }
