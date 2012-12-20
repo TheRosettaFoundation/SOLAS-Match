@@ -85,6 +85,14 @@ class Serializer
                 }
                 break;
             }
+            case FormatEnum::PROTOBUFS: {
+                try {
+                    $ret = $data;
+                } catch (Exception $e) {
+                    echo "Failed to unserialize data: $data";
+                }
+                break;
+            }
         }
         if (!is_null($data) && is_null($ret)) {
             if (strcasecmp($data, "null") == 0 || $data == "null"||(FormatEnum::PHP==$format&&$data=="N;")) {
@@ -119,8 +127,9 @@ class Serializer
         if (is_string($destination)) {
             $destination = new $destination();
         }
-        if(is_object($sourceObject)&&get_class($destination)==get_class($sourceObject)) return $sourceObject;
-         
+        if(is_object($sourceObject)){
+            if(get_class($destination)==get_class($sourceObject)) return $sourceObject;
+        
         $sourceReflection = new ReflectionObject($sourceObject);
         $destinationReflection = new ReflectionObject($destination);
         $sourceProperties = $sourceReflection->getProperties();
@@ -141,7 +150,11 @@ class Serializer
                 $destination->$name = $value;
             }
         }
+        }else{
+          $destination->parse($sourceObject);
+        }
         return $destination;
+        
     }
     
     public static function getFormat($format)
@@ -155,7 +168,7 @@ class Serializer
         } elseif (strcasecmp($format, '.html') == 0) {
             $format = FormatEnum::HTML;
         } elseif (strcasecmp($format, '.proto') == 0) {
-            $format = FormatEnum::JSON;//change when implmented.
+            $format = FormatEnum::PROTOBUFS;//change when implmented.
         } else {
             $format = FormatEnum::JSON;
         }
