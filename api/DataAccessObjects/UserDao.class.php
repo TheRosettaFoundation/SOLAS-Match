@@ -26,16 +26,7 @@ class UserDao {
 
         $ret = null;
         if ($r = PDOWrapper::call("userFindByUserData", $args)) {
-            $user_data = array(
-                    'user_id' => $r[0]['user_id'],
-                    'email' => $r[0]['email'],
-                    'nonce' => $r[0]['nonce'],
-                    'display_name' => $r[0]['display_name'],
-                    'biography' => $r[0]['biography'],
-                    'native_lang_id' => $r[0]['native_lang_id'],
-                    'native_region_id' => $r[0]['native_region_id']
-            );
-            $ret = ModelFactory::buildModel("User", $user_data);
+            $ret = ModelFactory::buildModel("User", $r[0]);
         }
         return $ret;
     }
@@ -91,7 +82,7 @@ class UserDao {
         PDOWrapper::cleanseNullOrWrapStr($user->getNativeLangId()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getNativeRegionId()).",".
         PDOWrapper::cleanse($user->getUserId()));
-        return $this->find(array('user_id' => $result[0]['user_id']));
+        return $this->find(array('user_id' => $result[0]['id']));
     }
 
     private function insert($user) 
@@ -100,7 +91,7 @@ class UserDao {
                                         .",".PDOWrapper::cleanse($user->getNonce())
                                         .",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword())
                                         .",null,null,null,null,null")) {
-            return $this->find(array('user_id' => $user_id[0]['user_id']));
+            return $this->find(array('user_id' => $user_id[0]['id']));
         } else {
             return null;
         }
@@ -374,8 +365,8 @@ class UserDao {
     {
         $ret = false;
         $args = array();
-        $args[] = $user_id;
-        $args[] = $task_id;
+        $args[] = PDOWrapper::cleanse($user_id);
+        $args[] = PDOWrapper::cleanse($task_id);
         if ($result = PDOWrapper::call('userSubscribedToTask', $args)) {
             $ret = $result[0]['result'];
         }
@@ -421,17 +412,7 @@ class UserDao {
         $dao = new TaskDao();
         if ($result = PDOWrapper::call("getUserTrackedTasks", "$user_id")) {
             foreach ($result as $row) {
-                $params = array();
-                $params['task_id'] = $row['id'];
-                $params['title'] = $row['title'];
-                $params['impact'] = $row['impact'];
-                $params['reference_page'] = $row['reference_page'];
-                $params['organisation_id'] = $row['organisation_id'];
-                $params['source_id'] = $row['source_id'];
-                $params['target_id'] = $row['target_id'];
-                $params['word_count'] = $row['word_count'];
-                $params['created_time'] = $row['created_time'];
-                $task = ModelFactory::buildModel("Task", $params);
+                $task = ModelFactory::buildModel("Task", $row);
                 $task->setStatus($dao->getTaskStatus($task->getId()));
                 $ret[] = $task;
             }

@@ -1242,7 +1242,7 @@ BEGIN
 	if bio='' then set bio=null;end if;
 
 	
-	if id is null and not exists(select * from Organisations o where (o.home-page= url or o.home-page= concat("http://",url) ) and o.name=companyName)then
+	if id is null and not exists(select * from Organisations o where (o.`home-page`= url or o.`home-page`= concat("http://",url) ) and o.name=companyName)then
 	-- set insert
     if bio is null then set bio='';end if;
 	insert into Organisations (name,`home-page`, biography) values (companyName,url,bio);
@@ -1261,7 +1261,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," o.home-page='",url,"'") ;
+			set @q = CONCAT(@q," o.`home-page`='",url,"'") ;
 		end if;
 		if companyName is not null then 
 			if (@first = false) then 
@@ -1276,7 +1276,7 @@ BEGIN
 		if id is not null then 
 			set @q = CONCAT(@q," where  o.id= ",id);
 		elseif url is not null and companyName is not null then 
-			set @q = CONCAT(@q," where o.home-page='",url,"' and o.name='",companyName,"'");
+			set @q = CONCAT(@q," where o.`home-page`='",url,"' and o.name='",companyName,"'");
 		end if;
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -1284,7 +1284,7 @@ BEGIN
 #
 	end if;
 	
-	select o.id as 'result' from Organisations o where (o.home-page= url or o.home-page= concat("http://",url) ) and o.name=companyName;
+	select o.id as 'result' from Organisations o where (o.`home-page`= url or o.`home-page`= concat("http://",url) ) and o.name=companyName;
 END//
 DELIMITER ;
 
@@ -1378,7 +1378,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.display-name='",name,"'");
+			set @q = CONCAT(@q," u.`display-name`='",name,"'");
 		
 		end if;
 		
@@ -1455,7 +1455,7 @@ DROP PROCEDURE IF EXISTS `getCountries`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountries`()
 BEGIN
-SELECT  en-name as country, code, id FROM Countries order by en-name;
+SELECT  `en-name` as country, code, id FROM Countries order by `en-name`;
 END//
 DELIMITER ;
 
@@ -1465,7 +1465,7 @@ DROP PROCEDURE IF EXISTS `getLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguages`()
 BEGIN
-SELECT  en-name as language, code, id FROM Languages order by en-name;
+SELECT  `en-name` as language, code, id FROM Languages order by `en-name`;
 END//
 DELIMITER ;
 
@@ -1477,8 +1477,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLCID`(IN `lang` VARCHAR(128), IN
 BEGIN
 set @ll = "";
 set @cc = "";
-select c.code into @cc from Countries c where c.en-name = countryName;
-select l.code into @ll from Languages l where l.en-name = lang;
+select c.code into @cc from Countries c where c.`en-name` = countryName;
+select l.code into @ll from Languages l where l.`en-name` = lang;
 select concat(@ll,"-",@cc) as lcid;
 END//
 DELIMITER ;
@@ -1578,7 +1578,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksByOrgIDs`(IN `orgIDs` VARCH
 BEGIN
 	if orgIDs='' then set orgIDs=null;end if;
 	if orderby='' then set orderby=null;end if;
-	set @q= "SELECT id,organisation_id,title,word-count,source_id,target_id,created-time, country_id-source, country_id-target FROM Tasks WHERE 1 ";-- set update
+	set @q= "SELECT id,organisation_id,title,`word-count`,source_id,target_id,`created-time`, `country_id-source`, `country_id-target` FROM Tasks WHERE 1 ";-- set update
 	if orgIDs is not null then 
 		set @q = CONCAT(@q," and organisation_id IN (",orgIDs,")") ;
 	end if;
@@ -1615,7 +1615,7 @@ BEGIN
 		set @q = CONCAT(@q," and u.id=",id) ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and u.display-name='",name,"'") ;
+		set @q = CONCAT(@q," and u.`display-name`='",name,"'") ;
 	end if;
 	if mail is not null then 
 		set @q = CONCAT(@q," and u.email='",mail,"'") ;
@@ -1630,7 +1630,7 @@ BEGIN
 		set @q = CONCAT(@q," and u.nonce=",nonce) ;
 	end if;
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
-		set @q = CONCAT(@q," and u.created-time='",created,"'") ;
+		set @q = CONCAT(@q," and u.`created-time`='",created,"'") ;
 	end if;
 	if lang_id is not null then 
 		set @q = CONCAT(@q," and u.language_id=",lang_id) ;
@@ -1663,7 +1663,7 @@ BEGIN
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
 	
-	set @q= "select id,organisation_id,title,word-count,source_id,target_id,created-time,impact,reference-page, (select code from Countries where id =t.country_id-source) as country_id-source, (select code from Countries where id =t.country_id-target) as country_id-target from Tasks t where 1";-- set update
+	set @q= "select id,organisation_id,title,`word-count`,source_id,target_id,`created-time`,impact,`reference-page`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target` from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1683,24 +1683,24 @@ BEGIN
 	if sCC is not null then 
 		set @scid=null;
 			select c.id into @scid from Countries c where c.code=sCC;
-		set @q = CONCAT(@q," and t.country_id-source=",@scid) ;
+		set @q = CONCAT(@q," and t.`country_id-source`=",@scid) ;
 	end if;
 	if tCC is not null then 
 		set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
-		set @q = CONCAT(@q," and t.country_id-target=",@tcid) ;
+		set @q = CONCAT(@q," and t.`country_id-target`=",@tcid) ;
 	end if;
 	if wordCount is not null then 
-		set @q = CONCAT(@q," and t.word-count=",wordCount) ;
+		set @q = CONCAT(@q," and t.`word-count`=",wordCount) ;
 	end if;
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
-		set @q = CONCAT(@q," and t.created-time='",created,"'") ;
+		set @q = CONCAT(@q," and t.`created-time`='",created,"'") ;
 	end if;
 	if impact is not null then 
 		set @q = CONCAT(@q," and t.impact='",impact,"'") ;
 	end if;
 	if ref is not null then 
-		set @q = CONCAT(@q," and t.reference-page='",ref,"'") ;
+		set @q = CONCAT(@q," and t.`reference-page`='",ref,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1781,7 +1781,7 @@ BEGIN
 			end if;
 			set @scid=null;
 			select c.id into @scid from Countries c where c.code=sCC;
-			set @q = CONCAT(@q," t.country_id-source=",@scid) ;
+			set @q = CONCAT(@q," t.`country_id-source`=",@scid) ;
 		end if;
 		if tCC is not null then 
 			if (@first = false) then 
@@ -1791,7 +1791,7 @@ BEGIN
 			end if;
 			set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
-			set @q = CONCAT(@q," t.country_id-target=",@tcid) ;
+			set @q = CONCAT(@q," t.`country_id-target`=",@tcid) ;
 		end if;
 		
 		if wordCount is not null then 
@@ -1800,7 +1800,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.word-count=",wordCount) ;
+			set @q = CONCAT(@q," t.`word-count`=",wordCount) ;
 		end if;
 		if impactValue is not null then 
 			if (@first = false) then 
@@ -1816,7 +1816,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.reference-page='",ref,"'") ;
+			set @q = CONCAT(@q," t.`reference-page`='",ref,"'") ;
 		end if;
 		if (created is not null  and created!='0000-00-00 00:00:00') then 
 			if (@first = false) then 
@@ -1824,7 +1824,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.created-time='",created,"'") ;
+			set @q = CONCAT(@q," t.`created-time=`'",created,"'") ;
 		end if;
 		set @q = CONCAT(@q," where  t.id= ",id);
 		PREPARE stmt FROM @q;
@@ -1894,9 +1894,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` I
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY created-time DESC LIMIT ",lim);
+    set @q = Concat("SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC LIMIT ",lim);
     else
-    set @q = "SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY created-time DESC ";
+    set @q = "SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC ";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -1932,7 +1932,7 @@ BEGIN
 								FROM TaskClaims
 								WHERE task_id = t.id
 							)
-                         ORDER BY t.created-time DESC
+                         ORDER BY t.`created-time` DESC
                          LIMIT ",lim);
         PREPARE stmt FROM @q;
         set @tID=tID;
@@ -2039,7 +2039,7 @@ BEGIN
 	if content='' then set content=null;end if;
 	if uID='' then set uID=null;end if;
 	if uTime='' then set uTime=null;end if;
-		set @q= "select task_id, version_id, filename, content-type, user_id, upload-time from TaskFileVersions t where 1 ";
+		set @q= "select task_id, version_id, filename, `content-type`, user_id, `upload-time` from TaskFileVersions t where 1 ";
 	if tID is not null then 
 		set @q = CONCAT(@q," and t.task_id=",tID) ;
 	end if;
@@ -2050,13 +2050,13 @@ BEGIN
 		set @q = CONCAT(@q," and t.filename='",name,"'") ;
 	end if;
 	if content is not null then 
-		set @q = CONCAT(@q," and t.content-type='",content,"'") ;
+		set @q = CONCAT(@q," and t.`content-type`='",content,"'") ;
 	end if;
 	if uID is not null then 
 		set @q = CONCAT(@q," and t.user_id=",uID) ;
 	end if;
 	if (uTime is not null  and uTime!='0000-00-00 00:00:00')then 
-		set @q = CONCAT(@q," and t.upload-time='",uTime,"'") ;
+		set @q = CONCAT(@q," and t.`upload-time`='",uTime,"'") ;
 	end if;
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -2143,7 +2143,7 @@ BEGIN
 
 set @q=Concat("SELECT * FROM ArchivedTasks as a 
                 WHERE user_id = ?
-                ORDER BY created-time DESC
+                ORDER BY `created-time` DESC
                 limit ", lim);
         PREPARE stmt FROM @q;
         set@uID = uID;
@@ -2163,7 +2163,7 @@ BEGIN
 set @q=Concat(" SELECT * 
                 FROM Tasks JOIN TaskClaims ON TaskClaims.task_id = Tasks.id
                 WHERE user_id = ?
-                ORDER BY created-time DESC
+                ORDER BY `created-time` DESC
                 limit ", lim);
         PREPARE stmt FROM @q;
         set@uID = uID;
@@ -2258,7 +2258,7 @@ BEGIN
 		set @q = CONCAT(@q," and o.name='",name,"'") ;
 	end if;
 	if url is not null then 
-		set @q = CONCAT(@q," and o.home-page='",url,"'") ;
+		set @q = CONCAT(@q," and o.`home-page`='",url,"'") ;
 	end if;
 	if bio is not null then 
 		set @q = CONCAT(@q," and o.biography='",bio,"'") ;
@@ -2336,7 +2336,7 @@ BEGIN
 	SELECT *
 	FROM OrgRequests
    WHERE org_id = orgID
-   ORDER BY request-datetime DESC;
+   ORDER BY `request-datetime` DESC;
 END//
 DELIMITER ;
 
@@ -2414,7 +2414,7 @@ BEGIN
 	if id='' then set id=null;end if;
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select en-name as language, code, id from Languages l where 1 ";-- set update
+	set @q= "select `en-name` as language, code, id from Languages l where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and l.id=",id) ;
@@ -2423,7 +2423,7 @@ BEGIN
 		set @q = CONCAT(@q," and l.code='",code,"'") ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and l.en-name='",name,"'") ;
+		set @q = CONCAT(@q," and l.`en-name`='",name,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -2440,7 +2440,7 @@ BEGIN
 	if id='' then set id=null;end if;
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select en-name as country, code, id from Countries c where 1 ";-- set update
+	set @q= "select `en-name` as country, code, id from Countries c where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and c.id=",id) ;
@@ -2449,7 +2449,7 @@ BEGIN
 		set @q = CONCAT(@q," and c.code='",code,"'") ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and c.en-name='",name,"'") ;
+		set @q = CONCAT(@q," and c.`en-name`='",name,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -2590,7 +2590,7 @@ BEGIN
     if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
     SET @claimedTasks = NULL;
     SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.claimed-time >= dateTime;
+    WHERE tc.`claimed-time` >= dateTime;
     SELECT @claimedTasks AS result;
 END//
 DELIMITER ;
@@ -2620,7 +2620,7 @@ BEGIN
     if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
     SET @archivedTasks = NULL;
     SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.created-time >= dateTime;
+    WHERE ta.`created-time` >= dateTime;
     SELECT @archivedTasks AS result;
 END//
 DELIMITER ;
@@ -2637,7 +2637,7 @@ BEGIN
     if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
 
     SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.claimed-time >= dateTime;	
+    WHERE tc.`claimed-time` >= dateTime;	
 
     SELECT count(1) into @unclaimedTasks from Tasks t
     WHERE t.id NOT IN
@@ -2647,7 +2647,7 @@ BEGIN
     );
 
     SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.created-time >= dateTime;	
+    WHERE ta.`created-time` >= dateTime;	
 
     SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks;	
     SELECT @totalTasks AS result;

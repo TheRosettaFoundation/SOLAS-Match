@@ -65,7 +65,9 @@ class OrganisationDao {
     {
         $ret = null;
         if ($result = PDOWrapper::call("getOrgMembers", PDOWrapper::cleanse($org_id))) {
-            $ret = $result;
+            foreach ($result as $user){
+                $ret[]= ModelFactory::buildModel("User", $user);
+            }
         }
         
         return $ret;
@@ -131,14 +133,7 @@ class OrganisationDao {
 
     private static function createOrgFromSqlResult($result)
     {
-        $org_data = array(
-                    'id' => $result['id'],
-                    'name' => $result['name'],
-                    'home_page' => $result['home_page'],
-                    'biography' => $result['biography']
-        );
-
-        return ModelFactory::buildModel("Organisation", $org_data);
+        return ModelFactory::buildModel("Organisation", $result);
     }
    
     

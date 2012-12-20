@@ -68,7 +68,7 @@ class TaskDao {
                 $task_data = array();
                 foreach ($row as $col_name => $col_value) {
                     if ($col_name == 'id') {
-                        $task_data['task_id'] = $col_value;
+                        $task_data['id'] = $col_value;
                     } else if (!is_numeric($col_name) && !is_null($col_value)) {
                         $task_data[$col_name] = $col_value;
                     }
@@ -91,7 +91,7 @@ class TaskDao {
     public function find($params) 
     {
         $permitted_params = array(
-                    'task_id',
+                    'id',
             );
 
         if (!is_array($params)) {
@@ -112,28 +112,28 @@ class TaskDao {
     public function getTask($params)
     {
         $args = "";
-        $args .= isset($params['task_id']) ?
-            PDOWrapper::cleanseNull($params['task_id']) : "null";        
+        $args .= isset($params['id']) ?
+            PDOWrapper::cleanseNull($params['id']) : "null";        
         $args .= isset($params['org_id']) ?
             ",".PDOWrapper::cleanseNull($params['org_id']) : ",null";
         $args .= isset($params['title']) ?
             ",".PDOWrapper::cleanseNullOrWrapStr($params['title']) : ",null";
-        $args .= isset($params['word_count']) ?
-            ",".PDOWrapper::cleanseNull($params['word_count']) : ",null";
+        $args .= isset($params['word-count']) ?
+            ",".PDOWrapper::cleanseNull($params['word-count']) : ",null";
         $args .= isset($params['source_id']) ?
             ",".PDOWrapper::cleanseNull($params['source_id']) : ",null";
         $args .= isset($params['target_id']) ?
             ",".PDOWrapper::cleanseNull($params['target_id']) : ",null";
-        $args .= isset($params['created_time']) ?
-            ",".PDOWrapper::cleanseNull($params['created_time']) : ",null";
+        $args .= isset($params['created-time']) ?
+            ",".PDOWrapper::cleanseNull($params['created-time']) : ",null";
         $args .= isset($params['impact']) ?
             ",".PDOWrapper::cleanseNullOrWrapStr($params['impact']) : ",null";
-        $args .= isset($params['reference_page']) ?
-            ",".PDOWrapper::cleanseNullOrWrapStr($params['reference_page']) : ",null";
-        $args .= isset($params['sourceCountry']) ?
-            ",".PDOWrapper::cleanseNullOrWrapStr($params['sourceCountry']) : ",null";
-        $args .= isset($params['targetCountry']) ?
-            ",".PDOWrapper::cleanseNullOrWrapStr($params['targetCountry']) : ",null";
+        $args .= isset($params['reference-page']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['reference-page']) : ",null";
+        $args .= isset($params['country_id-source']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['country_id-source']) : ",null";
+        $args .= isset($params['country_id-target']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['country_id-target']) : ",null";
 
         $tasks = array();
         $result = PDOWrapper::call("getTask", $args);
@@ -352,7 +352,7 @@ class TaskDao {
                                         .",".PDOWrapper::cleanse($limit))) {
             $ret = array();
             foreach ($result as $row) {
-                $task = self::find(array('task_id' => $row['id']));
+                $task = self::find(array('id' => $row['id']));
                 if (!$task->getId()) {
                     throw new Exception('Tried to create a task, but its ID is not set.');
                 }
