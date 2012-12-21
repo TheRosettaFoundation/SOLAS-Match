@@ -143,7 +143,7 @@ class TaskDao {
                 
                 foreach ($row as $col_name => $col_value) {
                     if ($col_name == 'id') {
-                        $task_data['task_id'] = $col_value;
+                        $task_data['id'] = $col_value;
                     } else if (!is_numeric($col_name) && !is_null($col_value)) {
                         $task_data[$col_name] = $col_value;
                     }

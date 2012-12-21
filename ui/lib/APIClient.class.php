@@ -21,7 +21,7 @@ class APIClient
     }     
 
     public function call($url, $method = HTTP_Request2::METHOD_GET, 
-                    $data = null, $query_args = array(), $format = ".proto", $file = null)
+                    $data = null, $query_args = array(), $format = ".json", $file = null)
     {
         $app = Slim::getInstance();
         $settings = new Settings();
@@ -55,7 +55,7 @@ class APIClient
     }
     
     public function castCall($destination, $url, $method = HTTP_Request2::METHOD_GET, 
-        $data = null, $query_args = array(), $format = ".proto")
+        $data = null, $query_args = array(), $format = ".json")
     {
         $ret = null;
         $result = $this->call($url, $method, $data, $query_args, $format);
