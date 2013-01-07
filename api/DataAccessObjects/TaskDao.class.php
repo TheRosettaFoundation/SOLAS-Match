@@ -29,7 +29,7 @@ class TaskDao {
         } else {
             $task = ModelFactory::buildModel("Task", $params);
         }
-        
+
         $this->save($task);
         return $task;
     }
@@ -319,7 +319,7 @@ class TaskDao {
             ",".PDOWrapper::cleanseNull($task->getWordCount()).
             ",".PDOWrapper::cleanseNull($task->getSourceLangId()).
             ",".PDOWrapper::cleanseNull($task->getTargetLangId()).
-            ",".PDOWrapper::cleanseNullOrWrapStr($deadline).
+            ",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getImpact()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getReferencePage()).
