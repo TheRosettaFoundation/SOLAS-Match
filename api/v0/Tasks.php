@@ -89,7 +89,7 @@ class Tasks {
                 $id = $id[0];
             }
             $dao = new TaskDao();
-            $data = $dao->getTask(array("task_id" => $id));
+            $data = $dao->getTask(array("id" => $id));
             if ($data && is_array($data)) {
                 $data = $data[0];
             }
@@ -135,7 +135,7 @@ class Tasks {
                                                         function ($id, $filename, $userId) {
             
             $dao = new TaskDao();
-            $task = $dao->getTask(array("task_id" => $id));
+            $task = $dao->getTask(array("id" => $id));
             if (is_array($task)) {
                 $task = $task[0];
             }

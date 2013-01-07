@@ -90,21 +90,11 @@ class TaskDao {
 
     public function find($params) 
     {
-        $permitted_params = array(
-                    'id',
-            );
 
         if (!is_array($params)) {
             throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
         }
-
-        $where = array();
-        foreach ($params as $key => $value) {
-            if (!in_array($key, $permitted_params)) {
-                throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
-            }
-        }
-
+        
         $result = self::getTask($params);
         return $result[0];
     }
@@ -204,7 +194,7 @@ class TaskDao {
         $this->calculateTaskScore($task->getId());
 
         //Generate new file info and save it
-        TaskFile::recordFileUpload($task, $task_file_info['filename'], $task_file_info['content_type'], $userID);
+        TaskFile::recordFileUpload($task, $task_file_info['filename'], $task_file_info['content-type'], $userID);
      
         $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
 
@@ -328,11 +318,11 @@ class TaskDao {
     public function getLatestAvailableTasks($nb_items = 10)
     {
         $ret = false;
-        if ($r = PDOWrapper::call("getLatestAvailableTasks", PDOWrapper::cleanse($nb_items))) {
+        if ($r = PDOWrapper::call("getLatestAvailableTasks", PDOWrapper::cleanseNullOrWrapStr($nb_items))) {
             $ret = array();
             foreach ($r as $row) {
                 // Add a new Job object to the array to be returned.
-                $task = self::find(array('task_id' => $row['id']));
+                $task = self::find(array('id' => $row['id']));
                 if (!$task->getId()) {
                     throw new Exception('Tried to create a task, but its ID is not set.');
                 }
@@ -349,7 +339,7 @@ class TaskDao {
     {
         $ret = false;
         if ($result = PDOWrapper::call("getUserTopTasks", PDOWrapper::cleanse($user_id)
-                                        .",".PDOWrapper::cleanse($limit))) {
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($limit))) {
             $ret = array();
             foreach ($result as $row) {
                 $task = self::find(array('id' => $row['id']));
@@ -384,7 +374,7 @@ class TaskDao {
         if ($r = PDOWrapper::call("getTaggedTasks", PDOWrapper::cleanse($tag_id).",".PDOWrapper::cleanse($limit))) {
             $ret = array();
             foreach ($r as $row) {
-                    $ret[] = self::find(array('task_id' => $row['id']));
+                    $ret[] = self::find(array('id' => $row['id']));
             }
         }
         return $ret;
@@ -397,7 +387,7 @@ class TaskDao {
 
     public function moveToArchiveByID($taskID) 
     {
-        $task = $this->find(array("task_id" => $taskID));
+        $task = $this->find(array("id" => $taskID));
         Notify::sendEmailNotifications($task, NotificationTypes::ARCHIVE);
         PDOWrapper::call("archiveTask", PDOWrapper::cleanse($taskID));
     }
@@ -466,22 +456,12 @@ class TaskDao {
         if ($sqlResult) {
             $ret = array();
             foreach ($sqlResult as $row) {
-                $params = array();
-                $params['task_id'] = $row['task_id'];
-                $params['title'] = $row['title'];
-                $params['impact'] = $row['impact'];
-                $params['reference_page'] = $row['reference_page'];
-                $params['organisation_id'] = $row['organisation_id'];
-                $params['source_id'] = $row['source_id'];
-                $params['target_id'] = $row['target_id'];
-                $params['word_count'] = $row['word_count'];
-                $params['created_time'] = $row['created_time'];
-                $task = ModelFactory::buildModel("Task", $params);
+                $task = ModelFactory::buildModel("Task", $row);
                 $task->setStatus($this->getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }
-
+        
         return $ret;
      }
 
@@ -519,10 +499,10 @@ class TaskDao {
         }
     }
  
-    public static function downloadTask($taskID,$version=0)
+    public static function downloadTask($taskID, $version = 0)
     {
         $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $taskID));
+        $task = $task_dao->find(array('id' => $taskID));
 
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
@@ -536,15 +516,15 @@ class TaskDao {
         }
 
         $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
-        $file_content_type = $task_file_info['content_type'];
+        $file_content_type = $task_file_info['content-type'];
         TaskFile::logFileDownload($task, $version);
         IO::downloadFile($absolute_file_path, $file_content_type);
     }
     
-    public static function downloadConvertedTask($taskID,$version=0)
+    public static function downloadConvertedTask($taskID, $version = 0)
     {
         $task_dao = new TaskDao;
-        $task = $task_dao->find(array('task_id' => $taskID));
+        $task = $task_dao->find(array('id' => $taskID));
 
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
@@ -558,7 +538,7 @@ class TaskDao {
         }
 
         $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
-        $file_content_type = $task_file_info['content_type'];
+        $file_content_type = $task_file_info['content-type'];
         TaskFile::logFileDownload($task, $version);
         IO::downloadConvertedFile($absolute_file_path, $file_content_type);
     }

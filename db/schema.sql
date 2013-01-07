@@ -221,7 +221,7 @@ BEGIN
 					 RENAME TABLE `badges` TO `Badges`;
 					
 					 ALTER TABLE `Badges`
-					 change `badge_id` `id` INT,
+					 change `badge_id` `id` INT NOT NULL AUTO_INCREMENT,
 					 ADD CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
             END IF;

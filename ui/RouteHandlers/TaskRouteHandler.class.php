@@ -555,8 +555,10 @@ class TaskRouteHandler
                 }
    
                 $tag_list = TemplateHelper::separateTags($tags);
-                foreach ($tag_list as $tag) {
-                    $task->addTags($tag);
+                if($tag_list) {
+                    foreach ($tag_list as $tag) {
+                        $task->addTags($tag);
+                    }
                 }
                 
                 $language_list = array();
