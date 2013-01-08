@@ -702,8 +702,8 @@ BEGIN
 
 	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='task_claim') THEN
 		RENAME TABLE `task_claim` TO `TaskClaims`;
-                ALTER TABLE `TaskClaims` change `claim_id` `id` INT;
-                ALTER TABLE `TaskClaims` change `claimed_time` `claimed-time` DATETIME;
+                ALTER TABLE `TaskClaims` change `claim_id` `id` INT UNSIGNED NOT NULL AUTO_INCREMENT;
+                ALTER TABLE `TaskClaims` change `claimed_time` `claimed-time` DATETIME NOT NULL;
 
                 ALTER TABLE `TaskClaims`
                 DROP FOREIGN KEY `FK_task_claim_user`,
@@ -2070,8 +2070,12 @@ DROP PROCEDURE IF EXISTS `claimTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `claimTask`(IN `tID` INT, IN `uID` INT)
 BEGIN
-	insert into TaskClaims  (task_id,user_id) values (tID,uID);
-	select 1 as result;
+	if not EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
+		insert into TaskClaims  (task_id,user_id,`claimed-time`) values (tID,uID,now());
+		select 1 as result;
+	else
+	select 0 as result;
+	end if;
 END//
 DELIMITER ;
 
