@@ -892,6 +892,11 @@ BEGIN
         IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='password_reset_requests') THEN
                 RENAME TABLE `password_reset_requests` TO `PasswordResetRequests`;
                 ALTER TABLE `PasswordResetRequests` change `request_time` `request-time` DATETIME;
+
+                ALTER TABLE `PasswordResetRequests`
+                DROP FOREIGN KEY `FK_password_reset_user`,
+                ADD CONSTRAINT `FK_password_reset_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
         END IF;
     END IF;
 END//
@@ -990,11 +995,17 @@ BEGIN
         end if;
 
         IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_tag') THEN
-	         ALTER TABLE `user_tag`
-	      	drop FOREIGN key `FK_user_tag_tag`;
-				RENAME TABLE `user_tag` TO `UserTags`;
-	         ALTER TABLE `UserTags`
-	      	ADD CONSTRAINT `FK_user_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+                RENAME TABLE `user_tag` TO `UserTags`;
+
+                ALTER TABLE `UserTags`
+                DROP FOREIGN KEY `FK_user_tag_user`,
+                ADD CONSTRAINT `FK_user_tag_user1` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+                ALTER TABLE `UserTags`
+                DROP FOREIGN KEY `FK_user_tag_tag`,
+                ADD CONSTRAINT `FK_user_tag_tag1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
         END IF;
     END IF;
 END//
@@ -1106,6 +1117,15 @@ BEGIN
 
         IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_task_score') THEN
                 RENAME TABLE `user_task_score` TO `UserTaskScores`;
+
+                ALTER TABLE `UserTaskScores`
+                DROP FOREIGN KEY `FK_user_task_score_user`,
+                ADD CONSTRAINT `FK_user_task_score_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+                ALTER TABLE `UserTaskScores`
+                DROP FOREIGN KEY `FK_user_task_score_task`,
+                ADD CONSTRAINT `FK_user_task_score_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
         END IF;
     END IF;
 END//

@@ -270,7 +270,7 @@ class OrgRouteHandler
                     $app->flash('error', "All fields must be filled out");
                 } else {
                     $params = array();
-                    $params['badge_id'] = $post->badge_id;             
+                    $params['id'] = $post->badge_id;             
                     $params['title'] = $post->title;
                     $params['description'] = $post->description;
                     $params['owner_id'] = null; 
