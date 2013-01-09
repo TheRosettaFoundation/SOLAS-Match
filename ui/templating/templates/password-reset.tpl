@@ -29,14 +29,15 @@
 {/if}
 
 <form method="post" action="{urlFor name="password-reset" options="uid.$uid"}" class="well">
-    <label for="nPassword">New Password</label>
+    <label for="nPassword">New Password:</label>
     <input type="password" name="new_password" />
 
-    <label for="cPassword">Re-enter new Password</label>
+    <label for="cPassword">Confirm new Password:</label>
     <input type="password" name="confirmation_password" />
 
     <p>
-        <input type="submit" class="btn btn-primary" value="Change Password"/>
+        <input type="submit" class="btn btn-primary" value="    Change Password"/>
+        <i class="icon-exclamation-sign icon-white" style="position:relative; right:138px;top:2px;"></i>
     </p>
 </form>
 

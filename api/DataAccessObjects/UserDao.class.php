@@ -421,14 +421,15 @@ class UserDao {
 
     public function createPasswordReset($user_id)
     {
-        $uid=null;
-        if(!$this->hasRequestedPasswordResetID($user_id)){
+        $uid = null;
+        if(!$this->hasRequestedPasswordResetID($user_id)) {            
             $uid = md5(uniqid(rand()));
-            $this->addPasswordResetRequest($uid, $user_id);   
-        }else{
-            $request=$this->getPasswordResetRequests(array("user_id"=>$user_id));
-            $uid=$request->getKey();
+            $this->addPasswordResetRequest($uid, $user_id);
+        } else {
+            $request = $this->getPasswordResetRequests(array("user_id" => $user_id));
+            $uid = $request->getKey();
         }
+        
         Notify::sendPasswordResetEmail($uid, $user_id);
         return 1;
     }    
