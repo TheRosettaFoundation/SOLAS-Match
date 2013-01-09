@@ -342,7 +342,7 @@ class UserRouteHandler
                                 $app->redirect($app->urlFor($_SESSION['previous_page']));
                             }
                         }
-                        $app->redirect($app->urlFor('home'));
+                        $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user->getUserId())));
                     } catch (InvalidArgumentException $e) {
                         $error = '<p>Unable to log in. Please check your email and password.';
                         $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
