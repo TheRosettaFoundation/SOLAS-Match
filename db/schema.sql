@@ -897,6 +897,10 @@ BEGIN
                 DROP FOREIGN KEY `FK_password_reset_user`,
                 ADD CONSTRAINT `FK_password_reset_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
+                ALTER TABLE `PasswordResetRequests`
+                DROP PRIMARY KEY,
+                ADD UNIQUE INDEX `user_id` (`user_id`);
+
         END IF;
     END IF;
 END//
@@ -2723,6 +2727,15 @@ SET SQL_MODE=@OLD_SQL_MODE;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
+-- Dumping structure for trigger solas-intergration.defaultUserName
+DROP TRIGGER IF EXISTS `defaultUserName`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `defaultUserName` BEFORE INSERT ON `Users` FOR EACH ROW BEGIN
+if new.`display-name` is null then set new.`display-name` = substring_index(new.email,'@',1); end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
 
 
 /* These statements below may be removed, if they have already been called at least ONCE */

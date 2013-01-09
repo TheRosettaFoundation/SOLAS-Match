@@ -523,8 +523,11 @@ class UserRouteHandler
                     $app->redirect($app->urlFor('password-reset-request'));
                 }
             } elseif ($app->request()->isPost() || $openid->mode) {
-                $this->openIdLogin($openid, $app);
-                $app->redirect($app->urlFor("home"));
+                if($this->openIdLogin($openid, $app)){
+                   $app->redirect($app->urlFor("home"));
+                }  else {
+                    $app->redirect($app->urlFor('user-public-profile', array('user_id' => UserSession::getCurrentUserID())));
+                }
             }
             $app->render('login.tpl');
         } catch (InvalidArgumentException $e) {
@@ -552,7 +555,6 @@ class UserRouteHandler
             }
         } elseif ($openid->mode == 'cancel') {
             throw new InvalidArgumentException('User has canceled authentication!');
-            return false;
         } else {
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
@@ -566,10 +568,14 @@ class UserRouteHandler
 
                     $request = APIClient::API_VERSION."/register";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, 
-                            ModelFactory::buildModel("Register", $registerData));
+                    ModelFactory::buildModel("Register", $registerData));
+                    $user = $client->cast("User", $response);
+                    UserSession::setSession($user->getUserId());
+                    return false;
                 }
                 $user = $client->cast("User", $response);
                 UserSession::setSession($user->getUserId());
+                
             }
             return true;
         }
