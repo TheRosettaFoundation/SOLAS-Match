@@ -137,13 +137,11 @@ class UserDao {
         $user = $this->find(array('email' => $email));
 
         if (!is_object($user)) {
-            return array("error"=>"Sorry, the  password $clear_password or username $email entered is incorrect.
-                                    Please check the credentials used and try again.");
+            return null;
         }
 
         if (!$this->clearPasswordMatchesUsersPassword($user, $clear_password)) {
-            return array("error"=>"Sorry, the  password or username entered is incorrect.
-                                    Please check the credentials used and try again.");
+            return null;
         }
 
         return $user;

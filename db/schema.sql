@@ -147,7 +147,7 @@ BEGIN
 
             IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='archived_task') THEN
                     RENAME TABLE `archived_task` TO `ArchivedTasks`;
-                    ALTER TABLE `ArchivedTasks` change `archived_task_id` `id` BIGINT;
+                    ALTER TABLE `ArchivedTasks` change `archived_task_id` `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT;
                     ALTER TABLE `ArchivedTasks` change `reference_page` `reference-page` VARCHAR (128);
                     ALTER TABLE `ArchivedTasks` change `word_count` `word-count` INT;
                     ALTER TABLE `ArchivedTasks` change `created_time` `created-time` DATETIME;
@@ -473,7 +473,7 @@ BEGIN
 						  
 						  RENAME TABLE `org_request_queue` TO `OrgRequests`;
                     ALTER TABLE `OrgRequests` 
-						  change `request_id` `id` INT,
+						  change `request_id` `id` INT(11) NOT NULL AUTO_INCREMENT,
                     change `request_datetime` `request-datetime` TIMESTAMP;
 
                     ALTER TABLE `OrgRequests`
@@ -1844,7 +1844,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.`created-time=`'",created,"'") ;
+			set @q = CONCAT(@q," t.`created-time`='",created,"'") ;
 		end if;
 		set @q = CONCAT(@q," where  t.id= ",id);
 		PREPARE stmt FROM @q;
@@ -2037,10 +2037,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT)
 BEGIN
 	INSERT INTO `ArchivedTasks`(task_id, organisation_id, title, `word-count`, source_id, target_id, `created-time`, `archived-time`, user_id)
 		
-		SELECT id, organisation_id, title, `word-count`, source_id, target_id, `created-time`, NOW(), tc.user_id
+		SELECT tt.id, organisation_id, title, `word-count`, source_id, target_id, `created-time`, NOW(), tc.user_id
 		FROM Tasks tt
 		LEFT JOIN TaskClaims tc ON tc.task_id = tt.id
-		WHERE id =tID;
+		WHERE tt.id = tID;
    
    DELETE FROM Tasks WHERE id = tID ;
    DELETE FROM UserTaskScores WHERE task_id = tID;
