@@ -514,7 +514,7 @@ class UserRouteHandler
                         $user = $client->cast("User", $user);
                         UserSession::setSession($user->getUserId());
                     } else {
-                        throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect.
+                        throw new InvalidArgumentException('Sorry, the username or password entered is incorrect.
                             Please check the credentials used and try again.');    
                     }
                     

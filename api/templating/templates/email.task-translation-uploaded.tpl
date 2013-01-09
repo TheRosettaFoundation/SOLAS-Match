@@ -1,3 +1,4 @@
+<html>
 <p>
     {if $user->getDisplayName() != ''}
         {$user->getDisplayName()},
@@ -13,10 +14,11 @@
 	{$translator->getDisplayName()}
     {/if}
     has uploaded a translation for the file "{$task->getTitle()}". To download
-    the the latest version of the file please visit your <a href="{$site_url}{urlFor name='client-dashboard'}">
+    the the latest version of the file please visit your <a href="{$site_url}client/dashboard">
     client dashboard</a>. You will find the download button under the {$org->getName()}
     title.
 </p>
 <p>
 The SOLAS Match Team
 </p>
+</html>
