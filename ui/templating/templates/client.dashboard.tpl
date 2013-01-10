@@ -2,7 +2,7 @@
 
 <div class="page-header">
 	<h1>
-        Dashboard <small>Overview of your tasks for translation</small>
+        Organisation Dashboard <small>Overview of projects created by your organisation(s).</small>
     </h1>
 </div>
 
@@ -30,16 +30,25 @@
                         <i class="icon-briefcase"></i> {$org->getName()}
                     </a>
                 </th>
-                <th>Task Status</th>
-                <th>Track Status</th>
                 <th>
+                    <center>Deadline</center>
+                </th>
+                <th>
+                    <center>Status</center>
+                </th>
+                <th>
+                    <center>Track</center>
+                </th>
+                <th>
+                    <center>
                     <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class="btn btn-primary">
                         <i class="icon-wrench icon-white"></i> Edit Organisation
                     </a>
+                    </center>
                 </th>
                 <th>                    
                     <a class="btn btn-success" href="{urlFor name="task-upload" options="org_id.$org_id"}">
-                        <i class="icon-upload icon-white"></i> Add New Task
+                        <i class="icon-upload icon-white"></i> Create Project
                     </a>                    
                 </th>
             </tr>
@@ -54,52 +63,65 @@
                     <td>
                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$taskObject->getTitle()}</a>
                     </td>
+                    <td>
+                        <center>2011/12/12 - 24:00</center>
+                    </td>
                     {if $data['translated']}
                         <td>
+                            <center>
                             <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
                                 <i class="icon-download icon-black"></i><font color="Green"> Download&nbsp;updated&nbsp;file</font>
                             </a>
+                            </center>
                         </td>
                     {elseif $data['taskClaimed']}
                         <td>
+                            <center>
                             <p><font color=#153E7E>Pending Translation</font></p>
+                            </center>
                         </td>
                     {else}
                         <td>
+                            <center>
                             <p><font color="Red">Task not Claimed</font></p>
+                            </center>
                         </td>
                     {/if}
                     <td>
+                        <center>
                         <form method="post" action="{urlFor name="client-dashboard"}">
                             <input type="hidden" name="task_id" value="{$task_id}" />
                             {if $data['userSubscribedToTask']}
                                 <input type="hidden" name="track" value="Ignore" />
                                 <a href="#" onclick="this.parentNode.submit()" class="btn btn-primary">
-                                    <i class="icon-inbox icon-white"></i> Ignore
+                                    <i class="icon-inbox icon-white"></i> Disable
                                 </a>
                             {else}
                                 <input type="hidden" name="track" value="Track" />
                                 <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                                    <i class="icon-envelope icon-black"></i> Track
+                                    <i class="icon-envelope icon-black"></i> Enable
                                 </a>
                             {/if}
                         </form>
+                        </center>
                     </td>
                     <td>
+                        <center>
                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btn btn-small">
-                            <i class="icon-wrench icon-black"></i> Edit Task
+                            <i class="icon-wrench icon-black"></i> Edit Project
                         </a>
+                        </center>
                     </td>
                     <td>
                         <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-inverse">
-                            <i class="icon-fire icon-white"></i> Archive
+                            <i class="icon-fire icon-white"></i> Archive Project
                         </a>
                     </td>
                 </tr>
             {/foreach}
         {else}
             <td colspan="5">
-                <p>This organisation has no tasks listed.</p>
+                <p>This organisation has no projects listed.</p>
             </td>
         {/if}
         </tbody>

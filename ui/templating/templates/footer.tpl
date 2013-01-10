@@ -1,12 +1,15 @@
-<hr>
+
+<div class="well">
 <footer>	
+    <center>
 	<p>
-		&copy; 2012 University of Limerick &middot; <a href="http://www.therosettafoundation.org/">The Rosetta Foundation</a>
+		&copy; 2012-2013 University of Limerick &middot; <a href="http://www.therosettafoundation.org/">The Rosetta Foundation</a>
 	</p>
         <p>
             Your <a href="https://docs.google.com/spreadsheet/viewform?fromEmail=true&formkey=dEdyWnJnbnF0TVJhTHFLb0IyWVdhWEE6MQ">Feedback</a> is appreciated.
         </p>
-</footer>
+    </center>
+</footer>    
 </div><!-- /container -->
 {if isset($openid)&& ($openid==='y'||$openid==='h' )}
     <script type="text/javascript">
@@ -18,3 +21,4 @@
 {/if}
 </body>  
 </html> 
+

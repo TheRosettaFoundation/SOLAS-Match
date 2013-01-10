@@ -119,10 +119,11 @@
                 {assign var="user_id" value=$this_user->getUserId()}
                 <div class="span8">
                     <h3>
+                        <i class="icon-briefcase"></i>
                         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
                     </h3>
                 </div>
-                <div class="span4">
+                <div class="row">
                     <form method="post" class="pull-right" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                         {if isset($private_access)}
                             <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
@@ -134,16 +135,18 @@
                 </div>
                 <div class="span8">
                     <p>
+                        <b>Biography:</b><br/>
+                        
                         {if $org->getBiography() == ''}
                             This organisation does not have a biography listed.
                         {else}                            
                             {$org->getBiography()}
                         {/if}
                     </p>
-                     
                     <p>
+                    <b>Home Page:</b><br/>
                     {if $org->getHomePage() != "http://"}
-                        Visit their <a target="_blank" href="{$org->getHomePage()}">home page</a>.
+                        <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
                     {else}
                         This organisation does not have a web site listed.
                     {/if}
@@ -151,24 +154,9 @@
                 </div>
             </div>
             <p style="margin-bottom:20px;"></p>
+            <hr>
         {/foreach}
-        <p style="margin-bottom:50px;"></p>
-    {/if}
-{/if}
-
-{if isset($activeJobs)}
-    {if count($activeJobs) > 0}
-        <div class='page-header'><h1>Active Tasks <small>A list of tasks you are currently working on</small>
-        {if isset($private_access)}
-            <a href='{urlFor name="active-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
-                <i class="icon-list icon-white"></i> List All Active Tasks
-            </a>
-        {/if}
-        </h1></div>
-
-        {foreach $activeJobs as $job}
-                {include file="task.summary-link.tpl" task=$job}
-        {/foreach}
+        
         <p style="margin-bottom:50px;"></p>
     {/if}
 {/if}

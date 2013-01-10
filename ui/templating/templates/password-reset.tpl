@@ -37,7 +37,7 @@
 
     <p>
         <input type="submit" class="btn btn-primary" value="    Change Password"/>
-        <i class="icon-exclamation-sign icon-white" style="position:relative; right:138px;top:2px;"></i>
+        <i class="icon-check icon-white" style="position:relative; right:138px;top:2px;"></i>
     </p>
 </form>
 
