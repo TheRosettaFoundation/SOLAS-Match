@@ -59,7 +59,8 @@
                 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
                     <input type="hidden" name="badge_id" value="{$badge->getId()}" />
                     <input type="hidden" value="Remove" onClick="return confirmPost()" />
-                    <a href="#" onclick="this.parentNode.submit()" class="pull-right btn btn-inverse">
+                    <a href="#" onclick="return confirm('Are you sure you want to remove this badge?')" 
+                            class="pull-right btn btn-inverse">
                         <i class="icon-fire icon-white"></i> Remove Badge
                     </a> 
                 </form>                    
