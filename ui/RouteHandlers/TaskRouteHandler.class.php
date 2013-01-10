@@ -492,16 +492,6 @@ class TaskRouteHandler
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID();
 
-        $extra_scripts = "
-         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
-         <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
-         <script type=\"text/javascript\">
-             window.onload = function() {
-                 new datepickr(\"deadline_date\");
-             };
-         </script>
-         ";
-
         $error          = null;
         $title_err      = null;
         $word_count_err = null;
@@ -646,6 +636,13 @@ class TaskRouteHandler
         $language_list = TemplateHelper::getLanguageList();
         $countries= TemplateHelper::getCountryList();
         $extra_scripts = "
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
+        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+        <script type=\"text/javascript\">
+            window.onload = function() {
+                new datepickr(\"deadline_date\");
+            };
+        </script>
         <script language='javascript'>
         
         var fields = 0;
