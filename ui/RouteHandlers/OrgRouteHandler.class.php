@@ -298,7 +298,7 @@ class OrgRouteHandler
         $org_members = array();
         if (count($orgMemberList) > 0) {
             foreach ($orgMemberList as $stdObject) {
-                $org_members[] = $stdObject['user_id'];
+                $org_members[] = $stdObject->user_id;
             }
         }        
 
