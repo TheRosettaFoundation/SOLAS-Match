@@ -95,8 +95,13 @@
                     </div>
                 {/if}
             {/if}
-            <p><b>Name:</b> {$badge->getTitle()}</p>
-            <p><b>Description:</b> {$badge->getDescription()}</p>
+            <p>
+                <b>Name:</b><br/>
+                {$badge->getTitle()}
+            </p>
+            <p><b>Description:</b><br/>
+                {$badge->getDescription()}
+            </p>
         </p>
         <hr>
     {/foreach}

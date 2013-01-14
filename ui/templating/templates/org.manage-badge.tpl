@@ -33,7 +33,7 @@
 </form>
 
 <h3>Users with this badge</h3>
-<p>A list of users who were assigned this badge by an organisation member</p>
+<p>A list of users who were assigned this badge by an organisation member:</p>
 {if isset($user_list) && count($user_list) > 0}
     <ul class="unstyled">
         {foreach $user_list as $user}
@@ -46,12 +46,12 @@
                 {assign var="user_id" value=$user->getUserId()}
                 <li>
                     <div class="span8">
+                        <h4>Display Name:</h4>
                         <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                             {$displayName}
                         </a>
-                        : {$user->getBiography()}
                     </div>
-                    <div class="span4">
+                    <div class="right">
                         <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="">
                             <input type="hidden" name="user_id" value="{$user->getUserId()}" />
                             <input type="hidden" value="Remove" onClick="return confirmPost()" />

@@ -2,7 +2,7 @@
 
 <div class="page-header">
     <h1>
-        Organisation Search <small>Search for organisation by name</small>
+        Organisation Search <small>Search for organisations by name.</small>
     </h1>
 </div>
 
@@ -15,14 +15,42 @@
 </form>
 
 {if isset($found_orgs)}
-    <h3>Search Results:</h3>
+    {assign var="org_count" value=count($found_orgs)}
+    <p>
+        <h3>Search Results: Found {$org_count} match(es)</h3>    
+    </p>
     {foreach $found_orgs as $org}
-        {assign var="org_id" value=$org->getId()}
-        <h4><a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a></h4>
-        {if $org->getBiography() != ''}
-            <p>{$org->getBiography()}</p>
-        {/if}
-        <br />
+        <div class="row">
+            {assign var="org_id" value=$org->getId()}
+            <div class="span8">
+                <h3>
+                    <i class="icon-briefcase"></i>
+                    <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
+                </h3>
+                <br/>
+            </div>
+            <div class="span8">
+                <p>
+                    <b>Biography:</b><br/>
+
+                    {if $org->getBiography() == ''}
+                        This organisation does not have a biography listed.
+                    {else}                            
+                        {$org->getBiography()}
+                    {/if}
+                </p>
+                <p>
+                <b>Home Page:</b><br/>
+                {if $org->getHomePage() != "http://"}
+                    <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
+                {else}
+                    This organisation does not have a web site listed.
+                {/if}
+                </p>
+            </div>
+        </div>
+        <p style="margin-bottom:20px;"></p>
+        <hr>
     {/foreach}
 {/if}
 

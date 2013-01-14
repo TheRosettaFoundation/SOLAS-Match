@@ -2,7 +2,7 @@
 
 {if !isset($user)}
 	<div class="hero-unit">
-		<h1>Help NGOs translate</h1>
+		<h1>Help NGOs translate.</h1>
 		<p>Non&ndash;governmental agencies need <em>your</em> translation skills.</p>
 		<p>
 			<a class="btn btn-success btn-large" href="{urlFor name="register"}">
@@ -38,49 +38,49 @@
 
 <div class="page-header">
 	<h1>
-            Translation tasks <small>Claim a task, translate it, upload it</small>
+            Translation tasks <small>Claim a task, translate it, upload it.</small>
             <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
                 <i class="icon-search icon-white"></i> Search for Organisations
             </a>
         </h1>
 </div>
-
+                
 <div class="row">
-	<div class="span8">
-		{if isset($tasks)}
-			<div id="tasks">
-				{foreach from=$tasks item=task name=tasks_loop}
-					{include file="task.summary-link.tpl" task=$task}
-				{/foreach}
-			</div>
-		{else}
-			<div class="alert alert-warning">
-				{if isset($user_is_organisation_member)}
-					<strong>No open tasks</strong> You can upload a new task from your Dashboard in the navigation menu above.
-				{else}
-					<strong>No tasks available</strong> Please wait for organisations to upload more translation tasks.
-				{/if}
-			</div>
-		{/if}
-	</div>
+    <div class="pull-right">
 
-    <div class="span4">
-        {include file="tags.user-tags.inc.tpl"}	
-        {include file="tags.top-list.inc.tpl"}
-        {if isset($stats) && $stats=="y"}
-                {include file="statistics.tpl"}
+            {include file="tags.user-tags.inc.tpl"}	
+            {include file="tags.top-list.inc.tpl"}
+            {if isset($stats) && $stats=="y"}
+                    {include file="statistics.tpl"}
+            {/if}
+    </div>
+    
+    <div class="pull-left">
+        {if isset($tasks)}
+                <div id="tasks">
+                        {foreach from=$tasks item=task name=tasks_loop}
+                                {include file="task.summary-link.tpl" task=$task}
+                        {/foreach}
+                </div>
+        {else}
+                <div class="alert alert-warning">
+                        {if isset($user_is_organisation_member)}
+                                <strong>No open tasks!</strong> You can upload a new task from your Dashboard in the navigation menu above.
+                        {else}
+                                <strong>No tasks available!</strong> Please wait for organisations to upload more translation tasks.
+                        {/if}
+                </div>
         {/if}
-    </div> 
-    <div class="span8">        
+
         {if !isset($user)}
             <div class="alert">
                 <p>Help us match you with the most suitable translation tasks.</p>
-                <p><a href={urlFor name="register"}>Register now</a> to find the jobs best suited to you.</p>
+                <p><a href={urlFor name="register"}>Register now</a> to find the translation tasks best suited to you.</p>
             </div>
-        {/if}  
+        {/if}      
     </div>
 </div>
 
-
-
+<div class="row">
 {include file="footer.tpl"}
+</div>

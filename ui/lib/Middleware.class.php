@@ -122,7 +122,13 @@ class Middleware
         $app->flash('error', "You are not authorised to view this page.
                     Only members of ".$org_name." may view this page.");
         $app->redirect($app->urlFor('home'));
-    }
+    } 
+    
+    public static function authUserForOrgProject($request, $response, $route) 
+    { 
+        //todo 
+        return true;
+    }    
 
     public static function authUserForTaskDownload($request, $response, $route)
     {

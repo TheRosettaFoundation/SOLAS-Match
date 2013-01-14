@@ -9,6 +9,9 @@ class OrgRouteHandler
 
         $app->get('/org/create', array($middleware, 'authUserIsLoggedIn'), 
         array($this, 'createOrg'))->via('POST')->name('create-org');
+        
+        $app->get('/org/dashboard', array($middleware, 'authUserIsLoggedIn'), 
+        array($this, 'orgDashboard'))->via('POST')->name('org-dashboard');        
 
         $app->get('/org/request/:org_id', array($this, 'orgRequestMembership')
         )->name('org-request-membership');
@@ -75,7 +78,7 @@ class OrgRouteHandler
                         $organisation = $client->call($request, HTTP_Request2::METHOD_PUT);                        
                         $org_name = $org->getName();
                         $app->flashNow('success', "Organisation \"$org_name\" has been created. 
-                                            Visit the <a href='".$app->urlFor("client-dashboard").
+                                            Visit the <a href='".$app->urlFor("org-dashboard").
                                             "'>client dashboard</a> to start uploading tasks.");
                     } else {
                         $app->flashNow('error', "Unable to save Organisation.");
@@ -90,7 +93,143 @@ class OrgRouteHandler
             }
         }        
        $app->render('create-org.tpl');
-    }
+    }    
+
+    public function orgDashboard()
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+
+        $current_user_id    = UserSession::getCurrentUserID();
+
+        $request = APIClient::API_VERSION."/users/$current_user_id";
+        $response = $client->call($request);
+        $current_user = $client->cast('User', $response);        
+        
+        if (is_null($current_user_id)) {
+            $app->flash('error', 'Login required to access page');
+            $app->redirect($app->urlFor('login'));
+        }
+
+        $my_organisations = array();
+        $url = APIClient::API_VERSION."/users/$current_user_id/orgs";
+        $response = $client->call($url);
+        if (is_array($response)) {
+            foreach ($response as $stdObject) {
+                $my_organisations[] = $client->cast('Organisation', $stdObject);
+            }
+        }elseif(is_string ($response)){
+            $my_organisations = $client->cast('Organisation', $response);
+        }
+        
+        $org_tasks = array();
+        $orgs = array();
+
+        foreach ($my_organisations as $org) {
+
+            $url = APIClient::API_VERSION."/orgs/{$org->getId()}/tasks";
+            $org_tasks_data = $client->call($url);        
+            $my_org_tasks = array();
+            if ($org_tasks_data) {
+                foreach ($org_tasks_data as $stdObject) {
+                    $my_org_tasks[] = $client->cast('Task', $stdObject);
+                }
+            } else {
+                // If no org tasks, set to null
+                $my_org_tasks = null;
+            }   
+            
+            $request = APIClient::API_VERSION."/tags/topTags";
+            $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
+                                        array('limit' => 30));        
+            $top_tags = array();
+            if ($response) {
+                foreach ($response as $stdObject) {
+                    $top_tags[] = $client->cast('Tag', $stdObject);
+                }
+            }            
+
+            $org_tasks[$org->getId()] = $my_org_tasks;
+            $orgs[$org->getId()] = $org;
+        }    
+        
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+            
+            if (isset($post->track)) {
+                $task_id = $post->task_id;
+                $url = APICLient::API_VERSION."/tasks/$task_id";
+                $response = $client->call($url);
+                $task = $client->cast('Task', $response);
+
+                $task_title = '';
+                if ($task->getTitle() != '') {
+                    $task_title = $task->getTitle();
+                } else {
+                    $task_title = "task ".$task->getId();
+                }
+                if ($post->track == "Ignore") {
+                   
+                    $request = APIClient::API_VERSION."/users/$current_user_id/tracked_tasks/$task_id";
+                    $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                    
+                    
+                    if ($response) {
+                        $app->flashNow('success', 'No longer receiving notifications from '.$task_title.'.');
+                    } else {
+                        $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
+                    }                    
+                } elseif ($post->track == "Track") {
+                    
+                    $request = APIClient::API_VERSION."/users/$current_user_id/tracked_tasks/$task_id";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT);     
+                    
+                    if ($response) {
+                        $app->flashNow('success', 'You will now receive notifications for '.$task_title.'.');
+                    } else {
+                        $app->flashNow('error', 'Unable to subscribe to '.$task_title.'.');
+                    }
+                } else {
+                    $app->flashNow('error', 'Invalid POST type');
+                }
+            }
+        }
+        if (count($org_tasks) > 0) {
+            
+            $templateData = array();
+            foreach ($org_tasks as $org => $taskArray) {
+                $taskData = array();
+                if ($taskArray) {
+                    foreach ($taskArray as $task) {
+                        $temp = array();
+                        $temp['task']=$task;
+                        $temp['translated']=$client->call(APIClient::API_VERSION.
+                                "/tasks/{$task->getId()}/version") > 0;
+                                
+                        $temp['taskClaimed']=$client->call(APIClient::API_VERSION.
+                                "/tasks/{$task->getId()}/claimed") == 1;
+                                
+                        $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION.
+                                "/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getId()}") == 1;
+                        $taskData[]=$temp;
+                    }
+                } else {
+                    $taskData = null;
+                }
+                $templateData[$org] = $taskData;
+            }
+            
+            $app->view()->appendData(array(
+                'orgs' => $orgs,
+                'templateData' => $templateData
+            ));
+        }
+        
+        $app->view()->appendData(array(
+            'current_page'  => 'org-dashboard'
+        ));
+        $app->render('org.dashboard.tpl');
+    }    
+    
 
     public function orgRequestMembership($org_id)
     {

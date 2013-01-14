@@ -9,7 +9,7 @@
         {else}
             User Profile
         {/if}
-        <small>View user details here</small>   
+        <small>Overview of your account details.</small>   
         {if isset($private_access)}
             <a href="{urlFor name="create-org"}" class="btn btn-success pull-right">
                 <i class="icon-star icon-white"></i> Create Organisation
@@ -17,7 +17,7 @@
         {/if} 
     </h1></div>
 {else}
-    <div class='page-header'><h1>User Profile <small>View user details here</small></h1></div>
+    <div class='page-header'><h1>User Profile <small>Overview of your account details.</small></h1></div>
 {/if}
 
 <h1>
@@ -28,7 +28,7 @@
     {/if}
 </h1>
 
-<h3>Public display name:</h3>
+<h3>Public Display Name:</h3>
 <p>{$this_user->getDisplayName()}</p>
  
 {if TemplateHelper::getNativeLanguage($this_user) != ''}
@@ -45,7 +45,7 @@
 {if isset($badges)}
     {if count($badges) > 0}
         <div class='page-header'>
-            <h1>Badges<small> A list of badges you have earned</small>
+            <h1>Badges<small> A list of badges you have earned.</small>
                 <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>
                     <i class="icon-list icon-white"></i> List All Badges
                 </a>
@@ -106,7 +106,7 @@
     {if count($user_orgs) > 0}
         <div class='page-header'>
             <h1>
-                Organisations <small>A list of organisations you belong to</small>
+                Organisations <small>A list of organisations you belong to.</small>
                 <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
                     <i class="icon-search icon-white"></i> Search for Organisations
                 </a>
@@ -163,7 +163,7 @@
 
 {if isset($archivedJobs)}
     {if count($archivedJobs) > 0}
-        <div class='page-header'><h1>Archived Jobs <small>A list of jobs you have worked on in the past</small>
+        <div class='page-header'><h1>Archived Tasks <small>A list of tasks you have worked on in the past.</small>
         {if isset($private_access)}
             <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
                 <i class="icon-list icon-white"></i> List All Archived Tasks

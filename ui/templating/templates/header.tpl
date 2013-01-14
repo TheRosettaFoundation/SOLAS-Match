@@ -28,9 +28,9 @@
 
 		    	{if isset($user_is_organisation_member)}
 			    	<li
-			    		{if isset($current_page) && $current_page == 'client-dashboard'}class="active"{/if}
+			    		{if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if}
 			    	>
-			    		<a href="{urlFor name="client-dashboard"}">Dashboard</a>
+			    		<a href="{urlFor name="org-dashboard"}">Dashboard</a>
 			    	</li>
 		    	{/if}
                         {if isset($user)}

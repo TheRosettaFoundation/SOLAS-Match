@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 <div class="page-header">
-	<h1>Log In <small>to Solas Match</small></h1>
+	<h1>Log In <small>to Solas Match.</small></h1>
 </div>
 {if isset($flash['error'])}
     <div class="alert alert-error">
