@@ -154,13 +154,11 @@ class PDOWrapper {
         }
         
         $conn = $db->connection;
-        $i = 0;
         $data = array();
 
         if ($result = $conn->query($sql)) {
             foreach ($result as $row) {
-                $data[$i] = $row;
-                $i++;
+                $data[] = $row;                
             }
         }
         return empty($data) ? false : $data;

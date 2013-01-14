@@ -15,9 +15,9 @@ class BadgeDao
     public function insertAndUpdateBadge($badge)
     {
      
-        $result=PDOWrapper::call("badgeInsertAndUpdate", PDOWrapper::cleanseWrapStr($badge->getId())
-        .",".PDOWrapper::cleanseWrapStr($badge->getOwnerId()), PDOWrapper::cleanseWrapStr($badge->getTitle())
-        .",".PDOWrapper::cleanseWrapStr($badge->getDescription()));
+        $result = PDOWrapper::call("badgeInsertAndUpdate", PDOWrapper::cleanseNullOrWrapStr($badge->getId())
+        .",".PDOWrapper::cleanseNull($badge->getOwnerId()).",".PDOWrapper::cleanseNullOrWrapStr($badge->getTitle())
+        .",".PDOWrapper::cleanseNullOrWrapStr($badge->getDescription()));
         return $result[0]['result'];
     }
 

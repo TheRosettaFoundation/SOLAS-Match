@@ -89,7 +89,7 @@ class OrgRouteHandler
                 $app->flashNow('error', "You must specify a name for the organisation.");
             }
         }        
-        $app->render('create-org.tpl');
+       $app->render('create-org.tpl');
     }
 
     public function orgRequestMembership($org_id)
@@ -270,7 +270,7 @@ class OrgRouteHandler
                     $app->flash('error', "All fields must be filled out");
                 } else {
                     $params = array();
-                    $params['badge_id'] = $post->badge_id;             
+                    $params['id'] = $post->badge_id;             
                     $params['title'] = $post->title;
                     $params['description'] = $post->description;
                     $params['owner_id'] = null; 
@@ -293,12 +293,12 @@ class OrgRouteHandler
         }
 
         $request = APIClient::API_VERSION."/orgs/$org_id/members";
-        $orgMemberList = $client->call($request);
+        $orgMemberList = $client->castCall(array('User'), $request);
         
         $org_members = array();
         if (count($orgMemberList) > 0) {
-            foreach ($orgMemberList as $stdObject) {
-                $org_members[] = $stdObject->user_id;
+            foreach ($orgMemberList as $usrObject) {
+                $org_members[] = $usrObject->getUserId();
             }
         }        
 
@@ -442,8 +442,8 @@ class OrgRouteHandler
                 $params['owner_id'] = $org_id;
 
                 $badge = ModelFactory::buildModel("Badge", $params);
-                $request = APIClient::API_VERSION."/badges/{$badge->getId()}";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $badge);                
+                $request = APIClient::API_VERSION."/badges";
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $badge);                
                 
                 $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
             }

@@ -14,14 +14,14 @@ class TagsDao {
     public function getTag($params)
     {
         $args = "";
-        $args .= ((isset($params['tag_id']))) ? PDOWrapper::cleanseNull($params['tag_id']) : "null";
+        $args .= ((isset($params['id']))) ? PDOWrapper::cleanseNull($params['id']) : "null";
         $args .= (isset($params['label'])) ? ",".PDOWrapper::cleanseNullOrWrapStr($params['label']) : ",null";
         $ret = array();
         $result = PDOWrapper::call("getTag", $args);
         if ($result != null) {
             foreach ($result as $r) {
                 $tag_data = array();
-                $tag_data['tag_id'] = $r['tag_id'];
+                $tag_data['id'] = $r['id'];
                 $tag_data['label'] = $r['label'];
                 $ret[] = ModelFactory::buildModel("Tag", $tag_data);
             }
@@ -48,7 +48,7 @@ class TagsDao {
     private function insert($tag)
     {
         $id = PDOWrapper::call("tagInsert", PDOWrapper::cleanseWrapStr($tag->getLabel()));
-        return $id[0]['tag_id'];
+        return $id[0]['id'];
     }
     
     /*
@@ -88,7 +88,7 @@ class TagsDao {
 
     public function label($tag_id)
     {
-        $result = self::getTag(array('tag_id'=>$tag_id));
+        $result = self::getTag(array('id'=>$tag_id));
         return $result[0]['label'];
     }
     

@@ -106,6 +106,15 @@ class Dispatcher {
                 }  
                 break;
             }
+            case FormatEnum::PROTOBUFS: {
+                try {
+                    $response['Content-Type'] = 'application/x-protobuf; charset=utf-8';
+                    $body = APIHelper::serialiser($body, $format);
+                } catch (Exception $e) {
+                    echo "Failed to unserialize data: $data";
+                }
+                break;
+            }
         }
         
         if ($headers != null) {

@@ -75,15 +75,15 @@ class ModelFactory
     private static function generateMembershipRequest($modelData)
     {
         $ret = new MembershipRequest();
-        $ret ->setId($modelData["request_id"]);
+        $ret ->setId($modelData["id"]);
         if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
         }
         if (isset($modelData['org_id'])) {
             $ret->setOrgId($modelData['org_id']);
         }
-        if (isset($modelData['request_datetime'])) {
-            $ret->setRequestTime($modelData['request_datetime']);
+        if (isset($modelData['request-datetime'])) {
+            $ret->setRequestTime($modelData['request-datetime']);
         }
         return $ret;
     }
@@ -92,8 +92,8 @@ class ModelFactory
     {
         $ret = new ArchivedTask();
 
-        if (isset($modelData['archive_id'])) {
-            $ret->setArchiveId($modelData['archive_id']);
+        if (isset($modelData['id'])) {
+            $ret->setArchiveId($modelData['id']);
         }
         if (isset($modelData['task_id'])) {
             $ret->setTaskId($modelData['task_id']);
@@ -104,8 +104,8 @@ class ModelFactory
         if (isset($modelData['title'])) {
             $ret->setTitle($modelData['title']);
         }
-        if (isset($modelData['word_count'])) {
-            $ret->setWordCount($modelData['word_count']);
+        if (isset($modelData['word-count'])) {
+            $ret->setWordCount($modelData['word-count']);
         }
         if (isset($modelData['source_id'])) {
             $ret->setSourceId($modelData['source_id']);
@@ -113,17 +113,17 @@ class ModelFactory
         if (isset($modelData['target_id'])) {
             $ret->setTargetId($modelData['target_id']);
         }
-        if (isset($modelData['created_time'])) {
-            $ret->setCreatedTime($modelData['created_time']);
+        if (isset($modelData['created-time'])) {
+            $ret->setCreatedTime($modelData['created-time']);
         }
-        if (isset($modelData['archived_time'])) {
-            $ret->setArchivedTime($modelData['archived_time']);
+        if (isset($modelData['archived-time'])) {
+            $ret->setArchivedTime($modelData['archived-time']);
         }
         if (isset($modelData['impact'])) {
             $ret->setImpact($modelData['impact']);
         }
-        if (isset($modelData['reference_page'])) {
-            $ret->setReferencePage($modelData['reference_page']);
+        if (isset($modelData['reference-page'])) {
+            $ret->setReferencePage($modelData['reference-page']);
         }
 
         return $ret;
@@ -153,8 +153,8 @@ class ModelFactory
         if (isset($modelData['uid'])) {
             $ret->setKey($modelData['uid']);
         }
-        if (isset($modelData['request_time'])) {
-            $ret->setRequestTime($modelData['request_time']);
+        if (isset($modelData['request-time'])) {
+            $ret->setRequestTime($modelData['request-time']);
         }
 
         return $ret;
@@ -226,8 +226,8 @@ class ModelFactory
     {
         $ret = new Badge();
 
-        if (isset($modelData['badge_id'])) {
-            $ret->setId($modelData['badge_id']);
+        if (isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
         }
         if (isset($modelData['title'])) {
             $ret->setTitle($modelData['title']);
@@ -246,8 +246,8 @@ class ModelFactory
     {
         $ret = new Tag();
 
-        if (isset($modelData['tag_id'])) {
-            $ret->setId($modelData['tag_id']);
+        if (isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
         }
         if (isset($modelData['label'])) {
             $ret->setLabel($modelData['label']);
@@ -266,8 +266,8 @@ class ModelFactory
         if (isset($modelData['name'])) {
             $ret->setName($modelData['name']);
         }
-        if (isset($modelData['home_page'])) {
-            $ret->setHomePage($modelData['home_page']);
+        if (isset($modelData['home-page'])) {
+            $ret->setHomePage($modelData['home-page']);
         }
         if (isset($modelData['biography'])) {
             $ret->setBiography($modelData['biography']);
@@ -289,14 +289,14 @@ class ModelFactory
         if (isset($modelData['filename'])) {
             $ret->setFilename($modelData['filename']);
         }
-        if (isset($modelData['content_type'])) {
-            $ret->setContentType($modelData['content_type']);
+        if (isset($modelData['content-type'])) {
+            $ret->setContentType($modelData['content-type']);
         }
         if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
         }
-        if (isset($modelData['upload_time'])) {
-            $ret->setUploadTime($modelData['upload_time']);
+        if (isset($modelData['upload-time'])) {
+            $ret->setUploadTime($modelData['upload-time']);
         }
 
         return $ret;
@@ -306,8 +306,8 @@ class ModelFactory
     {
         $ret = new User();
 
-        if (isset($modelData['user_id'])) {
-            $ret->setUserId($modelData['user_id']);
+        if (isset($modelData['id'])) {
+            $ret->setUserId($modelData['id']);
         }
         if (isset($modelData['email'])) {
             $ret->setEmail($modelData['email']);
@@ -318,20 +318,20 @@ class ModelFactory
         if (isset($modelData['password'])) {
             $ret->setPassword($modelData['password']);
         }
-        if (isset($modelData['display_name'])) {
-            $ret->setDisplayName($modelData['display_name']);
+        if (isset($modelData['display-name'])) {
+            $ret->setDisplayName($modelData['display-name']);
         }
         if (isset($modelData['biography'])) {
             $ret->setBiography($modelData['biography']);
         }
-        if (isset($modelData['native_lang_id'])) {
-            $ret->setNativeLangId($modelData['native_lang_id']);
+        if (isset($modelData['language_id'])) {
+            $ret->setNativeLangId($modelData['language_id']);
         }
-        if (isset($modelData['native_region_id'])) {
-            $ret->setNativeRegionId($modelData['native_region_id']);
+        if (isset($modelData['country_id'])) {
+            $ret->setNativeRegionId($modelData['country_id']);
         }
-        if (isset($modelData['created_time'])) {
-            $ret->setCreatedTime($modelData['created_time']);
+        if (isset($modelData['created-time'])) {
+            $ret->setCreatedTime($modelData['created-time']);
         }
 
         return $ret;
@@ -341,8 +341,8 @@ class ModelFactory
     {
         $ret = new Task();
 
-        if (isset($modelData['task_id'])) {
-            $ret->setId($modelData['task_id']);
+        if (isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
         }
         if (isset($modelData['organisation_id'])) {
             $ret->setOrgId($modelData['organisation_id']);
@@ -350,8 +350,8 @@ class ModelFactory
         if (isset($modelData['title'])) {
             $ret->setTitle($modelData['title']);
         }
-        if (isset($modelData['word_count'])) {
-            $ret->setWordCount($modelData['word_count']);
+        if (isset($modelData['word-count'])) {
+            $ret->setWordCount($modelData['word-count']);
         }
         if (isset($modelData['source_id'])) {
             $ret->setSourceLangId($modelData['source_id']);
@@ -362,20 +362,20 @@ class ModelFactory
         if (isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
-        if (isset($modelData['created_time'])) {
-            $ret->setCreatedTime($modelData['created_time']);
+        if (isset($modelData['created-time'])) {
+            $ret->setCreatedTime($modelData['created-time']);
         }
         if (isset($modelData['impact'])) {
             $ret->setImpact($modelData['impact']);
         }
-        if (isset($modelData['reference_page'])) {
-            $ret->setReferencePage($modelData['reference_page']);
+        if (isset($modelData['reference-page'])) {
+            $ret->setReferencePage($modelData['reference-page']);
         }
-        if (isset($modelData['sourceCountry'])) {
-            $ret->setSourceRegionId($modelData['sourceCountry']);
+        if (isset($modelData['country_id-source'])) {
+            $ret->setSourceRegionId($modelData['country_id-source']);
         }
-        if (isset($modelData['targetCountry'])) {
-            $ret->setTargetRegionId($modelData['targetCountry']);
+        if (isset($modelData['country_id-target'])) {
+            $ret->setTargetRegionId($modelData['country_id-target']);
         }
         if (isset($modelData['tags'])) {
             foreach ($modelData['tags'] as $tag) {

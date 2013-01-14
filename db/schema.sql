@@ -8,40 +8,122 @@
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
-/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
+SET FOREIGN_KEY_CHECKS=0;
 
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='user'and c.TABLE_SCHEMA = database())) THEN  
+        IF EXISTS (SELECT * FROM information_schema.COLUMNS cols
+                WHERE cols.TABLE_SCHEMA = database()
+                AND cols.TABLE_NAME = 'user' 
+                AND cols.COLUMN_NAME = 'native_language') then
+            ALTER TABLE `user` 
+                DROP COLUMN `native_language`,
+                ADD COLUMN `native_lang_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `language` table',
+                ADD COLUMN `native_region_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `country` table';
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc 
+                        where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user'and tc.CONSTRAINT_NAME='FK_user_language') then
+            ALTER TABLE `user`
+            ADD CONSTRAINT `FK_user_language` FOREIGN KEY (`native_lang_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc 
+                        where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user'and tc.CONSTRAINT_NAME='FK_user_country') then
+            ALTER TABLE `user`
+            ADD CONSTRAINT `FK_user_country` FOREIGN KEY (`native_region_id`) REFERENCES `country` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
 
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='archived_task') THEN
-		RENAME TABLE `archived_task` TO `ArchivedTasks`;
-	END IF;
+        IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user') THEN
+                
+                ALTER TABLE `user`
+                DROP FOREIGN KEY `FK_user_language`,
+                DROP FOREIGN KEY `FK_user_country`;
+					 
+			    RENAME TABLE `user` TO `Users`;
+                ALTER TABLE `Users` 
+					 change `user_id` `id` int unsigned NOT NULL AUTO_INCREMENT,
+					 CHANGE `email` `email` VARCHAR(128) NOT NULL AFTER `display-name`,
+                change `display_name` `display-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+                change `native_lang_id` `language_id` INT UNSIGNED NULL DEFAULT NULL,
+                change `native_region_id` `country_id` INT UNSIGNED NULL DEFAULT NULL,
+                change `created_time` `created-time` DATETIME NOT NULL;
 
-	if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='ArchivedTasks'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
-		ALTER TABLE `ArchivedTasks`
-		    add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
-		    add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
-	end if;
-        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='ArchivedTasks' and tc.CONSTRAINT_NAME='source') then
-            ALTER TABLE `ArchivedTasks`
-            DROP INDEX `source`;
-        end if;
-        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='ArchivedTasks' and tc.CONSTRAINT_NAME='target') then
-            ALTER TABLE `ArchivedTasks`
-            DROP INDEX `target`;
-        end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='ArchivedTasks' and tc.CONSTRAINT_NAME='task_id') then
-            ALTER TABLE `ArchivedTasks`
-            ADD UNIQUE INDEX `task_id` (`task_id`);
-        end if;
-        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='ArchivedTasks'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME="user_id") then
-            ALTER TABLE `ArchivedTasks`
-            add column`user_id` INT(10) UNSIGNED DEFAULT NULL;
-        end if;
-        ALTER TABLE `ArchivedTasks` 
-	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+                ALTER TABLE `Users`
+                ADD CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+                ADD CONSTRAINT `FK_user_country` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        END IF;
+    END IF;
+END//
+
+DELIMITER ;
+
+CALL alterTable();
+
+DROP PROCEDURE alterTable;
+
+
+-- Dumping structure for table Solas-Match-test.Users
+CREATE TABLE IF NOT EXISTS `Users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `display-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `password` char(128) COLLATE utf8_unicode_ci NOT NULL,
+  `biography` text COLLATE utf8_unicode_ci,
+  `language_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `Languages` table',
+  `country_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `Countries` table',
+  `nonce` int(11) unsigned NOT NULL,
+  `created-time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_user_country` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='archived_task'and c.TABLE_SCHEMA = database())) THEN
+            if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='archived_task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+                ALTER TABLE `archived_task`
+                add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
+                add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
+            end if;
+            if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='source') then
+                ALTER TABLE `archived_task`
+                DROP INDEX `source`;
+            end if;
+            if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='target') then
+                ALTER TABLE `archived_task`
+                DROP INDEX `target`;
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='archived_task' and tc.CONSTRAINT_NAME='task_id') then
+                ALTER TABLE `archived_task`
+                ADD UNIQUE INDEX `task_id` (`task_id`);
+            end if;
+            if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='archived_task'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME="user_id") then
+                ALTER TABLE `archived_task`
+                add column`user_id` INT(10) UNSIGNED DEFAULT NULL;
+            end if;
+
+
+            IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='archived_task') THEN
+                    RENAME TABLE `archived_task` TO `ArchivedTasks`;
+                    ALTER TABLE `ArchivedTasks` change `archived_task_id` `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+                    ALTER TABLE `ArchivedTasks` change `reference_page` `reference-page` VARCHAR (128);
+                    ALTER TABLE `ArchivedTasks` change `word_count` `word-count` INT;
+                    ALTER TABLE `ArchivedTasks` change `created_time` `created-time` DATETIME;
+                    ALTER TABLE `ArchivedTasks` change `archived_time` `archived-time` DATETIME;
+            END IF;
+
+            ALTER TABLE `ArchivedTasks` 
+            ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+    END IF;
 END//
 
 DELIMITER ;
@@ -52,19 +134,19 @@ DROP PROCEDURE alterTable;
 
 -- Dumping structure for table Solas-Match-test.ArchivedTasks
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
-	`archived_task_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`task_id` BIGINT(20) NOT NULL,
 	`organisation_id` INT(10) UNSIGNED NOT NULL,
 	`title` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
 	`impact` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
-	`reference_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`word_count` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`reference-page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`word-count` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`source_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `Languages` table',
 	`target_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `Languages` table',
-	`created_time` DATETIME NOT NULL,
-	`archived_time` DATETIME NOT NULL,
+	`created-time` DATETIME NOT NULL,
+	`archived-time` DATETIME NOT NULL,
         `user_id` INT(10) UNSIGNED DEFAULT NULL,
-	PRIMARY KEY (`archived_task_id`),
+	PRIMARY KEY (`id`),
 	UNIQUE INDEX `task_id` (`task_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -78,28 +160,39 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='badges'and c.TABLE_SCHEMA = database())) THEN
+            ALTER TABLE `badges` 
+            CHANGE COLUMN `owner_id` `owner_id` INT(11) UNSIGNED NULL AFTER `badge_id`,
+            ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='badges') THEN
-		RENAME TABLE `badges` TO `Badges`;
-	END IF;
+            if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='badges'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='owner_id') then
+                    ALTER TABLE `badges`
+                        add column `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL;
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='badges'and tc.CONSTRAINT_NAME='badge') then
+                ALTER TABLE `badges`
+                ADD UNIQUE INDEX `badge` (`owner_id`, `title`);
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='badges'and tc.CONSTRAINT_NAME='FK_badges_organisation') then
+                ALTER TABLE `badges`
+                ADD CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+            end if;
 
-        ALTER TABLE `Badges` 
-        CHANGE COLUMN `owner_id` `owner_id` INT(11) UNSIGNED NULL AFTER `badge_id`,
-	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+            IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='badges') THEN
+                ALTER TABLE `badges`
+					 DROP FOREIGN KEY `FK_badges_organisation`;
+					
+					 ALTER TABLE `user_badges`
+					 DROP FOREIGN KEY `FK_user_badges_badges`;
+					
+					 RENAME TABLE `badges` TO `Badges`;
+					
+					 ALTER TABLE `Badges`
+					 change `badge_id` `id` INT NOT NULL AUTO_INCREMENT,
+					 ADD CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
-	if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='Badges'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='owner_id') then
-		ALTER TABLE `Badges`
-		    add column `owner_id` int(11) COLLATE utf8_unicode_ci DEFAULT NULL;
-	end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Badges'and tc.CONSTRAINT_NAME='badge') then
-            ALTER TABLE `Badges`
-            ADD UNIQUE INDEX `badge` (`owner_id`, `title`);
-        end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Badges'and tc.CONSTRAINT_NAME='FK_badges_organisation') then
-            ALTER TABLE `Badges`
-            ADD CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
-        end if;
-        
+            END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -111,42 +204,41 @@ DROP PROCEDURE alterTable;
 
 -- Dumping structure for table Solas-Match-test.Badges
 CREATE TABLE IF NOT EXISTS `Badges` (
-	`badge_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`owner_id` INT(11) UNSIGNED NULL DEFAULT NULL,
 	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
 	`description` MEDIUMTEXT NOT NULL COLLATE 'utf8_unicode_ci',
-	PRIMARY KEY (`badge_id`),
+	PRIMARY KEY (`id`),
 	UNIQUE INDEX `badge` (`owner_id`, `title`),
 	CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 )
 ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+		REPLACE INTO `Badges` (`id`, `title`, `description`) VALUES
+		(3, 'Profile-Filler', 'Filled in required info for user profile.'),
+		(4, 'Registered', 'Successfully set up an account'),
+		(5, 'Native-Language', 'Filled in your native language on your user profile.');
 
--- Dumping data for table Solas-Match-test.Badges: ~3 rows (approximately)
-/*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
-REPLACE INTO `Badges` (`badge_id`, `title`, `description`) VALUES
-	(3, 'Profile-Filler', 'Filled in required info for user profile.'),
-	(4, 'Registered', 'Successfully set up an account'),
-	(5, 'Native-Language', 'Filled in your native language on your user profile.');
-/*!40000 ALTER TABLE `Badges` ENABLE KEYS */;
 
 
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='language'and c.TABLE_SCHEMA = database())) THEN
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='language'and tc.CONSTRAINT_NAME='code') then
+                ALTER TABLE `language` 
+                ADD UNIQUE INDEX `code` (`code`);
+            end if;
+            ALTER TABLE `language` 
+            CHANGE COLUMN `code` `code` VARCHAR(3) NOT NULL COMMENT '"en", for example' AFTER `id`,
+            ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='language') THEN
-		RENAME TABLE `language` TO `Languages`;
-	END IF;
-
-	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Languages'and tc.CONSTRAINT_NAME='code') then
-            ALTER TABLE `Languages` 
-            ADD UNIQUE INDEX `code` (`code`);
-        end if;
-        ALTER TABLE `Languages` 
-        CHANGE COLUMN `code` `code` VARCHAR(3) NOT NULL COMMENT '"en", for example' AFTER `id`,
-        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+            IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='language') THEN
+                    RENAME TABLE `language` TO `Languages`;
+                    ALTER TABLE `Languages` change `en_name` `en-name` VARCHAR (255);
+            END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -160,7 +252,7 @@ DROP PROCEDURE alterTable;
 CREATE TABLE IF NOT EXISTS `Languages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(3) COLLATE utf8_unicode_ci NOT NULL COMMENT '"en", for example',
-  `en_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '"English", for example',
+  `en-name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '"English", for example',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -174,16 +266,18 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='country'and c.TABLE_SCHEMA = database())) THEN
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='country'and tc.CONSTRAINT_NAME='code') then
+                ALTER TABLE `country` 
+                ADD UNIQUE INDEX `code` (`code`);
+            end if;
+            ALTER TABLE `country` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='country') THEN
-		RENAME TABLE `country` TO `Countries`;
-	END IF;
-
-	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Countries'and tc.CONSTRAINT_NAME='code') then
-            ALTER TABLE `Countries` 
-            ADD UNIQUE INDEX `code` (`code`);
-        end if;
-        ALTER TABLE `Countries` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+            IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='country') THEN
+                    RENAME TABLE `country` TO `Countries`;
+                    ALTER TABLE `Countries` change `en_name` `en-name` VARCHAR (255);
+            END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -196,7 +290,7 @@ DROP PROCEDURE alterTable;
 CREATE TABLE IF NOT EXISTS `Countries` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`code` VARCHAR(2) NOT NULL COMMENT '"IE", for example',
-	`en_name` VARCHAR(255) NOT NULL COMMENT '"Ireland", for example',
+	`en-name` VARCHAR(255) NOT NULL COMMENT '"Ireland", for example',
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `code` (`code`)
 )
@@ -208,24 +302,26 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='organisation'and c.TABLE_SCHEMA = database())) THEN
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation'and tc.CONSTRAINT_NAME='name') then
+                ALTER TABLE `organisation` 
+                ADD UNIQUE INDEX `name` (`name`);
+            else 
+                ALTER TABLE `organisation` 
+                DROP INDEX `name`,
+                ADD UNIQUE INDEX `name` (`name`);
+            end if;
+            ALTER TABLE `organisation`
+            CHANGE COLUMN `name` `name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `id`,
+            CHANGE COLUMN `home_page` `home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `name`,
+            CHANGE COLUMN `biography` `biography` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
+            ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='organisation') THEN
-		RENAME TABLE `organisation` TO `Organisations`;
-	END IF;
-
-	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Organisations'and tc.CONSTRAINT_NAME='name') then
-            ALTER TABLE `Organisations` 
-            ADD UNIQUE INDEX `name` (`name`);
-        else 
-            ALTER TABLE `Organisations` 
-            DROP INDEX `name`,
-            ADD UNIQUE INDEX `name` (`name`);
-        end if;
-        ALTER TABLE `Organisations`
-	CHANGE COLUMN `name` `name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `id`,
-	CHANGE COLUMN `home_page` `home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `name`,
-	CHANGE COLUMN `biography` `biography` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `home_page`,
-        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+            IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='organisation') THEN
+                    RENAME TABLE `organisation` TO `Organisations`;
+                    ALTER TABLE `Organisations` change `home_page` `home-page` VARCHAR (128);
+            END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -238,7 +334,7 @@ DROP PROCEDURE alterTable;
 CREATE TABLE IF NOT EXISTS `Organisations` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`home_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`home-page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
 	`biography` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `name` (`name`)
@@ -254,28 +350,38 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='organisation_member'and c.TABLE_SCHEMA = database())) THEN
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation_member'and tc.CONSTRAINT_NAME='user_id') then
+                ALTER TABLE `organisation_member`
+                ADD UNIQUE INDEX `user_id` (`user_id`, `organisation_id`);
+            else 
+                ALTER TABLE `organisation_member`
+                DROP INDEX `user_id`,
+                ADD UNIQUE INDEX `user_id` (`user_id`, `organisation_id`);
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation_member'and tc.CONSTRAINT_NAME='FK_organisation_member_user') then
+                ALTER TABLE `organisation_member`
+                    ADD CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+            end if; 
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='organisation_member'and tc.CONSTRAINT_NAME='FK_organisation_member_organisation') then
+                ALTER TABLE `organisation_member`
+                ADD CONSTRAINT `FK_organisation_member_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+            end if; 
+            ALTER TABLE `organisation_member` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='organisation_member') THEN
-		RENAME TABLE `organisation_member` TO `OrganisationMembers`;
-	END IF;
+            IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='organisation_member') THEN
+                    ALTER TABLE `organisation_member`
+						  DROP FOREIGN KEY `FK_organisation_member_user`,
+						  DROP FOREIGN KEY `FK_organisation_member_organisation`;
+						  
+						  
+						  RENAME TABLE `organisation_member` TO `OrganisationMembers`;
 
-	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='OrganisationMembers'and tc.CONSTRAINT_NAME='user_id') then
-            ALTER TABLE `OrganisationMembers`
-	    ADD UNIQUE INDEX `user_id` (`user_id`, `organisation_id`);
-        else 
-            ALTER TABLE `OrganisationMembers`
-            DROP INDEX `user_id`,
-            ADD UNIQUE INDEX `user_id` (`user_id`, `organisation_id`);
-        end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='OrganisationMembers'and tc.CONSTRAINT_NAME='FK_organisation_member_user') then
-            ALTER TABLE `OrganisationMembers`
-        	ADD CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
-        end if; 
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='OrganisationMembers'and tc.CONSTRAINT_NAME='FK_organisation_member_organisation') then
-            ALTER TABLE `OrganisationMembers`
-            ADD CONSTRAINT `FK_organisation_member_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
-        end if; 
-        ALTER TABLE `OrganisationMembers` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+                    ALTER TABLE `OrganisationMembers`
+                    ADD CONSTRAINT `FK_organisation_member_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+                    ADD CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+            END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -293,7 +399,7 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
 	UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
 	INDEX `FK_organisation_member_organisation` (`organisation_id`),
 	CONSTRAINT `FK_organisation_member_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
+	CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -308,29 +414,40 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='org_request_queue'and c.TABLE_SCHEMA = database())) THEN
+            ALTER TABLE `org_request_queue` 
+            CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL AFTER `request_id`,
+            CHANGE COLUMN `org_id` `org_id` INT(11) UNSIGNED NOT NULL AFTER `user_id`,
+            ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='org_request_queue') THEN
-		RENAME TABLE `org_request_queue` TO `OrgRequests`;
-	END IF;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='org_request_queue'and tc.CONSTRAINT_NAME='userRequest') then
+                ALTER TABLE `org_request_queue`            
+                ADD UNIQUE INDEX `userRequest` (`user_id`, `org_id`);
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='org_request_queue'and tc.CONSTRAINT_NAME='FK_org_request_queue_user') then
+                ALTER TABLE `org_request_queue`
+                ADD CONSTRAINT `FK_org_request_queue_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='org_request_queue'and tc.CONSTRAINT_NAME='FK_org_request_queue_organisation') then
+                ALTER TABLE `org_request_queue`
+                ADD CONSTRAINT `FK_org_request_queue_organisation` FOREIGN KEY (`org_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+            end if;
 
-        ALTER TABLE `OrgRequests` 
-        CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL AFTER `request_id`,
-	CHANGE COLUMN `org_id` `org_id` INT(11) UNSIGNED NOT NULL AFTER `user_id`,
-        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+            IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='org_request_queue') THEN
+                    ALTER TABLE `org_request_queue`
+						  DROP FOREIGN KEY `FK_org_request_queue_organisation`,
+						  DROP FOREIGN KEY `FK_org_request_queue_user`;
+						  
+						  RENAME TABLE `org_request_queue` TO `OrgRequests`;
+                    ALTER TABLE `OrgRequests` 
+						  change `request_id` `id` INT(11) NOT NULL AUTO_INCREMENT,
+                    change `request_datetime` `request-datetime` TIMESTAMP;
 
-	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='OrgRequests'and tc.CONSTRAINT_NAME='userRequest') then
-            ALTER TABLE `OrgRequests`            
-            ADD UNIQUE INDEX `userRequest` (`user_id`, `org_id`);
-        end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='OrgRequests'and tc.CONSTRAINT_NAME='FK_org_request_queue_user') then
-            ALTER TABLE `OrgRequests`
-            ADD CONSTRAINT `FK_org_request_queue_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
-        end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='OrgRequests'and tc.CONSTRAINT_NAME='FK_org_request_queue_organisation') then
-            ALTER TABLE `OrgRequests`
-            ADD CONSTRAINT `FK_org_request_queue_organisation` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
-        end if;
-        
+                    ALTER TABLE `OrgRequests`
+                    ADD CONSTRAINT `FK_org_request_queue_organisation1` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+                    ADD CONSTRAINT `FK_org_request_queue_user2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+            END IF;
+    END IF;     
 END//
 
 DELIMITER ;
@@ -344,15 +461,15 @@ DROP PROCEDURE alterTable;
 --
 
 CREATE TABLE IF NOT EXISTS `OrgRequests` (
-	`request_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`user_id` INT(11) UNSIGNED NOT NULL,
 	`org_id` INT(11) UNSIGNED NOT NULL,
-	`request_datetime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY (`request_id`),
+	`request-datetime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`id`),
 	UNIQUE INDEX `userRequest` (`user_id`, `org_id`),
 	INDEX `FK_org_request_queue_organisation` (`org_id`),
 	CONSTRAINT `FK_org_request_queue_organisation` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_org_request_queue_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
+	CONSTRAINT `FK_org_request_queue_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
@@ -361,16 +478,20 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='tag'and c.TABLE_SCHEMA = database())) THEN
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='tag'and tc.CONSTRAINT_NAME='label') then
+                ALTER TABLE `tag`
+                ADD UNIQUE INDEX `label` (`label`);
+            end if;
+            ALTER TABLE `tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
 
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='tag') THEN
-		RENAME TABLE `tag` TO `Tags`;
-	END IF;
-
-	if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tags'and tc.CONSTRAINT_NAME='label') then
-            ALTER TABLE `Tags`
-            ADD UNIQUE INDEX `label` (`label`);
-        end if;
-        ALTER TABLE `Tags` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+            IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='tag') THEN
+                    RENAME TABLE `tag` TO `Tags`;
+                    ALTER TABLE `task_tag` drop FOREIGN key `FK_task_tag_tag`;
+                    ALTER TABLE `user_tag` drop FOREIGN key `FK_user_tag_tag`;
+                    ALTER TABLE `Tags` change `tag_id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+            END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -381,9 +502,9 @@ DROP PROCEDURE alterTable;
 
 -- Dumping structure for table Solas-Match-test.Tags
 CREATE TABLE IF NOT EXISTS `Tags` (
-	`tag_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`label` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci',
-	PRIMARY KEY (`tag_id`),
+	PRIMARY KEY (`id`),
 	UNIQUE INDEX `label` (`label`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -396,72 +517,94 @@ CREATE TABLE IF NOT EXISTS `Tags` (
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
-BEGIN
+BEGIN   
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database())) THEN     
+            if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="sourceCountry" or c.COLUMN_NAME="targetCountry")) then
+                                    ALTER TABLE `task`
+                ADD COLUMN `sourceCountry` INT NULL AFTER `created_time`,
+                ADD COLUMN `targetCountry` INT NULL AFTER `sourceCountry`;
+                      end if;
 
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='task') THEN
-		RENAME TABLE `task` TO `Tasks`;
-	END IF;
-        
-        if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='Tasks'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="deadline")) then
-            ALTER TABLE `Tasks`
-            ADD COLUMN `deadline` DATETIME NOT NULL AFTER `target_id`;
-        end if;
+                      ALTER TABLE `task` 
+            CHANGE COLUMN `title` `title` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `organisation_id`,
+            CHANGE COLUMN `sourceCountry` `sourceCountry` INT UNSIGNED NULL DEFAULT NULL AFTER `created_time`,
+            CHANGE COLUMN `targetCountry` `targetCountry` INT UNSIGNED NULL DEFAULT NULL AFTER `sourceCountry`,
+            CHANGE COLUMN `source_id` `source_id` INT UNSIGNED NULL COMMENT 'foreign key from the `language` table' AFTER `word_count`,
+                      CHANGE COLUMN `target_id` `target_id` INT UNSIGNED NULL COMMENT 'foreign key from the `language` table' AFTER `source_id`,
+            ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+            if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
+                ALTER TABLE `task`
+                add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
+                add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
+            end if;
+            if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="deadline")) then
+                ALTER TABLE `task`
+                ADD COLUMN `deadline` DATETIME NOT NULL AFTER `target_id`;
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='task') then
+                ALTER TABLE `task`
+                ADD UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`);
+            end if;
+            if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='task') then
+                ALTER TABLE `task`
+                DROP INDEX `task`,
+                ADD UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`);
+            end if;
+            if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='source') then
+                ALTER TABLE `task`
+                DROP INDEX `source`;
+            end if;
+            if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='target') then
+                ALTER TABLE `task`
+                DROP INDEX `target`;
+            end if;
+                      if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_organisation') then
+                ALTER TABLE `task`
+                ADD CONSTRAINT `FK_task_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `organisation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_language') then
+                ALTER TABLE `task`
+                ADD CONSTRAINT `FK_task_language` FOREIGN KEY (`source_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE;
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_language_2') then
+                ALTER TABLE `task`
+                ADD CONSTRAINT `FK_task_language_2` FOREIGN KEY (`target_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE;
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_country') then
+                ALTER TABLE `task`
+                ADD CONSTRAINT `FK_task_country` FOREIGN KEY (`sourceCountry`) REFERENCES `country` (`id`) ON UPDATE CASCADE;
+            end if;
+            if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='FK_task_country2') then
+                ALTER TABLE `task`
+                ADD CONSTRAINT `FK_task_country2` FOREIGN KEY (`targetCountry`) REFERENCES `country` (`id`) ON UPDATE CASCADE;
+            end if;
 
-        if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='Tasks'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="sourceCountry" or c.COLUMN_NAME="targetCountry")) then
-				ALTER TABLE `Tasks`
-            ADD COLUMN `sourceCountry` INT NULL AFTER `created_time`,
-            ADD COLUMN `targetCountry` INT NULL AFTER `sourceCountry`;
-		  end if;
-		  
-		  ALTER TABLE `Tasks` 
-        CHANGE COLUMN `title` `title` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci' AFTER `organisation_id`,
-        CHANGE COLUMN `sourceCountry` `sourceCountry` INT UNSIGNED NULL DEFAULT NULL AFTER `created_time`,
-        CHANGE COLUMN `targetCountry` `targetCountry` INT UNSIGNED NULL DEFAULT NULL AFTER `sourceCountry`,
-        CHANGE COLUMN `source_id` `source_id` INT UNSIGNED NULL COMMENT 'foreign key from the `Languages` table' AFTER `word_count`,
-		  CHANGE COLUMN `target_id` `target_id` INT UNSIGNED NULL COMMENT 'foreign key from the `Languages` table' AFTER `source_id`,
-        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-        if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='Tasks'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="impact" or c.COLUMN_NAME="reference_page")) then
-            ALTER TABLE `Tasks`
-            add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
-            add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
-		  end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tasks'and tc.CONSTRAINT_NAME='Tasks') then
-            ALTER TABLE `Tasks`
-            ADD UNIQUE INDEX `Tasks` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`);
-        end if;
-        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tasks'and tc.CONSTRAINT_NAME='Tasks') then
-            ALTER TABLE `Tasks`
-            DROP INDEX `Tasks`,
-            ADD UNIQUE INDEX `Tasks` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`);
-        end if;
-        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tasks'and tc.CONSTRAINT_NAME='source') then
-            ALTER TABLE `Tasks`
-            DROP INDEX `source`;
-        end if;
-        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tasks'and tc.CONSTRAINT_NAME='target') then
-            ALTER TABLE `Tasks`
-            DROP INDEX `target`;
-        end if;
-		  if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tasks'and tc.CONSTRAINT_NAME='FK_task_organisation') then
-            ALTER TABLE `Tasks`
-            ADD CONSTRAINT `FK_task_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
-        end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tasks'and tc.CONSTRAINT_NAME='FK_task_language') then
-            ALTER TABLE `Tasks`
-            ADD CONSTRAINT `FK_task_language` FOREIGN KEY (`source_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE;
-        end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tasks'and tc.CONSTRAINT_NAME='FK_task_language_2') then
-            ALTER TABLE `Tasks`
-            ADD CONSTRAINT `FK_task_language_2` FOREIGN KEY (`target_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE;
-        end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tasks'and tc.CONSTRAINT_NAME='FK_task_country') then
-            ALTER TABLE `Tasks`
-            ADD CONSTRAINT `FK_task_country` FOREIGN KEY (`sourceCountry`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE;
-        end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Tasks'and tc.CONSTRAINT_NAME='FK_task_country2') then
-            ALTER TABLE `Tasks`
-            ADD CONSTRAINT `FK_task_country2` FOREIGN KEY (`targetCountry`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE;
-        end if;
+            IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='task') THEN
+                    ALTER TABLE `task`
+                    DROP FOREIGN KEY `FK_task_country2`,
+                    DROP FOREIGN KEY `FK_task_country`,
+                    DROP FOREIGN KEY `FK_task_language`,
+                    DROP FOREIGN KEY `FK_task_language_2`,
+                    DROP FOREIGN KEY `FK_task_organisation`;
+						  
+						  RENAME TABLE `task` TO `Tasks`;
+                    
+						  ALTER TABLE `Tasks`
+						  change `reference_page` `reference-page` VARCHAR(128),
+                    change `word_count` `word-count` INT UNSIGNED,
+                    change `created_time` `created-time` DATETIME,
+                    change `sourceCountry` `country_id-source` INT UNSIGNED,
+                    change `targetCountry` `country_id-target` INT UNSIGNED;
+
+                    ALTER TABLE `Tasks`
+                    ADD CONSTRAINT `FK_task_country2` FOREIGN KEY (`country_id-target`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE,
+                    ADD CONSTRAINT `FK_task_country` FOREIGN KEY (`country_id-source`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE,
+                    ADD CONSTRAINT `FK_task_language` FOREIGN KEY (`source_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE,
+                    ADD CONSTRAINT `FK_task_language_2` FOREIGN KEY (`target_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE,
+                    ADD CONSTRAINT `FK_task_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+            END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -477,24 +620,24 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 	`organisation_id` INT(10) UNSIGNED NOT NULL,
 	`title` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci',
 	`impact` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
-	`reference_page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`word_count` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`reference-page` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`word-count` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`source_id` INT(10) UNSIGNED NOT NULL COMMENT 'foreign key from the `Languages` table',
 	`target_id` INT(10) UNSIGNED NOT NULL COMMENT 'foreign key from the `Languages` table',
     `deadline` DATETIME NOT NULL,
-	`created_time` DATETIME NOT NULL,
-	`sourceCountry` INT(11) UNSIGNED NULL DEFAULT NULL,
-	`targetCountry` INT(11) UNSIGNED NULL DEFAULT NULL,
+	`created-time` DATETIME NOT NULL,
+	`country_id-source` INT(11) UNSIGNED NULL DEFAULT NULL,
+	`country_id-target` INT(11) UNSIGNED NULL DEFAULT NULL,
 	PRIMARY KEY (`id`),
-	UNIQUE INDEX `Tasks` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`),
+	UNIQUE INDEX `Tasks` (`organisation_id`, `source_id`, `target_id`, `title`, `country_id-source`, `country_id-target`),
 	INDEX `FK_task_language` (`source_id`),
 	INDEX `FK_task_language_2` (`target_id`),
-	INDEX `FK_task_country` (`sourceCountry`),
-	INDEX `FK_task_country2` (`targetCountry`),
-	CONSTRAINT `FK_task_country2` FOREIGN KEY (`targetCountry`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE,
-	CONSTRAINT `FK_task_country` FOREIGN KEY (`sourceCountry`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE,
-	CONSTRAINT `FK_task_language` FOREIGN KEY (`source_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE,
-	CONSTRAINT `FK_task_language_2` FOREIGN KEY (`target_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE,
+	INDEX `FK_task_country` (`country_id-source`),
+	INDEX `FK_task_country2` (`country_id-target`),
+	CONSTRAINT `FK_task_country2` FOREIGN KEY (`country_id-target`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE,
+   CONSTRAINT `FK_task_country` FOREIGN KEY (`country_id-source`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE,
+   CONSTRAINT `FK_task_language` FOREIGN KEY (`source_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE,
+   CONSTRAINT `FK_task_language_2` FOREIGN KEY (`target_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE,
 	CONSTRAINT `FK_task_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -507,31 +650,43 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
-
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='task_claim') THEN
-		RENAME TABLE `task_claim` TO `TaskClaims`;
-	END IF;
-
-        ALTER TABLE `TaskClaims`
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='task_claim'and c.TABLE_SCHEMA = database())) THEN  
+        ALTER TABLE `task_claim`
             CHANGE COLUMN `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL AFTER `claim_id`,
             CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL AFTER `task_id`, 
             ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskClaims'and tc.CONSTRAINT_NAME='Tasks') then
-            ALTER TABLE `TaskClaims`
-            ADD UNIQUE INDEX `Tasks` (`task_id`, `user_id`);
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_claim'and tc.CONSTRAINT_NAME='task') then
+            ALTER TABLE `task_claim`
+            ADD UNIQUE INDEX `task` (`task_id`, `user_id`);
         end if;
-        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskClaims'and tc.CONSTRAINT_NAME='task_user') then
-            ALTER TABLE `TaskClaims`
+        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_claim'and tc.CONSTRAINT_NAME='task_user') then
+            ALTER TABLE `task_claim`
             DROP INDEX `task_user`;
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskClaims'and tc.CONSTRAINT_NAME='FK_task_claim_task') then
-            ALTER TABLE `TaskClaims`
-            ADD CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_claim'and tc.CONSTRAINT_NAME='FK_task_claim_task') then
+            ALTER TABLE `task_claim`
+            ADD CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskClaims'and tc.CONSTRAINT_NAME='FK_task_claim_user') then
-            ALTER TABLE `TaskClaims`
-            ADD CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_claim'and tc.CONSTRAINT_NAME='FK_task_claim_user') then
+            ALTER TABLE `task_claim`
+            ADD CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
         end if;
+
+	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='task_claim') THEN
+		RENAME TABLE `task_claim` TO `TaskClaims`;
+                ALTER TABLE `TaskClaims` change `claim_id` `id` INT UNSIGNED NOT NULL AUTO_INCREMENT;
+                ALTER TABLE `TaskClaims` change `claimed_time` `claimed-time` DATETIME NOT NULL;
+
+                ALTER TABLE `TaskClaims`
+                DROP FOREIGN KEY `FK_task_claim_user`,
+                ADD CONSTRAINT `FK_task_claim_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+                ALTER TABLE `TaskClaims`
+                DROP FOREIGN KEY `FK_task_claim_task`,
+                ADD CONSTRAINT `FK_task_claim_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+	END IF;
+    END IF;
+
 END//
 
 DELIMITER ;
@@ -543,14 +698,14 @@ DROP PROCEDURE alterTable;
 
 -- Dumping structure for table Solas-Match-test.TaskClaims
 CREATE TABLE IF NOT EXISTS `TaskClaims` (
-	`claim_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`task_id` BIGINT(20) UNSIGNED NOT NULL,
 	`user_id` INT(11) UNSIGNED NOT NULL,
-	`claimed_time` DATETIME NOT NULL,
-	PRIMARY KEY (`claim_id`),
+	`claimed-time` DATETIME NOT NULL,
+	PRIMARY KEY (`id`),
 	UNIQUE INDEX `Tasks` (`task_id`, `user_id`),
 	INDEX `FK_task_claim_user` (`user_id`),
-	CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -562,42 +717,53 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
-
-	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='task_file_version') THEN
-		RENAME TABLE `task_file_version` TO `TaskFileVersions`;
-	END IF;
-
-        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskFileVersions'and tc.CONSTRAINT_NAME='task_id') then
-            ALTER TABLE `TaskFileVersions`
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='task_file_version'and c.TABLE_SCHEMA = database())) THEN  
+        if exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='task_id') then
+            ALTER TABLE `task_file_version`
             DROP INDEX `task_id`;
         end if;
-        if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='TaskFileVersions'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
-            ALTER TABLE `TaskFileVersions`
+        if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task_file_version'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
+            ALTER TABLE `task_file_version`
             ADD COLUMN `id` BIGINT NULL AUTO_INCREMENT FIRST,
             ADD PRIMARY KEY (`id`);
 		  end if;
 
-		  ALTER TABLE `TaskFileVersions` 
+		  ALTER TABLE `task_file_version` 
 		  CHANGE COLUMN `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL AFTER `id`,
 		  CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NULL DEFAULT NULL COMMENT 'Null while we don\'t have logging in' AFTER `content_type`,
 		  ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskFileVersions'and tc.CONSTRAINT_NAME='taskFile') then
-            ALTER TABLE `TaskFileVersions`
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='taskFile') then
+            ALTER TABLE `task_file_version`
             ADD UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`);
         end if;
         
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskFileVersions'and tc.CONSTRAINT_NAME='PRIMARY') then
-            ALTER TABLE `TaskFileVersions`
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='PRIMARY') then
+            ALTER TABLE `task_file_version`
             ADD PRIMARY KEY (`id`);
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskFileVersions'and tc.CONSTRAINT_NAME='FK_task_file_version_task') then
-            ALTER TABLE `TaskFileVersions`
-				ADD CONSTRAINT `FK_task_file_version_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='FK_task_file_version_task') then
+            ALTER TABLE `task_file_version`
+				ADD CONSTRAINT `FK_task_file_version_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskFileVersions'and tc.CONSTRAINT_NAME='FK_task_file_version_user') then
-            ALTER TABLE `TaskFileVersions`
-				ADD CONSTRAINT `FK_task_file_version_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
-        end if;    	
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_file_version'and tc.CONSTRAINT_NAME='FK_task_file_version_user') then
+            ALTER TABLE `task_file_version`
+				ADD CONSTRAINT `FK_task_file_version_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;  
+
+	IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='task_file_version') THEN
+		RENAME TABLE `task_file_version` TO `TaskFileVersions`;
+                ALTER TABLE `TaskFileVersions` change `content_type` `content-type` VARCHAR (255);
+                ALTER TABLE `TaskFileVersions` change `upload_time` `upload-time` DATETIME;
+
+                ALTER TABLE `TaskFileVersions`
+                DROP FOREIGN KEY `FK_task_file_version_user`,
+                ADD CONSTRAINT `FK_task_file_version_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+                ALTER TABLE `TaskFileVersions`
+                DROP FOREIGN KEY `FK_task_file_version_task`,
+                ADD CONSTRAINT `FK_task_file_version_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+	END IF; 
+    END IF;
 END//
 DELIMITER ;
 
@@ -612,13 +778,13 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
 	`task_id` BIGINT(20) UNSIGNED NOT NULL,
 	`version_id` INT(11) NOT NULL COMMENT 'Gets incremented within the code',
 	`filename` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
-	`content_type` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
+	`content-type` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
 	`user_id` INT(11) UNSIGNED NULL DEFAULT NULL COMMENT 'Null while we don\'t have logging in',
-	`upload_time` DATETIME NOT NULL,
+	`upload-time` DATETIME NOT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`),
 	INDEX `FK_task_file_version_user` (`user_id`),
-	CONSTRAINT `FK_task_file_version_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_task_file_version_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_task_file_version_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -627,21 +793,32 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='task_tag'and c.TABLE_SCHEMA = database())) THEN  
+        ALTER TABLE `task_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_tag'and tc.CONSTRAINT_NAME='FK_task_tag_task') then
+           ALTER TABLE `task_tag`
+           ADD CONSTRAINT `FK_task_tag_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task_tag'and tc.CONSTRAINT_NAME='FK_task_tag_tag') then
+           ALTER TABLE `task_tag`
+           ADD CONSTRAINT `FK_task_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
 
-    IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='task_tag') THEN
+       IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='task_tag') THEN
+           	ALTER TABLE `task_tag`
+				DROP FOREIGN KEY `FK_task_tag_task`,
+           	drop foreign key `FK_task_tag_tag`;
+
             RENAME TABLE `task_tag` TO `TaskTags`;
+            ALTER TABLE `TaskTags` 
+				change `created_time` `created-time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+            ALTER TABLE `TaskTags`
+            ADD CONSTRAINT `FK_task_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+            ADD CONSTRAINT `FK_task_tag_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+           
+       END IF;
     END IF;
-
-    ALTER TABLE `TaskTags` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskTags'and tc.CONSTRAINT_NAME='FK_task_tag_task') then
-       ALTER TABLE `TaskTags`
-       ADD CONSTRAINT `FK_task_tag_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
-    end if;
-
-    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='TaskTags'and tc.CONSTRAINT_NAME='FK_task_tag_tag') then
-       ALTER TABLE `TaskTags`
-       ADD CONSTRAINT `FK_task_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`tag_id`) ON UPDATE CASCADE ON DELETE CASCADE;
-    end if;
 END//
 
 DELIMITER ;
@@ -652,10 +829,10 @@ CALL alterTable();
 CREATE TABLE IF NOT EXISTS `TaskTags` (
 	`task_id` BIGINT(20) UNSIGNED NOT NULL,
 	`tag_id` INT(10) UNSIGNED NOT NULL,
-	`created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`created-time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	UNIQUE INDEX `TaskTags` (`task_id`, `tag_id`),
 	INDEX `FK_task_tag_tag` (`tag_id`),
-	CONSTRAINT `FK_task_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`tag_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_task_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_task_tag_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -664,85 +841,40 @@ CREATE TABLE IF NOT EXISTS `TaskTags` (
 /*!40000 ALTER TABLE `TaskTags` DISABLE KEYS */;
 /*!40000 ALTER TABLE `TaskTags` ENABLE KEYS */;
 
+
+
+
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
-
-    IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user') THEN
-            RENAME TABLE `user` TO `Users`;
-    END IF;
-
-    IF EXISTS (SELECT * FROM information_schema.COLUMNS cols
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='password_reset_requests'and c.TABLE_SCHEMA = database())) THEN
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='password_reset_requests'and tc.CONSTRAINT_NAME='FK_password_reset_user') then
+            ALTER TABLE `password_reset_requests`
+            ADD CONSTRAINT `FK_password_reset_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if NOT EXISTS (SELECT * FROM information_schema.COLUMNS cols
             WHERE cols.TABLE_SCHEMA = database()
-            AND cols.TABLE_NAME = 'Users' 
-            AND cols.COLUMN_NAME = 'native_language') then
-        ALTER TABLE `Users` 
-            DROP COLUMN `native_language`,
-            ADD COLUMN `native_lang_id` INT(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `Languages` table',
-            ADD COLUMN `native_region_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `Countries` table';
-    end if;
-    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc 
-                    where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Users'and tc.CONSTRAINT_NAME='FK_user_language') then
-        ALTER TABLE `Users`
-        ADD CONSTRAINT `FK_user_language` FOREIGN KEY (`native_lang_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
-    end if;
-    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc 
-                    where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='Users'and tc.CONSTRAINT_NAME='FK_user_country') then
-        ALTER TABLE `Users`
-        ADD CONSTRAINT `FK_user_country` FOREIGN KEY (`native_region_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
-    end if;
-END//
+            AND cols.TABLE_NAME = 'password_reset_requests'
+            AND cols.COLUMN_NAME = 'request_time') then
+        ALTER TABLE `password_reset_requests`
+            ADD COLUMN `request_time` datetime NOT NULL;
+        end if;
 
-DELIMITER ;
+        IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='password_reset_requests') THEN
+                RENAME TABLE `password_reset_requests` TO `PasswordResetRequests`;
+                ALTER TABLE `PasswordResetRequests` change `request_time` `request-time` DATETIME;
 
-CALL alterTable();
+                ALTER TABLE `PasswordResetRequests`
+                DROP FOREIGN KEY `FK_password_reset_user`,
+                ADD CONSTRAINT `FK_password_reset_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
-DROP PROCEDURE alterTable;
+                ALTER TABLE `PasswordResetRequests`
+                DROP PRIMARY KEY,
+                ADD UNIQUE INDEX `user_id` (`user_id`);
 
-
--- Dumping structure for table Solas-Match-test.Users
-CREATE TABLE IF NOT EXISTS `Users` (
-  `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `display_name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `password` char(128) COLLATE utf8_unicode_ci NOT NULL,
-  `biography` text COLLATE utf8_unicode_ci,
-  `native_lang_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `Languages` table',
-  `native_region_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT 'foreign key from the `Countries` table',
-  `nonce` int(11) unsigned NOT NULL,
-  `created_time` datetime NOT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email` (`email`),
-  CONSTRAINT `FK_user_language` FOREIGN KEY (`native_lang_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT `FK_user_country` FOREIGN KEY (`native_region_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-ALTER TABLE `Users`
-        CHANGE COLUMN `email` `email` VARCHAR(128) NOT NULL AFTER `display_name`,
-	ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-
-
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-
-    IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='password_reset_requests') THEN
-            RENAME TABLE `password_reset_requests` TO `PasswordResetRequests`;
+        END IF;
     END IF;
-
-    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='PasswordResetRequests'and tc.CONSTRAINT_NAME='FK_password_reset_user') then
-        ALTER TABLE `PasswordResetRequests`
-	ADD CONSTRAINT `FK_password_reset_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
-    end if;
-    if NOT EXISTS (SELECT * FROM information_schema.COLUMNS cols
-        WHERE cols.TABLE_SCHEMA = database()
-        AND cols.TABLE_NAME = 'PasswordResetRequests'
-        AND cols.COLUMN_NAME = 'request_time') then
-    ALTER TABLE `PasswordResetRequests`
-        ADD COLUMN `request_time` datetime NOT NULL;
-    end if;
 END//
 
 DELIMITER ;
@@ -755,8 +887,9 @@ DROP PROCEDURE alterTable;
 CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
     `uid` CHAR(40) NOT NULL,
     `user_id` INT(11) UNSIGNED NOT NULL,
-    `request_time` datetime NOT NULL,
-    PRIMARY KEY (`uid`, `user_id`)
+    `request-time` datetime NOT NULL,
+    PRIMARY KEY (`uid`, `user_id`),
+    CONSTRAINT `FK_password_reset_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -764,26 +897,33 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='user_badges'and c.TABLE_SCHEMA = database())) THEN  
+        ALTER TABLE `user_badges` 
+        CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL FIRST,
+        ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_badges'and tc.CONSTRAINT_NAME='userBadge') then
+            ALTER TABLE `user_badges`
+            ADD UNIQUE INDEX `userBadge` (`user_id`, `badge_id`);
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_badges'and tc.CONSTRAINT_NAME='FK_user_badges_user') then
+            ALTER TABLE `user_badges`
+            ADD CONSTRAINT `FK_user_badges_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_badges'and tc.CONSTRAINT_NAME='FK_user_badges_badges') then
+            ALTER TABLE `user_badges`
+            ADD CONSTRAINT `FK_user_badges_badges` FOREIGN KEY (`badge_id`) REFERENCES `badges` (`badge_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        end if;
 
-    IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_badges') THEN
-            RENAME TABLE `user_badges` TO `UserBadges`;
+        IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_badges') THEN
+            ALTER TABLE `user_badges`
+	         DROP FOREIGN KEY `FK_user_badges_user`,
+	         DROP FOREIGN KEY `FK_user_badges_badges`;
+				RENAME TABLE `user_badges` TO `UserBadges`;
+            ALTER TABLE `UserBadges`
+				ADD CONSTRAINT `FK_user_badges_badges` FOREIGN KEY (`badge_id`) REFERENCES `Badges` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+				ADD CONSTRAINT `FK_user_badges_users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;                                
+        END IF;
     END IF;
-
-    ALTER TABLE `UserBadges` 
-    CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL FIRST,
-    ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserBadges'and tc.CONSTRAINT_NAME='userBadge') then
-        ALTER TABLE `UserBadges`
-        ADD UNIQUE INDEX `userBadge` (`user_id`, `badge_id`);
-    end if;
-    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserBadges'and tc.CONSTRAINT_NAME='FK_user_badges_user') then
-        ALTER TABLE `UserBadges`
-        ADD CONSTRAINT `FK_user_badges_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
-    end if;
-    if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserBadges'and tc.CONSTRAINT_NAME='FK_user_badges_badges') then
-        ALTER TABLE `UserBadges`
-	ADD CONSTRAINT `FK_user_badges_badges` FOREIGN KEY (`badge_id`) REFERENCES `Badges` (`badge_id`) ON UPDATE CASCADE ON DELETE CASCADE;
-    end if;
 END//
 
 DELIMITER ;
@@ -797,7 +937,9 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
 	`user_id` INT(11) NOT NULL,
 	`badge_id` INT(11) NOT NULL,
 	UNIQUE INDEX `userBadge` (`user_id`, `badge_id`),
-	PRIMARY KEY (`user_id`, `badge_id`)
+	PRIMARY KEY (`user_id`, `badge_id`),
+        CONSTRAINT `FK_user_badges_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+        CONSTRAINT `FK_user_badges_badges` FOREIGN KEY (`badge_id`) REFERENCES `badges` (`badge_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -805,32 +947,43 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
-
-        IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_tag') THEN
-                RENAME TABLE `user_tag` TO `UserTags`;
-        END IF;
-
-        ALTER TABLE `UserTags` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='UserTags'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
-            ALTER TABLE `UserTags`
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='user_tag'and c.TABLE_SCHEMA = database())) THEN  
+        ALTER TABLE `user_tag` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='user_tag'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
+            ALTER TABLE `user_tag`
             ADD COLUMN `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
             CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL AFTER `id`,
             CHANGE COLUMN `tag_id` `tag_id` INT(11) UNSIGNED NOT NULL AFTER `user_id`,
             DROP PRIMARY KEY,
             ADD PRIMARY KEY (`id`);
 	end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserTags'and tc.CONSTRAINT_NAME='userTag') then
-            ALTER TABLE `UserTags`
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_tag'and tc.CONSTRAINT_NAME='userTag') then
+            ALTER TABLE `user_tag`
             ADD UNIQUE INDEX `userTag` (`user_id`, `tag_id`);
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserTags'and tc.CONSTRAINT_NAME='FK_user_tag_user') then
-            ALTER TABLE `UserTags`
-            ADD CONSTRAINT `FK_user_tag_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_tag'and tc.CONSTRAINT_NAME='FK_user_tag_user') then
+            ALTER TABLE `user_tag`
+            ADD CONSTRAINT `FK_user_tag_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserTags'and tc.CONSTRAINT_NAME='FK_user_tag_tag') then
-            ALTER TABLE `UserTags`
-            ADD CONSTRAINT `FK_user_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`tag_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_tag'and tc.CONSTRAINT_NAME='FK_user_tag_tag') then
+            ALTER TABLE `user_tag`
+            ADD CONSTRAINT `FK_user_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON UPDATE CASCADE ON DELETE CASCADE;
         end if;
+
+        IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_tag') THEN
+
+                RENAME TABLE `user_tag` TO `UserTags`;
+
+                ALTER TABLE `UserTags`
+                DROP FOREIGN KEY `FK_user_tag_user`,
+                ADD CONSTRAINT `FK_user_tag_user1` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+                ALTER TABLE `UserTags`
+                DROP FOREIGN KEY `FK_user_tag_tag`,
+                ADD CONSTRAINT `FK_user_tag_tag1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+        END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -844,7 +997,9 @@ CREATE TABLE IF NOT EXISTS `UserTags` (
 	`user_id` INT(11) NOT NULL,
 	`tag_id` INT(11) NOT NULL,
 	PRIMARY KEY (`user_id`, `tag_id`),
-	UNIQUE INDEX `userTag` (`user_id`, `tag_id`)
+	UNIQUE INDEX `userTag` (`user_id`, `tag_id`),
+        CONSTRAINT `FK_user_tag_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+        CONSTRAINT `FK_user_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -853,14 +1008,10 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
-
-        IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_notifications') THEN
-                RENAME TABLE `user_notifications` TO `UserNotifications`;
-        END IF;
-
-        ALTER TABLE `UserNotifications` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='UserNotifications'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
-            ALTER TABLE `UserNotifications`
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='user_notifications'and c.TABLE_SCHEMA = database())) THEN  
+        ALTER TABLE `user_notifications` ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
+        if not exists (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='user_notifications'and c.TABLE_SCHEMA = database() and c.COLUMN_NAME='id') then
+            ALTER TABLE `user_notifications`
             ADD COLUMN `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
             CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL AFTER `id`,
             CHANGE COLUMN `task_id` `task_id` BIGINT(11) UNSIGNED NOT NULL AFTER `user_id`,
@@ -869,15 +1020,29 @@ BEGIN
             ADD UNIQUE INDEX `user_id_task_id` (`user_id`, `task_id`);
 	end if;
 
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserNotifications'and tc.CONSTRAINT_NAME='FK_user_notifications_user') then
-            ALTER TABLE `UserNotifications`
-            ADD CONSTRAINT `FK_user_notifications_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_notifications'and tc.CONSTRAINT_NAME='FK_user_notifications_user') then
+            ALTER TABLE `user_notifications`
+            ADD CONSTRAINT `FK_user_notifications_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
         end if;
 
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserNotifications'and tc.CONSTRAINT_NAME='FK_user_notifications_task') then
-            ALTER TABLE `UserNotifications`
-            ADD CONSTRAINT `FK_user_notifications_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_notifications'and tc.CONSTRAINT_NAME='FK_user_notifications_task') then
+            ALTER TABLE `user_notifications`
+            ADD CONSTRAINT `FK_user_notifications_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
         end if;
+
+        IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_notifications') THEN
+                RENAME TABLE `user_notifications` TO `UserNotifications`;
+                ALTER TABLE `UserNotifications` change `created_time` `created-time` DATETIME;
+
+                ALTER TABLE `UserNotifications`
+                DROP FOREIGN KEY `FK_user_notifications_task`,
+                ADD CONSTRAINT `FK_user_notifications_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+                ALTER TABLE `UserNotifications`
+                DROP FOREIGN KEY `FK_user_notifications_user`,
+                ADD CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -895,12 +1060,12 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
 	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`user_id` INT(11) UNSIGNED NOT NULL,
 	`task_id` BIGINT(11) UNSIGNED NOT NULL,
-	`created_time` DATETIME NOT NULL,
+	`created-time` DATETIME NOT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `user_id_task_id` (`user_id`, `task_id`),
 	INDEX `FK_user_notifications_task` (`task_id`),
 	CONSTRAINT `FK_user_notifications_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_user_notifications_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
+	CONSTRAINT `FK_user_notifications_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -908,27 +1073,37 @@ DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
 BEGIN
-
-        IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_task_score') THEN
-                RENAME TABLE `user_task_score` TO `UserTaskScores`;
-        END IF;
-
-        ALTER TABLE `UserTaskScores` 
+    IF (EXISTS (SELECT 1 FROM information_schema.COLUMNS c where c.TABLE_NAME='user_task_score'and c.TABLE_SCHEMA = database())) THEN  
+        ALTER TABLE `user_task_score` 
         CHANGE COLUMN `user_id` `user_id` INT(11) UNSIGNED NOT NULL FIRST,
 	CHANGE COLUMN `task_id` `task_id` BIGINT(11) UNSIGNED NOT NULL AFTER `user_id`,
         ENGINE InnoDB, CONVERT TO CHARSET utf8 COLLATE 'utf8_unicode_ci';
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserTaskScores'and tc.CONSTRAINT_NAME='taskScore') then
-            ALTER TABLE `UserTaskScores`
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_task_score'and tc.CONSTRAINT_NAME='taskScore') then
+            ALTER TABLE `user_task_score`
             ADD UNIQUE INDEX `taskScore` (`task_id`, `user_id`);
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserTaskScores'and tc.CONSTRAINT_NAME='FK_user_task_score_user') then
-            ALTER TABLE `UserTaskScores`
-            ADD CONSTRAINT `FK_user_task_score_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_task_score'and tc.CONSTRAINT_NAME='FK_user_task_score_user') then
+            ALTER TABLE `user_task_score`
+            ADD CONSTRAINT `FK_user_task_score_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE;
         end if;
-        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='UserTaskScores'and tc.CONSTRAINT_NAME='FK_user_task_score_task') then
-            ALTER TABLE `UserTaskScores`
-            ADD CONSTRAINT `FK_user_task_score_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+        if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='user_task_score'and tc.CONSTRAINT_NAME='FK_user_task_score_task') then
+            ALTER TABLE `user_task_score`
+            ADD CONSTRAINT `FK_user_task_score_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
         end if;
+
+        IF EXISTS(SELECT 1 FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA=database() and t.TABLE_NAME='user_task_score') THEN
+                RENAME TABLE `user_task_score` TO `UserTaskScores`;
+
+                ALTER TABLE `UserTaskScores`
+                DROP FOREIGN KEY `FK_user_task_score_user`,
+                ADD CONSTRAINT `FK_user_task_score_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+                ALTER TABLE `UserTaskScores`
+                DROP FOREIGN KEY `FK_user_task_score_task`,
+                ADD CONSTRAINT `FK_user_task_score_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+        END IF;
+    END IF;
 END//
 
 DELIMITER ;
@@ -943,7 +1118,9 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 	`task_id` INT(11) NOT NULL,
 	`score` INT(11) NOT NULL DEFAULT '-1',
 	PRIMARY KEY (`user_id`, `task_id`),
-	UNIQUE INDEX `taskScore` (`task_id`, `user_id`)
+	UNIQUE INDEX `taskScore` (`task_id`, `user_id`),
+        CONSTRAINT `FK_user_task_score_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+        CONSTRAINT `FK_user_task_score_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -955,10 +1132,10 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 /*!40000 ALTER TABLE `UserTaskScores` ENABLE KEYS */;
 
 
--- Dumping structure for procedure Solas-Match-test.findOganisation
-DROP PROCEDURE IF EXISTS `findOganisation`;
+-- Dumping structure for procedure Solas-Match-test.findOrganisation
+DROP PROCEDURE IF EXISTS `findOrganisation`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findOganisation`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisation`(IN `id` INT)
     COMMENT 'finds an organisation by the data passed in.'
 BEGIN
 	SELECT *
@@ -1013,7 +1190,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `id` INT)
 BEGIN
 	SELECT u.*
-	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.user_id
+	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.id
 	WHERE organisation_id=id;
 END//
 DELIMITER ;
@@ -1025,7 +1202,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserBadges`(IN `id` INT)
 BEGIN
 SELECT b.*
-FROM UserBadges ub JOIN Badges b ON ub.badge_id = b.badge_id
+FROM UserBadges ub JOIN Badges b ON ub.badge_id = b.id
 WHERE user_id = id;
 END//
 DELIMITER ;
@@ -1038,9 +1215,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT, IN `lim` 
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("SELECT t.*	FROM UserTags	JOIN Tags t ON UserTags.tag_id = t.tag_id	WHERE user_id = ? LIMIT ",lim);
+    set @q = Concat("SELECT t.*	FROM UserTags	JOIN Tags t ON UserTags.tag_id = t.id	WHERE user_id = ? LIMIT ",lim);
     else
-    set @q = "SELECT t.*	FROM UserTags	JOIN Tags t ON UserTags.tag_id = t.tag_id	WHERE user_id =  ?";
+    set @q = "SELECT t.*	FROM UserTags	JOIN Tags t ON UserTags.tag_id = t.id	WHERE user_id =  ?";
     end if;
     PREPARE stmt FROM @q;
     set @id=id;
@@ -1061,10 +1238,10 @@ BEGIN
 	if bio='' then set bio=null;end if;
 
 	
-	if id is null and not exists(select * from Organisations o where (o.home_page= url or o.home_page= concat("http://",url) ) and o.name=companyName)then
+	if id is null and not exists(select * from Organisations o where (o.`home-page`= url or o.`home-page`= concat("http://",url) ) and o.name=companyName)then
 	-- set insert
     if bio is null then set bio='';end if;
-	insert into Organisations (name,home_page, biography) values (companyName,url,bio);
+	insert into Organisations (name,`home-page`, biography) values (companyName,url,bio);
 
 	else 
 		set @first = true;
@@ -1080,7 +1257,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," o.home_page='",url,"'") ;
+			set @q = CONCAT(@q," o.`home-page`='",url,"'") ;
 		end if;
 		if companyName is not null then 
 			if (@first = false) then 
@@ -1095,7 +1272,7 @@ BEGIN
 		if id is not null then 
 			set @q = CONCAT(@q," where  o.id= ",id);
 		elseif url is not null and companyName is not null then 
-			set @q = CONCAT(@q," where o.home_page='",url,"' and o.name='",companyName,"'");
+			set @q = CONCAT(@q," where o.`home-page`='",url,"' and o.name='",companyName,"'");
 		end if;
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -1103,7 +1280,7 @@ BEGIN
 #
 	end if;
 	
-	select o.id as 'result' from Organisations o where (o.home_page= url or o.home_page= concat("http://",url) ) and o.name=companyName;
+	select o.id as 'result' from Organisations o where (o.`home-page`= url or o.`home-page`= concat("http://",url) ) and o.name=companyName;
 END//
 DELIMITER ;
 
@@ -1133,11 +1310,11 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
 BEGIN
 	if(id is not null and pass is not null) then
-		select * from Users where user_id = id and password= pass;
+		select * from Users u where u.id = id and password= pass;
    elseif(id is not null and role=1) then
-		select * from Users where user_id = id and EXISTS (select * from OrganisationMembers where user_id = id);
+		select * from Users u where u.id = id and EXISTS (select * from OrganisationMembers om where om.user_id = u.id);
 	elseif(id is not null) then
- 		select * from Users where user_id = id;
+ 		select * from Users u where u.id = id;
    elseif (email is not null) then
    	select * from Users u where u.email = email;
 	end if;
@@ -1165,7 +1342,7 @@ BEGIN
 	
 	if id is null and not exists(select * from Users u where u.email= email)then
 	-- set insert
-	insert into Users (email, nonce, password, created_time, display_name, biography, native_lang_id, native_region_id) 
+	insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
               values (email, nonce, pass, NOW(), name, bio, lang, region);
 	else 
 		set @first = true;
@@ -1181,7 +1358,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.native_lang_id='",lang,"'") ;
+			set @q = CONCAT(@q," u.language_id='",lang,"'") ;
 		end if;
 		if region is not null then 
 			if (@first = false) then 
@@ -1189,7 +1366,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.native_region_id='",region,"'") ;
+			set @q = CONCAT(@q," u.country_id='",region,"'") ;
 		end if;
 		if name is not null then 
 				if (@first = false) then 
@@ -1197,7 +1374,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.display_name='",name,"'");
+			set @q = CONCAT(@q," u.`display-name`='",name,"'");
 		
 		end if;
 		
@@ -1232,13 +1409,13 @@ BEGIN
 #		set where
 	
 		if id is not null then 
-			set @q = CONCAT(@q," where  u.user_id= ",id);
-#    	allows email to be changed but not user_id
+			set @q = CONCAT(@q," where  u.id= ",id);
+#    	allows email to be changed but not user id
 		
 		elseif email is not null then 
 			set @q = CONCAT(@q," where  u.email= ,",email,"'");-- allows anything but email and user_id to change
 		else
-			set @q = CONCAT(@q," where  u.email= null AND u.user_id=null");-- will always fail to update anyting
+			set @q = CONCAT(@q," where  u.email= null AND u.id=null");-- will always fail to update anyting
 		end if;
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -1246,7 +1423,7 @@ BEGIN
 
 	end if;
 	
-	select u.user_id from Users u where u.email= email;
+	select u.id from Users u where u.email= email;
 END//
 DELIMITER ;
 
@@ -1274,7 +1451,7 @@ DROP PROCEDURE IF EXISTS `getCountries`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountries`()
 BEGIN
-SELECT  en_name as country, code, id FROM Countries order by en_name;
+SELECT  `en-name` as country, code, id FROM Countries order by `en-name`;
 END//
 DELIMITER ;
 
@@ -1284,7 +1461,7 @@ DROP PROCEDURE IF EXISTS `getLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguages`()
 BEGIN
-SELECT  en_name as language, code, id FROM Languages order by en_name;
+SELECT  `en-name` as language, code, id FROM Languages order by `en-name`;
 END//
 DELIMITER ;
 
@@ -1296,8 +1473,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLCID`(IN `lang` VARCHAR(128), IN
 BEGIN
 set @ll = "";
 set @cc = "";
-select c.code into @cc from Countries c where c.en_name = countryName;
-select l.code into @ll from Languages l where l.en_name = lang;
+select c.code into @cc from Countries c where c.`en-name` = countryName;
+select l.code into @ll from Languages l where l.`en-name` = lang;
 select concat(@ll,"-",@cc) as lcid;
 END//
 DELIMITER ;
@@ -1324,7 +1501,7 @@ BEGIN
 	set @q= "SELECT *FROM Badges b where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
-		set @q = CONCAT(@q," and b.badge_id=",id) ;
+		set @q = CONCAT(@q," and b.id=",id) ;
 	end if;
 	if des is not null then 
 		set @q = CONCAT(@q," and b.description='",des,"'") ;
@@ -1364,10 +1541,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTag`(IN `id` INT, IN `name` VARC
 BEGIN
 	if id='' then set id=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select t.tag_id , t.label from Tags t where 1 ";-- set update
+	set @q= "select t.id , t.label from Tags t where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
-		set @q = CONCAT(@q," and t.tag_id=",id) ;
+		set @q = CONCAT(@q," and t.id=",id) ;
 	end if;
 	if name is not null then 
 		set @q = CONCAT(@q," and t.label='",name,"'") ;
@@ -1385,7 +1562,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tagInsert`(IN `name` VARCHAR(50))
 BEGIN
 insert into Tags (label) values (name);
-select tag_id from Tags where label=name;
+select id from Tags where label=name;
 END//
 DELIMITER ;
 
@@ -1397,7 +1574,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksByOrgIDs`(IN `orgIDs` VARCH
 BEGIN
 	if orgIDs='' then set orgIDs=null;end if;
 	if orderby='' then set orderby=null;end if;
-	set @q= "SELECT id,organisation_id,title,word_count,source_id,target_id,created_time, sourceCountry, targetCountry FROM Tasks WHERE 1 ";-- set update
+	set @q= "SELECT id,organisation_id,title,`word-count`,source_id,target_id,`created-time`, `country_id-source`, `country_id-target` FROM Tasks WHERE 1 ";-- set update
 	if orgIDs is not null then 
 		set @q = CONCAT(@q," and organisation_id IN (",orgIDs,")") ;
 	end if;
@@ -1431,10 +1608,10 @@ BEGIN
 	set @q= "select * from Users u where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
-		set @q = CONCAT(@q," and u.user_id=",id) ;
+		set @q = CONCAT(@q," and u.id=",id) ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and u.display_name='",name,"'") ;
+		set @q = CONCAT(@q," and u.`display-name`='",name,"'") ;
 	end if;
 	if mail is not null then 
 		set @q = CONCAT(@q," and u.email='",mail,"'") ;
@@ -1449,13 +1626,13 @@ BEGIN
 		set @q = CONCAT(@q," and u.nonce=",nonce) ;
 	end if;
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
-		set @q = CONCAT(@q," and u.created_time='",created,"'") ;
+		set @q = CONCAT(@q," and u.`created-time`='",created,"'") ;
 	end if;
 	if lang_id is not null then 
-		set @q = CONCAT(@q," and u.native_lang_id=",lang_id) ;
+		set @q = CONCAT(@q," and u.language_id=",lang_id) ;
 	end if;
 	if region_id is not null then 
-		set @q = CONCAT(@q," and u.native_region_id=",region_id) ;
+		set @q = CONCAT(@q," and u.country_id=",region_id) ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1482,7 +1659,7 @@ BEGIN
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
 	
-	set @q= "select id,organisation_id,title,word_count,source_id,target_id,deadline,created_time,impact,reference_page, (select code from Countries where id =t.sourceCountry) as sourceCountry, (select code from Countries where id =t.targetCountry) as targetCountry from Tasks t where 1";-- set update
+	set @q= "select id,organisation_id,title,`word-count`,source_id,target_id,deadline,`created-time`,impact,`reference-page`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target` from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1502,27 +1679,27 @@ BEGIN
 	if sCC is not null then 
 		set @scid=null;
 			select c.id into @scid from Countries c where c.code=sCC;
-		set @q = CONCAT(@q," and t.sourceCountry=",@scid) ;
+		set @q = CONCAT(@q," and t.`country_id-source`=",@scid) ;
 	end if;
 	if tCC is not null then 
 		set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
-		set @q = CONCAT(@q," and t.targetCountry=",@tcid) ;
+		set @q = CONCAT(@q," and t.`country_id-target`=",@tcid) ;
 	end if;
 	if wordCount is not null then 
-		set @q = CONCAT(@q," and t.word_count=",wordCount) ;
+		set @q = CONCAT(@q," and t.`word-count`=",wordCount) ;
 	end if;
     if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
         set @q = CONCAT(@q," and t.deadline='",deadlineTime,"'") ;
     end if;
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
-		set @q = CONCAT(@q," and t.created_time='",created,"'") ;
+		set @q = CONCAT(@q," and t.`created-time`='",created,"'") ;
 	end if;
 	if impact is not null then 
 		set @q = CONCAT(@q," and t.impact='",impact,"'") ;
 	end if;
 	if ref is not null then 
-		set @q = CONCAT(@q," and t.reference_page='",ref,"'") ;
+		set @q = CONCAT(@q," and t.`reference-page`='",ref,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1558,7 +1735,7 @@ BEGIN
 			select c.id into @scid from Countries c where c.code=sCC;
 		set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
-		insert into Tasks (organisation_id,title,word_count,source_id,target_id,deadline,created_time,impact,reference_page,sourceCountry,targetCountry)
+		insert into Tasks (organisation_id,title,`word-count`,source_id,target_id,deadline,`created-time`,impact,`reference-page`,`country_id-source`,`country_id-target`)
 		 values (orgID,name,wordCount,sID,tID,deadlineTime,created,impactValue,ref,@scid,@tcid);
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 		set @first = true;
@@ -1604,7 +1781,7 @@ BEGIN
 			end if;
 			set @scid=null;
 			select c.id into @scid from Countries c where c.code=sCC;
-			set @q = CONCAT(@q," t.sourceCountry=",@scid) ;
+			set @q = CONCAT(@q," t.`country_id-source`=",@scid) ;
 		end if;
 		if tCC is not null then 
 			if (@first = false) then 
@@ -1614,7 +1791,7 @@ BEGIN
 			end if;
 			set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
-			set @q = CONCAT(@q," t.targetCountry=",@tcid) ;
+			set @q = CONCAT(@q," t.`country_id-target`=",@tcid) ;
 		end if;
 		
 		if wordCount is not null then 
@@ -1623,7 +1800,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.word_count=",wordCount) ;
+			set @q = CONCAT(@q," t.`word-count`=",wordCount) ;
 		end if;
 		if impactValue is not null then 
 			if (@first = false) then 
@@ -1639,7 +1816,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.reference_page='",ref,"'") ;
+			set @q = CONCAT(@q," t.`reference-page`='",ref,"'") ;
 		end if;
         if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
             if (@first = false) then
@@ -1655,7 +1832,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.created_time='",created,"'") ;
+			set @q = CONCAT(@q," t.`created-time`='",created,"'") ;
 		end if;
 		set @q = CONCAT(@q," where  t.id= ",id);
 		PREPARE stmt FROM @q;
@@ -1671,8 +1848,8 @@ DROP PROCEDURE IF EXISTS `deleteTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`()
 BEGIN
-if EXISTS (select 1 from Tags where Tags.tag_id=id) then
-	delete from Tags where Tags.tag_id=id;
+if EXISTS (select 1 from Tags where Tags.id=id) then
+	delete from Tags where Tags.id=id;
 	select 1 as result;
 else
 	select 0 as result;
@@ -1687,7 +1864,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTags`(IN `id` INT)
 BEGIN
 	if id='' then set id=null;end if;
-	set @q= "select t.tag_id , t.label from Tags t join TaskTags tt on t.tag_id= tt.tag_id where 1 ";-- set update
+	set @q= "select t.id , t.label from Tags t join TaskTags tt on t.id= tt.tag_id where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and tt.task_id=",id) ;
@@ -1725,9 +1902,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` I
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("SELECT t.id FROM Tasks AS t WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY created_time DESC LIMIT ",lim);
+    set @q = Concat("SELECT t.id FROM Tasks AS t WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC LIMIT ",lim);
     else
-    set @q = "SELECT t.id FROM Tasks AS t WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY created_time DESC ";
+    set @q = "SELECT t.id FROM Tasks AS t WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC ";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -1763,7 +1940,7 @@ BEGIN
 								FROM TaskClaims
 								WHERE task_id = t.id
 							)
-                         ORDER BY t.created_time DESC
+                         ORDER BY t.`created-time` DESC
                          LIMIT ",lim);
         PREPARE stmt FROM @q;
         set @tID=tID;
@@ -1778,9 +1955,9 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
 BEGIN
-set @q = Concat("   SELECT t.label AS label,t.tag_id as tag_id, COUNT( tt.tag_id ) AS frequency
+set @q = Concat("   SELECT t.label AS label,t.id as tag_id, COUNT( tt.tag_id ) AS frequency
                     FROM TaskTags AS tt 
-                    join Tags AS t on tt.tag_id = t.tag_id
+                    join Tags AS t on tt.tag_id = t.id
                     join Tasks as tsk on tsk.id=tt.task_id
                     WHERE not exists ( SELECT 1
                                         FROM TaskClaims tc
@@ -1824,7 +2001,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN 
 BEGIN
 set @maxVer =-1;
 if not exists (select 1 from TaskFileVersions tfv where tfv.task_id=tID) then
-	INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
+	INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`) 
 	VALUES (tID,1+@maxVer,name, content, uID, Now());
 else
 	
@@ -1833,7 +2010,7 @@ else
 	where tfv.task_id=tID 
 	order by tfv.version_id desc
 	limit 1;
-	INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content_type`, `user_id`, `upload_time`) 
+	INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`) 
 	VALUES (tID,1+@maxVer,name, content, uID, Now());
 end if;
 select 1+@maxVer as version;
@@ -1846,12 +2023,12 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT)
     MODIFIES SQL DATA
 BEGIN
-	INSERT INTO `ArchivedTasks`(task_id, organisation_id, title, word_count, source_id, target_id, created_time, archived_time, user_id)
+	INSERT INTO `ArchivedTasks`(task_id, organisation_id, title, `word-count`, source_id, target_id, `created-time`, `archived-time`, user_id)
 		
-		SELECT id, organisation_id, title, word_count, source_id, target_id, created_time, NOW(), tc.user_id
+		SELECT tt.id, organisation_id, title, `word-count`, source_id, target_id, `created-time`, NOW(), tc.user_id
 		FROM Tasks tt
 		LEFT JOIN TaskClaims tc ON tc.task_id = tt.id
-		WHERE id =tID;
+		WHERE tt.id = tID;
    
    DELETE FROM Tasks WHERE id = tID ;
    DELETE FROM UserTaskScores WHERE task_id = tID;
@@ -1870,7 +2047,7 @@ BEGIN
 	if content='' then set content=null;end if;
 	if uID='' then set uID=null;end if;
 	if uTime='' then set uTime=null;end if;
-		set @q= "select task_id, version_id, filename, content_type, user_id, upload_time from TaskFileVersions t where 1 ";
+		set @q= "select task_id, version_id, filename, `content-type`, user_id, `upload-time` from TaskFileVersions t where 1 ";
 	if tID is not null then 
 		set @q = CONCAT(@q," and t.task_id=",tID) ;
 	end if;
@@ -1881,13 +2058,13 @@ BEGIN
 		set @q = CONCAT(@q," and t.filename='",name,"'") ;
 	end if;
 	if content is not null then 
-		set @q = CONCAT(@q," and t.content_type='",content,"'") ;
+		set @q = CONCAT(@q," and t.`content-type`='",content,"'") ;
 	end if;
 	if uID is not null then 
 		set @q = CONCAT(@q," and t.user_id=",uID) ;
 	end if;
 	if (uTime is not null  and uTime!='0000-00-00 00:00:00')then 
-		set @q = CONCAT(@q," and t.upload_time='",uTime,"'") ;
+		set @q = CONCAT(@q," and t.`upload-time`='",uTime,"'") ;
 	end if;
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -1901,8 +2078,12 @@ DROP PROCEDURE IF EXISTS `claimTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `claimTask`(IN `tID` INT, IN `uID` INT)
 BEGIN
-	insert into TaskClaims  (task_id,user_id) values (tID,uID);
-	select 1 as result;
+	if not EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
+		insert into TaskClaims  (task_id,user_id,`claimed-time`) values (tID,uID,now());
+		select 1 as result;
+	else
+	select 0 as result;
+	end if;
 END//
 DELIMITER ;
 
@@ -1950,7 +2131,7 @@ BEGIN
     set @q="SELECT * FROM ArchivedTasks
                 WHERE 1";
     if arc_id is not null then
-        set @q=CONCAT(@q, " and archived_task_id=", arc_id);
+        set @q=CONCAT(@q, " and id=", arc_id);
     end if;
     if t_id is not null then
         set @q=CONCAT(@q, " and task_id=", t_id);
@@ -1974,7 +2155,7 @@ BEGIN
 
 set @q=Concat("SELECT * FROM ArchivedTasks as a 
                 WHERE user_id = ?
-                ORDER BY created_time DESC
+                ORDER BY `created-time` DESC
                 limit ", lim);
         PREPARE stmt FROM @q;
         set@uID = uID;
@@ -1994,7 +2175,7 @@ BEGIN
 set @q=Concat(" SELECT * 
                 FROM Tasks JOIN TaskClaims ON TaskClaims.task_id = Tasks.id
                 WHERE user_id = ?
-                ORDER BY created_time DESC
+                ORDER BY `created-time` DESC
                 limit ", lim);
         PREPARE stmt FROM @q;
         set@uID = uID;
@@ -2089,7 +2270,7 @@ BEGIN
 		set @q = CONCAT(@q," and o.name='",name,"'") ;
 	end if;
 	if url is not null then 
-		set @q = CONCAT(@q," and o.home_page='",url,"'") ;
+		set @q = CONCAT(@q," and o.`home-page`='",url,"'") ;
 	end if;
 	if bio is not null then 
 		set @q = CONCAT(@q," and o.biography='",bio,"'") ;
@@ -2109,7 +2290,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `userNotificationsInsertAndUpdate`(I
 	CONTAINS SQL
 	SQL SECURITY DEFINER
 BEGIN
-	insert into UserNotifications  (user_id, task_id, created_time) values (user_id, task_id, NOW());
+	insert into UserNotifications  (user_id, task_id, `created-time`) values (user_id, task_id, NOW());
     select 1 as "result";
 END//
 DELIMITER ;
@@ -2167,7 +2348,7 @@ BEGIN
 	SELECT *
 	FROM OrgRequests
    WHERE org_id = orgID
-   ORDER BY request_datetime DESC;
+   ORDER BY `request-datetime` DESC;
 END//
 DELIMITER ;
 
@@ -2198,7 +2379,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserBadge`(IN `uID` INT, IN `bID` INT)
 BEGIN
 	set @owner = null;
-	select b.owner_id into @owner from Badges b where b.badge_id=bID;
+	select b.owner_id into @owner from Badges b where b.id=bID;
 	if @owner is not null  then
 		DELETE FROM UserBadges
 		WHERE user_id=uID
@@ -2231,7 +2412,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersWithBadge`(IN `bID` INT)
 BEGIN
 	SELECT *
-	FROM Users JOIN UserBadges ON Users.user_id = UserBadges.user_id
+	FROM Users JOIN UserBadges ON Users.id = UserBadges.user_id
 	WHERE badge_id = bID;
 END//
 DELIMITER ;
@@ -2245,7 +2426,7 @@ BEGIN
 	if id='' then set id=null;end if;
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select en_name as language, code, id from Languages l where 1 ";-- set update
+	set @q= "select `en-name` as language, code, id from Languages l where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and l.id=",id) ;
@@ -2254,7 +2435,7 @@ BEGIN
 		set @q = CONCAT(@q," and l.code='",code,"'") ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and l.en_name='",name,"'") ;
+		set @q = CONCAT(@q," and l.`en-name`='",name,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -2271,7 +2452,7 @@ BEGIN
 	if id='' then set id=null;end if;
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select en_name as country, code, id from Countries c where 1 ";-- set update
+	set @q= "select `en-name` as country, code, id from Countries c where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and c.id=",id) ;
@@ -2280,7 +2461,7 @@ BEGIN
 		set @q = CONCAT(@q," and c.code='",code,"'") ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and c.en_name='",name,"'") ;
+		set @q = CONCAT(@q," and c.`en-name`='",name,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -2313,7 +2494,7 @@ DROP PROCEDURE IF EXISTS `addPasswordResetRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
 BEGIN
-    INSERT INTO PasswordResetRequests (uid, user_id, request_time) VALUES (uniqueId,userId,NOW());
+    INSERT INTO PasswordResetRequests (uid, user_id, `request-time`) VALUES (uniqueId,userId,NOW());
 END//
 DELIMITER ;
 
@@ -2371,7 +2552,7 @@ DROP PROCEDURE IF EXISTS `deleteBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteBadge`(IN `id` INT)
 BEGIN
-delete from Badges where badge_id = id;
+delete from Badges where Badges.id = id;
 END//
 DELIMITER ;
 
@@ -2380,12 +2561,12 @@ DROP PROCEDURE IF EXISTS `badgeInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `badgeInsertAndUpdate`(IN `badgeID` INT, IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` MEDIUMTEXT)
 BEGIN
-if not exists (select 1 from Badges b where b.badge_id = badgeID) then
+if not exists (select 1 from Badges b where b.id = badgeID) then
 	insert into Badges (owner_id,title,description) values (ownerID,name,disc);
 	select 1 as result;
 else
 	update Badges bg set bg.title = name, bg.description = disc
-	where bg.badge_id = badgeID;
+	where bg.id = badgeID;
 	select 1 as result;
 end if;
 END//
@@ -2421,7 +2602,7 @@ BEGIN
     if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
     SET @claimedTasks = NULL;
     SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.claimed_time >= dateTime;
+    WHERE tc.`claimed-time` >= dateTime;
     SELECT @claimedTasks AS result;
 END//
 DELIMITER ;
@@ -2451,7 +2632,7 @@ BEGIN
     if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
     SET @archivedTasks = NULL;
     SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.created_time >= dateTime;
+    WHERE ta.`created-time` >= dateTime;
     SELECT @archivedTasks AS result;
 END//
 DELIMITER ;
@@ -2468,7 +2649,7 @@ BEGIN
     if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
 
     SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.claimed_time >= dateTime;	
+    WHERE tc.`claimed-time` >= dateTime;	
 
     SELECT count(1) into @unclaimedTasks from Tasks t
     WHERE t.id NOT IN
@@ -2478,7 +2659,7 @@ BEGIN
     );
 
     SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.created_time >= dateTime;	
+    WHERE ta.`created-time` >= dateTime;	
 
     SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks;	
     SELECT @totalTasks AS result;
@@ -2494,8 +2675,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `Organisations` FOR EACH ROW 
 BEGIN
-	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
-	set new.home_page = concat("http://",new.home_page);
+	if not (new.`home-page` like "http://%" or new.`home-page`  like "https://%") then
+	set new.`home-page` = concat("http://",new.`home-page`);
 	end if;
 END//
 DELIMITER ;
@@ -2508,8 +2689,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `Organisations` FOR EACH ROW 
 BEGIN
-	if not (new.home_page like "http://%" or new.home_page  like "https://%") then
-	set new.home_page = concat("http://",new.home_page);
+	if not (new.`home-page` like "http://%" or new.`home-page`  like "https://%") then
+	set new.`home-page` = concat("http://",new.`home-page`);
 	end if;
 END//
 DELIMITER ;
@@ -2530,6 +2711,15 @@ SET SQL_MODE=@OLD_SQL_MODE;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
+-- Dumping structure for trigger solas-intergration.defaultUserName
+DROP TRIGGER IF EXISTS `defaultUserName`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `defaultUserName` BEFORE INSERT ON `Users` FOR EACH ROW BEGIN
+if new.`display-name` is null then set new.`display-name` = substring_index(new.email,'@',1); end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
 
 
 /* These statements below may be removed, if they have already been called at least ONCE */
@@ -2554,3 +2744,8 @@ DELIMITER ;
 CALL removeOldTables();
 DROP PROCEDURE removeOldTables;
 
+/* Remove when necessary*/
+DROP PROCEDURE IF EXISTS `findOganisation`;
+
+
+SET FOREIGN_KEY_CHECKS=1;

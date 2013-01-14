@@ -156,10 +156,12 @@ class UserRouteHandler
         $my_organisations = array();
         $url = APIClient::API_VERSION."/users/$current_user_id/orgs";
         $response = $client->call($url);
-        if ($response) {
+        if (is_array($response)) {
             foreach ($response as $stdObject) {
                 $my_organisations[] = $client->cast('Organisation', $stdObject);
             }
+        }elseif(is_string ($response)){
+            $my_organisations = $client->cast('Organisation', $response);
         }
         
         $org_tasks = array();
@@ -338,7 +340,7 @@ class UserRouteHandler
                                 $app->redirect($app->urlFor($_SESSION['previous_page']));
                             }
                         }
-                        $app->redirect($app->urlFor('home'));
+                        $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user->getUserId())));
                     } catch (InvalidArgumentException $e) {
                         $error = '<p>Unable to log in. Please check your email and password.';
                         $error .= ' <a href="' . $app->urlFor('login') . '">Try logging in again</a>';
@@ -510,7 +512,7 @@ class UserRouteHandler
                         $user = $client->cast("User", $user);
                         UserSession::setSession($user->getUserId());
                     } else {
-                        throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect.
+                        throw new InvalidArgumentException('Sorry, the username or password entered is incorrect.
                             Please check the credentials used and try again.');    
                     }
                     
@@ -519,8 +521,11 @@ class UserRouteHandler
                     $app->redirect($app->urlFor('password-reset-request'));
                 }
             } elseif ($app->request()->isPost() || $openid->mode) {
-                $this->openIdLogin($openid, $app);
-                $app->redirect($app->urlFor("home"));
+                if($this->openIdLogin($openid, $app)){
+                   $app->redirect($app->urlFor("home"));
+                }  else {
+                    $app->redirect($app->urlFor('user-public-profile', array('user_id' => UserSession::getCurrentUserID())));
+                }
             }
             $app->render('login.tpl');
         } catch (InvalidArgumentException $e) {
@@ -548,24 +553,27 @@ class UserRouteHandler
             }
         } elseif ($openid->mode == 'cancel') {
             throw new InvalidArgumentException('User has canceled authentication!');
-            return false;
         } else {
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
                 $client = new APIClient();
                 $request = APIClient::API_VERSION."/users/getByEmail/{$retvals['contact/email']}";
                 $response = $client->call($request);
-                if (!is_object($response)&&!is_array($response)) {
+                if (is_null($response)) {
                     $registerData = array();
                     $registerData['email'] = $retvals['contact/email'];
                     $registerData['password'] = md5($retvals['contact/email']);
 
                     $request = APIClient::API_VERSION."/register";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, 
-                            ModelFactory::buildModel("Register", $registerData));
+                    ModelFactory::buildModel("Register", $registerData));
+                    $user = $client->cast("User", $response);
+                    UserSession::setSession($user->getUserId());
+                    return false;
                 }
                 $user = $client->cast("User", $response);
                 UserSession::setSession($user->getUserId());
+                
             }
             return true;
         }
