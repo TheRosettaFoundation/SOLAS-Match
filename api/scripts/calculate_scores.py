@@ -115,13 +115,13 @@ def getUserList():
 # This function returns the IDs of all active tasks
 #
 def getActiveTaskList():
-    return DBCall('getTask', ['null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
+    return DBCall('getTask', ['null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
 
 #
 # This function returns the task identified by task_id
 #
 def getTaskById(task_id):
-    return DBCall('getTask', [task_id, 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
+    return DBCall('getTask', [task_id, 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
 
 #
 # This function returns all the tags related to a specific task

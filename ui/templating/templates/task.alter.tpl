@@ -18,6 +18,19 @@
     <label for="impact">Task Impact</label>
     <textarea wrap="soft" cols="1" rows="2" name="impact">{$task->getImpact()}</textarea>
 
+    <label for="deadline">Deadline</label>
+    {if $deadline_error != ''}
+        <div class="alert alert-error">
+            {$deadline_error}
+        </div>
+    {/if}
+    <p>
+        Date: <input name="deadline_date" id="deadline_date" type="text" value="{$deadlineDate}" />
+        Time: <input name="deadline_time" type="text" value="{$deadlineTime}" />
+    </p>
+    
+
+
     <label for="reference">Context Reference</label>
     {if $task->getReferencePage() != '' }
         {assign var="url_text" value=$task->getReferencePage()}
@@ -88,6 +101,5 @@
         </button>
     </p>
 </form>
-
 
 {include file="footer.tpl"}

@@ -359,6 +359,9 @@ class ModelFactory
         if (isset($modelData['target_id'])) {
             $ret->setTargetLangId($modelData['target_id']);
         }
+        if (isset($modelData['deadline'])) {
+            $ret->setDeadline($modelData['deadline']);
+        }
         if (isset($modelData['created-time'])) {
             $ret->setCreatedTime($modelData['created-time']);
         }

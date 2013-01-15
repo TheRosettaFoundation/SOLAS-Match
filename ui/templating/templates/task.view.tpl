@@ -74,6 +74,8 @@
 <h3>Word Count</h3>
 <p>{$task->getWordCount()}</p>
 
+<h3>Deadline</h3>
+<p>{$task->getDeadline()}</p>
 
 {if isset($user)}
     <hr />

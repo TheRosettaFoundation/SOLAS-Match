@@ -52,6 +52,9 @@ namespace  {
     /**  @var string[]  */
     public $tags = array();
     
+    /**  @var string */
+    public $deadline = null;
+    
 
     /** @var \Closure[] */
     protected static $__extensions = array();
@@ -178,6 +181,14 @@ namespace  {
       $f->name      = "tags";
       $f->type      = \DrSlump\Protobuf::TYPE_STRING;
       $f->rule      = \DrSlump\Protobuf::RULE_REPEATED;
+      $descriptor->addField($f);
+
+      // REQUIRED STRING deadline = 14
+      $f = new \DrSlump\Protobuf\Field();
+      $f->number    = 14;
+      $f->name      = "deadline";
+      $f->type      = \DrSlump\Protobuf::TYPE_STRING;
+      $f->rule      = \DrSlump\Protobuf::RULE_REQUIRED;
       $descriptor->addField($f);
 
       foreach (self::$__extensions as $cb) {
@@ -760,6 +771,43 @@ namespace  {
      */
     public function addTags( $value){
      return $this->_add(15, $value);
+    }
+    
+    /**
+     * Check if <deadline> has a value
+     *
+     * @return boolean
+     */
+    public function hasDeadline(){
+      return $this->_has(14);
+    }
+    
+    /**
+     * Clear <deadline> value
+     *
+     * @return \Task
+     */
+    public function clearDeadline(){
+      return $this->_clear(14);
+    }
+    
+    /**
+     * Get <deadline> value
+     *
+     * @return string
+     */
+    public function getDeadline(){
+      return $this->_get(14);
+    }
+    
+    /**
+     * Set <deadline> value
+     *
+     * @param string $value
+     * @return \Task
+     */
+    public function setDeadline( $value){
+      return $this->_set(14, $value);
     }
   }
 }

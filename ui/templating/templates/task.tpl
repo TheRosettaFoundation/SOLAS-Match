@@ -14,6 +14,9 @@
 		{if $task->getTargetLangId()}
 			To <b>{TemplateHelper::languageNameFromId($task->getTargetLangId())}</b>
 		{/if}
+        <p>
+            Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
+        </p>
         <div class="tag">
 		{foreach from=$task->getTags() item=tag}
 			<a href="{urlFor name="tag-details" options="label.$tag"}" class="label">{$tag}</a>
