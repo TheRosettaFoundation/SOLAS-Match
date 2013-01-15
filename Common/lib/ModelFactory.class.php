@@ -14,6 +14,8 @@ require_once __DIR__."/../models/Organisation.php";
 require_once __DIR__."/../models/TaskMetadata.php";
 require_once __DIR__."/../models/User.php";
 require_once __DIR__."/../models/Task.php";
+require_once __DIR__."/../models/Project.php";
+require_once __DIR__."/../models/ArchivedProject.php";
 
 class ModelFactory
 {
@@ -65,6 +67,12 @@ class ModelFactory
             case "Task" :
                 $ret = ModelFactory::generateTask($modelData);
                 break;
+            case "Project" :
+                $ret = ModelFactory::generateProject($modelData);
+                break;
+            case "ArchivedProject" :
+                $ret = ModelFactory::generateArchivedProject($modelData);
+                break;
             default :
                 echo "Unable to build model $modelName";
         }
@@ -93,37 +101,58 @@ class ModelFactory
         $ret = new ArchivedTask();
 
         if (isset($modelData['id'])) {
-            $ret->setArchiveId($modelData['id']);
+            $ret->setId($modelData['id']);
         }
-        if (isset($modelData['task_id'])) {
-            $ret->setTaskId($modelData['task_id']);
-        }
-        if (isset($modelData['org_id'])) {
-            $ret->setOrgId($modelData['org_id']);
+        if (isset($modelData['project_id'])) {
+            $ret->setProjectId($modelData['project_id']);
         }
         if (isset($modelData['title'])) {
             $ret->setTitle($modelData['title']);
         }
+        if (isset($modelData['comment'])) {
+            $ret->setComment($modelData['comment']);
+        }
+        if (isset($modelData['deadline'])) {
+            $ret->setDeadline($modelData['deadline']);
+        }
         if (isset($modelData['word-count'])) {
             $ret->setWordCount($modelData['word-count']);
-        }
-        if (isset($modelData['source_id'])) {
-            $ret->setSourceId($modelData['source_id']);
-        }
-        if (isset($modelData['target_id'])) {
-            $ret->setTargetId($modelData['target_id']);
         }
         if (isset($modelData['created-time'])) {
             $ret->setCreatedTime($modelData['created-time']);
         }
-        if (isset($modelData['archived-time'])) {
-            $ret->setArchivedTime($modelData['archived-time']);
+        if (isset($modelData['language_id-source'])) {
+            $ret->setSourceLanguageId($modelData['language_id-source']);
         }
-        if (isset($modelData['impact'])) {
-            $ret->setImpact($modelData['impact']);
+        if (isset($modelData['language_id-target'])) {
+            $ret->setTargetLanguageId($modelData['language_id-target']);
         }
-        if (isset($modelData['reference-page'])) {
-            $ret->setReferencePage($modelData['reference-page']);
+        if (isset($modelData['Country_id-source'])) {
+            $ret->setSourceCountryId($modelData['Country_id-source']);
+        }
+        if (isset($modelData['Country_id-target'])) {
+            $ret->setTargetCountryId($modelData['Country_id-target']);
+        }
+        if (isset($modelData['taskType'])) {
+            $ret->setTaskType($modelData['taskType']);
+        }
+        if (isset($modelData['taskStatus'])) {
+            $ret->setTaskStatus($modelData['taskStatus']);
+        }
+        if (isset($modelData['published'])) {
+            $ret->setPublished($modelData['published']);
+        }
+        if (isset($modelData['user_id-claimed'])) {
+            $ret->setTranslatorId($modelData['user_id-claimed']);
+        }
+        if (isset($modelData['user_id-archived'])) {
+            $ret->setArchiveUserId($modelData['user_id-archived']);
+        }
+        if (isset($modelData['archive-date'])) {
+            $ret->setArchiveDate($modelData['archive-date']);
+        }
+        if (isset($modelData['tags'])) {
+            $ret->setTags($modelData['tags']);
         }
 
         return $ret;
@@ -344,43 +373,122 @@ class ModelFactory
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
         }
-        if (isset($modelData['organisation_id'])) {
-            $ret->setOrgId($modelData['organisation_id']);
+        if (isset($modelData['project_id'])) {
+            $ret->setProjectId($modelData['project_id']);
         }
         if (isset($modelData['title'])) {
             $ret->setTitle($modelData['title']);
         }
-        if (isset($modelData['word-count'])) {
-            $ret->setWordCount($modelData['word-count']);
-        }
-        if (isset($modelData['source_id'])) {
-            $ret->setSourceLangId($modelData['source_id']);
-        }
-        if (isset($modelData['target_id'])) {
-            $ret->setTargetLangId($modelData['target_id']);
+        if (isset($modelData['comment'])) {
+            $ret->setComment($modelData['comment']);
         }
         if (isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
+        if (isset($modelData['word-count'])) {
+            $ret->setWordCount($modelData['word-count']);
+        }
         if (isset($modelData['created-time'])) {
             $ret->setCreatedTime($modelData['created-time']);
         }
-        if (isset($modelData['impact'])) {
-            $ret->setImpact($modelData['impact']);
+        if (isset($modelData['language_id-source'])) {
+            $ret->setSourceLanguageId($modelData['language_id-source']);
         }
-        if (isset($modelData['reference-page'])) {
-            $ret->setReferencePage($modelData['reference-page']);
+        if (isset($modelData['language_id-target'])) {
+            $ret->setTargetLanguageId($modelData['language_id-target']);
         }
-        if (isset($modelData['country_id-source'])) {
-            $ret->setSourceRegionId($modelData['country_id-source']);
+        if (isset($modelData['Country_id-source'])) {
+            $ret->setSourceCountryId($modelData['Country_id-source']);
         }
-        if (isset($modelData['country_id-target'])) {
-            $ret->setTargetRegionId($modelData['country_id-target']);
+        if (isset($modelData['Country_id-target'])) {
+            $ret->setTargetCountryId($modelData['Country_id-target']);
+        }
+        if (isset($modelData['taskType'])) {
+            $ret->setTaskType($modelData['taskType']);
+        }
+        if (isset($modelData['taskStatus'])) {
+            $ret->setTaskStatus($modelData['taskStatus']);
+        }
+        if (isset($modelData['published'])) {
+            $ret->setPublished($modelData['published']);
         }
         if (isset($modelData['tags'])) {
             foreach ($modelData['tags'] as $tag) {
                 $ret->addTags($tag);
             }
+        }
+
+        return $ret;
+    }
+
+    private static function generateProject($modelData)
+    {
+        $ret = new Project();
+
+        if(isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
+        }
+        if(isset($modelData['title'])) {
+            $ret->setTitle($modelData['title']);
+        }
+        if(isset($modelData['description'])) {
+            $ret->setiDescription($modelData['description']);
+        }
+        if(isset($modelData['deadline'])) {
+            $ret->setDeadline($modelData['deadline']);
+        }
+        if(isset($modelData['organisation_id'])) {
+            $ret->setOrganisationId($modelData['organisation_id']);
+        }
+        if(isset($modelData['reference'])) {
+            $ret->setReference($modelData['reference']);
+        }
+        if(isset($modelData['word-count'])) {
+            $ret->setWordCount($modelData['word-count']);
+        }
+        if(isset($modelData['created'])) {
+            $ret->setCreatedTime($modelData['created']);
+        }
+        if(isset($modelData['status'])) {
+            $ret->setStatus($modelData['status']);
+        }
+
+        return $ret;
+    }
+
+    private static function generateArchivedProject($modelData)
+    {
+        $ret = new ArchivedProject();
+
+        if(isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
+        }
+        if(isset($modelData['title'])) {
+            $ret->setTitle($modelData['title']);
+        }
+        if(isset($modelData['description'])) {
+            $ret->setDescription($modelData['description']);
+        }
+        if(isset($modelData['deadline'])) {
+            $ret->setDeadline($modelData['deadline']);
+        }
+        if(isset($modelData['organisation_id'])) {
+            $ret->setOrganisationId($modelData['organisation_id']);
+        }
+        if(isset($modelData['reference'])) {
+            $ret->setReference($modelData['reference']);
+        }
+        if(isset($modelData['word-count'])) {
+            $ret->setWordCount($modelData['word-count']);
+        }
+        if(isset($modelData['created'])) {
+            $ret->setCreatedTime($modelData['created']);
+        }
+        if(isset($modelData['archived-date'])) {
+            $ret->setArchivedDate($modelData['archived-date']);
+        }
+        if(isset($modelData['user_id-archived'])) {
+            $ret->setTranslatorId($modelData['user_id-archived']);
         }
 
         return $ret;
