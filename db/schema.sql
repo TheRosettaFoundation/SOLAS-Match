@@ -41,40 +41,7 @@ BEGIN
                 DROP FOREIGN KEY `FK_user_language`,
                 DROP FOREIGN KEY `FK_user_country`;
 					 
-					 ALTER TABLE `user_badges`
-				 	 DROP FOREIGN KEY `FK_user_badges_user`;
-
-                ALTER TABLE `user_notifications`
-				    DROP FOREIGN KEY `FK_user_notifications_user`;
-                
-                ALTER TABLE `user_tag`
-					 DROP FOREIGN KEY `FK_user_tag_user`;
-					 
-					 ALTER TABLE `user_task_score`
-				  	 DROP FOREIGN KEY `FK_user_task_score_user`;
-
-				  	 ALTER TABLE `task_claim`
-					 DROP FOREIGN KEY `FK_task_claim_user`;
-					 
-					 ALTER TABLE `organisation_member`
-					 DROP FOREIGN KEY `FK_organisation_member_user`;
-					 
-					 ALTER TABLE `org_request_queue`
-					 DROP FOREIGN KEY `FK_org_request_queue_user`;
-					 
-					 ALTER TABLE `password_reset_requests`
-					 DROP FOREIGN KEY `FK_password_reset_user`;
-					 
-					 ALTER TABLE `task_file_version`
-					 DROP FOREIGN KEY `FK_task_file_version_user`;
-					 
-					 ALTER TABLE `task_file_version_download`
-					 DROP FOREIGN KEY `FK_task_file_version_download_user`;
-					 
-					 ALTER TABLE `translator`
-	             DROP FOREIGN KEY `FK_translator_user`;
-                
-					 RENAME TABLE `user` TO `Users`;
+			    RENAME TABLE `user` TO `Users`;
                 ALTER TABLE `Users` 
 					 change `user_id` `id` int unsigned NOT NULL AUTO_INCREMENT,
 					 CHANGE `email` `email` VARCHAR(128) NOT NULL AFTER `display-name`,
@@ -569,7 +536,11 @@ BEGIN
                 ALTER TABLE `task`
                 add column `impact` text COLLATE utf8_unicode_ci NOT NULL,
                 add column`reference_page` varchar(128) COLLATE utf8_unicode_ci NOT NULL;
-                      end if;
+            end if;
+            if not exists (SELECT * FROM information_schema.COLUMNS c where c.TABLE_NAME='task'and c.TABLE_SCHEMA = database() and (c.COLUMN_NAME="deadline")) then
+                ALTER TABLE `task`
+                ADD COLUMN `deadline` DATETIME NOT NULL AFTER `target_id`;
+            end if;
             if not exists (SELECT 1 FROM information_schema.TABLE_CONSTRAINTS tc where tc.TABLE_SCHEMA=database() and tc.TABLE_NAME='task'and tc.CONSTRAINT_NAME='task') then
                 ALTER TABLE `task`
                 ADD UNIQUE INDEX `task` (`organisation_id`, `source_id`, `target_id`, `title`, `sourceCountry`, `targetCountry`);
@@ -653,6 +624,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 	`word-count` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`source_id` INT(10) UNSIGNED NOT NULL COMMENT 'foreign key from the `Languages` table',
 	`target_id` INT(10) UNSIGNED NOT NULL COMMENT 'foreign key from the `Languages` table',
+    `deadline` DATETIME NOT NULL,
 	`created-time` DATETIME NOT NULL,
 	`country_id-source` INT(11) UNSIGNED NULL DEFAULT NULL,
 	`country_id-target` INT(11) UNSIGNED NULL DEFAULT NULL,
@@ -1672,7 +1644,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `deadlineTime` DATETIME, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3))
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
@@ -1687,7 +1659,7 @@ BEGIN
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
 	
-	set @q= "select id,organisation_id,title,`word-count`,source_id,target_id,`created-time`,impact,`reference-page`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target` from Tasks t where 1";-- set update
+	set @q= "select id,organisation_id,title,`word-count`,source_id,target_id,deadline,`created-time`,impact,`reference-page`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target` from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1717,6 +1689,9 @@ BEGIN
 	if wordCount is not null then 
 		set @q = CONCAT(@q," and t.`word-count`=",wordCount) ;
 	end if;
+    if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
+        set @q = CONCAT(@q," and t.deadline='",deadlineTime,"'") ;
+    end if;
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
 		set @q = CONCAT(@q," and t.`created-time`='",created,"'") ;
 	end if;
@@ -1736,7 +1711,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impactValue` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `deadlineTime` DATETIME, IN `created` DATETIME, IN `impactValue` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3))
 BEGIN
 	if id='' then set id=null;end if;
 	if orgID='' then set orgID=null;end if;
@@ -1744,6 +1719,7 @@ BEGIN
 	if sID='' then set sID=null;end if;
 	if tID='' then set tID=null;end if;
 	if wordCount='' then set wordCount=null;end if;
+    if deadlineTime="" then set deadlineTime=null;end if;
 	if created='' then set created=null;end if;
 	if impactValue='' then set impactValue=null;end if;
 	if ref='' then set ref=null;end if;
@@ -1759,8 +1735,8 @@ BEGIN
 			select c.id into @scid from Countries c where c.code=sCC;
 		set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
-		insert into Tasks (organisation_id,title,`word-count`,source_id,target_id,`created-time`,impact,`reference-page`,`country_id-source`,`country_id-target`)
-		 values (orgID,name,wordCount,sID,tID,created,impactValue,ref,@scid,@tcid);
+		insert into Tasks (organisation_id,title,`word-count`,source_id,target_id,deadline,`created-time`,impact,`reference-page`,`country_id-source`,`country_id-target`)
+		 values (orgID,name,wordCount,sID,tID,deadlineTime,created,impactValue,ref,@scid,@tcid);
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 		set @first = true;
 		set @q= "update Tasks t set";-- set update
@@ -1842,6 +1818,14 @@ BEGIN
 			end if;
 			set @q = CONCAT(@q," t.`reference-page`='",ref,"'") ;
 		end if;
+        if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
+            if (@first = false) then
+                set @q = CONCAT(@q,",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q," t.deadline='",deadlineTime,"'") ;
+        end if;
 		if (created is not null  and created!='0000-00-00 00:00:00') then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
@@ -1855,7 +1839,7 @@ BEGIN
 		EXECUTE stmt;
 		DEALLOCATE PREPARE stmt;
 	end if;
-	call getTask(id,orgID,name,wordCount,sID,tID,created,impactValue,ref,sCC,tCC);
+	call getTask(id,orgID,name,wordCount,sID,tID,deadlineTime,created,impactValue,ref,sCC,tCC);
 END//
 DELIMITER ;
 
@@ -1918,9 +1902,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` I
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC LIMIT ",lim);
+    set @q = Concat("SELECT t.id FROM Tasks AS t WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC LIMIT ",lim);
     else
-    set @q = "SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC ";
+    set @q = "SELECT t.id FROM Tasks AS t WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC ";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -1935,7 +1919,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `
     READS SQL DATA
     COMMENT 'relpace with more effient code later'
 BEGIN
-    set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT *FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY uts.score DESC limit ",lim);
+    set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT *FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.deadline > NOW() AND t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY uts.score DESC limit ",lim);
     PREPARE stmt FROM @q;
     set @uID=uID;
     EXECUTE stmt using @uID;
