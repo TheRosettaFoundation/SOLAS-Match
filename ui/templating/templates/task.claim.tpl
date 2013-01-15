@@ -15,7 +15,7 @@
 	<ol>
 		<li>Can you <strong>open the file</strong> on your computer?</li>
 		<li><strong>Will you have enough time to translate</strong> this file? Check how long the file is.</li>
-		{if $task->getTargetLangId()}
+		{if $task->getTargetLanguageId()}
 			<li>Do you think you're capable of translating this file <strong>to {$targetLanguage->getName()}</strong>?</li>
 		{/if}
 	</ol>

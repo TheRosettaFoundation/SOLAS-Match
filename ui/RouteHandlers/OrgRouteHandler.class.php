@@ -97,6 +97,7 @@ class OrgRouteHandler
 
     public function orgDashboard()
     {
+        //TODO Replace with new Dashboard
         $app = Slim::getInstance();
         $client = new APIClient();
 
