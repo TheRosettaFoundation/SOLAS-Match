@@ -296,26 +296,25 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
 
 -- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Dev.Tasks
+-- Dumping structure for table intergrationTest.Tasks
 DROP TABLE IF EXISTS `Tasks`;
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(20) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `deadline` datetime NOT NULL,
   `word-count` int(11) DEFAULT NULL,
-  `created-time` datetime NOT NULL,
   `language_id-source` int(11) unsigned NOT NULL,
   `language_id-target` int(11) unsigned NOT NULL,
   `Country_id-source` int(11) unsigned NOT NULL,
   `Country_id-target` int(11) unsigned NOT NULL,
+  `created-time` datetime NOT NULL,
+  `deadline` datetime NOT NULL,
+  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
   `taskType_id` int(11) unsigned NOT NULL,
   `taskStatus_id` int(11) unsigned NOT NULL,
-  `published` bit(1) NOT NULL,
+  `published` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `title` (`title`,`project_id`),
+  UNIQUE KEY `title` (`title`,`project_id`,`language_id-source`,`language_id-target`,`Country_id-source`,`Country_id-target`,`taskType_id`),
   KEY `FK_Tasks_Languages` (`language_id-source`),
   KEY `FK_Tasks_Languages_2` (`language_id-target`),
   KEY `FK_Tasks_Countries` (`Country_id-source`),
@@ -332,9 +331,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   CONSTRAINT `FK_Tasks_TaskTypes` FOREIGN KEY (`taskType_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table Solas-Match-Dev.Tasks: ~0 rows (approximately)
-/*!40000 ALTER TABLE `Tasks` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Tasks` ENABLE KEYS */;
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table manuel-test.TaskTags
@@ -1014,7 +1011,7 @@ DELIMITER ;
 -- Dumping structure for procedure intergrationTest.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` TINYINT, IN `dLine` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME,  IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` TINYINT, IN `dLine` DATETIME)
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
@@ -1024,27 +1021,32 @@ BEGIN
 	if tID='' then set tID=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
-	if impact='' then set impact=null;end if;
 	if ref='' then set ref=null;end if;
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
+	if taskComment='' then set taskComment=null;end if;
+	if tStatus='' then set tStatus=null;end if;
+	if tType='' then set tType=null;end if;
+	if pub ='' then set pub = null;end if;
+	if dLine='' then set dLine=null;end if;
 	
-	set @q= "select id,project_id,title,`word-count`,source_id,target_id,`created-time`,impact,`reference-page`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target` from Tasks t where 1";-- set update
+	
+	set @q= "select id,project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment, deadline, published, taskType_id,taskStatus_id from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
 	end if;
-	if orgID is not null then 
+	if projectID is not null then 
 		set @q = CONCAT(@q," and t.project_id=",projectID) ;
 	end if;
 	if name is not null then 
 		set @q = CONCAT(@q," and t.title='",name,"'") ;
 	end if;
 	if sID is not null then 
-		set @q = CONCAT(@q," and t.source_id=",sID) ;
+		set @q = CONCAT(@q," and t.`language_id-source`=",sID) ;
 	end if;
 	if tID is not null then 
-		set @q = CONCAT(@q," and t.target_id=",tID) ;
+		set @q = CONCAT(@q," and t.`language_id-target`=",tID) ;
 	end if;
 	if sCC is not null then 
 		set @scid=null;
@@ -1062,18 +1064,31 @@ BEGIN
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
 		set @q = CONCAT(@q," and t.`created-time`='",created,"'") ;
 	end if;
-	if impact is not null then 
-		set @q = CONCAT(@q," and t.impact='",impact,"'") ;
-	end if;
 	if ref is not null then 
 		set @q = CONCAT(@q," and t.`reference-page`='",ref,"'") ;
 	end if;
-	
+	if taskComment is not null then 
+		set @q = CONCAT(@q," and t.`comment`='",taskComment,"'") ;
+	end if;
+	if tStatus is not null then 
+		set @q = CONCAT(@q," and t.`taskStatus_id`=",tStatus) ;
+	end if;
+	if tType is not null then 
+		set @q = CONCAT(@q," and t.`taskType_id`=",tType) ;
+	end if;
+	if pub is not null then 
+		set @q = CONCAT(@q," and t.`published`=",pub) ;
+	end if;
+	if dLine is not null and dLine!='0000-00-00 00:00:00' then 
+		set @q = CONCAT(@q," and t.`deadline`='",dLine,"'") ;
+	end if;
+
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
+
 
 
 -- Dumping structure for procedure manuel-test.getTaskFileMetaData
