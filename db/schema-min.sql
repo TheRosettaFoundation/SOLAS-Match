@@ -489,6 +489,7 @@ ENGINE=InnoDB;
 
 /*---------------------------------------start of procs--------------------------------------------*/
 
+-- Dumping structure for procedure SolasMatch.getProject
 DROP PROCEDURE IF EXISTS `getProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME)
@@ -532,9 +533,10 @@ BEGIN
     PREPARE stmt FROM @q;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
-END//
-DELIMITER;
+END //
+DELIMITER ;
 
+-- Dumping structure for procedure SolasMatch.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME)
@@ -618,6 +620,22 @@ BEGIN
         DEALLOCATE PREPARE stmt;
     end if;
     call getProject(projectId, titleText, descr, deadlineTime, orgId, ref, wordCount, createdTime);
+END //
+DELIMITER ;
+
+-- Dumping structure for procedure SolasMatch.archiveProject
+DROP PROCEDURE IF EXISTS `archiveProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject` (IN projectId INT)
+    MODIFIES SQL DATA
+BEGIN
+    INSERT INTO `ArchivedProjects` (id, title, description, deadline, organisation_id, reference, `word-count`, created)
+
+        SELECT *
+        FROM Projects p
+        WHERE p.id=projectId;
+
+    DELETE FROM Projects WHERE id=projectId;
 END //
 DELIMITER ;
 
