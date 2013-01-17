@@ -39,16 +39,9 @@
     </p>
 {/if}
 
-{if $task->getImpact() != ''}
-    <h3>Impact</h3>
-    <p>{$task->getImpact()}</p>
-{/if}
-
-{if $task->getReferencePage() != ''}
-    <h3>Context Reference</h3>
-    <p>
-        <a target="_blank" href="{$task->getReferencePage()}">{$task->getReferencePage()}</a>
-    </p>
+{if $task->getComment() != ''}
+    <h3>Comment</h3>
+    <p>{$task->getComment()}</p>
 {/if}
 
 {assign var="task_tags" value=$task->getTags()}

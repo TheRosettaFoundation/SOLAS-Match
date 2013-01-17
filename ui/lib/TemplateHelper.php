@@ -106,15 +106,15 @@ class TemplateHelper {
 
     public static function getTaskSourceLanguage($task)
     {
-        $language =  TemplateHelper::languageNameFromId($task->getSourceLangId());
-        $region =  TemplateHelper::countryNameFromCode($task->getSourceRegionId());
+        $language =  TemplateHelper::languageNameFromId($task->getSourceLanguageId());
+        $region =  TemplateHelper::countryNameFromCode($task->getSourceCountryId());
         return $language.' ('.$region.')';
     }
 
     public static function getTaskTargetLanguage($task)
     {
-        $language =  TemplateHelper::languageNameFromId($task->getTargetLangId());
-        $region =  TemplateHelper::countryNameFromCode($task->getTargetRegionId());
+        $language =  TemplateHelper::languageNameFromId($task->getTargetLanguageId());
+        $region =  TemplateHelper::countryNameFromCode($task->getTargetCountryId());
         return $language.' ('.$region.')';
     }
 

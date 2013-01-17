@@ -189,8 +189,8 @@ class TaskDao {
 
         //Remove ID so a new one will be created
         $task->setId(null);
-        $task->setTargetLangId($language_id);
-        $task->setTargetRegionId($countryCode);
+        $task->setTargetLanguageId($language_id);
+        $task->setTargetCountryId($countryCode);
         //Save the new Task
         $this->save($task);
         $this->calculateTaskScore($task->getId());
@@ -215,18 +215,19 @@ class TaskDao {
 
     private function update($task)
     {
+        //TODO Update when stored proc is finished
         $result= PDOWrapper::call("taskInsertAndUpdate", PDOWrapper::cleanseNull($task->getId())
-                                                .",".PDOWrapper::cleanseNull($task->getOrgId())
+                                                .",".PDOWrapper::cleanseNull($task->getOrganisationId())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
                                                 .",".PDOWrapper::cleanseNull($task->getWordCount())
-                                                .",".PDOWrapper::cleanseNull($task->getSourceLangId())
-                                                .",".PDOWrapper::cleanseNull($task->getTargetLangId())
+                                                .",".PDOWrapper::cleanseNull($task->getSourceLanguageId())
+                                                .",".PDOWrapper::cleanseNull($task->getTargetLanguageId())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getImpact())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getReferencePage())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceRegionId())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetRegionId()));
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryId())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryId()));
         $this->updateTags($task);
     }
     
@@ -304,17 +305,17 @@ class TaskDao {
 
     private function insert(&$task)
     {
-        $result = PDOWrapper::call("taskInsertAndUpdate", "null,".PDOWrapper::cleanseNull($task->getOrgId()).
+        $result = PDOWrapper::call("taskInsertAndUpdate", "null,".PDOWrapper::cleanseNull($task->getOrganisationId()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle()).
             ",".PDOWrapper::cleanseNull($task->getWordCount()).
-            ",".PDOWrapper::cleanseNull($task->getSourceLangId()).
-            ",".PDOWrapper::cleanseNull($task->getTargetLangId()).
+            ",".PDOWrapper::cleanseNull($task->getSourceLanguageId()).
+            ",".PDOWrapper::cleanseNull($task->getTargetLanguageId()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getImpact()).
             ",".PDOWrapper::cleanseNullOrWrapStr($task->getReferencePage()).
-            ",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceRegionId()).
-            ",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetRegionId()));
+            ",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryId()).
+            ",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryId()));
         $task->setId($result[0]['id']);
         $this->updateTags($task);
     }

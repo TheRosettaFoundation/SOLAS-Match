@@ -83,7 +83,7 @@ class TaskRouteHandler
         
         if ($response) {
             foreach ($response as $stdObject) {
-                $archived_tasks[] = $client->cast('Task', $stdObject);
+                $archived_tasks[] = $client->cast('ArchivedTask', $stdObject);
             }
         }        
 
@@ -260,10 +260,10 @@ class TaskRouteHandler
         }
         $app->view()->setData('task', $task);
         $app->view()->setData('sourceLanguage', $client->castCall("Language",
-                APIClient::API_VERSION."/languages/{$task->getSourceLangId()}"));
+                APIClient::API_VERSION."/languages/{$task->getSourceLanguageId()}"));
                 
         $app->view()->setData('targetLanguage', $client->castCall("Language",
-                APIClient::API_VERSION."/languages/{$task->getTargetLangId()}"));
+                APIClient::API_VERSION."/languages/{$task->getTargetLanguageId()}"));
        
         $app->render('task.claim.tpl');
     }
@@ -383,7 +383,7 @@ class TaskRouteHandler
             die;
         }
 
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrgId()}";
+        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
         $response = $client->call($request); 
         $org = $client->cast('Organisation', $response);
         
@@ -478,7 +478,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $org_id = $task->getOrgId();
+        $org_id = $task->getOrganisationId();
         $app->view()->appendData(array(
                 'org_id' => $org_id
         ));     
@@ -549,23 +549,19 @@ class TaskRouteHandler
             if (is_null($word_count_err) && is_null($title_err) && is_null($deadlineError)) {
                 if (!empty($post->source)) {
                     $source_id = TemplateHelper::saveLanguage($post->source);
-                    $task->setSourceLangId($source_id);
+                    $task->setSourceLanguageId($source_id);
                 }
 
                 if ($post->impact != '') {
-                    $task->setImpact($post->impact);
+                    $task->setComment($post->impact);
                 }
 
-                if ($post->reference != '' && $post->reference != "http://") {
-                    $task->setReferencePage($post->reference);
-                }
-        
                 if (isset($post->sourceCountry)&&$post->sourceCountry != '') {
-                    $task->setSourceRegionId($post->sourceCountry);
+                    $task->setSourceCountryId($post->sourceCountry);
                 }
 
                 if (isset($post->targetCountry)&&$post->targetCountry != '') {
-                    $task->setTargetRegionId($post->targetCountry);
+                    $task->setTargetCountryId($post->targetCountry);
                 }
 
                 $tags = $post->tags;
@@ -610,8 +606,8 @@ class TaskRouteHandler
                         //if it is the first language add it to this task
                         if ($language == $language_list[0]) {
                             $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
-                            $task->setTargetLangId($target_id);
-                            $task->setTargetRegionId($language['country']);
+                            $task->setTargetLanguageId($target_id);
+                            $task->setTargetCountryId($language['country']);
                             $request = APIClient::API_VERSION."/tasks/$task_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
                         } else {
@@ -625,8 +621,8 @@ class TaskRouteHandler
                     }
                 } else {
                     $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
-                    $task->setTargetLangId($target_id);
-                    $task->setTargetRegionId($language_list[0]['country']);
+                    $task->setTargetLanguageId($target_id);
+                    $task->setTargetCountryId($language_list[0]['country']);
                     
                     $request = APIClient::API_VERSION."/tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
@@ -773,7 +769,7 @@ class TaskRouteHandler
             }
             
             if ($post->impact != '') {
-                $task->setImpact($post->impact);
+                $task->setComment($post->impact);
             }
 
             $deadline = "";
@@ -799,24 +795,20 @@ class TaskRouteHandler
                 $task->setDeadline(date("Y-m-d H:i:s", $deadline));
             }
             
-            if ($post->reference != '' && $post->reference != 'http://') {
-                $task->setReferencePage($post->reference);
-            }
-            
             if ($post->source != '') {
-                $task->setSourceLangId($post->source);
+                $task->setSourceLanguageId($post->source);
             }
             
             if ($post->target != '') {
-                $task->setTargetLangId($post->target);
+                $task->setTargetLanguageId($post->target);
             }   
              
             if ($post->sourceCountry != '') {
-                $task->setSourceRegionId($post->sourceCountry);
+                $task->setSourceCountryId($post->sourceCountry);
             }   
              
             if ($post->targetCountry != '') {
-                $task->setTargetRegionId($post->targetCountry);
+                $task->setTargetCountryId($post->targetCountry);
             }   
               
             if ($post->tags != '') {
@@ -915,7 +907,7 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/users/subscribedToTask/{$user->getUserId()}/$task_id";
         $registered = $client->call($request);         
 
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrgId()}";
+        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
 
@@ -1011,7 +1003,7 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
-        $org_id = $task->getOrgId();
+        $org_id = $task->getOrganisationId();
 
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
@@ -1022,7 +1014,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrgId()}";
+        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
         $response = $client->call($request); 
         $org = $client->cast('Organisation', $response);
         $org_name = $org->getName();
