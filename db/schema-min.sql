@@ -475,6 +475,137 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 
 /*---------------------------------------start of procs--------------------------------------------*/
 
+DROP PROCEDURE IF EXISTS `getProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME)
+    READS SQL DATA
+BEGIN
+    if projectId='' then set projectId=null;end if;
+    if titleText='' then set titleText=null;end if;
+    if descr='' then set descr=null;end if;
+    if deadlineTime='' then set deadlineTime=null;end if;
+    if orgId='' then set orgId=null;end if;
+    if ref='' then set ref=null;end if;
+    if wordCount='' then set wordCount=null;end if;
+    if createdTime='' then set createdTime=null;end if;
+
+    set @q="SELECT * FROM Projects p WHERE 1";
+    if projectId is not null then
+        set @q = CONCAT(@q, " and p.id=", projectId);
+    end if;
+    if titleText is not null then
+        set @q = CONCAT(@q, " and p.title='", titleText, "'");
+    end if;
+    if descr is not null then
+        set @q = CONCAT(@q, " and p.description='", descr, "'");
+    end if;
+    if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
+        set @q = CONCAT(@q, " and p.deadline='", deadlineTime, "'");
+    end if;
+    if orgId is not null then
+        set @q = CONCAT(@q, " and p.organisation_id=", orgId);
+    end if;
+    if ref is not null then
+        set @q = CONCAT(@q, " and p.reference='", ref, "'");
+    end if;
+    if wordCount is not null then
+        set @q = CONCAT(@q, " and p.`word-count`=", wordCount);
+    end if;
+    if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
+        set @q = CONCAT(@q, " and p.created='", createdTime, "'");
+    end if;
+
+    PREPARE stmt FROM @q;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END//
+DELIMITER;
+
+DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME)
+BEGIN
+    if projectId="" then set projectId=null; end if;
+    if titleText="" then set titleText=null; end if;
+    if descr="" then set descr=null; end if;
+    if deadlineTime="" then set deadlineTime=null; end if;
+    if orgId="" then set orgId=null; end if;
+    if ref="" then set ref=null; end if;
+    if wordCount="" then set wordCount=null; end if;
+    if createdTime="" then set createdTime=null; end if;
+
+    if projectId is null then
+        if createdTime is null then set createdTime=now(); end if;
+
+        INSERT INTO Projects (title, description, deadline, organisation_id, reference, `word-count`, created) VALUES (titleText, descr, deadlineTime, orgId, ref, wordCount, NOW());
+    elseif EXISTS (select 1 FROM Projects p WHERE p.id=projectId) then
+        set @first = true;
+        set @q = "UPDATE Projects p set";
+
+        if titleText is not null then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q, " p.title='", titleText, "'");
+        end if;
+        if descr is not null then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q, " p.description='", descr, "'");
+        end if;
+        if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q, " p.deadline='", deadlineTime, "'");
+        end if;
+        if orgId is not null then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q, " p.organisation_id=", orgId);
+        end if;
+        if ref is not null then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q, " p.reference='", ref, "'");
+        end if;
+        if wordCount is not null then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q, " p.`word-count`=", wordCount);
+        end if;
+        if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q, " p.created='", createdTime, "'");
+        end if;
+        set @q = CONCAT(@q, " WHERE p.id=", projectId);
+        PREPARE stmt FROM @q;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+    end if;
+    call getProject(projectId, titleText, descr, deadlineTime, orgId, ref, wordCount, createdTime);
+END //
+DELIMITER ;
 
 -- Dumping structure for procedure manuel-test.acceptMemRequest
 DROP PROCEDURE IF EXISTS `acceptMemRequest`;
