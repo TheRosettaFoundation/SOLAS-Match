@@ -624,7 +624,7 @@ DELIMITER ;
 -- Dumping structure for procedure SolasMatch.archiveProject
 DROP PROCEDURE IF EXISTS `archiveProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject` (IN projectId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject` (IN projectId INT, IN user_id INT)
     MODIFIES SQL DATA
 BEGIN
     INSERT INTO `ArchivedProjects` (id, title, description, deadline, organisation_id, reference, `word-count`, created)
@@ -633,7 +633,65 @@ BEGIN
         FROM Projects p
         WHERE p.id=projectId;
 
+    INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`, `archived-date`, `user_id-archived`)
+        VALUES (projectId, NOW(), user_id);
+
     DELETE FROM Projects WHERE id=projectId;
+END //
+DELIMITER ;
+
+-- Dumping structure for procedure SolasMatch.getArchivedProject
+DROP PROCEDURE IF EXISTS `getArchivedProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject` (IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT)
+    READS SQL DATA
+BEGIN
+    if projectId='' then set projectId=null;end if;
+    if titleText='' then set titleText=null;end if;
+    if descr='' then set descr=null;end if;
+    if deadlineTime='' then set deadlineTime=null;end if;
+    if orgId='' then set orgId=null;end if;
+    if ref='' then set ref=null;end if;
+    if wordCount='' then set wordCount=null;end if;
+    if createdTime='' then set createdTime=null;end if;
+    if archiveDate='' then set archiveDate=null;end if;
+    if archiverId='' then set archiverId=null;end if;
+
+    set @q = "SELECT * FROM ArchivedProjects p JOIN ArchivedProjectsMetaData m ON p.id=m.`archived-project_id` WHERE 1";
+    if projectId is not null then
+        set @q = CONCAT(@q, " and p.id=", projectId);
+    end if;
+    if titleText is not null then
+        set @q = CONCAT(@q, " and title='", titleText, "'");
+    end if;
+    if descr is not null then
+        set @q = CONCAT(@q, " and description='", descr, "'");
+    end if;
+    if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
+        set @q = CONCAT(@q, " and deadline='", deadlineTime, "'");
+    end if;
+    if orgId is not null then
+        set @q = CONCAT(@q, " and organisation_id=", orgId);
+    end if;
+    if ref is not null then
+        set @q = CONCAT(@q, " and reference='", ref, "'");
+    end if;
+    if wordCount is not null then
+        set @q = CONCAT(@q, " and `word-count`=", wordCount);
+    end if;
+    if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
+        set @q = CONCAT(@q, " and created='", createdTime, "'");
+    end if;
+    if (archiveDate is not null and archiveDate!='0000-00-00 00:00:00') then
+        set @q = CONCAT(@q, " and `archived-date`='", archiveDate, "'");
+    end if;
+    if archiverId is not null then
+        set @q = CONCAT(@q, " and `user_id-archived`=", archiverId);
+    end if;
+
+    PREPARE stmt from @q;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
 END //
 DELIMITER ;
 
