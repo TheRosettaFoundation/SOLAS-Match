@@ -312,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
   `taskType_id` int(11) unsigned NOT NULL,
   `taskStatus_id` int(11) unsigned NOT NULL,
-  `published` tinyint(1) NOT NULL,
+  `published` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`,`project_id`,`language_id-source`,`language_id-target`,`Country_id-source`,`Country_id-target`,`taskType_id`),
   KEY `FK_Tasks_Languages` (`language_id-source`),
@@ -332,6 +332,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 
 
 -- Dumping structure for table manuel-test.TaskTags
@@ -1967,104 +1968,157 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure manuel-test.userInsertAndUpdate
-DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
+
+-- Dumping structure for procedure intergrationTest.taskInsertAndUpdate
+DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` INT, IN `region` INT, IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
 BEGIN
-	if pass='' then set pass=null;end if;
-	if bio='' then set bio=null;end if;
 	if id='' then set id=null;end if;
-	if nonce='' then set nonce=null;end if;
+	if projectID='' then set projectID=null;end if;
 	if name='' then set name=null;end if;
-	if email='' then set email=null;end if;
-	if lang='' then set lang=null;end if;
-    if region='' then set region=null;end if;
+	if sID='' then set sID=null;end if;
+	if tID='' then set tID=null;end if;
+	if wordCount='' then set wordCount=null;end if;
+	if created='' then set created=null;end if;
+	if taskComment='' then set taskComment=null;end if;
+	if sCC='' then set sCC=null;end if;
+	if tCC='' then set tCC=null;end if;
+	if dLine='' then set dLine=null;end if;
+	if taskType='' then set taskType=null;end if;
+	if tStatus='' then set tStatus=null;end if;
+	if pub='' then set pub=null;end if;
 	
-	if id is null and not exists(select * from Users u where u.email= email)then
-	-- set insert
-	insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
-              values (email, nonce, pass, NOW(), name, bio, lang, region);
-	else 
+	
+	if id is null then
+		if taskComment is null then set taskComment="";end if;
+		if created is null or created ='0000-00-00 00:00:00' then set created=now();end if;
+		if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
+		set @scid=null;
+			select c.id into @scid from Countries c where c.code=sCC;
+		set @tcid=null;
+			select c.id into @tcid from Countries c where c.code=tCC;
+		insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`taskType_id`,`taskStatus_id`,`published`)
+		 values (projectID,name,wordCount,sID,tID,created,taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
+	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 		set @first = true;
-		set @q= "update Users u set ";-- set update
-		if bio is not null then 
-#set paramaters to be updated
-			set @q = CONCAT(@q," u.biography='",bio,"'") ;
-			set @first = false;
-		end if;
-		if lang is not null then 
+		set @q= "update Tasks t set";-- set update
+		if projectID is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.language_id='",lang,"'") ;
-		end if;
-		if region is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," u.country_id='",region,"'") ;
+			set @q = CONCAT(@q," t.project_id=",projectID) ;
 		end if;
 		if name is not null then 
-				if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," u.`display-name`='",name,"'");
-		
-		end if;
-		
-		if email is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.email='",email,"'");
-		
+			set @q = CONCAT(@q," t.title='",name,"'") ;
 		end if;
-		if nonce is not null then 
+		if sID is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.nonce=",nonce) ;
-		
+			set @q = CONCAT(@q," t.`language_id-source`=",sID) ;
 		end if;
-		
-		if pass is not null then 
+		if tID is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.password='",pass,"'");
-		
+			set @q = CONCAT(@q," t.`language_id-target`=",tID) ;
 		end if;
-#		set where
-	
-		if id is not null then 
-			set @q = CONCAT(@q," where  u.id= ",id);
-#    	allows email to be changed but not user id
 		
-		elseif email is not null then 
-			set @q = CONCAT(@q," where  u.email= ,",email,"'");-- allows anything but email and user_id to change
-		else
-			set @q = CONCAT(@q," where  u.email= null AND u.id=null");-- will always fail to update anyting
+		if sCC is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @scid=null;
+			select c.id into @scid from Countries c where c.code=sCC;
+			set @q = CONCAT(@q," t.`country_id-source`=",@scid) ;
 		end if;
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
-
+		if tCC is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @tcid=null;
+			select c.id into @tcid from Countries c where c.code=tCC;
+			set @q = CONCAT(@q," t.`country_id-target`=",@tcid) ;
+		end if;
+		
+		if wordCount is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.`word-count`=",wordCount) ;
+		end if;
+		if taskComment is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.comment='",taskComment,"'");
+		end if;
+		if (created is not null  and created!='0000-00-00 00:00:00') then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.`created-time`='",created,"'") ;
+		end if;
+		if (dLine is not null  and dLine!='0000-00-00 00:00:00') then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.`deadline`='",dLine,"'") ;
+		end if;
+		if taskType is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.`taskType_id`=",taskType) ;
+		end if;
+		if tStatus is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.`taskStatus_id`=",tStatus) ;
+		end if;
+		if pub is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," t.`published`=",pub) ;
+		end if;
+		set @q = CONCAT(@q," where  t.id= ",id);
+		PREPARE stmt FROM @q;
+		EXECUTE stmt;
+		DEALLOCATE PREPARE stmt;
 	end if;
-	
-	select u.id from Users u where u.email= email;
+	call getTask(id,projectID,name,wordCount,sID,tID,created,sCC,tCC,taskComment,taskType,tStatus,pub,dLine);
 END//
 DELIMITER ;
 
