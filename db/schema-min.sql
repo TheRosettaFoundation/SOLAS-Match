@@ -13,7 +13,7 @@ SET FOREIGN_KEY_CHECKS=0;
 /*--------------------------------------------------start of tables--------------------------------*/
 
 -- Dumping structure for table Solas-Match-Dev.ArchivedProjects
-DROP TABLE IF EXISTS `ArchivedProjects`;
+
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
 
 
 -- Dumping structure for table Solas-Match-Dev.ArchivedProjectsMetaData
-DROP TABLE IF EXISTS `ArchivedProjectsMetaData`;
+
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
   `archived-project_id` int(10) unsigned NOT NULL,
   `archived-date` datetime NOT NULL,
@@ -88,7 +88,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
 /*!40000 ALTER TABLE `ArchivedTasks` ENABLE KEYS */;
 
 -- Dumping structure for table Solas-Match-Dev.ArchivedTasksMetadata
-DROP TABLE IF EXISTS `ArchivedTasksMetadata`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
   `user_id-claimed` int(10) unsigned DEFAULT NULL,
@@ -207,7 +206,6 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Dev.Projects
-DROP TABLE IF EXISTS `Projects`;
 CREATE TABLE IF NOT EXISTS `Projects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -227,7 +225,6 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 /*!40000 ALTER TABLE `Projects` ENABLE KEYS */;
 
 -- Dumping structure for table Solas-Match-Dev.Statistics
-DROP TABLE IF EXISTS `Statistics`;
 CREATE TABLE IF NOT EXISTS `Statistics` (
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `value` double NOT NULL,
@@ -250,7 +247,6 @@ CREATE TABLE IF NOT EXISTS `Tags` (
 
 
 -- Dumping structure for table Solas-Match-Dev.TaskClaims
-DROP TABLE IF EXISTS `TaskClaims`;
 CREATE TABLE IF NOT EXISTS `TaskClaims` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
@@ -268,7 +264,6 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
 /*!40000 ALTER TABLE `TaskClaims` ENABLE KEYS */;
 
 -- Dumping structure for table Solas-Match-Dev.TaskPrerequisites
-DROP TABLE IF EXISTS `TaskPrerequisites`;
 CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   `task_id` bigint(20) unsigned NOT NULL,
   `task_id-prerequisite` bigint(20) unsigned NOT NULL,
@@ -356,7 +351,6 @@ CREATE TABLE IF NOT EXISTS `TaskTags` (
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Dev.TaskStatus
-DROP TABLE IF EXISTS `TaskStatus`;
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -374,7 +368,6 @@ REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 /*!40000 ALTER TABLE `TaskStatus` ENABLE KEYS */;
 
 -- Dumping structure for table Solas-Match-Dev.TaskTypes
-DROP TABLE IF EXISTS `TaskTypes`;
 CREATE TABLE IF NOT EXISTS `TaskTypes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -468,6 +461,27 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
+	`user_id` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`Project_id` INT(10) UNSIGNED NULL DEFAULT NULL,
+	UNIQUE INDEX `user_id` (`user_id`, `Project_id`),
+	CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='utf8_unicode_ci'
+ENGINE=InnoDB;
+
+
+
+CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
+	`user_id` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`task_id` BIGINT(10) UNSIGNED NULL DEFAULT NULL,
+	UNIQUE INDEX `user_id` (`user_id`, `task_id`),
+	CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='utf8_unicode_ci'
+ENGINE=InnoDB;
 
 
 
@@ -1128,14 +1142,14 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure manuel-test.getTask
+-- Dumping structure for procedure intergrationTest.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impact` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` TINYINT, IN `dLine` DATETIME)
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
-	if orgID='' then set orgID=null;end if;
+	if projectID='' then set projectID=null;end if;
 	if name='' then set name=null;end if;
 	if sID='' then set sID=null;end if;
 	if tID='' then set tID=null;end if;
@@ -1146,13 +1160,13 @@ BEGIN
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
 	
-	set @q= "select id,organisation_id,title,`word-count`,source_id,target_id,`created-time`,impact,`reference-page`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target` from Tasks t where 1";-- set update
+	set @q= "select id,project_id,title,`word-count`,source_id,target_id,`created-time`,impact,`reference-page`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target` from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
 	end if;
 	if orgID is not null then 
-		set @q = CONCAT(@q," and t.organisation_id=",orgID) ;
+		set @q = CONCAT(@q," and t.project_id=",projectID) ;
 	end if;
 	if name is not null then 
 		set @q = CONCAT(@q," and t.title='",name,"'") ;
@@ -1594,13 +1608,13 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure manuel-test.getUserTrackedTasks
+-- Dumping structure for procedure intergrationTest.getUserTrackedTasks
 DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTrackedTasks`(IN `id` INT)
 BEGIN
 	SELECT t.*
-	FROM UserNotifications un join Tasks t on un.task_id=t.id
+	FROM UserTrackedTasks utt join Tasks t on utt.task_id=t.id
 	WHERE user_id = id;
 END//
 DELIMITER ;
@@ -1888,34 +1902,38 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure manuel-test.taskInsertAndUpdate
+-- Dumping structure for procedure intergrationTest.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `orgID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `impactValue` TEXT, IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` TINYINT)
 BEGIN
 	if id='' then set id=null;end if;
-	if orgID='' then set orgID=null;end if;
+	if projectID='' then set projectID=null;end if;
 	if name='' then set name=null;end if;
 	if sID='' then set sID=null;end if;
 	if tID='' then set tID=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
-	if impactValue='' then set impactValue=null;end if;
+	if taskComment='' then set taskComment=null;end if;
 	if ref='' then set ref=null;end if;
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
-	
+	if dLine='' then set dLine=null;end if;
+	if taskType='' then set taskType=null;end if;
+	if tStatus='' then set tStatus=null;end if;
+	if pub='' then set pub=null;end if;
 	
 	if id is null then
-		if impactValue is null then set impactValue="";end if;
+		if taskComment is null then set taskComment="";end if;
 		if ref is null then set ref="";end if;
 		if created is null or created ='0000-00-00 00:00:00' then set created=now();end if;
+		if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
 		set @scid=null;
 			select c.id into @scid from Countries c where c.code=sCC;
 		set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
-		insert into Tasks (organisation_id,title,`word-count`,source_id,target_id,`created-time`,impact,`reference-page`,`country_id-source`,`country_id-target`)
-		 values (orgID,name,wordCount,sID,tID,created,impactValue,ref,@scid,@tcid);
+		insert into Tasks (project_id,title,`word-count`,source_id,target_id,`created-time`,comment,`reference-page`,`country_id-source`,`country_id-target`)
+		 values (projectID,name,wordCount,sID,tID,created,taskComment,ref,@scid,@tcid);
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 		set @first = true;
 		set @q= "update Tasks t set";-- set update
@@ -1925,7 +1943,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.organisation_id=",orgID) ;
+			set @q = CONCAT(@q," t.project_id=",projectID) ;
 		end if;
 		if name is not null then 
 			if (@first = false) then 
@@ -1987,7 +2005,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.impact='",impactValue,"'");
+			set @q = CONCAT(@q," t.comment='",taskComment,"'");
 		end if;
 		if ref is not null then 
 			if (@first = false) then 
@@ -2013,6 +2031,7 @@ BEGIN
 	call getTask(id,orgID,name,wordCount,sID,tID,created,impactValue,ref,sCC,tCC);
 END//
 DELIMITER ;
+
 
 
 -- Dumping structure for procedure manuel-test.taskIsClaimed
@@ -2195,18 +2214,48 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure manuel-test.userSubscribedToTask
+-- Dumping structure for procedure intergrationTest.userSubscribedToTask
 DROP PROCEDURE IF EXISTS `userSubscribedToTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToTask`(IN `userId` INT, IN `taskId` INT)
 BEGIN
 	if EXISTS (SELECT task_id 
-                	FROM UserNotifications
+                	FROM UserTrackedTasks
                 	WHERE user_id = userId
                     AND task_id = taskId) then
 		select 1 as 'result';
 	else
     	select 0 as 'result';
+	end if;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure intergrationTest.UserTrackTask
+DROP PROCEDURE IF EXISTS `UserTrackTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UserTrackTask`(IN `uID` INT, IN `tID` BIGINT)
+    MODIFIES SQL DATA
+BEGIN
+	if not exists(select 1 from UserTrackedTasks utt where utt.user_id=uID and utt.task_id=tID) then
+		insert into UserTrackedTasks (user_id,task_id) values (uID,tID);
+		select 1 as `result`;
+	else
+		select 0 as `result`;
+	end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure intergrationTest.userUnTrackTask
+DROP PROCEDURE IF EXISTS `userUnTrackTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackTask`(IN `uID` INT, IN `tID` BIGINT)
+BEGIN
+	if exists(select 1 from UserTrackedTasks utt where utt.user_id=uID and utt.task_id=tID) then
+		delete from UserTrackedTasks  where user_id=uID and task_id=tID;
+		select 1 as `result`;
+	else
+		select 0 as `result`;
 	end if;
 END//
 DELIMITER ;
