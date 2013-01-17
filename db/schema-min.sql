@@ -1161,7 +1161,7 @@ DELIMITER ;
 -- Dumping structure for procedure intergrationTest.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME,  IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` TINYINT, IN `dLine` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` TINYINT, IN `dLine` DATETIME)
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
@@ -1171,7 +1171,6 @@ BEGIN
 	if tID='' then set tID=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
-	if ref='' then set ref=null;end if;
 	if sCC='' then set sCC=null;end if;
 	if tCC='' then set tCC=null;end if;
 	if taskComment='' then set taskComment=null;end if;
@@ -1181,7 +1180,7 @@ BEGIN
 	if dLine='' then set dLine=null;end if;
 	
 	
-	set @q= "select id,project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment, deadline, published, taskType_id,taskStatus_id from Tasks t where 1";-- set update
+	set @q= "select id,project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  taskType_id, taskStatus_id, published, deadline from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1213,9 +1212,6 @@ BEGIN
 	end if;
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
 		set @q = CONCAT(@q," and t.`created-time`='",created,"'") ;
-	end if;
-	if ref is not null then 
-		set @q = CONCAT(@q," and t.`reference-page`='",ref,"'") ;
 	end if;
 	if taskComment is not null then 
 		set @q = CONCAT(@q," and t.`comment`='",taskComment,"'") ;
