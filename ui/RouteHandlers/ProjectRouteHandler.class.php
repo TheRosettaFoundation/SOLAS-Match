@@ -14,6 +14,9 @@ class ProjectRouteHandler
         $app->get('/project/alter/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'projectAlter'))->via('POST')->name('project-alter');
         // $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
+        
+        $app->get('/project/upload/:org_id/', array($middleware, 'authUserForOrg'),
+        array($this, 'projectUpload'))->via('GET', 'POST')->name('project-upload');        
     }
   
     public function projectView($project_id)
@@ -57,16 +60,17 @@ class ProjectRouteHandler
                 }   
             }   
         }   
-        
-        $request = APIClient::API_VERSION."/users/subscribedToProject/{$user_id}/$project_id";
-        $registered = $client->call($request);         
 
-        $request = APIClient::API_VERSION."/orgs/{$project->getOrgId()}";
-        $response = $client->call($request);     
-        $org = $client->cast('Organisation', $response);
+        $request = APIClient::API_VERSION."/users/subscribedToProject/{$user_id}/{$project_id}";
+        $registered = $client->call($request);         
+        
+        // Uncomment when projects work
+        // $request = APIClient::API_VERSION."/orgs/{$project->getOrgId()}";
+        //$response = $client->call($request);     
+        //$org = $client->cast('Organisation', $response);
 
         $app->view()->appendData(array(
-                                 'org' => $org,
+                                 //'org' => $org,
                                  'registered' => $registered
         ));
  
@@ -236,6 +240,155 @@ class ProjectRouteHandler
         ));
         
         $app->render('project.alter.tpl');
+    }
+    
+    
+    public function projectUpload($org_id)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+        $user_id = UserSession::getCurrentUserID();
+
+        $error          = null;
+        $title_err      = null;
+        $word_count_err = null;
+        $field_name = 'new_project_file';
+
+        
+//        $request = APIClient::API_VERSION."/projects/$project_id";
+//        $response = $client->call($request);
+//        $project = $client->cast('Project', $response);        
+//        if (!is_object($project)) {
+//            $app->notFound();
+//        }
+        
+        if ($app->request()->isPost()) {            
+            $post = (object) $app->request()->post();
+            
+            if(!is_null($post->title) && !is_null($post->deadline) &&
+                (isset($post->chunking) || isset($post->translation) ||
+                isset($post->proofreading) || isset($post->postediting))) {
+                
+                // ready to create project metadata & upload file
+                $projectData = array();
+                
+                $projectData['title'] = $post->title;
+                
+                if(isset($post->description)) {
+                    $projectData['description'] = $post->description;
+                }
+                
+                if(isset($post->reference)) {
+                    $projectData['reference'] = $post->reference;
+                }
+                
+                if(isset($post->word_count)) {
+                    $projectData['word_count'] = $post->word_count;
+                }
+
+                $projectData['deadline'] = $post->deadline;
+                
+                if(isset($post->tags)) {
+                    $projectData['tags'] = $post->tags;
+                }
+                
+                $projectModel = ModelFactory::buildModel("project", $projectData);
+                $request = APIClient::API_VERSION."/projects";
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $projectModel);                
+                $project = $client->cast('Project', $response);      
+                
+                try {                    
+                    $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                    $error_message=$client->call(APIClient::API_VERSION."/projects/{$project->getId()}/file/".
+                            urlencode($_FILES[$field_name]['name'])."/$user_id",
+                            HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                } catch (Exception  $e) {
+                    $upload_error = true;
+                    $error_message = 'File error: ' . $e->getMessage();
+                }                
+                
+            } else {
+                
+            }
+
+            
+
+            
+            
+            
+            
+            $upload_error = false;
+            try {
+                TemplateHelper::validateFileHasBeenSuccessfullyUploaded($field_name);
+            } catch (Exception $e) {
+                $upload_error = true;
+                $error_message = $e->getMessage();
+            }
+            
+            if (!$upload_error) {
+                
+                $projectData = array();
+                $taskData['organisation_id'] = $org_id;
+                $taskData['title'] = $_FILES[$field_name]['name'];
+                $task = ModelFactory::buildModel("Task", $taskData);
+                
+                $request = APIClient::API_VERSION."/tasks";
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
+                
+                $task = $client->cast('Task', $response);
+
+                try {                    
+                    $filedata =file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                    $error_message=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/file/".
+                            urlencode($_FILES[$field_name]['name'])."/$user_id",
+                            HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                } catch (Exception  $e) {
+                    $upload_error = true;
+                    $error_message = 'File error: ' . $e->getMessage();
+                }
+            }
+            
+            if (!$upload_error) {
+                $app->redirect($app->urlFor('task-describe', array('task_id' => $task->getId())));
+            }
+        } 
+        
+        $extra_scripts = 
+            "<script>
+            var isEnabled = false;
+            function chunkingEnabled()
+            {        
+                if(!isEnabled) {
+                   document.getElementById(\"translation\").checked = false;
+                   document.getElementById(\"proofreading\").checked = false;
+                   document.getElementById(\"postediting\").checked = false;        
+                   document.getElementById(\"translation\").disabled = true;
+                   document.getElementById(\"proofreading\").disabled = true;
+                   document.getElementById(\"postediting\").disabled = true;
+                   isEnabled = true;
+                } else {
+                   document.getElementById(\"translation\").disabled = false;
+                   document.getElementById(\"proofreading\").disabled = false;
+                   document.getElementById(\"postediting\").disabled = false;       
+                   isEnabled = false;
+                }        
+            }
+        </script>";
+        
+        $language_list = TemplateHelper::getLanguageList();
+        $countries = TemplateHelper::getCountryList();
+
+        $app->view()->appendData(array(
+            'error'             => $error,
+            'title_error'       => $title_err,
+            'word_count_err'    => $word_count_err,
+            'url_project_upload' => $app->urlFor('project-upload', array('org_id' => $org_id)),
+            'languages'         => $language_list,
+            'countries'         => $countries,
+            'extra_scripts'     => $extra_scripts
+        ));
+        
+        $app->render('project.upload.tpl');
     }    
     
     

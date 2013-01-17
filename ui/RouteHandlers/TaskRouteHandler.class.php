@@ -491,6 +491,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID();
+        $settings = new Settings();
 
         $error          = null;
         $title_err      = null;
@@ -609,7 +610,7 @@ class TaskRouteHandler
             }
         }
         $language_list = TemplateHelper::getLanguageList();
-        $countries= TemplateHelper::getCountryList();
+        $countries = TemplateHelper::getCountryList();
         $extra_scripts = "
         <script language='javascript'>
         
@@ -686,9 +687,8 @@ class TaskRouteHandler
                     isRemoveButtonHidden = true;
                 } 
             }            
-        </script>";
-        
-        $countries= TemplateHelper::getCountryList();
+        </script>";  
+
         $app->view()->appendData(array(
             'error'             => $error,
             'title_error'       => $title_err,

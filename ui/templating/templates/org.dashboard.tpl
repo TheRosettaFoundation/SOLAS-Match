@@ -37,7 +37,10 @@
                     <center>Status</center>
                 </th>
                 <th>
-                    <center>Track</center>
+                    <center>Word Count</center>
+                </th>
+                <th>
+                    <center>Created</center>
                 </th>
                 <th>
                     <center>
@@ -54,6 +57,7 @@
             </tr>
         </thead>
         <tbody>
+        {*
         {assign var="projectsData" value=$templateData[$project_id]}
         {if !is_null($projectsData)}
             {foreach from=$projectsData item=data}
@@ -125,6 +129,7 @@
                 <p>This organisation has no projects listed.</p>
             </td>
         {/if}
+        *}
         </tbody>
     {/foreach}
     </table>

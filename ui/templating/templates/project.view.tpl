@@ -2,13 +2,7 @@
 
 <h1 class="page-header">
     Project Title Name
-    {*
-    {if $project->getTitle() != ''}
-        {$project->getTitle()}
-    {else}
-        Task {$project->getId()}
-    {/if}
-    *}
+    {*$project->getTitle()*}
     <small>Overview of project details.</small>
     {*
     {assign var="project_id" value=$project->getId()}
@@ -72,9 +66,9 @@
 <p>
     10/5/2012 24:00
 </p>
-
-
-    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+    <!-- Uncomment when projects is working -->
+    {*
+    <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
         {if isset($registered) && $registered == true}
             <p>
                 <input type="hidden" name="notify" value="false" />
@@ -91,6 +85,7 @@
             </p>
         {/if}
     </form> 
+    *}
 
 <p style="margin-bottom:40px;"></p>
 
@@ -143,6 +138,7 @@
                 </tr>
             </thead>
             <tbody>
+                {*
             {assign var="tasksData" value=$templateData[$org_id]}
             {if !is_null($tasksData)}
                 {foreach from=$tasksData item=data}
@@ -221,6 +217,7 @@
                 </td>
             {/if}
             </tbody>
+            *}
         {/foreach}
         </table>
     {else}
