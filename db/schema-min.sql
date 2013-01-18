@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
 /*!40000 ALTER TABLE `ArchivedProjectsMetaData` ENABLE KEYS */;
 
 
--- Dumping structure for table Solas-Match-Dev.ArchivedTasks
+-- Dumping structure for table intergrationTest.ArchivedTasks
 DROP TABLE IF EXISTS `ArchivedTasks`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
@@ -62,19 +62,19 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `created-time` datetime NOT NULL,
   `language_id-source` int(11) unsigned NOT NULL,
   `language_id-target` int(11) unsigned NOT NULL,
-  `Country_id-source` int(11) unsigned NOT NULL,
-  `Country_id-target` int(11) unsigned NOT NULL,
+  `country_id-source` int(11) unsigned NOT NULL,
+  `country_id-target` int(11) unsigned NOT NULL,
   `taskType_id` int(11) unsigned NOT NULL,
   `taskStatus_id` int(11) unsigned NOT NULL,
-  `published` bit(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `title` (`title`,`project_id`),
+  `published` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `title` (`title`,`project_id`,`language_id-source`,`language_id-target`,`country_id-source`,`country_id-target`,`taskType_id`),
   KEY `FK_ArchivedTasks_Languages` (`language_id-source`),
   KEY `FK_ArchivedTasks_Languages_2` (`language_id-target`),
-  KEY `FK_ArchivedTasks_Countries` (`Country_id-source`),
-  KEY `FK_ArchivedTasks_Countries_2` (`Country_id-target`),
+  KEY `FK_ArchivedTasks_Countries` (`country_id-source`),
+  KEY `FK_ArchivedTasks_Countries_2` (`country_id-target`),
   KEY `FK_ArchivedTasks_TaskTypes` (`taskType_id`),
   KEY `FK_ArchivedTasks_TaskStatus` (`taskStatus_id`),
+  KEY `id` (`id`),
   CONSTRAINT `FK_ArchivedTasks_Countries` FOREIGN KEY (`Country_id-source`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasks_Countries_2` FOREIGN KEY (`Country_id-target`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasks_Languages` FOREIGN KEY (`language_id-source`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -83,17 +83,15 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   CONSTRAINT `FK_ArchivedTasks_TaskTypes` FOREIGN KEY (`taskType_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table Solas-Match-Dev.ArchivedTasks: ~0 rows (approximately)
-/*!40000 ALTER TABLE `ArchivedTasks` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ArchivedTasks` ENABLE KEYS */;
+-- Data exporting was unselected.
 
--- Dumping structure for table Solas-Match-Dev.ArchivedTasksMetadata
+-- Dumping structure for table intergrationTest.ArchivedTasksMetadata
+DROP TABLE IF EXISTS `ArchivedTasksMetadata`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
   `user_id-claimed` int(10) unsigned DEFAULT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
   `archived-date` datetime NOT NULL,
-  `tags` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `archivedTask_id` (`archivedTask_id`),
   KEY `FK_ArchivedTasksMetadata_Users` (`user_id-claimed`),
   KEY `FK_ArchivedTasksMetadata_Users_2` (`user_id-archived`),
@@ -102,9 +100,8 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   CONSTRAINT `FK_ArchivedTasksMetadata_Users_2` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table Solas-Match-Dev.ArchivedTasksMetadata: ~0 rows (approximately)
-/*!40000 ALTER TABLE `ArchivedTasksMetadata` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ArchivedTasksMetadata` ENABLE KEYS */;
+-- Data exporting was unselected.
+
 
 
 
@@ -674,21 +671,32 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure manuel-test.archiveTask
+-- Dumping structure for procedure intergrationTest.archiveTask
 DROP PROCEDURE IF EXISTS `archiveTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT, IN `uID` INT)
     MODIFIES SQL DATA
 BEGIN
-	INSERT INTO `ArchivedTasks`(task_id, organisation_id, title, `word-count`, source_id, target_id, `created-time`, `archived-time`, user_id)
+	if not exists(select 1 from ArchivedTasks where id = tID) then
+		INSERT INTO `ArchivedTasks` (`id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `taskType_id`, `taskStatus_id`, `published`)
+			SELECT * FROM Tasks t WHERE t.id = tID;
 		
-		SELECT tt.id, organisation_id, title, `word-count`, source_id, target_id, `created-time`, NOW(), tc.user_id
-		FROM Tasks tt
-		LEFT JOIN TaskClaims tc ON tc.task_id = tt.id
-		WHERE tt.id = tID;
-   
-   DELETE FROM Tasks WHERE id = tID ;
-   DELETE FROM UserTaskScores WHERE task_id = tID;
+		INSERT INTO ArchivedTasksMetadata 
+		(`user_id-claimed`,`user_id-archived`,`archived-date`,`archivedTask_id`) 
+		select 
+		(SELECT  tc.user_id
+			FROM TaskClaims tc
+			WHERE tc.task_id = tID
+			limit 1)  as `user_id-claimed`
+		,uID
+		,now()
+		,tID;
+	   
+	   DELETE FROM Tasks WHERE id = tID ;
+	   select 1 as result;
+   else
+      select 0 as result;
+   end if;
 END//
 DELIMITER ;
 
