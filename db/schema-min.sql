@@ -455,28 +455,33 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   CONSTRAINT `FK_user_task_score_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
+-- Dumping structure for table intergrationTest.UserTrackedProjects
+DROP TABLE IF EXISTS `UserTrackedProjects`;
 CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
-	`user_id` INT(10) UNSIGNED NULL DEFAULT NULL,
-	`Project_id` INT(10) UNSIGNED NULL DEFAULT NULL,
-	UNIQUE INDEX `user_id` (`user_id`, `Project_id`),
-	CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-)
-COLLATE='utf8_unicode_ci'
-ENGINE=InnoDB;
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `Project_id` int(10) unsigned DEFAULT NULL,
+  UNIQUE KEY `user_id` (`user_id`,`Project_id`),
+  KEY `FK_UserTrackedProjects_Projects` (`Project_id`),
+  CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
 
 
 
+-- Dumping structure for table intergrationTest.UserTrackedTasks
+DROP TABLE IF EXISTS `UserTrackedTasks`;
 CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
-	`user_id` INT(10) UNSIGNED NULL DEFAULT NULL,
-	`task_id` BIGINT(10) UNSIGNED NULL DEFAULT NULL,
-	UNIQUE INDEX `user_id` (`user_id`, `task_id`),
-	CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-)
-COLLATE='utf8_unicode_ci'
-ENGINE=InnoDB;
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `task_id` bigint(10) unsigned DEFAULT NULL,
+  UNIQUE KEY `user_id` (`user_id`,`task_id`),
+  KEY `FK_UserTrackedTasks_Tasks` (`task_id`),
+  CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
 
 
 
@@ -2001,188 +2006,6 @@ DELIMITER ;
 -- Dumping structure for procedure intergrationTest.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `ref` VARCHAR(128), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` TINYINT)
-BEGIN
-	if id='' then set id=null;end if;
-	if projectID='' then set projectID=null;end if;
-	if name='' then set name=null;end if;
-	if sID='' then set sID=null;end if;
-	if tID='' then set tID=null;end if;
-	if wordCount='' then set wordCount=null;end if;
-	if created='' then set created=null;end if;
-	if taskComment='' then set taskComment=null;end if;
-	if ref='' then set ref=null;end if;
-	if sCC='' then set sCC=null;end if;
-	if tCC='' then set tCC=null;end if;
-	if dLine='' then set dLine=null;end if;
-	if taskType='' then set taskType=null;end if;
-	if tStatus='' then set tStatus=null;end if;
-	if pub='' then set pub=null;end if;
-	
-	if id is null then
-		if taskComment is null then set taskComment="";end if;
-		if ref is null then set ref="";end if;
-		if created is null or created ='0000-00-00 00:00:00' then set created=now();end if;
-		if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
-		set @scid=null;
-			select c.id into @scid from Countries c where c.code=sCC;
-		set @tcid=null;
-			select c.id into @tcid from Countries c where c.code=tCC;
-		insert into Tasks (project_id,title,`word-count`,source_id,target_id,`created-time`,comment,`reference-page`,`country_id-source`,`country_id-target`)
-		 values (projectID,name,wordCount,sID,tID,created,taskComment,ref,@scid,@tcid);
-	elseif EXISTS (select 1 from Tasks t where t.id=id) then
-		set @first = true;
-		set @q= "update Tasks t set";-- set update
-		if orgID is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," t.project_id=",projectID) ;
-		end if;
-		if name is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," t.title='",name,"'") ;
-		end if;
-		if sID is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," t.source_id=",sID) ;
-		end if;
-		if tID is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," t.target_id=",tID) ;
-		end if;
-		
-		if sCC is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @scid=null;
-			select c.id into @scid from Countries c where c.code=sCC;
-			set @q = CONCAT(@q," t.`country_id-source`=",@scid) ;
-		end if;
-		if tCC is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @tcid=null;
-			select c.id into @tcid from Countries c where c.code=tCC;
-			set @q = CONCAT(@q," t.`country_id-target`=",@tcid) ;
-		end if;
-		
-		if wordCount is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," t.`word-count`=",wordCount) ;
-		end if;
-		if impactValue is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," t.comment='",taskComment,"'");
-		end if;
-		if ref is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," t.`reference-page`='",ref,"'") ;
-		end if;
-		if (created is not null  and created!='0000-00-00 00:00:00') then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," t.`created-time`='",created,"'") ;
-		end if;
-		set @q = CONCAT(@q," where  t.id= ",id);
-		PREPARE stmt FROM @q;
-		EXECUTE stmt;
-		DEALLOCATE PREPARE stmt;
-	end if;
-	call getTask(id,orgID,name,wordCount,sID,tID,created,impactValue,ref,sCC,tCC);
-END//
-DELIMITER ;
-
-
-
--- Dumping structure for procedure manuel-test.taskIsClaimed
-DROP PROCEDURE IF EXISTS `taskIsClaimed`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskIsClaimed`(IN `tID` INT)
-BEGIN
-Select exists (SELECT 1	FROM TaskClaims WHERE task_id = tID) as result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure manuel-test.unlinkStoredTags
-DROP PROCEDURE IF EXISTS `unlinkStoredTags`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkStoredTags`(IN `id` INT)
-    MODIFIES SQL DATA
-BEGIN
-DELETE FROM TaskTags WHERE task_id = id;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure manuel-test.userFindByUserData
-DROP PROCEDURE IF EXISTS `userFindByUserData`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
-BEGIN
-	if(id is not null and pass is not null) then
-		select * from Users u where u.id = id and password= pass;
-   elseif(id is not null and role=1) then
-		select * from Users u where u.id = id and EXISTS (select * from OrganisationMembers om where om.user_id = u.id);
-	elseif(id is not null) then
- 		select * from Users u where u.id = id;
-   elseif (email is not null) then
-   	select * from Users u where u.email = email;
-	end if;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure manuel-test.userHasBadge
-DROP PROCEDURE IF EXISTS `userHasBadge`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userHasBadge`(IN `userID` INT, IN `badgeID` INT)
-BEGIN
-	Select EXISTS( SELECT 1 FROM UserBadges WHERE user_id = userID AND badge_id = badgeID) as result;
-END//
-DELIMITER ;
-
-
-
--- Dumping structure for procedure intergrationTest.taskInsertAndUpdate
-DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
-DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
 BEGIN
 	if id='' then set id=null;end if;
@@ -2334,6 +2157,160 @@ END//
 DELIMITER ;
 
 
+
+
+-- Dumping structure for procedure manuel-test.taskIsClaimed
+DROP PROCEDURE IF EXISTS `taskIsClaimed`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskIsClaimed`(IN `tID` INT)
+BEGIN
+Select exists (SELECT 1	FROM TaskClaims WHERE task_id = tID) as result;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure manuel-test.unlinkStoredTags
+DROP PROCEDURE IF EXISTS `unlinkStoredTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkStoredTags`(IN `id` INT)
+    MODIFIES SQL DATA
+BEGIN
+DELETE FROM TaskTags WHERE task_id = id;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure manuel-test.userFindByUserData
+DROP PROCEDURE IF EXISTS `userFindByUserData`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
+BEGIN
+	if(id is not null and pass is not null) then
+		select * from Users u where u.id = id and password= pass;
+   elseif(id is not null and role=1) then
+		select * from Users u where u.id = id and EXISTS (select * from OrganisationMembers om where om.user_id = u.id);
+	elseif(id is not null) then
+ 		select * from Users u where u.id = id;
+   elseif (email is not null) then
+   	select * from Users u where u.email = email;
+	end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure manuel-test.userHasBadge
+DROP PROCEDURE IF EXISTS `userHasBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userHasBadge`(IN `userID` INT, IN `badgeID` INT)
+BEGIN
+	Select EXISTS( SELECT 1 FROM UserBadges WHERE user_id = userID AND badge_id = badgeID) as result;
+END//
+DELIMITER ;
+
+
+
+-- Dumping structure for procedure intergrationTest.userInsertAndUpdate
+DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` INT, IN `region` INT, IN `id` INT)
+BEGIN
+	if pass='' then set pass=null;end if;
+	if bio='' then set bio=null;end if;
+	if id='' then set id=null;end if;
+	if nonce='' then set nonce=null;end if;
+	if name='' then set name=null;end if;
+	if email='' then set email=null;end if;
+	if lang='' then set lang=null;end if;
+    if region='' then set region=null;end if;
+	
+	if id is null and not exists(select * from Users u where u.email= email)then
+	-- set insert
+	insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
+              values (email, nonce, pass, NOW(), name, bio, lang, region);
+	else 
+		set @first = true;
+		set @q= "update Users u set ";-- set update
+		if bio is not null then 
+#set paramaters to be updated
+			set @q = CONCAT(@q," u.biography='",bio,"'") ;
+			set @first = false;
+		end if;
+		if lang is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.language_id='",lang,"'") ;
+		end if;
+		if region is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.country_id='",region,"'") ;
+		end if;
+		if name is not null then 
+				if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.`display-name`='",name,"'");
+		
+		end if;
+		
+		if email is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.email='",email,"'");
+		
+		end if;
+		if nonce is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.nonce=",nonce) ;
+		
+		end if;
+		
+		if pass is not null then 
+			if (@first = false) then 
+				set @q = CONCAT(@q,",");
+			else
+				set @first = false;
+			end if;
+			set @q = CONCAT(@q," u.password='",pass,"'");
+		
+		end if;
+#		set where
+	
+		if id is not null then 
+			set @q = CONCAT(@q," where  u.id= ",id);
+#    	allows email to be changed but not user id
+		
+		elseif email is not null then 
+			set @q = CONCAT(@q," where  u.email= ,",email,"'");-- allows anything but email and user_id to change
+		else
+			set @q = CONCAT(@q," where  u.email= null AND u.id=null");-- will always fail to update anyting
+		end if;
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+
+	end if;
+	
+	select u.id from Users u where u.email= email;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure manuel-test.userLikeTag
 DROP PROCEDURE IF EXISTS `userLikeTag`;
 DELIMITER //
@@ -2379,10 +2356,10 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure intergrationTest.UserTrackTask
-DROP PROCEDURE IF EXISTS `UserTrackTask`;
+-- Dumping structure for procedure intergrationTest.userTrackTask
+DROP PROCEDURE IF EXISTS `userTrackTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `UserTrackTask`(IN `uID` INT, IN `tID` BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackTask`(IN `uID` INT, IN `tID` BIGINT)
     MODIFIES SQL DATA
 BEGIN
 	if not exists(select 1 from UserTrackedTasks utt where utt.user_id=uID and utt.task_id=tID) then
