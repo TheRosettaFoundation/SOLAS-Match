@@ -54,7 +54,7 @@
             </tr>
         </thead>
         <tbody>
-        {assign var="projectsData" value=$templateData[$project_id]}
+        {assign var="projectsData" value=$templateData[$org_id]}
         {if !is_null($projectsData)}
             {foreach from=$projectsData item=data}
                 <tr>

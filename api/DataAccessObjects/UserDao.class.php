@@ -378,10 +378,9 @@ class UserDao {
     public function trackTask($user_id, $task_id)
     {
         $ret = false;
-        $args = array();
-        $args['user_id'] = $user_id;
-        $args['task_id'] = $task_id;
-        if ($result = PDOWrapper::call("userNotificationsInsertAndUpdate", $args)) {
+        $args = PDOWrapper::cleanseNull($user_id);
+        $args .= ", ".PDOWrapper::cleanseNull($task_id);
+        if ($result = PDOWrapper::call("UserTrackTask", $args)) {
             $ret = $result[0]['result'];
         }
 
@@ -394,10 +393,9 @@ class UserDao {
     public function ignoreTask($user_id, $task_id)
     {
         $ret = false;
-        $args = array();
-        $args['user_id'] = $user_id;
-        $args['task_id'] = $task_id;
-        if ($result = PDOWrapper::call("removeUserNotification", $args)) {
+        $args = PDOWrapper::cleanseNull($user_id);
+        $args .= ", ".PDOWrapper::cleanseNull($task_id);
+        if ($result = PDOWrapper::call("userUnTrackTask", $args)) {
             $ret = $result[0]['result'];
         }
 
@@ -408,7 +406,7 @@ class UserDao {
     {
         $ret = array();
         $dao = new TaskDao();
-        if ($result = PDOWrapper::call("getUserTrackedTasks", "$user_id")) {
+        if ($result = PDOWrapper::call("getUserTrackedTasks", PDOWrapper::cleanseNull($user_id))) {
             foreach ($result as $row) {
                 $task = ModelFactory::buildModel("Task", $row);
                 $task->setStatus($dao->getTaskStatus($task->getId()));
