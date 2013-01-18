@@ -218,8 +218,19 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping data for table Solas-Match-Dev.Projects: ~0 rows (approximately)
-/*!40000 ALTER TABLE `Projects` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Projects` ENABLE KEYS */;
+
+-- Dumping structure for table Solas-Match-Test.ProjectTags
+DROP TABLE IF EXISTS `ProjectTags`;
+CREATE TABLE IF NOT EXISTS `ProjectTags` (
+  `project_id` int(10) unsigned NOT NULL,
+  `tag_id` int(10) unsigned NOT NULL,
+  UNIQUE KEY `project_id` (`project_id`,`tag_id`),
+  KEY `FK_ProjectTags_Tags` (`tag_id`),
+  CONSTRAINT `FK_ProjectTags_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ProjectTags_Tags` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Dev.Statistics
 CREATE TABLE IF NOT EXISTS `Statistics` (
@@ -331,19 +342,6 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 -- Data exporting was unselected.
 
 
-
--- Dumping structure for table manuel-test.TaskTags
-CREATE TABLE IF NOT EXISTS `TaskTags` (
-  `task_id` bigint(20) unsigned NOT NULL,
-  `tag_id` int(10) unsigned NOT NULL,
-  `created-time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY `task_tag` (`task_id`,`tag_id`),
-  KEY `FK_task_tag_tag` (`tag_id`),
-  CONSTRAINT `FK_task_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_task_tag_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Dev.TaskStatus
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
@@ -488,6 +486,21 @@ CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
+
+-- Dumping structure for procedure Solas-Match-Test.addProjectTag
+DROP PROCEDURE IF EXISTS `addProjectTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addProjectTag`(IN `projectID` INT, IN `tagID` INT)
+    MODIFIES SQL DATA
+BEGIN
+if not exists (select 1 from ProjectTags where project_id=projectID and tag_id =tagID) then
+	insert into ProjectTags  (project_id,tag_id) values (projectID,tagID);
+	select 1 as result;
+else
+	select 0 as result;
+end if;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure SolasMatch.getProject
 DROP PROCEDURE IF EXISTS `getProject`;
