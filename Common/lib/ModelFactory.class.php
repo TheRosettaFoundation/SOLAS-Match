@@ -432,7 +432,7 @@ class ModelFactory
             $ret->setTitle($modelData['title']);
         }
         if(isset($modelData['description'])) {
-            $ret->setiDescription($modelData['description']);
+            $ret->setDescription($modelData['description']);
         }
         if(isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);

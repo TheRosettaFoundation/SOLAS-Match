@@ -6,7 +6,7 @@ include_once '../Common/models/ArchivedProject.php';
 
 class ProjectDao
 {
-    public getProject($params)
+    public function getProject($params)
     {
         $args = "";
         if(isset($params['id'])) {
