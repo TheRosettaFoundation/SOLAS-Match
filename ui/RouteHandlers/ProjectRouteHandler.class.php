@@ -352,28 +352,30 @@ class ProjectRouteHandler
                 $app->redirect($app->urlFor('task-describe', array('task_id' => $task->getId())));
             }
         } 
-        
+        /*
         $extra_scripts = 
             "<script>
             var isEnabled = false;
             function chunkingEnabled()
             {        
                 if(!isEnabled) {
-                   document.getElementById(\"translation\").checked = false;
-                   document.getElementById(\"proofreading\").checked = false;
-                   document.getElementById(\"postediting\").checked = false;        
-                   document.getElementById(\"translation\").disabled = true;
-                   document.getElementById(\"proofreading\").disabled = true;
-                   document.getElementById(\"postediting\").disabled = true;
+                   document.getElementById(\"translation_0\").checked = false;
+                   document.getElementById(\"proofreading_0\").checked = false;
+                   document.getElementById(\"postediting_0\").checked = false;        
+                   document.getElementById(\"translation_0\").disabled = true;
+                   document.getElementById(\"proofreading_0\").disabled = true;
+                   document.getElementById(\"postediting_0\").disabled = true;
                    isEnabled = true;
                 } else {
-                   document.getElementById(\"translation\").disabled = false;
-                   document.getElementById(\"proofreading\").disabled = false;
-                   document.getElementById(\"postediting\").disabled = false;       
+                   document.getElementById(\"translation_0\").disabled = false;
+                   document.getElementById(\"proofreading_0\").disabled = false;
+                   document.getElementById(\"postediting_0\").disabled = false;       
                    isEnabled = false;
                 }        
             }
         </script>";
+         
+         */
         
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
@@ -384,8 +386,8 @@ class ProjectRouteHandler
             'word_count_err'    => $word_count_err,
             'url_project_upload' => $app->urlFor('project-upload', array('org_id' => $org_id)),
             'languages'         => $language_list,
-            'countries'         => $countries,
-            'extra_scripts'     => $extra_scripts
+            'countries'         => $countries//,
+            //'extra_scripts'     => $extra_scripts
         ));
         
         $app->render('project.upload.tpl');

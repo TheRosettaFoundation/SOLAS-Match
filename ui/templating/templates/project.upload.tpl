@@ -6,6 +6,8 @@
     var fields = 0;
     var MAX_FIELDS = 10; 
     var isRemoveButtonHidden = true;
+    
+    var isEnabledArray = new Array(false);
 
     function addNewTarget() {
 
@@ -15,79 +17,78 @@
         }
 
         if(fields < MAX_FIELDS) {
-            var outer = document.getElementById('moreTargetLanguages');
-            var innerDiv = document.createElement('div');
-            innerDiv.setAttribute('id', fields);
+
+            var table = document.getElementById('moreTargetLanguages');            
+            var newRow = document.createElement('tr');                        
+    
+            newRow.setAttribute('id', "newTargetLanguage" + fields);
+            var newColumnLangCountry = document.createElement('td');
+            newColumnLangCountry.setAttribute('width', "50%");
             
             var langs = document.getElementById('sourceLanguage').cloneNode(true);
             langs.setAttribute('id', "targetLanguage_" + (fields + 1));
             langs.setAttribute('name', "targetLanguage_" + (fields + 1));
-            innerDiv.appendChild(langs);
-            outer.appendChild(innerDiv);
+            newColumnLangCountry.appendChild(langs);
             
             var countries = document.getElementById('sourceCountry').cloneNode(true);
             countries.setAttribute('id', "targetCountry_" + (fields + 1));
             countries.setAttribute('name', "targetCountry_" + (fields + 1));
-            innerDiv.appendChild(countries);
-            outer.appendChild(innerDiv);
+            newColumnLangCountry.appendChild(countries);
+            newRow.appendChild(newColumnLangCountry);
             
-            
-            var taskTypes = document.getElementById('moreTaskTypeTables');
-            
-            var table = document.createElement('table');            
-            table.setAttribute('width', "100%");
-            taskTypes.appendChild(table);
-            
-            var tableRow = document.createElement('tr');
-            tableRow.setAttribute('align', "center");
-            table.appendChild(tableRow);
-            
-            var tableColumnChunking = document.createElement('td');            
+            var tableColumnChunking = document.createElement('td');  
+            tableColumnChunking.setAttribute('align', 'middle');
+            tableColumnChunking.setAttribute('valign', "top");
             var inputChunking = document.createElement('input');
             inputChunking.setAttribute('type', "checkbox");
             inputChunking.setAttribute('id', "chunking_" + (fields + 1));
             inputChunking.setAttribute('name', "chunking");
             inputChunking.setAttribute('value', "y");
-            inputChunking.setAttribute('onchange', "chunkingEnabled()");       
+            inputChunking.setAttribute('onchange', "chunkingEnabled(" + (fields + 1) +")");       
+            tableColumnChunking.appendChild(inputChunking);
 
-            
             var tableColumnTranslation = document.createElement('td');
+            tableColumnTranslation.setAttribute('align', 'middle'); 
+            tableColumnTranslation.setAttribute('valign', "top");
             var inputTranslation = document.createElement('input');
             inputTranslation.setAttribute('type', "checkbox");
             inputTranslation.setAttribute('id', "translation_" + (fields + 1));
             inputTranslation.setAttribute('checked', "true");
             inputTranslation.setAttribute('name', "translation");
             inputTranslation.setAttribute('value', "y");
+            tableColumnTranslation.appendChild(inputTranslation);
+           
             
             var tableColumnReading = document.createElement('td');
+            tableColumnReading.setAttribute('align', 'middle');
+            tableColumnReading.setAttribute('valign', "top");
             var inputProofReading = document.createElement('input');
             inputProofReading.setAttribute('type', "checkbox");
             inputProofReading.setAttribute('id', "proofreading_" + (fields + 1));
             inputProofReading.setAttribute('name', "proofreading");
             inputProofReading.setAttribute('value', "y");
+            tableColumnReading.appendChild(inputProofReading);
             
             var tableColumnPostEditing = document.createElement('td');
+            tableColumnPostEditing.setAttribute('align', 'middle');
+            tableColumnPostEditing.setAttribute('valign', "top");
             var inputPostEditing = document.createElement('input');
             inputPostEditing.setAttribute('type', "checkbox");
             inputPostEditing.setAttribute('id', "postediting_" + (fields + 1));
             inputPostEditing.setAttribute('name', "postediting");
-            inputPostEditing.setAttribute('value', "y");            
+            inputPostEditing.setAttribute('value', "y"); 
+            tableColumnPostEditing.appendChild(inputPostEditing);
             
+            newRow.appendChild(tableColumnChunking);
+            newRow.appendChild(tableColumnTranslation);
+            newRow.appendChild(tableColumnReading);
+            newRow.appendChild(tableColumnPostEditing);
+            table.appendChild(newRow);
+            isEnabledArray.push(false);
             
-            
-            /*
-                     <table border="1" width="100%"> 
-                        <tr align="center">
-                            <td><input type="checkbox" id="chunking_0" type="checkbox" name="chunking" value="y" onchange="chunkingEnabled()"></td>                            
-                            <td><input type="checkbox" id="translation_0" type="checkbox" checked="true" name="translation" value="y"></td>
-                            <td><input type="checkbox" id="proofreading_0" type="checkbox" name="proofreading" value="y"></td>
-                            <td><input type="checkbox" id="postediting_0" type="checkbox" onchange="" name="postediting" value="y"></td>
-                        </tr>                        
-                    </table>             
-            */
-
-   
-            fields++;                
+            var size = document.getElementById('targetLanguageArraySize');
+            fields++;   
+            size.setAttribute('value', parseInt(size.getAttribute('value'))+1);        
         }
 
         if(fields == MAX_FIELDS) {
@@ -100,22 +101,44 @@
     function removeNewTarget() {    
         var id = fields-1;  
         
-        var div = document.getElementById('moreTargetLanguages');
-        var innerDiv = document.getElementById(id);
-        div.removeChild(innerDiv);
+        var table = document.getElementById('moreTargetLanguages');
+        var tableRow = document.getElementById('newTargetLanguage' + id);
+        table.removeChild(tableRow);  
+        isEnabledArray.pop();
         
         if(fields == MAX_FIELDS) {
             document.getElementById('addMoreTargetsBtn').style.visibility = 'visible';
             document.getElementById('alertinfo').style.display = 'none';
         }
 
+        var size = document.getElementById('targetLanguageArraySize');
         fields--;
+         size.setAttribute('value', parseInt(size.getAttribute('value'))-1);
 
         if(fields == 0) {
             document.getElementById('removeBottomTargetBtn').style.visibility = 'hidden';
             isRemoveButtonHidden = true;
         }         
-    }            
+    }
+    
+    function chunkingEnabled(index)
+    {
+        if(!isEnabledArray[index]) {
+            document.getElementById("translation_" + index).checked = false;
+            document.getElementById("proofreading_" + index).checked = false;
+            document.getElementById("postediting_" + index).checked = false;        
+            document.getElementById("translation_" + index).disabled = true;
+            document.getElementById("proofreading_" + index).disabled = true;
+            document.getElementById("postediting_" + index).disabled = true;    
+            isEnabledArray[index] = true;
+        } else {
+            document.getElementById("translation_" + index).disabled = false;
+            document.getElementById("proofreading_" + index).disabled = false;
+            document.getElementById("postediting_" + index).disabled = false;
+            document.getElementById("translation_" + index).checked = true;
+            isEnabledArray[index] = false;
+        }
+    }    
 </script>
 
 
@@ -139,7 +162,7 @@
 </div>  
 <p style="margin-bottom:20px;"></p>
 <div class="well">
-    <table border="1">
+    <table border="0">
         <form method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
 
             <tr>
@@ -218,7 +241,7 @@
                     <h2>Target Language(s): <font color='red'>*</font></h2><br>
                 </td>
                 <td valign="bottom">
-                    <table border="1" width="100%"> 
+                    <table border="0" width="100%"> 
                         <tr align="center">
                             <td width="25%"><b>Chunking</b></td>
                             <td width="25%"><b>Translation</b></td>
@@ -231,7 +254,7 @@
             <tr>
                 <td> 
                     {if isset($languages)}
-                        <select name="targetLanguage_0" id="targetLanguage_0">
+                        <select name="targetLanguage_0" id="targetLanguage_0" >
                             {foreach $languages as $language}
                                 <option value="{$language->getCode()}">{$language->getName()}</option>
                             {/foreach}
@@ -249,10 +272,10 @@
                         <input type="text" name="sourceCountry" id="source">
                     {/if}  
                 </td>
-                <td valign="baseline">
-                    <table border="1" width="100%"> 
+                <td valign="top">
+                    <table border="0" width="100%"> 
                         <tr align="center">
-                            <td><input type="checkbox" id="chunking_0" name="chunking" value="y" onchange="chunkingEnabled()"></td>                            
+                            <td bgcolor=""><input type="checkbox" id="chunking_0" name="chunking" value="y" onchange="chunkingEnabled(0)"></td>                            
                             <td><input type="checkbox" id="translation_0" checked="true" name="translation" value="y"></td>
                             <td><input type="checkbox" id="proofreading_0" name="proofreading" value="y"></td>
                             <td><input type="checkbox" id="postediting_0" onchange="" name="postediting" value="y"></td>
@@ -262,33 +285,20 @@
                     
             </tr>
             <tr>
-                <td>
-            
-
-                        <div id="moreTargetLanguages"></div>
-                        <!--
-                        <div id="text0"></div>
-                        <div id="text1"></div>
-                        <div id="text2"></div>
-                        <div id="text3"></div>
-                        <div id="text4"></div>
-                        <div id="text5"></div>
-                        <div id="text6"></div>
-                        <div id="text7"></div>
-                        <div id="text8"></div>
-                        <div id="text9"></div>
-                        -->
-                        <div id="alertinfo" class="alert alert-info" style="display: none;">You have reached the maximum number of target translation fields allowed.</div>  
-                        <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
-                        <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" style="visibility: hidden;"/>
-
- 
- 
-                </td>
-                <td>
-                    <div id="moreTaskTypeTables"</div>
+                <!-- <div id="moreTaskTypeTables"</div> -->
+                <!-- <td id="moreTargetLanguages" width="50%"> -->
+                <td colspan="2">     
+                    <table id="moreTargetLanguages" border="0" width="100%"></table>
                 </td>
             </tr> 
+            <tr>
+                <td>
+                    <div id="alertinfo" class="alert alert-info" style="display: none;">You have reached the maximum number of target translation fields allowed.</div>  
+                    <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
+                    <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" style="visibility: hidden;"/>  
+                    <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1">
+                </td>
+            </tr>                
             <tr>
                 <td colspan="2">
                     <hr/>
@@ -297,12 +307,13 @@
             <tr align="center">
                 <td>
                     <p style="margin-bottom:20px;"></p> 
-                        <a href='{urlFor name="home"}' class='btn btn-danger'>
+                        <a href='{urlFor name="org-dashboard"}' class='btn btn-danger'>
                             <i class="icon-ban-circle icon-white"></i> Cancel
                         </a>
                     <p style="margin-bottom:20px;"></p> 
                 </td>
                 <td>
+                    
                     <p style="margin-bottom:20px;"></p> 
                         <button type="submit" name="submit" value="createproject" class="btn btn-success">
                             <i class="icon-upload icon-white"></i> Submit Project
