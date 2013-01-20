@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 
-{assign var="project_id" value=1} {* $project->getId()} *}
+{assign var="project_id" value=11} {* $project->getId()} *}
 <h1 class="page-header">
     Project Title{* {$project->getTitle()} *}
     <small>Alter project details here.</small>

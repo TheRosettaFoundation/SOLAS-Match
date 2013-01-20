@@ -50,7 +50,7 @@
                     </center>
                 </th>
                 <th>                    
-                    <a class="btn btn-success" href="{urlFor name="task-upload" options="org_id.$org_id"}">
+                    <a class="btn btn-success" href="{urlFor name="project-upload" options="org_id.$org_id"}">
                         <i class="icon-upload icon-white"></i> Create Project
                     </a>                    
                 </th>

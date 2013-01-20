@@ -21,14 +21,14 @@
 
 
 <form method="post" action="{urlFor name="create-org"}" class="well">
-    <label for="name">Organisation Name:</label>
+    <label for="name"><b>Organisation Name:</b></label>
     <input type="text" name="name" />
 
-    <label for="home_page">Home Page:</label>
+    <label for="home_page"><b>Home Page:</b></label>
     <input type="text" name="home_page" value="http://" />
 
-    <label for="bio">Biography:</label>
-    <textarea name="bio" cols="40" rows="5" placeholder="Explain what the purpose of your organisation is"></textarea>
+    <label for="bio"><b>Biography:</b></label>
+    <textarea name="bio" cols="40" rows="5" placeholder="Explain what the purpose of your organisation is."></textarea>
 
     <p>
         <button type="submit" class="btn btn-success">

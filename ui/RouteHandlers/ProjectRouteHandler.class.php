@@ -16,7 +16,10 @@ class ProjectRouteHandler
         // $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
         
         $app->get('/project/upload/:org_id/', array($middleware, 'authUserForOrg'),
-        array($this, 'projectUpload'))->via('GET', 'POST')->name('project-upload');        
+        array($this, 'projectUpload'))->via('GET', 'POST')->name('project-upload');    
+        
+        $app->get('/project/id/:project_id/uploaded/', array($middleware, 'authUserForOrgProject'),
+        array($this, 'projectUploaded'))->name('project-uploaded');
     }
   
     public function projectView($project_id)
@@ -265,6 +268,25 @@ class ProjectRouteHandler
         if ($app->request()->isPost()) {            
             $post = (object) $app->request()->post();
             
+            /*
+            $invalidProjectInfo = array(
+                'title' => '',
+                'deadline'
+            */
+   
+            //$isValidProjectInfo = array();
+            
+            $isValidTaskTypes = array();
+
+            for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+                
+                if(isset($post->{'chunking_'.$i}) || isset($post->{'translation_'.$i}) ||
+                    isset($post->{'proofreading_'.$i}) || isset($post->{'postediting_'.$i})) {
+                        $isValidTaskTypes[$i] = true;
+                        //$isValidTaskTypes[] = 'trans'
+                } 
+            }
+            
             if(!is_null($post->title) && !is_null($post->deadline) &&
                 (isset($post->chunking) || isset($post->translation) ||
                 isset($post->proofreading) || isset($post->postediting))) {
@@ -391,6 +413,35 @@ class ProjectRouteHandler
         ));
         
         $app->render('project.upload.tpl');
+    }    
+    
+    
+    public function projectUploaded($project_id)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+        $user_id = UserSession::getCurrentUserID();
+
+        $request = APIClient::API_VERSION."/projects/$project_id";
+        $response = $client->call($request);     
+        $project = $client->cast('Project', $response);
+       
+        $request = APIClient::API_VERSION."/users/$user_id";
+        $response = $client->call($request, HTTP_Request2::METHOD_GET);
+        $user = $client->cast('User', $response);        
+        
+        if (!is_object($user)) {
+            $app->flash('error', 'Login required to access page');
+            $app->redirect($app->urlFor('login'));
+        }   
+        
+        // Uncomment when working
+        $org_id = 11;//$project->getOrgId();
+        $app->view()->appendData(array(
+                'org_id' => $org_id
+        ));     
+        
+        $app->render('project.uploaded.tpl');
     }    
     
     

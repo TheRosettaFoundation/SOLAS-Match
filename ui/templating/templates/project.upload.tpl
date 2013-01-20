@@ -12,12 +12,14 @@
     function addNewTarget() {
 
         if(isRemoveButtonHidden) {
-            document.getElementById('removeBottomTargetBtn').style.visibility = 'visible';
+            //document.getElementById('removeBottomTargetBtn').style.visibility = 'visible';
+            document.getElementById('removeBottomTargetBtn').disabled = false;
             isRemoveButtonHidden = false;
         }
 
         if(fields < MAX_FIELDS) {
 
+            //var projectForm = document.getElementById('createProjectForm');
             var table = document.getElementById('moreTargetLanguages');            
             var newRow = document.createElement('tr');                        
     
@@ -42,11 +44,12 @@
             var inputChunking = document.createElement('input');
             inputChunking.setAttribute('type', "checkbox");
             inputChunking.setAttribute('id', "chunking_" + (fields + 1));
-            inputChunking.setAttribute('name', "chunking");
+            inputChunking.setAttribute('name', "chunking_" + (fields + 1));
             inputChunking.setAttribute('value', "y");
             inputChunking.setAttribute('onchange', "chunkingEnabled(" + (fields + 1) +")");       
             tableColumnChunking.appendChild(inputChunking);
-
+            
+            
             var tableColumnTranslation = document.createElement('td');
             tableColumnTranslation.setAttribute('align', 'middle'); 
             tableColumnTranslation.setAttribute('valign', "top");
@@ -54,7 +57,7 @@
             inputTranslation.setAttribute('type', "checkbox");
             inputTranslation.setAttribute('id', "translation_" + (fields + 1));
             inputTranslation.setAttribute('checked', "true");
-            inputTranslation.setAttribute('name', "translation");
+            inputTranslation.setAttribute('name', "translation_" + (fields + 1))
             inputTranslation.setAttribute('value', "y");
             tableColumnTranslation.appendChild(inputTranslation);
            
@@ -65,7 +68,7 @@
             var inputProofReading = document.createElement('input');
             inputProofReading.setAttribute('type', "checkbox");
             inputProofReading.setAttribute('id', "proofreading_" + (fields + 1));
-            inputProofReading.setAttribute('name', "proofreading");
+            inputProofReading.setAttribute('name', "proofreading_" + (fields + 1));
             inputProofReading.setAttribute('value', "y");
             tableColumnReading.appendChild(inputProofReading);
             
@@ -75,7 +78,7 @@
             var inputPostEditing = document.createElement('input');
             inputPostEditing.setAttribute('type', "checkbox");
             inputPostEditing.setAttribute('id', "postediting_" + (fields + 1));
-            inputPostEditing.setAttribute('name', "postediting");
+            inputPostEditing.setAttribute('name', "postediting_" + (fields + 1));
             inputPostEditing.setAttribute('value', "y"); 
             tableColumnPostEditing.appendChild(inputPostEditing);
             
@@ -93,7 +96,8 @@
 
         if(fields == MAX_FIELDS) {
             document.getElementById('alertinfo').style.display = 'block';
-            document.getElementById('addMoreTargetsBtn').style.visibility = 'hidden';
+            //document.getElementById('addMoreTargetsBtn').style.visibility = 'hidden';
+            document.getElementById('addMoreTargetsBtn').disabled = true;
         }            
     } 
 
@@ -107,16 +111,18 @@
         isEnabledArray.pop();
         
         if(fields == MAX_FIELDS) {
-            document.getElementById('addMoreTargetsBtn').style.visibility = 'visible';
+            //document.getElementById('addMoreTargetsBtn').style.visibility = 'visible';
+            document.getElementById('addMoreTargetsBtn').disabled = false;
             document.getElementById('alertinfo').style.display = 'none';
         }
 
         var size = document.getElementById('targetLanguageArraySize');
         fields--;
-         size.setAttribute('value', parseInt(size.getAttribute('value'))-1);
+        size.setAttribute('value', parseInt(size.getAttribute('value'))-1);
 
         if(fields == 0) {
-            document.getElementById('removeBottomTargetBtn').style.visibility = 'hidden';
+            //document.getElementById('removeBottomTargetBtn').style.visibility = 'hidden';
+            document.getElementById('removeBottomTargetBtn').disabled = true;
             isRemoveButtonHidden = true;
         }         
     }
@@ -162,9 +168,13 @@
 </div>  
 <p style="margin-bottom:20px;"></p>
 <div class="well">
-    <table border="0">
-        <form method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
-
+    <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
+        <table border="1">
+            <tr>
+                <td colspan="2">
+                    {*<div class="alert alert-error"></div>*}
+                </td>
+            </tr>
             <tr>
                 <td width="493" align="center" valign="middle">
                     <label for="title"><h2>Title: <font color='red'>*</font></h2></label>
@@ -232,7 +242,7 @@
                         <input type="text" name="sourceCountry" id="source">
                     {/if}                     
                 </td>                
-                <td align="center">
+                <td align="center" valign="bottom">
                     <h2>Task Type: <font color='red'>*</font></h2>
                     <p class="desc">Specify which task types you require for your workflow.</p>                 
                 </td>
@@ -240,7 +250,7 @@
                 <td>                    
                     <h2>Target Language(s): <font color='red'>*</font></h2><br>
                 </td>
-                <td valign="bottom">
+                <td valign="center">
                     <table border="0" width="100%"> 
                         <tr align="center">
                             <td width="25%"><b>Chunking</b></td>
@@ -275,10 +285,10 @@
                 <td valign="top">
                     <table border="0" width="100%"> 
                         <tr align="center">
-                            <td bgcolor=""><input type="checkbox" id="chunking_0" name="chunking" value="y" onchange="chunkingEnabled(0)"></td>                            
-                            <td><input type="checkbox" id="translation_0" checked="true" name="translation" value="y"></td>
-                            <td><input type="checkbox" id="proofreading_0" name="proofreading" value="y"></td>
-                            <td><input type="checkbox" id="postediting_0" onchange="" name="postediting" value="y"></td>
+                            <td bgcolor=""><input type="checkbox" id="chunking_0" name="chunking_0" value="y" onchange="chunkingEnabled(0)"></td>                            
+                            <td><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"></td>
+                            <td><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y"></td>
+                            <td><input type="checkbox" id="postediting_0" name="postediting_0" value="y"></td>
                         </tr>                        
                     </table>                    
                 </td>
@@ -292,10 +302,10 @@
                 </td>
             </tr> 
             <tr>
-                <td>
-                    <div id="alertinfo" class="alert alert-info" style="display: none;">You have reached the maximum number of target translation fields allowed.</div>  
+                <td colspan="2">
+                    <div id="alertinfo" class="alert alert-info" style="display: none;"><center>You have reached the maximum number of target translation fields allowed.</center></div>  
                     <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
-                    <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" style="visibility: hidden;"/>  
+                    <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" disabled="true"/>  
                     <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1">
                 </td>
             </tr>                
@@ -320,9 +330,9 @@
                         </button>                            
                     <p style="margin-bottom:20px;"></p>                     
                 </td>
-            </tr>
-        </form>            
-    </table>                        
+            </tr>          
+        </table>   
+    </form>  
 </div>
     
 {include file="footer.tpl"}

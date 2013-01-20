@@ -7,7 +7,7 @@
 </div>
 
 <form class="well" method="post" action="{urlFor name="org-search"}">
-    <label for="search_name">Organisation Name:</label>
+    <label for="search_name"><b>Organisation Name:</b></label>
     <input type="text" name="search_name" id="search_name" style="height: 20px" />
     <br />
     <input type="submit" name="submit" value="    Search" class="btn btn-primary" />
