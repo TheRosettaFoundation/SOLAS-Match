@@ -164,7 +164,7 @@ class ProjectRouteHandler
         $word_count_err = null;
 
         $request = APIClient::API_VERSION."/projects/$project_id";
-        $response = $client->call($request);     
+        $response = $client->call($request);
         $project = $client->cast('Project', $response);
         
         $app->view()->setData('project', $project);
@@ -176,15 +176,12 @@ class ProjectRouteHandler
                 $project->setTitle($post->title);
             }
             
-            if ($post->impact != '') {
-                $project->setComment($post->impact);
-            }
-            
             if ($post->reference != '' && $post->reference != 'http://') {
-                $project->setReferencePage($post->reference);
+                $project->setReference($post->reference);
             }
             
-            if ($post->source != '') {
+            //Not in template yet
+            /*if ($post->source != '') {
                 $project->setSourceLangId($post->source);
             }
             
@@ -205,15 +202,15 @@ class ProjectRouteHandler
                 foreach ($tags as $tag) {
                     $project->addTags($tag);
                 }
-            }
+            }*/
             
 
             if (ctype_digit($post->word_count)) {
                 
                 $project->setWordCount($post->word_count);                
-                $request = APIClient::API_VERSION."/tasks/$task_id";
+                $request = APIClient::API_VERSION."/projects/$project_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $project);
-                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+                $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
             } else if ($post->word_count != '') {
                 $word_count_err = "Word Count must be numeric";
             } else {
@@ -259,18 +256,9 @@ class ProjectRouteHandler
         $targetLanguage_err = null;
         $field_name = 'new_project_file';
         
-        //$title_err  = null;
+        $title_err  = null;
         $project            = null;
 
-
-        
-//        $request = APIClient::API_VERSION."/projects/$project_id";
-//        $response = $client->call($request);
-//        $project = $client->cast('Project', $response);        
-//        if (!is_object($project)) {
-//            $app->notFound();
-//        }
-        
         if ($app->request()->isPost()) {            
             $post = (object) $app->request()->post();
             
@@ -300,7 +288,7 @@ class ProjectRouteHandler
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err)) {
                 
                 $taskData = array();
-                $taskData['title'] = 'MyTaskFile';//$_FILES[$field_name]['name'];
+                $taskData['title'] = $_FILES[$field_name]['name'];
                 $taskData['organisation_id'] = $org_id;
                 $taskData['source_id'] = $post->sourceLanguage;
                 $taskData['country_id-source'] = $post->sourceCountry;
@@ -338,16 +326,7 @@ class ProjectRouteHandler
                     'targetLanguage_err' => $targetLanguage_err
                 ));               
             }
-            
-            
-            
-            
             /*
-                
-            
-
-                    
-
                     $projectData['deadline'] = $post->deadline;
                     $projectData['organisation_id'] = $org_id;
                     
@@ -404,8 +383,6 @@ class ProjectRouteHandler
             */
    
             //$isValidProjectInfo = array();
-            
-
             
             if(($post->title != '') && !is_null($post->deadline) &&
                 (isset($post->chunking) || isset($post->translation) ||
@@ -518,6 +495,16 @@ class ProjectRouteHandler
         </script>";
          
          */
+
+         $extra_scripts = "
+            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
+            <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+            <script type=\"text/javascript\">
+                window.onload = function() {
+                    new datepickr(\"deadline\");
+                };
+            </script>
+        ";
         
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
@@ -528,8 +515,8 @@ class ProjectRouteHandler
             'word_count_err'    => $word_count_err,
             'url_project_upload' => $app->urlFor('project-upload', array('org_id' => $org_id)),
             'languages'         => $language_list,
-            'countries'         => $countries//,
-            //'extra_scripts'     => $extra_scripts
+            'countries'         => $countries,
+            'extra_scripts'     => $extra_scripts
         ));
         
         $app->render('project.upload.tpl');
@@ -555,15 +542,12 @@ class ProjectRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        // Uncomment when working
-        $org_id = 11;//$project->getOrgId();
+        $org_id = $project->getOrganisationId();
+
         $app->view()->appendData(array(
                 'org_id' => $org_id
         ));     
         
         $app->render('project.uploaded.tpl');
     }    
-    
-    
 }
-?>

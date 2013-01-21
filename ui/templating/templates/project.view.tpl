@@ -1,16 +1,13 @@
 {include file="header.tpl"}
 
 <h1 class="page-header">
-    Project Title Name
-    {*$project->getTitle()*}
+    {$project->getTitle()}
     <small>Overview of project details.</small>
-    {*
     {assign var="project_id" value=$project->getId()}
     
     <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
         <i class="icon-wrench icon-white"></i> Edit Details
     </a> 
-    *}
 </h1>
 
 {if isset($flash['success'])}
@@ -33,41 +30,28 @@
     </p>
 {/if}
 
-{*{if $task->getImpact() != ''}
-
-    <p>{$task->getImpact()}</p>
-{/if}
-*}
 <h3>Deadline</h3>
 <p>
-    10/5/2012 24:00
+    {$project->getDeadline()}
 </p>
 
-{*
-{if $task->getReferencePage() != ''}
+{if $project->getReference() != ''}
     <h3>Context Reference</h3>
     <p>
-        <a target="_blank" href="{$task->getReferencePage()}">{$task->getReferencePage()}</a>
+        <a target="_blank" href="{$project->getReference()}">{$project->getReference()}</a>
     </p>
 {/if}
-*}
 
 <h3>Word Count</h3>
 <p>
-    2378905
-</p>
-
-<h3>Reference</h3>
-<p>
-    some url www.google.com
+    {$project->getWordCount()}
 </p>
 
 <h3>Created</h3>
 <p>
-    10/5/2012 24:00
+    {$project->getCreatedTime()}
 </p>
-    <!-- Uncomment when projects is working -->
-    {*
+    
     <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
         {if isset($registered) && $registered == true}
             <p>
@@ -85,7 +69,6 @@
             </p>
         {/if}
     </form> 
-    *}
 
 <p style="margin-bottom:40px;"></p>
 
