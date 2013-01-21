@@ -8,12 +8,15 @@
 </div>
 
 	<p>
-		{if $task->getSourceLangId()}
-			From <b>{TemplateHelper::languageNameFromId($task->getSourceLangId())}</b>
+		{if $task->getSourceLanguageId()}
+			From <b>{TemplateHelper::languageNameFromId($task->getSourceLanguageId())}</b>
 		{/if}
-		{if $task->getTargetLangId()}
-			To <b>{TemplateHelper::languageNameFromId($task->getTargetLangId())}</b>
+		{if $task->getTargetLanguageId()}
+			To <b>{TemplateHelper::languageNameFromId($task->getTargetLanguageId())}</b>
 		{/if}
+        <p>
+            Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
+        </p>
         <div class="tag">
 		{foreach from=$task->getTags() item=tag}
 			<a href="{urlFor name="tag-details" options="label.$tag"}" class="label">{$tag}</a>
@@ -25,10 +28,10 @@
 		<span class="time_since">{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago</span>
 
 		&middot;
-        {assign var="org_id" value=$task->getOrgId()}
+        {assign var="org_id" value=$org->getId()}
         
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-            {TemplateHelper::orgNameFromId($task->getOrgId())}
+            {TemplateHelper::orgNameFromId($org_id)}
         </a>
 		{assign var="wordcount" value=$task->getWordCount()}
 		{if $wordcount}
@@ -40,10 +43,7 @@
     <h3>{$org->getName()} <small>Organisation Information</small>
     <p style="margin-bottom:20px;"></p>
     {assign var="ref" value=''}
-    {if $task->getReferencePage() != ''}
-        {assign var="ref" value=$task->getReferencePage()}
-        {assign var="button" value="Page Reference"}
-    {elseif $org->getHomePage() != 'http://'}
+    {if $org->getHomePage() != 'http://'}
         {assign var="ref" value=$org->getHomePage()}
         {assign var="button" value="Organisation Home Page"}
     {/if}
@@ -54,8 +54,8 @@
     {if $org->getBiography() != ''}
         <p><b>About the Organisation:</b> {$org->getBiography()}</p>
     {/if}
-    {if $task->getImpact() != ''}
-        <p><b>Impact:</b> {$task->getImpact()}</p>
+    {if $task->getComment() != ''}
+        <p><b>Comment:</b> {$task->getComment()}</p>
     {/if}
 
 {if isset($file_previously_uploaded) && $file_previously_uploaded}

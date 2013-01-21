@@ -1,38 +1,41 @@
 {include file="header.tpl"}
 
-{assign var="task_id" value=$task->getId()}
+{assign var="project_id" value=1} {* $project->getId()} *}
 <h1 class="page-header">
-    Task {$task->getTitle()}
-    <small>Alter task details here</small>
-    <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
+    Project Title{* {$project->getTitle()} *}
+    <small>Alter project details here</small>
+    <a href="{urlFor name="project-view" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
         <i class="icon-list icon-white"></i> View Details
     </a>
 </h1>
 
-<h3>Edit Task Details</h3>
+<h3>Edit Project Details</h3>
 <p style="margin-bottom:20px;"></p>
-<form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well">
+<form method="post" action="{urlFor name="project-alter" options="project_id.$project_id"}" class="well">
     <label for="title">Title</label>
-    <textarea wrap="soft" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
+    <textarea wrap="soft" cols="1" rows="2" name="title">asd</textarea> {*$project->getTitle()*}
 
-    <label for="impact">Task Comment</label>
-    <textarea wrap="soft" cols="1" rows="2" name="impact">{$task->getComment()}</textarea>
-
-    <label for="deadline">Deadline</label>
-    {if $deadline_error != ''}
-        <div class="alert alert-error">
-            {$deadline_error}
-        </div>
-    {/if}
-    <p>
-        Date: <input name="deadline_date" id="deadline_date" type="text" value="{$deadlineDate}" />
-        Time: <input name="deadline_time" type="text" value="{$deadlineTime}" />
-    </p>
+    <label for="impact">Description</label>
+    <textarea wrap="soft" cols="1" rows="2" name="description">asf</textarea> {*$project->getImpact()*}
     
+    <label for="impact">Deadline</label>
+    <textarea wrap="soft" cols="1" rows="2" name="deadline">asf</textarea> {*$project->getDeadline()*}    
+    
+    <label for="impact">Reference</label>
+    <textarea wrap="soft" cols="1" rows="2" name="reference">asf</textarea> {*$project->getReference()*}    
+    
+    <label for="reference">Context Reference</label>
+    {if $task->getReferencePage() != '' }
+        {assign var="url_text" value=$task->getReferencePage()}
+    {else}
+        {assign var="url_text" value="http://"}
+    {/if}
+    <textarea wrap="soft" cols="1" rows="2" name="reference">{$url_text}</textarea>
+
     <label for="source">Source Language</label>
         <select name="source" id="source">
             {foreach $languages as $language}
-                {if $task->getSourceLanguageId() == $language->getId()}
+                {if $task->getSourceLangId() == $language->getId()}
                     <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
                 {else}
                     <option value="{$language->getId()}">{$language->getName()}</option>
@@ -42,7 +45,7 @@
     {if isset($countries)}
         <select name="sourceCountry" id="sourceCountry">
             {foreach $countries as $country}
-                {if $task->getSourceCountryId() == $country->getCode()}
+                {if $task->getSourceRegionId() == $country->getCode()}
                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                 {else}
                     <option value="{$country->getCode()}">{$country->getName()}</option>
@@ -54,7 +57,7 @@
     <label for="target">Target Language</label>
     <select name="target" id="target">
         {foreach $languages as $language}
-            {if $task->getTargetLanguageId() == $language->getId()}
+            {if $task->getTargetLangId() == $language->getId()}
                     <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
             {else}
                 <option value="{$language->getId()}">{$language->getName()}</option>
@@ -64,7 +67,7 @@
     {if isset($countries)}
         <select name="targetCountry" id="targetCountry">
             {foreach $countries as $country}
-                {if $task->getTargetCountryId() == $country->getCode()}
+                {if $task->getTargetRegionId() == $country->getCode()}
                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                 {else}
                     <option value="{$country->getCode()}">{$country->getName()}</option>
@@ -83,7 +86,7 @@
     {/if} 
     
     <label for="word_count">Word Count</label>
-    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}">
+    <input type="text" name="word_count" id="word_count" maxlength="6" value="999"> {*$project->getWordCount()*}
 
     <p>
         <button type="submit" value="Submit" name="submit" class="btn btn-primary">
@@ -91,5 +94,6 @@
         </button>
     </p>
 </form>
+
 
 {include file="footer.tpl"}

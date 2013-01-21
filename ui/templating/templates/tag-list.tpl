@@ -18,7 +18,7 @@
 <p style="margin-bottom:40px;"></p>
 
 {if isset($all_tags)}
-    <h1>All Tags <small>List of all tags in the system</small></h1>
+    <h1>All Tags <small>List of all tags in the system.</small></h1>
     <p style="margin-bottom:10px;"></p>
     <ul class="nav nav-list unstyled">
     {foreach $all_tags as $tag}

@@ -8,6 +8,7 @@
 
 require_once 'DataAccessObjects/OrganisationDao.class.php';
 require_once 'DataAccessObjects/BadgeDao.class.php';
+require_once 'DataAccessObjects/ProjectDao.class.php';
 
 class Orgs {
     
@@ -86,6 +87,24 @@ class Orgs {
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getOrgByName');
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/projects(:format)/',
+            function ($id, $format = '.json')
+            {
+                $dao = new ProjectDao();
+                $params = array();
+                $params['organisation_id'] = $id;
+                Dispatcher::sendResponce(null, $dao->getProject($params), null, $format);
+            }, 'getOrgProjects');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects(:format)/',
+            function ($id, $format = '.json')
+            {
+                $dao = new ProjectDao();
+                $params = array();
+                $params['organisation_id'] = $id;
+                Dispatcher::sendResponce(null, $dao->getArchivedProject($params), null, $format);
+            }, 'getOrgArchivedProjects');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/badges(:format)/',
                                                         function ($id, $format= ".json") {

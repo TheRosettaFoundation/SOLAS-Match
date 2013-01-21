@@ -10,8 +10,8 @@
 {else}
     Your
 {/if}
-    active tasks
-    <small>A list of tasks you are currently working on</small>
+    Active Tasks
+    <small>A list of tasks you are currently working on.</small>
 </h1></div>
 
 {if isset($active_tasks)}
@@ -21,6 +21,12 @@
             {include file="task.summary-link.tpl" task=$task}
         {/for}
         {include file="pagination.tpl" url_name="active-tasks" current_page=$page_no last_page=$last}
+    {else}
+        <div class="alert alert-warning">
+
+            <strong>No Active Tasks available!</strong> You can claim tasks from the 'Task Stream' on the home page.
+
+        </div>        
     {/if}
 {/if}
 

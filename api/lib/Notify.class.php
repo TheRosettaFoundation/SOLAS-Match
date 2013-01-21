@@ -213,7 +213,7 @@ class Notify
                 $site_url = $settings->get('site.url');
     
                 $org_dao = new OrganisationDao();
-                $org = $org_dao->find(array('id' => $task->getOrgId()));
+                $org = $org_dao->find(array('id' => $task->getOrganisationId()));
 
                 if (count($subscribed_users) > 0) {
                     foreach ($subscribed_users as $user) {

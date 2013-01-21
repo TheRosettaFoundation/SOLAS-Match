@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 <div class="page-header">
-	<h1>Register on Solas Match <small>As a volunteer translator</small></h1>
+	<h1>Register on Solas Match <small>As a volunteer translator.</small></h1>
 </div>
 
 {if isset($error)}

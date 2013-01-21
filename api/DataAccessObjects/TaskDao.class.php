@@ -29,7 +29,7 @@ class TaskDao {
         } else {
             $task = ModelFactory::buildModel("Task", $params);
         }
-        
+
         $this->save($task);
         return $task;
     }
@@ -103,27 +103,33 @@ class TaskDao {
     {
         $args = "";
         $args .= isset($params['id']) ?
-            PDOWrapper::cleanseNull($params['id']) : "null";        
-        $args .= isset($params['org_id']) ?
-            ",".PDOWrapper::cleanseNull($params['org_id']) : ",null";
+            PDOWrapper::cleanseNull($params['id']) : "null";
+        $args .= isset($params['project_id']) ?
+            PDOWrapper::cleanseNull($params['project_id']) : ", null";
         $args .= isset($params['title']) ?
             ",".PDOWrapper::cleanseNullOrWrapStr($params['title']) : ",null";
         $args .= isset($params['word-count']) ?
             ",".PDOWrapper::cleanseNull($params['word-count']) : ",null";
-        $args .= isset($params['source_id']) ?
-            ",".PDOWrapper::cleanseNull($params['source_id']) : ",null";
-        $args .= isset($params['target_id']) ?
-            ",".PDOWrapper::cleanseNull($params['target_id']) : ",null";
+        $args .= isset($params['language_id-source']) ?
+            ",".PDOWrapper::cleanseNull($params['language_id-source']) : ",null";
+        $args .= isset($params['language_id-target']) ?
+            ",".PDOWrapper::cleanseNull($params['language_id-target']) : ",null";
         $args .= isset($params['created-time']) ?
             ",".PDOWrapper::cleanseNull($params['created-time']) : ",null";
-        $args .= isset($params['impact']) ?
-            ",".PDOWrapper::cleanseNullOrWrapStr($params['impact']) : ",null";
-        $args .= isset($params['reference-page']) ?
-            ",".PDOWrapper::cleanseNullOrWrapStr($params['reference-page']) : ",null";
-        $args .= isset($params['country_id-source']) ?
-            ",".PDOWrapper::cleanseNullOrWrapStr($params['country_id-source']) : ",null";
-        $args .= isset($params['country_id-target']) ?
-            ",".PDOWrapper::cleanseNullOrWrapStr($params['country_id-target']) : ",null";
+        $args .= isset($params['Country_id-source']) ?
+            ",".PDOWrapper::cleanseNull($params['Country_id-source']) : ",null";
+        $args .= isset($params['Country_id-target']) ?
+            ",".PDOWrapper::cleanseNull($params['Country_id-target']) : ",null";
+        $args .= isset($params['comment']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['comment']) : ",null";
+        $args .= isset($params['taskType_id']) ?
+            ",".PDOWrapper::cleanseNull($params['taskType_id']) : ",null";
+        $args .= isset($params['taskStatus_id']) ?
+            ",".PDOWrapper::cleanseNull($params['taskStatus_id']) : ",null";
+        $args .= isset($params['published']) ?
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['published']) : ",null";
+        $args .= isset($params['deadline']) ?
+            ",".PDOWrapper::cleanseNull($params['deadline']) : ",null";
 
         $tasks = array();
         $result = PDOWrapper::call("getTask", $args);
@@ -187,8 +193,8 @@ class TaskDao {
 
         //Remove ID so a new one will be created
         $task->setId(null);
-        $task->setTargetLangId($language_id);
-        $task->setTargetRegionId($countryCode);
+        $task->setTargetLanguageId($language_id);
+        $task->setTargetCountryId($countryCode);
         //Save the new Task
         $this->save($task);
         $this->calculateTaskScore($task->getId());
@@ -214,16 +220,19 @@ class TaskDao {
     private function update($task)
     {
         $result= PDOWrapper::call("taskInsertAndUpdate", PDOWrapper::cleanseNull($task->getId())
-                                                .",".PDOWrapper::cleanseNull($task->getOrgId())
+                                                .",".PDOWrapper::cleanseNull($task->getProjectId())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
                                                 .",".PDOWrapper::cleanseNull($task->getWordCount())
-                                                .",".PDOWrapper::cleanseNull($task->getSourceLangId())
-                                                .",".PDOWrapper::cleanseNull($task->getTargetLangId())
+                                                .",".PDOWrapper::cleanseNull($task->getSourceLanguageId())
+                                                .",".PDOWrapper::cleanseNull($task->getTargetLanguageId())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getImpact())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getReferencePage())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceRegionId())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetRegionId()));
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryId())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryId())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
+                                                .",".PDOWrapper::cleanseNull($task->getTaskType())
+                                                .",".PDOWrapper::cleanseNull($task->getTaskStatus())
+                                                .",".PDOWrapper::cleanseNull($task->getPublished()));
         $this->updateTags($task);
     }
     
@@ -301,16 +310,20 @@ class TaskDao {
 
     private function insert(&$task)
     {
-        $result = PDOWrapper::call("taskInsertAndUpdate", "null,".PDOWrapper::cleanseNull($task->getOrgId()).
-            ",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle()).
-            ",".PDOWrapper::cleanseNull($task->getWordCount()).
-            ",".PDOWrapper::cleanseNull($task->getSourceLangId()).
-            ",".PDOWrapper::cleanseNull($task->getTargetLangId()).
-            ",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime()).
-            ",".PDOWrapper::cleanseNullOrWrapStr($task->getImpact()).
-            ",".PDOWrapper::cleanseNullOrWrapStr($task->getReferencePage()).
-            ",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceRegionId()).
-            ",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetRegionId()));
+        $result = PDOWrapper::call("taskInsertAndUpdate", "null"
+            .",".PDOWrapper::cleanseNull($task->getProjectId())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
+            .",".PDOWrapper::cleanseNull($task->getWordCount())
+            .",".PDOWrapper::cleanseNull($task->getSourceLanguageId())
+            .",".PDOWrapper::cleanseNull($task->getTargetLanguageId())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryId())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryId())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
+            .",".PDOWrapper::cleanseNull($task->getTaskType())
+            .",".PDOWrapper::cleanseNull($task->getTaskStatus())
+            .",".PDOWrapper::cleanseNull($task->getPublished()));
         $task->setId($result[0]['id']);
         $this->updateTags($task);
     }
@@ -380,16 +393,11 @@ class TaskDao {
         return $ret;
     }
 
-    public function moveToArchive($task) 
-    {
-        $this->moveToArchiveByID($task->getId());
-    }
-
-    public function moveToArchiveByID($taskID) 
+    public function moveToArchiveByID($taskID, $userId) 
     {
         $task = $this->find(array("id" => $taskID));
         Notify::sendEmailNotifications($task, NotificationTypes::ARCHIVE);
-        PDOWrapper::call("archiveTask", PDOWrapper::cleanse($taskID));
+        PDOWrapper::call("archiveTask", PDOWrapper::cleanse($taskID, $userId));
     }
 
     public function claimTask($task, $user)
@@ -457,7 +465,7 @@ class TaskDao {
             $ret = array();
             foreach ($sqlResult as $row) {
                 $task = ModelFactory::buildModel("Task", $row);
-                $task->setStatus($this->getTaskStatus($task->getId()));
+                $task->setTaskStatus($this->getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }

@@ -6,7 +6,7 @@
     {else}
         Your
     {/if}
-    Archived Jobs <small>A list of jobs you have worked on in the past</small>
+    Archived Tasks <small>A list of tasks you have worked on in the past</small>
 </h1></div>
 
 {if isset($archived_tasks) && count($archived_tasks) > 0}

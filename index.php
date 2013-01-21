@@ -34,6 +34,7 @@ require_once 'ui/RouteHandlers/OrgRouteHandler.class.php';
 require_once 'ui/RouteHandlers/TaskRouteHandler.class.php';
 require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
 require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
+require_once 'ui/RouteHandlers/ProjectRouteHandler.class.php';
 
 require_once 'Common/models/User.php';
 require_once 'Common/models/Tag.php';
@@ -84,6 +85,7 @@ $app->configureMode('development', function () use ($app) {
 *
 */
 {
+
     $route_handler = new UserRouteHandler();
     $route_handler->init();
 
@@ -98,6 +100,9 @@ $app->configureMode('development', function () use ($app) {
 
     $route_handler = new BadgeRouteHandler();
     $route_handler->init();
+    
+    $route_handler = new ProjectRouteHandler();
+    $route_handler->init();    
 }
 
 function isValidPost(&$app)
@@ -124,6 +129,16 @@ $app->hook('slim.before', function () use ($app)
             $app->view()->appendData(array(
                 'user_is_organisation_member' => true,
                 'user_organisations' => $org_array
+            ));
+        }
+
+        $user_id = $user->getUserId();
+        $request = APIClient::API_VERSION."/users/$user_id/tasks";
+        $response = $client->call($request);
+        
+        if($response && count($response) > 0) {
+            $app->view()->appendData(array(
+                        "user_has_active_tasks" => true
             ));
         }
     }
