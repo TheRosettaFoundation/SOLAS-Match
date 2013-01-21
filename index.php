@@ -131,6 +131,16 @@ $app->hook('slim.before', function () use ($app)
                 'user_organisations' => $org_array
             ));
         }
+
+        $user_id = $user->getUserId();
+        $request = APIClient::API_VERSION."/users/$user_id/tasks";
+        $response = $client->call($request);
+        
+        if($response && count($response) > 0) {
+            $app->view()->appendData(array(
+                        "user_has_active_tasks" => true
+            ));
+        }
     }
 });
 

@@ -383,7 +383,11 @@ class TaskRouteHandler
             die;
         }
 
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+
+        $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request); 
         $org = $client->cast('Organisation', $response);
         

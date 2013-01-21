@@ -465,7 +465,7 @@ class TaskDao {
             $ret = array();
             foreach ($sqlResult as $row) {
                 $task = ModelFactory::buildModel("Task", $row);
-                $task->setStatus($this->getTaskStatus($task->getId()));
+                $task->setTaskStatus($this->getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }

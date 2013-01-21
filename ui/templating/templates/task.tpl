@@ -28,10 +28,10 @@
 		<span class="time_since">{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago</span>
 
 		&middot;
-        {assign var="org_id" value=$task->getOrganisationId()}
+        {assign var="org_id" value=$org->getId()}
         
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-            {TemplateHelper::orgNameFromId($task->getOrganisationId())}
+            {TemplateHelper::orgNameFromId($org_id)}
         </a>
 		{assign var="wordcount" value=$task->getWordCount()}
 		{if $wordcount}

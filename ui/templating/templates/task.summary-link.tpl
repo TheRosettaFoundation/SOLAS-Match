@@ -19,8 +19,8 @@
             Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
         </p>
     
-        {if $task->getStatus()}
-            <p><span class="label label-info">{$task->getStatus()}</span></p>
+        {if $task->getTaskStatus()}
+            <p><span class="label label-info">{$task->getTaskStatus()}</span></p>
         {/if}
     
 	

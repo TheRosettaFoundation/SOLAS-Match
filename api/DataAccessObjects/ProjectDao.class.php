@@ -1,6 +1,7 @@
 <?php
 
 include_once '../Common/lib/PDOWrapper.class.php';
+include_once '../Common/lib/ModelFactory.class.php';
 include_once '../Common/models/Project.php';
 include_once '../Common/models/ArchivedProject.php';
 

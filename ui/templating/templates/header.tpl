@@ -34,11 +34,10 @@
 			    		<a href="{urlFor name="org-dashboard"}">Dashboard</a>
 			    	</li>
 		    	{/if}
-                        {if isset($user)}
-		            {assign var="user_id" value=$user->getUserId()}
+                {if isset($user_has_active_tasks)}
 					<li {if isset($current_page) && $current_page == 'active-tasks'}class="active" {/if}>
 						<a href="{urlFor name="active-tasks" options="page_no.1"}">Active Tasks</a>
-					</li> <!--'{urlFor name="active-tasks" options="page_no.1"}' -->
+					</li>
 				{/if}
 			{if isset($user)}
                 {assign var="user_id" value=$user->getUserId()}

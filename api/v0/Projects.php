@@ -56,7 +56,11 @@ class Projects
                 $dao = new ProjectDao();
                 $params = array();
                 $params['id'] = $id;
-                Dispatcher::sendResponce(null, $dao->getProject($params), null, $format);
+                $data = $dao->getProject($params);
+                if($data && is_array($data)) {
+                    $data = $data[0];
+                }
+                Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:projectId/user/:userId/archive(:format)/',
@@ -72,7 +76,7 @@ class Projects
                 Dispatcher::sendResponce(null, $dao->getArchivedProject(null), null, $format);
             }, 'getArchivedProjects');
 
-        Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/',
+        Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects/:id/',
             function ($id, $format = '.json') 
             {
                 if (!is_numeric($id) && strstr($id, '.')) {
@@ -84,7 +88,11 @@ class Projects
                 $dao = new ProjectDao();
                 $params = array();
                 $params['id'] = $id;
-                Dispatcher::sendResponce(null, $dao->getArchivedProject($params), null, $format);
+                $data = $dao->getArchivedProject($params);
+                if($data && is_array($data)) {
+                    $data = $data[0];
+                }
+                Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getArchivedProject');
     }
 }
