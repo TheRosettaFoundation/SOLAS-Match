@@ -495,6 +495,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID();
+        $settings = new Settings();
 
         $error          = null;
         $title_err      = null;
@@ -636,7 +637,7 @@ class TaskRouteHandler
             }
         }
         $language_list = TemplateHelper::getLanguageList();
-        $countries= TemplateHelper::getCountryList();
+        $countries = TemplateHelper::getCountryList();
         $extra_scripts = "
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
         <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
@@ -722,7 +723,6 @@ class TaskRouteHandler
             }            
         </script>";
 
-        $countries= TemplateHelper::getCountryList();
         $app->view()->appendData(array(
             'error'             => $error,
             'title_error'       => $title_err,

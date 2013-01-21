@@ -37,7 +37,10 @@
                     <center>Status</center>
                 </th>
                 <th>
-                    <center>Track</center>
+                    <center>Word Count</center>
+                </th>
+                <th>
+                    <center>Created</center>
                 </th>
                 <th>
                     <center>
@@ -47,14 +50,15 @@
                     </center>
                 </th>
                 <th>                    
-                    <a class="btn btn-success" href="{urlFor name="task-upload" options="org_id.$org_id"}">
+                    <a class="btn btn-success" href="{urlFor name="project-upload" options="org_id.$org_id"}">
                         <i class="icon-upload icon-white"></i> Create Project
                     </a>                    
                 </th>
             </tr>
         </thead>
         <tbody>
-        {assign var="projectsData" value=$templateData[$org_id]}
+        {*
+        {assign var="projectsData" value=$templateData[$project_id]}
         {if !is_null($projectsData)}
             {foreach from=$projectsData item=data}
                 <tr>
@@ -125,6 +129,7 @@
                 <p>This organisation has no projects listed.</p>
             </td>
         {/if}
+        *}
         </tbody>
     {/foreach}
     </table>

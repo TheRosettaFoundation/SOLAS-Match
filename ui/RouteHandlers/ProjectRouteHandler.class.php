@@ -14,6 +14,12 @@ class ProjectRouteHandler
         $app->get('/project/alter/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'projectAlter'))->via('POST')->name('project-alter');
         // $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
+        
+        $app->get('/project/upload/:org_id/', array($middleware, 'authUserForOrg'),
+        array($this, 'projectUpload'))->via('GET', 'POST')->name('project-upload');    
+        
+        $app->get('/project/id/:project_id/uploaded/', array($middleware, 'authUserForOrgProject'),
+        array($this, 'projectUploaded'))->name('project-uploaded');
     }
   
     public function projectView($project_id)
@@ -57,13 +63,14 @@ class ProjectRouteHandler
                 }   
             }   
         }   
-        
-        $request = APIClient::API_VERSION."/users/subscribedToProject/{$user_id}/$project_id";
-        $registered = $client->call($request);         
 
         $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
+
+        //Not Implemented
+        $request = APIClient::API_VERSION."/users/subscribedToProject/{$user_id}/{$project_id}";
+        $registered = $client->call($request);         
 
         $app->view()->appendData(array(
                                  'org' => $org,
@@ -236,6 +243,325 @@ class ProjectRouteHandler
         ));
         
         $app->render('project.alter.tpl');
+    }
+    
+    
+    public function projectUpload($org_id)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+        $user_id = UserSession::getCurrentUserID();
+
+        $error          = null;
+        $title_err      = null;
+        $deadline_err   = null;
+        $word_count_err = null;
+        $targetLanguage_err = null;
+        $field_name = 'new_project_file';
+        
+        //$title_err  = null;
+        $project            = null;
+
+
+        
+//        $request = APIClient::API_VERSION."/projects/$project_id";
+//        $response = $client->call($request);
+//        $project = $client->cast('Project', $response);        
+//        if (!is_object($project)) {
+//            $app->notFound();
+//        }
+        
+        if ($app->request()->isPost()) {            
+            $post = (object) $app->request()->post();
+            
+            $projectData = array();
+            
+            if(($post->title != '')) {
+                $projectData['title'] = $post->title;
+            } else {
+                $title_err = "Project <b>Title</b> must be set.";
+            }            
+            
+            if($post->deadline != '') {
+                $projectData['deadline'] = $post->deadline;
+            } else {
+                $deadline_err = "Project <b>Deadline</b> must be set.";
+            }
+            
+            for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+                if(!isset($post->{'chunking_'.$i}) && !isset($post->{'translation_'.$i}) &&
+                    !isset($post->{'proofreading_'.$i}) && !isset($post->{'postediting_'.$i})) {
+                    $targetLanguage_err = "At least one <b>Task Type</b> must be set for each target language.";
+                    break;
+                }
+            }
+            
+            // Has all the minimum required project info been acquired (no errors)
+            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err)) {
+                
+                $taskData = array();
+                $taskData['title'] = 'MyTaskFile';//$_FILES[$field_name]['name'];
+                $taskData['organisation_id'] = $org_id;
+                $taskData['source_id'] = $post->sourceLanguage;
+                $taskData['country_id-source'] = $post->sourceCountry;
+            
+
+                    
+                for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+                       if(isset($post->{'chunking_'.$i})) {
+
+ 
+                            $taskData['taskType'] = 'chunking';
+                            $taskData['target_id'] = '';
+                            $taskData['country_id-target'] = '';
+
+                            $task = ModelFactory::buildModel("Task", $taskData); 
+                       }
+                       if(isset($post->{'translation_'.$i})) {
+                            $taskData['taskType'] = 'translation';
+                           
+                       }
+                       if(isset($post->{'proofreading_'.$i})) {
+                            $taskData['taskType'] = 'proofreading';
+                           
+                       }                       
+                       if(isset($post->{'postediting_'.$i})) {
+                            $taskData['taskType'] = 'postediting_';
+                       }
+                       
+                }                
+                
+            } else {
+                $app->view()->appendData(array(
+                    'title_err' => $title_err,
+                    'deadline_err' => $deadline_err,                   
+                    'targetLanguage_err' => $targetLanguage_err
+                ));               
+            }
+            
+            
+            
+            
+            /*
+                
+            
+
+                    
+
+                    $projectData['deadline'] = $post->deadline;
+                    $projectData['organisation_id'] = $org_id;
+                    
+                    for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+
+                       if(isset($post->{'chunking_'.$i}) || isset($post->{'translation_'.$i}) ||
+                           isset($post->{'proofreading_'.$i}) || isset($post->{'postediting_'.$i})) {
+                               $isValidTaskTypes[$i] = true;
+                       } else {
+                           $targetLanguage_err = "At least one task type must be set for each target language.";
+                       } 
+                    }  
+                    
+                    if(is_null($targetLanguage_err)) {
+                        
+                    }
+                
+                } else {
+                    $deadline_err = "Project deadline must be set.";
+                }
+            } else {
+                $title_err = "Project title must be set.";
+            }
+  
+                $isValidTaskTypes = array();
+
+                for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+
+                    if(isset($post->{'chunking_'.$i}) || isset($post->{'translation_'.$i}) ||
+                        isset($post->{'proofreading_'.$i}) || isset($post->{'postediting_'.$i})) {
+                            $isValidTaskTypes[$i] = true;
+                    } else {
+                        $targetLanguage_err = "At least one task type must be set for each target language.";
+                    } 
+                }
+            } else {
+                
+            }
+                      
+            
+            $projectData = array();
+            
+            if ($post->title != '') {
+                $projectData['title'] = $post->title;
+                $project = ModelFactory::buildModel("Project", $projectData);
+            } else {
+                $title_err = "Project title must be set.";
+            }
+            */
+            /*
+            $invalidProjectInfo = array(
+                'title' => '',
+                'deadline'
+            */
+   
+            //$isValidProjectInfo = array();
+            
+
+            
+            if(($post->title != '') && !is_null($post->deadline) &&
+                (isset($post->chunking) || isset($post->translation) ||
+                isset($post->proofreading) || isset($post->postediting))) {
+                
+                // ready to create project metadata & upload file
+                $projectData = array();
+                
+                $projectData['title'] = $post->title;
+                
+                if($post->description != '') {
+                    $projectData['description'] = $post->description;
+                }
+                
+                if($post->reference != '') {
+                    $projectData['reference'] = $post->reference;
+                }
+                
+                if(isset($post->word_count)) {
+                    $projectData['word_count'] = $post->word_count;
+                }
+
+                $projectData['deadline'] = $post->deadline;
+                
+                if($post->tags  != '') {
+                    $projectData['tags'] = $post->tags;
+                }
+                
+                $projectModel = ModelFactory::buildModel("project", $projectData);
+                $request = APIClient::API_VERSION."/projects";
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $projectModel);                
+                $project = $client->cast('Project', $response);      
+                
+                try {                    
+                    $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                    $error_message=$client->call(APIClient::API_VERSION."/projects/{$project->getId()}/file/".
+                            urlencode($_FILES[$field_name]['name'])."/$user_id",
+                            HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                } catch (Exception  $e) {
+                    $upload_error = true;
+                    $error_message = 'File error: ' . $e->getMessage();
+                }                
+                
+            } else {
+                
+            }
+
+            
+
+            
+            
+            
+            
+            $upload_error = false;
+            try {
+                TemplateHelper::validateFileHasBeenSuccessfullyUploaded($field_name);
+            } catch (Exception $e) {
+                $upload_error = true;
+                $error_message = $e->getMessage();
+            }
+            
+            if (!$upload_error) {
+                
+                $projectData = array();
+                $taskData['organisation_id'] = $org_id;
+                $taskData['title'] = $_FILES[$field_name]['name'];
+                $task = ModelFactory::buildModel("Task", $taskData);
+                
+                $request = APIClient::API_VERSION."/tasks";
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
+                
+                $task = $client->cast('Task', $response);
+
+                try {                    
+                    $filedata =file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                    $error_message=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/file/".
+                            urlencode($_FILES[$field_name]['name'])."/$user_id",
+                            HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                } catch (Exception  $e) {
+                    $upload_error = true;
+                    $error_message = 'File error: ' . $e->getMessage();
+                }
+            }
+            
+            if (!$upload_error) {
+                $app->redirect($app->urlFor('task-describe', array('task_id' => $task->getId())));
+            }
+        } 
+        /*
+        $extra_scripts = 
+            "<script>
+            var isEnabled = false;
+            function chunkingEnabled()
+            {        
+                if(!isEnabled) {
+                   document.getElementById(\"translation_0\").checked = false;
+                   document.getElementById(\"proofreading_0\").checked = false;
+                   document.getElementById(\"postediting_0\").checked = false;        
+                   document.getElementById(\"translation_0\").disabled = true;
+                   document.getElementById(\"proofreading_0\").disabled = true;
+                   document.getElementById(\"postediting_0\").disabled = true;
+                   isEnabled = true;
+                } else {
+                   document.getElementById(\"translation_0\").disabled = false;
+                   document.getElementById(\"proofreading_0\").disabled = false;
+                   document.getElementById(\"postediting_0\").disabled = false;       
+                   isEnabled = false;
+                }        
+            }
+        </script>";
+         
+         */
+        
+        $language_list = TemplateHelper::getLanguageList();
+        $countries = TemplateHelper::getCountryList();
+
+        $app->view()->appendData(array(
+            'error'             => $error,
+            'title_error'       => $title_err,
+            'word_count_err'    => $word_count_err,
+            'url_project_upload' => $app->urlFor('project-upload', array('org_id' => $org_id)),
+            'languages'         => $language_list,
+            'countries'         => $countries//,
+            //'extra_scripts'     => $extra_scripts
+        ));
+        
+        $app->render('project.upload.tpl');
+    }    
+    
+    
+    public function projectUploaded($project_id)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+        $user_id = UserSession::getCurrentUserID();
+
+        $request = APIClient::API_VERSION."/projects/$project_id";
+        $response = $client->call($request);     
+        $project = $client->cast('Project', $response);
+       
+        $request = APIClient::API_VERSION."/users/$user_id";
+        $response = $client->call($request, HTTP_Request2::METHOD_GET);
+        $user = $client->cast('User', $response);        
+        
+        if (!is_object($user)) {
+            $app->flash('error', 'Login required to access page');
+            $app->redirect($app->urlFor('login'));
+        }   
+        
+        // Uncomment when working
+        $org_id = 11;//$project->getOrgId();
+        $app->view()->appendData(array(
+                'org_id' => $org_id
+        ));     
+        
+        $app->render('project.uploaded.tpl');
     }    
     
     
