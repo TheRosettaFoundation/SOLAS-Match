@@ -522,8 +522,7 @@ class TaskRouteHandler
             
             if (is_null($word_count_err) && is_null($title_err)) {
                 if (!empty($post->source)) {
-                    $source_id = TemplateHelper::saveLanguage($post->source);
-                    $task->setSourceLangId($source_id);
+                    $task->setSourceLangId($post->source);
                 }
 
                 if ($post->impact != '') {
