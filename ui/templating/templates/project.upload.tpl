@@ -194,17 +194,17 @@
                 <td width="493" align="center" valign="middle">
                     <label for="title"><h2>Title: <font color='red'>*</font></h2></label>
                     <p class="desc">Provide a meaningful title for your project.</p>
-                    <textarea wrap="soft" cols="1" rows="3" name="title">asd</textarea> {*$project->getTitle()*}
+                    <textarea wrap="soft" cols="1" rows="3" name="title"></textarea>
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="description"><h2>Description:</h2></label>
-                    <p class="desc">A brief summary of the project.</p>
-                    <textarea wrap="soft" cols="1" rows="6" name="description">asf</textarea> {*$project->getDescription()*}
+                    <p class="desc">A brief summary of the project.</p>                    
+                    <textarea wrap="soft" cols="1" rows="6" name="description">{if isset($projectModel)}{$projectModel->getDescription()}{/if}</textarea>                    
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="reference"><h2>Reference:</h2></label>
                     <p class="desc">Enter a URL that gives context to this project.</p>
-                    <textarea wrap="soft" cols="1" rows="3" name="reference">asf</textarea> {*$project->getReference()*}    
+                    <textarea wrap="soft" cols="1" rows="3" name="reference">{if isset($projectModel)}{$projectModel->getReference()}{/if}</textarea>    
                     <p style="margin-bottom:30px;"></p> 
                 </td>
                 <td width="493" align="center" valign="middle">    
@@ -217,17 +217,17 @@
                     
                     <label for="word_count"><h2>Word Count:</h2></label>
                     <p class="desc">Approximate or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.</p>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" value="999"> {*$project->getWordCount()*}
+                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{if isset($projectModel)}{$projectModel->getWordCount()}{/if}">
                     <p style="margin-bottom:30px;"></p> 
                     
                     <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
                     <p class="desc">When the project and its tasks should be completed by.</p>
-                    <textarea wrap="soft" cols="1" rows="2" name="deadline">asf</textarea> {*$project->getDeadline()*}   
+                    <textarea wrap="soft" cols="1" rows="2" name="deadline">asf</textarea> {*{if isset($projectModel)}{$projectModel->getDeadline()}{/if}*}
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="tags"><h2>Tags:</h2></label>
                     <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                    <textarea wrap="soft" cols="1" rows="3" name="tags">asd</textarea> {*$project->getTitle()*}
+                    <textarea wrap="soft" cols="1" rows="3" name="tags"></textarea> {*{if isset($projectModel)}{$projectModel->getTags()}{/if}*}
                 </td>                    
             </tr>
             <tr>

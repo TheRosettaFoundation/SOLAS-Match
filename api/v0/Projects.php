@@ -12,6 +12,7 @@ class Projects
 {
     public static function init()
     {
+        
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects(:format)/',
             function ($format = '.json') 
             {

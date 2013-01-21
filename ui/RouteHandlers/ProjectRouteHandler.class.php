@@ -259,24 +259,47 @@ class ProjectRouteHandler
         $targetLanguage_err = null;
         $field_name         = 'new_project_file';
         $project            = null;
+        $projectModel       = null;
 
         if ($app->request()->isPost()) {            
             $post = (object) $app->request()->post();
             
             $project = null;
-            $projectData = array();
+            $projectModel = new Project();             
             
             if(($post->title != '')) {
-                $projectData['title'] = $post->title;
+                $projectModel->setTitle($post->title);
             } else {
                 $title_err = "Project <b>Title</b> must be set.";
             }            
             
             if($post->deadline != '') {
-                $projectData['deadline'] = $post->deadline;
+                $projectModel->setDeadline($post->deadline);
             } else {
                 $deadline_err = "Project <b>Deadline</b> must be set.";
             }
+            
+            if(($post->description != '')) {
+                $projectModel->setDescription($post->description);
+            }
+            if(($post->reference != '')) {
+                $projectModel->setReference($post->reference);
+            }
+            if(($post->word_count != '')) {
+                $projectModel->setWordCount($post->word_count);
+            }
+            
+            $tags = $post->tags;
+            if (is_null($tags)) {
+                $tags = '';
+            }
+
+            $tag_list = TemplateHelper::separateTags($tags);
+            if($tag_list) {
+                foreach ($tag_list as $tag) {
+                    $projectModel->addTags($tag);
+                }
+            } 
             
             for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
                 if(!isset($post->{'chunking_'.$i}) && !isset($post->{'translation_'.$i}) &&
@@ -287,37 +310,8 @@ class ProjectRouteHandler
             }
             
             // Has all the minimum required project info been acquired (no errors)
-            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err)) {       
-                
-                if(($post->description != '')) {
-                    $projectData['description'] = $post->description;
-                }
-                if(($post->reference != '')) {
-                    $projectData['reference'] = $post->reference;
-                }
-                if(($post->wordcount != '')) {
-                    $projectData['wordcount'] = $post->wordcount;
-                }
-                
-                if(($post->reference != '')) {
-                    $projectData['reference'] = $post->reference;
-                }
-
-                $tags = $post->tags;
-                if (is_null($tags)) {
-                    $tags = '';
-                }
-
-                $tag_list = TemplateHelper::separateTags($tags);
-                if($tag_list) {
-                    foreach ($tag_list as $tag) {
-                        $project->addTags($tag);
-                    }
-                }                
-                
-                $projectModel = ModelFactory::buildModel("Project", $projectData); 
+            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err)) { 
                 $request = APIClient::API_VERSION."/projects";
-                
                 if($response = $client->call($request, HTTP_Request2::METHOD_POST, $projectModel)) {
 
                     $project = $client->cast('Project', $response);
@@ -360,12 +354,14 @@ class ProjectRouteHandler
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);                         
                         }                       
                     }           
-                }                
-            } else {
+                }              
+            } else {  
+                
                 $app->view()->appendData(array(
                     'title_err'             => $title_err,
                     'deadline_err'          => $deadline_err,                   
-                    'targetLanguage_err'    => $targetLanguage_err
+                    'targetLanguage_err'    => $targetLanguage_err,
+                    'projectModel'          => $projectModel
                 ));               
             }
         }
