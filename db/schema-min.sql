@@ -1242,17 +1242,17 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure intergrationTest.getTask
+-- Dumping structure for procedure Solas-Match-Test.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` TINYINT, IN `dLine` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` TINYINT, IN `dLine` DATETIME)
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
 	if projectID='' then set projectID=null;end if;
 	if name='' then set name=null;end if;
-	if sID='' then set sID=null;end if;
-	if tID='' then set tID=null;end if;
+	if sCode='' then set sCode=null;end if;
+	if tCode='' then set tCode=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
 	if sCC='' then set sCC=null;end if;
@@ -1264,7 +1264,7 @@ BEGIN
 	if dLine='' then set dLine=null;end if;
 	
 	
-	set @q= "select id,project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  taskType_id, taskStatus_id, published, deadline from Tasks t where 1";-- set update
+	set @q= "select id,project_id,title,`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  taskType_id, taskStatus_id, published, deadline from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1275,11 +1275,15 @@ BEGIN
 	if name is not null then 
 		set @q = CONCAT(@q," and t.title='",name,"'") ;
 	end if;
-	if sID is not null then 
-		set @q = CONCAT(@q," and t.`language_id-source`=",sID) ;
+	if sCode is not null then 
+		set @sID=null;
+		select l.id into @sID from Languages l where l.code=sCode;
+		set @q = CONCAT(@q," and t.`language_id-source`=",@sID) ;
 	end if;
-	if tID is not null then 
-		set @q = CONCAT(@q," and t.`language_id-target`=",tID) ;
+	if tCode is not null then 
+		set @tID=null;
+		select l.id into @tID from Languages l where l.code=tCode;
+		set @q = CONCAT(@q," and t.`language_id-target`=",@tID) ;
 	end if;
 	if sCC is not null then 
 		set @scid=null;
@@ -1318,6 +1322,7 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
+
 
 
 
@@ -2021,21 +2026,21 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure intergrationTest.taskInsertAndUpdate
+-- Dumping structure for procedure Solas-Match-Test.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
 BEGIN
 	if id='' then set id=null;end if;
 	if projectID='' then set projectID=null;end if;
 	if name='' then set name=null;end if;
-	if sID='' then set sID=null;end if;
-	if tID='' then set tID=null;end if;
+	if sCode='' then set sCode=null;end if;
+	if tCode='' then set tCode=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
 	if taskComment='' then set taskComment=null;end if;
-	if sCC='' then set sCC=null;end if;
-	if tCC='' then set tCC=null;end if;
+	if sCode='' then set sCode=null;end if;
+	if tCode='' then set tCode=null;end if;
 	if dLine='' then set dLine=null;end if;
 	if taskType='' then set taskType=null;end if;
 	if tStatus='' then set tStatus=null;end if;
@@ -2050,8 +2055,14 @@ BEGIN
 			select c.id into @scid from Countries c where c.code=sCC;
 		set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
+		set @sID=null;
+			select l.id into @sID from Languages l where l.code=sCode;
+		set @tID=null;
+			select l.id into @tID from Languages l where l.code=tCode;
+			
+			
 		insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`taskType_id`,`taskStatus_id`,`published`)
-		 values (projectID,name,wordCount,sID,tID,created,taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
+		 values (projectID,name,wordCount,@sID,@tID,created,taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 		set @first = true;
 		set @q= "update Tasks t set";-- set update
@@ -2071,21 +2082,25 @@ BEGIN
 			end if;
 			set @q = CONCAT(@q," t.title='",name,"'") ;
 		end if;
-		if sID is not null then 
+		if sCode is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.`language_id-source`=",sID) ;
+			set @sID=null;
+			select l.id into @sID from Languages l where l.code=sCode;
+			set @q = CONCAT(@q," t.`language_id-source`=",@sID) ;
 		end if;
-		if tID is not null then 
+		if tCode is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.`language_id-target`=",tID) ;
+			set @tID=null;
+			select l.id into @tID from Languages l where l.code=tCode;
+			set @q = CONCAT(@q," t.`language_id-target`=",@tID) ;
 		end if;
 		
 		if sCC is not null then 
@@ -2170,12 +2185,9 @@ BEGIN
 		EXECUTE stmt;
 		DEALLOCATE PREPARE stmt;
 	end if;
-	call getTask(id,projectID,name,wordCount,sID,tID,created,sCC,tCC,taskComment,taskType,tStatus,pub,dLine);
+	call getTask(id,projectID,name,wordCount,sCode,tCode,created,sCC,tCC,taskComment,taskType,tStatus,pub,dLine);
 END//
 DELIMITER ;
-
-
-
 
 -- Dumping structure for procedure manuel-test.taskIsClaimed
 DROP PROCEDURE IF EXISTS `taskIsClaimed`;
