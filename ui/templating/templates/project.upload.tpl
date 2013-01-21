@@ -12,7 +12,7 @@
     function addNewTarget() {
 
         if(isRemoveButtonHidden) {
-            //document.getElementById('removeBottomTargetBtn').style.visibility = 'visible';
+            document.getElementById('removeBottomTargetBtn').style.visibility = 'visible';
             document.getElementById('removeBottomTargetBtn').disabled = false;
             isRemoveButtonHidden = false;
         }
@@ -121,7 +121,7 @@
         size.setAttribute('value', parseInt(size.getAttribute('value'))-1);
 
         if(fields == 0) {
-            //document.getElementById('removeBottomTargetBtn').style.visibility = 'hidden';
+            document.getElementById('removeBottomTargetBtn').style.visibility = 'hidden';
             document.getElementById('removeBottomTargetBtn').disabled = true;
             isRemoveButtonHidden = true;
         }         
@@ -169,10 +169,25 @@
 <p style="margin-bottom:20px;"></p>
 <div class="well">
     <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
-        <table border="1">
+        <table border="0">
             <tr>
                 <td colspan="2">
-                    {*<div class="alert alert-error"></div>*}
+                    {if (isset($title_err) || isset($title_err) || isset($title_err))}
+                        <div class="alert alert-error">
+                            <h3>Please fill in all required information:</h3>
+                            <ol>
+                                {if isset($title_err)}
+                                    <li>{$title_err}</li>
+                                {/if}
+                                {if isset($deadline_err)}
+                                    <li>{$deadline_err}</li>
+                                {/if}
+                                {if isset($targetLanguage_err)}
+                                    <li>{$targetLanguage_err}</li>
+                                {/if}
+                            </ol>
+                        </div>                        
+                    {/if}
                 </td>
             </tr>
             <tr>
@@ -305,7 +320,7 @@
                 <td colspan="2">
                     <div id="alertinfo" class="alert alert-info" style="display: none;"><center>You have reached the maximum number of target translation fields allowed.</center></div>  
                     <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
-                    <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" disabled="true"/>  
+                    <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" disabled="true" style="visibility: hidden"/>  
                     <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1">
                 </td>
             </tr>                

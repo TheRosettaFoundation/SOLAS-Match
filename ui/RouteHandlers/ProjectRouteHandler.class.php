@@ -254,8 +254,14 @@ class ProjectRouteHandler
 
         $error          = null;
         $title_err      = null;
+        $deadline_err   = null;
         $word_count_err = null;
+        $targetLanguage_err = null;
         $field_name = 'new_project_file';
+        
+        //$title_err  = null;
+        $project            = null;
+
 
         
 //        $request = APIClient::API_VERSION."/projects/$project_id";
@@ -268,6 +274,129 @@ class ProjectRouteHandler
         if ($app->request()->isPost()) {            
             $post = (object) $app->request()->post();
             
+            $projectData = array();
+            
+            if(($post->title != '')) {
+                $projectData['title'] = $post->title;
+            } else {
+                $title_err = "Project <b>Title</b> must be set.";
+            }            
+            
+            if($post->deadline != '') {
+                $projectData['deadline'] = $post->deadline;
+            } else {
+                $deadline_err = "Project <b>Deadline</b> must be set.";
+            }
+            
+            for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+                if(!isset($post->{'chunking_'.$i}) && !isset($post->{'translation_'.$i}) &&
+                    !isset($post->{'proofreading_'.$i}) && !isset($post->{'postediting_'.$i})) {
+                    $targetLanguage_err = "At least one <b>Task Type</b> must be set for each target language.";
+                    break;
+                }
+            }
+            
+            // Has all the minimum required project info been acquired (no errors)
+            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err)) {
+                
+                $taskData = array();
+                $taskData['title'] = 'MyTaskFile';//$_FILES[$field_name]['name'];
+                $taskData['organisation_id'] = $org_id;
+                $taskData['source_id'] = $post->sourceLanguage;
+                $taskData['country_id-source'] = $post->sourceCountry;
+            
+
+                    
+                for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+                       if(isset($post->{'chunking_'.$i})) {
+
+ 
+                            $taskData['taskType'] = 'chunking';
+                            $taskData['target_id'] = '';
+                            $taskData['country_id-target'] = '';
+
+                            $task = ModelFactory::buildModel("Task", $taskData); 
+                       }
+                       if(isset($post->{'translation_'.$i})) {
+                            $taskData['taskType'] = 'translation';
+                           
+                       }
+                       if(isset($post->{'proofreading_'.$i})) {
+                            $taskData['taskType'] = 'proofreading';
+                           
+                       }                       
+                       if(isset($post->{'postediting_'.$i})) {
+                            $taskData['taskType'] = 'postediting_';
+                       }
+                       
+                }                
+                
+            } else {
+                $app->view()->appendData(array(
+                    'title_err' => $title_err,
+                    'deadline_err' => $deadline_err,                   
+                    'targetLanguage_err' => $targetLanguage_err
+                ));               
+            }
+            
+            
+            
+            
+            /*
+                
+            
+
+                    
+
+                    $projectData['deadline'] = $post->deadline;
+                    $projectData['organisation_id'] = $org_id;
+                    
+                    for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+
+                       if(isset($post->{'chunking_'.$i}) || isset($post->{'translation_'.$i}) ||
+                           isset($post->{'proofreading_'.$i}) || isset($post->{'postediting_'.$i})) {
+                               $isValidTaskTypes[$i] = true;
+                       } else {
+                           $targetLanguage_err = "At least one task type must be set for each target language.";
+                       } 
+                    }  
+                    
+                    if(is_null($targetLanguage_err)) {
+                        
+                    }
+                
+                } else {
+                    $deadline_err = "Project deadline must be set.";
+                }
+            } else {
+                $title_err = "Project title must be set.";
+            }
+  
+                $isValidTaskTypes = array();
+
+                for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+
+                    if(isset($post->{'chunking_'.$i}) || isset($post->{'translation_'.$i}) ||
+                        isset($post->{'proofreading_'.$i}) || isset($post->{'postediting_'.$i})) {
+                            $isValidTaskTypes[$i] = true;
+                    } else {
+                        $targetLanguage_err = "At least one task type must be set for each target language.";
+                    } 
+                }
+            } else {
+                
+            }
+                      
+            
+            $projectData = array();
+            
+            if ($post->title != '') {
+                $projectData['title'] = $post->title;
+                $project = ModelFactory::buildModel("Project", $projectData);
+            } else {
+                $title_err = "Project title must be set.";
+            }
+            */
             /*
             $invalidProjectInfo = array(
                 'title' => '',
@@ -276,18 +405,9 @@ class ProjectRouteHandler
    
             //$isValidProjectInfo = array();
             
-            $isValidTaskTypes = array();
 
-            for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
-                
-                if(isset($post->{'chunking_'.$i}) || isset($post->{'translation_'.$i}) ||
-                    isset($post->{'proofreading_'.$i}) || isset($post->{'postediting_'.$i})) {
-                        $isValidTaskTypes[$i] = true;
-                        //$isValidTaskTypes[] = 'trans'
-                } 
-            }
             
-            if(!is_null($post->title) && !is_null($post->deadline) &&
+            if(($post->title != '') && !is_null($post->deadline) &&
                 (isset($post->chunking) || isset($post->translation) ||
                 isset($post->proofreading) || isset($post->postediting))) {
                 
@@ -296,11 +416,11 @@ class ProjectRouteHandler
                 
                 $projectData['title'] = $post->title;
                 
-                if(isset($post->description)) {
+                if($post->description != '') {
                     $projectData['description'] = $post->description;
                 }
                 
-                if(isset($post->reference)) {
+                if($post->reference != '') {
                     $projectData['reference'] = $post->reference;
                 }
                 
@@ -310,7 +430,7 @@ class ProjectRouteHandler
 
                 $projectData['deadline'] = $post->deadline;
                 
-                if(isset($post->tags)) {
+                if($post->tags  != '') {
                     $projectData['tags'] = $post->tags;
                 }
                 
