@@ -549,6 +549,32 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getProjectByTag
+DROP PROCEDURE IF EXISTS `getProjectByTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectByTag`(IN `tID` INT)
+BEGIN
+ select p.* 
+ from Projects p 
+ join ProjectTags pt 
+ on pt.project_id=p.id
+ where pt.tag_id= tID;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.getProjectTags
+DROP PROCEDURE IF EXISTS `getProjectTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectTags`(IN `pID` INT)
+BEGIN
+select t.* 
+from Tags t 
+join ProjectTags pt
+on pt.tag_id = t.id
+where pt.project_id = pID;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure SolasMatch.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
@@ -1875,6 +1901,19 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.removeProjectTag
+DROP PROCEDURE IF EXISTS `removeProjectTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeProjectTag`(IN `projectID` INT, IN `tagID` INT)
+BEGIN
+if exists (select 1 from ProjectTags where project_id=projectID and tag_id =tagID) then
+	delete from ProjectTags  where project_id=projectID and tag_id =tagID;
+	select 1 as result;
+else
+	select 0 as result;
+end if;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure manuel-test.removeUserBadge
 DROP PROCEDURE IF EXISTS `removeUserBadge`;
