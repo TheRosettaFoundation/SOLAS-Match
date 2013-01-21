@@ -29,7 +29,7 @@
 {if isset($org)}
     <h3>Organisation</h3>
     <p>
-        <a href="{$org->getHomePage()}">{$org->getTitle()}</a>
+        <a href="{$org->getHomePage()}">{$org->getName()}</a>
     </p>
 {/if}
 

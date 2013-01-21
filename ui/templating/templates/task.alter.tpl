@@ -15,21 +15,24 @@
     <label for="title">Title</label>
     <textarea wrap="soft" cols="1" rows="2" name="title">{$task->getTitle()}</textarea>
 
-    <label for="impact">Task Impact</label>
-    <textarea wrap="soft" cols="1" rows="2" name="impact">{$task->getImpact()}</textarea>
+    <label for="impact">Task Comment</label>
+    <textarea wrap="soft" cols="1" rows="2" name="impact">{$task->getComment()}</textarea>
 
-    <label for="reference">Context Reference</label>
-    {if $task->getReferencePage() != '' }
-        {assign var="url_text" value=$task->getReferencePage()}
-    {else}
-        {assign var="url_text" value="http://"}
+    <label for="deadline">Deadline</label>
+    {if $deadline_error != ''}
+        <div class="alert alert-error">
+            {$deadline_error}
+        </div>
     {/if}
-    <textarea wrap="soft" cols="1" rows="2" name="reference">{$url_text}</textarea>
-
+    <p>
+        Date: <input name="deadline_date" id="deadline_date" type="text" value="{$deadlineDate}" />
+        Time: <input name="deadline_time" type="text" value="{$deadlineTime}" />
+    </p>
+    
     <label for="source">Source Language</label>
         <select name="source" id="source">
             {foreach $languages as $language}
-                {if $task->getSourceLangId() == $language->getId()}
+                {if $task->getSourceLanguageId() == $language->getId()}
                     <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
                 {else}
                     <option value="{$language->getId()}">{$language->getName()}</option>
@@ -39,7 +42,7 @@
     {if isset($countries)}
         <select name="sourceCountry" id="sourceCountry">
             {foreach $countries as $country}
-                {if $task->getSourceRegionId() == $country->getCode()}
+                {if $task->getSourceCountryId() == $country->getCode()}
                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                 {else}
                     <option value="{$country->getCode()}">{$country->getName()}</option>
@@ -51,7 +54,7 @@
     <label for="target">Target Language</label>
     <select name="target" id="target">
         {foreach $languages as $language}
-            {if $task->getTargetLangId() == $language->getId()}
+            {if $task->getTargetLanguageId() == $language->getId()}
                     <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
             {else}
                 <option value="{$language->getId()}">{$language->getName()}</option>
@@ -61,7 +64,7 @@
     {if isset($countries)}
         <select name="targetCountry" id="targetCountry">
             {foreach $countries as $country}
-                {if $task->getTargetRegionId() == $country->getCode()}
+                {if $task->getTargetCountryId() == $country->getCode()}
                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                 {else}
                     <option value="{$country->getCode()}">{$country->getName()}</option>
@@ -88,6 +91,5 @@
         </button>
     </p>
 </form>
-
 
 {include file="footer.tpl"}

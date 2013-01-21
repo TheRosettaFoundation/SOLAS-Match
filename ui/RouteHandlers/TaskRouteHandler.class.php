@@ -83,7 +83,7 @@ class TaskRouteHandler
         
         if ($response) {
             foreach ($response as $stdObject) {
-                $archived_tasks[] = $client->cast('Task', $stdObject);
+                $archived_tasks[] = $client->cast('ArchivedTask', $stdObject);
             }
         }        
 
@@ -223,7 +223,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $request = APIClient::API_VERSION."/tasks/archiveTask/$task_id";
+        $request = APIClient::API_VERSION."/tasks/archiveTask/$task_id/user/$user_id";
         $response = $client->call($request, HTTP_Request2::METHOD_PUT);        
         
         $app->redirect($ref = $app->request()->getReferrer());
@@ -260,10 +260,10 @@ class TaskRouteHandler
         }
         $app->view()->setData('task', $task);
         $app->view()->setData('sourceLanguage', $client->castCall("Language",
-                APIClient::API_VERSION."/languages/{$task->getSourceLangId()}"));
+                APIClient::API_VERSION."/languages/{$task->getSourceLanguageId()}"));
                 
         $app->view()->setData('targetLanguage', $client->castCall("Language",
-                APIClient::API_VERSION."/languages/{$task->getTargetLangId()}"));
+                APIClient::API_VERSION."/languages/{$task->getTargetLanguageId()}"));
        
         $app->render('task.claim.tpl');
     }
@@ -383,7 +383,11 @@ class TaskRouteHandler
             die;
         }
 
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrgId()}";
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+
+        $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request); 
         $org = $client->cast('Organisation', $response);
         
@@ -478,7 +482,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $org_id = $task->getOrgId();
+        $org_id = $task->getOrganisationId();
         $app->view()->appendData(array(
                 'org_id' => $org_id
         ));     
@@ -496,10 +500,14 @@ class TaskRouteHandler
         $error          = null;
         $title_err      = null;
         $word_count_err = null;
+        $deadlineError  = null;
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
+
+        $deadlineDate = date("F dS, Y", strtotime($task->getDeadline()));
+        $deadlineTime = date("H:i", strtotime($task->getDeadline()));
 
         if (!is_object($task)) {
             $app->notFound();
@@ -519,26 +527,45 @@ class TaskRouteHandler
             } else {
                 $word_count_err = "Word count must be set!";
             }
+
+            $deadline = "";
+            if ($post->deadline_date != '') {
+                $deadline = strtotime($post->deadline_date);
+                
+                if($deadline) {
+                    if ($post->deadline_time != '') {
+                        if (TemplateHelper::isValidTime($post->deadline_time) == true) {
+                            $deadline = TemplateHelper::addTimeToUnixTime($deadline, $post->deadline_time);
+                        } else {
+                            $deadlineError = "Invalid time format. Please enter time in a 24-hour format like ";
+                            $deadlineError .= "this 16:30";
+                        }
+                    }
+                } else {
+                    $deadline = "";
+                    $deadlineError = "Invalid date format";
+                }
+            }
             
-            if (is_null($word_count_err) && is_null($title_err)) {
+            if($deadline != "" && $deadlineError == "") {
+                $task->setDeadline(date("Y-m-d H:i:s", $deadline));
+            }
+            
+            if (is_null($word_count_err) && is_null($title_err) && is_null($deadlineError)) {
                 if (!empty($post->source)) {
                     $task->setSourceLangId($post->source);
                 }
 
                 if ($post->impact != '') {
-                    $task->setImpact($post->impact);
+                    $task->setComment($post->impact);
                 }
 
-                if ($post->reference != '' && $post->reference != "http://") {
-                    $task->setReferencePage($post->reference);
-                }
-        
                 if (isset($post->sourceCountry)&&$post->sourceCountry != '') {
-                    $task->setSourceRegionId($post->sourceCountry);
+                    $task->setSourceCountryId($post->sourceCountry);
                 }
 
                 if (isset($post->targetCountry)&&$post->targetCountry != '') {
-                    $task->setTargetRegionId($post->targetCountry);
+                    $task->setTargetCountryId($post->targetCountry);
                 }
 
                 $tags = $post->tags;
@@ -583,8 +610,8 @@ class TaskRouteHandler
                         //if it is the first language add it to this task
                         if ($language == $language_list[0]) {
                             $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
-                            $task->setTargetLangId($target_id);
-                            $task->setTargetRegionId($language['country']);
+                            $task->setTargetLanguageId($target_id);
+                            $task->setTargetCountryId($language['country']);
                             $request = APIClient::API_VERSION."/tasks/$task_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
                         } else {
@@ -598,8 +625,8 @@ class TaskRouteHandler
                     }
                 } else {
                     $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
-                    $task->setTargetLangId($target_id);
-                    $task->setTargetRegionId($language_list[0]['country']);
+                    $task->setTargetLanguageId($target_id);
+                    $task->setTargetCountryId($language_list[0]['country']);
                     
                     $request = APIClient::API_VERSION."/tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
@@ -611,6 +638,13 @@ class TaskRouteHandler
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
         $extra_scripts = "
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
+        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+        <script type=\"text/javascript\">
+            window.onload = function() {
+                new datepickr(\"deadline_date\");
+            };
+        </script>
         <script language='javascript'>
         
         var fields = 0;
@@ -686,7 +720,7 @@ class TaskRouteHandler
                     isRemoveButtonHidden = true;
                 } 
             }            
-        </script>";  
+        </script>";
 
         $app->view()->appendData(array(
             'error'             => $error,
@@ -696,6 +730,8 @@ class TaskRouteHandler
             'task'              => $task,
             'languages'         => $language_list,
             'countries'         => $countries,
+            'deadlineDate'      => $deadlineDate,
+            'deadlineTime'      => $deadlineTime,
             'extra_scripts'     => $extra_scripts
         ));
         
@@ -707,11 +743,25 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $word_count_err = null;
+        $deadlineError = "";
+
+        $extra_scripts = "
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
+        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+        <script type=\"text/javascript\">
+            window.onload = function() {
+                new datepickr(\"deadline_date\");
+            };
+        </script>
+        ";
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
         
+        $deadlineDate = date("F dS, Y", strtotime($task->getDeadline()));
+        $deadlineTime = date("H:i", strtotime($task->getDeadline()));
+
         $app->view()->setData('task', $task);
         
         if (isValidPost($app)) {
@@ -722,27 +772,46 @@ class TaskRouteHandler
             }
             
             if ($post->impact != '') {
-                $task->setImpact($post->impact);
+                $task->setComment($post->impact);
             }
-            
-            if ($post->reference != '' && $post->reference != 'http://') {
-                $task->setReferencePage($post->reference);
+
+            $deadline = "";
+            if ($post->deadline_date != '') {
+                $deadline = strtotime($post->deadline_date);
+
+                if($deadline) {
+                    if ($post->deadline_time != '') {
+                        if (TemplateHelper::isValidTime($post->deadline_time) == true) {
+                            $deadline = TemplateHelper::addTimeToUnixTime($deadline, $post->deadline_time);
+                        } else {
+                            $deadlineError = "Invalid time format. Please enter time in a 24-hour format like ";
+                            $deadlineError .= "this 16:30";
+                        }
+                    }
+                } else {
+                    $deadline = "";
+                    $deadlineError = "Invalid date format";
+                }
+            }
+
+            if($deadline != "" && $deadlineError == "") {
+                $task->setDeadline(date("Y-m-d H:i:s", $deadline));
             }
             
             if ($post->source != '') {
-                $task->setSourceLangId($post->source);
+                $task->setSourceLanguageId($post->source);
             }
             
             if ($post->target != '') {
-                $task->setTargetLangId($post->target);
+                $task->setTargetLanguageId($post->target);
             }   
              
             if ($post->sourceCountry != '') {
-                $task->setSourceRegionId($post->sourceCountry);
+                $task->setSourceCountryId($post->sourceCountry);
             }   
              
             if ($post->targetCountry != '') {
-                $task->setTargetRegionId($post->targetCountry);
+                $task->setTargetCountryId($post->targetCountry);
             }   
               
             if ($post->tags != '') {
@@ -754,18 +823,18 @@ class TaskRouteHandler
             
 
             if (ctype_digit($post->word_count)) {
-                
                 $task->setWordCount($post->word_count);                
-                $request = APIClient::API_VERSION."/tasks/$task_id";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
-                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
             } else if ($post->word_count != '') {
                 $word_count_err = "Word Count must be numeric";
             } else {
                 $word_count_err = "Word Count cannot be blank";
             }
-            
 
+            if ($word_count_err == '' && $deadlineError == '') {
+                $request = APIClient::API_VERSION."/tasks/$task_id";
+                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
+                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+            }
         }
          
         $languages = TemplateHelper::getLanguageList();
@@ -780,10 +849,14 @@ class TaskRouteHandler
         }
         
         $app->view()->appendData(array(
+                              'extra_scripts'   => $extra_scripts,
                               'languages'       => $languages,
                               'countries'       => $countries,
                               'tag_list'        => $tag_list,
                               'word_count_err'  => $word_count_err,
+                              'deadlineDate'    => $deadlineDate,
+                              'deadlineTime'    => $deadlineTime,
+                              'deadline_error'  => $deadlineError
         ));
         
         $app->render('task.alter.tpl');
@@ -837,7 +910,7 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/users/subscribedToTask/{$user->getUserId()}/$task_id";
         $registered = $client->call($request);         
 
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrgId()}";
+        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
 
@@ -933,7 +1006,7 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
-        $org_id = $task->getOrgId();
+        $org_id = $task->getOrganisationId();
 
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
@@ -944,7 +1017,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrgId()}";
+        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
         $response = $client->call($request); 
         $org = $client->cast('Organisation', $response);
         $org_name = $org->getName();
@@ -1055,11 +1128,12 @@ class TaskRouteHandler
                 $taskData = array();
                 $taskData['organisation_id'] = $org_id;
                 $taskData['title'] = $_FILES[$field_name]['name'];
+                $taskData['deadline'] = date("Y-m-d H:i:s", strtotime("+1 week"));
                 $task = ModelFactory::buildModel("Task", $taskData);
                 
                 $request = APIClient::API_VERSION."/tasks";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
-                
+
                 $task = $client->cast('Task', $response);
 
                 try {                    

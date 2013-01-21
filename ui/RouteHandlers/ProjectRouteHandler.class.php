@@ -64,16 +64,16 @@ class ProjectRouteHandler
             }   
         }   
 
+        $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
+        $response = $client->call($request);     
+        $org = $client->cast('Organisation', $response);
+
+        //Not Implemented
         $request = APIClient::API_VERSION."/users/subscribedToProject/{$user_id}/{$project_id}";
         $registered = $client->call($request);         
-        
-        // Uncomment when projects work
-        // $request = APIClient::API_VERSION."/orgs/{$project->getOrgId()}";
-        //$response = $client->call($request);     
-        //$org = $client->cast('Organisation', $response);
 
         $app->view()->appendData(array(
-                                 //'org' => $org,
+                                 'org' => $org,
                                  'registered' => $registered
         ));
  
@@ -177,7 +177,7 @@ class ProjectRouteHandler
             }
             
             if ($post->impact != '') {
-                $project->setImpact($post->impact);
+                $project->setComment($post->impact);
             }
             
             if ($post->reference != '' && $post->reference != 'http://') {

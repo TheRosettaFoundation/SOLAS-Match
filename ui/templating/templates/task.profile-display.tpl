@@ -3,11 +3,11 @@
     {assign var='task_id' value=$task->getId()}
 	<h2>{$task->getTitle()}</h2>
 	<p>
-		{if $task->getSourceLangId()}
-			From <b>{TemplateHelper::languageNameFromId($task->getSourceLangId())}</b>
+		{if $task->getSourceLanguageId()}
+			From <b>{TemplateHelper::languageNameFromId($task->getSourceLanguageId())}</b>
 		{/if}
-		{if $task->getTargetLangId()}
-			To <b>{TemplateHelper::languageNameFromId($task->getTargetLangId())}</b>
+		{if $task->getTargetLanguageId()}
+			To <b>{TemplateHelper::languageNameFromId($task->getTargetLanguageId())}</b>
 		{/if}                
 
 		{foreach from=$task->getTags() item=tag}
@@ -17,10 +17,10 @@
 	
 	<p class="task_details">
 		Added {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago
-		&middot; By {TemplateHelper::orgNameFromId($task->getOrgId())}
-		{if $task->getWordcount()}
-			&middot; {$task->getWordcount()|number_format} words
+		&middot; By Project
+		{if $task->getWordCount()}
+			&middot; {$task->getWordCount()|number_format} words
 		{/if}
-                <p style="margin-bottom:30px;"></p>
+    <p style="margin-bottom:30px;"></p>
 	</p>
 </div>

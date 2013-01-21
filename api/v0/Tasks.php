@@ -62,15 +62,15 @@ class Tasks {
             Dispatcher::sendResponce(null, $dao->delete($id), null, $format);
         }, 'deleteTask');        
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:id/',
-                                                        function ($id, $format = ".json") {
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:taskId/user/:userId/',
+                                                        function ($taskId, $userId, $format = ".json") {
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                $userId = explode('.', $userId);
+                $format = '.'.$userId[1];
+                $userId = $userId[0];
             }
             $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->moveToArchiveByID($id), null, $format);
+            Dispatcher::sendResponce(null, $dao->moveToArchiveByID($taskId, $userId), null, $format);
         }, 'archiveTask');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/top_tasks(:format)/',

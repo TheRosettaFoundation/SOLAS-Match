@@ -146,8 +146,6 @@ class UserRouteHandler
             if ($use_openid == 'y' || $use_openid == 'h') {
                 $extra_scripts = "
                     <script type=\"text/javascript\" src=\"".$app->urlFor("home").
-                        "resources/bootstrap/js/jquery-1.2.6.min.js\"></script>                            
-                    <script type=\"text/javascript\" src=\"".$app->urlFor("home").
                         "resources/bootstrap/js/openid-jquery.js\"></script>                            
                     <script type=\"text/javascript\" src=\"".$app->urlFor("home").
                         "resources/bootstrap/js/openid-en.js\"></script>                            

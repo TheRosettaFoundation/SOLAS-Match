@@ -5,6 +5,7 @@
 	<title>{if isset($title)}{$title}{else}SOLAS Match{/if}</title>
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css">
+    <script type="text/javascript" src="{urlFor name="home"}resources/bootstrap/js/jquery-1.2.6.min.js"></script>
     {if isset($extra_scripts)}
         {$extra_scripts}
     {/if}
@@ -33,11 +34,10 @@
 			    		<a href="{urlFor name="org-dashboard"}">Dashboard</a>
 			    	</li>
 		    	{/if}
-                        {if isset($user)}
-		            {assign var="user_id" value=$user->getUserId()}
+                {if isset($user_has_active_tasks)}
 					<li {if isset($current_page) && $current_page == 'active-tasks'}class="active" {/if}>
 						<a href="{urlFor name="active-tasks" options="page_no.1"}">Active Tasks</a>
-					</li> <!--'{urlFor name="active-tasks" options="page_no.1"}' -->
+					</li>
 				{/if}
 			{if isset($user)}
                 {assign var="user_id" value=$user->getUserId()}

@@ -64,6 +64,36 @@ class TemplateHelper {
         );      
     }
 
+    public static function isValidTime($time)
+    {
+
+        if (strlen($time) > 5) {
+            return false;
+        } elseif (strpos($time, ":") === false) {
+            return false;
+        } else {
+            $hour = substr($time, 0, strpos($time, ":"));
+            $minute = substr($time, strpos($time, ":") + 1, strlen($time));
+            if(!is_numeric($hour) || intval($hour) > 24 || !is_numeric($minute) || intval($minute) > 60) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static function addTimeToUnixTime($unixTime, $timeStr) 
+    {
+        $ret = $unixTime;
+
+        $hour = substr($timeStr, 0, strpos($timeStr, ":"));
+        $minute = substr($timeStr, strpos($timeStr, ":") + 1, strlen($timeStr));
+        $ret += intval($hour) * 60 * 60;
+        $ret += intval($minute) * 60;
+
+        return $ret;
+    }
+
     private static function emailContainsCharacter($email, $character) 
     {
         return (strpos($email, $character) !== false);
@@ -76,15 +106,15 @@ class TemplateHelper {
 
     public static function getTaskSourceLanguage($task)
     {
-        $language =  TemplateHelper::languageNameFromId($task->getSourceLangId());
-        $region =  TemplateHelper::countryNameFromCode($task->getSourceRegionId());
+        $language =  TemplateHelper::languageNameFromId($task->getSourceLanguageId());
+        $region =  TemplateHelper::countryNameFromCode($task->getSourceCountryId());
         return $language.' ('.$region.')';
     }
 
     public static function getTaskTargetLanguage($task)
     {
-        $language =  TemplateHelper::languageNameFromId($task->getTargetLangId());
-        $region =  TemplateHelper::countryNameFromCode($task->getTargetRegionId());
+        $language =  TemplateHelper::languageNameFromId($task->getTargetLanguageId());
+        $region =  TemplateHelper::countryNameFromCode($task->getTargetCountryId());
         return $language.' ('.$region.')';
     }
 
