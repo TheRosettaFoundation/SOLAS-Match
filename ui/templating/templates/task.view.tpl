@@ -68,7 +68,7 @@
 <p>{$task->getWordCount()}</p>
 
 <h3>Deadline</h3>
-<p>{$task->getDeadline()}</p>
+<p>{date("D dS, M Y", strtotime($task->getDeadline()))}</p>
 
 {if isset($user)}
     <hr />
