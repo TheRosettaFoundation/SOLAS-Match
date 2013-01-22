@@ -170,5 +170,24 @@ class ProjectDao
 
         return $projects;
     }
+
+    public function getProjectTasks($projectId)
+    {
+        $tasks = array();
+        $args = "null, ";
+        $args .= PDOWrapper::cleanseNull($projectId).", ";
+        $args .= "null, null, null, null, null, null, null, null, null, null, null, null";
+        $result = PDOWrapper::call("getTask", $args);
+        if($result) {
+            foreach($result as $row) {
+                $task = ModelFactory::buildModel("Task", $row);
+                if(is_object($task)) {
+                    $tasks[] = $task;
+                }
+            }
+        }
+
+        return $tasks;
+    }
 }
 
