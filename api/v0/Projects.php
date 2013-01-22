@@ -25,9 +25,8 @@ class Projects
             {
                 $data=Dispatcher::getDispatcher()->request()->getBody();
                 $data= APIHelper::deserialiser($data, $format);
-                $project = ModelFactory::buildModel('Project', $data);
                 $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->insertProject($project), null, $format);
+                Dispatcher::sendResponce(null, $dao->create($data), null, $format);
             }, 'createProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:id/',

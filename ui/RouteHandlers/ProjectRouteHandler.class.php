@@ -1,5 +1,8 @@
 <?php
 
+require_once 'Common/TaskTypeEnum.php';
+require_once 'Common/TaskStatusEnum.php';
+
 class ProjectRouteHandler
 {
     public function init()
@@ -250,7 +253,7 @@ class ProjectRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        $user_id = UserSession::getCurrentUserID();
+        $user_id = UserSession::getCurrentUserID(); 
 
         $error          = null;
         $title_err      = null;
@@ -312,44 +315,42 @@ class ProjectRouteHandler
             // Has all the minimum required project info been acquired (no errors)
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err)) { 
                 $request = APIClient::API_VERSION."/projects";
+                $projectModel->setOrganisationId($org_id);
                 if($response = $client->call($request, HTTP_Request2::METHOD_POST, $projectModel)) {
 
                     $project = $client->cast('Project', $response);
                     
-                    $taskData = array();
-                    $taskData['title'] = 'MyTaskFile';//$_FILES[$field_name]['name'];
-                    $taskData['organisation_id'] = $org_id;
-                    $taskData['source_id'] = $post->sourceLanguage;
-                    $taskData['country_id-source'] = $post->sourceCountry;
-                    $taskData['project_id'] = $project->getId();            
+                    $taskModel = new Task();
+                    $taskModel->setTitle('MyTaskFile');//$_FILES[$field_name]['name'];
+                    $taskModel->setSourceLanguageId($post->sourceLanguage);
+                    $taskModel->setSourceCountryId($post->sourceCountry);
+                    $taskModel->setProjectId($project->getId());            
 
 
                     for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
 
-                        $taskData['target_id'] = $post->{'targetLanguage_'.$i};
-                        $taskData['country_id-target'] = $post->{'targetCountry_'.$i};                    
+                        $taskModel->setTargetLanguageId($post->{'targetLanguage_'.$i});
+                        $taskModel->setTargetCountryId($post->{'targetCountry_'.$i});
 
                         if(isset($post->{'chunking_'.$i})) { 
-                            $taskData['taskType'] = 'chunking';
-                            $taskModel = ModelFactory::buildModel("Task", $taskData); 
+                            $taskModel->setTaskType(TaskTypeEnum::CHUNKING);
+                            $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
                         }
                         if(isset($post->{'translation_'.$i})) {
-                            $taskData['taskType'] = 'translation';
-                            $taskModel = ModelFactory::buildModel("Task", $taskData); 
+                            $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
+                            $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
                         }
                         if(isset($post->{'proofreading_'.$i})) {
-                            $taskData['taskType'] = 'proofreading';
-                            $taskModel = ModelFactory::buildModel("Task", $taskData);
-                            $request = APIClient::API_VERSION."/tasks";
+                            $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
+                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
                         }                       
                         if(isset($post->{'postediting_'.$i})) {
-                            $taskData['taskType'] = 'postediting';
-                            $taskModel = ModelFactory::buildModel("Task", $taskData);
+                            $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);                         
                         }                       

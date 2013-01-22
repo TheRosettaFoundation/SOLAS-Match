@@ -172,7 +172,7 @@
         <table border="0">
             <tr>
                 <td colspan="2">
-                    {if (isset($title_err) || isset($title_err) || isset($title_err))}
+                    {if (isset($title_err) || isset($deadline_err) || isset($targetLanguage_err))}
                         <div class="alert alert-error">
                             <h3>Please fill in all required information:</h3>
                             <ol>
@@ -222,7 +222,7 @@
                     
                     <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
                     <p class="desc">When the project and its tasks should be completed by.</p>
-                    <textarea wrap="soft" cols="1" rows="2" name="deadline">asf</textarea> {*{if isset($projectModel)}{$projectModel->getDeadline()}{/if}*}
+                    <textarea wrap="soft" cols="1" rows="2" name="deadline">{if isset($projectModel)}{$projectModel->getDeadline()}{/if}</textarea> 
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="tags"><h2>Tags:</h2></label>

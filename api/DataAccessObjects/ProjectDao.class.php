@@ -7,6 +7,33 @@ include_once '../Common/models/ArchivedProject.php';
 
 class ProjectDao
 {
+    
+    public function create($params)
+    {
+        if (!is_array($params) && is_object($params)) {
+            $project   = APIHelper::cast("Project", $params);
+        } else {
+            $project = ModelFactory::buildModel("Project", $params);
+        }
+
+        $this->save($project);
+        return $project;
+    }
+    
+    public function save(&$project)
+    {
+        $result = PDOWrapper::call("projectInsertAndUpdate", "null"
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getTitle())
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getDescription())
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getDeadline())
+                .",".PDOWrapper::cleanseNull($project->getOrganisationId())
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getReference())
+                .",".PDOWrapper::cleanseNull($project->getWordCount())
+                .",".PDOWrapper::cleanseNull($project->getCreatedTime()));
+        $project->setId($result[0]['id']);     
+        return $project;
+    }
+    
     public function getProject($params)
     {
         $args = "";
@@ -67,30 +94,6 @@ class ProjectDao
         }
 
         return $projects;
-    }
-
-    /*
-     *  Create a new project or update an existing
-     *  Modifies the project passed by adding an id for new projects
-     */
-    public function insertProject(&$project)
-    {
-        $args = "";
-        if(is_null($project->getId())) {
-            $args .= "null";
-        } else {
-            $args .= PDOWrapper::cleanseNull($project->getId());
-        }
-        $args .= PDOWrapper::cleanseNullOrWrapStr($project->getTitle());
-        $args .= PDOWrapper::cleanseNullOrWrapStr($project->getDescription());
-        $args .= PDOWrapper::cleanseNull($project->getDeadline());
-        $args .= PDOWrapper::cleanseNull($project->getOrganisationId());
-        $args .= PDOWrapper::cleanseNullOrWrapStr($project->getReference());
-        $args .= PDOWrapper::cleanseNull($project->getWordCount());
-        $args .= PDOWrapper::cleanseNull($project->getCreatedTime());
-
-        $result = PDOWrapper::call("projectInsertAndUpdate", $args);
-        $project->setId($result[0]['id']);
     }
 
     public function archiveProject($projectId, $userId)
