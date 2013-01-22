@@ -3,11 +3,11 @@
     {assign var='task_id' value=$task->getId()}
         <h2><a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a></h2>
         <p>
-        	{if $task->getSourceLanguageId()}
-        		From <b>{TemplateHelper::languageNameFromId($task->getSourceLanguageId())}</b>
+        	{if $task->getSourceLanguageCode()}
+        		From <b>{TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())}</b>
         	{/if}
-        	{if $task->getTargetLanguageId()}
-        		To <b>{TemplateHelper::languageNameFromId($task->getTargetLanguageId())}</b>
+        	{if $task->getTargetLanguageCode()}
+        		To <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
         	{/if}
                  <p>
 		    {foreach from=$task->getTags() item=tag}

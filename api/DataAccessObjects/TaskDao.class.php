@@ -116,10 +116,10 @@ class TaskDao {
             ",".PDOWrapper::cleanseNull($params['language_id-target']) : ",null";
         $args .= isset($params['created-time']) ?
             ",".PDOWrapper::cleanseNull($params['created-time']) : ",null";
-        $args .= isset($params['Country_id-source']) ?
-            ",".PDOWrapper::cleanseNull($params['Country_id-source']) : ",null";
-        $args .= isset($params['Country_id-target']) ?
-            ",".PDOWrapper::cleanseNull($params['Country_id-target']) : ",null";
+        $args .= isset($params['country_id-source']) ?
+            ",".PDOWrapper::cleanseNull($params['country_id-source']) : ",null";
+        $args .= isset($params['country_id-target']) ?
+            ",".PDOWrapper::cleanseNull($params['country_id-target']) : ",null";
         $args .= isset($params['comment']) ?
             ",".PDOWrapper::cleanseNullOrWrapStr($params['comment']) : ",null";
         $args .= isset($params['taskType_id']) ?
@@ -184,7 +184,7 @@ class TaskDao {
      * Add an identicle entry with a different ID and target Language
      * Used for bulk uploads
      */
-    public function duplicateTaskForTarget($task, $language_id, $countryCode, $userID)
+    public function duplicateTaskForTarget($task, $languageCode, $countryCode, $userID)
     {
         //Get the file info for original task
         $task_file_info = TaskFile::getTaskFileInfo($task);
@@ -193,8 +193,8 @@ class TaskDao {
 
         //Remove ID so a new one will be created
         $task->setId(null);
-        $task->setTargetLanguageId($language_id);
-        $task->setTargetCountryId($countryCode);
+        $task->setTargetLanguageCode($languageCode);
+        $task->setTargetCountryCode($countryCode);
         //Save the new Task
         $this->save($task);
         $this->calculateTaskScore($task->getId());
@@ -223,12 +223,12 @@ class TaskDao {
                                                 .",".PDOWrapper::cleanseNull($task->getProjectId())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
                                                 .",".PDOWrapper::cleanseNull($task->getWordCount())
-                                                .",".PDOWrapper::cleanseNull($task->getSourceLanguageId())
-                                                .",".PDOWrapper::cleanseNull($task->getTargetLanguageId())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceLanguageCode())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetLanguageCode())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryId())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryId())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryCode())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryCode())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
                                                 .",".PDOWrapper::cleanseNull($task->getTaskType())
                                                 .",".PDOWrapper::cleanseNull($task->getTaskStatus())
@@ -314,12 +314,12 @@ class TaskDao {
             .",".PDOWrapper::cleanseNull($task->getProjectId())
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
             .",".PDOWrapper::cleanseNull($task->getWordCount())
-            .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceLanguageId())
-            .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetLanguageId())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceLanguageCode())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetLanguageCode())
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
-            .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryId())
-            .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryId())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryCode())
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryCode())
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
             .",".PDOWrapper::cleanseNull($task->getTaskType())
             .",".PDOWrapper::cleanseNull($task->getTaskStatus())

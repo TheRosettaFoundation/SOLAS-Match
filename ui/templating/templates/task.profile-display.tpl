@@ -3,11 +3,11 @@
     {assign var='task_id' value=$task->getId()}
 	<h2>{$task->getTitle()}</h2>
 	<p>
-		{if $task->getSourceLanguageId()}
-			From <b>{TemplateHelper::languageNameFromId($task->getSourceLanguageId())}</b>
+		{if $task->getSourceLanguageCode()}
+			From <b>{TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())}</b>
 		{/if}
-		{if $task->getTargetLanguageId()}
-			To <b>{TemplateHelper::languageNameFromId($task->getTargetLanguageId())}</b>
+		{if $task->getTargetLanguageCode()}
+			To <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
 		{/if}                
 
 		{foreach from=$task->getTags() item=tag}

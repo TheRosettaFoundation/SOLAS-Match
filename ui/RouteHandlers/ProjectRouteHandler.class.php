@@ -167,7 +167,7 @@ class ProjectRouteHandler
         $word_count_err = null;
 
         $request = APIClient::API_VERSION."/projects/$project_id";
-        $response = $client->call($request);     
+        $response = $client->call($request);
         $project = $client->cast('Project', $response);
         
         $app->view()->setData('project', $project);
@@ -179,15 +179,12 @@ class ProjectRouteHandler
                 $project->setTitle($post->title);
             }
             
-            if ($post->impact != '') {
-                $project->setComment($post->impact);
-            }
-            
             if ($post->reference != '' && $post->reference != 'http://') {
-                $project->setReferencePage($post->reference);
+                $project->setReference($post->reference);
             }
             
-            if ($post->source != '') {
+            //Not in template yet
+            /*if ($post->source != '') {
                 $project->setSourceLangId($post->source);
             }
             
@@ -208,15 +205,15 @@ class ProjectRouteHandler
                 foreach ($tags as $tag) {
                     $project->addTags($tag);
                 }
-            }
+            }*/
             
 
             if (ctype_digit($post->word_count)) {
                 
                 $project->setWordCount($post->word_count);                
-                $request = APIClient::API_VERSION."/tasks/$task_id";
+                $request = APIClient::API_VERSION."/projects/$project_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $project);
-                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+                $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
             } else if ($post->word_count != '') {
                 $word_count_err = "Word Count must be numeric";
             } else {
@@ -260,7 +257,6 @@ class ProjectRouteHandler
         $deadline_err   = null;
         $word_count_err = null;
         $targetLanguage_err = null;
-        $field_name         = 'new_project_file';
         $project            = null;
         $projectModel       = null;
 
@@ -312,25 +308,23 @@ class ProjectRouteHandler
                 }
             }
             
-            // Has all the minimum required project info been acquired (no errors)
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err)) { 
                 $request = APIClient::API_VERSION."/projects";
                 $projectModel->setOrganisationId($org_id);
                 if($response = $client->call($request, HTTP_Request2::METHOD_POST, $projectModel)) {
-
                     $project = $client->cast('Project', $response);
                     
                     $taskModel = new Task();
-                    $taskModel->setTitle('MyTaskFile');//$_FILES[$field_name]['name'];
-                    $taskModel->setSourceLanguageId($post->sourceLanguage);
-                    $taskModel->setSourceCountryId($post->sourceCountry);
+                    $taskModel->setTitle($projectModel->getTitle());
+                    $taskModel->setSourceLanguageCode($post->sourceLanguage);
+                    $taskModel->setSourceCountryCode($post->sourceCountry);
                     $taskModel->setProjectId($project->getId());            
 
 
                     for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
 
-                        $taskModel->setTargetLanguageId($post->{'targetLanguage_'.$i});
-                        $taskModel->setTargetCountryId($post->{'targetCountry_'.$i});
+                        $taskModel->setTargetLanguageCode($post->{'targetLanguage_'.$i});
+                        $taskModel->setTargetCountryCode($post->{'targetCountry_'.$i});
 
                         if(isset($post->{'chunking_'.$i})) { 
                             $taskModel->setTaskType(TaskTypeEnum::CHUNKING);
@@ -356,8 +350,7 @@ class ProjectRouteHandler
                         }                       
                     }           
                 }              
-            } else {  
-                
+            } else {                 
                 $app->view()->appendData(array(
                     'title_err'             => $title_err,
                     'deadline_err'          => $deadline_err,                   
@@ -405,31 +398,160 @@ class ProjectRouteHandler
             }
         } 
         */
-            
-        /*
-        $extra_scripts = 
-            "<script>
-            var isEnabled = false;
-            function chunkingEnabled()
-            {        
-                if(!isEnabled) {
-                   document.getElementById(\"translation_0\").checked = false;
-                   document.getElementById(\"proofreading_0\").checked = false;
-                   document.getElementById(\"postediting_0\").checked = false;        
-                   document.getElementById(\"translation_0\").disabled = true;
-                   document.getElementById(\"proofreading_0\").disabled = true;
-                   document.getElementById(\"postediting_0\").disabled = true;
-                   isEnabled = true;
-                } else {
-                   document.getElementById(\"translation_0\").disabled = false;
-                   document.getElementById(\"proofreading_0\").disabled = false;
-                   document.getElementById(\"postediting_0\").disabled = false;       
-                   isEnabled = false;
-                }        
-            }
-        </script>";
-         
-         */
+
+         $extra_scripts = "
+            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
+            <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+            <script type=\"text/javascript\">
+                window.onload = function() {
+                    new datepickr(\"deadline\");
+                };
+            </script>            
+            <script language='javascript'>
+
+                var fields = 0;
+                var MAX_FIELDS = 10; 
+                var isRemoveButtonHidden = true;
+
+                var isEnabledArray = new Array(false);
+
+                function addNewTarget() {
+
+                    if(isRemoveButtonHidden) {
+                        document.getElementById('removeBottomTargetBtn').style.visibility = 'visible';
+                        document.getElementById('removeBottomTargetBtn').disabled = false;
+                        isRemoveButtonHidden = false;
+                    }
+
+                    if(fields < MAX_FIELDS) {
+
+                        //var projectForm = document.getElementById('createProjectForm');
+                        var table = document.getElementById('moreTargetLanguages');            
+                        var newRow = document.createElement('tr');                        
+
+                        newRow.setAttribute('id', \"newTargetLanguage\" + fields);
+                        var newColumnLangCountry = document.createElement('td');
+                        newColumnLangCountry.setAttribute('width', \"50%\");
+
+                        var langs = document.getElementById('sourceLanguage').cloneNode(true);
+                        langs.setAttribute('id', \"targetLanguage_\" + (fields + 1));
+                        langs.setAttribute('name', \"targetLanguage_\" + (fields + 1));
+                        newColumnLangCountry.appendChild(langs);
+
+                        var countries = document.getElementById('sourceCountry').cloneNode(true);
+                        countries.setAttribute('id', \"targetCountry_\" + (fields + 1));
+                        countries.setAttribute('name', \"targetCountry_\" + (fields + 1));
+                        newColumnLangCountry.appendChild(countries);
+                        newRow.appendChild(newColumnLangCountry);
+
+                        var tableColumnChunking = document.createElement('td');  
+                        tableColumnChunking.setAttribute('align', 'middle');
+                        tableColumnChunking.setAttribute('valign', \"top\");
+                        var inputChunking = document.createElement('input');
+                        inputChunking.setAttribute('type', \"checkbox\");
+                        inputChunking.setAttribute('id', \"chunking_\" + (fields + 1));
+                        inputChunking.setAttribute('name', \"chunking_\" + (fields + 1));
+                        inputChunking.setAttribute('value', \"y\");
+                        inputChunking.setAttribute('onchange', \"chunkingEnabled(\" + (fields + 1) +\")\");       
+                        tableColumnChunking.appendChild(inputChunking);
+
+
+                        var tableColumnTranslation = document.createElement('td');
+                        tableColumnTranslation.setAttribute('align', 'middle'); 
+                        tableColumnTranslation.setAttribute('valign', \"top\");
+                        var inputTranslation = document.createElement('input');
+                        inputTranslation.setAttribute('type', \"checkbox\");
+                        inputTranslation.setAttribute('id', \"translation_\" + (fields + 1));
+                        inputTranslation.setAttribute('checked', \"true\");
+                        inputTranslation.setAttribute('name', \"translation_\" + (fields + 1))
+                        inputTranslation.setAttribute('value', \"y\");
+                        tableColumnTranslation.appendChild(inputTranslation);
+
+
+                        var tableColumnReading = document.createElement('td');
+                        tableColumnReading.setAttribute('align', 'middle');
+                        tableColumnReading.setAttribute('valign', \"top\");
+                        var inputProofReading = document.createElement('input');
+                        inputProofReading.setAttribute('type', \"checkbox\");
+                        inputProofReading.setAttribute('id', \"proofreading_\" + (fields + 1));
+                        inputProofReading.setAttribute('name', \"proofreading_\" + (fields + 1));
+                        inputProofReading.setAttribute('value', \"y\");
+                        tableColumnReading.appendChild(inputProofReading);
+
+                        var tableColumnPostEditing = document.createElement('td');
+                        tableColumnPostEditing.setAttribute('align', 'middle');
+                        tableColumnPostEditing.setAttribute('valign', \"top\");
+                        var inputPostEditing = document.createElement('input');
+                        inputPostEditing.setAttribute('type', \"checkbox\");
+                        inputPostEditing.setAttribute('id', \"postediting_\" + (fields + 1));
+                        inputPostEditing.setAttribute('name', \"postediting_\" + (fields + 1));
+                        inputPostEditing.setAttribute('value', \"y\"); 
+                        tableColumnPostEditing.appendChild(inputPostEditing);
+
+                        newRow.appendChild(tableColumnChunking);
+                        newRow.appendChild(tableColumnTranslation);
+                        newRow.appendChild(tableColumnReading);
+                        newRow.appendChild(tableColumnPostEditing);
+                        table.appendChild(newRow);
+                        isEnabledArray.push(false);
+
+                        var size = document.getElementById('targetLanguageArraySize');
+                        fields++;   
+                        size.setAttribute('value', parseInt(size.getAttribute('value'))+1);        
+                    }
+
+                    if(fields == MAX_FIELDS) {
+                        document.getElementById('alertinfo').style.display = 'block';
+                        //document.getElementById('addMoreTargetsBtn').style.visibility = 'hidden';
+                        document.getElementById('addMoreTargetsBtn').disabled = true;
+                    }            
+                } 
+
+
+                function removeNewTarget() {    
+                    var id = fields-1;  
+
+                    var table = document.getElementById('moreTargetLanguages');
+                    var tableRow = document.getElementById('newTargetLanguage' + id);
+                    table.removeChild(tableRow);  
+                    isEnabledArray.pop();
+
+                    if(fields == MAX_FIELDS) {
+                        //document.getElementById('addMoreTargetsBtn').style.visibility = 'visible';
+                        document.getElementById('addMoreTargetsBtn').disabled = false;
+                        document.getElementById('alertinfo').style.display = 'none';
+                    }
+
+                    var size = document.getElementById('targetLanguageArraySize');
+                    fields--;
+                    size.setAttribute('value', parseInt(size.getAttribute('value'))-1);
+
+                    if(fields == 0) {
+                        document.getElementById('removeBottomTargetBtn').style.visibility = 'hidden';
+                        document.getElementById('removeBottomTargetBtn').disabled = true;
+                        isRemoveButtonHidden = true;
+                    }         
+                }
+
+                function chunkingEnabled(index)
+                {
+                    if(!isEnabledArray[index]) {
+                        document.getElementById(\"translation_\" + index).checked = false;
+                        document.getElementById(\"proofreading_\" + index).checked = false;
+                        document.getElementById(\"postediting_\" + index).checked = false;        
+                        document.getElementById(\"translation_\" + index).disabled = true;
+                        document.getElementById(\"proofreading_\" + index).disabled = true;
+                        document.getElementById(\"postediting_\" + index).disabled = true;    
+                        isEnabledArray[index] = true;
+                    } else {
+                        document.getElementById(\"translation_\" + index).disabled = false;
+                        document.getElementById(\"proofreading_\" + index).disabled = false;
+                        document.getElementById(\"postediting_\" + index).disabled = false;
+                        document.getElementById(\"translation_\" + index).checked = true;
+                        isEnabledArray[index] = false;
+                    }
+                }    
+            </script>";
         
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
@@ -440,8 +562,8 @@ class ProjectRouteHandler
             'word_count_err'    => $word_count_err,
             'url_project_upload' => $app->urlFor('project-upload', array('org_id' => $org_id)),
             'languages'         => $language_list,
-            'countries'         => $countries//,
-            //'extra_scripts'     => $extra_scripts
+            'countries'         => $countries,
+            'extra_scripts'     => $extra_scripts
         ));
         
         $app->render('project.upload.tpl');
@@ -467,15 +589,12 @@ class ProjectRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        // Uncomment when working
-        $org_id = 11;//$project->getOrgId();
+        $org_id = $project->getOrganisationId();
+
         $app->view()->appendData(array(
                 'org_id' => $org_id
         ));     
         
         $app->render('project.uploaded.tpl');
     }    
-    
-    
 }
-?>

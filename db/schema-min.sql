@@ -218,8 +218,19 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping data for table Solas-Match-Dev.Projects: ~0 rows (approximately)
-/*!40000 ALTER TABLE `Projects` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Projects` ENABLE KEYS */;
+
+-- Dumping structure for table Solas-Match-Test.ProjectTags
+DROP TABLE IF EXISTS `ProjectTags`;
+CREATE TABLE IF NOT EXISTS `ProjectTags` (
+  `project_id` int(10) unsigned NOT NULL,
+  `tag_id` int(10) unsigned NOT NULL,
+  UNIQUE KEY `project_id` (`project_id`,`tag_id`),
+  KEY `FK_ProjectTags_Tags` (`tag_id`),
+  CONSTRAINT `FK_ProjectTags_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ProjectTags_Tags` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Dev.Statistics
 CREATE TABLE IF NOT EXISTS `Statistics` (
@@ -331,19 +342,6 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 -- Data exporting was unselected.
 
 
-
--- Dumping structure for table manuel-test.TaskTags
-CREATE TABLE IF NOT EXISTS `TaskTags` (
-  `task_id` bigint(20) unsigned NOT NULL,
-  `tag_id` int(10) unsigned NOT NULL,
-  `created-time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY `task_tag` (`task_id`,`tag_id`),
-  KEY `FK_task_tag_tag` (`tag_id`),
-  CONSTRAINT `FK_task_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_task_tag_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Dev.TaskStatus
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
@@ -488,6 +486,21 @@ CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
+
+-- Dumping structure for procedure Solas-Match-Test.addProjectTag
+DROP PROCEDURE IF EXISTS `addProjectTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addProjectTag`(IN `projectID` INT, IN `tagID` INT)
+    MODIFIES SQL DATA
+BEGIN
+if not exists (select 1 from ProjectTags where project_id=projectID and tag_id =tagID) then
+	insert into ProjectTags  (project_id,tag_id) values (projectID,tagID);
+	select 1 as result;
+else
+	select 0 as result;
+end if;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure SolasMatch.getProject
 DROP PROCEDURE IF EXISTS `getProject`;
@@ -1029,16 +1042,16 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure manuel-test.getLatestAvailableTasks
+-- Dumping structure for procedure Solas-Match-Test.getLatestAvailableTasks
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT)
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC LIMIT ",lim);
+    set @q = Concat("SELECT t.* FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) ORDER BY `created-time` DESC LIMIT ",lim);
     else
-    set @q = "SELECT t.id FROM Tasks AS t WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY `created-time` DESC ";
+    set @q = "SELECT t.* FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) ORDER BY `created-time` DESC";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -1229,17 +1242,17 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure intergrationTest.getTask
+-- Dumping structure for procedure Solas-Match-Test.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` TINYINT, IN `dLine` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` TINYINT, IN `dLine` DATETIME)
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
 	if projectID='' then set projectID=null;end if;
 	if name='' then set name=null;end if;
-	if sID='' then set sID=null;end if;
-	if tID='' then set tID=null;end if;
+	if sCode='' then set sCode=null;end if;
+	if tCode='' then set tCode=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
 	if sCC='' then set sCC=null;end if;
@@ -1251,7 +1264,7 @@ BEGIN
 	if dLine='' then set dLine=null;end if;
 	
 	
-	set @q= "select id,project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  taskType_id, taskStatus_id, published, deadline from Tasks t where 1";-- set update
+	set @q= "select id,project_id,title,`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  taskType_id, taskStatus_id, published, deadline from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1262,11 +1275,15 @@ BEGIN
 	if name is not null then 
 		set @q = CONCAT(@q," and t.title='",name,"'") ;
 	end if;
-	if sID is not null then 
-		set @q = CONCAT(@q," and t.`language_id-source`=",sID) ;
+	if sCode is not null then 
+		set @sID=null;
+		select l.id into @sID from Languages l where l.code=sCode;
+		set @q = CONCAT(@q," and t.`language_id-source`=",@sID) ;
 	end if;
-	if tID is not null then 
-		set @q = CONCAT(@q," and t.`language_id-target`=",tID) ;
+	if tCode is not null then 
+		set @tID=null;
+		select l.id into @tID from Languages l where l.code=tCode;
+		set @q = CONCAT(@q," and t.`language_id-target`=",@tID) ;
 	end if;
 	if sCC is not null then 
 		set @scid=null;
@@ -1305,6 +1322,7 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
+
 
 
 
@@ -1693,15 +1711,20 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure manuel-test.getUserTopTasks
+-- Dumping structure for procedure Solas-Match-Test.getUserTopTasks
 DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `lim` INT)
     READS SQL DATA
     COMMENT 'relpace with more effient code later'
 BEGIN
-    set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT *FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY uts.score DESC limit ",lim);
-    PREPARE stmt FROM @q;
+	 if lim='' then set lim=null; end if;
+	 if lim is not null then
+	    set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY uts.score DESC limit ",lim);
+    else
+       set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY uts.score DESC");
+    end if;
+	 PREPARE stmt FROM @q;
     set @uID=uID;
     EXECUTE stmt using @uID;
     DEALLOCATE PREPARE stmt;
@@ -2003,21 +2026,21 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure intergrationTest.taskInsertAndUpdate
+-- Dumping structure for procedure Solas-Match-Test.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sID` INT, IN `tID` INT, IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
 BEGIN
 	if id='' then set id=null;end if;
 	if projectID='' then set projectID=null;end if;
 	if name='' then set name=null;end if;
-	if sID='' then set sID=null;end if;
-	if tID='' then set tID=null;end if;
+	if sCode='' then set sCode=null;end if;
+	if tCode='' then set tCode=null;end if;
 	if wordCount='' then set wordCount=null;end if;
 	if created='' then set created=null;end if;
 	if taskComment='' then set taskComment=null;end if;
-	if sCC='' then set sCC=null;end if;
-	if tCC='' then set tCC=null;end if;
+	if sCode='' then set sCode=null;end if;
+	if tCode='' then set tCode=null;end if;
 	if dLine='' then set dLine=null;end if;
 	if taskType='' then set taskType=null;end if;
 	if tStatus='' then set tStatus=null;end if;
@@ -2032,8 +2055,14 @@ BEGIN
 			select c.id into @scid from Countries c where c.code=sCC;
 		set @tcid=null;
 			select c.id into @tcid from Countries c where c.code=tCC;
+		set @sID=null;
+			select l.id into @sID from Languages l where l.code=sCode;
+		set @tID=null;
+			select l.id into @tID from Languages l where l.code=tCode;
+			
+			
 		insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`taskType_id`,`taskStatus_id`,`published`)
-		 values (projectID,name,wordCount,sID,tID,created,taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
+		 values (projectID,name,wordCount,@sID,@tID,created,taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 		set @first = true;
 		set @q= "update Tasks t set";-- set update
@@ -2053,21 +2082,25 @@ BEGIN
 			end if;
 			set @q = CONCAT(@q," t.title='",name,"'") ;
 		end if;
-		if sID is not null then 
+		if sCode is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.`language_id-source`=",sID) ;
+			set @sID=null;
+			select l.id into @sID from Languages l where l.code=sCode;
+			set @q = CONCAT(@q," t.`language_id-source`=",@sID) ;
 		end if;
-		if tID is not null then 
+		if tCode is not null then 
 			if (@first = false) then 
 				set @q = CONCAT(@q,",");
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.`language_id-target`=",tID) ;
+			set @tID=null;
+			select l.id into @tID from Languages l where l.code=tCode;
+			set @q = CONCAT(@q," t.`language_id-target`=",@tID) ;
 		end if;
 		
 		if sCC is not null then 
@@ -2152,12 +2185,9 @@ BEGIN
 		EXECUTE stmt;
 		DEALLOCATE PREPARE stmt;
 	end if;
-	call getTask(id,projectID,name,wordCount,sID,tID,created,sCC,tCC,taskComment,taskType,tStatus,pub,dLine);
+	call getTask(id,projectID,name,wordCount,sCode,tCode,created,sCC,tCC,taskComment,taskType,tStatus,pub,dLine);
 END//
 DELIMITER ;
-
-
-
 
 -- Dumping structure for procedure manuel-test.taskIsClaimed
 DROP PROCEDURE IF EXISTS `taskIsClaimed`;
