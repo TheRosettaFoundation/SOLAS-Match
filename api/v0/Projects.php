@@ -63,6 +63,22 @@ class Projects
                 Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getProject');
 
+        Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/tasks(:format)/',
+            function ($id, $format = '.json')
+            {
+                if(!is_numeric($id) && strstr($id, '.')) {
+                    $id = explode('.', $id);
+                    $format = '.'.$id[1];
+                    $id = $id[0];
+                }
+                
+                $dao = new ProjectDao();
+                $data = $dao->getProjectTasks($id);
+                Dispatcher::sendResponce(null, $data, null, $format);
+            }, 'getProjectTasks');
+                
+
+
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:projectId/user/:userId/archive(:format)/',
             function ($projectId, $userId, $format = ".json") {
                 $dao = new ProjectDao();
