@@ -122,21 +122,21 @@ class OrgRouteHandler
             $my_organisations = $client->cast('Organisation', $response);
         }
         
-        $org_tasks = array();
+        $org_projects = array();
         $orgs = array();
 
         foreach ($my_organisations as $org) {
 
-            $url = APIClient::API_VERSION."/orgs/{$org->getId()}/tasks";
-            $org_tasks_data = $client->call($url);        
-            $my_org_tasks = array();
-            if ($org_tasks_data) {
-                foreach ($org_tasks_data as $stdObject) {
-                    $my_org_tasks[] = $client->cast('Task', $stdObject);
+            $url = APIClient::API_VERSION."/orgs/{$org->getId()}/projects";
+            $org_projects_data = $client->call($url);        
+            $my_org_projects = array();
+            if ($org_projects_data) {
+                foreach ($org_projects_data as $stdObject) {
+                    $my_org_projects[] = $client->cast('Project', $stdObject);
                 }
             } else {
                 // If no org tasks, set to null
-                $my_org_tasks = null;
+                $my_org_projects = null;
             }   
             
             $request = APIClient::API_VERSION."/tags/topTags";
@@ -149,7 +149,7 @@ class OrgRouteHandler
                 }
             }            
 
-            $org_tasks[$org->getId()] = $my_org_tasks;
+            $org_projects[$org->getId()] = $my_org_projects;
             $orgs[$org->getId()] = $org;
         }    
         
@@ -157,59 +157,60 @@ class OrgRouteHandler
             $post = (object) $app->request()->post();
             
             if (isset($post->track)) {
-                $task_id = $post->task_id;
-                $url = APICLient::API_VERSION."/tasks/$task_id";
+                $task_id = $post->project_id;
+                $url = APICLient::API_VERSION."/projects/$project_id";
                 $response = $client->call($url);
-                $task = $client->cast('Task', $response);
+                $project = $client->cast('Project', $response);
 
-                $task_title = '';
-                if ($task->getTitle() != '') {
-                    $task_title = $task->getTitle();
+                $project_title = '';
+                if ($project->getTitle() != '') {
+                    $project_title = $project->getTitle();
                 } else {
-                    $task_title = "task ".$task->getId();
+                    $project_title = "project ".$project->getId();
                 }
                 if ($post->track == "Ignore") {
                    
-                    $request = APIClient::API_VERSION."/users/$current_user_id/tracked_tasks/$task_id";
+                    $request = APIClient::API_VERSION."/users/$current_user_id/track_projects/$project_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                    
                     
                     if ($response) {
-                        $app->flashNow('success', 'No longer receiving notifications from '.$task_title.'.');
+                        $app->flashNow('success', 'No longer receiving notifications from '.$project_title.'.');
                     } else {
-                        $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
+                        $app->flashNow('error', 'Unable to unsubscribe from '.$project_title.'\'s notifications');
                     }                    
                 } elseif ($post->track == "Track") {
                     
-                    $request = APIClient::API_VERSION."/users/$current_user_id/tracked_tasks/$task_id";
+                    $request = APIClient::API_VERSION."/users/$current_user_id/tracked_projects/$project_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT);     
                     
                     if ($response) {
-                        $app->flashNow('success', 'You will now receive notifications for '.$task_title.'.');
+                        $app->flashNow('success', 'You will now receive notifications for '.$project_title.'.');
                     } else {
-                        $app->flashNow('error', 'Unable to subscribe to '.$task_title.'.');
+                        $app->flashNow('error', 'Unable to subscribe to '.$project_title.'.');
                     }
                 } else {
                     $app->flashNow('error', 'Invalid POST type');
                 }
             }
         }
-        if (count($org_tasks) > 0) {
+        
+        if (count($org_projects) > 0) {
             
             $templateData = array();
-            foreach ($org_tasks as $org => $taskArray) {
+            foreach ($org_projects as $org => $projectArray) {
                 $taskData = array();
-                if ($taskArray) {
-                    foreach ($taskArray as $task) {
+                if ($projectArray) {
+                    foreach ($projectArray as $project) {
                         $temp = array();
-                        $temp['task']=$task;
-                        $temp['translated']=$client->call(APIClient::API_VERSION.
-                                "/tasks/{$task->getId()}/version") > 0;
+                        $temp['project'] = $project;
+                        //$temp['translated']=$client->call(APIClient::API_VERSION.
+                                //"/projects/{$project->getId()}/version") > 0;
                                 
-                        $temp['taskClaimed']=$client->call(APIClient::API_VERSION.
-                                "/tasks/{$task->getId()}/claimed") == 1;
+                        $temp['projectClaimed']=$client->call(APIClient::API_VERSION.
+                                "/projects/{$project->getId()}/claimed") == 1;
                                 
-                        $temp['userSubscribedToTask']=$client->call(APIClient::API_VERSION.
-                                "/users/subscribedToTask/".UserSession::getCurrentUserID()."/{$task->getId()}") == 1;
+                        $temp['userSubscribedToProject']=$client->call(APIClient::API_VERSION.
+                                "/users/subscribedToProject/".UserSession::getCurrentUserID()."/{$project->getId()}") == 1;                                
                         $taskData[]=$temp;
                     }
                 } else {
