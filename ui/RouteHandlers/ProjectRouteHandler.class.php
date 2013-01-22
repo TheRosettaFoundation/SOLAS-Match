@@ -324,12 +324,26 @@ class ProjectRouteHandler
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
                         }
                         if(isset($post->{'proofreading_'.$i})) {
-                            $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
-                             $request = APIClient::API_VERSION."/tasks";
+                            $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);      
+                            
+                            if($post->{'translation_'.$i}) {
+                                $taskModel->setTaskStatus(TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                            } else {
+                                $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
+                            }
+
+                            $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
                         }                       
                         if(isset($post->{'postediting_'.$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);
+                            
+                            if($post->{'proofreading'.$i}) {
+                                $taskModel->setTaskStatus(TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                            } else {
+                                $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
+                            }
+                            
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);                         
                         }                       
