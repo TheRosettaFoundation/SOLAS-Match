@@ -134,12 +134,13 @@ class TemplateHelper {
 
     public static function languageNameFromCode($languageCode)
     {
-        $ret = null;
+        $ret = "";
         $client = new APIClient();
         $request = APIClient::API_VERSION."/languages/getByCode/$languageCode";
         $response = $client->call($request);
         if($response) {
-            $ret = $client->cast("Language", $response);
+            $lang = $client->cast("Language", $response);
+            $ret = $lang->getName();
         }
         return $ret;
     }
