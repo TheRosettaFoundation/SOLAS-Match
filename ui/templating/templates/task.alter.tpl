@@ -32,7 +32,7 @@
     <label for="source">Source Language</label>
         <select name="source" id="source">
             {foreach $languages as $language}
-                {if $task->getSourceLanguageCode() == $language->getiCode()}
+                {if $task->getSourceLanguageCode() == $language->getCode()}
                     <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
                 {else}
                     <option value="{$language->getCode()}">{$language->getName()}</option>

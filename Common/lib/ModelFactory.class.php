@@ -127,11 +127,11 @@ class ModelFactory
         if (isset($modelData['language_id-target'])) {
             $ret->setTargetLanguageCode($modelData['language_id-target']);
         }
-        if (isset($modelData['Country_id-source'])) {
-            $ret->setSourceCountryCode($modelData['Country_id-source']);
+        if (isset($modelData['country_id-source'])) {
+            $ret->setSourceCountryCode($modelData['country_id-source']);
         }
-        if (isset($modelData['Country_id-target'])) {
-            $ret->setTargetCountryCode($modelData['Country_id-target']);
+        if (isset($modelData['country_id-target'])) {
+            $ret->setTargetCountryCode($modelData['country_id-target']);
         }
         if (isset($modelData['taskType'])) {
             $ret->setTaskType($modelData['taskType']);
@@ -397,11 +397,11 @@ class ModelFactory
         if (isset($modelData['language_id-target'])) {
             $ret->setTargetLanguageCode($modelData['language_id-target']);
         }
-        if (isset($modelData['Country_id-source'])) {
-            $ret->setSourceCountryCode($modelData['Country_id-source']);
+        if (isset($modelData['country_id-source'])) {
+            $ret->setSourceCountryCode($modelData['country_id-source']);
         }
-        if (isset($modelData['Country_id-target'])) {
-            $ret->setTargetCountryCode($modelData['Country_id-target']);
+        if (isset($modelData['country_id-target'])) {
+            $ret->setTargetCountryCode($modelData['country_id-target']);
         }
         if (isset($modelData['taskType'])) {
             $ret->setTaskType($modelData['taskType']);

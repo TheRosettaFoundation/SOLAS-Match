@@ -472,6 +472,10 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
+
+        $request = APIClient::API_VERSION."/projecs/".$task->getProjectId();
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
        
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request, HTTP_Request2::METHOD_GET);
@@ -482,7 +486,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $org_id = $task->getOrganisationId();
+        $org_id = $project->getOrganisationId();
         $app->view()->appendData(array(
                 'org_id' => $org_id
         ));     
@@ -870,6 +874,10 @@ class TaskRouteHandler
         $task = $client->cast('Task', $response);        
         $app->view()->setData('task', $task);
 
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
         $user = $client->cast('User', $response);         
@@ -907,7 +915,7 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/users/subscribedToTask/{$user->getUserId()}/$task_id";
         $registered = $client->call($request);         
 
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
+        $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
 

@@ -116,10 +116,10 @@ class TaskDao {
             ",".PDOWrapper::cleanseNull($params['language_id-target']) : ",null";
         $args .= isset($params['created-time']) ?
             ",".PDOWrapper::cleanseNull($params['created-time']) : ",null";
-        $args .= isset($params['Country_id-source']) ?
-            ",".PDOWrapper::cleanseNull($params['Country_id-source']) : ",null";
-        $args .= isset($params['Country_id-target']) ?
-            ",".PDOWrapper::cleanseNull($params['Country_id-target']) : ",null";
+        $args .= isset($params['country_id-source']) ?
+            ",".PDOWrapper::cleanseNull($params['country_id-source']) : ",null";
+        $args .= isset($params['country_id-target']) ?
+            ",".PDOWrapper::cleanseNull($params['country_id-target']) : ",null";
         $args .= isset($params['comment']) ?
             ",".PDOWrapper::cleanseNullOrWrapStr($params['comment']) : ",null";
         $args .= isset($params['taskType_id']) ?
