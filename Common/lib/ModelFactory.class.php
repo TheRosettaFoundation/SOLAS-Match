@@ -403,11 +403,11 @@ class ModelFactory
         if (isset($modelData['country_id-target'])) {
             $ret->setTargetCountryCode($modelData['country_id-target']);
         }
-        if (isset($modelData['taskType'])) {
-            $ret->setTaskType($modelData['taskType']);
+        if (isset($modelData['task-type_id'])) {
+            $ret->setTaskType($modelData['task-type_id']);
         }
-        if (isset($modelData['taskStatus'])) {
-            $ret->setTaskStatus($modelData['taskStatus']);
+        if (isset($modelData['task-status_id'])) {
+            $ret->setTaskStatus($modelData['task-status_id']);
         }
         if (isset($modelData['published'])) {
             $ret->setPublished($modelData['published']);

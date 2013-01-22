@@ -87,10 +87,8 @@
     </h1> 
         
 
-    {if isset($orgs)}
+    {if isset($projectTasks) && count($projectTasks) > 0}
         <table class="table table-striped">
-        {foreach $orgs as $org}
-            {assign var="org_id" value=$org->getId()}
             <thead>
                 <tr>
                     <th>
@@ -107,13 +105,13 @@
                         <center>Deadline</center>
                     </th>
                     <th>
-                        <center>Comment</title
+                        <center>Comment</title>
                     </th>                    
                     <th>
-                        <center>Word Count</title
+                        <center>Word Count</title>
                     </th>
                     <th>
-                        <center>Published</title
+                        <center>Published</title>
                     </th>                    
                     <th>
                         <center>Track</center>
@@ -121,87 +119,87 @@
                 </tr>
             </thead>
             <tbody>
-                {*
-            {assign var="tasksData" value=$templateData[$org_id]}
-            {if !is_null($tasksData)}
-                {foreach from=$tasksData item=data}
+                {foreach from=$projectTasks item=task}
+                    {assign var="task_id" value=$task->getId()}
                     <tr>
-                    {assign var="taskObject" value=$data['task']}
-                    {assign var="task_id" value=$taskObject->getId()}
                         <td>
                             <center>
-                                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$taskObject->getTitle()}</a><br/>
+                                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a><br/>
                             </center>
-                            <i>From:</i> <strong>Ngombe_Democratic_Republic_of_Congo</strong><br/>
-                            <i>To:</i> <strong>Ngombe_Democratic_Republic_of_Congo</strong>
-
                         </td>
-                        <td>
-                            <center>2011/12/12 - 24:00</center>
-                        </td>
-                        {if $data['translated']}
-                            <td>
-                                <center>
-                                <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
-                                    <i class="icon-download icon-black"></i><font color="Green"> Download&nbsp;updated&nbsp;file</font>
-                                </a>
-                                </center>
-                            </td>
-                        {elseif $data['taskClaimed']}
-                            <td>
-                                <center>
-                                <p><font color=#153E7E>Pending Translation</font></p>
-                                </center>
-                            </td>
-                        {else}
-                            <td>
-                                <center>
-                                <p><font color="Red">Task not Claimed</font></p>
-                                </center>
-                            </td>
-                        {/if}
                         <td>
                             <center>
-                            <form method="post" action="{urlFor name="org-dashboard"}">
-                                <input type="hidden" name="task_id" value="{$task_id}" />
-                                {if $data['userSubscribedToTask']}
-                                    <input type="hidden" name="track" value="Ignore" />
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-primary">
-                                        <i class="icon-inbox icon-white"></i> Disable
-                                    </a>
+                                {assign var="status_id" value=$task->getTaskStatus()}
+                                {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                                    Waiting
+                                {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                    Unclaimed
+                                {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                    In progress
+                                {elseif $status_id == TaskStatusEnum::COMPLETE}
+                                    Complete
+                                {/if}
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                {assign var="type_id" value=$task->getTaskType()}
+                                {if $type_id == TaskTypeEnum::CHUNKING}
+                                    Chunking
+                                {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                                    Translation
+                                {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                                    Proofreading
+                                {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                                    Post-Editing
+                                {/if}
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                {$task->getComment()}
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                {$task->getWordCount()}
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                {if $task->getPublished() == 1}
+                                    Yes
                                 {else}
+                                    No
+                                {/if}
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                    <input type="hidden" name="task_id" value="{$task_id}" />
+                                    {if $taskMetaData[$task_id]['tracking']}
+                                        <input type="hidden" name="track" value="Ignore" />
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-primary">
+                                            <i class="icon-inbox icon-white"></i> Disable
+                                        </a>
+                                    {else}
                                     <input type="hidden" name="track" value="Track" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
                                         <i class="icon-envelope icon-black"></i> Enable
                                     </a>
-                                {/if}
-                            </form>
+                                    {/if}
+                                </form>
                             </center>
-                        </td>
-                        <td>
-                            <center>
-                            <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btn btn-small">
-                                <i class="icon-wrench icon-black"></i> Edit Task
-                            </a>
-                            </center>
-                        </td>
-                        <td>
-                            <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-inverse">
-                                <i class="icon-fire icon-white"></i> Archive Task
-                            </a>
                         </td>
                     </tr>
                 {/foreach}
-            {else}
-                <td>
-                    <div class="alert-info" align="center">
-                        This project has no tasks listed.
-                    </div>
-                </td>
-            {/if}
             </tbody>
-            *}
-        {/foreach}
         </table>
     {else}
         <div class="alert alert-warning">

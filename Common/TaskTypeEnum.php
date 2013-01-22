@@ -6,4 +6,3 @@ class TaskTypeEnum {
     const PROOFREADING  = 3;
     const POSTEDITING   = 4;
 }
-?>
