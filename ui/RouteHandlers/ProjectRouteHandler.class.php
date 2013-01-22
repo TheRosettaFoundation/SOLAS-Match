@@ -13,10 +13,8 @@ class ProjectRouteHandler
         $app->get('/project/view/:project_id/', array($middleware, 'authUserForOrgProject'),
         array($this, 'projectView'))->via("POST")->name('project-view');
         
-        //$app->get('/project/view/:project_id/', array($this, 'projectView'))->name('project-view');  
         $app->get('/project/alter/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'projectAlter'))->via('POST')->name('project-alter');
-        // $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
         
         $app->get('/project/upload/:org_id/', array($middleware, 'authUserForOrg'),
         array($this, 'projectUpload'))->via('GET', 'POST')->name('project-upload');    

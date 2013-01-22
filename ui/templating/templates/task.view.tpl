@@ -39,6 +39,16 @@
     </p>
 {/if}
 
+{if isset($project)}
+    <h3>Project</h3>
+    <p>
+        {assign var="projectId" value=$project->getId()}
+        <a href="{urlFor name="project-view" options="project_id.$projectId"}">
+            {$project->getTitle()}
+        </a>
+    </p>
+{/if}
+
 {if $task->getComment() != ''}
     <h3>Comment</h3>
     <p>{$task->getComment()}</p>

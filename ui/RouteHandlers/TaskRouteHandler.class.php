@@ -921,6 +921,7 @@ class TaskRouteHandler
 
         $app->view()->appendData(array(
                                  'org' => $org,
+                                 'project' => $project,
                                  'registered' => $registered
         ));
 
