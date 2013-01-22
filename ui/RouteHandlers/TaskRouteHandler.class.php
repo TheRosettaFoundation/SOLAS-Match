@@ -260,10 +260,10 @@ class TaskRouteHandler
         }
         $app->view()->setData('task', $task);
         $app->view()->setData('sourceLanguage', $client->castCall("Language",
-                APIClient::API_VERSION."/languages/{$task->getSourceLanguageId()}"));
+                APIClient::API_VERSION."/languages/getByCode/{$task->getSourceLanguageCode()}"));
                 
         $app->view()->setData('targetLanguage', $client->castCall("Language",
-                APIClient::API_VERSION."/languages/{$task->getTargetLanguageId()}"));
+                APIClient::API_VERSION."/languages/getByCode/{$task->getTargetLanguageCode()}"));
        
         $app->render('task.claim.tpl');
     }
@@ -553,8 +553,7 @@ class TaskRouteHandler
             
             if (is_null($word_count_err) && is_null($title_err) && is_null($deadlineError)) {
                 if (!empty($post->source)) {
-                    $source_id = TemplateHelper::saveLanguage($post->source);
-                    $task->setSourceLanguageId($source_id);
+                    $task->setSourceLanguageCode($post->source);
                 }
 
                 if ($post->impact != '') {
@@ -610,24 +609,21 @@ class TaskRouteHandler
                     foreach ($language_list as $language) {
                         //if it is the first language add it to this task
                         if ($language == $language_list[0]) {
-                            $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
-                            $task->setTargetLanguageId($target_id);
-                            $task->setTargetCountryId($language['country']);
+                            $task->setTargetLanguageiCode($language['lang']);
+                            $task->setTargetCountryCode($language['country']);
                             $request = APIClient::API_VERSION."/tasks/$task_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
                         } else {
-                            $language_id = TemplateHelper::saveLanguage($language['lang']);
-                            
                             $request = APIClient::API_VERSION.
-                                    "/tasks/addTarget/$language_id/{$language['country']}/$user_id";
+                                    "/tasks/addTarget/{$language['lang']}/{$language['country']}/$user_id";
                                     
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
                         }
                     }
                 } else {
-                    $target_id = TemplateHelper::saveLanguage($language_list[0]['lang']);
-                    $task->setTargetLanguageId($target_id);
-                    $task->setTargetCountryId($language_list[0]['country']);
+                    $language = $language_list[0];
+                    $task->setTargetLanguageCode($language['lang']);
+                    $task->setTargetCountryCode($language['country']);
                     
                     $request = APIClient::API_VERSION."/tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
@@ -800,19 +796,19 @@ class TaskRouteHandler
             }
             
             if ($post->source != '') {
-                $task->setSourceLanguageId($post->source);
+                $task->setSourceLanguageCode($post->source);
             }
             
             if ($post->target != '') {
-                $task->setTargetLanguageId($post->target);
+                $task->setTargetLanguageCode($post->target);
             }   
              
             if ($post->sourceCountry != '') {
-                $task->setSourceCountryId($post->sourceCountry);
+                $task->setSourceCountryCode($post->sourceCountry);
             }   
              
             if ($post->targetCountry != '') {
-                $task->setTargetCountryId($post->targetCountry);
+                $task->setTargetCountryCode($post->targetCountry);
             }   
               
             if ($post->tags != '') {

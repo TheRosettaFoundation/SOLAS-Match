@@ -122,16 +122,16 @@ class ModelFactory
             $ret->setCreatedTime($modelData['created-time']);
         }
         if (isset($modelData['language_id-source'])) {
-            $ret->setSourceLanguageId($modelData['language_id-source']);
+            $ret->setSourceLanguageCode($modelData['language_id-source']);
         }
         if (isset($modelData['language_id-target'])) {
-            $ret->setTargetLanguageId($modelData['language_id-target']);
+            $ret->setTargetLanguageCode($modelData['language_id-target']);
         }
         if (isset($modelData['Country_id-source'])) {
-            $ret->setSourceCountryId($modelData['Country_id-source']);
+            $ret->setSourceCountryCode($modelData['Country_id-source']);
         }
         if (isset($modelData['Country_id-target'])) {
-            $ret->setTargetCountryId($modelData['Country_id-target']);
+            $ret->setTargetCountryCode($modelData['Country_id-target']);
         }
         if (isset($modelData['taskType'])) {
             $ret->setTaskType($modelData['taskType']);
@@ -392,16 +392,16 @@ class ModelFactory
             $ret->setCreatedTime($modelData['created-time']);
         }
         if (isset($modelData['language_id-source'])) {
-            $ret->setSourceLanguageId($modelData['language_id-source']);
+            $ret->setSourceLanguageCode($modelData['language_id-source']);
         }
         if (isset($modelData['language_id-target'])) {
-            $ret->setTargetLanguageId($modelData['language_id-target']);
+            $ret->setTargetLanguageCode($modelData['language_id-target']);
         }
         if (isset($modelData['Country_id-source'])) {
-            $ret->setSourceCountryId($modelData['Country_id-source']);
+            $ret->setSourceCountryCode($modelData['Country_id-source']);
         }
         if (isset($modelData['Country_id-target'])) {
-            $ret->setTargetCountryId($modelData['Country_id-target']);
+            $ret->setTargetCountryCode($modelData['Country_id-target']);
         }
         if (isset($modelData['taskType'])) {
             $ret->setTaskType($modelData['taskType']);

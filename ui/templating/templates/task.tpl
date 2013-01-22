@@ -8,11 +8,11 @@
 </div>
 
 	<p>
-		{if $task->getSourceLanguageId()}
-			From <b>{TemplateHelper::languageNameFromId($task->getSourceLanguageId())}</b>
+		{if $task->getSourceLanguageCode()}
+			From <b>{TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())}</b>
 		{/if}
-		{if $task->getTargetLanguageId()}
-			To <b>{TemplateHelper::languageNameFromId($task->getTargetLanguageId())}</b>
+		{if $task->getTargetLanguageCode()}
+			To <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
 		{/if}
         <p>
             Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}

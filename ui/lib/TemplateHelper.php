@@ -106,15 +106,15 @@ class TemplateHelper {
 
     public static function getTaskSourceLanguage($task)
     {
-        $language =  TemplateHelper::languageNameFromId($task->getSourceLanguageId());
-        $region =  TemplateHelper::countryNameFromCode($task->getSourceCountryId());
+        $language =  TemplateHelper::languageNameFromCode($task->getSourceLanguageCode());
+        $region =  TemplateHelper::countryNameFromCode($task->getSourceCountryCode());
         return $language.' ('.$region.')';
     }
 
     public static function getTaskTargetLanguage($task)
     {
-        $language =  TemplateHelper::languageNameFromId($task->getTargetLanguageId());
-        $region =  TemplateHelper::countryNameFromCode($task->getTargetCountryId());
+        $language =  TemplateHelper::languageNameFromCode($task->getTargetLanguageCode());
+        $region =  TemplateHelper::countryNameFromCode($task->getTargetCountryCode());
         return $language.' ('.$region.')';
     }
 
@@ -130,6 +130,18 @@ class TemplateHelper {
         $client = new APIClient();
         $result = $client->castCall("Language", APIClient::API_VERSION."/languages/$languageID" );
         return $result->getName();
+    }
+
+    public static function languageNameFromCode($languageCode)
+    {
+        $ret = null;
+        $client = new APIClient();
+        $request = APIClient::API_VERSION."/languages/getByCode/$languageCode";
+        $response = $client->call($request);
+        if($response) {
+            $ret = $client->cast("Language", $response);
+        }
+        return $ret;
     }
 
     public static function orgNameFromId($orgID)
