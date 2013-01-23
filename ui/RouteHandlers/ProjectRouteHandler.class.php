@@ -319,6 +319,12 @@ class ProjectRouteHandler
             if(($post->word_count != '')) {
                 $project->setWordCount($post->word_count);
             }
+            if (isset($post->sourceLanguage) && $post->sourceLanguage != '') {
+                $project->setSourceLanguageCode($post->sourceLanguage);
+            }
+            if ($post->sourceCountry != '') {
+                $project->setSourceCountryCode($post->sourceCountry);
+            }
             
             $tags = $post->tags;
             if (is_null($tags)) {
