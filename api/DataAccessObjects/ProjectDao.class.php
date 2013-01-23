@@ -127,7 +127,7 @@ class ProjectDao
 
     public function archiveProject($projectId, $userId)
     {
-        $args = $projectId.", ".$userId;
+        $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId);
         PDOWrapper::call("archiveProject", $args);
     }
 

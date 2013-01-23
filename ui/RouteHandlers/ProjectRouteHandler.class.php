@@ -631,7 +631,7 @@ class ProjectRouteHandler
             $app->flash('error', 'Login required to access page');
             $app->redirect($app->urlFor('login'));
         }   
-        
+
         $request = APIClient::API_VERSION."/projects/archiveProject/$project_id/user/$user_id";
         $response = $client->call($request, HTTP_Request2::METHOD_PUT);        
         

@@ -82,11 +82,15 @@ class Projects
             }, 'getProjectTasks');
                 
 
-
-        Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:projectId/user/:userId/archive(:format)/',
-            function ($projectId, $userId, $format = ".json") {
-                $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->archiveProject($projectId, $userId), null, $format);
+        Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/archiveProject/:projectId/user/:userId/',
+                                                        function ($projectId, $userId, $format = ".json") {
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                $userId = explode('.', $userId);
+                $format = '.'.$userId[1];
+                $userId = $userId[0];
+            }
+            $dao = new ProjectDao();
+            Dispatcher::sendResponce(null, $dao->archiveProject($projectId, $userId), null, $format);                
             }, 'archiveProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects(:format)/',
