@@ -452,6 +452,12 @@ class ModelFactory
         if(isset($modelData['status'])) {
             $ret->setStatus($modelData['status']);
         }
+        if(isset($modelData['language_id'])) {
+            $ret->setSourceLanguageCode($modelData['language_id']);
+        }
+        if(isset($modelData['country_id'])) {
+            $ret->setSourceCountryCode($modelData['country_id']);
+        }
 
         return $ret;
     }

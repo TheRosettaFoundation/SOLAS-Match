@@ -349,7 +349,7 @@ class ProjectRouteHandler
                     $taskModel = new Task();
                     $taskModel->setTitle($project->getTitle());
                     $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
-                    $taskModel->setSourceCountryCode($project->getSourceCountryCode);
+                    $taskModel->setSourceCountryCode($project->getSourceCountryCode());
                     $taskModel->setProjectId($project->getId());
 
 
