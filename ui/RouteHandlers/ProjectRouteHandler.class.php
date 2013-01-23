@@ -37,7 +37,6 @@ class ProjectRouteHandler
         $response = $client->call($request);     
         $project = $client->cast('Project', $response);        
         $app->view()->setData('project', $project);
-        
          
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();

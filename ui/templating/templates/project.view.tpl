@@ -35,6 +35,12 @@
     {$project->getDeadline()}
 </p>
 
+<h3>Source Language</h3>
+<p>
+    {TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}
+    ({TemplateHelper::countryNameFromCode($project->getSourceCountryCode())})
+</p>
+
 {if $project->getReference() != ''}
     <h3>Context Reference</h3>
     <p>
@@ -79,7 +85,7 @@
         Project Tasks
         <small>Overview of tasks created for this project.</small>
 
-        <a class="pull-right btn btn-success" href="{urlFor name="task-upload" options="project_id.{$project->getId()}"}">
+        <a class="pull-right btn btn-success" href="{urlFor name="task-upload" options="project_id.$project_id"}">
             <i class="icon-upload icon-white"></i> Create Task
         </a>          
 
