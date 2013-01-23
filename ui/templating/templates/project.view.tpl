@@ -220,7 +220,7 @@
         
 {else}
     <p class="alert alert-info">
-        Please log in to register for notifications for this task.
+        Please log in to register for notifications for this project.
     </p>
 {/if}
 
