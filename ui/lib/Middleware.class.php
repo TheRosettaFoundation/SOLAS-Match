@@ -159,7 +159,7 @@ class Middleware
             }
         }
         $app = Slim::getInstance();
-        $app->flash('error', "You are not authorised to download this task");
+        $app->flash('error', "Only organisation members are authorised to view this page.");
         $app->redirect($app->urlFor('home'));
     }    
 
