@@ -18,11 +18,40 @@
         <p>
             Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
         </p>
-    
-        {if $task->getTaskStatus()}
-            <p><span class="label label-info">{$task->getTaskStatus()}</span></p>
+        
+        {if $task->getTaskType()}
+            <p>
+                <b>Task Type:</b>
+                <span class="label label-info">                    
+                    {if $task->getTaskType() == 1}
+                        Chunking
+                    {elseif $task->getTaskType() == 2}
+                        Translation
+                    {elseif $task->getTaskType() == 3}
+                        Proofreading
+                    {elseif $task->getTaskType() == 4}
+                        Postediting
+                    {/if}
+                </span>
+            </p>
         {/if}
     
+        {if $task->getTaskStatus()}
+            <p>
+                <b>Task Status:</b>
+                <span class="label label-info">
+                    {if $task->getTaskStatus() == 1}
+                        Waiting for Prerequisites
+                    {elseif $task->getTaskStatus() == 2}
+                        Pending Claim
+                    {elseif $task->getTaskStatus() == 3}
+                        In Progress
+                    {elseif $task->getTaskStatus() == 4}
+                        Complete
+                    {/if}
+                </span>
+            </p>
+        {/if}  
 	
 	<p class="task_details">
 		Added {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago
