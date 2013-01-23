@@ -151,7 +151,8 @@ class ProjectRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        $word_count_err = null;
+        $wordCountError = '';
+        $deadlineError = '';
 
         $request = APIClient::API_VERSION."/projects/$project_id";
         $response = $client->call($request);
@@ -169,7 +170,6 @@ class ProjectRouteHandler
             }
 
             $deadlineInMSecs = "";
-            $deadlineError = "";
             if ($post->deadlineDate != "") {
                 $deadlineInMSecs = strtotime($post->deadlineDate);
 
@@ -213,18 +213,18 @@ class ProjectRouteHandler
             }
 
             if (ctype_digit($post->word_count)) {
-                
                 $project->setWordCount($post->word_count);                
+            } else if ($post->word_count != '') {
+                $wordCountError = "Word Count must be numeric";
+            } else {
+                $wordCountError = "Word Count cannot be blank";
+            }
+            
+            if ($deadlineError == '' && $wordCountError == '') {
                 $request = APIClient::API_VERSION."/projects/$project_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $project);
                 $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
-            } else if ($post->word_count != '') {
-                $word_count_err = "Word Count must be numeric";
-            } else {
-                $word_count_err = "Word Count cannot be blank";
             }
-            
-
         }
          
         $languages = TemplateHelper::getLanguageList();
@@ -257,7 +257,8 @@ class ProjectRouteHandler
                               'languages'       => $languages,
                               'countries'       => $countries,
                               'tag_list'        => $tag_list,
-                              'word_count_err'  => $word_count_err,
+                              'wordCountError'  => $wordCountError,
+                              'deadlineError'   => $deadlineError,
                               'extra_scripts'   => $extra_scripts
         ));
         

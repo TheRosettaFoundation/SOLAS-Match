@@ -19,6 +19,9 @@
     <textarea wrap="soft" cols="1" rows="6" name="description">{$project->getDescription()}</textarea>
     
     <label for="deadline">Deadline:</label>
+    {if isset($deadlineError) && $deadlineError != ''}
+        <p class="alert alert-error">{$deadlineError}</p>
+    {/if}
     <p>
         Date: <input type="text" id="deadlineDate" name="deadlineDate" value="{$deadlineDate}" />
         Time: <input type="text" name="deadlineTime" value="{$deadlineTime}" />
@@ -53,6 +56,9 @@
     <input type="text" name="tags" id="tags" value="{$tag_list}">
     
     <label for="word_count">Word Count:</label>
+    {if isset($wordCountError) && $wordCountError != ''}
+        <p class="alert alert-error">{$wordCountError}</p>
+    {/if}
     <input type="text" name="word_count" id="word_count" maxlength="6" value="{$project->getWordCount()}">
     <p>
         <button type="submit" value="Submit" name="submit" class="btn btn-primary">
