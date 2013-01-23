@@ -35,24 +35,6 @@
                 </span>
             </p>
         {/if}
-    
-        {if $task->getTaskStatus()}
-            <p>
-                <b>Task Status:</b>
-                <span class="label label-info">
-                    {if $task->getTaskStatus() == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
-                        Waiting for Prerequisites
-                    {elseif $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
-                        Pending Claim
-                    {elseif $task->getTaskStatus() == TaskStatusEnum::IN_PROGRESS}
-                        In Progress
-                    {elseif $task->getTaskStatus() == TaskStatusEnum::COMPLETE}
-                        Complete
-                    {/if}
-                </span>
-            </p>
-        {/if}  
-	
 	<p class="task_details">
 		Added {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago
 		&middot; By 
