@@ -202,7 +202,8 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table Solas-Match-Dev.Projects
+-- Dumping structure for table Solas-Match-Test.Projects
+DROP TABLE IF EXISTS `Projects`;
 CREATE TABLE IF NOT EXISTS `Projects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -212,12 +213,18 @@ CREATE TABLE IF NOT EXISTS `Projects` (
   `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `word-count` int(10) DEFAULT NULL,
   `created` datetime NOT NULL,
+  `language_id` int(10) unsigned DEFAULT NULL,
+  `country_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `organisation_id` (`organisation_id`,`title`),
+  KEY `FK_Projects_Languages` (`language_id`),
+  KEY `FK_Projects_Countries` (`country_id`),
+  CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Projects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table Solas-Match-Dev.Projects: ~0 rows (approximately)
+-- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.ProjectTags
 DROP TABLE IF EXISTS `ProjectTags`;
@@ -304,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table intergrationTest.Tasks
+-- Dumping structure for table Solas-Match-Test.Tasks
 DROP TABLE IF EXISTS `Tasks`;
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -313,30 +320,30 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `word-count` int(11) DEFAULT NULL,
   `language_id-source` int(11) unsigned NOT NULL,
   `language_id-target` int(11) unsigned NOT NULL,
-  `Country_id-source` int(11) unsigned NOT NULL,
-  `Country_id-target` int(11) unsigned NOT NULL,
+  `country_id-source` int(11) unsigned NOT NULL,
+  `country_id-target` int(11) unsigned NOT NULL,
   `created-time` datetime NOT NULL,
   `deadline` datetime NOT NULL,
   `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `taskType_id` int(11) unsigned NOT NULL,
-  `taskStatus_id` int(11) unsigned NOT NULL,
+  `task-type_id` int(11) unsigned NOT NULL,
+  `task-status_id` int(11) unsigned NOT NULL,
   `published` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `title` (`title`,`project_id`,`language_id-source`,`language_id-target`,`Country_id-source`,`Country_id-target`,`taskType_id`),
+  UNIQUE KEY `title` (`title`,`project_id`,`language_id-source`,`language_id-target`,`Country_id-source`,`Country_id-target`,`task-type_id`),
   KEY `FK_Tasks_Languages` (`language_id-source`),
   KEY `FK_Tasks_Languages_2` (`language_id-target`),
   KEY `FK_Tasks_Countries` (`Country_id-source`),
   KEY `FK_Tasks_Countries_2` (`Country_id-target`),
-  KEY `FK_Tasks_TaskTypes` (`taskType_id`),
-  KEY `FK_Tasks_TaskStatus` (`taskStatus_id`),
+  KEY `FK_Tasks_TaskTypes` (`task-type_id`),
+  KEY `FK_Tasks_TaskStatus` (`task-status_id`),
   KEY `FK_Tasks_Projects` (`project_id`),
+  CONSTRAINT `FK_Tasks_TaskStatus` FOREIGN KEY (`task-status_id`) REFERENCES `TaskStatus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Tasks_TaskTypes` FOREIGN KEY (`task-type_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_Countries` FOREIGN KEY (`Country_id-source`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_Countries_2` FOREIGN KEY (`Country_id-target`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_Languages` FOREIGN KEY (`language_id-source`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_Languages_2` FOREIGN KEY (`language_id-target`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_Tasks_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_Tasks_TaskStatus` FOREIGN KEY (`taskStatus_id`) REFERENCES `TaskStatus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_Tasks_TaskTypes` FOREIGN KEY (`taskType_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_Tasks_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -575,10 +582,10 @@ where pt.project_id = pID;
 END//
 DELIMITER ;
 
--- Dumping structure for procedure SolasMatch.projectInsertAndUpdate
+-- Dumping structure for procedure Solas-Match-Test.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `scID` INT, IN `sCC` INT)
 BEGIN
     if projectId="" then set projectId=null; end if;
     if titleText="" then set titleText=null; end if;
@@ -591,8 +598,12 @@ BEGIN
 
     if projectId is null then
         if createdTime is null then set createdTime=now(); end if;
-
-        INSERT INTO Projects (title, description, deadline, organisation_id, reference, `word-count`, created) VALUES (titleText, descr, deadlineTime, orgId, ref, wordCount, NOW());
+        	set @scID=null;
+			select c.id into @scID from Countries c where c.code=sCC;
+			set @sID=null;
+			select l.id into @sID from Languages l where l.code=sCode;
+	
+        INSERT INTO Projects (title, description, deadline, organisation_id, reference, `word-count`, created,lanugage_id,country_id) VALUES (titleText, descr, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID);
     elseif EXISTS (select 1 FROM Projects p WHERE p.id=projectId) then
         set @first = true;
         set @q = "UPDATE Projects p set";
@@ -645,6 +656,27 @@ BEGIN
             end if;
             set @q = CONCAT(@q, " p.`word-count`=", wordCount);
         end if;
+        if sCC is not null then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @scID=null;
+				select c.id into @scID from Countries c where c.code=sCC;
+            set @q = CONCAT(@q, " p.`country_id`=", @scID);
+        end if;
+        if sCode is not null then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @sID=null;
+				select l.id into @sID from Languages l where l.code=sCode;
+            set @q = CONCAT(@q, " p.`language_id`=", @sID);
+        end if;
+        
         if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
             if (@first = false) then
                 set @q = CONCAT(@q, ",");
@@ -659,7 +691,7 @@ BEGIN
         DEALLOCATE PREPARE stmt;
     end if;
     call getProject(projectId, titleText, descr, deadlineTime, orgId, ref, wordCount, createdTime);
-END //
+END//
 DELIMITER ;
 
 -- Dumping structure for procedure SolasMatch.archiveProject
@@ -2098,9 +2130,9 @@ BEGIN
 			select l.id into @sID from Languages l where l.code=sCode;
 		set @tID=null;
 			select l.id into @tID from Languages l where l.code=tCode;
+			if pub is null then set pub=1;end if;	
 			
-			
-		insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`taskType_id`,`taskStatus_id`,`published`)
+		insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`task-type_id`,`task-status_id`,`published`)
 		 values (projectID,name,wordCount,@sID,@tID,created,taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 		set @first = true;
@@ -2201,7 +2233,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.`taskType_id`=",taskType) ;
+			set @q = CONCAT(@q," t.`task-type_id`=",taskType) ;
 		end if;
 		if tStatus is not null then 
 			if (@first = false) then 
@@ -2209,7 +2241,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," t.`taskStatus_id`=",tStatus) ;
+			set @q = CONCAT(@q," t.`task-status_id`=",tStatus) ;
 		end if;
 		if pub is not null then 
 			if (@first = false) then 
