@@ -156,44 +156,61 @@ class ProjectRouteHandler
         $request = APIClient::API_VERSION."/projects/$project_id";
         $response = $client->call($request);
         $project = $client->cast('Project', $response);
-        
-        $app->view()->setData('project', $project);
-        
+
         if (isValidPost($app)) {
             $post = (object) $app->request()->post();
             
             if ($post->title != '') {
                 $project->setTitle($post->title);
             }
+
+            if ($post->description != '') {
+                $project->setDescription($post->description);
+            }
+
+            $deadlineInMSecs = "";
+            $deadlineError = "";
+            if ($post->deadlineDate != "") {
+                $deadlineInMSecs = strtotime($post->deadlineDate);
+
+                if ($deadlineInMSecs) {
+                    if ($post->deadlineTime != "") {
+                        if (TemplateHelper::isValidTime($post->deadlineTime) == true) {
+                            $deadlineInMSecs = TemplateHelper::addTimeToUnixTime($deadlineInMSecs,
+                                    $post->deadlineTime);
+                        } else {
+                            $deadlineError = "Invalid time format. Please enter time in a 24-hour format like ";
+                            $deadlineError .= "this 16:30";
+                        }
+                    }
+                } else {
+                    $deadlineInMSecs = "";
+                    $deadlineError = "Invalid date format";
+                }
+            }
+
+            if ($deadlineInMSecs != '' && $deadlineError == '') {
+                $project->setDeadline(date("Y-m-d H:i:s", $deadlineInMSecs));
+            }
             
+            if ($post->sourceLanguage != '') {
+                $project->setSourceLanguageCode($post->sourceLanguage);
+            }
+            
+            if ($post->sourceCountry != '') {
+                $project->setSourceCountryCode($post->sourceCountry);
+            }   
+             
             if ($post->reference != '' && $post->reference != 'http://') {
                 $project->setReference($post->reference);
             }
             
-            //Not in template yet
-            /*if ($post->source != '') {
-                $project->setSourceLangId($post->source);
-            }
-            
-            if ($post->target != '') {
-                $project->setTargetLangId($post->target);
-            }   
-             
-            if ($post->sourceCountry != '') {
-                $project->setSourceRegionId($post->sourceCountry);
-            }   
-             
-            if ($post->targetCountry != '') {
-                $project->setTargetRegionId($post->targetCountry);
-            }   
-              
             if ($post->tags != '') {
                 $tags = TemplateHelper::separateTags($post->tags);
                 foreach ($tags as $tag) {
-                    $project->addTags($tag);
+                    $project->addTag($tag);
                 }
-            }*/
-            
+            }
 
             if (ctype_digit($post->word_count)) {
                 
@@ -213,20 +230,35 @@ class ProjectRouteHandler
         $languages = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
        
-        /*
-        $tags = $project->getTags();
+        $deadlineDate = date("F dS, Y", strtotime($project->getDeadline()));
+        $deadlineTime = date("H:i", strtotime($project->getDeadline()));
+        
+        $tags = $project->getTagList();
         $tag_list = '';
         if ($tags != null) {
             foreach ($tags as $tag) {
                 $tag_list .= $tag . ' ';
             }
         }
-        */
+
+        $extra_scripts = "
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
+        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+        <script type=\"text/javascript\">
+            window.onload = function() {
+                new datepickr(\"deadlineDate\");
+            };
+        </script>";
+        
         $app->view()->appendData(array(
+                              'project'         => $project,
+                              'deadlineDate'    => $deadlineDate,
+                              'deadlineTime'    => $deadlineTime,
                               'languages'       => $languages,
                               'countries'       => $countries,
-                              //'tag_list'        => $tag_list,
+                              'tag_list'        => $tag_list,
                               'word_count_err'  => $word_count_err,
+                              'extra_scripts'   => $extra_scripts
         ));
         
         $app->render('project.alter.tpl');

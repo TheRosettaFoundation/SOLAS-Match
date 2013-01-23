@@ -30,7 +30,7 @@ class Projects
             }, 'createProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:id/',
-            function ($format = '.json') 
+            function ($id, $format = '.json') 
             {
                 if (!is_numeric($id) && strstr($id, '.')) {
                     $id = explode('.', $id);
@@ -39,9 +39,13 @@ class Projects
                 }
                 $data=Dispatcher::getDispatcher()->request()->getBody();
                 $data= APIHelper::deserialiser($data, $format);
-                $project = ModelFactory::buildModel('Project', $data);
+                if(is_object($data)) {
+                    $project = APIHelper::cast("Project", $data);
+                } else {
+                    $project = ModelFactory::buildModel('Project', $data);
+                }
                 $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->insertProject($project), null, $format);
+                Dispatcher::sendResponce(null, $dao->update($project), null, $format);
             }, 'updateProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/',

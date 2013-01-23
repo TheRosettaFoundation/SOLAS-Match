@@ -19,17 +19,34 @@ class ProjectDao
         $this->save($project);
         return $project;
     }
-    
-    public function save(&$project)
+
+    public function update($params)
     {
-        $result = PDOWrapper::call("projectInsertAndUpdate", "null"
+        if (!is_array($params) && is_object($params)) {
+            $project   = APIHelper::cast("Project", $params);
+        } else {
+            $project = ModelFactory::buildModel("Project", $params);
+        }
+        
+        $this->save($project);
+        return $project;
+    }
+    
+    private function save(&$project)
+    {
+        $projectId = "null";
+        if($project->getId() != '') {
+            $projectId = $project->getId();
+        }
+
+        $result = PDOWrapper::call("projectInsertAndUpdate", $projectId
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getTitle())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getDescription())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getDeadline())
                 .",".PDOWrapper::cleanseNull($project->getOrganisationId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getReference())
                 .",".PDOWrapper::cleanseNull($project->getWordCount())
-                .",".PDOWrapper::cleanseNull($project->getCreatedTime()));
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()));
         $project->setId($result[0]['id']);     
         return $project;
     }
