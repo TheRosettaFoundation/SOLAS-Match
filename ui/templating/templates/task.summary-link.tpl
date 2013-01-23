@@ -23,13 +23,13 @@
             <p>
                 <b>Task Type:</b>
                 <span class="label label-info">                    
-                    {if $task->getTaskType() == 1}
+                    {if $task->getTaskType() == TaskTypeEnum::CHUNKING}
                         Chunking
-                    {elseif $task->getTaskType() == 2}
+                    {elseif $task->getTaskType() == TaskTypeEnum::TRANSLATION}
                         Translation
-                    {elseif $task->getTaskType() == 3}
+                    {elseif $task->getTaskType() == TaskTypeEnum::PROOFREADING}
                         Proofreading
-                    {elseif $task->getTaskType() == 4}
+                    {elseif $task->getTaskType() == TaskTypeEnum::POSTEDITING}
                         Postediting
                     {/if}
                 </span>
@@ -40,13 +40,13 @@
             <p>
                 <b>Task Status:</b>
                 <span class="label label-info">
-                    {if $task->getTaskStatus() == 1}
+                    {if $task->getTaskStatus() == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
                         Waiting for Prerequisites
-                    {elseif $task->getTaskStatus() == 2}
+                    {elseif $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
                         Pending Claim
-                    {elseif $task->getTaskStatus() == 3}
+                    {elseif $task->getTaskStatus() == TaskStatusEnum::IN_PROGRESS}
                         In Progress
-                    {elseif $task->getTaskStatus() == 4}
+                    {elseif $task->getTaskStatus() == TaskStatusEnum::COMPLETE}
                         Complete
                     {/if}
                 </span>
