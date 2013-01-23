@@ -200,8 +200,6 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
   CONSTRAINT `FK_password_reset_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
-
 -- Dumping structure for table Solas-Match-Test.Projects
 DROP TABLE IF EXISTS `Projects`;
 CREATE TABLE IF NOT EXISTS `Projects` (
@@ -225,6 +223,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 
 -- Dumping structure for table Solas-Match-Test.ProjectTags
 DROP TABLE IF EXISTS `ProjectTags`;
@@ -509,10 +508,10 @@ end if;
 END//
 DELIMITER ;
 
--- Dumping structure for procedure SolasMatch.getProject
+-- Dumping structure for procedure Solas-Match-Test.getProject
 DROP PROCEDURE IF EXISTS `getProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
     READS SQL DATA
 BEGIN
     if projectId='' then set projectId=null;end if;
@@ -523,6 +522,8 @@ BEGIN
     if ref='' then set ref=null;end if;
     if wordCount='' then set wordCount=null;end if;
     if createdTime='' then set createdTime=null;end if;
+    if sCC="" then set sCC=null; end if;
+    if sCode="" then set sCode=null; end if;
 
     set @q="SELECT * FROM Projects p WHERE 1";
     if projectId is not null then
@@ -549,11 +550,21 @@ BEGIN
     if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
         set @q = CONCAT(@q, " and p.created='", createdTime, "'");
     end if;
+    if sCC is not null then
+    	set @scID=null;
+		select c.id into @scID from Countries c where c.code=sCC;
+    	set @q = CONCAT(@q, " and p.country_id=",@scID);
+    end if;
+    if sCode is not null then
+      set @sID=null;
+		select c.id into @sID from Countries c where c.code=sCode;
+    	set @q = CONCAT(@q, " and p.language_id='", @sID);
+    end if;
 
     PREPARE stmt FROM @q;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
-END //
+END//
 DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getProjectByTag
@@ -585,7 +596,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `scID` INT, IN `sCC` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `scID` INT, IN `sID` INT)
 BEGIN
     if projectId="" then set projectId=null; end if;
     if titleText="" then set titleText=null; end if;
@@ -595,6 +606,8 @@ BEGIN
     if ref="" then set ref=null; end if;
     if wordCount="" then set wordCount=null; end if;
     if createdTime="" then set createdTime=null; end if;
+    if scID="" then set scID=null; end if;
+    if sID="" then set sID=null; end if;
 
     if projectId is null then
         if createdTime is null then set createdTime=now(); end if;
