@@ -58,8 +58,11 @@ class TaskRouteHandler
         $app->get('/task/:task_id/upload-edited/', array($middleware, 'authenticateUserForTask'), 
         array($this, 'taskUploadEdited'))->via('POST')->name('task-upload-edited');
 
-        $app->get('/task/upload/:project_id', array($middleware, 'authUserForOrg'), 
+        $app->get('/task/upload/:project_id', array($middleware, 'authUserForOrgProject'), 
         array($this, 'taskUpload'))->via('GET', 'POST')->name('task-upload');
+
+        $app->get('/task/create/:project_id', array($middleware, 'authUserForOrgProject'), 
+        array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
     }
 
     public function archivedTasks($page_no)
@@ -1107,7 +1110,7 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        $user_id = UserSession::getCurrentUserID();        
+        $user_id = UserSession::getCurrentUserID();
 
         $error_message = null;
         $field_name = 'new_task_file';
@@ -1132,9 +1135,9 @@ class TaskRouteHandler
             
             if (!$upload_error) {
                 $taskData = array();
-                $taskData['organisation_id'] = $org_id;
+                $taskData['project_id'] = $project_id;
                 $taskData['title'] = $_FILES[$field_name]['name'];
-                $taskData['deadline'] = date("Y-m-d H:i:s", strtotime("+1 week"));
+                $taskData['deadline'] = date("Y-m-d H:i:s", strtotime("+2 week"));
                 $task = ModelFactory::buildModel("Task", $taskData);
                 
                 $request = APIClient::API_VERSION."/tasks";
@@ -1162,11 +1165,30 @@ class TaskRouteHandler
             $app->view()->appendData(array('error' => $error_message));
         }
         $app->view()->appendData(array(
-               'url_task_upload'       => $app->urlFor('task-upload', array('org_id' => $org_id)),
+               'url_task_upload'       => $app->urlFor('task-upload', array('project_id' => $project_id)),
                'max_file_size_bytes'   => TemplateHelper::maxFileSizeBytes(),
                'max_file_size_mb'      => TemplateHelper::maxFileSizeMB(),
                'field_name'            => $field_name
         ));
         $app->render('task.upload.tpl');
-    }   
+    }
+
+    public function taskCreate($project_id)
+    {
+        $titleError = null;
+        $task = new Task();
+
+        $languages = TemplateHelper::getLanguageList();
+        $countries = TemplateHelper::getCountryList();
+
+        $app->view()->appendData(array(
+                'project_id'    => $project_id,
+                'task'          => $task,
+                'languages'     => $languages,
+                'countries'     => $countries,
+                'titleError'    => $titleError
+        ));
+
+        $app->render('task.create.tpl');
+    }
 }
