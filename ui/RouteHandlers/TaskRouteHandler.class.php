@@ -58,7 +58,7 @@ class TaskRouteHandler
         $app->get('/task/:task_id/upload-edited/', array($middleware, 'authenticateUserForTask'), 
         array($this, 'taskUploadEdited'))->via('POST')->name('task-upload-edited');
 
-        $app->get('/task/upload/:org_id', array($middleware, 'authUserForOrg'), 
+        $app->get('/task/upload/:project_id', array($middleware, 'authUserForOrg'), 
         array($this, 'taskUpload'))->via('GET', 'POST')->name('task-upload');
     }
 
@@ -1103,7 +1103,7 @@ class TaskRouteHandler
         }
     }
 
-    public function taskUpload($org_id)
+    public function taskUpload($project_id)
     {
         $app = Slim::getInstance();
         $client = new APIClient();

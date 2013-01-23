@@ -42,13 +42,30 @@ class ProjectRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
+            if(isset($post->published) && isset($post->task_id)) {
+                
+                $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
+                $response = $client->call($request);     
+                $task = $client->cast('Task', $response);        
+                
+                if($post->published) {                     
+                    $task->setPublished(1);                    
+                    $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);                 
+                } else {
+                    $task->setPublished(0);                    
+                    $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);      
+                }
+            }
+            
             if (isset($post->notify)) {
                 if ($post->notify == "true") {
                     $request = APIClient::API_VERSION."/users/$user_id/tracked_projects/{$project->getId()}";
                     $userTrackProject = $client->call($request, HTTP_Request2::METHOD_PUT);
                     
                     if ($userTrackProject) {
-                        $app->flashNow("success", 
+                        $app->flashNow("Success", 
                                 "You are now tracking this Project and will receive email notifications
                                 when its status changes.");
                     } else {

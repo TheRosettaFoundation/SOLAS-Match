@@ -79,7 +79,7 @@
         Project Tasks
         <small>Overview of tasks created for this project.</small>
 
-        <a class="pull-right btn btn-success" href="{urlFor name="task-upload"}"> {*options="project_id.$project_id"*}
+        <a class="pull-right btn btn-success" href="{urlFor name="task-upload" options="project_id.{$project->getId()}"}">
             <i class="icon-upload icon-white"></i> Create Task
         </a>          
 
@@ -172,11 +172,20 @@
                         </td>
                         <td>
                             <center>
-                                {if $task->getPublished() == 1}
-                                    Yes
-                                {else}
-                                    No
-                                {/if}
+                                <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                    <input type="hidden" name="task_id" value="{$task_id}" />
+                                    {if $task->getPublished() == 1}
+                                        <input type="hidden" name="published" value="0" />
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                                            <i class="icon-check icon-black"></i> Published
+                                        </a>
+                                    {else}                                        
+                                        <input type="hidden" name="published" value="1" />
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                                            <i class="icon-remove-circle icon-white"></i> Unpublished
+                                        </a>
+                                    {/if}
+                                </form>
                             </center>
                         </td>
                         <td>
@@ -185,13 +194,13 @@
                                     <input type="hidden" name="task_id" value="{$task_id}" />
                                     {if $taskMetaData[$task_id]['tracking']}
                                         <input type="hidden" name="track" value="Ignore" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-primary">
-                                            <i class="icon-inbox icon-white"></i> Disable
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                                            <i class="icon-inbox icon-black"></i> Tracked
                                         </a>
                                     {else}
                                     <input type="hidden" name="track" value="Track" />
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                                        <i class="icon-envelope icon-black"></i> Enable
+                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                                        <i class="icon-envelope icon-white"></i> Untracked
                                     </a>
                                     {/if}
                                 </form>

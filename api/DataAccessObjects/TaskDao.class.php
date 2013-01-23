@@ -178,6 +178,8 @@ class TaskDao {
             //Only calc scores for tasks with MetaData
             $this->calculateTaskScore($task->getId());
         }
+        
+        return $task;
     }
 
     /*
@@ -234,6 +236,7 @@ class TaskDao {
                                                 .",".PDOWrapper::cleanseNull($task->getTaskStatus())
                                                 .",".PDOWrapper::cleanseNull($task->getPublished()));
         $this->updateTags($task);
+        $task = ModelFactory::buildModel('Task', $result);
     }
     
     public function delete($TaskID)

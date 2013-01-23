@@ -187,7 +187,7 @@ class PDOWrapper {
      */
     public static function cleanseNull($str)
     {
-        return (!$str) ? 'NULL' : PDOWrapper::cleanse($str);
+        return (is_null($str)) ? 'NULL' : PDOWrapper::cleanse($str);
     }
     
     public static function cleanseNullOrWrapStr($str)
