@@ -137,12 +137,12 @@ class Middleware
             $user_id = UserSession::getCurrentUserID();
             $project_id = $params['project_id'];   
             
-            $request = APIClient::API_VERSION."/v0/users/$user_id/orgs";
+            $request = APIClient::API_VERSION."/users/$user_id/orgs";
             $response = $client->call($request, HTTP_Request2::METHOD_GET);   
             $userOrgs = array();
             
             foreach($response as $userOrg) {
-                $userOrgs[] = $client->cast('Org', $userOrg);
+                $userOrgs[] = $client->cast('Organisation', $userOrg);
             }        
             
             $request = APIClient::API_VERSION."/projects/$project_id";
