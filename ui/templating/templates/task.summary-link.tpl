@@ -18,12 +18,23 @@
         <p>
             Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
         </p>
-    
-        {if $task->getTaskStatus()}
-            <p><span class="label label-info">{$task->getTaskStatus()}</span></p>
+        
+        {if $task->getTaskType()}
+            <p>
+                <b>Task Type:</b>
+                <span class="label label-info">                    
+                    {if $task->getTaskType() == TaskTypeEnum::CHUNKING}
+                        Chunking
+                    {elseif $task->getTaskType() == TaskTypeEnum::TRANSLATION}
+                        Translation
+                    {elseif $task->getTaskType() == TaskTypeEnum::PROOFREADING}
+                        Proofreading
+                    {elseif $task->getTaskType() == TaskTypeEnum::POSTEDITING}
+                        Postediting
+                    {/if}
+                </span>
+            </p>
         {/if}
-    
-	
 	<p class="task_details">
 		Added {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago
 		&middot; By 
