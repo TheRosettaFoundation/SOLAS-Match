@@ -129,9 +129,38 @@ class Middleware
     } 
     
     public static function authUserForOrgProject($request, $response, $route) 
-    { 
-        //todo 
-        return true;
+    {                        
+        $params = $route->getParams();
+        
+        if ($params != null) {
+            $client = new APIClient();
+            $user_id = UserSession::getCurrentUserID();
+            $project_id = $params['project_id'];   
+            
+            $request = APIClient::API_VERSION."/v0/users/$user_id/orgs";
+            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
+            $userOrgs = array();
+            
+            foreach($response as $userOrg) {
+                $userOrgs[] = $client->cast('Org', $userOrg);
+            }        
+            
+            $request = APIClient::API_VERSION."/projects/$project_id";
+            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
+            $project = $client->cast('Project', $response); 
+            
+            $project_orgid = $project->getOrganisationId();
+            
+            foreach($userOrgs as $org)
+            {                
+                if($org->getId() == $project_orgid) {
+                    return true;
+                }
+            }
+        }
+        $app = Slim::getInstance();
+        $app->flash('error', "You are not authorised to download this task");
+        $app->redirect($app->urlFor('home'));
     }    
 
     public static function authUserForTaskDownload($request, $response, $route)
