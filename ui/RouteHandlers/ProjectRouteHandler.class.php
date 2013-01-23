@@ -10,6 +10,7 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();     
         
+        // todo authUserForOrgProject in middleware
         $app->get('/project/view/:project_id/', array($middleware, 'authUserForOrgProject'),
         array($this, 'projectView'))->via("POST")->name('project-view');
         
@@ -21,6 +22,9 @@ class ProjectRouteHandler
         
         $app->get('/project/id/:project_id/uploaded/', array($middleware, 'authUserForOrgProject'),
         array($this, 'projectUploaded'))->name('project-uploaded');
+        
+        $app->get('/project/id/:project_id/mark-archived/', array($middleware, 'authUserForOrgProject'),
+        array($this, 'archiveProject'))->name('archive-project');
     }
   
     public function projectView($project_id)
@@ -594,4 +598,31 @@ class ProjectRouteHandler
         
         $app->render('project.uploaded.tpl');
     }    
+    
+    public function archiveProject($project_id)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+
+        $request = APIClient::API_VERSION."/projects/$project_id";
+        $response = $client->call($request);
+        $project = $client->cast('Project', $response);
+        
+        if (!is_object($project)) {
+            header('HTTP/1.0 404 Not Found');
+            die;
+        }   
+        $user_id = UserSession::getCurrentUserID();
+        
+        if (is_null($user_id)) {
+            $app->flash('error', 'Login required to access page');
+            $app->redirect($app->urlFor('login'));
+        }   
+        
+        $request = APIClient::API_VERSION."/projects/archiveProject/$project_id/user/$user_id";
+        $response = $client->call($request, HTTP_Request2::METHOD_PUT);        
+        
+        $app->redirect($ref = $app->request()->getReferrer());
+    }    
+    
 }

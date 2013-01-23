@@ -31,7 +31,7 @@
                     </a>
                 </th>
                 <th>
-                    <center>Deadline</center>
+                    <center>Deadline <font color='red'>*</font></center>
                 </th>
                 <th>
                     <center>Status</center>
@@ -40,7 +40,7 @@
                     <center>Word Count</center>
                 </th>
                 <th>
-                    <center>Created</center>
+                    <center>Created <font color='red'>*</font></center>
                 </th>
                 <th>
                     <center>
@@ -57,8 +57,8 @@
             </tr>
         </thead>
         <tbody>
-        {*
-        {assign var="projectsData" value=$templateData[$project_id]}
+            
+        {assign var="projectsData" value=$templateData[$org_id]}
         {if !is_null($projectsData)}
             {foreach from=$projectsData item=data}
                 <tr>
@@ -66,59 +66,34 @@
                 {assign var="project_id" value=$projectObject->getId()}
                     <td>
                         <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$projectObject->getTitle()}</a>
+                    </td> 
+                    <td>
+                        <center>{$data['project']->getDeadline()}</center>
                     </td>
-                    {if $data['deadline']}
-                        <td>
-                            <center>2011/12/12 - 24:00</center>
-                        </td>
-                    {elseif $data['translated']}
-                        <td>
-                            <center>
-                            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" class="btn btn-small">
-                                <i class="icon-download icon-black"></i><font color="Green"> Download&nbsp;updated&nbsp;file</font>
-                            </a>
-                            </center>
-                        </td>
-                    {elseif $data['taskClaimed']}
-                        <td>
-                            <center>
-                            <p><font color=#153E7E>Pending Translation</font></p>
-                            </center>
-                        </td>
-                    {else}
-                        <td>
-                            <center>
-                            <p><font color="Red">Task not Claimed</font></p>
-                            </center>
-                        </td>
-                    {/if}
+                    <td><!-- Project Status - to be implemented -->
+                        <center>
+                            <b>0%</b>
+                        </center>
+                    </td>
+                    <td>
+                        <center>                           
+                            {$data['project']->getWordCount()}
+                        </center>                    
+                    </td>
                     <td>
                         <center>
-                        <form method="post" action="{urlFor name="org-dashboard"}">
-                            <input type="hidden" name="task_id" value="{$task_id}" />
-                            {if $data['userSubscribedToTask']}
-                                <input type="hidden" name="track" value="Ignore" />
-                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-primary">
-                                    <i class="icon-inbox icon-white"></i> Disable
-                                </a>
-                            {else}
-                                <input type="hidden" name="track" value="Track" />
-                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                                    <i class="icon-envelope icon-black"></i> Enable
-                                </a>
-                            {/if}
-                        </form>
+                            {$data['project']->getCreatedTime()}
                         </center>
                     </td>
                     <td>
                         <center>
-                        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btn btn-small">
+                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class="btn btn-small">
                             <i class="icon-wrench icon-black"></i> Edit Project
                         </a>
                         </center>
                     </td>
                     <td>
-                        <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-inverse">
+                        <a href="{urlFor name="archive-project" options="project_id.$project_id"}" class="btn btn-inverse">
                             <i class="icon-fire icon-white"></i> Archive Project
                         </a>
                     </td>
@@ -129,10 +104,13 @@
                 <p>This organisation has no projects listed.</p>
             </td>
         {/if}
-        *}
+   
         </tbody>
     {/foreach}
-    </table>
+    </table> 
+    <div class="i" style="margin-top: 40px">
+        <small><b>Note:</b> <font color='red'>*</font> denotes <b>Deadline</b> and <b>Created</b> formats are as follows: <b>YYYY-MM-DD HH:MM:SS (24-Hour)</b>.</small>
+    </div>
 {else}
     <div class="alert alert-warning">
     <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new task for that content.
