@@ -46,7 +46,9 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNull($project->getOrganisationId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getReference())
                 .",".PDOWrapper::cleanseNull($project->getWordCount())
-                .",".PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()));
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime())
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceCountryCode())
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceLanguageCode()));
         $project->setId($result[0]['id']);     
         return $project;
     }
@@ -54,43 +56,53 @@ class ProjectDao
     public function getProject($params)
     {
         $args = "";
-        if(isset($params['id'])) {
+        if (isset($params['id'])) {
             $args .= PDOWrapper::cleanseNull($params['id']);
         } else {
             $args .= "null";
         }
-        if(isset($params['title'])) {
+        if (isset($params['title'])) {
             $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['title']);
         } else {
             $args .= ", null";
         }
-        if(isset($params['description'])) {
+        if (isset($params['description'])) {
             $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['description']);
         } else {
             $args .= ", null";
         }
-        if(isset($params['deadline'])) {
+        if (isset($params['deadline'])) {
             $args .= ", ".PDOWrapper::cleanseNull($params['deadline']);
         } else {
             $args .= ", null";
         }
-        if(isset($params['organisation_id'])) {
+        if (isset($params['organisation_id'])) {
             $args .= ", ".PDOWrapper::cleanseNull($params['organisation_id']);
         } else {
             $args .= ", null";
         }
-        if(isset($params['reference'])) {
+        if (isset($params['reference'])) {
             $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['reference']);
         } else {
             $args .= ", null";
         }
-        if(isset($params['word-count'])) {
+        if (isset($params['word-count'])) {
             $args .= ", ".PDOWrapper::cleanseNull($params['word-count']);
         } else {
             $args .= ", null";
         }
-        if(isset($params['created'])) {
+        if (isset($params['created'])) {
             $args .= ", ".PDOWrapper::cleanseNull($params['created']);
+        } else {
+            $args .= ", null";
+        }
+        if (isset($params['language_id'])) {
+            $args .= ", ".PDOWrapper::cleanseNull($params['language_id']);
+        } else {
+            $args .= ", null";
+        }
+        if (isset($params['country_id'])) {
+            $args .= ", ".PDOWrapper::cleanseNull($params['country_id']);
         } else {
             $args .= ", null";
         }

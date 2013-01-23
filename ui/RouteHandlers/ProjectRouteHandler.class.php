@@ -37,7 +37,6 @@ class ProjectRouteHandler
         $response = $client->call($request);     
         $project = $client->cast('Project', $response);        
         $app->view()->setData('project', $project);
-        
          
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -294,35 +293,31 @@ class ProjectRouteHandler
         $deadline_err   = null;
         $word_count_err = null;
         $targetLanguage_err = null;
-        $project            = null;
-        $projectModel       = null;
+        $project       = new Project();
 
         if ($app->request()->isPost()) {            
             $post = (object) $app->request()->post();
             
-            $project = null;
-            $projectModel = new Project();             
-            
             if(($post->title != '')) {
-                $projectModel->setTitle($post->title);
+                $project->setTitle($post->title);
             } else {
                 $title_err = "Project <b>Title</b> must be set.";
             }            
             
             if($post->deadline != '') {
-                $projectModel->setDeadline($post->deadline);
+                $project->setDeadline($post->deadline);
             } else {
                 $deadline_err = "Project <b>Deadline</b> must be set.";
             }
             
             if(($post->description != '')) {
-                $projectModel->setDescription($post->description);
+                $project->setDescription($post->description);
             }
             if(($post->reference != '')) {
-                $projectModel->setReference($post->reference);
+                $project->setReference($post->reference);
             }
             if(($post->word_count != '')) {
-                $projectModel->setWordCount($post->word_count);
+                $project->setWordCount($post->word_count);
             }
             
             $tags = $post->tags;
@@ -333,7 +328,7 @@ class ProjectRouteHandler
             $tag_list = TemplateHelper::separateTags($tags);
             if($tag_list) {
                 foreach ($tag_list as $tag) {
-                    $projectModel->addTags($tag);
+                    $project->addTag($tag);
                 }
             } 
             
@@ -347,15 +342,15 @@ class ProjectRouteHandler
             
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err)) { 
                 $request = APIClient::API_VERSION."/projects";
-                $projectModel->setOrganisationId($org_id);
-                if($response = $client->call($request, HTTP_Request2::METHOD_POST, $projectModel)) {
+                $project->setOrganisationId($org_id);
+                if($response = $client->call($request, HTTP_Request2::METHOD_POST, $project)) {
                     $project = $client->cast('Project', $response);
                     
                     $taskModel = new Task();
-                    $taskModel->setTitle($projectModel->getTitle());
-                    $taskModel->setSourceLanguageCode($post->sourceLanguage);
-                    $taskModel->setSourceCountryCode($post->sourceCountry);
-                    $taskModel->setProjectId($project->getId());            
+                    $taskModel->setTitle($project->getTitle());
+                    $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
+                    $taskModel->setSourceCountryCode($project->getSourceCountryCode());
+                    $taskModel->setProjectId($project->getId());
 
 
                     for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
@@ -406,51 +401,12 @@ class ProjectRouteHandler
                     'title_err'             => $title_err,
                     'deadline_err'          => $deadline_err,                   
                     'targetLanguage_err'    => $targetLanguage_err,
-                    'projectModel'          => $projectModel
+                    'project'               => $project
                 ));               
             }
         }
-            
-            
-            /*             
-            $upload_error = false;
-            try {
-                TemplateHelper::validateFileHasBeenSuccessfullyUploaded($field_name);
-            } catch (Exception $e) {
-                $upload_error = true;
-                $error_message = $e->getMessage();
-            }
-            
-            if (!$upload_error) {
-                
-                $projectData = array();
-                $taskData['organisation_id'] = $org_id;
-                $taskData['title'] = $_FILES[$field_name]['name'];
-                $task = ModelFactory::buildModel("Task", $taskData);
-                
-                $request = APIClient::API_VERSION."/tasks";
-                $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
-                
-                $task = $client->cast('Task', $response);
 
-                try {                    
-                    $filedata =file_get_contents($_FILES[$field_name]['tmp_name']);                    
-                    $error_message=$client->call(APIClient::API_VERSION."/tasks/{$task->getId()}/file/".
-                            urlencode($_FILES[$field_name]['name'])."/$user_id",
-                            HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
-                } catch (Exception  $e) {
-                    $upload_error = true;
-                    $error_message = 'File error: ' . $e->getMessage();
-                }
-            }
-            
-            if (!$upload_error) {
-                $app->redirect($app->urlFor('task-describe', array('task_id' => $task->getId())));
-            }
-        } 
-        */
-
-         $extra_scripts = "
+        $extra_scripts = "
             <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
             <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
             <script type=\"text/javascript\">
