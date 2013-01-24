@@ -106,6 +106,19 @@
                 <input type="checkbox" name="published" checked="true" />
             </p>
 
+            <p>
+                <h2>Task Prerequisites</h2>
+                <p id="feedback">
+                    <input type="hidden" name="selectedList" id="selectedList" value="" />
+                    <span>You've selected:</span> <span id="select-result">none</span>.
+                </p>
+                <ol id="selectable">
+                    {foreach $projectTasks as $projectTask}
+                        <li class="ui-widget-content">{$projectTask->getTitle()}</li>
+                    {/foreach}
+                </ol>
+            </p>
+
             <button type="submit" value="Submit" name="submit" class="btn btn-primary">
                 <i class="icon-upload icon-white"></i> Submit
             </button>
