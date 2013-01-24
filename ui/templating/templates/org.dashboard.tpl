@@ -88,7 +88,7 @@
                 </tr>
             {/foreach}
         {else}
-            <td colspan="5">
+            <td colspan="7" style="text-align: left">
                 <p>This organisation has no projects listed.</p>
             </td>
         {/if}

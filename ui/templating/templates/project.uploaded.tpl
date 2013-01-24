@@ -12,7 +12,7 @@
         It is now listed on your organisations <a href="{urlFor name="org-dashboard" options="org_id.$org_id"}">dashboard</a>.
     </p>
     <p>
-        You can view the project details and it's associated tasks on the <a href="{urlFor name="project-view" options="project_id.$project_id"}">project view.
+        You can view the project details and it's associated tasks on the <a href="{urlFor name="project-view" options="project_id.$project_id"}">project view.</a>
     <p>
         
 </div>

@@ -606,7 +606,8 @@ class ProjectRouteHandler
         $org_id = $project->getOrganisationId();
 
         $app->view()->appendData(array(
-                'org_id' => $org_id
+                'org_id' => $org_id,
+                'project_id' => $project_id
         ));     
         
         $app->render('project.uploaded.tpl');

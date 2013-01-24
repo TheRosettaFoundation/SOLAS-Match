@@ -12,6 +12,87 @@
         <i class="icon-wrench icon-white"></i> Edit Details
     </a>
 </h1>
+        
+        
+<table class="table table-striped">
+    <thead>            
+        <th style="text-align: left"><b>Organisation</b></th>
+        <th><b>Project</b></th>
+        <th><b>Task Deadline</b></th>
+        <th><b>Source Language</b></th>
+        <th><b>Target Language</b></th>
+        <th><b>Word Count</b></th>
+        <th><b>Created</b></center></th>            
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">
+                {if isset($task)}
+                    {assign var="org_id" value=$task->getId()}
+                    <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
+                {/if}
+            </td>
+            <td>
+                {if isset($project)}
+                    {assign var="projectId" value=$project->getId()}
+                    <a href="{urlFor name="project-view" options="project_id.$projectId"}">
+                        {$project->getTitle()}
+                    </a>
+                {/if}
+            </td>
+            <td>
+                {date("D dS, M Y", strtotime($task->getDeadline()))}
+            </td>
+            <td>
+                {TemplateHelper::getTaskSourceLanguage($task)}
+            </td>
+            <td>
+                {TemplateHelper::getTaskTargetLanguage($task)}
+            </td>
+                
+            <td>
+                {$task->getWordCount()}                
+            </td>
+            <td>
+                {date("D dS, M Y", strtotime($task->getCreatedTime()))}
+            </td>  
+        </tr>  
+    </tbody>
+</table>        
+      
+<div class="well">
+    <table width="100%">
+        <thead>
+        <th width="48%" align="left">Task Comment:<hr/></th>
+        <th></th>
+        <th width="48%" align="left">Project Description:<hr/></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <i>
+                    {if $task->getComment() != ''}
+                        {$task->getComment()}
+                    {else}
+                       No comment has been added.
+                    {/if}
+                    </i>
+                </td>
+                <td></td>
+                <td>
+                    <i>
+                    {if $project->getDescription() != ''}
+                        {$project->getDescription()}
+                    {else}
+                        No description has been added.
+                    {/if}
+                    </i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+        
 
 {if isset($flash['success'])}
     <p class="alert alert-success">
@@ -25,60 +106,6 @@
     </p>
 {/if}
 
-{if isset($org)}
-    <h3>Organisation</h3>
-    <p>
-        {assign var="org_id" value=$org->getId()}
-        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-            {if $org->getName() != ''}
-                {$org->getName()}
-            {else}
-                Organisation Public Profile
-            {/if}
-        </a>
-    </p>
-{/if}
-
-{if isset($project)}
-    <h3>Project</h3>
-    <p>
-        {assign var="projectId" value=$project->getId()}
-        <a href="{urlFor name="project-view" options="project_id.$projectId"}">
-            {$project->getTitle()}
-        </a>
-    </p>
-{/if}
-
-{if $task->getComment() != ''}
-    <h3>Comment</h3>
-    <p>{$task->getComment()}</p>
-{/if}
-
-{assign var="task_tags" value=$task->getTags()}
-{if isset($task_tags)}
-    <h3>Task Tags</h3>
-    <ul class="nav nav-list unstyled">
-        {foreach $task_tags as $tag}
-            <li>
-                <div class="tag">
-                    <a class="label" href="{urlFor name="tag-details" options="label.$tag"}">{$tag}</a>
-                </div>
-            </li>
-        {/foreach}
-    </ul>
-{/if}
-
-<h3>Source Language</h3>
-<p>{TemplateHelper::getTaskSourceLanguage($task)}</p>
-
-<h3>Target Language</h3>
-<p>{TemplateHelper::getTaskTargetLanguage($task)}</p>
-
-<h3>Word Count</h3>
-<p>{$task->getWordCount()}</p>
-
-<h3>Deadline</h3>
-<p>{date("D dS, M Y", strtotime($task->getDeadline()))}</p>
 
 {if isset($user)}
     <hr />

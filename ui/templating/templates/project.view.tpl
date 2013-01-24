@@ -27,8 +27,8 @@
 <table class="table table-striped">
     <thead>            
         <th style="text-align: left"><b>Organisation</b></th>
-        <th><b>Deadline</b></th>
-        <th><b>Source Language (Country)</b></th>
+        <th><b>Project Deadline</b></th>
+        <th><b>Source Language</b></th>
         <th><b>Word Count</b></th>
         <th><b>Reference</b></th>
         <th><b>Track</b></th>
@@ -57,21 +57,21 @@
                     <a target="_blank" href="{$project->getReference()}">{$project->getReference()}</a>
                 {/if}            
             </td>
-            <td align="center">
+            <td>
                 <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if isset($registered) && $registered == true}
                         <p>
                             <input type="hidden" name="notify" value="false" />
-                            <input type="submit" class="btn btn-small" value="    Disable" />
+                            <input type="submit" class="btn btn-small" value="    Tracked" />
 
-                            <i class="icon-inbox icon-black" style="position:relative; right:63px; top:2px;"></i>
+                            <i class="icon-inbox icon-black" style="position:relative; right:70px; top:2px;"></i>
                         </p>
                     {else}
                         <p>
                             <input type="hidden" name="notify" value="true" />
-                            <input type="submit" class="btn btn-small" value="    Enable" />
+                            <input type="submit" class="btn btn-small btn-inverse" value="    Untracked" />
 
-                            <i class="icon-envelope icon-black" style="position:relative; right:63px; top:2px;"></i>
+                            <i class="icon-envelope icon-white" style="position:relative; right:81px; top:2px;"></i>
                         </p>
                     {/if}
                 </form> 
@@ -85,6 +85,28 @@
         </tr> 
     </tbody>
 </table>
+            
+            
+<div class="well">
+    <table width="100%">
+        <thead>
+        <th align="left">Project Description:<hr/></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <i>
+                    {if $project->getDescription() != ''}
+                        {$project->getDescription()}
+                    {else}
+                        No description has been added.
+                    {/if}  
+                    </i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>            
                 
 <p style="margin-bottom:40px;"></p>
 
@@ -118,11 +140,8 @@
                         Type
                     </th> 
                     <th>
-                        Deadline
-                    </th>
-                    <th>
-                        Comment
-                    </th>                    
+                        Task Deadline
+                    </th>                  
                     <th>
                         Word Count
                     </th>
@@ -167,9 +186,6 @@
                         </td>
                         <td>
                             {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
-                        </td>
-                        <td>
-                            {$task->getComment()}
                         </td>
                         <td>
                             {$task->getWordCount()}
