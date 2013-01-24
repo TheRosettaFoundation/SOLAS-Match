@@ -54,7 +54,7 @@
     <p>{$task->getComment()}</p>
 {/if}
 
-{assign var="task_tags" value=$task->getTags()}
+{assign var="task_tags" value=$project->getTagList()}
 {if isset($task_tags)}
     <h3>Task Tags</h3>
     <ul class="nav nav-list unstyled">
