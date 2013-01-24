@@ -1104,12 +1104,26 @@ class TaskRouteHandler
         $titleError = null;
         $wordCountError = null;
         $deadlineError = null;
+        $taskPreReqs = array();
         $client = new APIClient();
         $task = new Task();
 
         $request = APIClient::API_VERSION."/projects/$project_id";
         $response = $client->call($request);
         $project = $client->cast("Project", $response);
+
+        $projectTasks = array();
+        $request = APIClient::API_VERSION."/projects/$project_id/tasks";
+        $response = $client->call($request);
+        if ($response != null) {
+            foreach ($response as $row) {
+                $projectTask = $client->cast("Task", $row);
+
+                if(is_object($projectTask)) {
+                    $projectTasks[] = $projectTask;
+                }
+            }
+        }
 
         $task->setProjectId($project_id);
 
@@ -1178,7 +1192,11 @@ class TaskRouteHandler
 
             if (isset($post->published)) {
                 $task->setPublished("1");
-            } 
+            }
+
+            if (isset($post->selectedList)) {
+                //Add to prereqs
+            }
             
             if(is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 $request = APIClient::API_VERSION."/tasks";
@@ -1201,6 +1219,23 @@ class TaskRouteHandler
         $taskTypes[TaskTypeEnum::POSTEDITING] = "Post Editing";
 
         $extra_scripts = "
+        <link rel=\"stylesheet\" href=\"".$app->urlFor("home")."resources/css/jquery-ui.css\" />
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/selectable.css\" />
+        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."ui/js/jquery-ui.js\"></script>
+        <script>
+        $(function() {
+            $( \"#selectable\" ).selectable({
+                stop: function() {
+                    var result = $( \"#select-result\" ).empty();
+                    $( \".ui-selected\", this ).each(function() {
+                        var index = $( \"#selectable li\" ).index( this );
+                        result.append( \" #\" + ( index + 1 ) );
+                    });
+                }
+            });
+        });
+        </script>
+
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
         <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
         <script type=\"text/javascript\">
@@ -1213,6 +1248,8 @@ class TaskRouteHandler
         $app->view()->appendData(array(
                 'project'       => $project,
                 'task'          => $task,
+                'projectTasks'  => $projectTasks,
+                'taskPreReqs'   => $taskPreReqs,
                 'deadlineDate'  => $deadlineDate,
                 'deadlineTime'  => $deadlineTime,
                 'languages'     => $languages,
