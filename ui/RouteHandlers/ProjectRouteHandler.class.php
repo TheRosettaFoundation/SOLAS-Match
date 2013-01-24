@@ -10,7 +10,6 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();     
         
-        // todo authUserForOrgProject in middleware
         $app->get('/project/view/:project_id/', array($middleware, 'authUserForOrgProject'),
         array($this, 'projectView'))->via("POST")->name('project-view');
         

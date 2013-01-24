@@ -80,7 +80,6 @@ class Projects
                 $data = $dao->getProjectTasks($id);
                 Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getProjectTasks');
-                
 
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/archiveProject/:projectId/user/:userId/',
                                                         function ($projectId, $userId, $format = ".json") {

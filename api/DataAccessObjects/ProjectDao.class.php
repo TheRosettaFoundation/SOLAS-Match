@@ -1,5 +1,7 @@
 <?php
 
+include_once 'DataAccessObjects/ProjectTags.class.php';
+include_once 'DataAccessObjects/TagsDao.class.php';
 include_once '../Common/lib/PDOWrapper.class.php';
 include_once '../Common/lib/ModelFactory.class.php';
 include_once '../Common/models/Project.php';
@@ -49,8 +51,53 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceCountryCode())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceLanguageCode()));
-        $project->setId($result[0]['id']);     
+        $project->setId($result[0]['id']);
+        $this->updateTags($project);
         return $project;
+    }
+
+    private function updateTags($project)
+    {
+        ProjectTags::removeAllProjectTags($project->getId());
+        $tags = $project->getTagList();
+        if (count($tags) > 0) {
+            if ($tag_ids = $this->tagsToIds($tags)) {
+                ProjectTags::addProjectTags($project->getId(), $tag_ids);
+                return 1;
+            }
+            return 0;
+        }
+        return 0;
+    }
+    
+    private function tagsToIds($tags)
+    {
+        $tag_ids = array();
+        foreach ($tags as $tag) {
+            if ($tag_id = $this->getTagId($tag)) {
+                $tag_ids[] = $tag_id;
+            } else {
+                $tag_ids[] = $this->createTag($tag);
+            }
+        }
+        
+        if (count($tag_ids) > 0) {
+            return $tag_ids;
+        } else {
+            return null;
+        }
+    }
+    
+    public function getTagId($tag)
+    {
+        $tDAO = new TagsDao();
+        return $tDAO->tagIDFromLabel($tag);
+    }
+    
+    private function createTag($tag)
+    {
+        $tDAO = new TagsDao();
+        return $tDAO->create($tag);
     }
     
     public function getProject($params)
@@ -113,6 +160,13 @@ class ProjectDao
             foreach($result as $row) {
                 $project = ModelFactory::buildModel("Project", $row);
                 if(is_object($project)) {
+                    $tags = $this->getProjectTags($project->getId());
+                    if($tags) {
+                        foreach ($tags as $tag) {
+                            $project->addTag($tag->getLabel());
+                        }
+                    }
+
                     $projects[] = $project;
                 }
             }
@@ -190,6 +244,7 @@ class ProjectDao
         if($result) {
             foreach($result as $row) {
                 $project = ModelFactory::buildModel("ArchivedProject", $row);
+                
                 if(is_object($project)) {
                     $projects[] = $project;
                 }
@@ -220,6 +275,11 @@ class ProjectDao
         }
 
         return $tasks;
+    }
+
+    private function getProjectTags($projectId)
+    {
+        return ProjectTags::getTags($projectId);
     }
 }
 
