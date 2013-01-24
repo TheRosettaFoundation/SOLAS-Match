@@ -28,8 +28,6 @@
                     </div>
                 {/if}
             </label>
-            
-            <p class="desc">Title</p>
             <textarea wrap="soft" cols="1" rows="3" name="title">{$task->getTitle()}</textarea>				
             <p style="margin-bottom:30px;"></p>
 
@@ -49,18 +47,34 @@
                 <h2>Target Language: <font color='red'>*</font></h2><br>
                 <select name="targetLanguage" id="targetLanguage">
                     {foreach $languages as $language}
-                        <option value="{$language->getCode()}">{$language->getName()}</option>
+                        {if $task->getTargetLanguageCode() == $language->getCode()}
+                            <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
+                        {else}
+                            <option value="{$language->getCode()}">{$language->getName()}</option>
+                        {/if}
                     {/foreach}
                 </select>
                 {if isset($countries)}
                     <select name="targetCountry" id="targetCountry">
                         {foreach $countries as $country}
-                            <option value="{$country->getCode()}">{$country->getName()}</option>
+                            {if $task->getTargetCountryCode() == $country->getCode()}
+                                <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
+                            {else}
+                                <option value="{$country->getCode()}">{$country->getName()}</option>
+                            {/if}
                         {/foreach}
                     </select> 
                 {/if}
             </p>    
             <p style="margin-bottom:30px;"></p>
+
+            <h2>Task Type</h2>
+            <select name="taskType">
+                {assign var="taskTypeCount" value=count($taskTypes)}
+                {for $id=1 to $taskTypeCount}
+                    <option value="{$id}">{$taskTypes[$id]}</option>
+                {/for}
+            </select>
 
             <p>
                 <label for="word_count">
@@ -72,11 +86,11 @@
                     </div>
                 {/if}
                 </label>  
-                <input type="text" name="word_count" id="word_count" maxlength="6">
+                <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}">
             </p>
             <p style="margin-bottom:30px;"></p>
 
-            <label for="deadline">Deadline</label>
+            <h2>Deadline</h2>
             {if $deadlineError != ''}
                 <div class="alert alert-error">
                     {$deadlineError}
@@ -87,8 +101,10 @@
                 Time: <input name="deadline_time" type="text" value="{$deadlineTime}" />
             </p>
 
-            <label for="published">Publish Task</label>
-            <input type="checkbox" name="published" />
+            <p>
+                <h2>Publish Task</h2>
+                <input type="checkbox" name="published" checked="true" />
+            </p>
 
             <button type="submit" value="Submit" name="submit" class="btn btn-primary">
                 <i class="icon-upload icon-white"></i> Submit

@@ -1175,8 +1175,10 @@ class TaskRouteHandler
 
     public function taskCreate($project_id)
     {
+        $app = Slim::getInstance();
         $titleError = null;
         $wordCountError = null;
+        $deadlineError = null;
         $client = new APIClient();
         $task = new Task();
 
@@ -1184,9 +1186,14 @@ class TaskRouteHandler
         $response = $client->call($request);
         $project = $client->cast("Project", $response);
 
+        $task->setProjectId($project_id);
+
         //task inherits souce details from project
         $task->setSourceLanguageCode($project->getSourceLanguageCode());
         $task->setSourceCountryCode($project->getSourceCountryCode());
+
+        //default status, change when prereqs are working
+        $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
 
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -1207,6 +1214,10 @@ class TaskRouteHandler
 
             if ($post->targetLanguage != '') {
                 $task->setTargetLanguageCode($post->targetLanguage);
+            }
+
+            if ($post->taskType != '') {
+                $task->setTaskType($post->taskType);
             }
 
             if (ctype_digit($post->word_count)) {
@@ -1240,12 +1251,14 @@ class TaskRouteHandler
                 $task->setDeadline(date("Y-m-d H:i:s", $deadline));
             }
 
-            echo "<p>".$post->published."</p>";
-            //if ($post->published ) 
+            if (isset($post->published)) {
+                $task->setPublished("1");
+            } 
             
-            if(is_null($titleError) && is_null($wordCountError)) {
+            if(is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 $request = APIClient::API_VERSION."/tasks";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
+                $task = $client->cast("Task", $response);
                 $app->redirect($app->urlFor("task-view", array("task_id" => $task->getId())));
             }
         }
@@ -1255,6 +1268,12 @@ class TaskRouteHandler
 
         $languages = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
+
+        $taskTypes = array();
+        $taskTypes[TaskTypeEnum::CHUNKING] = "Chunking";
+        $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
+        $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
+        $taskTypes[TaskTypeEnum::POSTEDITING] = "Post Editing";
 
         $extra_scripts = "
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
@@ -1273,8 +1292,11 @@ class TaskRouteHandler
                 'deadlineTime'  => $deadlineTime,
                 'languages'     => $languages,
                 'countries'     => $countries,
+                'taskTypes'     => $taskTypes,
+                'extra_scripts' => $extra_scripts,
                 'titleError'    => $titleError,
-                'wordCountError'=> $wordCountError
+                'wordCountError'=> $wordCountError,
+                'deadlineError' => $deadlineError
         ));
 
         $app->render('task.create.tpl');
