@@ -23,59 +23,69 @@
 {/if}
 
 
-{if isset($org)}
-    <h3>Organisation</h3>
-    <p>
-        <a href="{$org->getHomePage()}">{$org->getName()}</a>
-    </p>
-{/if}
 
-<h3>Deadline</h3>
-<p>
-    {$project->getDeadline()}
-</p>
+<table class="table table-striped">
+    <thead>            
+        <th style="text-align: left"><b>Organisation</b></th>
+        <th><b>Deadline</b></th>
+        <th><b>Source Language (Country)</b></th>
+        <th><b>Word Count</b></th>
+        <th><b>Reference</b></th>
+        <th><b>Track</b></th>
+        <th><b>Created</b></center></th>            
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">
+                {if isset($org)}
+                    {assign var="org_id" value=$org->getId()}
+                    <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
+                {/if}
+            </td>
+            <td>
+                {$project->getDeadline()}
+            </td>
+            <td>
+                {TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}
+                ({TemplateHelper::countryNameFromCode($project->getSourceCountryCode())})
+            </td>
+            <td>
+                {$project->getWordCount()}
+            </td>
+            <td>
+                {if $project->getReference() != ''}
+                    <a target="_blank" href="{$project->getReference()}">{$project->getReference()}</a>
+                {/if}            
+            </td>
+            <td align="center">
+                <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                    {if isset($registered) && $registered == true}
+                        <p>
+                            <input type="hidden" name="notify" value="false" />
+                            <input type="submit" class="btn btn-small" value="    Disable" />
 
-<h3>Source Language</h3>
-<p>
-    {TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}
-    ({TemplateHelper::countryNameFromCode($project->getSourceCountryCode())})
-</p>
+                            <i class="icon-inbox icon-black" style="position:relative; right:63px; top:2px;"></i>
+                        </p>
+                    {else}
+                        <p>
+                            <input type="hidden" name="notify" value="true" />
+                            <input type="submit" class="btn btn-small" value="    Enable" />
 
-{if $project->getReference() != ''}
-    <h3>Context Reference</h3>
-    <p>
-        <a target="_blank" href="{$project->getReference()}">{$project->getReference()}</a>
-    </p>
-{/if}
+                            <i class="icon-envelope icon-black" style="position:relative; right:63px; top:2px;"></i>
+                        </p>
+                    {/if}
+                </form> 
+            </td>
+            <td>
+                {$project->getCreatedTime()}
+            </td>            
 
-<h3>Word Count</h3>
-<p>
-    {$project->getWordCount()}
-</p>
-
-<h3>Created</h3>
-<p>
-    {$project->getCreatedTime()}
-</p>
-    
-    <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-        {if isset($registered) && $registered == true}
-            <p>
-                <input type="hidden" name="notify" value="false" />
-                <input type="submit" class="btn btn-small" value="    Disable" />
-
-                <i class="icon-inbox icon-black" style="position:relative; right:63px; top:2px;"></i>
-            </p>
-        {else}
-            <p>
-                <input type="hidden" name="notify" value="true" />
-                <input type="submit" class="btn btn-small" value="    Enable" />
-
-                <i class="icon-envelope icon-black" style="position:relative; right:63px; top:2px;"></i>
-            </p>
-        {/if}
-    </form> 
-
+        </tr>
+        <tr>
+        </tr> 
+    </tbody>
+</table>
+                
 <p style="margin-bottom:40px;"></p>
 
 {if isset($user)}
@@ -99,28 +109,28 @@
                 <tr>
                     <th>
                         <p style="margin-bottom:40px;"></p>
-                        <center>Title</center>
+                        Title
                     </th>
                     <th>
-                        <center>Status</center>
+                        Status
                     </th>               
                     <th>
-                        <center>Type</center>
+                        Type
                     </th> 
                     <th>
-                        <center>Deadline</center>
+                        Deadline
                     </th>
                     <th>
-                        <center>Comment</title>
+                        Comment
                     </th>                    
                     <th>
-                        <center>Word Count</title>
+                        Word Count
                     </th>
                     <th>
-                        <center>Published</title>
+                        Published
                     </th>                    
                     <th>
-                        <center>Track</center>
+                        Track
                     </th>
                 </tr>
             </thead>
@@ -129,88 +139,73 @@
                     {assign var="task_id" value=$task->getId()}
                     <tr>
                         <td>
-                            <center>
-                                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a><br/>
-                            </center>
+                            <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a><br/>
                         </td>
                         <td>
-                            <center>
-                                {assign var="status_id" value=$task->getTaskStatus()}
-                                {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
-                                    Waiting
-                                {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
-                                    Unclaimed
-                                {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                    In progress
-                                {elseif $status_id == TaskStatusEnum::COMPLETE}
-                                    Complete
-                                {/if}
-                            </center>
+                            {assign var="status_id" value=$task->getTaskStatus()}
+                            {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                                Waiting
+                            {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                Unclaimed
+                            {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                In Progress
+                            {elseif $status_id == TaskStatusEnum::COMPLETE}
+                                Complete
+                            {/if}
                         </td>
                         <td>
-                            <center>
-                                {assign var="type_id" value=$task->getTaskType()}
-                                {if $type_id == TaskTypeEnum::CHUNKING}
-                                    Chunking
-                                {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                                    Translation
-                                {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                                    Proofreading
-                                {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                                    Post-Editing
-                                {/if}
-                            </center>
+                            {assign var="type_id" value=$task->getTaskType()}
+                            {if $type_id == TaskTypeEnum::CHUNKING}
+                                Chunking
+                            {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                                Translation
+                            {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                                Proofreading
+                            {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                                Postediting
+                            {/if}
                         </td>
                         <td>
-                            <center>
-                                {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
-                            </center>
+                            {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
                         </td>
                         <td>
-                            <center>
-                                {$task->getComment()}
-                            </center>
+                            {$task->getComment()}
                         </td>
                         <td>
-                            <center>
-                                {$task->getWordCount()}
-                            </center>
+                            {$task->getWordCount()}
                         </td>
                         <td>
-                            <center>
-                                <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                                    <input type="hidden" name="task_id" value="{$task_id}" />
-                                    {if $task->getPublished() == 1}
-                                        <input type="hidden" name="published" value="0" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                                            <i class="icon-check icon-black"></i> Published
-                                        </a>
-                                    {else}                                        
-                                        <input type="hidden" name="published" value="1" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                                            <i class="icon-remove-circle icon-white"></i> Unpublished
-                                        </a>
-                                    {/if}
-                                </form>
-                            </center>
-                        </td>
-                        <td>
-                            <center>
-                                <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                                    <input type="hidden" name="task_id" value="{$task_id}" />
-                                    {if $taskMetaData[$task_id]['tracking']}
-                                        <input type="hidden" name="track" value="Ignore" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                                            <i class="icon-inbox icon-black"></i> Tracked
-                                        </a>
-                                    {else}
-                                    <input type="hidden" name="track" value="Track" />
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                                        <i class="icon-envelope icon-white"></i> Untracked
+                            <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                <input type="hidden" name="task_id" value="{$task_id}" />
+                                {if $task->getPublished() == 1}
+                                    <input type="hidden" name="published" value="0" />
+                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                                        <i class="icon-check icon-black"></i> Published
                                     </a>
-                                    {/if}
-                                </form>
-                            </center>
+                                {else}                                        
+                                    <input type="hidden" name="published" value="1" />
+                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                                        <i class="icon-remove-circle icon-white"></i> Unpublished
+                                    </a>
+                                {/if}
+                            </form>
+
+                        </td>
+                        <td>
+                            <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                <input type="hidden" name="task_id" value="{$task_id}" />
+                                {if $taskMetaData[$task_id]['tracking']}
+                                    <input type="hidden" name="track" value="Ignore" />
+                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                                        <i class="icon-inbox icon-black"></i> Tracked
+                                    </a>
+                                {else}
+                                <input type="hidden" name="track" value="Track" />
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                                    <i class="icon-envelope icon-white"></i> Untracked
+                                </a>
+                                {/if}
+                            </form>
                         </td>
                     </tr>
                 {/foreach}
@@ -220,9 +215,7 @@
         <div class="alert alert-warning">
         <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new task for that content.
         </div>
-    {/if}        
-        
-        
+    {/if}       
         
 {else}
     <p class="alert alert-info">

@@ -346,11 +346,11 @@ class UserRouteHandler
             if ($use_openid == 'y' || $use_openid == 'h') {
                 $extra_scripts = "
                     <script type=\"text/javascript\" src=\"".$app->urlFor("home").
-                        "resources/bootstrap/js/jquery-1.2.6.min.js\"></script>
+                        "ui/js/jquery-1.9.0.min.js\"></script>
                     <script type=\"text/javascript\" src=\"".$app->urlFor("home").
-                        "resources/bootstrap/js/openid-jquery.js\"></script>
+                        "ui/js/openid-jquery.js\"></script>
                     <script type=\"text/javascript\" src=\"".$app->urlFor("home").
-                        "resources/bootstrap/js/openid-en.js\"></script>
+                        "ui/js/openid-en.js\"></script>
                     <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"".
                         $app->urlFor("home")."resources/css/openid.css\" />";
                 $app->view()->appendData(array('extra_scripts' => $extra_scripts));
