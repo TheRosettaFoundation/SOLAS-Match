@@ -107,25 +107,48 @@
 {/if}
 
 {if isset($user)}
-    <hr />
+    <table width="100%" class="table table-striped">  
+        <thead>
+        <th>Task Published</th>
+        <th>Task Tracked</th>
+        </thead>
+        <tr align="center">
+            <td>
+            {assign var="project_id" value=$project->getId()}
+            <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                <input type="hidden" name="task_id" value="{$task_id}" />
+                {if $task->getPublished() == 1}
+                    <input type="hidden" name="published" value="0" />
+                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                        <i class="icon-check icon-black"></i> Published
+                    </a>
+                {else}                                        
+                    <input type="hidden" name="published" value="1" />
+                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                        <i class="icon-remove-circle icon-white"></i> Unpublished
+                    </a>
+                {/if}
+            </form>
 
-    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" class="well">
-        {if isset($registered) && $registered == true}
-            <p>
-                <input type="hidden" name="notify" value="false" />
-                <input type="submit" class="btn btn-primary" value="    Ignore Task" />
-                You are currently receiving notifications about this task.
-                <i class="icon-inbox icon-white" style="position:relative; right:430px; top:2px;"></i> 
-            </p>
-        {else}
-            <p>
-                <input type="hidden" name="notify" value="true" />
-                <input type="submit" class="btn btn-primary" value="    Track Task" />
-                You are not currently receiving notifications about this task.
-                <i class="icon-envelope icon-white" style="position:relative; right:446px; top:2px;"></i> 
-            </p>
-        {/if}
-    </form>
+        </td>
+        <td>
+            <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                <input type="hidden" name="task_id" value="{$task_id}" />
+                {if $taskMetaData[$task_id]['tracking']}
+                    <input type="hidden" name="track" value="Ignore" />
+                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                        <i class="icon-inbox icon-black"></i> Tracked
+                    </a>
+                {else}
+                <input type="hidden" name="track" value="Track" />
+                <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                    <i class="icon-envelope icon-white"></i> Untracked
+                </a>
+                {/if}
+            </form>
+        </td>
+        </tr>
+    </table>
 {else}
     <p class="alert alert-info">
         Please log in to register for notifications for this task.

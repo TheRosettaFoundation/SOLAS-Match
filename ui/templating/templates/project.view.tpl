@@ -114,7 +114,7 @@
     <hr />
     
     <h1 class="page-header">
-        Project Tasks
+        Tasks
         <small>Overview of tasks created for this project.</small>
 
         <a class="pull-right btn btn-success" href="{urlFor name="task-create" options="project_id.$project_id"}">

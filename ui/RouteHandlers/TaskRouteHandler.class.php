@@ -913,7 +913,24 @@ class TaskRouteHandler
                     $app->flashNow("error", "Unable to unregister for this notification.");
                 }   
             }   
-        }   
+        } 
+        
+        $taskMetaData = array();
+        if(is_object($task)) {
+            $metaData = array();
+            $request = APIClient::API_VERSION."/users/subscribedToTask/$user_id/$task_id";
+            $response = $client->call($request);
+            if($response == 1) {
+                $metaData['tracking'] = true;
+            } else {
+                $metaData['tracking'] = false;
+            }
+            $taskMetaData[$task_id] = $metaData;
+        }
+
+        $app->view()->appendData(array(
+                     'taskMetaData' => $taskMetaData
+        ));        
         
         $request = APIClient::API_VERSION."/users/subscribedToTask/{$user->getUserId()}/$task_id";
         $registered = $client->call($request);         
