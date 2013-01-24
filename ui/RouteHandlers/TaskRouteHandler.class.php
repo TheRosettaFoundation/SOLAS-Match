@@ -61,7 +61,7 @@ class TaskRouteHandler
         $app->get('/task/upload/:project_id', array($middleware, 'authUserForOrgProject'), 
         array($this, 'taskUpload'))->via('GET', 'POST')->name('task-upload');
 
-        $app->get('/task/create/:project_id', array($middleware, 'authUserForOrgProject'), 
+        $app->get('/task/create/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
     }
 
@@ -1176,17 +1176,105 @@ class TaskRouteHandler
     public function taskCreate($project_id)
     {
         $titleError = null;
+        $wordCountError = null;
+        $client = new APIClient();
         $task = new Task();
+
+        $request = APIClient::API_VERSION."/projects/$project_id";
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+
+        //task inherits souce details from project
+        $task->setSourceLanguageCode($project->getSourceLanguageCode());
+        $task->setSourceCountryCode($project->getSourceCountryCode());
+
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+
+            if ($post->title != '') {
+                $task->setTitle($post->title);
+            } else {
+                $titleError = "Title must not be blank";
+            }
+
+            if ($post->comment != '') {
+                $task->setComment($post->comment);
+            }
+
+            if ($post->targetCountry != '') {
+                $task->setTargetCountryCode($post->targetCountry);
+            }
+
+            if ($post->targetLanguage != '') {
+                $task->setTargetLanguageCode($post->targetLanguage);
+            }
+
+            if (ctype_digit($post->word_count)) {
+                $task->setWordCount($post->word_count);
+            } else if ($post->word_count != '') {
+                $wordCountError = "Word Count must be numeric";
+            } else {
+                $wordCountError = "Word Count cannot be blank";
+            }
+
+            $deadline = "";
+            if ($post->deadline_date != '') {
+                $deadline = strtotime($post->deadline_date);
+                
+                if($deadline) {
+                    if ($post->deadline_time != '') {
+                        if (TemplateHelper::isValidTime($post->deadline_time) == true) {
+                            $deadline = TemplateHelper::addTimeToUnixTime($deadline, $post->deadline_time);
+                        } else {
+                            $deadlineError = "Invalid time format. Please enter time in a 24-hour format like ";
+                            $deadlineError .= "this 16:30";
+                        }
+                    }
+                } else {
+                    $deadline = "";
+                    $deadlineError = "Invalid date format";
+                }
+            }
+            
+            if ($deadline != "" && $deadlineError == "") {
+                $task->setDeadline(date("Y-m-d H:i:s", $deadline));
+            }
+
+            echo "<p>".$post->published."</p>";
+            //if ($post->published ) 
+            
+            if(is_null($titleError) && is_null($wordCountError)) {
+                $request = APIClient::API_VERSION."/tasks";
+                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
+                $app->redirect($app->urlFor("task-view", array("task_id" => $task->getId())));
+            }
+        }
+
+        $deadlineDate = date("F dS, Y", strtotime($task->getDeadline()));
+        $deadlineTime = date("H:i", strtotime($task->getDeadline()));
 
         $languages = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
 
+        $extra_scripts = "
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
+        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+        <script type=\"text/javascript\">
+            window.onload = function() {
+                new datepickr(\"deadline_date\");
+            };
+        </script>
+        ";
+
         $app->view()->appendData(array(
-                'project_id'    => $project_id,
+                'project'       => $project,
                 'task'          => $task,
+                'deadlineDate'  => $deadlineDate,
+                'deadlineTime'  => $deadlineTime,
                 'languages'     => $languages,
                 'countries'     => $countries,
-                'titleError'    => $titleError
+                'titleError'    => $titleError,
+                'wordCountError'=> $wordCountError
         ));
 
         $app->render('task.create.tpl');
