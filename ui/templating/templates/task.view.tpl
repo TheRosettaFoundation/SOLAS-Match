@@ -106,7 +106,6 @@
     </p>
 {/if}
 
-
 {if isset($user)}
     <hr />
 

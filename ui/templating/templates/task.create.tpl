@@ -17,6 +17,7 @@
         </div>
     {/if}
 
+    {assign var="project_id" value=$project->getId()}
     <form method="post" action="{urlFor name="task-create" options="project_id.$project_id"}" class="well">
         <fieldset>
             <label for="content">
@@ -27,103 +28,84 @@
                     </div>
                 {/if}
             </label>
-            
-            <p class="desc">You may replace the file name with something more descriptive.</p>
             <textarea wrap="soft" cols="1" rows="3" name="title">{$task->getTitle()}</textarea>				
             <p style="margin-bottom:30px;"></p>
-            <label for="impact"><h2>Task Impact:</h2></label>
+
+            <label for="comment"><h2>Task Comment:</h2></label>
             <p>Who and what will be affected by the translation of this task</p>
-            <textarea wrap="soft" cols="1" rows="4" name="impact">{$task->getImpact()}</textarea>
-
+            <textarea wrap="soft" cols="1" rows="4" name="comment">{$task->getComment()}</textarea>
             <p style="margin-bottom:30px;"></p>
-            <label for="reference"><h2>Context Reference:</h2></label>
-            <p class="desc">Enter a URL that gives context to this task.</p>
-            {if $task->getReferencePage() != '' }
-                {assign var="url_text" value=$task->getReferencePage()}
-            {else}
-                {assign var="url_text" value="http://"}
-            {/if}
-            <textarea wrap="soft" cols="1" rows="4" name="reference">{$url_text}</textarea>
-
-            <p style="margin-bottom:30px;"></p>
-            {if isset($languages)}
-                <p>
-                    <h2>Source Language: <font color='red'>*</font></h2><br>
-                    <select name="source" id="source">
-                        {foreach $languages as $language}
-                                <option value="{$language->getCode()}">{$language->getName()}</option>
-                        {/foreach}
-                    </select>
-                    {if isset($countries)}
-                        <select name="sourceCountry" id="sourceCountry">
-                            {foreach $countries as $country}
-                                 <option value="{$country->getCode()}">{$country->getName()}</option>
-                            {/foreach}                                
-                        </select>
-                    {/if}
-                </p>
-                <p>
-                    <h2>Target Language(s): <font color='red'>*</font></h2><br>
-                    <select name="target_0" id="target_0">
-                        {foreach $languages as $language}
-                            <option value="{$language->getCode()}">{$language->getName()}</option>
-                        {/foreach}
-                    </select>
-                    {if isset($countries)}
-                        <select name="targetCountry_0" id="targetCountry">
-                            {foreach $countries as $country}
-                                <option value="{$country->getCode()}">{$country->getName()}</option>
-                            {/foreach}
-                        </select> 
-                    {/if}
-                    <div id="text0"></div>
-                    <div id="text1"></div>
-                    <div id="text2"></div>
-                    <div id="text3"></div>
-                    <div id="text4"></div>
-                    <div id="text5"></div>
-                    <div id="text6"></div>
-                    <div id="text7"></div>
-                    <div id="text8"></div>
-                    <div id="text9"></div>
-                    <div id="alertinfo" class="alert alert-info" style="display: none;">You have reached the maximum number of target translation fields allowed.</div>  
-                    <input id="addMoreTargetsBtn" type="button" onclick="addInput()" value="Add More Target Languages"/>
-                    <input id="removeBottomTargetBtn" type="button" onclick="removeInput()" value="Remove" style="visibility: hidden;"/>
-                </p>    
-                <p style="margin-bottom:30px;"></p>
-            {else}
-                <p>
-                    <label for="source">From language</label>
-                    <input type="text" name="source" id="source">
-                    <input type="text" name="sourceCountry" id="source">
-                </p>
-                <p>
-                    <label for="target">To language</label>
-                    <input type="text" name="target" id="target">
-                    <input type="text" name="targetCountry" id="source">
-                </p>
-            {/if}
 
             <p>
-                <h2>Tags:</h2>
-                <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                <input type="text" name="tags" id="tags">
+                <h2>Source Language:</h2><br>
+                <p>
+                    {TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}
+                    ({TemplateHelper::countryNameFromCode($project->getSourceCountryCode())})
+                </p>
             </p>
+            <p>
+                <h2>Target Language: <font color='red'>*</font></h2><br>
+                <select name="targetLanguage" id="targetLanguage">
+                    {foreach $languages as $language}
+                        {if $task->getTargetLanguageCode() == $language->getCode()}
+                            <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
+                        {else}
+                            <option value="{$language->getCode()}">{$language->getName()}</option>
+                        {/if}
+                    {/foreach}
+                </select>
+                {if isset($countries)}
+                    <select name="targetCountry" id="targetCountry">
+                        {foreach $countries as $country}
+                            {if $task->getTargetCountryCode() == $country->getCode()}
+                                <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
+                            {else}
+                                <option value="{$country->getCode()}">{$country->getName()}</option>
+                            {/if}
+                        {/foreach}
+                    </select> 
+                {/if}
+            </p>    
             <p style="margin-bottom:30px;"></p>
+
+            <h2>Task Type</h2>
+            <select name="taskType">
+                {assign var="taskTypeCount" value=count($taskTypes)}
+                {for $id=1 to $taskTypeCount}
+                    <option value="{$id}">{$taskTypes[$id]}</option>
+                {/for}
+            </select>
 
             <p>
                 <label for="word_count">
                 <h2>Word Count: <font color='red'>*</font></h2>
                 <p class="desc">Approximate, or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.</p>
-                {if !is_null($word_count_err)}
+                {if !is_null($wordCountError)}
                     <div class="alert alert-error" style="width:144px">
-                        {$word_count_err}
+                        {$wordCountError}
                     </div>
                 {/if}
                 </label>  
-                <input type="text" name="word_count" id="word_count" maxlength="6">
+                <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}">
             </p>
             <p style="margin-bottom:30px;"></p>
+
+            <h2>Deadline</h2>
+            {if $deadlineError != ''}
+                <div class="alert alert-error">
+                    {$deadlineError}
+                </div>
+            {/if}
+            <p>
+                Date: <input name="deadline_date" id="deadline_date" type="text" value="{$deadlineDate}" />
+                Time: <input name="deadline_time" type="text" value="{$deadlineTime}" />
+            </p>
+
+            <p>
+                <h2>Publish Task</h2>
+                <input type="checkbox" name="published" checked="true" />
+            </p>
+
             <button type="submit" value="Submit" name="submit" class="btn btn-primary">
                 <i class="icon-upload icon-white"></i> Submit
             </button>

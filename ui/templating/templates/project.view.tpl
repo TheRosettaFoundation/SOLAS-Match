@@ -117,7 +117,7 @@
         Project Tasks
         <small>Overview of tasks created for this project.</small>
 
-        <a class="pull-right btn btn-success" href="{urlFor name="task-upload" options="project_id.$project_id"}">
+        <a class="pull-right btn btn-success" href="{urlFor name="task-create" options="project_id.$project_id"}">
             <i class="icon-upload icon-white"></i> Create Task
         </a>          
 
