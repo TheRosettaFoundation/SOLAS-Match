@@ -390,7 +390,7 @@ class ProjectRouteHandler
                         if(isset($post->{'postediting_'.$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);
                             
-                            if($post->{'proofreading'.$i}) {
+                            if($post->{'proofreading_'.$i}) {
                                 $taskModel->setTaskStatus(TaskStatusEnum::WAITING_FOR_PREREQUISITES);
                             } else {
                                 $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
