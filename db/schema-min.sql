@@ -568,6 +568,40 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getTaskPreReqs
+DROP PROCEDURE IF EXISTS `getTaskPreReqs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskPreReqs` (IN `taskId` INT)
+    READS SQL DATA
+BEGIN
+    SELECT *
+    FROM TaskPrerequisites
+    WHERE task_id=taskId;
+END //
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.addTaskPreReq
+DROP PROCEDURE IF EXISTS `addTaskPreReq`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addTaskPreReq` (IN taskId INT, IN preReqId INT)
+    MODIFIES SQL DATA
+BEGIN
+    INSERT INTO TaskPrerequisites (`task_id`, `task_id-prerequisite`)
+        VALUES (taskId, preReqId);
+END //
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.removeTaskPreReq
+DROP PROCEDURE IF EXISTS `removeTaskPreReq`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskPreReq` (IN taskId INT, IN preReqId INT)
+    MODIFIES SQL DATA
+BEGIN
+    DELETE FROM TaskPrerequisites
+        WHERE task_id = taskId
+        AND `task_id-prerequisite` = preReqId;
+END //
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.archiveTask
 DROP PROCEDURE IF EXISTS `archiveTask`;
