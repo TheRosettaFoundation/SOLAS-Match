@@ -114,8 +114,8 @@
         </thead>
         <tr align="center">
             <td>
-            {assign var="project_id" value=$project->getId()}
-            <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+            {assign var="task_id" value=$task->getId()}
+            <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                 <input type="hidden" name="task_id" value="{$task_id}" />
                 {if $task->getPublished() == 1}
                     <input type="hidden" name="published" value="0" />
@@ -132,7 +132,7 @@
 
         </td>
         <td>
-            <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+            <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                 <input type="hidden" name="task_id" value="{$task_id}" />
                 {if $taskMetaData[$task_id]['tracking']}
                     <input type="hidden" name="track" value="Ignore" />

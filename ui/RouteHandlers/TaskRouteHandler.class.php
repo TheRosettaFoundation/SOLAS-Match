@@ -888,6 +888,27 @@ class TaskRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
+            if(isset($post->published) && isset($post->task_id)) {
+                
+                $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
+                $response = $client->call($request);     
+                $task = $client->cast('Task', $response);        
+                
+                if($post->published) {                     
+                    $task->setPublished(1);                    
+                    $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);                 
+                } else {
+                    $task->setPublished(0);                    
+                    $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);      
+                }
+                
+                $app->view()->appendData(array(
+                             'task' => $task
+                ));
+            }  
+            
             if (isset($post->notify) && $post->notify == "true") {
                 $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/{$task->getId()}";
                 $userTrackTask = $client->call($request, HTTP_Request2::METHOD_PUT);
@@ -899,7 +920,7 @@ class TaskRouteHandler
                 } else {
                     $app->flashNow("error", "Unable to register for notifications for this task.");
                 }   
-            } else {
+            } else if(isset($post->notify) && $post->notify == "false") {
 
                 $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/{$task->getId()}";
                 $userIgnoreTask = $client->call($request, HTTP_Request2::METHOD_DELETE);
@@ -912,7 +933,7 @@ class TaskRouteHandler
                 } else {
                     $app->flashNow("error", "Unable to unregister for this notification.");
                 }   
-            }   
+            } 
         } 
         
         $taskMetaData = array();
@@ -940,9 +961,9 @@ class TaskRouteHandler
         $org = $client->cast('Organisation', $response);
 
         $app->view()->appendData(array(
-                                 'org' => $org,
-                                 'project' => $project,
-                                 'registered' => $registered
+                'org' => $org,
+                'project' => $project,
+                'registered' => $registered
         ));
 
         $app->render('task.view.tpl');
