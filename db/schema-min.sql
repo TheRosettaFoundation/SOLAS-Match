@@ -4,7 +4,7 @@
 -- Server OS:                    debian-linux-gnu
 -- HeidiSQL version:             7.0.0.4053
 -- Date/time:                    2013-01-09 15:51:55
--- --------------------------------------------------------
+-- --------------------------------------------------------ul
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
@@ -1624,6 +1624,18 @@ WHERE user_id = id;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
+DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `tID` INT)
+BEGIN
+select u.*
+FROM TaskClaims tc
+join Users u
+on u.id = tc.user_id
+WHERE task_id = tID;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getUserNotifications
 DROP PROCEDURE IF EXISTS `getUserNotifications`;
@@ -2319,6 +2331,19 @@ Select exists (SELECT 1	FROM TaskClaims WHERE task_id = tID) as result;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.unClaimTask
+DROP PROCEDURE IF EXISTS `unClaimTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT)
+BEGIN
+	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
+      delete from TaskClaims where task_id=tID and user_id=uID;
+		select 1 as result;
+	else
+	select 0 as result;
+	end if;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.unlinkStoredTags
 DROP PROCEDURE IF EXISTS `unlinkStoredTags`;
@@ -2522,6 +2547,19 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.userTrackProject
+DROP PROCEDURE IF EXISTS `userTrackProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackProject`(IN `pID` INT, IN `uID` INT)
+BEGIN
+	if not exists (select 1 from UserTrackedProjects utp where utp.user_id=uID and utp.Project_id=pID) then
+		insert into UserTrackedProjects (project_id,user_id) values (pID,uID);
+		select 1 as result;
+	else
+		select 0 as result;
+	end if;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.userUnTrackTask
 DROP PROCEDURE IF EXISTS `userUnTrackTask`;
@@ -2536,6 +2574,21 @@ BEGIN
 	end if;
 END//
 DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.userUnTrackProject
+DROP PROCEDURE IF EXISTS `userUnTrackProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackProject`(IN `pID` INT, IN `uID` INT)
+BEGIN
+	if exists (select 1 from UserTrackedProjects utp where utp.user_id=uID and utp.Project_id=pID) then
+		delete from UserTrackedProjects  where user_id=uID and Project_id=pID;
+		select 1 as result;
+	else
+		select 0 as result;
+	end if;
+END//
+DELIMITER ;
+
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
