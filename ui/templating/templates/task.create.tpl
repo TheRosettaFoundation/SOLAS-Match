@@ -114,7 +114,7 @@
                 </p>
                 <ol id="selectable">
                     {foreach $projectTasks as $projectTask}
-                        <li class="ui-widget-content">{$projectTask->getTitle()}</li>
+                        <li class="ui-widget-content" value="{$projectTask->getId()}">{$projectTask->getTitle()}</li>
                     {/foreach}
                 </ol>
             </p>

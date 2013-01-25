@@ -1211,14 +1211,22 @@ class TaskRouteHandler
                 $task->setPublished("1");
             }
 
-            if (isset($post->selectedList)) {
-                //Add to prereqs
-            }
-            
             if(is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 $request = APIClient::API_VERSION."/tasks";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, $task);
                 $task = $client->cast("Task", $response);
+
+                if (isset($post->selectedList) && $post->selectedList != "") {
+                    $selectedList = explode(",", $post->selectedList);
+                    foreach($selectedList as $taskId) {
+                        if (is_numeric($taskId)) {
+                            $request = APIClient::API_VERSION."/tasks/".
+                                $task->getId()."/addPrerequisite/$taskId";
+                            $client->call($request, HTTP_Request2::METHOD_POST);
+                        }
+                    }
+                }
+            
                 $app->redirect($app->urlFor("task-view", array("task_id" => $task->getId())));
             }
         }
@@ -1244,9 +1252,12 @@ class TaskRouteHandler
             $( \"#selectable\" ).selectable({
                 stop: function() {
                     var result = $( \"#select-result\" ).empty();
+                    var selectedList = $(\"#selectedList\").val(\"\");
                     $( \".ui-selected\", this ).each(function() {
                         var index = $( \"#selectable li\" ).index( this );
+                        var taskId = $( \"#selectable li:nth-child(\" + (index + 1) + \")\").val();
                         result.append( \" #\" + ( index + 1 ) );
+                        selectedList.val(selectedList.val() + taskId + \",\");
                     });
                 }
             });

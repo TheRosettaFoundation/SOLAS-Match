@@ -331,6 +331,32 @@ class TaskDao {
         $this->updateTags($task);
     }
 
+    public function getTaskPreReqs($taskId)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("getTaskPreReqs", PDOWrapper::cleanseNull($taskId))) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = $row['task_id-prerequisite'];
+            }
+        }
+        return $ret;
+    }
+
+    public function addTaskPreReq($taskId, $preReqId)
+    {
+        $args = PDOWrapper::cleanseNull($taskId).", ";
+        $args .= PDOWrapper::cleanseNull($preReqId);
+        PDOWrapper::call("addTaskPreReq", $args);
+    }
+
+    public function removeTaskPreReq($taskId, $preReqId)
+    {
+        $args = PDOWrapper::cleanseNull($taskId).", ";
+        $args .= PDOWrapper::cleanseNull($preReqId);
+        PDOWrapper::call("removeTaskPreReq", $args);
+    }
+
     public function getLatestAvailableTasks($nb_items = 10)
     {
         $ret = false;
