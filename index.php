@@ -46,6 +46,8 @@ require_once 'Common/models/Country.php';
 require_once 'Common/models/TaskMetadata.php';
 require_once 'Common/models/MembershipRequest.php';
 
+require_once 'Common/protobufs/emails/FeedbackEmail.php';
+
 /**
  * Start the session
  */

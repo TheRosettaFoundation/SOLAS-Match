@@ -11,6 +11,7 @@ require_once 'DataAccessObjects/TaskTags.class.php';
 require_once 'DataAccessObjects/TaskFile.class.php';
 require_once 'DataAccessObjects/TaskStream.class.php';
 require_once '../Common/models/TaskMetadata.php';
+require_once '../Common/protobufs/emails/FeedbackEmail.php';
 require_once 'lib/IO.class.php';
 require_once 'lib/Upload.class.php';
 require_once 'lib/FormatConverter.php';
@@ -68,7 +69,7 @@ class Tasks {
                     Dispatcher::sendResponce(null, $dao->getTaskPreReqs($id), null, $format);
                 }, 'getTaskPreReqs');
 
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/:id/addPrerequisite/:preReqId/',
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/prerequisites/:preReqId/',
                 function ($id, $preReqId, $format = ".json") {
                     if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
                         $preReqId = explode('.', $preReqId);
@@ -79,7 +80,7 @@ class Tasks {
                     Dispatcher::sendResponce(null, $dao->addTaskPreReq($id, $preReqId), null, $format);
                 }, "addTaskPreReq");
 
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/removePrerequisite/:preReqId/',
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/prerequisites/:preReqId/',
                 function ($id, $preReqId, $format = ".json") {
                     if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
                         $preReqId = explode('.', $preReqId);
@@ -146,6 +147,30 @@ class Tasks {
             $dao = new TaskDao();
             Dispatcher::sendResponce(null, array("status message" => $dao->getTaskStatus($id)), null, $format);
         }, 'getTaskStatus');
+
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/feedback(:format)/',
+                function ($id, $format = ".json") {
+                    $taskDao = new TaskDao();
+                    $task = $taskDao->getTask(array('id' => $id));
+
+                    $data = Dispatcher::getDispatcher()->request()->getBody();
+                    $data = APIHelper::deserialiser($data, $format);
+                    $feedbackData = APIHelper::cast(new FeedbackEmail(), $data);
+
+                    $users = $feedbackData->getUserIdList();
+                    if (count($users) > 0) {
+                        if (count($users) == 1) {
+                            $userDao = new UserDao();
+                            $user = $userDao->find(array('user_id' => $users[0]));
+
+                            Notify::sendOrgFeedback($task, $user, $feedbackData->getFeedback());
+                        } else {
+                            //send user feedback
+                            //not implemented
+                        }
+                    }
+                    Dispatcher::sendResponce(null, null, null, $format);
+        }, 'sendFeedback');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/file(:format)/',
                                                         function ($id, $format=".json") {

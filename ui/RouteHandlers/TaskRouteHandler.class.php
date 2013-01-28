@@ -178,13 +178,22 @@ class TaskRouteHandler
             $bottom = count($activeTasks) - 1;
         }
         
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }    
+        
         $app->view()->setData('active_tasks', $activeTasks);
         $app->view()->appendData(array(
                         'page_no' => $page_no,
                         'last' => $total_pages,
                         'top' => $top,
                         'bottom' => $bottom,
-                        'current_page' => 'active-tasks'
+                        'current_page' => 'active-tasks',
+                        'taskTypeColours' => $taskTypeColours
         ));
         
         $app->render('active-tasks.tpl');
@@ -759,6 +768,29 @@ class TaskRouteHandler
         $deadlineError = "";
 
         $extra_scripts = "
+        <link rel=\"stylesheet\" href=\"".$app->urlFor("home")."resources/css/jquery-ui.css\" />
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/selectable.css\" />
+        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."ui/js/jquery-ui.js\"></script>
+        <script>
+        $(selectableUpdate);
+
+        function selectableUpdate()
+        {
+            $( \"#selectable\" ).selectable({
+                stop: function() {
+                    var result = $( \"#select-result\" ).empty();
+                    var selectedList = $(\"#selectedList\").val(\"\");
+                    $( \".ui-selected\", this ).each(function() {
+                        var index = $( \"#selectable li\" ).index( this );
+                        var taskId = $( \"#selectable li:nth-child(\" + (index + 1) + \")\").val();
+                        result.append( \" #\" + ( index + 1 ) );
+                        selectedList.val(selectedList.val() + taskId + \",\");
+                    });
+                }
+            });
+        }
+        </script>
+
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
         <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
         <script type=\"text/javascript\">
@@ -771,6 +803,43 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
+
+        $preReqTaskIds = array();
+        $hiddenPreReqList = "";
+        $request = APIClient::API_VERSION."/tasks/$task_id/prerequisites";
+        $response = $client->call($request);
+        if($response) {
+            foreach($response as $taskId) {
+                $request = APIClient::API_VERSION."/tasks/$taskId";
+                $stdObject = $client->call($request);
+                if($stdObject) {
+                    $preReq = $client->cast("Task", $stdObject);
+                    if ($preReq->getId() != $task->getId()) {
+                        $preReqTaskIds[] = $preReq->getId();
+                        $hiddenPreReqList = $preReq->getId().",";
+                    }
+                }
+            }
+        }
+
+        $project = null;
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
+        $response = $client->call($request);
+        if($response) {
+            $project = $client->cast("Project", $response);
+        }
+
+        $projectTasks = array();
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId()."/tasks";
+        $response = $client->call($request);
+        if ($response) {
+            foreach ($response as $row) {
+                $projectTask = $client->cast("Project", $row);
+                if ($projectTask->getId() != $task->getId()) {
+                    $projectTasks[] = $client->cast("Project", $row);
+                }
+            }
+        }
         
         $deadlineDate = date("F dS, Y", strtotime($task->getDeadline()));
         $deadlineTime = date("H:i", strtotime($task->getDeadline()));
@@ -811,30 +880,14 @@ class TaskRouteHandler
                 $task->setDeadline(date("Y-m-d H:i:s", $deadline));
             }
             
-            if ($post->source != '') {
-                $task->setSourceLanguageCode($post->source);
-            }
-            
             if ($post->target != '') {
                 $task->setTargetLanguageCode($post->target);
-            }   
-             
-            if ($post->sourceCountry != '') {
-                $task->setSourceCountryCode($post->sourceCountry);
             }   
              
             if ($post->targetCountry != '') {
                 $task->setTargetCountryCode($post->targetCountry);
             }   
               
-            if ($post->tags != '') {
-                $tags = TemplateHelper::separateTags($post->tags);
-                foreach ($tags as $tag) {
-                    $task->addTags($tag);
-                }
-            }
-            
-
             if (ctype_digit($post->word_count)) {
                 $task->setWordCount($post->word_count);                
             } else if ($post->word_count != '') {
@@ -846,6 +899,26 @@ class TaskRouteHandler
             if ($word_count_err == '' && $deadlineError == '') {
                 $request = APIClient::API_VERSION."/tasks/$task_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
+
+                if (isset($post->selectedList) && $post->selectedList != "") {
+                    $selectedList = explode(",", $post->selectedList);
+
+                    foreach ($preReqTaskIds as $preReqId) {
+                        if(!in_array($preReqId, $selectedList)) {
+                            $request = APIClient::API_VERSION."/tasks/".$task->getId()."/prerequisites/$preReqId";
+                            $client->call($request, HTTP_Request2::METHOD_DELETE);
+                        }
+                    }
+
+                    foreach($selectedList as $taskId) {
+                        if (is_numeric($taskId)) {
+                            $request = APIClient::API_VERSION."/tasks/".
+                                        $task->getId()."/prerequisites/$taskId";
+                            $client->call($request, HTTP_Request2::METHOD_PUT);
+                        }
+                    }
+                }
+
                 $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
             }
         }
@@ -853,19 +926,14 @@ class TaskRouteHandler
         $languages = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
        
-        $tags = $task->getTags();
-        $tag_list = '';
-        if ($tags != null) {
-            foreach ($tags as $tag) {
-                $tag_list .= $tag . ' ';
-            }
-        }
-        
         $app->view()->appendData(array(
+                              'project'         => $project,
                               'extra_scripts'   => $extra_scripts,
                               'languages'       => $languages,
                               'countries'       => $countries,
-                              'tag_list'        => $tag_list,
+                              'projectTasks'    => $projectTasks,
+                              'taskPreReqIds'   => $preReqTaskIds,
+                              'hiddenPreReqList'=> $hiddenPreReqList,
                               'word_count_err'  => $word_count_err,
                               'deadlineDate'    => $deadlineDate,
                               'deadlineTime'    => $deadlineTime,
@@ -987,11 +1055,20 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
+        
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }
 
         $app->view()->appendData(array(
                 'org' => $org,
                 'project' => $project,
-                'registered' => $registered
+                'registered' => $registered,
+                'taskTypeColours' => $taskTypeColours
         ));
 
         $app->render('task.view.tpl');
@@ -1270,8 +1347,8 @@ class TaskRouteHandler
                     foreach($selectedList as $taskId) {
                         if (is_numeric($taskId)) {
                             $request = APIClient::API_VERSION."/tasks/".
-                                $task->getId()."/addPrerequisite/$taskId";
-                            $client->call($request, HTTP_Request2::METHOD_POST);
+                                $task->getId()."/prerequisites/$taskId";
+                            $client->call($request, HTTP_Request2::METHOD_PUT);
                         }
                     }
                 }
@@ -1346,6 +1423,35 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();  
         
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);     
+        $task = $client->cast('Task', $response); 
+        
+        $request = APIClient::API_VERSION."/projects/{$task->getProjectId()}";
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+        
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $maxChunks = $settings->get("site.max_chunking");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }
+    
+        $language_list = TemplateHelper::getLanguageList();
+        $countries = TemplateHelper::getCountryList();
+        
+        $app->view()->appendData(array(
+            'project'           => $project,
+            'task'              => $task,
+            'taskTypeColours'   => $taskTypeColours,
+            'maxChunks'         => $maxChunks,
+            'languages'         => $language_list,
+            'countries'         => $countries
+        ));
+        
         $app->render('task.chunking.tpl');
     }
     
@@ -1353,6 +1459,7 @@ class TaskRouteHandler
     {  
         $app = Slim::getInstance();
         $client = new APIClient();  
+        $user_id = UserSession::getCurrentUserID();
         
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -1360,11 +1467,20 @@ class TaskRouteHandler
         
         $request = APIClient::API_VERSION."/projects/{$task->getProjectId()}";
         $response = $client->call($request);     
-        $project = $client->cast('Project', $response);
+        $project = $client->cast('Project', $response);        
+        
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }
         
         $app->view()->appendData(array(
             'project' => $project,
-            'task' => $task
+            'task' => $task,
+            'taskTypeColours' => $taskTypeColours
         ));
 
         if ($app->request()->isPost()) {
@@ -1373,11 +1489,20 @@ class TaskRouteHandler
             if(isset($post->revokeTask) && $post->revokeTask) {
                 //todo implement revoke task
             }
+            if(isset($post->feedback)) {
+                //wait for stored proc support
+                $feedback = new FeedbackEmail();
+                $feedback->setTaskId($task->getId());
+                //$feedback->addUserId($user->getUserId());
+                $feedback->setFeedback($post->feedback);
+
+                $request = APIClient::API_VERSION."/tasks/$task_id/feedback";
+                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $feedback);
+                //todo implement feedback logic
+                //notify user with flash on success/fail
+            }
         }
         
         $app->render('task.feedback.tpl');
     }
-    
-    
-    
 }

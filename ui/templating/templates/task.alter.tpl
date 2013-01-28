@@ -29,27 +29,12 @@
         Time: <input name="deadline_time" type="text" value="{$deadlineTime}" />
     </p>
     
-    <label for="source">Source Language</label>
-        <select name="source" id="source">
-            {foreach $languages as $language}
-                {if $task->getSourceLanguageCode() == $language->getCode()}
-                    <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
-                {else}
-                    <option value="{$language->getCode()}">{$language->getName()}</option>
-                {/if}
-            {/foreach}
-        </select>
-    {if isset($countries)}
-        <select name="sourceCountry" id="sourceCountry">
-            {foreach $countries as $country}
-                {if $task->getSourceCountryCode() == $country->getCode()}
-                    <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
-                {else}
-                    <option value="{$country->getCode()}">{$country->getName()}</option>
-                {/if}
-            {/foreach}
-        </select>
-    {/if}
+    <p>
+        <label>Source Language:</label>
+            {TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}
+            ({TemplateHelper::countryNameFromCode($project->getSourceCountryCode())})
+    </p>
+    <br />
 
     <label for="target">Target Language</label>
     <select name="target" id="target">
@@ -73,9 +58,6 @@
         </select>
     {/if}
 
-    <label for="tags">Tags</label>
-    <input type="text" name="tags" id="tags" value="{$tag_list}">
-
     {if !is_null($word_count_err)}
         <div class="alert alert-error">
             {$word_count_err}
@@ -84,6 +66,21 @@
     
     <label for="word_count">Word Count</label>
     <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}">
+
+    <label for="prerequisites">Task Prerequisites</label>
+    <p id="feedback">
+        <input type="hidden" name="selectedList" id="selectedList" value="{$hiddenPreReqList}" />
+        <span>You've selected:</span> <span id="select-result">none</span>.
+    </p>
+    <ol id="selectable">
+        {foreach $projectTasks as $projectTask}
+            {if in_array($projectTask->getId(), $taskPreReqIds)}
+                <li class="ui-widget-content ui-selected" value="{$projectTask->getId()}">{$projectTask->getTitle()}</li>
+            {else}
+                <li class="ui-widget-content" value="{$projectTask->getId()}">{$projectTask->getTitle()}</li>
+            {/if}
+        {/foreach}
+    </ol>
 
     <p>
         <button type="submit" value="Submit" name="submit" class="btn btn-primary">

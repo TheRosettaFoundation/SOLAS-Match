@@ -131,6 +131,17 @@ class UserRouteHandler
             ));
         }
         
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }  
+        
+        $app->view()->appendData(array(
+                     'taskTypeColours' => $taskTypeColours
+        ));
+        
         $app->render('index.tpl');
     }
 

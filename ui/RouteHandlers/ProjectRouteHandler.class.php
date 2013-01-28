@@ -151,12 +151,21 @@ class ProjectRouteHandler
                 }
             }
         }
+        
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }
 
         $app->view()->appendData(array(
                      'org' => $org,
                      'registered' => $registered,
                      'projectTasks' => $project_tasks,
-                     'taskMetaData' => $taskMetaData
+                     'taskMetaData' => $taskMetaData,
+                     'taskTypeColours' => $taskTypeColours
         ));
         
         $app->render('project.view.tpl');
@@ -286,6 +295,7 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID(); 
+        $settings = new Settings();
 
         $error          = null;
         $title_err      = null;
@@ -423,7 +433,7 @@ class ProjectRouteHandler
             <script language='javascript'>
 
                 var fields = 0;
-                var MAX_FIELDS = 10; 
+                var MAX_FIELDS =".$settings->get("site.max_target_languages")."; 
                 var isRemoveButtonHidden = true;
 
                 var isEnabledArray = new Array(false);
