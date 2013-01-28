@@ -173,16 +173,20 @@
                             {/if}
                         </td>
                         <td>
-                            {assign var="type_id" value=$task->getTaskType()}
-                            {if $type_id == TaskTypeEnum::CHUNKING}
-                                Chunking
-                            {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                                Translation
-                            {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                                Proofreading
-                            {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                                Postediting
-                            {/if}
+                            <b>
+                                <small>                                  
+                                {assign var="type_id" value=$task->getTaskType()}
+                                {if $type_id == TaskTypeEnum::CHUNKING}
+                                    <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
+                                {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
+                                {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
+                                {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                                    <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
+                                {/if}
+                                </small>
+                            </b>
                         </td>
                         <td>
                             {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}

@@ -178,13 +178,22 @@ class TaskRouteHandler
             $bottom = count($activeTasks) - 1;
         }
         
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }    
+        
         $app->view()->setData('active_tasks', $activeTasks);
         $app->view()->appendData(array(
                         'page_no' => $page_no,
                         'last' => $total_pages,
                         'top' => $top,
                         'bottom' => $bottom,
-                        'current_page' => 'active-tasks'
+                        'current_page' => 'active-tasks',
+                        'taskTypeColours' => $taskTypeColours
         ));
         
         $app->render('active-tasks.tpl');
@@ -987,11 +996,20 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
+        
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }
 
         $app->view()->appendData(array(
                 'org' => $org,
                 'project' => $project,
-                'registered' => $registered
+                'registered' => $registered,
+                'taskTypeColours' => $taskTypeColours
         ));
 
         $app->render('task.view.tpl');

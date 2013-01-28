@@ -151,12 +151,21 @@ class ProjectRouteHandler
                 }
             }
         }
+        
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }
 
         $app->view()->appendData(array(
                      'org' => $org,
                      'registered' => $registered,
                      'projectTasks' => $project_tasks,
-                     'taskMetaData' => $taskMetaData
+                     'taskMetaData' => $taskMetaData,
+                     'taskTypeColours' => $taskTypeColours
         ));
         
         $app->render('project.view.tpl');

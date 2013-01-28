@@ -7,18 +7,20 @@
         Task {$task->getId()}
     {/if}
     <small>
-    -
-    {assign var="type_id" value=$task->getTaskType()}
-    {if $type_id == TaskTypeEnum::CHUNKING}
-        <span style="color: red">Chunking Task</span>
-    {elseif $type_id == TaskTypeEnum::TRANSLATION}
-        <span>Translation Task
-    {elseif $type_id == TaskTypeEnum::PROOFREADING}
-        <span>Proofreading Task
-    {elseif $type_id == TaskTypeEnum::POSTEDITING}
-        <span>Postediting Task
-    {/if}
-    </small>
+        <b>
+            -
+            {assign var="type_id" value=$task->getTaskType()}
+            {if $type_id == TaskTypeEnum::CHUNKING}
+                <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
+            {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
+            {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
+            {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
+            {/if}
+        </b>
+    </small>   
     {assign var="task_id" value=$task->getId()}
     <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
         <i class="icon-wrench icon-white"></i> Edit Details

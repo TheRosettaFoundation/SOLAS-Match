@@ -20,19 +20,18 @@
         </p>
         
         {if $task->getTaskType()}
+            {assign var="type_id" value=$task->getTaskType()}
             <p>
-                <b>Task Type:</b>
-                <span class="label label-info">                    
-                    {if $task->getTaskType() == TaskTypeEnum::CHUNKING}
-                        Chunking
-                    {elseif $task->getTaskType() == TaskTypeEnum::TRANSLATION}
-                        Translation
-                    {elseif $task->getTaskType() == TaskTypeEnum::PROOFREADING}
-                        Proofreading
-                    {elseif $task->getTaskType() == TaskTypeEnum::POSTEDITING}
-                        Postediting
-                    {/if}
-                </span>
+                <b>Task Type:</b>                  
+                    {if $type_id == TaskTypeEnum::CHUNKING}
+                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
+                    {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task</span>
+                    {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task</span>
+                    {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task</span>
+                    {/if}                
             </p>
         {/if}
 	<p class="task_details">
