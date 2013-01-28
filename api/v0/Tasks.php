@@ -247,7 +247,15 @@ class Tasks {
 
             $result = $dao->duplicateTaskForTarget($task, $languageCode, $countryCode, $userID);
             Dispatcher::sendResponce(null, array("result" => $result), null, $format);
-        }, 'addTarget');        
+        }, 'addTarget');   
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/user(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            $dao = new TaskDao();
+            $data = $dao->getUserClaimedTask($id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getUserCliamedTask');
     }
 }
 Tasks::init();

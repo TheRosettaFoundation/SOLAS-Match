@@ -1641,11 +1641,10 @@ DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `tID` INT)
 BEGIN
-select u.*
-FROM TaskClaims tc
-join Users u
-on u.id = tc.user_id
-WHERE task_id = tID;
+select u.* from Users u
+join TaskClaims tc 
+on u.id=tc.user_id
+where tc.task_id=tID;
 END//
 DELIMITER ;
 

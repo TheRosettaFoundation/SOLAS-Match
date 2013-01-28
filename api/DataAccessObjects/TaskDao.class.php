@@ -586,4 +586,16 @@ class TaskDao {
         IO::downloadConvertedFile($absolute_file_path, $file_content_type);
     }
     
+    
+    
+    public function getUserClaimedTask($id)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call('getUserClaimedTask', PDOWrapper::cleanse($id))) {
+            
+            $ret = ModelFactory::buildModel("User",$result );
+        }
+        return $ret;
+    }
+    
 }
