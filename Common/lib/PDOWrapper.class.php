@@ -66,11 +66,11 @@ class PDOWrapper {
         $ret = false;       
         
         if ($this->use_permanent_connection) {
-            $conn = new PDO("mysql:host={$settings->get('db.server')};dbname={$settings->get('db.database')}",
+            $conn = new PDO("mysql:host={$settings->get('db.server')};dbname={$settings->get('db.database')};port={$settings->get('db.server_port')}",
                             $settings->get('db.username'), $settings->get('db.password'),
                             array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", PDO::ATTR_PERSISTENT => true));  
         } else {
-            $conn = new PDO("mysql:host={$settings->get('db.server')};dbname={$settings->get('db.database')}",
+            $conn = new PDO("mysql:host={$settings->get('db.server')};dbname={$settings->get('db.database')};port={$settings->get('db.server_port')}",
                             $settings->get('db.username'), $settings->get('db.password'),
                             array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  
         }
