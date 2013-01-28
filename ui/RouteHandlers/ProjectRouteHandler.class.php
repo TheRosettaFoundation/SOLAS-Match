@@ -295,6 +295,7 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID(); 
+        $settings = new Settings();
 
         $error          = null;
         $title_err      = null;
@@ -432,7 +433,7 @@ class ProjectRouteHandler
             <script language='javascript'>
 
                 var fields = 0;
-                var MAX_FIELDS = 10; 
+                var MAX_FIELDS =".$settings->get("site.max_target_languages")."; 
                 var isRemoveButtonHidden = true;
 
                 var isEnabledArray = new Array(false);
