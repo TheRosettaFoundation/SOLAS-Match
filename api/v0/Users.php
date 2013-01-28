@@ -166,6 +166,37 @@ class Users {
             Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
             Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
         }, 'userClaimTask');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tasks(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            $data = Dispatcher::getDispatcher()->request()->getBody();
+            $data = APIHelper::deserialiser($data, $format);
+            $data = APIHelper::cast("Task", $data);
+            $dao = new TaskDao;
+            Dispatcher::sendResponce(null, array("result" => $dao->claimTaskbyID($data->getId(), $id)), null, $format);
+            $dao = new UserDao();
+
+            Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
+            Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
+        }, 'userClaimTaskByID');
+        
+        
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/tasks/:tID',
+                                                        function ($id, $tID ,$format = ".json") {
+             
+            if (!is_numeric($tID) && strstr($tID, '.')) {
+                 $tID = explode('.', $tID);
+                 $format = '.'.$tID[1];
+                 $tID = $tID[0];
+            }
+            $dao = new TaskDao;
+            Dispatcher::sendResponce(null, array("result" => $dao->unClaimTaskbyID($id,$tID)), null, $format);
+//            $dao = new UserDao();
+
+//            Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
+//            Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
+        }, 'userUnClaimTask');
 
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/top_tasks(:format)/',
@@ -316,7 +347,39 @@ class Users {
             Dispatcher::sendResponce(null, array("result" => $data,
                 "message" => $data == 1 ? "a password reset request has been create and sent to you contact address"
                 : "password reset request already exists"), null, $format);
-        }, 'createPasswordResetRequest');        
+        }, 'createPasswordResetRequest');   
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/Projects(:format)/',
+                                                        function ($id, $format=".json"){
+            $dao = new UserDao();
+            $data = $dao->getTrackedProjects($id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getUserTrackedProjects'); 
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/Projects/:pID',
+                                                        function ($id,$pID, $format=".json"){
+            if (!is_numeric($pID) && strstr($pID, '.')) {
+                $pID = explode('.', $pID);
+                $format = '.'.$pID[1];
+                $pID = $pID[0];
+            }
+            $dao = new UserDao();
+            $data = $dao->trackProject($pID,$id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'userTrackProject'); 
+        
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/Projects/:pID',
+                                                        function ($id,$pID, $format=".json"){
+            if (!is_numeric($pID) && strstr($pID, '.')) {
+                $pID = explode('.', $pID);
+                $format = '.'.$pID[1];
+                $pID = $pID[0];
+            }
+            $dao = new UserDao();
+            $data = $dao->unTrackProject($pID,$id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'userUnTrackProject'); 
+        
     }
 }
 Users::init();

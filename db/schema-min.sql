@@ -1540,6 +1540,18 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getTrackedProjects
+DROP PROCEDURE IF EXISTS `getTrackedProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrackedProjects`(IN `uID` INT)
+BEGIN
+select p.* from Projects p  
+join UserTrackedProjects utp 
+on p.id=utp.Project_id
+where utp.user_id=uID;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getUser
 DROP PROCEDURE IF EXISTS `getUser`;

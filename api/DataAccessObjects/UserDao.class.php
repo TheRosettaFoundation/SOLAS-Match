@@ -495,4 +495,33 @@ class UserDao {
             return array("result" => 1, "message" => "You have successfully changed your password");
         }
     }
+    
+    public function getTrackedProjects($user_id)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("getTrackedProjects", PDOWrapper::cleanse($user_id))) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Project", $row);
+            }
+        }
+        return $ret;
+    }
+    public function trackProject($projectID,$userID)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("userTrackProject", PDOWrapper::cleanse($projectID).",".PDOWrapper::cleanse($userID))) {
+            $ret = $result["result"];
+        }
+        return $ret;
+    }
+    
+    public function unTrackProject($projectID,$userID)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("userUnTrackProject", PDOWrapper::cleanse($projectID).",".PDOWrapper::cleanse($userID))) {
+            $ret = $result["result"];
+        }
+        return $ret;
+    }
 }

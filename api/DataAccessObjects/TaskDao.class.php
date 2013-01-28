@@ -439,6 +439,12 @@ class TaskDao {
         $ret = PDOWrapper::call("claimTask", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanse($user_id));
         return $ret[0]['result'];
     }
+    
+    public function unClaimTaskbyID($task_id, $user_id)
+    {
+        $ret = PDOWrapper::call("unClaimTask", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanse($user_id));
+        return $ret[0]['result'];
+    }
         
 
     public function hasUserClaimedTask($user_id, $task_id)
