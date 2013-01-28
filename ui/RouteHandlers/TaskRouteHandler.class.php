@@ -63,6 +63,15 @@ class TaskRouteHandler
 
         $app->get('/task/create/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
+        
+        $app->get('/task/:task_id/chunking/', array($middleware, 'authUserForOrgTask'), 
+        array($this, 'taskChunking'))->name('task-chunking');
+        
+        $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
+        array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
+        
+        $settings = new Settings();
+        $app->get($settings->get("site.api"), array($middleware, 'authUserForOrgTask'))->name('api');
     }
 
     public function archivedTasks($page_no)
@@ -939,7 +948,26 @@ class TaskRouteHandler
 
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
-        $user = $client->cast('User', $response);         
+        $user = $client->cast('User', $response);      
+        
+        if ($task_file_info = $client->castCall("TaskMetadata", APIClient::API_VERSION."/tasks/$task_id/info")) {
+            $app->view()->appendData(array(
+                'task_file_info' => $task_file_info,
+                'latest_version' => $client->call(APIClient::API_VERSION."/tasks/$task_id/version")
+            ));
+        }
+        $task_file_info = $client->castCall("TaskMetadata",
+                APIClient::API_VERSION."/tasks/$task_id/info",
+                HTTP_Request2::METHOD_GET, null, array("version" => 0));
+
+        $settings= new Settings();
+        $file_path= $settings->get("site.api").APIClient::API_VERSION."/tasks/$task_id/file";
+       
+        $app->view()->appendData(array(
+            'file_preview_path' => $file_path,
+            'filename' => $task_file_info->getFilename()
+        ));      
+        
          
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -1368,4 +1396,44 @@ class TaskRouteHandler
 
         $app->render('task.create.tpl');
     }
+    
+    public function taskChunking($task_id)
+    {  
+        $app = Slim::getInstance();
+        $client = new APIClient();  
+        
+        $app->render('task.chunking.tpl');
+    }
+    
+    public function taskFeedback($task_id)
+    {  
+        $app = Slim::getInstance();
+        $client = new APIClient();  
+        
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);     
+        $task = $client->cast('Task', $response);   
+        
+        $request = APIClient::API_VERSION."/projects/{$task->getProjectId()}";
+        $response = $client->call($request);     
+        $project = $client->cast('Project', $response);
+        
+        $app->view()->appendData(array(
+            'project' => $project,
+            'task' => $task
+        ));
+
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+            
+            if(isset($post->revokeTask) && $post->revokeTask) {
+                //todo implement revoke task
+            }
+        }
+        
+        $app->render('task.feedback.tpl');
+    }
+    
+    
+    
 }

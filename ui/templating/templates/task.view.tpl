@@ -6,7 +6,19 @@
     {else}
         Task {$task->getId()}
     {/if}
-    <small>Task Details</small>
+    <small>
+    -
+    {assign var="type_id" value=$task->getTaskType()}
+    {if $type_id == TaskTypeEnum::CHUNKING}
+        <span style="color: red">Chunking Task</span>
+    {elseif $type_id == TaskTypeEnum::TRANSLATION}
+        <span>Translation Task
+    {elseif $type_id == TaskTypeEnum::PROOFREADING}
+        <span>Proofreading Task
+    {elseif $type_id == TaskTypeEnum::POSTEDITING}
+        <span>Postediting Task
+    {/if}
+    </small>
     {assign var="task_id" value=$task->getId()}
     <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
         <i class="icon-wrench icon-white"></i> Edit Details
@@ -16,22 +28,17 @@
         
 <table class="table table-striped">
     <thead>            
-        <th style="text-align: left"><b>Organisation</b></th>
-        <th><b>Project</b></th>
-        <th><b>Task Deadline</b></th>
+        <th style="text-align: left"><b>Project</b></th>
+
         <th><b>Source Language</b></th>
         <th><b>Target Language</b></th>
+        <th><b>Created</b></th> 
+        <th><b>Task Deadline</b></th>
         <th><b>Word Count</b></th>
-        <th><b>Created</b></center></th>            
+        <th><b>Status</b></th>
     </thead>
     <tbody>
         <tr>
-            <td style="text-align: left">
-                {if isset($task)}
-                    {assign var="org_id" value=$task->getId()}
-                    <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
-                {/if}
-            </td>
             <td>
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
@@ -40,23 +47,35 @@
                     </a>
                 {/if}
             </td>
+
             <td>
-                {date("D dS, M Y", strtotime($task->getDeadline()))}
-            </td>
-            <td>
-                {TemplateHelper::getTaskSourceLanguage($task)}
+                {TemplateHelper::getTaskSourceLanguage($task)} 
             </td>
             <td>
                 {TemplateHelper::getTaskTargetLanguage($task)}
             </td>
-                
-            <td>
-                {$task->getWordCount()}                
-            </td>
             <td>
                 {date("D dS, M Y", strtotime($task->getCreatedTime()))}
-            </td>  
-        </tr>  
+            </td>
+            <td>
+                {date("D dS, M Y", strtotime($task->getDeadline()))}
+            </td>
+            <td>
+                {$task->getWordCount()}                
+            </td> 
+            <td>                            
+                {assign var="status_id" value=$task->getTaskStatus()}
+                {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                    Waiting
+                {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                    Unclaimed
+                {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                    <a href="{urlFor name="task-feedback" options="task_id.$task_id"}">In Progress</a>
+                {elseif $status_id == TaskStatusEnum::COMPLETE}
+                    <a href="{urlFor name="api"}v0/tasks/{$task_id}/file/?">Complete</a>
+                {/if}
+            </td>
+        </tr> 
     </tbody>
 </table>        
       
@@ -149,6 +168,18 @@
         </td>
         </tr>
     </table>
+    <div style="margin-bottom: 40px"></div>        
+    <table width="100%">
+        <thead>
+        <th>Source Document Preview - {$filename}<hr/></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td align="center"><iframe src="http://docs.google.com/viewer?url={urlencode($file_preview_path)}&embedded=true" width="800" height="780" style="border: none;"></iframe></td>
+            </tr>
+        </tbody>
+    </table>             
+                
 {else}
     <p class="alert alert-info">
         Please log in to register for notifications for this task.

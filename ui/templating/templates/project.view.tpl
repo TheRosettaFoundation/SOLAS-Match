@@ -27,12 +27,13 @@
 <table class="table table-striped">
     <thead>            
         <th style="text-align: left"><b>Organisation</b></th>
-        <th><b>Project Deadline</b></th>
         <th><b>Source Language</b></th>
-        <th><b>Word Count</b></th>
         <th><b>Reference</b></th>
+        <th><b>Word Count</b></th>
+        <th><b>Created</b></center></th> 
+        <th><b>Project Deadline</b></th>
         <th><b>Track</b></th>
-        <th><b>Created</b></center></th>            
+          
     </thead>
     <tbody>
         <tr>
@@ -43,19 +44,22 @@
                 {/if}
             </td>
             <td>
-                {$project->getDeadline()}
-            </td>
-            <td>
                 {TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}
                 ({TemplateHelper::countryNameFromCode($project->getSourceCountryCode())})
-            </td>
-            <td>
-                {$project->getWordCount()}
             </td>
             <td>
                 {if $project->getReference() != ''}
                     <a target="_blank" href="{$project->getReference()}">{$project->getReference()}</a>
                 {/if}            
+            </td>
+            <td>
+                {$project->getWordCount()}
+            </td>
+            <td>
+                {$project->getCreatedTime()}
+            </td>  
+            <td>
+                {$project->getDeadline()}
             </td>
             <td>
                 <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
@@ -76,10 +80,6 @@
                     {/if}
                 </form> 
             </td>
-            <td>
-                {$project->getCreatedTime()}
-            </td>            
-
         </tr>
         <tr>
         </tr> 
@@ -167,9 +167,9 @@
                             {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                 Unclaimed
                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                In Progress
+                                <a href="{urlFor name="task-feedback" options="task_id.$task_id"}">In Progress</a>
                             {elseif $status_id == TaskStatusEnum::COMPLETE}
-                                Complete
+                                <a href="{urlFor name="api"}v0/tasks/{$task_id}/file/?">Complete</a>
                             {/if}
                         </td>
                         <td>
