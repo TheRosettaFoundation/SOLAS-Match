@@ -1420,6 +1420,35 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();  
         
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);     
+        $task = $client->cast('Task', $response); 
+        
+        $request = APIClient::API_VERSION."/projects/{$task->getProjectId()}";
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+        
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $maxChunks = $settings->get("site.max_chunking");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }
+    
+        $language_list = TemplateHelper::getLanguageList();
+        $countries = TemplateHelper::getCountryList();
+        
+        $app->view()->appendData(array(
+            'project'           => $project,
+            'task'              => $task,
+            'taskTypeColours'   => $taskTypeColours,
+            'maxChunks'         => $maxChunks,
+            'languages'         => $language_list,
+            'countries'         => $countries
+        ));
+        
         $app->render('task.chunking.tpl');
     }
     
@@ -1427,6 +1456,7 @@ class TaskRouteHandler
     {  
         $app = Slim::getInstance();
         $client = new APIClient();  
+        $user_id = UserSession::getCurrentUserID();
         
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -1443,7 +1473,6 @@ class TaskRouteHandler
         for($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
         }
-
         
         $app->view()->appendData(array(
             'project' => $project,
@@ -1457,11 +1486,12 @@ class TaskRouteHandler
             if(isset($post->revokeTask) && $post->revokeTask) {
                 //todo implement revoke task
             }
+            if(isset($post->feedback)) {
+                //todo implement feedback logic
+                //notify user with flash on success/fail
+            }
         }
         
         $app->render('task.feedback.tpl');
     }
-    
-    
-    
 }

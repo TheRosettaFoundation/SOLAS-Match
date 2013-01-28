@@ -51,12 +51,12 @@
 
                     <label for="description"><h2>Description:</h2></label>
                     <p class="desc">A brief summary of the project.</p>                    
-                    <textarea wrap="soft" cols="1" rows="6" name="description">{if isset($projectModel)}{$projectModel->getDescription()}{/if}</textarea>                    
+                    <textarea wrap="soft" cols="1" rows="6" name="description">{if isset($project)}{$project->getDescription()}{/if}</textarea>                    
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="reference"><h2>Reference:</h2></label>
                     <p class="desc">Enter a URL that gives context to this project.</p>
-                    <textarea wrap="soft" cols="1" rows="3" name="reference">{if isset($projectModel)}{$projectModel->getReference()}{/if}</textarea>    
+                    <textarea wrap="soft" cols="1" rows="3" name="reference">{if isset($project)}{$project->getReference()}{/if}</textarea>    
                     <p style="margin-bottom:30px;"></p> 
                 </td>
                 <td width="493" align="center" valign="middle">    
@@ -69,12 +69,12 @@
                     
                     <label for="word_count"><h2>Word Count:</h2></label>
                     <p class="desc">Approximate or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.</p>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{if isset($projectModel)}{$projectModel->getWordCount()}{/if}">
+                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{if isset($project)}{$project->getWordCount()}{/if}">
                     <p style="margin-bottom:30px;"></p> 
                     
                     <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
                     <p class="desc">When the project and its tasks should be completed by.</p>
-                    <input type="text" id="deadline" name="deadline"></textarea> {*$project->getDeadline()*}   
+                    <input type="text" id="deadline" name="deadline" value="{if isset($project)}{$project->getDeadline()}{/if}">
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="tags"><h2>Tags:</h2></label>
@@ -123,7 +123,7 @@
                             <td width="25%"><b>Chunking</b></td>
                             <td width="25%"><b>Translation</b></td>
                             <td width="25%"><b>Proofreading</b></td>
-                            <td width="25%"><b>Post-Editing</b></td>
+                            <td width="25%"><b>Postediting</b></td>
                         </tr> 
                     </table>
                 </td>

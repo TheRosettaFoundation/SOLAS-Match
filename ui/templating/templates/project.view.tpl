@@ -174,18 +174,18 @@
                         </td>
                         <td>
                             <b>
-                                <small>                                  
-                                {assign var="type_id" value=$task->getTaskType()}
-                                {if $type_id == TaskTypeEnum::CHUNKING}
-                                    <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
-                                {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
-                                {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
-                                {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                                    <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
-                                {/if}
-                                </small>
+                            <small>                                  
+                            {assign var="type_id" value=$task->getTaskType()}
+                            {if $type_id == TaskTypeEnum::CHUNKING}
+                                <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>                                    
+                            {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                                <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span> 
+                            {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                                <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span> 
+                            {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span> 
+                            {/if}
+                            </small>
                             </b>
                         </td>
                         <td>

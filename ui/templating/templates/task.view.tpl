@@ -13,11 +13,11 @@
             {if $type_id == TaskTypeEnum::CHUNKING}
                 <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
             {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
+                <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task</span> 
             {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
+                <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task</span> 
             {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
+                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task</span> 
             {/if}
         </b>
     </small>   

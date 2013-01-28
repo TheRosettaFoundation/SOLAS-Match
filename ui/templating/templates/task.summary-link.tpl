@@ -24,13 +24,13 @@
             <p>
                 <b>Task Type:</b>                  
                     {if $type_id == TaskTypeEnum::CHUNKING}
-                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
+                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>                                    
                     {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task</span>
+                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span>
                     {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task</span>
+                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
                     {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task</span>
+                        <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span>
                     {/if}                
             </p>
         {/if}

@@ -2,7 +2,7 @@
 
 {assign var="task_id" value=$task->getId()}
 
-<h1 class="page-header" align="center">   
+<h1 class="page-header">   
     {if $task->getTitle() != ''}
         {$task->getTitle()}
     {else}
