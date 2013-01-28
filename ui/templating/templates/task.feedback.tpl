@@ -2,8 +2,27 @@
 
 {assign var="task_id" value=$task->getId()}
 
-<h1 class="page-header" align="center">
-    Task - {$task->getTitle()}
+<h1 class="page-header" align="center">   
+    {if $task->getTitle() != ''}
+        {$task->getTitle()}
+    {else}
+        Task {$task->getId()}
+    {/if}
+    <small>
+        <b>
+            -
+            {assign var="type_id" value=$task->getTaskType()}
+            {if $type_id == TaskTypeEnum::CHUNKING}
+                <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
+            {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
+            {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
+            {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
+            {/if}
+        </b>
+    </small>  
 </h1>
 
 <table class="table table-striped" width="100%">

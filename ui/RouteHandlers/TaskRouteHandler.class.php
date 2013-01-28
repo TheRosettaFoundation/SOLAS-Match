@@ -1434,11 +1434,21 @@ class TaskRouteHandler
         
         $request = APIClient::API_VERSION."/projects/{$task->getProjectId()}";
         $response = $client->call($request);     
-        $project = $client->cast('Project', $response);
+        $project = $client->cast('Project', $response);        
+        
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }
+
         
         $app->view()->appendData(array(
             'project' => $project,
-            'task' => $task
+            'task' => $task,
+            'taskTypeColours' => $taskTypeColours
         ));
 
         if ($app->request()->isPost()) {
