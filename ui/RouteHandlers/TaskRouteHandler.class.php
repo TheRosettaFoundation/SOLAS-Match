@@ -901,7 +901,7 @@ class TaskRouteHandler
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
 
                 foreach ($preReqTaskIds as $preReqId) {
-                    $request = APIClient::API_VERSION."/tasks/".$task->getId()."/removePrerequisite/$preReqId";
+                    $request = APIClient::API_VERSION."/tasks/".$task->getId()."/prerequisites/$preReqId";
                     $client->call($request, HTTP_Request2::METHOD_DELETE);
                 }
 
@@ -910,8 +910,8 @@ class TaskRouteHandler
                     foreach($selectedList as $taskId) {
                         if (is_numeric($taskId)) {
                             $request = APIClient::API_VERSION."/tasks/".
-                            $task->getId()."/addPrerequisite/$taskId";
-                            $client->call($request, HTTP_Request2::METHOD_POST);
+                                        $task->getId()."/prerequisites/$taskId";
+                            $client->call($request, HTTP_Request2::METHOD_PUT);
                         }
                     }
                 }
@@ -1344,8 +1344,8 @@ class TaskRouteHandler
                     foreach($selectedList as $taskId) {
                         if (is_numeric($taskId)) {
                             $request = APIClient::API_VERSION."/tasks/".
-                                $task->getId()."/addPrerequisite/$taskId";
-                            $client->call($request, HTTP_Request2::METHOD_POST);
+                                $task->getId()."/prerequisites/$taskId";
+                            $client->call($request, HTTP_Request2::METHOD_PUT);
                         }
                     }
                 }
