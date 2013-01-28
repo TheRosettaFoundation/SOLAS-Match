@@ -16,9 +16,33 @@ require_once __DIR__.'/../../Common/protobufs/emails/OrgMembershipRefused.php';
 require_once __DIR__.'/../../Common/protobufs/emails/TaskArchived.php';
 require_once __DIR__.'/../../Common/protobufs/emails/TaskClaimed.php';
 require_once __DIR__.'/../../Common/protobufs/emails/TaskTranslationUploaded.php';
+require_once __DIR__.'/../../Common/protobufs/emails/FeedbackEmail.php';
 
 class Notify 
 {
+    public static function sendOrgFeedback($task, $user, $feedback)
+    {
+        $settings = new Settings();
+        $use_backend = $settings->get('site.backend');
+        if (strcasecmp($use_backend, "y") == 0) {
+            //send to rabbitMQ
+            //Not implemented
+        } else {
+            $app = Slim::getInstance();
+
+            $app->appendData(array(
+                        'task'      => $task,
+                        'feedback'  => $feedback
+            ));
+
+            $subject = "Task Feedback";
+            $body = $app->view()->fetch("email.feedback.tpl");
+            $address = $user->getEmail();
+
+            Email::sendEmail($address, $subject, $body);
+        }
+    }
+
     public static function notifyUserClaimedTask($user, $task) 
     {
         $settings = new Settings();
@@ -37,7 +61,6 @@ class Notify
             }
         } else {
             $app        = Slim::getInstance();
-            $settings   = new Settings();
             $task_url 	= $settings->get('site.url') .  "/task/id/{$task->getId()}/";
 
             $app->view()->appendData(array(

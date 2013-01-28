@@ -1490,6 +1490,14 @@ class TaskRouteHandler
                 //todo implement revoke task
             }
             if(isset($post->feedback)) {
+                //wait for stored proc support
+                $feedback = new FeedbackEmail();
+                $feedback->setTaskId($task->getId());
+                //$feedback->addUserId($user->getUserId());
+                $feedback->setFeedback($post->feedback);
+
+                $request = APIClient::API_VERSION."/tasks/$task_id/feedback";
+                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $feedback);
                 //todo implement feedback logic
                 //notify user with flash on success/fail
             }
