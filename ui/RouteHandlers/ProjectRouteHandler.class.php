@@ -117,6 +117,11 @@ class ProjectRouteHandler
                     }
                 }
             }
+            
+            if(isset($post->revokeTask) && $post->revokeTask) {
+                $request = APIClient::API_VERSION."/users/$post->revokeUserId/tasks/$post->revokeTaskId";
+                $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
+            }
         }   
 
         $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";

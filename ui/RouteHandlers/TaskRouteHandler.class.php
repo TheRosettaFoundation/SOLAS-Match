@@ -1494,9 +1494,6 @@ class TaskRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if(isset($post->revokeTask) && $post->revokeTask) {
-                //todo implement revoke task
-            }
             if(isset($post->feedback)) {
                 $feedback = new FeedbackEmail();
                 $feedback->setTaskId($task->getId());

@@ -194,7 +194,7 @@ class Users {
         }, 'userClaimTaskByID');
         
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/tasks/:tID',
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/tasks/:tID/',
                                                         function ($id, $tID ,$format = ".json") {
              
             if (!is_numeric($tID) && strstr($tID, '.')) {
@@ -203,7 +203,7 @@ class Users {
                  $tID = $tID[0];
             }
             $dao = new TaskDao;
-            Dispatcher::sendResponce(null, array("result" => $dao->unClaimTaskbyID($id,$tID)), null, $format);
+            Dispatcher::sendResponce(null, array("result" => $dao->unClaimTaskbyID($tID,$id)), null, $format);
 //            $dao = new UserDao();
 
 //            Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
