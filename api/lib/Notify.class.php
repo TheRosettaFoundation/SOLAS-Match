@@ -30,7 +30,7 @@ class Notify
         } else {
             $app = Slim::getInstance();
 
-            $app->appendData(array(
+            $app->view()->appendData(array(
                         'task'      => $task,
                         'feedback'  => $feedback
             ));

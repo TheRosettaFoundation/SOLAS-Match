@@ -18,8 +18,8 @@
         
 	<ol>
 		<li><strong>Open the file</strong> that you have already saved to your computer.</li>
-		{if $task->getTargetLanguageId()}
-			<li><strong>Translate the file</strong> to <strong>{TemplateHelper::languageNameFromId($task->getTargetLanguageId())}</strong> using your favourite translation software.</li>
+		{if $task->getTargetLanguageCode()}
+			<li><strong>Translate the file</strong> to <strong>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</strong> using your favourite translation software.</li>
 		{/if}
 		<li><strong>Upload your finished translated file</strong> to the task page.</li>
 	</ol>

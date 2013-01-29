@@ -151,7 +151,8 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/feedback(:format)/',
                 function ($id, $format = ".json") {
                     $taskDao = new TaskDao();
-                    $task = $taskDao->getTask(array('id' => $id));
+                    $tasks = $taskDao->getTask(array('id' => $id));
+                    $task = $tasks[0];
 
                     $data = Dispatcher::getDispatcher()->request()->getBody();
                     $data = APIHelper::deserialiser($data, $format);

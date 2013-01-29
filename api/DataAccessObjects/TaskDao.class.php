@@ -593,7 +593,7 @@ class TaskDao {
         $ret = null;
         if ($result = PDOWrapper::call('getUserClaimedTask', PDOWrapper::cleanse($id))) {
             
-            $ret = ModelFactory::buildModel("User",$result );
+            $ret = ModelFactory::buildModel("User",$result[0] );
         }
         return $ret;
     }
