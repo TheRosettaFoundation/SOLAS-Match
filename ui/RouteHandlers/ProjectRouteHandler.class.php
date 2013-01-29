@@ -40,13 +40,13 @@ class ProjectRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if(isset($post->published) && isset($post->task_id)) {
+            if(isset($post->publishedTask) && isset($post->task_id)) {
                 
                 $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
                 $response = $client->call($request);     
                 $task = $client->cast('Task', $response);        
                 
-                if($post->published) {                     
+                if($post->publishedTask) {                     
                     $task->setPublished(1);                    
                     $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);                 
@@ -57,9 +57,9 @@ class ProjectRouteHandler
                 }
             }
             
-            if (isset($post->notify)) {
-                if ($post->notify == "true") {
-                    $request = APIClient::API_VERSION."/users/$user_id/tracked_projects/{$project->getId()}";
+            if (isset($post->trackProject)) {
+                if ($post->trackProject) {
+                    $request = APIClient::API_VERSION."/users/$user_id/projects/{$project->getId()}";
                     $userTrackProject = $client->call($request, HTTP_Request2::METHOD_PUT);
                     
                     if ($userTrackProject) {
@@ -71,10 +71,10 @@ class ProjectRouteHandler
                     }   
                 } else {
 
-                    $request = APIClient::API_VERSION."/users/$user_id/tracked_projects/{$project->getId()}";
-                    $userIgnoreProject = $client->call($request, HTTP_Request2::METHOD_DELETE);
+                    $request = APIClient::API_VERSION."/users/$user_id/projects/{$project->getId()}";
+                    $userUntrackProject = $client->call($request, HTTP_Request2::METHOD_DELETE);
                     
-                    if ($response) {
+                    if ($userUntrackProject) {
                         $app->flashNow("success", 
                                 "You are no longer tracking this Project and will receive no
                                 further emails."
@@ -83,7 +83,7 @@ class ProjectRouteHandler
                         $app->flashNow("error", "Unable to unregister for this notification.");
                     }   
                 }
-            } elseif(isset($post->track)) {
+            } elseif(isset($post->trackTask)) {
                 $task_id = $post->task_id;
                 $request = APIClient::API_VERSION."/tasks/$task_id";
                 $response = $client->call($request);
@@ -97,7 +97,7 @@ class ProjectRouteHandler
                     $task_title = "task ".$task->getId();
                 }
 
-                if($post->track == "Ignore") {
+                if(!$post->trackTask) {
                     $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                    
                     
@@ -106,7 +106,7 @@ class ProjectRouteHandler
                     } else {
                         $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
                     }
-                } elseif($post->track == "Track") {
+                } else {
                     $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT);     
                     
@@ -122,11 +122,10 @@ class ProjectRouteHandler
         $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
-
-        //Not Implemented
-        $request = APIClient::API_VERSION."/users/subscribedToProject/{$user_id}/{$project_id}";
-        $registered = $client->call($request);
-
+        
+        $request = APIClient::API_VERSION."/users/subscribedToProject/$user_id/$project_id";
+        $userSubscribedToProject = $client->call($request);
+        
         $project_tasks = array();
         $taskMetaData = array();
         $request = APIClient::API_VERSION."/projects/{$project_id}/tasks";
@@ -161,11 +160,11 @@ class ProjectRouteHandler
         }
 
         $app->view()->appendData(array(
-                     'org' => $org,
-                     'registered' => $registered,
-                     'projectTasks' => $project_tasks,
-                     'taskMetaData' => $taskMetaData,
-                     'taskTypeColours' => $taskTypeColours
+                'org' => $org,
+                'projectTasks' => $project_tasks,
+                'taskMetaData' => $taskMetaData,
+                'taskTypeColours' => $taskTypeColours,
+                'userSubscribedToProject' => $userSubscribedToProject
         ));
         
         $app->render('project.view.tpl');
