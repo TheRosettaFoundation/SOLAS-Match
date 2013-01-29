@@ -64,32 +64,32 @@ class Tasks {
         }, 'deleteTask');
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/prerequisites(:format)/',
-                function ($id, $format = ".json") {
-                    $dao = new TaskDao();
-                    Dispatcher::sendResponce(null, $dao->getTaskPreReqs($id), null, $format);
-                }, 'getTaskPreReqs');
+            function ($id, $format = ".json") {
+                $dao = new TaskDao();
+                Dispatcher::sendResponce(null, $dao->getTaskPreReqs($id), null, $format);
+        }, 'getTaskPreReqs');
 
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/prerequisites/:preReqId/',
-                function ($id, $preReqId, $format = ".json") {
-                    if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
-                        $preReqId = explode('.', $preReqId);
-                        $format = '.'.$preReqId[1];
-                        $preReqId = $preReqId[0];
-                    }
-                    $dao = new TaskDao();
-                    Dispatcher::sendResponce(null, $dao->addTaskPreReq($id, $preReqId), null, $format);
-                }, "addTaskPreReq");
+            function ($id, $preReqId, $format = ".json") {
+            if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
+                $preReqId = explode('.', $preReqId);
+                $format = '.'.$preReqId[1];
+                $preReqId = $preReqId[0];
+            }
+            $dao = new TaskDao();
+            Dispatcher::sendResponce(null, $dao->addTaskPreReq($id, $preReqId), null, $format);
+        }, "addTaskPreReq");
 
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/prerequisites/:preReqId/',
-                function ($id, $preReqId, $format = ".json") {
-                    if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
-                        $preReqId = explode('.', $preReqId);
-                        $format = '.'.$preReqId[1];
-                        $preReqId = $preReqId[0];
-                    }
-                    $dao = new TaskDao();
-                    Dispatcher::sendResponce(null, $dao->removeTaskPreReq($id, $preReqId), null, $format);
-                }, "removeTaskPreReq");
+        function ($id, $preReqId, $format = ".json") {
+            if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
+                $preReqId = explode('.', $preReqId);
+                $format = '.'.$preReqId[1];
+                $preReqId = $preReqId[0];
+            }
+            $dao = new TaskDao();
+            Dispatcher::sendResponce(null, $dao->removeTaskPreReq($id, $preReqId), null, $format);
+        }, "removeTaskPreReq");
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:taskId/user/:userId/',
                                                         function ($taskId, $userId, $format = ".json") {

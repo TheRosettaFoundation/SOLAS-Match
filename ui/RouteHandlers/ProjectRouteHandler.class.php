@@ -365,8 +365,11 @@ class ProjectRouteHandler
                     $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
                     $taskModel->setSourceCountryCode($project->getSourceCountryCode());
                     $taskModel->setProjectId($project->getId());
-
-
+                    
+                    $translationTaskId = 0;
+                    $proofreadingTaskId = 0;
+                    $posteditingTaskId = 0;
+                    
                     for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
 
                         $taskModel->setTargetLanguageCode($post->{'targetLanguage_'.$i});
@@ -383,30 +386,40 @@ class ProjectRouteHandler
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
+                            $newTask = $client->cast('Task', $response);
+                            $translationTaskId = $newTask->getId();
                         }
                         if(isset($post->{'proofreading_'.$i})) {
-                            $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);      
-                            
-                            if($post->{'translation_'.$i}) {
-                                $taskModel->setTaskStatus(TaskStatusEnum::WAITING_FOR_PREREQUISITES);
-                            } else {
-                                $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            }
+                            $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
+                            $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
 
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
+                            $newTask = $client->cast('Task', $response);
+                            $proofreadingTaskId = $newTask->getId();
+                            
+                            if(isset($post->{'translation_'.$i})) {
+                                $request = APIClient::API_VERSION."/tasks/$proofreadingTaskId/prerequisites/$translationTaskId";
+                                $response = $client->call($request, HTTP_Request2::METHOD_PUT);                            
+                            }                            
+
                         }                       
                         if(isset($post->{'postediting_'.$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);
-                            
-                            if($post->{'proofreading_'.$i}) {
-                                $taskModel->setTaskStatus(TaskStatusEnum::WAITING_FOR_PREREQUISITES);
-                            } else {
-                                $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            }
+                            $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             
                             $request = APIClient::API_VERSION."/tasks";
-                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);                         
+                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);    
+                            $newTask = $client->cast('Task', $response);
+                            $posteditingTaskId = $newTask->getId();
+                            
+                            if(isset($post->{'translation_'.$i}) && isset($post->{'proofreading_'.$i})) {
+                                $request = APIClient::API_VERSION."/tasks/$posteditingTaskId/prerequisites/$proofreadingTaskId";
+                                $response = $client->call($request, HTTP_Request2::METHOD_PUT);
+                            } else if(isset($post->{'translation_'.$i})) {
+                                $request = APIClient::API_VERSION."/tasks/$posteditingTaskId/prerequisites/$translationTaskId";
+                                $response = $client->call($request, HTTP_Request2::METHOD_PUT);
+                            }
                         }                       
                     } 
                     $app->redirect($app->urlFor("project-uploaded", array("project_id" => $project->getId())));
