@@ -90,7 +90,10 @@
         <tr>
             <td valign="middle">{$task->getDeadline()}</td>
             <td></td>
-            <td></td>            
+            <td valign="middle">
+                {assign var="user_id" value=$claimant->getUserId()}
+                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$claimant->getDisplayName()}</a>
+            </td>            
             <td>
                 {*todo add check once revoked*}
                 <form method="post" action="{urlFor name="task-feedback" options="task_id.$task_id"}">

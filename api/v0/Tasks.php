@@ -151,7 +151,8 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/feedback(:format)/',
                 function ($id, $format = ".json") {
                     $taskDao = new TaskDao();
-                    $task = $taskDao->getTask(array('id' => $id));
+                    $tasks = $taskDao->getTask(array('id' => $id));
+                    $task = $tasks[0];
 
                     $data = Dispatcher::getDispatcher()->request()->getBody();
                     $data = APIHelper::deserialiser($data, $format);
@@ -247,7 +248,15 @@ class Tasks {
 
             $result = $dao->duplicateTaskForTarget($task, $languageCode, $countryCode, $userID);
             Dispatcher::sendResponce(null, array("result" => $result), null, $format);
-        }, 'addTarget');        
+        }, 'addTarget');   
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/user(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            $dao = new TaskDao();
+            $data = $dao->getUserClaimedTask($id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getUserCliamedTask');
     }
 }
 Tasks::init();
