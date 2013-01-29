@@ -601,6 +601,10 @@ class UserRouteHandler
                 $orgList[$badge->getOwnerId()] = $org;
             }
         }
+        
+        $settings = new Settings();
+        
+        $org_creation = $settings->get("site.organisation_creation");
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
@@ -613,7 +617,8 @@ class UserRouteHandler
                                     'archivedJobs' => $archivedJobs,
                                     'user_tags' => $user_tags,
                                     'this_user' => $user,
-                                    'extra_scripts' => $extra_scripts
+                                    'extra_scripts' => $extra_scripts,
+                                    'org_creation' => $org_creation
         ));
                 
         if (UserSession::getCurrentUserID() === $user_id) {
