@@ -3,11 +3,13 @@
      
 <script language='javascript'>     
     var MAX_CHUNKS = {$maxChunks};
+    var CURR_CHUNKS = 2;
+    var chunkElements = document.getElementById('chunkingElements');
+    var moreTargetLanguages = document.getElementById('moreTargetLanguages');
 
     window.onload = function(){    
-
-        var chunkElements = document.getElementById('chunkingElements');
         var formSelect = document.createElement('select');
+        formSelect.setAttribute('onChange', "chunkSelectChange(this);")
     
         for(var i=0; i < MAX_CHUNKS-1; ++i) {
             var optionNode = document.createElement('option');
@@ -17,7 +19,42 @@
         }
         
         chunkElements.appendChild(formSelect);    
-    }            
+    }   
+    
+    function chunkSelectChange(node) {
+        var index = node.selectedIndex; 
+        var value = node.options[index].value;
+        var templateNode = document.getElementById('targetLanguageTemplate');
+        var clonedNode = templateNode.cloneNode(true);
+        
+        // remove Chunks
+        if(value < CURR_CHUNKS) {
+            for(var i=CURR_CHUNKS; i != value; i--) {
+
+ 
+            }        
+        // add chunks
+        } else if(value > CURR_CHUNKS) {
+        
+            for(var i=CURR_CHUNKS; i < value; i++) {
+
+                for(var j=0; j < clonedNode.childNodes.length; j++) {
+                /*
+                    if(clonedNode.childNodes[j].nodeName == 'targetLanguage_1') {
+                        clonedNode.childNodes[j].setAttribute('id', 'targetLanguage_'{$j});
+                        clonedNode.childNodes[j].setAttribute('name', 'targetLanguage_'{$j});
+                    }
+
+                    //clonedNode.
+                    var targetLanguage = document.getElementById('targetLanguage_1');
+                    targetLanguage.setAttribute('id', 'targetLanguage_'{i});
+                    var targetCountry = document.getElementById('targetLanguage_1');   
+                    moreTargetLanguages.appendChild(clonedNode);
+                    */
+                }
+            }            
+        }
+    }
 </script>
 
 <h1 class="page-header">
@@ -133,8 +170,8 @@
 
 <div class="well">
     <form method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
-    <table border="0" width="100%">
-        <tbody>
+    <table border="1" width="100%">
+        <tbody id="moreTargetLanguages">
             <tr>
                 <td colspan="5">
                     <label for="title"><h2>Chunking:</h2></label>
@@ -143,7 +180,7 @@
                 </td>    
             </tr>
             <tr>
-                <td width="15%">Number of chunks:</td>
+                <td width="15%"><b>Number of chunks:</b></td>
                 <td width="45%" id="chunkingElements"></td>            
                 <td align="center" valign="bottom">Translation</td>
                 <td align="center" valign="bottom">Proofreading</td>
@@ -172,33 +209,45 @@
                             {/foreach}
                         </select> 
                     {/if}
-                </td>
-
-                      
+                </td>                      
                 <td align="center"><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"></td>
                 <td align="center"><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y"></td>
-                <td align="center"><input type="checkbox" id="postediting_0" name="postediting_0" value="y"></td>
-                   
-                 
-
-                    
+                <td align="center"><input type="checkbox" id="postediting_0" name="postediting_0" value="y"></td>                    
             </tr>
-            <tr>
-                <!-- <div id="moreTaskTypeTables"</div> -->
-                <!-- <td id="moreTargetLanguages" width="50%"> -->
-                <td colspan="2">     
-                    <table id="moreTargetLanguages" border="0" width="100%"></table>
+            <tr id="targetLanguageTemplate" valign="top">
+                <td> 
+                    {if isset($languages)}
+                        <select name="targetLanguage_1" id="targetLanguage_1" >
+                            {foreach $languages as $language}
+                                <option value="{$language->getCode()}">{$language->getName()}</option>
+                            {/foreach}
+                        </select>
+                    {/if}
                 </td>
-            </tr> 
-            <tr>
-                <td colspan="2">
-                    <div id="alertinfo" class="alert alert-info" style="display: none;"><center>You have reached the maximum number of target translation fields allowed.</center></div>  
-                    <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
-                    <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" disabled="true" style="visibility: hidden"/>  
-                    <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1">
-                </td>
-            </tr>  
+                <td>
+                    {if isset($countries)}
+                        <select name="targetCountry_1" id="targetCountry_1">
+                            {foreach $countries as $country}
+                                <option value="{$country->getCode()}">{$country->getName()}</option>
+                            {/foreach}
+                        </select> 
+                    {/if}
+                </td>                      
+                <td align="center"><input type="checkbox" id="translation_1" checked="true" name="translation_1" value="y"></td>
+                <td align="center"><input type="checkbox" id="proofreading_1" name="proofreading_1" value="y"></td>
+                <td align="center"><input type="checkbox" id="postediting_1" name="postediting_1" value="y"></td>                    
+            </tr>
         </tbody>    
+    </table>                
+    <table width="100%">
+        <tr>
+            <td colspan="2">
+                <div id="alertinfo" class="alert alert-info" style="display: none;"><center>You have reached the maximum number of target translation fields allowed.</center></div>  
+                <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
+                <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" disabled="true" style="visibility: hidden"/>  
+                <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1">
+            </td>
+        </tr> 
     </table>
     </form>
 </div>
