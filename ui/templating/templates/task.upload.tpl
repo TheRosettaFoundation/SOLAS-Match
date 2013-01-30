@@ -13,12 +13,12 @@
 	{/if}
 	<form class="well" method="post" action="{$url_task_upload}" enctype="multipart/form-data">
 		<p><label for="{$field_name}">Choose your file</label>  
-		<input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}">
-		<input type="file" name="{$field_name}" id="{$field_name}"></p>
+		<input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/>
+		<input type="file" name="{$field_name}" id="{$field_name}"/></p>
 		<p class="help-block">Can be anything, even a .zip collection of files. Max file size {$max_file_size_mb}MB.</p>
 
-		<input type="hidden" name="organisation_id" value="1">
-		<input class="btn btn-success" type="submit" value="    Upload my selected file" name="submit">
+		<input type="hidden" name="organisation_id" value="1"/>
+		<input class="btn btn-success" type="submit" value="    Upload my selected file" name="submit"/>
                 <i class="icon-upload icon-white" style="position:relative; right:170px; top:2px;"></i> 
 	</form>
 </div>

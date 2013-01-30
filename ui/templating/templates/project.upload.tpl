@@ -37,6 +37,9 @@
                                 {if isset($targetLanguage_err)}
                                     <li>{$targetLanguage_err}</li>
                                 {/if}
+                                {if isset($file_upload_err)}
+                                    <li>File Upload Error: {$file_upload_err}</li>
+                                {/if}
                             </ol>
                         </div>                        
                     {/if}
@@ -60,21 +63,21 @@
                     <p style="margin-bottom:30px;"></p> 
                 </td>
                 <td width="493" align="center" valign="middle">    
-                    <label for="tasktrans"><h2>Source Text: <font color='red'>*</font></h2></label>  {*$field_name*}
+                    <label for="{$field_name}"><h2>Source Text: <font color='red'>*</font></h2></label>
                     <p class="desc">Upload your source file for the project. Max file size is 8 MB.</p> {*$max_file_size_mb*}
-                    <input type="hidden" name="MAX_FILE_SIZE" value="8096"> {*$max_file_size_bytes*}
-                    <input type="file" name="tasktrans" id="tasktrans">{*$field_name*}
-                    <input type="hidden" name="organisation_id" value="1">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="8096"/> {*$max_file_size_bytes*}
+                    <input type="file" name="{$field_name}" id="{$field_name}"/>
+                    <input type="hidden" name="organisation_id" value="1"/>
                     <p style="margin-bottom:30px;"></p>
                     
                     <label for="word_count"><h2>Word Count:</h2></label>
                     <p class="desc">Approximate or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.</p>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{if isset($project)}{$project->getWordCount()}{/if}">
+                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{if isset($project)}{$project->getWordCount()}{/if}"/>
                     <p style="margin-bottom:30px;"></p> 
                     
                     <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
                     <p class="desc">When the project and its tasks should be completed by.</p>
-                    <input type="text" id="deadline" name="deadline" value="{if isset($project)}{$project->getDeadline()}{/if}">
+                    <input type="text" id="deadline" name="deadline" value="{if isset($project)}{$project->getDeadline()}{/if}"/>
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="tags"><h2>Tags:</h2></label>
@@ -105,8 +108,8 @@
                             {/if}
                     {else}
                         <label for="source"><h2>Source Language: <font color='red'>*</font></h2></label>
-                        <input type="text" name="source" id="source">
-                        <input type="text" name="sourceCountry" id="source">
+                        <input type="text" name="source" id="source"/>
+                        <input type="text" name="sourceCountry" id="source"/>
                     {/if}                     
                 </td>                
                 <td align="center" valign="bottom">
@@ -145,17 +148,17 @@
                         {/if}
                     {else}
                         <label for="source"><h2>Source Language: <font color='red'>*</font></h2></label>
-                        <input type="text" name="source" id="source">
-                        <input type="text" name="sourceCountry" id="source">
+                        <input type="text" name="source" id="source"/>
+                        <input type="text" name="sourceCountry" id="source"/>
                     {/if}  
                 </td>
                 <td valign="top">
                     <table border="0" width="100%"> 
                         <tr align="center">
-                            <td bgcolor=""><input type="checkbox" id="chunking_0" name="chunking_0" value="y" onchange="chunkingEnabled(0)"></td>                            
-                            <td><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"></td>
-                            <td><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y"></td>
-                            <td><input type="checkbox" id="postediting_0" name="postediting_0" value="y"></td>
+                            <td bgcolor=""><input type="checkbox" id="chunking_0" name="chunking_0" value="y" onchange="chunkingEnabled(0)"/></td>                            
+                            <td><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
+                            <td><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y"/></td>
+                            <td><input type="checkbox" id="postediting_0" name="postediting_0" value="y"/></td>
                         </tr>                        
                     </table>                    
                 </td>
@@ -171,7 +174,7 @@
                     <div id="alertinfo" class="alert alert-info" style="display: none;"><center>You have reached the maximum number of target translation fields allowed.</center></div>  
                     <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
                     <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" disabled="true" style="visibility: hidden"/>  
-                    <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1">
+                    <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1"/>
                 </td>
             </tr>                
             <tr>

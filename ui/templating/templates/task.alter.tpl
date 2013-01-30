@@ -65,7 +65,7 @@
     {/if} 
     
     <label for="word_count">Word Count</label>
-    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}">
+    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}"/>
 
     <label for="prerequisites">Task Prerequisites</label>
     <p id="feedback">

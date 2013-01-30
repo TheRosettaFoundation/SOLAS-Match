@@ -94,20 +94,20 @@
             {else}
                 <p>
                     <label for="source">From language</label>
-                    <input type="text" name="source" id="source">
-                    <input type="text" name="sourceCountry" id="source">
+                    <input type="text" name="source" id="source"/>
+                    <input type="text" name="sourceCountry" id="source"/>
                 </p>
                 <p>
                     <label for="target">To language</label>
-                    <input type="text" name="target" id="target">
-                    <input type="text" name="targetCountry" id="source">
+                    <input type="text" name="target" id="target"/>
+                    <input type="text" name="targetCountry" id="source"/>
                 </p>
             {/if}
 
             <p>
                 <h2>Tags:</h2>
                 <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                <input type="text" name="tags" id="tags">
+                <input type="text" name="tags" id="tags"/>
             </p>
             <p style="margin-bottom:30px;"></p>
 
@@ -121,7 +121,7 @@
                     </div>
                 {/if}
                 </label>  
-                <input type="text" name="word_count" id="word_count" maxlength="6">
+                <input type="text" name="word_count" id="word_count" maxlength="6"/>
             </p>
             <p style="margin-bottom:30px;"></p>
             <button type="submit" value="Submit" name="submit" class="btn btn-primary">
