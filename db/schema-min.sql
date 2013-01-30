@@ -583,25 +583,36 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.addTaskPreReq
 DROP PROCEDURE IF EXISTS `addTaskPreReq`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `addTaskPreReq` (IN taskId INT, IN preReqId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addTaskPreReq`(IN `taskId` INT, IN `preReqId` INT)
     MODIFIES SQL DATA
 BEGIN
+	if not exists( select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
     INSERT INTO TaskPrerequisites (`task_id`, `task_id-prerequisite`)
         VALUES (taskId, preReqId);
-END //
+   	select 1 as "result";
+   else
+   	select 0 as "result";
+   end if;
+END//
 DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.removeTaskPreReq
 DROP PROCEDURE IF EXISTS `removeTaskPreReq`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskPreReq` (IN taskId INT, IN preReqId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskPreReq`(IN `taskId` INT, IN `preReqId` INT)
     MODIFIES SQL DATA
 BEGIN
-    DELETE FROM TaskPrerequisites
+	if exists( select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
+      DELETE FROM TaskPrerequisites
         WHERE task_id = taskId
         AND `task_id-prerequisite` = preReqId;
-END //
+   	select 1 as "result";
+   else
+   	select 0 as "result";
+   end if;
+END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.archiveTask
 DROP PROCEDURE IF EXISTS `archiveTask`;
@@ -2632,6 +2643,47 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
+-- Dumping structure for trigger Solas-Match-Test.initTaskStatusInsert
+DROP TRIGGER IF EXISTS `initTaskStatusInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `initTaskStatusInsert` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
+if exists 
+	(select 1 
+	 from Tasks t
+	 where t.id = new.task_id
+	 and t.`task-status_id`=2) then
+update Tasks set `task-status_id`=1
+	 where id = new.task_id;
+end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+-- Dumping structure for trigger Solas-Match-Test.updateTaskStatusDeletePrereq
+DROP TRIGGER IF EXISTS `updateTaskStatusDeletePrereq`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `updateTaskStatusDeletePrereq` AFTER DELETE ON `TaskPrerequisites` FOR EACH ROW BEGIN
+if exists 
+	(select 1 
+	 from Tasks t
+	 where t.id = old.task_id
+	 and t.`task-status_id`=1
+	 and not exists (select 1 
+						  from TaskPrerequisites tp
+						  join Tasks tsk 
+                    on tsk.id=tp.`task_id-prerequisite`
+						  where tp.task_id=t.id
+						  and tsk.`task-status_id`!= 4 )
+	 )
+	 then
+		update Tasks set `task-status_id`=2
+			 where id = old.task_id;
+end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
 
 -- Dumping structure for trigger Solas-Match-Test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
