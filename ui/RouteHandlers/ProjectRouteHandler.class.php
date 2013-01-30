@@ -163,11 +163,13 @@ class ProjectRouteHandler
         for($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
         }
-        $project_tags = array();
+        $project_tags = null;
         $request = APIClient::API_VERSION."/projects/$project_id/tags";
         $response = $client->call($request);
-        foreach ($response as $stdObject) {
-            $project_tags[] = $client->cast('Tag', $stdObject);
+        if($response) {
+            foreach ($response as $stdObject) {
+                $project_tags[] = $client->cast('Tag', $stdObject);
+            }
         }
     
 
