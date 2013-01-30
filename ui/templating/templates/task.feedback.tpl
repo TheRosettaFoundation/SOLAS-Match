@@ -85,16 +85,19 @@
         <th>Claimed Date</th> 
         <th>Claimed By</th> 
     </thead>
-    <tbody>
-            
+    <tbody>            
         <tr>
-            <td valign="middle">{$task->getDeadline()}</td>
+            <td>{$task->getDeadline()}</td>
             <td></td>
-            <td></td>            
+            <td>
+                {assign var="user_id" value=$claimant->getUserId()}
+                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$claimant->getDisplayName()}</a>
+            </td>            
             <td>
                 {*todo add check once revoked*}
-                <form method="post" action="{urlFor name="task-feedback" options="task_id.$task_id"}">
-                    <input type="hidden" name="task_id" value="{$task_id}" />                    
+                <form method="post" action="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}">
+                    <input type="hidden" name="revokeTaskId" value="{$task_id}" />  
+                    <input type="hidden" name="revokeUserId" value="{$user_id}" /> 
                     <input type="hidden" name="revokeTask" value="1" />
                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
                         <i class="icon-remove icon-white"></i> Revoke Task From User

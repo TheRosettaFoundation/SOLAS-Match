@@ -86,7 +86,7 @@
                     </div>
                 {/if}
                 </label>  
-                <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}">
+                <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}"/>
             </p>
             <p style="margin-bottom:30px;"></p>
 

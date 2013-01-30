@@ -95,6 +95,18 @@ class Users {
             Dispatcher::sendResponce(null, $dao->isSubscribedToTask($id, $taskID), null, $format);
         }, 'userSubscribedToTask');        
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/subscribedToProject/:id/:projectID/',
+                                                        function ($id, $projectID, $format = ".json") {
+
+            if (!is_numeric($projectID) && strstr($projectID, '.')) {
+                $projectID = explode('.', $projectID);
+                $format = '.'.$projectID[1];
+                $projectID = $projectID[0];
+            }
+            $dao = new UserDao();
+            Dispatcher::sendResponce(null, $dao->isSubscribedToProject($id, $projectID), null, $format);
+        }, 'userSubscribedToProject');  
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/orgs(:format)/',
                                                         function ($id, $format = ".json") {
             $dao = new UserDao();
@@ -182,7 +194,7 @@ class Users {
         }, 'userClaimTaskByID');
         
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/tasks/:tID',
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/tasks/:tID/',
                                                         function ($id, $tID ,$format = ".json") {
              
             if (!is_numeric($tID) && strstr($tID, '.')) {
@@ -191,7 +203,7 @@ class Users {
                  $tID = $tID[0];
             }
             $dao = new TaskDao;
-            Dispatcher::sendResponce(null, array("result" => $dao->unClaimTaskbyID($id,$tID)), null, $format);
+            Dispatcher::sendResponce(null, array("result" => $dao->unClaimTaskbyID($tID,$id)), null, $format);
 //            $dao = new UserDao();
 
 //            Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
@@ -349,14 +361,14 @@ class Users {
                 : "password reset request already exists"), null, $format);
         }, 'createPasswordResetRequest');   
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/Projects(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/projects(:format)/',
                                                         function ($id, $format=".json"){
             $dao = new UserDao();
             $data = $dao->getTrackedProjects($id);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTrackedProjects'); 
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/Projects/:pID',
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/projects/:pID/',
                                                         function ($id,$pID, $format=".json"){
             if (!is_numeric($pID) && strstr($pID, '.')) {
                 $pID = explode('.', $pID);
@@ -368,7 +380,7 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'userTrackProject'); 
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/Projects/:pID',
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/projects/:pID/',
                                                         function ($id,$pID, $format=".json"){
             if (!is_numeric($pID) && strstr($pID, '.')) {
                 $pID = explode('.', $pID);

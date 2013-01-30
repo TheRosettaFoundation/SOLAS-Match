@@ -146,8 +146,8 @@
 	{/if}
 	<h3>Upload your translated version of {$filename}</h3>
 	<form class="well" method="post" action="{urlFor name="task-upload-edited" options="task_id.$task_id"}" enctype="multipart/form-data">
-		<input type="hidden" name="task_id" value="{$task->getId()}">
-		<input type="file" name="edited_file" id="edited_file">
+		<input type="hidden" name="task_id" value="{$task->getId()}"/>
+		<input type="file" name="edited_file" id="edited_file"/>
 		<p class="help-block">
 			Max file size {$max_file_size}MB.
 		</p> 

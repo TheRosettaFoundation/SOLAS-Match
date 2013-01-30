@@ -1,15 +1,16 @@
 {include file="header.tpl"}
 
-     
 <script language='javascript'>     
     var MAX_CHUNKS = {$maxChunks};
     var CURR_CHUNKS = 2;
-    var chunkElements = document.getElementById('chunkingElements');
-    var moreTargetLanguages = document.getElementById('moreTargetLanguages');
+    
+    //var taskUploadTemplate = null;
 
-    window.onload = function(){    
+    $(document).ready(function() {     
+        //taskUploadTemplate = document.getElementById('taskUploadTemplate');
+        var chunkElements = document.getElementById('chunkingElements');
         var formSelect = document.createElement('select');
-        formSelect.setAttribute('onChange', "chunkSelectChange(this);")
+        formSelect.setAttribute('onchange', "chunkSelectChange(this);")
     
         for(var i=0; i < MAX_CHUNKS-1; ++i) {
             var optionNode = document.createElement('option');
@@ -18,44 +19,47 @@
             formSelect.appendChild(optionNode);            
         }
         
-        chunkElements.appendChild(formSelect);    
-    }   
+        chunkElements.appendChild(formSelect); 
+
+    }) 
     
     function chunkSelectChange(node) {
+    
         var index = node.selectedIndex; 
         var value = node.options[index].value;
-        var templateNode = document.getElementById('targetLanguageTemplate');
-        var clonedNode = templateNode.cloneNode(true);
-        
-        // remove Chunks
-        if(value < CURR_CHUNKS) {
-            for(var i=CURR_CHUNKS; i != value; i--) {
+        var templateNode = document.getElementById('taskUploadTemplate_0');
+        var taskChunks = document.getElementById('taskChunks');
 
- 
-            }        
-        // add chunks
+
+        
+        
+        if(value < CURR_CHUNKS) { 
+            for(var i=CURR_CHUNKS-1; i >value; i--) {
+                var del = document.getElementById('taskUploadTemplate_'.i);
+                taskChunks.removeChild(del);
+            }
+        
         } else if(value > CURR_CHUNKS) {
-        
-            for(var i=CURR_CHUNKS; i < value; i++) {
-
-                for(var j=0; j < clonedNode.childNodes.length; j++) {
-                /*
-                    if(clonedNode.childNodes[j].nodeName == 'targetLanguage_1') {
-                        clonedNode.childNodes[j].setAttribute('id', 'targetLanguage_'{$j});
-                        clonedNode.childNodes[j].setAttribute('name', 'targetLanguage_'{$j});
-                    }
-
-                    //clonedNode.
-                    var targetLanguage = document.getElementById('targetLanguage_1');
-                    targetLanguage.setAttribute('id', 'targetLanguage_'{i});
-                    var targetCountry = document.getElementById('targetLanguage_1');   
-                    moreTargetLanguages.appendChild(clonedNode);
-                    */
+            for(var i=CURR_CHUNKS; i <value; i++) {
+                var clonedNode = templateNode.cloneNode(true);
+                var inputs = clonedNode.getElementsByTagName('input');
+                clonedNode.setAttribute('id',clonedNode.getAttribute("id").replace("0",i));
+                for(var j=0; j < inputs.length; j++){
+                    inputs.item(j).setAttribute('id', inputs.item(j).getAttribute('id').replace("0", i));
+                    inputs.item(j).setAttribute('name', inputs.item(j).getAttribute('id'));
                 }
-            }            
+                taskChunks.appendChild(clonedNode);
+            }
+            
         }
+        
+        CURR_CHUNKS = value;       
     }
-</script>
+        
+           
+
+</script>   
+
 
 <h1 class="page-header">
     {if $task->getTitle() != ''}
@@ -171,7 +175,7 @@
 <div class="well">
     <form method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
     <table border="1" width="100%">
-        <tbody id="moreTargetLanguages">
+        <tbody id="taskChunks">
             <tr>
                 <td colspan="5">
                     <label for="title"><h2>Chunking:</h2></label>
@@ -191,65 +195,33 @@
                 <hr/>
                 </td>
             </tr>
-            <tr valign="top">
-                <td> 
-                    {if isset($languages)}
-                        <select name="targetLanguage_0" id="targetLanguage_0" >
-                            {foreach $languages as $language}
-                                <option value="{$language->getCode()}">{$language->getName()}</option>
-                            {/foreach}
-                        </select>
-                    {/if}
+            <tr id="taskUploadTemplate_0" valign="top">
+                <td colspan="2"> 
+                    <p class="desc">Upload your chunked file. Max file size is 8 MB.</p> {*$max_file_size_mb*}
+                    {*$max_file_size_bytes*}
+                    <input type="file" name="taskUpload_0" id="taskUpload_0"/>{*$field_name*}
                 </td>
-                <td>
-                    {if isset($countries)}
-                        <select name="targetCountry_0" id="targetCountry_0">
-                            {foreach $countries as $country}
-                                <option value="{$country->getCode()}">{$country->getName()}</option>
-                            {/foreach}
-                        </select> 
-                    {/if}
-                </td>                      
-                <td align="center"><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"></td>
-                <td align="center"><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y"></td>
-                <td align="center"><input type="checkbox" id="postediting_0" name="postediting_0" value="y"></td>                    
+                <td align="center" valign="middle"><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
+                <td align="center" valign="middle"><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y"/></td>
+                <td align="center" valign="middle"><input type="checkbox" id="postediting_0" name="postediting_0" value="y"/></td>                    
             </tr>
-            <tr id="targetLanguageTemplate" valign="top">
-                <td> 
-                    {if isset($languages)}
-                        <select name="targetLanguage_1" id="targetLanguage_1" >
-                            {foreach $languages as $language}
-                                <option value="{$language->getCode()}">{$language->getName()}</option>
-                            {/foreach}
-                        </select>
-                    {/if}
+            <tr id="taskUploadTemplate_1" valign="top">
+                <td colspan="2"> 
+                    <p class="desc">Upload your chunked file. Max file size is 8 MB.</p> {*$max_file_size_mb*}
+                    <input type="hidden" name="MAX_FILE_SIZE" value="8096"/> {*$max_file_size_bytes*}
+                    <input type="file" name="taskUpload_1" id="taskUpload_1"/>{*$field_name*}
                 </td>
-                <td>
-                    {if isset($countries)}
-                        <select name="targetCountry_1" id="targetCountry_1">
-                            {foreach $countries as $country}
-                                <option value="{$country->getCode()}">{$country->getName()}</option>
-                            {/foreach}
-                        </select> 
-                    {/if}
-                </td>                      
-                <td align="center"><input type="checkbox" id="translation_1" checked="true" name="translation_1" value="y"></td>
-                <td align="center"><input type="checkbox" id="proofreading_1" name="proofreading_1" value="y"></td>
-                <td align="center"><input type="checkbox" id="postediting_1" name="postediting_1" value="y"></td>                    
+                   
+                <td align="center" valign="middle"><input type="checkbox" id="translation_1" checked="true" name="translation_1" value="y"/></td>
+                <td align="center" valign="middle"><input type="checkbox" id="proofreading_1" name="proofreading_1" value="y"/></td>
+                <td align="center" valign="middle"><input type="checkbox" id="postediting_1" name="postediting_1" value="y"/></td>                    
             </tr>
         </tbody>    
-    </table>                
-    <table width="100%">
-        <tr>
-            <td colspan="2">
-                <div id="alertinfo" class="alert alert-info" style="display: none;"><center>You have reached the maximum number of target translation fields allowed.</center></div>  
-                <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
-                <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" disabled="true" style="visibility: hidden"/>  
-                <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1">
-            </td>
-        </tr> 
-    </table>
+    </table> 
     </form>
 </div>
 
+
+    
+    
 {include file="footer.tpl"}

@@ -105,7 +105,7 @@ class TaskDao {
         $args .= isset($params['id']) ?
             PDOWrapper::cleanseNull($params['id']) : "null";
         $args .= isset($params['project_id']) ?
-            PDOWrapper::cleanseNull($params['project_id']) : ", null";
+            ",".PDOWrapper::cleanseNull($params['project_id']) : ", null";
         $args .= isset($params['title']) ?
             ",".PDOWrapper::cleanseNullOrWrapStr($params['title']) : ",null";
         $args .= isset($params['word-count']) ?
@@ -593,7 +593,7 @@ class TaskDao {
         $ret = null;
         if ($result = PDOWrapper::call('getUserClaimedTask', PDOWrapper::cleanse($id))) {
             
-            $ret = ModelFactory::buildModel("User",$result );
+            $ret = ModelFactory::buildModel("User",$result[0] );
         }
         return $ret;
     }

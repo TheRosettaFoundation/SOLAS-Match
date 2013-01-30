@@ -373,6 +373,22 @@ class UserDao {
     }
 
     /*
+        returns true if the user has registered for notifications for this project
+    */
+    public function isSubscribedToProject($user_id, $project_id)
+    {
+        $ret = false;
+        $args = array();
+        $args[] = PDOWrapper::cleanse($user_id);
+        $args[] = PDOWrapper::cleanse($project_id);
+        if ($result = PDOWrapper::call('userSubscribedToProject', $args)) {
+            $ret = $result[0]['result'];
+        }
+
+        return $ret;
+    }
+    
+    /*
         Add the task to the user's notification List
     */
     public function trackTask($user_id, $task_id)
@@ -511,7 +527,7 @@ class UserDao {
     {
         $ret = null;
         if ($result = PDOWrapper::call("userTrackProject", PDOWrapper::cleanse($projectID).",".PDOWrapper::cleanse($userID))) {
-            $ret = $result["result"];
+            $ret = $result[0]["result"];
         }
         return $ret;
     }
@@ -520,7 +536,7 @@ class UserDao {
     {
         $ret = null;
         if ($result = PDOWrapper::call("userUnTrackProject", PDOWrapper::cleanse($projectID).",".PDOWrapper::cleanse($userID))) {
-            $ret = $result["result"];
+            $ret = $result[0]["result"];
         }
         return $ret;
     }
