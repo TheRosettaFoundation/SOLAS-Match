@@ -105,7 +105,7 @@ class TaskDao {
         $args .= isset($params['id']) ?
             PDOWrapper::cleanseNull($params['id']) : "null";
         $args .= isset($params['project_id']) ?
-            PDOWrapper::cleanseNull($params['project_id']) : ", null";
+            ",".PDOWrapper::cleanseNull($params['project_id']) : ", null";
         $args .= isset($params['title']) ?
             ",".PDOWrapper::cleanseNullOrWrapStr($params['title']) : ",null";
         $args .= isset($params['word-count']) ?

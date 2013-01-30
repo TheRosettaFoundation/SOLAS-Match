@@ -1,7 +1,7 @@
 <?php
 
-include_once "Common/models/WorkflowGraph.php";
-include_once "Common/models/WorkflowNode.php";
+include_once __DIR__."/../models/WorkflowGraph.php";
+include_once __DIR__."/../models/WorkflowNode.php";
 
 abstract class WorkflowBuilder
 {

@@ -1,5 +1,7 @@
 <?php
 
+require_once '../Common/lib/WorkflowBuilder.class.php';
+
 class APIWorkflowBuilder extends WorkflowBuilder
 {
     protected function getProjectTasks($projectId)
