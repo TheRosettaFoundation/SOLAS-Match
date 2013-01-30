@@ -63,16 +63,16 @@
             </td>
             <td>
                 <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                    {if isset($registered) && $registered == true}
+                    {if isset($userSubscribedToProject) && $userSubscribedToProject}
                         <p>
-                            <input type="hidden" name="notify" value="false" />
+                            <input type="hidden" name="trackProject" value="0" />
                             <input type="submit" class="btn btn-small" value="    Tracked" />
 
                             <i class="icon-inbox icon-black" style="position:relative; right:70px; top:2px;"></i>
                         </p>
                     {else}
                         <p>
-                            <input type="hidden" name="notify" value="true" />
+                            <input type="hidden" name="trackProject" value="1" />
                             <input type="submit" class="btn btn-small btn-inverse" value="    Untracked" />
 
                             <i class="icon-envelope icon-white" style="position:relative; right:81px; top:2px;"></i>
@@ -198,12 +198,12 @@
                             <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                 <input type="hidden" name="task_id" value="{$task_id}" />
                                 {if $task->getPublished() == 1}
-                                    <input type="hidden" name="published" value="0" />
+                                    <input type="hidden" name="publishedTask" value="0" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
                                         <i class="icon-check icon-black"></i> Published
                                     </a>
                                 {else}                                        
-                                    <input type="hidden" name="published" value="1" />
+                                    <input type="hidden" name="publishedTask" value="1" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
                                         <i class="icon-remove-circle icon-white"></i> Unpublished
                                     </a>
@@ -215,12 +215,12 @@
                             <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                 <input type="hidden" name="task_id" value="{$task_id}" />
                                 {if $taskMetaData[$task_id]['tracking']}
-                                    <input type="hidden" name="track" value="Ignore" />
+                                    <input type="hidden" name="trackTask" value="0" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
                                         <i class="icon-inbox icon-black"></i> Tracked
                                     </a>
                                 {else}
-                                <input type="hidden" name="track" value="Track" />
+                                <input type="hidden" name="trackTask" value="1" />
                                 <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
                                     <i class="icon-envelope icon-white"></i> Untracked
                                 </a>

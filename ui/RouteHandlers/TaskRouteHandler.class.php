@@ -1456,7 +1456,7 @@ class TaskRouteHandler
     }
     
     public function taskFeedback($task_id)
-    {  
+    {
         $app = Slim::getInstance();
         $client = new APIClient();  
         $user_id = UserSession::getCurrentUserID();
@@ -1467,7 +1467,14 @@ class TaskRouteHandler
         
         $request = APIClient::API_VERSION."/projects/{$task->getProjectId()}";
         $response = $client->call($request);     
-        $project = $client->cast('Project', $response);        
+        $project = $client->cast('Project', $response);
+
+        $claimant = null;
+        $request = APIClient::API_VERSION."/tasks/{$task->getId()}/user";
+        $response = $client->call($request);
+        if ($response) {
+            $claimant = $client->cast("User", $response);
+        }
         
         $settings = new Settings();
         $numTaskTypes = $settings->get("ui.task_types");
@@ -1480,20 +1487,17 @@ class TaskRouteHandler
         $app->view()->appendData(array(
             'project' => $project,
             'task' => $task,
+            'claimant' => $claimant,
             'taskTypeColours' => $taskTypeColours
         ));
 
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if(isset($post->revokeTask) && $post->revokeTask) {
-                //todo implement revoke task
-            }
             if(isset($post->feedback)) {
-                //wait for stored proc support
                 $feedback = new FeedbackEmail();
                 $feedback->setTaskId($task->getId());
-                //$feedback->addUserId($user->getUserId());
+                $feedback->addUserId($claimant->getUserId());
                 $feedback->setFeedback($post->feedback);
 
                 $request = APIClient::API_VERSION."/tasks/$task_id/feedback";

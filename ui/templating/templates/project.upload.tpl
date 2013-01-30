@@ -162,8 +162,6 @@
                     
             </tr>
             <tr>
-                <!-- <div id="moreTaskTypeTables"</div> -->
-                <!-- <td id="moreTargetLanguages" width="50%"> -->
                 <td colspan="2">     
                     <table id="moreTargetLanguages" border="0" width="100%"></table>
                 </td>
