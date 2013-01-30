@@ -1,12 +1,12 @@
 <?php
 
-class UIWorkflowBuilder extends WordflowBuilder
+class UIWorkflowBuilder extends WorkflowBuilder
 {
     protected function getProjectTasks($projectId)
     {
         $client = new APIClient();
-        $projectTasks = null
-        $request = APIClient::API_VERSION."/projects/$project_id/tasks";
+        $projectTasks = null;
+        $request = APIClient::API_VERSION."/projects/$projectId/tasks";
         $response = $client->call($request);
         if ($response) {
             $projectTasks = array();
@@ -21,16 +21,12 @@ class UIWorkflowBuilder extends WordflowBuilder
     protected function getTaskPreReqs($taskId)
     {
         $client = new APIClient();
-        $taskPreReqs[] = null;
+        $taskPreReqs = null;
 
         $request = APIClient::API_VERSION."/tasks/$taskId/prerequisites";
         $response = $client->call($request);
         if ($response) {
-            $taskPreReqs = array();
-            foreach ($response as $obj) {
-                $task = $client->cast("Task", $obj);
-                $taskPreReqs[] = $task;
-            }
+            $taskPreReqs = $response;
         }
 
         return $taskPreReqs;
