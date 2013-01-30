@@ -24,7 +24,7 @@
         <table border="0">
             <tr>
                 <td colspan="2">
-                    {if (isset($title_err) || isset($deadline_err) || isset($targetLanguage_err))}
+                    {if (isset($title_err) || isset($deadline_err) || isset($targetLanguage_err) || isset($file_upload_err)) }
                         <div class="alert alert-error">
                             <h3>Please fill in all required information:</h3>
                             <ol>
@@ -38,7 +38,7 @@
                                     <li>{$targetLanguage_err}</li>
                                 {/if}
                                 {if isset($file_upload_err)}
-                                    <li>File Upload Error: {$file_upload_err}</li>
+                                    <li><b>Source Text</b> - {$file_upload_err}</li>
                                 {/if}
                             </ol>
                         </div>                        
