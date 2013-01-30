@@ -88,9 +88,11 @@
             
             
 <div class="well">
-    <table width="100%">
+    <table border="0" width="100%">
         <thead>
-        <th align="left">Project Description:<hr/></th>
+        <th align="left" width="48%">Description:<hr/></th>
+        <th></th>
+        <th align="left" width="48%">Tags:<hr/></th>
         </thead>
         <tbody>
             <tr>
@@ -102,6 +104,17 @@
                         No description has been added.
                     {/if}  
                     </i>
+                </td>
+                <td></td>
+                <td>
+                {if isset($project_tags)}
+                    <ul class="nav nav-list unstyled">
+                    {foreach $project_tags as $ptag}
+                        {assign var="tag_label" value=$ptag->getLabel()}
+                        <a class="tag label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a>
+                    {/foreach}
+                    </ul>
+                {/if}                
                 </td>
             </tr>
         </tbody>
