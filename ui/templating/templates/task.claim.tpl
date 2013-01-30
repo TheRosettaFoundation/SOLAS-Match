@@ -28,7 +28,7 @@
 			Do you want to translate this file? When you are finished translating the file, you will need to upload it again.
 		</p>
 		<p>
-			<input type="hidden" name="task_id" value="{$task_id}">
+			<input type="hidden" name="task_id" value="{$task_id}"/>
 			<button type="submit" class="btn btn-primary">
                             <i class="icon-ok-circle icon-white"></i> Yes, I promise I will translate this file
                         </button>

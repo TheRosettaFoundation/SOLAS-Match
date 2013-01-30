@@ -26,9 +26,9 @@
 {if isset($openid)&& ($openid==='n'||$openid==='h' )}
 <form method="post" action="{urlFor name='login'}">
 	<label for="email">Email</label>
-	<input type="text" name="email" id="email">
+	<input type="text" name="email" id="email"/>
 	<label for="password">Password</label>
-	<input type="password" name="password" id="password">
+	<input type="password" name="password" id="password"/>
 	<p>
         <input type="submit" class="btn btn-primary" name="login" value="   Log In" />
         <input type="submit" class="btn btn-inverse" name="password_reset" value="   Reset Password" />

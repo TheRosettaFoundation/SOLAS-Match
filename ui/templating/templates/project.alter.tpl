@@ -53,13 +53,13 @@
     <input type="text" name="reference" value="{$project->getReference()}" />
 
     <label for="tags">Tags</label>
-    <input type="text" name="tags" id="tags" value="{$tag_list}">
+    <input type="text" name="tags" id="tags" value="{$tag_list}"/>
     
     <label for="word_count">Word Count:</label>
     {if isset($wordCountError) && $wordCountError != ''}
         <p class="alert alert-error">{$wordCountError}</p>
     {/if}
-    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$project->getWordCount()}">
+    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$project->getWordCount()}"/>
     <p>
         <button type="submit" value="Submit" name="submit" class="btn btn-primary">
             <i class="icon-refresh icon-white"></i> Update

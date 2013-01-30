@@ -65,9 +65,9 @@
                 <td width="493" align="center" valign="middle">    
                     <label for="tasktrans"><h2>Source Text: <font color='red'>*</font></h2></label>  {*$field_name*}
                     <p class="desc">Upload your source file for the project. Max file size is 8 MB.</p> {*$max_file_size_mb*}
-                    <input type="hidden" name="MAX_FILE_SIZE" value="8096"> {*$max_file_size_bytes*}
-                    <input type="file" name="tasktrans" id="tasktrans">{*$field_name*}
-                    <input type="hidden" name="organisation_id" value="1">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="8096"/> {*$max_file_size_bytes*}
+                    <input type="file" name="tasktrans" id="tasktrans"/>{*$field_name*}
+                    <input type="hidden" name="organisation_id" value="1"/>
                     <p style="margin-bottom:30px;"></p>
                     
                     <label for="word_count"><h2>Word Count:</h2></label>
@@ -138,8 +138,8 @@
                 {else}
 
                         <label for="source"><h2>Source Language: <font color='red'>*</font></h2></label>
-                        <input type="text" name="source" id="source">
-                        <input type="text" name="sourceCountry" id="source">
+                        <input type="text" name="source" id="source"/>
+                        <input type="text" name="sourceCountry" id="source"/>
                 {/if}  
                 </td>
 
@@ -158,10 +158,10 @@
                             <td>Post-Editing</td>
                         </tr>    
                         <tr align="center">
-                            <td><input id="chunking" type="checkbox" name="chunking" value="y" onchange="chunkingEnabled()"></td>                            
-                            <td><input id="translation" type="checkbox" checked="true" name="translation" value="y"></td>
-                            <td><input id="proofreading" type="checkbox" name="proofreading" value="y"></td>
-                            <td><input id="postediting" type="checkbox" onchange="" name="postediting" value="y"></td>
+                            <td><input id="chunking" type="checkbox" name="chunking" value="y" onchange="chunkingEnabled()"/></td>                            
+                            <td><input id="translation" type="checkbox" checked="true" name="translation" value="y"/></td>
+                            <td><input id="proofreading" type="checkbox" name="proofreading" value="y"/></td>
+                            <td><input id="postediting" type="checkbox" onchange="" name="postediting" value="y"/></td>
                         </tr>                        
                     </table>                    
                 </td>
@@ -169,8 +169,8 @@
             <tr>
                 <td>
                     <label for="target"><h2>Target Language(s): <font color='red'>*</font></h2></label>
-                    <input type="text" name="target" id="target">
-                    <input type="text" name="targetCountry" id="source">
+                    <input type="text" name="target" id="target"/>
+                    <input type="text" name="targetCountry" id="source"/>
 
                     <div id="alertinfo" class="alert alert-info" style="display: none;">You have reached the maximum number of target translation fields allowed.</div>  
                     <input id="addMoreTargetsBtn" type="button" onclick="addInput()" value="Add More Target Languages"/>

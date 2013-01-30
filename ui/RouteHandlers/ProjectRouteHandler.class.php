@@ -300,6 +300,7 @@ class ProjectRouteHandler
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID(); 
         $settings = new Settings();
+        $field_name = 'new_task_file';
 
         $error          = null;
         $title_err      = null;
@@ -359,14 +360,24 @@ class ProjectRouteHandler
                 }
             }
             
-            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err)) { 
+            $upload_error = false;
+            try {
+                TemplateHelper::validateFileHasBeenSuccessfullyUploaded($field_name);
+            } catch (Exception $e) {
+                $upload_error = true;
+                $file_upload_err = $e->getMessage();
+            }            
+
+            
+            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && !$upload_error) { 
                 $request = APIClient::API_VERSION."/projects";
                 $project->setOrganisationId($org_id);
                 if($response = $client->call($request, HTTP_Request2::METHOD_POST, $project)) {
                     $project = $client->cast('Project', $response);
                     
                     $taskModel = new Task();
-                    $taskModel->setTitle($project->getTitle());
+                    //$taskModel->setTitle($project->getTitle());
+                    $taskModel->setTitle($_FILES[$field_name]['name']);
                     $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
                     $taskModel->setSourceCountryCode($project->getSourceCountryCode());
                     $taskModel->setProjectId($project->getId());
@@ -385,6 +396,17 @@ class ProjectRouteHandler
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
+                            $createdChunkTask = $client->cast('Task', $response);
+                            
+                            try {                    
+                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$createdChunkTask->getId()}/file/".
+                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
+                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                            } catch (Exception  $e) {
+                                $upload_error = true;
+                                $error_message = 'File error: ' . $e->getMessage();
+                            } 
                         }
                         if(isset($post->{'translation_'.$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
@@ -393,6 +415,16 @@ class ProjectRouteHandler
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
                             $newTask = $client->cast('Task', $response);
                             $translationTaskId = $newTask->getId();
+                            
+                            try {                    
+                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$translationTaskId}/file/".
+                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
+                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                            } catch (Exception  $e) {
+                                $upload_error = true;
+                                $error_message = 'File error: ' . $e->getMessage();
+                            } 
                         }
                         if(isset($post->{'proofreading_'.$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
@@ -406,7 +438,18 @@ class ProjectRouteHandler
                             if(isset($post->{'translation_'.$i})) {
                                 $request = APIClient::API_VERSION."/tasks/$proofreadingTaskId/prerequisites/$translationTaskId";
                                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);                            
-                            }                            
+                            } 
+                            
+                            try {                    
+                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$proofreadingTaskId}/file/".
+                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
+                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                            } catch (Exception  $e) {
+                                $upload_error = true;
+                                $error_message = 'File error: ' . $e->getMessage();
+                            } 
+                            
 
                         }                       
                         if(isset($post->{'postediting_'.$i})) {
@@ -425,6 +468,16 @@ class ProjectRouteHandler
                                 $request = APIClient::API_VERSION."/tasks/$posteditingTaskId/prerequisites/$translationTaskId";
                                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                             }
+                            
+                            try {                    
+                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$posteditingTaskId}/file/".
+                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
+                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                            } catch (Exception  $e) {
+                                $upload_error = true;
+                                $error_message = 'File error: ' . $e->getMessage();
+                            } 
                         }                       
                     } 
                     $app->redirect($app->urlFor("project-uploaded", array("project_id" => $project->getId())));
@@ -434,7 +487,8 @@ class ProjectRouteHandler
                     'title_err'             => $title_err,
                     'deadline_err'          => $deadline_err,                   
                     'targetLanguage_err'    => $targetLanguage_err,
-                    'project'               => $project
+                    'project'               => $project,
+                    'file_upload_err'       => $file_upload_err
                 ));               
             }
         }
@@ -597,6 +651,7 @@ class ProjectRouteHandler
         $countries = TemplateHelper::getCountryList();
 
         $app->view()->appendData(array(
+            'field_name'        => $field_name,
             'error'             => $error,
             'title_error'       => $title_err,
             'word_count_err'    => $word_count_err,
