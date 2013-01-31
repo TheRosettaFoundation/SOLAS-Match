@@ -661,6 +661,7 @@ class ProjectRouteHandler
         $countries = TemplateHelper::getCountryList();
 
         $app->view()->appendData(array(
+            'max_file_size_bytes'   => TemplateHelper::maxFileSizeBytes(),
             'field_name'        => $field_name,
             'error'             => $error,
             'title_error'       => $title_err,

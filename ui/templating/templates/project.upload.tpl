@@ -65,7 +65,7 @@
                 <td width="493" align="center" valign="middle">    
                     <label for="{$field_name}"><h2>Source Text: <font color='red'>*</font></h2></label>
                     <p class="desc">Upload your source file for the project. Max file size is 8 MB.</p> {*$max_file_size_mb*}
-                    <input type="hidden" name="MAX_FILE_SIZE" value="8096"/> {*$max_file_size_bytes*}
+                    <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/> {*$max_file_size_bytes*}
                     <input type="file" name="{$field_name}" id="{$field_name}"/>
                     <input type="hidden" name="organisation_id" value="1"/>
                     <p style="margin-bottom:30px;"></p>

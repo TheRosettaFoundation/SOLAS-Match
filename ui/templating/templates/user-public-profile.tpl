@@ -34,9 +34,12 @@
 <h3>Public Display Name:</h3>
 <p>{$this_user->getDisplayName()}</p>
  
-{if TemplateHelper::getNativeLanguage($this_user) != ''}
+{if $this_user->getNativeRegionId() != null && $this_user->getNativeLangId()!= null}
     <h3>Native Language: </h3>
     <p>{TemplateHelper::getNativeLanguage($this_user)}</p>
+{else}
+    <h3>Native Language: </h3>
+    <p><i>Please select a native language!</i></p>
 {/if}
  
 {if $this_user->getBiography() != ''}
