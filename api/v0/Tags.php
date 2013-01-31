@@ -66,7 +66,7 @@ class Tags {
                 $id = $id[0];
             }
             $dao = new TagsDao();
-            $data = $dao->getTag(array("tag_id" => $id));
+            $data = $dao->getTag(array("id" => $id));
             if (is_array($data)) {
                 $data = $data[0];
             }

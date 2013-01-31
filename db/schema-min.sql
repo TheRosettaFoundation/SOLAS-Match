@@ -1237,8 +1237,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `l
     READS SQL DATA
 BEGIN
 	set @q = Concat("SELECT id 
-                         FROM Tasks t join TaskTags tt on tt.task_id=t.id
-                         WHERE tt.tag_id=? AND NOT  exists (
+                         FROM Tasks t join ProjectTags pt on pt.project_id=t.project_id
+                         WHERE pt.tag_id=? AND NOT  exists (
 							  	SELECT 1		
 								FROM TaskClaims
 								WHERE task_id = t.id
@@ -1434,15 +1434,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
 BEGIN
-set @q = Concat("   SELECT t.label AS label,t.id as tag_id, COUNT( tt.tag_id ) AS frequency
-                    FROM TaskTags AS tt 
-                    join Tags AS t on tt.tag_id = t.id
-                    join Tasks as tsk on tsk.id=tt.task_id
-                    WHERE not exists ( SELECT 1
-                                        FROM TaskClaims tc
-                                        where tc.task_id=tt.task_id
-                                        )
-                    GROUP BY tt.tag_id
+set @q = Concat("   SELECT t.label AS label,t.id as d, COUNT( pt.tag_id ) AS frequency
+                    FROM ProjectTags AS pt 
+                    join Tags AS t on pt.tag_id = t.id
+                    join Tasks tsk on tsk.project_id=pt.project_id
+                    WHERE not exists (SELECT 1
+                                       FROM TaskClaims tc
+                                       where tc.task_id=tsk.id
+                                     )
+                    GROUP BY pt.tag_id
                     ORDER BY frequency DESC
                     LIMIT ",lim);
         PREPARE stmt FROM @q;
