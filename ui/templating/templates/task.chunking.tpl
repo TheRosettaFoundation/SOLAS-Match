@@ -62,7 +62,7 @@
     function chunkSelectChange(node) {
         debug.innerHTML = '';
         var index = node.selectedIndex; 
-        var value = node.options[index].value;
+        var value = parseInt(node.options[index].value);
         var templateNode = document.getElementById('taskUploadTemplate_0');
         var taskChunks = document.getElementById('taskChunks');
         
