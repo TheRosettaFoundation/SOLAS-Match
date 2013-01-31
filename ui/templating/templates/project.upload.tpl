@@ -49,7 +49,7 @@
                 <td width="493" align="center" valign="middle">
                     <label for="title"><h2>Title: <font color='red'>*</font></h2></label>
                     <p class="desc">Provide a meaningful title for your project.</p>
-                    <textarea wrap="soft" cols="1" rows="3" name="title"></textarea>
+                    <textarea wrap="soft" cols="1" rows="3" name="title" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="description"><h2>Description:</h2></label>
@@ -71,8 +71,11 @@
                     <p style="margin-bottom:30px;"></p>
                     
                     <label for="word_count"><h2>Word Count:</h2></label>
-                    <p class="desc">Approximate or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.</p>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{if isset($project)}{$project->getWordCount()}{/if}"/>
+                    <p class="desc">Approximate or use a site such as 
+                        <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.
+                    </p>
+                    <input type="text" name="word_count" id="word_count" maxlength="6" 
+                            value="{if isset($project)}{$project->getWordCount()}{/if}"/>
                     <p style="margin-bottom:30px;"></p> 
                     
                     <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
@@ -82,7 +85,7 @@
 
                     <label for="tags"><h2>Tags:</h2></label>
                     <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                    <textarea wrap="soft" cols="1" rows="3" name="tags"></textarea> {*{if isset($projectModel)}{$projectModel->getTags()}{/if}*}
+                    <textarea wrap="soft" cols="1" rows="3" name="tags">{if isset($tagList)}{$tagList}{/if}</textarea>
                 </td>                    
             </tr>
             <tr>

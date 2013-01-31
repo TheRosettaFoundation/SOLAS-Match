@@ -149,12 +149,21 @@ class TagRouteHandler
             }
         }
 
+        $settings = new Settings();
+        $numTaskTypes = $settings->get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+        }
+
         $top_tags = array();
         $request = APIClient::API_VERSION."/tags/topTags";
         $top_tags= $client->castCall(array("Tag"), $request, HTTP_Request2::METHOD_GET, null, array('limit' => 30));
         $app->view()->appendData(array(
                  'tag' => $label,
-                 'top_tags' => $top_tags
+                 'top_tags' => $top_tags,
+                 'taskTypeColours' => $taskTypeColours
         )); 
         $app->render('tag.tpl');
     }

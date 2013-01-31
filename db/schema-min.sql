@@ -1237,8 +1237,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `l
     READS SQL DATA
 BEGIN
 	set @q = Concat("SELECT id 
-                         FROM Tasks t join TaskTags tt on tt.task_id=t.id
-                         WHERE tt.tag_id=? AND NOT  exists (
+                         FROM Tasks t join ProjectTags pt on pt.project_id=t.project_id
+                         WHERE pt.tag_id=? AND NOT  exists (
 							  	SELECT 1		
 								FROM TaskClaims
 								WHERE task_id = t.id
@@ -1404,10 +1404,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTags`(IN `id` INT)
 BEGIN
 	if id='' then set id=null;end if;
-	set @q= "select t.id , t.label from Tags t join TaskTags tt on t.id= tt.tag_id where 1 ";-- set update
+	set @q= "select t.id , t.label 
+                from Tags t 
+                join ProjectTags pt on t.id= pt.tag_id 
+                join Tasks tsk on tsk.project_id=pt.project_id 
+                where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
-		set @q = CONCAT(@q," and tt.task_id=",id) ;
+		set @q = CONCAT(@q," and tsk.id=",id) ;
 	end if;	
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -1434,15 +1438,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
 BEGIN
-set @q = Concat("   SELECT t.label AS label,t.id as tag_id, COUNT( tt.tag_id ) AS frequency
-                    FROM TaskTags AS tt 
-                    join Tags AS t on tt.tag_id = t.id
-                    join Tasks as tsk on tsk.id=tt.task_id
-                    WHERE not exists ( SELECT 1
-                                        FROM TaskClaims tc
-                                        where tc.task_id=tt.task_id
-                                        )
-                    GROUP BY tt.tag_id
+set @q = Concat("   SELECT t.label AS label,t.id as d, COUNT( pt.tag_id ) AS frequency
+                    FROM ProjectTags AS pt 
+                    join Tags AS t on pt.tag_id = t.id
+                    join Tasks tsk on tsk.project_id=pt.project_id
+                    WHERE not exists (SELECT 1
+                                       FROM TaskClaims tc
+                                       where tc.task_id=tsk.id
+                                     )
+                    GROUP BY pt.tag_id
                     ORDER BY frequency DESC
                     LIMIT ",lim);
         PREPARE stmt FROM @q;
