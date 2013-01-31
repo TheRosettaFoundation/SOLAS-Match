@@ -1491,11 +1491,23 @@ class TaskRouteHandler
             $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
         }
         
+        //HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/',
+        $task_tags = null;
+        $request = APIClient::API_VERSION."/tasks/$task_id/tags";
+        $taskTags = $client->call($request);
+        if($taskTags) {
+            foreach ($taskTags as $tag) {
+                $task_tags[] = $client->cast('Tag', $tag);
+            }
+        }
+        
+        
         $app->view()->appendData(array(
             'project' => $project,
             'task' => $task,
             'claimant' => $claimant,
-            'taskTypeColours' => $taskTypeColours
+            'taskTypeColours' => $taskTypeColours,
+            'task_tags' => $task_tags
         ));
 
         if ($app->request()->isPost()) {
