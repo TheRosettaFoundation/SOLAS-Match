@@ -50,10 +50,16 @@
             <td>
                 {if $project->getReference() != ''}
                     <a target="_blank" href="{$project->getReference()}">{$project->getReference()}</a>
-                {/if}            
+                {else}
+                    -
+                {/if}
             </td>
             <td>
-                {$project->getWordCount()}
+                {if $project->getWordCount() != ''}
+                    {$project->getWordCount()}
+                {else}
+                    -
+                {/if}
             </td>
             <td>
                 {$project->getCreatedTime()}
@@ -205,7 +211,11 @@
                             {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
                         </td>
                         <td>
-                            {$task->getWordCount()}
+                            {if $task->getWordCount() != ''}
+                                {$task->getWordCount()}
+                            {else}
+                                -
+                            {/if}
                         </td>
                         <td>
                             <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">

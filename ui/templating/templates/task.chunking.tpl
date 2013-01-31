@@ -1,12 +1,10 @@
 {include file="header.tpl"}
 
 <script language='javascript'>    
-    var debug = null;
     var MAX_CHUNKS = {$maxChunks};
     var CURR_CHUNKS = 2;
 
     $(document).ready(function() {     
-        debug = document.getElementById('debug');
         var chunkElements = document.getElementById('chunkingElements');        
         var formSelect = document.createElement('select');
         formSelect.setAttribute('name', 'chunkValue');
@@ -60,7 +58,6 @@
     }
     
     function chunkSelectChange(node) {
-        debug.innerHTML = '';
         var index = node.selectedIndex; 
         var value = parseInt(node.options[index].value);
         var templateNode = document.getElementById('taskUploadTemplate_0');
@@ -69,13 +66,11 @@
         if(value < CURR_CHUNKS) { 
             for(var i=CURR_CHUNKS; i > value; i--) {
                 var del = document.getElementById('taskUploadTemplate_' + (i-1));
-                debug.innerHTML += 'Deleting taskUploadTemplate_' + (i-1) + '<br>';
                 taskChunks.removeChild(del);
             }
         
         } else if(value > CURR_CHUNKS) {
             for(var i=CURR_CHUNKS; i < value; i++) {
-            debug.innerHTML += 'inserting taskUploadTemplate_' + i + '<br>';
                 var clonedNode = templateNode.cloneNode(true);
                 var inputs = clonedNode.getElementsByTagName('input');
                 clonedNode.setAttribute('id',clonedNode.getAttribute("id").replace("0",i));
@@ -207,6 +202,12 @@
 </div>
 
 <div class="well">
+    {if isset($flash['Warning'])}
+        <div class="alert alert-error">
+            <h3>Please fill in all required information:</h3>        
+            {$flash['Warning']}
+        </div>        
+    {/if}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="task-chunking" options="task_id.$task_id"}"> {* {urlFor name="project-view" options="project_id.$projectId"} *}
     <table border="0" width="100%">
         <tbody id="taskChunks">
@@ -237,14 +238,14 @@
             <tr id="taskUploadTemplate_0" valign="top">
                 <td colspan="4"> 
                     <p class="desc">Upload your chunked file. Max file size is 8 MB.</p>
-                    <input type="file" name="taskUpload_0" id="taskUpload_0"/>
+                    <input type="file" name="chunkUpload_0" id="chunkUpload_0"/>
                     <hr/>
                 </td>                
             </tr>
             <tr id="taskUploadTemplate_1" valign="top">
                 <td colspan="4"> 
                     <p class="desc">Upload your chunked file. Max file size is 8 MB.</p>
-                    <input type="file" name="taskUpload_1" id="taskUpload_1"/>
+                    <input type="file" name="chunkUpload_1" id="chunkUpload_1"/>
                     <hr/>
                 </td>                
             </tr>
@@ -252,13 +253,7 @@
     </table> 
     <table width="100%">
         <tr>
-            <td width="50%" align="center">   
-                <p style="margin-bottom:20px;"></p> 
-                <a href='{urlFor name="org-dashboard"}' class='btn btn-danger'>
-                    <i class="icon-ban-circle icon-white"></i> Cancel
-                </a>
-            </td>
-            <td align="center" colspan="3">
+            <td align="center" colspan="5">
                 <p style="margin-bottom:20px;"></p> 
                 <button type="submit" name="createChunking" value="1" class="btn btn-success">
                     <i class="icon-upload icon-white"></i> Submit Chunked Tasks
@@ -268,8 +263,4 @@
     </table>
     </form>
 </div>
-
-
-    
-    
 {include file="footer.tpl"}
