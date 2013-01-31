@@ -41,7 +41,7 @@
     </thead>
     <tbody>
         <tr>
-            <td>
+            <td style="text-align: left">
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
                     <a href="{urlFor name="project-view" options="project_id.$projectId"}">

@@ -106,16 +106,14 @@
                     </i>
                 </td>
                 <td></td>
-                <td>
+                <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;">
                 {if isset($project_tags) && is_array($project_tags)}
-                    <ul class="nav nav-list unstyled">
                     {foreach $project_tags as $ptag}
                         {assign var="tag_label" value=$ptag->getLabel()}
                         <a class="tag label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a>
                     {/foreach}
-                    </ul>
                 {else}
-                    There are no tags associated with this project.
+                    <i>There are no tags associated with this project.</i>                    
                 {/if}
                 </td>
             </tr>

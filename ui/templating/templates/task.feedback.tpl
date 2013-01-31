@@ -116,8 +116,8 @@
         <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback">You can provide direct feedback to the translator who claimed this task here.</textarea>                    
         <p style="margin-bottom:30px;"></p>  
         <span style="float: right; position: relative; top:-20px">
-            <button type="submit" value="Submit" name="submit" class="btn btn-primary">
-                <i class="icon-upload icon-white"></i> Submit
+            <button type="submit" value="Submit" name="submit" class="btn btn-success">
+                <i class="icon-upload icon-white"></i> Submit Feedback
             </button>        
             <button type="reset" value="Reset" name="reset" class="btn btn-primary">
                 <i class="icon-repeat icon-white"></i> Reset

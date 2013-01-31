@@ -59,14 +59,16 @@
             
             {if !is_null($badge->getOwnerId())}
                 {assign var="user_id" value=$this_user->getUserId()} 
-                <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
-                    <input type="hidden" name="badge_id" value="{$badge->getId()}" />
-                    <input type="hidden" value="Remove" onClick="return confirmPost()" />
-                    <a href="#" onclick="return confirm('Are you sure you want to remove this badge?')" 
-                            class="pull-right btn btn-inverse">
-                        <i class="icon-fire icon-white"></i> Remove Badge
-                    </a> 
-                </form>                    
+                    {if isset($private_access)}
+                        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
+                            <input type="hidden" name="badge_id" value="{$badge->getId()}" />
+                            <input type="hidden" value="Remove" onClick="return confirmPost()" />
+                            <a href="#" onclick="return confirm('Are you sure you want to remove this badge?')" 
+                                    class="pull-right btn btn-inverse">
+                                <i class="icon-fire icon-white"></i> Remove Badge
+                            </a> 
+                        </form>   
+                    {/if}
                 {assign var="org_id" value=$badge->getOwnerId()}
                 <h3>
                     <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">

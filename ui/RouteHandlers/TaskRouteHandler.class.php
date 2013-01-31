@@ -65,7 +65,7 @@ class TaskRouteHandler
         array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
         
         $app->get('/task/:task_id/chunking/', array($middleware, 'authUserForOrgTask'), 
-        array($this, 'taskChunking'))->name('task-chunking');
+        array($this, 'taskChunking'))->via('POST')->name('task-chunking');
         
         $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
@@ -1442,6 +1442,13 @@ class TaskRouteHandler
     
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
+        
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+            
+            $chunkValue = $post->chunkValue;
+            
+        }
         
         $app->view()->appendData(array(
             'project'           => $project,
