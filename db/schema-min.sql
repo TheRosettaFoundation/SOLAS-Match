@@ -1404,10 +1404,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTags`(IN `id` INT)
 BEGIN
 	if id='' then set id=null;end if;
-	set @q= "select t.id , t.label from Tags t join TaskTags tt on t.id= tt.tag_id where 1 ";-- set update
+	set @q= "select t.id , t.label 
+                from Tags t 
+                join ProjectTags pt on t.id= pt.tag_id 
+                join Tasks tsk on tsk.project_id=pt.project_id 
+                where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
-		set @q = CONCAT(@q," and tt.task_id=",id) ;
+		set @q = CONCAT(@q," and tsk.id=",id) ;
 	end if;	
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
