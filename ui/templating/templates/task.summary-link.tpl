@@ -9,11 +9,6 @@
         	{if $task->getTargetLanguageCode()}
         		To <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
         	{/if}
-                 <p>
-		    {foreach from=$task->getTags() item=tag}
-	    		<a href="{urlFor name="tag-details" options="label.$tag"}" class="label"><span class="label">{$tag}</span></a>
-     		{/foreach}
-                </p>
     	</p>
         <p>
             Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
@@ -34,6 +29,15 @@
                     {/if}                
             </p>
         {/if}
+        {if isset($task)}
+            <p>
+		        {foreach from=$task->getTagList() item=tag}
+                    {assign var="label" value=$tag->getLabel()}
+    	    		<a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
+     		    {/foreach}
+            </p>
+        {/if}
+        
 	<p class="task_details">
 		Added {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago
 		&middot; By 

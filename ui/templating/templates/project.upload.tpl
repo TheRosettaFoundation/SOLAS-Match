@@ -21,7 +21,7 @@
 <p style="margin-bottom:20px;"></p>
 <div class="well">
     <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
-        <table border="0">
+        <table>
             <tr>
                 <td colspan="2">
                     {if (isset($title_err) || isset($deadline_err) || isset($targetLanguage_err) || isset($file_upload_err)) }
@@ -45,22 +45,22 @@
                     {/if}
                 </td>
             </tr>
-            <tr>
+            <tr valign="middle">
                 <td width="493" align="center" valign="middle">
                     <label for="title"><h2>Title: <font color='red'>*</font></h2></label>
-                    <p class="desc">Provide a meaningful title for your project.</p>
+                    <p class="desc">Provide a meaningful title for the project.</p>
                     <textarea wrap="soft" cols="1" rows="3" name="title" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
-                    <p style="margin-bottom:30px;"></p>
+                    <p style="margin-bottom:20px;"></p>
 
                     <label for="description"><h2>Description:</h2></label>
                     <p class="desc">A brief summary of the project.</p>                    
                     <textarea wrap="soft" cols="1" rows="6" name="description">{if isset($project)}{$project->getDescription()}{/if}</textarea>                    
-                    <p style="margin-bottom:30px;"></p>
+                    <p style="margin-bottom:20px;"></p>
 
                     <label for="reference"><h2>Reference:</h2></label>
                     <p class="desc">Enter a URL that gives context to this project.</p>
                     <textarea wrap="soft" cols="1" rows="3" name="reference">{if isset($project)}{$project->getReference()}{/if}</textarea>    
-                    <p style="margin-bottom:30px;"></p> 
+                    <p style="margin-bottom:10px;"></p> 
                 </td>
                 <td width="493" align="center" valign="middle">    
                     <label for="{$field_name}"><h2>Source Text: <font color='red'>*</font></h2></label>

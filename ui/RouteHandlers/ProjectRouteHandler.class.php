@@ -189,7 +189,6 @@ class ProjectRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        $wordCountError = '';
         $deadlineError = '';
 
         $request = APIClient::API_VERSION."/projects/$project_id";
@@ -249,16 +248,8 @@ class ProjectRouteHandler
                     $project->addTag($tag);
                 }
             }
-
-            if (ctype_digit($post->word_count)) {
-                $project->setWordCount($post->word_count);                
-            } else if ($post->word_count != '') {
-                $wordCountError = "Word Count must be numeric";
-            } else {
-                $wordCountError = "Word Count cannot be blank";
-            }
             
-            if ($deadlineError == '' && $wordCountError == '') {
+            if ($deadlineError == '') {
                 $request = APIClient::API_VERSION."/projects/$project_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $project);
                 $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
@@ -295,7 +286,6 @@ class ProjectRouteHandler
                               'languages'       => $languages,
                               'countries'       => $countries,
                               'tag_list'        => $tag_list,
-                              'wordCountError'  => $wordCountError,
                               'deadlineError'   => $deadlineError,
                               'extra_scripts'   => $extra_scripts
         ));
