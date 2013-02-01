@@ -1367,7 +1367,7 @@ class TaskRouteHandler
         $taskTypes[TaskTypeEnum::CHUNKING] = "Chunking";
         $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
         $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
-        $taskTypes[TaskTypeEnum::POSTEDITING] = "Post Editing";
+        $taskTypes[TaskTypeEnum::POSTEDITING] = "Postediting";
 
         $extra_scripts = "
         <link rel=\"stylesheet\" href=\"".$app->urlFor("home")."resources/css/jquery-ui.css\" />

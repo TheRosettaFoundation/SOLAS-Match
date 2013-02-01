@@ -9,9 +9,6 @@
     </a>
 </h1>
 <form method="post" action="{urlFor name="project-alter" options="project_id.$project_id"}" class="well">
-    <h3>Edit Project Details</h3>    
-    <hr/>
-    
     <table width="100%">
         <tr align="center">
             <td>
@@ -56,11 +53,9 @@
                     </select>
                 </p>
                 {/if}
-                <p style="margin-bottom:20px;"></p>
                 
                 {if isset($countries)}
                 <p>
-                    <label for="source" style="font-size: large"><b>Source Country:</b></label>
                     <select name="sourceCountry" id="sourceCountry">
                         {foreach $countries as $country}
                             {if $project->getSourceCountryCode() == $country->getCode()}
@@ -75,14 +70,7 @@
                 <p style="margin-bottom:20px;"></p>
                 
                 <label for="reference" style="font-size: large"><b>Reference:</b></label>
-                <input type="text" name="reference" value="{$project->getReference()}" />
-                <p style="margin-bottom:20px;"></p>
-                
-                <label for="word_count" style="font-size: large"><b>Word Count:</b></label>
-                {if isset($wordCountError) && $wordCountError != ''}
-                    <p class="alert alert-error">{$wordCountError}</p>
-                {/if} 
-                <input type="text" name="word_count" id="word_count" maxlength="6" value="{$project->getWordCount()}"/>
+                <textarea wrap="soft" cols="1" rows="4" name="reference">{$project->getReference()}</textarea>
             </td>
         </tr>
         <tr>
@@ -92,14 +80,18 @@
         </tr>
         <tr align="center">
             <td>
+                <p style="margin-bottom:20px;"></p>  
                 <a href='{urlFor name="org-dashboard"}' class='btn btn-danger'>
                     <i class="icon-ban-circle icon-white"></i> Cancel
                 </a>
+                <p style="margin-bottom:20px;"></p>  
             </td>
             <td>
+                <p style="margin-bottom:20px;"></p>  
                 <button type="submit" value="Submit" name="submit" class="btn btn-primary">
                     <i class="icon-refresh icon-white"></i> Update
                 </button> 
+                <p style="margin-bottom:20px;"></p>  
             </td>
         </tr>
     </table>

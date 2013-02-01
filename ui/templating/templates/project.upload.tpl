@@ -48,7 +48,7 @@
             <tr valign="middle">
                 <td width="493" align="center" valign="middle">
                     <label for="title"><h2>Title: <font color='red'>*</font></h2></label>
-                    <p class="desc">Provide a meaningful title for your project.</p>
+                    <p class="desc">Provide a meaningful title for the project.</p>
                     <textarea wrap="soft" cols="1" rows="3" name="title" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
                     <p style="margin-bottom:20px;"></p>
 
