@@ -29,12 +29,12 @@
                     {/if}                
             </p>
         {/if}
-        {assign var="taskTags" value=$task->getTags()}
+        {assign var="taskTags" value=$task->getTagList()}
         {if !empty($taskTags)}
             <p>
-                Tags:
-                {foreach from=$taskTags item=tag}
-                    <a href="{urlFor name="tag-details" options="label.$tag"}" class="label"><span class="label">{$tag}</span></a>
+                {foreach from=$task->getTagList() item=tag}
+                    {assign var="label" value=$tag->getLabel()}
+                    <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
                 {/foreach}
             </p>
         {/if}

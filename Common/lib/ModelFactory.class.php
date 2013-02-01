@@ -414,7 +414,7 @@ class ModelFactory
         }
         if (isset($modelData['tags'])) {
             foreach ($modelData['tags'] as $tag) {
-                $ret->addTags($tag);
+                $ret->addTag($tag);
             }
         }
 

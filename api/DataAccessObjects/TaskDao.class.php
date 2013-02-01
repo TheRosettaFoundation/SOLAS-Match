@@ -271,7 +271,7 @@ class TaskDao {
     public function updateTags($task)
     {
         TaskTags::deleteTaskTags($task);
-        if ($tags = $task->getTags()) {
+        if ($tags = $task->getTagList()) {
             if ($tag_ids = $this->tagsToIds($tags)) {
                 TaskTags::setTaskTags($task, $tag_ids);
                 return 1;
