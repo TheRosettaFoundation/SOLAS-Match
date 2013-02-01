@@ -18,8 +18,9 @@
             Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
         </p>
         <div class="tag">
-		{foreach from=$task->getTags() item=tag}
-			<a href="{urlFor name="tag-details" options="label.$tag"}" class="label">{$tag}</a>
+		{foreach from=$task->getTagList() item=tag}
+            {assign var="label" value=$tag->getLabel()}
+			<a href="{urlFor name="tag-details" options="label.$label"}" class="label">{$label}</a>
 		{/foreach}
         </div>
 	</p>

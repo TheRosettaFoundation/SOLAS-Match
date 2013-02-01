@@ -10,7 +10,7 @@ class TaskTags {
         if ($result = PDOWrapper::call("getTaskTags", PDOWrapper::cleanseNull($task_id))) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = $row['label'];
+                $ret[] = ModelFactory::buildModel("Tag", $row);
             }
         }
         return $ret;
