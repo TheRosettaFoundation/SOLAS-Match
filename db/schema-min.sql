@@ -1401,20 +1401,13 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTaskTags
 DROP PROCEDURE IF EXISTS `getTaskTags`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTags`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTags`(IN `tID` INT)
 BEGIN
-	if id='' then set id=null;end if;
-	set @q= "select t.id , t.label from Tags t join TaskTags tt on t.id= tt.tag_id where 1 ";-- set update
-	if id is not null then 
-#set paramaters to be updated
-		set @q = CONCAT(@q," and tt.task_id=",id) ;
-	end if;	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+	set @pID = null;
+	select project_id into @pID  from Tasks where id=tID;
+	call getProjectTags(@pID);
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getTaskTranslator
 DROP PROCEDURE IF EXISTS `getTaskTranslator`;
