@@ -24,7 +24,7 @@
         <table border="0">
             <tr>
                 <td colspan="2">
-                    {if (isset($title_err) || isset($deadline_err) || isset($targetLanguage_err))}
+                    {if (isset($title_err) || isset($deadline_err) || isset($targetLanguage_err) || isset($file_upload_err)) }
                         <div class="alert alert-error">
                             <h3>Please fill in all required information:</h3>
                             <ol>
@@ -38,7 +38,7 @@
                                     <li>{$targetLanguage_err}</li>
                                 {/if}
                                 {if isset($file_upload_err)}
-                                    <li>File Upload Error: {$file_upload_err}</li>
+                                    <li><b>Source Text</b> - {$file_upload_err}</li>
                                 {/if}
                             </ol>
                         </div>                        
@@ -49,7 +49,7 @@
                 <td width="493" align="center" valign="middle">
                     <label for="title"><h2>Title: <font color='red'>*</font></h2></label>
                     <p class="desc">Provide a meaningful title for your project.</p>
-                    <textarea wrap="soft" cols="1" rows="3" name="title"></textarea>
+                    <textarea wrap="soft" cols="1" rows="3" name="title" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="description"><h2>Description:</h2></label>
@@ -65,14 +65,17 @@
                 <td width="493" align="center" valign="middle">    
                     <label for="{$field_name}"><h2>Source Text: <font color='red'>*</font></h2></label>
                     <p class="desc">Upload your source file for the project. Max file size is 8 MB.</p> {*$max_file_size_mb*}
-                    <input type="hidden" name="MAX_FILE_SIZE" value="8096"/> {*$max_file_size_bytes*}
+                    <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/> {*$max_file_size_bytes*}
                     <input type="file" name="{$field_name}" id="{$field_name}"/>
                     <input type="hidden" name="organisation_id" value="1"/>
                     <p style="margin-bottom:30px;"></p>
                     
                     <label for="word_count"><h2>Word Count:</h2></label>
-                    <p class="desc">Approximate or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.</p>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{if isset($project)}{$project->getWordCount()}{/if}"/>
+                    <p class="desc">Approximate or use a site such as 
+                        <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.
+                    </p>
+                    <input type="text" name="word_count" id="word_count" maxlength="6" 
+                            value="{if isset($project)}{$project->getWordCount()}{/if}"/>
                     <p style="margin-bottom:30px;"></p> 
                     
                     <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
@@ -82,7 +85,7 @@
 
                     <label for="tags"><h2>Tags:</h2></label>
                     <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                    <textarea wrap="soft" cols="1" rows="3" name="tags"></textarea> {*{if isset($projectModel)}{$projectModel->getTags()}{/if}*}
+                    <textarea wrap="soft" cols="1" rows="3" name="tags">{if isset($tagList)}{$tagList}{/if}</textarea>
                 </td>                    
             </tr>
             <tr>

@@ -163,13 +163,23 @@ class ProjectRouteHandler
         for($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
         }
+        $project_tags = null;
+        $request = APIClient::API_VERSION."/projects/$project_id/tags";
+        $response = $client->call($request);
+        if($response) {
+            foreach ($response as $stdObject) {
+                $project_tags[] = $client->cast('Tag', $stdObject);
+            }
+        }
+    
 
         $app->view()->appendData(array(
                 'org' => $org,
                 'projectTasks' => $project_tasks,
                 'taskMetaData' => $taskMetaData,
                 'taskTypeColours' => $taskTypeColours,
-                'userSubscribedToProject' => $userSubscribedToProject
+                'userSubscribedToProject' => $userSubscribedToProject,
+                'project_tags' => $project_tags
         ));
         
         $app->render('project.view.tpl');
@@ -301,6 +311,7 @@ class ProjectRouteHandler
         $user_id = UserSession::getCurrentUserID(); 
         $settings = new Settings();
         $field_name = 'new_task_file';
+        $tags = null;
 
         $error          = null;
         $title_err      = null;
@@ -651,6 +662,8 @@ class ProjectRouteHandler
         $countries = TemplateHelper::getCountryList();
 
         $app->view()->appendData(array(
+            'tagList'           => $tags,
+            'max_file_size_bytes'   => TemplateHelper::maxFileSizeBytes(),
             'field_name'        => $field_name,
             'error'             => $error,
             'title_error'       => $title_err,

@@ -65,7 +65,7 @@ class TaskRouteHandler
         array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
         
         $app->get('/task/:task_id/chunking/', array($middleware, 'authUserForOrgTask'), 
-        array($this, 'taskChunking'))->name('task-chunking');
+        array($this, 'taskChunking'))->via('POST')->name('task-chunking');
         
         $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
@@ -1443,6 +1443,13 @@ class TaskRouteHandler
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
         
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+            
+            $chunkValue = $post->chunkValue;
+            
+        }
+        
         $app->view()->appendData(array(
             'project'           => $project,
             'task'              => $task,
@@ -1484,11 +1491,23 @@ class TaskRouteHandler
             $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
         }
         
+        //HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/',
+        $task_tags = null;
+        $request = APIClient::API_VERSION."/tasks/$task_id/tags";
+        $taskTags = $client->call($request);
+        if($taskTags) {
+            foreach ($taskTags as $tag) {
+                $task_tags[] = $client->cast('Tag', $tag);
+            }
+        }
+        
+        
         $app->view()->appendData(array(
             'project' => $project,
             'task' => $task,
             'claimant' => $claimant,
-            'taskTypeColours' => $taskTypeColours
+            'taskTypeColours' => $taskTypeColours,
+            'task_tags' => $task_tags
         ));
 
         if ($app->request()->isPost()) {

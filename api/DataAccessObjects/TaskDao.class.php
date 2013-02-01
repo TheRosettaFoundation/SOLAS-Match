@@ -408,7 +408,7 @@ class TaskDao {
     {
         if (is_null($tag_id)) {
             throw new InvalidArgumentException('Cannot get tasks tagged with '
-                                                . $tag .
+                                                . $tag_id .
                                                 ' because no such tag is in the system.');
         }
 
