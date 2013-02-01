@@ -128,33 +128,45 @@ class Serializer
             $destination = new $destination();
         }
         if(is_object($sourceObject)){
+
             if(get_class($destination)==get_class($sourceObject)) return $sourceObject;
         
-        $sourceReflection = new ReflectionObject($sourceObject);
-        $destinationReflection = new ReflectionObject($destination);
-        $sourceProperties = $sourceReflection->getProperties();
-        foreach ($sourceProperties as $sourceProperty) {
-            $sourceProperty->setAccessible(true);
-            $name = $sourceProperty->getName();
-            $value = $sourceProperty->getValue($sourceObject);
-            if ($destinationReflection->hasProperty($name)) {
-                $propDest = $destinationReflection->getProperty($name);
-                $propDest->setAccessible(true);
-                
-                if(is_object($value)&&get_class($value)=="stdClass"){
-                    $propDest->setValue($destination, null);
-                }else{
-                    $propDest->setValue($destination, $value);
+            $sourceReflection = new ReflectionObject($sourceObject);
+            $destinationReflection = new ReflectionObject($destination);
+            $sourceProperties = $sourceReflection->getProperties();
+            foreach ($sourceProperties as $sourceProperty) {
+                $sourceProperty->setAccessible(true);
+                $name = $sourceProperty->getName();
+                $value = $sourceProperty->getValue($sourceObject);
+                if ($destinationReflection->hasProperty($name)) {
+                    $propDest = $destinationReflection->getProperty($name);
+                    $propDest->setAccessible(true);
+               
+                    if (is_array($value) && $propDest->class == "Task") {
+                        foreach ($value as $element) {
+                            $index = array_search($element, $value);
+                            if (get_class($element) == "stdClass") {
+                                $element = self::cast("Tag", $element);
+                            }
+
+                            $value[$index] = $element;
+                        }
+                    }
+
+                    if(is_object($value)&&get_class($value)=="stdClass"){
+                        $propDest->setValue($destination, null);
+                    } else {
+                        $propDest->setValue($destination, $value);
+                    }
+                } else {
+                    $destination->$name = $value;
                 }
-            } else {
-                $destination->$name = $value;
             }
+        } else {
+            $destination->parse($sourceObject);
         }
-        }else{
-          $destination->parse($sourceObject);
-        }
+
         return $destination;
-        
     }
     
     public static function getFormat($format)
