@@ -12,19 +12,9 @@ SET FOREIGN_KEY_CHECKS=0;
 
 /*--------------------------------------------------start of tables--------------------------------*/
 
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               5.5.28-0ubuntu0.12.04.3 - (Ubuntu)
--- Server OS:                    debian-linux-gnu
--- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-01-24 17:51:46
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
 
 -- Dumping structure for table Solas-Match-Test.ArchivedProjects
+DROP TABLE IF EXISTS `ArchivedProjects`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -45,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedProjectsMetaData
+DROP TABLE IF EXISTS `ArchivedProjectsMetaData`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
   `archived-project_id` int(10) unsigned NOT NULL,
   `archived-date` datetime NOT NULL,
@@ -59,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedTasks
+DROP TABLE IF EXISTS `ArchivedTasks`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
   `project_id` int(20) unsigned NOT NULL,
@@ -94,6 +86,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedTasksMetadata
+DROP TABLE IF EXISTS `ArchivedTasksMetadata`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
   `user_id-claimed` int(10) unsigned DEFAULT NULL,
@@ -111,6 +104,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
 
 
 -- Dumping structure for table Solas-Match-Test.Badges
+DROP TABLE IF EXISTS `Badges`;
 CREATE TABLE IF NOT EXISTS `Badges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) unsigned DEFAULT NULL,
@@ -121,6 +115,9 @@ CREATE TABLE IF NOT EXISTS `Badges` (
   CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+-- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
+/*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
 	(3, NULL, 'Profile-Filler', 'Filled in required info for user profile.'),
 	(4, NULL, 'Registered', 'Successfully set up an account'),
@@ -128,6 +125,7 @@ REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
 
 
 -- Dumping structure for table Solas-Match-Test.Countries
+DROP TABLE IF EXISTS `Countries`;
 CREATE TABLE IF NOT EXISTS `Countries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(2) COLLATE utf8_unicode_ci NOT NULL COMMENT '"IE", for example',
@@ -140,6 +138,7 @@ CREATE TABLE IF NOT EXISTS `Countries` (
 
 
 -- Dumping structure for table Solas-Match-Test.Languages
+DROP TABLE IF EXISTS `Languages`;
 CREATE TABLE IF NOT EXISTS `Languages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(3) COLLATE utf8_unicode_ci NOT NULL COMMENT '"en", for example',
@@ -152,6 +151,7 @@ CREATE TABLE IF NOT EXISTS `Languages` (
 
 
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
+DROP TABLE IF EXISTS `OrganisationMembers`;
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   `user_id` int(10) unsigned NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
@@ -166,6 +166,7 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
 
 
 -- Dumping structure for table Solas-Match-Test.Organisations
+DROP TABLE IF EXISTS `Organisations`;
 CREATE TABLE IF NOT EXISTS `Organisations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -179,6 +180,7 @@ CREATE TABLE IF NOT EXISTS `Organisations` (
 
 
 -- Dumping structure for table Solas-Match-Test.OrgRequests
+DROP TABLE IF EXISTS `OrgRequests`;
 CREATE TABLE IF NOT EXISTS `OrgRequests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -195,6 +197,7 @@ CREATE TABLE IF NOT EXISTS `OrgRequests` (
 
 
 -- Dumping structure for table Solas-Match-Test.PasswordResetRequests
+DROP TABLE IF EXISTS `PasswordResetRequests`;
 CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
   `uid` char(40) COLLATE utf8_unicode_ci NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
@@ -207,6 +210,7 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 
 
 -- Dumping structure for table Solas-Match-Test.Projects
+DROP TABLE IF EXISTS `Projects`;
 CREATE TABLE IF NOT EXISTS `Projects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -216,8 +220,8 @@ CREATE TABLE IF NOT EXISTS `Projects` (
   `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `word-count` int(10) DEFAULT NULL,
   `created` datetime NOT NULL,
-  `language_id` int(10) unsigned NOT NULL,
-  `country_id` int(10) unsigned NOT NULL,
+  `language_id` int(10) unsigned DEFAULT NULL,
+  `country_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `organisation_id` (`organisation_id`,`title`,`language_id`,`country_id`),
   KEY `FK_Projects_Languages` (`language_id`),
@@ -231,6 +235,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 
 
 -- Dumping structure for table Solas-Match-Test.ProjectTags
+DROP TABLE IF EXISTS `ProjectTags`;
 CREATE TABLE IF NOT EXISTS `ProjectTags` (
   `project_id` int(10) unsigned NOT NULL,
   `tag_id` int(10) unsigned NOT NULL,
@@ -244,6 +249,7 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
 
 
 -- Dumping structure for table Solas-Match-Test.Statistics
+DROP TABLE IF EXISTS `Statistics`;
 CREATE TABLE IF NOT EXISTS `Statistics` (
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `value` double NOT NULL,
@@ -254,6 +260,7 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
 
 
 -- Dumping structure for table Solas-Match-Test.Tags
+DROP TABLE IF EXISTS `Tags`;
 CREATE TABLE IF NOT EXISTS `Tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `label` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -265,6 +272,7 @@ CREATE TABLE IF NOT EXISTS `Tags` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskClaims
+DROP TABLE IF EXISTS `TaskClaims`;
 CREATE TABLE IF NOT EXISTS `TaskClaims` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
@@ -273,14 +281,15 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `Tasks` (`task_id`,`user_id`),
   KEY `FK_task_claim_user` (`user_id`),
-  CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.TaskFileVersions
+DROP TABLE IF EXISTS `TaskFileVersions`;
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
@@ -300,6 +309,7 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskPrerequisites
+DROP TABLE IF EXISTS `TaskPrerequisites`;
 CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   `task_id` bigint(20) unsigned NOT NULL,
   `task_id-prerequisite` bigint(20) unsigned NOT NULL,
@@ -313,6 +323,7 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
 
 
 -- Dumping structure for table Solas-Match-Test.Tasks
+DROP TABLE IF EXISTS `Tasks`;
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(20) unsigned NOT NULL,
@@ -350,6 +361,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskStatus
+DROP TABLE IF EXISTS `TaskStatus`;
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -361,6 +373,7 @@ CREATE TABLE IF NOT EXISTS `TaskStatus` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskTypes
+DROP TABLE IF EXISTS `TaskTypes`;
 CREATE TABLE IF NOT EXISTS `TaskTypes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -372,6 +385,7 @@ CREATE TABLE IF NOT EXISTS `TaskTypes` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserBadges
+DROP TABLE IF EXISTS `UserBadges`;
 CREATE TABLE IF NOT EXISTS `UserBadges` (
   `user_id` int(11) unsigned NOT NULL,
   `badge_id` int(11) NOT NULL,
@@ -386,6 +400,7 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserNotifications
+DROP TABLE IF EXISTS `UserNotifications`;
 CREATE TABLE IF NOT EXISTS `UserNotifications` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -394,14 +409,15 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id_task_id` (`user_id`,`task_id`),
   KEY `FK_user_notifications_task` (`task_id`),
-  CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_user_notifications_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_user_notifications_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.Users
+DROP TABLE IF EXISTS `Users`;
 CREATE TABLE IF NOT EXISTS `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `display-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -416,14 +432,15 @@ CREATE TABLE IF NOT EXISTS `Users` (
   UNIQUE KEY `email` (`email`),
   KEY `FK_user_language` (`language_id`),
   KEY `FK_user_country` (`country_id`),
-  CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_user_country` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_user_country` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.UserTags
+DROP TABLE IF EXISTS `UserTags`;
 CREATE TABLE IF NOT EXISTS `UserTags` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -439,6 +456,7 @@ CREATE TABLE IF NOT EXISTS `UserTags` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTaskScores
+DROP TABLE IF EXISTS `UserTaskScores`;
 CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   `user_id` int(11) unsigned NOT NULL,
   `task_id` bigint(11) unsigned NOT NULL,
@@ -453,6 +471,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedProjects
+DROP TABLE IF EXISTS `UserTrackedProjects`;
 CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `Project_id` int(10) unsigned DEFAULT NULL,
@@ -466,6 +485,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedTasks
+DROP TABLE IF EXISTS `UserTrackedTasks`;
 CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `task_id` bigint(10) unsigned DEFAULT NULL,
@@ -476,25 +496,10 @@ CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
 
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
-
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               5.5.28-0ubuntu0.12.04.3 - (Ubuntu)
--- Server OS:                    debian-linux-gnu
--- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-01-24 17:59:44
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
 
 -- Dumping structure for procedure Solas-Match-Test.acceptMemRequest
 DROP PROCEDURE IF EXISTS `acceptMemRequest`;
@@ -549,37 +554,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.archiveProject
-DROP PROCEDURE IF EXISTS `archiveProject`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject`(IN `projectId` INT, IN `user_id` INT)
-    MODIFIES SQL DATA
-BEGIN
-    INSERT INTO `ArchivedProjects` (id, title, description, deadline, organisation_id, reference, `word-count`, created,country_id,language_id)
-
-        SELECT *
-        FROM Projects p
-        WHERE p.id=projectId;
-
-    INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`, `archived-date`, `user_id-archived`)
-        VALUES (projectId, NOW(), user_id);
-
-    DELETE FROM Projects WHERE id=projectId;
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.getTaskPreReqs
-DROP PROCEDURE IF EXISTS `getTaskPreReqs`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskPreReqs` (IN `taskId` INT)
-    READS SQL DATA
-BEGIN
-    SELECT *
-    FROM TaskPrerequisites
-    WHERE task_id=taskId;
-END //
-DELIMITER ;
-
 -- Dumping structure for procedure Solas-Match-Test.addTaskPreReq
 DROP PROCEDURE IF EXISTS `addTaskPreReq`;
 DELIMITER //
@@ -596,20 +570,23 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.removeTaskPreReq
-DROP PROCEDURE IF EXISTS `removeTaskPreReq`;
+
+-- Dumping structure for procedure Solas-Match-Test.archiveProject
+DROP PROCEDURE IF EXISTS `archiveProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskPreReq`(IN `taskId` INT, IN `preReqId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject`(IN `projectId` INT, IN `user_id` INT)
     MODIFIES SQL DATA
 BEGIN
-	if exists( select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
-      DELETE FROM TaskPrerequisites
-        WHERE task_id = taskId
-        AND `task_id-prerequisite` = preReqId;
-   	select 1 as "result";
-   else
-   	select 0 as "result";
-   end if;
+    INSERT INTO `ArchivedProjects` (id, title, description, deadline, organisation_id, reference, `word-count`, created,country_id,language_id)
+
+        SELECT *
+        FROM Projects p
+        WHERE p.id=projectId;
+
+    INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`, `archived-date`, `user_id-archived`)
+        VALUES (projectId, NOW(), user_id);
+
+    DELETE FROM Projects WHERE id=projectId;
 END//
 DELIMITER ;
 
@@ -683,6 +660,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `claimTask`(IN `tID` INT, IN `uID` I
 BEGIN
 	if not EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
 		insert into TaskClaims  (task_id,user_id,`claimed-time`) values (tID,uID,now());
+		update Tasks set `task-status_id`=3 where id = tID;
 		select 1 as result;
 	else
 	select 0 as result;
@@ -1374,6 +1352,19 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getTaskPreReqs
+DROP PROCEDURE IF EXISTS `getTaskPreReqs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskPreReqs`(IN `taskId` INT)
+    READS SQL DATA
+BEGIN
+    SELECT *
+    FROM TaskPrerequisites
+    WHERE task_id=taskId;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getTasksByOrgIDs
 DROP PROCEDURE IF EXISTS `getTasksByOrgIDs`;
 DELIMITER //
@@ -1408,6 +1399,7 @@ BEGIN
 	call getProjectTags(@pID);
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getTaskTranslator
 DROP PROCEDURE IF EXISTS `getTaskTranslator`;
@@ -1544,6 +1536,7 @@ BEGIN
 END//
 DELIMITER ;
 
+
 -- Dumping structure for procedure Solas-Match-Test.getTrackedProjects
 DROP PROCEDURE IF EXISTS `getTrackedProjects`;
 DELIMITER //
@@ -1640,17 +1633,30 @@ WHERE user_id = id;
 END//
 DELIMITER ;
 
+
 -- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `tID` INT)
 BEGIN
-select u.* from Users u
-join TaskClaims tc 
-on u.id=tc.user_id
-where tc.task_id=tID;
+
+set @q=Concat(" SELECT t.id, t.project_id, t.title, t.`word-count`, 
+                (select code from Languages l where l.id =t.`language_id-source`) as `language_id-source`,
+                (select code from Languages l where l.id =t.`language_id-target`) as `language_id-target`,
+                t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`, 
+                (select code from Countries c where c.id =t.`country_id-target`) as `country_id-target`, comment,
+                `task-type_id`, `task-status_id`, published, deadline
+                FROM Tasks t JOIN TaskClaims tc ON tc.task_id = t.id
+                WHERE user_id = ?
+                ORDER BY `created-time` DESC
+                limit ", lim);
+        PREPARE stmt FROM @q;
+        set@uID = uID;
+	EXECUTE stmt using @uID;
+	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getUserNotifications
 DROP PROCEDURE IF EXISTS `getUserNotifications`;
@@ -2039,6 +2045,24 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.removeTaskPreReq
+DROP PROCEDURE IF EXISTS `removeTaskPreReq`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskPreReq`(IN `taskId` INT, IN `preReqId` INT)
+    MODIFIES SQL DATA
+BEGIN
+	if exists( select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
+      DELETE FROM TaskPrerequisites
+        WHERE task_id = taskId
+        AND `task_id-prerequisite` = preReqId;
+   	select 1 as "result";
+   else
+   	select 0 as "result";
+   end if;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.removeUserBadge
 DROP PROCEDURE IF EXISTS `removeUserBadge`;
 DELIMITER //
@@ -2155,6 +2179,18 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.setTaskStatus
+DROP PROCEDURE IF EXISTS `setTaskStatus`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `setTaskStatus`(IN `tID` INT, IN `sID` INT)
+BEGIN
+	update Tasks 
+		set Tasks.`task-status_id`=sID
+		where Tasks.id=tID;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.tagInsert
 DROP PROCEDURE IF EXISTS `tagInsert`;
 DELIMITER //
@@ -2183,161 +2219,364 @@ DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
 BEGIN
+
+DECLARE done INT DEFAULT 0;
+
+DECLARE tID INT DEFAULT 0;
+
+DECLARE cursor1 CURSOR FOR
+
+select t.id
+
+from Tasks t
+
+join TaskPrerequisites tp
+
+on t.id = tp.`task_id`
+
+where t.`task-status_id`=1
+
+and tp.`task_id-prerequisite`=id
+
+and not exists (select 1
+
+                    from TaskPrerequisites pre
+
+                    join Tasks tsk
+                    on tsk.id= pre.`task_id-prerequisite`
+                    where pre.task_id=t.id
+                    and tsk.`task-status_id`!=4
+						  and tsk.`id`!=id);
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+	
+
 	if id='' then set id=null;end if;
+
 	if projectID='' then set projectID=null;end if;
+
 	if name='' then set name=null;end if;
+
 	if sCode='' then set sCode=null;end if;
+
 	if tCode='' then set tCode=null;end if;
+
 	if wordCount='' then set wordCount=null;end if;
+
 	if created='' then set created=null;end if;
+
 	if taskComment='' then set taskComment=null;end if;
+
 	if sCode='' then set sCode=null;end if;
+
 	if tCode='' then set tCode=null;end if;
+
 	if dLine='' then set dLine=null;end if;
+
 	if taskType='' then set taskType=null;end if;
+
 	if tStatus='' then set tStatus=null;end if;
+
 	if pub='' then set pub=null;end if;
+
 	
-	
+
 	if id is null then
+
 		if taskComment is null then set taskComment="";end if;
+
 		if created is null or created ='0000-00-00 00:00:00' then set created=now();end if;
+
 		if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
+
 		set @scid=null;
+
 			select c.id into @scid from Countries c where c.code=sCC;
+
 		set @tcid=null;
+
 			select c.id into @tcid from Countries c where c.code=tCC;
+
 		set @sID=null;
+
 			select l.id into @sID from Languages l where l.code=sCode;
+
 		set @tID=null;
+
 			select l.id into @tID from Languages l where l.code=tCode;
+
 			if pub is null then set pub=1;end if;	
+
 			
+
 		insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`task-type_id`,`task-status_id`,`published`)
+
 		 values (projectID,name,wordCount,@sID,@tID,created,taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
+
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
+
+	
+
+		set @preStatus = null;
+		select `task-status_id` into @preStatus from Tasks t where t.id=id;
+		if (@preStatus!=4 and tStatus=4) then
+		OPEN cursor1;
+		read_loop: LOOP
+		FETCH cursor1 INTO tID;
+		IF done THEN
+	   LEAVE read_loop;
+	   END IF;
+		call setTaskStatus(tID,2);
+		END LOOP;
+		CLOSE cursor1;
+		end if;
+
+		
+
 		set @first = true;
+
 		set @q= "update Tasks t set";-- set update
+
 		if projectID is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @q = CONCAT(@q," t.project_id=",projectID) ;
+
 		end if;
+
 		if name is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @q = CONCAT(@q," t.title='",name,"'") ;
+
 		end if;
+
 		if sCode is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @sID=null;
+
 			select l.id into @sID from Languages l where l.code=sCode;
+
 			set @q = CONCAT(@q," t.`language_id-source`=",@sID) ;
+
 		end if;
+
 		if tCode is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @tID=null;
+
 			select l.id into @tID from Languages l where l.code=tCode;
+
 			set @q = CONCAT(@q," t.`language_id-target`=",@tID) ;
+
 		end if;
+
 		
+
 		if sCC is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @scid=null;
+
 			select c.id into @scid from Countries c where c.code=sCC;
+
 			set @q = CONCAT(@q," t.`country_id-source`=",@scid) ;
+
 		end if;
+
 		if tCC is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @tcid=null;
+
 			select c.id into @tcid from Countries c where c.code=tCC;
+
 			set @q = CONCAT(@q," t.`country_id-target`=",@tcid) ;
+
 		end if;
+
 		
+
 		if wordCount is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @q = CONCAT(@q," t.`word-count`=",wordCount) ;
+
 		end if;
+
 		if taskComment is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @q = CONCAT(@q," t.comment='",taskComment,"'");
+
 		end if;
+
 		if (created is not null  and created!='0000-00-00 00:00:00') then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @q = CONCAT(@q," t.`created-time`='",created,"'") ;
+
 		end if;
+
 		if (dLine is not null  and dLine!='0000-00-00 00:00:00') then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @q = CONCAT(@q," t.`deadline`='",dLine,"'") ;
+
 		end if;
+
 		if taskType is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @q = CONCAT(@q," t.`task-type_id`=",taskType) ;
+
 		end if;
+
 		if tStatus is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @q = CONCAT(@q," t.`task-status_id`=",tStatus) ;
+
 		end if;
+
 		if pub is not null then 
+
 			if (@first = false) then 
+
 				set @q = CONCAT(@q,",");
+
 			else
+
 				set @first = false;
+
 			end if;
+
 			set @q = CONCAT(@q," t.`published`=",pub) ;
+
 		end if;
+
 		set @q = CONCAT(@q," where  t.id= ",id);
+
 		PREPARE stmt FROM @q;
+
 		EXECUTE stmt;
+
 		DEALLOCATE PREPARE stmt;
+
 	end if;
+
 	call getTask(id,projectID,name,wordCount,sCode,tCode,created,sCC,tCC,taskComment,taskType,tStatus,pub,dLine);
+
 END//
 DELIMITER ;
 
@@ -2351,6 +2590,7 @@ Select exists (SELECT 1	FROM TaskClaims WHERE task_id = tID) as result;
 END//
 DELIMITER ;
 
+
 -- Dumping structure for procedure Solas-Match-Test.unClaimTask
 DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
@@ -2358,12 +2598,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID`
 BEGIN
 	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
       delete from TaskClaims where task_id=tID and user_id=uID;
+      update Tasks set `task-status_id`=2 where id = tID;
 		select 1 as result;
 	else
-	select 0 as result;
+		select 0 as result;
 	end if;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.unlinkStoredTags
 DROP PROCEDURE IF EXISTS `unlinkStoredTags`;
@@ -2535,6 +2777,23 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.userSubscribedToProject
+DROP PROCEDURE IF EXISTS `userSubscribedToProject`;
+DELIMITER //
+CREATE DEFINER=`tester`@`%` PROCEDURE `userSubscribedToProject`(IN `userId` INT, IN `projectId` INT)
+BEGIN
+	if EXISTS (SELECT project_id 
+                	FROM UserTrackedProjects
+                	WHERE user_id = userId
+                    AND project_id = projectId) then
+		select 1 as 'result';
+	else
+    	select 0 as 'result';
+	end if;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.userSubscribedToTask
 DROP PROCEDURE IF EXISTS `userSubscribedToTask`;
 DELIMITER //
@@ -2547,6 +2806,21 @@ BEGIN
 		select 1 as 'result';
 	else
     	select 0 as 'result';
+	end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.userTrackProject
+DROP PROCEDURE IF EXISTS `userTrackProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackProject`(IN `pID` INT, IN `uID` INT)
+BEGIN
+	if not exists (select 1 from UserTrackedProjects utp where utp.user_id=uID and utp.Project_id=pID) then
+		insert into UserTrackedProjects (project_id,user_id) values (pID,uID);
+		select 1 as result;
+	else
+		select 0 as result;
 	end if;
 END//
 DELIMITER ;
@@ -2567,33 +2841,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.userTrackProject
-DROP PROCEDURE IF EXISTS `userTrackProject`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackProject`(IN `pID` INT, IN `uID` INT)
-BEGIN
-	if not exists (select 1 from UserTrackedProjects utp where utp.user_id=uID and utp.Project_id=pID) then
-		insert into UserTrackedProjects (project_id,user_id) values (pID,uID);
-		select 1 as result;
-	else
-		select 0 as result;
-	end if;
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.userUnTrackTask
-DROP PROCEDURE IF EXISTS `userUnTrackTask`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackTask`(IN `uID` INT, IN `tID` BIGINT)
-BEGIN
-	if exists(select 1 from UserTrackedTasks utt where utt.user_id=uID and utt.task_id=tID) then
-		delete from UserTrackedTasks  where user_id=uID and task_id=tID;
-		select 1 as `result`;
-	else
-		select 0 as `result`;
-	end if;
-END//
-DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.userUnTrackProject
 DROP PROCEDURE IF EXISTS `userUnTrackProject`;
@@ -2609,37 +2856,21 @@ BEGIN
 END//
 DELIMITER ;
 
-/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
-
-/*---------------------------------------end of procs----------------------------------------------*/
-
-
-/*---------------------------------------start of triggers-----------------------------------------*/
-
-
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               5.5.28-0ubuntu0.12.04.3 - (Ubuntu)
--- Server OS:                    debian-linux-gnu
--- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-01-24 18:00:53
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
-
--- Dumping structure for trigger Solas-Match-Test.defaultUserName
-DROP TRIGGER IF EXISTS `defaultUserName`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+-- Dumping structure for procedure Solas-Match-Test.userUnTrackTask
+DROP PROCEDURE IF EXISTS `userUnTrackTask`;
 DELIMITER //
-CREATE TRIGGER `defaultUserName` BEFORE INSERT ON `Users` FOR EACH ROW BEGIN
-if new.`display-name` is null then set new.`display-name` = substring_index(new.email,'@',1); end if;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackTask`(IN `uID` INT, IN `tID` BIGINT)
+BEGIN
+	if exists(select 1 from UserTrackedTasks utt where utt.user_id=uID and utt.task_id=tID) then
+		delete from UserTrackedTasks  where user_id=uID and task_id=tID;
+		select 1 as `result`;
+	else
+		select 0 as `result`;
+	end if;
 END//
 DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
+
 
 -- Dumping structure for trigger Solas-Match-Test.initTaskStatusInsert
 DROP TRIGGER IF EXISTS `initTaskStatusInsert`;
@@ -2657,6 +2888,87 @@ end if;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
+
+
+
+/*---------------------------------------end of procs----------------------------------------------*/
+
+
+/*---------------------------------------start of triggers-----------------------------------------*/
+-- Dumping structure for trigger Solas-Match-Test.defaultUserName
+DROP TRIGGER IF EXISTS `defaultUserName`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `defaultUserName` BEFORE INSERT ON `Users` FOR EACH ROW BEGIN
+if new.`display-name` is null then set new.`display-name` = substring_index(new.email,'@',1); end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+
+-- Dumping structure for trigger Solas-Match-Test.initTaskStatusInsert
+DROP TRIGGER IF EXISTS `initTaskStatusInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `initTaskStatusInsert` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
+if exists 
+	(select 1 
+	 from Tasks t
+	 where t.id = new.task_id
+	 and t.`task-status_id`=2) then
+update Tasks set `task-status_id`=1
+	 where id = new.task_id;
+end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+
+-- Dumping structure for trigger Solas-Match-Test.updateDependentTaskOnComplete
+DROP TRIGGER IF EXISTS `updateDependentTaskOnComplete`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `updateDependentTaskOnComplete` BEFORE UPDATE ON `Tasks` FOR EACH ROW BEGIN
+/*
+DECLARE done INT DEFAULT 0;
+DECLARE tID INT DEFAULT 0;
+DECLARE cursor1 CURSOR FOR
+select t.id
+from Tasks t
+join TaskPrerequisites tp
+on t.id = tp.`task_id`
+where t.`task-status_id`=1
+and tp.`task_id-prerequisite`=old.id
+and not exists (select 1
+                    from TaskPrerequisites pre
+                    join Tasks tsk
+                    on tsk.id= pre.`task_id-prerequisite`
+                    where pre.task_id=t.id
+                    and tsk.`task-status_id`!=4
+						  and tsk.`id`!=old.id);
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+if ( old.`task-status_id`!=4 and new.`task-status_id`=4) then
+#begin
+
+OPEN cursor1;
+read_loop: LOOP
+	FETCH cursor1 INTO tID;
+	IF done THEN
+      LEAVE read_loop;
+   END IF;
+   
+	call setTaskStatus(tID,2);
+
+END LOOP;
+
+CLOSE cursor1;
+#	end
+end if;*/
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
 
 -- Dumping structure for trigger Solas-Match-Test.updateTaskStatusDeletePrereq
 DROP TRIGGER IF EXISTS `updateTaskStatusDeletePrereq`;
@@ -2683,6 +2995,7 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
+
 -- Dumping structure for trigger Solas-Match-Test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
@@ -2707,10 +3020,6 @@ CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `Organisations` FOR EAC
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
-/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
-
 
 /*---------------------------------------end of triggers-------------------------------------------*/
 SET FOREIGN_KEY_CHECKS=1;
