@@ -50,10 +50,16 @@
             <td>
                 {if $project->getReference() != ''}
                     <a target="_blank" href="{$project->getReference()}">{$project->getReference()}</a>
-                {/if}            
+                {else}
+                    -
+                {/if}
             </td>
             <td>
-                {$project->getWordCount()}
+                {if $project->getWordCount() != ''}
+                    {$project->getWordCount()}
+                {else}
+                    -
+                {/if}
             </td>
             <td>
                 {$project->getCreatedTime()}
@@ -88,9 +94,11 @@
             
             
 <div class="well">
-    <table width="100%">
+    <table border="0" width="100%">
         <thead>
-        <th align="left">Project Description:<hr/></th>
+        <th align="left" width="48%">Description:<hr/></th>
+        <th></th>
+        <th align="left" width="48%">Tags:<hr/></th>
         </thead>
         <tbody>
             <tr>
@@ -102,6 +110,17 @@
                         No description has been added.
                     {/if}  
                     </i>
+                </td>
+                <td></td>
+                <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;">
+                {if isset($project_tags) && is_array($project_tags)}
+                    {foreach $project_tags as $ptag}
+                        {assign var="tag_label" value=$ptag->getLabel()}
+                        <a class="tag label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a>
+                    {/foreach}
+                {else}
+                    <i>There are no tags associated with this project.</i>                    
+                {/if}
                 </td>
             </tr>
         </tbody>
@@ -192,7 +211,11 @@
                             {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
                         </td>
                         <td>
-                            {$task->getWordCount()}
+                            {if $task->getWordCount() != ''}
+                                {$task->getWordCount()}
+                            {else}
+                                -
+                            {/if}
                         </td>
                         <td>
                             <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">

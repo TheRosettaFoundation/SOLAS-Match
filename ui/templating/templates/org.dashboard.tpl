@@ -70,7 +70,11 @@
                             <b>0%</b>
                     </td>
                     <td>                      
-                            {$data['project']->getWordCount()}               
+                        {if $data['project']->getWordCount() != ''}
+                            {$data['project']->getWordCount()}
+                        {else}
+                            -
+                        {/if}
                     </td>
                     <td>
                             {$data['project']->getCreatedTime()}

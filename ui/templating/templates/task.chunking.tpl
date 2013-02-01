@@ -1,15 +1,13 @@
 {include file="header.tpl"}
 
-<script language='javascript'>     
+<script language='javascript'>    
     var MAX_CHUNKS = {$maxChunks};
     var CURR_CHUNKS = 2;
-    
-    //var taskUploadTemplate = null;
 
     $(document).ready(function() {     
-        //taskUploadTemplate = document.getElementById('taskUploadTemplate');
-        var chunkElements = document.getElementById('chunkingElements');
+        var chunkElements = document.getElementById('chunkingElements');        
         var formSelect = document.createElement('select');
+        formSelect.setAttribute('name', 'chunkValue');
         formSelect.setAttribute('onchange', "chunkSelectChange(this);")
     
         for(var i=0; i < MAX_CHUNKS-1; ++i) {
@@ -17,30 +15,62 @@
             optionNode.setAttribute('value', i+2);
             optionNode.innerHTML += (i+2);
             formSelect.appendChild(optionNode);            
-        }
-        
+        }        
         chunkElements.appendChild(formSelect); 
-
     }) 
     
-    function chunkSelectChange(node) {
+    function taskTypeSelection(type) {
+        var translationCheckBox = document.getElementById('translation_0');
+        var proofreadingCheckBox = document.getElementById('proofreading_0');
+        var posteditingCheckBox = document.getElementById('postediting_0');
+        
+        if(type == 'translation') {
+            if(translationCheckBox.checked) {            
+                translationCheckBox.disabled = false;
+                proofreadingCheckBox.disabled = true;
+                posteditingCheckBox.disabled = true;            
+            } else {
+                translationCheckBox.disabled = false;
+                proofreadingCheckBox.disabled = false;
+                posteditingCheckBox.disabled = false;             
+            }
+        } else if(type == 'proofreading') {
+            if(proofreadingCheckBox.checked) {
+                proofreadingCheckBox.disabled = false;            
+                translationCheckBox.disabled = true;
+                posteditingCheckBox.disabled = true;
+            } else {
+                proofreadingCheckBox.disabled = false;            
+                translationCheckBox.disabled = false;
+                posteditingCheckBox.disabled = false;            
+            }
+        } else if(type == 'postediting') {
+            if(posteditingCheckBox.checked) {            
+                posteditingCheckBox.disabled = false;            
+                translationCheckBox.disabled = true;
+                proofreadingCheckBox.disabled = true;
+            } else {
+                posteditingCheckBox.disabled = false;            
+                translationCheckBox.disabled = false;
+                proofreadingCheckBox.disabled = false;            
+            }            
+        }    
+    }
     
+    function chunkSelectChange(node) {
         var index = node.selectedIndex; 
-        var value = node.options[index].value;
+        var value = parseInt(node.options[index].value);
         var templateNode = document.getElementById('taskUploadTemplate_0');
         var taskChunks = document.getElementById('taskChunks');
-
-
-        
         
         if(value < CURR_CHUNKS) { 
-            for(var i=CURR_CHUNKS-1; i >value; i--) {
-                var del = document.getElementById('taskUploadTemplate_'.i);
+            for(var i=CURR_CHUNKS; i > value; i--) {
+                var del = document.getElementById('taskUploadTemplate_' + (i-1));
                 taskChunks.removeChild(del);
             }
         
         } else if(value > CURR_CHUNKS) {
-            for(var i=CURR_CHUNKS; i <value; i++) {
+            for(var i=CURR_CHUNKS; i < value; i++) {
                 var clonedNode = templateNode.cloneNode(true);
                 var inputs = clonedNode.getElementsByTagName('input');
                 clonedNode.setAttribute('id',clonedNode.getAttribute("id").replace("0",i));
@@ -49,15 +79,10 @@
                     inputs.item(j).setAttribute('name', inputs.item(j).getAttribute('id'));
                 }
                 taskChunks.appendChild(clonedNode);
-            }
-            
-        }
-        
-        CURR_CHUNKS = value;       
-    }
-        
-           
-
+            }             
+        }  
+        CURR_CHUNKS = value;              
+    } 
 </script>   
 
 
@@ -99,7 +124,7 @@
     </thead>
     <tbody>
         <tr>
-            <td>
+            <td style="text-align: left">
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
                     <a href="{urlFor name="project-view" options="project_id.$projectId"}">
@@ -171,24 +196,39 @@
         </tbody>
     </table>
 </div>
+                    
+<div id="debug">
+     
+</div>
 
 <div class="well">
-    <form method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
-    <table border="1" width="100%">
+    {if isset($flash['Warning'])}
+        <div class="alert alert-error">
+            <h3>Please fill in all required information:</h3>        
+            {$flash['Warning']}
+        </div>        
+    {/if}
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="task-chunking" options="task_id.$task_id"}"> {* {urlFor name="project-view" options="project_id.$projectId"} *}
+    <table border="0" width="100%">
         <tbody id="taskChunks">
             <tr>
-                <td colspan="5">
+                <td colspan="4">
                     <label for="title"><h2>Chunking:</h2></label>
                     <p class="desc">Divide large source files into smaller and more managable tasks.</p>
                     <hr/>
                 </td>    
             </tr>
             <tr>
-                <td width="15%"><b>Number of chunks:</b></td>
-                <td width="45%" id="chunkingElements"></td>            
-                <td align="center" valign="bottom">Translation</td>
-                <td align="center" valign="bottom">Proofreading</td>
-                <td align="center" valign="bottom">Postediting</td>
+                <td><b>Number of chunks:</b></td>         
+                <td align="center" valign="bottom"><b>Translation</b></td>
+                <td align="center" valign="bottom"><b>Proofreading</b></td>
+                <td align="center" valign="bottom"><b>Postediting</b></td>
+            </tr>
+            <tr>
+                <td id="chunkingElements"></td>  
+                <td align="center" valign="middle"><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y" onchange="taskTypeSelection('translation')"/></td>
+                <td align="center" valign="middle"><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y" onchange="taskTypeSelection('proofreading')" disabled/></td>
+                <td align="center" valign="middle"><input type="checkbox" id="postediting_0" name="postediting_0" value="y" onchange="taskTypeSelection('postediting')" disabled/></td>                
             </tr>
             <tr>
                 <td colspan="5">
@@ -196,32 +236,31 @@
                 </td>
             </tr>
             <tr id="taskUploadTemplate_0" valign="top">
-                <td colspan="2"> 
-                    <p class="desc">Upload your chunked file. Max file size is 8 MB.</p> {*$max_file_size_mb*}
-                    {*$max_file_size_bytes*}
-                    <input type="file" name="taskUpload_0" id="taskUpload_0"/>{*$field_name*}
-                </td>
-                <td align="center" valign="middle"><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
-                <td align="center" valign="middle"><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y"/></td>
-                <td align="center" valign="middle"><input type="checkbox" id="postediting_0" name="postediting_0" value="y"/></td>                    
+                <td colspan="4"> 
+                    <p class="desc">Upload your chunked file. Max file size is 8 MB.</p>
+                    <input type="file" name="chunkUpload_0" id="chunkUpload_0"/>
+                    <hr/>
+                </td>                
             </tr>
             <tr id="taskUploadTemplate_1" valign="top">
-                <td colspan="2"> 
-                    <p class="desc">Upload your chunked file. Max file size is 8 MB.</p> {*$max_file_size_mb*}
-                    <input type="hidden" name="MAX_FILE_SIZE" value="8096"/> {*$max_file_size_bytes*}
-                    <input type="file" name="taskUpload_1" id="taskUpload_1"/>{*$field_name*}
-                </td>
-                   
-                <td align="center" valign="middle"><input type="checkbox" id="translation_1" checked="true" name="translation_1" value="y"/></td>
-                <td align="center" valign="middle"><input type="checkbox" id="proofreading_1" name="proofreading_1" value="y"/></td>
-                <td align="center" valign="middle"><input type="checkbox" id="postediting_1" name="postediting_1" value="y"/></td>                    
+                <td colspan="4"> 
+                    <p class="desc">Upload your chunked file. Max file size is 8 MB.</p>
+                    <input type="file" name="chunkUpload_1" id="chunkUpload_1"/>
+                    <hr/>
+                </td>                
             </tr>
         </tbody>    
     </table> 
+    <table width="100%">
+        <tr>
+            <td align="center" colspan="5">
+                <p style="margin-bottom:20px;"></p> 
+                <button type="submit" name="createChunking" value="1" class="btn btn-success">
+                    <i class="icon-upload icon-white"></i> Submit Chunked Tasks
+                </button>
+            </td>
+        </tr>                        
+    </table>
     </form>
 </div>
-
-
-    
-    
 {include file="footer.tpl"}

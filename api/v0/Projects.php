@@ -117,6 +117,12 @@ class Projects
                 }
                 Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getArchivedProject');
+            
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/tags(:format)/',
+                                                        function ($id, $format = ".json") {
+            $dao = new ProjectTags();
+            Dispatcher::sendResponce(null, $dao->getTags($id), null, $format);
+        }, 'getProjectTags');
     }
 }
 Projects::init();

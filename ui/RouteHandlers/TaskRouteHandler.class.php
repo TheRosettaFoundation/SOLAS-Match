@@ -65,7 +65,7 @@ class TaskRouteHandler
         array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
         
         $app->get('/task/:task_id/chunking/', array($middleware, 'authUserForOrgTask'), 
-        array($this, 'taskChunking'))->name('task-chunking');
+        array($this, 'taskChunking'))->via('POST')->name('task-chunking');
         
         $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
@@ -1367,7 +1367,7 @@ class TaskRouteHandler
         $taskTypes[TaskTypeEnum::CHUNKING] = "Chunking";
         $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
         $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
-        $taskTypes[TaskTypeEnum::POSTEDITING] = "Post Editing";
+        $taskTypes[TaskTypeEnum::POSTEDITING] = "Postediting";
 
         $extra_scripts = "
         <link rel=\"stylesheet\" href=\"".$app->urlFor("home")."resources/css/jquery-ui.css\" />
@@ -1421,7 +1421,9 @@ class TaskRouteHandler
     public function taskChunking($task_id)
     {  
         $app = Slim::getInstance();
-        $client = new APIClient();  
+        $client = new APIClient();
+        $user_id = UserSession::getCurrentUserID();
+        $taskTypeErr = null;        
         
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -1442,6 +1444,81 @@ class TaskRouteHandler
     
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
+        
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post(); 
+            
+            if(!isset($post->translation_0) && !isset($post->postediting_0) && !isset($post->proofreading_0)) {
+                $app->flashNow('Warning', 'Task <b>Type</b> must be set for all chunks.');
+            } else {
+                $chunkValue = $post->chunkValue;
+                $upload_error = false;                
+                for($i=0; $i < $chunkValue && !$upload_error; $i++) {                    
+                    try {
+                        TemplateHelper::validateFileHasBeenSuccessfullyUploaded('chunkUpload_'.$i);
+                        $taskModel = new Task();
+                        if(isset($post->translation_0)) {
+                            $this->setTaskModelData($taskModel, $project, $task, $i);
+                            $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
+                            $request = APIClient::API_VERSION."/tasks";
+                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
+                            $createdTranslation =  $client->cast('Task', $response);
+                            try {                    
+                                $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);                    
+                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$createdTranslation->getId()}/file/".
+                                        urlencode($_FILES['chunkUpload_'.$i]['name'])."/$user_id",
+                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                            } catch (Exception  $e) {
+                                $upload_error = true;
+                                $error_message = 'File error: ' . $e->getMessage();
+                            } 
+                            
+                        } else if(isset($post->proofreading_0)) {
+                            $this->setTaskModelData($taskModel, $project, $task, $i);
+                            $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);                         
+                            $request = APIClient::API_VERSION."/tasks";
+                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
+                            $createdProofReading = $client->cast('Task', $response);
+                            
+                            try {                    
+                                $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);                    
+                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$createdProofReading->getId()}/file/".
+                                        urlencode($_FILES['chunkUpload_'.$i]['name'])."/$user_id",
+                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                            } catch (Exception  $e) {
+                                $upload_error = true;
+                                $error_message = 'File error: ' . $e->getMessage();
+                            }   
+                        } else if(isset($post->postediting_0)) {
+                            $this->setTaskModelData($taskModel, $project, $task, $i);                       
+                            $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);                         
+                            $request = APIClient::API_VERSION."/tasks";
+                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
+                            $createdPostEditing = $client->cast('Task', $response);
+                            
+                            try {                    
+                                $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);                    
+                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$createdPostEditing->getId()}/file/".
+                                        urlencode($_FILES['chunkUpload_'.$i]['name'])."/$user_id",
+                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                            } catch (Exception  $e) {
+                                $upload_error = true;
+                                $error_message = 'File error: ' . $e->getMessage();
+                            }    
+                        }
+                    } catch (Exception $e) {
+                        $upload_error = true;
+                        $file_upload_err = $e->getMessage();
+                    } 
+                }
+                $task->setTaskStatus(TaskStatusEnum::COMPLETE);
+                $request = APIClient::API_VERSION."/tasks/$task_id";
+                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task); 
+                $app->redirect($app->urlFor("project-view", array("project_id" => $project->getId())));
+            }
+            
+                
+        }
         
         $app->view()->appendData(array(
             'project'           => $project,
@@ -1484,11 +1561,23 @@ class TaskRouteHandler
             $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
         }
         
+        //HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/',
+        $task_tags = null;
+        $request = APIClient::API_VERSION."/tasks/$task_id/tags";
+        $taskTags = $client->call($request);
+        if($taskTags) {
+            foreach ($taskTags as $tag) {
+                $task_tags[] = $client->cast('Tag', $tag);
+            }
+        }
+        
+        
         $app->view()->appendData(array(
             'project' => $project,
             'task' => $task,
             'claimant' => $claimant,
-            'taskTypeColours' => $taskTypeColours
+            'taskTypeColours' => $taskTypeColours,
+            'task_tags' => $task_tags
         ));
 
         if ($app->request()->isPost()) {
@@ -1508,5 +1597,15 @@ class TaskRouteHandler
         }
         
         $app->render('task.feedback.tpl');
+    }
+    
+    private function setTaskModelData($taskModel, $project, $task, $i) {
+        $taskModel->setTitle($_FILES['chunkUpload_'.$i]['name']);
+        $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
+        $taskModel->setSourceCountryCode($project->getSourceCountryCode());
+        $taskModel->setTargetLanguageCode($task->getTargetLanguageCode());
+        $taskModel->setTargetCountryCode($task->getTargetCountryCode());
+        $taskModel->setProjectId($project->getId());
+        $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
     }
 }

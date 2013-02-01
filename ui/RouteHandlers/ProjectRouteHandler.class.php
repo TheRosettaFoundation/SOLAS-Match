@@ -163,13 +163,23 @@ class ProjectRouteHandler
         for($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
         }
+        $project_tags = null;
+        $request = APIClient::API_VERSION."/projects/$project_id/tags";
+        $response = $client->call($request);
+        if($response) {
+            foreach ($response as $stdObject) {
+                $project_tags[] = $client->cast('Tag', $stdObject);
+            }
+        }
+    
 
         $app->view()->appendData(array(
                 'org' => $org,
                 'projectTasks' => $project_tasks,
                 'taskMetaData' => $taskMetaData,
                 'taskTypeColours' => $taskTypeColours,
-                'userSubscribedToProject' => $userSubscribedToProject
+                'userSubscribedToProject' => $userSubscribedToProject,
+                'project_tags' => $project_tags
         ));
         
         $app->render('project.view.tpl');
@@ -179,7 +189,6 @@ class ProjectRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        $wordCountError = '';
         $deadlineError = '';
 
         $request = APIClient::API_VERSION."/projects/$project_id";
@@ -239,16 +248,8 @@ class ProjectRouteHandler
                     $project->addTag($tag);
                 }
             }
-
-            if (ctype_digit($post->word_count)) {
-                $project->setWordCount($post->word_count);                
-            } else if ($post->word_count != '') {
-                $wordCountError = "Word Count must be numeric";
-            } else {
-                $wordCountError = "Word Count cannot be blank";
-            }
             
-            if ($deadlineError == '' && $wordCountError == '') {
+            if ($deadlineError == '') {
                 $request = APIClient::API_VERSION."/projects/$project_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $project);
                 $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
@@ -285,7 +286,6 @@ class ProjectRouteHandler
                               'languages'       => $languages,
                               'countries'       => $countries,
                               'tag_list'        => $tag_list,
-                              'wordCountError'  => $wordCountError,
                               'deadlineError'   => $deadlineError,
                               'extra_scripts'   => $extra_scripts
         ));
@@ -301,6 +301,7 @@ class ProjectRouteHandler
         $user_id = UserSession::getCurrentUserID(); 
         $settings = new Settings();
         $field_name = 'new_task_file';
+        $tags = null;
 
         $error          = null;
         $title_err      = null;
@@ -651,6 +652,8 @@ class ProjectRouteHandler
         $countries = TemplateHelper::getCountryList();
 
         $app->view()->appendData(array(
+            'tagList'           => $tags,
+            'max_file_size_bytes'   => TemplateHelper::maxFileSizeBytes(),
             'field_name'        => $field_name,
             'error'             => $error,
             'title_error'       => $title_err,

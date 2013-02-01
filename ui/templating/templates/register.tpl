@@ -15,9 +15,9 @@
 {/if}
 {if isset($openid)&& ($openid==='n'||$openid==='h' )}
 <form method="post" action="{urlFor name="register"}" class="well">
-	<label for="email">Email</label>
+	<label for="email"><b>Email:</b></label>
 	<input type="text" name="email" id="email" placeholder="Your email"/>
-	<label for="password">Password</label>
+	<label for="password"><b>Password:</b></label>
 	<input type="password" name="password" id="password" placeholder="Your password"/>
 	<p>
 	<button type="submit" class="btn btn-success" name="submit">

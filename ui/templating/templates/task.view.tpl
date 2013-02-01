@@ -41,7 +41,7 @@
     </thead>
     <tbody>
         <tr>
-            <td>
+            <td style="text-align: left">
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
                     <a href="{urlFor name="project-view" options="project_id.$projectId"}">
@@ -63,7 +63,11 @@
                 {date("D dS, M Y", strtotime($task->getDeadline()))}
             </td>
             <td>
-                {$task->getWordCount()}                
+                {if $task->getWordCount() != ''}
+                    {$task->getWordCount()}
+                {else}
+                    -
+                {/if}              
             </td> 
             <td>                            
                 {assign var="status_id" value=$task->getTaskStatus()}

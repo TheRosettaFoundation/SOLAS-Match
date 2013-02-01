@@ -38,7 +38,7 @@
 {/if}
     
 <form class="well" method="post" action="{urlFor name="org-request-queue" options="org_id.$org_id"}">
-    <label for="email">User's email address:</label>
+    <label for="email"><b>User's email address:</b></label>
     <input type="text" name="email" />
 
     <p>
