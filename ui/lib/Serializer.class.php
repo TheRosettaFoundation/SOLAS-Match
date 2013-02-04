@@ -122,10 +122,15 @@ class Serializer
         if (is_null($destination) || is_null($sourceObject)) {
             return null;
         }
-       
+
+        $primitives = array("int", "integer", "string", "boolean");
         
         if (is_string($destination)) {
-            $destination = new $destination();
+            if (in_array($destination, $primitives)) {
+                return null;
+            } else {
+                $destination = new $destination();
+            }
         }
         if(is_object($sourceObject)){
 
@@ -142,11 +147,15 @@ class Serializer
                     $propDest = $destinationReflection->getProperty($name);
                     $propDest->setAccessible(true);
                
-                    if (is_array($value) && $propDest->class == "Task") {
+                    if (is_array($value)) {
                         foreach ($value as $element) {
                             $index = array_search($element, $value);
                             if (get_class($element) == "stdClass") {
-                                $element = self::cast("Tag", $element);
+                                if (preg_match("/@var\s+[\\\\a-zA-Z]*[\\\\]([^\s]+)[[]]/", 
+                                            $propDest->getDocComment(), $matches)) {
+                                    list( , $className) = $matches;
+                                    $element = self::cast($className, $element);
+                                }
                             }
 
                             $value[$index] = $element;
