@@ -195,8 +195,7 @@ class Upload {
                                                     number was not specified.version = $version");
         }
 
-        $settings           = new Settings();
-        $uploads_folder     = $settings->get('files.upload_path');
+        $uploads_folder     = Settings::get('files.upload_path');
         $project_folder     = 'proj-' . $task->getProjectId();
         $task_folder        = 'task-' . $task->getId();
         $version_folder     = 'v-' . $version;

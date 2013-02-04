@@ -39,9 +39,8 @@ class UserRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();        
-        $settings = new Settings();
         
-        $use_statistics = $settings->get('site.stats'); 
+        $use_statistics = Settings::get('site.stats'); 
         
         if ($use_statistics == 'y') {
             $request = APIClient::API_VERSION."/stats/totalUsers";
@@ -131,11 +130,11 @@ class UserRouteHandler
             ));
         }
         
-        $numTaskTypes = $settings->get("ui.task_types");
+        $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
         
         for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
         }  
         
         $app->view()->appendData(array(
@@ -150,8 +149,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         
-        $tempSettings = new Settings();
-        $use_openid = $tempSettings->get("site.openid");
+        $use_openid = Settings::get("site.openid");
         $app->view()->setData('openid', $use_openid);
         if (isset($use_openid)) {
             if ($use_openid == 'y' || $use_openid == 'h') {
@@ -351,9 +349,8 @@ class UserRouteHandler
         $client = new APIClient();
         
         $error = null;
-        $tempSettings=new Settings();
-        $openid = new LightOpenID($tempSettings->get("site.url"));
-        $use_openid = $tempSettings->get("site.openid");
+        $openid = new LightOpenID(Settings::get("site.url"));
+        $use_openid = Settings::get("site.openid");
         $app->view()->setData('openid', $use_openid);
         if (isset($use_openid)) {
             if ($use_openid == 'y' || $use_openid == 'h') {
@@ -536,7 +533,7 @@ class UserRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if (isset($post->badge_id) && $post->badge_id != '') {
+            if (isset($post->revokeBadge) && isset($post->badge_id) && $post->badge_id != ''){
                 $badge_id = $post->badge_id;
                 $request = APIClient::API_VERSION."/users/$user_id/badges/$badge_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                 
@@ -602,11 +599,9 @@ class UserRouteHandler
                 $org = $client->cast('Organisation', $mResponse);
                 $orgList[$badge->getOwnerId()] = $org;
             }
-        }
-        
-        $settings = new Settings();
-        
-        $org_creation = $settings->get("site.organisation_creation");
+        }       
+       
+        $org_creation = Settings::get("site.organisation_creation");
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"".$app->urlFor("home");
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";

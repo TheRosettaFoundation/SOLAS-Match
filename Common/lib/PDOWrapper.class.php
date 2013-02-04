@@ -25,13 +25,12 @@ class PDOWrapper {
     private function __construct()
     {
         // Set up the connection
-        $settings = new Settings();
         $this->logging = (strlen($this->logfile)>0) ? true : false;
         if ($this->logging) {
-            $this->logfile = $settings->get('db.log_file'); // full path to debug logfile. Use only in debug mode!
+            $this->logfile = Settings::get('db.log_file'); // full path to debug logfile. Use only in debug mode!
         }
-        $this->show_errors = ($settings->get('db.show_errors') == 'y') ? true : false;
-        $this->show_sql = ($settings->get('db.show_sql') == 'y') ? true : false;
+        $this->show_errors = (Settings::get('db.show_errors') == 'y') ? true : false;
+        $this->show_sql = (Settings::get('db.show_sql') == 'y') ? true : false;
         $this->init();
     }
 
@@ -61,17 +60,16 @@ class PDOWrapper {
      */
     private function openConnection()
     {
-        $settings = new Settings();
         $conn = false;
         $ret = false;       
         
         if ($this->use_permanent_connection) {
-            $conn = new PDO("mysql:host={$settings->get('db.server')};dbname={$settings->get('db.database')};port={$settings->get('db.server_port')}",
-                            $settings->get('db.username'), $settings->get('db.password'),
+            $conn = new PDO("mysql:host=".Settings::get('db.server').";dbname=".Settings::get('db.database').";port=".Settings::get('db.server_port'),
+                            Settings::get('db.username'), Settings::get('db.password'),
                             array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", PDO::ATTR_PERSISTENT => true));  
         } else {
-            $conn = new PDO("mysql:host={$settings->get('db.server')};dbname={$settings->get('db.database')};port={$settings->get('db.server_port')}",
-                            $settings->get('db.username'), $settings->get('db.password'),
+            $conn = new PDO("mysql:host=".Settings::get('db.server').";dbname=".Settings::get('db.database').";port=".Settings::get('db.server_port'),
+                            Settings::get('db.username'), Settings::get('db.password'),
                             array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  
         }
         

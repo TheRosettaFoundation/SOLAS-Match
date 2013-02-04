@@ -27,12 +27,11 @@ class MessagingClient
 
     public function messagingClient()
     {
-        $settings = new Settings();
-        $this->host = $settings->get('messaging.host');
-        $this->port = $settings->get('messaging.port');
-        $this->user = $settings->get('messaging.mess_user');
-        $this->pass = $settings->get('messaging.mess_pass');
-        $vhost = $settings->get('messaging.virtualhost');
+        $this->host = Settings::get('messaging.host');
+        $this->port = Settings::get('messaging.port');
+        $this->user = Settings::get('messaging.mess_user');
+        $this->pass = Settings::get('messaging.mess_pass');
+        $vhost = Settings::get('messaging.virtualhost');
         if ($vhost != '') {
             $this->vhost = $vhost;
         }

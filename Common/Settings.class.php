@@ -2,39 +2,26 @@
 
 class Settings {
 
-    private $_settings = array();
+    private static $settings = array();
+    private function __construct() {}
 
-    public function __construct()
+    public static function get($var)
     {
-        $file = dirname(__FILE__).'/includes/conf.ini';
-        $this->load($file);
-    }
-
-    public function get($var)
-    {
-        $result = $this->retrieveValue($var);
-        if (is_null($result)) {
+        self::load(dirname(__FILE__).'/includes/conf.ini');
+        $var = explode('.', $var);
+        if (isset(self::$settings[$var[1]])) {
+            return self::$settings[$var[1]];
+        } else {
             throw new BadMethodCallException('Could not load the requested setting ' . $var);
         }
-        return $result;
     }
 
-    private function retrieveValue($var)
-    {
-        $var = explode('.', $var);
-        if (isset($this->_settings[$var[1]])) {
-            return $this->_settings[$var[1]];
-        } else {
-            return null;
-        }
-    }
-
-    public function load($file)
+    private static function load($file)
     {
         if (file_exists($file)) {
-            $this->_settings = parse_ini_file($file);
+            self::$settings = parse_ini_file($file);
             //This updates the upload path to be absolute
-            $this->_settings['upload_path'] = __DIR__."/../".$this->_settings['upload_path'];
+            self::$settings['upload_path'] = __DIR__."/../".self::$settings['upload_path'];
         } else {
             echo "<p>Could not load ini file</p>";
         }

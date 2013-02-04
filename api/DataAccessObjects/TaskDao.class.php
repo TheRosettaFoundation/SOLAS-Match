@@ -247,8 +247,7 @@ class TaskDao {
 
     private function calculateTaskScore($task_id)
     {
-        $settings = new Settings();
-        $use_backend = $settings->get('site.backend');
+        $use_backend = Settings::get('site.backend');
         if (strcasecmp($use_backend, "y") == 0) {
             $mMessagingClient = new MessagingClient();
             if ($mMessagingClient->init()) {

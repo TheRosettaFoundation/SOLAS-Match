@@ -17,7 +17,7 @@
         {if $task->getTaskType()}
             {assign var="type_id" value=$task->getTaskType()}
             <p>
-                Task Type:                  
+                Type:                  
                     {if $type_id == TaskTypeEnum::CHUNKING}
                         <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>                                    
                     {elseif $type_id == TaskTypeEnum::TRANSLATION}
@@ -32,6 +32,7 @@
         {assign var="taskTags" value=$task->getTagList()}
         {if !empty($taskTags)}
             <p>
+                Tags:
                 {foreach from=$task->getTagList() item=tag}
                     {assign var="label" value=$tag->getLabel()}
                     <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>

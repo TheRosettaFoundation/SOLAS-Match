@@ -3,9 +3,12 @@
 <head>
 	<meta charset="utf-8">
 	<title>{if isset($title)}{$title}{else}SOLAS Match{/if}</title>
-	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css">
-    <script type="text/javascript" src="{urlFor name="home"}ui/js/jquery-1.9.0.min.js"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
+        <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/jquery-1.9.0.min.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/jquery-ui.js"></script>
+    
     {if isset($extra_scripts)}
         {$extra_scripts}
     {/if}
