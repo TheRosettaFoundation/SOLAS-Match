@@ -150,11 +150,13 @@ class Serializer
                     if (is_array($value)) {
                         foreach ($value as $element) {
                             $index = array_search($element, $value);
-                            if (get_class($element) == "stdClass") {
-                                if (preg_match("/@var\s+[\\\\a-zA-Z]*[\\\\]([^\s]+)[[]]/", 
-                                            $propDest->getDocComment(), $matches)) {
-                                    list( , $className) = $matches;
-                                    $element = self::cast($className, $element);
+                            if(is_object($element)) {
+                                if (get_class($element) == "stdClass") {
+                                    if (preg_match("/@var\s+[\\\\a-zA-Z]*[\\\\]([^\s]+)[[]]/", 
+                                                $propDest->getDocComment(), $matches)) {
+                                        list( , $className) = $matches;
+                                        $element = self::cast($className, $element);
+                                    }
                                 }
                             }
 
