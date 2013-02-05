@@ -8,7 +8,7 @@
 {* {assign var="badge_id" value=$badge->getId()} *}
 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="well">
     <input type="hidden" name="badge_id" value="{$badge->getId()}" />    
-    <label for='title'>Badge Title</label>
+    <label for='title'><b>Badge Title:</b></label>
     <input type='text' name='title' id='title'
     {if $badge->getTitle() != ''}
         value='{$badge->getTitle()}'
@@ -16,13 +16,13 @@
         placeholder='Enter updated badge name here'
     {/if} /> 
 
-    <label for="description">Description</label>
+    <label for="description"><b>Description:</b></label>
     <textarea name='description' cols='40' rows='5' {if $badge->getDescription() == ''} placeholder="Enter updated badge description here" {/if}
     >{if $badge->getDescription() != ''}{$badge->getDescription()}{/if}</textarea>
     
     <p>
         <button type='submit' class='btn btn-primary' name='submit'>
-            <i class="icon-refresh icon-white"></i> Update
+            <i class="icon-refresh icon-white"></i> Update Badge
         </button>
     </p>
 </form>

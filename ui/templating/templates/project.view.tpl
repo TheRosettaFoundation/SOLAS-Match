@@ -101,7 +101,7 @@
         <th align="left" width="48%">Tags:<hr/></th>
         </thead>
         <tbody>
-            <tr>
+            <tr valign="top">
                 <td>
                     <i>
                     {if $project->getDescription() != ''}

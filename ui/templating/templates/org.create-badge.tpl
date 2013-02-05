@@ -20,7 +20,7 @@
 
     <p>
         <button type='submit' class='btn btn-success' name='submit'>
-            <i class="icon-star icon-white"></i> Create
+            <i class="icon-star icon-white"></i> Create Badge
         </button>
     </p>
 </form>

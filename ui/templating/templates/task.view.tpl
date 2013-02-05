@@ -93,7 +93,7 @@
         <th width="48%" align="left">Project Description:<hr/></th>
         </thead>
         <tbody>
-            <tr>
+            <tr valign="top">
                 <td>
                     <i>
                     {if $task->getComment() != ''}
