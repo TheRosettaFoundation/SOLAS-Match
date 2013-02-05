@@ -14,7 +14,7 @@ SET FOREIGN_KEY_CHECKS=0;
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedProjects
-DROP TABLE IF EXISTS `ArchivedProjects`;
+
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedProjectsMetaData
-DROP TABLE IF EXISTS `ArchivedProjectsMetaData`;
+
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
   `archived-project_id` int(10) unsigned NOT NULL,
   `archived-date` datetime NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedTasks
-DROP TABLE IF EXISTS `ArchivedTasks`;
+
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
   `project_id` int(20) unsigned NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedTasksMetadata
-DROP TABLE IF EXISTS `ArchivedTasksMetadata`;
+
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
   `user_id-claimed` int(10) unsigned DEFAULT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
 
 
 -- Dumping structure for table Solas-Match-Test.Badges
-DROP TABLE IF EXISTS `Badges`;
+
 CREATE TABLE IF NOT EXISTS `Badges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) unsigned DEFAULT NULL,
@@ -125,7 +125,7 @@ REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
 
 
 -- Dumping structure for table Solas-Match-Test.Countries
-DROP TABLE IF EXISTS `Countries`;
+
 CREATE TABLE IF NOT EXISTS `Countries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(2) COLLATE utf8_unicode_ci NOT NULL COMMENT '"IE", for example',
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `Countries` (
 
 
 -- Dumping structure for table Solas-Match-Test.Languages
-DROP TABLE IF EXISTS `Languages`;
+
 CREATE TABLE IF NOT EXISTS `Languages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(3) COLLATE utf8_unicode_ci NOT NULL COMMENT '"en", for example',
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `Languages` (
 
 
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
-DROP TABLE IF EXISTS `OrganisationMembers`;
+
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   `user_id` int(10) unsigned NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
@@ -166,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
 
 
 -- Dumping structure for table Solas-Match-Test.Organisations
-DROP TABLE IF EXISTS `Organisations`;
+
 CREATE TABLE IF NOT EXISTS `Organisations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `Organisations` (
 
 
 -- Dumping structure for table Solas-Match-Test.OrgRequests
-DROP TABLE IF EXISTS `OrgRequests`;
+
 CREATE TABLE IF NOT EXISTS `OrgRequests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `OrgRequests` (
 
 
 -- Dumping structure for table Solas-Match-Test.PasswordResetRequests
-DROP TABLE IF EXISTS `PasswordResetRequests`;
+
 CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
   `uid` char(40) COLLATE utf8_unicode_ci NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 
 
 -- Dumping structure for table Solas-Match-Test.Projects
-DROP TABLE IF EXISTS `Projects`;
+
 CREATE TABLE IF NOT EXISTS `Projects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -235,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 
 
 -- Dumping structure for table Solas-Match-Test.ProjectTags
-DROP TABLE IF EXISTS `ProjectTags`;
+
 CREATE TABLE IF NOT EXISTS `ProjectTags` (
   `project_id` int(10) unsigned NOT NULL,
   `tag_id` int(10) unsigned NOT NULL,
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
 
 
 -- Dumping structure for table Solas-Match-Test.Statistics
-DROP TABLE IF EXISTS `Statistics`;
+
 CREATE TABLE IF NOT EXISTS `Statistics` (
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `value` double NOT NULL,
@@ -260,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
 
 
 -- Dumping structure for table Solas-Match-Test.Tags
-DROP TABLE IF EXISTS `Tags`;
+
 CREATE TABLE IF NOT EXISTS `Tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `label` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -272,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `Tags` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskClaims
-DROP TABLE IF EXISTS `TaskClaims`;
+
 CREATE TABLE IF NOT EXISTS `TaskClaims` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
@@ -289,7 +289,7 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskFileVersions
-DROP TABLE IF EXISTS `TaskFileVersions`;
+
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
@@ -309,7 +309,7 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskPrerequisites
-DROP TABLE IF EXISTS `TaskPrerequisites`;
+
 CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   `task_id` bigint(20) unsigned NOT NULL,
   `task_id-prerequisite` bigint(20) unsigned NOT NULL,
@@ -323,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
 
 
 -- Dumping structure for table Solas-Match-Test.Tasks
-DROP TABLE IF EXISTS `Tasks`;
+
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(20) unsigned NOT NULL,
@@ -361,7 +361,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskStatus
-DROP TABLE IF EXISTS `TaskStatus`;
+
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -380,7 +380,7 @@ REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 	(4, "Complete");
 
 -- Dumping structure for table Solas-Match-Test.TaskTypes
-DROP TABLE IF EXISTS `TaskTypes`;
+
 CREATE TABLE IF NOT EXISTS `TaskTypes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -400,7 +400,7 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
 
 
 -- Dumping structure for table Solas-Match-Test.UserBadges
-DROP TABLE IF EXISTS `UserBadges`;
+
 CREATE TABLE IF NOT EXISTS `UserBadges` (
   `user_id` int(11) unsigned NOT NULL,
   `badge_id` int(11) NOT NULL,
@@ -415,7 +415,7 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserNotifications
-DROP TABLE IF EXISTS `UserNotifications`;
+
 CREATE TABLE IF NOT EXISTS `UserNotifications` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -432,7 +432,7 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
 
 
 -- Dumping structure for table Solas-Match-Test.Users
-DROP TABLE IF EXISTS `Users`;
+
 CREATE TABLE IF NOT EXISTS `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `display-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -455,7 +455,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTags
-DROP TABLE IF EXISTS `UserTags`;
+
 CREATE TABLE IF NOT EXISTS `UserTags` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -471,7 +471,7 @@ CREATE TABLE IF NOT EXISTS `UserTags` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTaskScores
-DROP TABLE IF EXISTS `UserTaskScores`;
+
 CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   `user_id` int(11) unsigned NOT NULL,
   `task_id` bigint(11) unsigned NOT NULL,
@@ -486,7 +486,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedProjects
-DROP TABLE IF EXISTS `UserTrackedProjects`;
+
 CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `Project_id` int(10) unsigned DEFAULT NULL,
@@ -500,7 +500,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedTasks
-DROP TABLE IF EXISTS `UserTrackedTasks`;
+
 CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `task_id` bigint(10) unsigned DEFAULT NULL,
@@ -1652,7 +1652,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `tID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `uID` INT, IN `lim` INT)
 BEGIN
 
 set @q=Concat(" SELECT t.id, t.project_id, t.title, t.`word-count`, 

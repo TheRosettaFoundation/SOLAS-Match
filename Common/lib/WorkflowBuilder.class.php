@@ -5,54 +5,67 @@ include_once __DIR__."/../models/WorkflowNode.php";
 
 abstract class WorkflowBuilder
 {
-    public function buildGraph($project_id)
+    public function buildProjectGraph($projectId)
     {
-        $graph = null;
-        $projectTasks = $this->getProjectTasks($project_id);
+        $projectTasks = $this->getProjectTasks($projectId);
+        $taskPreReqIds = array();
 
         if ($projectTasks) {
-            //find roots
-            $graph = new WorkflowGraph();
             $taskPreReqIds = array();
             foreach ($projectTasks as $task) {
                 $taskPreReqIds[$task->getId()] = $this->getTaskPreReqs($task->getId());
-                if (!$taskPreReqIds[$task->getId()] || count($taskPreReqIds[$task->getId()]) < 1) {
-                    $node = new WorkflowNode();
-                    $node->setTaskId($task->getId());
-                    $node->setTask($task);
-                    $graph->addRootNode($node);
-
-                    //Remove from list of tasks
-                    $index = array_search($task, $projectTasks);
-                    unset($projectTasks[$index]);
-                }
             }
+        }
 
-            if ($graph->hasRootNode()) {
-                $previousLayer = $graph->getRootNodeList();
-                $previousLayerIds = array();    //array to hold previous layer's ids
-                $currentLayer = array();
+        return $this->parseAndBuild($taskPreReqIds);
+    }
+
+
+    /*
+     *  The graphArray parameter is an associative array of 
+     *  task objects => task pre req ids
+     *  For new tasks you must set its id to 0
+     */
+    public function parseAndBuild($graphArray)
+    {
+        $graph = new WorkflowGraph();
+        
+        foreach ($graphArray as $taskId => $preReqIds) {
+            if ($preReqIds == null || count($preReqIds) < 1) {
+                $node = new WorkflowNode();
+                $node->setTaskId($taskId);
+                $graph->addRootNode($node);
+
+                //Remove from list of tasks
+                unset($graphArray[$taskId]);
+            }
+        }
+
+        if ($graph->hasRootNode()) {
+            $previousLayer = $graph->getRootNodeList();
+            $previousLayerIds = array();    //array to hold previous layer's ids
+            $currentLayer = array();
                 
-                while (count($projectTasks) > 0 && count($previousLayer) > 0) {
-                    foreach($previousLayer as $node) {
-                        $previousLayerIds[] = $node->getTaskId();
-                    }
+            while (count($graphArray) > 0 && count($previousLayer) > 0) {
+                foreach($previousLayer as $node) {
+                    $previousLayerIds[] = $node->getTaskId();
+                }
 
-                    foreach ($projectTasks as $task) {
-                        $satisfiedPreReqs = array();
-                        foreach ($taskPreReqIds[$task->getId()] as $preReqId) {
+                foreach ($graphArray as $taskId => $preReqIds) {
+                    $satisfiedPreReqs = array();
+                    if (is_array($preReqIds) && count($preReqIds) > 0) {
+                        foreach ($preReqIds as $preReqId) {
                             if (in_array($preReqId, $previousLayerIds)) {
                                 $satisfiedPreReqs[] = $preReqId;
 
-                                $index = array_search($preReqId, $taskPreReqIds[$task->getId()]);
-                                unset($taskPreReqIds[$task->getId()][$index]);
+                                $index = array_search($preReqId, $preReqIds);
+                                unset($preReqIds[$index]);
                             }
                         }
 
-                        if (count($taskPreReqIds[$task->getId()]) == 0) {
+                        if (count($preReqIds) == 0) {
                             $node = new WorkflowNode();
-                            $node->setTaskId($task->getId());
-                            $node->setTask($task);
+                            $node->setTaskId($taskId);
 
                             foreach ($previousLayer as $pNode) {
                                 if (in_array($pNode->getTaskId(), $satisfiedPreReqs)) {
@@ -60,24 +73,24 @@ abstract class WorkflowBuilder
                                     $pNode->addNext($node);
                                 }
                             }
-
+    
                             $currentLayer[] = $node;
-                            $index = array_search($node->getTask(), $projectTasks);
-                            unset($projectTasks[$index]);
+                            $index = array_search($node->getTaskId(), $graphArray);
+                            unset($graphArray[$taskId]);
                         }
                     }
-                    $previousLayer = $currentLayer;
-                    $currentLayer = array();
                 }
+                $previousLayer = $currentLayer;
+                $currentLayer = array();
+            }
 
-                if (count($projectTasks) > 0) {
-                    // a deadlock occured
-                    $graph = null;
-                }
-            } else {
-                //a deadlock has occured
+            if (count($graphArray) > 0) {
+                // a deadlock occured
                 $graph = null;
             }
+        } else {
+            //a deadlock has occured
+            $graph = null;
         }
 
         return $graph;
@@ -113,7 +126,11 @@ abstract class WorkflowBuilder
 
     public function printNode($node)
     {
-        echo "<p>{$node->getTaskId()}: {$node->getTask()->getTitle()}</p>";
+        if ($node->hasTask()) {
+            echo "<p>{$node->getTaskId()}: {$node->getTask()->getTitle()}</p>";
+        } else {
+            echo "<p>{$node->getTaskId()}</p>";
+        }
         echo "<p>IN: [";
         foreach ($node->getPreviousList() as $pNode) {
             echo $pNode->getTaskId().", ";
