@@ -770,7 +770,7 @@ class TaskRouteHandler
             window.onload = function() {
                 new datepickr(\"deadline_date\");
             };
-        </script>".file_get_contents(Settings::get('site.url').'ui/js/task-alter.js');
+        </script>".file_get_contents(Settings::get('site.url').$app->urlFor("home").'ui/js/task-alter.js');
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -1053,7 +1053,11 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
-        $org_id = $task->getOrganisationId();
+
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+        $org_id = $project->getOrganisationId();
 
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
@@ -1064,7 +1068,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
+        $request = APIClient::API_VERSION."/orgs/$org_id";
         $response = $client->call($request); 
         $org = $client->cast('Organisation', $response);
         $org_name = $org->getName();
