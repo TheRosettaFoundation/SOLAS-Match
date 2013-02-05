@@ -965,9 +965,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` I
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("SELECT t.* FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) ORDER BY `created-time` DESC LIMIT ",lim);
+    set @q = Concat("SELECT t.* FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC LIMIT ",lim);
     else
-    set @q = "SELECT t.* FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) ORDER BY `created-time` DESC";
+    set @q = "SELECT t.* FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -1769,13 +1769,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `
     READS SQL DATA
     COMMENT 'relpace with more effient code later'
 BEGIN
-	 if lim='' then set lim=null; end if;
-	 if lim is not null then
-	    set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY uts.score DESC limit ",lim);
+    if lim='' then set lim=null; end if;
+    if lim is not null then
+        set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY uts.score DESC limit ",lim);
     else
-       set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) ORDER BY uts.score DESC");
+        set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY uts.score DESC");
     end if;
-	 PREPARE stmt FROM @q;
+    PREPARE stmt FROM @q;
     set @uID=uID;
     EXECUTE stmt using @uID;
     DEALLOCATE PREPARE stmt;
