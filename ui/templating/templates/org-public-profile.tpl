@@ -27,7 +27,7 @@
     {if isset($user)}
         {if in_array($user->getUserId(), $org_members)}
             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
-                <i class="icon-wrench icon-white"></i> Edit Profile
+                <i class="icon-wrench icon-white"></i> Edit Organisation Profile
             </a>
         {else}
             <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='pull-right btn btn-primary'>

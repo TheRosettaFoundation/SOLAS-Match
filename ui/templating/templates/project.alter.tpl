@@ -5,7 +5,7 @@
     {$project->getTitle()}
     <small>Alter project details here.</small>
     <a href="{urlFor name="project-view" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
-        <i class="icon-list icon-white"></i> View Details
+        <i class="icon-list icon-white"></i> View Project Details
     </a>
 </h1>
 <form method="post" action="{urlFor name="project-alter" options="project_id.$project_id"}" class="well">
@@ -89,7 +89,7 @@
             <td>
                 <p style="margin-bottom:20px;"></p>  
                 <button type="submit" value="Submit" name="submit" class="btn btn-primary">
-                    <i class="icon-refresh icon-white"></i> Update
+                    <i class="icon-refresh icon-white"></i> Update Project Details
                 </button> 
                 <p style="margin-bottom:20px;"></p>  
             </td>

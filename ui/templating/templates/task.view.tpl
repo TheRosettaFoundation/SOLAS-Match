@@ -23,7 +23,7 @@
     </small>   
     {assign var="task_id" value=$task->getId()}
     <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-        <i class="icon-wrench icon-white"></i> Edit Details
+        <i class="icon-wrench icon-white"></i> Edit Task Details
     </a>
 </h1>
         

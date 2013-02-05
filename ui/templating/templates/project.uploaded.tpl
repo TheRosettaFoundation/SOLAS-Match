@@ -32,7 +32,7 @@
     <a href="{urlFor name="home"}" class="btn btn-primary">
         <i class="icon-arrow-left icon-white"></i> Back to Home
     </a>
-    <a href="{urlFor name="project-upload" options="org_id.$org_id"}" class="btn btn-success">
+    <a href="{urlFor name="project-create" options="org_id.$org_id"}" class="btn btn-success">
         <i class="icon-circle-arrow-up icon-white"></i> Add New Project
     </a> 
 </p>

@@ -153,8 +153,8 @@
                     </td>                    
                     <td>
                         <p style="margin-bottom:20px;"></p>  
-                        <button type="submit" value="Submit" name="submit" class="btn btn-primary">
-                            <i class="icon-upload icon-white"></i> Submit
+                        <button type="submit" value="Submit" name="submit" class="btn btn-success">
+                            <i class="icon-upload icon-white"></i> Create Task
                         </button>
                         <p style="margin-bottom:20px;"></p>  
                     </td>

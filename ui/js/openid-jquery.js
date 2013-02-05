@@ -12,7 +12,7 @@ openid = {
 	version : '1.3', // version constant
 	demo : false,
 	demo_text : null,
-	cookie_expires : 6 * 30, // 6 months.
+	cookie_expires : 7 * 1, // 7 days.
 	cookie_name : 'openid_provider',
 	cookie_path : '/',
 

@@ -197,7 +197,7 @@
                     
                     <p style="margin-bottom:20px;"></p> 
                         <button type="submit" name="submit" value="createproject" class="btn btn-success">
-                            <i class="icon-upload icon-white"></i> Submit Project
+                            <i class="icon-upload icon-white"></i> Create Project
                         </button>                            
                     <p style="margin-bottom:20px;"></p>                     
                 </td>
