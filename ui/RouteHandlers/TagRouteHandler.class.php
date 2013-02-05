@@ -149,12 +149,11 @@ class TagRouteHandler
             }
         }
 
-        $settings = new Settings();
-        $numTaskTypes = $settings->get("ui.task_types");
+        $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
         
         for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
         }
 
         $top_tags = array();

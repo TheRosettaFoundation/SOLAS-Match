@@ -70,8 +70,7 @@ class TaskRouteHandler
         $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
         
-        $settings = new Settings();
-        $app->get($settings->get("site.api"), array($middleware, 'authUserForOrgTask'))->name('api');
+        $app->get(Settings::get("site.api"), array($middleware, 'authUserForOrgTask'))->name('api');
     }
 
     public function archivedTasks($page_no)
@@ -178,12 +177,11 @@ class TaskRouteHandler
             $bottom = count($activeTasks) - 1;
         }
         
-        $settings = new Settings();
-        $numTaskTypes = $settings->get("ui.task_types");
+        $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
         
         for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
         }    
         
         $app->view()->setData('active_tasks', $activeTasks);
@@ -346,8 +344,7 @@ class TaskRouteHandler
     public function downloadTaskVersion($task_id, $version, $convert = false)
     {
         $app = Slim::getInstance();
-        $settings = new Settings();
-        $app->redirect($settings->get("site.api").APIClient::API_VERSION.
+        $app->redirect(Settings::get("site.api").APIClient::API_VERSION.
                                                 "/tasks/$task_id/file/?version=$version&convertToXliff=$convert");   
     }
 
@@ -392,8 +389,7 @@ class TaskRouteHandler
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID();
         
-        $settings = new Settings();
-        $useConverter = $settings->get('converter.converter_enabled');          
+        $useConverter = Settings::get('converter.converter_enabled');          
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -428,8 +424,7 @@ class TaskRouteHandler
         //        $appPos = strrpos($file_path, "app");
         //        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
         //        substr($file_path, $appPos).'/'.$task_file_info['filename'];
-        $settings= new Settings();
-        $file_path= $settings->get("site.api").APIClient::API_VERSION."/tasks/$task_id/file";
+        $file_path= Settings::get("site.api").APIClient::API_VERSION."/tasks/$task_id/file";
        
         $app->view()->appendData(array(
             'file_preview_path' => $file_path,
@@ -520,7 +515,6 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID();
-        $settings = new Settings();
 
         $error          = null;
         $title_err      = null;
@@ -768,37 +762,15 @@ class TaskRouteHandler
         $deadlineError = "";
 
         $extra_scripts = "
-        <link rel=\"stylesheet\" href=\"".$app->urlFor("home")."resources/css/jquery-ui.css\" />
+
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/selectable.css\" />
-        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."ui/js/jquery-ui.js\"></script>
-        <script>
-        $(selectableUpdate);
-
-        function selectableUpdate()
-        {
-            $( \"#selectable\" ).selectable({
-                stop: function() {
-                    var result = $( \"#select-result\" ).empty();
-                    var selectedList = $(\"#selectedList\").val(\"\");
-                    $( \".ui-selected\", this ).each(function() {
-                        var index = $( \"#selectable li\" ).index( this );
-                        var taskId = $( \"#selectable li:nth-child(\" + (index + 1) + \")\").val();
-                        result.append( \" #\" + ( index + 1 ) );
-                        selectedList.val(selectedList.val() + taskId + \",\");
-                    });
-                }
-            });
-        }
-        </script>
-
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
         <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
         <script type=\"text/javascript\">
             window.onload = function() {
                 new datepickr(\"deadline_date\");
             };
-        </script>
-        ";
+        </script>".file_get_contents(Settings::get('site.url').$app->urlFor("home").'ui/js/task-alter.js');
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -972,8 +944,7 @@ class TaskRouteHandler
                 APIClient::API_VERSION."/tasks/$task_id/info",
                 HTTP_Request2::METHOD_GET, null, array("version" => 0));
 
-        $settings= new Settings();
-        $file_path= $settings->get("site.api").APIClient::API_VERSION."/tasks/$task_id/file";
+        $file_path= Settings::get("site.api").APIClient::API_VERSION."/tasks/$task_id/file";
        
         $app->view()->appendData(array(
             'file_preview_path' => $file_path,
@@ -1056,12 +1027,11 @@ class TaskRouteHandler
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
         
-        $settings = new Settings();
-        $numTaskTypes = $settings->get("ui.task_types");
+        $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
         
         for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
         }
 
         $app->view()->appendData(array(
@@ -1083,7 +1053,11 @@ class TaskRouteHandler
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
-        $org_id = $task->getOrganisationId();
+
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+        $org_id = $project->getOrganisationId();
 
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request);
@@ -1094,7 +1068,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
         
-        $request = APIClient::API_VERSION."/orgs/{$task->getOrganisationId()}";
+        $request = APIClient::API_VERSION."/orgs/$org_id";
         $response = $client->call($request); 
         $org = $client->cast('Organisation', $response);
         $org_name = $org->getName();
@@ -1433,13 +1407,12 @@ class TaskRouteHandler
         $response = $client->call($request);
         $project = $client->cast("Project", $response);
         
-        $settings = new Settings();
-        $numTaskTypes = $settings->get("ui.task_types");
-        $maxChunks = $settings->get("site.max_chunking");
+        $numTaskTypes = Settings::get("ui.task_types");
+        $maxChunks = Settings::get("site.max_chunking");
         $taskTypeColours = array();
         
         for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
         }
     
         $language_list = TemplateHelper::getLanguageList();
@@ -1520,13 +1493,16 @@ class TaskRouteHandler
                 
         }
         
+        $extraScripts = file_get_contents(Settings::get('site.url').'ui/js/task-chunking.js');
+        
         $app->view()->appendData(array(
             'project'           => $project,
             'task'              => $task,
             'taskTypeColours'   => $taskTypeColours,
             'maxChunks'         => $maxChunks,
             'languages'         => $language_list,
-            'countries'         => $countries
+            'countries'         => $countries,
+            'extra_scripts'      => $extraScripts
         ));
         
         $app->render('task.chunking.tpl');
@@ -1553,12 +1529,11 @@ class TaskRouteHandler
             $claimant = $client->cast("User", $response);
         }
         
-        $settings = new Settings();
-        $numTaskTypes = $settings->get("ui.task_types");
+        $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
         
         for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = $settings->get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
         }
         
         //HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/',

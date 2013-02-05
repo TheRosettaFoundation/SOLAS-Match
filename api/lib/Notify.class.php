@@ -22,8 +22,7 @@ class Notify
 {
     public static function sendOrgFeedback($task, $user, $feedback)
     {
-        $settings = new Settings();
-        $use_backend = $settings->get('site.backend');
+        $use_backend = Settings::get('site.backend');
         if (strcasecmp($use_backend, "y") == 0) {
             //send to rabbitMQ
             //Not implemented
@@ -45,8 +44,7 @@ class Notify
 
     public static function notifyUserClaimedTask($user, $task) 
     {
-        $settings = new Settings();
-        $use_backend = $settings->get('site.backend');
+        $use_backend = Settings::get('site.backend');
         if (strcasecmp($use_backend, "y") == 0) {
             $messagingClient = new MessagingClient();
             if ($messagingClient->init()) {
@@ -61,10 +59,10 @@ class Notify
             }
         } else {
             $app        = Slim::getInstance();
-            $task_url 	= $settings->get('site.url') .  "/task/id/{$task->getId()}/";
+            $task_url 	= Settings::get('site.url') .  "/task/id/{$task->getId()}/";
 
             $app->view()->appendData(array(
-                    'site_name' => $settings->get('site.name'),
+                    'site_name' => Settings::get('site.name'),
                     'task_url' => $task_url
             ));
             $email_subject = "You have claimed a volunteer translation task, here's how to upload your translated file";
@@ -77,11 +75,10 @@ class Notify
 
     public static function sendPasswordResetEmail($uid, $user_id)
     {
-        $settings = new Settings();
         $userDao = new UserDao();
         $user = $userDao->find(array('user_id' => $user_id));
 
-        $use_backend = $settings->get('site.backend');
+        $use_backend = Settings::get('site.backend');
         if (strcasecmp($use_backend, "y") == 0) {
             $messagingClient = new MessagingClient();
             if ($messagingClient->init()) {
@@ -96,8 +93,7 @@ class Notify
         } else {
             $app = Slim::getInstance();
 
-            $settings = new Settings();
-            $site_url = $settings->get('site.url');
+            $site_url = Settings::get('site.url');
             $site_url .= "$uid/password/reset";
 
             $app->view()->setData('site_url', $site_url);
@@ -119,8 +115,7 @@ class Notify
         $user_dao = new UserDao();
         $user = $user_dao->find(array('user_id' => $user_id));
 
-        $settings = new Settings();
-        $use_backend = $settings->get('site.backend');
+        $use_backend = Settings::get('site.backend');
         if (strcasecmp($use_backend, "y") == 0) {
             $messagingClient = new MessagingClient();
             if ($messagingClient->init()) {
@@ -145,8 +140,7 @@ class Notify
         } else {
             $app = Slim::getInstance();
 
-            $settings = new Settings();
-            $site_url = $settings->get('site.url');
+            $site_url = Settings::get('site.url');
 
             $app->view()->setData('site_url', $site_url);
             $app->view()->appendData(array(
@@ -170,13 +164,12 @@ class Notify
     {
         $app = Slim::getInstance();
 
-        $settings = new Settings();
         $task_dao = new TaskDao();
         $subscribed_users = $task_dao->getSubscribedUsers($task->getId());
 
         if (count($subscribed_users) > 0) {
 
-            $use_backend = $settings->get('site.backend');
+            $use_backend = Settings::get('site.backend');
             if (strcasecmp($use_backend, "y") == 0) {
                 $messagingClient = new MessagingClient();
                 if ($messagingClient->init()) {
@@ -233,7 +226,7 @@ class Notify
                     $translator = $task_dao->getTaskTranslator($task->getId());
                 }
 
-                $site_url = $settings->get('site.url');
+                $site_url = Settings::get('site.url');
     
                 $org_dao = new OrganisationDao();
                 $org = $org_dao->find(array('id' => $task->getOrganisationId()));

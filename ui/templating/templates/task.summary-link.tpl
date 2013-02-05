@@ -4,20 +4,20 @@
         <h2><a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a></h2>
         <p>
         	{if $task->getSourceLanguageCode()}
-        		From <b>{TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())}</b>
+        		From: <b>{TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())}</b>
         	{/if}
         	{if $task->getTargetLanguageCode()}
-        		To <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
+        		To: <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
         	{/if}
     	</p>
         <p>
-            Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
+            Due by: <b>{date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}</b>
         </p>
         
         {if $task->getTaskType()}
             {assign var="type_id" value=$task->getTaskType()}
             <p>
-                <b>Task Type:</b>                  
+                Type:                  
                     {if $type_id == TaskTypeEnum::CHUNKING}
                         <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>                                    
                     {elseif $type_id == TaskTypeEnum::TRANSLATION}
@@ -29,17 +29,19 @@
                     {/if}                
             </p>
         {/if}
-        {if isset($task)}
+        {assign var="taskTags" value=$task->getTagList()}
+        {if !empty($taskTags)}
             <p>
-		        {foreach from=$task->getTagList() item=tag}
+                Tags:
+                {foreach from=$task->getTagList() item=tag}
                     {assign var="label" value=$tag->getLabel()}
-    	    		<a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
-     		    {/foreach}
+                    <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
+                {/foreach}
             </p>
         {/if}
         
 	<p class="task_details">
-		Added {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())} ago
+		Added <b>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</b> ago
 		&middot; By 
         {assign var="project_id" value=$task->getProjectId()}
         <a href="{urlFor name="project-view" options="project_id.$project_id"}">

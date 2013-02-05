@@ -371,6 +371,13 @@ CREATE TABLE IF NOT EXISTS `TaskStatus` (
 
 -- Data exporting was unselected.
 
+-- Dumping data for table Solas-Match-Test.TaskStatus: ~4 rows (approximately)
+/*!40000 ALTER TABLE `TaskStatus` DISABLE KEYS */;
+REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
+	(1, "Waiting PreReqs"),
+	(2, "Pending Claim"),
+	(3, "In Progress"),
+	(4, "Complete");
 
 -- Dumping structure for table Solas-Match-Test.TaskTypes
 
@@ -382,6 +389,14 @@ CREATE TABLE IF NOT EXISTS `TaskTypes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
+-- Dumping data for table Solas-Match-Test.TaskStatus: ~4 rows (approximately)
+/*!40000 ALTER TABLE `TaskStatus` DISABLE KEYS */;
+REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
+	(1, "Chunking"),
+	(2, "Translation"),
+	(3, "Proofreading"),
+	(4, "Post-editing");
 
 
 -- Dumping structure for table Solas-Match-Test.UserBadges

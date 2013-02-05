@@ -18,7 +18,7 @@ var providers_large = {
 		name : 'AOL',
 		label : 'Enter your AOL screenname.',
 		url : 'http://openid.aol.com/{username}'
-	},
+	}/*,
 	myopenid : {
 		name : 'MyOpenID',
 		label : 'Enter your MyOpenID username.',
@@ -28,14 +28,15 @@ var providers_large = {
 		name : 'OpenID',
 		label : 'Enter your OpenID.',
 		url : null
-	}
+	}*/
 };
 
 var providers_small = {
-	livejournal : {
-		name : 'LiveJournal',
-		label : 'Enter your Livejournal username.',
-		url : 'http://{username}.livejournal.com/'
+	
+        clickpass : {
+		name : 'ClickPass',
+		label : 'Enter your ClickPass username',
+		url : 'http://clickpass.com/public/{username}'
 	},
 	/* flickr: {
 		name: 'Flickr',        
@@ -47,12 +48,23 @@ var providers_small = {
 		label: 'Enter your Technorati username.',
 		url: 'http://technorati.com/people/technorati/{username}/'
 	}, */
-	wordpress : {
+	
+	google_profile : {
+		name : 'Google Profile',
+		label : 'Enter your Google Profile username',
+		url : 'http://www.google.com/profiles/{username}'
+	},
+        livejournal : {
+		name : 'LiveJournal',
+		label : 'Enter your Livejournal username.',
+		url : 'http://{username}.livejournal.com/'
+	},
+        wordpress : {
 		name : 'Wordpress',
 		label : 'Enter your Wordpress.com username.',
 		url : 'http://{username}.wordpress.com/'
 	},
-	blogger : {
+        blogger : {
 		name : 'Blogger',
 		label : 'Your Blogger account',
 		url : 'http://{username}.blogspot.com/'
@@ -72,20 +84,14 @@ var providers_small = {
 		label: 'Your Launchpad username',
 		url: 'https://launchpad.net/~{username}'
 	}, */
-	claimid : {
+	
+        
+	
+	
+        claimid : {
 		name : 'ClaimID',
 		label : 'Your ClaimID username',
 		url : 'http://claimid.com/{username}'
-	},
-	clickpass : {
-		name : 'ClickPass',
-		label : 'Enter your ClickPass username',
-		url : 'http://clickpass.com/public/{username}'
-	},
-	google_profile : {
-		name : 'Google Profile',
-		label : 'Enter your Google Profile username',
-		url : 'http://www.google.com/profiles/{username}'
 	}
 };
 

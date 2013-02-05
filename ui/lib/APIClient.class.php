@@ -23,10 +23,7 @@ class APIClient
     public function call($url, $method = HTTP_Request2::METHOD_GET, 
                     $data = null, $query_args = array(), $format = ".json", $file = null)
     {
-        $app = Slim::getInstance();
-        $settings = new Settings();
-
-        $request_url = $settings->get('site.api');
+        $request_url = Settings::get('site.api');
         $request_url .= $url.$format.'/?';
         $request = new HTTP_Request2($request_url, $method);
 

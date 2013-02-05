@@ -8,11 +8,10 @@ class Email {
         $mailSubject    = $subject;
         $mailBody       = $body;
 
-        $settings       = new Settings();
-        $mailFrom       = $settings->get('site.system_email_address');
-        $site_name      = $settings->get('site.name');
-        $site_url       = $settings->get('site.url');
-        $monitor_email_address = $settings->get('site.notifications_monitor_email_address');
+        $mailFrom       = Settings::get('site.system_email_address');
+        $site_name      = Settings::get('site.name');
+        $site_url       = Settings::get('site.url');
+        $monitor_email_address = Settings::get('site.notifications_monitor_email_address');
 
         $mailSignature = "\n\n-- \n";
         $mailSignature .= $site_name . "\n";
@@ -41,9 +40,8 @@ class Email {
 
     public static function sendMail ($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams)
     {
-        $settings = new Settings();
-        if ($SMTPIN = fsockopen ($settings->get('mail.smtp_server'), $settings->get('messaging.smtp_port'))) {
-            fputs ($SMTPIN, "EHLO ".$settings->get('mail.smtp_server')."\r\n");
+        if ($SMTPIN = fsockopen (Settings::get('mail.smtp_server'), Settings::get('messaging.smtp_port'))) {
+            fputs ($SMTPIN, "EHLO ".Settings::get('mail.smtp_server')."\r\n");
             $talk["hello"] = fgets($SMTPIN, 2048);
             $talk["hello"] .= fgets($SMTPIN, 2048);
             $talk["hello"] .= fgets($SMTPIN, 2048);
@@ -62,9 +60,9 @@ class Email {
                 $talk["hello"] .= fgets($SMTPIN, 2048);
                 fputs ($SMTPIN, "auth login\r\n");
                 $talk["auth"] = fgets($SMTPIN, 2048);
-                fputs ($SMTPIN, base64_encode($settings->get('mail.smtp_user'))."\r\n");
+                fputs ($SMTPIN, base64_encode(Settings::get('mail.smtp_user'))."\r\n");
                 $talk["username"] = fgets($SMTPIN, 2048 );
-                fputs ($SMTPIN, base64_encode($settings->get('mail.smtp_pass'))."\r\n");
+                fputs ($SMTPIN, base64_encode(Settings::get('mail.smtp_pass'))."\r\n");
                 $talk["pass"] = fgets($SMTPIN, 2048 );
             }
             
