@@ -892,14 +892,29 @@ class TaskRouteHandler
                 
                 if ($graph) {
 
+                    $selectedList = array();
+                    $nextLayer = array();
+                    $currentLayer = $graph->getRootNodeList();
+                    $found = false;
+                    while (!$found && count($currentLayer) > 0) {
+                        foreach ($currentLayer as $node) {
+                            if ($node->getTaskId() == $task->getId()) {
+                                $found = true;
+                                foreach ($node->getPreviousList() as $preReqNode) {
+                                    $selectedList[] = $preReqNode->getTaskId();
+                                }
+                            }
+                            foreach ($node->getNextList() as $nextNode) {
+                                $nextLayer[] = $nextNode;
+                            }
+                        }
+                        $currentLayer = $nextLayer;
+                        $nextLayer = array();
+                    }
+
                     $request = APIClient::API_VERSION."/tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
     
-                    $selectedList = array();
-                    if (isset($post->selectedList) && $post->selectedList != "") {
-                        $selectedList = explode(",", $post->selectedList);
-                    }
-
                     foreach ($preReqTaskIds as $preReqId) {
                         if(!in_array($preReqId, $selectedList)) {
                             $request = APIClient::API_VERSION.
