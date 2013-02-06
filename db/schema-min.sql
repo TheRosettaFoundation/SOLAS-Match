@@ -1117,7 +1117,7 @@ BEGIN
     if sCC="" then set sCC=null; end if;
     if sCode="" then set sCode=null; end if;
 
-    set @q="SELECT id, title, description,deadline,organisation_id,reference,`word-count`, created,(select code from Countries where id =p.`country_id`) as country_id,(select code from Languages where id =p.`language_id`) as language_id FROM Projects p WHERE 1";
+    set @q="SELECT id, title, description,deadline,organisation_id,reference,`word-count`, created,(select code from Countries where id =p.`country_id`) as country_id,(select code from Languages where id =p.`language_id`) as language_id, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'  FROM Projects p WHERE 1";
     if projectId is not null then
         set @q = CONCAT(@q, " and p.id=", projectId);
     end if;
@@ -1159,13 +1159,12 @@ BEGIN
 END//
 DELIMITER ;
 
-
 -- Dumping structure for procedure Solas-Match-Test.getProjectByTag
 DROP PROCEDURE IF EXISTS `getProjectByTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectByTag`(IN `tID` INT)
 BEGIN
- select p.* 
+ select id, title, description,deadline,organisation_id,reference,`word-count`, created,(select code from Countries where id =p.`country_id`) as country_id,(select code from Languages where id =p.`language_id`) as language_id, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'
  from Projects p 
  join ProjectTags pt 
  on pt.project_id=p.id
