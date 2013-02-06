@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__."/../../Common/lib/WorkflowBuilder.class.php";
+
 class UIWorkflowBuilder extends WorkflowBuilder
 {
     protected function getProjectTasks($projectId)
