@@ -7,11 +7,33 @@
  */
 include_once 'DataAccessObjects/ProjectDao.class.php';
 include_once '../Common/models/Project.php';
+require_once 'lib/APIWorkflowBuilder.class.php';
 
 class Projects
 {
     public static function init()
     {
+        Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/test/:projectId',
+            function ($projectId) 
+            {
+                $time = microtime();
+                $time = explode(" ", $time);
+                $time = $time[1] + $time[0];
+                $time1 = $time; 
+
+                $builder = new APIWorkflowBuilder();
+                $graph = $builder->buildProjectGraph($projectId);
+                $builder->printGraph($graph);
+
+                $time = microtime();
+                $time = explode(" ", $time);
+                $time = $time[1] + $time[0];
+                $time2 = $time;
+
+                $totaltime = ($time2 - $time1);
+                echo '<BR>Running Time: ' .$totaltime. ' seconds.'; 
+            }, 'test');
+
         
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects(:format)/',
             function ($format = '.json') 
@@ -88,8 +110,13 @@ class Projects
                 $format = '.'.$userId[1];
                 $userId = $userId[0];
             }
-            $dao = new ProjectDao();
-            Dispatcher::sendResponce(null, $dao->archiveProject($projectId, $userId), null, $format);                
+            $projectDao = new ProjectDao();
+            $taskDao = new TaskDao();
+            $projectTasks = $projectDao->getProjectTasks($projectId);
+            foreach ($projectTasks as $task) {
+                $taskDao->moveToArchiveById($task->getId(), $userId);
+            }
+            Dispatcher::sendResponce(null, $projectDao->archiveProject($projectId, $userId), null, $format);                
             }, 'archiveProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects(:format)/',

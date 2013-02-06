@@ -24,6 +24,28 @@ class ProjectRouteHandler
         
         $app->get('/project/id/:project_id/mark-archived/', array($middleware, 'authUserForOrgProject'),
         array($this, 'archiveProject'))->name('archive-project');
+
+        $app->get('/project/test/:project_id', array($this, 'test'));
+    }
+
+    public function test($projectId)
+    {
+        $time = microtime();
+        $time = explode(" ", $time);
+        $time = $time[1] + $time[0];
+        $time1 = $time; 
+
+        $builder = new UIWorkflowBuilder();
+        $graph = $builder->buildProjectGraph($projectId);
+        $builder->printGraph($graph);
+
+        $time = microtime();
+        $time = explode(" ", $time);
+        $time = $time[1] + $time[0];
+        $time2 = $time;
+
+        $totaltime = ($time2 - $time1);
+        echo '<BR>Running Time: ' .$totaltime. ' seconds.';
     }
   
     public function projectView($project_id)

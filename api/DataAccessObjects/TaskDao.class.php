@@ -425,7 +425,7 @@ class TaskDao {
     {
         $task = $this->find(array("id" => $taskID));
         Notify::sendEmailNotifications($task, NotificationTypes::ARCHIVE);
-        PDOWrapper::call("archiveTask", PDOWrapper::cleanse($taskID, $userId));
+        PDOWrapper::call("archiveTask", PDOWrapper::cleanseNull($taskID).", ".PDOWrapper::cleanseNull($userId));
     }
 
     public function claimTask($task, $user)
