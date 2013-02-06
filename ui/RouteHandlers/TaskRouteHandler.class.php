@@ -895,25 +895,26 @@ class TaskRouteHandler
                     $request = APIClient::API_VERSION."/tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
     
+                    $selectedList = array();
                     if (isset($post->selectedList) && $post->selectedList != "") {
                         $selectedList = explode(",", $post->selectedList);
-
-                        foreach ($preReqTaskIds as $preReqId) {
-                            if(!in_array($preReqId, $selectedList)) {
-                                $request = APIClient::API_VERSION.
-                                    "/tasks/".$task->getId()."/prerequisites/$preReqId";
-                                $client->call($request, HTTP_Request2::METHOD_DELETE);
-                            }
-                        }
-
-                        foreach($selectedList as $taskId) {
-                            if (is_numeric($taskId)) {
-                                $request = APIClient::API_VERSION."/tasks/".
-                                            $task->getId()."/prerequisites/$taskId";
-                                $client->call($request, HTTP_Request2::METHOD_PUT);
-                            }
-                        }   
                     }
+
+                    foreach ($preReqTaskIds as $preReqId) {
+                        if(!in_array($preReqId, $selectedList)) {
+                            $request = APIClient::API_VERSION.
+                                "/tasks/".$task->getId()."/prerequisites/$preReqId";
+                            $client->call($request, HTTP_Request2::METHOD_DELETE);
+                        }
+                    }
+
+                    foreach($selectedList as $taskId) {
+                        if (is_numeric($taskId)) {
+                            $request = APIClient::API_VERSION."/tasks/".
+                                $task->getId()."/prerequisites/$taskId";
+                            $client->call($request, HTTP_Request2::METHOD_PUT);
+                        }
+                    }   
 
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
                 } else {
