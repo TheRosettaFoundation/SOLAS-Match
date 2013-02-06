@@ -139,21 +139,22 @@ class Middleware
             $request = APIClient::API_VERSION."/users/$user_id/orgs";
             $response = $client->call($request, HTTP_Request2::METHOD_GET);   
             $userOrgs = array();
-            
-            foreach($response as $userOrg) {
-                $userOrgs[] = $client->cast('Organisation', $userOrg);
-            }        
-            
-            $request = APIClient::API_VERSION."/projects/$project_id";
-            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
-            $project = $client->cast('Project', $response); 
-            
-            $project_orgid = $project->getOrganisationId();
-            
-            foreach($userOrgs as $org)
-            {                
-                if($org->getId() == $project_orgid) {
-                    return true;
+            if($response){
+                foreach($response as $userOrg) {
+                    $userOrgs[] = $client->cast('Organisation', $userOrg);
+                }        
+
+                $request = APIClient::API_VERSION."/projects/$project_id";
+                $response = $client->call($request, HTTP_Request2::METHOD_GET);   
+                $project = $client->cast('Project', $response); 
+
+                $project_orgid = $project->getOrganisationId();
+
+                foreach($userOrgs as $org)
+                {                
+                    if($org->getId() == $project_orgid) {
+                        return true;
+                    }
                 }
             }
         }

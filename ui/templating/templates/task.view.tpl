@@ -22,9 +22,22 @@
         </b>
     </small>   
     {assign var="task_id" value=$task->getId()}
-    <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-        <i class="icon-wrench icon-white"></i> Edit Task Details
-    </a>
+    {if isset($isOrgMember)}
+        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
+            <i class="icon-wrench icon-white"></i> Edit Task Details
+        </a>
+    {else}
+        <div class="pull-right">
+            <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-primary">
+            <i class="icon-download icon-white"></i> Download Source Document</a>
+
+
+            {if Settings::get('converter.converter_enabled') == "y"}
+                <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}?convertToXliff=true" class="btn btn-primary">
+                <i class="icon-download icon-white"></i> Download as XLIFF</a>   
+            {/if}
+        </div>
+    {/if}
 </h1>
         
         
@@ -32,12 +45,12 @@
     <thead>            
         <th style="text-align: left"><b>Project</b></th>
 
-        <th><b>Source Language</b></th>
-        <th><b>Target Language</b></th>
-        <th><b>Created</b></th> 
-        <th><b>Task Deadline</b></th>
-        <th><b>Word Count</b></th>
-        <th><b>Status</b></th>
+        <th>Source Language</th>
+        <th>Target Language</th>
+        <th>Created</th> 
+        <th>Task Deadline</th>
+        <th>Word Count</th>
+        {if isset($isOrgMember)}<th>Status</th>{/if}
     </thead>
     <tbody>
         <tr>
@@ -69,31 +82,39 @@
                     -
                 {/if}              
             </td> 
-            <td>                            
-                {assign var="status_id" value=$task->getTaskStatus()}
-                {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
-                    Waiting
-                {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
-                    Unclaimed
-                {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                    <a href="{urlFor name="task-feedback" options="task_id.$task_id"}">In Progress</a>
-                {elseif $status_id == TaskStatusEnum::COMPLETE}
-                    <a href="{urlFor name="api"}v0/tasks/{$task_id}/file/?">Complete</a>
-                {/if}
-            </td>
+            {if isset($isOrgMember)}
+                <td>                            
+                    {assign var="status_id" value=$task->getTaskStatus()}
+                    {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                        Waiting
+                    {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                        Unclaimed
+                    {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                        <a href="{urlFor name="task-feedback" options="task_id.$task_id"}">In Progress</a>
+                    {elseif $status_id == TaskStatusEnum::COMPLETE}
+                        <a href="{urlFor name="api"}v0/tasks/{$task_id}/file/?">Complete</a>
+                    {/if}
+                </td>
+            {/if}
         </tr> 
     </tbody>
 </table>        
       
 <div class="well">
     <table width="100%">
-        <thead>
+<!--        <thead>
         <th width="48%" align="left">Task Comment:<hr/></th>
         <th></th>
         <th width="48%" align="left">Project Description:<hr/></th>
-        </thead>
+        </thead>-->
         <tbody>
-            <tr valign="top">
+            <tr>
+                <td><b>Task Comment:</b></td>
+            </tr>
+            <tr>
+                <td><hr/></td>
+            </tr>
+            <tr>
                 <td>
                     <i>
                     {if $task->getComment() != ''}
@@ -102,8 +123,18 @@
                        No comment has been added.
                     {/if}
                     </i>
+                    <p style="margin-bottom: 40px" />
                 </td>
-                <td></td>
+            </tr>
+            <tr>
+                <td><b>Project Description:</b></td>
+            </tr>
+            <tr>
+                <td>
+                    <hr/>
+                </td>
+            </tr>
+            <tr>
                 <td>
                     <i>
                     {if $project->getDescription() != ''}
@@ -112,7 +143,7 @@
                         No description has been added.
                     {/if}
                     </i>
-                </td>
+                </td>            
             </tr>
         </tbody>
     </table>
@@ -131,7 +162,7 @@
     </p>
 {/if}
 
-{if isset($user)}
+{if isset($isOrgMember)}
     <table width="100%" class="table table-striped">  
         <thead>
         <th>Task Published</th>
@@ -174,22 +205,21 @@
         </td>
         </tr>
     </table>
-    <div style="margin-bottom: 40px"></div>        
-    <table width="100%">
-        <thead>
-        <th>Source Document Preview - {$filename}<hr/></th>
-        </thead>
-        <tbody>
-            <tr>
-                <td align="center"><iframe src="http://docs.google.com/viewer?url={urlencode($file_preview_path)}&embedded=true" width="800" height="780" style="border: none;"></iframe></td>
-            </tr>
-        </tbody>
-    </table>             
-                
 {else}
-    <p class="alert alert-info">
-        Please log in to register for notifications for this task.
-    </p>
+   
 {/if}
+
+<div style="margin-bottom: 40px"></div>        
+<table width="100%">
+    <thead>
+    <th>Source Document Preview - {$filename}<hr/></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td align="center"><iframe src="http://docs.google.com/viewer?url={urlencode($file_preview_path)}&embedded=true" width="800" height="780" style="border: none;"></iframe></td>
+        </tr>
+    </tbody>
+</table>            
+
 
 {include file="footer.tpl"}

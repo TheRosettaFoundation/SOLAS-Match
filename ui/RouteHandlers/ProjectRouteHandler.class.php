@@ -10,7 +10,7 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();     
         
-        $app->get('/project/view/:project_id/', array($middleware, 'authUserForOrgProject'),
+        $app->get('/project/view/:project_id/', array($middleware, 'authUserIsLoggedIn'),
         array($this, 'projectView'))->via("POST")->name('project-view');
         
         $app->get('/project/alter/:project_id/', array($middleware, 'authUserForOrgProject'), 
@@ -150,40 +150,6 @@ class ProjectRouteHandler
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
         
-        $request = APIClient::API_VERSION."/users/subscribedToProject/$user_id/$project_id";
-        $userSubscribedToProject = $client->call($request);
-        
-        $project_tasks = array();
-        $taskMetaData = array();
-        $request = APIClient::API_VERSION."/projects/{$project_id}/tasks";
-        $response = $client->call($request);
-        if($response) {
-            foreach($response as $row) {
-                $task = $client->cast("Task", $row);
-
-                if(is_object($task)) {
-                    $project_tasks[] = $task;
-                    $task_id = $task->getId();
-
-                    $metaData = array();
-                    $request = APIClient::API_VERSION."/users/subscribedToTask/$user_id/$task_id";
-                    $response = $client->call($request);
-                    if($response == 1) {
-                        $metaData['tracking'] = true;
-                    } else {
-                        $metaData['tracking'] = false;
-                    }
-                    $taskMetaData[$task_id] = $metaData;
-                }
-            }
-        }
-        
-        $numTaskTypes = Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        
-        for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
-        }
         $project_tags = null;
         $request = APIClient::API_VERSION."/projects/$project_id/tags";
         $response = $client->call($request);
@@ -191,17 +157,63 @@ class ProjectRouteHandler
             foreach ($response as $stdObject) {
                 $project_tags[] = $client->cast('Tag', $stdObject);
             }
-        }
-    
+        }   
+        
+        $request = APIClient::API_VERSION."/orgs/isMember/{$project->getOrganisationId()}/$user_id";
+        $isOrgMember = $client->call($request);
+        
+        if($isOrgMember) {
+            $request = APIClient::API_VERSION."/users/subscribedToProject/$user_id/$project_id";
+            $userSubscribedToProject = $client->call($request);
 
-        $app->view()->appendData(array(
-                'org' => $org,
-                'projectTasks' => $project_tasks,
-                'taskMetaData' => $taskMetaData,
-                'taskTypeColours' => $taskTypeColours,
-                'userSubscribedToProject' => $userSubscribedToProject,
-                'project_tags' => $project_tags
-        ));
+            $project_tasks = array();
+            $taskMetaData = array();
+            $request = APIClient::API_VERSION."/projects/{$project_id}/tasks";
+            $response = $client->call($request);
+            if($response) {
+                foreach($response as $row) {
+                    $task = $client->cast("Task", $row);
+
+                    if(is_object($task)) {
+                        $project_tasks[] = $task;
+                        $task_id = $task->getId();
+
+                        $metaData = array();
+                        $request = APIClient::API_VERSION."/users/subscribedToTask/$user_id/$task_id";
+                        $response = $client->call($request);
+                        if($response == 1) {
+                            $metaData['tracking'] = true;
+                        } else {
+                            $metaData['tracking'] = false;
+                        }
+                        $taskMetaData[$task_id] = $metaData;
+                    }
+                }
+            }
+
+            $numTaskTypes = Settings::get("ui.task_types");
+            $taskTypeColours = array();
+
+            for($i=1; $i <= $numTaskTypes; $i++) {
+                $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+            }
+
+            $app->view()->appendData(array(
+                    'org' => $org,
+                    'projectTasks' => $project_tasks,
+                    'taskMetaData' => $taskMetaData,
+                    'taskTypeColours' => $taskTypeColours,
+                    'userSubscribedToProject' => $userSubscribedToProject,
+                    'project_tags' => $project_tags
+            ));
+            
+        } else {   
+
+            $app->view()->appendData(array(
+                    'org' => $org,
+                    'project_tags' => $project_tags
+            ));
+        }
         
         $app->render('project.view.tpl');
     }  
