@@ -1236,6 +1236,8 @@ BEGIN
 								FROM TaskClaims
 								WHERE task_id = t.id
 							)
+                         AND t.published = 1
+                         AND t.`task-status_id` = 2 
                          ORDER BY t.`created-time` DESC
                          LIMIT ",lim);
         PREPARE stmt FROM @q;
