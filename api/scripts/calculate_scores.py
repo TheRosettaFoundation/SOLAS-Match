@@ -189,7 +189,7 @@ for user in users:
             increment_value = 100
             for user_tag in user_tags:
                 for task_tag in task_tags:
-                    if(user_tag['tag_id'] == task_tag['tag_id']):
+                    if(user_tag['id'] == task_tag['id']):
                         score += increment_value
                         increment_value *= 0.75
 
