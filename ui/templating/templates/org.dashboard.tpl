@@ -58,8 +58,18 @@
                     <td>
                         {date(Settings::get("ui.date_format"), strtotime($data['project']->getDeadline()))}
                     </td>
-                    <td><!-- Project Status - to be implemented -->
-                            <b>0%</b>
+                    <td>
+                        {assign var="projectStatus" value=intval(($data['project']->getStatus()*100))}
+                        
+                        {if $projectStatus == 100}                            
+                            <b style="color: #2F8518">{$projectStatus}%</b>
+                        {else if $projectStatus > 66}
+                            <b style="color: #598518">{$projectStatus}%</b>
+                        {else if $projectStatus > 33}
+                            <b style="color: #857818">{$projectStatus}%</b>
+                        {else}
+                            <b style="color: #851818">{$projectStatus}%</b>
+                        {/if}
                     </td>
                     <td>                      
                         {if $data['project']->getWordCount() != ''}
