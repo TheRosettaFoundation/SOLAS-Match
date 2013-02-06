@@ -115,13 +115,13 @@ def getUserList():
 # This function returns the IDs of all active tasks
 #
 def getActiveTaskList():
-    return DBCall('getTask', ['null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
+    return DBCall('getTask', ['null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
 
 #
 # This function returns the task identified by task_id
 #
 def getTaskById(task_id):
-    return DBCall('getTask', [task_id, 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
+    return DBCall('getTask', [task_id, 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null'])
 
 #
 # This function returns all the tags related to a specific task
@@ -169,7 +169,7 @@ LoadConfig()
 users = getUserList()       #get a list of all users
 for user in users:
     #Get the tags that user has subscribed to   
-    user_tags = getUserTags(user['user_id'])
+    user_tags = getUserTags(user['id'])
     if(len(sys.argv) < 2):
         #Get all active tasks
         tasks = getActiveTaskList()
@@ -189,21 +189,21 @@ for user in users:
             increment_value = 100
             for user_tag in user_tags:
                 for task_tag in task_tags:
-                    if(user_tag['tag_id'] == task_tag['tag_id']):
+                    if(user_tag['id'] == task_tag['id']):
                         score += increment_value
                         increment_value *= 0.75
 
         #Check if the task is in the user's native language
-        user_language = user['native_lang_id']
-        user_region = user['native_region_id']
+        user_language = user['language_id']
+        user_region = user['country_id']
         if(user_language != None):
-            if(task['source_id'] == user_language or task['target_id'] == user_language):
+            if(task['language_id-source'] == user_language or task['language_id-target'] == user_language):
                 score += 300
-                if(task['sourceCountry'] == user_region or task['targetCountry'] == user_region):
+                if(task['country_id-source'] == user_region or task['country_id-target'] == user_region):
                     score += 100
 
         #Increase score for older tasks
-        task_time = getTaskActiveTimeSecs(task['created_time'])
+        task_time = getTaskActiveTimeSecs(task['created-time'])
         if(task_time > 0):
             task_time /= 60     # convert to minutes
             task_time /= 60     # convert to hours
@@ -212,7 +212,7 @@ for user in users:
 
 
         #Save the score to the DB if it has changed
-        saveNewScore(user['user_id'], task['id'], score)
+        saveNewScore(user['id'], task['id'], score)
 
 end_time = time.time()
 running_time = end_time - start_time

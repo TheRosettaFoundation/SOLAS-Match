@@ -28,6 +28,7 @@ require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
 require_once 'ui/lib/UserSession.class.php';
 require_once 'ui/lib/URL.class.php';
+require_once 'ui/lib/UIWorkflowBuilder.class.php';
 
 require_once 'ui/RouteHandlers/UserRouteHandler.class.php';
 require_once 'ui/RouteHandlers/OrgRouteHandler.class.php';

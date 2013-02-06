@@ -74,6 +74,9 @@
                 <p style="margin-bottom:40px;"></p>
 
                 <label for="prerequisites" style="font-size: large"><b>Task Prerequisites</b>:</label>
+                {if isset($deadlockError) && $deadlockError != ''}
+                    <p class="alert alert-error">{$deadlockError}</p>
+                {/if}
                 <p id="feedback">
                     <input type="hidden" name="selectedList" id="selectedList" value="{$hiddenPreReqList}" />
                     <span>You've selected:</span> <span id="select-result">none</span>.

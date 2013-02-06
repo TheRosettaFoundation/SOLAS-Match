@@ -759,6 +759,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $word_count_err = null;
+        $deadlockError = null;
         $deadlineError = "";
 
         $extra_scripts = "
@@ -770,7 +771,7 @@ class TaskRouteHandler
             window.onload = function() {
                 new datepickr(\"deadline_date\");
             };
-        </script>".file_get_contents(Settings::get('site.url').$app->urlFor("home").'ui/js/task-alter.js');
+        </script>".file_get_contents(Settings::get('site.url').'ui/js/task-alter.js');
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -869,15 +870,55 @@ class TaskRouteHandler
             }
 
             if ($word_count_err == '' && $deadlineError == '') {
-                $request = APIClient::API_VERSION."/tasks/$task_id";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
+    
+                $taskPreReqIds = array();
+                foreach ($projectTasks as $projectTask) {
+                    $request = APIClient::API_VERSION."/tasks/{$projectTask->getId()}/prerequisites";
+                    $taskPreReqIds[$projectTask->getId()] = $client->call($request);
+                }
+                $selectedPreReqs = explode(",", $post->selectedList);
+                $thisTaskPreReqs = null;
+                if (count($selectedPreReqs) > 0) {
+                    $thisTaskPreReqs = array();
+                    foreach ($selectedPreReqs as $preReq) {
+                        if (is_numeric($preReq)) {
+                            $thisTaskPreReqs[] = $preReq;
+                        }
+                    }
+                }
+                $taskPreReqIds[$task->getId()] = $thisTaskPreReqs;
+                $graphBuilder = new UIWorkflowBuilder();
+                $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
+                
+                if ($graph) {
 
-                if (isset($post->selectedList) && $post->selectedList != "") {
-                    $selectedList = explode(",", $post->selectedList);
+                    $selectedList = array();
+                    $nextLayer = array();
+                    $currentLayer = $graph->getRootNodeList();
+                    $found = false;
+                    while (!$found && count($currentLayer) > 0) {
+                        foreach ($currentLayer as $node) {
+                            if ($node->getTaskId() == $task->getId()) {
+                                $found = true;
+                                foreach ($node->getPreviousList() as $preReqNode) {
+                                    $selectedList[] = $preReqNode->getTaskId();
+                                }
+                            }
+                            foreach ($node->getNextList() as $nextNode) {
+                                $nextLayer[] = $nextNode;
+                            }
+                        }
+                        $currentLayer = $nextLayer;
+                        $nextLayer = array();
+                    }
 
+                    $request = APIClient::API_VERSION."/tasks/$task_id";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);
+    
                     foreach ($preReqTaskIds as $preReqId) {
                         if(!in_array($preReqId, $selectedList)) {
-                            $request = APIClient::API_VERSION."/tasks/".$task->getId()."/prerequisites/$preReqId";
+                            $request = APIClient::API_VERSION.
+                                "/tasks/".$task->getId()."/prerequisites/$preReqId";
                             $client->call($request, HTTP_Request2::METHOD_DELETE);
                         }
                     }
@@ -885,13 +926,17 @@ class TaskRouteHandler
                     foreach($selectedList as $taskId) {
                         if (is_numeric($taskId)) {
                             $request = APIClient::API_VERSION."/tasks/".
-                                        $task->getId()."/prerequisites/$taskId";
+                                $task->getId()."/prerequisites/$taskId";
                             $client->call($request, HTTP_Request2::METHOD_PUT);
                         }
-                    }
-                }
+                    }   
 
-                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+                    $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+                } else {
+                    //A deadlock occured
+                    $deadlockError = "A deadlock has occured, please check your".
+                        " task pre-requisites.";
+                }
             }
         }
          
@@ -907,6 +952,7 @@ class TaskRouteHandler
                               'taskPreReqIds'   => $preReqTaskIds,
                               'hiddenPreReqList'=> $hiddenPreReqList,
                               'word_count_err'  => $word_count_err,
+                              'deadlockError'   => $deadlockError,
                               'deadlineDate'    => $deadlineDate,
                               'deadlineTime'    => $deadlineTime,
                               'deadline_error'  => $deadlineError
