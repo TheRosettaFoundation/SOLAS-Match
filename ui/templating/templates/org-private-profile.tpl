@@ -42,11 +42,11 @@
         placeholder="Enter Organisation Biography Here"
     {/if}
     >{if $org->getBiography() != ''}{$org->getBiography()}{/if}</textarea>
+    <p style="margin-bottom: 20px"/>
     <p>
         <button type='submit' class='btn btn-primary' name='submit'>
-            <i class="icon-refresh icon-white"></i> Update
-        </button>
-        
+            <i class="icon-refresh icon-white"></i> Update Organisation Details
+        </button>        
     </p>
 </form>
 

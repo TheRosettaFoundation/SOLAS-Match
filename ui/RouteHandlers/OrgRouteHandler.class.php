@@ -393,7 +393,7 @@ class OrgRouteHandler
 
         $request = APIClient::API_VERSION."/orgs/$org_id";
         $response = $client->call($request);
-        $org = $client->cast('Organisation', $response);
+        $org = $client->cast('Organisation', $response);      
         
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -421,7 +421,82 @@ class OrgRouteHandler
                     $app->redirect($app->urlFor('org-public-profile', array('org_id' => $org_id)));
                 }
             }
+            
+            if (isset($post->email)) {
+                if (TemplateHelper::isValidEmail($post->email)) {       
+                    $url = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
+                    $response = $client->call($url);
+                    $user = $client->cast('User', $response);
+                
+                    if (!is_null($user)) {
+                        $user_id = $user->getUserId();
+                        $request = APIClient::API_VERSION."/users/$user_id/orgs";
+                        $user_orgs = $client->call($request);
+                    
+                        if ($user->getDisplayName() != '') {
+                            $user_name = $user->getDisplayName();
+                        } else {
+                            $user_name = $user->getEmail();
+                        }   
+                        if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
+                            $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                            $response = $client->call($request, HTTP_Request2::METHOD_PUT);
+                            if ($org->getName() != '') {
+                                $org_name = $org->getName();
+                            } else {
+                                $org_name = "Organisation $org_id";
+                            }   
+                            $app->flashNow('success', "Successfully added $user_name as a member of $org_name");
+                        } else {
+                            $app->flashNow('error', "$user_name is already a member of this organisation");
+                        }   
+                    } else {
+                        $email = $post->email;
+                        $app->flashNow('error',
+                            "The email address $email is not registered with this system.
+                            Are you sure you have the right email addess?"
+                        );
+                    }
+                } else {
+                    $app->flashNow('error', 'You did not enter a valid email address');
+                }
+            } elseif (isset($post->accept)) {
+                if ($user_id = $post->user_id) {
+                    
+                    $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                    $response = $client->call($request, HTTP_Request2::METHOD_PUT);
+                    $request = APIClient::API_VERSION."/users/$user_id";
+                    $response = $client->call($request);
+                    $user = $client->cast('User', $response);
+                } else {
+                    $app->flashNow("error", "Invalid User ID: $user_id");
+                }
+            } elseif (isset($post->refuse)) {
+                if ($user_id = $post->user_id) {
+                    $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                    $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
+                    
+                    $request = APIClient::API_VERSION."/users/$user_id";
+                    $response = $client->call($request);
+                    $user = $client->cast('User', $response);
+                } else {
+                    $app->flashNow("error", "Invalid User ID: $user_id");
+                }
+            }
         }       
+        
+        $request = APIClient::API_VERSION."/orgs/$org_id/requests";
+        $requests = $client->call($request, HTTP_Request2::METHOD_GET);
+
+        $user_list = array();
+        if (count($requests) > 0) {
+            foreach ($requests as $request) {
+                $memRequest =$client->cast('MembershipRequest', $request);
+                $request = APIClient::API_VERSION."/users/{$memRequest->getUserId()}";
+                $user = $client->call($request);
+                $user_list[] =  $client->cast('User', $user);
+            }
+        }  
 
         $org_badges = array();
         $request = APIClient::API_VERSION."/orgs/$org_id/badges";
@@ -445,7 +520,8 @@ class OrgRouteHandler
         $app->view()->setData('current_page', 'org-public-profile');
         $app->view()->appendData(array('org' => $org,
                 'org_members' => $org_members,
-                'org_badges' => $org_badges
+                'org_badges' => $org_badges,
+                'user_list' => $user_list
         ));
         
         $app->render('org-public-profile.tpl');

@@ -16,8 +16,8 @@ class ProjectRouteHandler
         $app->get('/project/alter/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'projectAlter'))->via('POST')->name('project-alter');
         
-        $app->get('/project/upload/:org_id/', array($middleware, 'authUserForOrg'),
-        array($this, 'projectUpload'))->via('GET', 'POST')->name('project-upload');    
+        $app->get('/project/create/:org_id/', array($middleware, 'authUserForOrg'),
+        array($this, 'projectCreate'))->via('GET', 'POST')->name('project-create');    
         
         $app->get('/project/id/:project_id/uploaded/', array($middleware, 'authUserForOrgProject'),
         array($this, 'projectUploaded'))->name('project-uploaded');
@@ -293,7 +293,7 @@ class ProjectRouteHandler
     }
     
     
-    public function projectUpload($org_id)
+    public function projectCreate($org_id)
     {
         $app = Slim::getInstance();
         $client = new APIClient();
@@ -512,7 +512,7 @@ class ProjectRouteHandler
             'error'             => $error,
             'title_error'       => $title_err,
             'word_count_err'    => $word_count_err,
-            'url_project_upload' => $app->urlFor('project-upload', array('org_id' => $org_id)),
+            'url_project_upload' => $app->urlFor('project-create', array('org_id' => $org_id)),
             'languages'         => $language_list,
             'countries'         => $countries,
             'extra_scripts'     => $extra_scripts

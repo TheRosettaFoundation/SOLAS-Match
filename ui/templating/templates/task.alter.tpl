@@ -5,7 +5,7 @@
     Task {$task->getTitle()}
     <small>Alter task details here.</small>
     <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-        <i class="icon-list icon-white"></i> View Details
+        <i class="icon-list icon-white"></i> View Task Details
     </a>
 </h1>
 
@@ -110,7 +110,7 @@
                 <p style="margin-bottom:20px;"></p>
                 <p>
                     <button type="submit" value="Submit" name="submit" class="btn btn-primary">
-                        <i class="icon-refresh icon-white"></i> Update
+                        <i class="icon-refresh icon-white"></i> Update Task Details
                     </button>
                 </p>    
                 <p style="margin-bottom:20px;"></p>

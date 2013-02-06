@@ -32,7 +32,7 @@
 
     <p>
         <button type="submit" class="btn btn-success">
-            <i class="icon-star icon-white"></i> Create
+            <i class="icon-star icon-white"></i> Create Organisation
         </button>            
     </p>
 </form>

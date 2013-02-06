@@ -6,7 +6,7 @@
     {assign var="project_id" value=$project->getId()}
     
     <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
-        <i class="icon-wrench icon-white"></i> Edit Details
+        <i class="icon-wrench icon-white"></i> Edit Project
     </a> 
 </h1>
 
@@ -101,7 +101,7 @@
         <th align="left" width="48%">Tags:<hr/></th>
         </thead>
         <tbody>
-            <tr>
+            <tr valign="top">
                 <td>
                     <i>
                     {if $project->getDescription() != ''}
@@ -170,6 +170,7 @@
                     <th>
                         Track
                     </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -249,6 +250,11 @@
                                 </a>
                                 {/if}
                             </form>
+                        </td>                        
+                        <td>
+                            <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btn btn-small">
+                                <i class="icon-wrench icon-black"></i> Edit Task
+                            </a>
                         </td>
                     </tr>
                 {/foreach}
