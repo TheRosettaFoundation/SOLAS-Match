@@ -17,31 +17,30 @@ class Middleware
     {
         $app = Slim::getInstance();
         $params = $route->getParams();        
-
+        $taskClaimed=false;
         if ($params !== null) {
             $client = new APIClient();
             $task_id = $params['task_id'];
             $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
             $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);             
-            
-            if ($taskClaimed) {
-                $user_id = UserSession::getCurrentUserID();
-                if (is_null($user_id)) {
-                    $app->flash('error', 'Login required to access page');
-                    $app->redirect($app->urlFor('login'));
-                }
-                $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
-                $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET,
-                                                null, array("userID" => $user_id));
-
-                if (!$userClaimedTask) {
-                    $app->flash('error', 'This task has been claimed by another user');
-                    $app->redirect($app->urlFor('home'));
-                }
+        }
+        if ($taskClaimed) {
+            $user_id = UserSession::getCurrentUserID();
+            if (is_null($user_id)) {
+                $app->flash('error', 'Login required to access page');
+                $app->redirect($app->urlFor('login'));
             }
-            return true;
-        } else {
-            $app->flash('error', 'Unable to find task');
+            $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+            $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET,
+                                            null, array("userID" => $user_id));
+
+            if (!$userClaimedTask) {
+                $app->flash('error', 'This task has been claimed by another user');
+                $app->redirect($app->urlFor('home'));
+            }
+
+        }else {
+            $app->flash('error', 'You are not authorized to view this page.');
             $app->redirect($app->urlFor('home'));
         }
     }

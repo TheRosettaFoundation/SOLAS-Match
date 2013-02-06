@@ -11,7 +11,7 @@
         	{/if}
     	</p>
         <p>
-            Due by: <b>{date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}</b>
+            Due by: <b>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</b>
         </p>
         
         {if $task->getTaskType()}

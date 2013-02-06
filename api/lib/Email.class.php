@@ -73,7 +73,7 @@ class Email {
             fputs($SMTPIN, "DATA\r\n");
             $talk["data"] = fgets($SMTPIN, 1024 );
             fputs($SMTPIN, "To: <".$mailTo.">\r\nFrom: <".$mailParams.">\r\nSubject:"
-                                    .$mailSubject."\r\n\r\n\r\n".$mailBody."\r\n.\r\n");
+                                    .$mailSubject."\r\n".$mailHeader."\r\n\r\n".$mailBody."\r\n.\r\n");
             $talk["send"] = fgets($SMTPIN, 256);
             fputs ($SMTPIN, "QUIT\r\n");
             fclose($SMTPIN);

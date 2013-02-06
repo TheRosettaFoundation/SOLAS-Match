@@ -30,7 +30,7 @@
         <th><b>Source Language</b></th>
         <th><b>Reference</b></th>
         <th><b>Word Count</b></th>
-        <th><b>Created</b></center></th> 
+        <th><b>Created</b></center></th>
         <th><b>Project Deadline</b></th>
         <th><b>Track</b></th>
           
@@ -62,10 +62,10 @@
                 {/if}
             </td>
             <td>
-                {$project->getCreatedTime()}
+                {date(Settings::get("ui.date_format"), strtotime($project->getCreatedTime()))}
             </td>  
             <td>
-                {$project->getDeadline()}
+                {date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}
             </td>
             <td>
                 <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
@@ -170,7 +170,9 @@
                     <th>
                         Track
                     </th>
-                    <th></th>
+                    <th>
+                        Edit
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -209,7 +211,7 @@
                             </b>
                         </td>
                         <td>
-                            {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
+                            {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
                         </td>
                         <td>
                             {if $task->getWordCount() != ''}

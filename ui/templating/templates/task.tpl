@@ -15,7 +15,7 @@
 			To <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
 		{/if}
         <p>
-            Due by {date("D, dS F Y, H:i:s", strtotime($task->getDeadline()))}
+            Due by {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
         </p>
         <div class="tag">
 		{foreach from=$task->getTagList() item=tag}

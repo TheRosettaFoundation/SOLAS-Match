@@ -92,7 +92,7 @@
     </thead>
     <tbody>            
         <tr>
-            <td>{$task->getDeadline()}</td>
+            <td>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</td>
             <td></td>
             <td>
                 {assign var="user_id" value=$claimant->getUserId()}

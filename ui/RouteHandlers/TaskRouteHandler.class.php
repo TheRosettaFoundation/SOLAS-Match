@@ -13,7 +13,7 @@ class TaskRouteHandler
         $app->get('/tasks/active/p/:page_no', array($this, 'activeTasks')
         )->name('active-tasks');        
 
-        $app->get('/task/id/:task_id/download-task-latest-file/', array($middleware, 'authUserForOrgTask'),
+        $app->get('/task/id/:task_id/download-task-latest-file/', array($middleware, 'authenticateUserForTask'),
         array($this, 'downloadTaskLatestVersion'))->name('download-task-latest-version');
         
         $app->get('/task/id/:task_id/mark-archived/', array($middleware, 'authUserForOrgTask'),
@@ -22,7 +22,7 @@ class TaskRouteHandler
         $app->get('/task/id/:task_id/download-file-user/', array($middleware, 'authUserIsLoggedIn'), 
         array($middleware, 'authenticateUserForTask'), array($this, 'downloadTask'))->name('download-task');
 
-        $app->get('/task/claim/:task_id', array($middleware, 'authenticateUserForTask'),
+        $app->get('/task/claim/:task_id', array($middleware, 'authUserIsLoggedIn'),
         array($this, 'taskClaim'))->name('task-claim-page');
 
         $app->get('/task/id/:task_id/claimed', array($middleware, 'authenticateUserForTask'),
@@ -34,10 +34,10 @@ class TaskRouteHandler
         array($middleware, 'authUserForTaskDownload'), 
         array($this, 'downloadTaskVersion'))->name('download-task-version');
 
-        $app->get('/task/id/:task_id/download-preview/', array($middleware, 'authenticateUserForTask'),
+        $app->get('/task/id/:task_id/download-preview/', array($middleware, 'authUserIsLoggedIn'),
         array($this, 'downloadTaskPreview'))->name('download-task-preview');
 
-        $app->get('/task/id/:task_id/', array($middleware, 'authenticateUserForTask'),
+        $app->get('/task/id/:task_id/', array($middleware, 'authUserIsLoggedIn'),
         array($this, 'task'))->name('task');
 
         $app->get('/task/id/:task_id/uploaded/', array($middleware, 'authenticateUserForTask'),

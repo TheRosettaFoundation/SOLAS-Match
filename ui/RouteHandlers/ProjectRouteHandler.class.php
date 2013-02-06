@@ -518,7 +518,7 @@ class ProjectRouteHandler
             'extra_scripts'     => $extra_scripts
         ));
         
-        $app->render('project.upload.tpl');
+        $app->render('project.create.tpl');
     }    
     
     

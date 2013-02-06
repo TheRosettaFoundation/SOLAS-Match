@@ -29,18 +29,10 @@
                     <h4><i class="icon-briefcase"></i> {$org->getName()}</h4>
                 </a>
             </th>
-            <th>
-                Deadline <font color='red'>*</font>
-            </th>
-            <th>
-                Status
-            </th>
-            <th>
-                Word Count
-            </th>
-            <th>
-                Created <font color='red'>*</font>
-            </th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Word Count</th>
+            <th>Created</th>
             <th>
                 <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class="btn btn-primary">
                     <i class="icon-wrench icon-white"></i> Edit Organisation
@@ -64,7 +56,7 @@
                         <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$projectObject->getTitle()}</a>
                     </td> 
                     <td>
-                        {$data['project']->getDeadline()}
+                        {date(Settings::get("ui.date_format"), strtotime($data['project']->getDeadline()))}
                     </td>
                     <td><!-- Project Status - to be implemented -->
                             <b>0%</b>
@@ -77,7 +69,7 @@
                         {/if}
                     </td>
                     <td>
-                            {$data['project']->getCreatedTime()}
+                        {date(Settings::get("ui.date_format"), strtotime($data['project']->getCreatedTime()))}
                     </td>
                     <td>
                         <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class="btn btn-small">
@@ -100,9 +92,6 @@
         </tbody>
     {/foreach}
     </table> 
-    <div class="i" style="margin-top: 40px">
-        <small><b>Note:</b> <font color='red'>*</font> denotes <b>Deadline</b> and <b>Created</b> formats are as follows: <b>YYYY-MM-DD HH:MM:SS (24-Hour)</b>.</small>
-    </div>
 {else}
     <div class="alert alert-warning">
     <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new task for that content.

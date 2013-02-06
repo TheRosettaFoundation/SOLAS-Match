@@ -128,7 +128,10 @@
             <tr>
                 <td colspan="4">
                     <label for="title"><h2>Chunking:</h2></label>
-                    <p class="desc">Divide large source files into smaller and more managable tasks.</p>
+                    <p class="desc">Divide large source files into smaller and more managable tasks.<br />
+                        Recommended limit of approximately 2000 words or less per task.
+                    </p>
+                    
                     <hr/>
                 </td>    
             </tr>
