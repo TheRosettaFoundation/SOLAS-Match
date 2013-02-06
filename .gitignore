@@ -3,4 +3,4 @@ composer.phar
 vendor
 /nbproject/
 /ui/templating/templates_compiled/
-
+Common/includes/conf.ini

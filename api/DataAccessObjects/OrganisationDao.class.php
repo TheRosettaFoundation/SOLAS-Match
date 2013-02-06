@@ -34,7 +34,18 @@ class OrganisationDao {
             return null;
         }
     }
-        
+     
+    public static function isMember($orgID,$userID)
+    {
+        $ret=null;
+        if ($result = PDOWrapper::call("orgHasMember", 
+                PDOWrapper::cleanseNull($orgID).",".
+                PDOWrapper::cleanseNull($userID))){
+            $ret=$result['result'];
+        }
+        return $ret;
+    }
+    
     public static function getOrg($id, $name, $homepage, $bio)
     {
         $ret = array();

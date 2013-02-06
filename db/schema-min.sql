@@ -1881,6 +1881,15 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.orgHasMember
+DROP PROCEDURE IF EXISTS `orgHasMember`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `orgHasMember`(IN `oID` INT, IN `uID` INT)
+BEGIN
+select exists (select 1 from OrganisationMembers om where om.user_id=uID and om.organisation_id=oID) as result;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Test.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
