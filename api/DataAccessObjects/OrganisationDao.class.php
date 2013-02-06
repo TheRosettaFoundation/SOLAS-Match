@@ -41,7 +41,7 @@ class OrganisationDao {
         if ($result = PDOWrapper::call("orgHasMember", 
                 PDOWrapper::cleanseNull($orgID).",".
                 PDOWrapper::cleanseNull($userID))){
-            $ret=$result['result'];
+            $ret=$result[0]['result'];
         }
         return $ret;
     }
