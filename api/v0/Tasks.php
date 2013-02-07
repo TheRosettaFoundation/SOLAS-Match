@@ -256,7 +256,7 @@ class Tasks {
             $dao = new TaskDao();
             $data = $dao->getUserClaimedTask($id);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUserCliamedTask');
+        }, 'getUserClaimedTask');
     }
 }
 Tasks::init();

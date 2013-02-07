@@ -18,7 +18,7 @@
 
                 <h2>
                     {if isset($active_tasks)}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
+                        <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
                     {else}
                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
                     {/if}
@@ -28,7 +28,7 @@
             {elseif $type_id == TaskTypeEnum::PROOFREADING}
                 <h2>
                     {if isset($active_tasks)}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
+                        <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
                     {else}
                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
                     {/if}
@@ -38,7 +38,7 @@
             {elseif $type_id == TaskTypeEnum::POSTEDITING}
                 <h2>
                     {if isset($active_tasks)}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
+                        <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
                     {else}
                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
                     {/if}

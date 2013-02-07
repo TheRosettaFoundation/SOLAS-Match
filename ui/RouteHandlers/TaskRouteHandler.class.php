@@ -465,6 +465,13 @@ class TaskRouteHandler
             }
         }
         
+        $numTaskTypes = Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        }
+        
         if (UserRouteHandler::isLoggedIn()) {
             $_SESSION['previous_page'] = 'task';
             $_SESSION['old_page_vars'] = array("task_id" => $task_id);
@@ -473,7 +480,9 @@ class TaskRouteHandler
         $app->view()->appendData(array(
                 'max_file_size' => TemplateHelper::maxFileSizeMB(),
                 'body_class'    => 'task_page',
-                'converter'     => $useConverter
+                'converter'     => $useConverter,
+                'taskTypeColours' => $taskTypeColours,
+                'project'       => $project
         ));
         
         $app->render('task.tpl');
