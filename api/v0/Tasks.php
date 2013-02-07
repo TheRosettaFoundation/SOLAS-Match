@@ -196,10 +196,45 @@ class Tasks {
             Notify::sendEmailNotifications($task, NotificationTypes::UPLOAD);
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             if($convert){
-                Upload::apiSaveFile($task, $userId, FormatConverter::convertFromXliff(Dispatcher::getDispatcher()->request()->getBody()), $filename);
+                Upload::apiSaveFile($task, $userId, 
+                    FormatConverter::convertFromXliff(Dispatcher::getDispatcher()->request()->getBody()), $filename);
             }else{
             //touch this and you will die painfully sinisterly sean :)
                 Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename);
+            }
+
+            $graphBuilder = new APIWorkflowBuilder();
+            $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+
+            if ($graph->hasRootNode()) {
+                $currentLayer = $graph->getRootNodeList();
+                $nextLayer = array();
+                $found = false;
+
+                $dependants = array();
+                while(!$found && count($currentLayer) > 0) {
+                    foreach ($currentLayer as $node) {
+                        if ($node->getTaskId() == $id) {
+                            $found = true;
+                            foreach ($node->getNextList() as $nextNode) {
+                                $dependants[] = $preReqNode->getTaskId();
+                            }
+                        }
+                        foreach ($node->getNextList() as $nextNode) {
+                            if(!in_array($nextNode, $nextLayer)) {
+                                $nextLayer[] = $nextNode;
+                            }
+                        }
+                    }
+                    $currentLayer = $nextLayer;
+                    $nextLayer = array();
+                }
+
+                foreach ($dependants as $nextTask) {
+                    $taskDao = new TaskDao();
+                    $dTask = $taskDao->find(array("id" => $nextTask));
+//                    Upload::apiSaveFileVersion($dTask, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename, 0);
+                }
             }
         }, 'saveTaskFile');
         
