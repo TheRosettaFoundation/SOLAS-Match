@@ -59,7 +59,7 @@ class Notify
             }
         } else {
             $app        = Slim::getInstance();
-            $task_url 	= Settings::get('site.url') .  "/task/id/{$task->getId()}/";
+            $task_url 	= Settings::get('site.url') .  "task/id/{$task->getId()}/";
 
             $app->view()->appendData(array(
                     'site_name' => Settings::get('site.name'),

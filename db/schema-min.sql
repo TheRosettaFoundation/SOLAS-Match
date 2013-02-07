@@ -1653,23 +1653,11 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `uID` INT, IN `lim` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `taskID` INT)
 BEGIN
-
-set @q=Concat(" SELECT t.id, t.project_id, t.title, t.`word-count`, 
-                (select code from Languages l where l.id =t.`language_id-source`) as `language_id-source`,
-                (select code from Languages l where l.id =t.`language_id-target`) as `language_id-target`,
-                t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`, 
-                (select code from Countries c where c.id =t.`country_id-target`) as `country_id-target`, comment,
-                `task-type_id`, `task-status_id`, published, deadline
-                FROM Tasks t JOIN TaskClaims tc ON tc.task_id = t.id
-                WHERE user_id = ?
-                ORDER BY `created-time` DESC
-                limit ", lim);
-        PREPARE stmt FROM @q;
-        set@uID = uID;
-	EXECUTE stmt using @uID;
-	DEALLOCATE PREPARE stmt;
+	SELECT u.* FROM Users u
+	WHERE u.id IN (SELECT tc.user_id FROM TaskClaims tc
+	WHERE tc.task_id = taskID);
 END//
 DELIMITER ;
 
@@ -2245,37 +2233,6 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
 BEGIN
 
-DECLARE done INT DEFAULT 0;
-
-DECLARE tID INT DEFAULT 0;
-
-DECLARE cursor1 CURSOR FOR
-
-select t.id
-
-from Tasks t
-
-join TaskPrerequisites tp
-
-on t.id = tp.`task_id`
-
-where t.`task-status_id`=1
-
-and tp.`task_id-prerequisite`=id
-
-and not exists (select 1
-
-                    from TaskPrerequisites pre
-
-                    join Tasks tsk
-                    on tsk.id= pre.`task_id-prerequisite`
-                    where pre.task_id=t.id
-                    and tsk.`task-status_id`!=4
-						  and tsk.`id`!=id);
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-
-	
-
 	if id='' then set id=null;end if;
 
 	if projectID='' then set projectID=null;end if;
@@ -2339,22 +2296,6 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 		 values (projectID,name,wordCount,@sID,@tID,created,taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
 
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
-
-	
-
-		set @preStatus = null;
-		select `task-status_id` into @preStatus from Tasks t where t.id=id;
-		if (@preStatus!=4 and tStatus=4) then
-		OPEN cursor1;
-		read_loop: LOOP
-		FETCH cursor1 INTO tID;
-		IF done THEN
-	   LEAVE read_loop;
-	   END IF;
-		call setTaskStatus(tID,2);
-		END LOOP;
-		CLOSE cursor1;
-		end if;
 
 		
 
@@ -2604,6 +2545,7 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
 END//
 DELIMITER ;
+
 
 
 -- Dumping structure for procedure Solas-Match-Test.taskIsClaimed
@@ -2953,46 +2895,94 @@ SET SQL_MODE=@OLD_SQL_MODE;
 DROP TRIGGER IF EXISTS `updateDependentTaskOnComplete`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
-CREATE TRIGGER `updateDependentTaskOnComplete` BEFORE UPDATE ON `Tasks` FOR EACH ROW BEGIN
-/*
+CREATE TRIGGER `updateDependentTaskOnComplete` BEFORE INSERT ON `TaskFileVersions` FOR EACH ROW BEGIN
 DECLARE done INT DEFAULT 0;
+
 DECLARE tID INT DEFAULT 0;
+
 DECLARE cursor1 CURSOR FOR
+
 select t.id
+
 from Tasks t
+
 join TaskPrerequisites tp
+
 on t.id = tp.`task_id`
+
 where t.`task-status_id`=1
-and tp.`task_id-prerequisite`=old.id
+
+and tp.`task_id-prerequisite`=new.task_id
+
 and not exists (select 1
+
                     from TaskPrerequisites pre
+
                     join Tasks tsk
                     on tsk.id= pre.`task_id-prerequisite`
                     where pre.task_id=t.id
                     and tsk.`task-status_id`!=4
-						  and tsk.`id`!=old.id);
+						  and tsk.`id`!=new.task_id);
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
-if ( old.`task-status_id`!=4 and new.`task-status_id`=4) then
-#begin
 
-OPEN cursor1;
-read_loop: LOOP
-	FETCH cursor1 INTO tID;
-	IF done THEN
-      LEAVE read_loop;
-   END IF;
-   
-	call setTaskStatus(tID,2);
 
-END LOOP;
 
-CLOSE cursor1;
-#	end
-end if;*/
+	if exists (
+		select 1 from TaskFileVersions tf
+		where tf.task_id = new.task_id
+		and new.version_id > 0) then
+		
+		set @preStatus = null;
+		select `task-status_id` into @preStatus from Tasks t where t.id=new.task_id;
+		
+		OPEN cursor1;
+		read_loop: LOOP
+		FETCH cursor1 INTO tID;
+		IF done THEN
+	   LEAVE read_loop;
+	   END IF;
+		call setTaskStatus(tID,2);
+		END LOOP;
+		CLOSE cursor1;
+		
+		
+
+		UPDATE Tasks t SET t.`task-status_id`=4 WHERE t.id= new.task_id;
+		
+	end if;
+	
+
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
+
+
+-- Dumping structure for trigger Solas-Match-Test.updateTaskStatsuOnAddPrereq
+DROP TRIGGER IF EXISTS `updateTaskStatsuOnAddPrereq`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `updateTaskStatsuOnAddPrereq` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
+if exists 
+	(select 1 
+	 from Tasks t
+	 where t.id = new.task_id
+	 and t.`task-status_id`=2
+	 and exists (select 1 
+						  from TaskPrerequisites tp
+						  join Tasks tsk 
+                    on tsk.id=tp.`task_id-prerequisite`
+						  where tp.task_id=t.id
+						  and tsk.`task-status_id`!= 4 )
+	 )
+	 then
+		update Tasks set `task-status_id`=1
+			 where id = new.task_id;
+end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
 
 
 -- Dumping structure for trigger Solas-Match-Test.updateTaskStatusDeletePrereq

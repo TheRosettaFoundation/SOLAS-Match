@@ -349,7 +349,7 @@ class UserRouteHandler
         $client = new APIClient();
         
         $error = null;
-        $openid = new LightOpenID(Settings::get("site.url"));
+        $openid = new LightOpenID("http://".$_SERVER['HTTP_HOST'].$app->urlFor("home"));
         $use_openid = Settings::get("site.openid");
         $app->view()->setData('openid', $use_openid);
         if (isset($use_openid)) {

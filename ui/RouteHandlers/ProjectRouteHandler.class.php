@@ -533,7 +533,7 @@ class ProjectRouteHandler
                 window.onload = function() {
                     new datepickr(\"deadline\");
                 };
-            </script>".file_get_contents(Settings::get('site.url').'ui/js/project-create.js');           
+            </script>".file_get_contents("http://".$_SERVER['HTTP_HOST'].$app->urlFor("home").'ui/js/project-create.js');
   
         
         $language_list = TemplateHelper::getLanguageList();

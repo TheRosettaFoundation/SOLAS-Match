@@ -106,8 +106,7 @@ class Upload {
         $destination_path = self::absoluteFilePathForUpload($task, $version, $filename);
         return file_put_contents($destination_path, $file)?1:0;
     }
-        
-        
+       
         
     /*
      * For a named filename, save file that have been uploaded by form submission.
