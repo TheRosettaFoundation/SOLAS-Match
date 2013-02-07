@@ -390,7 +390,26 @@ class TaskRouteHandler
         $task = $client->cast('Task', $response);
 
         $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
-        $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);
+        $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);   
+        
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+     
+        $numTaskTypes = Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        }
+        
+        $converter = Settings::get('converter.converter_enabled');
+        
+        $app->view()->appendData(array(
+                    'taskTypeColours' => $taskTypeColours,
+                    'project' => $project,
+                    'converter'     => $converter,
+        ));         
 
         if ($taskClaimed) {
             if ($task->getTaskType() == TaskTypeEnum::POSTEDITING) {
@@ -407,18 +426,7 @@ class TaskRouteHandler
                 return;
             }
         }
-                
-        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
-        $response = $client->call($request);
-        $project = $client->cast("Project", $response);
-        
-        $numTaskTypes = Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        
-        for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
-        }
-        
+     
         if ($task_file_info = $client->castCall("TaskMetadata", APIClient::API_VERSION."/tasks/$task_id/info")) {
             $app->view()->appendData(array(
                 'task_file_info' => $task_file_info,
