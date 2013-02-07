@@ -40,8 +40,12 @@ class Middleware
             }
 
         }else {
-            $app->flash('error', 'You are not authorized to view this page.');
-            $app->redirect($app->urlFor('home'));
+            $user_id = UserSession::getCurrentUserID();
+
+            if (is_null($user_id)) {
+                $app->flash('error', 'You are not authorized to view this page.');
+                $app->redirect($app->urlFor('home'));
+            }
         }
     }
 

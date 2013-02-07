@@ -38,7 +38,7 @@ class TaskRouteHandler
         array($this, 'downloadTaskPreview'))->name('download-task-preview');
 
         $app->get('/task/id/:task_id/', array($middleware, 'authUserIsLoggedIn'),
-        array($this, 'task'))->name('task');
+        array($this, 'task'))->via("POST")->name('task');
 
         $app->get('/task/id/:task_id/uploaded/', array($middleware, 'authenticateUserForTask'),
         array($this, 'taskUploaded'))->name('task-uploaded');
@@ -385,8 +385,23 @@ class TaskRouteHandler
 
     public function task($task_id)
     {
-        $app = Slim::getInstance();
         $client = new APIClient();
+
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);     
+        $task = $client->cast('Task', $response);
+
+        $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+        $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);
+
+        if ($taskClaimed) {
+            if ($task->getTaskType() == TaskTypeEnum::POSTEDITING) {
+                $this->posteditingTask($task_id);
+                return;
+            }
+        }
+
+        $app = Slim::getInstance();
         $user_id = UserSession::getCurrentUserID();
         
         $useConverter = Settings::get('converter.converter_enabled');          
@@ -486,6 +501,84 @@ class TaskRouteHandler
         ));
         
         $app->render('task.tpl');
+    }
+
+    public function posteditingTask($taskId)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+        $userId = UserSession::getCurrentUserID();
+
+        $fieldName = "mergedFile";
+        $errorMessage = null;
+
+        $request = APIClient::API_VERSION."/tasks/$taskId";
+        $response = $client->call($request);
+        $task = $client->cast("Task", $response);
+
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+
+            $uploadError = false;
+            try {
+                TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
+            } catch (Exception $e) {
+                $uploadError = true;
+                $errorMessage = $e->getMessage();
+            }
+
+            if (!$uploadError) {
+                try {
+                    $filedata = file_get_contents($_FILES[$fieldName]['tmp_name']);
+                    $request = APIClient::API_VERSION."/tasks/$taskId/file/".
+                        urlencode($_FILES[$fieldName]['name'])."/$userId";
+                    $errorMessage = $client->call($request,
+                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                } catch (Exception  $e) {
+                    $uploadError = true;
+                    $errorMessage = 'File error: ' . $e->getMessage();
+                }
+            }
+        }
+
+        $graphBuilder = new UIWorkflowBuilder();
+        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+
+        $found = false;
+        $preReqTasks = array();
+        $currentLayer = $graph->getRootNodeList();
+        $nextLayer = array();
+        while (!$found && count($currentLayer) > 0) {
+            foreach ($currentLayer as $node) {
+                if ($node->getTaskId() == $task->getId()) {
+                    $found = true;
+                    foreach ($node->getPreviousList() as $pNode) {
+                        $request = APIClient::API_VERSION."/tasks/{$pNode->getTaskId()}";
+                        $response = $client->call($request);
+                        $pTask = $client->cast("Task", $response);
+                        if (is_object($pTask)) {
+                            $preReqTasks[] = $pTask;
+                        }
+                    }
+                }
+                foreach ($node->getNextList() as $nNode) {
+                    if (!in_array($nNode, $nextLayer)) {
+                        $nextLayer[] = $nNode;
+                    }
+                }
+            }
+            $currentLayer = $nextLayer;
+            $nextLayer = array();
+        }
+
+        $app->view()->appendData(array(
+                    'task'          => $task,
+                    'preReqTasks'   => $preReqTasks,
+                    'fieldName'     => $fieldName,
+                    'errorMessage'  => $errorMessage
+        ));
+
+        $app->render('task-postediting.tpl');
     }
 
     public function taskUploaded($task_id)
