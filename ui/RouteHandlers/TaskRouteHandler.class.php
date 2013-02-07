@@ -398,6 +398,12 @@ class TaskRouteHandler
             if ($task->getTaskType() == TaskTypeEnum::POSTEDITING) {
                 $this->posteditingTask($task_id);
                 return;
+            } elseif ($task->getTaskType() == TaskTypeEnum::TRANSLATION) {
+                $this->taskSimpleUpload($task_id);
+                return;
+            } elseif ($task->getTaskType() == TaskTypeEnum::PROOFREADING) {
+                $this->taskSimpleUpload($task_id);
+                return;
             }
         }
 
@@ -570,6 +576,90 @@ class TaskRouteHandler
         ));
 
         $app->render('task-postediting.tpl');
+    }
+
+    public function taskSimpleUpload($taskId)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+
+        $fieldName = "fileUpload";
+        $errorMessage = null;
+        $userId = UserSession::getCurrentUserID();
+
+        $request = APIClient::API_VERSION."/tasks/$taskId";
+        $response = $client->call($request);
+        $task = $client->cast("Task", $response);
+
+        if ($app->request()->isPost()) {
+            try {
+                TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
+            } catch (Exception $e) {
+                $errorMessage = $e->getMessage();
+            }
+        
+            if (is_null($errorMessage)) {
+                try {
+                    $post = (object) $app->request()->post();
+                    $filedata = file_get_contents($_FILES[$fieldName]['tmp_name']);
+                    
+                    if ($post->submit == 'XLIFF') {
+                        $request = APIClient::API_VERSION."/tasks/$taskId/file/?convertFileXliff=true";
+                        $response = $client->call($request, HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
+                    } else if ($post->submit == 'submit') {
+                        $errorMessage = $client->call(APIClient::API_VERSION.
+                            "/tasks/$taskId/file/{$_FILES[$fieldName]['name']}/$userId",
+                            HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
+                    }
+                
+                } catch (Exception  $e) {
+                    $errorMessage = 'File error: ' . $e->getMessage();
+                }
+            }
+
+            if (is_null($errorMessage)) {
+                //Wait for new version uploaded page
+                //$app->redirect($app->urlFor(
+            } else {
+                $app->flashNow("error", $errorMessage);
+            }
+        }
+
+        $request = APIClient::API_VERSION."/projects/{$task->getProjectId()}";
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+
+        $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
+        $response = $client->call($request);
+        $org = $client->cast("Organisation", $response);
+
+        $request = APIClient::API_VERSION."/tasks/{$task->getId()}/version";
+        $taskVersion = $client->call($request, HTTP_Request2::METHOD_GET);
+
+        $file_previously_uploaded = false;
+        if ($taskVersion > 0) {
+            $file_previously_uploaded = true;
+        }
+
+        $request = APIClient::API_VERSION."/tasks/$taskId/info";
+        $response = $client->call($request, HTTP_Request2::METHOD_GET, null, array("version" => 0));
+        $taskFileInfo = $client->cast("TaskMetadata", $response);
+        $filename = $taskFileInfo->getFilename();
+
+        $converter = Settings::get('converter.converter_enabled');
+
+        $app->view()->appendData(array(
+                    'task'          => $task,
+                    'project'       => $project,
+                    'org'           => $org,
+                    'filename'      => $filename,
+                    'converter'     => $converter,
+                    'fieldName'     => $fieldName,
+                    'max_file_size' => TemplateHelper::maxFileSizeMB(),
+                    'file_previously_uploaded' => $file_previously_uploaded
+        ));
+
+        $app->render('task-translation.tpl');
     }
 
     public function taskUploaded($task_id)

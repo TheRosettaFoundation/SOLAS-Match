@@ -3,46 +3,21 @@
     {assign var='task_id' value=$task->getId()}
     {assign var="type_id" value=$task->getTaskType()}    
                          
+            <h2>
+                <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
+            </h2>
             {if $type_id == TaskTypeEnum::CHUNKING}
-                <h2>
-                    {if isset($active_tasks)}
-                        <a href="{urlFor name="task-chunking" options="task_id.$task_id"}">{$task->getTitle()}</a>
-                    {else}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
-                    {/if}
-                </h2>
                 <p>Type: 
                 <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>  
 
             {elseif $type_id == TaskTypeEnum::TRANSLATION}
-
-                <h2>
-                    {if isset($active_tasks)}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
-                    {else}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
-                    {/if}
                 </h2>
                 <p>Type: 
                 <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span>
             {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                <h2>
-                    {if isset($active_tasks)}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
-                    {else}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
-                    {/if}
-                </h2>
                 <p>Type: 
                 <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
             {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                <h2>
-                    {if isset($active_tasks)}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
-                    {else}
-                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
-                    {/if}
-                </h2>
                 <p>Type: 
                 <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span>
             {/if}                
