@@ -64,9 +64,6 @@ class TaskRouteHandler
         $app->get('/task/create/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
         
-        $app->get('/task/:task_id/chunking/', array($middleware, 'authenticateUserForTask'), 
-        array($this, 'taskChunking'))->via('POST')->name('task-chunking');
-        
         $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
         
@@ -404,6 +401,9 @@ class TaskRouteHandler
             } elseif ($task->getTaskType() == TaskTypeEnum::PROOFREADING) {
                 $this->taskSimpleUpload($task_id);
                 return;
+            } elseif ($task->getTaskType() == TaskTypeEnum::CHUNKING) {
+                $this->taskChunking($task_id);
+                return;
             }
         }
 
@@ -659,7 +659,7 @@ class TaskRouteHandler
                     'file_previously_uploaded' => $file_previously_uploaded
         ));
 
-        $app->render('task-translation.tpl');
+        $app->render('task-simple-upload.tpl');
     }
 
     public function taskUploaded($task_id)
