@@ -382,6 +382,7 @@ class TaskRouteHandler
 
     public function task($task_id)
     {
+        $app = Slim::getInstance();
         $client = new APIClient();
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
@@ -406,31 +407,17 @@ class TaskRouteHandler
                 return;
             }
         }
-
-        $app = Slim::getInstance();
-        $user_id = UserSession::getCurrentUserID();
-        
-        $useConverter = Settings::get('converter.converter_enabled');          
-
-        $request = APIClient::API_VERSION."/tasks/$task_id";
-        $response = $client->call($request);     
-        $task = $client->cast('Task', $response);
-        
-        if (!is_object($task)) {
-            header('HTTP/1.0 404 Not Found');
-            die;
-        }
-
+                
         $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
         $response = $client->call($request);
         $project = $client->cast("Project", $response);
-
-        $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
-        $response = $client->call($request); 
-        $org = $client->cast('Organisation', $response);
         
-        $app->view()->setData('task', $task);
-        $app->view()->appendData(array('org' => $org));
+        $numTaskTypes = Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        }
         
         if ($task_file_info = $client->castCall("TaskMetadata", APIClient::API_VERSION."/tasks/$task_id/info")) {
             $app->view()->appendData(array(
@@ -446,58 +433,16 @@ class TaskRouteHandler
         //        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
         //        substr($file_path, $appPos).'/'.$task_file_info['filename'];
         $file_path= Settings::get("site.api").APIClient::API_VERSION."/tasks/$task_id/file";
-       
-        $app->view()->appendData(array(
-            'file_preview_path' => $file_path,
-            'filename' => $task_file_info->getFilename()
-        )); 
-        
-        $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
-        $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);
-        
-        if ($taskClaimed) {
-            $app->view()->appendData(array(
-                'task_is_claimed' => true
-            ));
-            
-            $request = APIClient::API_VERSION."/users/$user_id";
-            $user = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            if ($user) {                
-                $request = APIClient::API_VERSION."/tasks/{$task->getId()}/claimed";
-                $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET,
-                                                null, array('userID' => $user_id));
-                
-                if ($userClaimedTask) {
-                    $app->view()->appendData(array(
-                        'this_user_has_claimed_this_task' => true
-                    ));
-
-                    $request = APIClient::API_VERSION."/tasks/{$task->getId()}/version";
-                    $taskVersion = $client->call($request, HTTP_Request2::METHOD_GET);
-                    
-                    
-                    if ($taskVersion > 0) {
-                        $app->view()->appendData(array(
-                            'file_previously_uploaded' => true
-                        ));                        
-                    }
-                }
-            }
-        }
-        
-        if (UserRouteHandler::isLoggedIn()) {
-            $_SESSION['previous_page'] = 'task';
-            $_SESSION['old_page_vars'] = array("task_id" => $task_id);
-        }
         
         $app->view()->appendData(array(
-                'max_file_size' => TemplateHelper::maxFileSizeMB(),
-                'body_class'    => 'task_page',
-                'converter'     => $useConverter
+                    'task' => $task,
+                    'taskTypeColours' => $taskTypeColours,
+                    'project' => $project,
+                    'file_preview_path' => $file_path,
+                    'filename' => $task_file_info->getFilename()
         ));
         
-        $app->render('task.tpl');
+        $app->render('task.view.tpl');
     }
 
     public function posteditingTask($taskId)

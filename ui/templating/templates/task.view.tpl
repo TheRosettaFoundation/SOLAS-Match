@@ -22,22 +22,22 @@
         </b>
     </small>   
     {assign var="task_id" value=$task->getId()}
-    {if isset($isOrgMember)}
-        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-            <i class="icon-wrench icon-white"></i> Edit Task Details
-        </a>
-    {else}
-        <div class="pull-right">
-            <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-primary">
-            <i class="icon-download icon-white"></i> Download Source Document</a>
+    
+    <div class="pull-right">
+        <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-primary">
+        <i class="icon-download icon-white"></i> Claim Task</a>
 
-
-            {if Settings::get('converter.converter_enabled') == "y"}
-                <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}?convertToXliff=true" class="btn btn-primary">
-                <i class="icon-download icon-white"></i> Download as XLIFF</a>   
-            {/if}
-        </div>
-    {/if}
+        {if isset($isOrgMember)}
+            <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btn btn-primary'>
+                <i class="icon-wrench icon-white"></i> Edit Task Details
+            </a>
+        {else}
+                {if Settings::get('converter.converter_enabled') == "y"}
+                    <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}?convertToXliff=true" class="btn btn-primary">
+                    <i class="icon-download icon-white"></i> Download as XLIFF</a>   
+                {/if}
+        {/if}
+    </div>
 </h1>
         
         
