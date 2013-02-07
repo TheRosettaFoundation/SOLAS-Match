@@ -60,7 +60,11 @@
                 {date("D dS, M Y", strtotime($task->getDeadline()))}
             </td>
             <td>
-                {$task->getWordCount()}                
+                {if $task->getWordCount() != ''}               
+                    {$task->getWordCount()}
+                {else}
+                    -
+                {/if}
             </td> 
             <td>                            
                 {assign var="status_id" value=$task->getTaskStatus()}

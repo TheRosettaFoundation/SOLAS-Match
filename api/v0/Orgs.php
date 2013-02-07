@@ -65,6 +65,17 @@ class Orgs {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getOrg');
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/isMember/:orgID/:id/', function ($orgID,$id, $format = ".json"){
+            if (!is_numeric($id)&& strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+            $dao = new OrganisationDao();
+            $data = $dao->isMember($orgID, $id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'isMember');
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/getByName/:name/',
                                                         function ($name, $format = ".json") {
             

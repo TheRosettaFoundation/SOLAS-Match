@@ -87,9 +87,13 @@
             <thead>            
                 <th style="text-align: left">Name</th>
                 <th>Description</th>
-                <th>Edit</th>
-                <th>Assign</th>
-                <th>Delete</th>
+                
+                {if in_array($user->getUserId(), $org_members)}
+                    <th>Edit</th>
+                    <th>Assign</th>
+                    <th>Delete</th>
+                {/if}
+
             </thead>
             <tbody>
             {foreach $org_badges as $badge}

@@ -19,8 +19,8 @@ class TaskRouteHandler
         $app->get('/task/id/:task_id/mark-archived/', array($middleware, 'authUserForOrgTask'),
         array($this, 'archiveTask'))->name('archive-task');
 
-        $app->get('/task/id/:task_id/download-file-user/', array($middleware, 'authUserIsLoggedIn'), 
-        array($middleware, 'authenticateUserForTask'), array($this, 'downloadTask'))->name('download-task');
+        $app->get('/task/id/:task_id/download-file-user/', array($middleware, 'authUserIsLoggedIn'),
+        array($this, 'downloadTask'))->name('download-task');
 
         $app->get('/task/claim/:task_id', array($middleware, 'authUserIsLoggedIn'),
         array($this, 'taskClaim'))->name('task-claim-page');
@@ -49,7 +49,7 @@ class TaskRouteHandler
         $app->get('/task/alter/:task_id/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskAlter'))->via('POST')->name('task-alter');
 
-        $app->get('/task/view/:task_id/', array($middleware, 'authUserForOrgTask'),
+        $app->get('/task/view/:task_id/', array($middleware, 'authUserIsLoggedIn'),
         array($this, 'taskView'))->via("POST")->name('task-view');
 
         $app->get('/task/:task_id/uploaded-edit/', array($middleware, 'authenticateUserForTask'),
@@ -64,7 +64,7 @@ class TaskRouteHandler
         $app->get('/task/create/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
         
-        $app->get('/task/:task_id/chunking/', array($middleware, 'authUserForOrgTask'), 
+        $app->get('/task/:task_id/chunking/', array($middleware, 'authenticateUserForTask'), 
         array($this, 'taskChunking'))->via('POST')->name('task-chunking');
         
         $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
@@ -1171,6 +1171,13 @@ class TaskRouteHandler
         
         for($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        }
+        
+        $request = APIClient::API_VERSION."/orgs/isMember/{$project->getOrganisationId()}/$user_id";
+        $isOrgMember = $client->call($request);
+        
+        if($isOrgMember) {     
+            $app->view()->appendData(array('isOrgMember' => $isOrgMember));
         }
 
         $app->view()->appendData(array(

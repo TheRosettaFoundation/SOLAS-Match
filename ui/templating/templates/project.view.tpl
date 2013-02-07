@@ -5,9 +5,11 @@
     <small>Overview of project details.</small>
     {assign var="project_id" value=$project->getId()}
     
-    <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
-        <i class="icon-wrench icon-white"></i> Edit Project
-    </a> 
+    {if isset($projectTasks)}
+        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
+            <i class="icon-wrench icon-white"></i> Edit Project
+        </a> 
+    {/if}
 </h1>
 
 {if isset($flash['success'])}
@@ -27,12 +29,14 @@
 <table class="table table-striped">
     <thead>            
         <th style="text-align: left"><b>Organisation</b></th>
-        <th><b>Source Language</b></th>
-        <th><b>Reference</b></th>
-        <th><b>Word Count</b></th>
-        <th><b>Created</b></center></th>
-        <th><b>Project Deadline</b></th>
-        <th><b>Track</b></th>
+        <th>Source Language</th>
+        <th>Reference</th>
+        <th>Word Count</th>
+        <th>Created</center></th>
+        <th>Project Deadline</th>
+        {if isset($userSubscribedToProject)}
+            <th>Track</th>
+        {/if}
           
     </thead>
     <tbody>
@@ -67,25 +71,28 @@
             <td>
                 {date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}
             </td>
-            <td>
-                <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                    {if isset($userSubscribedToProject) && $userSubscribedToProject}
-                        <p>
-                            <input type="hidden" name="trackProject" value="0" />
-                            <input type="submit" class="btn btn-small" value="    Tracked" />
+            {if isset($userSubscribedToProject)}
+                <td>
 
-                            <i class="icon-inbox icon-black" style="position:relative; right:70px; top:2px;"></i>
-                        </p>
-                    {else}
-                        <p>
-                            <input type="hidden" name="trackProject" value="1" />
-                            <input type="submit" class="btn btn-small btn-inverse" value="    Untracked" />
+                    <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                         {if $userSubscribedToProject}
+                            <p>
+                                <input type="hidden" name="trackProject" value="0" />
+                                <input type="submit" class="btn btn-small" value="    Tracked" />
 
-                            <i class="icon-envelope icon-white" style="position:relative; right:81px; top:2px;"></i>
-                        </p>
-                    {/if}
-                </form> 
-            </td>
+                                <i class="icon-inbox icon-black" style="position:relative; right:70px; top:2px;"></i>
+                            </p>
+                        {else}
+                            <p>
+                                <input type="hidden" name="trackProject" value="1" />
+                                <input type="submit" class="btn btn-small btn-inverse" value="    Untracked" />
+
+                                <i class="icon-envelope icon-white" style="position:relative; right:81px; top:2px;"></i>
+                            </p>
+                        {/if}
+                    </form>                     
+                </td>
+            {/if}
         </tr>
         <tr>
         </tr> 
@@ -129,7 +136,7 @@
                 
 <p style="margin-bottom:40px;"></p>
 
-{if isset($user)}
+{if isset($user) && isset($projectTasks)}
     <hr />
     
     <h1 class="page-header">
@@ -269,9 +276,11 @@
     {/if}       
         
 {else}
+    {if isset($projectTasks)}
     <p class="alert alert-info">
         Please log in to register for notifications for this project.
     </p>
+    {/if}
 {/if}
 
 {include file="footer.tpl"}
