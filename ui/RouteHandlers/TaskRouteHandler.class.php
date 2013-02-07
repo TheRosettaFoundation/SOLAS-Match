@@ -899,7 +899,7 @@ class TaskRouteHandler
             window.onload = function() {
                 new datepickr(\"deadline_date\");
             };
-        </script>".file_get_contents(Settings::get('site.url').'ui/js/task-alter.js');
+        </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home").'ui/js/task-alter.js');
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -1674,7 +1674,7 @@ class TaskRouteHandler
                 
         }
         
-        $extraScripts = file_get_contents(Settings::get('site.url').'ui/js/task-chunking.js');
+        $extraScripts = file_get_contents("http://".$_SERVER['HTTP_HOST'].$app->urlFor("home").'ui/js/task-chunking.js');
         
         $app->view()->appendData(array(
             'project'           => $project,
