@@ -19,8 +19,8 @@ class ProjectRouteHandler
         $app->get('/project/create/:org_id/', array($middleware, 'authUserForOrg'),
         array($this, 'projectCreate'))->via('GET', 'POST')->name('project-create');    
         
-        $app->get('/project/id/:project_id/uploaded/', array($middleware, 'authUserForOrgProject'),
-        array($this, 'projectUploaded'))->name('project-uploaded');
+        $app->get('/project/id/:project_id/created/', array($middleware, 'authUserForOrgProject'),
+        array($this, 'projectCreated'))->name('project-created');
         
         $app->get('/project/id/:project_id/mark-archived/', array($middleware, 'authUserForOrgProject'),
         array($this, 'archiveProject'))->name('archive-project');
@@ -513,7 +513,7 @@ class ProjectRouteHandler
                             } 
                         }                       
                     } 
-                    $app->redirect($app->urlFor("project-uploaded", array("project_id" => $project->getId())));
+                    $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
                 }              
             } else {                 
                 $app->view()->appendData(array(
@@ -556,7 +556,7 @@ class ProjectRouteHandler
     }    
     
     
-    public function projectUploaded($project_id)
+    public function projectCreated($project_id)
     {
         $app = Slim::getInstance();
         $client = new APIClient();
@@ -582,7 +582,7 @@ class ProjectRouteHandler
                 'project_id' => $project_id
         ));     
         
-        $app->render('project.uploaded.tpl');
+        $app->render('project.created.tpl');
     }    
     
     public function archiveProject($project_id)

@@ -63,6 +63,9 @@ class TaskRouteHandler
 
         $app->get('/task/create/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
+
+        $app->get("/task/:task_id/created/", array($middleware, 'authenticateUserForTask'),
+        array($this, "taskCreated"))->name("task-created");
         
         $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
@@ -390,7 +393,26 @@ class TaskRouteHandler
         $task = $client->cast('Task', $response);
 
         $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
-        $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);
+        $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);   
+        
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
+        $response = $client->call($request);
+        $project = $client->cast("Project", $response);
+     
+        $numTaskTypes = Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        }
+        
+        $converter = Settings::get('converter.converter_enabled');
+        
+        $app->view()->appendData(array(
+                    'taskTypeColours' => $taskTypeColours,
+                    'project' => $project,
+                    'converter'     => $converter,
+        ));         
 
         if ($taskClaimed) {
             if ($task->getTaskType() == TaskTypeEnum::POSTEDITING) {
@@ -407,18 +429,7 @@ class TaskRouteHandler
                 return;
             }
         }
-                
-        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
-        $response = $client->call($request);
-        $project = $client->cast("Project", $response);
-        
-        $numTaskTypes = Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        
-        for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
-        }
-        
+     
         if ($task_file_info = $client->castCall("TaskMetadata", APIClient::API_VERSION."/tasks/$task_id/info")) {
             $app->view()->appendData(array(
                 'task_file_info' => $task_file_info,
@@ -480,6 +491,12 @@ class TaskRouteHandler
                     $uploadError = true;
                     $errorMessage = 'File error: ' . $e->getMessage();
                 }
+            }
+
+            if (is_null($errorMessage)) {
+                $app->redirect($app->urlFor("task-uploaded", array("task_id" => $taskId)));
+            } else {
+                $app->flashNow("error", $errorMessage);
             }
         }
 
@@ -563,8 +580,7 @@ class TaskRouteHandler
             }
 
             if (is_null($errorMessage)) {
-                //Wait for new version uploaded page
-                //$app->redirect($app->urlFor(
+                $app->redirect($app->urlFor("task-uploaded", array("task_id" => $taskId)));
             } else {
                 $app->flashNow("error", $errorMessage);
             }
@@ -611,28 +627,26 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        $user_id = UserSession::getCurrentUserID();
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
 
-        $request = APIClient::API_VERSION."/projecs/".$task->getProjectId();
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
         $response = $client->call($request);
         $project = $client->cast("Project", $response);
+
+        $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
+        $response = $client->call($request);
+        $org = $client->cast("Organisation", $response);
        
-        $request = APIClient::API_VERSION."/users/$user_id";
-        $response = $client->call($request, HTTP_Request2::METHOD_GET);
-        $user = $client->cast('User', $response);        
-        
-        if (!is_object($user)) {
-            $app->flash('error', 'Login required to access page');
-            $app->redirect($app->urlFor('login'));
-        }   
+        $tip_selector = new TipSelector();
+        $tip = $tip_selector->selectTip();
         
         $org_id = $project->getOrganisationId();
         $app->view()->appendData(array(
-                'org_id' => $org_id
+                'org_name' => $org->getName(),
+                'tip'      => $tip
         ));     
         
         $app->render('task.uploaded.tpl');
@@ -1508,7 +1522,7 @@ class TaskRouteHandler
                     }
                 }
             
-                $app->redirect($app->urlFor("task-view", array("task_id" => $task->getId())));
+                $app->redirect($app->urlFor("task-created", array("task_id" => $task->getId())));
             }
         }
 
@@ -1571,6 +1585,23 @@ class TaskRouteHandler
         ));
 
         $app->render('task.create.tpl');
+    }
+
+    public function taskCreated($taskId)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+
+        $request = APIClient::API_VERSION."/tasks/$taskId";
+        $response = $client->call($request);
+        $task = $client->cast("Task", $response);
+
+        $app->view()->appendData(array(
+                "project_id" => $task->getProjectId(),
+                "task_id"    => $task->getId()
+        ));
+
+        $app->render("task.created.tpl");
     }
     
     public function taskChunking($task_id)
@@ -1668,7 +1699,7 @@ class TaskRouteHandler
                 $task->setTaskStatus(TaskStatusEnum::COMPLETE);
                 $request = APIClient::API_VERSION."/tasks/$task_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task); 
-                $app->redirect($app->urlFor("project-view", array("project_id" => $project->getId())));
+                $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
             }
             
                 
@@ -1686,7 +1717,7 @@ class TaskRouteHandler
             'extra_scripts'      => $extraScripts
         ));
         
-        $app->render('task.chunking.tpl');
+        $app->render('task-chunking.tpl');
     }
     
     public function taskFeedback($task_id)

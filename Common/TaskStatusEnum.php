@@ -6,4 +6,3 @@ class TaskStatusEnum {
     const IN_PROGRESS               = 3;
     const COMPLETE                  = 4;
 }
-?>

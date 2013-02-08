@@ -2838,26 +2838,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for trigger Solas-Match-Test.initTaskStatusInsert
-DROP TRIGGER IF EXISTS `initTaskStatusInsert`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
-DELIMITER //
-CREATE TRIGGER `initTaskStatusInsert` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
-if exists 
-	(select 1 
-	 from Tasks t
-	 where t.id = new.task_id
-	 and t.`task-status_id`=2) then
-update Tasks set `task-status_id`=1
-	 where id = new.task_id;
-end if;
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
-
-
-
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
@@ -2871,25 +2851,6 @@ if new.`display-name` is null then set new.`display-name` = substring_index(new.
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
-
-
--- Dumping structure for trigger Solas-Match-Test.initTaskStatusInsert
-DROP TRIGGER IF EXISTS `initTaskStatusInsert`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
-DELIMITER //
-CREATE TRIGGER `initTaskStatusInsert` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
-if exists 
-	(select 1 
-	 from Tasks t
-	 where t.id = new.task_id
-	 and t.`task-status_id`=2) then
-update Tasks set `task-status_id`=1
-	 where id = new.task_id;
-end if;
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
-
 
 -- Dumping structure for trigger Solas-Match-Test.updateDependentTaskOnComplete
 DROP TRIGGER IF EXISTS `updateDependentTaskOnComplete`;

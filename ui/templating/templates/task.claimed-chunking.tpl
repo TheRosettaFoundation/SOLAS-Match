@@ -32,7 +32,7 @@
 	<h3>When you have finished chunking the file you downloaded:</h3>
         <p></p>
 	<p>
-            <a href="{urlFor name="task-chunking" options="task_id.$task_id"}" class="btn btn-primary">
+            <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
                 <i class="icon-share-alt icon-white"></i> Upload Task Chunks
             </a>
             <a href="{urlFor name="home"}" class="btn">
