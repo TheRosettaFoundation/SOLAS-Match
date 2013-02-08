@@ -415,45 +415,45 @@ class TaskRouteHandler
         ));         
 
         if ($taskClaimed) {
-            if ($task->getTaskType() == TaskTypeEnum::POSTEDITING) {
-                $this->posteditingTask($task_id);
-                return;
-            } elseif ($task->getTaskType() == TaskTypeEnum::TRANSLATION) {
-                $this->taskSimpleUpload($task_id);
-                return;
-            } elseif ($task->getTaskType() == TaskTypeEnum::PROOFREADING) {
-                $this->taskSimpleUpload($task_id);
-                return;
-            } elseif ($task->getTaskType() == TaskTypeEnum::CHUNKING) {
-                $this->taskChunking($task_id);
-                return;
+            switch ($task->getTaskType()) {
+                case TaskTypeEnum::POSTEDITING:
+                    $this->posteditingTask($task_id);
+                    break;
+                case TaskTypeEnum::TRANSLATION:
+                case TaskTypeEnum::PROOFREADING:
+                    $this->taskSimpleUpload($task_id);
+                    break;
+                case TaskTypeEnum::CHUNKING:
+                    $this->taskChunking($task_id);
+                    break;
             }
-        }
+        }else{
      
-        if ($task_file_info = $client->castCall("TaskMetadata", APIClient::API_VERSION."/tasks/$task_id/info")) {
+            if ($task_file_info = $client->castCall("TaskMetadata", APIClient::API_VERSION."/tasks/$task_id/info")) {
+                $app->view()->appendData(array(
+                    'task_file_info' => $task_file_info,
+                    'latest_version' => $client->call(APIClient::API_VERSION."/tasks/$task_id/version")
+                ));
+            }
+            $task_file_info = $client->castCall("TaskMetadata",
+                    APIClient::API_VERSION."/tasks/$task_id/info",
+                    HTTP_Request2::METHOD_GET, null, array("version" => 0));
+            //        $file_path = dirname(Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']));
+            //        $appPos = strrpos($file_path, "app");
+            //        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
+            //        substr($file_path, $appPos).'/'.$task_file_info['filename'];
+            $file_path= Settings::get("site.api").APIClient::API_VERSION."/tasks/$task_id/file";
+
             $app->view()->appendData(array(
-                'task_file_info' => $task_file_info,
-                'latest_version' => $client->call(APIClient::API_VERSION."/tasks/$task_id/version")
+                        'task' => $task,
+                        'taskTypeColours' => $taskTypeColours,
+                        'project' => $project,
+                        'file_preview_path' => $file_path,
+                        'filename' => $task_file_info->getFilename()
             ));
+
+            $app->render('task.view.tpl');
         }
-        $task_file_info = $client->castCall("TaskMetadata",
-                APIClient::API_VERSION."/tasks/$task_id/info",
-                HTTP_Request2::METHOD_GET, null, array("version" => 0));
-        //        $file_path = dirname(Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']));
-        //        $appPos = strrpos($file_path, "app");
-        //        $file_path = "http://".$_SERVER["HTTP_HOST"].$app->urlFor('home').
-        //        substr($file_path, $appPos).'/'.$task_file_info['filename'];
-        $file_path= Settings::get("site.api").APIClient::API_VERSION."/tasks/$task_id/file";
-        
-        $app->view()->appendData(array(
-                    'task' => $task,
-                    'taskTypeColours' => $taskTypeColours,
-                    'project' => $project,
-                    'file_preview_path' => $file_path,
-                    'filename' => $task_file_info->getFilename()
-        ));
-        
-        $app->render('task.view.tpl');
     }
 
     public function posteditingTask($taskId)

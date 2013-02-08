@@ -129,7 +129,6 @@ class TaskFile {
         TaskFile::uploadFile($task,$convert,$file,null,$userId,$filename);
         $graphBuilder = new APIWorkflowBuilder();
             $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
-
             if ($graph->hasRootNode()) {
                 $currentLayer = $graph->getRootNodeList();
                 $nextLayer = array();
@@ -138,10 +137,10 @@ class TaskFile {
                 $dependants = array();
                 while(!$found && count($currentLayer) > 0) {
                     foreach ($currentLayer as $node) {
-                        if ($node->getTaskId() == $id) {
+                        if ($node->getTaskId() == $task->getId()) {
                             $found = true;
                             foreach ($node->getNextList() as $nextNode) {
-                                $dependants[] = $preReqNode->getTaskId();
+                                $dependants[] = $nextNode->getTaskId();
                             }
                         }
                         foreach ($node->getNextList() as $nextNode) {
@@ -157,7 +156,7 @@ class TaskFile {
                 foreach ($dependants as $nextTask) {
                     $taskDao = new TaskDao();
                     $dTask = $taskDao->find(array("id" => $nextTask));
-                    uploadFile($task,$convert,$file,0,$userId,$filename);
+                    TaskFile::uploadFile($dTask ,$convert,$file,0,$userId,$filename);
                 }
             }
     }
