@@ -6,24 +6,10 @@
 
 
 <h1 class="page-header">
-    {if $task->getTitle() != ''}
-        {$task->getTitle()}
-    {else}
-        Task {$task->getId()}
-    {/if}
+    {$task->getTitle()}
     <small>
         <b>
-            -
-            {assign var="typeId" value=$task->getTaskType()}
-            {if $typeId == TaskTypeEnum::CHUNKING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
-            {elseif $typeId == TaskTypeEnum::TRANSLATION}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
-            {elseif $typeId == TaskTypeEnum::PROOFREADING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
-            {elseif $typeId == TaskTypeEnum::POSTEDITING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
-            {/if}
+            - <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
         </b>
     </small>   
     {assign var="task_id" value=$task->getId()}

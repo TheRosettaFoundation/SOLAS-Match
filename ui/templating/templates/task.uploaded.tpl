@@ -1,31 +1,45 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-	<h1>Task is now live</h1>
+	<h1>Thank you for your submission!</h1>
 </div>
 
 <div class="alert alert-success">
-	<strong>Success</strong> Your task has been uploaded.
+	<strong>Success</strong> Your file has been uploaded.
 </div>
 
-<h1>What now? <small>Wait for translators</small></h1>
+<section>
+	<h1>What now? <small>Give the organisation time to review</small></h1>
 
-<p>Here's what will now happen:</p>
-<p style="margin-bottom:20px;"></p>
-<ol>
-	<li>Volunteer translators will see the new task listed</li>
-	<li>If a volunteer translator is interested, they will download your job and upload it</li>
-	<li>This may take several days or weeks, depending on the task</li>
-</ol>
-<p style="margin-bottom:20px;"></p>
+	<p>Here's what will now happen:</p>
 
-<p>
-    <a href="{urlFor name="home"}" class="btn btn-primary">
-        <i class="icon-arrow-left icon-white"></i> Back to Home
-    </a>
-    <a href="{urlFor name="task-upload" options="org_id.$org_id"}" class="btn btn-success">
-        <i class="icon-circle-arrow-up icon-white"></i> Add New Task
-    </a> 
-</p>
+	<ol>
+		<li>Your task <strong>is complete</strong>.</li>
+		<li>The <strong>organisation will receive your uploaded work</strong></li>
+        {if isset($org_name)}
+            <li>{$org_name}
+        {else}
+    		<li>The Organisation
+        {/if}
+        really appreciates being able to make use of your translation. Thanks so much.</li>
+	</ol>
+</section>
+<section>    
+    {if isset($tip)}
+        <hr>
+            <p><b>Correct Translations - They Matter!</b></p>
+            <p>
+                <i>{$tip}</i>
+            </p>
+        <hr>
+    {/if}
+</section>
+<section>
+	<p>
+            <a href="{urlFor name="home"}" class="btn btn-primary">
+                <i class="icon-search icon-white"></i> Find A New Task
+            </a>
+        </p>
+</section>
 
 {include file="footer.tpl"}

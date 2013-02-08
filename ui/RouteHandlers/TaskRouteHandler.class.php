@@ -492,6 +492,12 @@ class TaskRouteHandler
                     $errorMessage = 'File error: ' . $e->getMessage();
                 }
             }
+
+            if (is_null($errorMessage)) {
+                $app->redirect($app->urlFor("task-uploaded", array("task_id" => $taskId)));
+            } else {
+                $app->flashNow("error", $errorMessage);
+            }
         }
 
         $graphBuilder = new UIWorkflowBuilder();
@@ -574,8 +580,7 @@ class TaskRouteHandler
             }
 
             if (is_null($errorMessage)) {
-                //Wait for new version uploaded page
-                //$app->redirect($app->urlFor(
+                $app->redirect($app->urlFor("task-uploaded", array("task_id" => $taskId)));
             } else {
                 $app->flashNow("error", $errorMessage);
             }
@@ -622,28 +627,26 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        $user_id = UserSession::getCurrentUserID();
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
         $task = $client->cast('Task', $response);
 
-        $request = APIClient::API_VERSION."/projecs/".$task->getProjectId();
+        $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
         $response = $client->call($request);
         $project = $client->cast("Project", $response);
+
+        $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
+        $response = $client->call($request);
+        $org = $client->cast("Organisation", $response);
        
-        $request = APIClient::API_VERSION."/users/$user_id";
-        $response = $client->call($request, HTTP_Request2::METHOD_GET);
-        $user = $client->cast('User', $response);        
-        
-        if (!is_object($user)) {
-            $app->flash('error', 'Login required to access page');
-            $app->redirect($app->urlFor('login'));
-        }   
+        $tip_selector = new TipSelector();
+        $tip = $tip_selector->selectTip();
         
         $org_id = $project->getOrganisationId();
         $app->view()->appendData(array(
-                'org_id' => $org_id
+                'org_name' => $org->getName(),
+                'tip'      => $tip
         ));     
         
         $app->render('task.uploaded.tpl');
@@ -1696,7 +1699,7 @@ class TaskRouteHandler
                 $task->setTaskStatus(TaskStatusEnum::COMPLETE);
                 $request = APIClient::API_VERSION."/tasks/$task_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task); 
-                $app->redirect($app->urlFor("project-view", array("project_id" => $project->getId())));
+                $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
             }
             
                 
