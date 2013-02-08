@@ -1,6 +1,8 @@
 <?php
 
-require_once ('../Common/lib/PDOWrapper.class.php');
+require_once '../Common/lib/PDOWrapper.class.php';
+require_once 'lib/APIWorkflowBuilder.class.php';
+require_once 'lib/Upload.class.php';
 
 class TaskFile {
 
@@ -109,5 +111,54 @@ class TaskFile {
             }
         }
         return $ret;
+    }
+    
+    public static function uploadFile($task,$convert,&$file,$version=null,$userId,$filename){
+        Notify::sendEmailNotifications($task, NotificationTypes::UPLOAD);
+            
+            if($convert){
+                Upload::apiSaveFile($task, $userId, 
+                    FormatConverter::convertFromXliff(Dispatcher::getDispatcher()->request()->getBody()), $filename,$version);
+            }else{
+            //touch this and you will die painfully sinisterly sean :)
+                Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename,$version);
+            }
+    }
+    
+    public static function uploadOutputFile($task,$convert,&$file,$userId,$filename){
+        TaskFile::uploadFile($task,$convert,$file,null,$userId,$filename);
+        $graphBuilder = new APIWorkflowBuilder();
+            $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+
+            if ($graph->hasRootNode()) {
+                $currentLayer = $graph->getRootNodeList();
+                $nextLayer = array();
+                $found = false;
+
+                $dependants = array();
+                while(!$found && count($currentLayer) > 0) {
+                    foreach ($currentLayer as $node) {
+                        if ($node->getTaskId() == $id) {
+                            $found = true;
+                            foreach ($node->getNextList() as $nextNode) {
+                                $dependants[] = $preReqNode->getTaskId();
+                            }
+                        }
+                        foreach ($node->getNextList() as $nextNode) {
+                            if(!in_array($nextNode, $nextLayer)) {
+                                $nextLayer[] = $nextNode;
+                            }
+                        }
+                    }
+                    $currentLayer = $nextLayer;
+                    $nextLayer = array();
+                }
+
+                foreach ($dependants as $nextTask) {
+                    $taskDao = new TaskDao();
+                    $dTask = $taskDao->find(array("id" => $nextTask));
+                    uploadFile($task,$convert,$file,0,$userId,$filename);
+                }
+            }
     }
 }

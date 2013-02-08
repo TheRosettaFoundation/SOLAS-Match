@@ -2,8 +2,8 @@
 
 {if !isset($user)}
 	<div class="hero-unit">
-		<h1>Help NGOs translate.</h1>
-		<p>Non&ndash;governmental agencies need <em>your</em> translation skills.</p>
+		<h1>Community translation.</h1>
+		<p>Facilitating conversation in global communities.</p>
 		<p>
 			<a class="btn btn-success btn-large" href="{urlFor name="register"}">
 				<i class="icon-star icon-white"></i> Register to Volunteer

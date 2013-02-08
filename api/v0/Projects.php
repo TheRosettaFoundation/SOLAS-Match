@@ -5,8 +5,8 @@
  *
  * @author Dave
  */
-include_once 'DataAccessObjects/ProjectDao.class.php';
-include_once '../Common/models/Project.php';
+require_once 'DataAccessObjects/ProjectDao.class.php';
+require_once '../Common/models/Project.php';
 require_once 'lib/APIWorkflowBuilder.class.php';
 
 class Projects

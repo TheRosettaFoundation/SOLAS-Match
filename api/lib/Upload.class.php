@@ -93,12 +93,14 @@ class Upload {
         return $_FILES[$field_name]['error'] == UPLOAD_ERR_OK;
     }
 
-    public static function apiSaveFile($task, $user_id,$file ,$filename)
+    public static function apiSaveFile($task, $user_id,$file ,$filename,$version=null)
     {
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mime= $finfo->buffer($file);
-        $version = TaskFile::recordFileUpload($task, $filename, $mime, $user_id);
-        $version = $version[0]['version'];
+        if(is_null($version)){
+            $version = TaskFile::recordFileUpload($task, $filename, $mime, $user_id);
+            $version = $version[0]['version'];
+        }
         $upload_folder     = self::absoluteFolderPathForUpload($task, $version);
         if (!self::folderPathForUploadExists($task, $version)) {
                 self::createFolderForUpload($task, $version);

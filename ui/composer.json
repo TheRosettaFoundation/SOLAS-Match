@@ -33,6 +33,10 @@
     }
     ],
 
+   "require-dev": {
+            "phpunit/phpunit": "3.7.*"
+    }
+
     "require": {
         "fp/lightopenid" : "dev-master",
         "slim/slim": "1.6.3",

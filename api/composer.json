@@ -33,6 +33,11 @@
     }
     ],
 
+    "require-dev": {
+            "phpunit/phpunit": "3.7.*"
+    }
+
+
     "require": {
         "slim/slim": "1.6.3",
         "slim/extras": "1.0.*",
