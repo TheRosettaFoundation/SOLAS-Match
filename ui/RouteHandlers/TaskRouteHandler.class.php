@@ -1717,7 +1717,7 @@ class TaskRouteHandler
             'extra_scripts'      => $extraScripts
         ));
         
-        $app->render('task.chunking.tpl');
+        $app->render('task-chunking.tpl');
     }
     
     public function taskFeedback($task_id)

@@ -15,101 +15,17 @@
         <b>
             -
             {assign var="type_id" value=$task->getTaskType()}
-            {if $type_id == TaskTypeEnum::CHUNKING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
-            {elseif $type_id == TaskTypeEnum::TRANSLATION}
+            {if $type_id == TaskTypeEnum::TRANSLATION}
                 <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
             {elseif $type_id == TaskTypeEnum::PROOFREADING}
                 <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
-            {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
             {/if}
         </b>
     </small>   
     {assign var="task_id" value=$task->getId()}
 </h1>
-        
-        
-<table class="table table-striped">
-    <thead>            
-        <th style="text-align: left"><b>Project</b></th>
 
-        <th><b>Source Language</b></th>
-        <th><b>Target Language</b></th>
-        <th><b>Created</b></th> 
-        <th><b>Task Deadline</b></th>
-        <th><b>Word Count</b></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td style="text-align: left">
-                {if isset($project)}
-                    {assign var="projectId" value=$project->getId()}
-                    <a href="{urlFor name="project-view" options="project_id.$projectId"}">
-                        {$project->getTitle()}
-                    </a>
-                {/if}
-            </td>
-
-            <td>
-                {TemplateHelper::getTaskSourceLanguage($task)} 
-            </td>
-            <td>
-                {TemplateHelper::getTaskTargetLanguage($task)}
-            </td>
-            <td>
-                {date("D dS, M Y", strtotime($task->getCreatedTime()))}
-            </td>
-            <td>
-                {date("D dS, M Y", strtotime($task->getDeadline()))}
-            </td>
-            <td>
-                {if $task->getWordCount() != ''}               
-                    {$task->getWordCount()}
-                {else}
-                    -
-                {/if}
-            </td> 
-        </tr> 
-    </tbody>
-</table>        
-      
-<div class="well">
-    <table width="100%">
-        <thead>
-        <th width="48%" align="left">Task Comment:<hr/></th>
-        <th></th>
-        <th width="48%" align="left">Project Description:<hr/></th>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <i>
-                    {if $task->getComment() != ''}
-                        {$task->getComment()}
-                    {else}
-                       No comment has been added.
-                    {/if}
-                    </i>
-                </td>
-                <td></td>
-                <td>
-                    <i>
-                    {if $project->getDescription() != ''}
-                        {$project->getDescription()}
-                    {else}
-                        No description has been added.
-                    {/if}
-                    </i>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-                    
-<div id="debug">
-     
-</div>
+{include file="task.details.tpl"}        
 
 <div class="well">
 
