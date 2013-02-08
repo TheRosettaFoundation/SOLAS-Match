@@ -24,8 +24,10 @@
     {assign var="task_id" value=$task->getId()}
     
     <div class="pull-right">
-        <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-primary">
-        <i class="icon-download icon-white"></i> Claim Task</a>
+        {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
+            <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-primary">
+            <i class="icon-download icon-white"></i> Claim Task</a>
+        {/if}
 
         {if isset($isOrgMember)}
             <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btn btn-primary'>
@@ -92,7 +94,7 @@
                     {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                         <a href="{urlFor name="task-feedback" options="task_id.$task_id"}">In Progress</a>
                     {elseif $status_id == TaskStatusEnum::COMPLETE}
-                        <a href="{urlFor name="api"}v0/tasks/{$task_id}/file/?">Complete</a>
+                        <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">Complete</a>
                     {/if}
                 </td>
             {/if}
