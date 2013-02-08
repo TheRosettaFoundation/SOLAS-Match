@@ -63,6 +63,9 @@ class TaskRouteHandler
 
         $app->get('/task/create/:project_id/', array($middleware, 'authUserForOrgProject'), 
         array($this, 'taskCreate'))->via('GET', 'POST')->name('task-create');
+
+        $app->get("/task/:task_id/created/", array($middleware, 'authenticateUserForTask'),
+        array($this, "taskCreated"))->name("task-created");
         
         $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
@@ -1516,7 +1519,7 @@ class TaskRouteHandler
                     }
                 }
             
-                $app->redirect($app->urlFor("task-view", array("task_id" => $task->getId())));
+                $app->redirect($app->urlFor("task-created", array("task_id" => $task->getId())));
             }
         }
 
@@ -1579,6 +1582,23 @@ class TaskRouteHandler
         ));
 
         $app->render('task.create.tpl');
+    }
+
+    public function taskCreated($taskId)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();
+
+        $request = APIClient::API_VERSION."/tasks/$taskId";
+        $response = $client->call($request);
+        $task = $client->cast("Task", $response);
+
+        $app->view()->appendData(array(
+                "project_id" => $task->getProjectId(),
+                "task_id"    => $task->getId()
+        ));
+
+        $app->render("task.created.tpl");
     }
     
     public function taskChunking($task_id)
