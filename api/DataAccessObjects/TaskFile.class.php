@@ -113,7 +113,7 @@ class TaskFile {
         return $ret;
     }
     
-    public static function uploadFile($task,$convert,&$file,$version=null,$userId,$filename){
+    public static function uploadFile($task,$convert,&$file,$version,$userId,$filename){
         Notify::sendEmailNotifications($task, NotificationTypes::UPLOAD);
             
             if($convert){

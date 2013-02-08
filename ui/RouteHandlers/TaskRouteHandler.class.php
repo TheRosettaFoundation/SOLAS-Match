@@ -553,7 +553,7 @@ class TaskRouteHandler
                         $response = $client->call($request, HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
                     } else if ($post->submit == 'submit') {
                         $errorMessage = $client->call(APIClient::API_VERSION.
-                            "/tasks/$taskId/file/".urlencode($_FILES[$fieldName]['name'])."/$userId",
+                            "/tasks/uploadOutputFile/$taskId/".urlencode($_FILES[$fieldName]['name'])."/$userId",
                             HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
                     }
                 
