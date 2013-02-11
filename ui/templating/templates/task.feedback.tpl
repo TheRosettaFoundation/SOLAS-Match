@@ -51,7 +51,7 @@
 </table>
             
 <div class="well">
-    <table width="100%">
+    <table width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>
         <th width="48%" align="left">Task Comment:<hr/></th>
         <th></th>
@@ -98,17 +98,6 @@
                 {assign var="user_id" value=$claimant->getUserId()}
                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$claimant->getDisplayName()}</a>
             </td>            
-            <td>
-                {*todo add check once revoked*}
-                <form method="post" action="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}">
-                    <input type="hidden" name="revokeTaskId" value="{$task_id}" />  
-                    <input type="hidden" name="revokeUserId" value="{$user_id}" /> 
-                    <input type="hidden" name="revokeTask" value="1" />
-                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                        <i class="icon-remove icon-white"></i> Revoke Task From User
-                    </a> 
-                </form>
-            </td>
         </tr>
     </tbody>
 </table>
@@ -117,18 +106,40 @@
 
 <div class="well">
     <b>User Feedback:</b><hr/>    
-    <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-feedback" options="task_id.$task_id"}">
-        <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback">You can provide direct feedback to the translator who claimed this task here.</textarea>                    
-        <p style="margin-bottom:30px;"></p>  
+    <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}">
+        <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="You can provide direct feedback to the translator who claimed this task here."></textarea>                    
+        <input type="hidden" name="revokeTaskId" value="{$task_id}" />  
+        <input type="hidden" name="revokeUserId" value="{$user_id}" /> 
+        <input type="hidden" name="revokeTask" value="1" />
+        <p style="margin-bottom:30px;"></p> 
+        
+        <span style="float: left; position: relative; top:-20px">
+            <button type="submit" value="1" name="revokeTask" class="btn btn-inverse">
+                <i class="icon-remove icon-white"></i> Revoke Task & Submit Feedback
+            </button>
+        </span>
         <span style="float: right; position: relative; top:-20px">
+
             <button type="submit" value="Submit" name="submit" class="btn btn-success">
                 <i class="icon-upload icon-white"></i> Submit Feedback
             </button>        
             <button type="reset" value="Reset" name="reset" class="btn btn-primary">
                 <i class="icon-repeat icon-white"></i> Reset
             </button>
+
+            
+            
         </span>
+
+
     </form>
-        
+        {*
+                <form method="post" action="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}">
+
+                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                        <i class="icon-remove icon-white"></i> Revoke Task From User & Submit Feedback
+                    </a> 
+                </form>
+                *}
 </div>  
 {include file="footer.tpl"}

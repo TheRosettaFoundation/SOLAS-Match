@@ -61,13 +61,21 @@ class ProjectRouteHandler
          
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
+            $response = null;            
             
-            if(isset($post->publishedTask) && isset($post->task_id)) {
-                
+            if(isset($post->task_id)) {
                 $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
                 $response = $client->call($request);     
-                $task = $client->cast('Task', $response);        
-                
+
+            } else {
+                $request = APIClient::API_VERSION."/tasks/{$post->revokeTaskId}";
+                $response = $client->call($request); 
+            }
+            
+            $task = $client->cast('Task', $response); 
+            $task_id = $task->getId();
+            
+            if(isset($post->publishedTask) && isset($post->task_id)) { 
                 if($post->publishedTask) {                     
                     $task->setPublished(1);                    
                     $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
@@ -106,13 +114,6 @@ class ProjectRouteHandler
                     }   
                 }
             } elseif(isset($post->trackTask)) {
-                $task_id = $post->task_id;
-                $request = APIClient::API_VERSION."/tasks/$task_id";
-                $response = $client->call($request);
-                if($response) {
-                    $task = $client->cast("Task", $response);
-                }
-
                 if($task && $task->getTitle() != '') {
                     $task_title = $task->getTitle();
                 } else {
@@ -140,9 +141,35 @@ class ProjectRouteHandler
                 }
             }
             
-            if(isset($post->revokeTask) && $post->revokeTask) {
-                $request = APIClient::API_VERSION."/users/$post->revokeUserId/tasks/$post->revokeTaskId";
-                $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
+            if(isset($post->feedback)) {
+                $feedback = new FeedbackEmail();               
+    
+                $feedback->setTaskId($task_id);
+                $feedback->addUserId($post->revokeUserId);
+                $feedback->setFeedback($post->feedback);
+
+                $request = APIClient::API_VERSION."/tasks/$task_id/feedback";
+                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $feedback);
+
+                if(isset($post->revokeTask) && $post->revokeTask) {
+                    $request = APIClient::API_VERSION."/users/$post->revokeUserId/tasks/$post->revokeTaskId";
+                    $taskRevoke = $client->call($request, HTTP_Request2::METHOD_DELETE);
+                    
+                    $request = APIClient::API_VERSION."/users/{$post->revokeUserId}";
+                    $claimant = $client->castCall('User', $request, HTTP_Request2::METHOD_GET);
+                    
+
+                    if(!$taskRevoke) {
+                        $app->flashNow('taskSuccess', '<b>Success</b> - The task 
+                            <a href="'.$app->urlFor('task-view', array('task_id' => $task_id)).'">'.$task->getTitle().'</a>
+                            has been successfully revoked from <a href="'.$app->urlFor('user-public-profile', array('user_id' => $user_id)).'">'.$claimant->getDisplayName().'</a>'.
+                            '. This user will be notified by e-mail and provided with your feedback.');
+                    } else {
+                        $app->flashNow('taskError', '<b>Error</b> - Unable to revoke the task '.
+                            '<a href="'.$app->urlFor('task-view', array('task_id' => $task_id)).'">'.$task->getTitle().'</a>
+                             from <a href="'.$app->urlFor('user-public-profile', array('user_id' => $user_id)).'">'.$claimant->getDisplayName().'</a>. Please try again later.');                                
+                    }
+                }
             }
         }   
 
