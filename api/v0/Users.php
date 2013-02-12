@@ -186,7 +186,7 @@ class Users {
             $data = APIHelper::deserialiser($data, $format);
             $data = APIHelper::cast("Task", $data);
             $dao = new TaskDao;
-            Dispatcher::sendResponce(null, array("result" => $dao->claimTaskbyID($data->getId(), $id)), null, $format);
+            Dispatcher::sendResponce(null,$dao->claimTaskbyID($data->getId(), $id), null, $format);
             $dao = new UserDao();
 
             Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
@@ -203,7 +203,7 @@ class Users {
                  $tID = $tID[0];
             }
             $dao = new TaskDao;
-            Dispatcher::sendResponce(null, array("result" => $dao->unClaimTaskbyID($tID,$id)), null, $format);
+            Dispatcher::sendResponce(null, $dao->unClaimTaskbyID($tID,$id), null, $format);
 //            $dao = new UserDao();
 
 //            Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
