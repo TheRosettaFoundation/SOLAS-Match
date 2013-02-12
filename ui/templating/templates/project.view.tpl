@@ -101,7 +101,7 @@
             
             
 <div class="well">
-    <table border="0" width="100%">
+    <table border="0" width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>
         <th align="left" width="48%">Description:<hr/></th>
         <th></th>
@@ -145,10 +145,18 @@
 
         <a class="pull-right btn btn-success" href="{urlFor name="task-create" options="project_id.$project_id"}">
             <i class="icon-upload icon-white"></i> Create Task
-        </a>          
-
-       
+        </a> 
     </h1> 
+            
+    {if isset($flash['taskSuccess'])}
+        <div class="alert alert-success">
+            {$flash['taskSuccess']}
+        </div>
+    {else if isset($flash['taskError'])}
+        <div class="alert alert-error">
+            {$flash['taskError']}
+        </div>
+    {/if}
         
 
     {if isset($projectTasks) && count($projectTasks) > 0}

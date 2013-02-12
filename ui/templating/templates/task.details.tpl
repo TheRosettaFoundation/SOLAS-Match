@@ -27,10 +27,10 @@
                 {TemplateHelper::getTaskTargetLanguage($task)}
             </td>
             <td>
-                {date("D dS, M Y", strtotime($task->getCreatedTime()))}
+                {date(Settings::get("ui.date_format"), strtotime($task->getCreatedTime()))}
             </td>
             <td>
-                {date("D dS, M Y", strtotime($task->getDeadline()))}
+                {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
             </td>
             <td>
                 {if $task->getWordCount() != ''}
@@ -58,7 +58,7 @@
 </table>
 
 <div class="well">
-    <table width="100%">
+    <table width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>
             <th width="48%" align="left">Task Comment:<hr/></th>
             <th></th>

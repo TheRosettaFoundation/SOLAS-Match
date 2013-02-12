@@ -1287,22 +1287,6 @@ class TaskRouteHandler
             'taskTypeColours' => $taskTypeColours,
             'task_tags' => $task_tags
         ));
-
-        if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-            
-            if(isset($post->feedback)) {
-                $feedback = new FeedbackEmail();
-                $feedback->setTaskId($task->getId());
-                $feedback->addUserId($claimant->getUserId());
-                $feedback->setFeedback($post->feedback);
-
-                $request = APIClient::API_VERSION."/tasks/$task_id/feedback";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $feedback);
-                //todo implement feedback logic
-                //notify user with flash on success/fail
-            }
-        }
         
         $app->render('task.feedback.tpl');
     }
