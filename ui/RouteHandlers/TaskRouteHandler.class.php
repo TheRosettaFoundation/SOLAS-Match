@@ -1270,7 +1270,6 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
         }
         
-        //HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/',
         $task_tags = null;
         $request = APIClient::API_VERSION."/tasks/$task_id/tags";
         $taskTags = $client->call($request);

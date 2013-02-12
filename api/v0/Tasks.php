@@ -156,7 +156,7 @@ class Tasks {
 
                     $data = Dispatcher::getDispatcher()->request()->getBody();
                     $data = APIHelper::deserialiser($data, $format);
-                    $feedbackData = APIHelper::cast(new FeedbackEmail(), $data);
+                    $feedbackData = APIHelper::cast("FeedbackEmail", $data);
 
                     $users = $feedbackData->getUserIdList();
                     if (count($users) > 0) {
