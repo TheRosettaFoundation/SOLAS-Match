@@ -30,7 +30,14 @@
 <div class="well">
 
     <div class="page-header">
-        <h1>Finished translating? <small>{$filename}</small></h1>
+        <h1>Finished translating?
+            <form method="post" action="{urlFor name="task-user-feedback" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
+                <button style="float: right" class="btn btn-success" type="submit" value="Submit Feedback"><i class="icon-upload icon-white"></i> Provide Feedback</button>   
+            </form>
+        </h1>
+        <div class="pull-right" >
+            
+        </div>
     </div>
     {if isset($upload_error)}
             <div class="alert alert-error">

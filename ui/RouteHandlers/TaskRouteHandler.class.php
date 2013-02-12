@@ -53,6 +53,9 @@ class TaskRouteHandler
         $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
         array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
         
+        $app->get('/task/:task_id/user-feedback/', array($middleware, 'authenticateUserForTask'), 
+        array($this, 'taskUserFeedback'))->via('POST')->name('task-user-feedback');   
+        
         $app->get(Settings::get("site.api"), array($middleware, 'authUserForOrgTask'))->name('api');
     }
 
@@ -324,6 +327,7 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $client = new APIClient();
+        $user_id = UserSession::getCurrentUserID();
 
         $request = APIClient::API_VERSION."/tasks/$task_id";
         $response = $client->call($request);     
@@ -881,7 +885,34 @@ class TaskRouteHandler
                 } else {
                     $app->flashNow("error", "Unable to unregister for this notification.");
                 }   
-            } 
+            }
+            
+            
+            if(isset($post->feedback)) {
+                $feedback = new FeedbackEmail();               
+
+                $feedback->setTaskId($task_id);
+                $feedback->addUserId($post->revokeUserId);
+                $feedback->setFeedback($post->feedback);
+
+                $request = APIClient::API_VERSION."/tasks/$task_id/feedback";
+                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $feedback);
+
+                if(isset($post->revokeTask) && $post->revokeTask) {
+                    $request = APIClient::API_VERSION."/users/$post->revokeUserId/tasks/$post->revokeTaskId";
+                    $taskRevoke = $client->call($request, HTTP_Request2::METHOD_DELETE);
+
+                    if($taskRevoke) {
+                        $app->flashNow('success', ' - The task 
+                            <a href="'.$app->urlFor('task-view', array('task_id' => $task_id)).'">'.$task->getTitle().'</a>
+                            has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.');
+                    } else {
+                        $app->flashNow('error', ' - Unable to unclaim the task '.
+                            '<a href="'.$app->urlFor('task-view', array('task_id' => $task_id)).'">'.$task->getTitle().'</a>. Please try again later.');                                
+                    }
+                }
+            }
+
         } 
         
         $taskMetaData = array();
@@ -1289,6 +1320,61 @@ class TaskRouteHandler
         ));
         
         $app->render('task.feedback.tpl');
+    }
+    
+    public function taskUserFeedback($task_id)
+    {
+        $app = Slim::getInstance();
+        $client = new APIClient();  
+        $user_id = UserSession::getCurrentUserID();
+        
+        $request = APIClient::API_VERSION."/tasks/$task_id";
+        $response = $client->call($request);     
+        $task = $client->cast('Task', $response);   
+        
+        $request = APIClient::API_VERSION."/projects/{$task->getProjectId()}";
+        $response = $client->call($request);     
+        $project = $client->cast('Project', $response);
+        
+        $org_id = $project->getOrganisationId();        
+        $request = APIClient::API_VERSION."/orgs/$org_id";
+        $organisation = $client->castCall('Organisation', $request);          
+
+
+        $claimant = null;
+        $request = APIClient::API_VERSION."/tasks/{$task->getId()}/user";
+        $response = $client->call($request);
+        if ($response) {
+            $claimant = $client->cast("User", $response);
+        }
+        
+        $numTaskTypes = Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        }
+        
+        $task_tags = null;
+        $request = APIClient::API_VERSION."/tasks/$task_id/tags";
+        $taskTags = $client->call($request);
+        if($taskTags) {
+            foreach ($taskTags as $tag) {
+                $task_tags[] = $client->cast('Tag', $tag);
+            }
+        }
+        
+        
+        $app->view()->appendData(array(
+            'org' => $organisation,
+            'project' => $project,
+            'task' => $task,
+            'claimant' => $claimant,
+            'taskTypeColours' => $taskTypeColours,
+            'task_tags' => $task_tags
+        ));
+        
+        $app->render('task.user-feedback.tpl');
     }
     
     private function setTaskModelData($taskModel, $project, $task, $i) {

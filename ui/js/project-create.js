@@ -41,7 +41,8 @@
             inputChunking.setAttribute('id', 'chunking_' + (fields + 1));
             inputChunking.setAttribute('name', 'chunking_' + (fields + 1));
             inputChunking.setAttribute('value', 'y');
-            inputChunking.setAttribute('onchange', 'chunkingEnabled(' + (fields + 1) +')');       
+            inputChunking.setAttribute('onchange', 'chunkingEnabled(' + (fields + 1) +')');     
+            inputChunking.setAttribute('title', 'Create a chunking task for dividing large source files into managable chunks of 5,000 words or less.');
             tableColumnChunking.appendChild(inputChunking);
 
 
@@ -54,6 +55,7 @@
             inputTranslation.setAttribute('checked', 'true');
             inputTranslation.setAttribute('name', 'translation_' + (fields + 1))
             inputTranslation.setAttribute('value', 'y');
+            inputTranslation.setAttribute('title', 'Create a translation task for volunteer translators to pick up.');
             tableColumnTranslation.appendChild(inputTranslation);
 
 
@@ -63,8 +65,10 @@
             var inputProofReading = document.createElement('input');
             inputProofReading.setAttribute('type', 'checkbox');
             inputProofReading.setAttribute('id', 'proofreading_' + (fields + 1));
+            inputProofReading.setAttribute('checked', 'true');
             inputProofReading.setAttribute('name', 'proofreading_' + (fields + 1));
             inputProofReading.setAttribute('value', 'y');
+            inputProofReading.setAttribute('title', 'Create a proofreading task for evaluating the translation provided by a volunteer.');
             tableColumnReading.appendChild(inputProofReading);
 
             var tableColumnPostEditing = document.createElement('td');
@@ -75,6 +79,7 @@
             inputPostEditing.setAttribute('id', 'postediting_' + (fields + 1));
             inputPostEditing.setAttribute('name', 'postediting_' + (fields + 1));
             inputPostEditing.setAttribute('value', 'y'); 
+            inputPostEditing.setAttribute('title', 'Create a postediting task for merging together task chunks created by a chunking task.');
             tableColumnPostEditing.appendChild(inputPostEditing);
 
             newRow.appendChild(tableColumnChunking);
@@ -135,6 +140,7 @@
             document.getElementById('proofreading_' + index).disabled = false;
             document.getElementById('postediting_' + index).disabled = false;
             document.getElementById('translation_' + index).checked = true;
+            document.getElementById('proofreading_' + index).checked = true;
             isEnabledArray[index] = false;
         }
     }    

@@ -46,13 +46,13 @@
 
 {if isset($flash['success'])}
     <p class="alert alert-success">
-        {$flash['success']}
+        <b>Success:</b> {$flash['success']}
     </p>
 {/if}
 
 {if isset($flash['error'])}
     <p class="alert alert-error">
-        <b>Warning!</b> {$flash['error']}
+        <b>Error:</b> {$flash['error']}
     </p>
 {/if}
 

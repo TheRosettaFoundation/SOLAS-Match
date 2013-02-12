@@ -158,10 +158,10 @@
                 <td valign="top">
                     <table border="0" width="100%"> 
                         <tr align="center">
-                            <td bgcolor=""><input type="checkbox" id="chunking_0" name="chunking_0" value="y" onchange="chunkingEnabled(0)"/></td>                            
-                            <td><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
-                            <td><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y"/></td>
-                            <td><input type="checkbox" id="postediting_0" name="postediting_0" value="y"/></td>
+                            <td><input title="Create a chunking task for dividing large source files into managable chunks of 5,000 words or less." type="checkbox" id="chunking_0" name="chunking_0" value="y" onchange="chunkingEnabled(0)"/></td>                            
+                            <td><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
+                            <td><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_0" checked="true" name="proofreading_0" value="y"/></td>
+                            <td><input title="Create a postediting task for merging together task chunks created by a chunking task." type="checkbox" id="postediting_0" name="postediting_0" value="y"/></td>
                         </tr>                        
                     </table>                    
                 </td>
