@@ -41,9 +41,7 @@
         {/if}
     </div>
 </h1>
-        
-{include file="task.details.tpl"}        
-
+    
 {if isset($flash['success'])}
     <p class="alert alert-success">
         <b>Success:</b> {$flash['success']}
@@ -55,6 +53,8 @@
         <b>Error:</b> {$flash['error']}
     </p>
 {/if}
+        
+{include file="task.details.tpl"} 
 
 <div style="margin-bottom: 40px"></div>        
 <table width="100%">

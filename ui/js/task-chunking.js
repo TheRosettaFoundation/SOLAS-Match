@@ -17,44 +17,6 @@
         chunkElements.appendChild(formSelect); 
     }) 
 
-    function taskTypeSelection(type) {
-        var translationCheckBox = document.getElementById('translation_0');
-        var proofreadingCheckBox = document.getElementById('proofreading_0');
-        var posteditingCheckBox = document.getElementById('postediting_0');
-
-        if(type == 'translation') {
-            if(translationCheckBox.checked) {            
-                translationCheckBox.disabled = false;
-                proofreadingCheckBox.disabled = true;
-                posteditingCheckBox.disabled = true;            
-            } else {
-                translationCheckBox.disabled = false;
-                proofreadingCheckBox.disabled = false;
-                posteditingCheckBox.disabled = false;             
-            }
-        } else if(type == 'proofreading') {
-            if(proofreadingCheckBox.checked) {
-                proofreadingCheckBox.disabled = false;            
-                translationCheckBox.disabled = true;
-                posteditingCheckBox.disabled = true;
-            } else {
-                proofreadingCheckBox.disabled = false;            
-                translationCheckBox.disabled = false;
-                posteditingCheckBox.disabled = false;            
-            }
-        } else if(type == 'postediting') {
-            if(posteditingCheckBox.checked) {            
-                posteditingCheckBox.disabled = false;            
-                translationCheckBox.disabled = true;
-                proofreadingCheckBox.disabled = true;
-            } else {
-                posteditingCheckBox.disabled = false;            
-                translationCheckBox.disabled = false;
-                proofreadingCheckBox.disabled = false;            
-            }            
-        }    
-    }
-
     function chunkSelectChange(node) {
         var index = node.selectedIndex; 
         var value = parseInt(node.options[index].value);

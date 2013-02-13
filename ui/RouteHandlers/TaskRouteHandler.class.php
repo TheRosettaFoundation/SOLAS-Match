@@ -50,8 +50,8 @@ class TaskRouteHandler
         $app->get("/task/:task_id/created/", array($middleware, 'authenticateUserForTask'),
         array($this, "taskCreated"))->name("task-created");
         
-        $app->get('/task/:task_id/feedback/', array($middleware, 'authUserForOrgTask'), 
-        array($this, 'taskFeedback'))->via('POST')->name('task-feedback');
+        $app->get('/task/:task_id/org-feedback/', array($middleware, 'authUserForOrgTask'), 
+        array($this, 'taskOrgFeedback'))->via('POST')->name('task-org-feedback');
         
         $app->get('/task/:task_id/user-feedback/', array($middleware, 'authenticateUserForTask'), 
         array($this, 'taskUserFeedback'))->via('POST')->name('task-user-feedback');   
@@ -903,11 +903,11 @@ class TaskRouteHandler
                     $taskRevoke = $client->call($request, HTTP_Request2::METHOD_DELETE);
 
                     if($taskRevoke) {
-                        $app->flashNow('success', ' - The task 
+                        $app->flashNow('success', ' The task 
                             <a href="'.$app->urlFor('task-view', array('task_id' => $task_id)).'">'.$task->getTitle().'</a>
                             has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.');
                     } else {
-                        $app->flashNow('error', ' - Unable to unclaim the task '.
+                        $app->flashNow('error', ' Unable to unclaim the task '.
                             '<a href="'.$app->urlFor('task-view', array('task_id' => $task_id)).'">'.$task->getTitle().'</a>. Please try again later.');                                
                     }
                 }
@@ -1184,18 +1184,20 @@ class TaskRouteHandler
         $countries = TemplateHelper::getCountryList();
         
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post(); 
+            $post = $app->request()->post(); 
             
-            if(!isset($post->translation_0) && !isset($post->postediting_0) && !isset($post->proofreading_0)) {
+            if(!isset($post["translation_0"]) && !isset($post["proofreading_0"])) {
                 $app->flashNow('Warning', 'Task <b>Type</b> must be set for all chunks.');
             } else {
-                $chunkValue = $post->chunkValue;
-                $upload_error = false;                
+                $chunkValue = $post["chunkValue"];
+                $upload_error = false;      
+                $translationTaskIds = array();
+                $proofreadTaskIds = array();
                 for($i=0; $i < $chunkValue && !$upload_error; $i++) {                    
                     try {
                         TemplateHelper::validateFileHasBeenSuccessfullyUploaded('chunkUpload_'.$i);
                         $taskModel = new Task();
-                        if(isset($post->translation_0)) {
+                        if(isset($post["translation_0"])) {
                             $this->setTaskModelData($taskModel, $project, $task, $i);
                             $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
                             $request = APIClient::API_VERSION."/tasks";
@@ -1209,9 +1211,11 @@ class TaskRouteHandler
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = 'File error: ' . $e->getMessage();
-                            } 
-                            
-                        } else if(isset($post->proofreading_0)) {
+                            }                             
+                            $translationTaskIds[] = $createdTranslation->getId();                            
+                        }
+                        
+                        if(isset($post["proofreading_0"])) {
                             $this->setTaskModelData($taskModel, $project, $task, $i);
                             $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);                         
                             $request = APIClient::API_VERSION."/tasks";
@@ -1227,28 +1231,55 @@ class TaskRouteHandler
                                 $upload_error = true;
                                 $error_message = 'File error: ' . $e->getMessage();
                             }   
-                        } else if(isset($post->postediting_0)) {
-                            $this->setTaskModelData($taskModel, $project, $task, $i);                       
-                            $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);                         
-                            $request = APIClient::API_VERSION."/tasks";
-                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
-                            $createdPostEditing = $client->cast('Task', $response);
-                            
-                            try {                    
-                                $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);                    
-                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$createdPostEditing->getId()}/file/".
-                                        urlencode($_FILES['chunkUpload_'.$i]['name'])."/$user_id",
-                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
-                            } catch (Exception  $e) {
-                                $upload_error = true;
-                                $error_message = 'File error: ' . $e->getMessage();
-                            }    
+                            $proofreadTaskIds[] = $createdProofReading->getId();                           
+
                         }
                     } catch (Exception $e) {
                         $upload_error = true;
                         $file_upload_err = $e->getMessage();
-                    } 
+                    }
                 }
+                
+                
+                // Create post editing task
+                $taskModel = new Task();
+                $this->setTaskModelData($taskModel, $project, $task, 0);                       
+                $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);                         
+                $request = APIClient::API_VERSION."/tasks";
+                $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
+                $createdPostEditing = $client->cast('Task', $response);
+                $createdPostEditingId = $createdPostEditing->getId();
+
+                try {                    
+                    $filedata = file_get_contents($_FILES['chunkUpload_0']['tmp_name']);                    
+                    $error_message = $client->call(APIClient::API_VERSION."/tasks/{$createdPostEditing->getId()}/file/".
+                            urlencode($_FILES['chunkUpload_0']['name'])."/$user_id",
+                            HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                } catch (Exception  $e) {
+                    $upload_error = true;
+                    $error_message = 'File error: ' . $e->getMessage();
+                } 
+                
+                
+                for($i=0; $i < $chunkValue; $i++) {
+                    if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {                        
+                        for($j=0; $j < $chunkValue; $j++) {
+                            $request = APIClient::API_VERSION."/tasks/$proofreadTaskIds[$i]/prerequisites/$translationTaskIds[$j]";
+                            $response = $client->call($request, HTTP_Request2::METHOD_PUT);
+                        }
+                    }
+                        
+                    if(isset($post["proofreading_0"])) {
+                        $request = APIClient::API_VERSION."/tasks/$createdPostEditingId/prerequisites/$proofreadTaskIds[$i]";
+                        $response = $client->call($request, HTTP_Request2::METHOD_PUT);                     
+                    }
+                }
+      
+                
+                
+                
+                
+                
                 $task->setTaskStatus(TaskStatusEnum::COMPLETE);
                 $request = APIClient::API_VERSION."/tasks/$task_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task); 
@@ -1273,7 +1304,7 @@ class TaskRouteHandler
         $app->render('task-chunking.tpl');
     }
     
-    public function taskFeedback($task_id)
+    public function taskOrgFeedback($task_id)
     {
         $app = Slim::getInstance();
         $client = new APIClient();  
@@ -1319,7 +1350,7 @@ class TaskRouteHandler
             'task_tags' => $task_tags
         ));
         
-        $app->render('task.feedback.tpl');
+        $app->render('task.org-feedback.tpl');
     }
     
     public function taskUserFeedback($task_id)

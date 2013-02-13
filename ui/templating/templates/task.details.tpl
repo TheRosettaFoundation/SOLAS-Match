@@ -47,7 +47,7 @@
                     {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                         Unclaimed
                     {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                        <a href="{urlFor name="task-feedback" options="task_id.$task_id"}">In Progress</a>
+                        <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">In Progress</a>
                     {elseif $status_id == TaskStatusEnum::COMPLETE}
                         <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">Complete</a>
                     {/if}
