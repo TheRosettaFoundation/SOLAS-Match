@@ -1,7 +1,7 @@
 <?php
 
-require_once 'Common/TaskTypeEnum.php';
-require_once 'Common/TaskStatusEnum.php';
+require_once "Common/TaskTypeEnum.php";
+require_once "Common/TaskStatusEnum.php";
 
 class ProjectRouteHandler
 {
@@ -10,22 +10,22 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();     
         
-        $app->get('/project/view/:project_id/', array($middleware, 'authUserIsLoggedIn'),
-        array($this, 'projectView'))->via("POST")->name('project-view');
+        $app->get("/project/view/:project_id/", array($middleware, "authUserIsLoggedIn"),
+        array($this, "projectView"))->via("POST")->name("project-view");
         
-        $app->get('/project/alter/:project_id/', array($middleware, 'authUserForOrgProject'), 
-        array($this, 'projectAlter'))->via('POST')->name('project-alter');
+        $app->get("/project/alter/:project_id/", array($middleware, "authUserForOrgProject"), 
+        array($this, "projectAlter"))->via("POST")->name("project-alter");
         
-        $app->get('/project/create/:org_id/', array($middleware, 'authUserForOrg'),
-        array($this, 'projectCreate'))->via('GET', 'POST')->name('project-create');    
+        $app->get("/project/create/:org_id/", array($middleware, "authUserForOrg"),
+        array($this, "projectCreate"))->via("GET", "POST")->name("project-create");    
         
-        $app->get('/project/id/:project_id/created/', array($middleware, 'authUserForOrgProject'),
-        array($this, 'projectCreated'))->name('project-created');
+        $app->get("/project/id/:project_id/created/", array($middleware, "authUserForOrgProject"),
+        array($this, "projectCreated"))->name("project-created");
         
-        $app->get('/project/id/:project_id/mark-archived/', array($middleware, 'authUserForOrgProject'),
-        array($this, 'archiveProject'))->name('archive-project');
+        $app->get("/project/id/:project_id/mark-archived/", array($middleware, "authUserForOrgProject"),
+        array($this, "archiveProject"))->name("archive-project");
 
-        $app->get('/project/test/:project_id', array($this, 'test'));
+        $app->get("/project/test/:project_id", array($this, "test"));
     }
 
     public function test($projectId)
@@ -45,7 +45,7 @@ class ProjectRouteHandler
         $time2 = $time;
 
         $totaltime = ($time2 - $time1);
-        echo '<BR>Running Time: ' .$totaltime. ' seconds.';
+        echo "<BR>Running Time: $totaltime seconds.";
     }
   
     public function projectView($project_id)
@@ -56,8 +56,8 @@ class ProjectRouteHandler
 
         $request = APIClient::API_VERSION."/projects/$project_id";
         $response = $client->call($request);     
-        $project = $client->cast('Project', $response);        
-        $app->view()->setData('project', $project);
+        $project = $client->cast("Project", $response);        
+        $app->view()->setData("project", $project);
          
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -72,7 +72,7 @@ class ProjectRouteHandler
                 $response = $client->call($request); 
             }
             
-            $task = $client->cast('Task', $response); 
+            $task = $client->cast("Task", $response); 
             $task_id = $task->getId();
             
             if(isset($post->publishedTask) && isset($post->task_id)) { 
@@ -114,10 +114,10 @@ class ProjectRouteHandler
                     }   
                 }
             } elseif(isset($post->trackTask)) {
-                if($task && $task->getTitle() != '') {
+                if($task && $task->getTitle() != "") {
                     $task_title = $task->getTitle();
                 } else {
-                    $task_title = "task ".$task->getId();
+                    $task_title = "task {$task->getId()}";
                 }
 
                 if(!$post->trackTask) {
@@ -125,18 +125,18 @@ class ProjectRouteHandler
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                    
                     
                     if ($response) {
-                        $app->flashNow('success', 'No longer receiving notifications from '.$task_title.'.');
+                        $app->flashNow("success", "No longer receiving notifications from $task_title.");
                     } else {
-                        $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
+                        $app->flashNow("error", "Unable to unsubscribe from $task_title's notifications");
                     }
                 } else {
                     $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT);     
                     
                     if ($response) {
-                        $app->flashNow('success', 'You will now receive notifications for '.$task_title.'.');
+                        $app->flashNow("success", "You will now receive notifications for $task_title.");
                     } else {
-                        $app->flashNow('error', 'Unable to subscribe to '.$task_title.'.');
+                        $app->flashNow("error", "Unable to subscribe to $task_title.");
                     }
                 }
             }
@@ -156,18 +156,18 @@ class ProjectRouteHandler
                     $taskRevoke = $client->call($request, HTTP_Request2::METHOD_DELETE);
                     
                     $request = APIClient::API_VERSION."/users/{$post->revokeUserId}";
-                    $claimant = $client->castCall('User', $request, HTTP_Request2::METHOD_GET);
+                    $claimant = $client->castCall("User", $request, HTTP_Request2::METHOD_GET);
                     
 
                     if(!$taskRevoke) {
-                        $app->flashNow('taskSuccess', '<b>Success</b> - The task 
-                            <a href="'.$app->urlFor('task-view', array('task_id' => $task_id)).'">'.$task->getTitle().'</a>
-                            has been successfully revoked from <a href="'.$app->urlFor('user-public-profile', array('user_id' => $user_id)).'">'.$claimant->getDisplayName().'</a>'.
-                            '. This user will be notified by e-mail and provided with your feedback.');
+                        $app->flashNow("taskSuccess", "<b>Success</b> - The task 
+                            <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
+                            has been successfully revoked from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">{$claimant->getDisplayName()}</a> 
+                            This user will be notified by e-mail and provided with your feedback.");
                     } else {
-                        $app->flashNow('taskError', '<b>Error</b> - Unable to revoke the task '.
-                            '<a href="'.$app->urlFor('task-view', array('task_id' => $task_id)).'">'.$task->getTitle().'</a>
-                             from <a href="'.$app->urlFor('user-public-profile', array('user_id' => $user_id)).'">'.$claimant->getDisplayName().'</a>. Please try again later.');                                
+                        $app->flashNow("taskError", "<b>Error</b> - Unable to revoke the task ".
+                            "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}\"</a>
+                             from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">{$claimant->getDisplayName()}</a>. Please try again later.");                                
                     }
                 }
             }
@@ -175,14 +175,14 @@ class ProjectRouteHandler
 
         $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request);     
-        $org = $client->cast('Organisation', $response);
+        $org = $client->cast("Organisation", $response);
         
         $project_tags = null;
         $request = APIClient::API_VERSION."/projects/$project_id/tags";
         $response = $client->call($request);
         if($response) {
             foreach ($response as $stdObject) {
-                $project_tags[] = $client->cast('Tag', $stdObject);
+                $project_tags[] = $client->cast("Tag", $stdObject);
             }
         }   
         
@@ -209,9 +209,9 @@ class ProjectRouteHandler
                         $request = APIClient::API_VERSION."/users/subscribedToTask/$user_id/$task_id";
                         $response = $client->call($request);
                         if($response == 1) {
-                            $metaData['tracking'] = true;
+                            $metaData["tracking"] = true;
                         } else {
-                            $metaData['tracking'] = false;
+                            $metaData["tracking"] = false;
                         }
                         $taskMetaData[$task_id] = $metaData;
                     }
@@ -226,43 +226,43 @@ class ProjectRouteHandler
             }
 
             $app->view()->appendData(array(
-                    'org' => $org,
-                    'projectTasks' => $project_tasks,
-                    'taskMetaData' => $taskMetaData,
-                    'taskTypeColours' => $taskTypeColours,
-                    'userSubscribedToProject' => $userSubscribedToProject,
-                    'project_tags' => $project_tags
+                    "org" => $org,
+                    "projectTasks" => $project_tasks,
+                    "taskMetaData" => $taskMetaData,
+                    "taskTypeColours" => $taskTypeColours,
+                    "userSubscribedToProject" => $userSubscribedToProject,
+                    "project_tags" => $project_tags
             ));
             
         } else {   
 
             $app->view()->appendData(array(
-                    'org' => $org,
-                    'project_tags' => $project_tags
+                    "org" => $org,
+                    "project_tags" => $project_tags
             ));
         }
         
-        $app->render('project.view.tpl');
+        $app->render("project.view.tpl");
     }  
     
     public function projectAlter($project_id)
     {
         $app = Slim::getInstance();
         $client = new APIClient();
-        $deadlineError = '';
+        $deadlineError = "";
 
         $request = APIClient::API_VERSION."/projects/$project_id";
         $response = $client->call($request);
-        $project = $client->cast('Project', $response);
+        $project = $client->cast("Project", $response);
 
         if (isValidPost($app)) {
             $post = (object) $app->request()->post();
             
-            if ($post->title != '') {
+            if ($post->title != "") {
                 $project->setTitle($post->title);
             }
 
-            if ($post->description != '') {
+            if ($post->description != "") {
                 $project->setDescription($post->description);
             }
 
@@ -286,30 +286,30 @@ class ProjectRouteHandler
                 }
             }
 
-            if ($deadlineInMSecs != '' && $deadlineError == '') {
+            if ($deadlineInMSecs != "" && $deadlineError == "") {
                 $project->setDeadline(date("Y-m-d H:i:s", $deadlineInMSecs));
             }
             
-            if ($post->sourceLanguage != '') {
+            if ($post->sourceLanguage != "") {
                 $project->setSourceLanguageCode($post->sourceLanguage);
             }
             
-            if ($post->sourceCountry != '') {
+            if ($post->sourceCountry != "") {
                 $project->setSourceCountryCode($post->sourceCountry);
             }   
              
-            if ($post->reference != '' && $post->reference != 'http://') {
+            if ($post->reference != "" && $post->reference != "http://") {
                 $project->setReference($post->reference);
             }
             
-            if ($post->tags != '') {
+            if ($post->tags != "") {
                 $tags = TemplateHelper::separateTags($post->tags);
                 foreach ($tags as $tag) {
                     $project->addTag($tag);
                 }
             }
             
-            if ($deadlineError == '') {
+            if ($deadlineError == "") {
                 $request = APIClient::API_VERSION."/projects/$project_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $project);
                 $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
@@ -323,16 +323,16 @@ class ProjectRouteHandler
         $deadlineTime = date("H:i", strtotime($project->getDeadline()));
         
         $tags = $project->getTagList();
-        $tag_list = '';
+        $tag_list = "";
         if ($tags != null) {
             foreach ($tags as $tag) {
-                $tag_list .= $tag . ' ';
+                $tag_list .= $tag . " ";
             }
         }
 
         $extra_scripts = "
-        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
-        <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/datepickr.css\" />
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}resources/bootstrap/js/datepickr.js\"></script>
         <script type=\"text/javascript\">
             window.onload = function() {
                 new datepickr(\"deadlineDate\");
@@ -340,17 +340,17 @@ class ProjectRouteHandler
         </script>";
         
         $app->view()->appendData(array(
-                              'project'         => $project,
-                              'deadlineDate'    => $deadlineDate,
-                              'deadlineTime'    => $deadlineTime,
-                              'languages'       => $languages,
-                              'countries'       => $countries,
-                              'tag_list'        => $tag_list,
-                              'deadlineError'   => $deadlineError,
-                              'extra_scripts'   => $extra_scripts
+                              "project"         => $project,
+                              "deadlineDate"    => $deadlineDate,
+                              "deadlineTime"    => $deadlineTime,
+                              "languages"       => $languages,
+                              "countries"       => $countries,
+                              "tag_list"        => $tag_list,
+                              "deadlineError"   => $deadlineError,
+                              "extra_scripts"   => $extra_scripts
         ));
         
-        $app->render('project.alter.tpl');
+        $app->render("project.alter.tpl");
     }
     
     
@@ -359,7 +359,7 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $client = new APIClient();
         $user_id = UserSession::getCurrentUserID(); 
-        $field_name = 'new_task_file';
+        $field_name = "new_task_file";
         $tags = null;
 
         $error          = null;
@@ -372,37 +372,37 @@ class ProjectRouteHandler
         if ($app->request()->isPost()) {            
             $post = (object) $app->request()->post();
             
-            if(($post->title != '')) {
+            if(($post->title != "")) {
                 $project->setTitle($post->title);
             } else {
                 $title_err = "Project <b>Title</b> must be set.";
             }            
             
-            if($post->deadline != '') {
+            if($post->deadline != "") {
                 $project->setDeadline($post->deadline);
             } else {
                 $deadline_err = "Project <b>Deadline</b> must be set.";
             }
             
-            if(($post->description != '')) {
+            if(($post->description != "")) {
                 $project->setDescription($post->description);
             }
-            if(($post->reference != '')) {
+            if(($post->reference != "")) {
                 $project->setReference($post->reference);
             }
-            if(($post->word_count != '')) {
+            if(($post->word_count != "")) {
                 $project->setWordCount($post->word_count);
             }
-            if (isset($post->sourceLanguage) && $post->sourceLanguage != '') {
+            if (isset($post->sourceLanguage) && $post->sourceLanguage != "") {
                 $project->setSourceLanguageCode($post->sourceLanguage);
             }
-            if ($post->sourceCountry != '') {
+            if ($post->sourceCountry != "") {
                 $project->setSourceCountryCode($post->sourceCountry);
             }
             
             $tags = $post->tags;
             if (is_null($tags)) {
-                $tags = '';
+                $tags = "";
             }
 
             $tag_list = TemplateHelper::separateTags($tags);
@@ -413,8 +413,8 @@ class ProjectRouteHandler
             } 
             
             for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
-                if(!isset($post->{'chunking_'.$i}) && !isset($post->{'translation_'.$i}) &&
-                    !isset($post->{'proofreading_'.$i}) && !isset($post->{'postediting_'.$i})) {
+                if(!isset($post->{"chunking_".$i}) && !isset($post->{"translation_".$i}) &&
+                    !isset($post->{"proofreading_".$i}) && !isset($post->{"postediting_".$i})) {
                     $targetLanguage_err = "At least one <b>Task Type</b> must be set for each <b>Target Language</b>.";
                     break;
                 }
@@ -433,11 +433,11 @@ class ProjectRouteHandler
                 $request = APIClient::API_VERSION."/projects";
                 $project->setOrganisationId($org_id);
                 if($response = $client->call($request, HTTP_Request2::METHOD_POST, $project)) {
-                    $project = $client->cast('Project', $response);
+                    $project = $client->cast("Project", $response);
                     
                     $taskModel = new Task();
                     //$taskModel->setTitle($project->getTitle());
-                    $taskModel->setTitle($_FILES[$field_name]['name']);
+                    $taskModel->setTitle($_FILES[$field_name]["name"]);
                     $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
                     $taskModel->setSourceCountryCode($project->getSourceCountryCode());
                     $taskModel->setProjectId($project->getId());
@@ -448,95 +448,95 @@ class ProjectRouteHandler
                     
                     for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
 
-                        $taskModel->setTargetLanguageCode($post->{'targetLanguage_'.$i});
-                        $taskModel->setTargetCountryCode($post->{'targetCountry_'.$i});
+                        $taskModel->setTargetLanguageCode($post->{"targetLanguage_".$i});
+                        $taskModel->setTargetCountryCode($post->{"targetCountry_".$i});
 
-                        if(isset($post->{'chunking_'.$i})) { 
+                        if(isset($post->{"chunking_".$i})) { 
                             $taskModel->setTaskType(TaskTypeEnum::CHUNKING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
-                            $createdChunkTask = $client->cast('Task', $response);
+                            $createdChunkTask = $client->cast("Task", $response);
                             
                             try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                                $filedata = file_get_contents($_FILES[$field_name]["tmp_name"]);                    
                                 $error_message = $client->call(APIClient::API_VERSION."/tasks/{$createdChunkTask->getId()}/file/".
-                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
+                                        urlencode($_FILES[$field_name]["name"])."/$user_id",
                                         HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
-                                $error_message = 'File error: ' . $e->getMessage();
+                                $error_message = "File error: " . $e->getMessage();
                             } 
                         }
-                        if(isset($post->{'translation_'.$i})) {
+                        if(isset($post->{"translation_".$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
-                            $newTask = $client->cast('Task', $response);
+                            $newTask = $client->cast("Task", $response);
                             $translationTaskId = $newTask->getId();
                             
                             try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                                $filedata = file_get_contents($_FILES[$field_name]["tmp_name"]);                    
                                 $error_message = $client->call(APIClient::API_VERSION."/tasks/{$translationTaskId}/file/".
-                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
+                                        urlencode($_FILES[$field_name]["name"])."/$user_id",
                                         HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
-                                $error_message = 'File error: ' . $e->getMessage();
+                                $error_message = "File error: " . $e->getMessage();
                             } 
                         }
-                        if(isset($post->{'proofreading_'.$i})) {
+                        if(isset($post->{"proofreading_".$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
 
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
-                            $newTask = $client->cast('Task', $response);
+                            $newTask = $client->cast("Task", $response);
                             $proofreadingTaskId = $newTask->getId();
                             
-                            if(isset($post->{'translation_'.$i})) {
+                            if(isset($post->{"translation_".$i})) {
                                 $request = APIClient::API_VERSION."/tasks/$proofreadingTaskId/prerequisites/$translationTaskId";
                                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);                            
                             } 
                             
                             try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                                $filedata = file_get_contents($_FILES[$field_name]["tmp_name"]);                    
                                 $error_message = $client->call(APIClient::API_VERSION."/tasks/{$proofreadingTaskId}/file/".
-                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
+                                        urlencode($_FILES[$field_name]["name"])."/$user_id",
                                         HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
-                                $error_message = 'File error: ' . $e->getMessage();
+                                $error_message = "File error: " . $e->getMessage();
                             } 
                             
 
                         }                       
-                        if(isset($post->{'postediting_'.$i})) {
+                        if(isset($post->{"postediting_".$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             
                             $request = APIClient::API_VERSION."/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);    
-                            $newTask = $client->cast('Task', $response);
+                            $newTask = $client->cast("Task", $response);
                             $posteditingTaskId = $newTask->getId();
                             
-                            if(isset($post->{'translation_'.$i}) && isset($post->{'proofreading_'.$i})) {
+                            if(isset($post->{"translation_".$i}) && isset($post->{"proofreading_".$i})) {
                                 $request = APIClient::API_VERSION."/tasks/$posteditingTaskId/prerequisites/$proofreadingTaskId";
                                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);
-                            } else if(isset($post->{'translation_'.$i})) {
+                            } else if(isset($post->{"translation_".$i})) {
                                 $request = APIClient::API_VERSION."/tasks/$posteditingTaskId/prerequisites/$translationTaskId";
                                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                             }
                             
                             try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                                $filedata = file_get_contents($_FILES[$field_name]["tmp_name"]);                    
                                 $error_message = $client->call(APIClient::API_VERSION."/tasks/{$posteditingTaskId}/file/".
-                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
+                                        urlencode($_FILES[$field_name]["name"])."/$user_id",
                                         HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
-                                $error_message = 'File error: ' . $e->getMessage();
+                                $error_message = "File error: " . $e->getMessage();
                             } 
                         }                       
                     } 
@@ -544,42 +544,42 @@ class ProjectRouteHandler
                 }              
             } else {                 
                 $app->view()->appendData(array(
-                    'title_err'             => $title_err,
-                    'deadline_err'          => $deadline_err,                   
-                    'targetLanguage_err'    => $targetLanguage_err,
-                    'project'               => $project,
-                    'file_upload_err'       => $file_upload_err
+                    "title_err"             => $title_err,
+                    "deadline_err"          => $deadline_err,                   
+                    "targetLanguage_err"    => $targetLanguage_err,
+                    "project"               => $project,
+                    "file_upload_err"       => $file_upload_err
                 ));               
             }
         }
 
         $extra_scripts = "
-            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".$app->urlFor("home")."resources/css/datepickr.css\" />
-            <script type=\"text/javascript\" src=\"".$app->urlFor("home")."resources/bootstrap/js/datepickr.js\"></script>
+            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/datepickr.css\" />
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}resources/bootstrap/js/datepickr.js\"></script>
             <script type=\"text/javascript\">
                 window.onload = function() {
                     new datepickr(\"deadline\");
                 };
-            </script>".file_get_contents("http://".$_SERVER['HTTP_HOST'].$app->urlFor("home").'ui/js/project-create.js');
+            </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-create.js");
   
         
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
 
         $app->view()->appendData(array(
-            'tagList'           => $tags,
-            'max_file_size_bytes'   => TemplateHelper::maxFileSizeBytes(),
-            'field_name'        => $field_name,
-            'error'             => $error,
-            'title_error'       => $title_err,
-            'word_count_err'    => $word_count_err,
-            'url_project_upload' => $app->urlFor('project-create', array('org_id' => $org_id)),
-            'languages'         => $language_list,
-            'countries'         => $countries,
-            'extra_scripts'     => $extra_scripts
+            "tagList"           => $tags,
+            "max_file_size_bytes"   => TemplateHelper::maxFileSizeBytes(),
+            "field_name"        => $field_name,
+            "error"             => $error,
+            "title_error"       => $title_err,
+            "word_count_err"    => $word_count_err,
+            "url_project_upload" => $app->urlFor("project-create", array("org_id" => $org_id)),
+            "languages"         => $language_list,
+            "countries"         => $countries,
+            "extra_scripts"     => $extra_scripts
         ));
         
-        $app->render('project.create.tpl');
+        $app->render("project.create.tpl");
     }    
     
     
@@ -591,25 +591,25 @@ class ProjectRouteHandler
 
         $request = APIClient::API_VERSION."/projects/$project_id";
         $response = $client->call($request);     
-        $project = $client->cast('Project', $response);
+        $project = $client->cast("Project", $response);
        
         $request = APIClient::API_VERSION."/users/$user_id";
         $response = $client->call($request, HTTP_Request2::METHOD_GET);
-        $user = $client->cast('User', $response);        
+        $user = $client->cast("User", $response);        
         
         if (!is_object($user)) {
-            $app->flash('error', 'Login required to access page');
-            $app->redirect($app->urlFor('login'));
+            $app->flash("error", "Login required to access page.");
+            $app->redirect($app->urlFor("login"));
         }   
         
         $org_id = $project->getOrganisationId();
 
         $app->view()->appendData(array(
-                'org_id' => $org_id,
-                'project_id' => $project_id
+                "org_id" => $org_id,
+                "project_id" => $project_id
         ));     
         
-        $app->render('project.created.tpl');
+        $app->render("project.created.tpl");
     }    
     
     public function archiveProject($project_id)
@@ -619,17 +619,17 @@ class ProjectRouteHandler
 
         $request = APIClient::API_VERSION."/projects/$project_id";
         $response = $client->call($request);
-        $project = $client->cast('Project', $response);
+        $project = $client->cast("Project", $response);
         
         if (!is_object($project)) {
-            header('HTTP/1.0 404 Not Found');
+            header("HTTP/1.0 404 Not Found");
             die;
         }   
         $user_id = UserSession::getCurrentUserID();
         
         if (is_null($user_id)) {
-            $app->flash('error', 'Login required to access page');
-            $app->redirect($app->urlFor('login'));
+            $app->flash("error", "Login required to access page.");
+            $app->redirect($app->urlFor("login"));
         }   
 
         $request = APIClient::API_VERSION."/projects/archiveProject/$project_id/user/$user_id";
