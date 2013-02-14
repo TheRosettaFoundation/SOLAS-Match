@@ -32,8 +32,9 @@ class RegisterAPI {
                                                         function ($format = ".json") {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
-            $data = APIHelper::deserialiser($data, $format);
-            $data = APIHelper::cast("Register", $data);
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data);
+            $data = $client->cast("Register", $data);
             $dao = new UserDao;
             $data = $dao->apiRegister($data->getEmail(), $data->getPassword());
             if (is_array($data) && isset($data[0])) {

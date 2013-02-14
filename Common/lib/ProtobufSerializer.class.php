@@ -39,4 +39,9 @@ class ProtobufSerializer extends Serializer
 
         return $ret;
     }
+
+    public function getContentType()
+    {
+        return 'application/x-protobuf; charset=utf-8';
+    }
 }

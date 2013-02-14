@@ -24,4 +24,9 @@ class PHPSerializer extends Serializer
 
         return $ret;
     }
+
+    public function getContentType()
+    {
+        return 'text/html; charset=utf-8';
+    }
 }

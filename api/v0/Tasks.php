@@ -31,7 +31,9 @@ class Tasks {
                                                         function ($format = ".json") {
             
             $data=Dispatcher::getDispatcher()->request()->getBody();
-            $data= APIHelper::deserialiser($data, $format);
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data);
+            $data = $client->cast("Task", $data);
             $dao = new TaskDao();
             Dispatcher::sendResponce(null, $dao->create($data), null, $format);
         }, 'createTask');
@@ -46,8 +48,9 @@ class Tasks {
             }
             $dao = new TaskDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();
-            $data = APIHelper::deserialiser($data, $format);
-            $data = APIHelper::cast("Task", $data);
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data);
+            $data = $client->cast("Task", $data);
             Dispatcher::sendResponce(null, $dao->save($data), null, $format);
         }, 'updateTask');
         
@@ -135,9 +138,10 @@ class Tasks {
                                                         function ($id, $format = ".json") {
             $dao = new TaskDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();
-            $data = APIHelper::deserialiser($data, $format);
-            $task = APIHelper::cast(new Task(), $data);
-            $result = $dao->updateTags($task);
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data);
+            $data = $client->cast("Task", $data);
+            $result = $dao->updateTags($data);
             Dispatcher::sendResponce(null, array("result" => $result), null, $format);
         }, 'setTasksTags');
         
@@ -155,8 +159,9 @@ class Tasks {
                     $task = $tasks[0];
 
                     $data = Dispatcher::getDispatcher()->request()->getBody();
-                    $data = APIHelper::deserialiser($data, $format);
-                    $feedbackData = APIHelper::cast("FeedbackEmail", $data);
+                    $client = new APIHelper($format);
+                    $data = $client->deserialize($data);
+                    $feedbackData = $client->cast("FeedbackEmail", $data);
 
                     $users = $feedbackData->getUserIdList();
                     if (count($users) > 0) {
@@ -254,10 +259,10 @@ class Tasks {
             }
             $dao = new TaskDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();
-            $data = APIHelper::deserialiser($data, $format);
-            $task = APIHelper::cast(new Task(), $data);
-
-            $result = $dao->duplicateTaskForTarget($task, $languageCode, $countryCode, $userID);
+            $client = new APIHelper($format);
+            $data = $client->deserializer($data);
+            $data = $client->cast("Task", $data);
+            $result = $dao->duplicateTaskForTarget($data, $languageCode, $countryCode, $userID);
             Dispatcher::sendResponce(null, array("result" => $result), null, $format);
         }, 'addTarget');   
         

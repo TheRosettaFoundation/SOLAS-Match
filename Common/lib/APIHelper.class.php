@@ -13,24 +13,24 @@ class APIHelper
 
     public function __construct($format)
     {
-        $format = Serializer::getFormat($format);
+        $format = self::getFormat($format);
 
         switch ($format)
         {
             case FormatEnum::JSON:
-                $_serializer = new JSONSerializer();
+                $this->_serializer = new JSONSerializer();
                 break;
             case FormatEnum::XML:
-                $_serializer = new XMLSerializer();
+                $this->_serializer = new XMLSerializer();
                 break;
             case FormatEnum::HTML:
-                $_serializer = new HTMLSerializer();
+                $this->_serializer = new HTMLSerializer();
                 break;
             case FormatEnum::PHP:
-                $_serializer = new PHPSerializer();
+                $this->_serializer = new PHPSerializer();
                 break;
             case FormatEnum::PROTOBUFS:
-                $_serializer = new ProtobufSerializer();
+                $this->_serializer = new ProtobufSerializer();
                 break;
         }
     }
@@ -83,8 +83,40 @@ class APIHelper
         return $ret;
     }
 
-    public function getFormat($format)
+    public function serialize($data)
     {
-        return $this->_serializer->getFormat($format);
+        return $this->_serializer->serialize($data);
+    }
+
+    public function deserialize($data)
+    {
+        return $this->_serializer->deserialize($data);
+    }
+
+    public static function getFormat($format)
+    {
+        if ($format == ".json") {
+            $format = FormatEnum::JSON;
+        } elseif (strcasecmp($format, '.xml') == 0) {
+            $format = FormatEnum::XML;
+        } elseif (strcasecmp($format, '.php') == 0) {
+            $format = FormatEnum::PHP;
+        } elseif (strcasecmp($format, '.html') == 0) {
+            $format = FormatEnum::HTML;
+        } elseif (strcasecmp($format, '.proto') == 0) {
+            $format = FormatEnum::PROTOBUFS;//change when implmented.
+        } else {
+            $format = FormatEnum::JSON;
+        }
+        return $format;
+    }
+
+    public function getContentType()
+    {
+        $ret = null;
+        if($this->_serializer) {
+            $ret = $this->_serializer->getContentType();
+        }
+        return $ret;
     }
 }

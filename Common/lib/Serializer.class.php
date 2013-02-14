@@ -4,6 +4,7 @@ abstract class Serializer
 {
     public abstract function serialize($data);
     public abstract function deserialize($data);
+    public abstract function getContentType();
 
     public function cast($destination, $sourceObject)
     {
@@ -72,22 +73,4 @@ abstract class Serializer
         
         return $destination;
     }
-
-    public static function getFormat($format)
-    {
-        if ($format == ".json") {
-            $format = FormatEnum::JSON;
-        } elseif (strcasecmp($format, '.xml') == 0) {
-            $format = FormatEnum::XML;
-        } elseif (strcasecmp($format, '.php') == 0) {
-            $format = FormatEnum::PHP;
-        } elseif (strcasecmp($format, '.html') == 0) {
-            $format = FormatEnum::HTML;
-        } elseif (strcasecmp($format, '.proto') == 0) {
-            $format = FormatEnum::PROTOBUFS;//change when implmented.
-        } else {
-            $format = FormatEnum::JSON;
-        }
-        return $format;
-   }
 }

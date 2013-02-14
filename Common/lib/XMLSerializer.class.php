@@ -6,9 +6,14 @@ class XMLSerializer extends Serializer
 {
     private $dom;
 
+    public function getContentType()
+    {
+        return 'application/xml; charset=utf-8';
+    }
+
     public function deserialize($data)
     {
-        $ret = null
+        $ret = null;
         try {
             if($data!="<data></data>"){
                 
@@ -60,9 +65,9 @@ class XMLSerializer extends Serializer
 
     private function convert($json, $return = 'document')
     {
-        $this->$dom = new DOMDocument('1.0', 'utf-8');
-        $this->$dom->formatOutput = true;
-        $this->$dom->preserveWhiteSpace = false; // Manuel - This is needed for formatOutput
+        $this->dom = new DOMDocument('1.0', 'utf-8');
+        $this->dom->formatOutput = true;
+        $this->dom->preserveWhiteSpace = false; // Manuel - This is needed for formatOutput
         
         // remove callback functions from JSONP
         //        if (preg_match('/(\{|\[).*(\}|\])/s', $json, $matches)) {
@@ -75,14 +80,14 @@ class XMLSerializer extends Serializer
             $data = json_decode($json);
         }
         
-        $data_element = $this->process($data, $this->$dom->createElement('data'));
-        $this->$dom->appendChild($data_element);
+        $data_element = $this->process($data, $this->dom->createElement('data'));
+        $this->dom->appendChild($data_element);
         
         switch ($return)
         {
-            case 'fragment': return $this->$dom->saveXML($data_element);
-            case 'object': return $this->$dom;
-            default: return $this->$dom->saveXML();
+            case 'fragment': return $this->dom->saveXML($data_element);
+            case 'object': return $this->dom;
+            default: return $this->dom->saveXML();
         }
     }
 
@@ -90,19 +95,19 @@ class XMLSerializer extends Serializer
     {
         if (is_array($data)) {
             foreach ($data as $item) {
-                $item_element = $this->process($item, $this->$dom->createElement('item'));
+                $item_element = $this->process($item, $this->dom->createElement('item'));
                 $element->appendChild($item_element);
             }
         } elseif (is_object($data)) {
             $vars = get_object_vars($data);
             foreach ($vars as $key => $value) {
                 $key = $this->validateElementName($key);
-                $var_element = $this->process($value, $this->$dom->createElement($key));
+                $var_element = $this->process($value, $this->dom->createElement($key));
                 $element->appendChild($var_element);
             }
         } else {
 //            if($data==null) $data="null";
-            $element->appendChild($this->$dom->createTextNode($data));
+            $element->appendChild($this->dom->createTextNode($data));
         }
         return $element;
     }

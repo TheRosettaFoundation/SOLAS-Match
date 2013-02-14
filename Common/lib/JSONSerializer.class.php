@@ -28,4 +28,9 @@ class JSONSerializer extends Serializer
 
         return $ret;
     }
+
+    public function getContentType()
+    {
+        return 'application/json; charset=utf-8';
+    }
 }
