@@ -13,7 +13,7 @@ class APIHelper
 
     public function __construct($format)
     {
-        $format = self::getFormat($format);
+        $format = self::getFormatFromString($format);
 
         switch ($format)
         {
@@ -38,6 +38,7 @@ class APIHelper
     public function call($url, $method = HTTP_Request2::METHOD_GET,
              $data = null, $query_args = array())
     {
+        $url = $url.$this->_serializer->getFormat()."/?";
         $request = new HTTP_Request2($url, $method);
 
         if (!is_null($data) && "null" != $data) {
@@ -93,7 +94,7 @@ class APIHelper
         return $this->_serializer->deserialize($data);
     }
 
-    public static function getFormat($format)
+    public static function getFormatFromString($format)
     {
         if ($format == ".json") {
             $format = FormatEnum::JSON;

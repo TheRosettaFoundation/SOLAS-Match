@@ -51,10 +51,11 @@ class ProjectRouteHandler
     public function projectView($project_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         $user_id = UserSession::getCurrentUserID();
 
-        $request = APIClient::API_VERSION."/projects/$project_id";
+        $request = "$siteApi/v0/projects/$project_id";
         $response = $client->call($request);     
         $project = $client->cast('Project', $response);        
         $app->view()->setData('project', $project);
@@ -64,11 +65,11 @@ class ProjectRouteHandler
             $response = null;            
             
             if(isset($post->task_id)) {
-                $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
+                $request = "$siteApi/v0/tasks/{$post->task_id}";
                 $response = $client->call($request);     
 
             } else {
-                $request = APIClient::API_VERSION."/tasks/{$post->revokeTaskId}";
+                $request = "$siteApi/v0/tasks/{$post->revokeTaskId}";
                 $response = $client->call($request); 
             }
             
@@ -78,18 +79,18 @@ class ProjectRouteHandler
             if(isset($post->publishedTask) && isset($post->task_id)) { 
                 if($post->publishedTask) {                     
                     $task->setPublished(1);                    
-                    $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
+                    $request = "$siteApi/v0/tasks/{$post->task_id}";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);                 
                 } else {
                     $task->setPublished(0);                    
-                    $request = APIClient::API_VERSION."/tasks/{$post->task_id}";
+                    $request = "$siteApi/v0/tasks/{$post->task_id}";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);      
                 }
             }
             
             if (isset($post->trackProject)) {
                 if ($post->trackProject) {
-                    $request = APIClient::API_VERSION."/users/$user_id/projects/{$project->getId()}";
+                    $request = "$siteApi/v0/users/$user_id/projects/{$project->getId()}";
                     $userTrackProject = $client->call($request, HTTP_Request2::METHOD_PUT);
                     
                     if ($userTrackProject) {
@@ -101,7 +102,7 @@ class ProjectRouteHandler
                     }   
                 } else {
 
-                    $request = APIClient::API_VERSION."/users/$user_id/projects/{$project->getId()}";
+                    $request = "$siteApi/v0/users/$user_id/projects/{$project->getId()}";
                     $userUntrackProject = $client->call($request, HTTP_Request2::METHOD_DELETE);
                     
                     if ($userUntrackProject) {
@@ -121,7 +122,7 @@ class ProjectRouteHandler
                 }
 
                 if(!$post->trackTask) {
-                    $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/$task_id";
+                    $request = "$siteApi/v0/users/$user_id/tracked_tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                    
                     
                     if ($response) {
@@ -130,7 +131,7 @@ class ProjectRouteHandler
                         $app->flashNow('error', 'Unable to unsubscribe from '.$task_title.'\'s notifications');
                     }
                 } else {
-                    $request = APIClient::API_VERSION."/users/$user_id/tracked_tasks/$task_id";
+                    $request = "$siteApi/v0/users/$user_id/tracked_tasks/$task_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT);     
                     
                     if ($response) {
@@ -148,14 +149,14 @@ class ProjectRouteHandler
                 $feedback->addUserId($post->revokeUserId);
                 $feedback->setFeedback($post->feedback);
 
-                $request = APIClient::API_VERSION."/tasks/$task_id/feedback";
+                $request = "$siteApi/v0/tasks/$task_id/feedback";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $feedback);
 
                 if(isset($post->revokeTask) && $post->revokeTask) {
-                    $request = APIClient::API_VERSION."/users/$post->revokeUserId/tasks/$post->revokeTaskId";
+                    $request = "$siteApi/v0/users/$post->revokeUserId/tasks/$post->revokeTaskId";
                     $taskRevoke = $client->call($request, HTTP_Request2::METHOD_DELETE);
                     
-                    $request = APIClient::API_VERSION."/users/{$post->revokeUserId}";
+                    $request = "$siteApi/v0/users/{$post->revokeUserId}";
                     $claimant = $client->castCall('User', $request, HTTP_Request2::METHOD_GET);
                     
 
@@ -173,49 +174,37 @@ class ProjectRouteHandler
             }
         }   
 
-        $request = APIClient::API_VERSION."/orgs/{$project->getOrganisationId()}";
+        $request = "$siteApi/v0/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request);     
         $org = $client->cast('Organisation', $response);
         
-        $project_tags = null;
-        $request = APIClient::API_VERSION."/projects/$project_id/tags";
+        $request = "$siteApi/v0/projects/$project_id/tags";
         $response = $client->call($request);
-        if($response) {
-            foreach ($response as $stdObject) {
-                $project_tags[] = $client->cast('Tag', $stdObject);
-            }
-        }   
+        $project_tags = $client->cast(array("Tag"), $response);
         
-        $request = APIClient::API_VERSION."/orgs/isMember/{$project->getOrganisationId()}/$user_id";
+        $request = "$siteApi/v0/orgs/isMember/{$project->getOrganisationId()}/$user_id";
         $isOrgMember = $client->call($request);
         
         if($isOrgMember) {
-            $request = APIClient::API_VERSION."/users/subscribedToProject/$user_id/$project_id";
+            $request = "$siteApi/v0/users/subscribedToProject/$user_id/$project_id";
             $userSubscribedToProject = $client->call($request);
 
-            $project_tasks = array();
             $taskMetaData = array();
-            $request = APIClient::API_VERSION."/projects/{$project_id}/tasks";
+            $request = "$siteApi/v0/projects/{$project_id}/tasks";
             $response = $client->call($request);
-            if($response) {
-                foreach($response as $row) {
-                    $task = $client->cast("Task", $row);
+            $project_tasks = $client->cast(array("Task"), $response);
+            foreach($project_tasks as $task) {
+                $task_id = $task->getId();
 
-                    if(is_object($task)) {
-                        $project_tasks[] = $task;
-                        $task_id = $task->getId();
-
-                        $metaData = array();
-                        $request = APIClient::API_VERSION."/users/subscribedToTask/$user_id/$task_id";
-                        $response = $client->call($request);
-                        if($response == 1) {
-                            $metaData['tracking'] = true;
-                        } else {
-                            $metaData['tracking'] = false;
-                        }
-                        $taskMetaData[$task_id] = $metaData;
-                    }
+                $metaData = array();
+                $request = "$siteApi/v0/users/subscribedToTask/$user_id/$task_id";
+                $response = $client->call($request);
+                if($response == 1) {
+                    $metaData['tracking'] = true;
+                } else {
+                    $metaData['tracking'] = false;
                 }
+                $taskMetaData[$task_id] = $metaData;
             }
 
             $numTaskTypes = Settings::get("ui.task_types");
@@ -248,10 +237,11 @@ class ProjectRouteHandler
     public function projectAlter($project_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         $deadlineError = '';
 
-        $request = APIClient::API_VERSION."/projects/$project_id";
+        $request = "$siteApi/v0/projects/$project_id";
         $response = $client->call($request);
         $project = $client->cast('Project', $response);
 
@@ -310,7 +300,7 @@ class ProjectRouteHandler
             }
             
             if ($deadlineError == '') {
-                $request = APIClient::API_VERSION."/projects/$project_id";
+                $request = "$siteApi/v0/projects/$project_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT, $project);
                 $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
             }
@@ -357,7 +347,8 @@ class ProjectRouteHandler
     public function projectCreate($org_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         $user_id = UserSession::getCurrentUserID(); 
         $field_name = 'new_task_file';
         $tags = null;
@@ -430,7 +421,7 @@ class ProjectRouteHandler
 
             
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && !$upload_error) { 
-                $request = APIClient::API_VERSION."/projects";
+                $request = "$siteApi/v0/projects";
                 $project->setOrganisationId($org_id);
                 if($response = $client->call($request, HTTP_Request2::METHOD_POST, $project)) {
                     $project = $client->cast('Project', $response);
@@ -454,13 +445,13 @@ class ProjectRouteHandler
                         if(isset($post->{'chunking_'.$i})) { 
                             $taskModel->setTaskType(TaskTypeEnum::CHUNKING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            $request = APIClient::API_VERSION."/tasks";
+                            $request = "$siteApi/v0/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
                             $createdChunkTask = $client->cast('Task', $response);
                             
                             try {                    
                                 $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
-                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$createdChunkTask->getId()}/file/".
+                                $error_message = $client->call("$siteApi/v0/tasks/{$createdChunkTask->getId()}/file/".
                                         urlencode($_FILES[$field_name]['name'])."/$user_id",
                                         HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
                             } catch (Exception  $e) {
@@ -471,14 +462,14 @@ class ProjectRouteHandler
                         if(isset($post->{'translation_'.$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            $request = APIClient::API_VERSION."/tasks";
+                            $request = "$siteApi/v0/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
                             $newTask = $client->cast('Task', $response);
                             $translationTaskId = $newTask->getId();
                             
                             try {                    
                                 $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
-                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$translationTaskId}/file/".
+                                $error_message = $client->call("$siteApi/v0/tasks/{$translationTaskId}/file/".
                                         urlencode($_FILES[$field_name]['name'])."/$user_id",
                                         HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
                             } catch (Exception  $e) {
@@ -490,19 +481,19 @@ class ProjectRouteHandler
                             $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
 
-                            $request = APIClient::API_VERSION."/tasks";
+                            $request = "$siteApi/v0/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
                             $newTask = $client->cast('Task', $response);
                             $proofreadingTaskId = $newTask->getId();
                             
                             if(isset($post->{'translation_'.$i})) {
-                                $request = APIClient::API_VERSION."/tasks/$proofreadingTaskId/prerequisites/$translationTaskId";
+                                $request = "$siteApi/v0/tasks/$proofreadingTaskId/prerequisites/$translationTaskId";
                                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);                            
                             } 
                             
                             try {                    
                                 $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
-                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$proofreadingTaskId}/file/".
+                                $error_message = $client->call("$siteApi/v0/tasks/{$proofreadingTaskId}/file/".
                                         urlencode($_FILES[$field_name]['name'])."/$user_id",
                                         HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
                             } catch (Exception  $e) {
@@ -516,22 +507,22 @@ class ProjectRouteHandler
                             $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             
-                            $request = APIClient::API_VERSION."/tasks";
+                            $request = "$siteApi/v0/tasks";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);    
                             $newTask = $client->cast('Task', $response);
                             $posteditingTaskId = $newTask->getId();
                             
                             if(isset($post->{'translation_'.$i}) && isset($post->{'proofreading_'.$i})) {
-                                $request = APIClient::API_VERSION."/tasks/$posteditingTaskId/prerequisites/$proofreadingTaskId";
+                                $request = "$siteApi/v0/tasks/$posteditingTaskId/prerequisites/$proofreadingTaskId";
                                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                             } else if(isset($post->{'translation_'.$i})) {
-                                $request = APIClient::API_VERSION."/tasks/$posteditingTaskId/prerequisites/$translationTaskId";
+                                $request = "$siteApi/v0/tasks/$posteditingTaskId/prerequisites/$translationTaskId";
                                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                             }
                             
                             try {                    
                                 $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
-                                $error_message = $client->call(APIClient::API_VERSION."/tasks/{$posteditingTaskId}/file/".
+                                $error_message = $client->call("$siteApi/v0/tasks/{$posteditingTaskId}/file/".
                                         urlencode($_FILES[$field_name]['name'])."/$user_id",
                                         HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
                             } catch (Exception  $e) {
@@ -586,14 +577,15 @@ class ProjectRouteHandler
     public function projectCreated($project_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         $user_id = UserSession::getCurrentUserID();
 
-        $request = APIClient::API_VERSION."/projects/$project_id";
+        $request = "$siteApi/v0/projects/$project_id";
         $response = $client->call($request);     
         $project = $client->cast('Project', $response);
        
-        $request = APIClient::API_VERSION."/users/$user_id";
+        $request = "$siteApi/v0/users/$user_id";
         $response = $client->call($request, HTTP_Request2::METHOD_GET);
         $user = $client->cast('User', $response);        
         
@@ -615,9 +607,10 @@ class ProjectRouteHandler
     public function archiveProject($project_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $request = APIClient::API_VERSION."/projects/$project_id";
+        $request = "$siteApi/v0/projects/$project_id";
         $response = $client->call($request);
         $project = $client->cast('Project', $response);
         
@@ -632,7 +625,7 @@ class ProjectRouteHandler
             $app->redirect($app->urlFor('login'));
         }   
 
-        $request = APIClient::API_VERSION."/projects/archiveProject/$project_id/user/$user_id";
+        $request = "$siteApi/v0/projects/archiveProject/$project_id/user/$user_id";
         $response = $client->call($request, HTTP_Request2::METHOD_PUT);        
         
         $app->redirect($ref = $app->request()->getReferrer());

@@ -6,6 +6,11 @@ class XMLSerializer extends Serializer
 {
     private $dom;
 
+    public function __construct()
+    {
+        $this->format = ".xml";
+    }
+
     public function getContentType()
     {
         return 'application/xml; charset=utf-8';

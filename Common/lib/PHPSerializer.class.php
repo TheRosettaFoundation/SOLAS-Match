@@ -4,6 +4,11 @@ require_once 'Serializer.class.php';
 
 class PHPSerializer extends Serializer
 {
+    public function __construct()
+    {
+        $this->format = ".php";
+    }
+
     public function serialize($data)
     {
         $ret = serialize($data);

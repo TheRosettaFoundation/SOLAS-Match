@@ -18,22 +18,17 @@ class TagRouteHandler
     public function tagsList()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
         $user_id = UserSession::getCurrentUserID();
-        $user_tags = array();
-        $request = APIClient::API_VERSION."/users/$user_id/tags";
+        $request = "$siteApi/v0/users/$user_id/tags";
         $response = $client->call($request);
-        foreach ($response as $stdObject) {
-            $user_tags[] = $client->cast('Tag', $stdObject);
-        }
+        $user_tags = $client->cast(array("Tag"), $response);
 
-        $all_tags = array();
-        $request = APIClient::API_VERSION."/tags";
+        $request = "$siteApi/v0/tags";
         $response = $client->call($request);
-        foreach ($response as $stdObject) {
-            $all_tags[] = $client->cast('Tag', $stdObject);
-        }
+        $all_tags = $client->cast(array("Tag"), $response);
         
         $app->view()->appendData(array(
             'user_tags' => $user_tags,
@@ -46,14 +41,15 @@ class TagRouteHandler
     public function tagSubscribe($label, $subscribe)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $request = APIClient::API_VERSION."/tags/getByLabel/$label";
+        $request = "$siteApi/v0/tags/getByLabel/$label";
         $response = $client->call($request);
         $tag = $client->cast('Tag', $response);
         
         $user_id = UserSession::getCurrentUserID();
-        $request = APIClient::API_VERSION."/users/$user_id";
+        $request = "$siteApi/v0/users/$user_id";
         $response = $client->call($request);
         $current_user = $client->cast('User', $response);
 
@@ -66,11 +62,11 @@ class TagRouteHandler
         $displayName = $current_user->getDisplayName();
         
         if ($subscribe == "true") {
-            $request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
+            $request = "$siteApi/v0/users/$user_id/tags/$tag_id";
             $userLikeTag = $client->call($request, HTTP_Request2::METHOD_PUT);            
             
             if ($userLikeTag) {
-                $request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
+                $request = "$siteApi/v0/users/$user_id/tags/$tag_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                 $app->flash('success', "Successfully added tag, $label, to subscription list");
             } else {
@@ -79,7 +75,7 @@ class TagRouteHandler
         }   
         
         if ($subscribe == "false") {
-            $request = APIClient::API_VERSION."/users/$user_id/tags/$tag_id";
+            $request = "$siteApi/v0/users/$user_id/tags/$tag_id";
             $removedTag = $client->call($request, HTTP_Request2::METHOD_DELETE);
             if ($removedTag) {
                 $app->flash('success', "Successfully removed tag $label for user $displayName");
@@ -94,9 +90,10 @@ class TagRouteHandler
     public function tagDetails($label)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $request = APIClient::API_VERSION."/tags/getByLabel/$label";
+        $request = "$siteApi/v0/tags/getByLabel/$label";
         $response = $client->call($request);
         $tag = $client->cast('Tag', $response);
         
@@ -107,16 +104,12 @@ class TagRouteHandler
             die;
         }
 
-        $tasks = array();
-        $request = APIClient::API_VERSION."/tags/$tag_id/tasks";
+        $request = "$siteApi/v0/tags/$tag_id/tasks";
         $data = array('limit' => 10);
         $response = $client->call($request, HTTP_Request2::METHOD_GET, $data);
-        if ($response) {
-            foreach ($response as $stdObject) {
-                $tasks[] = $client->cast('Task', $stdObject);
-            }         
-            $app->view()->setData('tasks', $tasks);
-        }  
+        $tasks = $client->cast(array("Task"), $response);
+
+        $app->view()->setData('tasks', $tasks);
         
         if (UserRouteHandler::isLoggedIn()) {
 
@@ -126,24 +119,19 @@ class TagRouteHandler
             ));
 
             $user_tags = array();
-            $request = APIClient::API_VERSION."/users/$user_id/tags";
+            $request = "$siteApi/v0/users/$user_id/tags";
             $response = $client->call($request);
+            $user_tags = $client->cast(array("Tag"), $response);
             
-            if ($response) {
-                foreach ($response as $stdObject) {
-                    $user_tags[] = $client->cast('Tag', $stdObject);
-                }
-                if (count($user_tags) > 0) {
-                    $app->view()->appendData(array(
-                            'user_tags' => $user_tags
-
-                    )); 
-                    foreach ($user_tags as $tag) {
-                        if ($label == $tag->getLabel()) {
-                            $app->view()->appendData(array(
-                               'subscribed' => true
-                            )); 
-                        }
+            if (count($user_tags) > 0) {
+                $app->view()->appendData(array(
+                        'user_tags' => $user_tags
+                )); 
+                foreach ($user_tags as $tag) {
+                    if ($label == $tag->getLabel()) {
+                        $app->view()->appendData(array(
+                           'subscribed' => true
+                        )); 
                     }
                 }
             }
@@ -157,7 +145,7 @@ class TagRouteHandler
         }
 
         $top_tags = array();
-        $request = APIClient::API_VERSION."/tags/topTags";
+        $request = "$siteApi/v0/tags/topTags";
         $top_tags= $client->castCall(array("Tag"), $request, HTTP_Request2::METHOD_GET, null, array('limit' => 30));
         $app->view()->appendData(array(
                  'tag' => $label,

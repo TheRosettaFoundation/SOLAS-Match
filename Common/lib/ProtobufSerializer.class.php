@@ -4,6 +4,11 @@ require_once 'Serializer.class.php';
 
 class ProtobufSerializer extends Serializer
 {
+    public function __construct()
+    {
+        $this->format = ".proto";
+    }
+
     public function serialize($data)
     {
         $ret = null;

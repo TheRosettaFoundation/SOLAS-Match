@@ -4,6 +4,12 @@ require_once 'Serializer.class.php';
 
 class HTMLSerializer extends Serializer
 {
+
+    public function __construct()
+    {
+        $this->format = ".html";
+    }
+
     public function serialize($data)
     {
         $ret = htmlspecialchars(wddx_serialize_value($data));

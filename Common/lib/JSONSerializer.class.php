@@ -4,6 +4,11 @@ require_once 'Serializer.class.php';
 
 class JSONSerializer extends Serializer
 {
+    public function __construct()
+    {
+        $this->format = ".json";
+    }
+
     public function serialize($data)
     {
         return json_encode($data);
