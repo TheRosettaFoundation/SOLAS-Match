@@ -165,6 +165,11 @@ class Serializer
                     }
 
                     if(is_object($value)&&get_class($value)=="stdClass"){
+                        if (preg_match("/@var\s+[\\\\a-zA-Z]*[\\\\]([^\s]+)[[]]/",
+                                    $propDest->getDocComment(), $matches)) {
+                            list( , $className) = $matches;
+                            $value = self::cast($className, $value);
+                        }
                         $propDest->setValue($destination, null);
                     } else {
                         $propDest->setValue($destination, $value);
