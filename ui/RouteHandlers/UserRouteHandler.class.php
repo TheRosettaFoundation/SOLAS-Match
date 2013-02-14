@@ -104,15 +104,20 @@ class UserRouteHandler
                                     array("limit" => 10));
             
             $tasks = array();
+            $i = 0;
             if ($response) {
                 foreach ($response as $stdObject) {
                     $tasks[] = $client->cast("Task", $stdObject);
+                    $tasks[$i]['Project'] = $client->castCall("Project", APIClient::API_VERSION."/projects/{$tasks[$i]->getProjectId()}", HTTP_Request2::METHOD_GET);
+                    $tasks[$i]['Org'] = $client->castCall("Organisation", APIClient::API_VERSION."/orgs/{$tasks[$i]['Project']->getOrganisationId()}", HTTP_Request2::METHOD_GET);
+                    $i++;
                 }
             }
-
-            if ($tasks) {
-                $app->view()->setData("tasks", $tasks);
-            }
+            
+            $app->view()->appendData(array(
+                "tasks" => $tasks
+            ));
+            
 
             $url = APIClient::API_VERSION."/users/$current_user_id/tags";
             $response = $client->call($url, HTTP_Request2::METHOD_GET, null,

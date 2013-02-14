@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
+        <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/jquery-ui.js"></script>
     
@@ -38,8 +39,8 @@
 			    	</li>
 		    	{/if}
                 {if isset($user_has_active_tasks)}
-					<li {if isset($current_page) && $current_page == 'active-tasks'}class="active" {/if}>
-						<a href="{urlFor name="active-tasks" options="page_no.1"}">Active Tasks</a>
+					<li {if isset($current_page) && $current_page == 'claimed-tasks'}class="active" {/if}>
+						<a href="{urlFor name="claimed-tasks" options="page_no.1"}">Claimed Tasks</a>
 					</li>
 				{/if}
 			{if isset($user)}

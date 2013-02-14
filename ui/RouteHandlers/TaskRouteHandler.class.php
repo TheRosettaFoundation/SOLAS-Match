@@ -10,8 +10,8 @@ class TaskRouteHandler
         $app->get("/tasks/archive/p/:page_no", array($this, "archivedTasks")
         )->name("archived-tasks");
 
-        $app->get("/tasks/active/p/:page_no", array($this, "activeTasks")
-        )->name("active-tasks");        
+        $app->get("/tasks/claimed/p/:page_no", array($this, "claimedTasks")
+        )->name("claimed-tasks");        
 
         $app->get("/task/id/:task_id/download-task-latest-file/", array($middleware, "authenticateUserForTask"),
         array($this, "downloadTaskLatestVersion"))->name("download-task-latest-version");
@@ -113,7 +113,7 @@ class TaskRouteHandler
         $app->render("archived-tasks.tpl");
     }
 
-    public function activeTasks($page_no)
+    public function claimedTasks($page_no)
     {
         $app = Slim::getInstance();
         $client = new APIClient();
@@ -129,8 +129,12 @@ class TaskRouteHandler
         $response = $client->call($request);
         
         if ($response) {
+            $i = 0;
             foreach ($response as $stdObject) {
                 $activeTasks[] = $client->cast("Task", $stdObject);
+                $activeTasks[$i]['Project'] = $client->castCall("Project", APIClient::API_VERSION."/projects/{$activeTasks[$i]->getProjectId()}", HTTP_Request2::METHOD_GET);
+                $activeTasks[$i]['Org'] = $client->castCall("Organisation", APIClient::API_VERSION."/orgs/{$activeTasks[$i]['Project']->getOrganisationId()}", HTTP_Request2::METHOD_GET);
+                $i++;
             }
         }
         
@@ -171,11 +175,11 @@ class TaskRouteHandler
                         "last" => $total_pages,
                         "top" => $top,
                         "bottom" => $bottom,
-                        "current_page" => "active-tasks",
+                        "current_page" => "claimed-tasks",
                         "taskTypeColours" => $taskTypeColours
         ));
         
-        $app->render("active-tasks.tpl");
+        $app->render("claimed-tasks.tpl");
     }
 
     public function downloadTaskLatestVersion($task_id)
@@ -1181,7 +1185,7 @@ class TaskRouteHandler
             $post = $app->request()->post(); 
             
             if(!isset($post["translation_0"]) && !isset($post["proofreading_0"])) {
-                $app->flashNow("Warning", "Task <b>Type</b> must be set for all chunks.");
+                $app->flashNow("Warning", "At least one task type such as <b>translation</b> and/or <b>proofreading</b> must be set.");
             } else {
                 $chunkValue = $post["chunkValue"];
                 $upload_error = false;      
@@ -1253,11 +1257,10 @@ class TaskRouteHandler
                 }                 
                 
                 for($i=0; $i < $chunkValue; $i++) {
-                    if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {                        
-                        for($j=0; $j < $chunkValue; $j++) {
-                            $request = APIClient::API_VERSION."/tasks/$proofreadTaskIds[$i]/prerequisites/$translationTaskIds[$j]";
-                            $response = $client->call($request, HTTP_Request2::METHOD_PUT);
-                        }
+
+                    if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {   
+                        $request = APIClient::API_VERSION."/tasks/$proofreadTaskIds[$i]/prerequisites/$translationTaskIds[$i]";
+                        $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                     }
                         
                     if(isset($post["proofreading_0"])) {
