@@ -150,6 +150,19 @@ class Projects
             $dao = new ProjectTags();
             Dispatcher::sendResponce(null, $dao->getTags($id), null, $format);
         }, 'getProjectTags');
+        
+         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/projects/:id/file/:filename/:userId/',
+                                                        function ($id, $filename, $userId, $format = ".json") {
+            
+            if (!is_numeric($userID) && strstr($userID, '.')) {
+                $userID = explode('.', $userID);
+                $format = '.'.$userID[1];
+                $userID = $userID[0];
+            }
+            $data=Dispatcher::getDispatcher()->request()->getBody();
+            $dao = new ProjectDao();
+            Dispatcher::sendResponce(null,$dao->saveProjectFile($id, $data, $filename,$userId), null, $format);
+        }, 'saveProjectFile');
     }
 }
 Projects::init();

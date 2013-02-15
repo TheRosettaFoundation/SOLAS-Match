@@ -281,5 +281,26 @@ class ProjectDao
     {
         return ProjectTags::getTags($projectId);
     }
+    
+    public function saveProjectFile($projectId,$file,$filename,$userId){
+        $destination =realpath(Settings::get("files.upload_path")."proj-$projectId/");
+        if(!file_exists($destination)) mkdir ($destination);
+        $token=self::recordProjectFile($projectId,$file,$filename,$userId);
+        file_put_contents($destination.$token, $file);
+        
+        
+        
+    }
+    
+    public function recordProjectFile($projectId,$file,$filename,$userId){
+        $token=$filename;//generate guid in future.
+        $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNull($filename).",".PDOWrapper::cleanseNull($token);
+        PDOWrapper::call("addProjectFile", $args);
+        return $token;
+    }
+    
+    
+    
 }
 
