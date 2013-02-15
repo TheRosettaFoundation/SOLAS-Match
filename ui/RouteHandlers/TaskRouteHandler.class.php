@@ -413,7 +413,7 @@ class TaskRouteHandler
                     $request = "$siteApi/v0/tasks/$taskId/file/".
                         urlencode($_FILES[$fieldName]['name'])."/$userId";
                     $errorMessage = $client->call($request,
-                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                        HTTP_Request2::METHOD_PUT, null, null, $filedata);
                 } catch (Exception  $e) {
                     $uploadError = true;
                     $errorMessage = 'File error: ' . $e->getMessage();
@@ -495,11 +495,11 @@ class TaskRouteHandler
                     
                     if ($post->submit == 'XLIFF') {
                         $request = "$siteApi/v0/tasks/$taskId/file/?convertFileXliff=true";
-                        $response = $client->call($request, HTTP_Request2::METHOD_PUT, null, null, null, $filedata);
+                        $response = $client->call($request, HTTP_Request2::METHOD_PUT, null, null, $filedata);
                     } else if ($post->submit == 'submit') {
                         $errorMessage = $client->call(
                             "$siteApi/v0/tasks/uploadOutputFile/$taskId/".urlencode($_FILES[$fieldName]['name'])."/$userId",
-                            HTTP_Request2::METHOD_PUT, $filedata, null);
+                            HTTP_Request2::METHOD_PUT, null, null, $filedata);
                     }
                 
                 } catch (Exception  $e) {
@@ -1152,7 +1152,7 @@ class TaskRouteHandler
                                 $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);                    
                                 $error_message = $client->call("$siteApi/v0/tasks/{$createdTranslation->getId()}/file/".
                                         urlencode($_FILES['chunkUpload_'.$i]['name'])."/$user_id",
-                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                                        HTTP_Request2::METHOD_PUT, null, null, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = 'File error: ' . $e->getMessage();
@@ -1169,7 +1169,7 @@ class TaskRouteHandler
                                 $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);                    
                                 $error_message = $client->call("$siteApi/v0/tasks/{$createdProofReading->getId()}/file/".
                                         urlencode($_FILES['chunkUpload_'.$i]['name'])."/$user_id",
-                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                                        HTTP_Request2::METHOD_PUT, null, null, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = 'File error: ' . $e->getMessage();
@@ -1185,7 +1185,7 @@ class TaskRouteHandler
                                 $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);                    
                                 $error_message = $client->call("$siteApi/v0/tasks/{$createdPostEditing->getId()}/file/".
                                         urlencode($_FILES['chunkUpload_'.$i]['name'])."/$user_id",
-                                        HTTP_Request2::METHOD_PUT, null, null, "", $filedata);
+                                        HTTP_Request2::METHOD_PUT, null, null, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = 'File error: ' . $e->getMessage();

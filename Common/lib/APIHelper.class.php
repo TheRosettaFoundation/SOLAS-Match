@@ -36,7 +36,7 @@ class APIHelper
     }
 
     public function call($url, $method = HTTP_Request2::METHOD_GET,
-             $data = null, $query_args = array())
+             $data = null, $query_args = array(), $file = null)
     {
         $url = $url.$this->_serializer->getFormat()."/?";
         $request = new HTTP_Request2($url, $method);
@@ -44,6 +44,10 @@ class APIHelper
         if (!is_null($data) && "null" != $data) {
             $data=$this->_serializer->serialize($data);
             $request->setBody($data);
+        }
+
+        if (!is_null($file)) {
+            $request->setBody($file);
         }
         
         if (count($query_args) > 0) {
