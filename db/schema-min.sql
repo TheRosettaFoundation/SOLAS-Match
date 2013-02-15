@@ -401,6 +401,18 @@ REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 	(3, "In Progress"),
 	(4, "Complete");
 
+
+-- Dumping structure for table Solas-Match-Test.TaskTranslatorBlacklist
+CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
+  `task_id` bigint(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  UNIQUE KEY `task_id` (`task_id`,`user_id`),
+  KEY `FK_TaskTranslatorBlacklist_Users` (`user_id`),
+  CONSTRAINT `FK_TaskTranslatorBlacklist_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_TaskTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 -- Dumping structure for table Solas-Match-Test.TaskTypes
 
 CREATE TABLE IF NOT EXISTS `TaskTypes` (
@@ -1605,7 +1617,7 @@ BEGIN
 	if lang_id='' then set lang_id=null;end if;
 	if region_id='' then set region_id=null;end if;
 	
-	set @q= "select * from Users u where 1 ";-- set update
+	set @q= "select id,`display-name`,email,password,biography,(select code from Languages where id =u.`language_id`) as `language_id` ,(select code from Countries where id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and u.id=",id) ;
@@ -1640,7 +1652,6 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getUserArchivedTasks
 DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
@@ -1775,7 +1786,6 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTopTasks
-DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `lim` INT)
     READS SQL DATA
@@ -1783,13 +1793,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `
 BEGIN
     if lim='' then set lim=null; end if;
     if lim is not null then
-        set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY uts.score DESC limit ",lim);
+        set @q = Concat("select id,project_id,title,`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ORDER BY uts.score DESC limit ",lim);
     else
-        set @q = Concat("SELECT t.id FROM Tasks AS t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY uts.score DESC");
+        set @q = Concat("select id,project_id,title,`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ORDER BY uts.score DESC");
     end if;
     PREPARE stmt FROM @q;
     set @uID=uID;
-    EXECUTE stmt using @uID;
+    EXECUTE stmt using @uID,@uID;
     DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
@@ -2582,12 +2592,12 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.unClaimTask
-DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT)
 BEGIN
 	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
       delete from TaskClaims where task_id=tID and user_id=uID;
+      insert into TaskTanslatorBlacklist (task_id,user_id) values (tID,uID);
       update Tasks set `task-status_id`=2 where id = tID;
 		select 1 as result;
 	else
