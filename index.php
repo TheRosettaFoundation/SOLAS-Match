@@ -23,7 +23,6 @@ require_once 'Common/lib/ModelFactory.class.php';
 require_once 'Common/lib/BadgeTypes.class.php';
 require_once 'Common/lib/APIHelper.class.php';
 
-require_once 'ui/lib/TipSelector.class.php'; //jokes after upload
 require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
 require_once 'ui/lib/UserSession.class.php';

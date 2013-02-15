@@ -575,9 +575,9 @@ class TaskRouteHandler
         $request = "$siteApi/v0/orgs/{$project->getOrganisationId()}";
         $response = $client->call($request);
         $org = $client->cast("Organisation", $response);
-       
-        $tip_selector = new TipSelector();
-        $tip = $tip_selector->selectTip();
+      
+        $request = "$siteApi/v0/tips";
+        $tip = $client->call($request);
         
         $org_id = $project->getOrganisationId();
         $app->view()->appendData(array(
