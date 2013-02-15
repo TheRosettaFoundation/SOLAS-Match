@@ -24,11 +24,7 @@ class TaskDao {
      **/
     public function create($params)
     {
-        if (!is_array($params) && is_object($params)) {
-            $task   = APIHelper::cast("Task", $params);
-        } else {
-            $task = ModelFactory::buildModel("Task", $params);
-        }
+        $task = ModelFactory::buildModel("Task", $params);
 
         $this->save($task);
         return $task;

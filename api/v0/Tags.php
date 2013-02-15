@@ -76,8 +76,9 @@ class Tags {
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tags(:format)/',
                                                         function ($format = ".json") {
             $data = Dispatcher::getDispatcher()->request()->getBody();
-            $data = APIHelper::deserialiser($data, $format);
-            $data = APIHelper::cast("Tag", $data);
+            $client = new APIHelper($format);
+            $client->deserialize($data);
+            $client->cast("Tag", $data);
             $data->setBadgeId(null);
             $dao = new TagsDao();
             Dispatcher::sendResponce(null, $dao->save($tag), null, $format);
@@ -91,8 +92,9 @@ class Tags {
                 $id = $id[0];
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
-            $data = APIHelper::deserialiser($data, $format);
-            $data = APIHelper::cast("Tag", $data);
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data);
+            $data = $client->cast("Tag", $data);
             $dao = new TagsDao();
             Dispatcher::sendResponce(null, $dao->save($data), null, $format);
         }, 'updateTag');

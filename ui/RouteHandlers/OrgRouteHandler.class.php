@@ -44,7 +44,8 @@ class OrgRouteHandler
     public function createOrg()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -64,17 +65,17 @@ class OrgRouteHandler
 
             if ($org->getName() != "") {
  
-                $request = APIClient::API_VERSION."/orgs/getByName/{$org->getName()}";
+                $request = "$siteApi/v0/orgs/getByName/{$org->getName()}";
                 $organisation = $client->call($request, HTTP_Request2::METHOD_GET);
                   
                 if (!$organisation) {
-                    $request = APIClient::API_VERSION."/orgs";
+                    $request = "$siteApi/v0/orgs";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, $org);    
                     $new_org = $client->cast("Organisation", $response);
                     
                     if ($new_org) {
                         $user_id = UserSession::getCurrentUserID();
-                        $request = APIClient::API_VERSION."/orgs/{$new_org->getId()}/requests/$user_id";
+                        $request = "$siteApi/v0/orgs/{$new_org->getId()}/requests/$user_id";
                         $organisation = $client->call($request, HTTP_Request2::METHOD_PUT);                        
                         $org_name = $org->getName();
                         $app->flashNow("success", "Organisation $org_name has been created. 
@@ -98,11 +99,12 @@ class OrgRouteHandler
     public function orgDashboard()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
         $current_user_id    = UserSession::getCurrentUserID();
 
-        $request = APIClient::API_VERSION."/users/$current_user_id";
+        $request = "$siteApi/v0/users/$current_user_id";
         $response = $client->call($request);
         $current_user = $client->cast("User", $response);        
         
@@ -112,42 +114,23 @@ class OrgRouteHandler
         }
 
         $my_organisations = array();
-        $url = APIClient::API_VERSION."/users/$current_user_id/orgs";
-        $response = $client->call($url);
-        if (is_array($response)) {
-            foreach ($response as $stdObject) {
-                $my_organisations[] = $client->cast("Organisation", $stdObject);
-            }
-        }elseif(is_string ($response)){
-            $my_organisations = $client->cast("Organisation", $response);
-        }
+        $request = "$siteApi/v0/users/$current_user_id/orgs";
+        $response = $client->call($request);
+        $my_organisations = $client->cast(array("Organisation"), $response);
         
         $org_projects = array();
         $orgs = array();
 
         foreach ($my_organisations as $org) {
 
-            $url = APIClient::API_VERSION."/orgs/{$org->getId()}/projects";
-            $org_projects_data = $client->call($url);        
-            $my_org_projects = array();
-            if ($org_projects_data) {
-                foreach ($org_projects_data as $stdObject) {
-                    $my_org_projects[] = $client->cast("Project", $stdObject);
-                }
-            } else {
-                // If no org tasks, set to null
-                $my_org_projects = null;
-            }   
+            $request = "$siteApi/v0/orgs/{$org->getId()}/projects";
+            $response = $client->call($request);
+            $my_org_projects = $client->cast(array("Project"), $response);
             
-            $request = APIClient::API_VERSION."/tags/topTags";
+            $request = "$siteApi/v0/tags/topTags";
             $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
-                                        array("limit" => 30));        
-            $top_tags = array();
-            if ($response) {
-                foreach ($response as $stdObject) {
-                    $top_tags[] = $client->cast("Tag", $stdObject);
-                }
-            }            
+                                        array('limit' => 30));
+            $top_tags = $client->cast(array("Tag"), $response);;
 
             $org_projects[$org->getId()] = $my_org_projects;
             $orgs[$org->getId()] = $org;
@@ -170,7 +153,7 @@ class OrgRouteHandler
                 }
                 if ($post->track == "Ignore") {
                    
-                    $request = APIClient::API_VERSION."/users/$current_user_id/track_projects/$project_id";
+                    $request = "$siteApi/v0/users/$current_user_id/track_projects/$project_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                    
                     
                     if ($response) {
@@ -180,7 +163,7 @@ class OrgRouteHandler
                     }                    
                 } elseif ($post->track == "Track") {
                     
-                    $request = APIClient::API_VERSION."/users/$current_user_id/tracked_projects/$project_id";
+                    $request = "$siteApi/v0/users/$current_user_id/tracked_projects/$project_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT);     
                     
                     if ($response) {
@@ -202,15 +185,11 @@ class OrgRouteHandler
                 if ($projectArray) {
                     foreach ($projectArray as $project) {
                         $temp = array();
-                        $temp["project"] = $project;
-                        //$temp["translated"]=$client->call(APIClient::API_VERSION.
-                                //"/projects/{$project->getId()}/version") > 0;
+                        $temp['project'] = $project;
+                        $temp['projectClaimed']=$client->call("$siteApi/v0/projects/{$project->getId()}/claimed") == 1;
                                 
-                        $temp["projectClaimed"]=$client->call(APIClient::API_VERSION.
-                                "/projects/{$project->getId()}/claimed") == 1;
-                                
-                        $temp["userSubscribedToProject"]=$client->call(APIClient::API_VERSION.
-                                "/users/subscribedToProject/".UserSession::getCurrentUserID()."/{$project->getId()}") == 1;                                
+                        $temp['userSubscribedToProject']=$client->call("$siteApi/v0/users/subscribedToProject/".
+                                UserSession::getCurrentUserID()."/{$project->getId()}") == 1;
                         $taskData[]=$temp;
                     }
                 } else {
@@ -235,17 +214,18 @@ class OrgRouteHandler
     public function orgRequestMembership($org_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
         $user_id = UserSession::getCurrentUserID();
-        $request = APIClient::API_VERSION."/users/$user_id";
+        $request = "$siteApi/v0/users/$user_id";
         $response = $client->call($request);
         $user = $client->cast("User", $response);
         
-        $request = APIClient::API_VERSION."/users/$user_id/orgs";
+        $request = "$siteApi/v0/users/$user_id/orgs";
         $user_orgs = (array) $client->call($request);
         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-            $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+            $request = "$siteApi/v0/orgs/$org_id/requests/$user_id";
             $requestMembership = $client->call($request, HTTP_Request2::METHOD_POST);         
             if ($requestMembership) {
                 $app->flash("success", "Successfully requested membership.");
@@ -261,9 +241,10 @@ class OrgRouteHandler
     public function orgRequestQueue($org_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $request = APIClient::API_VERSION."/orgs/$org_id";
+        $request = "$siteApi/v0/orgs/$org_id";
         $response = $client->call($request);
         $org = $client->cast("Organisation", $response);
         
@@ -272,13 +253,13 @@ class OrgRouteHandler
             
             if (isset($post->email)) {
                 if (TemplateHelper::isValidEmail($post->email)) {       
-                    $url = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
+                    $url = "$siteApi/v0/users/getByEmail/{$post->email}";
                     $response = $client->call($url);
                     $user = $client->cast("User", $response);
                 
                     if (!is_null($user)) {
                         $user_id = $user->getUserId();
-                        $request = APIClient::API_VERSION."/users/$user_id/orgs";
+                        $request = "$siteApi/v0/users/$user_id/orgs";
                         $user_orgs = $client->call($request);
                     
                         if ($user->getDisplayName() != "") {
@@ -287,7 +268,7 @@ class OrgRouteHandler
                             $user_name = $user->getEmail();
                         }   
                         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-                            $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                            $request = "$siteApi/v0/orgs/$org_id/requests/$user_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                             if ($org->getName() != "") {
                                 $org_name = $org->getName();
@@ -311,9 +292,9 @@ class OrgRouteHandler
             } elseif (isset($post->accept)) {
                 if ($user_id = $post->user_id) {
                     
-                    $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                    $request = "$siteApi/v0/orgs/$org_id/requests/$user_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT);
-                    $request = APIClient::API_VERSION."/users/$user_id";
+                    $request = "$siteApi/v0/users/$user_id";
                     $response = $client->call($request);
                     $user = $client->cast("User", $response);
                 } else {
@@ -321,10 +302,10 @@ class OrgRouteHandler
                 }
             } elseif (isset($post->refuse)) {
                 if ($user_id = $post->user_id) {
-                    $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                    $request = "$siteApi/v0/orgs/$org_id/requests/$user_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
                     
-                    $request = APIClient::API_VERSION."/users/$user_id";
+                    $request = "$siteApi/v0/users/$user_id";
                     $response = $client->call($request);
                     $user = $client->cast("User", $response);
                 } else {
@@ -333,16 +314,16 @@ class OrgRouteHandler
             }
         }
 
-        $request = APIClient::API_VERSION."/orgs/$org_id/requests";
-        $requests = $client->call($request, HTTP_Request2::METHOD_GET);
+        $request = "$siteApi/v0/orgs/$org_id/requests";
+        $response = $client->call($request, HTTP_Request2::METHOD_GET);
+        $requests = $client->cast(array("MembershipRequest"), $response);
 
         $user_list = array();
         if (count($requests) > 0) {
-            foreach ($requests as $request) {
-                $memRequest =$client->cast("MembershipRequest", $request);
-                $request = APIClient::API_VERSION."/users/{$memRequest->getUserId()}";
-                $user = $client->call($request);
-                $user_list[] =  $client->cast("User", $user);
+            foreach ($requests as $memRequest) {
+                $request = "$siteApi/v0/users/{$memRequest->getUserId()}";
+                $response = $client->call($request);
+                $user_list[] =  $client->cast('User', $response);
             }
         }
         
@@ -355,9 +336,10 @@ class OrgRouteHandler
     public function orgPrivateProfile($org_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $request = APIClient::API_VERSION."/orgs/$org_id";
+        $request = "$siteApi/v0/orgs/$org_id";
         $response = $client->call($request);
         $org = $client->cast("Organisation", $response);
         
@@ -377,7 +359,7 @@ class OrgRouteHandler
                 $org->setBiography($bio);
             }  
             
-            $request = APIClient::API_VERSION."/orgs/$org_id";
+            $request = "$siteApi/v0/orgs/$org_id";
             $response = $client->call($request, HTTP_Request2::METHOD_PUT, $org); 
             $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
         }   
@@ -389,9 +371,10 @@ class OrgRouteHandler
     public function orgPublicProfile($org_id)
     {
         $app = Slim::getInstance();
-        $client = new APICLient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $request = APIClient::API_VERSION."/orgs/$org_id";
+        $request = "$siteApi/v0/orgs/$org_id";
         $response = $client->call($request);
         $org = $client->cast("Organisation", $response);      
         
@@ -400,7 +383,7 @@ class OrgRouteHandler
                    
             if (isset($post->deleteBadge)) {
                 $badge_id = $post->badge_id;
-                $request = APIClient::API_VERSION."/badges/$badge_id";
+                $request = "$siteApi/v0/badges/$badge_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
             } 
             
@@ -416,7 +399,7 @@ class OrgRouteHandler
                     $params["owner_id"] = null; 
 
                     $updatedBadge = ModelFactory::buildModel("Badge", $params);
-                    $request = APIClient::API_VERSION."/badges/{$post->badge_id}";
+                    $request = "$siteApi/v0/badges/{$post->badge_id}";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT, $updatedBadge); 
                     $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
                 }
@@ -424,13 +407,13 @@ class OrgRouteHandler
             
             if (isset($post->email)) {
                 if (TemplateHelper::isValidEmail($post->email)) {       
-                    $url = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
+                    $url = "$siteApi/v0/users/getByEmail/{$post->email}";
                     $response = $client->call($url);
                     $user = $client->cast("User", $response);
                 
                     if (!is_null($user)) {
                         $user_id = $user->getUserId();
-                        $request = APIClient::API_VERSION."/users/$user_id/orgs";
+                        $request = "$siteApi/v0/users/$user_id/orgs";
                         $user_orgs = $client->call($request);
                     
                         if ($user->getDisplayName() != "") {
@@ -439,7 +422,7 @@ class OrgRouteHandler
                             $user_name = $user->getEmail();
                         }   
                         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-                            $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                            $request = "$siteApi/v0/orgs/$org_id/requests/$user_id";
                             $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                             if ($org->getName() != "") {
                                 $org_name = $org->getName();
@@ -463,9 +446,9 @@ class OrgRouteHandler
             } elseif (isset($post->accept)) {
                 if ($user_id = $post->user_id) {
                     
-                    $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                    $request = "$siteApi/v0/orgs/$org_id/requests/$user_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_PUT);
-                    $request = APIClient::API_VERSION."/users/$user_id";
+                    $request = "$siteApi/v0/users/$user_id";
                     $response = $client->call($request);
                     $user = $client->cast("User", $response);
                 } else {
@@ -473,10 +456,10 @@ class OrgRouteHandler
                 }
             } elseif (isset($post->refuse)) {
                 if ($user_id = $post->user_id) {
-                    $request = APIClient::API_VERSION."/orgs/$org_id/requests/$user_id";
+                    $request = "$siteApi/v0/orgs/$org_id/requests/$user_id";
                     $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
                     
-                    $request = APIClient::API_VERSION."/users/$user_id";
+                    $request = "$siteApi/v0/users/$user_id";
                     $response = $client->call($request);
                     $user = $client->cast("User", $response);
                 } else {
@@ -485,21 +468,21 @@ class OrgRouteHandler
             }
         }       
         
-        $request = APIClient::API_VERSION."/orgs/$org_id/requests";
+        $request = "$siteApi/v0/orgs/$org_id/requests";
         $requests = $client->call($request, HTTP_Request2::METHOD_GET);
 
         $user_list = array();
         if (count($requests) > 0) {
             foreach ($requests as $request) {
-                $memRequest =$client->cast("MembershipRequest", $request);
-                $request = APIClient::API_VERSION."/users/{$memRequest->getUserId()}";
+                $memRequest =$client->cast('MembershipRequest', $request);
+                $request = "$siteApi/v0/users/{$memRequest->getUserId()}";
                 $user = $client->call($request);
                 $user_list[] =  $client->cast("User", $user);
             }
         }  
 
         $org_badges = array();
-        $request = APIClient::API_VERSION."/orgs/$org_id/badges";
+        $request = "$siteApi/v0/orgs/$org_id/badges";
         $response = $client->call($request);
         if ($response) {
             foreach ($response as $stdObject) {
@@ -507,8 +490,8 @@ class OrgRouteHandler
             }        
         }
 
-        $request = APIClient::API_VERSION."/orgs/$org_id/members";
-        $orgMemberList = $client->castCall(array("User"), $request);
+        $request = "$siteApi/v0/orgs/$org_id/members";
+        $orgMemberList = $client->castCall(array('User'), $request);
         
         $org_members = array();
         if (count($orgMemberList) > 0) {
@@ -530,20 +513,16 @@ class OrgRouteHandler
     public function orgManageBadge($org_id, $badge_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $request = APIClient::API_VERSION."/badges/$badge_id";
+        $request = "$siteApi/v0/badges/$badge_id";
         $response = $client->call($request);
         $badge = $client->cast("Badge", $response);
 
-        $user_list = array();
-        $request = APIClient::API_VERSION."/badges/$badge_id/users";
+        $request = "$siteApi/v0/badges/$badge_id/users";
         $response = $client->call($request);
-        if ($response) {
-            foreach ($response as $stdObject) {
-                $user_list[] = $client->cast("User", $stdObject);
-            }
-        }
+        $user_list = $client->cast(array("User"), $response);
 
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
@@ -560,18 +539,16 @@ class OrgRouteHandler
             if (isset($post->email) && $post->email != "") {
                 if (TemplateHelper::isValidEmail($post->email)) {
                     
-                    $request = APIClient::API_VERSION."/users/getByEmail/{$post->email}";
+                    $request = "$siteApi/v0/users/getByEmail/{$post->email}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
                     
                     if (!is_null($response)) {
                         $user = $client->cast("User", $response);
                         $user_badges = array();
                         $user_id = $user->getUserId();
-                        $request = APIClient::API_VERSION."/users/$user_id/badges";
+                        $request = "$siteApi/v0/users/$user_id/badges";
                         $response = $client->call($request);
-                        foreach ($response as $badge_data) {
-                            $user_badges[] = $client->cast("Badge", $badge_data);                           
-                        }
+                        $user_badges = $client->cast(array("Badge"), $response);
                         $badge_ids = array();
                         if (count($user_badges) > 0) {
                             foreach ($user_badges as $badge_tmp) {
@@ -580,7 +557,7 @@ class OrgRouteHandler
                         }
                         
                         if (!in_array($badge_id, $badge_ids)) {
-                            $request = APIClient::API_VERSION."/users/$user_id/badges";
+                            $request = "$siteApi/v0/users/$user_id/badges";
                             $response = $client->call($request, HTTP_Request2::METHOD_POST, $badge);
                             
                             $user_name = "";
@@ -606,11 +583,11 @@ class OrgRouteHandler
                 }
             } elseif (isset($post->user_id) && $post->user_id != "") {
                 $user_id = $post->user_id;
-                $request = APIClient::API_VERSION."/users/$user_id";
+                $request = "$siteApi/v0/users/$user_id";
                 $response = $client->call($request);
                 $user = $client->cast("User", $response);
                 
-                $request = APIClient::API_VERSION."/users/".$user_id."/badges/$badge_id";
+                $request = "$siteApi/v0/users/".$user_id."/badges/$badge_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
                 
                 $user_name = "";
@@ -626,13 +603,9 @@ class OrgRouteHandler
         }
     
         $user_list = array();
-        $request = APIClient::API_VERSION."/badges/{$badge->getId()}/users";
-        $response = $client->call($request);        
-        if ($response) {
-            foreach ($response as $stdObject) {
-                $user_list[] = $client->cast("User", $stdObject);
-            }
-        }
+        $request = "$siteApi/v0/badges/{$badge->getId()}/users";
+        $response = $client->call($request);
+        $user_list = $client->cast(array("User"), $response);
 
         $app->view()->appendData(array(
             "user_list" => $user_list
@@ -644,7 +617,8 @@ class OrgRouteHandler
     public function orgCreateBadge($org_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
         if (isValidPost($app)) {
             $post = (object) $app->request()->post();
@@ -658,7 +632,7 @@ class OrgRouteHandler
                 $params["owner_id"] = $org_id;
 
                 $badge = ModelFactory::buildModel("Badge", $params);
-                $request = APIClient::API_VERSION."/badges";
+                $request = "$siteApi/v0/badges";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, $badge);                
                 
                 $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
@@ -672,20 +646,16 @@ class OrgRouteHandler
     public function orgSearch()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
-            if (isset($post->search_name) && $post->search_name != "") {                
-                $found_orgs = array();
-                $request = APIClient::API_VERSION."/orgs/getByName/{$post->search_name}";
+            if (isset($post->search_name) && $post->search_name != '') {                
+                $request = "$siteApi/v0/orgs/getByName/{$post->search_name}";
                 $response = $client->call($request);
-                if ($response) {
-                    foreach ($response as $stdObject) {
-                        $found_orgs[] = $client->cast("Organisation", $stdObject);
-                    }
-                }                
+                $found_orgs = $client->cast(array("Organisation"), $response);
                 
                 if (count($found_orgs) < 1) {
                     $app->flashNow("error", "No Organisations found.");
@@ -700,9 +670,10 @@ class OrgRouteHandler
     public function orgEditBadge($org_id, $badge_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();        
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $request = APIClient::API_VERSION."/badges/$badge_id";
+        $request = "$siteApi/v0/badges/$badge_id";
         $response = $client->call($request);
         $badge = $client->cast("Badge", $response);
 

@@ -23,8 +23,9 @@ class Badges {
                                                         function ($format = ".json") {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
-            $data = APIHelper::deserialiser($data, $format);
-            $data = APIHelper::cast("Badge", $data);
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data);
+            $data = $client->cast("Badge", $data);
             $data->setId(null);
             $dao = new BadgeDao();
             Dispatcher::sendResponce(null, $dao->insertAndUpdateBadge($data), null, $format);
@@ -39,8 +40,9 @@ class Badges {
                 $id = $id[0];
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
-            $data = APIHelper::deserialiser($data, $format);
-            $data = APIHelper::cast("Badge", $data);
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data);
+            $data = $client->cast("Badge", $data);
             $dao = new BadgeDao();
             Dispatcher::sendResponce(null, $dao->insertAndUpdateBadge($data), null, $format);
         }, 'updateBadge');

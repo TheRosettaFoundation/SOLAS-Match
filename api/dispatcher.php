@@ -15,9 +15,8 @@ SmartyView::$smartyExtensions = array(
 require_once '../Common/Settings.class.php';
 require_once "../Common/lib/ModelFactory.class.php";
 require_once "../Common/lib/BadgeTypes.class.php";
-require_once 'FormatEnum.php';
+require_once '../Common/lib/APIHelper.class.php';
 require_once 'HttpMethodEnum.php';
-require_once 'APIHelper.php';
 
 class Dispatcher {
     
@@ -66,57 +65,11 @@ class Dispatcher {
     
     public static function sendResponce($headers, $body, $code = 200, $format = ".json")
     {
-        $response = Dispatcher::getDispatcher()->response();        
-        $formatCode = APIHelper::getFormat($format); 
+        $response = Dispatcher::getDispatcher()->response();
+        $apiHelper = new APIHelper($format);
+        $response['Content-Type'] = $apiHelper->getContentType();
+        $body = $apiHelper->serialize($body);
 
-        switch ($formatCode){
-            
-            case FormatEnum::JSON: {
-                $response['Content-Type'] = 'application/json; charset=utf-8';
-                $body = APIHelper::serialiser($body, $format);
-                break;
-            }
-            
-            case FormatEnum::XML: {
-                try {
-                    $response['Content-Type'] = 'application/xml; charset=utf-8';
-                    $body = APIHelper::serialiser($body, $format);
-                } catch (Exception $e) {
-                    echo $e;
-                }  
-                break;
-            }
-            
-            case FormatEnum::HTML: {
-                try {
-                    $response['Content-Type'] = 'text/html; charset=utf-8';
-                    $body = APIHelper::serialiser($body, $format);
-                } catch (Exception $e) {
-                    echo $e;                    
-                }  
-                break;
-            }
-            
-            case FormatEnum::PHP:{
-                try {
-                    $response['Content-Type'] = 'text/html; charset=utf-8';
-                    $body = APIHelper::serialiser($body, $format);
-                } catch (Exception $e) {
-                    echo $e;                   
-                }  
-                break;
-            }
-            case FormatEnum::PROTOBUFS: {
-                try {
-                    $response['Content-Type'] = 'application/x-protobuf; charset=utf-8';
-                    $body = APIHelper::serialiser($body, $format);
-                } catch (Exception $e) {
-                    echo "Failed to unserialize data: $data";
-                }
-                break;
-            }
-        }
-        
         if ($headers != null) {
             foreach ($headers as $key => $val) {
                 $response[$key] = $val;

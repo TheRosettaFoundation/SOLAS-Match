@@ -12,11 +12,7 @@ class ProjectDao
     
     public function create($params)
     {
-        if (!is_array($params) && is_object($params)) {
-            $project   = APIHelper::cast("Project", $params);
-        } else {
-            $project = ModelFactory::buildModel("Project", $params);
-        }
+        $project = ModelFactory::buildModel("Project", $params);
 
         $this->save($project);
         return $project;
@@ -24,11 +20,7 @@ class ProjectDao
 
     public function update($params)
     {
-        if (!is_array($params) && is_object($params)) {
-            $project   = APIHelper::cast("Project", $params);
-        } else {
-            $project = ModelFactory::buildModel("Project", $params);
-        }
+        $project = ModelFactory::buildModel("Project", $params);
         
         $this->save($project);
         return $project;

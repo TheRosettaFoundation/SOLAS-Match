@@ -38,28 +38,29 @@ class UserRouteHandler
     public function home()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();        
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         
         $use_statistics = Settings::get("site.stats"); 
         
-        if ($use_statistics == "y") {
-            $request = APIClient::API_VERSION."/stats/totalUsers";
+        if ($use_statistics == 'y') {
+            $request = "$siteApi/v0/stats/totalUsers";
             $total_users = $client->call($request, HTTP_Request2::METHOD_GET);      
             
-            $request = APIClient::API_VERSION."/stats/totalOrgs";
+            $request = "$siteApi/v0/stats/totalOrgs";
             $total_orgs = $client->call($request, HTTP_Request2::METHOD_GET);
             
 
-            $request = APIClient::API_VERSION."/stats/totalArchivedTasks";
+            $request = "$siteApi/v0/stats/totalArchivedTasks";
             $total_archived_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
             
-            $request = APIClient::API_VERSION."/stats/totalClaimedTasks";
+            $request = "$siteApi/v0/stats/totalClaimedTasks";
             $total_claimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
             
-            $request = APIClient::API_VERSION."/stats/totalUnclaimedTasks";
+            $request = "$siteApi/v0/stats/totalUnclaimedTasks";
             $total_unclaimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
             
-            $request = APIClient::API_VERSION."/stats/totalTasks";
+            $request = "$siteApi/v0/stats/totalTasks";
             $total_tasks = $client->call($request, HTTP_Request2::METHOD_GET);  
 
             $app->view()->appendData(array(
@@ -73,15 +74,10 @@ class UserRouteHandler
             ));
         }
         
-        $request = APIClient::API_VERSION."/tags/topTags";
+        $request = "$siteApi/v0/tags/topTags";
         $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
-                                    array("limit" => 10));        
-        $top_tags = array();
-        if ($response) {
-            foreach ($response as $stdObject) {
-                $top_tags[] = $client->cast("Tag", $stdObject);
-            }
-        }        
+                                    array('limit' => 10));        
+        $top_tags = $client->cast(array('Tag'), $response);
 
         $app->view()->appendData(array(
             "top_tags" => $top_tags,
@@ -91,15 +87,22 @@ class UserRouteHandler
         $current_user_id = UserSession::getCurrentUserID();
         
         if ($current_user_id == null) {
-            $tasks = $client->castCall(array("Task"), APIClient::API_VERSION."/tasks/top_tasks",
-                    HTTP_Request2::METHOD_GET, null, array("limit" => 10));
+            $tasks = $client->castCall(array("Task"), "$siteApi/v0/tasks/top_tasks",
+                    HTTP_Request2::METHOD_GET, null, array('limit' => 10));
+            for ($i = 0; $i < count($tasks); $i++) {
+                $resp = $client->call("$siteApi/v0/projects/{$tasks[$i]->getProjectId()}");
+                $tasks[$i]['Project'] = $client->cast("Project", $resp);
+
+                $resp = $client->call("$siteApi/v0/orgs/{$tasks[$i]['Project']->getOrganisationId()}");
+                $tasks[$i]['Org'] = $client->cast("Organisation", $resp);
+            }
             if ($tasks) {
                 $app->view()->appendData(array(
                     "tasks" => $tasks
                 ));
             }
         } else {
-            $url = APIClient::API_VERSION."/users/$current_user_id/top_tasks";
+            $url = "$siteApi/v0/users/$current_user_id/top_tasks";
             $response = $client->call($url, HTTP_Request2::METHOD_GET, null,
                                     array("limit" => 10));
             
@@ -107,9 +110,12 @@ class UserRouteHandler
             $i = 0;
             if ($response) {
                 foreach ($response as $stdObject) {
-                    $tasks[] = $client->cast("Task", $stdObject);
-                    $tasks[$i]['Project'] = $client->castCall("Project", APIClient::API_VERSION."/projects/{$tasks[$i]->getProjectId()}", HTTP_Request2::METHOD_GET);
-                    $tasks[$i]['Org'] = $client->castCall("Organisation", APIClient::API_VERSION."/orgs/{$tasks[$i]['Project']->getOrganisationId()}", HTTP_Request2::METHOD_GET);
+                    $tasks[$i] = $client->cast("Task", $stdObject);
+                    $resp = $client->call("$siteApi/v0/projects/{$tasks[$i]->getProjectId()}");
+                    $tasks[$i]['Project'] = $client->cast("Project", $resp);
+
+                    $resp = $client->call("$siteApi/v0/orgs/{$tasks[$i]['Project']->getOrganisationId()}");
+                    $tasks[$i]['Org'] = $client->cast("Organisation", $resp);
                     $i++;
                 }
             }
@@ -118,17 +124,10 @@ class UserRouteHandler
                 "tasks" => $tasks
             ));
             
-
-            $url = APIClient::API_VERSION."/users/$current_user_id/tags";
+            $url = "$siteApi/v0/users/$current_user_id/tags";
             $response = $client->call($url, HTTP_Request2::METHOD_GET, null,
-                                    array("limit" => 10));
-            
-            $user_tags = array();
-            if ($response) {
-                foreach ($response as $stdObject) {
-                    $user_tags[] = $client->cast("Tag", $stdObject);
-                }
-            }
+                                    array('limit' => 10));
+            $user_tags = $client->cast(array("Tag"), $response);
             
             $app->view()->appendData(array(
                         "user_tags" => $user_tags
@@ -152,7 +151,8 @@ class UserRouteHandler
     public function register()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         
         $use_openid = Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
@@ -183,7 +183,7 @@ class UserRouteHandler
                 $registerData["password"] = $post->password;
                 $register =  ModelFactory::buildModel("Register", $registerData);
 
-                $request = APIClient::API_VERSION."/register";
+                $request = "$siteApi/v0/register";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, $register);
 
                 if ($response) {
@@ -193,7 +193,7 @@ class UserRouteHandler
                     $loginData["password"] = $post->password;
                     $login = ModelFactory::buildModel("Login", $loginData);
 
-                    $request = APIClient::API_VERSION."/login";             
+                    $request = "$siteApi/v0/login";             
                     $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
 
                     try {                        
@@ -242,9 +242,10 @@ class UserRouteHandler
     public function passwordReset($uid)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         
-        $request = APIClient::API_VERSION."/password_reset/$uid";
+        $request = "$siteApi/v0/password_reset/$uid";
         $response = $client->call($request);
         if (is_object($response)) {
             $reset_request = $client->cast("PasswordResetRequest", $response);
@@ -266,7 +267,7 @@ class UserRouteHandler
                     $data["password"] = $post->new_password;
                     $data["key"] = $uid;
 
-                    $request = APIClient::API_VERSION."/password_reset";
+                    $request = "$siteApi/v0/password_reset";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, 
                             ModelFactory::buildModel("PasswordReset", $data));
                     
@@ -292,37 +293,38 @@ class UserRouteHandler
     public function passResetRequest()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             if (isset($post->password_reset)) {
-                if (isset($post->email_address) && $post->email_address != "") {
-                    $request = APIClient::API_VERSION."/users/getByEmail/{$post->email_address}";
+                if (isset($post->email_address) && $post->email_address != '') {
+                    $request = "$siteApi/v0/users/getByEmail/{$post->email_address}";
                     $response = $client->call($request, HTTP_Request2::METHOD_GET);
                     $user = $client->cast("User", $response); 
                     
                     if ($user) {  
-                        $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
+                        $request = "$siteApi/v0/users/{$user->getUserId()}/passwordResetRequest";
                         $hasUserRequestedPwReset = $client->call($request, HTTP_Request2::METHOD_GET);
 
                         $message = "";
                         if (!$hasUserRequestedPwReset) {
                             //send request
-                            $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
+                            $request = "$siteApi/v0/users/{$user->getUserId()}/passwordResetRequest";
                             $client->call($request, HTTP_Request2::METHOD_POST);
                             $app->flash("success", "Password reset request sent. Check your email
                                                     for further instructions.");
                             $app->redirect($app->urlFor("home"));
                         } else {
                             //get request time
-                            $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest/time";
+                            $request = "$siteApi/v0/users/{$user->getUserId()}/passwordResetRequest/time";
                             $response = $client->call($request, HTTP_Request2::METHOD_GET);
                             $app->flashNow("info", "Password reset request was already sent on $response.
                                                      Another email has been sent to your contact address.
                                                      Follow the link in this email to reset your password");
                             //Send request
-                            $request = APIClient::API_VERSION."/users/{$user->getUserId()}/passwordResetRequest";
+                            $request = "$siteApi/v0/users/{$user->getUserId()}/passwordResetRequest";
                             $client->call($request, HTTP_Request2::METHOD_POST);
                         }
                     } else {
@@ -346,7 +348,8 @@ class UserRouteHandler
     public function login()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         
         $error = null;
         $openid = new LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
@@ -373,7 +376,7 @@ class UserRouteHandler
                     $loginData["password"] = $post->password;
                     $login = ModelFactory::buildModel("Login", $loginData);
 
-                    $request = APIClient::API_VERSION."/login";             
+                    $request = "$siteApi/v0/login";
                     $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
                     if (!is_array($user) && !is_null($user)) {
                         $user = $client->cast("User", $user);
@@ -423,17 +426,18 @@ class UserRouteHandler
         } else {
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
-                $client = new APIClient();
-                $request = APIClient::API_VERSION."/users/getByEmail/{$retvals["contact/email"]}";
+                $client = new APIHelper(Settings::get("ui.api_format"));
+                $siteApi = Settings::get("site.api");
+                $request = "$siteApi/v0/users/getByEmail/{$retvals['contact/email']}";
                 $response = $client->call($request);
                 if (is_null($response)) {
                     $registerData = array();
                     $registerData["email"] = $retvals["contact/email"];
                     $registerData["password"] = md5($retvals["contact/email"]);
 
-                    $request = APIClient::API_VERSION."/register";
+                    $request = "$siteApi/v0/register";
                     $response = $client->call($request, HTTP_Request2::METHOD_POST, 
-                    ModelFactory::buildModel("Register", $registerData));
+                                        ModelFactory::buildModel("Register", $registerData));
                     $user = $client->cast("User", $response);
                     UserSession::setSession($user->getUserId());
                     return false;
@@ -449,10 +453,11 @@ class UserRouteHandler
     public static function userPrivateProfile()
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         $user_id = UserSession::getCurrentUserID();
         
-        $url = APIClient::API_VERSION."/users/$user_id";
+        $url = "$siteApi/v0/users/$user_id";
         $response = $client->call($url);
         $user = $client->cast("User", $response);
         $languages = TemplateHelper::getLanguageList();      //wait for API support
@@ -481,27 +486,27 @@ class UserRouteHandler
                 $user->setNativeRegionId($langCountry);
 
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $url = APIClient::API_VERSION."/badges/$badge_id";
+                $url = "$siteApi/v0/badges/$badge_id";
                 $response = $client->call($url);
                 $badge = $client->cast("Badge", $response);
                 
-                $request = APIClient::API_VERSION."/users/$user_id/badges";
+                $request = "$siteApi/v0/users/$user_id/badges";
                 $client->call($request, HTTP_Request2::METHOD_POST, $badge);               
 
             }
             
-            $request = APIClient::API_VERSION."/users/$user_id";
+            $request = "$siteApi/v0/users/$user_id";
             $client->call($request, HTTP_Request2::METHOD_PUT, $user);
             
             if ($user->getDisplayName() != "" && $user->getBiography() != ""
                     && $user->getNativeLangId() != "" && $user->getNativeRegionId() != "") {
 
                 $badge_id = BadgeTypes::PROFILE_FILLER;
-                $url = APIClient::API_VERSION."/badges/$badge_id";
+                $url = "$siteApi/v0/badges/$badge_id";
                 $response = $client->call($url);
                 $badge = $client->cast("Badge", $response);
                 
-                $request = APIClient::API_VERSION."/users/$user_id/badges";
+                $request = "$siteApi/v0/users/$user_id/badges";
                 $response = $client->call($request, HTTP_Request2::METHOD_POST, $badge); 
             
             }
@@ -519,9 +524,10 @@ class UserRouteHandler
     public static function userPublicProfile($user_id)
     {
         $app = Slim::getInstance();
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $url = APIClient::API_VERSION."/users/$user_id";
+        $url = "$siteApi/v0/users/$user_id";
         $response = $client->call($url);
         $user = $client->cast("User", $response);
         
@@ -530,68 +536,43 @@ class UserRouteHandler
             
             if (isset($post->revokeBadge) && isset($post->badge_id) && $post->badge_id != ""){
                 $badge_id = $post->badge_id;
-                $request = APIClient::API_VERSION."/users/$user_id/badges/$badge_id";
+                $request = "$siteApi/v0/users/$user_id/badges/$badge_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                 
             }
                 
             if (isset($post->revoke)) {
                 $org_id = $post->org_id;
-                $request = APIClient::API_VERSION."/users/leaveOrg/$user_id/$org_id";
+                $request = "$siteApi/v0/users/leaveOrg/$user_id/$org_id";
                 $response = $client->call($request, HTTP_Request2::METHOD_DELETE); 
             } 
         }
                     
-        $activeJobs = array();        
-        $request = APIClient::API_VERSION."/users/$user_id/tasks";
+        $request = "$siteApi/v0/users/$user_id/tasks";
         $response = $client->call($request);
+        $activeJobs = $client->cast(array('Task'), $response);
         
-        if ($response) {
-            foreach ($response as $stdObject) {
-                $activeJobs[] = $client->cast("Task", $stdObject);
-            }
-        }
-
-        $archivedJobs = array();
-        $request = APIClient::API_VERSION."/users/$user_id/archived_tasks";
-        $response = $client->call($request, HTTP_Request2::METHOD_GET, null, array("limit" => 10 )); 
+        $request = "$siteApi/v0/users/$user_id/archived_tasks";
+        $response = $client->call($request, HTTP_Request2::METHOD_GET, null, array('limit' => 10 )); 
+        $archivedJobs = $client->cast(array("Task"), $response);
         
-        if ($response) {
-            foreach ($response as $stdObject) {
-                $archivedJobs[] = $client->cast("Task", $stdObject);
-            }
-        }        
-         
-        $user_tags = array();
-        $request = APIClient::API_VERSION."/users/$user_id/tags";
+        $request = "$siteApi/v0/users/$user_id/tags";
         $response = $client->call($request);
+        $user_tags = $client->cast(array("Tag"), $response);
         
-        if ($response) {
-            foreach ($response as $stdObject) {
-                $user_tags[] = $client->cast("Tag", $stdObject);
-            }
-        }            
-        
-        $request = APIClient::API_VERSION."/users/$user_id/orgs";
-        $orgs = $client->call($request);
+        $request = "$siteApi/v0/users/$user_id/orgs";
+        $response = $client->call($request);
+        $user_orgs = $client->cast(array("Organisation"), $response);
 
-        $user_orgs = array();
-        if ($orgs) {
-            foreach ($orgs as $org) {
-                $user_orgs[] = $client->cast("Organisation", $org);
-            }
-        }
-        
-        $badges = array();
+        $request = "$siteApi/v0/users/$user_id/badges";
+        $response = $client->call($request);
+        $badges = $client->cast(array("Badge"), $response);
+
         $orgList = array();
-        $request = APIClient::API_VERSION."/users/$user_id/badges";
-        $response = $client->call($request);
-        foreach ($response as $stdObject) {
-            $badge = $client->cast("Badge", $stdObject);
-            $badges[] = $badge;
+        foreach ($badges as $badge) {
             if ($badge->getOwnerId() != null) {
-                $mRequest = APIClient::API_VERSION."/orgs/".$badge->getOwnerId();
-                $mResponse = $client->call($mRequest);
-                $org = $client->cast("Organisation", $mResponse);
+                $request = "$siteApi/v0/orgs/".$badge->getOwnerId();
+                $response = $client->call($request);
+                $org = $client->cast('Organisation', $response);
                 $orgList[$badge->getOwnerId()] = $org;
             }
         }       
