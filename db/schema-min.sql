@@ -195,6 +195,16 @@ CREATE TABLE IF NOT EXISTS `OrgRequests` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table Solas-Match-Test.OrgTranslatorBlacklist
+CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
+  `org_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  UNIQUE KEY `org_id` (`org_id`,`user_id`),
+  KEY `FK_OrgTranslatorBlacklist_Users` (`user_id`),
+  CONSTRAINT `FK_OrgTranslatorBlacklist_Organisations` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_OrgTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- Dumping structure for table Solas-Match-Test.PasswordResetRequests
 
@@ -207,6 +217,18 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
+-- Dumping structure for table Solas-Match-Test.ProjectFiles
+CREATE TABLE IF NOT EXISTS `ProjectFiles` (
+  `project_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `fileToken` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `project_id` (`project_id`),
+  KEY `FK_ProjectFiles_Users` (`user_id`),
+  CONSTRAINT `FK_ProjectFiles_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ProjectFiles_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.Projects
@@ -1100,8 +1122,8 @@ END//
 DELIMITER ;
 
 
+
 -- Dumping structure for procedure Solas-Match-Test.getProject
-DROP PROCEDURE IF EXISTS `getProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
     READS SQL DATA
@@ -1149,7 +1171,7 @@ BEGIN
     end if;
     if sCode is not null then
       set @sID=null;
-		select c.id into @sID from Countries c where c.code=sCode;
+		select c.id into @sID from Languages l where l.code=sCode;
     	set @q = CONCAT(@q, " and p.language_id=", @sID);
     end if;
 
@@ -1158,6 +1180,7 @@ BEGIN
     DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getProjectByTag
 DROP PROCEDURE IF EXISTS `getProjectByTag`;
