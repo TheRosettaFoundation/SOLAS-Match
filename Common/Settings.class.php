@@ -7,7 +7,7 @@ class Settings {
 
     public static function get($var)
     {
-        self::load(dirname(__FILE__).'/includes/conf.ini');
+        self::load(dirname(__FILE__).'/conf/conf.ini');
         $var = explode('.', $var);
         if (isset(self::$settings[$var[1]])) {
             return self::$settings[$var[1]];
