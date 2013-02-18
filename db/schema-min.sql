@@ -1101,15 +1101,15 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getOrgMembers
-DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `id` INT)
 BEGIN
-	SELECT u.*
+select u.id,`display-name`,email,password,biography,(select l.code from Languages l where l.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time`
 	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.id
 	WHERE organisation_id=id;
 END//
 DELIMITER ;
+
 
 
 -- Dumping structure for procedure Solas-Match-Test.getPasswordResetRequests
