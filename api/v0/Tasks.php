@@ -191,8 +191,13 @@ class Tasks {
         }, 'getTaskFile');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:filename/:userId/',
-                                                        function ($id, $filename, $userId) {
+                                                        function ($id, $filename, $userId, $format = ".json") {
             
+            if (!is_numeric($userID) && strstr($userID, '.')) {
+                $userID = explode('.', $userID);
+                $format = '.'.$userID[1];
+                $userID = $userID[0];
+            }
             $dao = new TaskDao();
             $task = $dao->getTask(array("id" => $id));
             if (is_array($task)) {
@@ -206,7 +211,12 @@ class Tasks {
         
         
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/uploadOutputFile/:id/:filename/:userId/',
-                                                        function ($id, $filename, $userId) {
+                                                        function ($id, $filename, $userId, $format = ".json") {
+             if (!is_numeric($userID) && strstr($userID, '.')) {
+                $userID = explode('.', $userID);
+                $format = '.'.$userID[1];
+                $userID = $userID[0];
+            }
             $dao = new TaskDao();
             $task = $dao->getTask(array("id" => $id));
             if (is_array($task)) {
