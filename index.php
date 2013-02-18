@@ -36,6 +36,17 @@ require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
 require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
 require_once 'ui/RouteHandlers/ProjectRouteHandler.class.php';
 
+require_once 'ui/DataAccessObjects/BadgeDao.class.php';
+require_once 'ui/DataAccessObjects/CountryDao.class.php';
+require_once 'ui/DataAccessObjects/LanguageDao.class.php';
+require_once 'ui/DataAccessObjects/UserDao.class.php';
+require_once 'ui/DataAccessObjects/TaskDao.class.php';
+require_once 'ui/DataAccessObjects/TagDao.class.php';
+require_once 'ui/DataAccessObjects/OrganisationDao.class.php';
+require_once 'ui/DataAccessObjects/StatisticsDao.class.php';
+require_once 'ui/DataAccessObjects/ProjectDao.class.php';
+require_once 'ui/DataAccessObjects/TipDao.class.php';
+
 require_once 'Common/models/User.php';
 require_once 'Common/models/Tag.php';
 require_once 'Common/models/Task.php';

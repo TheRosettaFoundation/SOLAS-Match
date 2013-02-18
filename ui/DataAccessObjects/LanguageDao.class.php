@@ -2,12 +2,19 @@
 
 class LanguageDao
 {
+    private $client;
+    private $siteApi;
+    
+    public function __construct()
+    {
+        $this->client = new APIHelper(Settings::get("ui.api_format"));
+        $this->siteApi = Settings::get("site.api");
+    }
+
     public function getLanguage($params)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/languages";
+        $request = "$this->siteApi/v0/languages";
         $id = null;
         $code = null;
         if (isset($params['id'])) {
@@ -18,8 +25,8 @@ class LanguageDao
             $request = "$request/getByCode/$code";
         }
         
-        $response = $client->call($request);
-        $ret = $client->cast(array("Language"), $response);
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("Language"), $response);
         
         if ((!is_null($id) || !is_null($code)) && is_array($ret)) {
             $ret = $ret[0];

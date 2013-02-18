@@ -2,12 +2,19 @@
 
 class OrganisationDao
 {
+    private $client;
+    private $siteApi;
+    
+    public function __construct()
+    {
+        $this->client = new APIHelper(Settings::get("ui.api_format"));
+        $this->siteApi = Settings::get("site.api");
+    }
+
     public function getOrganisation($params)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs";
+        $request = "{$this->siteApi}/v0/orgs";
         
         $id = null;
         $name = null;
@@ -19,8 +26,8 @@ class OrganisationDao
             $request = "$request/getByName/$name";
         }
         
-        $response = $client->call($request);
-        $ret = $client->cast(array("Organisation"), $response);
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("Organisation"), $response);
         
         if ((!is_null($id) || !is_null($name)) && is_array($ret)) {
             $ret = $ret[0];
@@ -32,131 +39,104 @@ class OrganisationDao
     public function getOrgProjects($orgId)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/$orgId/projects";
-        $response = $client->call($request);
-        $ret = $client->cast(array("Project"), $response);
+        $request = "{$this->siteApi}/v0/orgs/$orgId/projects";
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("Project"), $response);
         return $ret;
     }
 
     public function getOrgArchivedProjects($orgId)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/$orgId/archivedProjects";
-        $response = $client->call($request);
-        $ret = $client->cast(array("ArchivedProject"), $response);
+        $request = "{$this->siteApi}/v0/orgs/$orgId/archivedProjects";
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("ArchivedProject"), $response);
         return $ret;
     }
 
     public function getOrgBadges($orgId)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/$orgId/badges";
-        $response = $client->call($request);
-        $ret = $client->cast(array("Badge"), $response);
+        $request = "{$this->siteApi}/v0/orgs/$orgId/badges";
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("Badge"), $response);
         return $ret;
     }
 
     public function getOrgMembers($orgId)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/$orgId/members";
-        $response = $client->call($request);
-        $ret = $client->cast(array("User"), $response);
+        $request = "{$this->siteApi}/v0/orgs/$orgId/members";
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("User"), $response);
         return $ret;
     }
 
     public function getMembershipRequests($orgId)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/$orgId/requests";
-        $response = $client->call($request);
-        $ret = $client->cast(array("MembershipRequest"), $response);
+        $request = "{$this->siteApi}/v0/orgs/$orgId/requests";
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("MembershipRequest"), $response);
         return $ret;
     }
 
     public function getOrgTasks($orgId)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/$orgId/tasks";
-        $response = $client->call($request);
-        $ret = $client->cast(array("Task"), $response);
+        $request = "{$this->siteApi}/v0/orgs/$orgId/tasks";
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("Task"), $response);
         return $ret;
     }
 
     public function isMember($orgId, $userId)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/isMember/$orgId/$userId";
-        $ret = $client->call($request);
+        $request = "{$this->siteApi}/v0/orgs/isMember/$orgId/$userId";
+        $ret = $this->client->call($request);
         return $ret;
     }
 
     public function createOrg($org)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs";
-        $response = $client->call($request, HTTP_Request2::METHOD_POST, $org);
-        $ret = $client->cast(array("Organisation"), $response);
+        $request = "{$this->siteApi}/v0/orgs";
+        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $org);
+        $ret = $this->client->cast(array("Organisation"), $response);
         return $ret;
     }
 
     public function updateOrg($org)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/{$org->getId()}";
-        $response = $client->call($request, HTTP_Request2::METHOD_PUT, $org);
-        $ret = $client->cast(array("Organisation"), $response);
+        $request = "{$this->siteApi}/v0/orgs/{$org->getId()}";
+        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $org);
+        $ret = $this->client->cast(array("Organisation"), $response);
         return $ret;
     }
 
     public function deleteOrg($orgId)
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/{$org->getId()}";
-        $client->call($request, HTTP_Request2::METHOD_DELETE);
+        $request = "{$this->siteApi}/v0/orgs/{$org->getId()}";
+        $this->client->call($request, HTTP_Request2::METHOD_DELETE);
     }
 
     public function createMembershipRequest($orgId, $userId)
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/$orgId/requests/$userId";
-        $client->call($request, HTTP_Request2::METHOD_POST);
+        $request = "{$this->siteApi}/v0/orgs/$orgId/requests/$userId";
+        $this->client->call($request, HTTP_Request2::METHOD_POST);
     }
 
     public function acceptMembershipRequest($orgId, $userId)
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/$orgId/requests/$userId";
-        $client->call($request, HTTP_Request2::METHOD_PUT);
+        $request = "{$this->siteApi}/v0/orgs/$orgId/requests/$userId";
+        $this->client->call($request, HTTP_Request2::METHOD_PUT);
     }
 
     public function rejectMembershipRequest($orgId, $userId)
     {
-    }
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/orgs/$orgId/requests/$userId";
-        $client->call($request, HTTP_Request2::METHOD_DELETE);
+        $request = "{$this->siteApi}/v0/orgs/$orgId/requests/$userId";
+        $this->client->call($request, HTTP_Request2::METHOD_DELETE);
     }
 }

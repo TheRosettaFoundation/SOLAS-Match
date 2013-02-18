@@ -2,13 +2,20 @@
 
 class TipDao
 {
+    private $client;
+    private $siteApi;
+    
+    public function __construct()
+    {
+        $this->client = new APIHelper(Settings::get("ui.api_format"));
+        $this->siteApi = Settings::get("site.api");
+    }
+
     public function getTip()
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/tips";
-        $ret = $client->call($request);
+        $request = "$this->siteApi/v0/tips";
+        $ret = $this->client->call($request);
         return $ret;
     }
 }

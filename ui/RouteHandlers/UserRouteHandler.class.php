@@ -1,5 +1,6 @@
 <?php
 
+require_once "ui/DataAccessObjects/UserDao.class.php";
 require_once "Common/models/Register.php";
 require_once "Common/models/Login.php";
 require_once "Common/models/PasswordResetRequest.php";
@@ -44,25 +45,13 @@ class UserRouteHandler
         $use_statistics = Settings::get("site.stats"); 
         
         if ($use_statistics == 'y') {
-            $request = "$siteApi/v0/stats/totalUsers";
-            $total_users = $client->call($request, HTTP_Request2::METHOD_GET);      
-            
-            $request = "$siteApi/v0/stats/totalOrgs";
-            $total_orgs = $client->call($request, HTTP_Request2::METHOD_GET);
-            
-
-            $request = "$siteApi/v0/stats/totalArchivedTasks";
-            $total_archived_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            $request = "$siteApi/v0/stats/totalClaimedTasks";
-            $total_claimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            $request = "$siteApi/v0/stats/totalUnclaimedTasks";
-            $total_unclaimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            $request = "$siteApi/v0/stats/totalTasks";
-            $total_tasks = $client->call($request, HTTP_Request2::METHOD_GET);  
-
+            $statsDao = new StatisticsDao();
+            $total_users = $statsDao->getTotalUsers();
+            $total_tasks = $statsDao->getTotalTasks();
+            $total_orgs = $statsDao->getTotalOrgs();
+            $total_archived_tasks = $statsDao->getTotalArchivedTasks();
+            $total_claimed_tasks = $statsDao->getTotalClaimedTasks();
+            $total_unclaimed_tasks = $statsDao->getTotalUnclaimedTasks();
             $app->view()->appendData(array(
                         "total_users" => $total_users
                         ,"total_orgs" => $total_orgs
@@ -527,9 +516,11 @@ class UserRouteHandler
         $client = new APIHelper(Settings::get("ui.api_format"));
         $siteApi = Settings::get("site.api");
 
-        $url = "$siteApi/v0/users/$user_id";
-        $response = $client->call($url);
-        $user = $client->cast("User", $response);
+//        $url = "$siteApi/v0/users/$user_id";
+//        $response = $client->call($url);
+//        $user = $client->cast("User", $response);
+        $userDao = new UserDao();
+        $user = $userDao->getUser(array('id' => $user_id));
         
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();

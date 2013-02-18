@@ -2,12 +2,19 @@
 
 class TagDao
 {
+    private $client;
+    private $siteApi;
+    
+    public function __construct()
+    {
+        $this->client = new APIHelper(Settings::get("ui.api_format"));
+        $this->siteApi = Settings::get("site.api");
+    }
+
     public function getTag($params, $limit = null)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/tags";
+        $request = "{$this->siteApi}/v0/tags";
         
         $id = null;
         $label = null;
@@ -24,8 +31,8 @@ class TagDao
             $args = array("limit" => $limit);
         }
         
-        $response = $client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $client->cast(array("Tag"), $response);
+        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
+        $ret = $this->client->cast(array("Tag"), $response);
         
         if ((!is_null($id) || !is_null($label)) && is_array($ret)) {
             $ret = $ret[0];
@@ -37,67 +44,57 @@ class TagDao
     public function getTopTags($limit = null)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/topTags";
+        $request = "{$this->siteApi}/v0/topTags";
 
         $args = null;
         if ($limit) {
             $args = array("limit" => $limit);
         }
 
-        $response = $client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $client->cast(array("Tag"), $response);
+        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
+        $ret = $this->client->cast(array("Tag"), $response);
         return $ret;
     }
 
     public function getTasksWithTag($tagId, $limit = null)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/tags/$tagId/tasks";
+        $request = "{$this->siteApi}/v0/tags/$tagId/tasks";
 
         $args = null;
         if ($limit) {
             $args = array("limit" => $limit);
         }
 
-        $response = $client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $client->cast(array("Task"), $response);
+        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
+        $ret = $this->client->cast(array("Task"), $response);
         return $ret;
     }
 
     public function createTag($tag)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/tags";
-        $response = $client->call($request, HTTP_Request2::METHOD_POST, $tag);
-        $ret = $client->cast("Tag", $response);
+        $request = "{$this->siteApi}/v0/tags";
+        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $tag);
+        $ret = $this->client->cast("Tag", $response);
         return $ret;
     }
 
     public function updateTag($tag)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/tags/{$tag->getId()}";
-        $response = $client->call($request, HTTP_Request2::METHOD_PUT, $tag);
-        $ret = $client->cast("Tag", $response);
+        $request = "{$this->siteApi}/v0/tags/{$tag->getId()}";
+        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $tag);
+        $ret = $this->client->cast("Tag", $response);
         return $ret;
     }
 
     public function deleteTag($tagId)
     {
         $ret = null;
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/tags/{$tag->getId()}";
-        $response = $client->call($request, HTTP_Request2::METHOD_DELETE);
-        $ret = $client->cast("Tag", $response);
+        $request = "{$this->siteApi}/v0/tags/{$tag->getId()}";
+        $response = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $ret = $this->client->cast("Tag", $response);
         return $ret;
     }
 }
