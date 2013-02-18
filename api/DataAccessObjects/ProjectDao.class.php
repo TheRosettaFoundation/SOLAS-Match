@@ -10,10 +10,11 @@ include_once '../Common/models/ArchivedProject.php';
 class ProjectDao
 {
     
-    public function create($params)
+    public function create($project)
     {
-        $project = ModelFactory::buildModel("Project", $params);
-
+        if(!is_object($project)){
+            $project = ModelFactory::buildModel("Project", $project);
+        }
         $this->save($project);
         return $project;
     }
@@ -27,13 +28,8 @@ class ProjectDao
     }
     
     private function save(&$project)
-    {
-        $projectId = "null";
-        if($project->getId() != '') {
-            $projectId = $project->getId();
-        }
-
-        $result = PDOWrapper::call("projectInsertAndUpdate", $projectId
+    {        
+        $args =PDOWrapper::cleanseNull($project->getId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getTitle())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getDescription())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getDeadline())
@@ -42,7 +38,8 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNull($project->getWordCount())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceCountryCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceLanguageCode()));
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceLanguageCode());
+        $result = PDOWrapper::call("projectInsertAndUpdate", $args);
         $project->setId($result[0]['id']);
         $this->updateTags($project);
         return $project;

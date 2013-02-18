@@ -369,7 +369,11 @@ class ProjectRouteHandler
             }            
             
             if($post->deadline != "") {
-                $project->setDeadline($post->deadline);
+                $since_unix = strtotime($post->deadline);
+                //$date = date_create_from_format('j F Y H:i', $post->deadline);
+                $date = date("Y-m-d H:i:s", $since_unix);  
+                $project->setDeadline($date);
+                
             } else {
                 $deadline_err = "Project <b>Deadline</b> must be set.";
             }
@@ -544,12 +548,8 @@ class ProjectRouteHandler
         }
 
         $extra_scripts = "
-            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/datepickr.css\" />
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}resources/bootstrap/js/datepickr.js\"></script>
-            <script type=\"text/javascript\">
-                window.onload = function() {
-                    new datepickr(\"deadline\");
-                };
+            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
             </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-create.js");
   
         

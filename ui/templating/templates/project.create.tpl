@@ -80,7 +80,7 @@
                     
                     <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
                     <p class="desc">When the project and its tasks should be completed by.</p>
-                    <input type="text" id="deadline" name="deadline" value="{if isset($project)}{$project->getDeadline()}{/if}"/>
+                    <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{$project->getDeadline()}{/if}"/>                    
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="tags"><h2>Tags:</h2></label>
