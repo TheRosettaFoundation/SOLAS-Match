@@ -26,9 +26,11 @@ class UserDao
             $request = "$request/getByEmail/$email";
         }
 
+        $response = $this->client->call($request);
         if (!is_null($id) || !is_null($email)) {
-            $response = $this->client->call($request);
             $ret = $this->client->cast("User", $response);
+        } else {
+            $ret = $this->client->cast(array("User"), $response);
         }
         
         return $ret;

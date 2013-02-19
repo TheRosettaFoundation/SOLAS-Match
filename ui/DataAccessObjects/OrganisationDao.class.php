@@ -22,17 +22,26 @@ class OrganisationDao
             $id = $params['id'];
             $request = "$request/$id";
         } elseif (isset($params['name'])) {
-            $code = $params['code'];
+            $name = $params['name'];
             $request = "$request/getByName/$name";
         }
-        
+       
         $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Organisation"), $response);
-        
-        if ((!is_null($id) || !is_null($name)) && is_array($ret)) {
-            $ret = $ret[0];
+        if (!is_null($id) || !is_null($name)) {
+            $ret = $this->client->cast("Organisation", $response);
+        } else {
+            $ret = $this->client->cast(array("Organisation"), $response);
         }
         
+        return $ret;
+    }
+
+    public function searchForOrg($name)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}/v0/orgs/getByName/$name";
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("Organisation"), $response);
         return $ret;
     }
 
@@ -103,7 +112,7 @@ class OrganisationDao
         $ret = null;
         $request = "{$this->siteApi}/v0/orgs";
         $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $org);
-        $ret = $this->client->cast(array("Organisation"), $response);
+        $ret = $this->client->cast("Organisation", $response);
         return $ret;
     }
 
@@ -124,8 +133,10 @@ class OrganisationDao
 
     public function createMembershipRequest($orgId, $userId)
     {
+        $ret = null;
         $request = "{$this->siteApi}/v0/orgs/$orgId/requests/$userId";
-        $this->client->call($request, HTTP_Request2::METHOD_POST);
+        $ret = $this->client->call($request, HTTP_Request2::METHOD_POST);
+        return $ret;
     }
 
     public function acceptMembershipRequest($orgId, $userId)
