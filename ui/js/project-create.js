@@ -3,19 +3,7 @@
     var MAX_FIELDS = 10;
     var isRemoveButtonHidden = true;
 
-    var isEnabledArray = new Array(false);
-    
-    //date_format='j F Y - H:i T'
-    $(document).ready(function() { 
-        $('#deadline').datetimepicker({
-            timeFormat: "HH:mm",
-            dateFormat: "d MM yy",
-            stepHour: 1,
-            stepMinute: 10
-            
-        });   
-    })
-
+    var isEnabledArray = new Array(false); 
 
     function addNewTarget() {
 

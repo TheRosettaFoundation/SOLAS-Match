@@ -50,7 +50,7 @@ class Projects
                 $data = $client->deserialize($data);
                 $data = $client->cast('Project', $data);
                 $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->create($data), null, $format);
+                Dispatcher::sendResponce(null, $dao->createUpdate($data), null, $format);
             }, 'createProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:id/',
@@ -66,7 +66,7 @@ class Projects
                 $data = $client->deserialize($data);
                 $data = $client->cast('Project', $data);
                 $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->update($data), null, $format);
+                Dispatcher::sendResponce(null, $dao->createUpdate($data), null, $format);
             }, 'updateProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/',

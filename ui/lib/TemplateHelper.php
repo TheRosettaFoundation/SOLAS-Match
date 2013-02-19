@@ -63,25 +63,17 @@ class TemplateHelper {
             self::emailContainsCharacter($email, '.')
         );      
     }
-
-    public static function isValidTime($time)
+    
+    public static function isValidDateTime($dateTime)
     {
-
-        if (strlen($time) > 5) {
-            return false;
-        } elseif (strpos($time, ":") === false) {
-            return false;
+        $cleansedDateTime = str_replace("UTC", "", $dateTime);
+        if($unixTime = strtotime($cleansedDateTime)) {
+            return true;
         } else {
-            $hour = substr($time, 0, strpos($time, ":"));
-            $minute = substr($time, strpos($time, ":") + 1, strlen($time));
-            if(!is_numeric($hour) || intval($hour) > 24 || !is_numeric($minute) || intval($minute) > 60) {
-                return false;
-            }
-        }
-
-        return true;
+            return false;
+        }        
     }
-
+    
     public static function addTimeToUnixTime($unixTime, $timeStr) 
     {
         $ret = $unixTime;

@@ -600,13 +600,10 @@ class TaskRouteHandler
         $extra_scripts = "
 
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/selectable.css\" />
-        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/datepickr.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}resources/bootstrap/js/datepickr.js\"></script>
-        <script type=\"text/javascript\">
-            window.onload = function() {
-                new datepickr(\"deadline_date\");
-            };
-        </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-alter.js");
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>"
+        .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js")  
+        .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-alter.js");
 
         $request = "$siteApi/v0/tasks/$task_id";
         $response = $client->call($request);     
@@ -654,27 +651,14 @@ class TaskRouteHandler
                 $task->setComment($post->impact);
             }
 
-            $deadline = "";
-            if ($post->deadline_date != "") {
-                $deadline = strtotime($post->deadline_date);
-
-                if($deadline) {
-                    if ($post->deadline_time != "") {
-                        if (TemplateHelper::isValidTime($post->deadline_time) == true) {
-                            $deadline = TemplateHelper::addTimeToUnixTime($deadline, $post->deadline_time);
-                        } else {
-                            $deadlineError = "Invalid time format. Please enter time in a 24-hour format like ";
-                            $deadlineError .= "this 16:30";
-                        }
-                    }
+            if ($post->deadline != "") {
+                if (TemplateHelper::isValidDateTime($post->deadline) == true) {
+                    $unixTime = strtotime($post->deadline);
+                    $date = date("Y-m-d H:i:s", $unixTime);  
+                    $task->setDeadline($date);
                 } else {
-                    $deadline = "";
-                    $deadlineError = "Invalid date format";
+                    $deadlineError = "Invalid date/time format!";
                 }
-            }
-
-            if($deadline != "" && $deadlineError == "") {
-                $task->setDeadline(date("Y-m-d H:i:s", $deadline));
             }
             
             if ($post->target != "") {
@@ -776,8 +760,6 @@ class TaskRouteHandler
                               "hiddenPreReqList"=> $hiddenPreReqList,
                               "word_count_err"  => $word_count_err,
                               "deadlockError"   => $deadlockError,
-                              "deadlineDate"    => $deadlineDate,
-                              "deadlineTime"    => $deadlineTime,
                               "deadline_error"  => $deadlineError
         ));
         
@@ -1010,27 +992,14 @@ class TaskRouteHandler
                 $wordCountError = "Word Count cannot be blank";
             }
 
-            $deadline = "";
-            if ($post->deadline_date != "") {
-                $deadline = strtotime($post->deadline_date);
-                
-                if($deadline) {
-                    if ($post->deadline_time != "") {
-                        if (TemplateHelper::isValidTime($post->deadline_time) == true) {
-                            $deadline = TemplateHelper::addTimeToUnixTime($deadline, $post->deadline_time);
-                        } else {
-                            $deadlineError = "Invalid time format. Please enter time in a 24-hour format like ";
-                            $deadlineError .= "this 16:30";
-                        }
-                    }
+            if ($post->deadline != "") {
+                if (TemplateHelper::isValidDateTime($post->deadline) == true) {
+                    $unixTime = strtotime($post->deadline);
+                    $date = date("Y-m-d H:i:s", $unixTime);  
+                    $task->setDeadline($date);
                 } else {
-                    $deadline = "";
-                    $deadlineError = "Invalid date format";
+                    $deadlineError = "Invalid date/time format!";
                 }
-            }
-            
-            if ($deadline != "" && $deadlineError == "") {
-                $task->setDeadline(date("Y-m-d H:i:s", $deadline));
             }
 
             if (isset($post->published)) {
@@ -1057,8 +1026,6 @@ class TaskRouteHandler
             }
         }
 
-        $deadlineDate = date("F dS, Y", strtotime($task->getDeadline()));
-        $deadlineTime = date("H:i", strtotime($task->getDeadline()));
 
         $languages = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
@@ -1070,10 +1037,8 @@ class TaskRouteHandler
         $taskTypes[TaskTypeEnum::POSTEDITING] = "Postediting";
 
         $extra_scripts = "
-        <link rel=\"stylesheet\" href=\"{$app->urlFor("home")}resources/css/jquery-ui.css\" />
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/selectable.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui.js\"></script>
-        <script>
+        <script language='javascript'>
         $(function() {
             $( \"#selectable\" ).selectable({
                 stop: function() {
@@ -1088,24 +1053,16 @@ class TaskRouteHandler
                 }
             });
         });
-        </script>
-
-        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/datepickr.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}resources/bootstrap/js/datepickr.js\"></script>
-        <script type=\"text/javascript\">
-            window.onload = function() {
-                new datepickr(\"deadline_date\");
-            };
-        </script>
-        ";
+        </script> 
+        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>"
+        .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js");
 
         $app->view()->appendData(array(
                 "project"       => $project,
                 "task"          => $task,
                 "projectTasks"  => $projectTasks,
                 "taskPreReqs"   => $taskPreReqs,
-                "deadlineDate"  => $deadlineDate,
-                "deadlineTime"  => $deadlineTime,
                 "languages"     => $languages,
                 "countries"     => $countries,
                 "taskTypes"     => $taskTypes,

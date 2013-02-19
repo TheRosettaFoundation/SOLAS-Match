@@ -10,19 +10,8 @@ include_once '../Common/models/ArchivedProject.php';
 class ProjectDao
 {
     
-    public function create($project)
+    public function createUpdate($project)
     {
-        if(!is_object($project)){
-            $project = ModelFactory::buildModel("Project", $project);
-        }
-        $this->save($project);
-        return $project;
-    }
-
-    public function update($params)
-    {
-        $project = ModelFactory::buildModel("Project", $params);
-        
         $this->save($project);
         return $project;
     }

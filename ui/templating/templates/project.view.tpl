@@ -5,7 +5,7 @@
     <small>Overview of project details.</small>
     {assign var="project_id" value=$project->getId()}
     
-    {if isset($projectTasks)}
+    {if isset($isOrgMember)}
         <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
             <i class="icon-wrench icon-white"></i> Edit Project
         </a> 
@@ -136,7 +136,7 @@
                 
 <p style="margin-bottom:40px;"></p>
 
-{if isset($user) && isset($projectTasks)}
+{if isset($user) && isset($isOrgMember)}
     <hr />
     
     <h1 class="page-header">
