@@ -23,10 +23,10 @@ class TaskDao
         }
         
         $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Task"), $response);
-        
-        if (!is_null($id) && is_array($ret)) {
-            $ret = $ret[0];
+        if (!is_null($id)) {
+            $ret = $this->client->cast("Task", $response);
+        } else {
+            $ret = $this->client->cast(array("Task"), $response);
         }
         
         return $ret;

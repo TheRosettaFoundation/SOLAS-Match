@@ -26,10 +26,10 @@ class CountryDao
         }
         
         $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Country"), $response);
-        
-        if ((!is_null($id) || !is_null($code)) && is_array($ret)) {
-            $ret = $ret[0];
+        if (!is_null($id) || !is_null($code)) {
+            $ret = $this->client->cast("Country", $response);
+        } else {
+            $ret = $this->client->cast(array("Country"), $response);
         }
         
         return $ret;

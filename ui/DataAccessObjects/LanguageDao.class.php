@@ -26,10 +26,10 @@ class LanguageDao
         }
         
         $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Language"), $response);
-        
-        if ((!is_null($id) || !is_null($code)) && is_array($ret)) {
-            $ret = $ret[0];
+        if (!is_null($id) || !is_null($code)) {
+            $ret = $this->client->cast("Language", $response);
+        } else {
+            $ret = $this->client->cast(array("Language"), $response);
         }
         
         return $ret;

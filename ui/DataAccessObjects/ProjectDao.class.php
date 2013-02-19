@@ -23,7 +23,7 @@ class ProjectDao
         }
 
         $response = $this->client->call($request);
-        if (!is_null($id) && is_array($ret)) {
+        if (!is_null($id)) {
             $ret = $this->client->cast("Project", $response);
         } else {
             $ret = $this->client->cast(array("Project"), $response);
