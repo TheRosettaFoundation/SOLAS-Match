@@ -26,7 +26,7 @@
 
 
 
-<table class="table table-striped">
+<table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
     <thead>            
         <th style="text-align: left"><b>Organisation</b></th>
         <th>Source Language</th>
@@ -40,7 +40,7 @@
           
     </thead>
     <tbody>
-        <tr>
+        <tr style="overflow-wrap: break-word;">
             <td style="text-align: left">
                 {if isset($org)}
                     {assign var="org_id" value=$org->getId()}
@@ -160,7 +160,7 @@
         
 
     {if isset($projectTasks) && count($projectTasks) > 0}
-        <table class="table table-striped">
+        <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
                 <tr>
                     <th>
@@ -193,7 +193,7 @@
             <tbody>
                 {foreach from=$projectTasks item=task}
                     {assign var="task_id" value=$task->getId()}
-                    <tr>
+                    <tr style="overflow-wrap: break-word;">
                         <td>
                             <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a><br/>
                         </td>
