@@ -67,4 +67,17 @@ class StatDao {
 
         return $ret;
     }
+    
+    public static function getStatistics($name)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call('getStatistics', PDOWrapper::cleanseNullOrWrapStr($name))) {
+            
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Statistic", $row);
+            }
+        }
+        return $ret;
+    }
 }

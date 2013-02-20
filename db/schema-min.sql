@@ -3038,6 +3038,26 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getStatistics
+DROP PROCEDURE IF EXISTS `getStatistics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatistics`()
+BEGIN
+	IF statName = '' THEN SET statName = NULL; END IF;
+	
+	set @q = "SELECT * FROM Statistics st where 1";
+	
+	if statName is not null then 
+		set @q = CONCAT(@q," and st.name='", statName,"'");
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
