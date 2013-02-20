@@ -32,10 +32,10 @@ class TagDao
         }
         
         $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("Tag"), $response);
-        
-        if ((!is_null($id) || !is_null($label)) && is_array($ret)) {
-            $ret = $ret[0];
+        if (!is_null($id) || !is_null($label)) {
+            $ret = $this->client->cast("Tag", $response);
+        } else {
+            $ret = $this->client->cast(array("Tag"), $response);
         }
         
         return $ret;
@@ -44,7 +44,7 @@ class TagDao
     public function getTopTags($limit = null)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/topTags";
+        $request = "{$this->siteApi}v0/tags/topTags";
 
         $args = null;
         if ($limit) {

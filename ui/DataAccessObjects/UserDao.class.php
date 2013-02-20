@@ -209,7 +209,7 @@ class UserDao
     public function updateUser($user)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/users/{$user->getId()}";
+        $request = "{$this->siteApi}/v0/users/{$user->getUserId()}";
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $user);
         $ret = $this->client->cast("User", $response);
         return $ret;
@@ -280,11 +280,15 @@ class UserDao
         return $ret;
     }
 
-    public function login($loginData)
+    public function login($email, $password)
     {
         $ret = null;
+        $login = new Login();
+        $login->setEmail($email);
+        $login->setPassword($password);
         $request = "{$this->siteApi}/v0/login";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_POST, $loginData);
+        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $login);
+        $ret = $this->client->cast("User", $response);
         return $ret;
     }
 
@@ -313,9 +317,10 @@ class UserDao
         $ret = null;
         $registerData = new Register();
         $registerData->setEmail($email);
-        $registerData->setPassword($password);
+        $registerData->setPassword(md5($password));
         $request = "{$this->siteApi}/v0/register";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_POST, $registerData);
+        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $registerData);
+        $ret = $this->client->cast("User", $response);
         return $ret;
     }
 }
