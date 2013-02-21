@@ -16,6 +16,13 @@
             </td>
         </tr>
         <tr>
+            <td>Projects Total:</td>
+            <td>&nbsp;</td>
+            <td style="padding-left: 50px">
+                <b>{$statsArray['TotalProjects']->getValue()}</b>
+            </td>
+        </tr>
+        <tr>
             <td>Projects:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
@@ -30,7 +37,7 @@
             </td>
         </tr>
         <tr>
-            <td>Tasks:</td>
+            <td>Tasks Total:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
                 <b>{$statsArray['Tasks']->getValue()}</b>

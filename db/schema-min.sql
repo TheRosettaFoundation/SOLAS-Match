@@ -3080,7 +3080,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
 -- Dumping structure for procedure Solas-Match-Test.statsUpdateAll
 DROP PROCEDURE IF EXISTS `statsUpdateAll`;
 DELIMITER //
@@ -3096,10 +3095,25 @@ BEGIN
 	CALL statsUpdateTags;
 	CALL statsUpdateTasks;
 	CALL statsUpdateTasksWithPreReqs;
+        CALL statsUpdateTotalProjects;
 	CALL statsUpdateUnclaimedTasks;
 	CALL statsUpdateUsers;
 END//
 DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateProjects
+DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
+BEGIN
+	SET @Projects = 0;		
+	SELECT count(1) INTO @Projects FROM Projects;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Projects', @Projects);	
+END//
+DELIMITER ;
+
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
