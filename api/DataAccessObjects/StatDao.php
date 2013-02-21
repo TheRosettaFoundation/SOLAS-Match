@@ -76,6 +76,7 @@ class StatDao {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Statistic", $row);
+                //$ret[$stat->getName()] = $stat;
             }
         }
         return $ret;

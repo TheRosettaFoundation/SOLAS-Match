@@ -280,6 +280,21 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
 
 -- Data exporting was unselected.
 
+-- Dumping data for table Solas-Match-Test.Statistics
+/*!40000 ALTER TABLE `Statistics` DISABLE KEYS */;
+REPLACE INTO `Statistics` (`name`, `value`) VALUES
+	('ArchivedProjects', 0),
+	('ArchivedTasks', 0),
+        ('Badges', 0),
+	('ClaimedTasks', 0),
+	('Organisations', 0),
+	('OrgMembershipRequests', 0),
+	('Projects', 0),
+	('Tags', 0),
+	('Tasks', 0),
+	('TasksWithPreReqs', 0),
+	('UnclaimedTasks', 0),
+	('Users', 0);
 
 -- Dumping structure for table Solas-Match-Test.Tags
 
@@ -2889,8 +2904,13 @@ DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
 BEGIN
-	SET @totalProjects = 0;	
-	SELECT count(1) INTO @totalProjects FROM Projects;	
+	SET @Projects = 0;
+	SET @ArchivedProjects = 0;	
+	
+	SELECT count(1) INTO @Projects FROM Projects;	
+	SELECT count(1) INTO @ArchivedProjects FROM ArchivedProjects;
+	
+	SET @totalProjects = @Projects + @ArchivedProjects;
 	REPLACE INTO Statistics (name, value)
 	VALUES ('Projects', @totalProjects);
 END//
@@ -2981,20 +3001,23 @@ BEGIN
 	SET @totalTasks = 0;
 	SET @claimedTasks = 0;
 	SET @unclaimedTasks = 0;
-	SET @archivedTasks = 0;
+	SET @totalTasksWithPreReqs = 0;
+	SET @archivedTasks = 0;	
 	
 	SELECT count(1) INTO @claimedTasks FROM TaskClaims;
 	
 	SELECT count(1) into @unclaimedTasks from Tasks t
 	WHERE t.id NOT IN
 	(
-            SELECT task_id
-            FROM  TaskClaims
+	  SELECT task_id
+	  FROM  TaskClaims
 	);
 	
-	SELECT count(1) INTO @archivedTasks FROM ArchivedTasks;
+	SELECT count(1) INTO @archivedTasks FROM ArchivedTasks;	
+
+	SELECT count(DISTINCT tp.task_id) INTO @totalTasksWithPreReqs FROM TaskPrerequisites tp;
 	
-	SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks;	
+	SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks + @totalTasksWithPreReqs;	
 	REPLACE INTO Statistics (name, value)
 	VALUES ('Tasks', @totalTasks);
 END//
@@ -3057,6 +3080,26 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateAll
+DROP PROCEDURE IF EXISTS `statsUpdateAll`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateAll`()
+BEGIN
+	CALL statsUpdateArchivedProjects;
+	CALL statsUpdateArchivedTasks;
+	CALL statsUpdateBadges;
+	CALL statsUpdateClaimedTasks;
+	CALL statsUpdateOrganisations;
+	CALL statsUpdateOrgMemberRequests;
+	CALL statsUpdateProjects;
+	CALL statsUpdateTags;
+	CALL statsUpdateTasks;
+	CALL statsUpdateTasksWithPreReqs;
+	CALL statsUpdateUnclaimedTasks;
+	CALL statsUpdateUsers;
+END//
+DELIMITER ;
 
 /*---------------------------------------end of procs----------------------------------------------*/
 

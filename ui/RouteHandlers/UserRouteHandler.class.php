@@ -44,33 +44,20 @@ class UserRouteHandler
         $use_statistics = Settings::get("site.stats"); 
         
         if ($use_statistics == 'y') {
-            $request = "$siteApi/v0/stats/totalUsers";
-            $total_users = $client->call($request, HTTP_Request2::METHOD_GET);      
             
-            $request = "$siteApi/v0/stats/totalOrgs";
-            $total_orgs = $client->call($request, HTTP_Request2::METHOD_GET);
-            
-
-            $request = "$siteApi/v0/stats/totalArchivedTasks";
-            $total_archived_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            $request = "$siteApi/v0/stats/totalClaimedTasks";
-            $total_claimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            $request = "$siteApi/v0/stats/totalUnclaimedTasks";
-            $total_unclaimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            $request = "$siteApi/v0/stats/totalTasks";
-            $total_tasks = $client->call($request, HTTP_Request2::METHOD_GET);  
+            $request = "$siteApi/v0/stats";
+            $statistics = $client->call($request, HTTP_Request2::METHOD_GET);    
+            $statsArray = null;
+            if($statistics) {
+                $statsArray = array();
+                foreach($statistics as $stat) {
+                    $statObj = $client->cast("Statistic", $stat);
+                    $statsArray[$statObj->getName()] = $statObj;
+                }
+            }
 
             $app->view()->appendData(array(
-                        "total_users" => $total_users
-                        ,"total_orgs" => $total_orgs
-                        ,"stats" => $use_statistics
-                        ,"total_archived_tasks" => $total_archived_tasks
-                        ,"total_claimed_tasks" => $total_claimed_tasks
-                        ,"total_unclaimed_tasks" => $total_unclaimed_tasks
-                        ,"total_tasks" => $total_tasks
+                "statsArray" => $statsArray
             ));
         }
         
