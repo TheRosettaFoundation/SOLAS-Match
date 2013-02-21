@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Common/lib/APIHelper.class.php';
+
 class BadgeDao
 {
     private $client;

@@ -124,6 +124,7 @@ class ProjectRouteHandler
                 }
             }
             
+            //This should not be here!!!!!!!!!
             if(isset($post->feedback)) {
                 $feedback = new FeedbackEmail();               
     

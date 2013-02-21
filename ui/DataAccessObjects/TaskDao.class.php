@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Common/lib/APIHelper.class.php';
+
 class TaskDao
 {
     private $client;
@@ -93,11 +95,11 @@ class TaskDao
         $request = "{$this->siteApi}/v0/tasks/$taskId/info";
         $args = array("version" => $version);
         $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("TaskMetaData"), $response);
+        $ret = $this->client->cast("TaskMetaData", $response);
         return $ret;
     }
 
-    public function getClaimedTasks($taskId, $userId = null)
+    public function isTaskClaimed($taskId, $userId = null)
     {
         $ret = null;
         $request = "{$this->siteApi}/v0/tasks/$taskId/claimed";
@@ -107,8 +109,7 @@ class TaskDao
             $args = array("userID" => $userId);
         }
 
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("Task"), $response);
+        $ret = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
         return $ret;
     }
 
@@ -117,7 +118,7 @@ class TaskDao
         $ret = null;
         $request = "{$this->siteApi}/v0/tasks/$taskId/user";
         $response = $this->client->call($request);
-        $ret = $this->client->cast(array("User"), $response);
+        $ret = $this->client->cast("User", $response);
         return $ret;
     }
 
@@ -169,22 +170,35 @@ class TaskDao
         $this->client->call($request, HTTP_Request2::METHOD_PUT, $task);
     }
 
-    public function sendFeedback($feedbackData)
+    public function sendFeedback($taskId, $userIds, $feedback)
     {
+        $feedbackData = new FeedbackEmail();
+        $feedbackData->setTaskId($taskId);
+        if (is_array($userIds)) {
+            foreach ($userIds as $userId) {
+                $feedbackData->addUserId($userId);
+            }
+        } else {
+            $feedbackData->addUserId($userIds);
+        }
+        $feedbackData->setFeedback($feedback);
         $request = "{$this->siteApi}/v0/tasks/{$feedbackData->getTaskId()}/feedback";
         $this->client->call($request, HTTP_Request2::METHOD_PUT, $feedbackData);
     }
 
-    public function saveTaskFile($taskId, $filename, $userId, $fileData, $version = 0, $convert = false)
+    public function saveTaskFile($taskId, $filename, $userId, $fileData, $version = null, $convert = false)
     {
-        $request = "{$this->siteApi}/v0/tasks/$taskId/file/$filename/$userId";
+        $request = "{$this->siteApi}v0/tasks/$taskId/file/$filename/$userId";
 
-        $args = array("version" => $version);
+        $args = array();
+        if ($version) {
+            $args["version"] = $version;
+        }
         if ($convert) {
             $args['convertFromXliff'] = $convert;
         }
 
-        $this->client->call($request, HTTP_Request2::METHOD_PUT, $fileData, $args);
+        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $fileData, $args);
     }
 
     public function uploadOutputFile($taskId, $filename, $userId, $fileData, $convert = false)

@@ -21,7 +21,6 @@ require_once 'Common/Settings.class.php';
 require_once 'Common/lib/Authentication.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
 require_once 'Common/lib/BadgeTypes.class.php';
-require_once 'Common/lib/APIHelper.class.php';
 
 require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
