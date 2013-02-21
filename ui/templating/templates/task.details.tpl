@@ -65,7 +65,7 @@
             <th width="48%" align="left">Project Description:<hr/></th>
         </thead>
         <tbody>
-            <tr style="overflow-wrap: break-word;">
+            <tr style="overflow-wrap: break-word;" valign="top">
                 <td>
                     <i>
                         {if $task->getComment() != ''}
@@ -85,6 +85,32 @@
                         {/if}
                     </i>
                 </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding-bottom: 40px"></td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Project Impact:</b><hr/>
+                </td>
+                <td></td>
+                <td>
+                    <b>Task Tags:</b><hr/>
+                </td>
+            </tr>
+            <tr valign="top">                
+                <td>
+                    <i>
+                    {if $project->getImpact() != ''}
+                        {$project->getImpact()}
+                    {else}
+                        No impact has been added.
+                    {/if}  
+                    </i> 
+                </td>    
+                <td></td>
+                <td>
+                </td>                    
             </tr>
         </tbody>
     </table>

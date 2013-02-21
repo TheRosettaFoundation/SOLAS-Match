@@ -21,6 +21,7 @@ class ProjectDao
         $args =PDOWrapper::cleanseNull($project->getId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getTitle())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getDescription())
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getImpact())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getDeadline())
                 .",".PDOWrapper::cleanseNull($project->getOrganisationId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getReference())
@@ -93,6 +94,11 @@ class ProjectDao
         }
         if (isset($params['description'])) {
             $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['description']);
+        } else {
+            $args .= ", null";
+        }
+        if (isset($params['impact'])) {
+            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['impact']);
         } else {
             $args .= ", null";
         }
@@ -178,6 +184,11 @@ class ProjectDao
         }
         if(isset($params['description'])) {
             $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['description']);
+        } else {
+            $args .= ", null";
+        }
+        if(isset($params['impact'])) {
+            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['impact']);
         } else {
             $args .= ", null";
         }

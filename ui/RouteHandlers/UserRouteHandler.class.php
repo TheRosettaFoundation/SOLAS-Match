@@ -83,11 +83,11 @@ class UserRouteHandler
                 $resp = $client->call("$siteApi/v0/orgs/{$tasks[$i]['Project']->getOrganisationId()}");
                 $tasks[$i]['Org'] = $client->cast("Organisation", $resp);
             }
-            if ($tasks) {
-                $app->view()->appendData(array(
-                    "tasks" => $tasks
-                ));
-            }
+
+            $app->view()->appendData(array(
+                "tasks" => $tasks
+            ));
+
         } else {
             $url = "$siteApi/v0/users/$current_user_id/top_tasks";
             $response = $client->call($url, HTTP_Request2::METHOD_GET, null,

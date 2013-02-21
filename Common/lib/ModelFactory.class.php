@@ -444,6 +444,9 @@ class ModelFactory
         if(isset($modelData['organisation_id'])) {
             $ret->setOrganisationId($modelData['organisation_id']);
         }
+        if(isset($modelData['impact'])) {
+            $ret->setImpact($modelData['impact']);
+        }
         if(isset($modelData['reference'])) {
             $ret->setReference($modelData['reference']);
         }

@@ -338,6 +338,8 @@ class ProjectRouteHandler
         $title_err      = null;
         $deadline_err   = null;
         $word_count_err = null;
+        $description_err= null;
+        $impact_err     = null;
         $targetLanguage_err = null;
         $project       = new Project();
 
@@ -365,7 +367,16 @@ class ProjectRouteHandler
             
             if(($post->description != "")) {
                 $project->setDescription($post->description);
+            } else {
+                $description_err = "Project <b>Description</b> must be set.";
             }
+            
+            if(($post->impact != "")) {
+                $project->setImpact($post->impact);
+            } else {
+                $impact_err = "Project <b>Impact</b> must be set.";
+            }
+            
             if(($post->reference != "")) {
                 $project->setReference($post->reference);
             }
@@ -549,6 +560,8 @@ class ProjectRouteHandler
             "error"             => $error,
             "title_error"       => $title_err,
             "word_count_err"    => $word_count_err,
+            "description_err"   => $description_err,
+            "impact_err"        => $impact_err,
             "url_project_upload" => $app->urlFor("project-create", array("org_id" => $org_id)),
             "languages"         => $language_list,
             "countries"         => $countries,
