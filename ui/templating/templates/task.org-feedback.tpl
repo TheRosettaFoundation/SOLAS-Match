@@ -2,6 +2,8 @@
 
 {assign var="task_id" value=$task->getId()}
 
+{include file="handle-flash-messages.tpl"}
+
 <h1 class="page-header">   
     {if $task->getTitle() != ''}
         {$task->getTitle()}
@@ -105,12 +107,11 @@
 <div style="margin-bottom: 40px"></div>  
 
 <div class="well">
-    <b>User Feedback:</b><hr/>    
-    <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}">
-        <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="You can provide direct feedback to the translator who claimed this task here."></textarea>                    
-        <input type="hidden" name="revokeTaskId" value="{$task_id}" />  
-        <input type="hidden" name="revokeUserId" value="{$user_id}" /> 
-        <input type="hidden" name="revokeTask" value="1" />
+    <b>User Feedback:</b><hr/>
+    <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" 
+                action="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
+        <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" 
+                placeholder="You can provide direct feedback to the translator who claimed this task here."></textarea>                    
         <p style="margin-bottom:30px;"></p> 
         
         <span style="float: left; position: relative; top:-20px">

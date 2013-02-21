@@ -11,19 +11,14 @@ class BadgeRouteHandler
     public function badgeList()
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
 
-        $badgeList = array();
         $org_list = array();
-        $request = "$siteApi/v0/badges";
-        $response = $client->call($request);
-        $badgeList = $client->cast(array("Badge"), $response);
+        $orgDao = new OrganisationDao();
+        $badgeDao = new BadgeDao();
+        $badgeList = $badgeDao->getBadges();
         foreach ($badgeList as $badge) {
             if ($badge->getOwnerId() != null) {
-                $mRequest = "$siteApi/v0/orgs/".$badge->getOwnerId();
-                $mResponse = $client->call($mRequest);
-                $org = $client->cast("Organisation", $mResponse);
+                $org = $orgDao->getOrganisation(array('id' => $badge->getOwnerId()));;
                 $org_list[$badge->getOwnerId()] = $org;
             }
         }

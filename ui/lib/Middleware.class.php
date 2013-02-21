@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Common/lib/APIHelper.class.php';
+
 class Middleware
 {
     public static function authUserIsLoggedIn()
@@ -16,52 +18,40 @@ class Middleware
     public static function authenticateUserForTask($request, $response, $route) 
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $params = $route->getParams();        
-        $taskClaimed=false;
+        $taskDao = new TaskDao();
+        $params = $route->getParams(); 
+
+        $user_id = UserSession::getCurrentUserID();
+        if (is_null($user_id)) {
+            $app->flash('error', 'Login required to access page');
+            $app->redirect($app->urlFor('login'));
+        }
+
+        $claimant = null;
         if ($params !== null) {
             $task_id = $params['task_id'];
-            $request = "$siteApi/v0/tasks/$task_id/claimed";
-            $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);             
+            $claimant = $taskDao->getUserClaimedTask($task_id);             
         }
-        if ($taskClaimed) {
-            $user_id = UserSession::getCurrentUserID();
-            if (is_null($user_id)) {
-                $app->flash('error', 'Login required to access page');
-                $app->redirect($app->urlFor('login'));
-            }
-            $request = "$siteApi/v0/tasks/$task_id/claimed";
-            $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET,
-                                            null, array("userID" => $user_id));
-
-            if (!$userClaimedTask) {
+        if ($claimant) {
+            if ($user_id != $claimant->getUserId()) {
                 $app->flash('error', 'This task has been claimed by another user');
                 $app->redirect($app->urlFor('home'));
             }
 
-        }else {
-            $user_id = UserSession::getCurrentUserID();
-
-            if (is_null($user_id)) {
-                $app->flash('error', 'You are not authorized to view this page.');
-                $app->redirect($app->urlFor('home'));
-            }
         }
     }
 
     public static function authUserForOrg($request, $response, $route) 
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));        
-        $siteApi = Settings::get("site.api");
+        $userDao = new UserDao();
+        $orgDao = new OrganisationDao();
+
         $user_id = UserSession::getCurrentUserID();
         $params = $route->getParams();
         if ($params !== null) {
             $org_id = $params['org_id'];
             if ($user_id) {
-                $user_orgs = array();
-                $request = "$siteApi/v0/users/$user_id/orgs";
-                $user_orgs = $client->castCall(array('Organisation'), $request, HTTP_Request2::METHOD_GET);
+                $user_orgs = $userDao->getUserOrgs($user_id);
                 if (!is_null($user_orgs)) {
                     foreach ($user_orgs as $orgObject) {
                         if ($orgObject->getId() == $org_id) {
@@ -76,7 +66,7 @@ class Middleware
         $org_name = 'this organisation';
         if (isset($org_id)) {
             $request = "$siteApi/v0/orgs/$org_id";
-            $org = $client->castCall('Organisation', $request, HTTP_Request2::METHOD_GET);
+            $org = $orgDao->getOrganisation(array('id' => $org_id));
             $org_name = "<a href=\"".$app->urlFor('org-public-profile',
                                                     array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
@@ -91,26 +81,22 @@ class Middleware
      */
     public static function authUserForOrgTask($request, $response, $route) 
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $taskDao = new TaskDao();
+        $projectDao = new ProjectDao();
+        $userDao = new UserDao();
+        $orgDao = new OrganisationDao();
+
         $params= $route->getParams();
         if ($params != null) {
             $task_id = $params['task_id'];
-            $request = "$siteApi/v0/tasks/$task_id";
-            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
-            $task = $client->cast('Task', $response);
-
-            $request = "$siteApi/v0/projects/".$task->getProjectId();
-            $response = $client->call($request);
-            $project = $client->cast("Project", $response);
+            $task = $taskDao->getTask(array('id' => $task_id));
+            $project = $projectDao->getProject(array('id' => $task->getProjectId()));
             
             $org_id = $project->getOrganisationId();
             $user_id = UserSession::getCurrentUserID();
 
             if ($user_id) {
-                $user_orgs = array();
-                $request = "$siteApi/v0/users/$user_id/orgs";
-                $user_orgs = $client->castCall(array('Organisation'), $request, HTTP_Request2::METHOD_GET);
+                $user_orgs = $userDao->getUserOrgs($user_id);
                 if (!is_null($user_orgs)) {
                     foreach ($user_orgs as $orgObject) {
                         if ($orgObject->getId() == $org_id) {
@@ -124,8 +110,7 @@ class Middleware
         $app = Slim::getInstance();
         $org_name = 'this organisation';
         if (isset($org_id)) {
-            $request = "$siteApi/v0/orgs/$org_id";
-            $org = $client->castCall('Organisation', $request, HTTP_Request2::METHOD_GET);
+            $org = $orgDao->getOrganisation(array('id' => $org_id));
             $org_name = "<a href=\"".$app->urlFor('org-public-profile',
                                                     array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
@@ -137,22 +122,14 @@ class Middleware
     public static function authUserForOrgProject($request, $response, $route) 
     {                        
         $params = $route->getParams();
+        $userDao = new UserDao();
+        $projectDao = new ProjectDao();
         
         if ($params != null) {
-            $client = new APIHelper(Settings::get("ui.api_format"));
-            $siteApi = Settings::get("site.api");
-
             $user_id = UserSession::getCurrentUserID();
             $project_id = $params['project_id'];   
-            
-            $request = "$siteApi/v0/users/$user_id/orgs";
-            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
-            $userOrgs = $client->cast(array("Organisation"), $response);
-
-            $request = "$siteApi/v0/projects/$project_id";
-            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
-            $project = $client->cast('Project', $response); 
-
+            $userOrgs = $userDao->getUserOrgs($user_id);
+            $project = $projectDao->getProject(array('id' => $project_id)); 
             $project_orgid = $project->getOrganisationId();
 
             foreach($userOrgs as $org)
@@ -170,24 +147,17 @@ class Middleware
     public static function authUserForTaskDownload($request, $response, $route)
     {
         $params = $route->getParams();
+        $taskDao = new TaskDao();
+        $userDao = new UserDao();
         if ($params != null) {
-            $client = new APIHelper(Settings::get("ui.api_format"));            
-            $siteApi = Settings::get("site.api");
             $task_id = $params['task_id'];
             $user_id = UserSession::getCurrentUserID();
-            
-            $request = "$siteApi/v0/tasks/$task_id";
-            $task = $client->castCall('Task', $request, HTTP_Request2::METHOD_GET);
-
-            $user_orgs = array();
-            $request = "$siteApi/v0/users/$user_id/orgs";
-            $user_orgs = $client->castCall(array('Organisation'), $request, HTTP_Request2::METHOD_GET);
+            $task = $taskDao->getTask(array('id' => $task_id));
+            $user_orgs = $userDao->getUserOrgs($user_id);
             
             //If the task has not been claimed yet then anyone can download it
-            $request = "$siteApi/v0/tasks/$task_id/claimed";
-            $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);            
-            $request = "$siteApi/v0/tasks/$task_id/claimed";
-            $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET, $user_id);
+            $taskClaimed = $taskDao->isTaskClaimed($task_id);            
+            $userClaimedTask = $taskDao->isTaskClaimed($task_id, $user_id);
             if (!$taskClaimed) {
                 return true;
             } elseif ($userClaimedTask) {

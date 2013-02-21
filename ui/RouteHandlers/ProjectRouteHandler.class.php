@@ -51,48 +51,37 @@ class ProjectRouteHandler
     public function projectView($project_id)
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
         $user_id = UserSession::getCurrentUserID();
+        $projectDao = new ProjectDao();
+        $taskDao = new TaskDao();
+        $userDao = new UserDao();
+        $orgDao = new OrganisationDao();
 
-        $request = "$siteApi/v0/projects/$project_id";
-        $response = $client->call($request);     
-        $project = $client->cast("Project", $response);        
+        $project = $projectDao->getProject(array('id' => $project_id));        
         $app->view()->setData("project", $project);
          
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
-            $response = null;            
-            
+           
+            $task = null;
             if(isset($post->task_id)) {
-                $request = "$siteApi/v0/tasks/{$post->task_id}";
-                $response = $client->call($request);     
-
-            } else {
-                $request = "$siteApi/v0/tasks/{$post->revokeTaskId}";
-                $response = $client->call($request); 
+                $task = $taskDao->getTask(array('id' => $post->task_id));
+            } elseif (isset($post->revokeTaskId)) {
+                $task = $taskDao->getTask(array('id' => $post->revokeTaskId));
             }
-            
-            $task = $client->cast("Task", $response); 
-            $task_id = $task->getId();
             
             if(isset($post->publishedTask) && isset($post->task_id)) { 
                 if($post->publishedTask) {                     
-                    $task->setPublished(1);                    
-                    $request = "$siteApi/v0/tasks/{$post->task_id}";
-                    $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);                 
+                    $task->setPublished(1);
                 } else {
                     $task->setPublished(0);                    
-                    $request = "$siteApi/v0/tasks/{$post->task_id}";
-                    $response = $client->call($request, HTTP_Request2::METHOD_PUT, $task);      
                 }
+                $taskDao->updateTask($task);
             }
             
             if (isset($post->trackProject)) {
                 if ($post->trackProject) {
-                    $request = "$siteApi/v0/users/$user_id/projects/{$project->getId()}";
-                    $userTrackProject = $client->call($request, HTTP_Request2::METHOD_PUT);
-                    
+                    $userTrackProject = $userDao->trackProject($user_id, $project->getId());
                     if ($userTrackProject) {
                         $app->flashNow("Success", 
                                 "You are now tracking this Project and will receive email notifications
@@ -101,10 +90,7 @@ class ProjectRouteHandler
                         $app->flashNow("error", "Unable to register for notifications for this Project.");
                     }   
                 } else {
-
-                    $request = "$siteApi/v0/users/$user_id/projects/{$project->getId()}";
-                    $userUntrackProject = $client->call($request, HTTP_Request2::METHOD_DELETE);
-                    
+                    $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
                     if ($userUntrackProject) {
                         $app->flashNow("success", 
                                 "You are no longer tracking this Project and will receive no
@@ -122,18 +108,14 @@ class ProjectRouteHandler
                 }
 
                 if(!$post->trackTask) {
-                    $request = "$siteApi/v0/users/$user_id/tracked_tasks/$task_id";
-                    $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                    
-                    
+                    $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
                         $app->flashNow("success", "No longer receiving notifications from $task_title.");
                     } else {
                         $app->flashNow("error", "Unable to unsubscribe from $task_title's notifications");
                     }
                 } else {
-                    $request = "$siteApi/v0/users/$user_id/tracked_tasks/$task_id";
-                    $response = $client->call($request, HTTP_Request2::METHOD_PUT);     
-                    
+                    $response = $userDao->trackTask($user_id, $task_id);
                     if ($response) {
                         $app->flashNow("success", "You will now receive notifications for $task_title.");
                     } else {
@@ -142,23 +124,18 @@ class ProjectRouteHandler
                 }
             }
             
+            //This should not be here!!!!!!!!!
             if(isset($post->feedback)) {
                 $feedback = new FeedbackEmail();               
     
                 $feedback->setTaskId($task_id);
                 $feedback->addUserId($post->revokeUserId);
                 $feedback->setFeedback($post->feedback);
-
-                $request = "$siteApi/v0/tasks/$task_id/feedback";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $feedback);
+                $taskDao->sendFeedback($feedback);
 
                 if(isset($post->revokeTask) && $post->revokeTask) {
-                    $request = "$siteApi/v0/users/$post->revokeUserId/tasks/$post->revokeTaskId";
-                    $taskRevoke = $client->call($request, HTTP_Request2::METHOD_DELETE);
-                    
-                    $request = "$siteApi/v0/users/{$post->revokeUserId}";
-                    $claimant = $client->castCall('User', $request, HTTP_Request2::METHOD_GET);
-
+                    $taskRevoke = $userDao->unclaimTask($post->revokeUserId, $post->revokeTaskId);
+                    $claimant = $userDao->getUser(array('id' => $post->revokeUserId));
                     if(!$taskRevoke) {
                         $app->flashNow("taskSuccess", "<b>Success</b> - The task 
                             <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
@@ -173,33 +150,19 @@ class ProjectRouteHandler
             }
         }   
 
-        $request = "$siteApi/v0/orgs/{$project->getOrganisationId()}";
-        $response = $client->call($request);     
-        $org = $client->cast("Organisation", $response);
-        
-        $request = "$siteApi/v0/projects/$project_id/tags";
-        $response = $client->call($request);
-        $project_tags = $client->cast(array("Tag"), $response);
-        
-        $request = "$siteApi/v0/orgs/isMember/{$project->getOrganisationId()}/$user_id";
-        $isOrgMember = $client->call($request);
-        
+        $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
+        $project_tags = $projectDao->getProjectTags($project_id);
+        $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         if($isOrgMember) {
-            $request = "$siteApi/v0/users/subscribedToProject/$user_id/$project_id";
-            $userSubscribedToProject = $client->call($request);
-
+            $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
-            $request = "$siteApi/v0/projects/{$project_id}/tasks";
-            $response = $client->call($request);
-            $project_tasks = $client->cast(array("Task"), $response);
-            
+            $project_tasks = $projectDao->getProjectTasks($project_id);
             if($project_tasks) {
                 foreach($project_tasks as $task) {
                     $task_id = $task->getId();
 
                     $metaData = array();
-                    $request = "$siteApi/v0/users/subscribedToTask/$user_id/$task_id";
-                    $response = $client->call($request);
+                    $response = $userDao->isSubscribedToTask($user_id, $task_id);
                     if($response == 1) {
                         $metaData['tracking'] = true;
                     } else {
@@ -240,14 +203,10 @@ class ProjectRouteHandler
     public function projectAlter($project_id)
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
         $deadlineError = '';
+        $projectDao = new ProjectDao();
 
-        $request = "$siteApi/v0/projects/$project_id";
-        $response = $client->call($request);
-        $project = $client->cast("Project", $response);
-
+        $project = $projectDao->getProject(array('id' => $project_id));
         if (isValidPost($app)) {
             $post = (object) $app->request()->post();
             
@@ -290,8 +249,7 @@ class ProjectRouteHandler
             }
             
             if ($deadlineError == '') {
-                $request = "$siteApi/v0/projects/$project_id";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT, $project);
+                $projectDao->updateProject($project);
                 $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
             }
         }
@@ -324,12 +282,12 @@ class ProjectRouteHandler
         $app->render("project.alter.tpl");
     }
     
-    
     public function projectCreate($org_id)
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $projectDao = new ProjectDao();
+        $taskDao = new TaskDao();
+
         $user_id = UserSession::getCurrentUserID(); 
         $field_name = "new_task_file";
         $tags = null;
@@ -420,11 +378,8 @@ class ProjectRouteHandler
 
             
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && !$upload_error) { 
-                $request = "$siteApi/v0/projects";
                 $project->setOrganisationId($org_id);
-                if($response = $client->call($request, HTTP_Request2::METHOD_POST, $project)) {
-                    $project = $client->cast("Project", $response);
-                    
+                if($project = $projectDao->createProject($project)) {
                     $taskModel = new Task();
                     //$taskModel->setTitle($project->getTitle());
                     $taskModel->setTitle($_FILES[$field_name]["name"]);
@@ -444,15 +399,11 @@ class ProjectRouteHandler
                         if(isset($post->{"chunking_".$i})) { 
                             $taskModel->setTaskType(TaskTypeEnum::CHUNKING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            $request = "$siteApi/v0/tasks";
-                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
-                            $createdChunkTask = $client->cast("Task", $response);
-                            
+                            $createdChunkTask = $taskDao->createTask($taskModel);
                             try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
-                                $error_message = $client->call("$siteApi/v0/tasks/{$createdChunkTask->getId()}/file/".
-                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
-                                        HTTP_Request2::METHOD_PUT, null, null, $filedata);
+                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
+                                $error_message = $taskDao->saveTaskFile($createdChunkTask->getId(), urlencode($_FILES[$field_name]['name']),
+                                        $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = "File error: " . $e->getMessage();
@@ -461,16 +412,13 @@ class ProjectRouteHandler
                         if(isset($post->{"translation_".$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            $request = "$siteApi/v0/tasks";
-                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
-                            $newTask = $client->cast("Task", $response);
+                            $newTask = $taskDao->createTask($taskModel);
                             $translationTaskId = $newTask->getId();
                             
                             try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
-                                $error_message = $client->call("$siteApi/v0/tasks/{$translationTaskId}/file/".
-                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
-                                        HTTP_Request2::METHOD_PUT, null, null, $filedata);
+                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
+                                $error_message = $taskDao->saveTaskFile($translationTaskId, urlencode($_FILES[$field_name]['name']),
+                                        $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = "File error: " . $e->getMessage();
@@ -479,51 +427,36 @@ class ProjectRouteHandler
                         if(isset($post->{"proofreading_".$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-
-                            $request = "$siteApi/v0/tasks";
-                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);
-                            $newTask = $client->cast("Task", $response);
+                            $newTask = $taskDao->createTask($taskModel);
                             $proofreadingTaskId = $newTask->getId();
-                            
                             if(isset($post->{'translation_'.$i})) {
-                                $request = "$siteApi/v0/tasks/$proofreadingTaskId/prerequisites/$translationTaskId";
-                                $response = $client->call($request, HTTP_Request2::METHOD_PUT);                            
+                                $taskDao->addTaskPreReq($proofreadingTaskId, $translationTaskId);
                             } 
                             
                             try {                    
                                 $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
-                                $error_message = $client->call("$siteApi/v0/tasks/{$proofreadingTaskId}/file/".
-                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
-                                        HTTP_Request2::METHOD_PUT, null, null, $filedata);
+                                $error_message = $taskDao->saveTaskFile($proofreadingTaskId, urlencode($_FILES[$field_name]['name']),
+                                        $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = "File error: " . $e->getMessage();
                             } 
-                            
-
                         }                       
                         if(isset($post->{"postediting_".$i})) {
                             $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            
-                            $request = "$siteApi/v0/tasks";
-                            $response = $client->call($request, HTTP_Request2::METHOD_POST, $taskModel);    
-                            $newTask = $client->cast("Task", $response);
+                            $newTask = $taskDao->createTask($taskModel);
                             $posteditingTaskId = $newTask->getId();
-                            
                             if(isset($post->{'translation_'.$i}) && isset($post->{'proofreading_'.$i})) {
-                                $request = "$siteApi/v0/tasks/$posteditingTaskId/prerequisites/$proofreadingTaskId";
-                                $response = $client->call($request, HTTP_Request2::METHOD_PUT);
+                                $taskDao->addTaskPreReq($posteditingTaskId, $proofreadingTaskId);
                             } else if(isset($post->{'translation_'.$i})) {
-                                $request = "$siteApi/v0/tasks/$posteditingTaskId/prerequisites/$translationTaskId";
-                                $response = $client->call($request, HTTP_Request2::METHOD_PUT);
+                                $taskDao->addTaskPreReq($posteditingTaskId, $translationTaskId);
                             }
                             
                             try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
-                                $error_message = $client->call("$siteApi/v0/tasks/{$posteditingTaskId}/file/".
-                                        urlencode($_FILES[$field_name]['name'])."/$user_id",
-                                        HTTP_Request2::METHOD_PUT, null, null, $filedata);
+                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
+                                $error_message = $taskDao->saveTaskFile($posteditingTaskId, urlencode($_FILES[$field_name]['name']),
+                                        $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = "File error: " . $e->getMessage();
@@ -549,9 +482,10 @@ class ProjectRouteHandler
             </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-create.js")
             .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js");
   
-        
-        $language_list = TemplateHelper::getLanguageList();
-        $countries = TemplateHelper::getCountryList();
+        $langDao = new LanguageDao();
+        $countryDao = new CountryDao();
+        $language_list = $langDao->getLanguage(null);
+        $countries = $countryDao->getCountry(null);
 
         $app->view()->appendData(array(
             "tagList"           => $tags,
@@ -571,21 +505,15 @@ class ProjectRouteHandler
         $app->render("project.create.tpl");
     }    
     
-    
     public function projectCreated($project_id)
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $user_id = UserSession::getCurrentUserID();
+        $projectDao = new ProjectDao();
+        $userDao = new UserDao();
 
-        $request = "$siteApi/v0/projects/$project_id";
-        $response = $client->call($request);     
-        $project = $client->cast("Project", $response);
-       
-        $request = "$siteApi/v0/users/$user_id";
-        $response = $client->call($request, HTTP_Request2::METHOD_GET);
-        $user = $client->cast("User", $response);        
+        $user_id = UserSession::getCurrentUserID();
+        $project = $projectDao->getProject(array('id' => $project_id));
+        $user = $userDao->getUser(array('id' => $user_id));        
         
         if (!is_object($user)) {
             $app->flash("error", "Login required to access page.");
@@ -605,13 +533,9 @@ class ProjectRouteHandler
     public function archiveProject($project_id)
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $projectDao = new ProjectDao();
 
-        $request = "$siteApi/v0/projects/$project_id";
-        $response = $client->call($request);
-        $project = $client->cast("Project", $response);
-        
+        $project = $projectDao->getProject(array('id' => $project_id));
         if (!is_object($project)) {
             header("HTTP/1.0 404 Not Found");
             die;
@@ -623,9 +547,7 @@ class ProjectRouteHandler
             $app->redirect($app->urlFor("login"));
         }   
 
-        $request = "$siteApi/v0/projects/archiveProject/$project_id/user/$user_id";
-        $response = $client->call($request, HTTP_Request2::METHOD_PUT);        
-        
+        $projectDao->archiveProject($project_id, $user_id);
         $app->redirect($ref = $app->request()->getReferrer());
     }    
     

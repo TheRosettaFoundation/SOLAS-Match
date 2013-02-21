@@ -21,7 +21,6 @@ require_once 'Common/Settings.class.php';
 require_once 'Common/lib/Authentication.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
 require_once 'Common/lib/BadgeTypes.class.php';
-require_once 'Common/lib/APIHelper.class.php';
 
 require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
@@ -35,6 +34,17 @@ require_once 'ui/RouteHandlers/TaskRouteHandler.class.php';
 require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
 require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
 require_once 'ui/RouteHandlers/ProjectRouteHandler.class.php';
+
+require_once 'ui/DataAccessObjects/BadgeDao.class.php';
+require_once 'ui/DataAccessObjects/CountryDao.class.php';
+require_once 'ui/DataAccessObjects/LanguageDao.class.php';
+require_once 'ui/DataAccessObjects/UserDao.class.php';
+require_once 'ui/DataAccessObjects/TaskDao.class.php';
+require_once 'ui/DataAccessObjects/TagDao.class.php';
+require_once 'ui/DataAccessObjects/OrganisationDao.class.php';
+require_once 'ui/DataAccessObjects/StatisticsDao.class.php';
+require_once 'ui/DataAccessObjects/ProjectDao.class.php';
+require_once 'ui/DataAccessObjects/TipDao.class.php';
 
 require_once 'Common/models/User.php';
 require_once 'Common/models/Tag.php';
@@ -120,27 +130,19 @@ function isValidPost(&$app)
  */
 $app->hook('slim.before', function () use ($app)
 {
-    $client = new APIHelper(Settings::get("ui.api_format"));
-    $siteApi = Settings::get("site.api");
-    $request = "$siteApi/v0/users/".UserSession::getCurrentUserID();
+    $userDao = new UserDao();
     if (!is_null(UserSession::getCurrentUserID()) &&
-        $current_user = $client->castCall("User", $request)) {
+        $current_user = $userDao->getUser(array("id" => UserSession::getCurrentUserID()))) {
         $app->view()->appendData(array('user' => $current_user));
-        $user = $client->castCall("User", "$siteApi/v0/users/".UserSession::getCurrentUserID(),
-                        HTTP_Request2::METHOD_GET, null, array("role"=>'organisation_member'));
-        if ($user) {
-            $org_array = $client->castCall(Array("Organisation"), 
-                "$siteApi/v0/users/".UserSession::getCurrentUserID()."orgs");
+        $org_array = $userDao->getUserOrgs(UserSession::getCurrentUserID());
+        if ($org_array && count($org_array) > 0) {
             $app->view()->appendData(array(
                 'user_is_organisation_member' => true,
                 'user_organisations' => $org_array
             ));
         }
 
-        $request = "$siteApi/v0/users/".UserSession::getCurrentUserID()."/tasks";
-        $response = $client->call($request);
-        $tasks = $client->cast(array("Task"), $response);
-        
+        $tasks = $userDao->getUserTasks(UserSession::getCurrentUserID());
         if($tasks && count($tasks) > 0) {
             $app->view()->appendData(array(
                         "user_has_active_tasks" => true

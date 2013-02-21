@@ -119,21 +119,17 @@ class TemplateHelper {
 
     public static function languageNameFromId($languageID)
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $result = $client->castCall("Language", "$siteApi/v0/languages/$languageID" );
+        $languageDao = new LanguageDao();
+        $result = $languageDao->getLanguage(array('id' => $languageID));
         return $result->getName();
     }
 
     public static function languageNameFromCode($languageCode)
     {
         $ret = "";
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $request = "$siteApi/v0/languages/getByCode/$languageCode";
-        $response = $client->call($request);
-        if($response) {
-            $lang = $client->cast("Language", $response);
+        $langDao = new LanguageDao();
+        $lang = $langDao->getLanguage(array('code' => $languageCode));
+        if($lang) {
             $ret = $lang->getName();
         }
         return $ret;
@@ -141,50 +137,43 @@ class TemplateHelper {
 
     public static function orgNameFromId($orgID)
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $result = $client->castCall("Organisation", "$siteApi/v0/orgs/$orgID");
+        $orgDao = new OrganisationDao();
+        $result = $orgDao->getOrganisation(array('id' => $orgID));
         return $result->getName();
     }
 
     public static function countryNameFromId($cID)
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $result = $client->castCall("Country", "$siteApi/v0/countries/$cID");
+        $countryDao = new CountryDao();
+        $result = $countryDao->getCountry(array('id' => $cID));
         return $result->getName();
     }
     
     public static function countryNameFromCode($cc) 
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $result = $client->castCall("Country", "$siteApi/v0/countries/getByCode/$cc");
+        $countryDao = new CountryDao();
+        $result = $countryDao->getCountry(array('code' => $cc));
         return $result->getName();
     }
      
     public static function getLanguageList() 
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $result = $client->castCall(array("Language"), "$siteApi/v0/languages");
+        $langDao = new LanguageDao();
+        $result = $langDao->getLanguage(null);
         return $result;
     }
 
     public static function getCountryList()
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-        $result = $client->castCall(array("Country"), "$siteApi/v0/countries");
+        $countryDao = new CountryDao();
+        $result = $countryDao->getCountry(null);
         return $result;
     }
 
     public static function saveLanguage($languageCode) 
     {
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
-
-        $language = $client->castCall("Language", "$siteApi/v0/languages/getByCode/$languageCode");
+        $langDao = new LanguageDao();
+        $language = $langDao->getLanguage(array('code' => $languageCode));
         if (is_null(($language))) {
             throw new InvalidArgumentException('A valid language code was expected.');
         }
