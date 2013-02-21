@@ -157,17 +157,19 @@ class ProjectRouteHandler
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
             $project_tasks = $projectDao->getProjectTasks($project_id);
-            foreach($project_tasks as $task) {
-                $task_id = $task->getId();
+            if($project_tasks) {
+                foreach($project_tasks as $task) {
+                    $task_id = $task->getId();
 
-                $metaData = array();
-                $response = $userDao->isSubscribedToTask($user_id, $task_id);
-                if($response == 1) {
-                    $metaData['tracking'] = true;
-                } else {
-                    $metaData['tracking'] = false;
+                    $metaData = array();
+                    $response = $userDao->isSubscribedToTask($user_id, $task_id);
+                    if($response == 1) {
+                        $metaData['tracking'] = true;
+                    } else {
+                        $metaData['tracking'] = false;
+                    }
+                    $taskMetaData[$task_id] = $metaData;
                 }
-                $taskMetaData[$task_id] = $metaData;
             }
 
             $numTaskTypes = Settings::get("ui.task_types");
@@ -183,7 +185,8 @@ class ProjectRouteHandler
                     "taskMetaData" => $taskMetaData,
                     "taskTypeColours" => $taskTypeColours,
                     "userSubscribedToProject" => $userSubscribedToProject,
-                    "project_tags" => $project_tags
+                    "project_tags" => $project_tags,
+                    "isOrgMember"   => $isOrgMember
             ));
             
         } else {   
@@ -215,28 +218,15 @@ class ProjectRouteHandler
                 $project->setDescription($post->description);
             }
 
-            $deadlineInMSecs = "";
-            if ($post->deadlineDate != "") {
-                $deadlineInMSecs = strtotime($post->deadlineDate);
-
-                if ($deadlineInMSecs) {
-                    if ($post->deadlineTime != "") {
-                        if (TemplateHelper::isValidTime($post->deadlineTime) == true) {
-                            $deadlineInMSecs = TemplateHelper::addTimeToUnixTime($deadlineInMSecs,
-                                    $post->deadlineTime);
-                        } else {
-                            $deadlineError = "Invalid time format. Please enter time in a 24-hour format like ";
-                            $deadlineError .= "this 16:30";
-                        }
-                    }
+            if ($post->deadline != "") {
+                
+                if (TemplateHelper::isValidDateTime($post->deadline) == true) {
+                    $unixTime = strtotime($post->deadline);
+                    $date = date("Y-m-d H:i:s", $unixTime);  
+                    $project->setDeadline($date);
                 } else {
-                    $deadlineInMSecs = "";
-                    $deadlineError = "Invalid date format";
+                    $deadlineError = "Invalid date/time format!";
                 }
-            }
-
-            if ($deadlineInMSecs != "" && $deadlineError == "") {
-                $project->setDeadline(date("Y-m-d H:i:s", $deadlineInMSecs));
             }
             
             if ($post->sourceLanguage != "") {
@@ -263,13 +253,9 @@ class ProjectRouteHandler
                 $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
             }
         }
-        $langDao = new LanguageDao();
-        $countryDao = new CountryDao();
-        $languages = $langDao->getLanguage(null);
-        $countries = $countryDao->getCountry(null);
-       
-        $deadlineDate = date("F dS, Y", strtotime($project->getDeadline()));
-        $deadlineTime = date("H:i", strtotime($project->getDeadline()));
+         
+        $languages = TemplateHelper::getLanguageList();
+        $countries = TemplateHelper::getCountryList();
         
         $tags = $project->getTagList();
         $tag_list = "";
@@ -280,18 +266,12 @@ class ProjectRouteHandler
         }
 
         $extra_scripts = "
-        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/datepickr.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}resources/bootstrap/js/datepickr.js\"></script>
-        <script type=\"text/javascript\">
-            window.onload = function() {
-                new datepickr(\"deadlineDate\");
-            };
-        </script>";
+            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>"
+            .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js");
         
         $app->view()->appendData(array(
                               "project"         => $project,
-                              "deadlineDate"    => $deadlineDate,
-                              "deadlineTime"    => $deadlineTime,
                               "languages"       => $languages,
                               "countries"       => $countries,
                               "tag_list"        => $tag_list,
@@ -329,7 +309,14 @@ class ProjectRouteHandler
             }            
             
             if($post->deadline != "") {
-                $project->setDeadline($post->deadline);
+                if (TemplateHelper::isValidDateTime($post->deadline) == true) {
+                    $unixTime = strtotime($post->deadline);
+                    $date = date("Y-m-d H:i:s", $unixTime);  
+                    $project->setDeadline($date);
+                } else {
+                    $deadline_err = "Invalid date/time format!";
+                }
+                
             } else {
                 $deadline_err = "Project <b>Deadline</b> must be set.";
             }
@@ -479,13 +466,10 @@ class ProjectRouteHandler
         }
 
         $extra_scripts = "
-            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/datepickr.css\" />
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}resources/bootstrap/js/datepickr.js\"></script>
-            <script type=\"text/javascript\">
-                window.onload = function() {
-                    new datepickr(\"deadline\");
-                };
-            </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-create.js");
+            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
+            </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-create.js")
+            .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js");
   
         $langDao = new LanguageDao();
         $countryDao = new CountryDao();

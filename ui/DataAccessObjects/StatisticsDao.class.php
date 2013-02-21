@@ -13,6 +13,14 @@ class StatisticsDao
         $this->siteApi = Settings::get("site.api");
     }
 
+    public function getStats()
+    {
+        $ret = null;
+        $request = "{$this->siteApi}/v0/stats";
+        $ret = $this->client->call($request);
+        return $ret;
+    }
+
     public function getTotalTasks()
     {
         $ret = null;

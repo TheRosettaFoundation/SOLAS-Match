@@ -10,30 +10,15 @@ include_once '../Common/models/ArchivedProject.php';
 class ProjectDao
 {
     
-    public function create($params)
+    public function createUpdate($project)
     {
-        $project = ModelFactory::buildModel("Project", $params);
-
-        $this->save($project);
-        return $project;
-    }
-
-    public function update($params)
-    {
-        $project = ModelFactory::buildModel("Project", $params);
-        
         $this->save($project);
         return $project;
     }
     
     private function save(&$project)
-    {
-        $projectId = "null";
-        if($project->getId() != '') {
-            $projectId = $project->getId();
-        }
-
-        $result = PDOWrapper::call("projectInsertAndUpdate", $projectId
+    {        
+        $args =PDOWrapper::cleanseNull($project->getId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getTitle())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getDescription())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getDeadline())
@@ -42,7 +27,8 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNull($project->getWordCount())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceCountryCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceLanguageCode()));
+                .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceLanguageCode());
+        $result = PDOWrapper::call("projectInsertAndUpdate", $args);
         $project->setId($result[0]['id']);
         $this->updateTags($project);
         return $project;
@@ -273,5 +259,26 @@ class ProjectDao
     {
         return ProjectTags::getTags($projectId);
     }
+    
+    public function saveProjectFile($projectId,$file,$filename,$userId){
+        $destination =realpath(Settings::get("files.upload_path")."proj-$projectId/");
+        if(!file_exists($destination)) mkdir ($destination);
+        $token=self::recordProjectFile($projectId,$file,$filename,$userId);
+        file_put_contents($destination.$token, $file);
+        
+        
+        
+    }
+    
+    public function recordProjectFile($projectId,$file,$filename,$userId){
+        $token=$filename;//generate guid in future.
+        $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNull($filename).",".PDOWrapper::cleanseNull($token);
+        PDOWrapper::call("addProjectFile", $args);
+        return $token;
+    }
+    
+    
+    
 }
 

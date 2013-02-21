@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
+	<meta charset="utf-8" name="google-translate-customization" content="d0b5975e5905d60f-4e4c167261d2937a-g4574d0ff41a34d5b-10"/>
+<!--        ------------------------------------------css---------------------------------------------------        -->
 	<title>{if isset($title)}{$title}{else}SOLAS Match{/if}</title>
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/>
+
+<!--        ------------------------------------------javascript---------------------------------------------------        -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/jquery-ui.js"></script>
-    
-    {if isset($extra_scripts)}
-        {$extra_scripts}
-    {/if}
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/google-translate.js"></script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        
+        <!--        ------------------------------------------extra scripts---------------------------------------------------        -->
+        {if isset($extra_scripts)}
+            {$extra_scripts}
+        {/if}
+
 
 </head>
 <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
@@ -56,6 +63,9 @@
                             <a>Notifications:<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                         </li>
                     {/if}
+                    <li style="padding-top: 7px">
+                        <div id="google_translate_element"></div>
+                    </li>
                     {if isset($user)}
                         
                         <li>

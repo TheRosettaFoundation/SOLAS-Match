@@ -22,10 +22,8 @@ class TaskDao {
      * @return Task object
      * @author
      **/
-    public function create($params)
+    public function create($task)
     {
-        $task = ModelFactory::buildModel("Task", $params);
-
         $this->save($task);
         return $task;
     }

@@ -48,20 +48,17 @@ class UserRouteHandler
         $use_statistics = Settings::get("site.stats"); 
         if ($use_statistics == 'y') {
             $statsDao = new StatisticsDao();
-            $total_users = $statsDao->getTotalUsers();
-            $total_tasks = $statsDao->getTotalTasks();
-            $total_orgs = $statsDao->getTotalOrgs();
-            $total_archived_tasks = $statsDao->getTotalArchivedTasks();
-            $total_claimed_tasks = $statsDao->getTotalClaimedTasks();
-            $total_unclaimed_tasks = $statsDao->getTotalUnclaimedTasks();
+            $statistics = $statsDao->getStats();    
+            $statsArray = null;
+            if($statistics) {
+                $statsArray = array();
+                foreach($statistics as $stat) {
+                    $statsArray[$stat->getName()] = $stat;
+                }
+            }
+
             $app->view()->appendData(array(
-                        "total_users" => $total_users
-                        ,"total_orgs" => $total_orgs
-                        ,"stats" => $use_statistics
-                        ,"total_archived_tasks" => $total_archived_tasks
-                        ,"total_claimed_tasks" => $total_claimed_tasks
-                        ,"total_unclaimed_tasks" => $total_unclaimed_tasks
-                        ,"total_tasks" => $total_tasks
+                "statsArray" => $statsArray
             ));
         }
         

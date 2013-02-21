@@ -32,10 +32,7 @@
                     <p class="alert alert-error">{$deadlineError}</p>
                 {/if}
                 <p>
-                    Date: <input type="text" id="deadlineDate" name="deadlineDate" value="{$deadlineDate}" />
-                </p>
-                <p>
-                    Time: <input type="text" name="deadlineTime" value="{$deadlineTime}" />
+                    <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}" />
                 </p>
                 <p style="margin-bottom:20px;"></p>
                 

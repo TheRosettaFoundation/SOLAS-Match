@@ -1,4 +1,4 @@
-<table class="table table-striped">
+<table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
     <thead>
         <th style="text-align: left"><b>Project</b></th>
 
@@ -65,7 +65,7 @@
             <th width="48%" align="left">Project Description:<hr/></th>
         </thead>
         <tbody>
-            <tr>
+            <tr style="overflow-wrap: break-word;">
                 <td>
                     <i>
                         {if $task->getComment() != ''}

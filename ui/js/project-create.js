@@ -3,7 +3,7 @@
     var MAX_FIELDS = 10;
     var isRemoveButtonHidden = true;
 
-    var isEnabledArray = new Array(false);
+    var isEnabledArray = new Array(false); 
 
     function addNewTarget() {
 

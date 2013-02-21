@@ -201,9 +201,9 @@ class Upload {
         $task_folder        = 'task-' . $task->getId();
         $version_folder     = 'v-' . $version;
 
-        return $uploads_folder 
+        return realpath($uploads_folder 
                 . $project_folder . DIRECTORY_SEPARATOR 
                 . $task_folder . DIRECTORY_SEPARATOR 
-                . $version_folder;
+                . $version_folder);
     }
 }
