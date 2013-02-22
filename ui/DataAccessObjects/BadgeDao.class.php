@@ -16,7 +16,7 @@ class BadgeDao
     public function getBadge($params)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/badges";
+        $request = "{$this->siteApi}v0/badges";
         
         $id = null;
         $name = null;
@@ -38,7 +38,7 @@ class BadgeDao
     public function find($params)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/badges/{$params['id']}";
+        $request = "{$this->siteApi}v0/badges/{$params['id']}";
         $response = $this->client->call($request);
         $ret = $this->client->cast("Badge", $response);
         return $ret;
@@ -47,7 +47,7 @@ class BadgeDao
     public function getBadges()
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/badges";
+        $request = "{$this->siteApi}v0/badges";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("Badge"), $response);
         return $ret;
@@ -56,7 +56,7 @@ class BadgeDao
     public function getUserWithBadge($badgeId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/badges/$badgeId/users";
+        $request = "{$this->siteApi}v0/badges/$badgeId/users";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("User"), $response);
         return $ret;
@@ -65,7 +65,7 @@ class BadgeDao
     public function createBadge($badge)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/badges";
+        $request = "{$this->siteApi}v0/badges";
         $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $badge);
         $ret = $this->client->cast("Badge", $response);
         return $ret;
@@ -74,7 +74,7 @@ class BadgeDao
     public function updateBadge($badge)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/badges/{$badge->getId()}";
+        $request = "{$this->siteApi}v0/badges/{$badge->getId()}";
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $badge);
         $ret = $this->client->cast("Badge", $response);
         return $ret;
@@ -82,7 +82,7 @@ class BadgeDao
 
     public function deleteBadge($badgeId)
     {
-        $request = "{$this->siteApi}/v0/badges/$badgeId";
+        $request = "{$this->siteApi}v0/badges/$badgeId";
         $response = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
     }
 }

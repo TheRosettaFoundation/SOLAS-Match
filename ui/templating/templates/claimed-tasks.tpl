@@ -18,7 +18,7 @@
     {if count($active_tasks) > 0}
         {for $count=$top to $bottom}
             {assign var="task" value=$active_tasks[$count]}
-            {include file="task.summary-link.tpl" task=$task}
+            {include file="task.claimed-tasks.tpl" task=$task}
         {/for}
         {include file="pagination.tpl" url_name="claimed-tasks" current_page=$page_no last_page=$last}
     {else}

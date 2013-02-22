@@ -71,21 +71,9 @@
             inputProofReading.setAttribute('title', 'Create a proofreading task for evaluating the translation provided by a volunteer.');
             tableColumnReading.appendChild(inputProofReading);
 
-            var tableColumnPostEditing = document.createElement('td');
-            tableColumnPostEditing.setAttribute('align', 'middle');
-            tableColumnPostEditing.setAttribute('valign', 'top');
-            var inputPostEditing = document.createElement('input');
-            inputPostEditing.setAttribute('type', 'checkbox');
-            inputPostEditing.setAttribute('id', 'postediting_' + (fields + 1));
-            inputPostEditing.setAttribute('name', 'postediting_' + (fields + 1));
-            inputPostEditing.setAttribute('value', 'y'); 
-            inputPostEditing.setAttribute('title', 'Create a postediting task for merging together task chunks created by a chunking task.');
-            tableColumnPostEditing.appendChild(inputPostEditing);
-
             newRow.appendChild(tableColumnChunking);
             newRow.appendChild(tableColumnTranslation);
             newRow.appendChild(tableColumnReading);
-            newRow.appendChild(tableColumnPostEditing);
             table.appendChild(newRow);
             isEnabledArray.push(false);
 
@@ -129,16 +117,13 @@
     {
         if(!isEnabledArray[index]) {
             document.getElementById('translation_' + index).checked = false;
-            document.getElementById('proofreading_' + index).checked = false;
-            document.getElementById('postediting_' + index).checked = false;        
+            document.getElementById('proofreading_' + index).checked = false;     
             document.getElementById('translation_' + index).disabled = true;
-            document.getElementById('proofreading_' + index).disabled = true;
-            document.getElementById('postediting_' + index).disabled = true;    
+            document.getElementById('proofreading_' + index).disabled = true;  
             isEnabledArray[index] = true;
         } else {
             document.getElementById('translation_' + index).disabled = false;
             document.getElementById('proofreading_' + index).disabled = false;
-            document.getElementById('postediting_' + index).disabled = false;
             document.getElementById('translation_' + index).checked = true;
             document.getElementById('proofreading_' + index).checked = true;
             isEnabledArray[index] = false;

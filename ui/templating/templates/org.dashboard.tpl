@@ -23,7 +23,7 @@
     {foreach $orgs as $org}
         {assign var="org_id" value=$org->getId()}
         <thead>
-            <th style="text-align: left">
+            <th style="text-align: left; max-width: 150px">
                 <p style="margin-bottom:40px;"></p>
                 <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                     <h4><i class="icon-briefcase"></i> {$org->getName()}</h4>
@@ -49,10 +49,10 @@
         {assign var="projectsData" value=$templateData[$org_id]}
         {if !is_null($projectsData)}
             {foreach from=$projectsData item=data}
-                <tr>
+                <tr style="overflow-wrap: break-word;">
                 {assign var="projectObject" value=$data['project']}
                 {assign var="project_id" value=$projectObject->getId()}
-                    <td style="text-align: left">
+                    <td style="text-align: left; max-width: 40px">
                         <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$projectObject->getTitle()}</a>
                     </td> 
                     <td>

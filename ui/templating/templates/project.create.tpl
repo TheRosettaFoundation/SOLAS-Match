@@ -73,29 +73,36 @@
                     <textarea wrap="soft" cols="1" rows="3" name="reference">{if isset($project)}{$project->getReference()}{/if}</textarea>    
                 </td>
                 <td width="493" align="center" valign="middle">    
-                    <label for="{$field_name}"><h2>Source Text: <span style="color: red">*</span></h2></label>
-                    <p class="desc">Upload your source file for the project. Max file size is 8 MB.</p> {*$max_file_size_mb*}
-                    <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/> {*$max_file_size_bytes*}
-                    <input type="file" name="{$field_name}" id="{$field_name}"/>
-                    <input type="hidden" name="organisation_id" value="1"/>
-                    <p style="margin-bottom:50px;"></p>
-                    
+                    <div style="margin-bottom:25px;">
+                        <label for="{$field_name}"><h2>Source Text: <span style="color: red">*</span></h2></label>
+                        <p class="desc">Upload your source file for the project. Max file size is 8 MB.</p> {*$max_file_size_mb*}
+                        <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/> {*$max_file_size_bytes*}
+                        <input type="file" name="{$field_name}" id="{$field_name}"/>
+                        <input type="hidden" name="organisation_id" value="1"/>
+                    </div>
+                    <div style="margin-bottom: 25px;">
                     <label for="word_count"><h2>Word Count:</h2></label>
-                    <p class="desc">Approximate or use a site such as 
-                        <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.
-                    </p>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" 
-                            value="{if isset($project)}{$project->getWordCount()}{/if}"/>
-                    <p style="margin-bottom:50px;"></p> 
-                    
-                    <label for="deadline"><h2>Deadline: <span style="color: red">*</span></h2></label>
-                    <p class="desc">When the project and its tasks should be completed by.</p>
-                    <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}{/if}"/>                    
-                    <p style="margin-bottom:50px;"></p>
-
-                    <label for="tags"><h2>Tags:</h2></label>
-                    <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                    <input id="tags" name="tags" />{if isset($tagList)}{$tagList}{/if}
+                        <p class="desc">Approximate or use a site such as 
+                            <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.
+                        </p>
+                        <input type="text" name="word_count" id="word_count" maxlength="6" 
+                                value="{if isset($project)}{$project->getWordCount()}{/if}"/>
+                    </div>                    
+                    <div style="margin-bottom:25px;">                    
+                        <label for="deadline"><h2>Deadline: <span style="color: red">*</span></h2></label>
+                        <p class="desc">When the project and its tasks should be completed by.</p>
+                        <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}{/if}"/>                    
+                    </div>
+                    <div style="margin-bottom:25px;">
+                        <label for="tags"><h2>Tags:</h2></label>
+                        <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
+                        <textarea wrap="soft" cols="1" rows="3" name="tags">{if isset($tagList)}{$tagList}{/if}</textarea>
+                    </div>
+                    <div style="margin-bottom:25px;">
+                        <label for="publishtasks"><h2>Publish Tasks:</h2></label>
+                        <p class="desc">If checked, tasks will appear in the task stream.</p>
+                        <input type="checkbox" name="publishTasks" value="1" checked="true"/>
+                    </div>
                 </td>                    
             </tr>
             <tr>
@@ -136,10 +143,9 @@
                 <td valign="center">
                     <table border="0" width="100%"> 
                         <tr align="center">
-                            <td width="25%"><b>Chunking</b></td>
-                            <td width="25%"><b>Translation</b></td>
-                            <td width="25%"><b>Proofreading</b></td>
-                            <td width="25%"><b>Postediting</b></td>
+                            <td width="33%"><b>Chunking</b></td>
+                            <td width="33%"><b>Translation</b></td>
+                            <td width="33%"><b>Proofreading</b></td>
                         </tr> 
                     </table>
                 </td>
@@ -171,7 +177,6 @@
                             <td><input title="Create a chunking task for dividing large source files into managable chunks of 5,000 words or less." type="checkbox" id="chunking_0" name="chunking_0" value="y" onchange="chunkingEnabled(0)"/></td>                            
                             <td><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
                             <td><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_0" checked="true" name="proofreading_0" value="y"/></td>
-                            <td><input title="Create a postediting task for merging together task chunks created by a chunking task." type="checkbox" id="postediting_0" name="postediting_0" value="y"/></td>
                         </tr>                        
                     </table>                    
                 </td>

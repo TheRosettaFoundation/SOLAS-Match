@@ -1,26 +1,29 @@
 {include file="header.tpl"}
 
-<h1 class="page-header">
-    {if $task->getTitle() != ''}
-        {$task->getTitle()}
-    {else}
-        Task {$task->getId()}
-    {/if}
-    <small>
-        <b>
-            -
-            {assign var="type_id" value=$task->getTaskType()}
-            {if $type_id == TaskTypeEnum::CHUNKING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
-            {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task</span> 
-            {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task</span> 
-            {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task</span> 
-            {/if}
-        </b>
-    </small>   
+<h1 class="page-header" style="height: auto">
+    <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
+        {if $task->getTitle() != ''}
+            {$task->getTitle()}
+        {else}
+            Task {$task->getId()}
+        {/if}
+
+        <small>
+            <b>
+                 -
+                {assign var="type_id" value=$task->getTaskType()}
+                {if $type_id == TaskTypeEnum::CHUNKING}
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
+                {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task</span> 
+                {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task</span> 
+                {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task</span> 
+                {/if}
+            </b>
+        </small>  
+    </span>
     {assign var="task_id" value=$task->getId()}
     
     <div class="pull-right">
@@ -33,11 +36,6 @@
             <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btn btn-primary'>
                 <i class="icon-wrench icon-white"></i> Edit Task Details
             </a>
-        {else}
-                {if Settings::get('converter.converter_enabled') == "y"}
-                    <a href="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true" class="btn btn-primary">
-                    <i class="icon-download icon-white"></i> Download as XLIFF</a>   
-                {/if}
         {/if}
     </div>
 </h1>

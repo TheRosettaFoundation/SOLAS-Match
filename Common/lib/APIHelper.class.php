@@ -17,6 +17,7 @@ class APIHelper
 
         switch ($format)
         {
+            default:
             case FormatEnum::JSON:
                 $this->_serializer = new JSONSerializer();
                 break;

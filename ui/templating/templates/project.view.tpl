@@ -1,14 +1,18 @@
 {include file="header.tpl"}
 
 <h1 class="page-header">
-    {$project->getTitle()}
-    <small>Overview of project details.</small>
+    <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
+        {$project->getTitle()}
+        <small>Overview of project details.</small>
+    </span>
     {assign var="project_id" value=$project->getId()}
     
     {if isset($isOrgMember)}
-        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
-            <i class="icon-wrench icon-white"></i> Edit Project
-        </a> 
+        <div class="pull-right">
+            <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
+                <i class="icon-wrench icon-white"></i> Edit Project
+            </a> 
+        </div>
     {/if}
 </h1>
 
@@ -182,31 +186,14 @@
         <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
                 <tr>
-                    <th>
-                        <p style="margin-bottom:40px;"></p>
-                        Title
-                    </th>
-                    <th>
-                        Status
-                    </th>               
-                    <th>
-                        Type
-                    </th> 
-                    <th>
-                        Task Deadline
-                    </th>                  
-                    <th>
-                        Word Count
-                    </th>
-                    <th>
-                        Published
-                    </th>                    
-                    <th>
-                        Track
-                    </th>
-                    <th>
-                        Edit
-                    </th>
+                    <th><span style="margin-bottom:40px;"/>Title</th>
+                    <th>Status</th>       
+                    <th>Type</th> 
+                    <th>Task Deadline</th>                  
+                    <th>Word Count</th>
+                    <th>Published</th>                    
+                    <th>Track</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>

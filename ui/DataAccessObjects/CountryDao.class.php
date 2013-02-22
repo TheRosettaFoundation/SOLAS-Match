@@ -15,7 +15,7 @@ class CountryDao
     public function getCountry($params)
     {
         $ret = null;
-        $request = "$this->siteApi/v0/countries";
+        $request = "{$this->siteApi}v0/countries";
         
         $id = null;
         $code = null;

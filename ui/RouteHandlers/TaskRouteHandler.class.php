@@ -569,6 +569,12 @@ class TaskRouteHandler
                 }
             }
             
+            if(isset($post->publishTask) && $post->publishTask) {
+                $task->setPublished(1);
+            } else {
+                $task->setPublished(0);
+            }
+            
             if ($post->target != "") {
                 $task->setTargetLanguageCode($post->target);
             }   

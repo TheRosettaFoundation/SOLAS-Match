@@ -16,7 +16,7 @@ class TagDao
     public function getTag($params, $limit = null)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/tags";
+        $request = "{$this->siteApi}v0/tags";
         
         $id = null;
         $label = null;
@@ -61,7 +61,7 @@ class TagDao
     public function getTasksWithTag($tagId, $limit = null)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/tags/$tagId/tasks";
+        $request = "{$this->siteApi}v0/tags/$tagId/tasks";
 
         $args = null;
         if ($limit) {
@@ -76,7 +76,7 @@ class TagDao
     public function createTag($tag)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/tags";
+        $request = "{$this->siteApi}v0/tags";
         $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $tag);
         $ret = $this->client->cast("Tag", $response);
         return $ret;
@@ -85,7 +85,7 @@ class TagDao
     public function updateTag($tag)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/tags/{$tag->getId()}";
+        $request = "{$this->siteApi}v0/tags/{$tag->getId()}";
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $tag);
         $ret = $this->client->cast("Tag", $response);
         return $ret;
@@ -94,7 +94,7 @@ class TagDao
     public function deleteTag($tagId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/tags/{$tag->getId()}";
+        $request = "{$this->siteApi}v0/tags/{$tag->getId()}";
         $response = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
         $ret = $this->client->cast("Tag", $response);
         return $ret;
