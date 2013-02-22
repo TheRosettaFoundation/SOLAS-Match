@@ -145,6 +145,7 @@ class Tasks {
             Dispatcher::sendResponce(null, array("result" => $result), null, $format);
         }, 'setTasksTags');
         
+        //Consider Removing
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/status(:format)/',
                                                         function ($id, $format=".json") {
             
@@ -259,6 +260,7 @@ class Tasks {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTaskClaimed');
         
+        //Consider Removing
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/addTarget/:languageCode/:countryCode/:userID/',
                                                 function ($languageCode, $countryCode, $userID, $format = ".json") {
             

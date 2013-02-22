@@ -113,16 +113,17 @@ class TaskFile {
         return $ret;
     }
     
-    public static function uploadFile($task,$convert,&$file,$version,$userId,$filename){
+    public static function uploadFile($task,$convert,&$file,$version,$userId,$filename)
+    {
         Notify::sendEmailNotifications($task, NotificationTypes::UPLOAD);
             
-            if($convert){
-                Upload::apiSaveFile($task, $userId, 
-                    FormatConverter::convertFromXliff(Dispatcher::getDispatcher()->request()->getBody()), $filename,$version);
-            }else{
+        if($convert){
+            Upload::apiSaveFile($task, $userId, 
+            FormatConverter::convertFromXliff(Dispatcher::getDispatcher()->request()->getBody()), $filename,$version);
+        }else{
             //touch this and you will die painfully sinisterly sean :)
-                Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename,$version);
-            }
+            Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename,$version);
+        }
     }
     
     public static function uploadOutputFile($task,$convert,&$file,$userId,$filename){

@@ -77,11 +77,11 @@
                 {/if}
                 <p id="feedback">
                     <input type="hidden" name="selectedList" id="selectedList" value="{$hiddenPreReqList}" />
-                    <span>You've selected:</span> <span id="select-result">none</span>.
+                    <span>You've selected:</span> <span id="select-result">{$selectedString}</span>.
                 </p>
                 <ol class ="pull-left" id="selectable">
                     {foreach $projectTasks as $projectTask}
-                        {if in_array($projectTask->getId(), $taskPreReqIds)}
+                        {if $taskPreReqIds && in_array($projectTask->getId(), $taskPreReqIds)}
                             <li class="ui-widget-content ui-selected" value="{$projectTask->getId()}">{$projectTask->getTitle()}</li>
                         {else}
                             <li class="ui-widget-content" style="width: 470px" value="{$projectTask->getId()}">{$projectTask->getTitle()}</li>

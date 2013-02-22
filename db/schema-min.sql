@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `impact` VARCHAR(4096) NOT NULL,
   `deadline` datetime NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
   `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -237,6 +238,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `impact` VARCHAR(4096) NOT NULL,
   `deadline` datetime DEFAULT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
   `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -280,6 +282,22 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
 
 -- Data exporting was unselected.
 
+-- Dumping data for table Solas-Match-Test.Statistics
+/*!40000 ALTER TABLE `Statistics` DISABLE KEYS */;
+REPLACE INTO `Statistics` (`name`, `value`) VALUES
+	('ArchivedProjects', 0),
+	('ArchivedTasks', 0),
+        ('Badges', 0),
+	('ClaimedTasks', 0),
+	('Organisations', 0),
+	('OrgMembershipRequests', 0),
+	('Projects', 0),
+	('Tags', 0),
+	('Tasks', 0),
+	('TasksWithPreReqs', 0),
+        ('TotalProjects', 0),
+	('UnclaimedTasks', 0),
+	('Users', 0);
 
 -- Dumping structure for table Solas-Match-Test.Tags
 
@@ -626,7 +644,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject`(IN `projectId` INT, IN `user_id` INT)
     MODIFIES SQL DATA
 BEGIN
-    INSERT INTO `ArchivedProjects` (id, title, description, deadline, organisation_id, reference, `word-count`, created,country_id,language_id)
+    INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,country_id,language_id)
 
         SELECT *
         FROM Projects p
@@ -1101,6 +1119,7 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getOrgMembers
+DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `id` INT)
 BEGIN
@@ -1136,13 +1155,15 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getProject
+DROP PROCEDURE IF EXISTS `getProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impact` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
     READS SQL DATA
 BEGIN
     if projectId='' then set projectId=null;end if;
     if titleText='' then set titleText=null;end if;
     if descr='' then set descr=null;end if;
+    if impact='' then set impact=null;end if;
     if deadlineTime='' then set deadlineTime=null;end if;
     if orgId='' then set orgId=null;end if;
     if ref='' then set ref=null;end if;
@@ -1151,7 +1172,7 @@ BEGIN
     if sCC="" then set sCC=null; end if;
     if sCode="" then set sCode=null; end if;
 
-    set @q="SELECT id, title, description,deadline,organisation_id,reference,`word-count`, created,(select code from Countries where id =p.`country_id`) as country_id,(select code from Languages where id =p.`language_id`) as language_id, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'  FROM Projects p WHERE 1";
+    set @q="SELECT id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,(select code from Countries where id =p.`country_id`) as country_id,(select code from Languages where id =p.`language_id`) as language_id, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'  FROM Projects p WHERE 1";
     if projectId is not null then
         set @q = CONCAT(@q, " and p.id=", projectId);
     end if;
@@ -1160,6 +1181,9 @@ BEGIN
     end if;
     if descr is not null then
         set @q = CONCAT(@q, " and p.description='", descr, "'");
+    end if;
+    if impact is not null then
+        set @q = CONCAT(@q, " and p.impact='", impact, "'");
     end if;
     if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
         set @q = CONCAT(@q, " and p.deadline='", deadlineTime, "'");
@@ -1199,7 +1223,7 @@ DROP PROCEDURE IF EXISTS `getProjectByTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectByTag`(IN `tID` INT)
 BEGIN
- select id, title, description,deadline,organisation_id,reference,`word-count`, created,(select code from Countries where id =p.`country_id`) as country_id,(select code from Languages where id =p.`language_id`) as language_id, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'
+ select id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,(select code from Countries where id =p.`country_id`) as country_id,(select code from Languages where id =p.`language_id`) as language_id, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'
  from Projects p 
  join ProjectTags pt 
  on pt.project_id=p.id
@@ -1786,6 +1810,7 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTopTasks
+DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `lim` INT)
     READS SQL DATA
@@ -1913,11 +1938,12 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impact` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
 BEGIN
     if projectId="" then set projectId=null; end if;
     if titleText="" then set titleText=null; end if;
     if descr="" then set descr=null; end if;
+    if impact="" then set impact=null; end if;
     if deadlineTime="" then set deadlineTime=null; end if;
     if orgId="" then set orgId=null; end if;
     if ref="" then set ref=null; end if;
@@ -1933,10 +1959,10 @@ BEGIN
 			set @sID=null;
 			select l.id into @sID from Languages l where l.code=sCode;
 	
-        INSERT INTO Projects (title, description, deadline, organisation_id, reference, `word-count`, created,language_id,country_id) VALUES (titleText, descr, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID);
+        INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id) VALUES (titleText, descr, impact, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID);
         #select (projectId, titleText, descr, deadlineTime, orgId, ref, wordCount, createdTime,sCC,sCode);
 #        call getProject(projectId, title, descr, deadlineTime, orgId, ref, wordCount, createdTime,sCC,sCode);
-         call getProject(LAST_INSERT_ID(), '', '', '', '','', '', '','','');
+         call getProject(LAST_INSERT_ID(),'', '', '', '', '','', '', '','','');
     elseif EXISTS (select 1 FROM Projects p WHERE p.id=projectId) then
         set @first = true;
         set @q = "UPDATE Projects p set";
@@ -1956,6 +1982,14 @@ BEGIN
                 set @first = false;
             end if;
             set @q = CONCAT(@q, " p.description='", descr, "'");
+        end if;
+        if impact is not null then
+            if (@first = false) then
+                set @q = CONCAT(@q, ",");
+            else
+                set @first = false;
+            end if;
+            set @q = CONCAT(@q, " p.impact='", impact, "'");
         end if;
         if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
             if (@first = false) then
@@ -2592,6 +2626,7 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.unClaimTask
+DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT)
 BEGIN
@@ -2889,8 +2924,13 @@ DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
 BEGIN
-	SET @totalProjects = 0;	
-	SELECT count(1) INTO @totalProjects FROM Projects;	
+	SET @Projects = 0;
+	SET @ArchivedProjects = 0;	
+	
+	SELECT count(1) INTO @Projects FROM Projects;	
+	SELECT count(1) INTO @ArchivedProjects FROM ArchivedProjects;
+	
+	SET @totalProjects = @Projects + @ArchivedProjects;
 	REPLACE INTO Statistics (name, value)
 	VALUES ('Projects', @totalProjects);
 END//
@@ -2959,7 +2999,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.statsUpdateUnclaimedTasks
 DROP PROCEDURE IF EXISTS `statsUpdateUnclaimedTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateClaimedTasks`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateUnclaimedTasks`()
 BEGIN
         SET @unclaimedTasks = 0;
         SELECT count(1) into @unclaimedTasks from Tasks t
@@ -2981,20 +3021,23 @@ BEGIN
 	SET @totalTasks = 0;
 	SET @claimedTasks = 0;
 	SET @unclaimedTasks = 0;
-	SET @archivedTasks = 0;
+	SET @totalTasksWithPreReqs = 0;
+	SET @archivedTasks = 0;	
 	
 	SELECT count(1) INTO @claimedTasks FROM TaskClaims;
 	
 	SELECT count(1) into @unclaimedTasks from Tasks t
 	WHERE t.id NOT IN
 	(
-            SELECT task_id
-            FROM  TaskClaims
+	  SELECT task_id
+	  FROM  TaskClaims
 	);
 	
-	SELECT count(1) INTO @archivedTasks FROM ArchivedTasks;
+	SELECT count(1) INTO @archivedTasks FROM ArchivedTasks;	
+
+	SELECT count(DISTINCT tp.task_id) INTO @totalTasksWithPreReqs FROM TaskPrerequisites tp;
 	
-	SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks;	
+	SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks + @totalTasksWithPreReqs;	
 	REPLACE INTO Statistics (name, value)
 	VALUES ('Tasks', @totalTasks);
 END//
@@ -3041,7 +3084,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getStatistics
 DROP PROCEDURE IF EXISTS `getStatistics`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatistics`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatistics`(IN `statName` VARCHAR(128))
 BEGIN
 	IF statName = '' THEN SET statName = NULL; END IF;
 	
@@ -3056,6 +3099,57 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateAll
+DROP PROCEDURE IF EXISTS `statsUpdateAll`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateAll`()
+BEGIN
+	CALL statsUpdateArchivedProjects;
+	CALL statsUpdateArchivedTasks;
+	CALL statsUpdateBadges;
+	CALL statsUpdateClaimedTasks;
+	CALL statsUpdateOrganisations;
+	CALL statsUpdateOrgMemberRequests;
+	CALL statsUpdateProjects;
+	CALL statsUpdateTags;
+	CALL statsUpdateTasks;
+	CALL statsUpdateTasksWithPreReqs;
+        CALL statsUpdateTotalProjects;
+	CALL statsUpdateUnclaimedTasks;
+	CALL statsUpdateUsers;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateProjects
+DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
+BEGIN
+	SET @Projects = 0;		
+	SELECT count(1) INTO @Projects FROM Projects;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Projects', @Projects);	
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateTotalProjects
+DROP PROCEDURE IF EXISTS `statsUpdateTotalProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTotalProjects`()
+BEGIN
+	SET @Projects = 0;
+	SET @ArchivedProjects = 0;	
+	
+	SELECT count(1) INTO @Projects FROM Projects;	
+	SELECT count(1) INTO @ArchivedProjects FROM ArchivedProjects;
+	
+	SET @totalProjects = @Projects + @ArchivedProjects;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('TotalProjects', @totalProjects);	
+END//
+DELIMITER ;
+
 
 
 /*---------------------------------------end of procs----------------------------------------------*/
@@ -3140,10 +3234,10 @@ SET SQL_MODE=@OLD_SQL_MODE;
 
 
 -- Dumping structure for trigger Solas-Match-Test.updateTaskStatsuOnAddPrereq
-DROP TRIGGER IF EXISTS `updateTaskStatsuOnAddPrereq`;
+DROP TRIGGER IF EXISTS `updateTaskStatusOnAddPrereq`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
-CREATE TRIGGER `updateTaskStatsuOnAddPrereq` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
+CREATE TRIGGER `updateTaskStatusOnAddPrereq` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
 if exists 
 	(select 1 
 	 from Tasks t

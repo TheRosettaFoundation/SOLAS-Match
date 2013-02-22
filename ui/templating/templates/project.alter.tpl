@@ -15,18 +15,20 @@
 
                 <label for="title" style="font-size: large"><b>Title:</b></label>
                 <textarea wrap="soft" cols="1" rows="4" name="title">{$project->getTitle()}</textarea>
-                <p style="margin-bottom:20px;"></p>
+                <p style="margin-bottom:30px;"></p>
                 
                 <label for="description" style="font-size: large"><b>Description:</b></label>
                 <textarea wrap="soft" cols="1" rows="6" name="description">{$project->getDescription()}</textarea>
                 
-                <p style="margin-bottom:20px;"></p>
-                <label for="tags" style="font-size: large"><b>Tags:</b></label>
-                <textarea wrap="soft" cols="1" rows="4" name="tags">{$tag_list}</textarea>
-
-
+                <p style="margin-bottom:30px;"></p>
+                <label for="impact" style="font-size: large"><b>Impact:</b></label>
+                <textarea wrap="soft" cols="1" rows="4" name="impact">{$project->getImpact()}</textarea>
             </td>
             <td>
+                <label for="tags" style="font-size: large"><b>Tags:</b></label>
+                <textarea wrap="soft" cols="1" rows="4" name="tags">{$tag_list}</textarea>
+                <p style="margin-bottom:20px;"></p>
+                
                 <label for="deadline" style="font-size: large"><b>Deadline:</b></label>
                 {if isset($deadlineError) && $deadlineError != ''}
                     <p class="alert alert-error">{$deadlineError}</p>
@@ -34,7 +36,7 @@
                 <p>
                     <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}" />
                 </p>
-                <p style="margin-bottom:20px;"></p>
+                <p style="margin-bottom:20px;"/>
                 
                 {if isset($languages)}
                 <p>

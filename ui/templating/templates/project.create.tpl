@@ -6,7 +6,7 @@
             Create A Project <small>Provide as much information as possible.</small><br>   
             <small>
                 Note:
-                <font color='red'>*</font>
+                <span style="color: red">*</span>
                 denotes a required field.
             </small>
         </h1>
@@ -34,6 +34,12 @@
                                 {if isset($deadline_err)}
                                     <li>{$deadline_err}</li>
                                 {/if}
+                                {if isset($description_err)}
+                                    <li>{$description_err}</li>
+                                {/if}
+                                {if isset($impact_err)}
+                                    <li>{$impact_err}</li>
+                                {/if}
                                 {if isset($targetLanguage_err)}
                                     <li>{$targetLanguage_err}</li>
                                 {/if}
@@ -47,28 +53,32 @@
             </tr>
             <tr valign="middle">
                 <td width="493" align="center" valign="middle">
-                    <label for="title"><h2>Title: <font color='red'>*</font></h2></label>
+                    <label for="title"><h2>Title: <span style="color: red">*</span></h2></label>
                     <p class="desc">Provide a meaningful title for the project.</p>
                     <textarea wrap="soft" cols="1" rows="3" name="title" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
                     <p style="margin-bottom:20px;"></p>
 
-                    <label for="description"><h2>Description:</h2></label>
+                    <label for="description"><h2>Description: <span style="color: red">*</span></h2></label>
                     <p class="desc">A brief summary of the project.</p>                    
                     <textarea wrap="soft" cols="1" rows="6" name="description">{if isset($project)}{$project->getDescription()}{/if}</textarea>                    
                     <p style="margin-bottom:20px;"></p>
 
+                    <label for="impact"><h2>Impact: <span style="color: red">*</span></h2></label>
+                    <p class="desc">Who or what will benefit from contributions to this project.</p>
+                    <textarea wrap="soft" cols="1" rows="3" name="impact">{if isset($project)}{$project->getImpact()}{/if}</textarea>    
+                    <p style="margin-bottom:20px;"></p>
+                    
                     <label for="reference"><h2>Reference:</h2></label>
                     <p class="desc">Enter a URL that gives context to this project.</p>
                     <textarea wrap="soft" cols="1" rows="3" name="reference">{if isset($project)}{$project->getReference()}{/if}</textarea>    
-                    <p style="margin-bottom:10px;"></p> 
                 </td>
                 <td width="493" align="center" valign="middle">    
-                    <label for="{$field_name}"><h2>Source Text: <font color='red'>*</font></h2></label>
+                    <label for="{$field_name}"><h2>Source Text: <span style="color: red">*</span></h2></label>
                     <p class="desc">Upload your source file for the project. Max file size is 8 MB.</p> {*$max_file_size_mb*}
                     <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/> {*$max_file_size_bytes*}
                     <input type="file" name="{$field_name}" id="{$field_name}"/>
                     <input type="hidden" name="organisation_id" value="1"/>
-                    <p style="margin-bottom:30px;"></p>
+                    <p style="margin-bottom:50px;"></p>
                     
                     <label for="word_count"><h2>Word Count:</h2></label>
                     <p class="desc">Approximate or use a site such as 
@@ -76,12 +86,12 @@
                     </p>
                     <input type="text" name="word_count" id="word_count" maxlength="6" 
                             value="{if isset($project)}{$project->getWordCount()}{/if}"/>
-                    <p style="margin-bottom:30px;"></p> 
+                    <p style="margin-bottom:50px;"></p> 
                     
-                    <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
+                    <label for="deadline"><h2>Deadline: <span style="color: red">*</span></h2></label>
                     <p class="desc">When the project and its tasks should be completed by.</p>
                     <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}{/if}"/>                    
-                    <p style="margin-bottom:30px;"></p>
+                    <p style="margin-bottom:50px;"></p>
 
                     <label for="tags"><h2>Tags:</h2></label>
                     <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
@@ -96,7 +106,7 @@
             <tr>
                 <td align="left" valign="top">
                     {if isset($languages)}
-                            <h2>Source Language: <font color='red'>*</font></h2><br>
+                        <h2>Source Language: <span style="color: red">*</span></h2><br>
                             <select name="sourceLanguage" id="sourceLanguage">
                                 {foreach $languages as $language}
                                         <option value="{$language->getCode()}">{$language->getName()}</option>
@@ -110,18 +120,18 @@
                                 </select>
                             {/if}
                     {else}
-                        <label for="source"><h2>Source Language: <font color='red'>*</font></h2></label>
+                        <label for="source"><h2>Source Language: <span style="color: red">*</span></h2></label>
                         <input type="text" name="source" id="source"/>
                         <input type="text" name="sourceCountry" id="source"/>
                     {/if}                     
                 </td>                
                 <td align="center" valign="bottom">
-                    <h2>Task Type: <font color='red'>*</font></h2>
+                    <h2>Task Type: <span style="color: red">*</span></h2>
                     <p class="desc">Specify which task types you require for your workflow.</p>                 
                 </td>
             <tr>
                 <td>                    
-                    <h2>Target Language(s): <font color='red'>*</font></h2><br>
+                    <h2>Target Language(s): <span style="color: red">*</span></h2><br>
                 </td>
                 <td valign="center">
                     <table border="0" width="100%"> 
@@ -150,7 +160,7 @@
                             </select> 
                         {/if}
                     {else}
-                        <label for="source"><h2>Source Language: <font color='red'>*</font></h2></label>
+                        <label for="source"><h2>Source Language: <span style="color: red">*</span></h2></label>
                         <input type="text" name="source" id="source"/>
                         <input type="text" name="sourceCountry" id="source"/>
                     {/if}  

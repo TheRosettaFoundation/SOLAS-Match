@@ -180,7 +180,8 @@ class Users {
             Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
             Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
         }, 'userClaimTask');
-        
+       
+        //Which of these actually gets called??
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tasks(:format)/',
                                                         function ($id, $format = ".json") {
             
@@ -363,7 +364,7 @@ class Users {
             $dao = new UserDao();
             $data = $dao->createPasswordReset($id);
             Dispatcher::sendResponce(null, array("result" => $data,
-                "message" => $data == 1 ? "a password reset request has been create and sent to you contact address"
+                "message" => $data == 1 ? "a password reset request has been created and sent to your contact address"
                 : "password reset request already exists"), null, $format);
         }, 'createPasswordResetRequest');   
         

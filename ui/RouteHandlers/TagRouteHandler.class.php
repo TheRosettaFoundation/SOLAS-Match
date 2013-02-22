@@ -18,17 +18,12 @@ class TagRouteHandler
     public function tagsList()
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $userDao = new UserDao();
+        $tagDao = new TagDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $request = "$siteApi/v0/users/$user_id/tags";
-        $response = $client->call($request);
-        $user_tags = $client->cast(array("Tag"), $response);
-
-        $request = "$siteApi/v0/tags";
-        $response = $client->call($request);
-        $all_tags = $client->cast(array("Tag"), $response);
+        $user_tags = $userDao->getUserTags($user_id);
+        $all_tags = $tagDao->getTag(null);
         
         $app->view()->appendData(array(
             "user_tags" => $user_tags,
@@ -41,17 +36,12 @@ class TagRouteHandler
     public function tagSubscribe($label, $subscribe)
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $tagDao = new TagDao();
+        $userDao = new UserDao();
 
-        $request = "$siteApi/v0/tags/getByLabel/$label";
-        $response = $client->call($request);
-        $tag = $client->cast("Tag", $response);
-        
+        $tag = $tagDao->getTag(array('label' => $label));
         $user_id = UserSession::getCurrentUserID();
-        $request = "$siteApi/v0/users/$user_id";
-        $response = $client->call($request);
-        $current_user = $client->cast("User", $response);
+        $current_user = $userDao->getUser(array('id' => $user_id));
 
         if (!is_object($current_user)) {
             $app->flash("error", "Login required to access page");
@@ -62,12 +52,8 @@ class TagRouteHandler
         $displayName = $current_user->getDisplayName();
         
         if ($subscribe == "true") {
-            $request = "$siteApi/v0/users/$user_id/tags/$tag_id";
-            $userLikeTag = $client->call($request, HTTP_Request2::METHOD_PUT);            
-            
+            $userLikeTag = $userDao->addUserTagById($user_id, $tag_id);            
             if ($userLikeTag) {
-                $request = "$siteApi/v0/users/$user_id/tags/$tag_id";
-                $response = $client->call($request, HTTP_Request2::METHOD_PUT);
                 $app->flash("success", "Successfully added tag, $label, to subscription list");
             } else {
                 $app->flash("error", "Unable to save tag, $label, for user $displayName");
@@ -75,8 +61,7 @@ class TagRouteHandler
         }   
         
         if ($subscribe == "false") {
-            $request = "$siteApi/v0/users/$user_id/tags/$tag_id";
-            $removedTag = $client->call($request, HTTP_Request2::METHOD_DELETE);
+            $removedTag = $userDao->removeUserTag($user_id, $tag_id);
             if ($removedTag) {
                 $app->flash("success", "Successfully removed tag $label for user $displayName");
             } else {
@@ -90,31 +75,22 @@ class TagRouteHandler
     public function tagDetails($label)
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $tagDao = new TagDao();
+        $projectDao = new ProjectDao();
+        $orgDao = new OrganisationDao();
+        $userDao = new UserDao();
 
-        $request = "$siteApi/v0/tags/getByLabel/$label";
-        $response = $client->call($request);
-        $tag = $client->cast("Tag", $response);
-        
+        $tag = $tagDao->getTag(array('label' => $label));
         $tag_id = $tag->getId();
-        
         if (is_null($tag_id)) {
             header("HTTP/1.0 404 Not Found");
             die;
         }
 
-        $request = "$siteApi/v0/tags/$tag_id/tasks";
-        $data = array('limit' => 10);
-        $response = $client->call($request, HTTP_Request2::METHOD_GET, $data);
-        $tasks = $client->cast(array("Task"), $response);
-
+        $tasks = $tagDao->getTasksWithTag($tag_id, 10);
         for ($i = 0; $i < count($tasks); $i++) {
-            $resp = $client->call("$siteApi/v0/projects/{$tasks[$i]->getProjectId()}");
-            $tasks[$i]['Project'] = $client->cast("Project", $resp);
-            
-            $resp = $client->call("$siteApi/v0/orgs/{$tasks[$i]['Project']->getOrganisationId()}");
-            $tasks[$i]['Org'] = $client->cast("Organisation", $resp);
+            $tasks[$i]['Project'] = $projectDao->getProject(array('id' => $tasks[$i]->getProjectId()));
+            $tasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $tasks[$i]['Project']->getOrganisationId()));
         }
 
         $app->view()->setData('tasks', $tasks);
@@ -126,12 +102,8 @@ class TagRouteHandler
                     "user_id" => $user_id
             ));
 
-            $user_tags = array();
-            $request = "$siteApi/v0/users/$user_id/tags";
-            $response = $client->call($request);
-            $user_tags = $client->cast(array("Tag"), $response);
-            
-            if (count($user_tags) > 0) {
+            $user_tags = $userDao->getUserTags($user_id);
+            if ($user_tags && count($user_tags) > 0) {
                 $app->view()->appendData(array(
                         'user_tags' => $user_tags
                 )); 
@@ -152,9 +124,7 @@ class TagRouteHandler
             $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
         }
 
-        $top_tags = array();
-        $request = "$siteApi/v0/tags/topTags";
-        $top_tags= $client->castCall(array("Tag"), $request, HTTP_Request2::METHOD_GET, null, array('limit' => 30));
+        $top_tags= $tagDao->getTopTags(30);
         $app->view()->appendData(array(
                  "tag" => $label,
                  "top_tags" => $top_tags,

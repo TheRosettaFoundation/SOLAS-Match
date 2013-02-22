@@ -55,7 +55,6 @@ class APIHelper
             $requestUrl->setQueryVariables($query_args);
         }
         
-        
         $response = $request->send();
         $response_data = $this->_serializer->deserialize(trim($response->getBody()));
         return $response_data;

@@ -1,5 +1,6 @@
 <?php
 
+require_once "ui/DataAccessObjects/UserDao.class.php";
 require_once "Common/models/Register.php";
 require_once "Common/models/Login.php";
 require_once "Common/models/PasswordResetRequest.php";
@@ -38,47 +39,30 @@ class UserRouteHandler
     public function home()
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $tagDao = new TagDao();
+        $taskDao = new TaskDao();
+        $projectDao = new ProjectDao();
+        $orgDao = new OrganisationDao();
+        $userDao = new UserDao();
         
         $use_statistics = Settings::get("site.stats"); 
-        
         if ($use_statistics == 'y') {
-            $request = "$siteApi/v0/stats/totalUsers";
-            $total_users = $client->call($request, HTTP_Request2::METHOD_GET);      
-            
-            $request = "$siteApi/v0/stats/totalOrgs";
-            $total_orgs = $client->call($request, HTTP_Request2::METHOD_GET);
-            
-
-            $request = "$siteApi/v0/stats/totalArchivedTasks";
-            $total_archived_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            $request = "$siteApi/v0/stats/totalClaimedTasks";
-            $total_claimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            $request = "$siteApi/v0/stats/totalUnclaimedTasks";
-            $total_unclaimed_tasks = $client->call($request, HTTP_Request2::METHOD_GET); 
-            
-            $request = "$siteApi/v0/stats/totalTasks";
-            $total_tasks = $client->call($request, HTTP_Request2::METHOD_GET);  
+            $statsDao = new StatisticsDao();
+            $statistics = $statsDao->getStats();    
+            $statsArray = null;
+            if($statistics) {
+                $statsArray = array();
+                foreach($statistics as $stat) {
+                    $statsArray[$stat->getName()] = $stat;
+                }
+            }
 
             $app->view()->appendData(array(
-                        "total_users" => $total_users
-                        ,"total_orgs" => $total_orgs
-                        ,"stats" => $use_statistics
-                        ,"total_archived_tasks" => $total_archived_tasks
-                        ,"total_claimed_tasks" => $total_claimed_tasks
-                        ,"total_unclaimed_tasks" => $total_unclaimed_tasks
-                        ,"total_tasks" => $total_tasks
+                "statsArray" => $statsArray
             ));
         }
         
-        $request = "$siteApi/v0/tags/topTags";
-        $response = $client->call($request, HTTP_Request2::METHOD_GET, null,
-                                    array('limit' => 10));        
-        $top_tags = $client->cast(array('Tag'), $response);
-
+        $top_tags = $tagDao->getTopTags(10);        
         $app->view()->appendData(array(
             "top_tags" => $top_tags,
             "current_page" => "home",
@@ -87,48 +71,28 @@ class UserRouteHandler
         $current_user_id = UserSession::getCurrentUserID();
         
         if ($current_user_id == null) {
-            $tasks = $client->castCall(array("Task"), "$siteApi/v0/tasks/top_tasks",
-                    HTTP_Request2::METHOD_GET, null, array('limit' => 10));
+            $tasks = $taskDao->getTopTasks(10);
             for ($i = 0; $i < count($tasks); $i++) {
-                $resp = $client->call("$siteApi/v0/projects/{$tasks[$i]->getProjectId()}");
-                $tasks[$i]['Project'] = $client->cast("Project", $resp);
+                $tasks[$i]['Project'] = $projectDao->getProject(array('id' => $tasks[$i]->getProjectId()));
+                $tasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $tasks[$i]['Project']->getOrganisationId()));
+            }
 
-                $resp = $client->call("$siteApi/v0/orgs/{$tasks[$i]['Project']->getOrganisationId()}");
-                $tasks[$i]['Org'] = $client->cast("Organisation", $resp);
-            }
-            if ($tasks) {
-                $app->view()->appendData(array(
-                    "tasks" => $tasks
-                ));
-            }
+            $app->view()->appendData(array(
+                "tasks" => $tasks
+            ));
+
         } else {
-            $url = "$siteApi/v0/users/$current_user_id/top_tasks";
-            $response = $client->call($url, HTTP_Request2::METHOD_GET, null,
-                                    array("limit" => 10));
-            
-            $tasks = array();
-            $i = 0;
-            if ($response) {
-                foreach ($response as $stdObject) {
-                    $tasks[$i] = $client->cast("Task", $stdObject);
-                    $resp = $client->call("$siteApi/v0/projects/{$tasks[$i]->getProjectId()}");
-                    $tasks[$i]['Project'] = $client->cast("Project", $resp);
-
-                    $resp = $client->call("$siteApi/v0/orgs/{$tasks[$i]['Project']->getOrganisationId()}");
-                    $tasks[$i]['Org'] = $client->cast("Organisation", $resp);
-                    $i++;
-                }
+            $tasks = $userDao->getUserTopTasks($current_user_id, 10);
+            for ($i = 0; $i < count($tasks); $i++) {
+                $tasks[$i]['Project'] = $projectDao->getProject(array('id' => $tasks[$i]->getProjectId()));
+                $tasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $tasks[$i]['Project']->getOrganisationId()));
             }
             
             $app->view()->appendData(array(
                 "tasks" => $tasks
             ));
             
-            $url = "$siteApi/v0/users/$current_user_id/tags";
-            $response = $client->call($url, HTTP_Request2::METHOD_GET, null,
-                                    array('limit' => 10));
-            $user_tags = $client->cast(array("Tag"), $response);
-            
+            $user_tags = $userDao->getUserTags($current_user_id);
             $app->view()->appendData(array(
                         "user_tags" => $user_tags
             ));
@@ -151,8 +115,7 @@ class UserRouteHandler
     public function register()
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $userDao = new UserDao();
         
         $use_openid = Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
@@ -177,28 +140,11 @@ class UserRouteHandler
             }
             
             if (is_null($error)) {
-
-                $registerData = array();
-                $registerData["email"] = $post->email;
-                $registerData["password"] = $post->password;
-                $register =  ModelFactory::buildModel("Register", $registerData);
-
-                $request = "$siteApi/v0/register";
-                $response = $client->call($request, HTTP_Request2::METHOD_POST, $register);
-
+                $response = $userDao->register($post->email, $post->password);
                 if ($response) {
-                
-                    $loginData = array();
-                    $loginData["email"] = $post->email;
-                    $loginData["password"] = $post->password;
-                    $login = ModelFactory::buildModel("Login", $loginData);
-
-                    $request = "$siteApi/v0/login";             
-                    $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
-
+                    $user = $userDao->login($post->email, $post->password);
                     try {                        
                         if (!is_array($user) && !is_null($user)) {
-                            $user = $client->cast("User", $user);
                             UserSession::setSession($user->getUserId());
                         } else {
                             throw new InvalidArgumentException("Sorry, the  password or username entered is incorrect.
@@ -242,14 +188,10 @@ class UserRouteHandler
     public function passwordReset($uid)
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $userDao = new UserDao();
         
-        $request = "$siteApi/v0/password_reset/$uid";
-        $response = $client->call($request);
-        if (is_object($response)) {
-            $reset_request = $client->cast("PasswordResetRequest", $response);
-        } else {
+        $reset_request = $userDao->getPasswordResetRequest($uid);
+        if (!is_object($reset_request)) {
             $app->flash("error", "Incorrect Unique ID. Are you sure you copied the URL correctly?");
             $app->redirect($app->urlFor("home"));
         }
@@ -263,16 +205,8 @@ class UserRouteHandler
                 if (isset($post->confirmation_password) && 
                         $post->confirmation_password == $post->new_password) {
 
-                    $data = array();
-                    $data["password"] = $post->new_password;
-                    $data["key"] = $uid;
-
-                    $request = "$siteApi/v0/password_reset";
-                    $response = $client->call($request, HTTP_Request2::METHOD_POST, 
-                            ModelFactory::buildModel("PasswordReset", $data));
-                    
+                    $response = $userDao->resetRequest($post->new_password, $uid);
                     if ($response) {
-                    
                         $app->flash("success", "You have successfully changed your password");
                         $app->redirect($app->urlFor("home"));
                     } else {
@@ -293,39 +227,30 @@ class UserRouteHandler
     public function passResetRequest()
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $userDao = new UserDao();
         
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             if (isset($post->password_reset)) {
                 if (isset($post->email_address) && $post->email_address != '') {
-                    $request = "$siteApi/v0/users/getByEmail/{$post->email_address}";
-                    $response = $client->call($request, HTTP_Request2::METHOD_GET);
-                    $user = $client->cast("User", $response); 
-                    
+                    $user = $userDao->getUser(array('email' => $post->email_address)); 
                     if ($user) {  
-                        $request = "$siteApi/v0/users/{$user->getUserId()}/passwordResetRequest";
-                        $hasUserRequestedPwReset = $client->call($request, HTTP_Request2::METHOD_GET);
-
+                        $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($user->getUserId());
                         $message = "";
                         if (!$hasUserRequestedPwReset) {
                             //send request
-                            $request = "$siteApi/v0/users/{$user->getUserId()}/passwordResetRequest";
-                            $client->call($request, HTTP_Request2::METHOD_POST);
+                            $userDao->requestPasswordReset($user->getUserId());
                             $app->flash("success", "Password reset request sent. Check your email
                                                     for further instructions.");
                             $app->redirect($app->urlFor("home"));
                         } else {
                             //get request time
-                            $request = "$siteApi/v0/users/{$user->getUserId()}/passwordResetRequest/time";
-                            $response = $client->call($request, HTTP_Request2::METHOD_GET);
+                            $response = $userDao->getPasswordResetRequestTime($user->getUserId());
                             $app->flashNow("info", "Password reset request was already sent on $response.
                                                      Another email has been sent to your contact address.
                                                      Follow the link in this email to reset your password");
                             //Send request
-                            $request = "$siteApi/v0/users/{$user->getUserId()}/passwordResetRequest";
-                            $client->call($request, HTTP_Request2::METHOD_POST);
+                            $userDao->requestPasswordReset($user->getUserId());
                         }
                     } else {
                         $app->flashNow("error", "Please enter a valid email address");
@@ -348,8 +273,7 @@ class UserRouteHandler
     public function login()
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $userDao = new UserDao();
         
         $error = null;
         $openid = new LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
@@ -370,16 +294,8 @@ class UserRouteHandler
                 $post = (object) $app->request()->post();
 
                 if (isset($post->login)) {
-
-                    $loginData = array();
-                    $loginData["email"] = $post->email;
-                    $loginData["password"] = $post->password;
-                    $login = ModelFactory::buildModel("Login", $loginData);
-
-                    $request = "$siteApi/v0/login";
-                    $user = $client->call($request, HTTP_Request2::METHOD_POST, $login);
+                    $user = $userDao->login($post->email, $post->password);
                     if (!is_array($user) && !is_null($user)) {
-                        $user = $client->cast("User", $user);
                         UserSession::setSession($user->getUserId());
                     } else {
                         throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
@@ -426,23 +342,13 @@ class UserRouteHandler
         } else {
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
-                $client = new APIHelper(Settings::get("ui.api_format"));
-                $siteApi = Settings::get("site.api");
-                $request = "$siteApi/v0/users/getByEmail/{$retvals['contact/email']}";
-                $response = $client->call($request);
-                if (is_null($response)) {
-                    $registerData = array();
-                    $registerData["email"] = $retvals["contact/email"];
-                    $registerData["password"] = md5($retvals["contact/email"]);
-
-                    $request = "$siteApi/v0/register";
-                    $response = $client->call($request, HTTP_Request2::METHOD_POST, 
-                                        ModelFactory::buildModel("Register", $registerData));
-                    $user = $client->cast("User", $response);
+                $userDao = new UserDao();
+                $user = $userDao->getUser(array('email' => $retvals['contact/email']));
+                if (is_null($user)) {
+                    $user = $userDao->register($retvals["contact/email"], $retvals["contact/email"]);
                     UserSession::setSession($user->getUserId());
                     return false;
                 }
-                $user = $client->cast("User", $response);
                 UserSession::setSession($user->getUserId());
                 
             }
@@ -453,15 +359,14 @@ class UserRouteHandler
     public static function userPrivateProfile()
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $userDao = new UserDao();
         $user_id = UserSession::getCurrentUserID();
-        
-        $url = "$siteApi/v0/users/$user_id";
-        $response = $client->call($url);
-        $user = $client->cast("User", $response);
-        $languages = TemplateHelper::getLanguageList();      //wait for API support
-        $countries = TemplateHelper::getCountryList();       //wait for API support
+        $user = $userDao->getUser(array('id' => $user_id));
+
+        $languageDao = new LanguageDao();
+        $countryDao = new CountryDao();
+        $languages = $languageDao->getLanguage(null);
+        $countries = $countryDao->getCountry(null);
         
         if (!is_object($user)) {
             $app->flash("error", "Login required to access page");
@@ -486,29 +391,17 @@ class UserRouteHandler
                 $user->setNativeRegionId($langCountry);
 
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $url = "$siteApi/v0/badges/$badge_id";
-                $response = $client->call($url);
-                $badge = $client->cast("Badge", $response);
-                
-                $request = "$siteApi/v0/users/$user_id/badges";
-                $client->call($request, HTTP_Request2::METHOD_POST, $badge);               
-
+                $userDao->addUserBadgeById($user_id, $badge_id);               
             }
-            
-            $request = "$siteApi/v0/users/$user_id";
-            $client->call($request, HTTP_Request2::METHOD_PUT, $user);
             
             if ($user->getDisplayName() != "" && $user->getBiography() != ""
                     && $user->getNativeLangId() != "" && $user->getNativeRegionId() != "") {
 
+                $userDao->updateUser($user);
+                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
+                $userDao->addUserBadgeById($user_id, $badge_id);               
                 $badge_id = BadgeTypes::PROFILE_FILLER;
-                $url = "$siteApi/v0/badges/$badge_id";
-                $response = $client->call($url);
-                $badge = $client->cast("Badge", $response);
-                
-                $request = "$siteApi/v0/users/$user_id/badges";
-                $response = $client->call($request, HTTP_Request2::METHOD_POST, $badge); 
-            
+                $userDao->addUserBadgeById($user_id, $badge_id);               
             }
             
             $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getUserId())));
@@ -524,55 +417,33 @@ class UserRouteHandler
     public static function userPublicProfile($user_id)
     {
         $app = Slim::getInstance();
-        $client = new APIHelper(Settings::get("ui.api_format"));
-        $siteApi = Settings::get("site.api");
+        $userDao = new UserDao();
+        $orgDao = new OrganisationDao();
 
-        $url = "$siteApi/v0/users/$user_id";
-        $response = $client->call($url);
-        $user = $client->cast("User", $response);
-        
+        $user = $userDao->getUser(array('id' => $user_id));
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
             if (isset($post->revokeBadge) && isset($post->badge_id) && $post->badge_id != ""){
                 $badge_id = $post->badge_id;
-                $request = "$siteApi/v0/users/$user_id/badges/$badge_id";
-                $response = $client->call($request, HTTP_Request2::METHOD_DELETE);                 
+                $userDao->removeUserBadge($user_id, $badge_id);
             }
                 
             if (isset($post->revoke)) {
                 $org_id = $post->org_id;
-                $request = "$siteApi/v0/users/leaveOrg/$user_id/$org_id";
-                $response = $client->call($request, HTTP_Request2::METHOD_DELETE); 
+                $userDao->leaveOrganisation($user_id, $org_id); 
             } 
         }
                     
-        $request = "$siteApi/v0/users/$user_id/tasks";
-        $response = $client->call($request);
-        $activeJobs = $client->cast(array('Task'), $response);
-        
-        $request = "$siteApi/v0/users/$user_id/archived_tasks";
-        $response = $client->call($request, HTTP_Request2::METHOD_GET, null, array('limit' => 10 )); 
-        $archivedJobs = $client->cast(array("Task"), $response);
-        
-        $request = "$siteApi/v0/users/$user_id/tags";
-        $response = $client->call($request);
-        $user_tags = $client->cast(array("Tag"), $response);
-        
-        $request = "$siteApi/v0/users/$user_id/orgs";
-        $response = $client->call($request);
-        $user_orgs = $client->cast(array("Organisation"), $response);
-
-        $request = "$siteApi/v0/users/$user_id/badges";
-        $response = $client->call($request);
-        $badges = $client->cast(array("Badge"), $response);
+        $archivedJobs = $userDao->getUserArchivedTasks($user_id, 10);
+        $user_tags = $userDao->getUserTags($user_id);
+        $user_orgs = $userDao->getUserOrgs($user_id);
+        $badges = $userDao->getUserBadges($user_id);
 
         $orgList = array();
         foreach ($badges as $badge) {
             if ($badge->getOwnerId() != null) {
-                $request = "$siteApi/v0/orgs/".$badge->getOwnerId();
-                $response = $client->call($request);
-                $org = $client->cast('Organisation', $response);
+                $org = $orgDao->getOrganisation(array('id' => $badge->getOwnerId()));
                 $orgList[$badge->getOwnerId()] = $org;
             }
         }       
@@ -586,7 +457,6 @@ class UserRouteHandler
         $app->view()->appendData(array("badges" => $badges,
                                     "user_orgs" => $user_orgs,
                                     "current_page" => "user-profile",
-                                    "activeJobs" => $activeJobs,
                                     "archivedJobs" => $archivedJobs,
                                     "user_tags" => $user_tags,
                                     "this_user" => $user,

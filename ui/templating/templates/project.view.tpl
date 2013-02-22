@@ -105,7 +105,7 @@
         <thead>
         <th align="left" width="48%">Description:<hr/></th>
         <th></th>
-        <th align="left" width="48%">Tags:<hr/></th>
+        <th align="left" width="48%">Impact:<hr/></th>
         </thead>
         <tbody>
             <tr valign="top">
@@ -119,7 +119,26 @@
                     </i>
                 </td>
                 <td></td>
-                <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;">
+                <td>
+                    <i>
+                    {if $project->getImpact() != ''}
+                        {$project->getImpact()}
+                    {else}
+                        No impact has been added.
+                    {/if}  
+                    </i>               
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding-bottom: 40px"></td>
+            </tr>
+            <tr valign="top">
+                <td colspan="3">
+                    <b>Tags:</b><hr/>
+                </td>
+            </tr>
+            <tr>                
+                <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
                 {if isset($project_tags) && is_array($project_tags)}
                     {foreach $project_tags as $ptag}
                         {assign var="tag_label" value=$ptag->getLabel()}
@@ -128,7 +147,7 @@
                 {else}
                     <i>There are no tags associated with this project.</i>                    
                 {/if}
-                </td>
+                </td>                
             </tr>
         </tbody>
     </table>
