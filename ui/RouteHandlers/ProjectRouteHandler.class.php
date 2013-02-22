@@ -217,6 +217,10 @@ class ProjectRouteHandler
             if ($post->description != "") {
                 $project->setDescription($post->description);
             }
+            
+            if ($post->impact != "") {
+                $project->setImpact($post->impact);
+            }
 
             if ($post->deadline != "") {
                 

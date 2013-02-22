@@ -66,7 +66,7 @@ class TemplateHelper {
     
     public static function isValidDateTime($dateTime)
     {
-        $cleansedDateTime = str_replace("UTC", "", $dateTime);
+        $cleansedDateTime = str_replace("-", "", str_replace("UTC", "", $dateTime));        
         if($unixTime = strtotime($cleansedDateTime)) {
             return true;
         } else {
