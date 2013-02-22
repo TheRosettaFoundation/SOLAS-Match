@@ -72,7 +72,7 @@ class ProjectDao
 
     public function archiveProject($projectId, $userId)
     {
-        $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
+        $project = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $project);
     }
 

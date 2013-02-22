@@ -1,5 +1,5 @@
 {* Must have an object $task assigned by parent *}
-<div class="task">
+<div class="task" style="word-break: break-all; overflow-wrap: break-word;">
     {assign var='task_id' value=$task->getId()}
     {assign var="type_id" value=$task->getTaskType()}    
                          
@@ -59,7 +59,7 @@
             {assign var="org_id" value=$task['Project']->getOrganisationId()}
             
             Part of: <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$task['Project']->getTitle()}</a>
-            for <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>                  
+            for <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>        
         </p>  
 
         <p style="margin-bottom:40px;"></p>        

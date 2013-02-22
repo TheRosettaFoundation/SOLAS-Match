@@ -55,7 +55,7 @@
             {/if}
     </div>
     
-    <div class="pull-left">
+    <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; table-layout: fixed; word-break:break-all;">
         {if count($tasks) > 0}
                 <div id="tasks">
                         {foreach from=$tasks item=task name=tasks_loop}

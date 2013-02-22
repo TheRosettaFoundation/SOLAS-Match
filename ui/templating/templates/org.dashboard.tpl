@@ -19,7 +19,7 @@
 {/if}
 
 {if isset($orgs)}
-    <table class="table table-striped" style="overflow-wrap: break-word;">
+    <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all;">
     {foreach $orgs as $org}
         {assign var="org_id" value=$org->getId()}
         <thead>

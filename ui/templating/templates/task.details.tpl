@@ -1,4 +1,4 @@
-<table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
+<table class="table table-striped">
     <thead>
         <th style="text-align: left"><b>Project</b></th>
 
@@ -11,7 +11,7 @@
     </thead>
     <tbody>
         <tr>
-            <td style="text-align: left">
+            <td style="text-align: left; word-break:break-all;">
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
                     <a href="{urlFor name="project-view" options="project_id.$projectId"}">
