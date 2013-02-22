@@ -4,7 +4,7 @@
     {assign var="type_id" value=$task->getTaskType()}    
                          
             <h2>
-                <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
+                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
             </h2>
             {if $type_id == TaskTypeEnum::CHUNKING}
                 <p>Type: 
