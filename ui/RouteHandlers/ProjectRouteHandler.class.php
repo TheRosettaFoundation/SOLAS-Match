@@ -392,6 +392,7 @@ class ProjectRouteHandler
             }
             
             $upload_error = false;
+            $file_upload_err = false;
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($field_name);
             } catch (Exception $e) {
