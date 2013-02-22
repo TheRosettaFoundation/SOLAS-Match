@@ -115,7 +115,7 @@ class ProjectRouteHandler
                         $app->flashNow("error", "Unable to unsubscribe from $task_title's notifications");
                     }
                 } else {
-                    $response = $userDao->trackTask($user_id, $task_id);
+                    $response = $userDao->trackTask($user_id, $post->task_id);
                     if ($response) {
                         $app->flashNow("success", "You will now receive notifications for $task_title.");
                     } else {
@@ -269,10 +269,29 @@ class ProjectRouteHandler
             }
         }
 
+        $tagList = "[";
+        $tagDao = new TagDao();
+        $tags = $tagDao->getTag(null);
+        if ($tags) {
+            foreach ($tags as $tag) {
+                $tagList .= "\"{$tag->getLabel()}\", ";
+            }
+        }
+        $tagList = substr($tagList, 0, strlen($tagList) - 2);
+        $tagList .= "]";
+
         $extra_scripts = "
             <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>"
-            .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js");
+            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui.css\" />
+            <script src=\"{$app->urlFor("home")}ui/js/jquery-1.9.0.min.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/js/jquery-ui.js\"></script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
+            <script type=\"text/javascript\">
+                var tagList = $tagList;
+            </script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/tags-autocomplete.js\"></script>
+        ";
         
         $app->view()->appendData(array(
                               "project"         => $project,
@@ -480,12 +499,31 @@ class ProjectRouteHandler
             }
         }
 
+        $tagString = "[";
+        $tagDao = new TagDao();
+        $allTags = $tagDao->getTag(null);
+        if ($allTags) {
+            foreach ($allTags as $tag) {
+                $tagString .= "\"{$tag->getLabel()}\", ";
+            }
+        }
+        $tagString = substr($tagString, 0, strlen($tagString) - 2);
+        $tagString .= "]";
+
         $extra_scripts = "
             <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
+            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui.css\" />
+            <script src=\"{$app->urlFor("home")}ui/js/jquery-1.9.0.min.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/js/jquery-ui.js\"></script>
             <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
-            </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-create.js")
-            .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js");
-  
+            </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-create.js")."
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
+            <script type=\"text/javascript\">
+                var tagList = $tagString;
+            </script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/tags-autocomplete.js\"></script>
+        ";
+
         $langDao = new LanguageDao();
         $countryDao = new CountryDao();
         $language_list = $langDao->getLanguage(null);

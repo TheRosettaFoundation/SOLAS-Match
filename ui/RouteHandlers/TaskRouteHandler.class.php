@@ -509,8 +509,8 @@ class TaskRouteHandler
 
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/selectable.css\" />
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>"
-        .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js")  
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>"
         .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-alter.js");
 
         $task = $taskDao->getTask(array('id' => $task_id));
@@ -902,8 +902,8 @@ class TaskRouteHandler
         });
         </script> 
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>"
-        .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js");
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
 
         $app->view()->appendData(array(
                 "project"       => $project,

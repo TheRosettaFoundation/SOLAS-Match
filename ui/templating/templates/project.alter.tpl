@@ -26,7 +26,7 @@
             </td>
             <td>
                 <label for="tags" style="font-size: large"><b>Tags:</b></label>
-                <textarea wrap="soft" cols="1" rows="4" name="tags">{$tag_list}</textarea>
+                <input id="tags" name="tags" value="{$tag_list}">
                 <p style="margin-bottom:20px;"></p>
                 
                 <label for="deadline" style="font-size: large"><b>Deadline:</b></label>
