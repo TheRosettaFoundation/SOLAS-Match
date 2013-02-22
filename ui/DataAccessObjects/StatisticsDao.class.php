@@ -17,55 +17,8 @@ class StatisticsDao
     {
         $ret = null;
         $request = "{$this->siteApi}/v0/stats";
-        $ret = $this->client->call($request);
-        return $ret;
-    }
-
-    public function getTotalTasks()
-    {
-        $ret = null;
-        $request = "{$this->siteApi}/v0/stats/totalTasks";
-        $ret = $this->client->call($request);
-        return $ret;
-    }
-
-    public function getTotalArchivedTasks()
-    {
-        $ret = null;
-        $request = "{$this->siteApi}/v0/stats/totalArchivedTasks";
-        $ret = $this->client->call($request);
-        return $ret;
-    }
-
-    public function getTotalClaimedTasks()
-    {
-        $ret = null;
-        $request = "{$this->siteApi}/v0/stats/totalClaimedTasks";
-        $ret = $this->client->call($request);
-        return $ret;
-    }
-
-    public function getTotalUnclaimedTasks()
-    {
-        $ret = null;
-        $request = "{$this->siteApi}/v0/stats/totalUnclaimedTasks";
-        $ret = $this->client->call($request);
-        return $ret;
-    }
-
-    public function getTotalUsers()
-    {
-        $ret = null;
-        $request = "{$this->siteApi}/v0/stats/totalUsers";
-        $ret = $this->client->call($request);
-        return $ret;
-    }
-
-    public function getTotalOrgs()
-    {
-        $ret = null;
-        $request = "{$this->siteApi}/v0/stats/totalOrgs";
-        $ret = $this->client->call($request);
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("Statistic"), $response);
         return $ret;
     }
 }
