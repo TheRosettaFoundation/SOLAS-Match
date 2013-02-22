@@ -2056,7 +2056,7 @@ BEGIN
         PREPARE stmt FROM @q;
         EXECUTE stmt;
         DEALLOCATE PREPARE stmt;
-        call getProject(projectId, '', '', '', '','', '', '','','');
+        call getProject(projectId, '', '', '', '','', '', '','','', '');
     end if;
 END//
 DELIMITER ;
