@@ -2815,7 +2815,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.userSubscribedToProject
 DROP PROCEDURE IF EXISTS `userSubscribedToProject`;
 DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `userSubscribedToProject`(IN `userId` INT, IN `projectId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToProject`(IN `userId` INT, IN `projectId` INT)
 BEGIN
 	if EXISTS (SELECT project_id 
                 	FROM UserTrackedProjects

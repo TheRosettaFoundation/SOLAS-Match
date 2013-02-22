@@ -378,9 +378,8 @@ class UserDao {
     public function isSubscribedToProject($user_id, $project_id)
     {
         $ret = false;
-        $args = array();
-        $args[] = PDOWrapper::cleanse($user_id);
-        $args[] = PDOWrapper::cleanse($project_id);
+        $args = PDOWrapper::cleanse($user_id);
+        $args .= ", ".PDOWrapper::cleanse($project_id);
         if ($result = PDOWrapper::call('userSubscribedToProject', $args)) {
             $ret = $result[0]['result'];
         }
