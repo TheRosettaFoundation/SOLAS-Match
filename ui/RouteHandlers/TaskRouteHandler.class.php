@@ -509,8 +509,8 @@ class TaskRouteHandler
 
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/selectable.css\" />
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>"
-        .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js")  
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>"
         .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-alter.js");
 
         $task = $taskDao->getTask(array('id' => $task_id));
@@ -525,6 +525,23 @@ class TaskRouteHandler
 
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
+
+        $selectedString = "";
+        if (is_array($preReqTaskIds)) {
+            foreach ($projectTasks as $pTask) {
+                if (in_array($pTask->getId(), $preReqTaskIds)) {
+                    $index = array_search($pTask->getId(), $preReqTaskIds);
+                    $index++;
+                    $selectedString .= "#{$index}, ";
+                }
+            }
+        }
+
+        if ($selectedString == "") {
+            $selectedString = "none";
+        } else {
+            $selectedString = substr($selectedString, 0, strlen($selectedString) - 2);
+        }
         
         $deadlineDate = date("F dS, Y", strtotime($task->getDeadline()));
         $deadlineTime = date("H:i", strtotime($task->getDeadline()));
@@ -650,6 +667,7 @@ class TaskRouteHandler
                               "projectTasks"    => $projectTasks,
                               "taskPreReqIds"   => $preReqTaskIds,
                               "hiddenPreReqList"=> $hiddenPreReqList,
+                              "selectedString"  => $selectedString,
                               "word_count_err"  => $word_count_err,
                               "deadlockError"   => $deadlockError,
                               "deadline_error"  => $deadlineError
@@ -890,8 +908,8 @@ class TaskRouteHandler
         });
         </script> 
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>"
-        .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/datetime-picker.js");
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
 
         $app->view()->appendData(array(
                 "project"       => $project,

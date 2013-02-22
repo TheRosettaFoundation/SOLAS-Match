@@ -1119,6 +1119,7 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getOrgMembers
+DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `id` INT)
 BEGIN
@@ -1154,6 +1155,7 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getProject
+DROP PROCEDURE IF EXISTS `getProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impact` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
     READS SQL DATA
@@ -1808,6 +1810,7 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTopTasks
+DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `lim` INT)
     READS SQL DATA
@@ -2053,7 +2056,7 @@ BEGIN
         PREPARE stmt FROM @q;
         EXECUTE stmt;
         DEALLOCATE PREPARE stmt;
-        call getProject(projectId, '', '', '', '','', '', '','','');
+        call getProject(projectId, '', '', '', '','', '', '','','', '');
     end if;
 END//
 DELIMITER ;
@@ -2623,6 +2626,7 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.unClaimTask
+DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT)
 BEGIN
@@ -2811,7 +2815,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.userSubscribedToProject
 DROP PROCEDURE IF EXISTS `userSubscribedToProject`;
 DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `userSubscribedToProject`(IN `userId` INT, IN `projectId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToProject`(IN `userId` INT, IN `projectId` INT)
 BEGIN
 	if EXISTS (SELECT project_id 
                 	FROM UserTrackedProjects
@@ -3230,10 +3234,10 @@ SET SQL_MODE=@OLD_SQL_MODE;
 
 
 -- Dumping structure for trigger Solas-Match-Test.updateTaskStatsuOnAddPrereq
-DROP TRIGGER IF EXISTS `updateTaskStatsuOnAddPrereq`;
+DROP TRIGGER IF EXISTS `updateTaskStatusOnAddPrereq`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
-CREATE TRIGGER `updateTaskStatsuOnAddPrereq` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
+CREATE TRIGGER `updateTaskStatusOnAddPrereq` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
 if exists 
 	(select 1 
 	 from Tasks t
