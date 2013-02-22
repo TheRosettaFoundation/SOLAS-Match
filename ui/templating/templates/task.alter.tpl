@@ -13,24 +13,31 @@
     <table width="100%">
         <tr align="center">
             <td width="50%">
-                <label for="title" style="font-size: large"><b>Title:</b></label>
-                <textarea wrap="soft" cols="1" rows="4" name="title">{$task->getTitle()}</textarea>
-                <p style="margin-bottom:20px;"></p>
-
-                <label for="impact" style="font-size: large"><b>Task Comment:</b></label>
-                <textarea wrap="soft" cols="1" rows="6" name="impact">{$task->getComment()}</textarea>
-                <p style="margin-bottom:20px;"></p>
-
-                <label for="deadline" style="font-size: large"><b>Deadline:</b></label>
-                {if $deadline_error != ''}
-                    <div class="alert alert-error">
-                        {$deadline_error}
-                    </div>
-                {/if}
-                <p>
-                    {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)} {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))} {/if}" />
-                </p>
+                <div style="margin-bottom:20px;">
+                    <label for="title" style="font-size: large"><b>Title:</b></label>
+                    <textarea wrap="soft" cols="1" rows="4" name="title">{$task->getTitle()}</textarea>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label for="impact" style="font-size: large"><b>Task Comment:</b></label>
+                    <textarea wrap="soft" cols="1" rows="6" name="impact">{$task->getComment()}</textarea>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label for="deadline" style="font-size: large"><b>Deadline:</b></label>
+                    {if $deadline_error != ''}
+                        <div class="alert alert-error">
+                            {$deadline_error}
+                        </div>
+                    {/if}
+                    <p>
+                        {assign var="deadlineDateTime" value=$task->getDeadline()}
+                        <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}{/if}" />
+                    </p>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label for="publishtask" style="font-size: large"><b>Publish Task:</b></label>
+                    <p class="desc">If checked, this task will appear in the task stream.</p>
+                    <input type="checkbox" name="publishTask" value="1" checked="true"/>
+                </div>
             </td>
             <td>
                 <p>

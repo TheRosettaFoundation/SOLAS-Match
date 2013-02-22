@@ -16,7 +16,7 @@ class TipDao
     public function getTip()
     {
         $ret = null;
-        $request = "$this->siteApi/v0/tips";
+        $request = "{$this->siteApi}v0/tips";
         $ret = $this->client->call($request);
         return $ret;
     }

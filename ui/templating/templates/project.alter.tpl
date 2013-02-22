@@ -2,11 +2,15 @@
 
 {assign var="project_id" value=$project->getId()}
 <h1 class="page-header">
-    {$project->getTitle()}
-    <small>Alter project details here.</small>
-    <a href="{urlFor name="project-view" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
-        <i class="icon-list icon-white"></i> View Project Details
-    </a>
+    <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
+        {$project->getTitle()}
+        <small>Alter project details here.</small>
+    </span>
+    <div class="pull-right">
+        <a href="{urlFor name="project-view" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
+            <i class="icon-list icon-white"></i> View Project Details
+        </a>
+    </div>
 </h1>
 <form method="post" action="{urlFor name="project-alter" options="project_id.$project_id"}" class="well">
     <table width="100%">

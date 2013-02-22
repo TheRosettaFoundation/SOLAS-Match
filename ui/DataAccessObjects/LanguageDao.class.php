@@ -16,7 +16,7 @@ class LanguageDao
     public function getLanguage($params)
     {
         $ret = null;
-        $request = "$this->siteApi/v0/languages";
+        $request = "{$this->siteApi}v0/languages";
         $id = null;
         $code = null;
         if (isset($params['id'])) {

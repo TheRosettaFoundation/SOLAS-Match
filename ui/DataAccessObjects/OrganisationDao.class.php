@@ -16,7 +16,7 @@ class OrganisationDao
     public function getOrganisation($params)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs";
+        $request = "{$this->siteApi}v0/orgs";
         
         $id = null;
         $name = null;
@@ -41,7 +41,7 @@ class OrganisationDao
     public function searchForOrg($name)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/getByName/$name";
+        $request = "{$this->siteApi}v0/orgs/getByName/$name";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("Organisation"), $response);
         return $ret;
@@ -50,7 +50,7 @@ class OrganisationDao
     public function getOrgProjects($orgId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/$orgId/projects";
+        $request = "{$this->siteApi}v0/orgs/$orgId/projects";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("Project"), $response);
         return $ret;
@@ -59,7 +59,7 @@ class OrganisationDao
     public function getOrgArchivedProjects($orgId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/$orgId/archivedProjects";
+        $request = "{$this->siteApi}v0/orgs/$orgId/archivedProjects";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("ArchivedProject"), $response);
         return $ret;
@@ -68,7 +68,7 @@ class OrganisationDao
     public function getOrgBadges($orgId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/$orgId/badges";
+        $request = "{$this->siteApi}v0/orgs/$orgId/badges";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("Badge"), $response);
         return $ret;
@@ -77,7 +77,7 @@ class OrganisationDao
     public function getOrgMembers($orgId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/$orgId/members";
+        $request = "{$this->siteApi}v0/orgs/$orgId/members";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("User"), $response);
         return $ret;
@@ -86,7 +86,7 @@ class OrganisationDao
     public function getMembershipRequests($orgId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/$orgId/requests";
+        $request = "{$this->siteApi}v0/orgs/$orgId/requests";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("MembershipRequest"), $response);
         return $ret;
@@ -95,7 +95,7 @@ class OrganisationDao
     public function getOrgTasks($orgId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/$orgId/tasks";
+        $request = "{$this->siteApi}v0/orgs/$orgId/tasks";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("Task"), $response);
         return $ret;
@@ -104,7 +104,7 @@ class OrganisationDao
     public function isMember($orgId, $userId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/isMember/$orgId/$userId";
+        $request = "{$this->siteApi}v0/orgs/isMember/$orgId/$userId";
         $ret = $this->client->call($request);
         return $ret;
     }
@@ -112,7 +112,7 @@ class OrganisationDao
     public function createOrg($org)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs";
+        $request = "{$this->siteApi}v0/orgs";
         $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $org);
         $ret = $this->client->cast("Organisation", $response);
         return $ret;
@@ -121,7 +121,7 @@ class OrganisationDao
     public function updateOrg($org)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/{$org->getId()}";
+        $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $org);
         $ret = $this->client->cast(array("Organisation"), $response);
         return $ret;
@@ -129,27 +129,27 @@ class OrganisationDao
 
     public function deleteOrg($orgId)
     {
-        $request = "{$this->siteApi}/v0/orgs/{$org->getId()}";
+        $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
         $this->client->call($request, HTTP_Request2::METHOD_DELETE);
     }
 
     public function createMembershipRequest($orgId, $userId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/orgs/$orgId/requests/$userId";
+        $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
         $ret = $this->client->call($request, HTTP_Request2::METHOD_POST);
         return $ret;
     }
 
     public function acceptMembershipRequest($orgId, $userId)
     {
-        $request = "{$this->siteApi}/v0/orgs/$orgId/requests/$userId";
+        $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
         $this->client->call($request, HTTP_Request2::METHOD_PUT);
     }
 
     public function rejectMembershipRequest($orgId, $userId)
     {
-        $request = "{$this->siteApi}/v0/orgs/$orgId/requests/$userId";
+        $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
         $this->client->call($request, HTTP_Request2::METHOD_DELETE);
     }
 }

@@ -17,7 +17,7 @@ class PHPSerializer extends Serializer
 
     public function deserialize($data)
     {
-        $ret = unserialize($data);
+        $ret = unserialize(trim($data));
 
         if (!is_null($data) && is_null($ret)) {
             if (strcasecmp($data, "null") == 0 || $data == "null" || $data=="N;") {

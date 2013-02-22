@@ -28,7 +28,7 @@
             Create your project <small>Provide as much information as possible.</small><br>   
             <small>
                 Note:
-                <font color='red'>*</font>
+                <span color='red'>*</span>
                 denotes a required field.
             </small>
         </h1>
@@ -47,7 +47,7 @@
 
             <tr>
                 <td width="493" align="center" valign="middle">
-                    <label for="title"><h2>Title: <font color='red'>*</font></h2></label>
+                    <label for="title"><h2>Title: <span color='red'>*</span></h2></label>
                     <p class="desc">Provide a meaningful title for your project.</p>
                     <textarea wrap="soft" cols="1" rows="3" name="title">asd</textarea> {*$project->getTitle()*}
                     <p style="margin-bottom:30px;"></p>
@@ -63,7 +63,7 @@
                     <p style="margin-bottom:30px;"></p> 
                 </td>
                 <td width="493" align="center" valign="middle">    
-                    <label for="tasktrans"><h2>Source Text: <font color='red'>*</font></h2></label>  {*$field_name*}
+                    <label for="tasktrans"><h2>Source Text: <span color='red'>*</span></h2></label>  {*$field_name*}
                     <p class="desc">Upload your source file for the project. Max file size is 8 MB.</p> {*$max_file_size_mb*}
                     <input type="hidden" name="MAX_FILE_SIZE" value="8096"/> {*$max_file_size_bytes*}
                     <input type="file" name="tasktrans" id="tasktrans"/>{*$field_name*}
@@ -75,7 +75,7 @@
                     <input type="text" name="word_count" id="word_count" maxlength="6" value="999"> {*$project->getWordCount()*}
                     <p style="margin-bottom:30px;"></p> 
                     
-                    <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
+                    <label for="deadline"><h2>Deadline: <span color='red'>*</span></h2></label>
                     <p class="desc">When the project and its tasks should be completed by.</p>
                     <textarea wrap="soft" cols="1" rows="2" name="deadline">asf</textarea> {*$project->getDeadline()*}   
                     <p style="margin-bottom:30px;"></p>
@@ -94,7 +94,7 @@
             <tr>
                 <td align="left" valign="top">
                 {if isset($languages)}
-                        <h2>Source Language: <font color='red'>*</font></h2><br>
+                        <h2>Source Language: <span color='red'>*</span></h2><br>
                         <select name="source" id="source">
                             {foreach $languages as $language}
                                     <option value="{$language->getCode()}">{$language->getName()}</option>
@@ -107,7 +107,7 @@
                                 {/foreach}                                
                             </select>
                         {/if}
-                        <h2>Target Language(s): <font color='red'>*</font></h2><br>
+                        <h2>Target Language(s): <span color='red'>*</span></h2><br>
                         <select name="target_0" id="target_0">
                             {foreach $languages as $language}
                                 <option value="{$language->getCode()}">{$language->getName()}</option>
@@ -137,7 +137,7 @@
                     <p style="margin-bottom:30px;"></p>   
                 {else}
 
-                        <label for="source"><h2>Source Language: <font color='red'>*</font></h2></label>
+                        <label for="source"><h2>Source Language: <span color='red'>*</span></h2></label>
                         <input type="text" name="source" id="source"/>
                         <input type="text" name="sourceCountry" id="source"/>
                 {/if}  
@@ -146,7 +146,7 @@
                 <td rowspan="2">
                     <table border="0" width="100%">
                         <tr align="center">
-                            <td colspan="4"><h2>Task Types: <font color='red'>*</font></h2>
+                            <td colspan="4"><h2>Task Types: <span color='red'>*</span></h2>
                             <p class="desc">Specify which task types you require for your workflow.</p>
                             </td>
                         </tr>
@@ -168,7 +168,7 @@
             </tr>            
             <tr>
                 <td>
-                    <label for="target"><h2>Target Language(s): <font color='red'>*</font></h2></label>
+                    <label for="target"><h2>Target Language(s): <span color='red'>*</span></h2></label>
                     <input type="text" name="target" id="target"/>
                     <input type="text" name="targetCountry" id="source"/>
 

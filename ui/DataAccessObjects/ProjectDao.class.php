@@ -16,7 +16,7 @@ class ProjectDao
     public function getProject($params)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/projects";
+        $request = "{$this->siteApi}v0/projects";
         
         $id = null;
         if (isset($params['id'])) {
@@ -37,7 +37,7 @@ class ProjectDao
     public function getProjectTasks($projectId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/projects/$projectId/tasks";
+        $request = "{$this->siteApi}v0/projects/$projectId/tasks";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("Task"), $response);
         return $ret;
@@ -46,7 +46,7 @@ class ProjectDao
     public function getProjectTags($projectId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/projects/$projectId/tags";
+        $request = "{$this->siteApi}v0/projects/$projectId/tags";
         $response = $this->client->call($request);
         $ret = $this->client->cast(array("Tag"), $response);
         return $ret;
@@ -55,7 +55,7 @@ class ProjectDao
     public function createProject($project)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/projects";
+        $request = "{$this->siteApi}v0/projects";
         $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $project);
         $ret = $this->client->cast("Project", $response);
         return $ret;
@@ -64,7 +64,7 @@ class ProjectDao
     public function updateProject($project)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/projects/{$project->getId()}";
+        $request = "{$this->siteApi}v0/projects/{$project->getId()}";
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $project);
         $ret = $this->client->cast("Project", $response);
         return $ret;
@@ -72,14 +72,14 @@ class ProjectDao
 
     public function archiveProject($projectId, $userId)
     {
-        $request = "{$this->siteApi}/v0/projects/archiveProject/$projectId/user/$userId";
+        $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $project);
     }
 
     public function getArchivedProject($params)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/archivedProjects";
+        $request = "{$this->siteApi}v0/archivedProjects";
         
         $id = null;
         if (isset($params['id'])) {

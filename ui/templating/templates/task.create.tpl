@@ -6,7 +6,7 @@
             <small>
                 
                 Note:
-                <font color='red'>*</font>
+                <span color='red'>*</span>
                 Denotes required field.
             </small>
         </h1>
@@ -25,7 +25,7 @@
                 <tr align="center">
                     <td width="50%">
                         <label for="content">
-                            <h2>Title: <font color='red'>*</font></h2>
+                            <h2>Title: <span color='red'>*</span></h2>
                             <p class="desc">Provide a meaningful title for the task.</p>
                             {if !is_null($titleError)}
                                 <div class="alert alert-error" style="width:131px">
@@ -50,7 +50,7 @@
                         </p>
                         <p style="margin-bottom:20px;"></p>
                         <p>
-                            <h2>Target Language: <font color='red'>*</font></h2><br>
+                            <h2>Target Language: <span color='red'>*</span></h2><br>
                             <select name="targetLanguage" id="targetLanguage">
                                 {foreach $languages as $language}
                                     {if $task->getTargetLanguageCode() == $language->getCode()}
@@ -87,7 +87,7 @@
                     <td>
                         <p>
                             <label for="word_count">
-                            <h2>Word Count: <font color='red'>*</font></h2>
+                            <h2>Word Count: <span color='red'>*</span></h2>
                             <p class="desc">Approximate, or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.</p>
                             {if !is_null($wordCountError)}
                                 <div class="alert alert-error" style="width:144px">
