@@ -499,12 +499,31 @@ class ProjectRouteHandler
             }
         }
 
+        $tagString = "[";
+        $tagDao = new TagDao();
+        $allTags = $tagDao->getTag(null);
+        if ($allTags) {
+            foreach ($allTags as $tag) {
+                $tagString .= "\"{$tag->getLabel()}\", ";
+            }
+        }
+        $tagString = substr($tagString, 0, strlen($tagString) - 2);
+        $tagString .= "]";
+
         $extra_scripts = "
             <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
+            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui.css\" />
+            <script src=\"{$app->urlFor("home")}ui/js/jquery-1.9.0.min.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/js/jquery-ui.js\"></script>
             <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
             </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-create.js")."
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
-  
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
+            <script type=\"text/javascript\">
+                var tagList = $tagString;
+            </script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/tags-autocomplete.js\"></script>
+        ";
+
         $langDao = new LanguageDao();
         $countryDao = new CountryDao();
         $language_list = $langDao->getLanguage(null);

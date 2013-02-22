@@ -95,7 +95,7 @@
 
                     <label for="tags"><h2>Tags:</h2></label>
                     <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                    <textarea wrap="soft" cols="1" rows="3" name="tags">{if isset($tagList)}{$tagList}{/if}</textarea>
+                    <input id="tags" name="tags" />{if isset($tagList)}{$tagList}{/if}
                 </td>                    
             </tr>
             <tr>
