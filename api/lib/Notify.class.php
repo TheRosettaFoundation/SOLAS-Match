@@ -24,8 +24,16 @@ class Notify
     {
         $use_backend = Settings::get('site.backend');
         if (strcasecmp($use_backend, "y") == 0) {
-            //send to rabbitMQ
-            //Not implemented
+            $messagingClient = new MessagingClient();
+            if ($messagingClient->init()) {
+                $messageType = new FeedbackEmail();
+                $messageType->taskId = $task->getId();
+                $messageType->userId = $user->getUserId();
+                $messageType->feedback = $feedback;
+                $message = $messagingClient->createMessageFromProto($messageType);
+                $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                        $messagingClient->FeedbackEmailTopic);
+            }
         } else {
             $app = Slim::getInstance();
 

@@ -16,6 +16,7 @@ require_once __DIR__."/../models/User.php";
 require_once __DIR__."/../models/Task.php";
 require_once __DIR__."/../models/Project.php";
 require_once __DIR__."/../models/ArchivedProject.php";
+require_once __DIR__."/../models/Statistic.php";
 
 class ModelFactory
 {
@@ -72,6 +73,9 @@ class ModelFactory
                 break;
             case "ArchivedProject" :
                 $ret = ModelFactory::generateArchivedProject($modelData);
+                break;
+            case "Statistic" :
+                $ret = ModelFactory::generateStatistic($modelData);
                 break;
             default :
                 echo "Unable to build model $modelName";
@@ -497,6 +501,21 @@ class ModelFactory
             $ret->setTranslatorId($modelData['user_id-archived']);
         }
 
+        return $ret;
+    }
+    
+    
+    private static function generateStatistic($modelData)
+    {
+        $ret = new Statistic();
+
+        if(isset($modelData['name'])) {
+            $ret->setName($modelData['name']);
+        }
+        if(isset($modelData['value'])) {
+            $ret->setValue($modelData['value']);
+        }
+        
         return $ret;
     }
 }

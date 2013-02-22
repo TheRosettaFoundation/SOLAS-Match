@@ -1,4 +1,4 @@
-<table class="table table-striped">
+<table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
     <thead>
         <th style="text-align: left"><b>Project</b></th>
 
@@ -27,10 +27,10 @@
                 {TemplateHelper::getTaskTargetLanguage($task)}
             </td>
             <td>
-                {date("D dS, M Y", strtotime($task->getCreatedTime()))}
+                {date(Settings::get("ui.date_format"), strtotime($task->getCreatedTime()))}
             </td>
             <td>
-                {date("D dS, M Y", strtotime($task->getDeadline()))}
+                {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
             </td>
             <td>
                 {if $task->getWordCount() != ''}
@@ -47,7 +47,7 @@
                     {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                         Unclaimed
                     {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                        <a href="{urlFor name="task-feedback" options="task_id.$task_id"}">In Progress</a>
+                        <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">In Progress</a>
                     {elseif $status_id == TaskStatusEnum::COMPLETE}
                         <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">Complete</a>
                     {/if}
@@ -58,14 +58,14 @@
 </table>
 
 <div class="well">
-    <table width="100%">
+    <table width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>
             <th width="48%" align="left">Task Comment:<hr/></th>
             <th></th>
             <th width="48%" align="left">Project Description:<hr/></th>
         </thead>
         <tbody>
-            <tr>
+            <tr style="overflow-wrap: break-word;">
                 <td>
                     <i>
                         {if $task->getComment() != ''}

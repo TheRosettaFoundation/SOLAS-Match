@@ -2871,6 +2871,193 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateArchivedProjects
+DROP PROCEDURE IF EXISTS `statsUpdateArchivedProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedProjects`()
+BEGIN
+	SET @totalArchivedProjects = 0;	
+	SELECT count(1) INTO @totalArchivedProjects FROM ArchivedProjects;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('ArchivedProjects', @totalArchivedProjects);	
+END //
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateProjects
+DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
+BEGIN
+	SET @totalProjects = 0;	
+	SELECT count(1) INTO @totalProjects FROM Projects;	
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Projects', @totalProjects);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateTasksWithPreReqs
+DROP PROCEDURE IF EXISTS `statsUpdateTasksWithPreReqs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasksWithPreReqs`()
+BEGIN
+	SET @totalTasksWithPreReqs = 0;
+	SELECT count(DISTINCT tp.task_id) INTO @totalTasksWithPreReqs FROM TaskPrerequisites tp;	
+	REPLACE INTO Statistics (name, value)
+	VALUES ('TasksWithPreReqs', @totalTasksWithPreReqs);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateOrganisations
+DROP PROCEDURE IF EXISTS `statsUpdateOrganisations`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrganisations`()
+BEGIN
+	SET @totalOrgs = 0;	
+	SELECT count(1) INTO @totalOrgs FROM Organisations;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Organisations', @totalOrgs);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateUsers
+DROP PROCEDURE IF EXISTS `statsUpdateUsers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateUsers`()
+BEGIN
+	SET @totalUsers = 0;	
+	SELECT count(1) INTO @totalUsers FROM Users;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Users', @totalUsers);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateArchivedTasks
+DROP PROCEDURE IF EXISTS `statsUpdateArchivedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedTasks`()
+BEGIN
+	SET @totalArchivedTasks = 0;
+	SELECT count(1) INTO @totalArchivedTasks FROM ArchivedTasks;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('ArchivedTasks', @totalArchivedTasks);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateClaimedTasks
+DROP PROCEDURE IF EXISTS `statsUpdateClaimedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateClaimedTasks`()
+BEGIN
+	SET @claimedTasks = 0;
+	SELECT count(1) INTO @claimedTasks FROM TaskClaims;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('ClaimedTasks', @claimedTasks);	
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateUnclaimedTasks
+DROP PROCEDURE IF EXISTS `statsUpdateUnclaimedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateClaimedTasks`()
+BEGIN
+        SET @unclaimedTasks = 0;
+        SELECT count(1) into @unclaimedTasks from Tasks t
+        WHERE t.id NOT IN
+        (
+            SELECT task_id
+            FROM  TaskClaims
+        );
+        REPLACE INTO Statistics (name, value)
+        VALUES ('UnclaimedTasks', @unclaimedTasks);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateTasks
+DROP PROCEDURE IF EXISTS `statsUpdateTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasks`()
+BEGIN
+	SET @totalTasks = 0;
+	SET @claimedTasks = 0;
+	SET @unclaimedTasks = 0;
+	SET @archivedTasks = 0;
+	
+	SELECT count(1) INTO @claimedTasks FROM TaskClaims;
+	
+	SELECT count(1) into @unclaimedTasks from Tasks t
+	WHERE t.id NOT IN
+	(
+            SELECT task_id
+            FROM  TaskClaims
+	);
+	
+	SELECT count(1) INTO @archivedTasks FROM ArchivedTasks;
+	
+	SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks;	
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Tasks', @totalTasks);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateBadges
+DROP PROCEDURE IF EXISTS `statsUpdateBadges`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateBadges`()
+BEGIN
+	SET @totalBadges = 0;
+	SELECT count(1) INTO @totalBadges FROM Badges;		
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Badges', @totalBadges);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateTags
+DROP PROCEDURE IF EXISTS `statsUpdateTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTags`()
+BEGIN
+	SET @totalTags = 0;
+	SELECT count(1) INTO @totalTags FROM Tags;		
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Tags', @totalTags);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateOrgMemberRequests
+DROP PROCEDURE IF EXISTS `statsUpdateOrgMemberRequests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrgMemberRequests`()
+BEGIN
+	SET @orgMemberRequests = 0;	
+	SELECT count(1) INTO @orgMemberRequests FROM OrgRequests;	
+	REPLACE INTO Statistics (name, value)
+	VALUES ('OrgMembershipRequests', @orgMemberRequests);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getStatistics
+DROP PROCEDURE IF EXISTS `getStatistics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatistics`()
+BEGIN
+	IF statName = '' THEN SET statName = NULL; END IF;
+	
+	set @q = "SELECT * FROM Statistics st where 1";
+	
+	if statName is not null then 
+		set @q = CONCAT(@q," and st.name='", statName,"'");
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

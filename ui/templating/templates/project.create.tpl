@@ -80,7 +80,7 @@
                     
                     <label for="deadline"><h2>Deadline: <font color='red'>*</font></h2></label>
                     <p class="desc">When the project and its tasks should be completed by.</p>
-                    <input type="text" id="deadline" name="deadline" value="{if isset($project)}{$project->getDeadline()}{/if}"/>
+                    <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}{/if}"/>                    
                     <p style="margin-bottom:30px;"></p>
 
                     <label for="tags"><h2>Tags:</h2></label>
@@ -158,10 +158,10 @@
                 <td valign="top">
                     <table border="0" width="100%"> 
                         <tr align="center">
-                            <td bgcolor=""><input type="checkbox" id="chunking_0" name="chunking_0" value="y" onchange="chunkingEnabled(0)"/></td>                            
-                            <td><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
-                            <td><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y"/></td>
-                            <td><input type="checkbox" id="postediting_0" name="postediting_0" value="y"/></td>
+                            <td><input title="Create a chunking task for dividing large source files into managable chunks of 5,000 words or less." type="checkbox" id="chunking_0" name="chunking_0" value="y" onchange="chunkingEnabled(0)"/></td>                            
+                            <td><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
+                            <td><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_0" checked="true" name="proofreading_0" value="y"/></td>
+                            <td><input title="Create a postediting task for merging together task chunks created by a chunking task." type="checkbox" id="postediting_0" name="postediting_0" value="y"/></td>
                         </tr>                        
                     </table>                    
                 </td>

@@ -56,7 +56,7 @@
     </div>
     
     <div class="pull-left">
-        {if isset($tasks)}
+        {if count($tasks) > 0}
                 <div id="tasks">
                         {foreach from=$tasks item=task name=tasks_loop}
                                 {include file="task.summary-link.tpl" task=$task}

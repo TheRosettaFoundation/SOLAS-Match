@@ -10,7 +10,7 @@
 {else}
     Your
 {/if}
-    Active Tasks
+    Claimed Tasks
     <small>A list of tasks you are currently working on.</small>
 </h1></div>
 
@@ -20,7 +20,7 @@
             {assign var="task" value=$active_tasks[$count]}
             {include file="task.summary-link.tpl" task=$task}
         {/for}
-        {include file="pagination.tpl" url_name="active-tasks" current_page=$page_no last_page=$last}
+        {include file="pagination.tpl" url_name="claimed-tasks" current_page=$page_no last_page=$last}
     {else}
         <div class="alert alert-warning">
 

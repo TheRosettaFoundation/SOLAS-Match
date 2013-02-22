@@ -16,12 +16,13 @@ class Middleware
     public static function authenticateUserForTask($request, $response, $route) 
     {
         $app = Slim::getInstance();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         $params = $route->getParams();        
         $taskClaimed=false;
         if ($params !== null) {
-            $client = new APIClient();
             $task_id = $params['task_id'];
-            $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+            $request = "$siteApi/v0/tasks/$task_id/claimed";
             $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);             
         }
         if ($taskClaimed) {
@@ -30,7 +31,7 @@ class Middleware
                 $app->flash('error', 'Login required to access page');
                 $app->redirect($app->urlFor('login'));
             }
-            $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+            $request = "$siteApi/v0/tasks/$task_id/claimed";
             $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET,
                                             null, array("userID" => $user_id));
 
@@ -51,14 +52,15 @@ class Middleware
 
     public static function authUserForOrg($request, $response, $route) 
     {
-        $client = new APIClient();        
+        $client = new APIHelper(Settings::get("ui.api_format"));        
+        $siteApi = Settings::get("site.api");
         $user_id = UserSession::getCurrentUserID();
         $params = $route->getParams();
         if ($params !== null) {
             $org_id = $params['org_id'];
             if ($user_id) {
                 $user_orgs = array();
-                $request = APIClient::API_VERSION."/users/$user_id/orgs";
+                $request = "$siteApi/v0/users/$user_id/orgs";
                 $user_orgs = $client->castCall(array('Organisation'), $request, HTTP_Request2::METHOD_GET);
                 if (!is_null($user_orgs)) {
                     foreach ($user_orgs as $orgObject) {
@@ -73,7 +75,7 @@ class Middleware
         $app = Slim::getInstance();
         $org_name = 'this organisation';
         if (isset($org_id)) {
-            $request = APIClient::API_VERSION."/orgs/$org_id";
+            $request = "$siteApi/v0/orgs/$org_id";
             $org = $client->castCall('Organisation', $request, HTTP_Request2::METHOD_GET);
             $org_name = "<a href=\"".$app->urlFor('org-public-profile',
                                                     array('org_id' => $org_id))."\">".$org->getName()."</a>";
@@ -89,15 +91,16 @@ class Middleware
      */
     public static function authUserForOrgTask($request, $response, $route) 
     {
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
         $params= $route->getParams();
         if ($params != null) {
             $task_id = $params['task_id'];
-            $request = APIClient::API_VERSION."/tasks/$task_id";
+            $request = "$siteApi/v0/tasks/$task_id";
             $response = $client->call($request, HTTP_Request2::METHOD_GET);   
             $task = $client->cast('Task', $response);
 
-            $request = APIClient::API_VERSION."/projects/".$task->getProjectId();
+            $request = "$siteApi/v0/projects/".$task->getProjectId();
             $response = $client->call($request);
             $project = $client->cast("Project", $response);
             
@@ -106,7 +109,7 @@ class Middleware
 
             if ($user_id) {
                 $user_orgs = array();
-                $request = APIClient::API_VERSION."/users/$user_id/orgs";
+                $request = "$siteApi/v0/users/$user_id/orgs";
                 $user_orgs = $client->castCall(array('Organisation'), $request, HTTP_Request2::METHOD_GET);
                 if (!is_null($user_orgs)) {
                     foreach ($user_orgs as $orgObject) {
@@ -121,7 +124,7 @@ class Middleware
         $app = Slim::getInstance();
         $org_name = 'this organisation';
         if (isset($org_id)) {
-            $request = APIClient::API_VERSION."/orgs/$org_id";
+            $request = "$siteApi/v0/orgs/$org_id";
             $org = $client->castCall('Organisation', $request, HTTP_Request2::METHOD_GET);
             $org_name = "<a href=\"".$app->urlFor('org-public-profile',
                                                     array('org_id' => $org_id))."\">".$org->getName()."</a>";
@@ -136,29 +139,26 @@ class Middleware
         $params = $route->getParams();
         
         if ($params != null) {
-            $client = new APIClient();
+            $client = new APIHelper(Settings::get("ui.api_format"));
+            $siteApi = Settings::get("site.api");
+
             $user_id = UserSession::getCurrentUserID();
             $project_id = $params['project_id'];   
             
-            $request = APIClient::API_VERSION."/users/$user_id/orgs";
+            $request = "$siteApi/v0/users/$user_id/orgs";
             $response = $client->call($request, HTTP_Request2::METHOD_GET);   
-            $userOrgs = array();
-            if($response){
-                foreach($response as $userOrg) {
-                    $userOrgs[] = $client->cast('Organisation', $userOrg);
-                }        
+            $userOrgs = $client->cast(array("Organisation"), $response);
 
-                $request = APIClient::API_VERSION."/projects/$project_id";
-                $response = $client->call($request, HTTP_Request2::METHOD_GET);   
-                $project = $client->cast('Project', $response); 
+            $request = "$siteApi/v0/projects/$project_id";
+            $response = $client->call($request, HTTP_Request2::METHOD_GET);   
+            $project = $client->cast('Project', $response); 
 
-                $project_orgid = $project->getOrganisationId();
+            $project_orgid = $project->getOrganisationId();
 
-                foreach($userOrgs as $org)
-                {                
-                    if($org->getId() == $project_orgid) {
-                        return true;
-                    }
+            foreach($userOrgs as $org)
+            {                
+                if($org->getId() == $project_orgid) {
+                    return true;
                 }
             }
         }
@@ -171,21 +171,22 @@ class Middleware
     {
         $params = $route->getParams();
         if ($params != null) {
-            $client = new APIClient();            
+            $client = new APIHelper(Settings::get("ui.api_format"));            
+            $siteApi = Settings::get("site.api");
             $task_id = $params['task_id'];
             $user_id = UserSession::getCurrentUserID();
             
-            $request = APIClient::API_VERSION."/tasks/$task_id";
+            $request = "$siteApi/v0/tasks/$task_id";
             $task = $client->castCall('Task', $request, HTTP_Request2::METHOD_GET);
 
             $user_orgs = array();
-            $request = APIClient::API_VERSION."/users/$user_id/orgs";
+            $request = "$siteApi/v0/users/$user_id/orgs";
             $user_orgs = $client->castCall(array('Organisation'), $request, HTTP_Request2::METHOD_GET);
             
             //If the task has not been claimed yet then anyone can download it
-            $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+            $request = "$siteApi/v0/tasks/$task_id/claimed";
             $taskClaimed = $client->call($request, HTTP_Request2::METHOD_GET);            
-            $request = APIClient::API_VERSION."/tasks/$task_id/claimed";
+            $request = "$siteApi/v0/tasks/$task_id/claimed";
             $userClaimedTask = $client->call($request, HTTP_Request2::METHOD_GET, $user_id);
             if (!$taskClaimed) {
                 return true;

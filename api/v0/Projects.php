@@ -46,9 +46,11 @@ class Projects
             function ($format = '.json') 
             {
                 $data=Dispatcher::getDispatcher()->request()->getBody();
-                $data= APIHelper::deserialiser($data, $format);
+                $client = new APIHelper($format);
+                $data = $client->deserialize($data);
+                $data = $client->cast('Project', $data);
                 $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->create($data), null, $format);
+                Dispatcher::sendResponce(null, $dao->createUpdate($data), null, $format);
             }, 'createProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:id/',
@@ -60,14 +62,11 @@ class Projects
                     $id = $id[0];
                 }
                 $data=Dispatcher::getDispatcher()->request()->getBody();
-                $data= APIHelper::deserialiser($data, $format);
-                if(is_object($data)) {
-                    $project = APIHelper::cast("Project", $data);
-                } else {
-                    $project = ModelFactory::buildModel('Project', $data);
-                }
+                $client = new APIHelper($format);
+                $data = $client->deserialize($data);
+                $data = $client->cast('Project', $data);
                 $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->update($project), null, $format);
+                Dispatcher::sendResponce(null, $dao->createUpdate($data), null, $format);
             }, 'updateProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/',

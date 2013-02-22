@@ -54,9 +54,9 @@
             </tr>
             <tr>
                 <td id="chunkingElements"></td>  
-                <td align="center" valign="middle"><input type="checkbox" id="translation_0" checked="true" name="translation_0" value="y" onchange="taskTypeSelection('translation')"/></td>
-                <td align="center" valign="middle"><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y" onchange="taskTypeSelection('proofreading')" disabled/></td>
-                <td align="center" valign="middle"><input type="checkbox" id="postediting_0" name="postediting_0" value="y" onchange="taskTypeSelection('postediting')" disabled/></td>                
+                <td align="center" title="Create a translation task for volunteer translators to pick up." valign="middle"><input type="checkbox" id="translation_0" name="translation_0" value="y" /></td>
+                <td align="center" title="Create a proofreading task for evaluating the translation provided by a volunteer." valign="middle"><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y" /></td>
+                <td align="center" title="Create a postediting task for merging together task chunks created by a chunking task." valign="middle"><input type="checkbox" id="postediting_0" checked="true" name="postediting_0" value="y" disabled /></td>                
             </tr>
             <tr>
                 <td colspan="5">

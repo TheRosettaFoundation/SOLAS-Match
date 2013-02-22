@@ -63,25 +63,17 @@ class TemplateHelper {
             self::emailContainsCharacter($email, '.')
         );      
     }
-
-    public static function isValidTime($time)
+    
+    public static function isValidDateTime($dateTime)
     {
-
-        if (strlen($time) > 5) {
-            return false;
-        } elseif (strpos($time, ":") === false) {
-            return false;
+        $cleansedDateTime = str_replace("UTC", "", $dateTime);
+        if($unixTime = strtotime($cleansedDateTime)) {
+            return true;
         } else {
-            $hour = substr($time, 0, strpos($time, ":"));
-            $minute = substr($time, strpos($time, ":") + 1, strlen($time));
-            if(!is_numeric($hour) || intval($hour) > 24 || !is_numeric($minute) || intval($minute) > 60) {
-                return false;
-            }
-        }
-
-        return true;
+            return false;
+        }        
     }
-
+    
     public static function addTimeToUnixTime($unixTime, $timeStr) 
     {
         $ret = $unixTime;
@@ -127,16 +119,18 @@ class TemplateHelper {
 
     public static function languageNameFromId($languageID)
     {
-        $client = new APIClient();
-        $result = $client->castCall("Language", APIClient::API_VERSION."/languages/$languageID" );
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
+        $result = $client->castCall("Language", "$siteApi/v0/languages/$languageID" );
         return $result->getName();
     }
 
     public static function languageNameFromCode($languageCode)
     {
         $ret = "";
-        $client = new APIClient();
-        $request = APIClient::API_VERSION."/languages/getByCode/$languageCode";
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
+        $request = "$siteApi/v0/languages/getByCode/$languageCode";
         $response = $client->call($request);
         if($response) {
             $lang = $client->cast("Language", $response);
@@ -147,44 +141,50 @@ class TemplateHelper {
 
     public static function orgNameFromId($orgID)
     {
-        $client = new APIClient();
-        $result = $client->castCall("Organisation", APIClient::API_VERSION."/orgs/$orgID");
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
+        $result = $client->castCall("Organisation", "$siteApi/v0/orgs/$orgID");
         return $result->getName();
     }
 
     public static function countryNameFromId($cID)
     {
-        $client = new APIClient();
-        $result = $client->castCall("Country", APIClient::API_VERSION."/countries/$cID");
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
+        $result = $client->castCall("Country", "$siteApi/v0/countries/$cID");
         return $result->getName();
     }
     
     public static function countryNameFromCode($cc) 
     {
-        $client = new APIClient();
-        $result = $client->castCall("Country", APIClient::API_VERSION."/countries/getByCode/$cc");
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
+        $result = $client->castCall("Country", "$siteApi/v0/countries/getByCode/$cc");
         return $result->getName();
     }
      
     public static function getLanguageList() 
     {
-        $client = new APIClient();
-        $result = $client->castCall(array("Language"), APIClient::API_VERSION."/languages");
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
+        $result = $client->castCall(array("Language"), "$siteApi/v0/languages");
         return $result;
     }
 
     public static function getCountryList()
     {
-        $client = new APIClient();
-        $result = $client->castCall(array("Country"), APIClient::API_VERSION."/countries");
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
+        $result = $client->castCall(array("Country"), "$siteApi/v0/countries");
         return $result;
     }
 
     public static function saveLanguage($languageCode) 
     {
-        $client = new APIClient();
+        $client = new APIHelper(Settings::get("ui.api_format"));
+        $siteApi = Settings::get("site.api");
 
-        $language = $client->castCall("Language", APIClient::API_VERSION."/languages/getByCode/$languageCode");
+        $language = $client->castCall("Language", "$siteApi/v0/languages/getByCode/$languageCode");
         if (is_null(($language))) {
             throw new InvalidArgumentException('A valid language code was expected.');
         }

@@ -30,8 +30,9 @@ class LoginAPI {
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/login(:format)/', function ($format = ".json") {
             $data = Dispatcher::getDispatcher()->request()->getBody();
-            $data = APIHelper::deserialiser($data, $format);
-            $data = APIHelper::cast("Login", $data);
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data);
+            $data = $client->cast("Login", $data);
             $dao = new UserDao;
             $data = $dao->apiLogin($data->getEmail(), $data->getPassword());
 //            if (is_array($data)) {

@@ -30,10 +30,7 @@
         	{if $task->getTargetLanguageCode()}
         		To: <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
         	{/if}
-    	</p>
-        <p>
-            Due by: <b>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</b>
-        </p>       
+    	</p>   
 
         {assign var="taskTags" value=$task->getTagList()}
         {if !empty($taskTags)}
@@ -45,17 +42,25 @@
                 {/foreach}
             </p>
         {/if}
-        
+        <p>
+            {if $task->getWordCount()}
+                Word Count: <b>{$task->getWordCount()|number_format}</b>
+            {/if}      
+        </p> 
 	<p class="task_details">
-		Added <b>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</b> ago
-		&middot;
-        {assign var="project_id" value=$task->getProjectId()}
-        <a href="{urlFor name="project-view" options="project_id.$project_id"}">
-            Project Page
-        </a>
-		{if $task->getWordCount()}
-			&middot; {$task->getWordCount()|number_format} words
-		{/if}
+            Added: <b>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</b> ago
 	</p>
+        <p>
+            Due by: <b>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</b>
+        </p>           
+        
+        <p>            
+            {assign var="project_id" value=$task->getProjectId()}
+            {assign var="org_id" value=$task['Project']->getOrganisationId()}
+            
+            Part of: <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$task['Project']->getTitle()}</a>
+            for <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>                  
+        </p>  
+
         <p style="margin-bottom:40px;"></p>        
 </div>

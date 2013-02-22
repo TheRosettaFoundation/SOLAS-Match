@@ -5,7 +5,7 @@
     <small>Overview of project details.</small>
     {assign var="project_id" value=$project->getId()}
     
-    {if isset($projectTasks)}
+    {if isset($isOrgMember)}
         <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
             <i class="icon-wrench icon-white"></i> Edit Project
         </a> 
@@ -26,7 +26,7 @@
 
 
 
-<table class="table table-striped">
+<table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
     <thead>            
         <th style="text-align: left"><b>Organisation</b></th>
         <th>Source Language</th>
@@ -40,7 +40,7 @@
           
     </thead>
     <tbody>
-        <tr>
+        <tr style="overflow-wrap: break-word;">
             <td style="text-align: left">
                 {if isset($org)}
                     {assign var="org_id" value=$org->getId()}
@@ -101,7 +101,7 @@
             
             
 <div class="well">
-    <table border="0" width="100%">
+    <table border="0" width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>
         <th align="left" width="48%">Description:<hr/></th>
         <th></th>
@@ -136,7 +136,7 @@
                 
 <p style="margin-bottom:40px;"></p>
 
-{if isset($user) && isset($projectTasks)}
+{if isset($user) && isset($isOrgMember)}
     <hr />
     
     <h1 class="page-header">
@@ -145,14 +145,22 @@
 
         <a class="pull-right btn btn-success" href="{urlFor name="task-create" options="project_id.$project_id"}">
             <i class="icon-upload icon-white"></i> Create Task
-        </a>          
-
-       
+        </a> 
     </h1> 
+            
+    {if isset($flash['taskSuccess'])}
+        <div class="alert alert-success">
+            {$flash['taskSuccess']}
+        </div>
+    {else if isset($flash['taskError'])}
+        <div class="alert alert-error">
+            {$flash['taskError']}
+        </div>
+    {/if}
         
 
     {if isset($projectTasks) && count($projectTasks) > 0}
-        <table class="table table-striped">
+        <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
                 <tr>
                     <th>
@@ -185,7 +193,7 @@
             <tbody>
                 {foreach from=$projectTasks item=task}
                     {assign var="task_id" value=$task->getId()}
-                    <tr>
+                    <tr style="overflow-wrap: break-word;">
                         <td>
                             <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a><br/>
                         </td>
@@ -196,7 +204,7 @@
                             {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                 Unclaimed
                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                <a href="{urlFor name="task-feedback" options="task_id.$task_id"}">In Progress</a>
+                                <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">In Progress</a>
                             {elseif $status_id == TaskStatusEnum::COMPLETE}
                                 <a href="{urlFor name="home"}api/v0/tasks/{$task_id}/file/?">Complete</a>
                             {/if}

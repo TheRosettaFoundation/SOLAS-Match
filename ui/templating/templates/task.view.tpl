@@ -25,7 +25,7 @@
     
     <div class="pull-right">
         {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
-            <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}" class="btn btn-primary">
+            <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btn btn-primary">
             <i class="icon-download icon-white"></i> Claim Task</a>
         {/if}
 
@@ -35,26 +35,26 @@
             </a>
         {else}
                 {if Settings::get('converter.converter_enabled') == "y"}
-                    <a href="{urlFor name="download-task-preview" options="task_id.$task_id"}?convertToXliff=true" class="btn btn-primary">
+                    <a href="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true" class="btn btn-primary">
                     <i class="icon-download icon-white"></i> Download as XLIFF</a>   
                 {/if}
         {/if}
     </div>
 </h1>
-        
-{include file="task.details.tpl"}        
-
+    
 {if isset($flash['success'])}
     <p class="alert alert-success">
-        {$flash['success']}
+        <b>Success:</b> {$flash['success']}
     </p>
 {/if}
 
 {if isset($flash['error'])}
     <p class="alert alert-error">
-        <b>Warning!</b> {$flash['error']}
+        <b>Error:</b> {$flash['error']}
     </p>
 {/if}
+        
+{include file="task.details.tpl"} 
 
 <div style="margin-bottom: 40px"></div>        
 <table width="100%">

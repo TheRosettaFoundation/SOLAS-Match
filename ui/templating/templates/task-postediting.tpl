@@ -32,7 +32,7 @@
     
     {foreach from=$preReqTasks item=pTask}
         {assign var="pTaskId" value=$pTask->getId()}
-        <p>Download {$pTask->getTitle()} <a href="{urlFor name="download-task" options="task_id.$pTaskId"}">here</a></p>
+        <p>Download {$pTask->getTitle()} <a href="{urlFor name="download-task-latest-version" options="task_id.$pTaskId"}">here</a></p>
     {/foreach}
     <p style="margin-bottom: 40px"/>
 

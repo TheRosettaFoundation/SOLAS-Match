@@ -7,24 +7,18 @@
 
 class TipSelector
 {
-    private $_tip_list = array();
-
-    public function __construct()
+    public static function selectTip()
     {
-        $this->_tip_list = array();
+        $tip_list = array();
 
         $tip_file = __DIR__.'/../../resources/tips/tips.txt';
         $handle = fopen($tip_file, 'r');
 
         while ($tmp = fgets($handle)) {
             if ($tmp != '') {
-                $this->_tip_list[] = $tmp;
+                $tip_list[] = $tmp;
             }
         }
-    }
-
-    public function selectTip()
-    {
-        return $this->_tip_list[rand(0, count($this->_tip_list) - 1)];
+        return $tip_list[rand(0, count($tip_list) - 1)];
     }
 }
