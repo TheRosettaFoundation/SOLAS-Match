@@ -115,7 +115,7 @@ class ProjectRouteHandler
                         $app->flashNow("error", "Unable to unsubscribe from $task_title's notifications");
                     }
                 } else {
-                    $response = $userDao->trackTask($user_id, $task_id);
+                    $response = $userDao->trackTask($user_id, $post->task_id);
                     if ($response) {
                         $app->flashNow("success", "You will now receive notifications for $task_title.");
                     } else {
