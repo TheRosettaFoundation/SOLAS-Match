@@ -77,7 +77,7 @@
                 {/if}
                 <p id="feedback">
                     <input type="hidden" name="selectedList" id="selectedList" value="{$hiddenPreReqList}" />
-                    <span>You've selected:</span> <span id="select-result">none</span>.
+                    <span>You've selected:</span> <span id="select-result">{$selectedString}</span>.
                 </p>
                 <ol class ="pull-left" id="selectable">
                     {foreach $projectTasks as $projectTask}
