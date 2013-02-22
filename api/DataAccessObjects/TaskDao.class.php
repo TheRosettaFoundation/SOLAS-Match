@@ -582,7 +582,7 @@ class TaskDao {
         $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
         $file_content_type = $task_file_info['content-type'];
         TaskFile::logFileDownload($task, $version);
-        IO::downloadConvertedFile($absolute_file_path, $file_content_type);
+        IO::downloadConvertedFile($absolute_file_path, $file_content_type,$taskID);
     }
     
     
