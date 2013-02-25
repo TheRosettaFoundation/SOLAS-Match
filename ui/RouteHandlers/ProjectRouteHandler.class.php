@@ -83,7 +83,7 @@ class ProjectRouteHandler
                 if ($post->trackProject) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
                     if ($userTrackProject) {
-                        $app->flashNow("Success", 
+                        $app->flashNow("success", 
                                 "You are now tracking this Project and will receive email notifications
                                 when its status changes.");
                     } else {

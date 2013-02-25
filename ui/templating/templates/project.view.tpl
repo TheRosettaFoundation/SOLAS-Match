@@ -36,7 +36,7 @@
         <th>Source Language</th>
         <th>Reference</th>
         <th>Word Count</th>
-        <th>Created</center></th>
+        <th>Created</th>
         <th>Project Deadline</th>
         {if isset($userSubscribedToProject)}
             <th>Track</th>

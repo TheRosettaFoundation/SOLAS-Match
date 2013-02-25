@@ -270,7 +270,6 @@ class UserDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/projects/$projectId";
         $ret = $this->client->call($request, HTTP_Request2::METHOD_PUT);
-        print_r($ret);
         return $ret;
     }
 
