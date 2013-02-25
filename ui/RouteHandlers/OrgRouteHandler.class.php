@@ -486,7 +486,7 @@ class OrgRouteHandler
             $post = (object) $app->request()->post();
             
             if ($post->title == "" || $post->description == "") {
-                $app->flash("error", "All fields must be filled out.");
+                $app->flashNow("error", "All fields must be filled out.");
             } else {
                 $params = array();
                 $params["title"] = $post->title;
@@ -496,6 +496,7 @@ class OrgRouteHandler
                 $badge = ModelFactory::buildModel("Badge", $params);
                 $badgeDao->createBadge($badge);                
                 
+                $app->flash("success", "Successfully created new Organisation Badge.");
                 $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
             }
         }
