@@ -716,29 +716,29 @@ class TaskRouteHandler
                 }
                 $taskDao->updateTask($task);                 
                 
-            }  
-            
-            if (isset($post->notify) && $post->notify == "true") {
-                $userTrackTask = $userDao->trackTask($user_id, $task->getId());
-                if ($userTrackTask) {
-                    $app->flashNow("success", 
-                            "You are now tracking this task and will receive email notifications
-                            when its status changes.");
-                } else {
-                    $app->flashNow("error", "Unable to register for notifications for this task.");
-                }   
-            } else if(isset($post->notify) && $post->notify == "false") {
-                $response = $userDao->untrackTask($user_id, $task->getId());
-                if ($response) {
-                    $app->flashNow("success", 
-                            "You are no longer tracking this task and will receive no
-                            further emails."
-                    );
-                } else {
-                    $app->flashNow("error", "Unable to unregister for this notification.");
-                }   
             }
-            
+
+            if (isset($post->track)) {
+                if ($post->track == "Ignore") {
+                    $response = $userDao->untrackTask($user_id, $task->getId());
+                    if ($response) {
+                        $app->flashNow("success", 
+                                "You are now tracking this task and will receive email notifications
+                                when its status changes.");
+                    } else {
+                        $app->flashNow("error", "Unable to register for notifications for this task.");
+                    }
+                } else {
+                    $response = $userDao->trackTask($user_id, $task->getId());
+                    if ($response) {
+                        $app->flashNow("success", 
+                                "You are no longer tracking this task and will receive no
+                                further emails.");
+                    } else {
+                        $app->flashNow("error", "Unable to unregister for this notification.");
+                    }
+                }
+            }
             
             if(isset($post->feedback)) {
                 $taskDao->sendFeedback($task_id, array($post->revokeUserId), $feedback);
