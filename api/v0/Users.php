@@ -33,7 +33,7 @@ class Users {
             $role = Dispatcher::clenseArgs('role', HttpMethodEnum::GET, false);
             $dao = new UserDao();
             if (!$role) {
-                $data = $dao->find(array("user_id" => $id));
+                $data = $dao->getUser($id, null, null, null, null, null, null, null, null);
             } else {
                 $data = $dao->find(array("user_id" => $id,
                                         "role" => $role));
