@@ -322,6 +322,7 @@ class ProjectRouteHandler
         $description_err= null;
         $impact_err     = null;
         $targetLanguage_err = null;
+        $wordcount_err = null;
         $project       = new Project();
 
         if ($app->request()->isPost()) {            
@@ -361,8 +362,12 @@ class ProjectRouteHandler
             if(($post->reference != "")) {
                 $project->setReference($post->reference);
             }
-            if(($post->word_count != "")) {
+            
+            $cleansedWordCount = str_replace(",", "", $post->word_count);
+            if((ctype_digit($cleansedWordCount))) {                
                 $project->setWordCount($post->word_count);
+            } else {
+                $wordcount_err = "Project <b>Word Count</b> must be set and be a valid natural number.";
             }
             if (isset($post->sourceLanguage) && $post->sourceLanguage != "") {
                 $project->setSourceLanguageCode($post->sourceLanguage);
@@ -477,7 +482,8 @@ class ProjectRouteHandler
             } else {                 
                 $app->view()->appendData(array(
                     "title_err"             => $title_err,
-                    "deadline_err"          => $deadline_err,                   
+                    "deadline_err"          => $deadline_err,      
+                    "wordcount_err"         => $wordcount_err,
                     "targetLanguage_err"    => $targetLanguage_err,
                     "project"               => $project,
                     "file_upload_err"       => $file_upload_err

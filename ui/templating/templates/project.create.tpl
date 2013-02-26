@@ -31,11 +31,14 @@
                                 {if isset($title_err)}
                                     <li>{$title_err}</li>
                                 {/if}
-                                {if isset($deadline_err)}
-                                    <li>{$deadline_err}</li>
-                                {/if}
                                 {if isset($description_err)}
                                     <li>{$description_err}</li>
+                                {/if}
+                                {if isset($wordcount_err)}
+                                    <li>{$wordcount_err}</li>
+                                {/if}
+                                {if isset($deadline_err)}
+                                    <li>{$deadline_err}</li>
                                 {/if}
                                 {if isset($impact_err)}
                                     <li>{$impact_err}</li>
@@ -81,7 +84,7 @@
                         <input type="hidden" name="organisation_id" value="1"/>
                     </div>
                     <div style="margin-bottom: 25px;">
-                    <label for="word_count"><h2>Word Count:</h2></label>
+                    <label for="word_count"><h2>Word Count: <span style="color: red">*</span></h2></label>
                         <p class="desc">Approximate or use a site such as 
                             <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.
                         </p>
