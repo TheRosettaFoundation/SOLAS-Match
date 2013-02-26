@@ -29,7 +29,7 @@ class UserRouteHandler
         $app->get("/login", array($this, "login")
         )->via("GET", "POST")->name("login");
 
-        $app->get("/profile/:user_id", array($this, "userPublicProfile")
+        $app->get("/:user_id/profile", array($this, "userPublicProfile")
         )->via("POST")->name("user-public-profile");
 
         $app->get("/profile", array($middleware, "authUserIsLoggedIn"), 
@@ -43,8 +43,8 @@ class UserRouteHandler
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $orgDao = new OrganisationDao();
-        $userDao = new UserDao();
-        
+        $userDao = new UserDao(); 
+                
         $use_statistics = Settings::get("site.stats"); 
         if ($use_statistics == 'y') {
             $statsDao = new StatisticsDao();

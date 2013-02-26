@@ -6,7 +6,7 @@
             <small>
                 
                 Note:
-                <span color='red'>*</span>
+                <span style="color: red">*</span>
                 Denotes required field.
             </small>
         </h1>
@@ -25,7 +25,7 @@
                 <tr align="center">
                     <td width="50%">
                         <label for="content">
-                            <h2>Title: <span color='red'>*</span></h2>
+                            <h2>Title: <span style="color: red">*</span></h2>
                             <p class="desc">Provide a meaningful title for the task.</p>
                             {if !is_null($titleError)}
                                 <div class="alert alert-error" style="width:131px">
@@ -50,7 +50,7 @@
                         </p>
                         <p style="margin-bottom:20px;"></p>
                         <p>
-                            <h2>Target Language: <span color='red'>*</span></h2><br>
+                            <h2>Target Language: <span style="color: red">*</span></h2><br>
                             <select name="targetLanguage" id="targetLanguage">
                                 {foreach $languages as $language}
                                     {if $task->getTargetLanguageCode() == $language->getCode()}
@@ -87,7 +87,7 @@
                     <td>
                         <p>
                             <label for="word_count">
-                            <h2>Word Count: <span color='red'>*</span></h2>
+                            <h2>Word Count: <span style="color: red">*</span></h2>
                             <p class="desc">Approximate, or use a site such as <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.</p>
                             {if !is_null($wordCountError)}
                                 <div class="alert alert-error" style="width:144px">
@@ -99,7 +99,7 @@
                         </p>
                         <p style="margin-bottom:20px;"></p>
 
-                        <h2>Deadline</h2>
+                        <h2>Deadline <span style="color: red">*</span></h2>
                         <p class="desc">Provide a deadline by which the task must be completed.</p>
                         {if $deadlineError != ''}
                             <div class="alert alert-error">
@@ -117,7 +117,7 @@
 
                         <p>
                             <h2>Publish Task</h2>
-                            <p class="desc">Will the task be published on the live task steam.</p>
+                            <p class="desc">Doy you want the task to be published on the live task steam.</p>
                             <input type="checkbox" name="published" checked="true" />
                         </p>
                         <p style="margin-bottom:20px;"></p>

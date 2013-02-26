@@ -13,41 +13,41 @@ class TaskRouteHandler
         $app->get("/tasks/claimed/p/:page_no", array($this, "claimedTasks")
         )->name("claimed-tasks");        
 
-        $app->get("/task/id/:task_id/download-task-latest-file/", array($middleware, "authenticateUserForTask"),
+        $app->get("/task/:task_id/download-task-latest-file", array($middleware, "authenticateUserForTask"),
         array($this, "downloadTaskLatestVersion"))->name("download-task-latest-version");
         
-        $app->get("/task/id/:task_id/mark-archived/", array($middleware, "authUserForOrgTask"),
+        $app->get("/task/:task_id/mark-archived", array($middleware, "authUserForOrgTask"),
         array($this, "archiveTask"))->name("archive-task");
 
-        $app->get("/task/id/:task_id/download-file-user/", array($middleware, "authUserIsLoggedIn"),
+        $app->get("/task/:task_id/download-file-user", array($middleware, "authUserIsLoggedIn"),
         array($this, "downloadTask"))->name("download-task");
 
-        $app->get("/task/claim/:task_id", array($middleware, "authUserIsLoggedIn"),
+        $app->get("/task/:task_id/claim", array($middleware, "authUserIsLoggedIn"),
         array($this, "taskClaim"))->via("POST")->name("task-claim-page");
 
-        $app->get("/task/id/:task_id/claimed", array($middleware, "authenticateUserForTask"),
+        $app->get("/task/:task_id/claimed", array($middleware, "authenticateUserForTask"),
         array($this, "taskClaimed"))->name("task-claimed");
 
-        $app->get("/task/id/:task_id/download-file/v/:version/", array($middleware, "authUserIsLoggedIn"), 
+        $app->get("/task/:task_id/download-file/v/:version", array($middleware, "authUserIsLoggedIn"), 
         array($middleware, "authUserForTaskDownload"), 
         array($this, "downloadTaskVersion"))->name("download-task-version");
 
-        $app->get("/task/id/:task_id/", array($middleware, "authUserIsLoggedIn"),
+        $app->get("/task/:task_id/id/", array($middleware, "authUserIsLoggedIn"),
         array($this, "task"))->via("POST")->name("task");
 
-        $app->get("/task/id/:task_id/uploaded/", array($middleware, "authenticateUserForTask"),
+        $app->get("/task/:task_id/uploaded", array($middleware, "authenticateUserForTask"),
         array($this, "taskUploaded"))->name("task-uploaded");
 
-        $app->get("/task/alter/:task_id/", array($middleware, "authUserForOrgTask"), 
+        $app->get("/task/:task_id/alter", array($middleware, "authUserForOrgTask"), 
         array($this, "taskAlter"))->via("POST")->name("task-alter");
 
-        $app->get("/task/view/:task_id/", array($middleware, "authUserIsLoggedIn"),
+        $app->get("/task/:task_id/view", array($middleware, "authUserIsLoggedIn"),
         array($this, "taskView"))->via("POST")->name("task-view");
 
-        $app->get("/task/create/:project_id/", array($middleware, "authUserForOrgProject"), 
+        $app->get("/project/:project_id/create-task", array($middleware, "authUserForOrgProject"), 
         array($this, "taskCreate"))->via("GET", "POST")->name("task-create");
 
-        $app->get("/task/:task_id/created/", array($middleware, "authenticateUserForTask"),
+        $app->get("/task/:task_id/created", array($middleware, "authenticateUserForTask"),
         array($this, "taskCreated"))->name("task-created");
         
         $app->get("/task/:task_id/org-feedback/", array($middleware, "authUserForOrgTask"), 
@@ -716,29 +716,29 @@ class TaskRouteHandler
                 }
                 $taskDao->updateTask($task);                 
                 
-            }  
-            
-            if (isset($post->notify) && $post->notify == "true") {
-                $userTrackTask = $userDao->trackTask($user_id, $task->getId());
-                if ($userTrackTask) {
-                    $app->flashNow("success", 
-                            "You are now tracking this task and will receive email notifications
-                            when its status changes.");
-                } else {
-                    $app->flashNow("error", "Unable to register for notifications for this task.");
-                }   
-            } else if(isset($post->notify) && $post->notify == "false") {
-                $response = $userDao->untrackTask($user_id, $task->getId());
-                if ($response) {
-                    $app->flashNow("success", 
-                            "You are no longer tracking this task and will receive no
-                            further emails."
-                    );
-                } else {
-                    $app->flashNow("error", "Unable to unregister for this notification.");
-                }   
             }
-            
+
+            if (isset($post->track)) {
+                if ($post->track == "Ignore") {
+                    $response = $userDao->untrackTask($user_id, $task->getId());
+                    if ($response) {
+                        $app->flashNow("success", 
+                                "You are now tracking this task and will receive email notifications
+                                when its status changes.");
+                    } else {
+                        $app->flashNow("error", "Unable to register for notifications for this task.");
+                    }
+                } else {
+                    $response = $userDao->trackTask($user_id, $task->getId());
+                    if ($response) {
+                        $app->flashNow("success", 
+                                "You are no longer tracking this task and will receive no
+                                further emails.");
+                    } else {
+                        $app->flashNow("error", "Unable to unregister for this notification.");
+                    }
+                }
+            }
             
             if(isset($post->feedback)) {
                 $taskDao->sendFeedback($task_id, array($post->revokeUserId), $feedback);
@@ -1078,27 +1078,32 @@ class TaskRouteHandler
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             if(isset($post->feedback)) {
-                $taskDao->sendFeedback($task_id, array($claimant->getUserId()), $post->feedback);
 
-                $app->flashNow("success", "Feedback sent to 
-                        <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
-                        {$claimant->getDisplayName()}</a>.");
-                if(isset($post->revokeTask) && $post->revokeTask) {
-                    //Check return value
-                    $taskRevoke = $userDao->unclaimTask($claimant->getUserId(), $task_id);
-                    if(!$taskRevoke) {
-                        $app->flash("taskSuccess", "<b>Success</b> - The task 
-                            <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
-                            has been successfully revoked from 
+                if ($post->feedback != "") {
+                    $taskDao->sendFeedback($task_id, array($claimant->getUserId()), $post->feedback);
+
+                    $app->flashNow("success", "Feedback sent to 
                             <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
-                            {$claimant->getDisplayName()}</a>. This user will be notified by e-mail and provided with your feedback.");
-                        $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
-                    } else {
-                        $app->flashNow("error", "<b>Error</b> - Unable to revoke the task ".
-                            "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}\"</a>
-                            from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
-                            {$claimant->getDisplayName()}</a>. Please try again later.");
+                            {$claimant->getDisplayName()}</a>.");
+                    if(isset($post->revokeTask) && $post->revokeTask) {
+                        //Check return value
+                        $taskRevoke = $userDao->unclaimTask($claimant->getUserId(), $task_id);
+                        if(!$taskRevoke) {
+                            $app->flash("taskSuccess", "<b>Success</b> - The task 
+                                <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
+                                has been successfully revoked from 
+                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
+                                {$claimant->getDisplayName()}</a>. This user will be notified by e-mail and provided with your feedback.");
+                            $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
+                        } else {
+                            $app->flashNow("error", "<b>Error</b> - Unable to revoke the task ".
+                                "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}\"</a>
+                                from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
+                                {$claimant->getDisplayName()}</a>. Please try again later.");
+                        }
                     }
+                } else {
+                    $app->flashNow("error", "The feedback field cannot be empty.");
                 }
             }
         }

@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <h1 class="page-header">
-    <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
+    <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
         {$project->getTitle()}
         <small>Overview of project details.</small>
     </span>
@@ -30,30 +30,29 @@
 
 
 
-<table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
+<table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
     <thead>            
-        <th style="text-align: left"><b>Organisation</b></th>
+        <th style="text-align: left;"><b>Organisation</b></th>
         <th>Source Language</th>
         <th>Reference</th>
         <th>Word Count</th>
-        <th>Created</center></th>
+        <th>Created</th>
         <th>Project Deadline</th>
         {if isset($userSubscribedToProject)}
-            <th>Track</th>
+            <th>Tracked</th>
         {/if}
           
     </thead>
     <tbody>
-        <tr style="overflow-wrap: break-word;">
-            <td style="text-align: left">
+        <tr style="overflow-wrap: break-word; word-break:break-all;">
+            <td style="text-align: left; word-break:break-all;">
                 {if isset($org)}
                     {assign var="org_id" value=$org->getId()}
                     <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
                 {/if}
             </td>
             <td>
-                {TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}
-                ({TemplateHelper::countryNameFromCode($project->getSourceCountryCode())})
+                {TemplateHelper::getTaskSourceLanguage($project)}
             </td>
             <td>
                 {if $project->getReference() != ''}
@@ -105,7 +104,7 @@
             
             
 <div class="well">
-    <table border="0" width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
+    <table border="0" width="100%" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
         <thead>
         <th align="left" width="48%">Description:<hr/></th>
         <th></th>
@@ -183,7 +182,7 @@
         
 
     {if isset($projectTasks) && count($projectTasks) > 0}
-        <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
+        <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
             <thead>
                 <tr>
                     <th><span style="margin-bottom:40px;"/>Title</th>
@@ -192,7 +191,7 @@
                     <th>Task Deadline</th>                  
                     <th>Word Count</th>
                     <th>Published</th>                    
-                    <th>Track</th>
+                    <th>Tracked</th>
                     <th>Edit</th>
                 </tr>
             </thead>
