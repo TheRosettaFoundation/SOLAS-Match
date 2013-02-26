@@ -2659,13 +2659,13 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
 BEGIN
 	if(id is not null and pass is not null) then
-		select * from Users u where u.id = id and password= pass;
+		select id,`display-name`,email,password,biography,(select code from Languages where id =u.`language_id`) as `language_id` ,(select code from Countries where id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id and password= pass;
    elseif(id is not null and role=1) then
-		select * from Users u where u.id = id and EXISTS (select * from OrganisationMembers om where om.user_id = u.id);
+		select id,`display-name`,email,password,biography,(select code from Languages where id =u.`language_id`) as `language_id` ,(select code from Countries where id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id and EXISTS (select * from OrganisationMembers om where om.user_id = u.id);
 	elseif(id is not null) then
- 		select * from Users u where u.id = id;
+		select id,`display-name`,email,password,biography,(select code from Languages where id =u.`language_id`) as `language_id` ,(select code from Countries where id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id;
    elseif (email is not null) then
-   	select * from Users u where u.email = email;
+   	select id,`display-name`,email,password,biography,(select code from Languages where id =u.`language_id`) as `language_id` ,(select code from Countries where id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.email = email;
 	end if;
 END//
 DELIMITER ;

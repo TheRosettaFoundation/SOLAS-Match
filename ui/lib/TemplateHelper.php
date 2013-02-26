@@ -144,8 +144,20 @@ class TemplateHelper {
 
     public static function getNativeLanguage($user)
     {
+        $use_language_codes = Settings::get("ui.language_codes"); 
+        
         $language = TemplateHelper::languageNameFromId($user->getNativeLangId());
         $region = TemplateHelper::countryNameFromId($user->getNativeRegionId());
+        
+        if($use_language_codes == "y") {
+            return $user->getNativeLangId()."-".$user->getNativeRegionId();
+        } else if($use_language_codes == "n") {
+            return TemplateHelper::languageNameFromCode($user->getNativeLangId())." - ".TemplateHelper::countryNameFromCode($user->getNativeRegionId());
+        } else if($use_language_codes == "h") {
+            return TemplateHelper::languageNameFromCode($user->getNativeLangId())." - ".TemplateHelper::countryNameFromCode($user->getNativeRegionId())
+                    ." (".$user->getNativeLangId()."-".$user->getNativeRegionId().")";
+        }
+        
         return $language." - ".$region;
     }
 
