@@ -115,10 +115,11 @@ class IO {
                 header("Content-length: $fsize");
                 header("Cache-control: private"); //use this to open files directly
                 header("X-Sendfile: ".realpath($absoluteFilePath));
-                die; // TODO -> this die is to get around Slim's $app->reponse() header/body response.
+               // TODO -> this die is to get around Slim's $app->reponse() header/body response.
                     // Is there a cleaner way to download files?
         }
         fclose ($fd);
+          die;
         return;
     }
     
