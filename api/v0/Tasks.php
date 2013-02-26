@@ -192,7 +192,7 @@ class Tasks {
         }, 'getTaskFile');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:filename/:userId/',
-                                                        function ($id, $filename, $userId, $format = ".json") {
+                                                        function ($id, $filename, $userID, $format = ".json") {
             
             if (!is_numeric($userID) && strstr($userID, '.')) {
                 $userID = explode('.', $userID);
@@ -207,7 +207,7 @@ class Tasks {
             $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, null);
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
-            TaskFile::uploadFile($task, $convert,$data,$version,$userId,$filename);
+            TaskFile::uploadFile($task, $convert,$data,$version,$userID,$filename);
         }, 'saveTaskFile');
         
         
