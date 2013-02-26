@@ -34,4 +34,4 @@
     </p>
 </section>
 
-<iframe src="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff={$convert}" width="1" height="1" frameborder="no"></iframe>
+<iframe src="{urlFor name="download-task" options="task_id.$task_id"}" width="1" height="1" frameborder="no"></iframe>

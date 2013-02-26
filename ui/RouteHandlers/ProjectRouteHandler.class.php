@@ -365,7 +365,7 @@ class ProjectRouteHandler
             
             $cleansedWordCount = str_replace(",", "", $post->word_count);
             if((ctype_digit($cleansedWordCount))) {                
-                $project->setWordCount($post->word_count);
+                $project->setWordCount($cleansedWordCount);
             } else {
                 $wordcount_err = "Project <b>Word Count</b> must be set and be a valid natural number.";
             }
@@ -479,7 +479,8 @@ class ProjectRouteHandler
                     } 
                     $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
                 }              
-            } else {                 
+            } else {     
+                $project->setWordCount($post->word_count);
                 $app->view()->appendData(array(
                     "title_err"             => $title_err,
                     "deadline_err"          => $deadline_err,      
