@@ -11,7 +11,7 @@
     </thead>
     <tbody>
         <tr>
-            <td style="text-align: left; word-break:break-all;">
+            <td style="text-align: left; word-break:break-all; width: 150px">
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
                     <a href="{urlFor name="project-view" options="project_id.$projectId"}">

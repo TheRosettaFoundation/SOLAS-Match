@@ -10,22 +10,22 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();     
         
-        $app->get("/project/view/:project_id/", array($middleware, "authUserIsLoggedIn"),
+        $app->get("/project/:project_id/view", array($middleware, "authUserIsLoggedIn"),
         array($this, "projectView"))->via("POST")->name("project-view");
         
-        $app->get("/project/alter/:project_id/", array($middleware, "authUserForOrgProject"), 
+        $app->get("/project/:project_id/alter", array($middleware, "authUserForOrgProject"), 
         array($this, "projectAlter"))->via("POST")->name("project-alter");
         
-        $app->get("/project/create/:org_id/", array($middleware, "authUserForOrg"),
+        $app->get("/project/:org_id/create", array($middleware, "authUserForOrg"),
         array($this, "projectCreate"))->via("GET", "POST")->name("project-create");    
         
-        $app->get("/project/id/:project_id/created/", array($middleware, "authUserForOrgProject"),
+        $app->get("/project/id/:project_id/created", array($middleware, "authUserForOrgProject"),
         array($this, "projectCreated"))->name("project-created");
         
-        $app->get("/project/id/:project_id/mark-archived/", array($middleware, "authUserForOrgProject"),
+        $app->get("/project/id/:project_id/mark-archived", array($middleware, "authUserForOrgProject"),
         array($this, "archiveProject"))->name("archive-project");
 
-        $app->get("/project/test/:project_id", array($this, "test"));
+        $app->get("/project/:project_id/test", array($this, "test"));
     }
 
     public function test($projectId)
@@ -510,10 +510,8 @@ class ProjectRouteHandler
             <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/tags-autocomplete.js\"></script>
         ";
 
-        $langDao = new LanguageDao();
-        $countryDao = new CountryDao();
-        $language_list = $langDao->getLanguage(null);
-        $countries = $countryDao->getCountry(null);
+        $language_list = TemplateHelper::getLanguageList();
+        $countries = TemplateHelper::getCountryList();
 
         $app->view()->appendData(array(
             "tagList"           => $tags,

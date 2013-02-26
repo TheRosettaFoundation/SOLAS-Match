@@ -18,12 +18,12 @@ class TemplateHelper {
         // From http://www.dreamincode.net/code/snippet86.htm
         // Array of time period chunks
         $chunks = array(
-            array(60 * 60 * 24 * 365 , 'year'),
-            array(60 * 60 * 24 * 30 , 'month'),
-            array(60 * 60 * 24 * 7, 'week'),
-            array(60 * 60 * 24 , 'day'),
-            array(60 * 60 , 'hour'),
-            array(60 , 'minute'),
+            array(60 * 60 * 24 * 365 , "year"),
+            array(60 * 60 * 24 * 30 , "month"),
+            array(60 * 60 * 24 * 7, "week"),
+            array(60 * 60 * 24 , "day"),
+            array(60 * 60 , "hour"),
+            array(60 , "minute"),
         );
 
         $today = time(); /* Current unix time  */
@@ -36,21 +36,21 @@ class TemplateHelper {
 
             // finding the biggest chunk (if the chunk fits, break)
             if (($count = floor($since / $seconds)) != 0) {
-                // DEBUG print "<!-- It's $name -->\n";
+                // DEBUG print "<!-- It"s $name -->\n";
                 break;
             }
         }        
        
-        $print = ($count == 1) ? '1 '.$name : "$count {$name}s";
+        $print = ($count == 1) ? "1 $name" : "$count {$name}s";
 
         if ($i + 1 < $j) {
             // now getting the second item
             $seconds2 = $chunks[$i + 1][0];
             $name2 = $chunks[$i + 1][1];
 
-            // add second item if it's greater than 0
+            // add second item if it"s greater than 0
             if (($count2 = floor(($since - ($seconds * $count)) / $seconds2)) != 0) {
-                $print .= ($count2 == 1) ? ', 1 '.$name2 : ", $count2 {$name2}s";
+                $print .= ($count2 == 1) ? ", 1 $name2" : ", $count2 {$name2}s";
             }
         }
         return $print;
@@ -58,9 +58,9 @@ class TemplateHelper {
 
     public static function isValidEmail($email) 
     {
-        return (self::emailContainsCharacter($email, '@')
+        return (self::emailContainsCharacter($email, "@")
             && 
-            self::emailContainsCharacter($email, '.')
+            self::emailContainsCharacter($email, ".")
         );      
     }
     
@@ -93,39 +93,76 @@ class TemplateHelper {
 
     public static function getTaskSourceLanguage($task)
     {
-        $language =  TemplateHelper::languageNameFromCode($task->getSourceLanguageCode());
-        $region =  TemplateHelper::countryNameFromCode($task->getSourceCountryCode());
-        return $language.' ('.$region.')';
+        $use_language_codes = Settings::get("ui.language_codes"); 
+        
+        if($use_language_codes == "y") {
+            return $task->getSourceLanguageCode()."-".$task->getSourceCountryCode();
+        } else if($use_language_codes == "n") {
+            $language = TemplateHelper::languageNameFromCode($task->getSourceLanguageCode());
+            $region = TemplateHelper::countryNameFromCode($task->getSourceCountryCode());
+            return $language." - ".$region;
+        } else if($use_language_codes == "h") {
+            return TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())." - "
+                .TemplateHelper::countryNameFromCode($task->getSourceCountryCode())
+                ." (".$task->getSourceLanguageCode()."-".$task->getSourceCountryCode().")";
+        }
     }
 
     public static function getTaskTargetLanguage($task)
     {
-        $language =  TemplateHelper::languageNameFromCode($task->getTargetLanguageCode());
-        $region =  TemplateHelper::countryNameFromCode($task->getTargetCountryCode());
-        return $language.' ('.$region.')';
+        $use_language_codes = Settings::get("ui.language_codes"); 
+        
+        if($use_language_codes == "y") {
+            return $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
+        } else if($use_language_codes == "n") {
+            $language = TemplateHelper::languageNameFromCode($task->getTargetLanguageCode());
+            $region = TemplateHelper::countryNameFromCode($task->getTargetCountryCode());
+            return $language." - ".$region;
+        } else if($use_language_codes == "h") {
+            return TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())
+                ." - ".TemplateHelper::countryNameFromCode($task->getTargetCountryCode())
+                ." (".$task->getTargetLanguageCode()."-".$task->getTargetCountryCode().")";
+        }
+    }
+    
+    public static function getProjectSourceLanguage($project)
+    {
+        $use_language_codes = Settings::get("ui.language_codes"); 
+        
+        if($use_language_codes == "y") {
+            return $project->getSourceLanguageCode()."-".$project->getSourceCountryCode();
+        } else if($use_language_codes == "n") {
+            $language = TemplateHelper::languageNameFromCode($project->getSourceLanguageCode());
+            $region = TemplateHelper::countryNameFromCode($project->getSourceCountryCode());
+            return $language." - ".$region;
+        } else if($use_language_codes == "h") {
+            return TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())." - "
+                .TemplateHelper::countryNameFromCode($project->getSourceCountryCode())
+                ." (".$project->getSourceLanguageCode()."-".$project->getSourceCountryCode().")";
+        }
     }
 
     public static function getNativeLanguage($user)
     {
         $language = TemplateHelper::languageNameFromId($user->getNativeLangId());
         $region = TemplateHelper::countryNameFromId($user->getNativeRegionId());
-        return $language.' ('.$region.')';
+        return $language." - ".$region;
     }
 
     public static function languageNameFromId($languageID)
     {
         $languageDao = new LanguageDao();
-        $result = $languageDao->getLanguage(array('id' => $languageID));
-        return $result->getName();
+        $result = $languageDao->getLanguage(array("id" => $languageID));
+        return self::cleanse($result->getName());
     }
 
     public static function languageNameFromCode($languageCode)
     {
         $ret = "";
         $langDao = new LanguageDao();
-        $lang = $langDao->getLanguage(array('code' => $languageCode));
+        $lang = $langDao->getLanguage(array("code" => $languageCode));
         if($lang) {
-            $ret = $lang->getName();
+            $ret = self::cleanse($lang->getName());
         }
         return $ret;
     }
@@ -133,44 +170,67 @@ class TemplateHelper {
     public static function orgNameFromId($orgID)
     {
         $orgDao = new OrganisationDao();
-        $result = $orgDao->getOrganisation(array('id' => $orgID));
-        return $result->getName();
+        $result = $orgDao->getOrganisation(array("id" => $orgID));
+        return self::cleanse($result->getName());
     }
 
     public static function countryNameFromId($cID)
     {
         $countryDao = new CountryDao();
-        $result = $countryDao->getCountry(array('id' => $cID));
-        return $result->getName();
+        $result = $countryDao->getCountry(array("id" => $cID));
+        return self::cleanse($result->getName());
     }
     
     public static function countryNameFromCode($cc) 
     {
         $countryDao = new CountryDao();
-        $result = $countryDao->getCountry(array('code' => $cc));
-        return $result->getName();
+        $result = $countryDao->getCountry(array("code" => $cc));
+        return self::cleanse($result->getName());
     }
      
     public static function getLanguageList() 
     {
+        $use_language_codes = Settings::get("ui.language_codes");
         $langDao = new LanguageDao();
-        $result = $langDao->getLanguage(null);
+        $result = $langDao->getLanguage(null);        
+        foreach($result as $lang)
+        {
+            if($use_language_codes == "y") {
+                $lang->setName(self::cleanse($lang->getCode()));
+            } else if($use_language_codes == "n") {
+                $lang->setName(self::cleanse($lang->getName()));                
+            } else if($use_language_codes == "h") {
+                $lang->setName(self::cleanse($lang->getName())." (".self::cleanse($lang->getCode()).")"); 
+            }
+        }
         return $result;
     }
 
     public static function getCountryList()
     {
+        $use_language_codes = Settings::get("ui.language_codes");     
         $countryDao = new CountryDao();
         $result = $countryDao->getCountry(null);
+        foreach($result as $country)
+        {
+            if($use_language_codes == "y") {
+                $country->setName(self::cleanse($country->getCode()));
+            } else if($use_language_codes == "n") {
+                $country->setName(self::cleanse($country->getName()));                
+            } else if($use_language_codes == "h") {
+                $country->setName(self::cleanse($country->getName())." (".self::cleanse($country->getCode()).")"); 
+            }
+            
+        }
         return $result;
     }
 
     public static function saveLanguage($languageCode) 
     {
         $langDao = new LanguageDao();
-        $language = $langDao->getLanguage(array('code' => $languageCode));
+        $language = $langDao->getLanguage(array("code" => $languageCode));
         if (is_null(($language))) {
-            throw new InvalidArgumentException('A valid language code was expected.');
+            throw new InvalidArgumentException("A valid language code was expected.");
         }
         return $language->getId();
     }
@@ -180,11 +240,11 @@ class TemplateHelper {
         $display_max_size = self::maxUploadSizeFromPHPSettings();
 
         switch (substr($display_max_size, -1)) {
-            case 'G':
+            case "G":
                 $display_max_size = $display_max_size * 1024;
-            case 'M':
+            case "M":
                 $display_max_size = $display_max_size * 1024;
-            case 'K':
+            case "K":
                 $display_max_size = $display_max_size * 1024;
         }
         return $display_max_size;
@@ -202,25 +262,25 @@ class TemplateHelper {
 
     private static function maxUploadSizeFromPHPSettings()
     {
-        return ini_get('post_max_size');
+        return ini_get("post_max_size");
     }
         
     public static function validateFileHasBeenSuccessfullyUploaded($field_name)
     {
         if (self::isPostTooLarge()) {
-            $max_file_size = ini_get('post_max_size');
-            throw new Exception('Sorry, the file you tried uploading is too large.
-                                The max file size is ' . $max_file_size . 
-                                '. Please consider saving the file in multiple smaller parts for upload.');
+            $max_file_size = ini_get("post_max_size");
+            throw new Exception("Sorry, the file you tried uploading is too large.
+                                The max file size is $max_file_size.
+                                 Please consider saving the file in multiple smaller parts for upload.");
         }
 
         if (!self::isUploadedFile($field_name)) {
-            throw new Exception('You did not upload a file. Please try again.');
+            throw new Exception("You did not upload a file. Please try again.");
         }
 
         if (!self::isUploadedWithoutError($field_name)) {
-            $error_message = self::fileUploadErrorMessage($_FILES[$form_file_field]['error']);
-            throw new Exception('Sorry, we were not able to upload your file. Error: ' . $error_message);
+            $error_message = self::fileUploadErrorMessage($_FILES[$form_file_field]["error"]);
+            throw new Exception("Sorry, we were not able to upload your file. Error: $error_message");
         }
     }
 
@@ -228,10 +288,10 @@ class TemplateHelper {
     private static function isPostTooLarge()
     {
             return ( 
-                    $_SERVER['REQUEST_METHOD'] == 'POST' && 
+                    $_SERVER["REQUEST_METHOD"] == "POST" && 
                     empty($_POST) &&
                     empty($_FILES) && 
-                    $_SERVER['CONTENT_LENGTH'] > 0
+                    $_SERVER["CONTENT_LENGTH"] > 0
             );
     }
 
@@ -239,32 +299,32 @@ class TemplateHelper {
     {
         switch ($error_code) {
             case UPLOAD_ERR_INI_SIZE :
-                return 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+                return "The uploaded file exceeds the upload_max_filesize directive in php.ini";
             case UPLOAD_ERR_FORM_SIZE :
-                return 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form';
+                return "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
             case UPLOAD_ERR_PARTIAL :
-                return 'The uploaded file was only partially uploaded';
+                return "The uploaded file was only partially uploaded";
             case UPLOAD_ERR_NO_FILE :
-                return 'No file was uploaded';
+                return "No file was uploaded";
             case UPLOAD_ERR_NO_TMP_DIR :
-                return 'Missing a temporary folder';
+                return "Missing a temporary folder";
             case UPLOAD_ERR_CANT_WRITE :
-                return 'Failed to write file to disk';
+                return "Failed to write file to disk";
             case UPLOAD_ERR_EXTENSION :
-                return 'File upload stopped by extension';
+                return "File upload stopped by extension";
             default :
-                return 'Unknown upload error';
+                return "Unknown upload error";
         }
     }
 
     public static function isUploadedFile($field_name)
     {
-        return is_uploaded_file($_FILES[$field_name]['tmp_name']);
+        return is_uploaded_file($_FILES[$field_name]["tmp_name"]);
     }
 
     public static function isUploadedWithoutError($field_name)
     {
-        return $_FILES[$field_name]['error'] == UPLOAD_ERR_OK;
+        return $_FILES[$field_name]["error"] == UPLOAD_ERR_OK;
     }
         
     public static function separateTags($tags)
@@ -292,7 +352,13 @@ class TemplateHelper {
 
     private static function explodeTags($tags)
     {
-        $separator = ' ';
+        $separator = " ";
         return explode($separator, $tags);
     }
+    
+    private static function cleanse($string)
+    {
+        return str_replace("_", " ", $string);
+    }
+    
 }

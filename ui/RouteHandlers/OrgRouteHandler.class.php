@@ -13,25 +13,25 @@ class OrgRouteHandler
         $app->get("/org/dashboard", array($middleware, "authUserIsLoggedIn"), 
         array($this, "orgDashboard"))->via("POST")->name("org-dashboard");        
 
-        $app->get("/org/request/:org_id", array($this, "orgRequestMembership")
+        $app->get("/org/:org_id/request", array($this, "orgRequestMembership")
         )->name("org-request-membership");
 
         $app->get("/org/:org_id/request/:user_id/:accept", array($middleware, "authUserForOrg"), 
         array($this, "orgProcessRequest"))->name("org-process-request");
 
-        $app->get("/org/request/queue/:org_id", array($middleware, "authUserForOrg"), 
+        $app->get("/org/:org_id/request/queue", array($middleware, "authUserForOrg"), 
         array($this, "orgRequestQueue"))->via("POST")->name("org-request-queue");
 
-        $app->get("/org/private/:org_id", array($middleware, "authUserForOrg"), 
+        $app->get("/org/:org_id/private", array($middleware, "authUserForOrg"), 
         array($this, "orgPrivateProfile"))->via("POST")->name("org-private-profile");
 
-        $app->get("/org/profile/:org_id", array($this, "orgPublicProfile")
+        $app->get("/org/:org_id/profile", array($this, "orgPublicProfile")
         )->via("POST")->name("org-public-profile");
 
-        $app->get("/org/:org_id/manage/:badge_id/", array($middleware, "authUserForOrg"), 
+        $app->get("/org/:org_id/manage/:badge_id", array($middleware, "authUserForOrg"), 
         array($this, "orgManageBadge"))->via("POST")->name("org-manage-badge");
 
-        $app->get("/org/create/badge/:org_id/", array($middleware, "authUserForOrg"), 
+        $app->get("/org/:org_id/create/badge", array($middleware, "authUserForOrg"), 
         array($this, "orgCreateBadge"))->via("POST")->name("org-create-badge");
 
         $app->get("/org/search", array($this, "orgSearch")

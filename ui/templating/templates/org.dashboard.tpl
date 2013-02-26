@@ -94,8 +94,10 @@
                 </tr>
             {/foreach}
         {else}
-            <td colspan="7" style="text-align: left">
-                <p>This organisation has no projects listed.</p>
+        <td colspan="7">
+                <p class="alert alert-info">
+                    This organisation has no projects listed.
+                </p>
             </td>
         {/if}
    

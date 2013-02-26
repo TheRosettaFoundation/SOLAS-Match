@@ -24,13 +24,12 @@
         </p>
 
         <p>
-        	{if $task->getSourceLanguageCode()}
-        		From: <b>{TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())}</b>
-        	{/if}
-        	{if $task->getTargetLanguageCode()}
-        		To: <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
-        	{/if}
+            From: <b>{TemplateHelper::getTaskSourceLanguage($task)}</b>
     	</p>   
+        
+        <p>
+            To: <b>{TemplateHelper::getTaskTargetLanguage($task)}</b>
+        </p>
 
         {assign var="taskTags" value=$task->getTagList()}
         {if !empty($taskTags)}

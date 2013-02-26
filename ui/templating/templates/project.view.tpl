@@ -39,7 +39,7 @@
         <th>Created</th>
         <th>Project Deadline</th>
         {if isset($userSubscribedToProject)}
-            <th>Track</th>
+            <th>Tracked</th>
         {/if}
           
     </thead>
@@ -52,8 +52,7 @@
                 {/if}
             </td>
             <td>
-                {TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}
-                ({TemplateHelper::countryNameFromCode($project->getSourceCountryCode())})
+                {TemplateHelper::getTaskSourceLanguage($project)}
             </td>
             <td>
                 {if $project->getReference() != ''}
@@ -192,7 +191,7 @@
                     <th>Task Deadline</th>                  
                     <th>Word Count</th>
                     <th>Published</th>                    
-                    <th>Track</th>
+                    <th>Tracked</th>
                     <th>Edit</th>
                 </tr>
             </thead>

@@ -134,14 +134,8 @@
         </table>
     <br />
 {else}
-    <br />
     <p class="alert alert-info">
         There are no badges associated with this organisation.
-        {if isset($user)}
-            {if in_array($user->getUserId(), $org_members)}
-                Add organisation badges <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}">here</a>.
-            {/if}
-        {/if}
     </p>
     <p style="margin-bottom:20px;"></p>
 {/if}    
@@ -154,67 +148,63 @@
         <h1 class="page-header">
             Membership Requests
             <small>Overview of users who have requested membership.</small>
+            
+        {if isset($user)}
+            {if in_array($user->getUserId(), $org_members)}
+                <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
+                    <i class="icon-star icon-white"></i> Add User
+                </a>
+            {/if}
+        {/if}
         </h1>                  
         <p style="margin-bottom: 40px" />               
                 
-                
-        <table class="table table-striped">
-            <thead>            
-                <th style="text-align: left"><b>Name</b></th>
-                <th><b>Biography</b></th>
-                <th>Accept</th>
-                <th>Deny</th>
-            </thead>
-            <tbody>
-                {if isset($user_list) && count($user_list) > 0}
-                    {foreach $user_list as $user}
-                        <tr>
-                            {assign var="user_id" value=$user->getUserId()}                        
-                            {if $user->getDisplayName() != ''}
-                                <td style="text-align: left">
-                                    <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$user->getDisplayName()}</a>
-                                </td>
-                            {/if}
-                            <td width="50%">
-                                <i>
-                                {if $user->getBiography() != ''}
-                                    {$user->getBiography()}
-                                {else}
-                                    No biography has been added.
-                                {/if}
-                                </i>
-                            </td>
-                            <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                <input type="hidden" name="user_id" value="{$user->getUserId()}" />
-                                <td>
-                                    <input type="submit" name="accept" value="    Accept Request" class="btn btn-primary" />
-                                    <i class="icon-ok-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
-                                </td>
-                                <td>
-                                    <input type="submit" name="refuse" value="    Refuse Request" class="btn btn-inverse" />
-                                    <i class="icon-remove-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
-                                </td>
-                            </form>
-                        </tr>
-                    {/foreach}
-                {else}
+        {if isset($user_list) && count($user_list) > 0}
+            <table class="table table-striped">
+                <thead>            
+                    <th style="text-align: left"><b>Name</b></th>
+                    <th><b>Biography</b></th>
+                    <th>Accept</th>
+                    <th>Deny</th>
+                </thead>
+                <tbody>
+                {foreach $user_list as $user}
                     <tr>
-                        <td colspan="2">
-                            <i>There are no current membership requests for this organisation</i>
+                        {assign var="user_id" value=$user->getUserId()}                        
+                        {if $user->getDisplayName() != ''}
+                            <td style="text-align: left">
+                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$user->getDisplayName()}</a>
+                            </td>
+                        {/if}
+                        <td width="50%">
+                            <i>
+                            {if $user->getBiography() != ''}
+                                {$user->getBiography()}
+                            {else}
+                                No biography has been added.
+                            {/if}
+                            </i>
                         </td>
+                        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                            <input type="hidden" name="user_id" value="{$user->getUserId()}" />
+                            <td>
+                                <input type="submit" name="accept" value="    Accept Request" class="btn btn-primary" />
+                                <i class="icon-ok-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
+                            </td>
+                            <td>
+                                <input type="submit" name="refuse" value="    Refuse Request" class="btn btn-inverse" />
+                                <i class="icon-remove-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
+                            </td>
+                        </form>
                     </tr>
-                {/if}
-            </tbody>
-        </table>   
-    {/if}
-{/if}
-
-
-{if isset($user)}
-    {if in_array($user->getUserId(), $org_members)}
-        <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class="btn btn-primary">
-            <i class="icon-list icon-white"></i> View Membership Requests
-        </a>
+                {/foreach}
+                </tbody>
+            </table>   
+        {else}
+            <p class="alert alert-info">
+                There are no membership requests associated with this organisation.
+            </p>
+        {/if}
     {/if}
 {/if}
 
