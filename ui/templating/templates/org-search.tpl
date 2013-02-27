@@ -7,7 +7,7 @@
 </div>
 
 <form class="well" method="post" action="{urlFor name="org-search"}">
-    <label for="search_name"><b>Organisation Name:</b></label>
+    <label for="search_name"><strong>Organisation Name:</strong></label>
     <input type="text" name="search_name" id="search_name" style="height: 20px" />
     <br />
     <input type="submit" name="submit" value="    Search" class="btn btn-primary" />
@@ -31,7 +31,7 @@
             </div>
             <div class="span8">
                 <p>
-                    <b>Biography:</b><br/>
+                    <strong>Biography:</strong><br/>
 
                     {if $org->getBiography() == ''}
                         This organisation does not have a biography listed.
@@ -40,7 +40,7 @@
                     {/if}
                 </p>
                 <p>
-                <b>Home Page:</b><br/>
+                <strong>Home Page:</strong><br/>
                 {if $org->getHomePage() != "http://"}
                     <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
                 {else}
@@ -56,7 +56,7 @@
 
 {if isset($flash['error'])}
     <div class="alert alert-error">
-        <p><b>Warning! </b>{$flash['error']}</p>
+        <p><strong>Warning! </strong>{$flash['error']}</p>
     </div>
 {/if}
 

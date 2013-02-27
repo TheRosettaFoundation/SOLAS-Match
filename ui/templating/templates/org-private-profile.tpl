@@ -20,7 +20,7 @@
 
 {assign var="org_id" value=$org->getId()}
 <form method='post' action='{urlFor name='org-private-profile' options="org_id.$org_id"}' class='well'>
-    <label for='name'><b>Public Display Name:</b></label>
+    <label for='name'><strong>Public Display Name:</strong></label>
     <input type='text' name='name' id='name' 
     {if $org->getName() != ''}
        value="{$org->getName()}"
@@ -28,7 +28,7 @@
         placeholder='Organisation Name' 
     {/if}
     />
-    <label for='home_page'><b>Home Page:</b></label>
+    <label for='home_page'><strong>Home Page:</strong></label>
     <input type='text' name='home_page' id='home_page'
     {if $org->getHomePage() != ''}
          value="{$org->getHomePage()}"
@@ -36,7 +36,7 @@
         placeholder='http://yoursite.com'
     {/if}
     />
-    <label for='bio'><b>Biography:</b></label>
+    <label for='bio'><strong>Biography:</strong></label>
     <textarea name='bio' cols='40' rows='5' 
     {if $org->getBiography() == ''}
         placeholder="Enter Organisation Biography Here"

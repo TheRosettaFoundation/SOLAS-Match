@@ -12,10 +12,10 @@
 {/if}
 
 <form method="post" action="{urlFor name="org-create-badge" options="org_id.$org_id"}" class="well">
-    <label for='title'><b>Badge Title:</b></label>
+    <label for='title'><strong>Badge Title:</strong></label>
     <input type='text' name='title' id='title' />
 
-    <label for="description"><b>Description:</b></label>
+    <label for="description"><strong>Description:</strong></label>
     <textarea name='description' cols='40' rows='5'></textarea>
 
     <p>

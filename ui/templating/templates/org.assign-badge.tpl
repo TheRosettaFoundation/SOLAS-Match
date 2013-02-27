@@ -16,7 +16,7 @@ badge id: {$badge_id}<br/>
 
     {if isset($flash['error'])}
         <div class="alert alert-error">
-            <b>Warning!</b> {$flash['error']}
+            <strong>Warning!</strong> {$flash['error']}
         </div>
     {/if}
 

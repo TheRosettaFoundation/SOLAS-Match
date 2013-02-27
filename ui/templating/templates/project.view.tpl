@@ -24,7 +24,7 @@
 
 {if isset($flash['error'])}
     <p class="alert alert-error">
-        <b>Warning!</b> {$flash['error']}
+        <strong>Warning!</strong> {$flash['error']}
     </p>
 {/if}
 
@@ -32,7 +32,7 @@
 
 <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
     <thead>            
-        <th style="text-align: left;"><b>Organisation</b></th>
+        <th style="text-align: left;"><strong>Organisation</strong></th>
         <th>Source Language</th>
         <th>Reference</th>
         <th>Word Count</th>
@@ -137,7 +137,7 @@
             </tr>
             <tr valign="top">
                 <td colspan="3">
-                    <b>Tags:</b><hr/>
+                    <strong>Tags:</strong><hr/>
                 </td>
             </tr>
             <tr>                
@@ -215,7 +215,7 @@
                             {/if}
                         </td>
                         <td>
-                            <b>
+                            <strong>
                             <small>                                  
                             {assign var="type_id" value=$task->getTaskType()}
                             {if $type_id == TaskTypeEnum::CHUNKING}
@@ -228,7 +228,7 @@
                                 <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span> 
                             {/if}
                             </small>
-                            </b>
+                            </strong>
                         </td>
                         <td>
                             {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}

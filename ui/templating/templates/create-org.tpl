@@ -19,15 +19,14 @@
     </div>
 {/if}
 
-
 <form method="post" action="{urlFor name="create-org"}" class="well">
-    <label for="name"><b>Organisation Name:</b></label>
+    <label for="name"><strong>Organisation Name:</strong></label>
     <input type="text" name="name" />
 
-    <label for="home_page"><b>Home Page:</b></label>
+    <label for="home_page"><strong>Home Page:</strong></label>
     <input type="text" name="home_page" value="http://" />
 
-    <label for="bio"><b>Biography:</b></label>
+    <label for="bio"><strong>Biography:</strong></label>
     <textarea name="bio" cols="40" rows="5" placeholder="Explain what the purpose of your organisation is."></textarea>
 
     <p>

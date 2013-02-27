@@ -1,6 +1,6 @@
 <table class="table table-striped">
     <thead>
-        <th style="text-align: left"><b>Project</b></th>
+        <th style="text-align: left"><strong>Project</strong></th>
 
         <th>Source Language</th>
         <th>Target Language</th>
@@ -91,11 +91,11 @@
             </tr>
             <tr>
                 <td>
-                    <b>Project Impact:</b><hr/>
+                    <strong>Project Impact:</strong><hr/>
                 </td>
                 <td></td>
                 <td>
-                    <b>Task Tags:</b><hr/>
+                    <strong>Task Tags:</strong><hr/>
                 </td>
             </tr>
             <tr valign="top">                

@@ -7,7 +7,7 @@
         Task {$task->getId()}
     {/if}
     <small>
-        <b>
+        <strong>
             -
             {assign var="type_id" value=$task->getTaskType()}
             {if $type_id == TaskTypeEnum::CHUNKING}
@@ -19,7 +19,7 @@
             {elseif $type_id == TaskTypeEnum::POSTEDITING}
                 <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
             {/if}
-        </b>
+        </strong>
     </small>   
     {assign var="task_id" value=$task->getId()}
 </h1>
@@ -47,10 +47,10 @@
                 </td>    
             </tr>
             <tr>
-                <td><b>Number of chunks:</b></td>         
-                <td align="center" valign="bottom"><b>Translation</b></td>
-                <td align="center" valign="bottom"><b>Proofreading</b></td>
-                <td align="center" valign="bottom"><b>Postediting</b></td>
+                <td><strong>Number of chunks:</strong></td>         
+                <td align="center" valign="bottom"><strong>Translation</strong></td>
+                <td align="center" valign="bottom"><strong>Proofreading</strong></td>
+                <td align="center" valign="bottom"><strong>Postediting</strong></td>
             </tr>
             <tr>
                 <td id="chunkingElements"></td>  

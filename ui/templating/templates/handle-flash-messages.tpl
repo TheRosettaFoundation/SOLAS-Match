@@ -15,4 +15,3 @@
         <p><strong>Congratulations! </strong>{$flash['success']}</p>
     </div>
 {/if}
-

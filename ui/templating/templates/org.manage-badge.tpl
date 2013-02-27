@@ -7,7 +7,7 @@
 
 {if isset($flash['success'])}
     <div class="alert alert-success">
-        <b>Notice:</b> {$flash['success']}
+        <strong>Notice:</strong> {$flash['success']}
     </div>
 {/if}
 
@@ -21,7 +21,7 @@
 
     {if isset($flash['error'])}
         <div class="alert alert-error">
-            <b>Warning!</b> {$flash['error']}
+            <strong>Warning!</strong> {$flash['error']}
         </div>
     {/if}
 

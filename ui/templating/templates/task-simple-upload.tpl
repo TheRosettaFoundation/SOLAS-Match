@@ -12,7 +12,7 @@
         Task {$task->getId()}
     {/if}
     <small>
-        <b>
+        <strong>
             -
             {assign var="type_id" value=$task->getTaskType()}
             {if $type_id == TaskTypeEnum::TRANSLATION}
@@ -20,7 +20,7 @@
             {elseif $type_id == TaskTypeEnum::PROOFREADING}
                 <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
             {/if}
-        </b>
+        </strong>
     </small>   
     {assign var="task_id" value=$task->getId()}
 </h1>
@@ -75,25 +75,25 @@
     <br />
     <p>Click 
         <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>
-        to re-download the <b>original task file</b>.
+        to re-download the <strong>original task file</strong>.
     </p> 
 
     {if ($converter == "y")}
     <p>Click
         <a href="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true">here</a>   
-        to re-download the <b>original task file</b> as XLIFF.
+        to re-download the <strong>original task file</strong> as XLIFF.
     </p>     
     {/if}  
 
     <p>Click 
         <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">here</a>
-        to re-download the <b>latest uploaded file</b>.
+        to re-download the <strong>latest uploaded file</strong>.
     </p> 
 
     {if ($converter == "y")}
     <p>Click
         <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}?convertToXliff=true">here</a>   
-        to re-download the <b>latest uploaded file</b> as XLIFF.
+        to re-download the <strong>latest uploaded file</strong> as XLIFF.
     </p>     
     {/if}
 

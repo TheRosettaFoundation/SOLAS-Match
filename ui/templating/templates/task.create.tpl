@@ -2,7 +2,7 @@
 <div class="grid_8">
     <div class="page-header">
         <h1>
-            Create New Task <small>For Project: <b>{$project->getTitle()}</b></small><br>   
+            Create New Task <small>For Project: <strong>{$project->getTitle()}</strong></small><br>   
             <small>
                 
                 Note:

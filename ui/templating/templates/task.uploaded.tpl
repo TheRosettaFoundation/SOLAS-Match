@@ -27,7 +27,7 @@
 <section>    
     {if isset($tip)}
         <hr>
-            <p><b>Correct Translations - They Matter!</b></p>
+            <p><strong>Correct Translations - They Matter!</strong></p>
             <p>
                 <i>{$tip}</i>
             </p>

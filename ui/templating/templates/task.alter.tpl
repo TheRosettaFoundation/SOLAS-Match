@@ -14,15 +14,15 @@
         <tr align="center">
             <td width="50%">
                 <div style="margin-bottom:20px;">
-                    <label for="title" style="font-size: large"><b>Title:</b></label>
+                    <label for="title" style="font-size: large"><strong>Title:</strong></label>
                     <textarea wrap="soft" cols="1" rows="4" name="title">{$task->getTitle()}</textarea>
                 </div>
                 <div style="margin-bottom:20px;">
-                    <label for="impact" style="font-size: large"><b>Task Comment:</b></label>
+                    <label for="impact" style="font-size: large"><strong>Task Comment:</strong></label>
                     <textarea wrap="soft" cols="1" rows="6" name="impact">{$task->getComment()}</textarea>
                 </div>
                 <div style="margin-bottom:20px;">
-                    <label for="deadline" style="font-size: large"><b>Deadline:</b></label>
+                    <label for="deadline" style="font-size: large"><strong>Deadline:</strong></label>
                     {if $deadline_error != ''}
                         <div class="alert alert-error">
                             {$deadline_error}
@@ -34,14 +34,14 @@
                     </p>
                 </div>
                 <div style="margin-bottom:20px;">
-                    <label for="publishtask" style="font-size: large"><b>Publish Task:</b></label>
+                    <label for="publishtask" style="font-size: large"><strong>Publish Task:</strong></label>
                     <p class="desc">If checked, this task will appear in the task stream.</p>
                     <input type="checkbox" name="publishTask" value="1" checked="true"/>
                 </div>
             </td>
             <td>
                 <p>
-                    <label for="target" style="font-size: large"><b>Target Language:</b></label>
+                    <label for="target" style="font-size: large"><strong>Target Language:</strong></label>
                     <select name="target" id="target">
                         {foreach $languages as $language}
                             {if $task->getTargetLanguageCode() == $language->getCode()}
@@ -74,11 +74,11 @@
                 {/if} 
                 <p style="margin-bottom:40px;"></p>
                 
-                <label for="word_count" style="font-size: large"><b>Word Count:</b></label>
+                <label for="word_count" style="font-size: large"><strong>Word Count:</strong></label>
                 <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}"/>
                 <p style="margin-bottom:40px;"></p>
 
-                <label for="prerequisites" style="font-size: large"><b>Task Prerequisites</b>:</label>
+                <label for="prerequisites" style="font-size: large"><strong>Task Prerequisites</strong>:</label>
                 {if isset($deadlockError) && $deadlockError != ''}
                     <p class="alert alert-error">{$deadlockError}</p>
                 {/if}

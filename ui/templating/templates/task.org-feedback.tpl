@@ -11,7 +11,7 @@
         Task {$task->getId()}
     {/if}
     <small>
-        <b>
+        <strong>
             -
             {assign var="type_id" value=$task->getTaskType()}
             {if $type_id == TaskTypeEnum::CHUNKING}
@@ -23,7 +23,7 @@
             {elseif $type_id == TaskTypeEnum::POSTEDITING}
                 <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
             {/if}
-        </b>
+        </strong>
     </small>  
 </h1>
 
@@ -107,7 +107,7 @@
 <div style="margin-bottom: 40px"></div>  
 
 <div class="well">
-    <b>User Feedback:</b><hr/>
+    <strong>User Feedback:</strong><hr/>
     <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" 
                 action="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
         <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" 

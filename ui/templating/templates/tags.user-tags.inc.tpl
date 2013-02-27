@@ -7,7 +7,7 @@
                 <div class="tag">
                     <a class="label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a>
                     <a class="label label-close" href="{urlFor name="home"}tag/{$tag_label}/false" 
-                    title="Click to remove tag from subscription list"><b>| x</b></a>
+                    title="Click to remove tag from subscription list"><strong>| x</strong></a>
                 </div>
             </li>
         {/foreach}

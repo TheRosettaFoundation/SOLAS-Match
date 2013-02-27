@@ -17,23 +17,23 @@
         <tr align="center">
             <td>
 
-                <label for="title" style="font-size: large"><b>Title:</b></label>
+                <label for="title" style="font-size: large"><strong>Title:</strong></label>
                 <textarea wrap="soft" cols="1" rows="4" name="title">{$project->getTitle()}</textarea>
                 <p style="margin-bottom:30px;"></p>
                 
-                <label for="description" style="font-size: large"><b>Description:</b></label>
+                <label for="description" style="font-size: large"><strong>Description:</strong></label>
                 <textarea wrap="soft" cols="1" rows="6" name="description">{$project->getDescription()}</textarea>
                 
                 <p style="margin-bottom:30px;"></p>
-                <label for="impact" style="font-size: large"><b>Impact:</b></label>
+                <label for="impact" style="font-size: large"><strong>Impact:</strong></label>
                 <textarea wrap="soft" cols="1" rows="4" name="impact">{$project->getImpact()}</textarea>
             </td>
             <td>
-                <label for="tags" style="font-size: large"><b>Tags:</b></label>
+                <label for="tags" style="font-size: large"><strong>Tags:</strong></label>
                 <input id="tags" name="tags" value="{$tag_list}">
                 <p style="margin-bottom:20px;"></p>
                 
-                <label for="deadline" style="font-size: large"><b>Deadline:</b></label>
+                <label for="deadline" style="font-size: large"><strong>Deadline:</strong></label>
                 {if isset($deadlineError) && $deadlineError != ''}
                     <p class="alert alert-error">{$deadlineError}</p>
                 {/if}
@@ -44,7 +44,7 @@
                 
                 {if isset($languages)}
                 <p>
-                    <label for="source" style="font-size: large"><b>Source Language:</b></label>
+                    <label for="source" style="font-size: large"><strong>Source Language:</strong></label>
                     <select name="sourceLanguage" id="sourceLanguage">
                         {foreach $languages as $language}
                             {if $project->getSourceLanguageCode() == $language->getCode()}
@@ -72,7 +72,7 @@
                 {/if}
                 <p style="margin-bottom:20px;"></p>
                 
-                <label for="reference" style="font-size: large"><b>Reference:</b></label>
+                <label for="reference" style="font-size: large"><strong>Reference:</strong></label>
                 <textarea wrap="soft" cols="1" rows="4" name="reference">{$project->getReference()}</textarea>
             </td>
         </tr>

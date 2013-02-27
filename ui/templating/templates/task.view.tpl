@@ -9,7 +9,7 @@
         {/if}
 
         <small>
-            <b>
+            <strong>
                  -
                 {assign var="type_id" value=$task->getTaskType()}
                 {if $type_id == TaskTypeEnum::CHUNKING}
@@ -21,7 +21,7 @@
                 {elseif $type_id == TaskTypeEnum::POSTEDITING}
                     <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task</span> 
                 {/if}
-            </b>
+            </strong>
         </small>  
     </span>
     {assign var="task_id" value=$task->getId()}
@@ -42,13 +42,13 @@
     
 {if isset($flash['success'])}
     <p class="alert alert-success">
-        <b>Success:</b> {$flash['success']}
+        <strong>Success:</strong> {$flash['success']}
     </p>
 {/if}
 
 {if isset($flash['error'])}
     <p class="alert alert-error">
-        <b>Error:</b> {$flash['error']}
+        <strong>Error:</strong> {$flash['error']}
     </p>
 {/if}
         

@@ -295,7 +295,6 @@ REPLACE INTO `Statistics` (`name`, `value`) VALUES
 	('Tags', 0),
 	('Tasks', 0),
 	('TasksWithPreReqs', 0),
-        ('TotalProjects', 0),
 	('UnclaimedTasks', 0),
 	('Users', 0);
 
@@ -3115,7 +3114,6 @@ BEGIN
 	CALL statsUpdateTags;
 	CALL statsUpdateTasks;
 	CALL statsUpdateTasksWithPreReqs;
-        CALL statsUpdateTotalProjects;
 	CALL statsUpdateUnclaimedTasks;
 	CALL statsUpdateUsers;
 END//
@@ -3132,24 +3130,6 @@ BEGIN
 	VALUES ('Projects', @Projects);	
 END//
 DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTotalProjects
-DROP PROCEDURE IF EXISTS `statsUpdateTotalProjects`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTotalProjects`()
-BEGIN
-	SET @Projects = 0;
-	SET @ArchivedProjects = 0;	
-	
-	SELECT count(1) INTO @Projects FROM Projects;	
-	SELECT count(1) INTO @ArchivedProjects FROM ArchivedProjects;
-	
-	SET @totalProjects = @Projects + @ArchivedProjects;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('TotalProjects', @totalProjects);	
-END//
-DELIMITER ;
-
 
 
 /*---------------------------------------end of procs----------------------------------------------*/

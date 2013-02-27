@@ -18,14 +18,14 @@
 {/if}
  
 <form method='post' action='{urlFor name='user-private-profile'}' class='well'>
-    <label for='name'><b>Public Display Name:</b></label>
+    <label for='name'><strong>Public Display Name:</strong></label>
     <input type='text' name='name' id='name'
     {if $user->getDisplayName() != ''}
         value='{$user->getDisplayName()}'
     {else}
         placeholder='Name'
     {/if} />
-    <label for='nLanguage'><b>Native Language:</b></label>
+    <label for='nLanguage'><strong>Native Language:</strong></label>
     {if isset($languages)}
         <select name="nLanguage" id="nLanguage">
             {foreach $languages as $language}
@@ -50,7 +50,7 @@
     {else}
         <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getNativeLanguage($user)} />
     {/if}
-    <label for='bio'><b>Biography:</b></label>
+    <label for='bio'><strong>Biography:</strong></label>
     <textarea name='bio' cols='40' rows='5' {if $user->getBiography() == ''} placeholder="Enter Bio Here" {/if}
     >{if $user->getBiography() != ''}{$user->getBiography()}{/if}</textarea>
     <p>Register with <a href="http://en.gravatar.com/" target="_blank">Gravatar</a> to choose your avatar!</p>

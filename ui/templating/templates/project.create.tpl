@@ -47,7 +47,7 @@
                                     <li>{$targetLanguage_err}</li>
                                 {/if}
                                 {if isset($file_upload_err)}
-                                    <li><b>Source Text</b> - {$file_upload_err}</li>
+                                    <li><strong>Source Text</strong> - {$file_upload_err}</li>
                                 {/if}
                             </ol>
                         </div>                        
@@ -146,9 +146,9 @@
                 <td valign="center">
                     <table border="0" width="100%"> 
                         <tr align="center">
-                            <td width="33%"><b>Chunking</b></td>
-                            <td width="33%"><b>Translation</b></td>
-                            <td width="33%"><b>Proofreading</b></td>
+                            <td width="33%"><strong>Chunking</strong></td>
+                            <td width="33%"><strong>Translation</strong></td>
+                            <td width="33%"><strong>Proofreading</strong></td>
                         </tr> 
                     </table>
                 </td>
@@ -192,7 +192,7 @@
             </tr> 
             <tr>
                 <td colspan="2">
-                    <div id="alertinfo" class="alert alert-info" style="display: none;"><center>You have reached the maximum number of target translation fields allowed.</center></div>  
+                    <div id="alertinfo" class="alert alert-info" style="display: none; text-align: center">You have reached the maximum number of target translation fields allowed.</div>  
                     <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
                     <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" disabled="true" style="visibility: hidden"/>  
                     <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1"/>

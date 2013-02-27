@@ -142,7 +142,7 @@
                 </div>
                 <div class="span8">
                     <p>
-                        <b>Biography:</b><br/>
+                        <strong>Biography:</strong><br/>
                         
                         {if $org->getBiography() == ''}
                             This organisation does not have a biography listed.
@@ -151,7 +151,7 @@
                         {/if}
                     </p>
                     <p>
-                    <b>Home Page:</b><br/>
+                    <strong>Home Page:</strong><br/>
                     {if $org->getHomePage() != "http://"}
                         <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
                     {else}

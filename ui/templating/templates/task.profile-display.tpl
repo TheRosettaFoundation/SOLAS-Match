@@ -4,10 +4,10 @@
 	<h2>{$task->getTitle()}</h2>
 	<p>
 		{if $task->getSourceLanguageCode()}
-			From <b>{TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())}</b>
+			From <strong>{TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())}</strong>
 		{/if}
 		{if $task->getTargetLanguageCode()}
-			To <b>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</b>
+			To <strong>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</strong>
 		{/if}                
 
 		{foreach from=$task->getTags() item=tag}

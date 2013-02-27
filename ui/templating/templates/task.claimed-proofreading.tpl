@@ -24,7 +24,7 @@
 	</ol>
 
     {if isset($user)}
-        <p>We have also emailed you these instructions to <b>{$user->getEmail()}</b>.</p>
+        <p>We have also emailed you these instructions to <strong>{$user->getEmail()}</strong>.</p>
     {/if}
 </section>
 

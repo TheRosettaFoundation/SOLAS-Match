@@ -9,7 +9,7 @@
         Task {$task->getId()}
     {/if}
     <small>
-        <b>
+        <strong>
             -
             {assign var="type_id" value=$task->getTaskType()}
             {if $type_id == TaskTypeEnum::CHUNKING}
@@ -21,7 +21,7 @@
             {elseif $type_id == TaskTypeEnum::POSTEDITING}
                 <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
             {/if}
-        </b>
+        </strong>
     </small>  
 </h1>
 
@@ -107,7 +107,7 @@
 <div style="margin-bottom: 40px"></div>  
 
 <div class="well">
-    <b>Organisation Feedback:</b><hr/>    
+    <strong>Organisation Feedback:</strong><hr/>    
     <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.{$task->getId()}"}">
         <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="You can provide direct feedback to the organisation who owns this task here. If you have accidentally claimed this task or are unable to complete it, you can also provide the reasons for this decision in this form."></textarea>                    
         <input type="hidden" name="revokeTaskId" value="{$task_id}" />  

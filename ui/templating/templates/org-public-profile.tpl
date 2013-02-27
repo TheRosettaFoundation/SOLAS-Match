@@ -59,7 +59,7 @@
             <tr>
                 <td>
                     {if $org->getHomePage() != '' && $org->getHomePage() != 'http://'}
-                        <b>Home Page:</b> <a target="_blank" href='{$org->getHomePage()}'>{$org->getHomePage()}</a>
+                        <strong>Home Page:</strong> <a target="_blank" href='{$org->getHomePage()}'>{$org->getHomePage()}</a>
                     {/if}
                 </td>
             </tr>
@@ -101,7 +101,7 @@
                 {assign var="org_id" value=$org->getId()}
                 <tr>
                     <td style="text-align: left" width="20%">
-                        <b>{$badge->getTitle()}</b>
+                        <strong>{$badge->getTitle()}</strong>
                     </td>
                     <td width="35%">
                         {$badge->getDescription()}
@@ -162,8 +162,8 @@
         {if isset($user_list) && count($user_list) > 0}
             <table class="table table-striped">
                 <thead>            
-                    <th style="text-align: left"><b>Name</b></th>
-                    <th><b>Biography</b></th>
+                    <th style="text-align: left"><strong>Name</strong></th>
+                    <th><strong>Biography</strong></th>
                     <th>Accept</th>
                     <th>Deny</th>
                 </thead>

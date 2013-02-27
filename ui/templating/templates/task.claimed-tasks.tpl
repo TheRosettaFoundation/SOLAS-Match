@@ -24,11 +24,11 @@
         </p>
 
         <p>
-            From: <b>{TemplateHelper::getTaskSourceLanguage($task)}</b>
+            From: <strong>{TemplateHelper::getTaskSourceLanguage($task)}</strong>
     	</p>   
         
         <p>
-            To: <b>{TemplateHelper::getTaskTargetLanguage($task)}</b>
+            To: <strong>{TemplateHelper::getTaskTargetLanguage($task)}</strong>
         </p>
 
         {assign var="taskTags" value=$task->getTagList()}
@@ -43,14 +43,14 @@
         {/if}
         <p>
             {if $task->getWordCount()}
-                Word Count: <b>{$task->getWordCount()|number_format}</b>
+                Word Count: <strong>{$task->getWordCount()|number_format}</strong>
             {/if}      
         </p> 
 	<p class="task_details">
-            Added: <b>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</b> ago
+            Added: <strong>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</strong> ago
 	</p>
         <p>
-            Due by: <b>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</b>
+            Due by: <strong>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</strong>
         </p>           
         
         <p>            

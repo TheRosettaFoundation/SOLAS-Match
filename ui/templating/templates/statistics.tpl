@@ -5,84 +5,77 @@
             <td>Users:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['Users']->getValue()}</b>
+                <strong>{$statsArray['Users']->getValue()}</strong>
             </td>
         </tr>
         <tr>
             <td>Organisations:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['Organisations']->getValue()}</b>
-            </td>
-        </tr>
-        <tr>
-            <td>Projects Total:</td>
-            <td>&nbsp;</td>
-            <td style="padding-left: 50px">
-                <b>{$statsArray['TotalProjects']->getValue()}</b>
+                <strong>{$statsArray['Organisations']->getValue()}</strong>
             </td>
         </tr>
         <tr>
             <td>Projects:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['Projects']->getValue()}</b>
+                <strong>{$statsArray['Projects']->getValue()}</strong>
             </td>
         </tr>
         <tr>
             <td>Projects Archived:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['ArchivedProjects']->getValue()}</b>
+                <strong>{$statsArray['ArchivedProjects']->getValue()}</strong>
             </td>
         </tr>
         <tr>
-            <td>Tasks Total:</td>
+            <td>Tasks:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['Tasks']->getValue()}</b>
+                <strong>{$statsArray['Tasks']->getValue()}</strong>
             </td>
         </tr>
         <tr>
             <td>Tasks Claimed:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['ClaimedTasks']->getValue()}</b>
+                <strong>{$statsArray['ClaimedTasks']->getValue()}</strong>
             </td>
         </tr>
         <tr>
             <td>Tasks Unclaimed:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['UnclaimedTasks']->getValue()}</b>
+                <strong>{$statsArray['UnclaimedTasks']->getValue()}</strong>
             </td>
         </tr>
         <tr>
             <td>Tasks with Prerequisites:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['TasksWithPreReqs']->getValue()}</b>
+                <strong>{$statsArray['TasksWithPreReqs']->getValue()}</strong>
             </td>
         </tr>
         <tr>
             <td>Tasks Archived:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['ArchivedTasks']->getValue()}</b>
+                <strong>{$statsArray['ArchivedTasks']->getValue()}</strong>
             </td>
         </tr>
         <tr>
             <td>Badges:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['Badges']->getValue()}</b>
+                <strong>{$statsArray['Badges']->getValue()}</strong>
             </td>
         </tr>        
         <tr>
             <td>Tags:</td>
             <td>&nbsp;</td>
             <td style="padding-left: 50px">
-                <b>{$statsArray['Tags']->getValue()}</b>
+                <strong>{$statsArray['Tags']->getValue()}</strong>
             </td>
         </tr>
     </table>

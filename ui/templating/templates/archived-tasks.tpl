@@ -1,13 +1,11 @@
 {include file='header.tpl'}
 
-<div class='page-header'><h1>
-    {if isset($user) && $user->getDisplayName() != ''}
-        {$user->getDisplayName()}'s
-    {else}
-        Your
-    {/if}
-    Archived Tasks <small>A list of tasks you have worked on in the past</small>
-</h1></div>
+<div class='page-header'>
+    <h1>
+        {if isset($user) && $user->getDisplayName() != ''}{$user->getDisplayName()}'s {else} Your{/if}
+        Archived Tasks <small>A list of tasks you have worked on in the past</small>
+    </h1>
+</div>
 
 {if isset($archived_tasks) && count($archived_tasks) > 0}
     {for $count=$top to $bottom}
