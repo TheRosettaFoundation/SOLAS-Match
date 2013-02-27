@@ -61,7 +61,7 @@
                         {if isset($user)}
                             <li>
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                    <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20&r=g" alt="" />
+                                    <img src="{urlencode("http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20&r=g")}" alt="" />
                                        {$user->getDisplayName()}
                                 </a>
                             </li>

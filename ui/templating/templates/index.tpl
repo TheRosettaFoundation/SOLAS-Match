@@ -47,29 +47,28 @@
 
     <div class="row">
         <div class="pull-right">
-
-                {include file="tags.user-tags.inc.tpl"}	
-                {include file="tags.top-list.inc.tpl"}
-                {if isset($statsArray) && is_array($statsArray)}
-                        {include file="statistics.tpl"}
-                {/if}
+            {include file="tags.user-tags.inc.tpl"}	
+            {include file="tags.top-list.inc.tpl"}
+            {if isset($statsArray) && is_array($statsArray)}
+                    {include file="statistics.tpl"}
+            {/if}
         </div>
 
         <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; table-layout: fixed; word-break:break-all;">
             {if count($tasks) > 0}
-                    <div id="tasks">
-                            {foreach from=$tasks item=task name=tasks_loop}
-                                    {include file="task.summary-link.tpl" task=$task}
-                            {/foreach}
-                    </div>
+                <div id="tasks">
+                    {foreach from=$tasks item=task name=tasks_loop}
+                        {include file="task.summary-link.tpl" task=$task}
+                    {/foreach}
+                </div>
             {else}
-                    <div class="alert alert-warning">
-                            {if isset($user_is_organisation_member)}
-                                    <strong>No open tasks!</strong> You can upload a new task from your Dashboard in the navigation menu above.
-                            {else}
-                                    <strong>No tasks available!</strong> Please wait for organisations to upload more translation tasks.
-                            {/if}
-                    </div>
+                <div class="alert alert-warning">
+                    {if isset($user_is_organisation_member)}
+                        <strong>No open tasks!</strong> You can upload a new task from your Dashboard in the navigation menu above.
+                    {else}
+                        <strong>No tasks available!</strong> Please wait for organisations to upload more translation tasks.
+                    {/if}
+                </div>
             {/if}
 
             {if !isset($user)}

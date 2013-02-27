@@ -1,18 +1,18 @@
 {include file="header.tpl"}
 
-<div class="page-header">
-    <h1>
-        Organisation Search <small>Search for organisations by name.</small>
-    </h1>
-</div>
+    <div class="page-header">
+        <h1>
+            Organisation Search <small>Search for organisations by name.</small>
+        </h1>
+    </div>
 
-<form class="well" method="post" action="{urlFor name="org-search"}">
-    <label for="search_name"><strong>Organisation Name:</strong></label>
-    <input type="text" name="search_name" id="search_name" style="height: 20px" />
-    <br />
-    <input type="submit" name="submit" value="    Search" class="btn btn-primary" />
-    <i class="icon-search icon-white" style="position:relative; right:75px; top:2px;"></i>
-</form>
+    <form class="well" method="post" action="{urlFor name="org-search"}">
+        <label for="search_name"><strong>Organisation Name:</strong></label>
+        <input type="text" name="search_name" id="search_name" style="height: 20px" />
+        <br />
+        <input type="submit" name="submit" value="    Search" class="btn btn-primary" />
+        <i class="icon-search icon-white" style="position:relative; right:75px; top:2px;"/>
+    </form>
 
 {if isset($found_orgs)}
     {assign var="org_count" value=count($found_orgs)}
@@ -49,8 +49,8 @@
                 </p>
             </div>
         </div>
-        <p style="margin-bottom:20px;"></p>
-        <hr>
+        <p style="margin-bottom:20px;"/>
+        <hr/>
     {/foreach}
 {/if}
 
