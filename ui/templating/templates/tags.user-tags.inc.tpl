@@ -12,6 +12,6 @@
             </li>
         {/foreach}
     </ul>
-    <p style="margin-bottom:20px;"></p>
+    <p style="margin-bottom:20px;"/>
 {/if}
 

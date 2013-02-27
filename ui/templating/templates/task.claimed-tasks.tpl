@@ -3,33 +3,34 @@
     {assign var='task_id' value=$task->getId()}
     {assign var="type_id" value=$task->getTaskType()}    
                          
-            <h2>
-                <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
-            </h2>
-            {if $type_id == TaskTypeEnum::CHUNKING}
-                <p>Type: 
-                <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>  
-
-            {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                </h2>
-                <p>Type: 
-                <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span>
-            {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                <p>Type: 
-                <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
-            {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                <p>Type: 
-                <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span>
-            {/if}                
+    <h2>
+        <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
+    </h2>
+    {if $type_id == TaskTypeEnum::CHUNKING}
+        <p>Type: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span> 
         </p>
-
-        <p>
-            From: <strong>{TemplateHelper::getTaskSourceLanguage($task)}</strong>
-    	</p>   
-        
-        <p>
-            To: <strong>{TemplateHelper::getTaskTargetLanguage($task)}</strong>
+    {elseif $type_id == TaskTypeEnum::TRANSLATION}
+        </h2>
+        <p>Type: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span>
         </p>
+    {elseif $type_id == TaskTypeEnum::PROOFREADING}
+        <p>Type: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
+        </p>
+    {elseif $type_id == TaskTypeEnum::POSTEDITING}
+        <p>Type: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span>
+        </p>
+    {/if}
+
+    <p>
+        From: <strong>{TemplateHelper::getTaskSourceLanguage($task)}</strong>
+    </p>   
+    <p>
+        To: <strong>{TemplateHelper::getTaskTargetLanguage($task)}</strong>
+    </p>
 
         {assign var="taskTags" value=$task->getTagList()}
         {if !empty($taskTags)}
@@ -51,7 +52,7 @@
 	</p>
         <p>
             Due by: <strong>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</strong>
-        </p>           
+        </p>          
         
         <p>            
             {assign var="project_id" value=$task->getProjectId()}
@@ -61,5 +62,5 @@
             for <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>        
         </p>  
 
-        <p style="margin-bottom:40px;"></p>        
+        <p style="margin-bottom:40px;"/>        
 </div>

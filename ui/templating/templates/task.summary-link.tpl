@@ -59,5 +59,5 @@
             for <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>        
         </p>  
 
-        <p style="margin-bottom:40px;"></p>        
+        <p style="margin-bottom:40px;"/>        
 </div>

@@ -1,7 +1,6 @@
 <table class="table table-striped">
     <thead>
         <th style="text-align: left"><strong>Project</strong></th>
-
         <th>Source Language</th>
         <th>Target Language</th>
         <th>Created</th>
@@ -87,7 +86,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="3" style="padding-bottom: 40px"></td>
+                <td colspan="3" style="padding-bottom: 40px"/>
             </tr>
             <tr>
                 <td>
@@ -159,4 +158,3 @@
         </tr>
     </table>
 {/if}
-

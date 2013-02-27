@@ -1,45 +1,49 @@
 {include file='header.tpl'}
 
 {if isset($this_user)}
-    <div class="page-header"><h1>
-        <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80&r=g" alt="" />
-        {assign var="user_id" value=$this_user->getUserId()}
-        {if $this_user->getDisplayName() != ''}
-            {$this_user->getDisplayName()}
-        {else}
-            User Profile
-        {/if}
-        <small>Overview of your account details.</small>   
-        {if isset($private_access) && isset($org_creation)}
-            {if $org_creation == 'y'}
-                <a href="{urlFor name="create-org"}" class="btn btn-success pull-right">
-                    <i class="icon-star icon-white"></i> Create Organisation
-                </a>
-            {else if $org_creation == 'h'}
+    <div class="page-header">
+        <h1>
+            <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
+            {assign var="user_id" value=$this_user->getUserId()}
+            {if $this_user->getDisplayName() != ''}
+                {$this_user->getDisplayName()}
+            {else}
+                User Profile
             {/if}
-        {/if} 
-    </h1></div>
+            <small>Overview of your account details.</small>   
+            {if isset($private_access) && isset($org_creation)}
+                {if $org_creation == 'y'}
+                    <a href="{urlFor name="create-org"}" class="btn btn-success pull-right">
+                        <i class="icon-star icon-white"></i> Create Organisation
+                    </a>
+                {else if $org_creation == 'h'}
+                {/if}
+            {/if} 
+        </h1>
+    </div>
 {else}
     <div class='page-header'><h1>User Profile <small>Overview of your account details.</small></h1></div>
 {/if}
 
-<h1>
-    {if isset($private_access)}
-        <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>
-            <i class="icon-wrench icon-white"></i> Edit Profile Details
-        </a>
-    {/if}
-</h1>
+    <h1>
+        {if isset($private_access)}
+            <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>
+                <i class="icon-wrench icon-white"></i> Edit Profile Details
+            </a>
+        {/if}
+    </h1>
 
-<h3>Public Display Name:</h3>
-<p>{$this_user->getDisplayName()}</p>
- 
+    <h3>Public Display Name:</h3>
+    <p>{$this_user->getDisplayName()}</p>
+
 {if $this_user->getNativeRegionId() != null && $this_user->getNativeLangId()!= null}
     <h3>Native Language: </h3>
     <p>{TemplateHelper::getNativeLanguage($this_user)}</p>
 {else}
     <h3>Native Language: </h3>
-    <p><i>Please select a native language!</i></p>
+    <p>
+        <i>Please select a native language!</i>
+    </p>
 {/if}
  
 {if $this_user->getBiography() != ''}
@@ -47,7 +51,7 @@
     <p>{$this_user->getBiography()}</p>
 {/if}
 
-<p style="margin-bottom:50px;"></p>
+<p style="margin-bottom:50px;"/>
 {if isset($badges)}
     {if count($badges) > 0}
         <div class='page-header'>
@@ -58,8 +62,7 @@
             </h1>
         </div>
 
-        {foreach $badges as $badge }     
-            
+        {foreach $badges as $badge }
             {if !is_null($badge->getOwnerId())}
                 {assign var="user_id" value=$this_user->getUserId()} 
                     {if isset($private_access)}
@@ -80,10 +83,10 @@
                 <h3>SOLAS Badge: {$badge->getTitle()}</h3>            
                 <p>{$badge->getDescription()}</p>                
             {/if}
-            <p style="margin-bottom:20px;"></p>
+            <p style="margin-bottom:20px;"/>
         {/foreach}
         
-        <p style="margin-bottom:50px;"></p>
+        <p style="margin-bottom:50px;"/>
     {/if}
 {/if}
 
@@ -105,7 +108,7 @@
                 </a>
             </p>
         {/foreach}
-        <p style="margin-bottom:50px;"></p>
+        <p style="margin-bottom:50px;"/>
     {/if}
 {/if}
 
@@ -160,28 +163,30 @@
                     </p>
                 </div>
             </div>
-            <p style="margin-bottom:20px;"></p>
+            <p style="margin-bottom:20px;"/>
             <hr>
         {/foreach}
         
-        <p style="margin-bottom:50px;"></p>
+        <p style="margin-bottom:50px;"/>
     {/if}
 {/if}
 
 {if isset($archivedJobs)}
     {if count($archivedJobs) > 0}
-        <div class='page-header'><h1>Archived Tasks <small>A list of tasks you have worked on in the past.</small>
-        {if isset($private_access)}
-            <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
-                <i class="icon-list icon-white"></i> List All Archived Tasks
-            </a>
-        {/if}
-        </h1></div>
+        <div class='page-header'>
+            <h1>Archived Tasks <small>A list of tasks you have worked on in the past.</small>
+                {if isset($private_access)}
+                    <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
+                        <i class="icon-list icon-white"></i> List All Archived Tasks
+                    </a>
+                {/if}
+            </h1>
+        </div>
 
         {foreach $archivedJobs as $job}
             {include file="task.profile-display.tpl" task=$job}
         {/foreach}
-        <p style="margin-bottom:50px;"></p>
+        <p style="margin-bottom:50px;"/>
     {/if}
 {/if}
 
