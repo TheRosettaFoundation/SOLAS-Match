@@ -1,10 +1,10 @@
 {include file="header.tpl"}
 
-<div class="page-header">
-	<h1>
-        Organisation Dashboard <small>Overview of projects created by your organisation(s).</small>
-    </h1>
-</div>
+    <div class="page-header">
+        <h1>
+            Organisation Dashboard <small>Overview of projects created by your organisation(s).</small>
+        </h1>
+    </div>
 
 {if isset($flash['success'])}
     <p class="alert alert-success">
@@ -23,7 +23,7 @@
     {foreach $orgs as $org}
         {assign var="org_id" value=$org->getId()}
         <thead>
-            <th style="text-align: left; max-width: 150px">
+            <th style="text-align: left; max-width: 170px">
                 <p style="margin-bottom:40px;"></p>
                 <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                     <h4><i class="icon-briefcase"></i> {$org->getName()}</h4>
@@ -109,5 +109,5 @@
     <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new task for that content.
     </div>
 {/if}
-<p style="margin-bottom:60px;"></p>
+<p style="margin-bottom:60px;"/>
 {include file="footer.tpl"}

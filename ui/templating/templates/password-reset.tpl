@@ -1,11 +1,11 @@
 {include file="header.tpl"}
 
-<h1 class="page-header"}>
-    Password Reset
-    <small>
-        Reset your password here.
-    </small>
-</h1>
+    <h1 class="page-header"}>
+        Password Reset
+        <small>
+            Reset your password here.
+        </small>
+    </h1>
 
 {if isset($flash['error'])}
     <div class="alert alert-error">
@@ -28,19 +28,17 @@
     </div>
 {/if}
 
-<form method="post" action="{urlFor name="password-reset" options="uid.$uid"}" class="well">
-    <label for="nPassword">New Password:</label>
-    <input type="password" name="new_password" />
+    <form method="post" action="{urlFor name="password-reset" options="uid.$uid"}" class="well">
+        <label for="nPassword">New Password:</label>
+        <input type="password" name="new_password" />
 
-    <label for="cPassword">Confirm new Password:</label>
-    <input type="password" name="confirmation_password" />
+        <label for="cPassword">Confirm new Password:</label>
+        <input type="password" name="confirmation_password" />
 
-    <p>
-        <input type="submit" class="btn btn-primary" value="    Change Password"/>
-        <i class="icon-check icon-white" style="position:relative; right:138px;top:2px;"></i>
-    </p>
-</form>
-
-
-
+        <p>
+            <input type="submit" class="btn btn-primary" value="    Change Password"/>
+            <i class="icon-check icon-white" style="position:relative; right:138px;top:2px;"></i>
+        </p>
+    </form>
+    
 {include file="footer.tpl"}
