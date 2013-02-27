@@ -3,13 +3,6 @@
 require 'vendor/autoload.php';
 mb_internal_encoding("UTF-8");
 
-SmartyView::$smartyDirectory = 'vendor/smarty/smarty/distribution/libs';
-SmartyView::$smartyCompileDirectory = 'templating/templates_compiled';
-SmartyView::$smartyTemplatesDirectory = 'templating/templates';
-SmartyView::$smartyExtensions = array(
-    'vendor/slim/extras/Views/Extension/Smarty'
-);
-
 \DrSlump\Protobuf::autoload();
 
 require_once '../Common/Settings.class.php';
@@ -27,7 +20,6 @@ class Dispatcher {
         if (Dispatcher::$apiDispatcher == null) {
             Dispatcher::$apiDispatcher = new Slim(array(
                  'debug' => true
-                ,'view' => new SmartyView()
                 ,'mode' => 'development' // default is development. TODO get from config file, or set
                 // in environment...... $_ENV['SLIM_MODE'] = 'production';
             ));
