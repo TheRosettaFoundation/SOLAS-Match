@@ -3017,26 +3017,8 @@ DROP PROCEDURE IF EXISTS `statsUpdateTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasks`()
 BEGIN
-	SET @totalTasks = 0;
-	SET @claimedTasks = 0;
-	SET @unclaimedTasks = 0;
-	SET @totalTasksWithPreReqs = 0;
-	SET @archivedTasks = 0;	
-	
-	SELECT count(1) INTO @claimedTasks FROM TaskClaims;
-	
-	SELECT count(1) into @unclaimedTasks from Tasks t
-	WHERE t.id NOT IN
-	(
-	  SELECT task_id
-	  FROM  TaskClaims
-	);
-	
-	SELECT count(1) INTO @archivedTasks FROM ArchivedTasks;	
-
-	SELECT count(DISTINCT tp.task_id) INTO @totalTasksWithPreReqs FROM TaskPrerequisites tp;
-	
-	SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks + @totalTasksWithPreReqs;	
+	SET @totalTasks = 0;	
+	SELECT count(1) INTO @totalTasks FROM Tasks;
 	REPLACE INTO Statistics (name, value)
 	VALUES ('Tasks', @totalTasks);
 END//
