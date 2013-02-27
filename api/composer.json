@@ -10,12 +10,6 @@
             "type": "git",
             "reference": "master"
         },
-        "source": {
-            "name": "slim/extras",
-            "url": "git://github.com/codeguy/Slim-Extras.git",
-            "type": "git",
-            "reference": "master"
-        },
         "type": "package",
         "package": {
             "name": "drslump/protobuf-php",
@@ -40,13 +34,11 @@
 
     "require": {
         "slim/slim": "1.6.3",
-        "slim/extras": "1.0.*",
-        "smarty/smarty": "3.1.*",
         "videlalvaro/php-amqplib": "dev-master",
         "drslump/protobuf-php": "*"
     },
     "autoload": {
-        "classmap": ["vendor/slim/extras/Views/SmartyView.php", "vendor/slim/slim/Slim/View.php"]
+        "classmap": ["vendor/slim/slim/Slim/View.php"]
         
     },
 
