@@ -2680,10 +2680,10 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.userInsertAndUpdate
+-- Dumping structure for procedure solas-manuel-dev.userInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` INT, IN `region` INT, IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(3), IN `region` VARCHAR(3), IN `id` INT)
 BEGIN
 	if pass='' then set pass=null;end if;
 	if bio='' then set bio=null;end if;
@@ -2696,8 +2696,13 @@ BEGIN
 	
 	if id is null and not exists(select * from Users u where u.email= email)then
 	-- set insert
+	set @countryID=null;
+	select c.id into @countryID from Countries c where c.code=region;
+	set @langID=null;
+	select l.id into @langID from Languages l where l.code=lang;
+	
 	insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
-              values (email, nonce, pass, NOW(), name, bio, lang, region);
+              values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
 	else 
 		set @first = true;
 		set @q= "update Users u set ";-- set update
@@ -2712,7 +2717,10 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.language_id='",lang,"'") ;
+
+			set @langID=null;
+			select l.id into @langID from Languages l where l.code=lang;
+			set @q = CONCAT(@q," u.language_id='",@langID,"'") ;
 		end if;
 		if region is not null then 
 			if (@first = false) then 
@@ -2720,7 +2728,9 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.country_id='",region,"'") ;
+			set @countryID=null;
+			select c.id into @countryID from Countries c where c.code=region;
+			set @q = CONCAT(@q," u.country_id='",@countryID,"'") ;
 		end if;
 		if name is not null then 
 				if (@first = false) then 
@@ -2780,7 +2790,6 @@ BEGIN
 	select u.id from Users u where u.email= email;
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.userLikeTag
 DROP PROCEDURE IF EXISTS `userLikeTag`;
