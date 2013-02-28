@@ -374,7 +374,7 @@ class OrgRouteHandler
         $requests = $orgDao->getMembershipRequests($org_id);
         $user_list = array();
         if (count($requests) > 0) {
-            foreach ($requests as $request) {
+            foreach ($requests as $memRequest) {
                 $user = $userDao->getUser(array('id' => $memRequest->getUserId()));
                 $user_list[] = $user;
             }

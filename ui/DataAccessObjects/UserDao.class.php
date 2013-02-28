@@ -286,7 +286,7 @@ class UserDao
         $ret = null;
         $login = new Login();
         $login->setEmail($email);
-        $login->setPassword(md5($password));
+        $login->setPassword($password);
         $request = "{$this->siteApi}v0/login";
         $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $login);
         $ret = $this->client->cast("User", $response);
@@ -318,7 +318,7 @@ class UserDao
         $ret = null;
         $registerData = new Register();
         $registerData->setEmail($email);
-        $registerData->setPassword(md5($password));
+        $registerData->setPassword($password);
         $request = "{$this->siteApi}v0/register";
         $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $registerData);
         $ret = $this->client->cast("User", $response);

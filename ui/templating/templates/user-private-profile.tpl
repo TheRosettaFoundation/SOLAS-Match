@@ -31,9 +31,9 @@
             <select name="nLanguage" id="nLanguage">
                 {foreach $languages as $language}
                     {if $user->getNativeLangId() == $language->getID()}
-                        <option value="{$language->getId()}" selected="selected">{$language->getName()}</option>
+                        <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
                     {else}
-                        <option value="{$language->getId()}">{$language->getName()}</option>
+                        <option value="{$language->getCode()}">{$language->getName()}</option>
                     {/if}
                 {/foreach}
             </select>
@@ -41,9 +41,9 @@
             <select name="nLanguageCountry" id="nLanguageCountry">
                 {foreach $countries as $country}
                     {if $user->getNativeRegionId() == $country->getId()}
-                    <option value="{$country->getId()}" selected="selected">{$country->getName()}</option>
+                    <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                     {else}
-                        <option value="{$country->getId()}">{$country->getName()}</option>
+                        <option value="{$country->getCode()}">{$country->getName()}</option>
                     {/if}
                 {/foreach}
             </select>
