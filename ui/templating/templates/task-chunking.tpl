@@ -33,7 +33,7 @@
                 {$flash['Warning']}
             </div>        
         {/if}
-        <form method="post" enctype="multipart/form-data" action="{urlFor name="task" options="task_id.$task_id"}"> {* {urlFor name="project-view" options="project_id.$projectId"} *}
+        <form method="post" enctype="multipart/form-data" action="{urlFor name="task-chunking" options="task_id.$task_id"}">
         <table border="0" width="100%">
             <tbody id="taskChunks">
                 <tr>

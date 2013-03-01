@@ -36,7 +36,7 @@
         <p style="margin-bottom: 40px"/>
 
         <h2>Upload the merged file here:</h2>
-        <form class="well" method="post" enctype="multipart/form-data" action="{urlFor name="task" options="task_id.$taskId"}">
+        <form class="well" method="post" enctype="multipart/form-data" action="{urlFor name="task-postediting" options="task_id.$taskId"}">
             <p><input type="file" name="{$fieldName}" id="{$fieldName}" /></p>
             <p><button type="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload</button>
         </form>

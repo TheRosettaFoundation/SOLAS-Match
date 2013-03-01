@@ -32,8 +32,17 @@ class TaskRouteHandler
         array($middleware, "authUserForTaskDownload"), 
         array($this, "downloadTaskVersion"))->name("download-task-version");
 
-        $app->get("/task/:task_id/id/", array($middleware, "authUserIsLoggedIn"),
+        $app->get("/task/:task_id/id", array($middleware, "authUserIsLoggedIn"),
         array($this, "task"))->via("POST")->name("task");
+
+        $app->get("/task/:task_id/postediting", array($middleware, "authUserIsLoggedIn"),
+        array($this, "posteditingTask"))->via("POST")->name("task-postediting");
+
+        $app->get("/task/:task_id/simple-upload", array($middleware, "authUserIsLoggedIn"),
+        array($this, "taskSimpleUpload"))->via("POST")->name("task-simple-upload");
+
+        $app->get("/task/:task_id/chunking", array($middleware, "authUserIsLoggedIn"),
+        array($this, "taskChunking"))->via("POST")->name("task-chunking");
 
         $app->get("/task/:task_id/uploaded", array($middleware, "authenticateUserForTask"),
         array($this, "taskUploaded"))->name("task-uploaded");
@@ -281,45 +290,43 @@ class TaskRouteHandler
         $user_id = UserSession::getCurrentUserID();
         $task = $taskDao->getTask(array('id' => $task_id));
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
-        $numTaskTypes = Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        
-        for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
-        }
-        
-        $converter = Settings::get("converter.converter_enabled");
-        
-        $app->view()->appendData(array(
-                    "taskTypeColours" => $taskTypeColours,
-                    "project" => $project,
-                    "converter"     => $converter,
-        ));         
 
         if ($taskClaimed) {
             switch ($task->getTaskType()) {
                 case TaskTypeEnum::POSTEDITING:
-                    $this->posteditingTask($task_id);
+                    $app->redirect($app->urlFor("task-postediting", array("task_id" => $task_id)));
                     break;
                 case TaskTypeEnum::TRANSLATION:
                 case TaskTypeEnum::PROOFREADING:
-                    $this->taskSimpleUpload($task_id);
+                    $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $task_id)));
                     break;
                 case TaskTypeEnum::CHUNKING:
-                    $this->taskChunking($task_id);
+                    $app->redirect($app->urlFor("task-chunking", array("task_id" => $task_id)));
                     break;
             }
         }else{
      
+            $user_id = UserSession::getCurrentUserID();
+            $task = $taskDao->getTask(array('id' => $task_id));
+            $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+            $numTaskTypes = Settings::get("ui.task_types");
+
+            $taskTypeColours = array();
+            for($i=1; $i <= $numTaskTypes; $i++) {
+                $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+            }
+        
+            $converter = Settings::get("converter.converter_enabled");
+        
             $task_file_info = $taskDao->getTaskInfo($task_id);
             $siteApi = Settings::get("site.api");
             $file_path= "{$siteApi}v0/tasks/$task_id/file";
 
             $app->view()->appendData(array(
-                        "task" => $task,
                         "taskTypeColours" => $taskTypeColours,
                         "project" => $project,
+                        "converter"     => $converter,
+                        "task" => $task,
                         "file_preview_path" => $file_path,
                         "filename" => $task_file_info->getFilename()
             ));
@@ -332,11 +339,13 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
+        $projectDao = new ProjectDao();
 
         $userId = UserSession::getCurrentUserID();
         $fieldName = "mergedFile";
         $errorMessage = null;
         $task = $taskDao->getTask(array('id' => $taskId));
+        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
 
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -395,11 +404,23 @@ class TaskRouteHandler
             $nextLayer = array();
         }
 
+        $numTaskTypes = Settings::get("ui.task_types");
+
+        $taskTypeColours = array();
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        }
+
+        $converter = Settings::get("converter.converter_enabled");
+        
         $app->view()->appendData(array(
                     "task"          => $task,
+                    "project"       => $project,
                     "preReqTasks"   => $preReqTasks,
                     "fieldName"     => $fieldName,
-                    "errorMessage"  => $errorMessage
+                    "errorMessage"  => $errorMessage,
+                    "converter"     => $converter,
+                    "taskTypeColours"   => $taskTypeColours
         ));
 
         $app->render("task-postediting.tpl");
@@ -448,8 +469,10 @@ class TaskRouteHandler
             }
         }
 
-        
-        $org = $orgDao->getOrganisation($project->getOrganisationId());
+
+        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
+
         $taskVersion = $taskDao->getTaskVersion($task->getId());
 
         $file_previously_uploaded = false;
@@ -459,6 +482,12 @@ class TaskRouteHandler
 
         $taskFileInfo = $taskDao->getTaskInfo($taskId, 0);
         $filename = $taskFileInfo->getFilename();
+        $numTaskTypes = Settings::get("ui.task_types");
+
+        $taskTypeColours = array();
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        }
 
         $converter = Settings::get("converter.converter_enabled");
 
@@ -470,6 +499,7 @@ class TaskRouteHandler
                     "converter"     => $converter,
                     "fieldName"     => $fieldName,
                     "max_file_size" => TemplateHelper::maxFileSizeMB(),
+                    "taskTypeColours"   => $taskTypeColours,
                     "file_previously_uploaded" => $file_previously_uploaded
         ));
 
