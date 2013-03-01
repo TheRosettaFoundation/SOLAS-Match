@@ -116,7 +116,7 @@
 
                             <p>
                                 <h2>Publish Task</h2>
-                                <p class="desc">Doy you want the task to be published on the live task steam.</p>
+                                <p class="desc">Do you want the task to be published on the live task steam.</p>
                                 <input type="checkbox" name="published" checked="true" />
                             </p>
                             <p style="margin-bottom:20px;"/>
