@@ -184,7 +184,7 @@ class Tasks {
             
             $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, 0);
             $convert = Dispatcher::clenseArgs('convertToXliff', HttpMethodEnum::GET, false);
-            if($convert){
+            if($convert&&$convert!==""){
                 TaskDao::downloadConvertedTask($id, $version);
             }else{
                 TaskDao::downloadTask($id, $version);
@@ -212,7 +212,7 @@ class Tasks {
         
         
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/uploadOutputFile/:id/:filename/:userId/',
-                                                        function ($id, $filename, $userId, $format = ".json") {
+                                                        function ($id, $filename, $userID, $format = ".json") {
              if (!is_numeric($userID) && strstr($userID, '.')) {
                 $userID = explode('.', $userID);
                 $format = '.'.$userID[1];
@@ -225,7 +225,7 @@ class Tasks {
             }
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
-            TaskFile::uploadOutputFile($task, $convert,$data,$userId,$filename);
+            TaskFile::uploadOutputFile($task, $convert,$data,$userID,$filename);
         }, 'uploadOutputFile');
         
         

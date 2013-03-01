@@ -604,6 +604,21 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.addProjectFile
+DROP PROCEDURE IF EXISTS `addProjectFile`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addProjectFile`(IN `pID` INT, IN `uID` INT, IN `fname` VARCHAR(128), IN `token` VARCHAR(128))
+    MODIFIES SQL DATA
+BEGIN
+	if not exists (select 1 from ProjectFiles pf where pf.project_id=pID and pf.user_id=uID and pf.filename=fName and pf.`file-token`=token) then
+		insert into ProjectFiles (project_id,user_id,filename,`file-token`) values(pID,uID,fName,token);
+		select 1 as result;
+	else
+		select 0 as result;
+	end if;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Test.addProjectTag
 DROP PROCEDURE IF EXISTS `addProjectTag`;
 DELIMITER //

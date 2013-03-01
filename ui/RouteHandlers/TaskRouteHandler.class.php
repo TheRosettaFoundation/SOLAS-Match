@@ -412,10 +412,12 @@ class TaskRouteHandler
         $projectDao = new ProjectDao();
         $orgDao = new OrganisationDao();
 
+        
         $fieldName = "fileUpload";
         $errorMessage = null;
         $userId = UserSession::getCurrentUserID();
         $task = $taskDao->getTask(array('id' => $taskId));
+        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         if ($app->request()->isPost()) {
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
@@ -425,13 +427,13 @@ class TaskRouteHandler
         
             if (is_null($errorMessage)) {
                 try {
-                    $post = (object) $app->request()->post();
+                    $post = (object) $app->request()->post();///never again cast an array to an object.
                     $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
                     
                     if ($post->submit == 'XLIFF') {
-                        $taskDao->saveTaskFile($taskId, $_FILES[$fieldName]["name"], $userId, $filedata, null, true);
+                        $taskDao->uploadOutputFile($taskId,$_FILES[$fieldName]["tmp_name"] , $userId, $filedata, true);
                     } else if ($post->submit == 'submit') {
-                        $taskDao->saveTaskFile($taskId, $_FILES[$fieldName]["name"], $userId, $filedata);
+                        $taskDao->uploadOutputFile($taskId, $_FILES[$fieldName]["name"], $userId, $filedata);
                     }
                 
                 } catch (Exception  $e) {
@@ -446,7 +448,7 @@ class TaskRouteHandler
             }
         }
 
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $taskVersion = $taskDao->getTaskVersion($task->getId());
 
