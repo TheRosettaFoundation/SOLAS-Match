@@ -17,6 +17,7 @@ require_once __DIR__."/../models/Task.php";
 require_once __DIR__."/../models/Project.php";
 require_once __DIR__."/../models/ArchivedProject.php";
 require_once __DIR__."/../models/Statistic.php";
+require_once __DIR__."/../models/ProjectFile.php";
 
 class ModelFactory
 {
@@ -76,6 +77,9 @@ class ModelFactory
                 break;
             case "Statistic" :
                 $ret = ModelFactory::generateStatistic($modelData);
+                break;
+            case "ProjectFile" :
+                $ret = ModelFactory::generateProjectFile($modelData);
                 break;
             default :
                 echo "Unable to build model $modelName";
@@ -517,6 +521,26 @@ class ModelFactory
         }
         if(isset($modelData['value'])) {
             $ret->setValue($modelData['value']);
+        }
+        
+        return $ret;
+    }
+    
+    private static function generateProjectFile($modelData)
+    {
+        $ret = new ProjectFile();
+
+        if(isset($modelData['project_id'])) {
+            $ret->setProjectId($modelData['project_id']);
+        }
+        if(isset($modelData['filename'])) {
+            $ret->setFilename($modelData['filename']);
+        }
+        if(isset($modelData['file-token'])) {
+            $ret->setToken($modelData['file-token']);
+        }
+        if(isset($modelData['user_id'])) {
+            $ret->setUserId($modelData['user_id']);
         }
         
         return $ret;

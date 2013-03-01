@@ -271,20 +271,26 @@ class ProjectDao
         return ProjectTags::getTags($projectId);
     }
     
+    public function getProjectFile($project_id, $user_id, $filename, $token) {
+        
+        $args = PDOWrapper::cleanseNull($project_id).",".PDOWrapper::cleanseNull($user_id)
+                .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token);        
+        $result = PDOWrapper::call("getProjectFile", $args);
+        return ModelFactory::buildModel("ProjectFile", $result[0]);
+    }
+    
     public function saveProjectFile($projectId,$file,$filename,$userId){
-        $destination =realpath(Settings::get("files.upload_path")."proj-$projectId/");
+        $destination =Settings::get("files.upload_path")."proj-$projectId/";
         if(!file_exists($destination)) mkdir ($destination);
         $token=self::recordProjectFile($projectId,$file,$filename,$userId);
         file_put_contents($destination.$token, $file);
-        
-        
-        
+        return $token;        
     }
     
     public function recordProjectFile($projectId,$file,$filename,$userId){
         $token=$filename;//generate guid in future.
         $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNull($filename).",".PDOWrapper::cleanseNull($token);
+                .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token);
         PDOWrapper::call("addProjectFile", $args);
         return $token;
     }

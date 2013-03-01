@@ -409,8 +409,12 @@ class ProjectRouteHandler
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && !$upload_error) { 
                 $project->setOrganisationId($org_id);
                 if($project = $projectDao->createProject($project)) {
+                    $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
+                    $filename = $_FILES[$field_name]["name"];
+                    $projectDao->saveProjectFile($project->getId(), $filedata, $filename, $user_id);
+                    
                     $taskModel = new Task();
-                    $taskModel->setTitle($_FILES[$field_name]["name"]);
+                    $taskModel->setTitle($filename);
                     $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
                     $taskModel->setSourceCountryCode($project->getSourceCountryCode());
                     $taskModel->setProjectId($project->getId());
@@ -434,8 +438,7 @@ class ProjectRouteHandler
                             $taskModel->setTaskType(TaskTypeEnum::CHUNKING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $createdChunkTask = $taskDao->createTask($taskModel);
-                            try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
+                            try {
                                 $error_message = $taskDao->saveTaskFile($createdChunkTask->getId(), urlencode($_FILES[$field_name]['name']),
                                         $user_id, $filedata);
                             } catch (Exception  $e) {
@@ -449,8 +452,7 @@ class ProjectRouteHandler
                             $newTask = $taskDao->createTask($taskModel);
                             $translationTaskId = $newTask->getId();
                             
-                            try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
+                            try {
                                 $error_message = $taskDao->saveTaskFile($translationTaskId, urlencode($_FILES[$field_name]['name']),
                                         $user_id, $filedata);
                             } catch (Exception  $e) {
@@ -467,8 +469,7 @@ class ProjectRouteHandler
                                 $taskDao->addTaskPreReq($proofreadingTaskId, $translationTaskId);
                             } 
                             
-                            try {                    
-                                $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);                    
+                            try {
                                 $error_message = $taskDao->saveTaskFile($proofreadingTaskId, urlencode($_FILES[$field_name]['name']),
                                         $user_id, $filedata);
                             } catch (Exception  $e) {

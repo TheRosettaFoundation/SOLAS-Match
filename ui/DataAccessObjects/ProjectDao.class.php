@@ -100,13 +100,8 @@ class ProjectDao
     public function saveProjectFile($id, $data, $filename,$userId){
         $ret = null;
         $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
-        $response = $this->client->call($url, HTTP_Request2::METHOD_PUT, null, null, $data);
-        $ret = $this->client->cast(array("Project"), $response);
-
-        if (!is_null($id) && is_array($ret)) {
-            $ret = $ret[0];
-        }
-
+        $ret = $this->client->call($url, HTTP_Request2::METHOD_PUT, null, null, $data);
+       
         return $ret;
     }
 }
