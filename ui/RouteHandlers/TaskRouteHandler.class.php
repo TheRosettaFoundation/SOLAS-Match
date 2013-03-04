@@ -547,37 +547,11 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask(array('id' => $task_id));
 
-        $hiddenPreReqList = "";
-        $preReqTaskIds = $taskDao->getTaskPreReqs($task_id);
-        if($preReqTaskIds) {
-            foreach($preReqTaskIds as $taskId) {
-                $hiddenPreReqList = "$taskId,";
-            }
-        }
+        $preReqTasks = $taskDao->getTaskPreReqs($task_id); 
 
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
-
-        $selectedString = "";
-        if (is_array($preReqTaskIds)) {
-            foreach ($projectTasks as $pTask) {
-                if (in_array($pTask->getId(), $preReqTaskIds)) {
-                    $index = array_search($pTask->getId(), $preReqTaskIds);
-                    $index++;
-                    $selectedString .= "#{$index}, ";
-                }
-            }
-        }
-
-        if ($selectedString == "") {
-            $selectedString = "none";
-        } else {
-            $selectedString = substr($selectedString, 0, strlen($selectedString) - 2);
-        }
-        
-        $deadlineDate = date("F dS, Y", strtotime($task->getDeadline()));
-        $deadlineTime = date("H:i", strtotime($task->getDeadline()));
-
+      
         $app->view()->setData("task", $task);
         
         if (isValidPost($app)) {
@@ -629,7 +603,14 @@ class TaskRouteHandler
                 foreach ($projectTasks as $projectTask) {
                     $taskPreReqIds[$projectTask->getId()] = $taskDao->getTaskPreReqs($projectTask->getId());
                 }
-                $selectedPreReqs = explode(",", $post->selectedList);
+
+                $selectedPreReqs = array();
+                if(isset($post->totalTaskPreReqs) && $post->totalTaskPreReqs > 0) {
+                    for($i=0; $i < $post->totalTaskPreReqs; $i++) {                        
+                        if(isset($post->{"preReq_".$i})) $selectedPreReqs[] = $post->{"preReq_".$i};
+                    }
+                }
+                
                 $thisTaskPreReqs = null;
                 if (count($selectedPreReqs) > 0) {
                     $thisTaskPreReqs = array();
@@ -666,10 +647,10 @@ class TaskRouteHandler
                     }
 
                     $taskDao->updateTask($task);
-                    if ($preReqTaskIds) {
-                        foreach ($preReqTaskIds as $preReqId) {
-                            if(!in_array($preReqId, $selectedList)) {
-                                $taskDao->removeTaskPreReq($task->getId(), $preReqId);
+                    if ($preReqTasks) {
+                        foreach ($preReqTasks as $preReqTask) {
+                            if(!in_array($preReqTask->getId(), $selectedList)) {
+                                $taskDao->removeTaskPreReq($task->getId(), $preReqTask->getId());
                             }
                         }
                     }
@@ -683,11 +664,18 @@ class TaskRouteHandler
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
                 } else {
                     //A deadlock occured
-                    $deadlockError = "A deadlock has occured, please check your task pre-requisites.";
+                    $deadlockError = "A deadlock has occured, please check your task prerequisites.";
                 }
             }
         }
-         
+        
+        $numTaskTypes = Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        } 
+        
         $languages = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
        
@@ -697,12 +685,10 @@ class TaskRouteHandler
                               "languages"       => $languages,
                               "countries"       => $countries,
                               "projectTasks"    => $projectTasks,
-                              "taskPreReqIds"   => $preReqTaskIds,
-                              "hiddenPreReqList"=> $hiddenPreReqList,
-                              "selectedString"  => $selectedString,
                               "word_count_err"  => $word_count_err,
                               "deadlockError"   => $deadlockError,
-                              "deadline_error"  => $deadlineError
+                              "deadline_error"  => $deadlineError,
+                              "taskTypeColours" => $taskTypeColours
         ));
         
         $app->render("task.alter.tpl");
@@ -897,17 +883,16 @@ class TaskRouteHandler
             }
 
             if(is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
-                $task = $taskDao->createTask($task);
-                if (isset($post->selectedList) && $post->selectedList != "") {
-                    $selectedList = explode(",", $post->selectedList);
-                    foreach($selectedList as $taskId) {
-                        if (is_numeric($taskId)) {
-                            $taskDao->addTaskPreReq($task->getId(), $taskId);
-                        }
+                $newTask = $taskDao->createTask($task);
+                $newTaskId = $newTask->getId();
+                
+                if(isset($post->totalTaskPreReqs) && $post->totalTaskPreReqs > 0) {
+                    for($i=0; $i < $post->totalTaskPreReqs; $i++) {
+                        if(isset($post->{"preReq_".$i})) $taskDao->addTaskPreReq($newTaskId, $post->{"preReq_".$i});
                     }
                 }
             
-                $app->redirect($app->urlFor("task-created", array("task_id" => $task->getId())));
+                $app->redirect($app->urlFor("task-created", array("task_id" => $newTaskId)));
             }
         }
 
@@ -920,25 +905,15 @@ class TaskRouteHandler
         $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
         $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
         $taskTypes[TaskTypeEnum::POSTEDITING] = "Postediting";
+        
+        $numTaskTypes = Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        
+        for($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+        }
 
         $extra_scripts = "
-        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/selectable.css\" />
-        <script language='javascript'>
-        $(function() {
-            $( \"#selectable\" ).selectable({
-                stop: function() {
-                    var result = $( \"#select-result\" ).empty();
-                    var selectedList = $(\"#selectedList\").val(\"\");
-                    $( \".ui-selected\", this ).each(function() {
-                        var index = $( \"#selectable li\" ).index( this );
-                        var taskId = $( \"#selectable li:nth-child(\" + (index + 1) + \")\").val();
-                        result.append( \" #\" + ( index + 1 ) );
-                        selectedList.val(selectedList.val() + taskId + \",\");
-                    });
-                }
-            });
-        });
-        </script> 
         <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
         <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
         <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
@@ -954,7 +929,8 @@ class TaskRouteHandler
                 "extra_scripts" => $extra_scripts,
                 "titleError"    => $titleError,
                 "wordCountError"=> $wordCountError,
-                "deadlineError" => $deadlineError
+                "deadlineError" => $deadlineError,
+                "taskTypeColours" => $taskTypeColours
         ));
 
         $app->render("task.create.tpl");

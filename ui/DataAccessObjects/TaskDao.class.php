@@ -38,7 +38,8 @@ class TaskDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites";
-        $ret = $this->client->call($request);
+        $response = $this->client->call($request);
+        $ret = $this->client->cast(array("Task"), $response);
         return $ret;
     }
 

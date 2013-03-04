@@ -19,7 +19,7 @@
 
         {assign var="project_id" value=$project->getId()}
         <form method="post" action="{urlFor name="task-create" options="project_id.$project_id"}" class="well">
-            <table width="100%">
+            <table border="0" width="100%">
                 <fieldset>
                     <tr align="center">
                         <td width="50%">
@@ -73,8 +73,9 @@
                                     </select> 
                                 {/if}
                             </p>
-                            <p style="margin-bottom:20px;"/>
-                            <h2>Task Type</h2>
+                        </td>
+                        <td>                            
+                            <h2>Task Type: <span style="color: red">*</span></h2>
                             <p class="desc">Provide the type of the task.</p>
                             <select name="taskType">
                                 {assign var="taskTypeCount" value=count($taskTypes)}
@@ -82,8 +83,7 @@
                                     <option value="{$id}">{$taskTypes[$id]}</option>
                                 {/for}
                             </select>
-                        </td>
-                        <td>
+                            <p style="margin-bottom:40px;"/>
                             <p>
                                 <label for="word_count">
                                 <h2>Word Count: <span style="color: red">*</span></h2>
@@ -96,44 +96,27 @@
                                 </label>  
                                 <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}"/>
                             </p>
-                            <p style="margin-bottom:20px;"/>
+                            <p style="margin-bottom:40px;"/>
 
-                            <h2>Deadline <span style="color: red">*</span></h2>
+                            <h2>Deadline: <span style="color: red">*</span></h2>
                             <p class="desc">Provide a deadline by which the task must be completed.</p>
                             {if $deadlineError != ''}
                                 <div class="alert alert-error">
                                     {$deadlineError}
                                 </div>
                             {/if}
-                            <p style="margin-bottom:20px;"/>
-
                             <p>
                                 {assign var="deadlineDateTime" value=$task->getDeadline()}
                                 <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)} {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))} {/if}" />
                             </p>
-
-                            <p style="margin-bottom:20px;"/>
+                            <p style="margin-bottom:40px;"/>
 
                             <p>
                                 <h2>Publish Task</h2>
                                 <p class="desc">Do you want the task to be published on the live task steam.</p>
                                 <input type="checkbox" name="published" checked="true" />
                             </p>
-                            <p style="margin-bottom:20px;"/>
-
-                            <p>
-                                <h2>Task Prerequisite</h2>
-                                <p class="desc">Provide a prerequisite task for this task - if any.</p>
-                                <p id="feedback">
-                                    <input type="hidden" name="selectedList" id="selectedList" value="" />
-                                    <span>You've selected:</span> <span id="select-result">none</span>.
-                                </p>
-                                <ol class ="pull-left" id="selectable">
-                                    {foreach $projectTasks as $projectTask}
-                                        <li class="ui-widget-content" style="width: 470px" value="{$projectTask->getId()}">{$projectTask->getTitle()}</li>
-                                    {/foreach}
-                                </ol>
-                            </p>                   
+                                              
                         </td>
                     </tr>
                     <tr>
@@ -141,6 +124,68 @@
                             <hr/>
                         </td> 
                     </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h2>Task Prerequisite(s):</h2>
+                            <p class="desc">Assign prerequisites for this task - if any.</p>
+                            <p>These are tasks that must be completed before the current task becomes available.</p>
+                            <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all;" width="100%" >
+                                <thead>
+                                    <th>Assign</th>
+                                    <th>Title</th>
+                                    <th>Source Language</th>
+                                    <th>Target Language</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                </thead>
+                                {assign var="i" value=0}
+                                {foreach $projectTasks as $projectTask}                                    
+                                    {assign var="type_id" value=$projectTask->getTaskType()}
+                                    {assign var="status_id" value=$projectTask->getTaskStatus()}
+                                    {assign var="task_id" value=$projectTask->getId()}
+                                    <tr style="overflow-wrap: break-word;">
+                                        <td>
+                                            <input type="checkbox" name="preReq_{$i}" value="{$task_id}"/>
+                                            {assign var="i" value=$i+1}
+                                        </td>
+                                        <td>
+                                            <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$projectTask->getTitle()}</a>
+                                        </td>
+                                        <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
+                                        <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
+                                        <td>                                            
+                                            {if $type_id == TaskTypeEnum::CHUNKING}
+                                                <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>                                    
+                                            {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                                                <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span> 
+                                            {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                                                <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span> 
+                                            {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                                                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span> 
+                                            {/if}
+                                        </td>
+                                        <td>                                            
+                                            {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                                                Waiting
+                                            {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                                Unclaimed
+                                            {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                                <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">In Progress</a>
+                                            {elseif $status_id == TaskStatusEnum::COMPLETE}
+                                                <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">Complete</a>
+                                            {/if}
+                                        </td>
+                                    </tr>
+                                {/foreach}
+                                <input type="hidden" name="totalTaskPreReqs" value="{$i}" />
+                            </table>                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr/>
+                        </td> 
+                    </tr>                    
                     <tr align="center">
                         <td>
                             <p style="margin-bottom:20px;"/>  
