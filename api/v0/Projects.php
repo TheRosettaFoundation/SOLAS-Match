@@ -150,10 +150,21 @@ class Projects
             Dispatcher::sendResponce(null, $dao->getTags($id), null, $format);
         }, 'getProjectTags');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/file(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/info(:format)/',
                                                         function ($id, $format = ".json") {
             $dao = new ProjectDao();    
-            Dispatcher::sendResponce(null,$dao->getProjectFile($id, null, null, null), null, $format);
+            Dispatcher::sendResponce(null,$dao->getProjectFileInfo($id, null, null, null), null, $format);
+        }, 'getProjectFileInfo');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/file(:format)/',
+                                                        function ($id, $format = ".json") {
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+            $dao = new ProjectDao();    
+            Dispatcher::sendResponce(null,$dao->getProjectFile($id), null, $format);
         }, 'getProjectFile');
         
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/projects/:id/file/:filename/:userId/',

@@ -271,10 +271,11 @@ class ProjectDao
         return ProjectTags::getTags($projectId);
     }
     
-    public function getProjectFile($project_id, $user_id, $filename, $token) {
+    public function getProjectFileInfo($project_id, $user_id, $filename, $token, $mime) {
         
         $args = PDOWrapper::cleanseNull($project_id).",".PDOWrapper::cleanseNull($user_id)
-                .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token);        
+                .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token)
+                .",".PDOWrapper::cleanseNullOrWrapStr($mime);
         $result = PDOWrapper::call("getProjectFile", $args);
         
         if($result) {
@@ -284,18 +285,28 @@ class ProjectDao
         }        
     }
     
+    public function getProjectFile($projectId) {
+        $projectFileInfo = $this->getProjectFileInfo($projectId, null, null, null, null);
+        $filename = $projectFileInfo->getFilename();
+        $source = Settings::get("files.upload_path")."proj-$projectId/$filename";
+        IO::downloadFile($source, $projectFileInfo->getMime());
+    }
+    
     public function saveProjectFile($projectId,$file,$filename,$userId){
         $destination =Settings::get("files.upload_path")."proj-$projectId/";
         if(!file_exists($destination)) mkdir ($destination);
-        $token=self::recordProjectFile($projectId,$file,$filename,$userId);
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime= $finfo->buffer($file);
+        $token=self::recordProjectFileInfo($projectId,$filename,$userId,$mime);
         file_put_contents($destination.$token, $file);
         return $token;        
     }
     
-    public function recordProjectFile($projectId,$file,$filename,$userId){
+    public function recordProjectFileInfo($projectId,$filename,$userId, $mime){
         $token=$filename;//generate guid in future.
         $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token);
+                .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token)
+                .",".PDOWrapper::cleanseNullOrWrapStr($mime);
         PDOWrapper::call("addProjectFile", $args);
         return $token;
     }

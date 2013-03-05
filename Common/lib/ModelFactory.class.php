@@ -542,6 +542,9 @@ class ModelFactory
         if(isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
         }
+        if(isset($modelData['mime-type'])) {
+            $ret->setMime($modelData['mime-type']);
+        }
         
         return $ret;
     }
