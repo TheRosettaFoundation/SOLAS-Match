@@ -548,9 +548,37 @@ class TaskRouteHandler
         $task = $taskDao->getTask(array('id' => $task_id));
 
         $preReqTasks = $taskDao->getTaskPreReqs($task_id); 
+        if (!$preReqTasks) {
+            $preReqTasks = array();
+        }
 
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
+        foreach ($projectTasks as $projectTask) {
+            if ($projectTask->getTaskStatus() == TaskStatusEnum::IN_PROGRESS ||
+                        $projectTask->getTaskStatus() == TaskStatusEnum::COMPLETE) {
+                $tasksEnabled[$projectTask->getId()] = false;
+            } else {
+                $tasksEnabled[$projectTask->getId()] = true;
+            }
+
+            $taskPreReqIds[$projectTask->getId()] = array();
+            $taskPreReqs = $taskDao->getTaskPreReqs($projectTask->getId());
+            if ($taskPreReqs) {
+                foreach ($taskPreReqs as $preReq) {
+                    $taskPreReqIds[$projectTask->getId()][] = $preReq->getId();
+                }
+            }
+
+            // Remove this task from list of possible pre reqs
+            if ($projectTask->getId() == $task_id) {
+                $thisTaskPreReqIds = $taskPreReqIds[$projectTask->getId()];
+                $index = array_search($projectTask, $projectTasks);
+                if ($index) {
+                    unset($projectTasks[$index]);
+                }
+            }
+        }
       
         $app->view()->setData("task", $task);
         
@@ -598,12 +626,6 @@ class TaskRouteHandler
             }
 
             if ($word_count_err == "" && $deadlineError == "") {
-    
-                $taskPreReqIds = array();
-                foreach ($projectTasks as $projectTask) {
-                    $taskPreReqIds[$projectTask->getId()] = $taskDao->getTaskPreReqs($projectTask->getId());
-                }
-
                 $selectedPreReqs = array();
                 if(isset($post->totalTaskPreReqs) && $post->totalTaskPreReqs > 0) {
                     for($i=0; $i < $post->totalTaskPreReqs; $i++) {                        
@@ -611,6 +633,7 @@ class TaskRouteHandler
                     }
                 }
                 
+                $oldPreReqs = $taskPreReqIds[$task->getId()];
                 $thisTaskPreReqs = null;
                 if (count($selectedPreReqs) > 0) {
                     $thisTaskPreReqs = array();
@@ -665,10 +688,56 @@ class TaskRouteHandler
                 } else {
                     //A deadlock occured
                     $deadlockError = "A deadlock has occured, please check your task prerequisites.";
+                    //Reset prereqs so as not to crash second run of the graph builder
+                    $taskPreReqIds[$task->getId()] = $oldPreReqs;
                 }
             }
         }
         
+        $graphBuilder = new UIWorkflowBuilder();
+        //Maybe replace with an API call
+        $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
+                
+        if ($graph) {
+            $currentRow = $graph->getRootNodeList();
+            $nextRow = array();
+            $foundTask = false;
+            while (count($currentRow) > 0) {
+                foreach ($currentRow as $node) {
+                    if (!$foundTask) {
+                        if ($node->getTaskId() == $task_id) {
+                            $foundTask = true;
+                            $nextRow = array();
+
+                            foreach ($node->getNextList() as $nextNode) {
+                                if (!in_array($nextNode, $nextRow)) {
+                                    $nextRow[] = $nextNode;
+                                }
+                            }
+                            break;  //Break out of foreach
+                        } else {
+                            foreach ($node->getNextList() as $nextNode) {
+                                if (!in_array($nextNode, $nextRow)) {
+                                    $nextRow[] = $nextNode;
+                                }
+                            }
+                        }
+                    } else {
+                        $tasksEnabled[$node->getTaskId()] = false;
+                        foreach ($node->getNextList() as $nextNode) {
+                            if (!in_array($nextNode, $nextRow)) {
+                                $nextRow[] = $nextNode;
+                            }
+                        }
+                    }
+                }
+                $currentRow = $nextRow;
+                $nextRow = array();
+            }
+        } else {
+            echo "<p>Graph building failed</p>";
+        }
+
         $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
         
@@ -680,15 +749,17 @@ class TaskRouteHandler
         $countries = TemplateHelper::getCountryList();
        
         $app->view()->appendData(array(
-                              "project"         => $project,
-                              "extra_scripts"   => $extra_scripts,
-                              "languages"       => $languages,
-                              "countries"       => $countries,
-                              "projectTasks"    => $projectTasks,
-                              "word_count_err"  => $word_count_err,
-                              "deadlockError"   => $deadlockError,
-                              "deadline_error"  => $deadlineError,
-                              "taskTypeColours" => $taskTypeColours
+                              "project"             => $project,
+                              "extra_scripts"       => $extra_scripts,
+                              "languages"           => $languages,
+                              "countries"           => $countries,
+                              "projectTasks"        => $projectTasks,
+                              "thisTaskPreReqIds"   => $thisTaskPreReqIds,
+                              "tasksEnabled"        => $tasksEnabled,
+                              "word_count_err"      => $word_count_err,
+                              "deadlockError"       => $deadlockError,
+                              "deadline_error"      => $deadlineError,
+                              "taskTypeColours"     => $taskTypeColours
         ));
         
         $app->render("task.alter.tpl");

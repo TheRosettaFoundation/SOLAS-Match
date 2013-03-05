@@ -330,7 +330,7 @@ class TaskDao {
         if ($result = PDOWrapper::call("getTaskPreReqs", PDOWrapper::cleanseNull($taskId))) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = $row['task_id-prerequisite'];
+                $ret[] = ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;

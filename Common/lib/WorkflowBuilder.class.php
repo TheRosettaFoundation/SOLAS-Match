@@ -13,7 +13,13 @@ abstract class WorkflowBuilder
         if ($projectTasks) {
             $taskPreReqIds = array();
             foreach ($projectTasks as $task) {
-                $taskPreReqIds[$task->getId()] = $this->getTaskPreReqs($task->getId());
+                $taskPreReqs = $this->getTaskPreReqs($task->getId());
+                $taskPreReqIds[$task->getId()] = array();
+                if ($taskPreReqs) {
+                    foreach ($taskPreReqs as $preReq) {
+                        $taskPreReqIds[$task->getId()][] = $preReq->getId();
+                    }
+                }
             }
         }
 
