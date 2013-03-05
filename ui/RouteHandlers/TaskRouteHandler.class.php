@@ -432,7 +432,6 @@ class TaskRouteHandler
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $orgDao = new OrganisationDao();
-
         
         $fieldName = "fileUpload";
         $errorMessage = null;
@@ -440,21 +439,27 @@ class TaskRouteHandler
         $task = $taskDao->getTask(array('id' => $taskId));
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();///never again cast an array to an object.
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
+                $projectFile = $projectDao->getProjectFile($project->getId());
+                $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
+                $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
+                if($fileUploadType != $projectFileType) {
+                    throw new Exception("The file extension differs from the originally downloaded file. Please upload as .$projectFileType!");
+                }
             } catch (Exception $e) {
                 $errorMessage = $e->getMessage();
             }
         
             if (is_null($errorMessage)) {
                 try {
-                    $post = (object) $app->request()->post();///never again cast an array to an object.
-                    $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
+                    $filedata = file_get_contents($_FILES["fileUpload"]["tmp_name"]);
                     
                     if ($post->submit == 'XLIFF') {
-                        $taskDao->uploadOutputFile($taskId,$_FILES[$fieldName]["tmp_name"] , $userId, $filedata, true);
+                        $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
                     } else if ($post->submit == 'submit') {
-                        $taskDao->uploadOutputFile($taskId, $_FILES[$fieldName]["name"], $userId, $filedata);
+                        $taskDao->uploadOutputFile($taskId, $userId, $filedata);
                     }
                 
                 } catch (Exception  $e) {
@@ -469,10 +474,7 @@ class TaskRouteHandler
             }
         }
 
-
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
-
         $taskVersion = $taskDao->getTaskVersion($task->getId());
 
         $file_previously_uploaded = false;

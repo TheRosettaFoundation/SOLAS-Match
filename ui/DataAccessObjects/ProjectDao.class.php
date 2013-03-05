@@ -97,11 +97,20 @@ class ProjectDao
         return $ret;
     }
     
-    public function saveProjectFile($id, $data, $filename,$userId){
+    public function saveProjectFile($id, $data, $filename,$userId)
+    {
         $ret = null;
         $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
-        $ret = $this->client->call($url, HTTP_Request2::METHOD_PUT, null, null, $data);
-       
+        $ret = $this->client->call($url, HTTP_Request2::METHOD_PUT, null, null, $data);       
         return $ret;
+    }
+    
+    public function getProjectFile($project_id)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$project_id/file";
+        $response = $this->client->call($request);        
+        $ret = $this->client->cast("ProjectFile", $response);
+        return $ret;        
     }
 }

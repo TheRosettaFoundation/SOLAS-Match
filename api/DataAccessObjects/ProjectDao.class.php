@@ -276,7 +276,12 @@ class ProjectDao
         $args = PDOWrapper::cleanseNull($project_id).",".PDOWrapper::cleanseNull($user_id)
                 .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token);        
         $result = PDOWrapper::call("getProjectFile", $args);
-        return ModelFactory::buildModel("ProjectFile", $result[0]);
+        
+        if($result) {
+            return ModelFactory::buildModel("ProjectFile", $result[0]);
+        } else {
+            return null;
+        }        
     }
     
     public function saveProjectFile($projectId,$file,$filename,$userId){

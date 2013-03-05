@@ -211,8 +211,8 @@ class Tasks {
         }, 'saveTaskFile');
         
         
-         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/uploadOutputFile/:id/:filename/:userId/',
-                                                        function ($id, $filename, $userID, $format = ".json") {
+         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/uploadOutputFile/:id/:userId/',
+                                                        function ($id, $userID, $format = ".json") {
              if (!is_numeric($userID) && strstr($userID, '.')) {
                 $userID = explode('.', $userID);
                 $format = '.'.$userID[1];
@@ -223,6 +223,11 @@ class Tasks {
             if (is_array($task)) {
                 $task = $task[0];
             }
+            
+            $projectDao = new ProjectDao();
+            $projectFile = $projectDao->getProjectFile($task->getProjectId(), $userID, null, null);
+            $filename = $projectFile->getFilename();
+            
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
             TaskFile::uploadOutputFile($task, $convert,$data,$userID,$filename);
