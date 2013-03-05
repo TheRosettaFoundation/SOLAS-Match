@@ -830,6 +830,16 @@ class TaskRouteHandler
         $projectTasks = $projectDao->getProjectTasks($project_id);
         $task->setProjectId($project_id);
 
+        $tasksEnabled = array();
+        foreach ($projectTasks as $projectTask) {
+            if ($projectTask->getTaskStatus() == TaskStatusEnum::IN_PROGRESS ||
+                    $projectTask->getTaskStatus() == TaskStatusEnum::COMPLETE) {
+                $tasksEnabled[$projectTask->getId()] = false;
+            } else {
+                $tasksEnabled[$projectTask->getId()] = true;
+            }
+        }
+
         //task inherits souce details from project
         $task->setSourceLanguageCode($project->getSourceLanguageCode());
         $task->setSourceCountryCode($project->getSourceCountryCode());
@@ -924,6 +934,7 @@ class TaskRouteHandler
                 "project"       => $project,
                 "task"          => $task,
                 "projectTasks"  => $projectTasks,
+                "tasksEnabled"  => $tasksEnabled,
                 "taskPreReqs"   => $taskPreReqs,
                 "languages"     => $languages,
                 "countries"     => $countries,
