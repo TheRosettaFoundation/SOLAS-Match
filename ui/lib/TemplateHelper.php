@@ -57,11 +57,8 @@ class TemplateHelper {
     }
 
     public static function isValidEmail($email) 
-    {
-        return (self::emailContainsCharacter($email, "@")
-            && 
-            self::emailContainsCharacter($email, ".")
-        );      
+    {   
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
     
     public static function isValidDateTime($dateTime)
