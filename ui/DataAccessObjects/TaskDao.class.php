@@ -202,9 +202,9 @@ class TaskDao
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, null, $args,$fileData);
     }
 
-    public function uploadOutputFile($taskId, $filename, $userId, $fileData, $convert = false)
+    public function uploadOutputFile($taskId, $userId, $fileData, $convert = false)
     {
-        $request = "{$this->siteApi}v0/tasks/uploadOutputFile/$taskId/$filename/$userId";
+        $request = "{$this->siteApi}v0/tasks/uploadOutputFile/$taskId/$userId";
 
         $args = null;
         if ($convert) {
