@@ -1,5 +1,8 @@
 <?php
 
+require_once "../Common/TaskStatusEnum.php";
+require_once "../Common/TaskTypeEnum.php";
+
 class Upload {
     
     public static function maxFileSizeBytes()
@@ -206,4 +209,52 @@ class Upload {
                 . $task_folder . DIRECTORY_SEPARATOR 
                 . $version_folder;
     }
+    
+    public static function addTaskPreReq($id, $preReqId){
+        $taskDao = new TaskDao();
+        $builder = new APIWorkflowBuilder();
+        
+        $currentTask =  $taskDao->getTask(array("id" => $id));
+        $projectId = $currentTask[0]->getProjectId();
+        
+        $taskPreReqs = $builder->calculatePreReqArray($projectId);
+
+        if(!empty($taskPreReqs) && !in_array($preReqId, $taskPreReqs[$id])){
+            $taskPreReqs[$id][] = $preReqId;
+        
+            if($graph = $builder->parseAndBuild($taskPreReqs)) {
+
+                $currentTaskNode = $builder->find($id, $graph);
+                $task = $taskDao->getTask(array("id" => $id));
+                $task = $task[0];
+
+                $preReqTask = $taskDao->getTask(array("id" => $preReqId));
+                $taskDao->addTaskPreReq($id, $preReqId);
+
+                if($task->getTaskType() != TaskTypeEnum::POSTEDITING) {
+                    foreach($currentTaskNode->getPreviousList() as $node) {
+                        $preReq = $taskDao->getTask(array("id" => $node->getTaskId()));
+                        $preReq = $preReq[0];      
+                        if($preReq->getTaskStatus() == TaskStatusEnum::COMPLETE) {
+                            Upload::copyOutputFile($id, $preReqId);
+                        } 
+                    }
+                }            
+            }
+        } 
+    }
+    
+    private static function copyOutputFile($id, $preReqId)
+    {
+        $taskDao = new TaskDao();
+        $task = $taskDao->getTask(array("id" => $id));
+        $task = $task[0];
+        $preReqTask = $taskDao->getTask(array("id" => $preReqId));
+        $preReqTask = $preReqTask[0];
+        $preReqlatestFileVersion = TaskFile::getLatestFileVersionByTaskID($preReqId);
+        $preReqFileName = TaskFile::getFilename($preReqTask, $preReqlatestFileVersion);
+        $projectId= $task->getProjectId();
+        file_put_contents(Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName", file_get_contents(Settings::get("files.upload_path")."proj-$projectId/task-$preReqId/v-$preReqlatestFileVersion/$preReqFileName"));
+    }
+    
 }

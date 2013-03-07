@@ -1448,10 +1448,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskPreReqs`(IN `taskId` INT)
     READS SQL DATA
 BEGIN
 	SELECT t.id, t.project_id, t.title, t.`word-count`,
-	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-source`),
-	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-target`),
-	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-source`),
-	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-target`),
+	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-source`) as `language_id-source`,
+	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-target`) as `language_id-target`,
+	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-source`) as `country_id-source`,
+	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-target`)as `country_id-target`,
 	t.`created-time`, t.deadline, t.`comment`, t.`task-type_id`, t.`task-status_id`, t.published
 		
 	FROM Tasks t JOIN TaskPrerequisites tp ON tp.`task_id-prerequisite`=t.id

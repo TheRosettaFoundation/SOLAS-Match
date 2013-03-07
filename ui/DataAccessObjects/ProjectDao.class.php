@@ -109,6 +109,14 @@ class ProjectDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$project_id/file";
+        $response = $this->client->call($request);
+        return $response;        
+    }
+    
+    public function getProjectFileInfo($project_id)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$project_id/info";
         $response = $this->client->call($request);        
         $ret = $this->client->cast("ProjectFile", $response);
         return $ret;        

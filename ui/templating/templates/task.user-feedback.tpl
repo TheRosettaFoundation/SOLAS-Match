@@ -114,12 +114,12 @@
             <input type="hidden" name="revokeTask" value="1" />
             <p style="margin-bottom:30px;"/> 
 
-            <span style="float: left; position: relative; top:-20px">
+            <span style="float: left; position: relative;">
                 <button type="submit" value="1" name="revokeTask" class="btn btn-inverse">
                     <i class="icon-remove icon-white"></i> Unclaim Task & Submit Feedback
                 </button>
             </span>
-            <span style="float: right; position: relative; top:-20px">
+            <span style="float: right; position: relative;">
 
                 <button type="submit" value="Submit" name="submit" class="btn btn-success">
                     <i class="icon-upload icon-white"></i> Submit Feedback

@@ -65,6 +65,7 @@ class Middleware
         $app = Slim::getInstance();
         $org_name = 'this organisation';
         if (isset($org_id)) {
+            $siteApi = Settings::get("site.api");
             $request = "$siteApi/v0/orgs/$org_id";
             $org = $orgDao->getOrganisation(array('id' => $org_id));
             $org_name = "<a href=\"".$app->urlFor('org-public-profile',

@@ -11,9 +11,13 @@
             </h1>
         </div>           
 
-        {if isset($error)}
+        {if isset($error) || isset($upload_error)}
             <div class="alert alert-error">
-                {$error}
+                {if isset($error)}
+                    {$error}
+                {else if isset($upload_error)}
+                    {$upload_error}
+                {/if}
             </div>
         {/if}
 
@@ -129,9 +133,7 @@
                             <h2>Task Prerequisite(s):</h2>
                             <p class="desc">Assign prerequisites for this task - if any.</p>
                             <p>
-                                These are tasks that must be completed before the current task becomes available. Checkboxes have 
-                                been disabled for tasks that are either in progress or completed and cannot be set as a 
-                                prerequisite of this task.
+                                These are tasks that must be completed before the current task becomes available.
                             </p>
                             <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all;" width="100%" >
                                 <thead>
@@ -149,11 +151,7 @@
                                     {assign var="task_id" value=$projectTask->getId()}
                                     <tr style="overflow-wrap: break-word;">
                                         <td>
-                                            {if $tasksEnabled[$task_id]}
-                                                <input type="checkbox" name="preReq_{$i}" value="{$task_id}"/>
-                                            {else}
-                                                <input type="checkbox" name="preReq_{$i}" value="{$task_id}" disabled="desabled" />
-                                            {/if}
+                                            <input type="checkbox" name="preReq_{$i}" value="{$task_id}"/>
                                             {assign var="i" value=$i+1}
                                         </td>
                                         <td>

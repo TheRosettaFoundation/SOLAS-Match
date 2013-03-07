@@ -7,11 +7,14 @@ abstract class WorkflowBuilder
 {
     public function buildProjectGraph($projectId)
     {
+        return $this->parseAndBuild($this->calculatePreReqArray($projectId));
+    }
+    
+    public function calculatePreReqArray($projectId)
+    {
         $projectTasks = $this->getProjectTasks($projectId);
         $taskPreReqIds = array();
-
-        if ($projectTasks) {
-            $taskPreReqIds = array();
+        if ($projectTasks) {        
             foreach ($projectTasks as $task) {
                 $taskPreReqs = $this->getTaskPreReqs($task->getId());
                 $taskPreReqIds[$task->getId()] = array();
@@ -20,10 +23,29 @@ abstract class WorkflowBuilder
                         $taskPreReqIds[$task->getId()][] = $preReq->getId();
                     }
                 }
-            }
+            }    
         }
-
-        return $this->parseAndBuild($taskPreReqIds);
+        
+        return $taskPreReqIds;
+    }
+    
+    // DFS
+    public function find($preReqId, $graph)
+    {
+        $stack = array();
+        $rootNodes = $graph->getRootNodeList();        
+        foreach($rootNodes as $node) array_push($stack, $node);
+        
+        while(!empty($stack)) {
+            $currNode = array_pop($stack);
+            if($currNode->getTaskID() != $preReqId) {
+                $nextNodes = $currNode->getNextList();
+                foreach($nextNodes as $node) array_push($stack, $node);
+            } else {
+                return $currNode;
+            }
+        }       
+        return false;
     }
 
 

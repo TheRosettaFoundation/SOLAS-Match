@@ -79,8 +79,8 @@ class Tasks {
                 $format = '.'.$preReqId[1];
                 $preReqId = $preReqId[0];
             }
-            $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->addTaskPreReq($id, $preReqId), null, $format);
+            
+            Dispatcher::sendResponce(null, Upload::addTaskPreReq($id, $preReqId), null, $format);
         }, "addTaskPreReq");
 
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/prerequisites/:preReqId/',

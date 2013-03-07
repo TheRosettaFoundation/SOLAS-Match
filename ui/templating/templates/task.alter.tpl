@@ -1,6 +1,7 @@
 {include file="header.tpl"}
 
 {assign var="task_id" value=$task->getId()}
+{assign var="task_status_id" value=$task->getTaskStatus()}
     <h1 class="page-header">
         Task {$task->getTitle()}
         <small>Alter task details here.</small>
@@ -9,13 +10,26 @@
         </a>
     </h1>
 
+    {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
+        <div class="alert alert-info">
+            <h3>
+                <p>Note:</p>
+            </h3>            
+            {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
+                <p>This task has been completed. You can only edit certain task details.</p>
+            {else if $task_status_id == TaskStatusEnum::COMPLETE}
+                <p>This task has been claimed and is in progress. You can only edit <strong>Task Comment</strong> and <strong>Deadline</strong>.</p>
+            {/if}
+        </div>
+    {/if}
+            
     <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well">
         <table width="100%">
             <tr align="center">
                 <td width="50%">
                     <div style="margin-bottom:20px;">
                         <label for="title" style="font-size: large"><strong>Title:</strong></label>
-                        <textarea wrap="soft" cols="1" rows="4" name="title">{$task->getTitle()}</textarea>
+                        <textarea wrap="soft" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} >{$task->getTitle()}</textarea>
                     </div>
                     <div style="margin-bottom:20px;">
                         <label for="impact" style="font-size: large"><strong>Task Comment:</strong></label>
@@ -35,26 +49,26 @@
                     </div>
                 </td>
                 <td>
-                    <div style="margin-bottom:40px;">
+                    <div style="margin-bottom:60px;">
                         <label for="publishtask" style="font-size: large"><strong>Publish Task:</strong></label>
                         <p class="desc">If checked, this task will appear in the task stream.</p>
-                        <input type="checkbox" name="publishTask" value="1" checked="true"/>
+                        <input type="checkbox" name="publishTask" value="1" checked="true" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
                     </div>
                     <p>
                         <label for="target" style="font-size: large"><strong>Target Language:</strong></label>
-                        <select name="target" id="target">
+                        <select name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}>
                             {foreach $languages as $language}
                                 {if $task->getTargetLanguageCode() == $language->getCode()}
-                                        <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
+                                        <option value="{$language->getCode()}" selected="selected" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} >{$language->getName()}</option>
                                 {else}
-                                    <option value="{$language->getCode()}">{$language->getName()}</option>
+                                    <option value="{$language->getCode()}" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} >{$language->getName()}</option>
                                 {/if}
                             {/foreach}
                         </select>
                     </p>
                     <p>
                     {if isset($countries)}
-                        <select name="targetCountry" id="targetCountry">
+                        <select name="targetCountry" id="targetCountry" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}>
                             {foreach $countries as $country}
                                 {if $task->getTargetCountryCode() == $country->getCode()}
                                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
@@ -65,7 +79,7 @@
                         </select>
                     {/if}
                     </p>
-                    <p style="margin-bottom:40px;"/>
+                    <p style="margin-bottom:60px;"/>
 
                     {if !is_null($word_count_err)}
                         <div class="alert alert-error">
@@ -75,7 +89,7 @@
                     <p style="margin-bottom:40px;"/>
 
                     <label for="word_count" style="font-size: large"><strong>Word Count:</strong></label>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}"/>
+                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} />
                 </td>             
             </tr>
             <tr>
@@ -97,9 +111,7 @@
                     <h2>Task Prerequisite(s):</h2>
                     <p class="desc">Assign prerequisites for this task - if any.</p>
                     <p>
-                        These are tasks that must be completed before the current task becomes available. Checkboxes have been
-                        disabled for tasks that are either complete or in progress or tasks that have this task as a 
-                        pre-requisite (i.e. tasks that would cause a deadlock)
+                        These are tasks that must be completed before the current task becomes available.
                     </p>
                     <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all;" width="100%" >
                         <thead>
@@ -117,15 +129,27 @@
                             {assign var="task_id" value=$projectTask->getId()}
                             <tr style="overflow-wrap: break-word;">
                                 <td>
-                                    {if $tasksEnabled[$task_id]}
+                                    {if $task_status_id > TaskStatusEnum::PENDING_CLAIM} 
+                                        <input type="checkbox" name="preReq_{$i}" value="{$task_id}" disabled                                               
+                                        {if in_array($task_id, $thisTaskPreReqIds)}
+                                            checked="true" />
+                                        {else}
+                                            />
+                                        {/if} 
+                                    {else}
+                                        {*
+                                        {if $tasksEnabled[$task_id]}
+                                            <input type="checkbox" name="preReq_{$i}" value="{$task_id}"
+                                        {else}
+                                            <input type="checkbox" name="preReq_{$i}" value="{$task_id}" disabled
+                                        {/if}
+                                        *}
                                         <input type="checkbox" name="preReq_{$i}" value="{$task_id}"
-                                    {else}
-                                        <input type="checkbox" name="preReq_{$i}" value="{$task_id}" disabled="desabled" 
-                                    {/if}
-                                    {if in_array($task_id, $thisTaskPreReqIds)}
-                                        checked="true" />
-                                    {else}
-                                        />
+                                        {if in_array($task_id, $thisTaskPreReqIds)}
+                                            checked="true" />
+                                        {else}
+                                            />
+                                        {/if} 
                                     {/if}
                                     {assign var="i" value=$i+1}
                                 </td>

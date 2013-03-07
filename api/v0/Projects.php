@@ -153,7 +153,7 @@ class Projects
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/info(:format)/',
                                                         function ($id, $format = ".json") {
             $dao = new ProjectDao();    
-            Dispatcher::sendResponce(null,$dao->getProjectFileInfo($id, null, null, null), null, $format);
+            Dispatcher::sendResponce(null,$dao->getProjectFileInfo($id, null, null, null, null), null, $format);
         }, 'getProjectFileInfo');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/file(:format)/',

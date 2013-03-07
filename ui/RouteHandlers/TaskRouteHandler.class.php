@@ -442,7 +442,7 @@ class TaskRouteHandler
             $post = (object) $app->request()->post();///never again cast an array to an object.
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
-                $projectFile = $projectDao->getProjectFile($project->getId());
+                $projectFile = $projectDao->getProjectFileInfo($project->getId());
                 $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
                 if($fileUploadType != $projectFileType) {
@@ -534,6 +534,8 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
+        $currentTask = $taskDao->getTask(array("id" => $task_id));
+        $currentTaskStatus = $currentTask->getTaskStatus();
 
         $word_count_err = null;
         $deadlockError = null;
@@ -891,6 +893,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $projectDao = new ProjectDao();
         $taskDao = new TaskDao();
+        $user_id = UserSession::getCurrentUserID();
 
         $titleError = null;
         $wordCountError = null;
@@ -900,16 +903,6 @@ class TaskRouteHandler
         $project = $projectDao->getProject(array('id' => $project_id));
         $projectTasks = $projectDao->getProjectTasks($project_id);
         $task->setProjectId($project_id);
-
-        $tasksEnabled = array();
-        foreach ($projectTasks as $projectTask) {
-            if ($projectTask->getTaskStatus() == TaskStatusEnum::IN_PROGRESS ||
-                    $projectTask->getTaskStatus() == TaskStatusEnum::COMPLETE) {
-                $tasksEnabled[$projectTask->getId()] = false;
-            } else {
-                $tasksEnabled[$projectTask->getId()] = true;
-            }
-        }
 
         //task inherits souce details from project
         $task->setSourceLanguageCode($project->getSourceLanguageCode());
@@ -969,13 +962,26 @@ class TaskRouteHandler
                 $newTask = $taskDao->createTask($task);
                 $newTaskId = $newTask->getId();
                 
+                $upload_error = null;                
+                try {
+                    $upload_error = $taskDao->saveTaskFile($newTaskId, $projectDao->getProjectFileInfo($project_id)->getFilename(),
+                            $user_id, $projectDao->getProjectFile($project_id));
+                } catch (Exception  $e) {
+                    $upload_error = "File error: " . $e->getMessage();
+                }
+                
                 if(isset($post->totalTaskPreReqs) && $post->totalTaskPreReqs > 0) {
                     for($i=0; $i < $post->totalTaskPreReqs; $i++) {
                         if(isset($post->{"preReq_".$i})) $taskDao->addTaskPreReq($newTaskId, $post->{"preReq_".$i});
                     }
                 }
-            
-                $app->redirect($app->urlFor("task-created", array("task_id" => $newTaskId)));
+                
+                if(is_null($upload_error)) {
+                    $app->redirect($app->urlFor("task-created", array("task_id" => $newTaskId)));
+                } else  {
+                    $taskDao->deleteTask($newTaskId);
+                    $app->view()->appendData(array("upload_error" => $upload_error));
+                }
             }
         }
 
@@ -1005,7 +1011,6 @@ class TaskRouteHandler
                 "project"       => $project,
                 "task"          => $task,
                 "projectTasks"  => $projectTasks,
-                "tasksEnabled"  => $tasksEnabled,
                 "taskPreReqs"   => $taskPreReqs,
                 "languages"     => $languages,
                 "countries"     => $countries,
@@ -1173,17 +1178,18 @@ class TaskRouteHandler
 
                 if ($post->feedback != "") {
                     $taskDao->sendFeedback($task_id, array($claimant->getUserId()), $post->feedback);
-
+    
                     $app->flashNow("success", "Feedback sent to 
                             <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
                             {$claimant->getDisplayName()}</a>.");
                     if(isset($post->revokeTask) && $post->revokeTask) {
-                        //Check return value
+                        $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
+                        $taskDao->updateTask($task);
                         $taskRevoke = $userDao->unclaimTask($claimant->getUserId(), $task_id);
                         if(!$taskRevoke) {
                             $app->flash("taskSuccess", "<b>Success</b> - The task 
                                 <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
-                                has been successfully revoked from 
+                                has been revoked from 
                                 <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
                                 {$claimant->getDisplayName()}</a>. This user will be notified by e-mail and provided with your feedback.");
                             $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
