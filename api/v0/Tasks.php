@@ -91,7 +91,8 @@ class Tasks {
                 $preReqId = $preReqId[0];
             }
             $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->removeTaskPreReq($id, $preReqId), null, $format);
+            Dispatcher::sendResponce(null, Upload::removeTaskPreReq($id, $preReqId), null, $format);
+            //Dispatcher::sendResponce(null, $dao->removeTaskPreReq($id, $preReqId), null, $format);
         }, "removeTaskPreReq");
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:taskId/user/:userId/',

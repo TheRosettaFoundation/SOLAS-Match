@@ -244,17 +244,46 @@ class Upload {
         } 
     }
     
+    public static function removeTaskPreReq($id, $preReqId)
+    {
+        $taskDao = new TaskDao();
+        $task = $taskDao->getTask(array("id" => $id));
+        $task = $task[0];
+        
+        $taskDao->removeTaskPreReq($id, $preReqId);
+        $taskPreReqs = $taskDao->getTaskPreReqs($id);
+        
+        if(is_array($taskPreReqs) && count($taskPreReqs > 0)) {
+            foreach($taskPreReqs as $taskPreReq) {
+                if($taskPreReq->getTaskStatus() == TaskStatusEnum::COMPLETE) {
+                    Upload::copyOutputFile($id, $taskPreReq->getId());
+                }
+            }
+        } else {
+            $projectDao = new ProjectDao();
+            
+            $projectId = $task->getProjectId();            
+            $projectFile = $projectDao->getProjectFile($projectId);
+            $projectFileInfo = $projectDao->getProjectFileInfo($projectId, null, null, null, null);
+
+            file_put_contents(Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFileName()}", $projectFile);         
+        }
+    }
+    
     private static function copyOutputFile($id, $preReqId)
     {
         $taskDao = new TaskDao();
         $task = $taskDao->getTask(array("id" => $id));
         $task = $task[0];
+        
         $preReqTask = $taskDao->getTask(array("id" => $preReqId));
         $preReqTask = $preReqTask[0];
+        
         $preReqlatestFileVersion = TaskFile::getLatestFileVersionByTaskID($preReqId);
         $preReqFileName = TaskFile::getFilename($preReqTask, $preReqlatestFileVersion);
         $projectId= $task->getProjectId();
-        file_put_contents(Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName", file_get_contents(Settings::get("files.upload_path")."proj-$projectId/task-$preReqId/v-$preReqlatestFileVersion/$preReqFileName"));
-    }
-    
+        file_put_contents(Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName",
+                        file_get_contents(Settings::get("files.upload_path").
+                        "proj-$projectId/task-$preReqId/v-$preReqlatestFileVersion/$preReqFileName"));
+    }    
 }
