@@ -6,7 +6,7 @@
         <p>Empowering conversation in language communities.</p>
         <p>
             <a class="btn btn-success btn-large" href="{urlFor name="register"}">
-                <i class="icon-star icon-white"></i> Register to Volunteer
+                <i class="icon-star icon-white"></i> Register
             </a>
             <a class="btn btn-primary btn-large" href="{urlFor name="login"}">
                 <i class="icon-share icon-white"></i> Login

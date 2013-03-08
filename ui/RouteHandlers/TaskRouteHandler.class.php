@@ -790,7 +790,7 @@ class TaskRouteHandler
         }
         $task_file_info = $taskDao->getTaskInfo($task_id, 0);
         $siteApi = Settings::get("site.api");
-        $file_path= "$siteApi/v0/tasks/$task_id/file";
+        $file_path= "{$siteApi}v0/tasks/$task_id/file";
        
         $app->view()->appendData(array(
             "file_preview_path" => $file_path,

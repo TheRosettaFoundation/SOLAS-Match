@@ -83,7 +83,7 @@
 			minuteMax: 59,
 			secondMax: 59,
 			millisecMax: 999,
-			minDateTime: null,
+			minDateTime: new Date(),
 			maxDateTime: null,
 			onSelect: null,
 			hourGrid: 0,

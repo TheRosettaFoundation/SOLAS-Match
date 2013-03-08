@@ -107,7 +107,7 @@ class IO {
      */
     public static function downloadFile($absoluteFilePath, $contentType)
     {
-        if ($fd = fopen ($absoluteFilePath, "r")) {
+        if (file_exists ($absoluteFilePath)) {
                 $fsize = filesize($absoluteFilePath);
                 $path_parts = pathinfo($absoluteFilePath);
                 header('Content-type: '.$contentType);
@@ -118,7 +118,7 @@ class IO {
                // TODO -> this die is to get around Slim's $app->reponse() header/body response.
                     // Is there a cleaner way to download files?
         }
-        fclose ($fd);
+//        fclose ($fd);
           die;
         return;
     }

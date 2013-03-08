@@ -5,3 +5,4 @@ vendor
 /ui/templating/templates_compiled/
 /Common/includes/conf.ini
 Common/includes/conf.ini
+backup/
