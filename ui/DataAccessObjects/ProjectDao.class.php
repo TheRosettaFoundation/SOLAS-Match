@@ -100,6 +100,7 @@ class ProjectDao
     public function saveProjectFile($id, $data, $filename,$userId)
     {
         $ret = null;
+        $filename = urlencode($filename);
         $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
         $ret = $this->client->call($url, HTTP_Request2::METHOD_PUT, null, null, $data);       
         return $ret;

@@ -177,7 +177,7 @@ class Projects
             }
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $dao = new ProjectDao();
-            Dispatcher::sendResponce(null,$dao->saveProjectFile($id, $data, $filename,$userID), null, $format);
+            Dispatcher::sendResponce(null,$dao->saveProjectFile($id, $data, urldecode($filename),$userID), null, $format);
         }, 'saveProjectFile');
     }
 }
