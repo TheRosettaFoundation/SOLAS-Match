@@ -226,7 +226,7 @@ class Tasks {
             }
             
             $projectDao = new ProjectDao();
-            $projectFile = $projectDao->getProjectFileInfo($task->getProjectId(), $userID, null, null, null);
+            $projectFile = $projectDao->getProjectFileInfo($task->getProjectId(), null, null, null, null);
             $filename = $projectFile->getFilename();
             
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
