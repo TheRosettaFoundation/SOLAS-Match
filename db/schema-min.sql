@@ -225,6 +225,7 @@ CREATE TABLE IF NOT EXISTS `ProjectFiles` (
   `user_id` int(10) unsigned NOT NULL,
   `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `fileToken` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `mime-type` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
   UNIQUE KEY `project_id` (`project_id`),
   KEY `FK_ProjectFiles_Users` (`user_id`),
   CONSTRAINT `FK_ProjectFiles_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
