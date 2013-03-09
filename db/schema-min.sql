@@ -12,14 +12,12 @@ SET FOREIGN_KEY_CHECKS=0;
 
 /*--------------------------------------------------start of tables--------------------------------*/
 
-
 -- Dumping structure for table Solas-Match-Test.ArchivedProjects
-
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `impact` VARCHAR(4096) NOT NULL,
+  `impact` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
   `deadline` datetime NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
   `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -36,7 +34,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedProjectsMetaData
-
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
   `archived-project_id` int(10) unsigned NOT NULL,
   `archived-date` datetime NOT NULL,
@@ -51,7 +48,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedTasks
-
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
   `project_id` int(20) unsigned NOT NULL,
@@ -87,7 +83,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedTasksMetadata
-
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
   `user_id-claimed` int(10) unsigned DEFAULT NULL,
@@ -105,7 +100,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
 
 
 -- Dumping structure for table Solas-Match-Test.Badges
-
 CREATE TABLE IF NOT EXISTS `Badges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) unsigned DEFAULT NULL,
@@ -116,7 +110,6 @@ CREATE TABLE IF NOT EXISTS `Badges` (
   CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
@@ -126,7 +119,6 @@ REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
 
 
 -- Dumping structure for table Solas-Match-Test.Countries
-
 CREATE TABLE IF NOT EXISTS `Countries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(2) COLLATE utf8_unicode_ci NOT NULL COMMENT '"IE", for example',
@@ -139,7 +131,6 @@ CREATE TABLE IF NOT EXISTS `Countries` (
 
 
 -- Dumping structure for table Solas-Match-Test.Languages
-
 CREATE TABLE IF NOT EXISTS `Languages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(3) COLLATE utf8_unicode_ci NOT NULL COMMENT '"en", for example',
@@ -152,7 +143,6 @@ CREATE TABLE IF NOT EXISTS `Languages` (
 
 
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
-
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   `user_id` int(10) unsigned NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
@@ -167,7 +157,6 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
 
 
 -- Dumping structure for table Solas-Match-Test.Organisations
-
 CREATE TABLE IF NOT EXISTS `Organisations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -181,7 +170,6 @@ CREATE TABLE IF NOT EXISTS `Organisations` (
 
 
 -- Dumping structure for table Solas-Match-Test.OrgRequests
-
 CREATE TABLE IF NOT EXISTS `OrgRequests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -196,6 +184,7 @@ CREATE TABLE IF NOT EXISTS `OrgRequests` (
 
 -- Data exporting was unselected.
 
+
 -- Dumping structure for table Solas-Match-Test.OrgTranslatorBlacklist
 CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
   `org_id` int(10) unsigned NOT NULL,
@@ -206,9 +195,10 @@ CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
   CONSTRAINT `FK_OrgTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Data exporting was unselected.
+
 
 -- Dumping structure for table Solas-Match-Test.PasswordResetRequests
-
 CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
   `uid` char(40) COLLATE utf8_unicode_ci NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
@@ -219,27 +209,29 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 
 -- Data exporting was unselected.
 
+
 -- Dumping structure for table Solas-Match-Test.ProjectFiles
 CREATE TABLE IF NOT EXISTS `ProjectFiles` (
   `project_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `fileToken` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `mime-type` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+  `file-token` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `mime-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   UNIQUE KEY `project_id` (`project_id`),
   KEY `FK_ProjectFiles_Users` (`user_id`),
-  CONSTRAINT `FK_ProjectFiles_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_ProjectFiles_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_ProjectFiles_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ProjectFiles_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.Projects
-
 CREATE TABLE IF NOT EXISTS `Projects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `impact` VARCHAR(4096) NOT NULL,
+  `description` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
+  `impact` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
   `deadline` datetime DEFAULT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
   `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -260,7 +252,6 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 
 
 -- Dumping structure for table Solas-Match-Test.ProjectTags
-
 CREATE TABLE IF NOT EXISTS `ProjectTags` (
   `project_id` int(10) unsigned NOT NULL,
   `tag_id` int(10) unsigned NOT NULL,
@@ -274,7 +265,6 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
 
 
 -- Dumping structure for table Solas-Match-Test.Statistics
-
 CREATE TABLE IF NOT EXISTS `Statistics` (
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `value` double NOT NULL,
@@ -283,24 +273,8 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
 
 -- Data exporting was unselected.
 
--- Dumping data for table Solas-Match-Test.Statistics
-/*!40000 ALTER TABLE `Statistics` DISABLE KEYS */;
-REPLACE INTO `Statistics` (`name`, `value`) VALUES
-	('ArchivedProjects', 0),
-	('ArchivedTasks', 0),
-        ('Badges', 0),
-	('ClaimedTasks', 0),
-	('Organisations', 0),
-	('OrgMembershipRequests', 0),
-	('Projects', 0),
-	('Tags', 0),
-	('Tasks', 0),
-	('TasksWithPreReqs', 0),
-	('UnclaimedTasks', 0),
-	('Users', 0);
 
 -- Dumping structure for table Solas-Match-Test.Tags
-
 CREATE TABLE IF NOT EXISTS `Tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `label` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -312,7 +286,6 @@ CREATE TABLE IF NOT EXISTS `Tags` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskClaims
-
 CREATE TABLE IF NOT EXISTS `TaskClaims` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
@@ -329,7 +302,6 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskFileVersions
-
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
@@ -349,7 +321,6 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskPrerequisites
-
 CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   `task_id` bigint(20) unsigned NOT NULL,
   `task_id-prerequisite` bigint(20) unsigned NOT NULL,
@@ -363,7 +334,6 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
 
 
 -- Dumping structure for table Solas-Match-Test.Tasks
-
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(20) unsigned NOT NULL,
@@ -388,8 +358,8 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   KEY `FK_Tasks_TaskTypes` (`task-type_id`),
   KEY `FK_Tasks_TaskStatus` (`task-status_id`),
   KEY `FK_Tasks_Projects` (`project_id`),
-  CONSTRAINT `FK_Tasks_Countries` FOREIGN KEY (`Country_id-source`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_Tasks_Countries_2` FOREIGN KEY (`Country_id-target`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Tasks_Countries` FOREIGN KEY (`country_id-source`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Tasks_Countries_2` FOREIGN KEY (`country_id-target`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_Languages` FOREIGN KEY (`language_id-source`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_Languages_2` FOREIGN KEY (`language_id-target`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -401,7 +371,6 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 
 
 -- Dumping structure for table Solas-Match-Test.TaskStatus
-
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -409,10 +378,6 @@ CREATE TABLE IF NOT EXISTS `TaskStatus` (
   UNIQUE KEY `id` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
-
--- Dumping data for table Solas-Match-Test.TaskStatus: ~4 rows (approximately)
-/*!40000 ALTER TABLE `TaskStatus` DISABLE KEYS */;
 REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 	(1, "Waiting PreReqs"),
 	(2, "Pending Claim"),
@@ -430,9 +395,10 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
   CONSTRAINT `FK_TaskTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Data exporting was unselected.
+
 
 -- Dumping structure for table Solas-Match-Test.TaskTypes
-
 CREATE TABLE IF NOT EXISTS `TaskTypes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -440,10 +406,6 @@ CREATE TABLE IF NOT EXISTS `TaskTypes` (
   UNIQUE KEY `id` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
-
--- Dumping data for table Solas-Match-Test.TaskStatus: ~4 rows (approximately)
-/*!40000 ALTER TABLE `TaskStatus` DISABLE KEYS */;
 REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
 	(1, "Chunking"),
 	(2, "Translation"),
@@ -451,8 +413,8 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
 	(4, "Post-editing");
 
 
--- Dumping structure for table Solas-Match-Test.UserBadges
 
+-- Dumping structure for table Solas-Match-Test.UserBadges
 CREATE TABLE IF NOT EXISTS `UserBadges` (
   `user_id` int(11) unsigned NOT NULL,
   `badge_id` int(11) NOT NULL,
@@ -467,7 +429,6 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserNotifications
-
 CREATE TABLE IF NOT EXISTS `UserNotifications` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -484,7 +445,6 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
 
 
 -- Dumping structure for table Solas-Match-Test.Users
-
 CREATE TABLE IF NOT EXISTS `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `display-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -507,7 +467,6 @@ CREATE TABLE IF NOT EXISTS `Users` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTags
-
 CREATE TABLE IF NOT EXISTS `UserTags` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -523,7 +482,6 @@ CREATE TABLE IF NOT EXISTS `UserTags` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTaskScores
-
 CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   `user_id` int(11) unsigned NOT NULL,
   `task_id` bigint(11) unsigned NOT NULL,
@@ -538,7 +496,6 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedProjects
-
 CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `Project_id` int(10) unsigned DEFAULT NULL,
@@ -552,7 +509,6 @@ CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
 
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedTasks
-
 CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `task_id` bigint(10) unsigned DEFAULT NULL,
@@ -608,7 +564,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.addProjectFile
 DROP PROCEDURE IF EXISTS `addProjectFile`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `addProjectFile`(IN `pID` INT, IN `uID` INT, IN `fname` VARCHAR(128), IN `token` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addProjectFile`(IN `pID` INT, IN `uID` INT, IN `fname` VARCHAR(128), IN `token` VARCHAR(128), IN `mime` varCHAR(128))
     MODIFIES SQL DATA
 BEGIN
 	if not exists (select 1 from ProjectFiles pf where pf.project_id=pID) then
@@ -619,6 +575,7 @@ BEGIN
 	end if;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.addProjectTag
 DROP PROCEDURE IF EXISTS `addProjectTag`;
@@ -1145,7 +1102,6 @@ END//
 DELIMITER ;
 
 
-
 -- Dumping structure for procedure Solas-Match-Test.getPasswordResetRequests
 DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
 DELIMITER //
@@ -1166,7 +1122,6 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
-
 
 
 -- Dumping structure for procedure Solas-Match-Test.getProject
@@ -1247,6 +1202,46 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getProjectFile
+DROP PROCEDURE IF EXISTS `getProjectFile`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectFile`(IN `pID` INT, IN `uID` INT, IN `fName` VARCHAR(128), IN `token` VARCHAR(128), IN `mime` VARCHAR(128))
+BEGIN
+    if pID='' then set pID=null;end if;
+    if uID='' then set uID=null;end if;
+    if fName='' then set fName=null;end if;
+    if token='' then set token=null;end if;
+    if mime='' then set mime=null;end if;
+   
+
+    set @q="SELECT * FROM ProjectFiles p WHERE 1";
+    
+	 if pID is not null then
+        set @q = CONCAT(@q, " and p.project_id=", pID);
+    end if;
+  	 if uID is not null then
+        set @q = CONCAT(@q, " and p.user_id=", uID);
+    end if;
+  	 if fName is not null then
+        set @q = CONCAT(@q, " and p.filename=", fName);
+    end if;
+ 	 if token is not null then
+        set @q = CONCAT(@q, " and p.`file-token`=",  token);
+    end if;
+ 	 if mime is not null then
+        set @q = CONCAT(@q, " and p.`mime-type`=",  mime);
+    end if;
+
+    
+    
+
+    PREPARE stmt FROM @q;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getProjectTags
 DROP PROCEDURE IF EXISTS `getProjectTags`;
 DELIMITER //
@@ -1257,6 +1252,26 @@ from Tags t
 join ProjectTags pt
 on pt.tag_id = t.id
 where pt.project_id = pID;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getStatistics
+DROP PROCEDURE IF EXISTS `getStatistics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatistics`(IN `statName` VARCHAR(128))
+BEGIN
+	IF statName = '' THEN SET statName = NULL; END IF;
+	
+	set @q = "SELECT * FROM Statistics st where 1";
+	
+	if statName is not null then 
+		set @q = CONCAT(@q," and st.name='", statName,"'");
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -1698,6 +1713,7 @@ BEGIN
 END//
 DELIMITER ;
 
+
 -- Dumping structure for procedure Solas-Match-Test.getUserArchivedTasks
 DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
 DELIMITER //
@@ -1955,6 +1971,7 @@ BEGIN
 select exists (select 1 from OrganisationMembers om where om.user_id=uID and om.organisation_id=oID) as result;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
@@ -2288,6 +2305,206 @@ BEGIN
 	update Tasks 
 		set Tasks.`task-status_id`=sID
 		where Tasks.id=tID;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateAll
+DROP PROCEDURE IF EXISTS `statsUpdateAll`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateAll`()
+BEGIN
+	CALL statsUpdateArchivedProjects;
+	CALL statsUpdateArchivedTasks;
+	CALL statsUpdateBadges;
+	CALL statsUpdateClaimedTasks;
+	CALL statsUpdateOrganisations;
+	CALL statsUpdateOrgMemberRequests;
+	CALL statsUpdateProjects;
+	CALL statsUpdateTags;
+	CALL statsUpdateTasks;
+	CALL statsUpdateTasksWithPreReqs;
+	CALL statsUpdateUnclaimedTasks;
+	CALL statsUpdateUsers;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateArchivedProjects
+DROP PROCEDURE IF EXISTS `statsUpdateArchivedProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedProjects`()
+BEGIN
+	SET @totalArchivedProjects = 0;	
+	SELECT count(1) INTO @totalArchivedProjects FROM ArchivedProjects;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('ArchivedProjects', @totalArchivedProjects);	
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateArchivedTasks
+DROP PROCEDURE IF EXISTS `statsUpdateArchivedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedTasks`()
+BEGIN
+	SET @totalArchivedTasks = 0;
+	SELECT count(1) INTO @totalArchivedTasks FROM ArchivedTasks;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('ArchivedTasks', @totalArchivedTasks);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateBadges
+DROP PROCEDURE IF EXISTS `statsUpdateBadges`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateBadges`()
+BEGIN
+	SET @totalBadges = 0;
+	SELECT count(1) INTO @totalBadges FROM Badges;		
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Badges', @totalBadges);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateClaimedTasks
+DROP PROCEDURE IF EXISTS `statsUpdateClaimedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateClaimedTasks`()
+BEGIN
+	SET @claimedTasks = 0;
+	SELECT count(1) INTO @claimedTasks FROM TaskClaims;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('ClaimedTasks', @claimedTasks);	
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateOrganisations
+DROP PROCEDURE IF EXISTS `statsUpdateOrganisations`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrganisations`()
+BEGIN
+	SET @totalOrgs = 0;	
+	SELECT count(1) INTO @totalOrgs FROM Organisations;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Organisations', @totalOrgs);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateOrgMemberRequests
+DROP PROCEDURE IF EXISTS `statsUpdateOrgMemberRequests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrgMemberRequests`()
+BEGIN
+	SET @orgMemberRequests = 0;	
+	SELECT count(1) INTO @orgMemberRequests FROM OrgRequests;	
+	REPLACE INTO Statistics (name, value)
+	VALUES ('OrgMembershipRequests', @orgMemberRequests);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateProjects
+DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
+BEGIN
+	SET @Projects = 0;		
+	SELECT count(1) INTO @Projects FROM Projects;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Projects', @Projects);	
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateTags
+DROP PROCEDURE IF EXISTS `statsUpdateTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTags`()
+BEGIN
+	SET @totalTags = 0;
+	SELECT count(1) INTO @totalTags FROM Tags;		
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Tags', @totalTags);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateTasks
+DROP PROCEDURE IF EXISTS `statsUpdateTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasks`()
+BEGIN
+	SET @totalTasks = 0;	
+	SELECT count(1) INTO @totalTasks FROM Tasks;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Tasks', @totalTasks);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateTasksWithPreReqs
+DROP PROCEDURE IF EXISTS `statsUpdateTasksWithPreReqs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasksWithPreReqs`()
+BEGIN
+	SET @totalTasksWithPreReqs = 0;
+	SELECT count(DISTINCT tp.task_id) INTO @totalTasksWithPreReqs FROM TaskPrerequisites tp;	
+	REPLACE INTO Statistics (name, value)
+	VALUES ('TasksWithPreReqs', @totalTasksWithPreReqs);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateTotalProjects
+DROP PROCEDURE IF EXISTS `statsUpdateTotalProjects`;
+DELIMITER //
+CREATE DEFINER=`tester`@`%` PROCEDURE `statsUpdateTotalProjects`()
+BEGIN
+	SET @Projects = 0;
+	SET @ArchivedProjects = 0;	
+	
+	SELECT count(1) INTO @Projects FROM Projects;	
+	SELECT count(1) INTO @ArchivedProjects FROM ArchivedProjects;
+	
+	SET @totalProjects = @Projects + @ArchivedProjects;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('TotalProjects', @totalProjects);	
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateUnclaimedTasks
+DROP PROCEDURE IF EXISTS `statsUpdateUnclaimedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateUnclaimedTasks`()
+BEGIN
+        SET @unclaimedTasks = 0;
+        SELECT count(1) into @unclaimedTasks from Tasks t
+        WHERE t.id NOT IN
+        (
+            SELECT task_id
+            FROM  TaskClaims
+        );
+        REPLACE INTO Statistics (name, value)
+        VALUES ('UnclaimedTasks', @unclaimedTasks);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateUsers
+DROP PROCEDURE IF EXISTS `statsUpdateUsers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateUsers`()
+BEGIN
+	SET @totalUsers = 0;	
+	SELECT count(1) INTO @totalUsers FROM Users;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('Users', @totalUsers);
 END//
 DELIMITER ;
 
@@ -2635,7 +2852,6 @@ END//
 DELIMITER ;
 
 
-
 -- Dumping structure for procedure Solas-Match-Test.taskIsClaimed
 DROP PROCEDURE IF EXISTS `taskIsClaimed`;
 DELIMITER //
@@ -2702,7 +2918,7 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure solas-manuel-dev.userInsertAndUpdate
+-- Dumping structure for procedure Solas-Match-Test.userInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(3), IN `region` VARCHAR(3), IN `id` INT)
@@ -2812,6 +3028,7 @@ BEGIN
 	select u.id from Users u where u.email= email;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.userLikeTag
 DROP PROCEDURE IF EXISTS `userLikeTag`;
@@ -2936,219 +3153,14 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateArchivedProjects
-DROP PROCEDURE IF EXISTS `statsUpdateArchivedProjects`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedProjects`()
-BEGIN
-	SET @totalArchivedProjects = 0;	
-	SELECT count(1) INTO @totalArchivedProjects FROM ArchivedProjects;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('ArchivedProjects', @totalArchivedProjects);	
-END //
-DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateProjects
-DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
-BEGIN
-	SET @Projects = 0;
-	SET @ArchivedProjects = 0;	
-	
-	SELECT count(1) INTO @Projects FROM Projects;	
-	SELECT count(1) INTO @ArchivedProjects FROM ArchivedProjects;
-	
-	SET @totalProjects = @Projects + @ArchivedProjects;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Projects', @totalProjects);
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTasksWithPreReqs
-DROP PROCEDURE IF EXISTS `statsUpdateTasksWithPreReqs`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasksWithPreReqs`()
-BEGIN
-	SET @totalTasksWithPreReqs = 0;
-	SELECT count(DISTINCT tp.task_id) INTO @totalTasksWithPreReqs FROM TaskPrerequisites tp;	
-	REPLACE INTO Statistics (name, value)
-	VALUES ('TasksWithPreReqs', @totalTasksWithPreReqs);
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateOrganisations
-DROP PROCEDURE IF EXISTS `statsUpdateOrganisations`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrganisations`()
-BEGIN
-	SET @totalOrgs = 0;	
-	SELECT count(1) INTO @totalOrgs FROM Organisations;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Organisations', @totalOrgs);
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateUsers
-DROP PROCEDURE IF EXISTS `statsUpdateUsers`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateUsers`()
-BEGIN
-	SET @totalUsers = 0;	
-	SELECT count(1) INTO @totalUsers FROM Users;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Users', @totalUsers);
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateArchivedTasks
-DROP PROCEDURE IF EXISTS `statsUpdateArchivedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedTasks`()
-BEGIN
-	SET @totalArchivedTasks = 0;
-	SELECT count(1) INTO @totalArchivedTasks FROM ArchivedTasks;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('ArchivedTasks', @totalArchivedTasks);
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateClaimedTasks
-DROP PROCEDURE IF EXISTS `statsUpdateClaimedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateClaimedTasks`()
-BEGIN
-	SET @claimedTasks = 0;
-	SELECT count(1) INTO @claimedTasks FROM TaskClaims;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('ClaimedTasks', @claimedTasks);	
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateUnclaimedTasks
-DROP PROCEDURE IF EXISTS `statsUpdateUnclaimedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateUnclaimedTasks`()
-BEGIN
-        SET @unclaimedTasks = 0;
-        SELECT count(1) into @unclaimedTasks from Tasks t
-        WHERE t.id NOT IN
-        (
-            SELECT task_id
-            FROM  TaskClaims
-        );
-        REPLACE INTO Statistics (name, value)
-        VALUES ('UnclaimedTasks', @unclaimedTasks);
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTasks
-DROP PROCEDURE IF EXISTS `statsUpdateTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasks`()
-BEGIN
-	SET @totalTasks = 0;	
-	SELECT count(1) INTO @totalTasks FROM Tasks;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Tasks', @totalTasks);
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateBadges
-DROP PROCEDURE IF EXISTS `statsUpdateBadges`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateBadges`()
-BEGIN
-	SET @totalBadges = 0;
-	SELECT count(1) INTO @totalBadges FROM Badges;		
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Badges', @totalBadges);
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTags
-DROP PROCEDURE IF EXISTS `statsUpdateTags`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTags`()
-BEGIN
-	SET @totalTags = 0;
-	SELECT count(1) INTO @totalTags FROM Tags;		
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Tags', @totalTags);
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateOrgMemberRequests
-DROP PROCEDURE IF EXISTS `statsUpdateOrgMemberRequests`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrgMemberRequests`()
-BEGIN
-	SET @orgMemberRequests = 0;	
-	SELECT count(1) INTO @orgMemberRequests FROM OrgRequests;	
-	REPLACE INTO Statistics (name, value)
-	VALUES ('OrgMembershipRequests', @orgMemberRequests);
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getStatistics
-DROP PROCEDURE IF EXISTS `getStatistics`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatistics`(IN `statName` VARCHAR(128))
-BEGIN
-	IF statName = '' THEN SET statName = NULL; END IF;
-	
-	set @q = "SELECT * FROM Statistics st where 1";
-	
-	if statName is not null then 
-		set @q = CONCAT(@q," and st.name='", statName,"'");
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateAll
-DROP PROCEDURE IF EXISTS `statsUpdateAll`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateAll`()
-BEGIN
-	CALL statsUpdateArchivedProjects;
-	CALL statsUpdateArchivedTasks;
-	CALL statsUpdateBadges;
-	CALL statsUpdateClaimedTasks;
-	CALL statsUpdateOrganisations;
-	CALL statsUpdateOrgMemberRequests;
-	CALL statsUpdateProjects;
-	CALL statsUpdateTags;
-	CALL statsUpdateTasks;
-	CALL statsUpdateTasksWithPreReqs;
-	CALL statsUpdateUnclaimedTasks;
-	CALL statsUpdateUsers;
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateProjects
-DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
-BEGIN
-	SET @Projects = 0;		
-	SELECT count(1) INTO @Projects FROM Projects;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Projects', @Projects);	
-END//
-DELIMITER ;
 
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
 /*---------------------------------------start of triggers-----------------------------------------*/
+
 -- Dumping structure for trigger Solas-Match-Test.defaultUserName
 DROP TRIGGER IF EXISTS `defaultUserName`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
@@ -3158,6 +3170,7 @@ if new.`display-name` is null then set new.`display-name` = substring_index(new.
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
+
 
 -- Dumping structure for trigger Solas-Match-Test.updateDependentTaskOnComplete
 DROP TRIGGER IF EXISTS `updateDependentTaskOnComplete`;
@@ -3226,33 +3239,6 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger Solas-Match-Test.updateTaskStatsuOnAddPrereq
-DROP TRIGGER IF EXISTS `updateTaskStatusOnAddPrereq`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
-DELIMITER //
-CREATE TRIGGER `updateTaskStatusOnAddPrereq` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
-if exists 
-	(select 1 
-	 from Tasks t
-	 where t.id = new.task_id
-	 and t.`task-status_id`=2
-	 and exists (select 1 
-						  from TaskPrerequisites tp
-						  join Tasks tsk 
-                    on tsk.id=tp.`task_id-prerequisite`
-						  where tp.task_id=t.id
-						  and tsk.`task-status_id`!= 4 )
-	 )
-	 then
-		update Tasks set `task-status_id`=1
-			 where id = new.task_id;
-end if;
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
-
-
-
 -- Dumping structure for trigger Solas-Match-Test.updateTaskStatusDeletePrereq
 DROP TRIGGER IF EXISTS `updateTaskStatusDeletePrereq`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
@@ -3273,6 +3259,32 @@ if exists
 	 then
 		update Tasks set `task-status_id`=2
 			 where id = old.task_id;
+end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+
+-- Dumping structure for trigger Solas-Match-Test.updateTaskStatusOnAddPrereq
+DROP TRIGGER IF EXISTS `updateTaskStatusOnAddPrereq`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `updateTaskStatusOnAddPrereq` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
+if exists 
+	(select 1 
+	 from Tasks t
+	 where t.id = new.task_id
+	 and t.`task-status_id`=2
+	 and exists (select 1 
+						  from TaskPrerequisites tp
+						  join Tasks tsk 
+                    on tsk.id=tp.`task_id-prerequisite`
+						  where tp.task_id=t.id
+						  and tsk.`task-status_id`!= 4 )
+	 )
+	 then
+		update Tasks set `task-status_id`=1
+			 where id = new.task_id;
 end if;
 END//
 DELIMITER ;
@@ -3307,3 +3319,4 @@ SET SQL_MODE=@OLD_SQL_MODE;
 /*---------------------------------------end of triggers-------------------------------------------*/
 SET FOREIGN_KEY_CHECKS=1;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
