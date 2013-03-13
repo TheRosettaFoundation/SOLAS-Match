@@ -205,7 +205,7 @@ class UserRouteHandler
                 if (isset($post->confirmation_password) && 
                         $post->confirmation_password == $post->new_password) {
 
-                    $response = $userDao->resetRequest($post->new_password, $uid);
+                    $response = $userDao->resetPassword($post->new_password, $uid);
                     if ($response) {
                         $app->flash("success", "You have successfully changed your password");
                         $app->redirect($app->urlFor("home"));
