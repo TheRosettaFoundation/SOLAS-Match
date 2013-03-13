@@ -46,7 +46,7 @@
     </div>
 
     <div class="row">
-        <div class="pull-right">
+        <div class="span4 pull-right">
             {include file="tags.user-tags.inc.tpl"}	
             {include file="tags.top-list.inc.tpl"}
             {if isset($statsArray) && is_array($statsArray)}
