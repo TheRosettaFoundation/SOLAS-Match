@@ -832,22 +832,6 @@ class TaskRouteHandler
                     }
                 }
             }
-            
-            if(isset($post->feedback)) {
-                $taskDao->sendFeedback($task_id, array($post->revokeUserId), $feedback);
-                if(isset($post->revokeTask) && $post->revokeTask) {
-                    $taskRevoke = $userDao->unclaimTask($post->revokeUserId, $post->revokeTaskId);
-                    if($taskRevoke) {
-                        $app->flashNow("success", " The task 
-                            <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
-                            has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.");
-                    } else {
-                        $app->flashNow("error", " Unable to unclaim the task ".
-                            "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>. Please try again later.");                                
-                    }
-                }
-            }
-
         } 
         
         $taskMetaData = array();
@@ -1225,6 +1209,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
+        $userDao = new UserDao();
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
@@ -1233,6 +1218,27 @@ class TaskRouteHandler
         $organisation = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));          
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
+
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+
+            if(isset($post->feedback)) {
+                $taskDao->sendFeedback($task_id, array($claimant->getUserId()), $post->feedback);
+                if(isset($post->revokeTask) && $post->revokeTask) {
+                    $taskRevoke = $userDao->unclaimTask($claimant->getUserId(), $task_id);
+                    if($taskRevoke) {
+                        $app->flash("success", " The task ".
+                              "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".
+                              "has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.");
+                        $app->redirect($app->urlFor("home"));
+                    } else {
+                        $app->flashNow("error", " Unable to unclaim the task ".
+                              "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".
+                              ". Please try again later.");
+                    }
+                }
+            }
+        }
         
         $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();

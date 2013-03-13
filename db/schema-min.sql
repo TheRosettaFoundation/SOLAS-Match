@@ -2869,7 +2869,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID`
 BEGIN
 	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
       delete from TaskClaims where task_id=tID and user_id=uID;
-      insert into TaskTanslatorBlacklist (task_id,user_id) values (tID,uID);
+      insert into TaskTranslatorBlacklist (task_id,user_id) values (tID,uID);
       update Tasks set `task-status_id`=2 where id = tID;
 		select 1 as result;
 	else
