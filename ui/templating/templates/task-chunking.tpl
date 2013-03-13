@@ -40,7 +40,9 @@
                     <td colspan="4">
                         <label for="title"><h2>Chunking:</h2></label>
                         <p class="desc">Divide large source files into smaller and more managable tasks.<br />
-                            Recommended limit of approximately 2000 words or less per task.
+                            Recommended limit of approximately 2000 words or less per task.<br />
+                            If you would like to re-download the file click 
+                            <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>.
                         </p>
 
                         <hr/>

@@ -278,7 +278,7 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $siteApi = Settings::get("site.api");
-        $app->redirect("$siteApi/v0/tasks/$task_id/file/?version=$version&convertToXliff=$convert");   
+        $app->redirect("{$siteApi}v0/tasks/$task_id/file/?version=$version&convertToXliff=$convert");   
     }
 
     public function task($task_id)
