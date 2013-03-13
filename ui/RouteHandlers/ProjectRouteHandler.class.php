@@ -406,7 +406,7 @@ class ProjectRouteHandler
             }            
 
             
-            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && !$upload_error) { 
+            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && !$upload_error && is_null($impact_err)) { 
                 $project->setOrganisationId($org_id);
                 if($project = $projectDao->createProject($project)) {
                     $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
