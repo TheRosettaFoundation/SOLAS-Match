@@ -680,14 +680,19 @@ DROP PROCEDURE IF EXISTS `badgeInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `badgeInsertAndUpdate`(IN `badgeID` INT, IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` MEDIUMTEXT)
 BEGIN
-if not exists (select 1 from Badges b where b.id = badgeID) then
-	insert into Badges (owner_id,title,description) values (ownerID,name,disc);
-	select 1 as result;
-else
-	update Badges bg set bg.title = name, bg.description = disc
-	where bg.id = badgeID;
-	select 1 as result;
-end if;
+	if badgeID='' then set badgeID=null;end if;
+	if ownerID='' then set ownerID=null;end if;
+	if name='' then set name=null;end if;
+	if disc='' then set disc=null;end if;
+	
+	if not exists (select 1 from Badges b where b.id = badgeID) then
+		insert into Badges (owner_id,title,description) values (ownerID,name,disc);
+		CALL getBadge(LAST_INSERT_ID(), null, null, null);
+	else
+		update Badges bg set bg.title = name, bg.description = disc
+		where bg.id = badgeID;
+		CALL getBadge(BadgeID, null, null, null);
+	end if;
 END//
 DELIMITER ;
 
@@ -2941,6 +2946,7 @@ BEGIN
 	
 	insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
               values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
+            call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
 	else 
 		set @first = true;
 		set @q= "update Users u set ";-- set update
@@ -3022,10 +3028,8 @@ BEGIN
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
-
+   	call getUser(id,null,null,null,null,null,null,null,null);
 	end if;
-	
-	select u.id from Users u where u.email= email;
 END//
 DELIMITER ;
 

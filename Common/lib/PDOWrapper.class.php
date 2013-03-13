@@ -6,15 +6,17 @@
  * @author sean
  */
 
+require_once __DIR__.'/../Settings.class.php';
+
 class PDOWrapper {
 
-    private static $instance = null;
-    
-    private $logfile                    = ''; 
-    private $logging                    = false; // debug on or off
-    private $show_errors                = false; // output errors. true/false
-    private $show_sql                   = false; // turn off for production version.
-    private $use_permanent_connection   = false;
+    public static   $unitTesting                = false;
+    private static  $instance                   = null;
+    private         $logfile                    = ''; 
+    private         $logging                    = false; // debug on or off
+    private         $show_errors                = false; // output errors. true/false
+    private         $show_sql                   = false; // turn off for production version.
+    private         $use_permanent_connection   = false;
 
     // Do not change the variables below
     private $connection;
@@ -62,16 +64,27 @@ class PDOWrapper {
     {
         $conn = false;
         $ret = false;       
+        $dbName = self::$unitTesting ? Settings::get('db.unit_test_database') : Settings::get('db.database');
+        $server = self::$unitTesting ? Settings::get('db.unit_test_server') : Settings::get('db.server');
+        $server_port = self::$unitTesting ? Settings::get('db.unit_test_server_port') : Settings::get('db.server_port');
+        $username = self::$unitTesting ? Settings::get('db.unit_test_username') : Settings::get('db.username');
+        $password = self::$unitTesting ? Settings::get('db.unit_test_password') : Settings::get('db.password');
         
         if ($this->use_permanent_connection) {
-            $conn = new PDO("mysql:host=".Settings::get('db.server').";dbname=".Settings::get('db.database').";port=".Settings::get('db.server_port'),
-                            Settings::get('db.username'), Settings::get('db.password'),
+            $conn = new PDO("mysql:host=$server;dbname=$dbName;port=$server_port",
+                            $username, $password,
                             array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", PDO::ATTR_PERSISTENT => true));  
         } else {
-            $conn = new PDO("mysql:host=".Settings::get('db.server').";dbname=".Settings::get('db.database').";port=".Settings::get('db.server_port'),
-                            Settings::get('db.username'), Settings::get('db.password'),
+             $conn = new PDO("mysql:host=$server;dbname=$dbName;port=$server_port",
+                            $username, $password,
                             array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  
         }
+        
+        unset($password);
+        unset($dbName);
+        unset($server);
+        unset($server_port);
+        unset($username);
         
         if (!$conn) {
             $this->error_msg = "\r\n" . "Unable to connect to database - " . date('H:i:s');

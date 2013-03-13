@@ -69,7 +69,7 @@ class Badges {
                 $id = $id[0];
             }
             $dao = new BadgeDao();
-            $data = $dao->find(array('badge_id' => $id));
+            $data = $dao->getBadge(array('badge_id' => $id));
             if (is_array($data)) {
                 $data = $data[0];
             }
