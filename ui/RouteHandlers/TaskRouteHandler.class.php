@@ -1077,6 +1077,7 @@ class TaskRouteHandler
                         $this->setTaskModelData($taskModel, $project, $task, $i);
                         if(isset($post["translation_0"])) {
                             $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
+                            $taskModel->setWordCount($post["wordCount_$i"]);
                             $createdTranslation = $taskDao->createTask($taskModel);
                             try {                    
                                 $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);                    
@@ -1091,6 +1092,7 @@ class TaskRouteHandler
                         
                         if(isset($post["proofreading_0"])) {
                             $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);                         
+                            $taskModel->setWordCount($post["wordCount_$i"]);
                             $createdProofReading = $taskDao->createTask($taskModel);
                             try {                    
                                 $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);
@@ -1110,6 +1112,7 @@ class TaskRouteHandler
 
                 $taskModel = new Task();
                 $this->setTaskModelData($taskModel, $project, $task, 0);                       
+                $taskModel->setWordCount($task->getWordCount());
                 $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);                         
                 $createdPostEditing = $taskDao->createTask($taskModel);
                 $createdPostEditingId = $createdPostEditing->getId();

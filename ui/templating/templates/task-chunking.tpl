@@ -35,6 +35,7 @@
         {/if}
         <form method="post" enctype="multipart/form-data" action="{urlFor name="task-chunking" options="task_id.$task_id"}">
         <table border="0" width="100%">
+            <input type="hidden" id="totalWordCount" name="totalWordCount" value="{$task->getWordCount()}" />
             <tbody id="taskChunks">
                 <tr>
                     <td colspan="4">
@@ -56,9 +57,15 @@
                 </tr>
                 <tr>
                     <td id="chunkingElements"></td>  
-                    <td align="center" title="Create a translation task for volunteer translators to pick up." valign="middle"><input type="checkbox" id="translation_0" name="translation_0" value="y" /></td>
-                    <td align="center" title="Create a proofreading task for evaluating the translation provided by a volunteer." valign="middle"><input type="checkbox" id="proofreading_0" name="proofreading_0" value="y" /></td>
-                    <td align="center" title="Create a postediting task for merging together task chunks created by a chunking task." valign="middle"><input type="checkbox" id="postediting_0" checked="true" name="postediting_0" value="y" disabled /></td>                
+                    <td align="center" title="Create a translation task for volunteer translators to pick up." valign="middle">
+                        <input type="checkbox" id="translation_0" name="translation_0" value="y" />
+                     </td>
+                    <td align="center" title="Create a proofreading task for evaluating the translation provided by a volunteer." valign="middle">
+                        <input type="checkbox" id="proofreading_0" name="proofreading_0" value="y" />
+                    </td>
+                    <td align="center" title="Create a postediting task for merging together task chunks created by a chunking task." valign="middle">
+                        <input type="checkbox" id="postediting_0" checked="true" name="postediting_0" value="y" disabled />
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="5">
@@ -66,9 +73,11 @@
                     </td>
                 </tr>
                 <tr id="taskUploadTemplate_0" valign="top">
-                    <td colspan="4"> 
+                    <td colspan="4">
                         <p class="desc">Upload your chunked file. Max file size is 8 MB.</p>
                         <input type="file" name="chunkUpload_0" id="chunkUpload_0"/>
+                        <label>Word Count:</label>
+                        <input type="text" name="wordCount_0" id="wordCount_0" />
                         <hr/>
                     </td>                
                 </tr>
@@ -76,6 +85,8 @@
                     <td colspan="4"> 
                         <p class="desc">Upload your chunked file. Max file size is 8 MB.</p>
                         <input type="file" name="chunkUpload_1" id="chunkUpload_1"/>
+                        <label>Word Count:</label>
+                        <input type="text" name="wordCount_1" id="wordCount_1" />
                         <hr/>
                     </td>                
                 </tr>
