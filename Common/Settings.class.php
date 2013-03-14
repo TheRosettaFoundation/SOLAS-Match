@@ -2,28 +2,27 @@
 
 class Settings {
 
-    private static $settings = array();
-    private function __construct() {}
-
     public static function get($var)
     {
-        self::load(dirname(__FILE__).'/conf/conf.ini');
+        $settings = self::load(dirname(__FILE__).'/conf/conf.ini');
         $var = explode('.', $var);
-        if (isset(self::$settings[$var[1]])) {
-            return self::$settings[$var[1]];
+        if (isset($settings[$var[0]][$var[1]])) {
+            return $settings[$var[0]][$var[1]];
         } else {
-            throw new BadMethodCallException('Could not load the requested setting ' . $var);
+            throw new BadMethodCallException('Could not load the requested setting ' . $var[0] . ".". $var[1]);
         }
     }
 
     private static function load($file)
     {
+        $settings = array();
         if (file_exists($file)) {
-            self::$settings = parse_ini_file($file);
+            $settings = parse_ini_file($file, true);
             //This updates the upload path to be absolute
-            self::$settings['upload_path'] = __DIR__."/../".self::$settings['upload_path'];
+            $settings['files']['upload_path'] = __DIR__."/../".$settings['files']['upload_path'];
         } else {
             echo "<p>Could not load ini file</p>";
         }
+        return $settings;
     }
 }

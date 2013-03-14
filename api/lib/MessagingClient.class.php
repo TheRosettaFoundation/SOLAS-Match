@@ -30,8 +30,8 @@ class MessagingClient
     {
         $this->host = Settings::get('messaging.host');
         $this->port = Settings::get('messaging.port');
-        $this->user = Settings::get('messaging.mess_user');
-        $this->pass = Settings::get('messaging.mess_pass');
+        $this->user = Settings::get('messaging.username');
+        $this->pass = Settings::get('messaging.password');
         $vhost = Settings::get('messaging.virtualhost');
         if ($vhost != '') {
             $this->vhost = $vhost;
