@@ -43,50 +43,8 @@ class OrgRouteHandler
 
     public function createOrg()
     {
-        $app = Slim::getInstance();
-        if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-
-            $org = new Organisation(null);
-            if (isset($post->name) && $post->name != null) {
-                $org->setName($post->name);
-            }
-
-            if (isset($post->home_page) && ($post->home_page != "" || $post->home_page != "http://")) {
-                $org->setHomePage($post->home_page);
-            }
-
-            if (isset($post->bio) && $post->bio != "") {
-                $org->setBiography($post->bio);
-            }
-
-            if ($org->getName() != "") {
-
-                $orgDao = new OrganisationDao();
-                $organisation = $orgDao->getOrganisation(array('name' => $org->getName()));
-                  
-                if (!$organisation) {
-                    $new_org = $orgDao->createOrg($org);
-                    if ($new_org) {
-                        $user_id = UserSession::getCurrentUserID();
-                        $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
-                        $org_name = $org->getName();
-                        $app->flashNow("success", "Organisation $org_name has been created. 
-                                            Visit the <a href=\"{$app->urlFor("org-dashboard")}
-                                            \">client dashboard</a> to start uploading tasks.");
-                    } else {
-                        $app->flashNow("error", "Unable to save Organisation.");
-                    }
-                } else {
-                    $org_name = $org->getName();
-                    $app->flashNow("error", "An Organisation named $org_name is already registered
-                                            with SOLAS Match. Please use a different name.");
-                }
-            } else {
-                $app->flashNow("error", "You must specify a name for the organisation.");
-            }
-        }        
-       $app->render("create-org.tpl");
+        $app = Slim::getInstance();      
+        $app->render("create-org.tpl");
     }    
 
     public function orgDashboard()
@@ -101,17 +59,53 @@ class OrgRouteHandler
         $current_user = $userDao->getUser(array('id' => $current_user_id));        
         $my_organisations = $userDao->getUserOrgs($current_user_id);
         $org_projects = array();
-        $orgs = array();
-        foreach ($my_organisations as $org) {
-            $my_org_projects = $orgDao->getOrgProjects($org->getId());
-            $org_projects[$org->getId()] = $my_org_projects;
-            $orgs[$org->getId()] = $org;
-        }    
         
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
+            
+            if(isset($post->submit) && $post->submit == 'createOrg') {
+            
+                $org = new Organisation(null);
+                if (isset($post->name) && $post->name != null) {
+                    $org->setName($post->name);
+                }
+
+                if (isset($post->home_page) && ($post->home_page != "" || $post->home_page != "http://")) {
+                    $org->setHomePage($post->home_page);
+                }
+
+                if (isset($post->bio) && $post->bio != "") {
+                    $org->setBiography($post->bio);
+                }
+
+                if ($org->getName() != "") {
+
+                    $orgDao = new OrganisationDao();
+                    $organisation = $orgDao->getOrganisation(array('name' => $org->getName()));
+
+                    if (!$organisation) {
+                        $new_org = $orgDao->createOrg($org);
+                        if ($new_org) {
+                            $my_organisations[] = $new_org;
+                            $user_id = UserSession::getCurrentUserID();
+                            $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
+                            $org_name = $org->getName();
+                            $app->flashNow("success", "Organisation $org_name has been created.");
+                        } else {
+                            $app->flashNow("error", "Unable to save Organisation.");
+                        }
+                    } else {
+                        $org_name = $org->getName();
+                        $app->flashNow("error", "An Organisation named $org_name is already registered
+                                                with SOLAS Match. Please use a different name.");
+                    }
+                } else {
+                    $app->flashNow("error", "You must specify a name for the organisation.");
+                }
+            }
+            
             if (isset($post->track)) {
-                $task_id = $post->project_id;
+                $project_id = $post->project_id;
                 $project = $projectDao->getProject(array('id' => $project_id));
 
                 $project_title = "";
@@ -138,6 +132,13 @@ class OrgRouteHandler
                     $app->flashNow("error", "Invalid POST type");
                 }
             }
+        }
+        
+        $orgs = array();
+        foreach ($my_organisations as $org) {
+            $my_org_projects = $orgDao->getOrgProjects($org->getId());
+            $org_projects[$org->getId()] = $my_org_projects;
+            $orgs[$org->getId()] = $org;
         }
         
         if (count($org_projects) > 0) {

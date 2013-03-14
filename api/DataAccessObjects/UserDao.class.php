@@ -33,21 +33,17 @@ class UserDao {
 
     public function create($email, $clear_password)
     {
-        if (is_object($this->getUser(null, $email, null, null, null, null, null, null, null))) {
+        if (is_array($ret=$this->getUser(null, $email, null, null, null, null, null, null, null)&&!empty($ret))) {
             throw new InvalidArgumentException('Oops, you already have an account here with that email address.
                                                 Please log in instread.');
         }
 
         $nonce = Authentication::generateNonce();
         $password = Authentication::hashPassword($clear_password, $nonce);
-
-        $user_data = array(
-                'email' => $email,
-                'nonce' => $nonce,
-                'password' => $password
-        );
-
-        $user = ModelFactory::buildModel("User", $user_data);
+        $user = new User();
+        $user->setEmail($email);
+        $user->setNonce($nonce);
+        $user->setPassword($password);
         return $this->save($user);
     }
 
@@ -154,12 +150,15 @@ class UserDao {
     public function apiRegister($email, $clear_password)
     {
         $user = $this->getUser(null, $email, null, null, null, null, null, null, null);
+        
+        if(is_array($user)) {
+            $user = $user[0];
+        }
 
         if (!is_object($user) && $clear_password != "") {
             $user = $this->create($email, $clear_password);
             $badge_dao = new BadgeDao();
-            $badge = $badge_dao->find(array('badge_id' => BadgeTypes::REGISTERED));
-            $badge_dao->assignBadge($user, $badge);
+            $badge_dao->assignBadgeByID($user->getUserId(), BadgeTypes::REGISTERED);
         } else {
             $user = null;
             //array("message"=>'sorry the account you enerted already exists.

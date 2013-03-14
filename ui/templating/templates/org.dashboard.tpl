@@ -1,11 +1,10 @@
 {include file="header.tpl"}
 
-    <div class="page-header">
+    <div class="page-header" style="margin-bottom: 50px">
         <h1>
             Organisation Dashboard <small>Overview of projects created by your organisation(s).</small>
         </h1>
     </div>
-    <p style="margin-bottom:60px"/>
 {if isset($flash['success'])}
     <p class="alert alert-success">
         {$flash['success']}
@@ -20,7 +19,6 @@
 
 {if isset($orgs)}
     {foreach $orgs as $org}
-        <hr />
         {assign var="org_id" value=$org->getId()}
 
         <div style="display: inline-block; overflow-wrap: break-word; word-break:break-all; font-weight: bold; font-size: large; max-width: 70%">
@@ -38,7 +36,7 @@
         </div>
                 
         <hr />           
-        <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all;">
+        <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; margin-bottom:50px">
         <thead>
             <th>Title</th>
             <th>Deadline</th>
@@ -107,7 +105,6 @@
    
         </tbody>
         </table> 
-        <p style="margin-bottom:60px"/>
     {/foreach}
 
 {else}

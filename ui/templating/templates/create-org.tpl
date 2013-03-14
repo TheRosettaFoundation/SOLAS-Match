@@ -7,19 +7,7 @@
     </small>
 </h1>
 
-{if isset($flash['error'])}
-    <div class="alert alert-error">
-        <p><strong>Warning!</strong> {$flash['error']}</p>
-    </div>
-{/if}
-
-{if isset($flash['success'])}
-    <div class="alert alert-success">
-        <p>{$flash['success']}</p>
-    </div>
-{/if}
-
-<form method="post" action="{urlFor name="create-org"}" class="well">
+<form method="post" action="{urlFor name="org-dashboard"}" class="well">
     <label for="name"><strong>Organisation Name:</strong></label>
     <input type="text" name="name" />
 
@@ -30,7 +18,7 @@
     <textarea name="bio" cols="40" rows="5" placeholder="Explain what the purpose of your organisation is."></textarea>
 
     <p>
-        <button type="submit" class="btn btn-success">
+        <button type="submit" name="submit" value="createOrg" class="btn btn-success">
             <i class="icon-star icon-white"></i> Create Organisation
         </button>            
     </p>

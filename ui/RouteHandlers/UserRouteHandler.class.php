@@ -344,8 +344,10 @@ class UserRouteHandler
             if ($openid->validate()) {
                 $userDao = new UserDao();
                 $user = $userDao->getUser(array('email' => $retvals['contact/email']));
-                if (is_null($user)) {
-                    $user = $userDao->register($retvals["contact/email"], $retvals["contact/email"]);
+                if(is_array($user)) $user = $user[0];                    
+                if(is_null($user)) {
+                    $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));
+                    if(is_array($user)) $user = $user[0]; 
                     UserSession::setSession($user->getUserId());
                     return false;
                 }
