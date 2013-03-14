@@ -166,7 +166,13 @@ class ProjectDao
     public function archiveProject($projectId, $userId)
     {
         $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId);
-        PDOWrapper::call("archiveProject", $args);
+        $result = PDOWrapper::call("archiveProject", $args);
+        
+        if($result) {
+            return ModelFactory::buildModel("ArchivedProject", $result[0]);
+        } else {
+            return null;
+        }
     }
 
     public function getArchivedProject($params)

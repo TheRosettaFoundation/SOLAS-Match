@@ -5,17 +5,19 @@
             Organisation Dashboard <small>Overview of projects created by your organisation(s).</small>
         </h1>
     </div>
+
 {if isset($flash['success'])}
-    <p class="alert alert-success">
+    <p class="alert alert-success" style="margin-bottom: 50px">
         {$flash['success']}
     </p>
 {/if}
 
 {if isset($flash['error'])}
-    <p class="alert alert-error">
+    <p class="alert alert-error" style="margin-bottom: 50px">
         {$flash['error']}
     </p>
 {/if}
+
 
 {if isset($orgs)}
     {foreach $orgs as $org}

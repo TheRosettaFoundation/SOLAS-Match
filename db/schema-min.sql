@@ -626,6 +626,8 @@ BEGIN
         VALUES (projectId, NOW(), user_id);
 
     DELETE FROM Projects WHERE id=projectId;
+    
+    CALL getArchivedProject(projectId, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 END//
 DELIMITER ;
 
@@ -798,12 +800,13 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getArchivedProject
 DROP PROCEDURE IF EXISTS `getArchivedProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT)
     READS SQL DATA
 BEGIN
     if projectId='' then set projectId=null;end if;
     if titleText='' then set titleText=null;end if;
     if descr='' then set descr=null;end if;
+    if imp='' then set imp=null;end if;
     if deadlineTime='' then set deadlineTime=null;end if;
     if orgId='' then set orgId=null;end if;
     if ref='' then set ref=null;end if;
@@ -812,7 +815,7 @@ BEGIN
     if archiveDate='' then set archiveDate=null;end if;
     if archiverId='' then set archiverId=null;end if;
 
-    set @q = "SELECT * FROM ArchivedProjects p JOIN ArchivedProjectsMetaData m ON p.id=m.`archived-project_id` WHERE 1";
+    set @q = "SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, (select code from Languages where id =p.language_id) as language_id, (select code from Countries where id =p.country_id) as country_id, m.`archived-date`, m.`user_id-archived` FROM ArchivedProjects p JOIN ArchivedProjectsMetaData m ON p.id=m.`archived-project_id` WHERE 1";
     if projectId is not null then
         set @q = CONCAT(@q, " and p.id=", projectId);
     end if;
@@ -821,6 +824,9 @@ BEGIN
     end if;
     if descr is not null then
         set @q = CONCAT(@q, " and description='", descr, "'");
+    end if;
+    if imp is not null then
+        set @q = CONCAT(@q, " and impact='", imp, "'");
     end if;
     if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
         set @q = CONCAT(@q, " and deadline='", deadlineTime, "'");
@@ -838,10 +844,10 @@ BEGIN
         set @q = CONCAT(@q, " and created='", createdTime, "'");
     end if;
     if (archiveDate is not null and archiveDate!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and `archived-date`='", archiveDate, "'");
+        set @q = CONCAT(@q, " and m.`archived-date`='", archiveDate, "'");
     end if;
     if archiverId is not null then
-        set @q = CONCAT(@q, " and `user_id-archived`=", archiverId);
+        set @q = CONCAT(@q, " and m.`user_id-archived`=", archiverId);
     end if;
 
     PREPARE stmt from @q;
@@ -2005,7 +2011,7 @@ BEGIN
         INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id) VALUES (titleText, descr, impact, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID);
         #select (projectId, titleText, descr, deadlineTime, orgId, ref, wordCount, createdTime,sCC,sCode);
 #        call getProject(projectId, title, descr, deadlineTime, orgId, ref, wordCount, createdTime,sCC,sCode);
-         call getProject(LAST_INSERT_ID(),'', '', '', '', '','', '', '','','');
+         call getProject(LAST_INSERT_ID(), NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL,NULL,NULL);
     elseif EXISTS (select 1 FROM Projects p WHERE p.id=projectId) then
         set @first = true;
         set @q = "UPDATE Projects p set";
@@ -2099,7 +2105,7 @@ BEGIN
         PREPARE stmt FROM @q;
         EXECUTE stmt;
         DEALLOCATE PREPARE stmt;
-        call getProject(projectId, '', '', '', '','', '', '','','', '');
+        call getProject(projectId, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     end if;
 END//
 DELIMITER ;

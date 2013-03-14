@@ -74,6 +74,8 @@ class ProjectDao
     {
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $ret = $this->client->cast("ArchivedProject", $response);
+        return $ret;
     }
 
     public function getArchivedProject($params)
@@ -88,7 +90,7 @@ class ProjectDao
         }
 
         $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Project"), $response);
+        $ret = $this->client->cast(array("ArchivedProject"), $response);
 
         if (!is_null($id) && is_array($ret)) {
             $ret = $ret[0];
