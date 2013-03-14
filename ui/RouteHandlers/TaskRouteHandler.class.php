@@ -213,7 +213,12 @@ class TaskRouteHandler
             $app->redirect($app->urlFor("login"));
         }   
         
-        $taskDao->archiveTask($task_id, $user_id);        
+        if($result = $taskDao->archiveTask($task_id, $user_id)) {
+            $app->flash("success", "You have successfully archived the task <b>{$task->getTitle()}</b>.");
+        } else {
+            $app->flash("error",  "There was an error archiving the task <b>{$task->getTitle()}</b>.");
+        }    
+             
         $app->redirect($ref = $app->request()->getReferrer());
     }
 
@@ -1153,14 +1158,11 @@ class TaskRouteHandler
                 $taskDao->updateTask($task); 
                 $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
             } else {
-                if(!empty($errors)) {
-                    $app->view()->appendData(array(
-                        "errors" => $errors
-                    ));   
-                }
+                $app->view()->appendData(array(
+                    "errors" => $errors
+                )); 
             }
-        }  
-    
+        }      
         
         $extraScripts = file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-chunking.js");
         

@@ -162,7 +162,8 @@ class TaskDao
     public function archiveTask($taskId, $userId)
     {
         $request = "{$this->siteApi}v0/tasks/archiveTask/$taskId/user/$userId";
-        $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        return $response;
     }
 
     public function setTaskTags($task)

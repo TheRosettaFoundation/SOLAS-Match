@@ -24,7 +24,7 @@
 
 {if isset($flash['error'])}
     <p class="alert alert-error">
-        <strong>Warning!</strong> {$flash['error']}
+        {$flash['error']}
     </p>
 {/if}
 
