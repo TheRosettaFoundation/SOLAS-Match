@@ -34,12 +34,19 @@
             </div>        
         {/if}
         <form method="post" enctype="multipart/form-data" action="{urlFor name="task-chunking" options="task_id.$task_id"}">
+        <input type="hidden" id="totalWordCount" name="totalWordCount" value="{$task->getWordCount()}" />
         <table border="0" width="100%">
-            <input type="hidden" id="totalWordCount" name="totalWordCount" value="{$task->getWordCount()}" />
             <tbody id="taskChunks">
+                <input type="hidden" id="totalWordCount" name="totalWordCount" value="{$task->getWordCount()}" />
                 <tr>
                     <td colspan="4">
-                        <label for="title"><h2>Chunking:</h2></label>
+                        <label for="title">
+                            <h2>Chunking:
+                                <a href="{urlFor name="task-user-feedback" options="task_id.$task_id"}" style="float: right" class="btn btn-success">
+                                    <i class="icon-upload icon-white"></i> Provide Feedback
+                                </a>
+                            </h2>
+                        </label>
                         <p class="desc">Divide large source files into smaller and more managable tasks.<br />
                             Recommended limit of approximately 2000 words or less per task.<br />
                             If you would like to re-download the file click 
@@ -48,6 +55,7 @@
 
                         <hr/>
                     </td>    
+
                 </tr>
                 <tr>
                     <td><strong>Number of chunks:</strong></td>         
