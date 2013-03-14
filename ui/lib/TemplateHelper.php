@@ -55,6 +55,22 @@ class TemplateHelper {
         }
         return $print;
     }
+    
+    public static function getTaskTypeFromId($taskTypeId)
+    {
+        switch ($taskTypeId) {
+            case TaskTypeEnum::POSTEDITING:
+                return "Postediting";
+            case TaskTypeEnum::TRANSLATION:
+                return "Translation";
+            case TaskTypeEnum::PROOFREADING:
+                return "Proofreading";
+            case TaskTypeEnum::CHUNKING:
+                return "Chunking";
+            default:
+                return "Unknown Task Type";
+        }
+    }
 
     public static function isValidEmail($email) 
     {   

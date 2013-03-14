@@ -486,6 +486,9 @@ class ModelFactory
         if(isset($modelData['description'])) {
             $ret->setDescription($modelData['description']);
         }
+        if(isset($modelData['impact'])) {
+            $ret->setImpact($modelData['impact']);
+        }
         if(isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
@@ -500,6 +503,12 @@ class ModelFactory
         }
         if(isset($modelData['created'])) {
             $ret->setCreatedTime($modelData['created']);
+        }
+        if(isset($modelData['language_id'])) {
+            $ret->setLanguageCode($modelData['language_id']);
+        }
+        if(isset($modelData['country_id'])) {
+            $ret->setCountryCode($modelData['country_id']);
         }
         if(isset($modelData['archived-date'])) {
             $ret->setArchivedDate($modelData['archived-date']);
