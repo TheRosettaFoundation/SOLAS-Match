@@ -64,11 +64,11 @@ class PDOWrapper {
     {
         $conn = false;
         $ret = false;       
-        $dbName = self::$unitTesting ? Settings::get('database.unit_test_database') : Settings::get('database.database');
-        $server = self::$unitTesting ? Settings::get('database.unit_test_server') : Settings::get('database.server');
-        $server_port = self::$unitTesting ? Settings::get('database.unit_test_server_port') : Settings::get('database.server_port');
-        $username = self::$unitTesting ? Settings::get('database.unit_test_username') : Settings::get('database.username');
-        $password = self::$unitTesting ? Settings::get('database.unit_test_password') : Settings::get('database.password');
+        $dbName = self::$unitTesting ? Settings::get('unit_test.database') : Settings::get('database.database');
+        $server = self::$unitTesting ? Settings::get('unit_test.server') : Settings::get('database.server');
+        $server_port = self::$unitTesting ? Settings::get('unit_test.port') : Settings::get('database.server_port');
+        $username = self::$unitTesting ? Settings::get('unit_test.username') : Settings::get('database.username');
+        $password = self::$unitTesting ? Settings::get('unit_test.password') : Settings::get('database.password');
         
         if ($this->use_permanent_connection) {
             $conn = new PDO("mysql:host=$server;dbname=$dbName;port=$server_port",

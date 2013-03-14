@@ -71,7 +71,8 @@ class StatDao {
     public static function getStatistics($name)
     {
         $ret = null;
-        if ($result = PDOWrapper::call('getStatistics', PDOWrapper::cleanseNullOrWrapStr($name))) {
+        $result = PDOWrapper::call('getStatistics', PDOWrapper::cleanseNullOrWrapStr($name));
+        if ($result) {
             
             $ret = array();
             foreach ($result as $row) {
