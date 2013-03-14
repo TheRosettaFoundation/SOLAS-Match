@@ -213,10 +213,11 @@ class TaskRouteHandler
             $app->redirect($app->urlFor("login"));
         }   
         
+        $taskType = TemplateHelper::getTaskTypeFromId($task->getTaskType());
         if($result = $taskDao->archiveTask($task_id, $user_id)) {
-            $app->flash("success", "You have successfully archived the task <b>{$task->getTitle()}</b>.");
+            $app->flash("success", "You have successfully archived the <b>$taskType Task {$task->getTitle()}</b>.");
         } else {
-            $app->flash("error",  "There was an error archiving the task <b>{$task->getTitle()}</b>.");
+            $app->flash("error",  "There was an error archiving the <b>$taskType Task {$task->getTitle()}</b>.");
         }    
              
         $app->redirect($ref = $app->request()->getReferrer());

@@ -123,70 +123,72 @@
                                               
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="2">
-                            <hr/>
-                        </td> 
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <h2>Task Prerequisite(s):</h2>
-                            <p class="desc">Assign prerequisites for this task - if any.</p>
-                            <p>
-                                These are tasks that must be completed before the current task becomes available.
-                            </p>
-                            <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all;" width="100%" >
-                                <thead>
-                                    <th>Assign</th>
-                                    <th>Title</th>
-                                    <th>Source Language</th>
-                                    <th>Target Language</th>
-                                    <th>Type</th>
-                                    <th>Status</th>
-                                </thead>
-                                {assign var="i" value=0}
-                                {foreach $projectTasks as $projectTask}                                    
-                                    {assign var="type_id" value=$projectTask->getTaskType()}
-                                    {assign var="status_id" value=$projectTask->getTaskStatus()}
-                                    {assign var="task_id" value=$projectTask->getId()}
-                                    <tr style="overflow-wrap: break-word;">
-                                        <td>
-                                            <input type="checkbox" name="preReq_{$i}" value="{$task_id}"/>
-                                            {assign var="i" value=$i+1}
-                                        </td>
-                                        <td>
-                                            <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$projectTask->getTitle()}</a>
-                                        </td>
-                                        <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
-                                        <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
-                                        <td>                                            
-                                            {if $type_id == TaskTypeEnum::CHUNKING}
-                                                <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>                                    
-                                            {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                                                <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span> 
-                                            {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                                                <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span> 
-                                            {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                                                <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span> 
-                                            {/if}
-                                        </td>
-                                        <td>                                            
-                                            {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
-                                                Waiting
-                                            {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
-                                                Unclaimed
-                                            {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                                <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">In Progress</a>
-                                            {elseif $status_id == TaskStatusEnum::COMPLETE}
-                                                <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">Complete</a>
-                                            {/if}
-                                        </td>
-                                    </tr>
-                                {/foreach}
-                                <input type="hidden" name="totalTaskPreReqs" value="{$i}" />
-                            </table>                            
-                        </td>
-                    </tr>
+                    {if !is_null($projectTasks)}
+                        <tr>
+                            <td colspan="2">
+                                <hr/>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h2>Task Prerequisite(s):</h2>
+                                <p class="desc">Assign prerequisites for this task - if any.</p>
+                                <p>
+                                    These are tasks that must be completed before the current task becomes available.
+                                </p>
+                                <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all;" width="100%" >
+                                    <thead>
+                                        <th>Assign</th>
+                                        <th>Title</th>
+                                        <th>Source Language</th>
+                                        <th>Target Language</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                    </thead>
+                                    {assign var="i" value=0}
+                                    {foreach $projectTasks as $projectTask}                                    
+                                        {assign var="type_id" value=$projectTask->getTaskType()}
+                                        {assign var="status_id" value=$projectTask->getTaskStatus()}
+                                        {assign var="task_id" value=$projectTask->getId()}
+                                        <tr style="overflow-wrap: break-word;">
+                                            <td>
+                                                <input type="checkbox" name="preReq_{$i}" value="{$task_id}"/>
+                                                {assign var="i" value=$i+1}
+                                            </td>
+                                            <td>
+                                                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$projectTask->getTitle()}</a>
+                                            </td>
+                                            <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
+                                            <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
+                                            <td>                                            
+                                                {if $type_id == TaskTypeEnum::CHUNKING}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>                                    
+                                                {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span> 
+                                                {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span> 
+                                                {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span> 
+                                                {/if}
+                                            </td>
+                                            <td>                                            
+                                                {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                                                    Waiting
+                                                {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                                    Unclaimed
+                                                {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                                    <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">In Progress</a>
+                                                {elseif $status_id == TaskStatusEnum::COMPLETE}
+                                                    <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">Complete</a>
+                                                {/if}
+                                            </td>
+                                        </tr>
+                                    {/foreach}
+                                    <input type="hidden" name="totalTaskPreReqs" value="{$i}" />
+                                </table>                            
+                            </td>
+                        </tr>
+                    {/if}
                     <tr>
                         <td colspan="2">
                             <hr/>
