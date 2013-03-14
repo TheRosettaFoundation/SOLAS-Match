@@ -1296,7 +1296,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscribedUsers`(IN `taskId` INT)
 BEGIN
     SELECT *
-    FROM UserNotifications
+    FROM UserTrackedTasks
     WHERE task_id = taskId;
 END//
 DELIMITER ;

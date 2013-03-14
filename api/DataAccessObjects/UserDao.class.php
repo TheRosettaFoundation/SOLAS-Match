@@ -447,7 +447,7 @@ class UserDao {
             $uid = $request->getKey();
         }
         
-        Notify::sendPasswordResetEmail($uid, $user_id);
+        Notify::sendPasswordResetEmail($user_id);
         return 1;
     }    
     

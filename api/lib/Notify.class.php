@@ -48,15 +48,12 @@ class Notify
         }
     }
 
-    public static function sendPasswordResetEmail($uid, $user_id)
+    public static function sendPasswordResetEmail($user_id)
     {
-        $userDao = new UserDao();
-        $user = $userDao->find(array('user_id' => $user_id));
-
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
             $message_type = new PasswordResetEmail();
-            $message_type->user_id = $user->getUserId();
+            $message_type->user_id = $user_id;
             $message = $messagingClient->createMessageFromProto($message_type);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                     $messagingClient->PasswordResetTopic);
