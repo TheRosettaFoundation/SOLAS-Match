@@ -616,18 +616,21 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject`(IN `projectId` INT, IN `user_id` INT)
     MODIFIES SQL DATA
 BEGIN
-    INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,country_id,language_id)
+    if not exists(select 1 from ArchivedProjects where id = projectId) then
+            INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,country_id,language_id)
 
-        SELECT *
-        FROM Projects p
-        WHERE p.id=projectId;
+              SELECT *
+              FROM Projects p
+              WHERE p.id=projectId;
 
-    INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`, `archived-date`, `user_id-archived`)
-        VALUES (projectId, NOW(), user_id);
+            INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`, `archived-date`, `user_id-archived`)
+              VALUES (projectId, NOW(), user_id);
 
-    DELETE FROM Projects WHERE id=projectId;
-    
-    CALL getArchivedProject(projectId, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+            DELETE FROM Projects WHERE id=projectId;
+            SELECT 1 as result;
+    else
+            SELECT 0 as result;
+    end if;	    
 END//
 DELIMITER ;
 
