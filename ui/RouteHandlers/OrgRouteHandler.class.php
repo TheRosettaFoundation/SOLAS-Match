@@ -359,12 +359,23 @@ class OrgRouteHandler
             } elseif (isset($post->accept)) {
                 if ($user_id = $post->user_id) {
                     $orgDao->acceptMembershipRequest($org_id, $user_id);
+                    $user = $userDao->getUser(array('id' => $user_id));
+                    $user_name = $user->getDisplayName();
+                    $org_name = $org->getName();
+                    $app->flashNow("success", "Successfully added ".
+                            "<a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">".
+                            "$user_name</a> as a member of $org_name");
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
             } elseif (isset($post->refuse)) {
                 if ($user_id = $post->user_id) {
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
+                    $user = $userDao->getUser(array('id' => $user_id));
+                    $user_name = $user->getDisplayName();
+                    $app->flashNow("success", "Successfully rejected 
+                            <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">
+                            $user_name's</a> membership request.");
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
