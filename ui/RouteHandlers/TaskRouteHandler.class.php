@@ -1117,6 +1117,9 @@ class TaskRouteHandler
                     if(isset($post["proofreading_0"])) {
                         $taskDao->addTaskPreReq($createdPostEditingId, $proofreadTaskIds[$i]);
                     }
+                    if(isset($post["translation_0"]) && !isset($post["proofreading_0"])) {   
+                        $taskDao->addTaskPreReq($createdPostEditingId, $translationTaskIds[$i]);
+                    }
                 }
                 
                 $task->setTaskStatus(TaskStatusEnum::COMPLETE);
