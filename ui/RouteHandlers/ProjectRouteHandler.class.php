@@ -425,8 +425,10 @@ class ProjectRouteHandler
                 $file_upload_err = $e->getMessage();
             }
             
+
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && is_null($upload_error)
-                    && is_null($uniqueLanguageCountry_err)) {                 
+                && is_null($uniqueLanguageCountry_err)) { 
+                
                 $project->setOrganisationId($org_id);
                 if($project = $projectDao->createProject($project)) {
                     $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);

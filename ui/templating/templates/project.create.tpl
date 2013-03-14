@@ -79,7 +79,7 @@
 
                         <label for="reference"><h2>Reference:</h2></label>
                         <p class="desc">Enter a URL that gives context to this project.</p>
-                        <textarea wrap="soft" cols="1" rows="3" name="reference">{if isset($project)}{$project->getReference()}{/if}</textarea>    
+                        <input type="text" name="reference" {if isset($project)}value="{$project->getReference()}"{/if} />    
                     </td>
                     <td width="493" align="center" valign="middle">    
                         <div style="margin-bottom:25px;">
@@ -98,14 +98,14 @@
                                     value="{if isset($project)}{$project->getWordCount()}{/if}"/>
                         </div>                    
                         <div style="margin-bottom:25px;">                    
-                            <label for="deadline"><h2>Deadline: <span style="color: red">*</span></h2></label>
+                            <label><h2>Deadline: <span style="color: red">*</span></h2></label>
                             <p class="desc">When the project and its tasks should be completed by.</p>
                             <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}{/if}"/>                    
                         </div>
                         <div style="margin-bottom:25px;">
                             <label for="tags"><h2>Tags:</h2></label>
                             <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                            <textarea wrap="soft" cols="1" rows="3" name="tags">{if isset($tagList)}{$tagList}{/if}</textarea>
+                            <input type="text" name="tags" {if isset($tagList)} value="{$tagList}"{/if} />
                         </div>
                         <div style="margin-bottom:25px;">
                             <label for="publishtasks"><h2>Publish Tasks:</h2></label>

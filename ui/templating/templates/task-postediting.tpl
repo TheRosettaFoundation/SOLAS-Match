@@ -19,7 +19,12 @@
 
     <div class="well">
         <div class="page-header">
-            <h1>{$task->getTitle()} <small>Post-Editing task details</small></h1>
+            <h1>
+                {$task->getTitle()} <small>Post-Editing task details</small>
+                <a href="{urlFor name="task-user-feedback" options="task_id.$task_id"}" style="float: right" class="btn btn-success">
+                    <i class="icon-upload icon-white"></i> Provide Feedback
+                </a>
+            </h1>
         </div>
 
         {if $errorMessage}

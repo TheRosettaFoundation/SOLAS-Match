@@ -25,6 +25,8 @@
         </small>  
     </h1>
 
+    {include file="handle-flash-messages.tpl"}
+
     <table class="table table-striped" width="100%">
         <thead>
             <th width="25%">Source</th>
@@ -107,11 +109,9 @@
 
     <div class="well">
         <strong>Organisation Feedback:</strong><hr/>    
-        <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.{$task->getId()}"}">
+        <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" 
+                action="{urlFor name="task-user-feedback" options="task_id.{$task->getId()}"}">
             <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="You can provide direct feedback to the organisation who owns this task here. If you have accidentally claimed this task or are unable to complete it, you can also provide the reasons for this decision in this form."></textarea>                    
-            <input type="hidden" name="revokeTaskId" value="{$task_id}" />  
-            <input type="hidden" name="revokeUserId" value="{$user_id}" /> 
-            <input type="hidden" name="revokeTask" value="1" />
             <p style="margin-bottom:30px;"/> 
 
             <span style="float: left; position: relative;">
