@@ -1,12 +1,12 @@
 <?php
 
-require_once '../Common/models/Badge.php';
-require_once 'BadgeValidator.class.php';
-require_once '../Common/lib/PDOWrapper.class.php';
+require_once __DIR__.'/../../Common/models/Badge.php';
+require_once __DIR__.'/BadgeValidator.class.php';
+require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
 
 class BadgeDao
 {
-    public function find($params)
+    public function getBadge($params)
     {
         $result = PDOWrapper::call("getBadge", PDOWrapper::cleanse($params['badge_id']).",null,null,null");
         return ModelFactory::buildModel("Badge", $result[0]);
@@ -18,9 +18,13 @@ class BadgeDao
         $result = PDOWrapper::call("badgeInsertAndUpdate", PDOWrapper::cleanseNullOrWrapStr($badge->getId())
         .",".PDOWrapper::cleanseNull($badge->getOwnerId()).",".PDOWrapper::cleanseNullOrWrapStr($badge->getTitle())
         .",".PDOWrapper::cleanseNullOrWrapStr($badge->getDescription()));
-        return $result[0]['result'];
+        if(is_array($result)) {
+            return ModelFactory::buildModel("Badge", $result[0]);
+        } else {
+            return null;
+        }
     }
-
+ 
     public function getAllBadges()
     {
         $results = PDOWrapper::call("getBadge", "null,null,null,null");

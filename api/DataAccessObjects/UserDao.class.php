@@ -33,27 +33,23 @@ class UserDao {
 
     public function create($email, $clear_password)
     {
-        if (is_object($this->find(array('email' => $email)))) {
+        if (is_array($ret=$this->getUser(null, $email, null, null, null, null, null, null, null)&&!empty($ret))) {
             throw new InvalidArgumentException('Oops, you already have an account here with that email address.
                                                 Please log in instread.');
         }
 
         $nonce = Authentication::generateNonce();
         $password = Authentication::hashPassword($clear_password, $nonce);
-
-        $user_data = array(
-                'email' => $email,
-                'nonce' => $nonce,
-                'password' => $password
-        );
-
-        $user = ModelFactory::buildModel("User", $user_data);
+        $user = new User();
+        $user->setEmail($email);
+        $user->setNonce($nonce);
+        $user->setPassword($password);
         return $this->save($user);
     }
 
     public function changePassword($user_id, $password)
     {
-        $user = $this->find(array('user_id' => $user_id));
+        $user = $this->getUser($user_id, null, null, null, null, null, null, null, null);
 
         $nonce = Authentication::generateNonce();
         $pass = Authentication::hashPassword($password, $nonce);
@@ -82,16 +78,21 @@ class UserDao {
         PDOWrapper::cleanseNullOrWrapStr($user->getNativeLangId()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getNativeRegionId()).",".
         PDOWrapper::cleanse($user->getUserId()));
-        return $this->find(array('user_id' => $result[0]['id']));
+        if(!is_null($result)) {
+            return ModelFactory::buildModel("User", $result[0]);
+        } else {
+            return null;
+        }
     }
 
     private function insert($user) 
     {
-        if ($user_id = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
+        $result = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
                                         .",".PDOWrapper::cleanse($user->getNonce())
                                         .",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword())
-                                        .",null,null,null,null,null")) {
-            return $this->find(array('user_id' => $user_id[0]['id']));
+                                        .",null,null,null,null,null");
+        if(!is_null($result)) {
+            return ModelFactory::buildModel("User", $result[0]);
         } else {
             return null;
         }
@@ -100,18 +101,13 @@ class UserDao {
     private function clearPasswordMatchesUsersPassword($user, $clear_password)
     {
         $hashed_input_password = Authentication::hashPassword($clear_password, $user->getNonce());
-
-        return is_object(
-                        $this->find(array(
-                                'user_id' => $user->getUserId(),
-                                'password' => $hashed_input_password
-                        ))
-        );
+        
+        return $hashed_input_password == $user->getPassword();
     }
 
     public function login($email, $clear_password)
     {
-        $user = $this->find(array('email' => $email));
+        $user = $this->getUser(null, $email, null, null, null, null, null, null, null);
 
         if (!is_object($user)) {
             throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect.
@@ -134,8 +130,12 @@ class UserDao {
 
     public function apiLogin($email, $clear_password)
     {
-        $user = $this->find(array('email' => $email));
-
+        $user = $this->getUser(null, $email, null, null, null, null, null, null, null);
+        
+        if(is_array($user)) {
+            $user = $user[0];
+        }
+        
         if (!is_object($user)) {
             return null;
         }
@@ -149,13 +149,16 @@ class UserDao {
 
     public function apiRegister($email, $clear_password)
     {
-        $user = $this->find(array('email' => $email));
+        $user = $this->getUser(null, $email, null, null, null, null, null, null, null);
+        
+        if(is_array($user)) {
+            $user = $user[0];
+        }
 
         if (!is_object($user) && $clear_password != "") {
             $user = $this->create($email, $clear_password);
             $badge_dao = new BadgeDao();
-            $badge = $badge_dao->find(array('badge_id' => BadgeTypes::REGISTERED));
-            $badge_dao->assignBadge($user, $badge);
+            $badge_dao->assignBadgeByID($user->getUserId(), BadgeTypes::REGISTERED);
         } else {
             $user = null;
             //array("message"=>'sorry the account you enerted already exists.
@@ -181,7 +184,8 @@ class UserDao {
         } else {
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
-                $user = $this->find(array('email' => $retvals['contact/email']));
+                $user = $this->getUser(null, $retvals['contact/email'], null, null, null, null, null, null, null);
+                if(is_array($user)) $user = $user[0];
                 if (!is_object($user)) {
                     $user = $this->create($retvals['contact/email'], md5($retvals['contact/email']));
                     $badge_dao = new BadgeDao();
@@ -203,7 +207,7 @@ class UserDao {
     {
         $ret = null;
         if ($user_id = UserSession::getCurrentUserId()) {
-                $ret = $this->find(array('user_id' => $user_id));
+                $ret = $this->getUser($user_id, null, null, null, null, null, null, null, null);
         }
         return $ret;
     }

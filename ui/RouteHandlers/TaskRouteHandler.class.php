@@ -1047,9 +1047,35 @@ class TaskRouteHandler
         if ($app->request()->isPost()) {
             $post = $app->request()->post(); 
             
+            $errors = array(); 
+            
+            $fileNames = array();
+            $fileHashes = array();
+            foreach($_FILES as $file) {
+                if($file["error"] != UPLOAD_ERR_OK) {
+                    $errors["missingFile"] = "You have not selected a <b>Chunked File</b> to upload.";
+                    break;
+                }
+                if(!in_array($file["name"],$fileNames)) {
+                    $fileNames[] = $file["name"];
+                } else {
+                    $errors["uniqueFileName"] = "Each <b>Chunked File</b> that you upload must have a <b>unique file name.</b>";
+                    break;
+                }
+                    
+                if(!in_array(($hash=md5_file($file["tmp_name"])), $fileHashes)) {
+                    $fileHashes[] = $hash;
+                } else {
+                    $errors["duplicateFileContent"] = "You have selected <b>one or more</b> files with the exact same <b>file content</b>.";
+                    break;
+                }
+            }          
+            
             if(!isset($post["translation_0"]) && !isset($post["proofreading_0"])) {
-                $app->flashNow("Warning", "At least one task type such as <b>translation</b> and/or <b>proofreading</b> must be set.");
-            } else {
+                $errors["taskTypeSet"] = "At least one task type such as <b>Translation</b> and/or <b>Proofreading</b> must be set.";
+            }
+            
+            if(empty($errors)) {
                 $chunkValue = $post["chunkValue"];
                 $upload_error = false;      
                 $translationTaskIds = array();
@@ -1073,7 +1099,7 @@ class TaskRouteHandler
                             }                             
                             $translationTaskIds[] = $createdTranslation->getId();                            
                         }
-                        
+
                         if(isset($post["proofreading_0"])) {
                             $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);                         
                             $taskModel->setWordCount($post["wordCount_$i"]);
@@ -1092,7 +1118,7 @@ class TaskRouteHandler
                         $upload_error = true;
                         $file_upload_err = $e->getMessage();
                     }
-                }
+                }            
 
                 $taskModel = new Task();
                 $this->setTaskModelData($taskModel, $project, $task, 0);                       
@@ -1109,7 +1135,7 @@ class TaskRouteHandler
                     $upload_error = true;
                     $error_message = "File error: " . $e->getMessage();
                 }                 
-                
+
                 for($i=0; $i < $chunkValue; $i++) {
                     if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {   
                         $taskDao->addTaskPreReq($proofreadTaskIds[$i], $translationTaskIds[$i]);
@@ -1121,12 +1147,20 @@ class TaskRouteHandler
                         $taskDao->addTaskPreReq($createdPostEditingId, $translationTaskIds[$i]);
                     }
                 }
-                
+            
+
                 $task->setTaskStatus(TaskStatusEnum::COMPLETE);
                 $taskDao->updateTask($task); 
                 $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
-            }  
-        }
+            } else {
+                if(!empty($errors)) {
+                    $app->view()->appendData(array(
+                        "errors" => $errors
+                    ));   
+                }
+            }
+        }  
+    
         
         $extraScripts = file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-chunking.js");
         

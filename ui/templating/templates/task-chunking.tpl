@@ -24,15 +24,20 @@
         {assign var="task_id" value=$task->getId()}
     </h1>
         
-{include file="task.details.tpl"}        
+{include file="task.details.tpl"}
 
+    {if isset($errors)}
+        <div class="alert alert-error">
+            <h3>Please fill in all required fields:</h3>
+            <ol>
+                {foreach from=$errors item=error}
+                        <li>{$error}</li>
+                {/foreach}
+            </ol>
+        </div>                        
+    {/if}
+    
     <div class="well">
-        {if isset($flash['Warning'])}
-            <div class="alert alert-error">
-                <h3>Please fill in all required information:</h3>        
-                {$flash['Warning']}
-            </div>        
-        {/if}
         <form method="post" enctype="multipart/form-data" action="{urlFor name="task-chunking" options="task_id.$task_id"}">
         <input type="hidden" id="totalWordCount" name="totalWordCount" value="{$task->getWordCount()}" />
         <table border="0" width="100%">

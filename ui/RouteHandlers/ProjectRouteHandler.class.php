@@ -157,18 +157,25 @@ class ProjectRouteHandler
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
             $project_tasks = $projectDao->getProjectTasks($project_id);
+            $taskLanguageMap = array();
             if($project_tasks) {
-                foreach($project_tasks as $task) {
-                    $task_id = $task->getId();
-
-                    $metaData = array();
-                    $response = $userDao->isSubscribedToTask($user_id, $task_id);
-                    if($response == 1) {
-                        $metaData['tracking'] = true;
-                    } else {
-                        $metaData['tracking'] = false;
+                foreach($project_tasks as $task) {                   
+                     $taskTargetLanguage = $task->getTargetLanguageCode();
+                     $taskTargetCountry = $task->getTargetCountryCode();
+                     $taskLanguageMap["$taskTargetLanguage,$taskTargetCountry"][] = $task;
+                }                
+                foreach($taskLanguageMap as $languageCountry => $tasks) {   
+                    foreach($tasks as $task) {
+                        $task_id = $task->getId(); 
+                        $metaData = array();
+                        $response = $userDao->isSubscribedToTask($user_id, $task_id);
+                        if($response == 1) {
+                            $metaData['tracking'] = true;
+                        } else {
+                            $metaData['tracking'] = false;
+                        }
+                        $taskMetaData[$task_id] = $metaData;
                     }
-                    $taskMetaData[$task_id] = $metaData;
                 }
             }
 
@@ -186,7 +193,8 @@ class ProjectRouteHandler
                     "taskTypeColours" => $taskTypeColours,
                     "userSubscribedToProject" => $userSubscribedToProject,
                     "project_tags" => $project_tags,
-                    "isOrgMember"   => $isOrgMember
+                    "isOrgMember"   => $isOrgMember,
+                    "taskLanguageMap" => $taskLanguageMap
             ));
             
         } else {   
@@ -323,6 +331,7 @@ class ProjectRouteHandler
         $impact_err     = null;
         $targetLanguage_err = null;
         $wordcount_err = null;
+        $uniqueLanguageCountry_err = null;
         $project       = new Project();
 
         if ($app->request()->isPost()) {            
@@ -388,7 +397,18 @@ class ProjectRouteHandler
                 }
             } 
             
-            for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+            $targetLanguageCountryArray = array();
+            for ($i=0; $i < $post->targetLanguageArraySize; $i++) {                  
+                $key = $post->{"targetLanguage_".$i};
+                if(!array_key_exists($key, $targetLanguageCountryArray)) {
+                        $targetLanguageCountryArray[$key] = $post->{"targetCountry_".$i};
+                } else {
+                    $uniqueLanguageCountry_err = "Each new <b>Target Language pair</b> added must be a <b>unique pair</b>.";
+                    break;
+                }
+            }
+            
+            for ($i=0; $i < $post->targetLanguageArraySize; $i++) {  
                 if(!isset($post->{"chunking_".$i}) && !isset($post->{"translation_".$i}) &&
                     !isset($post->{"proofreading_".$i})) {
                     $targetLanguage_err = "At least one <b>Task Type</b> must be set for each <b>Target Language</b>.";
@@ -396,17 +416,19 @@ class ProjectRouteHandler
                 }
             }
             
-            $upload_error = false;
-            $file_upload_err = false;
+            $upload_error = null;
+            $file_upload_err = null;
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($field_name);
             } catch (Exception $e) {
                 $upload_error = true;
                 $file_upload_err = $e->getMessage();
-            }            
-
+            }
             
-            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && !$upload_error && is_null($impact_err)) { 
+
+            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && is_null($upload_error)
+                && is_null($uniqueLanguageCountry_err)) { 
+                
                 $project->setOrganisationId($org_id);
                 if($project = $projectDao->createProject($project)) {
                     $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
@@ -488,7 +510,8 @@ class ProjectRouteHandler
                     "wordcount_err"         => $wordcount_err,
                     "targetLanguage_err"    => $targetLanguage_err,
                     "project"               => $project,
-                    "file_upload_err"       => $file_upload_err
+                    "file_upload_err"       => $file_upload_err,
+                    "uniqueLanguageCountry_err" => $uniqueLanguageCountry_err
                 ));               
             }
         }

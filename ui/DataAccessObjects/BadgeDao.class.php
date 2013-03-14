@@ -35,15 +35,6 @@ class BadgeDao
         return $ret;
     }
 
-    public function find($params)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/badges/{$params['id']}";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast("Badge", $response);
-        return $ret;
-    }
-
     public function getBadges()
     {
         $ret = null;

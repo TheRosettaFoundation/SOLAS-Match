@@ -157,6 +157,29 @@ class TemplateHelper {
         
         return $language." - ".$region;
     }
+    
+    public static function getLanguageAndCountryFromCode($codes)
+    {
+        $splitCodes = explode(",", $codes);
+        $languageCode = $splitCodes[0];
+        $countryCode = $splitCodes[1];
+        
+        $use_language_codes = Settings::get("ui.language_codes");
+        
+        if($use_language_codes == "y") {
+            return $languageCode."-".$countryCode;
+        } else if($use_language_codes == "n") {
+            $language = TemplateHelper::languageNameFromCode($languageCode);
+            $region = TemplateHelper::countryNameFromCode($countryCode);
+            return $language." - ".$region;
+        } else if($use_language_codes == "h") {
+            return TemplateHelper::languageNameFromCode($languageCode)." - "
+                .TemplateHelper::countryNameFromCode($countryCode)
+                ." (".$languageCode."-".$countryCode.")";
+        }
+        
+        return $language." - ".$region;
+    }
 
     public static function languageNameFromId($languageID)
     {

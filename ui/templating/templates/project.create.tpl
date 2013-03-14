@@ -25,9 +25,11 @@
             <table>
                 <tr>
                     <td colspan="2">
-                        {if (isset($title_err) || isset($deadline_err) || isset($targetLanguage_err) || isset($file_upload_err)) }
+                        {if (isset($title_err) || isset($description_err) || isset($wordcount_err) || isset($deadline_err)
+                            || isset($impact_err) || isset($targetLanguage_err) || isset($uniqueLanguageCountry_err)
+                            || isset($file_upload_err))}
                             <div class="alert alert-error">
-                                <h3>Please fill in all required information:</h3>
+                                <h3>Please fill in all required fields:</h3>
                                 <ol>
                                     {if isset($title_err)}
                                         <li>{$title_err}</li>
@@ -46,6 +48,9 @@
                                     {/if}
                                     {if isset($targetLanguage_err)}
                                         <li>{$targetLanguage_err}</li>
+                                    {/if}
+                                    {if isset($uniqueLanguageCountry_err)}
+                                        <li>{$uniqueLanguageCountry_err}</li>
                                     {/if}
                                     {if isset($file_upload_err)}
                                         <li><strong>Source Text</strong> - {$file_upload_err}</li>
