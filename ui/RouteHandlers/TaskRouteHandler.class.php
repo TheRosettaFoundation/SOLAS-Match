@@ -1176,7 +1176,7 @@ class TaskRouteHandler
                         $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                         $taskDao->updateTask($task);
                         $taskRevoke = $userDao->unclaimTask($claimant->getUserId(), $task_id);
-                        if(!$taskRevoke) {
+                        if($taskRevoke) {
                             $app->flash("taskSuccess", "<b>Success</b> - The task 
                                 <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
                                 has been revoked from 
