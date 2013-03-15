@@ -606,8 +606,8 @@ class ProjectRouteHandler
 
         $archivedProject = $projectDao->archiveProject($project_id, $user_id);     
         
-        if(is_object($archivedProject)) {            
-            $app->flash("success", "You have successfully archived the project <b>{$archivedProject->getTitle()}</b>.");
+        if($archivedProject) {            
+            $app->flash("success", "You have successfully archived the project <b>{$project->getTitle()}</b>.");
         } else {
             $app->flash("error",  "There was an error archiving the project <b>{$project->getTitle()}</b>.");
         }       
