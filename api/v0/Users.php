@@ -178,7 +178,7 @@ class Users {
             $dao = new UserDao();
 
             Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
-            Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
+            Notify::sendEmailNotifications($data->getId(), NotificationTypes::CLAIM);
         }, 'userClaimTask');
        
         //Which of these actually gets called??
@@ -194,7 +194,7 @@ class Users {
             $dao = new UserDao();
 
             Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
-            Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
+            Notify::sendEmailNotifications($data->getId(), NotificationTypes::CLAIM);
         }, 'userClaimTaskByID');
         
         

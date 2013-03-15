@@ -202,16 +202,7 @@ class TaskRouteHandler
         $taskDao = new TaskDao();
 
         $task = $taskDao->getTask(array('id' => $task_id));
-        if (!is_object($task)) {
-            header("HTTP/1.0 404 Not Found");
-            die;
-        }   
         $user_id = UserSession::getCurrentUserID();
-        
-        if (is_null($user_id)) {
-            $app->flash("error", "Login required to access page.");
-            $app->redirect($app->urlFor("login"));
-        }   
         
         $taskType = TemplateHelper::getTaskTypeFromId($task->getTaskType());
         if($result = $taskDao->archiveTask($task_id, $user_id)) {

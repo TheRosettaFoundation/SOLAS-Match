@@ -415,12 +415,75 @@ class TaskDao {
         return $ret;
     }
 
-    public function moveToArchiveByID($taskID, $userId) 
+    public function moveToArchiveByID($taskId, $userId) 
     {
-        $task = $this->find(array("id" => $taskID));
-        Notify::sendEmailNotifications($task, NotificationTypes::ARCHIVE);
-        $ret = PDOWrapper::call("archiveTask", PDOWrapper::cleanseNull($taskID).", ".PDOWrapper::cleanseNull($userId));
-        return $ret[0]['result'];
+        $ret = false;
+        $task = $this->find(array("id" => $taskId));
+
+        $graphBuilder = new APIWorkflowBuilder();
+        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+
+        if ($graph) {
+            $currentLayer = $graph->getRootNodeList();
+            $nextLayer = array();
+            $found = false;
+            while (count($currentLayer) > 0 && !$found) {
+                foreach ($currentLayer as $node) {
+                    if ($node->getTaskId() == $taskId) {
+                        $found = true;
+                        $ret = $this->archiveTaskNode($node, $userId);
+                    } else {
+                        foreach ($node->getNextList() as $nextNode) {
+                            if (!in_array($nextNode, $nextLayer)) {
+                                $nextLayer[] = $nextNode;
+                            }
+                        }
+                    }
+                }
+                $currentLayer = $nextLayer;
+                $nextLayer = array();
+            }
+        }
+
+        // UI us expecting output to be 0 or 1
+        if ($ret) {
+            $ret = 1;
+        } else {
+            $ret = 0;
+        }
+
+        return $ret;
+    }
+
+    public function archiveTaskNode($node, $userId)
+    {
+        $ret = true;
+        $task = $this->find(array('id' => $node->getTaskId()));
+        $dependantNodes = $node->getNextList();
+        if (count($dependantNodes) > 0) {
+            foreach ($dependantNodes as $dependant) {
+                $dTask = $this->find(array('id' => $dependant->getTaskId()));
+                $preReqs = $dependant->getPreviousList();
+                if ((count($preReqs) == 2 && $dTask->getTaskType() == TaskTypeEnum::POSTEDITING) ||
+                        count($preReqs) == 1) {
+                    $ret = $ret && ($this->archiveTaskNode($dependant, $userId));
+                }
+            }
+        }
+
+        if ($ret) {
+            $ret = $this->archiveTask($node->getTaskId(), $userId);
+        }
+
+        return $ret;
+    }
+
+    public function archiveTask($taskId, $userId)
+    {
+        Notify::sendEmailNotifications($taskId, NotificationTypes::ARCHIVE);
+        $result = PDOWrapper::call("archiveTask", PDOWrapper::cleanseNull($taskId).", ".PDOWrapper::cleanseNull($userId));
+        $ret = $result[0]['result'] == 1;
+        return $ret;
     }
 
     public function claimTask($task, $user)
