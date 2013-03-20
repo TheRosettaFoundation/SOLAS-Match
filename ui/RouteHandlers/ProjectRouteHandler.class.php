@@ -3,6 +3,8 @@
 require_once "Common/TaskTypeEnum.php";
 require_once "Common/TaskStatusEnum.php";
 
+require_once "ui/lib/GraphViewer.class.php";
+
 class ProjectRouteHandler
 {
     public function init()
@@ -30,6 +32,14 @@ class ProjectRouteHandler
 
     public function test($projectId)
     {
+        $app = Slim::getInstance();
+        $extra_scripts = "";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Raphael.js\"></script>";
+        $extra_scripts .= "<script>
+            var preReqs = new Array();
+            var allTasks = new Array();";
+        $body = "";
+
         $time = microtime();
         $time = explode(" ", $time);
         $time = $time[1] + $time[0];
@@ -37,7 +47,35 @@ class ProjectRouteHandler
 
         $builder = new UIWorkflowBuilder();
         $graph = $builder->buildProjectGraph($projectId);
-        $builder->printGraph($graph);
+        $viewer = new GraphViewer($graph);
+        $body .= $viewer->constructView();
+
+        if ($graph->hasRootNode()) {
+            $currentLayer = $graph->getRootNodeList();
+            $nextLayer = array();
+
+            while (count($currentLayer) > 0) {
+                foreach ($currentLayer as $node) {
+                    $extra_scripts .= "allTasks.push(".$node->getTaskId().");";
+                    $extra_scripts .= "preReqs[".$node->getTaskId()."] = new Array();";
+                    foreach ($node->getNextList() as $nextNode) {
+                        if (!in_array($nextNode, $nextLayer)) {
+                            $nextLayer[] = $nextNode;
+                        }
+                    }
+                    foreach ($node->getPreviousList() as $prevNode) {
+                        $extra_scripts .= "preReqs[".$node->getTaskId()."].push(".$prevNode->getTaskId().");";
+                    }
+                }
+                $currentLayer = $nextLayer;
+                $nextLayer = array();
+            }
+        }
+        $extra_scripts .= "</script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/GraphHelper.js\"></script>";
+        $extra_scripts .= "<script>
+                window.onload = prepareGraph;
+            </script>";
 
         $time = microtime();
         $time = explode(" ", $time);
@@ -45,7 +83,12 @@ class ProjectRouteHandler
         $time2 = $time;
 
         $totaltime = ($time2 - $time1);
-        echo "<BR>Running Time: $totaltime seconds.";
+        $body .= "<br />Running Time: $totaltime seconds.";
+        $app->view()->appendData(array(
+                    "body"          => $body,
+                    "extra_scripts" => $extra_scripts
+        ));         
+        $app->render("empty.tpl");
     }
   
     public function projectView($project_id)
