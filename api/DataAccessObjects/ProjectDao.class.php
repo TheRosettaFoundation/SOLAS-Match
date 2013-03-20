@@ -1,11 +1,11 @@
 <?php
 
-include_once 'DataAccessObjects/ProjectTags.class.php';
-include_once 'DataAccessObjects/TagsDao.class.php';
-include_once '../Common/lib/PDOWrapper.class.php';
-include_once '../Common/lib/ModelFactory.class.php';
-include_once '../Common/models/Project.php';
-include_once '../Common/models/ArchivedProject.php';
+include_once __DIR__.'/ProjectTags.class.php';
+include_once __DIR__.'/TagsDao.class.php';
+include_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
+include_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
+include_once __DIR__.'/../../Common/models/Project.php';
+include_once __DIR__.'/../../Common/models/ArchivedProject.php';
 
 class ProjectDao
 {
@@ -32,6 +32,8 @@ class ProjectDao
         $result = PDOWrapper::call("projectInsertAndUpdate", $args);
         $project->setId($result[0]['id']);
         $this->updateTags($project);
+        $project = ModelFactory::buildModel("Project", $result[0]);
+        $project->setTag(self::getProjectTags($project->getId()));
         return $project;
     }
 
@@ -103,7 +105,7 @@ class ProjectDao
             $args .= ", null";
         }
         if (isset($params['deadline'])) {
-            $args .= ", ".PDOWrapper::cleanseNull($params['deadline']);
+            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['deadline']);
         } else {
             $args .= ", null";
         }
@@ -123,17 +125,18 @@ class ProjectDao
             $args .= ", null";
         }
         if (isset($params['created'])) {
-            $args .= ", ".PDOWrapper::cleanseNull($params['created']);
+            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['created']);
+        } else {
+            $args .= ", null";
+        }
+        
+        if (isset($params['country_id'])) {
+            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['country_id']);
         } else {
             $args .= ", null";
         }
         if (isset($params['language_id'])) {
-            $args .= ", ".PDOWrapper::cleanseNull($params['language_id']);
-        } else {
-            $args .= ", null";
-        }
-        if (isset($params['country_id'])) {
-            $args .= ", ".PDOWrapper::cleanseNull($params['country_id']);
+            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['language_id']);
         } else {
             $args .= ", null";
         }

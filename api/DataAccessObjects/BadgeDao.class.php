@@ -56,7 +56,7 @@ class BadgeDao
     public function assignBadgeByID($userID, $badgeID)
     {
         $badgeValidator = new BadgeValidator();
-        if ($badgeValidator->validateUserBadgeByID($userID, $badgeID)) {
+        if (!$validation = $badgeValidator->validateUserBadgeByID($userID, $badgeID)) {
             if ($result = PDOWrapper::call("assignBadge", PDOWrapper::cleanse($userID)
                                                         .",".PDOWrapper::cleanse($badgeID))) {
                 return $result[0]["result"];
@@ -73,11 +73,9 @@ class BadgeDao
     
     public function removeUserBadgeByID($userID, $badgeID)
     {
-        if ($result = PDOWrapper::call("removeUserBadge", PDOWrapper::cleanse($userID)
-                                                        .",".PDOWrapper::cleanse($badgeID))) {
-            return $result[0]["result"];
-        }        
-        return 0;
+        $result = PDOWrapper::call("removeUserBadge", PDOWrapper::cleanse($userID)
+                                                        .",".PDOWrapper::cleanse($badgeID));
+        return $result[0]["result"];
     }
     
     public function deleteBadge($badgeID)

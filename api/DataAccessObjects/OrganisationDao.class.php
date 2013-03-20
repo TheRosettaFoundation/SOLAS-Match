@@ -21,10 +21,10 @@ class OrganisationDao {
     {
         $ret = array();
         
-        if ($result = PDOWrapper::call("getOrg", PDOWrapper::cleanseNull($id)
+        $result = PDOWrapper::call("getOrg", PDOWrapper::cleanseNull($id)
                                         .",".PDOWrapper::cleanseNullOrWrapStr($name)
                                         .",".PDOWrapper::cleanseNullOrWrapStr($homepage)
-                                        .",".PDOWrapper::cleanseNullOrWrapStr($bio)));
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($bio));
         if(is_array($result)) {
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Organisation", $row);
@@ -40,7 +40,9 @@ class OrganisationDao {
         $ret = null;
         
         if ($result = PDOWrapper::call("getOrgByUser", PDOWrapper::cleanse($user_id))) {
-            $ret = ModelFactory::buildModel("Organisation", $result[0]);
+            if(is_array($result)) {
+                $ret = ModelFactory::buildModel("Organisation", $result[0]);
+            }
         }        
         return $ret;
     }
@@ -91,32 +93,26 @@ class OrganisationDao {
 
     public function acceptMemRequest($org_id, $user_id)
     {
-        if($result = PDOWrapper::call("acceptMemRequest", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id))) {
-            return $result[0]['result'];
-        } else {
-            return null;
-        }
+        $result = PDOWrapper::call("acceptMemRequest", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));
+        return $result[0]['result'];
     }
 
     public function refuseMemRequest($org_id, $user_id)
     {
-        //Simply remove the membership request
-        $this->removeMembershipRequest($org_id, $user_id);
+        return $this->removeMembershipRequest($org_id, $user_id);
     }
 
     private function removeMembershipRequest($org_id, $user_id)
     {
-        PDOWrapper::call("removeMembershipRequest", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));
+        $result = PDOWrapper::call("removeMembershipRequest", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));
+        return $result[0]['result']; 
     }
     
     public static function revokeMembership($org_id, $user_id)
     {
-        if ($result = PDOWrapper::call("revokeMembership", PDOWrapper::cleanse($user_id).
-                                        ",".PDOWrapper::cleanse($org_id))) {
-            return $result[0]['result'];
-        } else {
-            return 0;
-        }
+        $result = PDOWrapper::call("revokeMembership", PDOWrapper::cleanse($user_id).
+                                        ",".PDOWrapper::cleanse($org_id));
+        return $result[0]['result'];
     } 
     
     public function insertAndUpdate($org)

@@ -26,9 +26,20 @@ class BadgeValidatorTest extends PHPUnit_Framework_TestCase
         $insertedBadge = $badgeDao->insertAndUpdateBadge($badge);
         $this->assertInstanceOf("Badge", $insertedBadge);    
         
-        $badgeValidator = new BadgeValidator();        
+        $userAssignedBadge = $badgeDao->assignBadge($insertedUser, $insertedBadge);
+        $this->assertEquals("1", $userAssignedBadge);
+        
+        $badgeValidator = new BadgeValidator();   
+        
+        // Success
         $resultValidate = $badgeValidator->validateUserBadge($insertedUser, $insertedBadge);
-        $this->assertEquals("1", $resultValidate);         
+        $this->assertEquals("1", $resultValidate);   
+        
+        $badge2 = UnitTestHelper::createBadge(99, "Badge 2", "Badge 2 Description", NULL);
+        
+        // Failure
+        $resultValidateFailure = $badgeValidator->validateUserBadge($insertedUser, $badge2);
+        $this->assertEquals("0", $resultValidateFailure);    
     }    
 }
 ?>

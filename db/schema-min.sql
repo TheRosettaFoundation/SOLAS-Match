@@ -529,13 +529,8 @@ DROP PROCEDURE IF EXISTS `acceptMemRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `acceptMemRequest`(IN `uID` INT, IN `orgID` INT)
 BEGIN
-	IF NOT EXISTS (SELECT om.user_id, om.organisation_id FROM OrganisationMembers om WHERE om.user_id = uID AND om.organisation_id = orgID) THEN  
-		INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
-		call removeMembershipRequest(uID,orgID);
-		SELECT 1 AS result;
-	ELSE
-		SELECT 0 AS result;
-	END IF;
+	INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
+	call removeMembershipRequest(uID,orgID);
 END//
 DELIMITER ;
 
@@ -1101,13 +1096,11 @@ DROP PROCEDURE IF EXISTS `getOrgByUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgByUser`(IN `id` INT)
 BEGIN
-	IF EXISTS (SELECT organisation_id FROM OrganisationMembers om WHERE om.user_id = id) THEN
-		SELECT *
-		FROM Organisations o
-		WHERE o.id IN (SELECT organisation_id
-							 FROM OrganisationMembers
-						 	 WHERE user_id=id); 
-	END IF;
+	SELECT *
+	FROM Organisations o
+	WHERE o.id IN (SELECT organisation_id
+						 FROM OrganisationMembers
+					 	 WHERE user_id=id); 
 END//
 DELIMITER ;
 
@@ -1193,13 +1186,14 @@ BEGIN
         set @q = CONCAT(@q, " and p.created='", createdTime, "'");
     end if;
     if sCC is not null then
-    	set @scID=null;
+    	set @scID=false;
 		select c.id into @scID from Countries c where c.code=sCC;
+ 		
     	set @q = CONCAT(@q, " and p.country_id=",@scID);
     end if;
     if sCode is not null then
-      set @sID=null;
-		select c.id into @sID from Languages l where l.code=sCode;
+      set @sID=false;
+		select l.id into @sID from Languages l where l.code=sCode;
     	set @q = CONCAT(@q, " and p.language_id=", @sID);
     end if;
 
@@ -2152,9 +2146,14 @@ DROP PROCEDURE IF EXISTS `removeMembershipRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeMembershipRequest`(IN `uID` INT, IN `orgID` INT)
 BEGIN
-	DELETE FROM OrgRequests
-   WHERE user_id=uID
-   AND org_id=orgID;
+	IF EXISTS (SELECT r.user_id and r.org_id FROM OrgRequests r WHERE r.user_id = uID and r.org_id = orgID)  THEN
+		DELETE FROM OrgRequests
+	   WHERE user_id=uID
+	   AND org_id=orgID;
+	   SELECT 1 AS result;
+	ELSE
+		SELECT 0 AS result;
+	END IF;
 END//
 DELIMITER ;
 

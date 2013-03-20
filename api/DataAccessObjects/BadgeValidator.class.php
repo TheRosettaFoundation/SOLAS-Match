@@ -9,7 +9,7 @@ class BadgeValidator
     
     public function validateUserBadgeByID($userID, $badgeID)
     {
-        return !self::userHasBadgeByID($userID, $badgeID);
+        return self::userHasBadgeByID($userID, $badgeID);
     }
     
     private function userHasBadge($user, $badge)
