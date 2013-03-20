@@ -529,8 +529,13 @@ DROP PROCEDURE IF EXISTS `acceptMemRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `acceptMemRequest`(IN `uID` INT, IN `orgID` INT)
 BEGIN
-	INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
-	call removeMembershipRequest(uID,orgID);
+	IF NOT EXISTS (SELECT om.user_id, om.organisation_id FROM OrganisationMembers om WHERE om.user_id = uID AND om.organisation_id = orgID) THEN  
+		INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
+		call removeMembershipRequest(uID,orgID);
+		SELECT 1 AS result;
+	ELSE
+		SELECT 0 AS result;
+	END IF;
 END//
 DELIMITER ;
 
@@ -723,7 +728,12 @@ DROP PROCEDURE IF EXISTS `deleteBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteBadge`(IN `id` INT)
 BEGIN
-delete from Badges where Badges.id = id;
+	IF EXISTS(SELECT b.id FROM Badges b WHERE b.id = id) THEN
+		DELETE FROM Badges WHERE Badges.id = id;
+		SELECT 1 AS result;
+	ELSE
+		SELECT 0 AS result;
+	END IF;
 END//
 DELIMITER ;
 
@@ -1091,11 +1101,13 @@ DROP PROCEDURE IF EXISTS `getOrgByUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgByUser`(IN `id` INT)
 BEGIN
-	SELECT *
-	FROM Organisations o
-	WHERE o.id IN (SELECT organisation_id
-						 FROM OrganisationMembers
-					 	 WHERE user_id=id); 
+	IF EXISTS (SELECT organisation_id FROM OrganisationMembers om WHERE om.user_id = id) THEN
+		SELECT *
+		FROM Organisations o
+		WHERE o.id IN (SELECT organisation_id
+							 FROM OrganisationMembers
+						 	 WHERE user_id=id); 
+	END IF;
 END//
 DELIMITER ;
 
@@ -1929,8 +1941,8 @@ BEGIN
 	if id is null and not exists(select * from Organisations o where (o.`home-page`= url or o.`home-page`= concat("http://",url) ) and o.name=companyName)then
 	-- set insert
     if bio is null then set bio='';end if;
-	insert into Organisations (name,`home-page`, biography) values (companyName,url,bio);
-
+		insert into Organisations (name,`home-page`, biography) values (companyName,url,bio);
+		CALL getOrg(LAST_INSERT_ID(), NULL, NULL,NULL);
 	else 
 		set @first = true;
 		set @q= "update Organisations o set ";-- set update
@@ -1962,13 +1974,13 @@ BEGIN
 		elseif url is not null and companyName is not null then 
 			set @q = CONCAT(@q," where o.`home-page`='",url,"' and o.name='",companyName,"'");
 		end if;
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
-#
-	end if;
-	
-	select o.id as 'result' from Organisations o where (o.`home-page`= url or o.`home-page`= concat("http://",url) ) and o.name=companyName;
+
+            PREPARE stmt FROM @q;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+            CALL getOrg(id, NULL, NULL, NULL);
+
+	end if;		
 END//
 DELIMITER ;
 

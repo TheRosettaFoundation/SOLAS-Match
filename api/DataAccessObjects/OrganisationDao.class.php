@@ -1,39 +1,10 @@
 <?php
 
-require_once '../Common/models/Organisation.php';
-require_once '../Common/models/MembershipRequest.php';
-require_once '../Common/lib/PDOWrapper.class.php';
+require_once __DIR__.'/../../Common/models/Organisation.php';
+require_once __DIR__.'/../../Common/models/MembershipRequest.php';
+require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
 
-class OrganisationDao {
-    
-    public function find($params)
-    {
-        $ret = null;
-        if (isset($params['id'])) {
-            if ($result = PDOWrapper::call("findOrganisation", PDOWrapper::cleanse($params['id']))) {
-                $ret = $this->createOrgFromSqlResult($result[0]);
-            }
-        } elseif (isset($params['name'])) {
-            $ret = self::getOrg(null, $params['name'], null, null);
-        }
-        
-        return $ret;
-    }
-    
-    public static function nameFromId($organisation_id)
-    {
-        $result = self::getOrg($organisation_id, null, null, null);        
-        return $result[0]->getName();
-    }
-        
-    public static function getOrgByName($name)
-    {
-        if ($result = self::getOrg(null, $name, null, null)) {
-            return $result[0];
-        } else {
-            return null;
-        }
-    }
+class OrganisationDao {    
      
     public static function isMember($orgID,$userID)
     {
@@ -53,12 +24,14 @@ class OrganisationDao {
         if ($result = PDOWrapper::call("getOrg", PDOWrapper::cleanseNull($id)
                                         .",".PDOWrapper::cleanseNullOrWrapStr($name)
                                         .",".PDOWrapper::cleanseNullOrWrapStr($homepage)
-                                        .",".PDOWrapper::cleanseNullOrWrapStr($bio))) {
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($bio)));
+        if(is_array($result)) {
             foreach ($result as $row) {
-                $ret[] = self::createOrgFromSqlResult($row);
+                $ret[] = ModelFactory::buildModel("Organisation", $row);
             }
-        }
-        
+        } else {
+            $ret = null;
+        }        
         return $ret;
     }
     
@@ -67,7 +40,7 @@ class OrganisationDao {
         $ret = null;
         
         if ($result = PDOWrapper::call("getOrgByUser", PDOWrapper::cleanse($user_id))) {
-            $ret = $this->createOrgFromSqlResult($result[0]);
+            $ret = ModelFactory::buildModel("Organisation", $result[0]);
         }        
         return $ret;
     }
@@ -118,7 +91,11 @@ class OrganisationDao {
 
     public function acceptMemRequest($org_id, $user_id)
     {
-        PDOWrapper::call("acceptMemRequest", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));
+        if($result = PDOWrapper::call("acceptMemRequest", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id))) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
     }
 
     public function refuseMemRequest($org_id, $user_id)
@@ -140,41 +117,19 @@ class OrganisationDao {
         } else {
             return 0;
         }
-    }
-
-    private static function createOrgFromSqlResult($result)
-    {
-        return ModelFactory::buildModel("Organisation", $result);
-    }
-   
+    } 
     
-    public function save($org)
+    public function insertAndUpdate($org)
     {
-        if (is_null($org->getId())) {
-            return $this->insert($org);       //Create new organisation
-        } else {
-            return $this->update($org);       //Update the data row
-        }
-    }
-
-    private function insert($org)
-    {
-        if ($org_id = PDOWrapper::call("organisationInsertAndUpdate",
-                                "null,".PDOWrapper::cleanseNullOrWrapStr($org->getHomePage())
-                                .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
-                                .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography()))) {
-            return $this->find(array('id' => $org_id[0]['result']));
+        if($result = PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanseNullOrWrapStr($org->getId())
+                                                    .",".PDOWrapper::cleanseWrapStr($org->getHomePage())
+                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
+                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography())));
+        if(is_array($result)) {
+            return ModelFactory::buildModel("Organisation", $result[0]);
         } else {
             return null;
         }
-    }
-
-    private function update($org)
-    {     
-        return PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanse($org->getId())
-                                                    .",".PDOWrapper::cleanseWrapStr($org->getHomePage())
-                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
-                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography()));
     }
     
     public function delete($orgID)

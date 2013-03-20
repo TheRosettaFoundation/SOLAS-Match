@@ -26,7 +26,7 @@ class Orgs {
             $data = $client->cast("Organisation", $data);
             $data->setId(null);
             $dao = new OrganisationDao();
-            Dispatcher::sendResponce(null, $dao->save($data), null, $format);
+            Dispatcher::sendResponce(null, $dao->insertAndUpdate($data), null, $format);
         }, 'createOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/', function ($id, $format = ".json") {
@@ -40,7 +40,7 @@ class Orgs {
             $data = $client->deserialize($data);
             $data = $client->cast("Organisation", $data);
             $dao = new OrganisationDao();
-            Dispatcher::sendResponce(null, $dao->save($data), null, $format);
+            Dispatcher::sendResponce(null, $dao->insertAndUpdate($data), null, $format);
         }, 'updateOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:id/', function ($id, $format = ".json"){

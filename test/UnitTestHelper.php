@@ -33,6 +33,45 @@ class UnitTestHelper
     }
     
     
+   
+    // Create system badge by default
+    public function createBadge($id = NULL, $title = "System Badge 1", $description = "System Badge 1 Description", $ownerId = NULL)
+    {       
+        $newBadge = new Badge();      
+        $newBadge->setId($id);
+        $newBadge->setTitle($title);
+        $newBadge->setDescription($description);
+        $newBadge->setOwnerId($ownerId);       
+        return $newBadge;
+    }
+    
+    public function createOrg($id = NULL, $name = "Organisation 1", $biography = "Organisation Biography 1", $homepage = "http://www.organisation1.org")
+    {
+        $org = new Organisation();
+        $org->setId($id);
+        $org->setName($name);
+        $org->setBiography($biography);
+        $org->setHomePage($homepage);        
+        return $org;
+    }
+    
+    // password = hash("sha512", "abcdefghikjlmnop")
+    public function createUser($userId = NULL, $displayName = "User 1", $biography = "User 1 Bio", $email = "user1@test.com", $nonce = "123456789"
+            , $password = "2d5e2eb5e2d5b1358161c8418e2fd3f46a431452a724257907d4a3317677a99414463452507ef607941e14044363aab9669578ce5f9517cb36c9acb32f492393"
+            , $nativeLangId = null, $nativeRegionId = null, $createdTime = null)
+    {
+        $user = new User();
+        $user->setUserId($userId);
+        $user->setDisplayName($displayName);   
+        $user->setBiography($biography);
+        $user->setEmail($email);
+        $user->setNonce($nonce);
+        $user->setPassword($password);
+        $user->setNativeLangId($nativeLangId);
+        $user->setNativeRegionId($nativeRegionId);
+        $user->setCreatedTime($createdTime);    
+        return $user;
+    }
     
     
 }

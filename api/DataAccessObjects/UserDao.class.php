@@ -1,8 +1,8 @@
 <?php
 
-require_once '../Common/models/User.php';
-require_once '../Common/lib/PDOWrapper.class.php';
-require_once '../Common/lib/Authentication.class.php';
+require_once __DIR__.'/../../Common/models/User.php';
+require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
+require_once __DIR__.'/../../Common/lib/Authentication.class.php';
 
 class UserDao {
     
