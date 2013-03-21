@@ -1238,13 +1238,13 @@ BEGIN
         set @q = CONCAT(@q, " and p.user_id=", uID);
     end if;
   	 if fName is not null then
-        set @q = CONCAT(@q, " and p.filename=", fName);
+        set @q = CONCAT(@q, " and p.filename='", fName, "'");
     end if;
  	 if token is not null then
-        set @q = CONCAT(@q, " and p.`file-token`=",  token);
+        set @q = CONCAT(@q, " and p.`file-token`='",  token, "'");
     end if;
  	 if mime is not null then
-        set @q = CONCAT(@q, " and p.`mime-type`=",  mime);
+        set @q = CONCAT(@q, " and p.`mime-type`='",  mime, "'");
     end if;
 
     
