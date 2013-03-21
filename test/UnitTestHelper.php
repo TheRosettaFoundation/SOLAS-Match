@@ -128,16 +128,17 @@ class UnitTestHelper
         
         return $task;
     }
-    
-    public static function createProjectFile()
+
+    public static function createProjectFile($userId, $projectid, $filename = "saveProjectFileTest.txt",
+            $mime = "saveProjectFileTest.txt", $token = "text/plain")
     {
         $projectFile = new ProjectFile();
-        $projectFile->setFilename($value);
-        $projectFile->setMime($value);
-        $projectFile->setProjectId($value);
-        $projectFile->setToken($value);
-        $projectFile->setUserId($value);
-        
+        $projectFile->setUserId($userId);
+        $projectFile->setProjectId($projectid);
+        $projectFile->setFilename($filename);
+        $projectFile->setMime($mime);
+        $projectFile->setToken($token);        
+        return $projectFile;
     }
     
     
