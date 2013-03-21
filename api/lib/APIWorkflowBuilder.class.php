@@ -1,6 +1,6 @@
 <?php
 
-require_once '../Common/lib/WorkflowBuilder.class.php';
+require_once __DIR__.'/../../Common/lib/WorkflowBuilder.class.php';
 
 class APIWorkflowBuilder extends WorkflowBuilder
 {

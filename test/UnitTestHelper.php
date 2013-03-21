@@ -2,6 +2,8 @@
 
 require_once __DIR__.'/../Common/Settings.class.php';
 require_once __DIR__.'/../Common/lib/PDOWrapper.class.php';
+require_once __DIR__.'/../Common/TaskTypeEnum.php';
+require_once __DIR__.'/../Common/TaskStatusEnum.php';
 
 class UnitTestHelper
 {
@@ -68,7 +70,7 @@ class UnitTestHelper
     
    
     // Create system badge by default
-    public static function createBadge($id = NULL, $title = "System Badge 1", $description = "System Badge 1 Description", $ownerId = NULL)
+    public static function createBadge($id = null, $title = "System Badge 1", $description = "System Badge 1 Description", $ownerId = null)
     {       
         $newBadge = new Badge();      
         $newBadge->setId($id);
@@ -78,7 +80,7 @@ class UnitTestHelper
         return $newBadge;
     }
     
-    public static function createOrg($id = NULL, $name = "Organisation 1", $biography = "Organisation Biography 1", $homepage = "http://www.organisation1.org")
+    public static function createOrg($id = null, $name = "Organisation 1", $biography = "Organisation Biography 1", $homepage = "http://www.organisation1.org")
     {
         $org = new Organisation();
         $org->setId($id);
@@ -89,7 +91,7 @@ class UnitTestHelper
     }
     
     // password = hash("sha512", "abcdefghikjlmnop")
-    public static function createUser($userId = NULL, $displayName = "User 1", $biography = "User 1 Bio", $email = "user1@test.com", $nonce = "123456789"
+    public static function createUser($userId = null, $displayName = "User 1", $biography = "User 1 Bio", $email = "user1@test.com", $nonce = "123456789"
             , $password = "2d5e2eb5e2d5b1358161c8418e2fd3f46a431452a724257907d4a3317677a99414463452507ef607941e14044363aab9669578ce5f9517cb36c9acb32f492393"
             , $nativeLangId = null, $nativeRegionId = null, $createdTime = null)
     {
@@ -121,14 +123,54 @@ class UnitTestHelper
         $project->setWordCount($wordcount);
         $project->setSourceCountryCode($sourceCountryCode);
         $project->setSourceLanguageCode($sourceLanguageCode);
-        
-//        foreach($tags as $tag) {
-//            
-//        }
         $project->setTag($tags);
         $project->setOrganisationId($organisationId);
         $project->setCreatedTime($createdTime);
         return $project;
+    }
+    
+    public static function createTask($projectId, $id = null, $title = "Task 1", $comment = "Task 1 Comment", $deadline = "2020-03-29 16:30:00",
+            $wordcount = 123456, $tags = array("Task", "Tags"), $type = TaskTypeEnum::TRANSLATION, $status = TaskStatusEnum::PENDING_CLAIM,
+            $sourceCountryCode = "IE", $sourceLanguageCode = "en", $targetCountryCode = "FR", $targetCountryLanguage = "fr",
+            $published = 1, $createdTime = null)
+    {
+        $task = new Task();
+        $task->setId($id);
+        $task->setProjectId($projectId);
+        $task->setTitle($title);        
+        $task->setComment($comment);        
+        $task->setDeadline($deadline);
+        $task->setWordCount($wordcount);
+        $task->setTaskType($type);
+        $task->setTaskStatus($status);
+        $task->setTargetCountryCode($targetCountryCode);
+        $task->setTargetLanguageCode($targetCountryLanguage);
+        $task->setSourceCountryCode($sourceCountryCode);
+        $task->setSourceLanguageCode($sourceLanguageCode);
+        $task->setPublished($published);
+        $task->setCreatedTime($createdTime);
+        
+        $i = 0;
+        foreach($tags as $tagLabel) {
+            $taskTag = new Tag();
+            $taskTag->setId($i+100);
+            $taskTag->setLabel($tagLabel[0]);
+            $task->addTag($taskTag);
+            $i++;
+        }
+        
+        return $task;
+    }
+    
+    public static function createProjectFile()
+    {
+        $projectFile = new ProjectFile();
+        $projectFile->setFilename($value);
+        $projectFile->setMime($value);
+        $projectFile->setProjectId($value);
+        $projectFile->setToken($value);
+        $projectFile->setUserId($value);
+        
     }
     
     

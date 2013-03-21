@@ -152,4 +152,37 @@ class TagsDao {
         }
         return 0;
     }  
+    
+    public function updateTags($project)
+    {
+        ProjectTags::removeAllProjectTags($project->getId());
+        $tags = $project->getTagList();
+        if (count($tags) > 0) {
+            if ($tag_ids = $this->tagsToIds($tags)) {
+                ProjectTags::addProjectTags($project->getId(), $tag_ids);
+                return 1;
+            }
+            return 0;
+        }
+        return 0;
+    }   
+    
+    private function tagsToIds($tags)
+    {
+        $tag_ids = array();
+        foreach ($tags as $tag) {
+            if ($tag_id = $this->tagIDFromLabel($tag)) {
+                $tag_ids[] = $tag_id;
+            } else {
+                $tag_ids[] = $this->create($tag);
+            }
+        }
+        
+        if (count($tag_ids) > 0) {
+            return $tag_ids;
+        } else {
+            return null;
+        }
+    }
+    
 }
