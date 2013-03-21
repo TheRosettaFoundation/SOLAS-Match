@@ -1,5 +1,5 @@
 {
-    "hash": "acb882f7d47e55413f9898da47b07650",
+    "hash": "8cd4fa6c618197ea006a7db3ade61022",
     "packages": [
         {
             "name": "drslump/protobuf-php",
@@ -10,7 +10,6 @@
                 "reference": "master"
             },
             "type": "git",
-            "installation-source": "source",
             "autoload": {
                 "files": [
                     "library/DrSlump/Protobuf.php"
@@ -36,7 +35,6 @@
             },
             "time": "2012-04-04 08:39:51",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "openid.php",
@@ -52,9 +50,9 @@
             "description": "A PHP 5 library for easy openid authentication",
             "homepage": "https://github.com/formapro/LightOpenID",
             "keywords": [
-                "security",
+                "Authentication",
                 "OpenId",
-                "Authentication"
+                "security"
             ]
         },
         {
@@ -76,7 +74,6 @@
             },
             "time": "2012-02-23 08:10:48",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Twig_Extensions_": "Views/Extension/"
@@ -100,8 +97,8 @@
             "description": "Extras package for Slim Framework",
             "homepage": "http://github.com/codeguy/Slim-Extras",
             "keywords": [
-                "templating",
-                "extensions"
+                "extensions",
+                "templating"
             ]
         },
         {
@@ -123,7 +120,6 @@
             },
             "time": "2012-06-17 09:58:20",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Slim": "Slim/"
@@ -149,23 +145,24 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.12",
+            "version": "v3.1.13",
             "source": {
                 "type": "svn",
                 "url": "http://smarty-php.googlecode.com/svn",
-                "reference": "/tags/v3.1.12/@4664"
+                "reference": "/tags/v3.1.13/@4699"
             },
             "require": {
                 "php": ">=5.2"
             },
-            "time": "2012-09-25 22:13:16",
+            "time": "2013-01-26 12:03:52",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
-                    "distribution/libs/Smarty.class.php"
+                    "distribution/libs/Smarty.class.php",
+                    "distribution/libs/SmartyBC.class.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL-3.0"
             ],
