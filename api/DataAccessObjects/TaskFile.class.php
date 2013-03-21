@@ -1,8 +1,8 @@
 <?php
 
-require_once '../Common/lib/PDOWrapper.class.php';
-require_once 'lib/APIWorkflowBuilder.class.php';
-require_once 'lib/Upload.class.php';
+require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
+require_once __DIR__.'/../lib/APIWorkflowBuilder.class.php';
+require_once __DIR__.'/../lib/Upload.class.php';
 
 class TaskFile {
 

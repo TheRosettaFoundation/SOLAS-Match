@@ -1,7 +1,7 @@
 <?php
 
-require_once "../Common/TaskStatusEnum.php";
-require_once "../Common/TaskTypeEnum.php";
+require_once __DIR__.'/../../Common/TaskStatusEnum.php';
+require_once __DIR__.'/../../Common/TaskTypeEnum.php';
 
 class Upload {
     

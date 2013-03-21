@@ -1,11 +1,11 @@
 <?php
 
-require_once '../Common/Requests/UserTaskScoreRequest.php';
-require_once '../Common/lib/PDOWrapper.class.php';
-require_once '../Common/models/Task.php';
-require_once 'lib/Upload.class.php';
-require_once 'TaskTags.class.php';
-require_once 'TaskFile.class.php';
+require_once __DIR__.'/../../Common/Requests/UserTaskScoreRequest.php';
+require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
+require_once __DIR__.'/../../Common/models/Task.php';
+require_once __DIR__.'/../../api/lib/Upload.class.php';
+require_once __DIR__.'/TaskTags.class.php';
+require_once __DIR__.'/TaskFile.class.php';
 
 /**
  * Task Document Access Object for manipulating tasks.
@@ -278,10 +278,8 @@ class TaskDao {
     {
         $tag_ids = array();
         foreach ($tags as $tag) {
-            if ($tag_id = $this->getTagId($tag)) {
+            if ($tag_id = $tag->getId()) {
                 $tag_ids[] = $tag_id;
-            } else {
-                $tag_ids[] = $this->createTag($tag);
             }
         }
 
@@ -290,18 +288,6 @@ class TaskDao {
         } else {
             return null;
         }
-    }
-
-    public function getTagId($tag)
-    {
-        $tDAO = new TagsDao();
-        return $tDAO->tagIDFromLabel($tag);
-    }
-
-    private function createTag($tag)
-    {
-        $tDAO = new TagsDao();
-        return $tDAO->create($tag);
     }
 
     private function insert(&$task)
@@ -320,7 +306,8 @@ class TaskDao {
             .",".PDOWrapper::cleanseNull($task->getTaskType())
             .",".PDOWrapper::cleanseNull($task->getTaskStatus())
             .",".PDOWrapper::cleanseNull($task->getPublished()));
-        $task->setId($result[0]['id']);
+
+        $task = ModelFactory::buildModel("Task", $result[0]);
         $this->updateTags($task);
     }
 

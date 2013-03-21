@@ -35,6 +35,17 @@ class BadgeDao
         
         return $ret;
     }
+    
+    public static function getAllBadgesStatic()
+    {
+        $results = PDOWrapper::call("getBadge", "null,null,null,null");
+        $ret = null;
+        foreach ($results as $result) {
+            $ret[]= ModelFactory::buildModel("Badge", $result);
+        }
+        
+        return $ret;
+    }
 
     public function getOrgBadges($org_id)
     {
