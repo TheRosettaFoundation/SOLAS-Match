@@ -37,7 +37,8 @@ class ProjectRouteHandler
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Raphael.js\"></script>";
         $extra_scripts .= "<script>
             var preReqs = new Array();
-            var allTasks = new Array();";
+            var languageList = new Array();
+            var languageTasks = new Array();";
         $body = "";
 
         $time = microtime();
@@ -54,9 +55,18 @@ class ProjectRouteHandler
             $currentLayer = $graph->getRootNodeList();
             $nextLayer = array();
 
+            $taskDao = new TaskDao();
+            $foundLanguages = array();
             while (count($currentLayer) > 0) {
                 foreach ($currentLayer as $node) {
-                    $extra_scripts .= "allTasks.push(".$node->getTaskId().");";
+                    $task = $taskDao->getTask(array('id' => $node->getTaskId()));
+                    $target = $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
+                    if (!in_array($target, $foundLanguages)) {
+                        $extra_scripts .= "languageTasks[\"".$target."\"] = new Array();";
+                        $extra_scripts .= "languageList.push(\"".$target."\");";
+                        $foundLanguages[] = $target;
+                    }
+                    $extra_scripts .= "languageTasks[\"".$target."\"].push(".$node->getTaskId().");";
                     $extra_scripts .= "preReqs[".$node->getTaskId()."] = new Array();";
                     foreach ($node->getNextList() as $nextNode) {
                         if (!in_array($nextNode, $nextLayer)) {
