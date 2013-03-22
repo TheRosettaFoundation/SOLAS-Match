@@ -14,7 +14,7 @@ class GraphViewer
         $this->xPos = 10;
         $this->yPos = 10;
         $this->iconWidth = 175;
-        $this->iconHeight = 100;
+        $this->iconHeight = 75;
     }
 
     public function constructView()
@@ -42,6 +42,39 @@ class GraphViewer
             $att = $doc->createAttribute("height");
             $att->value = "900";
             $view->appendChild($att);
+
+            $triangle = $doc->createElement("marker");
+            $att = $doc->createAttribute("id");
+            $att->value = "triangle";
+            $triangle->appendChild($att);
+            $att = $doc->createAttribute("viewBox");
+            $att->value = "0 0 10 10";
+            $triangle->appendChild($att);
+            $att = $doc->createAttribute("refX");
+            $att->value = 0;
+            $triangle->appendChild($att);
+            $att = $doc->createAttribute("refY");
+            $att->value = 5;
+            $triangle->appendChild($att);
+            $att = $doc->createAttribute("markerUnits");
+            $att->value = "strokeWidth";
+            $triangle->appendChild($att);
+            $att = $doc->createAttribute("markerWidth");
+            $att->value = 10;
+            $triangle->appendChild($att);
+            $att = $doc->createAttribute("markerHeight");
+            $att->value = 10;
+            $triangle->appendChild($att);
+            $att = $doc->createAttribute("orient");
+            $att->value = "auto";
+            $triangle->appendChild($att);
+
+            $path = $doc->createElement("path");
+            $att = $doc->createAttribute("d");
+            $att->value = "M 0 0 L 10 5 L 0 10 z";
+            $path->appendChild($att);
+            $triangle->appendChild($path);
+            $view->appendChild($triangle);
 
             $defs = $doc->createElement("defs");
             $att = $doc->createAttribute("id");
@@ -264,6 +297,27 @@ class GraphViewer
         $vLine->appendChild($att);
         $defs->appendChild($vLine);
 
+        $hLine = $doc->createElement("line");
+        $att = $doc->createAttribute("id");
+        $att->value = "h-line_".$task->getId();
+        $hLine->appendChild($att);
+        $att = $doc->createAttribute("x1");
+        $att->value = $thisX + 25;
+        $hLine->appendChild($att);
+        $att = $doc->createAttribute("y1");
+        $att->value = $thisY + ($itemHeight / 2);
+        $hLine->appendChild($att);
+        $att = $doc->createAttribute("x2");
+        $att->value = $thisX + $itemWidth;
+        $hLine->appendChild($att);
+        $att = $doc->createAttribute("y2");
+        $att->value = $thisY + ($itemHeight / 2);
+        $hLine->appendChild($att);
+        $att = $doc->createAttribute("style");
+        $att->value = "stroke:$taskTypeColour;stroke-width:4";
+        $hLine->appendChild($att);
+        $defs->appendChild($hLine);
+
         $clipPath = $doc->createElement("clipPath");
         $att = $doc->createAttribute("id");
         $att->value = "title-clip_".$task->getId();
@@ -285,15 +339,61 @@ class GraphViewer
         $clipPath->appendChild($component);
         $defs->appendChild($clipPath);
 
-        $text = $doc->createElement("text", $task->getId()." - ".$task->getTitle());
+        $text = $doc->createElement("text", $task->getId());
         $att = $doc->createAttribute("id");
-        $att->value = "text_".$task->getId();
+        $att->value = "task-id_".$task->getId();
         $text->appendChild($att);
         $att = $doc->createAttribute("x");
         $att->value = $thisX + 5;
         $text->appendChild($att);
         $att = $doc->createAttribute("y");
-        $att->value = $thisY + 50;
+        $att->value = $thisY + ($itemHeight / 2) + 3;
+        $text->appendChild($att);
+        $att = $doc->createAttribute("clip-path");
+        $att->value = "url(#title-clip_".$task->getId().")";
+        $text->appendChild($att);
+        $defs->appendChild($text);
+
+        $text = $doc->createElement("text", $task->getTitle());
+        $att = $doc->createAttribute("id");
+        $att->value = "task-title_".$task->getId();
+        $text->appendChild($att);
+        $att = $doc->createAttribute("x");
+        $att->value = $thisX + 30;
+        $text->appendChild($att);
+        $att = $doc->createAttribute("y");
+        $att->value = $thisY + 25;
+        $text->appendChild($att);
+        $att = $doc->createAttribute("clip-path");
+        $att->value = "url(#title-clip_".$task->getId().")";
+        $text->appendChild($att);
+        $defs->appendChild($text);
+
+        $status = "";
+        switch ($task->getTaskStatus()) {
+            case (TaskStatusEnum::WAITING_FOR_PREREQUISITES): 
+                $status = "Waiting";
+                break;
+            case (TaskStatusEnum::PENDING_CLAIM): 
+                $status = "Pending Claim";
+                break;
+            case (TaskStatusEnum::IN_PROGRESS):
+                $status = "In Progress";
+                break;
+            case (TaskStatusEnum::COMPLETE):
+                $status = "Complete";
+                break;
+        }
+
+        $text = $doc->createElement("text", "Status: $status");
+        $att = $doc->createAttribute("id");
+        $att->value = "task-status_".$task->getId();
+        $text->appendChild($att);
+        $att = $doc->createAttribute("x");
+        $att->value = $thisX + 35;
+        $text->appendChild($att);
+        $att = $doc->createAttribute("y");
+        $att->value = $thisY + 60;
         $text->appendChild($att);
         $att = $doc->createAttribute("clip-path");
         $att->value = "url(#title-clip_".$task->getId().")";
@@ -313,13 +413,31 @@ class GraphViewer
 
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
-        $att->value = "#text_".$task->getId();
+        $att->value = "#task-id_".$task->getId();
+        $component->appendChild($att);
+        $compositeElement->appendChild($component);
+
+        $component = $doc->createElement("use");
+        $att = $doc->createAttribute("xlink:href");
+        $att->value = "#task-title_".$task->getId();
+        $component->appendChild($att);
+        $compositeElement->appendChild($component);
+
+        $component = $doc->createElement("use");
+        $att = $doc->createAttribute("xlink:href");
+        $att->value = "#task-status_".$task->getId();
         $component->appendChild($att);
         $compositeElement->appendChild($component);
 
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
         $att->value = "#v-line_".$task->getId();
+        $component->appendChild($att);
+        $compositeElement->appendChild($component);
+
+        $component = $doc->createElement("use");
+        $att = $doc->createAttribute("xlink:href");
+        $att->value = "#h-line_".$task->getId();
         $component->appendChild($att);
         $compositeElement->appendChild($component);
 
