@@ -314,13 +314,12 @@ class OrgRouteHandler
                 if ($post->title == "" || $post->description == "") {
                     $app->flash("error", "All fields must be filled out.");
                 } else {
-                    $params = array();
-                    $params["id"] = $post->badge_id;             
-                    $params["title"] = $post->title;
-                    $params["description"] = $post->description;
-                    $params["owner_id"] = null;
-                    $updatedBadge = ModelFactory::buildModel("Badge", $params);
-                    $badgeDao->updateBadge($updatedBadge); 
+                    $badge = new Badge();
+                    $badge->setId($post->badge_id);
+                    $badge->setTitle($post->title);
+                    $badge->setDescription($post->description);
+                    $badge->setOwnerId(null);
+                    $badgeDao->updateBadge($badge); 
                     $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
                 }
             }
@@ -500,12 +499,10 @@ class OrgRouteHandler
             if ($post->title == "" || $post->description == "") {
                 $app->flashNow("error", "All fields must be filled out.");
             } else {
-                $params = array();
-                $params["title"] = $post->title;
-                $params["description"] = $post->description;
-                $params["owner_id"] = $org_id;
-
-                $badge = ModelFactory::buildModel("Badge", $params);
+                $badge = new Badge();
+                $badge->setTitle($post->title);
+                $badge->setDescription($post->description);
+                $badge->setOwnerId($org_id);
                 $badgeDao->createBadge($badge);                
                 
                 $app->flash("success", "Successfully created new Organisation Badge.");

@@ -42,7 +42,7 @@ class BadgeDao
         if ($badge_array = PDOWrapper::call("getBadge", "null,null,null,".PDOWrapper::cleanse($org_id))) {
             $ret = array();
             foreach ($badge_array as $badge) {
-                $ret[] = $this->buildBadgeModel($badge);
+                $ret[] = ModelFactory::buildModel("Badge", $badge);
             }
         }         
         return $ret;
@@ -75,10 +75,5 @@ class BadgeDao
             return $result[0]["result"];
         }        
         return 0;
-    }    
-    
-    private function buildBadgeModel($result)
-    {
-        return ModelFactory::buildModel("Badge", $result);
     }
 }

@@ -8,14 +8,14 @@ require_once __DIR__.'/../Common/TaskStatusEnum.php';
 class UnitTestHelper
 {
     private function __constuct() {}
-    private static $initalised = false;
+    private static $initalised = true;
     public static function teardownDb()
     {
         $dsn = "mysql:host=".Settings::get('unit_test.server').
                 ";port=".Settings::get('unit_test.port');
         $dsn1 = "mysql:host=".Settings::get('database.server').";dbname=".Settings::get('database.database').
                 ";port=".Settings::get('database.server_port');
-        assert($dsn1 != $dsn &&Settings::get('database.database')!=Settings::get('unit_test.database'));
+        assert($dsn1 != $dsn && Settings::get('database.database') != Settings::get('unit_test.database'));
         
         PDOWrapper::$unitTesting = true;
         $conn = new PDO($dsn,

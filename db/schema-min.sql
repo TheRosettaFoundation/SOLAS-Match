@@ -2534,8 +2534,8 @@ DROP PROCEDURE IF EXISTS `tagInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tagInsert`(IN `name` VARCHAR(50))
 BEGIN
-insert into Tags (label) values (name);
-select id from Tags where label=name;
+	insert into Tags (label) values (name);
+	select *  from Tags t where t.id = LAST_INSERT_ID();
 END//
 DELIMITER ;
 
