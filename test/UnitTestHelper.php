@@ -8,7 +8,7 @@ require_once __DIR__.'/../Common/TaskStatusEnum.php';
 class UnitTestHelper
 {
     private function __constuct() {}
-    private static $initalised = true;
+    private static $initalised = false;
     public static function teardownDb()
     {
         $dsn = "mysql:host=".Settings::get('unit_test.server').
