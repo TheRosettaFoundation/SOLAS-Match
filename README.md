@@ -44,6 +44,7 @@ Coded by:
   Eoin Ó Conchúir   <eoin.oconchuir@ul.ie>
   David O Carroll   <david.ocarroll@ul.ie>
   Sean Mooney       <Sean.Mooney@ul.ie>
+  Manuel Honegger   <Manuel.Honegger@ul.ie>	
 
 # Installation
 
