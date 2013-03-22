@@ -127,7 +127,7 @@ class Users {
             $data = $client->deserialize($data);
             $data = $client->cast('Badge', $data);
             $dao = new BadgeDao();
-            Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $data->getId()), null, $format);
+            Dispatcher::sendResponce(null, $dao->assignBadge($id, $data->getId()), null, $format);
         }, 'addUserbadges');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/badges/:badge/',
@@ -139,7 +139,7 @@ class Users {
                  $badge = $badge[0];
             }
             $dao = new BadgeDao();
-            Dispatcher::sendResponce(null, $dao->assignBadgeByID($id, $badge), null, $format);
+            Dispatcher::sendResponce(null, $dao->assignBadge($id, $badge), null, $format);
         }, 'addUserbadgesByID');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/badges/:badge/',

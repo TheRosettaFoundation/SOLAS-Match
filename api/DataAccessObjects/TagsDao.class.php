@@ -47,8 +47,12 @@ class TagsDao {
 
     private function insert($tag)
     {
-        $id = PDOWrapper::call("tagInsert", PDOWrapper::cleanseWrapStr($tag->getLabel()));
-        return $id[0]['id'];
+        $result = PDOWrapper::call("tagInsert", PDOWrapper::cleanseWrapStr($tag->getLabel()));
+        if($result) {
+            return ModelFactory::buildModel("Tag", $result[0]);
+        } else {
+            return null;
+        }
     }
     
     /*
@@ -174,7 +178,8 @@ class TagsDao {
             if ($tag_id = $this->tagIDFromLabel($tag)) {
                 $tag_ids[] = $tag_id;
             } else {
-                $tag_ids[] = $this->create($tag);
+                $createdTag = $this->create($tag);
+                $tag_ids[] = $createdTag->getId();
             }
         }
         

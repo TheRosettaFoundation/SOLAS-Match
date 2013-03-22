@@ -35,17 +35,6 @@ class BadgeDao
         
         return $ret;
     }
-    
-    public static function getAllBadgesStatic()
-    {
-        $results = PDOWrapper::call("getBadge", "null,null,null,null");
-        $ret = null;
-        foreach ($results as $result) {
-            $ret[]= ModelFactory::buildModel("Badge", $result);
-        }
-        
-        return $ret;
-    }
 
     public function getOrgBadges($org_id)
     {
@@ -59,15 +48,11 @@ class BadgeDao
         return $ret;
     }
 
-    public function assignBadge($user, $badge)
-    {
-        return $this->assignBadgeByID($user->getUserId(), $badge->getId());
-    }
     
-    public function assignBadgeByID($userID, $badgeID)
+    public function assignBadge($userID, $badgeID)
     {
         $badgeValidator = new BadgeValidator();
-        if (!$validation = $badgeValidator->validateUserBadgeByID($userID, $badgeID)) {
+        if (!$validation = $badgeValidator->validateUserBadge($userID, $badgeID)) {
             if ($result = PDOWrapper::call("assignBadge", PDOWrapper::cleanse($userID)
                                                         .",".PDOWrapper::cleanse($badgeID))) {
                 return $result[0]["result"];
@@ -76,13 +61,8 @@ class BadgeDao
         
         return 0;
     }
-
-    public function removeUserBadge($user, $badge)
-    {
-        return $this->removeUserBadgeByID($user->getUserId(), $badge->getId());
-    }
     
-    public function removeUserBadgeByID($userID, $badgeID)
+    public function removeUserBadge($userID, $badgeID)
     {
         $result = PDOWrapper::call("removeUserBadge", PDOWrapper::cleanse($userID)
                                                         .",".PDOWrapper::cleanse($badgeID));

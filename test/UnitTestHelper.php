@@ -118,8 +118,8 @@ class UnitTestHelper
         $task->setCreatedTime($createdTime);
         
         $i = 0;
-        foreach($tags as $tagLabel) {
-            $taskTag = new Tag();
+        $taskTag = new Tag();
+        foreach($tags as $tagLabel) {            
             $taskTag->setId($i+100);
             $taskTag->setLabel($tagLabel[0]);
             $task->addTag($taskTag);
@@ -129,8 +129,8 @@ class UnitTestHelper
         return $task;
     }
 
-    public static function createProjectFile($userId, $projectid, $filename = "saveProjectFileTest.txt",
-            $mime = "saveProjectFileTest.txt", $token = "text/plain")
+    public static function createProjectFile($userId, $projectid, $filename = "createProjectFileTest.txt",
+            $mime = "createProjectFileTest.txt", $token = "text/plain")
     {
         $projectFile = new ProjectFile();
         $projectFile->setUserId($userId);
@@ -139,6 +139,14 @@ class UnitTestHelper
         $projectFile->setMime($mime);
         $projectFile->setToken($token);        
         return $projectFile;
+    }
+    
+    public static function createProjectTag($id, $label)
+    {
+        $tag = new Tag();
+        $tag->setId($id);
+        $tag->setLabel($label);
+        return $tag;
     }
     
     

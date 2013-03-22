@@ -20,7 +20,12 @@ class ProjectTags {
     {
         $args = PDOWrapper::cleanseNull($projectId).", ";
         $args .= PDOWrapper::cleanseNull($tagId);
-        PDOWrapper::call("removeProjectTag", $args);
+        $result = PDOWrapper::call("removeProjectTag", $args);
+        if($result) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
     }
 
     public static function removeAllProjectTags($projectId)
@@ -43,6 +48,11 @@ class ProjectTags {
     {
         $args = PDOWrapper::cleanseNull($projectId).", ";
         $args .= PDOWrapper::cleanseNull($tagId);
-        PDOWrapper::call("addProjectTag", $args);
+        $result = PDOWrapper::call("addProjectTag", $args);
+        if($result) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
     }
 }

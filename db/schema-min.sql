@@ -1618,7 +1618,7 @@ BEGIN
     WHERE tc.`claimed-time` >= dateTime;	
 
     SELECT count(1) into @unclaimedTasks from Tasks t
-    WHERE t.id NOT IN
+    WHERE t.`created-time` >= dateTime AND t.id NOT IN
     (
         SELECT task_id
         FROM  TaskClaims

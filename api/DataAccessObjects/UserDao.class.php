@@ -158,7 +158,7 @@ class UserDao {
         if (!is_object($user) && $clear_password != "") {
             $user = $this->create($email, $clear_password);
             $badge_dao = new BadgeDao();
-            $badge_dao->assignBadgeByID($user->getUserId(), BadgeTypes::REGISTERED);
+            $badge_dao->assignBadge($user->getUserId(), BadgeTypes::REGISTERED);
         } else {
             $user = null;
             //array("message"=>'sorry the account you enerted already exists.
@@ -189,8 +189,7 @@ class UserDao {
                 if (!is_object($user)) {
                     $user = $this->create($retvals['contact/email'], md5($retvals['contact/email']));
                     $badge_dao = new BadgeDao();
-                    $badge = $badge_dao->find(array('badge_id' => BadgeTypes::REGISTERED));
-                    $badge_dao->assignBadge($user, $badge);
+                    $badge_dao->assignBadge($user->getUserId(),  BadgeTypes::REGISTERED);
                 }
                 UserSession::setSession($user->getUserId());
             }

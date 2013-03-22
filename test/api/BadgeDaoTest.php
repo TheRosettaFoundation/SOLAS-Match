@@ -118,21 +118,23 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
         $insertedUser = $userDao->save($user);
         $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getUserId());
         
         $badgeDao = new BadgeDao();
         $badge = UnitTestHelper::createBadge();
         $insertedBadge = $badgeDao->insertAndUpdateBadge($badge);
         $this->assertInstanceOf("Badge", $insertedBadge);
+        $this->assertNotNull($insertedBadge->getId());
         
         // Success
-        $resultAssignBadge = $badgeDao->assignBadge($insertedUser, $insertedBadge);
+        $resultAssignBadge = $badgeDao->assignBadge($insertedUser->getUserId(), $insertedBadge->getId());
         $this->assertEquals("1", $resultAssignBadge);
         
         
         $badge2 = UnitTestHelper::createBadge(NULL, "Badge 2", "Badge 2 Description", NULL);
         
         // Failure
-        $resultAssignBadgeFailure = $badgeDao->assignBadge($insertedUser, $badge2);
+        $resultAssignBadgeFailure = $badgeDao->assignBadge($insertedUser->getUserId(), $badge2->getId());
         $this->assertEquals("0", $resultAssignBadgeFailure);
         
     }
@@ -151,24 +153,30 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
         $insertedUser = $userDao->save($user);
         $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getUserId());
+        $userId = $insertedUser->getUserId();
 
         $badgeDao = new BadgeDao();
         $badge = UnitTestHelper::createBadge(NULL, "Test Remove Badge", "Testing Remove badge", $insertedOrg->getId());
         $insertedBadge = $badgeDao->insertAndUpdateBadge($badge);
         $this->assertInstanceOf("Badge", $insertedBadge);
+        $this->assertNotNull($insertedBadge->getId());
+        $badgeId = $insertedBadge->getId();
 
-        $resultAssign = $badgeDao->assignBadge($insertedUser, $insertedBadge);
+        $resultAssign = $badgeDao->assignBadge($userId, $badgeId);
         $this->assertEquals("1", $resultAssign);
         
         // Success
-        $resultRemove = $badgeDao->removeUserBadge($insertedUser, $insertedBadge);
+        $resultRemove = $badgeDao->removeUserBadge($userId, $badgeId);
         $this->assertEquals("1", $resultRemove);
         
         $badge2 = UnitTestHelper::createBadge(NULL, "Test Remove Badge 2", "Testing Remove badge 2", NULL);
         $insertedBadge2 = $badgeDao->insertAndUpdateBadge($badge2);
+        $this->assertInstanceOf("Badge", $insertedBadge2);
+        $this->assertNotNull($insertedBadge2->getId());
         
         // Failure
-        $resultRemoveFailure = $badgeDao->removeUserBadge($insertedUser, $insertedBadge2);
+        $resultRemoveFailure = $badgeDao->removeUserBadge($userId, $insertedBadge2->getId());
         $this->assertEquals("0", $resultRemoveFailure);
     }
     
@@ -180,7 +188,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $badge = UnitTestHelper::createBadge();
         $insertedBadge = $badgeDao->insertAndUpdateBadge($badge);
         $this->assertInstanceOf("Badge", $insertedBadge);        
-        $this->assertNotNull($insertedBadge->getId());
+        $this->assertNotNull($insertedBadge->getId());       
         
         // Success
         $resultDelete = $badgeDao->deleteBadge($insertedBadge->getId());

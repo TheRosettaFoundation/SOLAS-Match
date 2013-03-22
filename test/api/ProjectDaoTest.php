@@ -338,8 +338,6 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $resultGetProjectFileInfoSuccess = $projectDao->getProjectFileInfo($insertedProject->getId(), $insertedUser->getUserId(), "saveProjectFileTest.txt", "saveProjectFileTest.txt", "text/plain");
         $this->assertInstanceOf("ProjectFile", $resultGetProjectFileInfoSuccess);
         
-
-        
         // Failure
         $resultGetProjectFileInfoFailure = $projectDao->getProjectFileInfo(999, $insertedUser->getUserId(), "saveProjectFileTest.txt", "saveProjectFileTest.txt", "text/plain");
         $this->assertNull($resultGetProjectFileInfoFailure);
