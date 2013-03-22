@@ -27,6 +27,9 @@ class GraphViewer
             $att = $doc->createAttribute("xmlns");
             $att->value = "http://www.w3.org/2000/svg";
             $view->appendChild($att);
+            $att = $doc->createAttribute("xmlns:xlink");
+            $att->value = "http://www.w3.org/1999/xlink";
+            $view->appendChild($att);
             $att = $doc->createAttribute("id");
             $att->value = "project-view";
             $view->appendChild($att);
@@ -196,8 +199,17 @@ class GraphViewer
 
     public function drawNode($task, $doc, &$defs)
     {
-        $taskDao = new TaskDao();
-        $colour = Settings::get("ui.task_".$task->getTaskType()."_colour");
+        $taskTypeColour = Settings::get("ui.task_".$task->getTaskType()."_colour");
+        $taskStatusColour = "rgb(0, 0, 0)";
+        if ($task->getTaskStatus() == TaskStatusEnum::WAITING_FOR_PREREQUISITES) {
+            $taskStatusColour = "rgb(255, 50, 50)";
+        } elseif ($task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM) {
+            $taskStatusColour = "rgb(230, 230, 230)";
+        } elseif ($task->getTaskStatus() == TaskStatusEnum::IN_PROGRESS) {
+            $taskStatusColour = "rgb(150, 150, 255)";
+        } elseif ($task->getTaskStatus() == TaskStatusEnum::COMPLETE) {
+            $taskStatusColour = "rgb(50, 255, 50)";
+        }
 
         $thisX = 0;
         $thisY = 0;
@@ -227,9 +239,51 @@ class GraphViewer
         $att->value = $itemHeight;
         $rect->appendChild($att);
         $att = $doc->createAttribute("style");
-        $att->value = "fill:$colour;stroke:black;stroke-width:4";
+        $att->value = "fill:rgb(255, 255, 255);stroke:$taskTypeColour;stroke-width:4";
         $rect->appendChild($att);
         $defs->appendChild($rect);
+
+        $vLine = $doc->createElement("line");
+        $att = $doc->createAttribute("id");
+        $att->value = "v-line_".$task->getId();
+        $vLine->appendChild($att);
+        $att = $doc->createAttribute("x1");
+        $att->value = $thisX + 25;
+        $vLine->appendChild($att);
+        $att = $doc->createAttribute("y1");
+        $att->value = $thisY;
+        $vLine->appendChild($att);
+        $att = $doc->createAttribute("x2");
+        $att->value = $thisX + 25;
+        $vLine->appendChild($att);
+        $att = $doc->createAttribute("y2");
+        $att->value = $thisY + $itemHeight;
+        $vLine->appendChild($att);
+        $att = $doc->createAttribute("style");
+        $att->value = "stroke:$taskTypeColour;stroke-width:4";
+        $vLine->appendChild($att);
+        $defs->appendChild($vLine);
+
+        $clipPath = $doc->createElement("clipPath");
+        $att = $doc->createAttribute("id");
+        $att->value = "title-clip_".$task->getId();
+        $clipPath->appendChild($att);
+
+        $component = $doc->createElement("rect");
+        $att = $doc->createAttribute("x");
+        $att->value = 0;
+        $component->appendChild($att);
+        $att = $doc->createAttribute("y");
+        $att->value = 0;
+        $component->appendChild($att);
+        $att = $doc->createAttribute("width");
+        $att->value = $this->iconWidth;
+        $component->appendChild($att);
+        $att = $doc->createAttribute("height");
+        $att->value = $this->iconHeight;
+        $component->appendChild($att);
+        $clipPath->appendChild($component);
+        $defs->appendChild($clipPath);
 
         $text = $doc->createElement("text", $task->getId()." - ".$task->getTitle());
         $att = $doc->createAttribute("id");
@@ -240,6 +294,9 @@ class GraphViewer
         $text->appendChild($att);
         $att = $doc->createAttribute("y");
         $att->value = $thisY + 50;
+        $text->appendChild($att);
+        $att = $doc->createAttribute("clip-path");
+        $att->value = "url(#title-clip_".$task->getId().")";
         $text->appendChild($att);
         $defs->appendChild($text);
 
@@ -257,6 +314,12 @@ class GraphViewer
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
         $att->value = "#text_".$task->getId();
+        $component->appendChild($att);
+        $compositeElement->appendChild($component);
+
+        $component = $doc->createElement("use");
+        $att = $doc->createAttribute("xlink:href");
+        $att->value = "#v-line_".$task->getId();
         $component->appendChild($att);
         $compositeElement->appendChild($component);
 
