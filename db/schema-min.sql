@@ -116,7 +116,7 @@ REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
 	(3, NULL, 'Profile-Filler', 'Filled in required info for user profile.'),
 	(4, NULL, 'Registered', 'Successfully set up an account'),
 	(5, NULL, 'Native-Language', 'Filled in your native language on your user profile.');
-
+ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
 -- Dumping structure for table Solas-Match-Test.Countries
 CREATE TABLE IF NOT EXISTS `Countries` (
