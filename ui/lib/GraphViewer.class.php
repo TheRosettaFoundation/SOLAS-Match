@@ -87,11 +87,6 @@ class GraphViewer
                 $thisY = $this->yPos;
                 $task = $taskDao->getTask(array('id' => $root->getTaskId()));
                 $this->drawGraphFromNode($root, $task, $doc, $defs);
-                if ($oldDefs = $doc->getElementById("svg-definitions")) {
-                        $view->replaceChild($defs, $oldDefs);
-                } else {
-                        $view->appendChild($defs);
-                }
                 $composite = $doc->createElement("use");
                 $att = $doc->createAttribute("xlink:href");
                 $att->value = "#sub-graph_".$task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
@@ -107,6 +102,7 @@ class GraphViewer
                 $composite->appendChild($att);
                 $view->appendChild($composite);
             }
+            $view->insertBefore($defs, $view->firstChild);
             $view->setAttribute("height", $this->yPos + 20);
             $doc->appendChild($view);
         }
