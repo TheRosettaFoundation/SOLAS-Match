@@ -16,9 +16,10 @@ class TagsDao {
         $args = "";
         $args .= ((isset($params['id']))) ? PDOWrapper::cleanseNull($params['id']) : "null";
         $args .= (isset($params['label'])) ? ",".PDOWrapper::cleanseNullOrWrapStr($params['label']) : ",null";
-        $ret = array();
+        $ret = null;
         $result = PDOWrapper::call("getTag", $args);
         if ($result != null) {
+            $ret = array();
             foreach ($result as $r) {
                 $tag_data = array();
                 $tag_data['id'] = $r['id'];
@@ -32,7 +33,8 @@ class TagsDao {
 
     public function create($label)
     {
-        $tag = ModelFactory::buildModel("Tag", (array('label' => $label)));
+        $tag = new Tag();
+        $tag->setLabel($label);
         return $this->save($tag);
     }
 

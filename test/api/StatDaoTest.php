@@ -183,7 +183,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         
         // Success - 2 Total Orgs
         $resultTotalOrgs = $statDao->getTotalOrgs();
-        $this->assertEquals("2", $resultTotalOrgs);        
+        $this->assertEquals("2", $resultTotalOrgs);
     }
     
     public function testGetTotalUsers()
