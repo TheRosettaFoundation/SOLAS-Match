@@ -4,6 +4,8 @@ require_once __DIR__.'/../../Common/Requests/UserTaskScoreRequest.php';
 require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
 require_once __DIR__.'/../../Common/models/Task.php';
 require_once __DIR__.'/../../api/lib/Upload.class.php';
+require_once __DIR__.'/../lib/Notify.class.php';
+require_once __DIR__.'/../lib/NotificationTypes.class.php';
 require_once __DIR__.'/TaskTags.class.php';
 require_once __DIR__.'/TaskFile.class.php';
 
@@ -473,18 +475,18 @@ class TaskDao {
         return $ret;
     }
 
-    public function claimTask($task, $user)
-    {
-        return $this->claimTaskbyID($task->getId(), $user->getUserId());
-    }
+//    public function claimTask($task, $user)
+//    {
+//        return $this->claimTaskbyID($task->getId(), $user->getUserId());
+//    }
         
-    public function claimTaskbyID($task_id, $user_id)
+    public function claimTask($task_id, $user_id)
     {
         $ret = PDOWrapper::call("claimTask", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanse($user_id));
         return $ret[0]['result'];
     }
     
-    public function unClaimTaskbyID($task_id, $user_id)
+    public function unClaimTask($task_id, $user_id)
     {
         $ret = PDOWrapper::call("unClaimTask", PDOWrapper::cleanse($task_id).",".PDOWrapper::cleanse($user_id));
         return $ret[0]['result'];

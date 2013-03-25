@@ -271,8 +271,19 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
-
+REPLACE INTO `Statistics` (`name`, `value`) VALUES
+	('ArchivedProjects', 0),
+	('ArchivedTasks', 0),
+	('Badges', 3),
+	('ClaimedTasks', 0),
+	('Organisations', 0),
+	('OrgMembershipRequests', 0),
+	('Projects', 0),
+	('Tags', 0),
+	('Tasks', 0),
+	('TasksWithPreReqs', 0),
+	('Users', 0),
+	('UnclaimedTasks', 0);
 
 -- Dumping structure for table Solas-Match-Test.Tags
 CREATE TABLE IF NOT EXISTS `Tags` (
@@ -750,10 +761,10 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.deleteTag
 DROP PROCEDURE IF EXISTS `deleteTag`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`(IN `tagID` INT)
 BEGIN
-if EXISTS (select 1 from Tags where Tags.id=id) then
-	delete from Tags where Tags.id=id;
+if EXISTS (select 1 from Tags where Tags.id=tagID) then
+	delete from Tags where Tags.id=tagID;
 	select 1 as result;
 else
 	select 0 as result;
@@ -1641,7 +1652,7 @@ BEGIN
    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
    SET @unclaimedTasks = NULL;
    SELECT count(1) into @unclaimedTasks from Tasks t
-	WHERE t.id NOT IN
+	WHERE t.`created-time` >= dateTime AND t.id NOT IN
             (
                 SELECT task_id
                 FROM  TaskClaims

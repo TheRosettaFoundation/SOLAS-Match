@@ -64,6 +64,8 @@ class UnitTestHelper
                         (4, NULL, 'Registered', 'Successfully set up an account'),
                         (5, NULL, 'Native-Language', 'Filled in your native language on your user profile.');");
             $conn->exec("ALTER TABLE `Badges` AUTO_INCREMENT=100;");
+            
+            $conn->exec("CALL statsUpdateAll;");
         }
     }
     
@@ -172,17 +174,7 @@ class UnitTestHelper
         $projectFile->setMime($mime);
         $projectFile->setToken($token);        
         return $projectFile;
-    }
-    
-    public static function createProjectTag($id, $label)
-    {
-        $tag = new Tag();
-        $tag->setId($id);
-        $tag->setLabel($label);
-        return $tag;
-    }
-    
-    
+    }    
 }
 
 ?>
