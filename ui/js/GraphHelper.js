@@ -12,6 +12,7 @@ function drawLines()
             preReqList = preReqs[taskArray[k]];
             for (var j = 0; j < preReqList.length; j++) {
                 var preReq = $("#task_" + preReqList[j]);
+                var colour = $("#task-status_" + preReqList[j]).attr("fill");
                 rect = $("#rect_" + preReqList[j]);
                 var X_s = parseInt(preReq.attr("x")) + parseInt(languageBox.attr("x")) + parseInt(rect.attr("width"));
                 var Y_s = parseInt(preReq.attr("y")) + parseInt(languageBox.attr("y")) + parseInt(rect.attr("height")) / 2;
@@ -20,7 +21,7 @@ function drawLines()
                 var line = document.createElementNS('http://www.w3.org/2000/svg', "polyline");
                 line.setAttribute("points", X_s + "," + Y_s + " " + X_m + "," + Y_m + " " + X_e + "," + Y_e);
                 line.setAttribute("marker-mid", "url(#triangle)");
-                line.setAttribute("style", 'stroke:rgb(0,0,0);stroke-width:2');
+                line.setAttribute("style", 'stroke-width:2;stroke:' + colour);
                 svg.appendChild(line);
             }
         }
@@ -29,8 +30,9 @@ function drawLines()
 
 function repositionElements()
 {
-    for (var i = 0; i < allTasks.length; i++) {
-        if (preReqs[allTasks[i]].length > 0) {
+    for (var i = 0; i < languageList.length; i++) {
+        taskArray = languageTasks[languageList[i]];
+        for (var j = 0; j < taskArray.length; j++) {
             var newY = 0;
             preReqList = preReqs[allTasks[i]];
             for (var j = 0; j < preReqList.length; j++) {

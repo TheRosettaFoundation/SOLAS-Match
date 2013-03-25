@@ -262,17 +262,6 @@ class GraphViewer
     public function drawNode($task, $doc, &$defs)
     {
         $taskTypeColour = Settings::get("ui.task_".$task->getTaskType()."_colour");
-        $taskStatusColour = "rgb(0, 0, 0)";
-        if ($task->getTaskStatus() == TaskStatusEnum::WAITING_FOR_PREREQUISITES) {
-            $taskStatusColour = "rgb(255, 50, 50)";
-        } elseif ($task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM) {
-            $taskStatusColour = "rgb(230, 230, 230)";
-        } elseif ($task->getTaskStatus() == TaskStatusEnum::IN_PROGRESS) {
-            $taskStatusColour = "rgb(150, 150, 255)";
-        } elseif ($task->getTaskStatus() == TaskStatusEnum::COMPLETE) {
-            $taskStatusColour = "rgb(50, 255, 50)";
-        }
-
         $thisX = 0;
         $thisY = 0;
         $itemWidth = $this->iconWidth;
@@ -399,18 +388,23 @@ class GraphViewer
         $defs->appendChild($text);
 
         $status = "";
+        $taskStatusColour = "rgb(0, 0, 0)";
         switch ($task->getTaskStatus()) {
             case (TaskStatusEnum::WAITING_FOR_PREREQUISITES): 
                 $status = "Waiting";
+//                $taskStatusColour = "rgb(255, 50, 50)";
                 break;
             case (TaskStatusEnum::PENDING_CLAIM): 
                 $status = "Pending Claim";
+//                $taskStatusColour = "rgb(230, 230, 230)";
                 break;
             case (TaskStatusEnum::IN_PROGRESS):
                 $status = "In Progress";
+//                $taskStatusColour = "rgb(150, 150, 255)";
                 break;
             case (TaskStatusEnum::COMPLETE):
                 $status = "Complete";
+//                $taskStatusColour = "rgb(20, 210, 20)";
                 break;
         }
 
@@ -423,6 +417,9 @@ class GraphViewer
         $text->appendChild($att);
         $att = $doc->createAttribute("y");
         $att->value = $thisY + 60;
+        $text->appendChild($att);
+        $att = $doc->createAttribute("fill");
+        $att->value = $taskStatusColour;
         $text->appendChild($att);
         $att = $doc->createAttribute("clip-path");
         $att->value = "url(#title-clip_".$task->getId().")";
