@@ -23,8 +23,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks(:format)/',
                                                         function ($format = ".json") {
             
-            $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->getTask(null), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::getTask(null), null, $format);
         }, 'getTasks');        
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks(:format)/',
@@ -34,8 +33,7 @@ class Tasks {
             $client = new APIHelper($format);
             $data = $client->deserialize($data);
             $data = $client->cast("Task", $data);
-            $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->create($data), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::create($data), null, $format);
         }, 'createTask');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/',
@@ -46,12 +44,11 @@ class Tasks {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $dao = new TaskDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data);
             $data = $client->cast("Task", $data);
-            Dispatcher::sendResponce(null, $dao->save($data), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::save($data), null, $format);
         }, 'updateTask');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:id/',
@@ -62,14 +59,12 @@ class Tasks {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->delete($id), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::delete($id), null, $format);
         }, 'deleteTask');
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/prerequisites(:format)/',
             function ($id, $format = ".json") {
-                $dao = new TaskDao();
-                Dispatcher::sendResponce(null, $dao->getTaskPreReqs($id), null, $format);
+                Dispatcher::sendResponce(null, TaskDao::getTaskPreReqs($id), null, $format);
         }, 'getTaskPreReqs');
 
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/prerequisites/:preReqId/',
@@ -90,9 +85,8 @@ class Tasks {
                 $format = '.'.$preReqId[1];
                 $preReqId = $preReqId[0];
             }
-            $dao = new TaskDao();
             Dispatcher::sendResponce(null, Upload::removeTaskPreReq($id, $preReqId), null, $format);
-            //Dispatcher::sendResponce(null, $dao->removeTaskPreReq($id, $preReqId), null, $format);
+            //Dispatcher::sendResponce(null, Upload::removeTaskPreReq($id, $preReqId), null, $format);
         }, "removeTaskPreReq");
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:taskId/user/:userId/',
@@ -102,8 +96,7 @@ class Tasks {
                 $format = '.'.$userId[1];
                 $userId = $userId[0];
             }
-            $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->moveToArchiveByID($taskId, $userId), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::moveToArchiveByID($taskId, $userId), null, $format);
         }, 'archiveTask');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/top_tasks(:format)/',
@@ -121,8 +114,7 @@ class Tasks {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $dao = new TaskDao();
-            $data = $dao->getTask(array("id" => $id));
+            $data = TaskDao::getTask(array("id" => $id));
             if ($data && is_array($data)) {
                 $data = $data[0];
             }
@@ -131,18 +123,16 @@ class Tasks {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
-            $dao = new TaskTags();
-            Dispatcher::sendResponce(null, $dao->getTags($id), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::getTags($id), null, $format);
         }, 'getTasksTags');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
-            $dao = new TaskDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data);
             $data = $client->cast("Task", $data);
-            $result = $dao->updateTags($data);
+            $result = TaskDao::updateTags($data);
             Dispatcher::sendResponce(null, array("result" => $result), null, $format);
         }, 'setTasksTags');
         
@@ -150,14 +140,12 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/status(:format)/',
                                                         function ($id, $format=".json") {
             
-            $dao = new TaskDao();
-            Dispatcher::sendResponce(null, array("status message" => $dao->getTaskStatus($id)), null, $format);
+            Dispatcher::sendResponce(null, array("status message" => TaskDao::getTaskStatus($id)), null, $format);
         }, 'getTaskStatus');
 
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/feedback(:format)/',
                 function ($id, $format = ".json") {
-                    $taskDao = new TaskDao();
-                    $tasks = $taskDao->getTask(array('id' => $id));
+                    $tasks = TaskDao::getTask(array('id' => $id));
                     $task = $tasks[0];
 
                     $data = Dispatcher::getDispatcher()->request()->getBody();
@@ -168,8 +156,7 @@ class Tasks {
                     $users = $feedbackData->getUserIdList();
                     if (count($users) > 0) {
                         if (count($users) == 1) {
-                            $userDao = new UserDao();
-                            $user = $userDao->find(array('user_id' => $users[0]));
+                            $user = UserDao::find(array('user_id' => $users[0]));
 
                             Notify::sendOrgFeedback($task, $user, $feedbackData->getFeedback());
                         } else {
@@ -200,8 +187,7 @@ class Tasks {
                 $format = '.'.$userID[1];
                 $userID = $userID[0];
             }
-            $dao = new TaskDao();
-            $task = $dao->getTask(array("id" => $id));
+            $task = TaskDao::getTask(array("id" => $id));
             if (is_array($task)) {
                 $task = $task[0];
             }
@@ -219,14 +205,12 @@ class Tasks {
                 $format = '.'.$userID[1];
                 $userID = $userID[0];
             }
-            $dao = new TaskDao();
-            $task = $dao->getTask(array("id" => $id));
+            $task = TaskDao::getTask(array("id" => $id));
             if (is_array($task)) {
                 $task = $task[0];
             }
             
-            $projectDao = new ProjectDao();
-            $projectFile = $projectDao->getProjectFileInfo($task->getProjectId(), null, null, null, null);
+            $projectFile = ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
             $filename = $projectFile->getFilename();
             
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
@@ -255,12 +239,11 @@ class Tasks {
                                                         function ($id, $format = ".json") {
 
             $data = null;
-            $dao = new TaskDao();
             $userID = Dispatcher::clenseArgs('userID', HttpMethodEnum::GET, null);
             if (is_numeric($userID)) {
-                $data = $dao->hasUserClaimedTask($userID, $id);
+                $data = TaskDao::hasUserClaimedTask($userID, $id);
             } else {
-                $data = $dao->taskIsClaimed($id);
+                $data = TaskDao::taskIsClaimed($id);
             }
 
             Dispatcher::sendResponce(null, $data, null, $format);
@@ -275,20 +258,18 @@ class Tasks {
                 $format = '.'.$userID[1];
                 $userID = $userID[0];
             }
-            $dao = new TaskDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserializer($data);
             $data = $client->cast("Task", $data);
-            $result = $dao->duplicateTaskForTarget($data, $languageCode, $countryCode, $userID);
+            $result = TaskDao::duplicateTaskForTarget($data, $languageCode, $countryCode, $userID);
             Dispatcher::sendResponce(null, array("result" => $result), null, $format);
         }, 'addTarget');   
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/user(:format)/',
                                                         function ($id, $format = ".json") {
             
-            $dao = new TaskDao();
-            $data = $dao->getUserClaimedTask($id);
+            $data = TaskDao::getUserClaimedTask($id);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserClaimedTask');
     }

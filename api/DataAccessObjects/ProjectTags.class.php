@@ -2,7 +2,8 @@
 
 require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
 
-class ProjectTags {
+class ProjectTags
+{
     
     public static function getTags($project_id)
     {

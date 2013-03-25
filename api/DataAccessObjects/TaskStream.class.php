@@ -14,8 +14,7 @@ class TaskStream
     public static function getStream($nb_items = 10)
     {
         // Simple stream, just get latest global jobs.
-        $task_dao = new TaskDao();
-        return $task_dao->getLatestAvailableTasks($nb_items);
+        return TaskDao::getLatestAvailableTasks($nb_items);
     }
 
     /*
@@ -23,8 +22,7 @@ class TaskStream
     */
     public static function getUserStream($user_id, $nb_items = 0)
     {
-        $task_dao = new TaskDao();
-        return $task_dao->getUserTopTasks($user_id, $nb_items);
+        return TaskDao::getUserTopTasks($user_id, $nb_items);
     }
     
     /*
@@ -32,7 +30,6 @@ class TaskStream
      */
     public static function getTaggedStream($tag, $nb_items)
     {
-        $task_dao = new TaskDao();
-        return $task_dao->getTaggedTasks($tag, $nb_items);
+        return TaskDao::getTaggedTasks($tag, $nb_items);
     }
 }

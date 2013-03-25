@@ -15,31 +15,27 @@ class ProjectTagsTest extends PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
         
-        $orgDao = new OrganisationDao();
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = $orgDao->insertAndUpdate($org);
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
-        
-        $projectDao = new ProjectDao();
+
         $project = UnitTestHelper::createProject($insertedOrg->getId());        
-        $insertedProject = $projectDao->createUpdate($project);
+        $insertedProject = ProjectDao::createUpdate($project);
         $this->assertInstanceOf("Project", $insertedProject);    
         $this->assertNotNull($project->getId());          
 
-        $tagsDao = new TagsDao();
-        $projectTag1 = $tagsDao->create("New Project Tag");
+        $projectTag1 = TagsDao::create("New Project Tag");
         $this->assertInstanceOf("Tag", $projectTag1);
         $this->assertNotNull($projectTag1->getId());        
         $this->assertEquals("New Project Tag", $projectTag1->getLabel());
         
-        $projectTagsDao = new ProjectTags();
         // Success
-        $resultAddProjectTag = $projectTagsDao->addProjectTag($project->getId(), $projectTag1->getId());
+        $resultAddProjectTag = ProjectTags::addProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("1", $resultAddProjectTag);
         
         // Failure
-        $resultAddProjectTagFailure = $projectTagsDao->addProjectTag($project->getId(), $projectTag1->getId());
+        $resultAddProjectTagFailure = ProjectTags::addProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("0", $resultAddProjectTagFailure);
 
     }
@@ -49,34 +45,30 @@ class ProjectTagsTest extends PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
 
-        $orgDao = new OrganisationDao();
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = $orgDao->insertAndUpdate($org);
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
-        
-        $projectDao = new ProjectDao();
+
         $project = UnitTestHelper::createProject($insertedOrg->getId());        
-        $insertedProject = $projectDao->createUpdate($project);
+        $insertedProject = ProjectDao::createUpdate($project);
         $this->assertInstanceOf("Project", $insertedProject);    
         $this->assertNotNull($project->getId());          
 
-        $tagsDao = new TagsDao();
-        $projectTag1 = $tagsDao->create("New Project Tag");
+        $projectTag1 = TagsDao::create("New Project Tag");
         $this->assertInstanceOf("Tag", $projectTag1);
         $this->assertNotNull($projectTag1->getId());        
         $this->assertEquals("New Project Tag", $projectTag1->getLabel());
         
-        $projectTagsDao = new ProjectTags();
-        $addProjectTag = $projectTagsDao->addProjectTag($project->getId(), $projectTag1->getId());
+        $addProjectTag = ProjectTags::addProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("1", $addProjectTag);
         
         // Success
-        $resultRemoveProjectTag = $projectTagsDao->removeProjectTag($project->getId(), $projectTag1->getId());
+        $resultRemoveProjectTag = ProjectTags::removeProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("1", $resultRemoveProjectTag);
         
         // Failure
-        $resultRemoveProjectTagFailure = $projectTagsDao->removeProjectTag($project->getId(), $projectTag1->getId());
+        $resultRemoveProjectTagFailure = ProjectTags::removeProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("0", $resultRemoveProjectTagFailure);
     }
     
@@ -85,20 +77,17 @@ class ProjectTagsTest extends PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
         
-        $orgDao = new OrganisationDao();
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = $orgDao->insertAndUpdate($org);
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
-                
-        $projectDao = new ProjectDao();
+
         $project = UnitTestHelper::createProject($insertedOrg->getId());        
-        $insertedProject = $projectDao->createUpdate($project);
+        $insertedProject = ProjectDao::createUpdate($project);
         $this->assertInstanceOf("Project", $insertedProject);    
         $this->assertNotNull($project->getId());
         
-        $projectTagsDao = new ProjectTags();
-        $resultGetTags = $projectTagsDao->getTags($project->getId());
+        $resultGetTags = ProjectTags::getTags($project->getId());
         $this->assertCount(2, $resultGetTags);
         foreach($resultGetTags as $projectTag) {
             $this->assertInstanceOf("Tag", $projectTag);

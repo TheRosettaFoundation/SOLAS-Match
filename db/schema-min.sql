@@ -271,19 +271,6 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-REPLACE INTO `Statistics` (`name`, `value`) VALUES
-	('ArchivedProjects', 0),
-	('ArchivedTasks', 0),
-	('Badges', 3),
-	('ClaimedTasks', 0),
-	('Organisations', 0),
-	('OrgMembershipRequests', 0),
-	('Projects', 0),
-	('Tags', 0),
-	('Tasks', 0),
-	('TasksWithPreReqs', 0),
-	('Users', 0),
-	('UnclaimedTasks', 0);
 
 -- Dumping structure for table Solas-Match-Test.Tags
 CREATE TABLE IF NOT EXISTS `Tags` (
@@ -1556,136 +1543,39 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
 BEGIN
-set @q = Concat("   SELECT t.label AS label,t.id as d, COUNT( pt.tag_id ) AS frequency
-                    FROM ProjectTags AS pt 
-                    join Tags AS t on pt.tag_id = t.id
-                    join Tasks tsk on tsk.project_id=pt.project_id
-                    WHERE not exists (SELECT 1
-                                       FROM TaskClaims tc
-                                       where tc.task_id=tsk.id
-                                     )
-                    GROUP BY pt.tag_id
-                    ORDER BY frequency DESC
-                    LIMIT ",lim);
-        PREPARE stmt FROM @q;
-        EXECUTE stmt;
-        DEALLOCATE PREPARE stmt;
+	if lim='' then set lim=null;end if;
+	if not lim is null then
+		set @q = Concat("   SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
+		                    FROM ProjectTags AS pt 
+		                    join Tags AS t on pt.tag_id = t.id
+		                    GROUP BY pt.tag_id
+		                    ORDER BY frequency DESC, t.label
+		                    LIMIT ",lim);
+	else
+		set @q = "   SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
+		                    FROM ProjectTags AS pt 
+		                    join Tags AS t on pt.tag_id = t.id
+		                    GROUP BY pt.tag_id
+		                    ORDER BY frequency DESC, t.label";
+		
+	end if;
+   PREPARE stmt FROM @q;
+   EXECUTE stmt;
+   DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalArchivedTasks
-DROP PROCEDURE IF EXISTS `getTotalArchivedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalArchivedTasks`(IN `dateTime` DATETIME)
-BEGIN
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-    SET @archivedTasks = NULL;
-    SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.`created-time` >= dateTime;
-    SELECT @archivedTasks AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalClaimedTasks
-DROP PROCEDURE IF EXISTS `getTotalClaimedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalClaimedTasks`(IN `dateTime` DATETIME)
-BEGIN
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-    SET @claimedTasks = NULL;
-    SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.`claimed-time` >= dateTime;
-    SELECT @claimedTasks AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalOrgs
-DROP PROCEDURE IF EXISTS `getTotalOrgs`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalOrgs`()
-BEGIN
-    SET @totalOrgs = NULL;	
-    SELECT count(1) INTO @totalOrgs FROM Organisations;
-    SELECT @totalOrgs AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalTasks
-DROP PROCEDURE IF EXISTS `getTotalTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalTasks`(IN `dateTime` DATETIME)
-BEGIN
-    SET @totalTasks = NULL;
-    SET @claimedTasks = NULL;
-    SET @unclaimedTasks = NULL;
-    SET @archivedTasks = NULL;
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-
-    SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.`claimed-time` >= dateTime;	
-
-    SELECT count(1) into @unclaimedTasks from Tasks t
-    WHERE t.`created-time` >= dateTime AND t.id NOT IN
-    (
-        SELECT task_id
-        FROM  TaskClaims
-    );
-
-    SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.`created-time` >= dateTime;	
-
-    SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks;	
-    SELECT @totalTasks AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalUnclaimedTasks
-DROP PROCEDURE IF EXISTS `getTotalUnclaimedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalUnclaimedTasks`(IN `dateTime` DATETIME)
-BEGIN
-   if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-   SET @unclaimedTasks = NULL;
-   SELECT count(1) into @unclaimedTasks from Tasks t
-	WHERE t.`created-time` >= dateTime AND t.id NOT IN
-            (
-                SELECT task_id
-                FROM  TaskClaims
-            );
-	SELECT @unclaimedTasks AS result;	
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalUsers
-DROP PROCEDURE IF EXISTS `getTotalUsers`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalUsers`()
-BEGIN
-    SET @totalUsers = NULL;	
-    SELECT count(1) INTO @totalUsers FROM Users;
-    SELECT @totalUsers AS result;
-END//
-DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getTrackedProjects
 DROP PROCEDURE IF EXISTS `getTrackedProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrackedProjects`(IN `uID` INT)
 BEGIN
-select p.* from Projects p  
-join UserTrackedProjects utp 
-on p.id=utp.Project_id
-where utp.user_id=uID;
+    select p.* from Projects p  
+    join UserTrackedProjects utp 
+    on p.id=utp.Project_id
+    where utp.user_id=uID;
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getUser
 DROP PROCEDURE IF EXISTS `getUser`;
@@ -2487,24 +2377,6 @@ BEGIN
 	SELECT count(DISTINCT tp.task_id) INTO @totalTasksWithPreReqs FROM TaskPrerequisites tp;	
 	REPLACE INTO Statistics (name, value)
 	VALUES ('TasksWithPreReqs', @totalTasksWithPreReqs);
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTotalProjects
-DROP PROCEDURE IF EXISTS `statsUpdateTotalProjects`;
-DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `statsUpdateTotalProjects`()
-BEGIN
-	SET @Projects = 0;
-	SET @ArchivedProjects = 0;	
-	
-	SELECT count(1) INTO @Projects FROM Projects;	
-	SELECT count(1) INTO @ArchivedProjects FROM ArchivedProjects;
-	
-	SET @totalProjects = @Projects + @ArchivedProjects;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('TotalProjects', @totalProjects);	
 END//
 DELIMITER ;
 

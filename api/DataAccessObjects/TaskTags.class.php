@@ -2,7 +2,8 @@
 
 require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
 
-class TaskTags {
+class TaskTags
+{
     
     public static function getTags($task_id)
     {

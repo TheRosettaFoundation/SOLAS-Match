@@ -14,33 +14,29 @@ class BadgeValidatorTest extends PHPUnit_Framework_TestCase
 {
     public function testValidateUserBadge()
     {
-        UnitTestHelper::teardownDb();
-        
-        $userDao = new UserDao();
+        UnitTestHelper::teardownDb();        
+
         $user = UnitTestHelper::createUser();
-        $insertedUser = $userDao->save($user);
+        $insertedUser = UserDao::save($user);
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser);
         
-        $badgeDao = new BadgeDao();
         $badge = UnitTestHelper::createBadge();
-        $insertedBadge = $badgeDao->insertAndUpdateBadge($badge);
+        $insertedBadge = BadgeDao::insertAndUpdateBadge($badge);
         $this->assertInstanceOf("Badge", $insertedBadge);    
         $this->assertNotNull($insertedBadge->getId());
         
-        $userAssignedBadge = $badgeDao->assignBadge($insertedUser->getUserId(), $insertedBadge->getId());
+        $userAssignedBadge = BadgeDao::assignBadge($insertedUser->getUserId(), $insertedBadge->getId());
         $this->assertEquals("1", $userAssignedBadge);
         
-        $badgeValidator = new BadgeValidator();   
-        
         // Success
-        $resultValidate = $badgeValidator->validateUserBadge($insertedUser->getUserId(), $insertedBadge->getId());
+        $resultValidate = BadgeValidator::validateUserBadge($insertedUser->getUserId(), $insertedBadge->getId());
         $this->assertEquals("1", $resultValidate);   
         
         $badge2 = UnitTestHelper::createBadge(99, "Badge 2", "Badge 2 Description", NULL);
         
         // Failure
-        $resultValidateFailure = $badgeValidator->validateUserBadge($insertedUser->getUserId(), $badge2->getId());
+        $resultValidateFailure = BadgeValidator::validateUserBadge($insertedUser->getUserId(), $badge2->getId());
         $this->assertEquals("0", $resultValidateFailure);    
     }    
 }

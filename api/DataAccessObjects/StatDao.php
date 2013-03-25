@@ -6,74 +6,13 @@
  * @author sean
  */
 
-class StatDao {
-    
-    public static function getTotalTasks($dateTime)
-    {
-        $ret = null;
-        if ($result = PDOWrapper::call("getTotalTasks", PDOWrapper::cleanseNullOrWrapStr($dateTime))) {
-            $ret = $result[0]['result'];
-        }
-
-        return $ret;
-    }
-    
-    public static function getTotalArchivedTasks($dateTime)
-    {
-        $ret = null;
-        if ($result = PDOWrapper::call("getTotalArchivedTasks", PDOWrapper::cleanseNullOrWrapStr($dateTime))) {
-            $ret = $result[0]['result'];
-        }
-
-        return $ret;
-    }
-    
-    public static function getTotalClaimedTasks($dateTime)
-    {
-        $ret = null;
-        if ($result = PDOWrapper::call("getTotalClaimedTasks", PDOWrapper::cleanseNullOrWrapStr($dateTime))) {
-            $ret = $result[0]['result'];
-        }
-
-        return $ret;
-    }
-    
-    public static function getTotalOrgs()
-    {
-        $ret = null;
-        if ($result = PDOWrapper::call("getTotalOrgs", "")) {
-            $ret = $result[0]['result'];
-        }
-
-        return $ret;
-    }
-    
-    public static function getTotalUsers()
-    {
-        $ret = null;
-        if ($result = PDOWrapper::call("getTotalUsers", "")) {
-            $ret = $result[0]['result'];
-        }
-
-        return $ret;
-    }
-    
-    public static function getTotalUnclaimedTasks($dateTime)
-    {
-        $ret = null;
-        if ($result = PDOWrapper::call("getTotalUnclaimedTasks", PDOWrapper::cleanseNullOrWrapStr($dateTime))) {
-            $ret = $result[0]['result'];
-        }
-
-        return $ret;
-    }
-    
+class StatDao
+{        
     public static function getStatistics($name)
     {
         $ret = null;
         $result = PDOWrapper::call('getStatistics', PDOWrapper::cleanseNullOrWrapStr($name));
-        if ($result) {
-            
+        if ($result) {            
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Statistic", $row);
@@ -82,4 +21,64 @@ class StatDao {
         }
         return $ret;
     }
+    
+    public static function updateArchivedProjects()
+    {       
+       PDOWrapper::call("statsUpdateArchivedProjects", "");        
+    }
+    
+    public static function updateArchivedTasks()
+    {       
+       PDOWrapper::call("statsUpdateArchivedTasks", "");        
+    }
+    
+    public static function updateBadges()
+    {       
+       PDOWrapper::call("statsUpdateBadges", "");        
+    }
+    
+    public static function updateClaimedTasks()
+    {       
+       PDOWrapper::call("statsUpdateClaimedTasks", "");        
+    }
+    
+    public static function updateOrganisations()
+    {       
+       PDOWrapper::call("statsUpdateOrganisations", "");        
+    }
+    
+    public static function updateOrgMemberRequests()
+    {       
+       PDOWrapper::call("statsUpdateOrgMemberRequests", "");        
+    }
+    
+    public static function updateProjects()
+    {       
+       PDOWrapper::call("statsUpdateProjects", "");        
+    }
+    
+    public static function updateTags()
+    {       
+       PDOWrapper::call("statsUpdateTags", "");        
+    }
+    
+    public static function updateTasks()
+    {       
+       PDOWrapper::call("statsUpdateTasks", "");        
+    }
+    
+    public static function updateTasksWithPreReqs()
+    {       
+       PDOWrapper::call("statsUpdateTasksWithPreReqs", "");        
+    }
+    
+    public static function updateUnclaimedTasks()
+    {       
+       PDOWrapper::call("statsUpdateUnclaimedTasks", "");        
+    }
+    
+    public static function updateUsers()
+    {       
+       PDOWrapper::call("statsUpdateUsers", "");        
+    }    
 }
