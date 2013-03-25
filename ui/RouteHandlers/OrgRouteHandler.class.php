@@ -416,7 +416,7 @@ class OrgRouteHandler
         $badgeDao = new BadgeDao();
         $userDao = new UserDao();
 
-        $badge = $badgeDao->getBadge(array('id' => $badge_id));
+        $badge = $badgeDao->getBadge($badge_id);
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $app->view()->setData("badge", $badge);
@@ -539,7 +539,7 @@ class OrgRouteHandler
         $app = Slim::getInstance();
         $badgeDao = new BadgeDao();
 
-        $badge = $badgeDao->getBadge(array('id' => $badge_id));
+        $badge = $badgeDao->getBadge($badge_id);
         $app->view()->setData("badge", $badge);        
         $app->view()->appendData(array("org_id" => $org_id));        
         

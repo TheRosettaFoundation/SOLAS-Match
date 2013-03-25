@@ -1,7 +1,10 @@
 <?php
-
 require_once 'Serializer.class.php';
-
+require_once __dir__.'/../ProtoList.php';
+//require __dir__."/../../ui/vendor/autoload.php";
+//\DrSlump\Protobuf::autoload();
+//require_once '../models/Badge.php';
+//require_once '../models/Tag.php';
 class ProtobufSerializer extends Serializer
 {
     public function __construct()
@@ -13,23 +16,31 @@ class ProtobufSerializer extends Serializer
     {
         $ret = null;
         if(is_object($data)) {
-            $ret = $body->serialize();
+            $ret = $data->serialize();
         } elseif (is_array($data)) {
-            $ret = array();
+            $ret = new ProtoList();
             foreach ($data as $obj) {
-                $ret[]=$obj->serialize();
+                $ret->addItem($obj->serialize());
             }
+            $ret=$ret->serialize();
         } else {
-            $ret = $data;
+            $ret = $data->serialize();
         }
         return $ret;
     }
 
-    public function deserialize($data)
+    public function deserialize($data,$type=array("Tag"))
     {
-        $ret = null;
+        $ret = is_array($type)?array():null;
         try {
-            $ret = $data;
+            
+            $temp = new ProtoList();
+            $temp->parse($data);
+            foreach ($temp->getItemList() as $value) {
+               $obj = is_array($type)? new $type[0]: new $type;
+               $obj->parse($value);
+               $ret[]=$obj;
+            }
         } catch (Exception $e) {
             echo "Failed to unserialize data: $data";
         }
@@ -50,3 +61,16 @@ class ProtobufSerializer extends Serializer
         return 'application/x-protobuf; charset=utf-8';
     }
 }
+
+//$temp = new ProtobufSerializer();
+//$ary = array();
+//$stat = new Badge();
+//$stat->setTitle("test");
+//$stat->setId(25);
+//$ary[]=$stat;
+//$ary[]=$stat;
+//$ary[]=$stat;
+//$serial = $temp->serialize($ary);
+//echo $serial;
+//$deSerial= $temp->deserialize($serial,array("Tag"));
+//echo " equal? :".($ary ==$deSerial);

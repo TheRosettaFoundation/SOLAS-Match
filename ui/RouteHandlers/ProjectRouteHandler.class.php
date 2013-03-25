@@ -279,7 +279,7 @@ class ProjectRouteHandler
 
         $tagList = "[";
         $tagDao = new TagDao();
-        $tags = $tagDao->getTag(null);
+        $tags = $tagDao->getTags(null);
         if ($tags) {
             foreach ($tags as $tag) {
                 $tagList .= "\"{$tag->getLabel()}\", ";
@@ -518,7 +518,7 @@ class ProjectRouteHandler
 
         $tagString = "[";
         $tagDao = new TagDao();
-        $allTags = $tagDao->getTag(null);
+        $allTags = $tagDao->getTags(null);
         if ($allTags) {
             foreach ($allTags as $tag) {
                 $tagString .= "\"{$tag->getLabel()}\", ";

@@ -23,7 +23,7 @@ class TagRouteHandler
 
         $user_id = UserSession::getCurrentUserID();
         $user_tags = $userDao->getUserTags($user_id);
-        $all_tags = $tagDao->getTag(null);
+        $all_tags = $tagDao->getTags(null);
         
         $app->view()->appendData(array(
             "user_tags" => $user_tags,
@@ -39,7 +39,7 @@ class TagRouteHandler
         $tagDao = new TagDao();
         $userDao = new UserDao();
 
-        $tag = $tagDao->getTag(array('label' => $label));
+        $tag = $tagDao->getTagByLabel($label);
         $user_id = UserSession::getCurrentUserID();
         $current_user = $userDao->getUser(array('id' => $user_id));
 
@@ -80,7 +80,7 @@ class TagRouteHandler
         $orgDao = new OrganisationDao();
         $userDao = new UserDao();
 
-        $tag = $tagDao->getTag(array('label' => $label));
+        $tag = $tagDao->getTagByLabel($label);
         $tag_id = $tag->getId();
         if (is_null($tag_id)) {
             header("HTTP/1.0 404 Not Found");

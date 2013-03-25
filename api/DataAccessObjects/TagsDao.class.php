@@ -32,7 +32,8 @@ class TagsDao {
 
     public function create($label)
     {
-        $tag = ModelFactory::buildModel("Tag", (array('label' => $label)));
+        $tag = new Tag();
+        $tag->setLabel($label);
         return $this->save($tag);
     }
 

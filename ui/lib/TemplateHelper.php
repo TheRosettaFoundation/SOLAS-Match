@@ -225,14 +225,14 @@ class TemplateHelper {
     public static function countryNameFromId($cID)
     {
         $countryDao = new CountryDao();
-        $result = $countryDao->getCountry(array("id" => $cID));
+        $result = $countryDao->getCountry($cID);
         return self::cleanse($result->getName());
     }
     
     public static function countryNameFromCode($cc) 
     {
         $countryDao = new CountryDao();
-        $result = $countryDao->getCountry(array("code" => $cc));
+        $result = $countryDao->getCountryByCode($cc);
         return self::cleanse($result->getName());
     }
      
@@ -258,7 +258,7 @@ class TemplateHelper {
     {
         $use_language_codes = Settings::get("ui.language_codes");     
         $countryDao = new CountryDao();
-        $result = $countryDao->getCountry(null);
+        $result = $countryDao->getCountries();
         foreach($result as $country)
         {
             if($use_language_codes == "y") {

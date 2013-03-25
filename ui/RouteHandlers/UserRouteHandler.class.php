@@ -368,7 +368,7 @@ class UserRouteHandler
         $languageDao = new LanguageDao();
         $countryDao = new CountryDao();
         $languages = $languageDao->getLanguage(null);
-        $countries = $countryDao->getCountry(null);
+        $countries = $countryDao->getCountries();
         
         if (!is_object($user)) {
             $app->flash("error", "Login required to access page");

@@ -13,67 +13,47 @@ class BadgeDao
         $this->siteApi = Settings::get("site.api");
     }
 
-    public function getBadge($params)
+    public function getBadge($id=null,$title=null,$discription=null)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/badges";
-        
-        $id = null;
-        $name = null;
-        if (isset($params['id'])) {
-            $id = $params['id'];
-            $request = "$request/$id";
-        }
-        
-        $response = $this->client->call($request);
-        if (!is_null($id)) {
-            $ret = $this->client->cast("Badge", $response);
-        } else {
-            $ret = $this->client->cast(array("Badge"), $response);
-        }
-        
-        return $ret;
+       
+        $request = "{$this->siteApi}v0/badges/$id";
+        $response =$this->client->castCall("Badge", $request);
+        return $response;
     }
 
     public function getBadges()
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/badges";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Badge"), $response);
-        return $ret;
+        $response =$this->client->castCall(array("Badge"), $request);
+        return $response;
     }
 
     public function getUserWithBadge($badgeId)
     {
-        $ret = null;
+        
         $request = "{$this->siteApi}v0/badges/$badgeId/users";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("User"), $response);
-        return $ret;
+        $response =$this->client->castCall(array("User"), $request);
+        return $response;
     }
 
     public function createBadge($badge)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/badges";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $badge);
-        $ret = $this->client->cast("Badge", $response);
-        return $ret;
+        $response =$this->client->castCall("Badge", $request,HTTP_Request2::METHOD_POST, $badge);
+        return $response;
     }
 
     public function updateBadge($badge)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/badges/{$badge->getId()}";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $badge);
-        $ret = $this->client->cast("Badge", $response);
-        return $ret;
+        $response =$this->client->castCall("Badge", $request, HTTP_Request2::METHOD_PUT, $badge);
+        return $response;
     }
 
     public function deleteBadge($badgeId)
     {
         $request = "{$this->siteApi}v0/badges/$badgeId";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $response =$this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
+        return $response;
     }
 }
