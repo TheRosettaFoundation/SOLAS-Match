@@ -23,6 +23,10 @@ class GraphViewer
         $doc = new DOMDocument();
         $doc->formatOutput = true;
         if ($this->model) {
+            $viewWidth = 1200;
+            $projectDao = new ProjectDao();
+            $project = $projectDao->getProject(array("id" => $this->model->getProjectId()));
+
             $view = $doc->createElement("svg");
             $att = $doc->createAttribute("xmlns");
             $att->value = "http://www.w3.org/2000/svg";
@@ -37,11 +41,38 @@ class GraphViewer
             $att->value = "1.1";
             $view->appendChild($att);
             $att = $doc->createAttribute("width");
-            $att->value = "1200";
+            $att->value = $viewWidth;
             $view->appendChild($att);
             $att = $doc->createAttribute("height");
             $att->value = "900";
             $view->appendChild($att);
+
+            $border = $doc->createElement("rect");
+            $att = $doc->createAttribute("x");
+            $att->value = 1;
+            $border->appendChild($att);
+            $att = $doc->createAttribute("y");
+            $att->value = 4;
+            $border->appendChild($att);
+            $att = $doc->createAttribute("width");
+            $att->value = $viewWidth - 2;
+            $border->appendChild($att);
+            $att = $doc->createAttribute("height");
+            $att->value = 900;
+            $border->appendChild($att);
+            $att = $doc->createAttribute("style");
+            $att->value = "fill-opacity:0;stroke:black;stroke-width:2";
+            $border->appendChild($att);
+
+            $titleText = "Project: ".$project->getTitle();
+            $projectTitle = $doc->createElement("text", $titleText);
+            $att = $doc->createAttribute("x");
+            $att->value = 10;
+            $projectTitle->appendChild($att);
+            $att = $doc->createAttribute("y");
+            $att->value = 20;
+            $projectTitle->appendChild($att);
+            $view->appendChild($projectTitle);
 
             $triangle = $doc->createElement("marker");
             $att = $doc->createAttribute("id");
@@ -84,7 +115,7 @@ class GraphViewer
             $roots = $this->model->getRootNodeList();
             $taskDao = new TaskDao();
             foreach ($roots as $root) {
-                $thisY = $this->yPos;
+                $thisY = $this->yPos + 20;
                 $task = $taskDao->getTask(array('id' => $root->getTaskId()));
                 $this->drawGraphFromNode($root, $task, $doc, $defs);
                 $composite = $doc->createElement("use");
@@ -104,6 +135,8 @@ class GraphViewer
             }
             $view->insertBefore($defs, $view->firstChild);
             $view->setAttribute("height", $this->yPos + 20);
+            $border->setAttribute("height", $this->yPos + 15);
+            $view->appendChild($border);
             $doc->appendChild($view);
         }
         foreach ($doc->childNodes as $child) {
