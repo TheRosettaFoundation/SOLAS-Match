@@ -18,3 +18,8 @@ section {
     padding-top: 5px;
     padding-bottom: 5px;
 }
+.graph-view {
+    width : 1024px;
+    height :500px;
+    overflow : auto;
+}

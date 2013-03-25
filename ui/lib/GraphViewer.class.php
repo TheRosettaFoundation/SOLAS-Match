@@ -43,9 +43,6 @@ class GraphViewer
             $att = $doc->createAttribute("width");
             $att->value = $viewWidth;
             $view->appendChild($att);
-            $att = $doc->createAttribute("height");
-            $att->value = "900";
-            $view->appendChild($att);
 
             $border = $doc->createElement("rect");
             $att = $doc->createAttribute("x");
@@ -137,7 +134,14 @@ class GraphViewer
             $view->setAttribute("height", $this->yPos + 20);
             $border->setAttribute("height", $this->yPos + 15);
             $view->appendChild($border);
-            $doc->appendChild($view);
+
+            //create a div to display the graph
+            $div = $doc->createElement("div");
+            $att = $doc->createAttribute("class");
+            $att->value = "graph-view";
+            $div->appendChild($att);
+            $div->appendChild($view);
+            $doc->appendChild($div);
         }
         foreach ($doc->childNodes as $child) {
             $ret .= $doc->saveXml($child);
