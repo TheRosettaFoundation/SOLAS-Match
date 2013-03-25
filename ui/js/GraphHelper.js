@@ -30,22 +30,32 @@ function drawLines()
 
 function repositionElements()
 {
+    posArray = new Array();
     for (var i = 0; i < languageList.length; i++) {
         taskArray = languageTasks[languageList[i]];
         for (var j = 0; j < taskArray.length; j++) {
-            var newY = 0;
-            preReqList = preReqs[allTasks[i]];
-            for (var j = 0; j < preReqList.length; j++) {
-                newY += $("#task_" + preReqList[j]).attr("y");
+            preReqList = preReqs[taskArray[j]];
+            if (preReqList.length > 1) {
+                total = 0;
+                for (var k = 0; k < preReqList.length; k++) {
+                    total += parseInt($("#task_" + preReqList[k]).attr("y"));
+                }
+                $("#task_" + taskArray[j]).attr("y", total / preReqList.length);
             }
-            newY = newY / preReqList.length;
-            document.getElementById("task_" + allTasks[i]).setAttribute("y", newY);
+            postReqList = postReqs[taskArray[j]];
+            if (postReqList.length > 1) {
+                total = 0;
+                for (var k = 0; k < postReqList.length; k++) {
+                    total += parseInt($("#task_" + postReqList[k]).attr("y"));;
+                }
+                $("#task_" + taskArray[j]).attr("y", total / postReqList.length);
+            }
         }
     }
 }
 
 function prepareGraph()
 {
-    //repositionElements();
+    repositionElements();
     drawLines();
 }

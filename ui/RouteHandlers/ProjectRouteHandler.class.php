@@ -36,6 +36,7 @@ class ProjectRouteHandler
         $extra_scripts = "";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Raphael.js\"></script>";
         $extra_scripts .= "<script>
+            var postReqs = new Array();
             var preReqs = new Array();
             var languageList = new Array();
             var languageTasks = new Array();";
@@ -68,7 +69,9 @@ class ProjectRouteHandler
                     }
                     $extra_scripts .= "languageTasks[\"".$target."\"].push(".$node->getTaskId().");";
                     $extra_scripts .= "preReqs[".$node->getTaskId()."] = new Array();";
+                    $extra_scripts .= "postReqs[".$node->getTaskId()."] = new Array();";
                     foreach ($node->getNextList() as $nextNode) {
+                        $extra_scripts .= "postReqs[".$node->getTaskId()."].push(".$nextNode->getTaskId().");";
                         if (!in_array($nextNode, $nextLayer)) {
                             $nextLayer[] = $nextNode;
                         }
