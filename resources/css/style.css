@@ -19,7 +19,7 @@ section {
     padding-bottom: 5px;
 }
 .graph-view {
-    width : 1024px;
+    width : auto;
     height :500px;
     overflow : auto;
 }

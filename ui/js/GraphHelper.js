@@ -48,7 +48,8 @@ function repositionElements()
                 for (var k = 0; k < postReqList.length; k++) {
                     total += parseInt($("#task_" + postReqList[k]).attr("y"));;
                 }
-                $("#task_" + taskArray[j]).attr("y", total / postReqList.length);
+                newY = (total / postReqList.length);
+                $("#task_" + taskArray[j]).attr("y", newY);
             }
         }
     }

@@ -34,13 +34,6 @@ class ProjectRouteHandler
     {
         $app = Slim::getInstance();
         $extra_scripts = "";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Raphael.js\"></script>";
-        $extra_scripts .= "<script>
-            var postReqs = new Array();
-            var preReqs = new Array();
-            var languageList = new Array();
-            var languageTasks = new Array();";
-        $body = "";
 
         $time = microtime();
         $time = explode(" ", $time);
@@ -50,44 +43,17 @@ class ProjectRouteHandler
         $builder = new UIWorkflowBuilder();
         $graph = $builder->buildProjectGraph($projectId);
         $viewer = new GraphViewer($graph);
-        $body .= $viewer->constructView();
+        $body = $viewer->constructView();
 
-        if ($graph->hasRootNode()) {
-            $currentLayer = $graph->getRootNodeList();
-            $nextLayer = array();
-
-            $taskDao = new TaskDao();
-            $foundLanguages = array();
-            while (count($currentLayer) > 0) {
-                foreach ($currentLayer as $node) {
-                    $task = $taskDao->getTask(array('id' => $node->getTaskId()));
-                    $target = $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
-                    if (!in_array($target, $foundLanguages)) {
-                        $extra_scripts .= "languageTasks[\"".$target."\"] = new Array();";
-                        $extra_scripts .= "languageList.push(\"".$target."\");";
-                        $foundLanguages[] = $target;
-                    }
-                    $extra_scripts .= "languageTasks[\"".$target."\"].push(".$node->getTaskId().");";
-                    $extra_scripts .= "preReqs[".$node->getTaskId()."] = new Array();";
-                    $extra_scripts .= "postReqs[".$node->getTaskId()."] = new Array();";
-                    foreach ($node->getNextList() as $nextNode) {
-                        $extra_scripts .= "postReqs[".$node->getTaskId()."].push(".$nextNode->getTaskId().");";
-                        if (!in_array($nextNode, $nextLayer)) {
-                            $nextLayer[] = $nextNode;
-                        }
-                    }
-                    foreach ($node->getPreviousList() as $prevNode) {
-                        $extra_scripts .= "preReqs[".$node->getTaskId()."].push(".$prevNode->getTaskId().");";
-                    }
-                }
-                $currentLayer = $nextLayer;
-                $nextLayer = array();
-            }
-        }
-        $extra_scripts .= "</script>";
+        $extra_scripts .= $viewer->generateDataScript();
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/GraphHelper.js\"></script>";
         $extra_scripts .= "<script>
-                window.onload = prepareGraph;
+                $(window).load(runStartup);
+                function runStartup()
+                {
+                    prepareGraph();
+                    $( \"#tabs\" ).tabs();
+                }
             </script>";
 
         $time = microtime();
@@ -216,24 +182,40 @@ class ProjectRouteHandler
             $taskLanguageMap = array();
             if($project_tasks) {
                 foreach($project_tasks as $task) {                   
-                     $taskTargetLanguage = $task->getTargetLanguageCode();
-                     $taskTargetCountry = $task->getTargetCountryCode();
-                     $taskLanguageMap["$taskTargetLanguage,$taskTargetCountry"][] = $task;
-                }                
-                foreach($taskLanguageMap as $languageCountry => $tasks) {   
-                    foreach($tasks as $task) {
-                        $task_id = $task->getId(); 
-                        $metaData = array();
-                        $response = $userDao->isSubscribedToTask($user_id, $task_id);
-                        if($response == 1) {
-                            $metaData['tracking'] = true;
-                        } else {
-                            $metaData['tracking'] = false;
-                        }
-                        $taskMetaData[$task_id] = $metaData;
+                    $taskTargetLanguage = $task->getTargetLanguageCode();
+                    $taskTargetCountry = $task->getTargetCountryCode();
+                    $taskLanguageMap["$taskTargetLanguage,$taskTargetCountry"][] = $task;
+                    $task_id = $task->getId(); 
+                    $metaData = array();
+                    $response = $userDao->isSubscribedToTask($user_id, $task_id);
+                    if($response == 1) {
+                        $metaData['tracking'] = true;
+                    } else {
+                        $metaData['tracking'] = false;
                     }
-                }
+                    $taskMetaData[$task_id] = $metaData;
+                }                
             }
+
+            $graphBuilder = new UIWorkflowBuilder();
+            $graph = $graphBuilder->buildProjectGraph($project_id);
+            $viewer = new GraphViewer($graph);
+            $graphView = $viewer->constructView();
+
+            $extra_scripts = '<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+                 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>';
+
+            $extra_scripts .= $viewer->generateDataScript();
+            $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/GraphHelper.js\"></script>";
+            $extra_scripts .= "<script>
+                    window.onload = runStartup;
+
+                    function runStartup()
+                    {
+                        prepareGraph();
+                        $( \"#tabs\" ).tabs();
+                    }
+                </script>";
 
             $numTaskTypes = Settings::get("ui.task_types");
             $taskTypeColours = array();
@@ -244,6 +226,8 @@ class ProjectRouteHandler
 
             $app->view()->appendData(array(
                     "org" => $org,
+                    "graph" => $graphView,
+                    "extra_scripts" => $extra_scripts,
                     "projectTasks" => $project_tasks,
                     "taskMetaData" => $taskMetaData,
                     "taskTypeColours" => $taskTypeColours,

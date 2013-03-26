@@ -17,6 +17,51 @@ class GraphViewer
         $this->iconHeight = 75;
     }
 
+    public function generateDataScript()
+    {
+        $ret = "<script>
+            var postReqs = new Array();
+            var preReqs = new Array();
+            var languageList = new Array();
+            var languageTasks = new Array();";
+
+        if ($this->model && $this->model->hasRootNode()) {
+            $currentLayer = $this->model->getRootNodeList();
+            $nextLayer = array();
+            
+            $taskDao = new TaskDao();
+            $foundLanguages = array();
+            while (count($currentLayer) > 0) {
+                foreach ($currentLayer as $node) {
+                    $task = $taskDao->getTask(array('id' => $node->getTaskId()));
+                    $target = $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
+                    if (!in_array($target, $foundLanguages)) {
+                        $ret .= "languageTasks[\"".$target."\"] = new Array();";
+                        $ret .= "languageList.push(\"".$target."\");";
+                        $foundLanguages[] = $target;
+                    }
+                    $ret .= "languageTasks[\"".$target."\"].push(".$node->getTaskId().");";
+                    $ret .= "preReqs[".$node->getTaskId()."] = new Array();";
+                    $ret .= "postReqs[".$node->getTaskId()."] = new Array();";
+                    foreach ($node->getNextList() as $nextNode) {
+                        $ret .= "postReqs[".$node->getTaskId()."].push(".$nextNode->getTaskId().");";
+                        if (!in_array($nextNode, $nextLayer)) {
+                            $nextLayer[] = $nextNode;
+                        }
+                    }
+                    foreach ($node->getPreviousList() as $prevNode) {
+                        $ret .= "preReqs[".$node->getTaskId()."].push(".$prevNode->getTaskId().");";
+                    }
+                }
+                $currentLayer = $nextLayer;
+                $nextLayer = array();
+            }
+        }
+        $ret .= "</script>";
+
+        return $ret;
+    }
+
     public function constructView()
     {
         $ret = "";
