@@ -102,15 +102,15 @@ class TaskDao
         $args .= isset($params['word-count']) ?
             ",".PDOWrapper::cleanseNull($params['word-count']) : ",null";
         $args .= isset($params['language_id-source']) ?
-            ",".PDOWrapper::cleanseNull($params['language_id-source']) : ",null";
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['language_id-source']) : ",null";
         $args .= isset($params['language_id-target']) ?
-            ",".PDOWrapper::cleanseNull($params['language_id-target']) : ",null";
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['language_id-target']) : ",null";
         $args .= isset($params['created-time']) ?
-            ",".PDOWrapper::cleanseNull($params['created-time']) : ",null";
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['created-time']) : ",null";
         $args .= isset($params['country_id-source']) ?
-            ",".PDOWrapper::cleanseNull($params['country_id-source']) : ",null";
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['country_id-source']) : ",null";
         $args .= isset($params['country_id-target']) ?
-            ",".PDOWrapper::cleanseNull($params['country_id-target']) : ",null";
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['country_id-target']) : ",null";
         $args .= isset($params['comment']) ?
             ",".PDOWrapper::cleanseNullOrWrapStr($params['comment']) : ",null";
         $args .= isset($params['taskType_id']) ?
@@ -120,7 +120,7 @@ class TaskDao
         $args .= isset($params['published']) ?
             ",".PDOWrapper::cleanseNullOrWrapStr($params['published']) : ",null";
         $args .= isset($params['deadline']) ?
-            ",".PDOWrapper::cleanseNull($params['deadline']) : ",null";
+            ",".PDOWrapper::cleanseNullOrWrapStr($params['deadline']) : ",null";
 
         $tasks = array();
         $result = PDOWrapper::call("getTask", $args);
@@ -333,19 +333,21 @@ class TaskDao
     {
         $args = PDOWrapper::cleanseNull($taskId).", ";
         $args .= PDOWrapper::cleanseNull($preReqId);
-        PDOWrapper::call("addTaskPreReq", $args);
+        $result = PDOWrapper::call("addTaskPreReq", $args);
+        return $result[0]["result"];
     }
 
     public static function removeTaskPreReq($taskId, $preReqId)
     {
         $args = PDOWrapper::cleanseNull($taskId).", ";
         $args .= PDOWrapper::cleanseNull($preReqId);
-        PDOWrapper::call("removeTaskPreReq", $args);
+        $result = PDOWrapper::call("removeTaskPreReq", $args);
+        return $result[0]["result"];
     }
 
     public static function getLatestAvailableTasks($nb_items = 10)
     {
-        $ret = false;
+        $ret = null;
         if ($r = PDOWrapper::call("getLatestAvailableTasks", PDOWrapper::cleanseNullOrWrapStr($nb_items))) {
             $ret = array();
             foreach ($r as $row) {
