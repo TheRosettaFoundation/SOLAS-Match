@@ -1135,12 +1135,16 @@ class TaskRouteHandler
 
                 for($i=0; $i < $chunkValue; $i++) {
                     if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {   
+                        $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
                         $taskDao->addTaskPreReq($proofreadTaskIds[$i], $translationTaskIds[$i]);
+                        $taskDao->addTaskPreReq($createdPostEditingId, $proofreadTaskIds[$i]);
                     }
-                    if(isset($post["proofreading_0"])) {
+                    if(!isset($post["translation_0"]) && isset($post["proofreading_0"])) {
+                        $taskDao->addTaskPreReq($proofreadTaskIds[$i], $task_id);
                         $taskDao->addTaskPreReq($createdPostEditingId, $proofreadTaskIds[$i]);
                     }
                     if(isset($post["translation_0"]) && !isset($post["proofreading_0"])) {   
+                        $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
                         $taskDao->addTaskPreReq($createdPostEditingId, $translationTaskIds[$i]);
                     }
                 }

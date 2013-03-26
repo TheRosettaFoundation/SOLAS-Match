@@ -176,119 +176,147 @@
         </div>
     {/if}        
 
-    {if isset($projectTasks) && count($projectTasks) > 0}
-       {foreach from=$taskLanguageMap key=languageCountry item=tasks}           
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">List View</a></li>
+            <li><a href="#tabs-2">Graph View</a></li>
+        </ul>
+        <div id="tabs-1">
+            {if isset($projectTasks) && count($projectTasks) > 0}
+                {foreach from=$taskLanguageMap key=languageCountry item=tasks}           
 
-                <div style="display: inline-block; overflow-wrap: break-word; word-break:break-all; font-weight: bold; font-size: large; max-width: 70%">
-                    {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
-                </div>                
-            <hr />  
+                    <div style="display: inline-block; overflow-wrap: break-word; word-break:break-all; 
+                                    font-weight: bold; font-size: large; max-width: 70%">
+                        {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
+                    </div>                
+                    <hr />  
  
-            <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; margin-bottom: 60px">
-                <thead>
-                    <tr>
-                        <th style="width: 20%">Title</th>
-                        <th>Status</th>       
-                        <th>Type</th> 
-                        <th>Task Deadline</th>                  
-                        <th>Published</th>                    
-                        <th>Tracked</th>
-                        <th>Edit</th>
-                        <th>Archive</th>
-                    </tr>
-                </thead>
-                <tbody>
+                    <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; margin-bottom: 60px">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Title</th>
+                                <th>Status</th>       
+                                <th>Type</th> 
+                                <th>Task Deadline</th>                  
+                                <th>Published</th>                    
+                                <th>Tracked</th>
+                                <th>Edit</th>
+                                <th>Archive</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                {foreach from=$tasks item=task}
-                   {assign var="task_id" value=$task->getId()}
-                   <tr style="overflow-wrap: break-word;">
-                       <td>
-                           <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a><br/>
-                       </td>
-                       <td>
-                           {assign var="status_id" value=$task->getTaskStatus()}
-                           {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
-                               Waiting
-                           {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
-                               Unclaimed
-                           {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                               <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">In Progress</a>
-                           {elseif $status_id == TaskStatusEnum::COMPLETE}
-                               <a href="{urlFor name="home"}api/v0/tasks/{$task_id}/file/?">Complete</a>
-                           {/if}
-                       </td>
-                       <td>
-                           <strong>
-                           <small>                                  
-                           {assign var="type_id" value=$task->getTaskType()}
-                           {if $type_id == TaskTypeEnum::CHUNKING}
-                               <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>                                    
-                           {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                               <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span> 
-                           {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                               <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span> 
-                           {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                               <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span> 
-                           {/if}
-                           </small>
-                           </strong>
-                       </td>
-                       <td>
-                           {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
-                       </td>
-                       <td>
-                           <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                               <input type="hidden" name="task_id" value="{$task_id}" />
-                               {if $task->getPublished() == 1}
-                                   <input type="hidden" name="publishedTask" value="0" />
-                                   <a onclick="this.parentNode.submit()" class="btn btn-small">
-                                       <i class="icon-check icon-black"></i> Published
-                                   </a>
-                               {else}                                        
-                                   <input type="hidden" name="publishedTask" value="1" />
-                                   <a onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                                       <i class="icon-remove-circle icon-white"></i> Unpublished
-                                   </a>
-                               {/if}
-                           </form>
+                            {foreach from=$tasks item=task}
+                                {assign var="task_id" value=$task->getId()}
+                                <tr style="overflow-wrap: break-word;">
+                                    <td>
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">
+                                            {$task->getTitle()}
+                                        </a>
+                                        <br/>
+                                    </td>
+                                    <td>
+                                        {assign var="status_id" value=$task->getTaskStatus()}
+                                        {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                                            Waiting
+                                        {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                            Unclaimed
+                                        {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                            <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
+                                                In Progress
+                                            </a>
+                                        {elseif $status_id == TaskStatusEnum::COMPLETE}
+                                            <a href="{urlFor name="home"}api/v0/tasks/{$task_id}/file/?">
+                                                Complete
+                                            </a>
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <small>                                  
+                                                {assign var="type_id" value=$task->getTaskType()}
+                                                {if $type_id == TaskTypeEnum::CHUNKING}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">
+                                                        Chunking
+                                                    </span>                                    
+                                                {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">
+                                                        Translation
+                                                    </span> 
+                                                {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">
+                                                        Proofreading
+                                                    </span> 
+                                                {elseif $type_id == TaskTypeEnum::POSTEDITING}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">
+                                                        Postediting
+                                                    </span> 
+                                                {/if}
+                                            </small>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
+                                    </td>
+                                    <td>
+                                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                            <input type="hidden" name="task_id" value="{$task_id}" />
+                                            {if $task->getPublished() == 1}
+                                                <input type="hidden" name="publishedTask" value="0" />
+                                                <a onclick="this.parentNode.submit()" class="btn btn-small">
+                                                    <i class="icon-check icon-black"></i> Published
+                                                </a>
+                                            {else}                                        
+                                                <input type="hidden" name="publishedTask" value="1" />
+                                                <a onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                                                    <i class="icon-remove-circle icon-white"></i> Unpublished
+                                                </a>
+                                            {/if}
+                                        </form>
 
-                       </td>
-                       <td>
-                           <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                               <input type="hidden" name="task_id" value="{$task_id}" />
-                               {if $taskMetaData[$task_id]['tracking']}
-                                   <input type="hidden" name="trackTask" value="0" />
-                                   <a onclick="this.parentNode.submit()" class="btn btn-small">
-                                       <i class="icon-inbox icon-black"></i> Tracked
-                                   </a>
-                               {else}
-                               <input type="hidden" name="trackTask" value="1" />
-                               <a onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                                   <i class="icon-envelope icon-white"></i> Untracked
-                               </a>
-                               {/if}
-                           </form>
-                       </td>    
-                       <td>
-                            <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btn btn-small">
-                                <i class="icon-wrench icon-black"></i> Edit Task
-                            </a>
-                       </td>
-                       <td>
-                            <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-inverse">
-                                <i class="icon-fire icon-white"></i> Archive Task
-                            </a>
-                       </td>
-                   </tr>                        
-               {/foreach}
-           </tbody>
-       </table>        
-   {/foreach}
-    {else}
-        <div class="alert alert-warning">
-        <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new task for that content.
+                                    </td>
+                                    <td>
+                                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                            <input type="hidden" name="task_id" value="{$task_id}" />
+                                            {if $taskMetaData[$task_id]['tracking']}
+                                                <input type="hidden" name="trackTask" value="0" />
+                                                <a onclick="this.parentNode.submit()" class="btn btn-small">
+                                                    <i class="icon-inbox icon-black"></i> Tracked
+                                                </a>
+                                            {else}
+                                                <input type="hidden" name="trackTask" value="1" />
+                                                <a onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                                                    <i class="icon-envelope icon-white"></i> Untracked
+                                                </a>
+                                            {/if}
+                                        </form>
+                                    </td>    
+                                    <td>
+                                        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btn btn-small">
+                                            <i class="icon-wrench icon-black"></i> Edit Task
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-inverse">
+                                            <i class="icon-fire icon-white"></i> Archive Task
+                                        </a>
+                                    </td>
+                                </tr>                        
+                            {/foreach}
+                        </tbody>
+                    </table>        
+                {/foreach}
+            {else}
+                <div class="alert alert-warning">
+                    <strong>What now?</strong> You don't have any tasks uploaded for your organisation. 
+                    If you have content to be translated, please add a new task for that content.
+                </div>
+            {/if}
         </div>
-    {/if}       
+        <div id="tabs-2">
+            {$graph}
+        </div>
+    </div>
         
 {else}
     {if isset($projectTasks)}
