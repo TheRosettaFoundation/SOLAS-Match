@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__."/UIWorkflowBuilder.class.php";
+
 class GraphViewer
 {
     private $model;
@@ -19,6 +21,7 @@ class GraphViewer
 
     public function generateDataScript()
     {
+        $graphBuilder = new UIWorkflowBuilder();
         $ret = "<script>
             var postReqs = new Array();
             var preReqs = new Array();
@@ -32,25 +35,28 @@ class GraphViewer
             $taskDao = new TaskDao();
             $foundLanguages = array();
             while (count($currentLayer) > 0) {
-                foreach ($currentLayer as $node) {
-                    $task = $taskDao->getTask(array('id' => $node->getTaskId()));
+                foreach ($currentLayer as $taskId) {
+                    $task = $taskDao->getTask(array('id' => $taskId));
                     $target = $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
                     if (!in_array($target, $foundLanguages)) {
                         $ret .= "languageTasks[\"".$target."\"] = new Array();";
                         $ret .= "languageList.push(\"".$target."\");";
                         $foundLanguages[] = $target;
                     }
-                    $ret .= "languageTasks[\"".$target."\"].push(".$node->getTaskId().");";
-                    $ret .= "preReqs[".$node->getTaskId()."] = new Array();";
-                    $ret .= "postReqs[".$node->getTaskId()."] = new Array();";
-                    foreach ($node->getNextList() as $nextNode) {
-                        $ret .= "postReqs[".$node->getTaskId()."].push(".$nextNode->getTaskId().");";
-                        if (!in_array($nextNode, $nextLayer)) {
-                            $nextLayer[] = $nextNode;
+                    $ret .= "languageTasks[\"".$target."\"].push($taskId);";
+                    $ret .= "preReqs[$taskId] = new Array();";
+                    $ret .= "postReqs[$taskId] = new Array();";
+
+                    $index = $graphBuilder->find($taskId, $this->model);
+                    $node = $this->model->getAllNodes($index);
+                    foreach ($node->getNextList() as $nextId) {
+                        $ret .= "postReqs[$taskId].push($nextId);";
+                        if (!in_array($nextId, $nextLayer)) {
+                            $nextLayer[] = $nextId;
                         }
                     }
-                    foreach ($node->getPreviousList() as $prevNode) {
-                        $ret .= "preReqs[".$node->getTaskId()."].push(".$prevNode->getTaskId().");";
+                    foreach ($node->getPreviousList() as $prevId) {
+                        $ret .= "preReqs[$taskId].push($prevId);";
                     }
                 }
                 $currentLayer = $nextLayer;
@@ -156,10 +162,10 @@ class GraphViewer
 
             $roots = $this->model->getRootNodeList();
             $taskDao = new TaskDao();
-            foreach ($roots as $root) {
+            foreach ($roots as $rootId) {
                 $thisY = $this->yPos + 20;
-                $task = $taskDao->getTask(array('id' => $root->getTaskId()));
-                $this->drawGraphFromNode($root, $task, $doc, $defs);
+                $task = $taskDao->getTask(array('id' => $rootId));
+                $this->drawGraphFromNode($task, $doc, $defs);
                 $composite = $doc->createElement("use");
                 $att = $doc->createAttribute("xlink:href");
                 $att->value = "#sub-graph_".$task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
@@ -195,12 +201,13 @@ class GraphViewer
         return $ret;
     }
 
-    public function drawGraphFromNode($node, $rootTask, $doc, &$defs)
+    public function drawGraphFromNode($rootTask, $doc, &$defs)
     {
+        $graphBuilder = new UIWorkflowBuilder();
         $taskDao = new TaskDao();
         $currentLayer = array();
         $nextLayer = array();
-        $currentLayer[] = $node;
+        $currentLayer[] = $rootTask->getId();
 
         $xRaster = 10;
         $yRaster = 10;
@@ -234,12 +241,14 @@ class GraphViewer
         $verticalNodeCount = 0;
         $horizontalNodeCount = 0;
         while (count($currentLayer) > 0) {
-            foreach ($currentLayer as $node) {
-                $task = $taskDao->getTask(array('id' => $node->getTaskId()));
+            foreach ($currentLayer as $nodeId) {
+                $task = $taskDao->getTask(array('id' => $nodeId));
+                $index = $graphBuilder->find($nodeId, $this->model);
+                $node = $this->model->getAllNodes($index);
                 $verticalNodeCount++;
-                foreach ($node->getNextList() as $nextNode) {
-                    if (!in_array($nextNode, $nextLayer)) {
-                        $nextLayer[] = $nextNode;
+                foreach ($node->getNextList() as $nextId) {
+                    if (!in_array($nextId, $nextLayer)) {
+                        $nextLayer[] = $nextId;
                     }
                 }
                 $this->drawNode($task, $doc, $defs);
