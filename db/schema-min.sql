@@ -1512,7 +1512,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
 -- Dumping structure for procedure Solas-Match-Test.getTaskTags
 DROP PROCEDURE IF EXISTS `getTaskTags`;
 DELIMITER //
@@ -1521,18 +1520,6 @@ BEGIN
 	set @pID = null;
 	select project_id into @pID  from Tasks where id=tID;
 	call getProjectTags(@pID);
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTaskTranslator
-DROP PROCEDURE IF EXISTS `getTaskTranslator`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTranslator`(IN `taskId` INT)
-BEGIN
-    SELECT user_id
-    FROM TaskClaims
-    WHERE task_id=taskId;
 END//
 DELIMITER ;
 
@@ -1635,16 +1622,11 @@ DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
-
-set @q=Concat("SELECT * FROM ArchivedTasks as a 
-                WHERE user_id = ?
-                ORDER BY `created-time` DESC
-                limit ", lim);
-        PREPARE stmt FROM @q;
-        set@uID = uID;
-	EXECUTE stmt using @uID;
-	DEALLOCATE PREPARE stmt;
-
+	SELECT a.id,a.project_id, a.title, a.`comment`, a.deadline, a.`word-count`, a.`created-time`, (select code from Languages where id =a.`language_id-source`) as `language_id-source`,(select code from Languages where id =a.`language_id-target`) as `language_id-target`, (select code from Countries where id =a.`country_id-source`) as `country_id-source`, (select code from Countries where id =a.`country_id-target`) as `country_id-target`, a.taskType_id AS taskType, a.taskStatus_id AS taskStatus, a.published, (SELECT `user_id-claimed` FROM ArchivedTasksMetadata) AS `user_id-claimed`, (SELECT `user_id-archived` FROM ArchivedTasksMetadata) AS `user_id-archived`, (SELECT `archived-date` FROM ArchivedTasksMetadata) AS `archive-date`  FROM ArchivedTasks AS a 
+		WHERE a.id = (SELECT am.archivedTask_id FROM ArchivedTasksMetadata am
+		WHERE am.`user_id-archived` = uID)
+      ORDER BY `created-time` DESC
+      LIMIT lim;
 END//
 DELIMITER ;
 
@@ -1666,9 +1648,11 @@ DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `taskID` INT)
 BEGIN
-	SELECT u.* FROM Users u
-	WHERE u.id IN (SELECT tc.user_id FROM TaskClaims tc
-	WHERE tc.task_id = taskID);
+	IF EXISTS( 	SELECT 1	FROM TaskClaims tc WHERE tc.task_id=taskId) THEN
+		SET @userId = false;			
+		SELECT user_id INTO @userId FROM TaskClaims WHERE task_id=taskId;
+		call getUser(@userId,null,null,null,null,null,null,null,null);
+	END IF;
 END//
 DELIMITER ;
 
@@ -2423,18 +2407,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.taskDownloadCount
-DROP PROCEDURE IF EXISTS `taskDownloadCount`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskDownloadCount`(IN `tID` INT)
-BEGIN
-	SELECT count(*) times_downloaded
-	FROM task_file_version_download
-	WHERE task_id = tID;
-END//
-DELIMITER ;
-
-
 -- Dumping structure for procedure Solas-Match-Test.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
@@ -2778,17 +2750,6 @@ BEGIN
 	else
 		select 0 as result;
 	end if;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.unlinkStoredTags
-DROP PROCEDURE IF EXISTS `unlinkStoredTags`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkStoredTags`(IN `id` INT)
-    MODIFIES SQL DATA
-BEGIN
-DELETE FROM TaskTags WHERE task_id = id;
 END//
 DELIMITER ;
 

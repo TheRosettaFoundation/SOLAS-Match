@@ -6,41 +6,6 @@ require_once __DIR__.'/../lib/Upload.class.php';
 
 class TaskFile
 {
-
-    public static function taskID() // Should be package protected
-    {
-        return intval($this->task_id);		
-    }
-    
-    public static function timesDownloaded() // Should be package protected
-    {     
-        if ($r = PDOWrapper::call("taskDownloadCount", PDOWrapper::cleanse($this->taskID()))) {
-            $ret = $r[0]['times_downloaded'];
-            return $ret;
-        } else {
-            return null;
-        }
-    }
-
-    /*
-     * URL to download the file.
-     */
-    public static function url() // Should be package protected
-    {   // Not secure and should be improved.
-        return '/task/id/' . $this->task_id . '/download-file/';
-    }
-
-    public static function urlVersion($version) // Should be package protected
-    {
-        return self::url() . 'v/' . intval($version) . '/';
-    }
-        /*
-     * A private file for check if a task has been translated by checking 
-     * if a file has been uploaded for it. if user_id is null it will just 
-     * check on a task basis. The inclusion of the user_id allows several 
-     * people to work on the job at once
-     * Returns true if the file has been translated
-     */
     public static function checkTaskFileVersion($task_id, $user_id = null)
     {
         $result = PDOWrapper::call("getLatestFileVersion", PDOWrapper::cleanse($task_id)
@@ -156,7 +121,7 @@ class TaskFile
                 }
 
                 foreach ($dependants as $nextTask) {
-                    $dTask = TaskDao::find(array("id" => $nextTask));
+                    $dTask = TaskDao::getTask($nextTask);
                     TaskFile::uploadFile($dTask ,$convert,$file,0,$userId,$filename);
                 }
             }

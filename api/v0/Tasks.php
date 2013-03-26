@@ -7,7 +7,6 @@
  */
 
 require_once 'DataAccessObjects/TaskDao.class.php';
-require_once 'DataAccessObjects/TaskTags.class.php';
 require_once 'DataAccessObjects/TaskFile.class.php';
 require_once 'DataAccessObjects/TaskStream.class.php';
 require_once '../Common/models/TaskMetadata.php';
@@ -23,7 +22,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks(:format)/',
                                                         function ($format = ".json") {
             
-            Dispatcher::sendResponce(null, TaskDao::getTask(null), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::getTask(), null, $format);
         }, 'getTasks');        
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks(:format)/',
@@ -103,7 +102,7 @@ class Tasks {
                                                         function ($format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
-            Dispatcher::sendResponce(null, TaskStream::getStream($limit), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::getLatestAvailableTasks($limit), null, $format);
         }, 'getTopTasks');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/',
@@ -114,7 +113,7 @@ class Tasks {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $data = TaskDao::getTask(array("id" => $id));
+            $data = TaskDao::getTask($id);
             if ($data && is_array($data)) {
                 $data = $data[0];
             }
@@ -125,16 +124,16 @@ class Tasks {
                                                         function ($id, $format = ".json") {
             Dispatcher::sendResponce(null, TaskDao::getTags($id), null, $format);
         }, 'getTasksTags');
-        
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/tags(:format)/',
-                                                        function ($id, $format = ".json") {
-            $data = Dispatcher::getDispatcher()->request()->getBody();
-            $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Task", $data);
-            $result = TaskDao::updateTags($data);
-            Dispatcher::sendResponce(null, array("result" => $result), null, $format);
-        }, 'setTasksTags');
+//        
+//        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/tags(:format)/',
+//                                                        function ($id, $format = ".json") {
+//            $data = Dispatcher::getDispatcher()->request()->getBody();
+//            $client = new APIHelper($format);
+//            $data = $client->deserialize($data);
+//            $data = $client->cast("Task", $data);
+//            $result = TaskDao::updateTags($data);
+//            Dispatcher::sendResponce(null, array("result" => $result), null, $format);
+//        }, 'setTasksTags');
         
         //Consider Removing
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/status(:format)/',
@@ -145,7 +144,7 @@ class Tasks {
 
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/feedback(:format)/',
                 function ($id, $format = ".json") {
-                    $tasks = TaskDao::getTask(array('id' => $id));
+                    $tasks = TaskDao::getTask($id);
                     $task = $tasks[0];
 
                     $data = Dispatcher::getDispatcher()->request()->getBody();
@@ -187,7 +186,7 @@ class Tasks {
                 $format = '.'.$userID[1];
                 $userID = $userID[0];
             }
-            $task = TaskDao::getTask(array("id" => $id));
+            $task = TaskDao::getTask($id);
             if (is_array($task)) {
                 $task = $task[0];
             }
@@ -205,7 +204,7 @@ class Tasks {
                 $format = '.'.$userID[1];
                 $userID = $userID[0];
             }
-            $task = TaskDao::getTask(array("id" => $id));
+            $task = TaskDao::getTask($id);
             if (is_array($task)) {
                 $task = $task[0];
             }

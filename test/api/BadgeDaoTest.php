@@ -187,6 +187,33 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultDeleteFailure);
     }
     
+    public function testValidateUserBadge()
+    {
+        UnitTestHelper::teardownDb();        
+
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser);
+        
+        $badge = UnitTestHelper::createBadge();
+        $insertedBadge = BadgeDao::insertAndUpdateBadge($badge);
+        $this->assertInstanceOf("Badge", $insertedBadge);    
+        $this->assertNotNull($insertedBadge->getId());
+        
+        $userAssignedBadge = BadgeDao::assignBadge($insertedUser->getUserId(), $insertedBadge->getId());
+        $this->assertEquals("1", $userAssignedBadge);
+        
+        // Success
+        $resultValidate = BadgeDao::validateUserBadge($insertedUser->getUserId(), $insertedBadge->getId());
+        $this->assertEquals("1", $resultValidate);   
+        
+        $badge2 = UnitTestHelper::createBadge(99, "Badge 2", "Badge 2 Description", NULL);
+        
+        // Failure
+        $resultValidateFailure = BadgeDao::validateUserBadge($insertedUser->getUserId(), $badge2->getId());
+        $this->assertEquals("0", $resultValidateFailure);    
+    }
 
 }
 ?>

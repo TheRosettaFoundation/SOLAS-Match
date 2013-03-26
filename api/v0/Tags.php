@@ -7,7 +7,6 @@
  */
 
 require_once 'DataAccessObjects/TagsDao.class.php';
-require_once 'DataAccessObjects/TaskTags.class.php';
 
 class Tags {
     

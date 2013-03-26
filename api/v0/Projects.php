@@ -137,7 +137,7 @@ class Projects
             
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
-            Dispatcher::sendResponce(null, ProjectTags::getTags($id), null, $format);
+            Dispatcher::sendResponce(null, ProjectDao::getTags($id), null, $format);
         }, 'getProjectTags');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/info(:format)/',

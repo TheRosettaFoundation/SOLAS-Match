@@ -151,7 +151,7 @@ class Users {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tasks(:format)/',
                                                         function ($id, $format = ".json") {
-            Dispatcher::sendResponce(null, TaskDao::getUserTasksByID($id), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::getUserTasks($id), null, $format);
         }, 'getUsertasks');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tasks(:format)/',
@@ -210,7 +210,7 @@ class Users {
                                                         function ($id, $format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
-            $data = TaskDao::getUserArchivedTasksByID($id, $limit);
+            $data = TaskDao::getUserArchivedTasks($id, $limit);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserArchivedTasks');
         

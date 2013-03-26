@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__.'/../../Common/models/Badge.php';
-require_once __DIR__.'/BadgeValidator.class.php';
 require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
 
 class BadgeDao
@@ -48,7 +47,7 @@ class BadgeDao
     
     public static function assignBadge($userID, $badgeID)
     {
-        if (!$validation = BadgeValidator::validateUserBadge($userID, $badgeID)) {
+        if (!$validation = self::validateUserBadge($userID, $badgeID)) {
             if ($result = PDOWrapper::call("assignBadge", PDOWrapper::cleanse($userID)
                                                         .",".PDOWrapper::cleanse($badgeID))) {
                 return $result[0]["result"];
@@ -71,5 +70,11 @@ class BadgeDao
             return $result[0]["result"];
         }        
         return 0;
+    }
+    
+    public static function validateUserBadge($userID, $badgeID)
+    {
+        $result = PDOWrapper::call("userHasBadge", PDOWrapper::cleanse($userID).",".PDOWrapper::cleanse($badgeID));
+        return $result[0]['result'];
     }
 }

@@ -162,11 +162,11 @@ class TagsDao
     
     public static function updateTags($project)
     {
-        ProjectTags::removeAllProjectTags($project->getId());
+        ProjectDao::removeAllProjectTags($project->getId());
         $tags = $project->getTagList();
         if (count($tags) > 0) {
             if ($tag_ids = self::tagsToIds($tags)) {
-                ProjectTags::addProjectTags($project->getId(), $tag_ids);
+                ProjectDao::addProjectTags($project->getId(), $tag_ids);
                 return 1;
             }
             return 0;

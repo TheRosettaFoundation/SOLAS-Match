@@ -1,6 +1,5 @@
 <?php
 
-include_once __DIR__.'/ProjectTags.class.php';
 include_once __DIR__.'/TagsDao.class.php';
 include_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
 include_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
@@ -34,7 +33,7 @@ class ProjectDao
 
         TagsDao::updateTags($project);
         $project = ModelFactory::buildModel("Project", $result[0]);
-        $project->setTag(ProjectTags::getTags($project->getId()));
+        $project->setTag(self::getTags($project->getId()));
         return $project;
     }
     
@@ -104,7 +103,7 @@ class ProjectDao
             foreach($result as $row) {
                 $project = ModelFactory::buildModel("Project", $row);
                 if(is_object($project)) {
-                     $tags = ProjectTags::getTags($project->getId());
+                     $tags = self::getTags($project->getId());
                     if($tags) {
                         foreach ($tags as $tag) {
                             $project->addTag($tag->getLabel());
@@ -231,6 +230,58 @@ class ProjectDao
         }
 
         return $tasks;
+    }
+    
+    public static function getTags($project_id)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("getProjectTags", PDOWrapper::cleanseNull($project_id))) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Tag", $row);
+            }
+        }
+        return $ret;
+    }
+
+    public static function removeProjectTag($projectId, $tagId)
+    {
+        $args = PDOWrapper::cleanseNull($projectId).", ";
+        $args .= PDOWrapper::cleanseNull($tagId);
+        $result = PDOWrapper::call("removeProjectTag", $args);
+        if($result) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
+
+    public static function removeAllProjectTags($projectId)
+    {
+        if($tags = self::getTags($projectId)) {
+            foreach ($tags as $tag) {
+                self::removeProjectTag($projectId, $tag->getId());
+            }
+        }
+    }
+
+    public static function addProjectTags($projectId, $tagIds)
+    {
+        foreach ($tagIds as $tagId) {
+            self::addProjectTag($projectId, $tagId);
+        }
+    }
+
+    public static function addProjectTag($projectId, $tagId)
+    {
+        $args = PDOWrapper::cleanseNull($projectId).", ";
+        $args .= PDOWrapper::cleanseNull($tagId);
+        $result = PDOWrapper::call("addProjectTag", $args);
+        if($result) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
     }
     
     public static function getProjectFileInfo($project_id, $user_id, $filename, $token, $mime) {

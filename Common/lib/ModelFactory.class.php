@@ -159,10 +159,7 @@ class ModelFactory
         if (isset($modelData['archive-date'])) {
             $ret->setArchiveDate($modelData['archive-date']);
         }
-        if (isset($modelData['tags'])) {
-            $ret->setTags($modelData['tags']);
-        }
-
+        
         return $ret;
     }
 
@@ -420,12 +417,7 @@ class ModelFactory
         if (isset($modelData['published'])) {
             $ret->setPublished($modelData['published']);
         }
-        if (isset($modelData['tags'])) {
-            foreach ($modelData['tags'] as $tag) {
-                $ret->addTag($tag);
-            }
-        }
-
+        
         return $ret;
     }
 
