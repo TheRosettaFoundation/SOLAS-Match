@@ -424,28 +424,12 @@ class TaskDao {
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
 
         if ($graph) {
-            $currentLayer = $graph->getRootNodeList();
-            $nextLayer = array();
-            $found = false;
-            while (count($currentLayer) > 0 && !$found) {
-                foreach ($currentLayer as $node) {
-                    if ($node->getTaskId() == $taskId) {
-                        $found = true;
-                        $ret = $this->archiveTaskNode($node, $userId);
-                    } else {
-                        foreach ($node->getNextList() as $nextNode) {
-                            if (!in_array($nextNode, $nextLayer)) {
-                                $nextLayer[] = $nextNode;
-                            }
-                        }
-                    }
-                }
-                $currentLayer = $nextLayer;
-                $nextLayer = array();
-            }
+            $index = $graphBuilder->find($taskId, $graph);
+            $node = $graph->getAllNodes($index);
+            $ret = $this->archiveTaskNode($node, $graph, $userId);
         }
 
-        // UI us expecting output to be 0 or 1
+        // UI is expecting output to be 0 or 1
         if ($ret) {
             $ret = 1;
         } else {
@@ -455,18 +439,21 @@ class TaskDao {
         return $ret;
     }
 
-    public function archiveTaskNode($node, $userId)
+    public function archiveTaskNode($node, $graph, $userId)
     {
         $ret = true;
         $task = $this->find(array('id' => $node->getTaskId()));
         $dependantNodes = $node->getNextList();
         if (count($dependantNodes) > 0) {
-            foreach ($dependantNodes as $dependant) {
-                $dTask = $this->find(array('id' => $dependant->getTaskId()));
+            $builder = new APIWorkflowBuilder();
+            foreach ($dependantNodes as $dependantId) {
+                $dTask = $this->find(array('id' => $dependantId));
+                $index = $builder->find($dependantId, $graph);
+                $dependant = $graph->getAllNodes($index);
                 $preReqs = $dependant->getPreviousList();
                 if ((count($preReqs) == 2 && $dTask->getTaskType() == TaskTypeEnum::POSTEDITING) ||
                         count($preReqs) == 1) {
-                    $ret = $ret && ($this->archiveTaskNode($dependant, $userId));
+                    $ret = $ret && ($this->archiveTaskNode($dependant, $graph, $userId));
                 }
             }
         }
