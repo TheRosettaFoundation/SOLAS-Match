@@ -13,144 +13,107 @@ class TaskDao
         $this->siteApi = Settings::get("site.api");
     }
 
-    public function getTask($params)
+    public function getTask($id)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/tasks";
-        
-        $id = null;
-        if (isset($params['id'])) {
-            $id = $params['id'];
-            $request = "$request/$id";
-        }
-        
-        $response = $this->client->call($request);
-        if (!is_null($id)) {
-            $ret = $this->client->cast("Task", $response);
-        } else {
-            $ret = $this->client->cast(array("Task"), $response);
-        }
-        
-        return $ret;
+        $request = "{$this->siteApi}v0/tasks/$id";
+        $response =$this->client->castCall(array("Task"), $request);
+        return $response;
     }
+    
+    public function getTasks()
+    {
+        $request = "{$this->siteApi}v0/tasks";
+        $response =$this->client->castCall(array("Task"), $request);
+        return $response;
+    }
+    
 
     public function getTaskPreReqs($taskId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Task"), $response);
-        return $ret;
+        $response =$this->client->castCall(array("Task"), $request);
+        return $response;
     }
 
     public function getTopTasks($limit = null)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/top_tasks";
-
-        $args = null;
-        if ($limit) {
-            $args = array("limit" => $limit);
-        }
-
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("Task"), $response);
-        return $ret;
+        $args=$limit ? array("limit" => $limit) : null;
+        $response =$this->client->castCall(array("Task"), $request,HTTP_Request2::METHOD_GET, null, $args);
+        return $response;
     }
 
     public function getTaskTags($taskId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Tag"), $response);
-        return $ret;
+        $args=$limit ? array("limit" => $limit) : null;
+        $response =$this->client->castCall(array("Tag"), $request,HTTP_Request2::METHOD_GET, null, $args);
+        return $response;
     }
 
+    // this is wrong fix
     public function getTaskFile($taskId, $version = 0, $convertToXliff = false)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/tasks/$taskId/tags";
-
-        $args = array("version" => $version);
-        if ($convertToXliff) {
-            $args['convertToXliff'] = $convertToXliff;
-        }
-        
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("Tag"), $response);
-        return $ret;
+        $request = "{$this->siteApi}v0/tasks/$taskId/file";
+        $args=array("version" => $version,"convertToXliff"=>$convertToXliff);
+        $response =$this->client->castCall(null, $request,HTTP_Request2::METHOD_GET, null, $args);
+        return $response;
     }
 
     public function getTaskVersion($taskId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/version";
-        $ret = $this->client->call($request);
-        return $ret;
+        $response =$this->client->castCall(null, $request);
+        return $response;
     }
 
     public function getTaskInfo($taskId, $version = 0)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/info";
         $args = array("version" => $version);
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast("TaskMetaData", $response);
-        return $ret;
+        $response =$this->client->castCall("TaskMetaData", $request,HTTP_Request2::METHOD_GET, null, $args);
+        return $response;
     }
 
     public function isTaskClaimed($taskId, $userId = null)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/claimed";
-
-        $args = null;
-        if (!is_null($userId)) {
-            $args = array("userID" => $userId);
-        }
-
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        return $ret;
+        $args=$userId ? array("userID" => $userId) : null;
+        $response =$this->client->castCall(null, $request,HTTP_Request2::METHOD_GET, null, $args);
+        return $response;
     }
 
     public function getUserClaimedTask($taskId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/user";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast("User", $response);
-        return $ret;
+        $response =$this->client->castCall("User", $request);
+        return $response;
     }
 
     public function createTask($task)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $task);
-        $ret = $this->client->cast("Task", $response);
-        return $ret;
+        $response =$this->client->castCall("Task", $request,HTTP_Request2::METHOD_POST, $task);
+        return $response;
     }
 
     public function updateTask($task)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/{$task->getId()}";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $task);
-        $ret = $this->client->cast("Task", $response);
-        return $ret;
+        $response =$this->client->castCall("Task", $request,HTTP_Request2::METHOD_PUT, $task);
+        return $response;
     }
 
     public function deleteTask($taskId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId";
-        $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $response =$this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
     }
 
     public function addTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $response =$this->client->castCall(null, $request, HTTP_Request2::METHOD_PUT);
     }
 
     public function removeTaskPreReq($taskId, $preReqId)

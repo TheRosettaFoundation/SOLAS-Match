@@ -398,10 +398,7 @@ class UserRouteHandler
             
             if ($user->getDisplayName() != "" && $user->getBiography() != ""
                     && $user->getNativeLangId() != "" && $user->getNativeRegionId() != "") {
-
                 $userDao->updateUser($user);
-                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $userDao->addUserBadgeById($user_id, $badge_id);               
                 $badge_id = BadgeTypes::PROFILE_FILLER;
                 $userDao->addUserBadgeById($user_id, $badge_id);               
             }
