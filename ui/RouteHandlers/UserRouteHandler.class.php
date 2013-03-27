@@ -382,7 +382,7 @@ class UserRouteHandler
             }
             
             $userBio = $app->request()->post("bio");
-            if ($userBio != null) {
+            if ($userBio != null && $userBio != '') {
                 $user->setBiography($userBio);
             }
             
@@ -396,7 +396,7 @@ class UserRouteHandler
                 $userDao->addUserBadgeById($user_id, $badge_id);               
             }
             
-            if ($user->getDisplayName() != "" && $user->getBiography() != ""
+            if ($user->getDisplayName() != ""
                     && $user->getNativeLangId() != "" && $user->getNativeRegionId() != "") {
 
                 $userDao->updateUser($user);
