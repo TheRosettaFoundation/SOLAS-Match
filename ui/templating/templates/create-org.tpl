@@ -7,7 +7,7 @@
     </small>
 </h1>
 
-<form method="post" action="{urlFor name="org-dashboard"}" class="well">
+<form method="post" action="{urlFor name="create-org"}" class="well">
     <label for="name"><strong>Organisation Name:</strong></label>
     <input type="text" name="name" />
 

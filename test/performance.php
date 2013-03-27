@@ -11,7 +11,7 @@ $startTime = system('date +%s%N') / 1000000000;
 
 for($i=0; $i < 50000; $i++) {
     $badgeDao = new BadgeDao();
-    $result = $badgeDao->getAllBadges();
+    $result = $badgeDao->getBadge();
 }
 
 $endTime = system('date +%s%N')  / 1000000000;
@@ -27,7 +27,7 @@ $startTime = system('date +%s%N') / 1000000000;
 
 $badgeDao = new BadgeDao();
 for($i=0; $i < 50000; $i++) {
-    $result = $badgeDao->getAllBadges();
+    $result = $badgeDao->getBadge();
 }
 
 $endTime = system('date +%s%N')  / 1000000000;
@@ -42,7 +42,7 @@ echo "Newing up once: $timeTaken seconds \n";
 $startTime = system('date +%s%N') / 1000000000;
 
 for($i=0; $i < 50000; $i++) {
-    $result = BadgeDao::getAllBadgesStatic();
+    $result = BadgeDao::getBadge();
 }
 
 $endTime = system('date +%s%N')  / 1000000000;

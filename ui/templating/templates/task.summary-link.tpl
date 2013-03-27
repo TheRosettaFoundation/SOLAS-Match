@@ -28,12 +28,12 @@
         <p>
             To: <strong>{TemplateHelper::getTaskTargetLanguage($task)}</strong>
         </p>
-
-        {assign var="taskTags" value=$task->getTagList()}
+        
+        {assign var="taskTags" value=$task['Project']->getTagList()}
         {if !empty($taskTags)}
             <p>
                 Tags:
-                {foreach from=$task->getTagList() item=tag}
+                {foreach from=$taskTags item=tag}
                     {assign var="label" value=$tag->getLabel()}
                     <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
                 {/foreach}

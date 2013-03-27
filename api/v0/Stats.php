@@ -6,7 +6,7 @@
  * @author sean
  */
 
-require_once 'DataAccessObjects/StatDao.php';
+require_once 'DataAccessObjects/StatDao.class.php';
 
 class Stats {
    

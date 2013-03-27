@@ -33,8 +33,7 @@ class LoginAPI {
             $client = new APIHelper($format);
             $data = $client->deserialize($data);
             $data = $client->cast("Login", $data);
-            $dao = new UserDao;
-            $data = $dao->apiLogin($data->getEmail(), $data->getPassword());
+            $data = UserDao::apiLogin($data->getEmail(), $data->getPassword());
 //            if (is_array($data)) {
 //                $data = $data[0];
 //            }

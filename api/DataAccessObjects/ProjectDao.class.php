@@ -1,6 +1,5 @@
 <?php
 
-include_once __DIR__.'/ProjectTags.class.php';
 include_once __DIR__.'/TagsDao.class.php';
 include_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
 include_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
@@ -10,13 +9,13 @@ include_once __DIR__.'/../../Common/models/ArchivedProject.php';
 class ProjectDao
 {
     
-    public function createUpdate($project)
+    public static function createUpdate($project)
     {
-        $this->save($project);
+        self::save($project);
         return $project;
     }
     
-    private function save(&$project)
+    private static function save(&$project)
     {        
         $args =PDOWrapper::cleanseNull($project->getId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getTitle())
@@ -31,14 +30,14 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceLanguageCode());
         $result = PDOWrapper::call("projectInsertAndUpdate", $args);
         $project->setId($result[0]['id']);
-        $tagsDao = new TagsDao();
-        $tagsDao->updateTags($project);
+
+        TagsDao::updateTags($project);
         $project = ModelFactory::buildModel("Project", $result[0]);
-        $project->setTag(ProjectTags::getTags($project->getId()));
+        $project->setTag(self::getTags($project->getId()));
         return $project;
     }
     
-    public function getProject($params)
+    public static function getProject($params)
     {
         $args = "";
         if (isset($params['id'])) {
@@ -102,18 +101,7 @@ class ProjectDao
         $result = PDOWrapper::call("getProject", $args);
         if($result) {
             foreach($result as $row) {
-                $project = ModelFactory::buildModel("Project", $row);
-                if(is_object($project)) {
-                    $tagsDao = new ProjectTags();
-                    $tags = $tagsDao->getTags($project->getId());
-                    if($tags) {
-                        foreach ($tags as $tag) {
-                            $project->addTag($tag->getLabel());
-                        }
-                    }
-
-                    $projects[] = $project;
-                }
+                $projects[] = ModelFactory::buildModel("Project", $row);
             }
         }
 
@@ -124,7 +112,7 @@ class ProjectDao
         return $projects;
     }
 
-    public function archiveProject($projectId, $userId)
+    public static function archiveProject($projectId, $userId)
     {
         $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId);
         $result = PDOWrapper::call("archiveProject", $args);        
@@ -135,7 +123,7 @@ class ProjectDao
         }
     }
 
-    public function getArchivedProject($params)
+    public static function getArchivedProject($params)
     {
         $args = "";
         if(isset($params['id'])) {
@@ -214,7 +202,7 @@ class ProjectDao
         }
     }
 
-    public function getProjectTasks($projectId)
+    public static function getProjectTasks($projectId)
     {
         $tasks = null;
         $args = "null, ";
@@ -234,7 +222,59 @@ class ProjectDao
         return $tasks;
     }
     
-    public function getProjectFileInfo($project_id, $user_id, $filename, $token, $mime) {
+    public static function getTags($project_id)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("getProjectTags", PDOWrapper::cleanseNull($project_id))) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Tag", $row);
+            }
+        }
+        return $ret;
+    }
+
+    public static function removeProjectTag($projectId, $tagId)
+    {
+        $args = PDOWrapper::cleanseNull($projectId).", ";
+        $args .= PDOWrapper::cleanseNull($tagId);
+        $result = PDOWrapper::call("removeProjectTag", $args);
+        if($result) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
+
+    public static function removeAllProjectTags($projectId)
+    {
+        if($tags = self::getTags($projectId)) {
+            foreach ($tags as $tag) {
+                self::removeProjectTag($projectId, $tag->getId());
+            }
+        }
+    }
+
+    public static function addProjectTags($projectId, $tagIds)
+    {
+        foreach ($tagIds as $tagId) {
+            self::addProjectTag($projectId, $tagId);
+        }
+    }
+
+    public static function addProjectTag($projectId, $tagId)
+    {
+        $args = PDOWrapper::cleanseNull($projectId).", ";
+        $args .= PDOWrapper::cleanseNull($tagId);
+        $result = PDOWrapper::call("addProjectTag", $args);
+        if($result) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
+    
+    public static function getProjectFileInfo($project_id, $user_id, $filename, $token, $mime) {
         
         $args = PDOWrapper::cleanseNull($project_id).",".PDOWrapper::cleanseNull($user_id)
                 .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token)
@@ -248,7 +288,7 @@ class ProjectDao
         }        
     }
     
-    public function getProjectFile($projectId) {
+    public static function getProjectFile($projectId) {
         $projectFileInfo = $this->getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
         $source = Settings::get("files.upload_path")."proj-$projectId/$filename";
@@ -256,7 +296,7 @@ class ProjectDao
         //IO::downloadFile($source, $projectFileInfo->getMime());
     }
     
-    public function saveProjectFile($projectId,$file,$filename,$userId){
+    public static function saveProjectFile($projectId,$file,$filename,$userId){
         $destination =Settings::get("files.upload_path")."proj-$projectId/";
         if(!file_exists($destination)) mkdir ($destination);
         $finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -266,7 +306,7 @@ class ProjectDao
         return $token;        
     }
     
-    public function recordProjectFileInfo($projectId,$filename,$userId, $mime){
+    public static function recordProjectFileInfo($projectId,$filename,$userId, $mime){
         $token = $filename;//generate guid in future.
         $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token)

@@ -15,8 +15,7 @@ class Countries {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/countries(:format)/', 
                                                         function ($format = ".json") {
             
-            $dao = new Languages();
-            Dispatcher::sendResponce(null, $dao->getCountryList(), null, $format);
+            Dispatcher::sendResponce(null, Languages::getCountryList(), null, $format);
         }, 'getCountries');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/countries/:id/',
@@ -27,8 +26,7 @@ class Countries {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $dao = new Languages();
-            $data = $dao->getCountry($id, null, null);
+            $data = Languages::getCountry($id, null, null);
             if (is_array($data) && is_array($data[0])) {
                 $data = $data[0];
             }
@@ -43,8 +41,7 @@ class Countries {
                 $format = '.'.$code[1];
                 $code = $code[0];
             }
-            $dao = new Languages();
-            $data = $dao->getCountry(null, $code, null);
+            $data = Languages::getCountry(null, $code, null);
             if (is_array($data) && is_array($data[0])) {
                 $data = $data[0];
             }
