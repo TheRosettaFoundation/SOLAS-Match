@@ -18,7 +18,7 @@ class OrganisationDao
         return $ret;
     }
     
-    public static function getOrg($id, $name, $homepage, $bio)
+    public static function getOrg($id, $name=null, $homepage=null, $bio=null)
     {
         $ret = array();
         

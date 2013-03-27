@@ -29,14 +29,9 @@ class Users {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            
-            $role = Dispatcher::clenseArgs('role', HttpMethodEnum::GET, false);
-            if (!$role) {
-                $data = UserDao::getUser($id, null, null, null, null, null, null, null, null);
-            } else {
-                $data = UserDao::find(array("user_id" => $id,
-                                        "role" => $role));
-            }
+
+            $data = UserDao::getUser($id);
+
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -73,7 +68,7 @@ class Users {
                     }
                 }
             }
-            $data = UserDao::getUser(null, $email, null, null, null, null, null, null, null);
+            $data = UserDao::getUser(null, $email);
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -109,7 +104,7 @@ class Users {
        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/badges(:format)/',
                                                         function ($id, $format = ".json") {
-            Dispatcher::sendResponce(null, UserDao::getUserBadgesbyID($id), null, $format);
+            Dispatcher::sendResponce(null, UserDao::getUserBadges($id), null, $format);
         }, 'getUserbadges');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/badges(:format)/',
@@ -162,8 +157,8 @@ class Users {
             $data = $client->deserialize($data);
             $data = $client->cast('Task', $data);
             Dispatcher::sendResponce(null, array("result" => TaskDao::claimTask($data->getId(), $id)), null, $format);
-
-            Notify::notifyUserClaimedTask(UserDao::find(array("user_id" => $id)), $data);
+            
+            Notify::notifyUserClaimedTask($id, $data->getId());
             Notify::sendEmailNotifications($data->getId(), NotificationTypes::CLAIM);
         }, 'userClaimTask');
        
@@ -177,7 +172,7 @@ class Users {
             $data = $client->cast('Task', $data);
             Dispatcher::sendResponce(null,TaskDao::claimTask($data->getId(), $id), null, $format);
 
-            Notify::notifyUserClaimedTask(UserDao::find(array("user_id" => $id)), $data);
+            Notify::notifyUserClaimedTask($id, $data->getId());
             Notify::sendEmailNotifications($data->getId(), NotificationTypes::CLAIM);
         }, 'userClaimTaskByID');
         
@@ -192,7 +187,7 @@ class Users {
             }
             Dispatcher::sendResponce(null, TaskDao::unClaimTask($tID,$id), null, $format);
 
-//            Notify::notifyUserClaimedTask(UserDao::find(array("user_id" => $id)), $data);
+//            Notify::notifyUserClaimedTask(UserDao::getUser($id), $data);
 //            Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
         }, 'userUnClaimTask');
 

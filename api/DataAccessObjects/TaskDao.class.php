@@ -220,37 +220,7 @@ class TaskDao
         }
         return $ret;
     }
-    
-    
 
-    public static function updateTags($task)
-    {
-        TaskTags::deleteTaskTags($task);
-        if ($tags = $task->getTagList()) {
-            if ($tag_ids = self::tagsToIds($tags)) {
-                TaskTags::setTaskTags($task, $tag_ids);
-                return 1;
-            }
-            return 0;
-        }
-        return 0;
-    }
-
-//    private static function tagsToIds($tags) 
-//    {
-//        $tag_ids = array();
-//        foreach ($tags as $tag) {
-//            if ($tag_id = $tag->getId()) {
-//                $tag_ids[] = $tag_id;
-//            }
-//        }
-//
-//        if (count($tag_ids) > 0) {
-//            return $tag_ids;
-//        } else {
-//            return null;
-//        }
-//    }
 
     private static function insert(&$task)
     {
@@ -326,34 +296,20 @@ class TaskDao
                                         .",".PDOWrapper::cleanseNullOrWrapStr($limit))) {
             $ret = array();
             foreach ($result as $row) {
-                 $ret[]= ModelFactory::buildModel("Task", $row);
+                 $ret[] = ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
     }
 
-    /*
-     * Return an array of tasks that are tagged with a certain tag.
-     */
-    public static function getTaggedTasks($tag, $limit = 15)
-    {
-        $tag_id = self::getTagId($tag);
-        return self::getTasksWithTag($tag_id, $limit);
-    }
         
     public static function getTasksWithTag($tag_id, $limit = 15)
     {
-        if (is_null($tag_id)) {
-            throw new InvalidArgumentException('Cannot get tasks tagged with '
-                                                . $tag_id .
-                                                ' because no such tag is in the system.');
-        }
-
-        $ret = false;
-        if ($r = PDOWrapper::call("getTaggedTasks", PDOWrapper::cleanse($tag_id).",".PDOWrapper::cleanse($limit))) {
+        $ret = null;
+        if ($result= PDOWrapper::call("getTaggedTasks", PDOWrapper::cleanse($tag_id).",".PDOWrapper::cleanse($limit))) {
             $ret = array();
-            foreach ($r as $row) {
-                    $ret[] = self::getTask($row['id']);
+            foreach ($result as $row) {
+                    $ret[] = ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -520,6 +476,7 @@ class TaskDao
     public static function downloadTask($taskID, $version = 0)
     {
         $task = self::getTask($taskID);
+        $task=$task[0];
 
         if (!is_object($task)) {
             header('HTTP/1.0 500 Not Found');

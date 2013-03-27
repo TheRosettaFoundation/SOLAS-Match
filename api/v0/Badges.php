@@ -75,7 +75,7 @@ class Badges {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges/:id/users(:format)/', 
                                                         function ($id, $format=".json") {
             
-            $data = UserDao::getUsersWithBadgeByID($id);
+            $data = UserDao::getUsersWithBadge($id);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getusersWithBadge');        
     }

@@ -43,26 +43,10 @@ class OrgRouteHandler
 
     public function createOrg()
     {
-        $app = Slim::getInstance();      
-        $app->render("create-org.tpl");
-    }    
-
-    public function orgDashboard()
-    {
-        $app = Slim::getInstance();
-        $current_user_id    = UserSession::getCurrentUserID();
-        $userDao = new UserDao();
-        $orgDao = new OrganisationDao();
-        $tagDao = new TagDao();
-        $projectDao = new ProjectDao();
-        
-        $current_user = $userDao->getUser(array('id' => $current_user_id));        
-        $my_organisations = $userDao->getUserOrgs($current_user_id);
-        $org_projects = array();
+        $app = Slim::getInstance();   
         
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-            
+            $post = (object) $app->request()->post();  
             if(isset($post->submit) && $post->submit == 'createOrg') {
             
                 $org = new Organisation(null);
@@ -86,8 +70,9 @@ class OrgRouteHandler
                     if (!$organisation) {
                         $new_org = $orgDao->createOrg($org);
                         if ($new_org) {
-                            $my_organisations[] = $new_org;
+//                            $my_organisations[] = $new_org;
                             $user_id = UserSession::getCurrentUserID();
+                            $orgDao->createMembershipRequest($new_org->getId(), $user_id);
                             $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
                             $org_name = $org->getName();
                             $app->flashNow("success", "Organisation $org_name has been created.");
@@ -104,6 +89,26 @@ class OrgRouteHandler
                 }
             }
             
+            $app->redirect($app->urlFor("org-dashboard"));
+        }          
+        $app->render("create-org.tpl");
+    }    
+
+    public function orgDashboard()
+    {
+        $app = Slim::getInstance();
+        $current_user_id    = UserSession::getCurrentUserID();
+        $userDao = new UserDao();
+        $orgDao = new OrganisationDao();
+        $tagDao = new TagDao();
+        $projectDao = new ProjectDao();
+        
+        $current_user = $userDao->getUser(array('id' => $current_user_id));        
+        $my_organisations = $userDao->getUserOrgs($current_user_id);
+        $org_projects = array();
+        
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
             if (isset($post->track)) {
                 $project_id = $post->project_id;
                 $project = $projectDao->getProject(array('id' => $project_id));

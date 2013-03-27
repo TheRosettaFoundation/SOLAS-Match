@@ -8,7 +8,6 @@
 
 require_once 'DataAccessObjects/TaskDao.class.php';
 require_once 'DataAccessObjects/TaskFile.class.php';
-require_once 'DataAccessObjects/TaskStream.class.php';
 require_once '../Common/models/TaskMetadata.php';
 require_once '../Common/protobufs/emails/FeedbackEmail.php';
 require_once 'lib/IO.class.php';
@@ -155,7 +154,7 @@ class Tasks {
                     $users = $feedbackData->getUserIdList();
                     if (count($users) > 0) {
                         if (count($users) == 1) {
-                            $user = UserDao::find(array('user_id' => $users[0]));
+                            $user = UserDao::getUser($users[0]);
 
                             Notify::sendOrgFeedback($task, $user, $feedbackData->getFeedback());
                         } else {

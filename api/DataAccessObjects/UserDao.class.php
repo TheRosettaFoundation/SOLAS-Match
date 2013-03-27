@@ -6,38 +6,8 @@ require_once __DIR__.'/../../Common/lib/Authentication.class.php';
 
 class UserDao
 {
-    
-    public static function find($params)
-    {
-        $args = "";
-        
-        if (isset($params['user_id']) || isset($params['email'])) {
-            $args.=(isset($params['user_id']) && $params['user_id'] != null) ? 
-                                            PDOWrapper::cleanse($params['user_id']) : "null";
-            $args.=(isset($params['password']) && $params['password'] != null) ?
-                                            ",".PDOWrapper::cleanseNullOrWrapStr($params['password']) : ",null";
-            $args.=(isset($params['email']) && $params['email'] != null) ?
-                                            ",".PDOWrapper::cleanseNullOrWrapStr($params['email']) : ",null";
-            $args.=(isset($params['role']) && $params['role'] == 'organisation_member') ? 
-                                            ",1" : ",0";
-        } else {
-            throw new InvalidArgumentException('Cannot search for user, as no valid parameters were given.');
-        }
-
-        $ret = null;
-        if ($r = PDOWrapper::call("userFindByUserData", $args)) {
-            $ret = ModelFactory::buildModel("User", $r[0]);
-        }
-        return $ret;
-    }
-
     public static function create($email, $clear_password)
     {
-        if (is_array($ret=self::getUser(null, $email, null, null, null, null, null, null, null)&&!empty($ret))) {
-            throw new InvalidArgumentException('Oops, you already have an account here with that email address.
-                                                Please log in instread.');
-        }
-
         $nonce = Authentication::generateNonce();
         $password = Authentication::hashPassword($clear_password, $nonce);
         $user = new User();
@@ -49,27 +19,18 @@ class UserDao
 
     public static function changePassword($user_id, $password)
     {
-        $user = self::getUser($user_id, null, null, null, null, null, null, null, null);
+        $user = self::getUser($user_id);
 
         $nonce = Authentication::generateNonce();
         $pass = Authentication::hashPassword($password, $nonce);
 
-        $user->setNonce($nonce);
-        $user->setPassword($pass);
+        $user[0]->setNonce($nonce);
+        $user[0]->setPassword($pass);
 
-        return self::save($user);
+        return self::save($user[0]);
     }
 
     public static function save($user)
-    {
-        if (is_null($user->getUserId())) {
-            return self::insert($user);
-        } else {
-            return self::update($user);
-        }
-    }
-
-    private static function update($user)
     {
         $result = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
         PDOWrapper::cleanseNull($user->getNonce()).",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
@@ -77,26 +38,14 @@ class UserDao
         PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getNativeLangId()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getNativeRegionId()).",".
-        PDOWrapper::cleanse($user->getUserId()));
-        if(!is_null($result)) {
+        PDOWrapper::cleanseNull($user->getUserId()));
+        if($result) {
             return ModelFactory::buildModel("User", $result[0]);
         } else {
             return null;
         }
     }
 
-    private static function insert($user) 
-    {
-        $result = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
-                                        .",".PDOWrapper::cleanse($user->getNonce())
-                                        .",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword())
-                                        .",null,null,null,null,null");
-        if(!is_null($result)) {
-            return ModelFactory::buildModel("User", $result[0]);
-        } else {
-            return null;
-        }
-    }
 
     private static function clearPasswordMatchesUsersPassword($user, $clear_password)
     {
@@ -107,7 +56,7 @@ class UserDao
 
     public static function login($email, $clear_password)
     {
-        $user = self::getUser(null, $email, null, null, null, null, null, null, null);
+        $user = self::getUser(null, $email);
 
         if (!is_object($user)) {
             throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect.
@@ -130,7 +79,7 @@ class UserDao
 
     public static function apiLogin($email, $clear_password)
     {
-        $user = self::getUser(null, $email, null, null, null, null, null, null, null);
+        $user = self::getUser(null, $email);
         
         if(is_array($user)) {
             $user = $user[0];
@@ -149,7 +98,7 @@ class UserDao
 
     public static function apiRegister($email, $clear_password)
     {
-        $user = self::getUser(null, $email, null, null, null, null, null, null, null);
+        $user = self::getUser(null, $email);
         
         if(is_array($user)) {
             $user = $user[0];
@@ -183,7 +132,7 @@ class UserDao
         } else {
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
-                $user = self::getUser(null, $retvals['contact/email'], null, null, null, null, null, null, null);
+                $user = self::getUser(null, $retvals['contact/email']);
                 if(is_array($user)) $user = $user[0];
                 if (!is_object($user)) {
                     $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
@@ -204,7 +153,7 @@ class UserDao
     {
         $ret = null;
         if ($user_id = UserSession::getCurrentUserId()) {
-                $ret = self::getUser($user_id, null, null, null, null, null, null, null, null);
+                $ret = self::getUser($user_id);
         }
         return $ret;
     }
@@ -212,23 +161,6 @@ class UserDao
     public static function isLoggedIn()
     {
         return (!is_null(UserSession::getCurrentUserId()));
-    }
-
-    public static function belongsToRole($user, $role)
-    {
-        $ret = false;
-        if ($role == 'translator') {
-            $ret = true;
-        } elseif ($role == 'organisation_member') {
-            $user_found = self::find(array(
-                    'user_id' => $user->getUserId(),
-                    'role' => 'organisation_member'
-            ));
-            if (is_object($user_found)) {
-                $ret = true;
-            }
-        }
-        return $ret;
     }
 
     public static function findOrganisationsUserBelongsTo($user_id) 
@@ -243,15 +175,11 @@ class UserDao
         return $ret;
     }
 
-    public static function getUserBadges(User $user)
+    public static function getUserBadges($user_id)
     {
-        return self::getUserBadgesbyID($user->getUserId());
-    }
-
-    public static function getUserBadgesbyID($user_id)
-    {
-        $ret = array();
+        $ret = null;
         if ($result = PDOWrapper::call("getUserBadges", PDOWrapper::cleanse($user_id))) {
+            $ret = array();
             foreach ($result as $badge) {
                 $ret[] = ModelFactory::buildModel("Badge", $badge);
             }
@@ -273,8 +201,8 @@ class UserDao
         return $ret;
     }
     
-    public static function getUser($user_id, $email, $nonce, $password, $display_name, $biography
-                            , $native_language_id, $native_region_id, $created)
+    public static function getUser($user_id=null, $email=null, $nonce=null, $password=null, $display_name=null, $biography=null
+                            , $native_language_id=null, $native_region_id=null, $created=null)
     {
         $ret = null;
         if ($result = PDOWrapper::call("getUser", PDOWrapper::cleanseNull($user_id)
@@ -297,7 +225,7 @@ class UserDao
     /*
         Get all users with $badge assigned
     */
-    public static function getUsersWithBadgeByID($badge_ID)
+    public static function getUsersWithBadge($badge_ID)
     {
         $ret = null;
         if ($result = PDOWrapper::call("getUsersWithBadge", PDOWrapper::cleanse($badge_ID))) {
@@ -307,11 +235,6 @@ class UserDao
             }
         }
         return $ret;
-    }
-    
-    public static function getUsersWithBadge($badge)
-    {
-        return self::getUsersWithBadgeByID($badge->getId());
     }
     
     /*
@@ -324,8 +247,9 @@ class UserDao
         $args['tag_id'] = PDOWrapper::cleanse($tag_id);
         if ($result = PDOWrapper::call("userLikeTag", $args)) {
             return $result[0]['result'];
+        } else {
+            return null;
         }
-        return 0;
     }
 
     /*
@@ -333,13 +257,12 @@ class UserDao
     */
     public static function removeTag($user_id, $tag_id)
     {
-        $ret = false;
         if ($result = PDOWrapper::call("removeUserTag", PDOWrapper::cleanse($user_id).","
                                         .PDOWrapper::cleanse($tag_id))) {
-            $ret = $result[0]['result'];
+            return $result[0]['result'];
+        } else {
+            return null;
         }
-
-        return $ret;
     }
 
     /*
@@ -347,14 +270,13 @@ class UserDao
     */
     public static function getUserNotificationList($user_id) 
     {
-        $ret = null;
         $args = array();
         $args['id'] = $user_id;
-        if ($return = PDOWrapper::call('getUserNotifications', $args)) {
-            $ret = $return;
+        if ($result = PDOWrapper::call('getUserNotifications', $args)) {
+            return $result;
+        } else {
+            return null;
         }
-
-        return $ret;
     }
 
     /*
@@ -362,15 +284,14 @@ class UserDao
     */
     public static function isSubscribedToTask($user_id, $task_id)
     {
-        $ret = false;
         $args = array();
         $args[] = PDOWrapper::cleanse($user_id);
         $args[] = PDOWrapper::cleanse($task_id);
         if ($result = PDOWrapper::call('userSubscribedToTask', $args)) {
-            $ret = $result[0]['result'];
+            return $result[0]['result'];
+        } else {
+            return null;
         }
-
-        return $ret;
     }
 
     /*
@@ -378,14 +299,13 @@ class UserDao
     */
     public static function isSubscribedToProject($user_id, $project_id)
     {
-        $ret = false;
         $args = PDOWrapper::cleanse($user_id);
         $args .= ", ".PDOWrapper::cleanse($project_id);
         if ($result = PDOWrapper::call('userSubscribedToProject', $args)) {
-            $ret = $result[0]['result'];
+            return $result[0]['result'];
+        } else {
+            return null;
         }
-
-        return $ret;
     }
     
     /*
@@ -393,14 +313,13 @@ class UserDao
     */
     public static function trackTask($user_id, $task_id)
     {
-        $ret = false;
         $args = PDOWrapper::cleanseNull($user_id);
         $args .= ", ".PDOWrapper::cleanseNull($task_id);
         if ($result = PDOWrapper::call("UserTrackTask", $args)) {
-            $ret = $result[0]['result'];
+            return $result[0]['result'];
+        } else {
+            return null;
         }
-
-        return $ret;
     }
 
     /*
@@ -408,23 +327,23 @@ class UserDao
     */
     public static function ignoreTask($user_id, $task_id)
     {
-        $ret = false;
         $args = PDOWrapper::cleanseNull($user_id);
         $args .= ", ".PDOWrapper::cleanseNull($task_id);
         if ($result = PDOWrapper::call("userUnTrackTask", $args)) {
-            $ret = $result[0]['result'];
+            return $result[0]['result'];
+        } else {
+            return null;
         }
-
-        return $ret;
     }
     
     public static function getTrackedTasks($user_id)
     {
-        $ret = array();
+        $ret = null;
         if ($result = PDOWrapper::call("getUserTrackedTasks", PDOWrapper::cleanseNull($user_id))) {
+            $ret = array();
             foreach ($result as $row) {
                 $task = ModelFactory::buildModel("Task", $row);
-                $task->setStatus(self::getTaskStatus($task->getId()));
+                $task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }
@@ -452,13 +371,25 @@ class UserDao
     */
     public static function addPasswordResetRequest($unique_id, $user_id)
     {
-        PDOWrapper::call("addPasswordResetRequest", PDOWrapper::cleanseWrapStr($unique_id)
+        $result = PDOWrapper::call("addPasswordResetRequest", PDOWrapper::cleanseWrapStr($unique_id)
                         .",".PDOWrapper::cleanse($user_id));
+        
+        if($result) {
+            return $result[0];
+        } else {
+            return null;
+        }
     }
 
     public static function removePasswordResetRequest($user_id)
     {
-        PDOWrapper::call("removePasswordResetRequest", PDOWrapper::cleanse($user_id));
+        $result = PDOWrapper::call("removePasswordResetRequest", PDOWrapper::cleanse($user_id));
+        
+        if($result) {
+            return $result[0];
+        } else {
+            return null;
+        }
     }
 
     /*

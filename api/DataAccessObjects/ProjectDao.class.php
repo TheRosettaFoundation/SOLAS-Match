@@ -101,17 +101,7 @@ class ProjectDao
         $result = PDOWrapper::call("getProject", $args);
         if($result) {
             foreach($result as $row) {
-                $project = ModelFactory::buildModel("Project", $row);
-                if(is_object($project)) {
-                     $tags = self::getTags($project->getId());
-                    if($tags) {
-                        foreach ($tags as $tag) {
-                            $project->addTag($tag->getLabel());
-                        }
-                    }
-
-                    $projects[] = $project;
-                }
+                $projects[] = ModelFactory::buildModel("Project", $row);
             }
         }
 

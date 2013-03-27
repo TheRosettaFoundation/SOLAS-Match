@@ -555,6 +555,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
 BEGIN
     INSERT INTO PasswordResetRequests (uid, user_id, `request-time`) VALUES (uniqueId,userId,NOW());
+    SELECT 1 AS result;
 END//
 DELIMITER ;
 
@@ -1330,7 +1331,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `lim` INT)
     READS SQL DATA
 BEGIN
-	set @q = Concat("SELECT id 
+	set @q = Concat("SELECT t.id, t.project_id, t.title,t.`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,t.`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, t.comment,  t.`task-type_id`, t.`task-status_id`, t.published, t.deadline  
                          FROM Tasks t join ProjectTags pt on pt.project_id=t.project_id
                          WHERE pt.tag_id=? AND NOT  exists (
 							  	SELECT 1		
@@ -2749,24 +2750,6 @@ BEGIN
 		select 1 as result;
 	else
 		select 0 as result;
-	end if;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.userFindByUserData
-DROP PROCEDURE IF EXISTS `userFindByUserData`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
-BEGIN
-	if(id is not null and pass is not null) then
-		select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id and password= pass;
-   elseif(id is not null and role=1) then
-		select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id and EXISTS (select * from OrganisationMembers om where om.user_id = u.id);
-	elseif(id is not null) then
-		select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id;
-   elseif (email is not null) then
-   	select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.email = email;
 	end if;
 END//
 DELIMITER ;
