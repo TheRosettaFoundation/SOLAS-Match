@@ -126,39 +126,25 @@ class TaskFile {
         }
     }
     
-    public static function uploadOutputFile($task,$convert,&$file,$userId,$filename){
+    public static function uploadOutputFile($task,$convert,&$file,$userId,$filename)
+    {
         TaskFile::uploadFile($task,$convert,$file,null,$userId,$filename);
         $graphBuilder = new APIWorkflowBuilder();
-            $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
-            if ($graph->hasRootNode()) {
-                $currentLayer = $graph->getRootNodeList();
-                $nextLayer = array();
-                $found = false;
+        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+        if ($graph && $graph->hasRootNode()) {
+            $index = $graphBuilder->find($task->getId(), $graph);
+            $node = $graph->getAllNodes($index);
 
-                $dependants = array();
-                while(!$found && count($currentLayer) > 0) {
-                    foreach ($currentLayer as $node) {
-                        if ($node->getTaskId() == $task->getId()) {
-                            $found = true;
-                            foreach ($node->getNextList() as $nextNode) {
-                                $dependants[] = $nextNode->getTaskId();
-                            }
-                        }
-                        foreach ($node->getNextList() as $nextNode) {
-                            if(!in_array($nextNode, $nextLayer)) {
-                                $nextLayer[] = $nextNode;
-                            }
-                        }
-                    }
-                    $currentLayer = $nextLayer;
-                    $nextLayer = array();
-                }
-
-                foreach ($dependants as $nextTask) {
-                    $taskDao = new TaskDao();
-                    $dTask = $taskDao->find(array("id" => $nextTask));
-                    TaskFile::uploadFile($dTask ,$convert,$file,0,$userId,$filename);
-                }
+            $dependants = array();
+            foreach ($node->getNextList() as $nextNodeId) {
+                $dependants[] = $nextNodeId;
             }
+
+            foreach ($dependants as $nextTask) {
+                $taskDao = new TaskDao();
+                $dTask = $taskDao->find(array("id" => $nextTask));
+                TaskFile::uploadFile($dTask ,$convert,$file,0,$userId,$filename);
+            }
+        }
     }
 }
