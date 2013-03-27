@@ -33,13 +33,13 @@ class Notify
         }
     }
 
-    public static function notifyUserClaimedTask($user, $task) 
+    public static function notifyUserClaimedTask($userId, $taskId) 
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
             $message_type = new UserTaskClaim();
-            $message_type->user_id = $user->getUserId();
-            $message_type->task_id = $task->getId();
+            $message_type->user_id = $userId;
+            $message_type->task_id = $taskId;
             $message = $messagingClient->createMessageFromProto($message_type);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                     $messagingClient->UserTaskClaimTopic);
@@ -63,26 +63,23 @@ class Notify
     }
 
     public static function notifyUserOrgMembershipRequest($user_id, $org_id, $accepted)
-    {
-        $org_dao = new OrganisationDao();
-        $org = $org_dao->getOrg($org_id, null, null, null);
-
-        $user_dao = new UserDao();
-        $user = $user_dao->find(array('user_id' => $user_id));
+    {        
+        $orgs = OrganisationDao::getOrg($org_id);
+        $users = UserDao::getUser($user_id);
 
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
             if ($accepted) {
                 $message_type = new OrgMembershipAccepted();
-                $message_type->user_id = $user->getUserId();
-                $message_type->org_id = $org->getId();
+                $message_type->user_id = $users[0]->getUserId();
+                $message_type->org_id = $orgs[0]->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                         $messagingClient->OrgMembershipAcceptedTopic);
             } else {
                 $message_type = new OrgMembershipRefused();
-                $message_type->user_id = $user->getUserId();
-                $message_type->org_id = $org->getId();
+                $message_type->user_id = $users[0]->getUserId();
+                $message_type->org_id = $orgs[0]->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                         $messagingClient->OrgMembershipRefusedTopic);
@@ -94,10 +91,7 @@ class Notify
 
     public static function sendEmailNotifications($taskId, $notificationType)
     {
-        $app = Slim::getInstance();
-
-        $task_dao = new TaskDao();
-        $subscribed_users = $task_dao->getSubscribedUsers($taskId);
+        $subscribed_users = TaskDao::getSubscribedUsers($taskId);
 
         if (count($subscribed_users) > 0) {
             $messagingClient = new MessagingClient();
@@ -118,7 +112,7 @@ class Notify
                     case NotificationTypes::CLAIM:
                         $message_type = new TaskClaimed();
                         $message_type->task_id = $taskId;
-                        $translator = $task_dao->getTaskTranslator($taskId);
+                        $translator = TaskDao::getUserClaimedTask($taskId);
                         $message_type->translator_id = $translator->getUserId();
                         foreach ($subscribed_users as $user) {
                             $message_type->user_id = $user->getUserId();
@@ -131,7 +125,7 @@ class Notify
                     case NotificationTypes::UPLOAD:
                         $message_type = new TaskTranslationUploaded();
                         $message_type->task_id = $taskId;
-                        $translator = $task_dao->getTaskTranslator($taskId);
+                        $translator = TaskDao::getUserClaimedTask($taskId);
                         $message_type->translator_id = $translator->getUserId();
                         foreach ($subscribed_users as $user) {
                             $message_type->user_id = $user->getUserId();

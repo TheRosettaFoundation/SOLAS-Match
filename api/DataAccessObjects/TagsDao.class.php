@@ -3,15 +3,16 @@
 require_once __DIR__.'/../../Common/models/Tag.php';
 require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
 
-class TagsDao {
+class TagsDao
+{
     
-    public function find($params)
+    public static function find($params)
     {
         $result = self::getTag($params);
         return $result[0];
     }
         
-    public function getTag($params)
+    public static function getTag($params)
     {
         $args = "";
         $args .= ((isset($params['id']))) ? PDOWrapper::cleanseNull($params['id']) : "null";
@@ -31,23 +32,23 @@ class TagsDao {
         return $ret;
     }
 
-    public function create($label)
+    public static function create($label)
     {
         $tag = new Tag();
         $tag->setLabel($label);
-        return $this->save($tag);
+        return self::save($tag);
     }
 
-    public function save($tag)
+    public static function save($tag)
     {
         if (!$tag->hasId()) {
-            return $this->insert($tag);
+            return self::insert($tag);
         } else {
             echo "Error: updating existing tag functionality not implemented."; die;
         }
     }
 
-    private function insert($tag)
+    private static function insert($tag)
     {
         $result = PDOWrapper::call("tagInsert", PDOWrapper::cleanseWrapStr($tag->getLabel()));
         if($result) {
@@ -65,18 +66,18 @@ class TagsDao {
 
         Also responsible to special Langauge tags for content.
     */
-    public function parse($str) // Needs to be package protected
+    public static function parse($str) // Needs to be package protected
     {
         $tag_ids = false;
         $str = $this->s->io->cleanseInput($str);
-        if ($tags = $this->tagsToArray($str)) {
+        if ($tags = self::tagsToArray($str)) {
             $tag_ids = array();
             foreach ($tags as $tag) {
                 // Ask the database what the ID is by searching for the tag's text label
-                if ($tag_id = $this->tagIDFromLabel($tag)) {
+                if ($tag_id = self::tagIDFromLabel($tag)) {
                         $tag_ids[] = $tag_id;
                 } else {
-                    if ($tag_id = $this->insertTag($tag)) {
+                    if ($tag_id = self::insertTag($tag)) {
                         $tag_ids[] = $tag_id;
                     }
                 }
@@ -86,13 +87,13 @@ class TagsDao {
         return $tag_ids;		
     }
 
-    public function tagIDFromLabel($label)
+    public static function tagIDFromLabel($label)
     {
         $result = self::getTag(array('label' => $label));
         return $result == null ? null : $result[0]->getId();
     }
 
-    public function label($tag_id)
+    public static function label($tag_id)
     {
         $result = self::getTag(array('id'=>$tag_id));
         return $result[0]['label'];
@@ -101,27 +102,27 @@ class TagsDao {
     /*
      * For a given tag, return its URL.
      */
-    public function url($tag_id) // Needs to be package protected
+    public static function url($tag_id) // Needs to be package protected
     {
         return '/tag/'.intval($tag_id).'/';		
     }
 
-    public function tagTargetHTML($str) // Needs to be package protected
+    public static function tagTargetHTML($str) // Needs to be package protected
     {
         $label = $str;
         return '<div class="tag target"><span class="label">To '.$label.'</span></div>';
     }
 
-    public function createAnyNewTags($labels)
+    public static function createAnyNewTags($labels)
     {
         $ret =  null;
         if (is_array($labels)) {
             $tags = array();
             foreach ($labels as $label) {
-                if ($tag = $this->find(array('label' => $label))) {
+                if ($tag = self::find(array('label' => $label))) {
                     $tags[] = $tag;
                 } else {
-                    $tags[] = $this->create($label);
+                    $tags[] = self::create($label);
                 }
             }
             $ret = $tags;
@@ -130,7 +131,7 @@ class TagsDao {
         return $ret;
     }
 
-    public function getAllTags()
+    public static function getAllTags()
     {
         $ret = false;
         foreach (self::getTag(null) as $row) {
@@ -139,9 +140,9 @@ class TagsDao {
         return $ret;
     }
     
-    public static function getTopTags ($limit = 30)
+    public static function getTopTags($limit = 30)
     {
-        $ret = false;
+        $ret = null;
         if ($r = PDOWrapper::call("getTopTags", PDOWrapper::cleanse($limit))) {
             $ret = array();
             foreach ($r as $row) {
@@ -151,7 +152,7 @@ class TagsDao {
         return $ret;           
      }
 
-    public function delete($id)
+    public static function delete($id)
     {
         if ($r = PDOWrapper::call("deleteTag", PDOWrapper::cleanse($id))) {
             return $r[0]['result'];
@@ -159,13 +160,13 @@ class TagsDao {
         return 0;
     }  
     
-    public function updateTags($project)
+    public static function updateTags($project)
     {
-        ProjectTags::removeAllProjectTags($project->getId());
+        ProjectDao::removeAllProjectTags($project->getId());
         $tags = $project->getTagList();
         if (count($tags) > 0) {
-            if ($tag_ids = $this->tagsToIds($tags)) {
-                ProjectTags::addProjectTags($project->getId(), $tag_ids);
+            if ($tag_ids = self::tagsToIds($tags)) {
+                ProjectDao::addProjectTags($project->getId(), $tag_ids);
                 return 1;
             }
             return 0;
@@ -173,14 +174,14 @@ class TagsDao {
         return 0;
     }   
     
-    private function tagsToIds($tags)
+    private static function tagsToIds($tags)
     {
         $tag_ids = array();
         foreach ($tags as $tag) {
-            if ($tag_id = $this->tagIDFromLabel($tag)) {
+            if ($tag_id = self::tagIDFromLabel($tag)) {
                 $tag_ids[] = $tag_id;
             } else {
-                $createdTag = $this->create($tag);
+                $createdTag = self::create($tag);
                 $tag_ids[] = $createdTag->getId();
             }
         }

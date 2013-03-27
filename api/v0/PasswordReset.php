@@ -36,9 +36,8 @@ class PasswordResetAPI {
                 $key = explode('.', $key);
                 $format = '.'.$key[1];
                 $key = $key[0];
-            }
-            $dao = new UserDao();           
-            $data = $dao->getPasswordResetRequests(array('uid' => $key));
+            }        
+            $data = UserDao::getPasswordResetRequests(array('uid' => $key));
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getResetRequest');
         
@@ -49,8 +48,7 @@ class PasswordResetAPI {
             $client = new APIHelper($format);
             $data = $client->deserialize($data);
             $data = $client->cast('PasswordReset', $data);
-            $dao = new UserDao;
-            $result = $dao->passwordReset($data->getPassword(), $data->getKey());
+            $result = UserDao::passwordReset($data->getPassword(), $data->getKey());
             Dispatcher::sendResponce(null, $result, null, $format);
          }, 'resetPassword');         
     }

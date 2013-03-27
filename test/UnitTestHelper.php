@@ -64,11 +64,9 @@ class UnitTestHelper
                         (4, NULL, 'Registered', 'Successfully set up an account'),
                         (5, NULL, 'Native-Language', 'Filled in your native language on your user profile.');");
             $conn->exec("ALTER TABLE `Badges` AUTO_INCREMENT=100;");
-            
-            $conn->exec("CALL statsUpdateAll;");
+
         }
     }
-    
     
    
     // Create system badge by default
@@ -132,7 +130,7 @@ class UnitTestHelper
     }
     
     public static function createTask($projectId, $id = null, $title = "Task 1", $comment = "Task 1 Comment", $deadline = "2020-03-29 16:30:00",
-            $wordcount = 123456, $tags = array("Task", "Tags"), $type = TaskTypeEnum::TRANSLATION, $status = TaskStatusEnum::PENDING_CLAIM,
+            $wordcount = 123456, $tags = null, $type = TaskTypeEnum::TRANSLATION, $status = TaskStatusEnum::PENDING_CLAIM,
             $sourceCountryCode = "IE", $sourceLanguageCode = "en", $targetCountryCode = "FR", $targetCountryLanguage = "fr",
             $published = 1, $createdTime = null)
     {
@@ -142,7 +140,7 @@ class UnitTestHelper
         $task->setTitle($title);        
         $task->setComment($comment);        
         $task->setDeadline($deadline);
-        $task->setWordCount($wordcount);
+        $task->setWordCount($wordcount);        
         $task->setTaskType($type);
         $task->setTaskStatus($status);
         $task->setTargetCountryCode($targetCountryCode);
@@ -152,14 +150,14 @@ class UnitTestHelper
         $task->setPublished($published);
         $task->setCreatedTime($createdTime);
         
-        $i = 0;
-        $taskTag = new Tag();
-        foreach($tags as $tagLabel) {            
-            $taskTag->setId($i+100);
-            $taskTag->setLabel($tagLabel[0]);
-            $task->addTag($taskTag);
-            $i++;
-        }
+//        $i = 0;
+//        $taskTag = new Tag();
+//        foreach($tags as $tagLabel) {            
+//            $taskTag->setId($i+100);
+//            $taskTag->setLabel($tagLabel[0]);
+//            $task->addTag($taskTag);
+//            $i++;
+//        }
         
         return $task;
     }
@@ -174,7 +172,8 @@ class UnitTestHelper
         $projectFile->setMime($mime);
         $projectFile->setToken($token);        
         return $projectFile;
-    }    
+    }  
+
 }
 
 ?>

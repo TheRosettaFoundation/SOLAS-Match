@@ -27,8 +27,18 @@ class ProjectDao
         $response = $this->client->call($request);
         if (!is_null($id)) {
             $ret = $this->client->cast("Project", $response);
+            $tags=$this->getProjectTags($params['id']);
+            foreach($tags as $tag){
+                $ret->addTag($tag);
+            }
         } else {
             $ret = $this->client->cast(array("Project"), $response);
+            foreach($ret as $project){
+                $tags=$this->getProjectTags($project->getId());
+                foreach($tags as $tag){
+                    $project->addTag($tag);
+                }
+            }
         }
 
         return $ret;

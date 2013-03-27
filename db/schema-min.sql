@@ -271,19 +271,6 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-REPLACE INTO `Statistics` (`name`, `value`) VALUES
-	('ArchivedProjects', 0),
-	('ArchivedTasks', 0),
-	('Badges', 3),
-	('ClaimedTasks', 0),
-	('Organisations', 0),
-	('OrgMembershipRequests', 0),
-	('Projects', 0),
-	('Tags', 0),
-	('Tasks', 0),
-	('TasksWithPreReqs', 0),
-	('Users', 0),
-	('UnclaimedTasks', 0);
 
 -- Dumping structure for table Solas-Match-Test.Tags
 CREATE TABLE IF NOT EXISTS `Tags` (
@@ -568,6 +555,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
 BEGIN
     INSERT INTO PasswordResetRequests (uid, user_id, `request-time`) VALUES (uniqueId,userId,NOW());
+    SELECT 1 AS result;
 END//
 DELIMITER ;
 
@@ -1343,7 +1331,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `lim` INT)
     READS SQL DATA
 BEGIN
-	set @q = Concat("SELECT id 
+	set @q = Concat("SELECT t.id, t.project_id, t.title,t.`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,t.`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, t.comment,  t.`task-type_id`, t.`task-status_id`, t.published, t.deadline  
                          FROM Tasks t join ProjectTags pt on pt.project_id=t.project_id
                          WHERE pt.tag_id=? AND NOT  exists (
 							  	SELECT 1		
@@ -1525,7 +1513,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
 -- Dumping structure for procedure Solas-Match-Test.getTaskTags
 DROP PROCEDURE IF EXISTS `getTaskTags`;
 DELIMITER //
@@ -1538,154 +1525,45 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTaskTranslator
-DROP PROCEDURE IF EXISTS `getTaskTranslator`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTranslator`(IN `taskId` INT)
-BEGIN
-    SELECT user_id
-    FROM TaskClaims
-    WHERE task_id=taskId;
-END//
-DELIMITER ;
-
-
 -- Dumping structure for procedure Solas-Match-Test.getTopTags
 DROP PROCEDURE IF EXISTS `getTopTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
 BEGIN
-set @q = Concat("   SELECT t.label AS label,t.id as d, COUNT( pt.tag_id ) AS frequency
-                    FROM ProjectTags AS pt 
-                    join Tags AS t on pt.tag_id = t.id
-                    join Tasks tsk on tsk.project_id=pt.project_id
-                    WHERE not exists (SELECT 1
-                                       FROM TaskClaims tc
-                                       where tc.task_id=tsk.id
-                                     )
-                    GROUP BY pt.tag_id
-                    ORDER BY frequency DESC
-                    LIMIT ",lim);
-        PREPARE stmt FROM @q;
-        EXECUTE stmt;
-        DEALLOCATE PREPARE stmt;
+	if lim='' then set lim=null;end if;
+	if not lim is null then
+		set @q = Concat("   SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
+		                    FROM ProjectTags AS pt 
+		                    join Tags AS t on pt.tag_id = t.id
+		                    GROUP BY pt.tag_id
+		                    ORDER BY frequency DESC, t.label
+		                    LIMIT ",lim);
+	else
+		set @q = "   SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
+		                    FROM ProjectTags AS pt 
+		                    join Tags AS t on pt.tag_id = t.id
+		                    GROUP BY pt.tag_id
+		                    ORDER BY frequency DESC, t.label";
+		
+	end if;
+   PREPARE stmt FROM @q;
+   EXECUTE stmt;
+   DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalArchivedTasks
-DROP PROCEDURE IF EXISTS `getTotalArchivedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalArchivedTasks`(IN `dateTime` DATETIME)
-BEGIN
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-    SET @archivedTasks = NULL;
-    SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.`created-time` >= dateTime;
-    SELECT @archivedTasks AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalClaimedTasks
-DROP PROCEDURE IF EXISTS `getTotalClaimedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalClaimedTasks`(IN `dateTime` DATETIME)
-BEGIN
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-    SET @claimedTasks = NULL;
-    SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.`claimed-time` >= dateTime;
-    SELECT @claimedTasks AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalOrgs
-DROP PROCEDURE IF EXISTS `getTotalOrgs`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalOrgs`()
-BEGIN
-    SET @totalOrgs = NULL;	
-    SELECT count(1) INTO @totalOrgs FROM Organisations;
-    SELECT @totalOrgs AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalTasks
-DROP PROCEDURE IF EXISTS `getTotalTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalTasks`(IN `dateTime` DATETIME)
-BEGIN
-    SET @totalTasks = NULL;
-    SET @claimedTasks = NULL;
-    SET @unclaimedTasks = NULL;
-    SET @archivedTasks = NULL;
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-
-    SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.`claimed-time` >= dateTime;	
-
-    SELECT count(1) into @unclaimedTasks from Tasks t
-    WHERE t.`created-time` >= dateTime AND t.id NOT IN
-    (
-        SELECT task_id
-        FROM  TaskClaims
-    );
-
-    SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.`created-time` >= dateTime;	
-
-    SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks;	
-    SELECT @totalTasks AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalUnclaimedTasks
-DROP PROCEDURE IF EXISTS `getTotalUnclaimedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalUnclaimedTasks`(IN `dateTime` DATETIME)
-BEGIN
-   if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-   SET @unclaimedTasks = NULL;
-   SELECT count(1) into @unclaimedTasks from Tasks t
-	WHERE t.`created-time` >= dateTime AND t.id NOT IN
-            (
-                SELECT task_id
-                FROM  TaskClaims
-            );
-	SELECT @unclaimedTasks AS result;	
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalUsers
-DROP PROCEDURE IF EXISTS `getTotalUsers`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalUsers`()
-BEGIN
-    SET @totalUsers = NULL;	
-    SELECT count(1) INTO @totalUsers FROM Users;
-    SELECT @totalUsers AS result;
-END//
-DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getTrackedProjects
 DROP PROCEDURE IF EXISTS `getTrackedProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrackedProjects`(IN `uID` INT)
 BEGIN
-select p.* from Projects p  
-join UserTrackedProjects utp 
-on p.id=utp.Project_id
-where utp.user_id=uID;
+    select p.* from Projects p  
+    join UserTrackedProjects utp 
+    on p.id=utp.Project_id
+    where utp.user_id=uID;
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getUser
 DROP PROCEDURE IF EXISTS `getUser`;
@@ -1745,16 +1623,11 @@ DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
-
-set @q=Concat("SELECT * FROM ArchivedTasks as a 
-                WHERE user_id = ?
-                ORDER BY `created-time` DESC
-                limit ", lim);
-        PREPARE stmt FROM @q;
-        set@uID = uID;
-	EXECUTE stmt using @uID;
-	DEALLOCATE PREPARE stmt;
-
+	SELECT a.id,a.project_id, a.title, a.`comment`, a.deadline, a.`word-count`, a.`created-time`, (select code from Languages where id =a.`language_id-source`) as `language_id-source`,(select code from Languages where id =a.`language_id-target`) as `language_id-target`, (select code from Countries where id =a.`country_id-source`) as `country_id-source`, (select code from Countries where id =a.`country_id-target`) as `country_id-target`, a.taskType_id AS taskType, a.taskStatus_id AS taskStatus, a.published, (SELECT `user_id-claimed` FROM ArchivedTasksMetadata) AS `user_id-claimed`, (SELECT `user_id-archived` FROM ArchivedTasksMetadata) AS `user_id-archived`, (SELECT `archived-date` FROM ArchivedTasksMetadata) AS `archive-date`  FROM ArchivedTasks AS a 
+		WHERE a.id = (SELECT am.archivedTask_id FROM ArchivedTasksMetadata am
+		WHERE am.`user_id-archived` = uID)
+      ORDER BY `created-time` DESC
+      LIMIT lim;
 END//
 DELIMITER ;
 
@@ -1776,9 +1649,11 @@ DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `taskID` INT)
 BEGIN
-	SELECT u.* FROM Users u
-	WHERE u.id IN (SELECT tc.user_id FROM TaskClaims tc
-	WHERE tc.task_id = taskID);
+	IF EXISTS( 	SELECT 1	FROM TaskClaims tc WHERE tc.task_id=taskId) THEN
+		SET @userId = false;			
+		SELECT user_id INTO @userId FROM TaskClaims WHERE task_id=taskId;
+		call getUser(@userId,null,null,null,null,null,null,null,null);
+	END IF;
 END//
 DELIMITER ;
 
@@ -2491,24 +2366,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTotalProjects
-DROP PROCEDURE IF EXISTS `statsUpdateTotalProjects`;
-DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `statsUpdateTotalProjects`()
-BEGIN
-	SET @Projects = 0;
-	SET @ArchivedProjects = 0;	
-	
-	SELECT count(1) INTO @Projects FROM Projects;	
-	SELECT count(1) INTO @ArchivedProjects FROM ArchivedProjects;
-	
-	SET @totalProjects = @Projects + @ArchivedProjects;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('TotalProjects', @totalProjects);	
-END//
-DELIMITER ;
-
-
 -- Dumping structure for procedure Solas-Match-Test.statsUpdateUnclaimedTasks
 DROP PROCEDURE IF EXISTS `statsUpdateUnclaimedTasks`;
 DELIMITER //
@@ -2547,18 +2404,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tagInsert`(IN `name` VARCHAR(50))
 BEGIN
 	insert into Tags (label) values (name);
 	select *  from Tags t where t.id = LAST_INSERT_ID();
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.taskDownloadCount
-DROP PROCEDURE IF EXISTS `taskDownloadCount`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskDownloadCount`(IN `tID` INT)
-BEGIN
-	SELECT count(*) times_downloaded
-	FROM task_file_version_download
-	WHERE task_id = tID;
 END//
 DELIMITER ;
 
@@ -2905,35 +2750,6 @@ BEGIN
 		select 1 as result;
 	else
 		select 0 as result;
-	end if;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.unlinkStoredTags
-DROP PROCEDURE IF EXISTS `unlinkStoredTags`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkStoredTags`(IN `id` INT)
-    MODIFIES SQL DATA
-BEGIN
-DELETE FROM TaskTags WHERE task_id = id;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.userFindByUserData
-DROP PROCEDURE IF EXISTS `userFindByUserData`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
-BEGIN
-	if(id is not null and pass is not null) then
-		select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id and password= pass;
-   elseif(id is not null and role=1) then
-		select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id and EXISTS (select * from OrganisationMembers om where om.user_id = u.id);
-	elseif(id is not null) then
-		select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id;
-   elseif (email is not null) then
-   	select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.email = email;
 	end if;
 END//
 DELIMITER ;

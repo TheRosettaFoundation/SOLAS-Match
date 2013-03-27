@@ -110,7 +110,7 @@
                 <td></td>
                 <td>
                     {foreach from=$project->getTagList() item=tag }
-                        <a class="tag label" href="{urlFor name="tag-details" options="label.$tag"}">{$tag}</a>
+                        <a class="tag label" href="{urlFor name="tag-details" options="label.{$tag->getLabel()}"}">{$tag->getLabel()}</a>
                     {/foreach}
                 </td>                    
             </tr>
