@@ -43,6 +43,23 @@ class ProjectDao
         return $ret;
     }
 
+    public function getProjectGraph($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/buildGraph/$projectId";
+        $response = $this->client->call($request);
+        $ret = $this->client->cast("WorkflowGraph", $response);
+        return $ret; 
+    }
+
+    public function getProjectGraphView($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/buildGraphView/$projectId";
+        $ret = $this->client->call($request);
+        return $ret; 
+    }
+
     public function getProjectTags($projectId)
     {
         $ret = null;

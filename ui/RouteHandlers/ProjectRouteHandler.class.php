@@ -3,7 +3,7 @@
 require_once "Common/TaskTypeEnum.php";
 require_once "Common/TaskStatusEnum.php";
 
-require_once "ui/lib/GraphViewer.class.php";
+require_once "ui/lib/UIGraphViewer.class.php";
 
 class ProjectRouteHandler
 {
@@ -40,9 +40,9 @@ class ProjectRouteHandler
         $time = $time[1] + $time[0];
         $time1 = $time; 
 
-        $builder = new UIWorkflowBuilder();
-        $graph = $builder->buildProjectGraph($projectId);
-        $viewer = new GraphViewer($graph);
+        $projectDao = new ProjectDao();
+        $graph = $projectDao->getProjectGraph($projectId);
+        $viewer = new UIGraphViewer($graph);
         $body = $viewer->constructView();
 
         $extra_scripts .= $viewer->generateDataScript();

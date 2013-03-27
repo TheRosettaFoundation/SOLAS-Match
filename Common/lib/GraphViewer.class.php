@@ -1,16 +1,15 @@
 <?php
 
-require_once __DIR__."/UIWorkflowBuilder.class.php";
-
-class GraphViewer
+abstract class GraphViewer
 {
-    private $model;
-    private $xPos;
-    private $yPos;
-    private $iconWidth;
-    private $iconHeight;
+    protected $model;
+    protected $xPos;
+    protected $yPos;
+    protected $iconWidth;
+    protected $iconHeight;
+    protected $graphBuilder;
 
-    public function GraphViewer($graph)
+    public function __construct($graph)
     {
         $this->model = $graph;
         $this->xPos = 10;
@@ -21,22 +20,20 @@ class GraphViewer
 
     public function generateDataScript()
     {
-        $graphBuilder = new UIWorkflowBuilder();
         $ret = "<script>
-            var postReqs = new Array();
-            var preReqs = new Array();
-            var languageList = new Array();
-            var languageTasks = new Array();";
-
+              var postReqs = new Array();
+              var preReqs = new Array();
+              var languageList = new Array();
+              var languageTasks = new Array();";
+        
         if ($this->model && $this->model->hasRootNode()) {
             $currentLayer = $this->model->getRootNodeList();
             $nextLayer = array();
             
-            $taskDao = new TaskDao();
             $foundLanguages = array();
             while (count($currentLayer) > 0) {
                 foreach ($currentLayer as $taskId) {
-                    $task = $taskDao->getTask(array('id' => $taskId));
+                    $task = $this->getTask($taskId);
                     $target = $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
                     if (!in_array($target, $foundLanguages)) {
                         $ret .= "languageTasks[\"".$target."\"] = new Array();";
@@ -46,8 +43,8 @@ class GraphViewer
                     $ret .= "languageTasks[\"".$target."\"].push($taskId);";
                     $ret .= "preReqs[$taskId] = new Array();";
                     $ret .= "postReqs[$taskId] = new Array();";
-
-                    $index = $graphBuilder->find($taskId, $this->model);
+                    
+                    $index = $this->graphBuilder->find($taskId, $this->model);
                     $node = $this->model->getAllNodes($index);
                     foreach ($node->getNextList() as $nextId) {
                         $ret .= "postReqs[$taskId].push($nextId);";
@@ -64,7 +61,7 @@ class GraphViewer
             }
         }
         $ret .= "</script>";
-
+        
         return $ret;
     }
 
@@ -75,9 +72,8 @@ class GraphViewer
         $doc->formatOutput = true;
         if ($this->model) {
             $viewWidth = 1200;
-            $projectDao = new ProjectDao();
-            $project = $projectDao->getProject(array("id" => $this->model->getProjectId()));
-
+            $project = $this->getProject($this->model->getProjectId());
+            
             $view = $doc->createElement("svg");
             $att = $doc->createAttribute("xmlns");
             $att->value = "http://www.w3.org/2000/svg";
@@ -94,7 +90,7 @@ class GraphViewer
             $att = $doc->createAttribute("width");
             $att->value = $viewWidth;
             $view->appendChild($att);
-
+            
             $border = $doc->createElement("rect");
             $att = $doc->createAttribute("x");
             $att->value = 1;
@@ -111,7 +107,7 @@ class GraphViewer
             $att = $doc->createAttribute("style");
             $att->value = "fill-opacity:0;stroke:black;stroke-width:2";
             $border->appendChild($att);
-
+            
             $titleText = "Project: ".$project->getTitle();
             $projectTitle = $doc->createElement("text", $titleText);
             $att = $doc->createAttribute("x");
@@ -121,7 +117,7 @@ class GraphViewer
             $att->value = 20;
             $projectTitle->appendChild($att);
             $view->appendChild($projectTitle);
-
+            
             $triangle = $doc->createElement("marker");
             $att = $doc->createAttribute("id");
             $att->value = "triangle";
@@ -147,24 +143,23 @@ class GraphViewer
             $att = $doc->createAttribute("orient");
             $att->value = "auto";
             $triangle->appendChild($att);
-
+            
             $path = $doc->createElement("path");
             $att = $doc->createAttribute("d");
             $att->value = "M 0 0 L 10 5 L 0 10 z";
             $path->appendChild($att);
             $triangle->appendChild($path);
             $view->appendChild($triangle);
-
+            
             $defs = $doc->createElement("defs");
             $att = $doc->createAttribute("id");
             $att->value = "svg-definitions";
             $defs->appendChild($att);
-
+            
             $roots = $this->model->getRootNodeList();
-            $taskDao = new TaskDao();
             foreach ($roots as $rootId) {
                 $thisY = $this->yPos + 20;
-                $task = $taskDao->getTask(array('id' => $rootId));
+                $task = $this->getTask($rootId);
                 $this->drawGraphFromNode($task, $doc, $defs);
                 $composite = $doc->createElement("use");
                 $att = $doc->createAttribute("xlink:href");
@@ -185,7 +180,7 @@ class GraphViewer
             $view->setAttribute("height", $this->yPos + 20);
             $border->setAttribute("height", $this->yPos + 15);
             $view->appendChild($border);
-
+            
             //create a div to display the graph
             $div = $doc->createElement("div");
             $att = $doc->createAttribute("class");
@@ -193,30 +188,30 @@ class GraphViewer
             $div->appendChild($att);
             $div->appendChild($view);
             $doc->appendChild($div);
+        } else {
+            echo "<p>Unable to build graph, model is null</p>";
         }
         foreach ($doc->childNodes as $child) {
             $ret .= $doc->saveXml($child);
         }
-
+        
         return $ret;
     }
 
     public function drawGraphFromNode($rootTask, $doc, &$defs)
     {
-        $graphBuilder = new UIWorkflowBuilder();
-        $taskDao = new TaskDao();
         $currentLayer = array();
         $nextLayer = array();
         $currentLayer[] = $rootTask->getId();
-
+        
         $xRaster = 10;
         $yRaster = 10;
-
+        
         $subGraph = $doc->createElement("g");
         $att = $doc->createAttribute("id");
         $att->value = "sub-graph_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
         $subGraph->appendChild($att);
-
+        
         $languageBox = $doc->createElement("rect");
         $att = $doc->createAttribute("id");
         $att->value = "language-box_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
@@ -236,14 +231,14 @@ class GraphViewer
         $att = $doc->createAttribute("style");
         $att->value = "fill-opacity:0;stroke:black;stroke-width:2";
         $languageBox->appendChild($att);
-
+        
         $maxVNodeCount = 0;
         $verticalNodeCount = 0;
         $horizontalNodeCount = 0;
         while (count($currentLayer) > 0) {
             foreach ($currentLayer as $nodeId) {
-                $task = $taskDao->getTask(array('id' => $nodeId));
-                $index = $graphBuilder->find($nodeId, $this->model);
+                $task = $this->getTask($nodeId);
+                $index = $this->graphBuilder->find($nodeId, $this->model);
                 $node = $this->model->getAllNodes($index);
                 $verticalNodeCount++;
                 foreach ($node->getNextList() as $nextId) {
@@ -252,7 +247,7 @@ class GraphViewer
                     }
                 }
                 $this->drawNode($task, $doc, $defs);
-
+                
                 $composite = $doc->createElement("use");
                 $att = $doc->createAttribute("xlink:href");
                 $att->value = "#comp_".$node->getTaskId();
@@ -267,20 +262,20 @@ class GraphViewer
                 $att->value = $yRaster + 40;
                 $composite->appendChild($att);
                 $subGraph->appendChild($composite);
-
+                
                 $yRaster += $this->iconHeight + 60;
             }
-
+            
             $yRaster = 10;
-
+            
             if ($verticalNodeCount > $maxVNodeCount) {
-                    $maxVNodeCount = $verticalNodeCount;
+                $maxVNodeCount = $verticalNodeCount;
             }
             $verticalNodeCount = 0;
             $horizontalNodeCount++;
-
+            
             $xRaster += $this->iconWidth + 100;
-
+            
             $currentLayer = $nextLayer;
             $nextLayer = array();
         }
@@ -296,8 +291,8 @@ class GraphViewer
         $att->value = "#language-box_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
         $component->appendChild($att);
         $subGraph->appendChild($component);
-
-        $text = $doc->createElement("text", TemplateHelper::getTaskTargetLanguage($rootTask));
+        
+        $text = $doc->createElement("text", $this->getTaskTargetLanguage($rootTask));
         $att = $doc->createAttribute("id");
         $att->value = "text_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
         $text->appendChild($att);
@@ -308,7 +303,7 @@ class GraphViewer
         $att->value = 25;
         $text->appendChild($att);
         $defs->appendChild($text);
-
+        
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
         $att->value = "#text_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
@@ -324,7 +319,7 @@ class GraphViewer
         $thisY = 0;
         $itemWidth = $this->iconWidth;
         $itemHeight = $this->iconHeight;
-
+        
         $rect = $doc->createElement("rect");
         $att = $doc->createAttribute("id");
         $att->value = "rect_".$task->getId();
@@ -372,7 +367,7 @@ class GraphViewer
         $att->value = "stroke:$taskTypeColour;stroke-width:4";
         $vLine->appendChild($att);
         $defs->appendChild($vLine);
-
+        
         $hLine = $doc->createElement("line");
         $att = $doc->createAttribute("id");
         $att->value = "h-line_".$task->getId();
@@ -393,12 +388,12 @@ class GraphViewer
         $att->value = "stroke:$taskTypeColour;stroke-width:4";
         $hLine->appendChild($att);
         $defs->appendChild($hLine);
-
+        
         $clipPath = $doc->createElement("clipPath");
         $att = $doc->createAttribute("id");
         $att->value = "title-clip_".$task->getId();
         $clipPath->appendChild($att);
-
+        
         $component = $doc->createElement("rect");
         $att = $doc->createAttribute("x");
         $att->value = 0;
@@ -414,7 +409,7 @@ class GraphViewer
         $component->appendChild($att);
         $clipPath->appendChild($component);
         $defs->appendChild($clipPath);
-
+        
         $text = $doc->createElement("text", $task->getId());
         $att = $doc->createAttribute("id");
         $att->value = "task-id_".$task->getId();
@@ -429,7 +424,7 @@ class GraphViewer
         $att->value = "url(#title-clip_".$task->getId().")";
         $text->appendChild($att);
         $defs->appendChild($text);
-
+        
         $text = $doc->createElement("text", $task->getTitle());
         $att = $doc->createAttribute("id");
         $att->value = "task-title_".$task->getId();
@@ -444,15 +439,15 @@ class GraphViewer
         $att->value = "url(#title-clip_".$task->getId().")";
         $text->appendChild($att);
         $defs->appendChild($text);
-
+        
         $status = "";
         $taskStatusColour = "rgb(0, 0, 0)";
         switch ($task->getTaskStatus()) {
-            case (TaskStatusEnum::WAITING_FOR_PREREQUISITES): 
+            case (TaskStatusEnum::WAITING_FOR_PREREQUISITES):
                 $status = "Waiting";
 //                $taskStatusColour = "rgb(255, 50, 50)";
                 break;
-            case (TaskStatusEnum::PENDING_CLAIM): 
+            case (TaskStatusEnum::PENDING_CLAIM):
                 $status = "Pending Claim";
 //                $taskStatusColour = "rgb(230, 230, 230)";
                 break;
@@ -465,7 +460,7 @@ class GraphViewer
 //                $taskStatusColour = "rgb(20, 210, 20)";
                 break;
         }
-
+        
         $text = $doc->createElement("text", "Status: $status");
         $att = $doc->createAttribute("id");
         $att->value = "task-status_".$task->getId();
@@ -483,18 +478,18 @@ class GraphViewer
         $att->value = "url(#title-clip_".$task->getId().")";
         $text->appendChild($att);
         $defs->appendChild($text);
-
+        
         $compositeElement = $doc->createElement("g");
         $att = $doc->createAttribute("id");
         $att->value = "comp_".$task->getId();
         $compositeElement->appendChild($att);
-
+        
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
         $att->value = "#rect_".$task->getId();
         $component->appendChild($att);
         $compositeElement->appendChild($component);
-
+        
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
         $att->value = "#task-id_".$task->getId();
@@ -506,25 +501,29 @@ class GraphViewer
         $att->value = "#task-title_".$task->getId();
         $component->appendChild($att);
         $compositeElement->appendChild($component);
-
+        
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
         $att->value = "#task-status_".$task->getId();
         $component->appendChild($att);
         $compositeElement->appendChild($component);
-
+        
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
         $att->value = "#v-line_".$task->getId();
         $component->appendChild($att);
         $compositeElement->appendChild($component);
-
+        
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
         $att->value = "#h-line_".$task->getId();
         $component->appendChild($att);
         $compositeElement->appendChild($component);
-
+        
         $defs->appendChild($compositeElement);
     }
+
+    protected abstract function getTask($id);
+    protected abstract function getProject($id);    
+    protected abstract function getTaskTargetLanguage($task);
 }
