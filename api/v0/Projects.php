@@ -143,7 +143,21 @@ class Projects
                 }
                 Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getArchivedProject');
-            
+
+        Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/buildGraph/:id/',
+                function ($id, $format = '.json')
+                {
+                    if (!is_numeric($id) && strstr($id, '.')) {
+                        $id = explode('.', $id);
+                        $format = '.'.$id[1];
+                        $id = $id[0];
+                    }
+
+                    $builder = new APIWorkflowBuilder();
+                    $graph = $builder->buildProjectGraph($id);
+                    Dispatcher::sendResponce(null, $graph, null, $format);
+                }, 'getProjectGraph');
+
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
             $dao = new ProjectTags();
