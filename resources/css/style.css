@@ -23,3 +23,15 @@ section {
     height :500px;
     overflow : auto;
 }
+
+.navbar-fixed-top .container{
+    width: 1200px;
+}
+
+.container{
+    width: 1200px;
+}
+
+.navbar-fixed-bottom .container{
+    width: 1200px;
+}
