@@ -23,7 +23,7 @@ class Authentication {
 
     private static function getSiteKey()
     {
-        return Settings::get('users.site_key');
+        return Settings::get('session.site_key');
     }
 
     private static function hash($password, $nonce, $site_key)
