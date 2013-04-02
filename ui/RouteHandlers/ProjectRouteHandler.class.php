@@ -195,8 +195,7 @@ class ProjectRouteHandler
                 }                
             }
 
-            $graphBuilder = new UIWorkflowBuilder();
-            $graph = $graphBuilder->buildProjectGraph($project_id);
+            $graph = $projectDao->getProjectGraph($project_id);
             $viewer = new GraphViewer($graph);
             $graphView = $viewer->constructView();
 

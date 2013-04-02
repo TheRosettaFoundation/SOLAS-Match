@@ -374,7 +374,7 @@ class TaskRouteHandler
         }
 
         $graphBuilder = new UIWorkflowBuilder();
-        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+        $graph = $projectDao->getProjectGraph($task->getProjectId());
         $index = $graphBuilder->find($task->getId(), $graph);
         $node = $graph->getAllNodes($index);
 
