@@ -6,10 +6,10 @@
  * @author sean
  */
 
-require_once 'DataAccessObjects/UserDao.class.php';
-require_once 'DataAccessObjects/TaskDao.class.php';
-require_once 'lib/Notify.class.php';
-require_once 'lib/NotificationTypes.class.php';
+require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
+require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
+require_once __DIR__."/../lib/Notify.class.php";
+require_once __DIR__."/../lib/NotificationTypes.class.php";
 
 class Users {
     
@@ -314,13 +314,13 @@ class Users {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/passwordResetRequest(:format)/',
                                                         function ($id, $format = ".json") {
-            $data = UserDao::hasRequestedPasswordResetID($id) ? 1 : 0;
+            $data = UserDao::hasRequestedPasswordReset($id) ? 1 : 0;
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'hasUserRequestedPasswordReset');
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/passwordResetRequest/time(:format)/',
                                                         function ($id, $format = ".json"){
-            $resetRequest = UserDao::getPasswordResetRequests(array('user_id' => $id));
+            $resetRequest = UserDao::getPasswordResetRequests($id);
             Dispatcher::sendResponce(null, $resetRequest->getRequestTime(), null, $format);
         }, "PasswordResetRequestTime");
         

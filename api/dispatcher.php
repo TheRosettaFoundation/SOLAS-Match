@@ -1,15 +1,15 @@
 <?php
 
-require 'vendor/autoload.php';
+require __DIR__."/vendor/autoload.php";
 mb_internal_encoding("UTF-8");
 
 \DrSlump\Protobuf::autoload();
 
-require_once '../Common/Settings.class.php';
-require_once "../Common/lib/ModelFactory.class.php";
-require_once "../Common/lib/BadgeTypes.class.php";
-require_once '../Common/lib/APIHelper.class.php';
-require_once 'HttpMethodEnum.php';
+require_once __DIR__."/../Common/Settings.class.php";
+require_once __DIR__."/../Common/lib/ModelFactory.class.php";
+require_once __DIR__."/../Common/lib/BadgeTypes.class.php";
+require_once __DIR__."/../Common/lib/APIHelper.class.php";
+require_once __DIR__."/HttpMethodEnum.php";
 
 class Dispatcher {
     

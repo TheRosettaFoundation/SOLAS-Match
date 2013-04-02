@@ -699,5 +699,82 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         }        
     }  
     
+    public function testCheckTaskFileVersion()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject); 
+        $this->assertNotNull($insertedProject->getId());
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+
+        $translationTask = TaskDao::create($task);
+        $this->assertInstanceOf("Task", $translationTask); 
+        $this->assertNotNull($translationTask->getId());
+        
+        // Success
+        $checkTaskFileVersion = TaskDao::checkTaskFileVersion($translationTask->getId());
+        $this->assertEquals(false, $checkTaskFileVersion);   
+    }
+    
+    public function testRecordFileUpload()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject); 
+        $this->assertNotNull($insertedProject->getId());
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getUserId());  
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+
+        $translationTask = TaskDao::create($task);
+        $this->assertInstanceOf("Task", $translationTask); 
+        $this->assertNotNull($translationTask->getId());  
+        
+        // Success
+        $recordFileUpload = TaskDao::recordFileUpload($translationTask->getId(), "examplefile", "text/plain", $insertedUser->getUserId());
+        $this->assertNotNull($recordFileUpload);
+    }
+    
+    public function testGetLatestFileVersion()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject); 
+        $this->assertNotNull($insertedProject->getId());
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+
+        $translationTask = TaskDao::create($task);
+        $this->assertInstanceOf("Task", $translationTask); 
+        $this->assertNotNull($translationTask->getId());
+        
+        // Success
+        $latestFileVersion = TaskDao::getLatestFileVersion($translationTask->getId());
+        $this->assertEquals(0, $latestFileVersion);   
+    }
+    
 }
 ?>

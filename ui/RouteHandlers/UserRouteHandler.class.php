@@ -1,10 +1,10 @@
 <?php
 
-require_once "ui/DataAccessObjects/UserDao.class.php";
-require_once "Common/models/Register.php";
-require_once "Common/models/Login.php";
-require_once "Common/models/PasswordResetRequest.php";
-require_once "Common/models/PasswordReset.php";
+require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
+require_once __DIR__."/../../Common/models/Register.php";
+require_once __DIR__."/../../Common/models/Login.php";
+require_once __DIR__."/../../Common/models/PasswordResetRequest.php";
+require_once __DIR__."/../../Common/models/PasswordReset.php";
 
 class UserRouteHandler
 {

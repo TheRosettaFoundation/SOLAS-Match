@@ -1,21 +1,21 @@
 <?php
 
-require_once 'HTTP/Request2.php';
-require_once __DIR__.'/MessagingClient.class.php';
-require_once __DIR__.'/../../Common/Settings.class.php';
+require_once "HTTP/Request2.php";
+require_once __DIR__."/MessagingClient.class.php";
+require_once __DIR__."/../../Common/Settings.class.php";
 require_once __DIR__."/../vendor/autoload.php";
 
 \DrSlump\Protobuf::autoload();
 
-require_once __DIR__.'/../../Common/protobufs/emails/EmailMessage.php';
-require_once __DIR__.'/../../Common/protobufs/emails/UserTaskClaim.php';
-require_once __DIR__.'/../../Common/protobufs/emails/PasswordResetEmail.php';
-require_once __DIR__.'/../../Common/protobufs/emails/OrgMembershipAccepted.php';
-require_once __DIR__.'/../../Common/protobufs/emails/OrgMembershipRefused.php';
-require_once __DIR__.'/../../Common/protobufs/emails/TaskArchived.php';
-require_once __DIR__.'/../../Common/protobufs/emails/TaskClaimed.php';
-require_once __DIR__.'/../../Common/protobufs/emails/TaskTranslationUploaded.php';
-require_once __DIR__.'/../../Common/protobufs/emails/FeedbackEmail.php';
+require_once __DIR__."/../../Common/protobufs/emails/EmailMessage.php";
+require_once __DIR__."/../../Common/protobufs/emails/UserTaskClaim.php";
+require_once __DIR__."/../../Common/protobufs/emails/PasswordResetEmail.php";
+require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipAccepted.php";
+require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipRefused.php";
+require_once __DIR__."/../../Common/protobufs/emails/TaskArchived.php";
+require_once __DIR__."/../../Common/protobufs/emails/TaskClaimed.php";
+require_once __DIR__."/../../Common/protobufs/emails/TaskTranslationUploaded.php";
+require_once __DIR__."/../../Common/protobufs/emails/FeedbackEmail.php";
 
 class Notify 
 {

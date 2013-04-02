@@ -1793,19 +1793,6 @@ SELECT exists	(	select 1
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.logFileDownload
-DROP PROCEDURE IF EXISTS `logFileDownload`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `logFileDownload`(IN `tID` INT, IN `vID` INT, IN `uID` INT)
-    MODIFIES SQL DATA
-BEGIN
-	insert into task_file_version_download (task_id,version_id,user_id,time_downloaded) 
-	values (tID,uID,vID,Now());
-END//
-DELIMITER ;
-
-
 -- Dumping structure for procedure Solas-Match-Test.organisationInsertAndUpdate
 DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
 DELIMITER //
@@ -2048,8 +2035,13 @@ DROP PROCEDURE IF EXISTS `removePasswordResetRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removePasswordResetRequest`(IN `userId` INT)
 BEGIN
-    DELETE FROM PasswordResetRequests 
-        WHERE user_id = userId;
+	IF EXISTS (SELECT 1 FROM PasswordResetRequests p WHERE p.user_id = userId) THEN
+		DELETE FROM PasswordResetRequests
+    	WHERE user_id = userId;
+    	SELECT 1 AS result;
+   ELSE
+   	SELECT 0 AS result;   
+   END IF;   
 END//
 DELIMITER ;
 

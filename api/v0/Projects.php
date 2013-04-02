@@ -5,9 +5,9 @@
  *
  * @author Dave
  */
-require_once 'DataAccessObjects/ProjectDao.class.php';
-require_once '../Common/models/Project.php';
-require_once 'lib/APIWorkflowBuilder.class.php';
+require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
+require_once __DIR__."/../../Common/models/Project.php";
+require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 
 class Projects
 {

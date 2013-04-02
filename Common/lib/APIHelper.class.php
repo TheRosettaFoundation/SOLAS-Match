@@ -1,11 +1,11 @@
 <?php
 
-require_once 'FormatEnum.php';
-require_once 'JSONSerializer.class.php';
-require_once 'XMLSerializer.class.php';
-require_once 'HTMLSerializer.class.php';
-require_once 'PHPSerializer.class.php';
-require_once 'ProtobufSerializer.class.php';
+require_once __DIR__."/FormatEnum.php";
+require_once __DIR__."/JSONSerializer.class.php";
+require_once __DIR__."/XMLSerializer.class.php";
+require_once __DIR__."/HTMLSerializer.class.php";
+require_once __DIR__."/PHPSerializer.class.php";
+require_once __DIR__."/ProtobufSerializer.class.php";
 
 class APIHelper
 {

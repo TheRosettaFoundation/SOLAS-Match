@@ -6,7 +6,7 @@
  * @author sean
  */
 
-require_once "../Common/models/Register.php";
+require_once __DIR__."/../../Common/models/Register.php";
 
 class RegisterAPI {
     

@@ -1,10 +1,13 @@
 <?php
-require_once 'Serializer.class.php';
-require_once __dir__.'/../ProtoList.php';
+
+require_once __DIR__."/Serializer.class.php";
+require_once __DIR__."/../ProtoList.php";
+
 //require __dir__."/../../ui/vendor/autoload.php";
 //\DrSlump\Protobuf::autoload();
 //require_once '../models/Badge.php';
 //require_once '../models/Tag.php';
+
 class ProtobufSerializer extends Serializer
 {
     public function __construct()

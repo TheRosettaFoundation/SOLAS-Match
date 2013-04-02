@@ -6,7 +6,7 @@
  * @author sean
  */
 
-require_once 'DataAccessObjects/BadgeDao.class.php';
+require_once __DIR__."/../DataAccessObjects/BadgeDao.class.php";
 
 class Badges {
     

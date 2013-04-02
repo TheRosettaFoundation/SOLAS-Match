@@ -459,14 +459,180 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getUserId()); 
         
-        $createPwResetRequest = UserDao::createPasswordReset($insertedUser->getId());
+        // Success
+        $createPwResetRequest = UserDao::createPasswordReset($insertedUser->getUserId());
         $this->assertEquals("1", $createPwResetRequest);
     }
     
-
+    public function testRemovePasswordResetRequest()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getUserId()); 
+        
+        $createPwResetRequest = UserDao::createPasswordReset($insertedUser->getUserId());
+        $this->assertEquals("1", $createPwResetRequest);  
+        
+        // Success
+        $removePwResetRequest = UserDao::removePasswordResetRequest($insertedUser->getUserId());
+        $this->assertEquals("1", $removePwResetRequest); 
+        
+        // Failure
+        $removePwResetRequestFail = UserDao::removePasswordResetRequest($insertedUser->getUserId());
+        $this->assertEquals("0", $removePwResetRequestFail); 
+    }
+    
+    public function testGetPasswordResetRequests()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getUserId()); 
+        
+        $createPwResetRequest = UserDao::createPasswordReset($insertedUser->getUserId());
+        $this->assertEquals("1", $createPwResetRequest);
+        
+        // Success        
+        $passwordResetRequest = UserDao::getPasswordResetRequests($insertedUser->getUserId());
+        $this->assertInstanceOf("PasswordResetRequest", $passwordResetRequest);        
+        
+        $removePwResetRequest = UserDao::removePasswordResetRequest($insertedUser->getUserId());
+        $this->assertEquals("1", $removePwResetRequest); 
+        
+        // Failure
+        $passwordResetRequestFailure = UserDao::getPasswordResetRequests($insertedUser->getUserId());
+        $this->assertNull($passwordResetRequestFailure);
+    }
+    
+    public function testTrackProject()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getUserId());
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        // Failure
+        $trackProjectFailure = UserDao::trackProject(999, $insertedUser->getUserId());
+        $this->assertNull($trackProjectFailure);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);   
+        $this->assertNotNull($insertedProject->getId());   
+        
+        // Success
+        $trackProject = UserDao::trackProject($insertedProject->getId(), $insertedUser->getUserId());
+        $this->assertEquals("1", $trackProject);
+    }
+    
+    public function testUnTrackProject()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getUserId());
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);   
+        $this->assertNotNull($insertedProject->getId());  
+        
+        // Failure
+        $untrackProjectFailure = UserDao::unTrackProject($insertedProject->getId(), $insertedUser->getUserId());
+        $this->assertEquals("0", $untrackProjectFailure);
+        
+        $trackProject = UserDao::trackProject($insertedProject->getId(), $insertedUser->getUserId());
+        $this->assertEquals("1", $trackProject);
+        
+        // Success
+        $untrackProject = UserDao::unTrackProject($insertedProject->getId(), $insertedUser->getUserId());
+        $this->assertEquals("1", $untrackProject);
+    }
+    
+    public function testGetTrackedProjects()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getUserId());
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);   
+        $this->assertNotNull($insertedProject->getId()); 
+        
+        $project2 = UnitTestHelper::createProject($insertedOrg->getId(), null, "Project 2 Title", "Project 2 Description");
+        $insertedProject2 = ProjectDao::createUpdate($project2);
+        $this->assertInstanceOf("Project", $insertedProject2);   
+        $this->assertNotNull($insertedProject2->getId()); 
+        
+        $trackProject = UserDao::trackProject($insertedProject->getId(), $insertedUser->getUserId());
+        $this->assertEquals("1", $trackProject);
+        
+        $trackProject2 = UserDao::trackProject($insertedProject2->getId(), $insertedUser->getUserId());
+        $this->assertEquals("1", $trackProject2);
+        
+        // Success
+        $trackedProjects = UserDao::getTrackedProjects($insertedUser->getUserId());
+        $this->assertCount(2, $trackedProjects);
+        foreach($trackedProjects as $project) {
+            $this->assertInstanceOf("Project", $project);
+        }
+    }
     
     
-    
+    public function testIsSubscribedToProject()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getUserId());
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);   
+        $this->assertNotNull($insertedProject->getId()); 
+        
+        // Failure
+        $isSubscribedToProjectFailure = UserDao::isSubscribedToProject($insertedUser->getUserId(), $insertedProject->getId());
+        $this->assertEquals("0", $isSubscribedToProjectFailure);
+        
+        $trackProject = UserDao::trackProject($insertedProject->getId(), $insertedUser->getUserId());
+        $this->assertEquals("1", $trackProject);
+        
+        // Success
+        $isSubscribedToProject = UserDao::isSubscribedToProject($insertedUser->getUserId(), $insertedProject->getId());
+        $this->assertEquals("1", $isSubscribedToProject);
+    }
 }
 
 ?>

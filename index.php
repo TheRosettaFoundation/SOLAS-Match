@@ -1,6 +1,6 @@
 <?php
 
-require "ui/vendor/autoload.php";
+require __DIR__."/ui/vendor/autoload.php";
 
 mb_internal_encoding("UTF-8");
 //header("Content-Type:application/xhtml+xml;charset=UTF-8");

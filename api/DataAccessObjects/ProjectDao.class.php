@@ -1,10 +1,10 @@
 <?php
 
-include_once __DIR__.'/TagsDao.class.php';
-include_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
-include_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
-include_once __DIR__.'/../../Common/models/Project.php';
-include_once __DIR__.'/../../Common/models/ArchivedProject.php';
+include_once __DIR__."/TagsDao.class.php";
+include_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+include_once __DIR__."/../../Common/lib/ModelFactory.class.php";
+include_once __DIR__."/../../Common/models/Project.php";
+include_once __DIR__."/../../Common/models/ArchivedProject.php";
 
 class ProjectDao
 {

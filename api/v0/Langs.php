@@ -6,7 +6,7 @@
  * @author sean
  */
 
-require_once 'lib/Languages.class.php';
+require_once __DIR__.'/../lib/Languages.class.php';
 
 class Langs {
     

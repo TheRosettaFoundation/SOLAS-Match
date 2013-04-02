@@ -6,7 +6,7 @@
  * @author sean
  */
 
-require_once __DIR__.'/../Settings.class.php';
+require_once __DIR__."/../Settings.class.php";
 
 class PDOWrapper {
 

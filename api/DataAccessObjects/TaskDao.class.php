@@ -1,12 +1,14 @@
 <?php
 
-require_once __DIR__.'/../../Common/Requests/UserTaskScoreRequest.php';
-require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
-require_once __DIR__.'/../../Common/models/Task.php';
-require_once __DIR__.'/../../api/lib/Upload.class.php';
-require_once __DIR__.'/../lib/Notify.class.php';
-require_once __DIR__.'/../lib/NotificationTypes.class.php';
-require_once __DIR__.'/TaskFile.class.php';
+require_once __DIR__."/../../Common/Requests/UserTaskScoreRequest.php";
+require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../Common/models/Task.php";
+require_once __DIR__."/../../api/lib/Upload.class.php";
+require_once __DIR__."/../lib/Notify.class.php";
+require_once __DIR__."/../lib/NotificationTypes.class.php";
+require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
+require_once __DIR__."/../lib/Upload.class.php";
+
 
 /**
  * Task Document Access Object for manipulating tasks.
@@ -127,7 +129,7 @@ class TaskDao
     public static function duplicateTaskForTarget($task, $languageCode, $countryCode, $userID)
     {
         //Get the file info for original task
-        $task_file_info = TaskFile::getTaskFileInfo($task);
+        $task_file_info = self::getTaskFileInfo($task->getId());
         //Get the file path to original upload
         $old_file_path = Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
 
@@ -140,12 +142,12 @@ class TaskDao
         self::calculateTaskScore($task->getId());
 
         //Generate new file info and save it
-        TaskFile::recordFileUpload($task, $task_file_info['filename'], $task_file_info['content-type'], $userID);
+        self::recordFileUpload($task->getId(), $task_file_info['filename'], $task_file_info['content-type'], $userID);
      
         $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
 
         //Get the new path the file can be found at
-        $file_info = TaskFile::getTaskFileInfo($task);
+        $file_info = self::getTaskFileInfo($task);
         $new_file_path = Upload::absoluteFilePathForUpload($task, 0, $file_info['filename']);
         
         Upload::createFolderPath($task);
@@ -461,12 +463,12 @@ class TaskDao
     */
     public static function hasBeenUploaded($task_id, $user_id)
     {
-        return TaskFile::checkTaskFileVersion($task_id, $user_id);
+        return self::checkTaskFileVersion($task_id, $user_id);
     }
 
     public static function getTaskStatus($task_id)
     {
-        if (TaskFile::checkTaskFileVersion($task_id)) {
+        if (self::checkTaskFileVersion($task_id)) {
             return "Your translation is under review";
         } else {
             return "Awaiting your translation";
@@ -483,7 +485,7 @@ class TaskDao
             die;
         }
         
-        $task_file_info = TaskFile::getTaskFileInfo($task, $version);
+        $task_file_info = self::getTaskFileInfo($taskID, $version);
 
         if (empty($task_file_info)) {
             throw new Exception("Task file info not set for.");
@@ -491,7 +493,7 @@ class TaskDao
 
         $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
         $file_content_type = $task_file_info['content-type'];
-        //TaskFile::logFileDownload($task, $version);
+        //self::logFileDownload($task, $version);
         IO::downloadFile($absolute_file_path, $file_content_type);
     }
     
@@ -504,7 +506,7 @@ class TaskDao
             die;
         }
         
-        $task_file_info = TaskFile::getTaskFileInfo($task, $version);
+        $task_file_info = self::getTaskFileInfo($taskID, $version);
 
         if (empty($task_file_info)) {
             throw new Exception("Task file info not set for.");
@@ -512,20 +514,125 @@ class TaskDao
 
         $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
         $file_content_type = $task_file_info['content-type'];
-        TaskFile::logFileDownload($task, $version);
         IO::downloadConvertedFile($absolute_file_path, $file_content_type,$taskID);
-    }
-    
-    
+    } 
     
     public static function getUserClaimedTask($id)
     {
         $ret = null;
-        if ($result = PDOWrapper::call('getUserClaimedTask', PDOWrapper::cleanse($id))) {
-            
+        if ($result = PDOWrapper::call('getUserClaimedTask', PDOWrapper::cleanse($id))) {            
             $ret = ModelFactory::buildModel("User",$result[0] );
         }
         return $ret;
+    }
+    
+    public static function checkTaskFileVersion($task_id, $user_id = null)
+    {
+        $result = PDOWrapper::call("getLatestFileVersion", PDOWrapper::cleanse($task_id)
+                                    .",".PDOWrapper::cleanseNull($user_id));
+        return $result[0]['latest_version'] > 0;
+    }
+    
+    public static function recordFileUpload($taskId, $filename, $content_type, $user_id) 
+    {
+        $args = "";
+        $args .= PDOWrapper::cleanseNull($taskId);
+        $args .= ",".PDOWrapper::cleanseWrapStr($filename);
+        $args .= ",".PDOWrapper::cleanseWrapStr($content_type);
+        $args .= ",".PDOWrapper::cleanseNull($user_id);
+        if($result = PDOWrapper::call("recordFileUpload", $args)) {
+            return $result[0]['version'];
+        } else {
+            return null;
+        }        
+    }
+    
+    public static function getTaskFileInfo($taskID, $version = 0)
+    {
+        $ret = false;
+        if ($r = PDOWrapper::call("getTaskFileMetaData", PDOWrapper::cleanse($taskID)
+                                                    .",".PDOWrapper::cleanse($version)
+                                                    .",null, null, null, null")) {
+            $file_info = array();
+            foreach ($r[0] as $key => $value) {
+                if (!is_numeric($key)) {
+                    $file_info[$key] = $value;
+                }
+            }
+            $ret = $file_info;
+        }
+        return $ret;
+    }
+    
+    public static function getFilename($taskId, $version)
+    {
+        if ($r = PDOWrapper::call("getTaskFileMetaData", PDOWrapper::cleanse($taskId)
+                                                    .",".PDOWrapper::cleanse($version)
+                                                    .",null, null, null, null")) {
+            return $r[0]['filename'];
+        } else {
+            return null;			
+        }
+    }  
+
+    public static function getLatestFileVersion($task_id, $user_id=null)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("getLatestFileVersion", PDOWrapper::cleanse($task_id)
+                                    .",".PDOWrapper::cleanseNull($user_id))) {
+            if (is_numeric($result[0]['latest_version'])) {
+                $ret = intval($result[0]['latest_version']);
+            }
+        }
+        return $ret;
+    }
+    
+    public static function uploadFile($task,$convert,&$file,$version,$userId,$filename)
+    {
+        Notify::sendEmailNotifications($task->getId(), NotificationTypes::UPLOAD);
+            
+        if($convert){
+            Upload::apiSaveFile($task, $userId, 
+            FormatConverter::convertFromXliff(Dispatcher::getDispatcher()->request()->getBody()), $filename,$version);
+        }else{
+            //touch this and you will die painfully sinisterly sean :)
+            Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename,$version);
+        }
+    }
+    
+    public static function uploadOutputFile($task,$convert,&$file,$userId,$filename){
+        self::uploadFile($task,$convert,$file,null,$userId,$filename);
+        $graphBuilder = new APIWorkflowBuilder();
+            $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+            if ($graph->hasRootNode()) {
+                $currentLayer = $graph->getRootNodeList();
+                $nextLayer = array();
+                $found = false;
+
+                $dependants = array();
+                while(!$found && count($currentLayer) > 0) {
+                    foreach ($currentLayer as $node) {
+                        if ($node->getTaskId() == $task->getId()) {
+                            $found = true;
+                            foreach ($node->getNextList() as $nextNode) {
+                                $dependants[] = $nextNode->getTaskId();
+                            }
+                        }
+                        foreach ($node->getNextList() as $nextNode) {
+                            if(!in_array($nextNode, $nextLayer)) {
+                                $nextLayer[] = $nextNode;
+                            }
+                        }
+                    }
+                    $currentLayer = $nextLayer;
+                    $nextLayer = array();
+                }
+
+                foreach ($dependants as $nextTask) {
+                    $dTask = TaskDao::getTask($nextTask);
+                    self::uploadFile($dTask ,$convert,$file,0,$userId,$filename);
+                }
+            }
     }
     
 }
