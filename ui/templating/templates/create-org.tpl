@@ -8,6 +8,12 @@
 </h1>
 
 <form method="post" action="{urlFor name="create-org"}" class="well">
+    {if isset($flash['error'])}
+        <p class="alert alert-error" style="margin-bottom: 15px">
+            {$flash['error']}
+        </p>
+    {/if}
+
     <label for="name"><strong>Organisation Name:</strong></label>
     <input type="text" name="name" />
 

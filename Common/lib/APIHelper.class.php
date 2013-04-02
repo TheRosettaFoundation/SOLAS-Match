@@ -80,10 +80,10 @@ class APIHelper
     }
 
     public function castCall($destination, $url, $method = HTTP_Request2::METHOD_GET,
-                    $data = null, $query_args = array())
+                    $data = null, $query_args = array(), $file = null)
     {
         $ret = null;
-        $result = $this->call($url, $method, $data, $query_args);
+        $result = $this->call($url, $method, $data, $query_args,$file);
         $ret = $this->cast($destination, $result);
         return $ret;
     }

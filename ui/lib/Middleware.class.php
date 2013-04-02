@@ -90,7 +90,7 @@ class Middleware
         $params= $route->getParams();
         if ($params != null) {
             $task_id = $params['task_id'];
-            $task = $taskDao->getTask(array('id' => $task_id));
+            $task = $taskDao->getTask($task_id);
             $project = $projectDao->getProject(array('id' => $task->getProjectId()));
             
             $org_id = $project->getOrganisationId();
@@ -153,7 +153,7 @@ class Middleware
         if ($params != null) {
             $task_id = $params['task_id'];
             $user_id = UserSession::getCurrentUserID();
-            $task = $taskDao->getTask(array('id' => $task_id));
+            $task = $taskDao->getTask($task_id);
             $user_orgs = $userDao->getUserOrgs($user_id);
             
             //If the task has not been claimed yet then anyone can download it

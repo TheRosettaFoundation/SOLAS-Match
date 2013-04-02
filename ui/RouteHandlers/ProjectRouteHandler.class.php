@@ -65,9 +65,9 @@ class ProjectRouteHandler
            
             $task = null;
             if(isset($post->task_id)) {
-                $task = $taskDao->getTask(array('id' => $post->task_id));
+                $task = $taskDao->getTask($post->task_id);
             } elseif (isset($post->revokeTaskId)) {
-                $task = $taskDao->getTask(array('id' => $post->revokeTaskId));
+                $task = $taskDao->getTask($post->revokeTaskId);
             }
             
             if(isset($post->publishedTask) && isset($post->task_id)) { 

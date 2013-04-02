@@ -180,7 +180,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
 
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         if (!is_object($task)) {
             header("HTTP/1.0 404 Not Found");
             die;
@@ -201,7 +201,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
 
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         $user_id = UserSession::getCurrentUserID();
         
         $taskType = TemplateHelper::getTaskTypeFromId($task->getTaskType());
@@ -231,7 +231,7 @@ class TaskRouteHandler
         $userDao = new UserDao();
         $languageDao = new LanguageDao();
 
-        $task = $taskDao->getTask(array('id' => $taskId));
+        $task = $taskDao->getTask($taskId);
         if ($app->request()->isPost()) {
             $user_id = UserSession::getCurrentUserID();
             $userDao->claimTask($user_id, $task);
@@ -266,7 +266,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
 
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         $app->view()->setData("task", $task);
         $app->render("task.claimed.tpl");
     }
@@ -285,7 +285,7 @@ class TaskRouteHandler
         $projectDao = new ProjectDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
 
         if ($taskClaimed) {
@@ -304,7 +304,7 @@ class TaskRouteHandler
         }else{
      
             $user_id = UserSession::getCurrentUserID();
-            $task = $taskDao->getTask(array('id' => $task_id));
+            $task = $taskDao->getTask( $task_id);
             $project = $projectDao->getProject(array('id' => $task->getProjectId()));
             $numTaskTypes = Settings::get("ui.task_types");
 
@@ -341,7 +341,7 @@ class TaskRouteHandler
         $userId = UserSession::getCurrentUserID();
         $fieldName = "mergedFile";
         $errorMessage = null;
-        $task = $taskDao->getTask(array('id' => $taskId));
+        $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
 
         if ($app->request()->isPost()) {
@@ -385,7 +385,7 @@ class TaskRouteHandler
                 if ($node->getTaskId() == $task->getId()) {
                     $found = true;
                     foreach ($node->getPreviousList() as $pNode) {
-                        $pTask = $taskDao->getTask(array('id' => $pNode->getTaskId()));
+                        $pTask = $taskDao->getTask($pNode->getTaskId());
                         if (is_object($pTask)) {
                             $preReqTasks[] = $pTask;
                         }
@@ -433,7 +433,7 @@ class TaskRouteHandler
         $fieldName = "fileUpload";
         $errorMessage = null;
         $userId = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $taskId));
+        $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();///never again cast an array to an object.
@@ -513,7 +513,7 @@ class TaskRouteHandler
         $orgDao = new OrganisationDao();
         $tipDao = new TipDao();
 
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
         $tip = $tipDao->getTip();
@@ -531,7 +531,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
-        $currentTask = $taskDao->getTask(array("id" => $task_id));
+        $currentTask = $taskDao->getTask($task_id);
         $currentTaskStatus = $currentTask->getTaskStatus();
 
         $word_count_err = null;
@@ -546,7 +546,7 @@ class TaskRouteHandler
         <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>"
         .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-alter.js");
 
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
 
         $preReqTasks = $taskDao->getTaskPreReqs($task_id); 
         if (!$preReqTasks) {
@@ -775,7 +775,7 @@ class TaskRouteHandler
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         $user = $userDao->getUser(array('id' => $user_id));
         
@@ -1010,7 +1010,7 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
-        $task = $taskDao->getTask(array('id' => $taskId));
+        $task = $taskDao->getTask($taskId);
         $app->view()->appendData(array(
                 "project_id" => $task->getProjectId(),
                 "task_id"    => $task->getId()
@@ -1028,7 +1028,7 @@ class TaskRouteHandler
         $user_id = UserSession::getCurrentUserID();
         $taskTypeErr = null;        
         
-        $task = $taskDao->getTask(array('id' => $task_id)); 
+        $task = $taskDao->getTask($task_id); 
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         $numTaskTypes = Settings::get("ui.task_types");
         $maxChunks = Settings::get("site.max_chunking");
@@ -1179,7 +1179,7 @@ class TaskRouteHandler
         $projectDao = new ProjectDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $task_id));   
+        $task = $taskDao->getTask($task_id);   
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
@@ -1244,7 +1244,7 @@ class TaskRouteHandler
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $task_id));   
+        $task = $taskDao->getTask($task_id);   
         $project = $projectDao->getProject(array('id' => $task->getProjectId()));
         $organisation = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));          
         $claimant = $taskDao->getUserClaimedTask($task_id);

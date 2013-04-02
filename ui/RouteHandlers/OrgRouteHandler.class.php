@@ -75,7 +75,8 @@ class OrgRouteHandler
                             $orgDao->createMembershipRequest($new_org->getId(), $user_id);
                             $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
                             $org_name = $org->getName();
-                            $app->flashNow("success", "Organisation $org_name has been created.");
+                            $app->flash("success", "Organisation $org_name has been created.");
+                            $app->redirect($app->urlFor("org-dashboard"));
                         } else {
                             $app->flashNow("error", "Unable to save Organisation.");
                         }
@@ -89,7 +90,7 @@ class OrgRouteHandler
                 }
             }
             
-            $app->redirect($app->urlFor("org-dashboard"));
+            
         }          
         $app->render("create-org.tpl");
     }    

@@ -16,7 +16,7 @@ class TaskDao
     public function getTask($id)
     {
         $request = "{$this->siteApi}v0/tasks/$id";
-        $response =$this->client->castCall(array("Task"), $request);
+        $response =$this->client->castCall("Task", $request);
         return $response;
     }
     
@@ -119,42 +119,38 @@ class TaskDao
     public function removeTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $response =$this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
     }
 
     public function archiveTask($taskId, $userId)
     {
         $request = "{$this->siteApi}v0/tasks/archiveTask/$taskId/user/$userId";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $response =$this->client->castCall(null, $request, HTTP_Request2::METHOD_PUT);
         return $response;
     }
 
     public function setTaskTags($task)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";
-        $this->client->call($request, HTTP_Request2::METHOD_PUT, $task);
+        $response =$this->client->castCall(null, $request, HTTP_Request2::METHOD_PUT, $task);
     }
 
-    public function sendFeedback($taskId, $userIds, $feedback)
+    public function sendFeedback($taskId, $userIds, $feedback)// change to new feed back email
     {
         $feedbackData = new FeedbackEmail();
         $feedbackData->setTaskId($taskId);
-        if (is_array($userIds)) {
-            foreach ($userIds as $userId) {
-                $feedbackData->addUserId($userId);
-            }
-        } else {
-            $feedbackData->addUserId($userIds);
+        $userIds = is_array($userIds) ? $userIds : array($userIds);
+        foreach ($userIds as $userId) {
+            $feedbackData->addUserId($userId);
         }
         $feedbackData->setFeedback($feedback);
         $request = "{$this->siteApi}v0/tasks/{$feedbackData->getTaskId()}/feedback";
-        $this->client->call($request, HTTP_Request2::METHOD_PUT, $feedbackData);
+        $response =$this->client->castCall(null,$request, HTTP_Request2::METHOD_PUT, $feedbackData);
     }
 
     public function saveTaskFile($taskId, $filename, $userId, $fileData, $version = null, $convert = false)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/file/$filename/$userId";
-
         $args = array();
         if ($version) {
             $args["version"] = $version;
@@ -163,7 +159,7 @@ class TaskDao
             $args['convertFromXliff'] = $convert;
         }
 
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, null, $args,$fileData);
+        $response = $this->client->castCall(null,$request, HTTP_Request2::METHOD_PUT, null, $args,$fileData);
     }
 
     public function uploadOutputFile($taskId, $userId, $fileData, $convert = false)
@@ -175,6 +171,6 @@ class TaskDao
             $args= array('convertFromXliff' => $convert);
         }
 
-        $this->client->call($request, HTTP_Request2::METHOD_PUT, null, $args,$fileData);
+        $response = $this->client->castCall(null,$request, HTTP_Request2::METHOD_PUT, null, $args,$fileData);
     }
 }
