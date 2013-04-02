@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Common/lib/APIHelper.class.php';
+require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
 class BadgeDao
 {

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Serializer.class.php';
+require_once __DIR__."/Serializer.class.php";
 
 class JSONSerializer extends Serializer
 {

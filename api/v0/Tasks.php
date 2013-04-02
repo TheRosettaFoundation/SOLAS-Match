@@ -6,13 +6,12 @@
  * @author sean
  */
 
-require_once 'DataAccessObjects/TaskDao.class.php';
-require_once 'DataAccessObjects/TaskFile.class.php';
-require_once '../Common/models/TaskMetadata.php';
-require_once '../Common/protobufs/emails/FeedbackEmail.php';
-require_once 'lib/IO.class.php';
-require_once 'lib/Upload.class.php';
-require_once 'lib/FormatConverter.php';
+require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
+require_once __DIR__."/../../Common/models/TaskMetadata.php";
+require_once __DIR__."/../../Common/protobufs/emails/FeedbackEmail.php";
+require_once __DIR__."/../lib/IO.class.php";
+require_once __DIR__."/../lib/Upload.class.php";
+require_once __DIR__."/../lib/FormatConverter.php";
 
 class Tasks {
     
@@ -192,7 +191,7 @@ class Tasks {
             $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, null);
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
-            TaskFile::uploadFile($task, $convert,$data,$version,$userID,$filename);
+            TaskDao::uploadFile($task, $convert,$data,$version,$userID,$filename);
         }, 'saveTaskFile');
         
         
@@ -213,7 +212,7 @@ class Tasks {
             
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
-            TaskFile::uploadOutputFile($task, $convert,$data,$userID,$filename);
+            TaskDao::uploadOutputFile($task, $convert,$data,$userID,$filename);
         }, 'uploadOutputFile');
         
         
@@ -222,14 +221,14 @@ class Tasks {
                                                         function ($id, $format = ".json") {
             
             $userID = Dispatcher::clenseArgs('userID', HttpMethodEnum::GET, null);
-            Dispatcher::sendResponce(null, TaskFile::getLatestFileVersionByTaskID($id, $userID), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::getLatestFileVersion($id, $userID), null, $format);
         }, 'getTaskVersion');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/info(:format)/',
                                                         function ($id, $format = ".json") {
             
             $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, 0);
-            $taskMetadata = ModelFactory::buildModel("TaskMetadata", TaskFile::getTaskFileInfoById($id, $version));
+            $taskMetadata = ModelFactory::buildModel("TaskMetadata", TaskDao::getTaskFileInfo($id, $version));
             Dispatcher::sendResponce(null, $taskMetadata, null, $format);
         }, 'getTaskInfo');
         

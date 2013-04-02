@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__.'/../../Common/TaskStatusEnum.php';
-require_once __DIR__.'/../../Common/TaskTypeEnum.php';
+require_once __DIR__."/../../Common/TaskStatusEnum.php";
+require_once __DIR__."/../../Common/TaskTypeEnum.php";
 
 class Upload {
     
@@ -101,7 +101,7 @@ class Upload {
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mime= $finfo->buffer($file);
         if(is_null($version)){
-            $version = TaskFile::recordFileUpload($task, $filename, $mime, $user_id);
+            $version = TaskDao::recordFileUpload($task->getId(), $filename, $mime, $user_id);
             $version = $version[0]['version'];
         }
         $upload_folder     = self::absoluteFolderPathForUpload($task, $version);
@@ -131,7 +131,7 @@ class Upload {
 
         $file_name 	= $_FILES[$form_file_field]['name'];
         $file_tmp_name 	= $_FILES[$form_file_field]['tmp_name'];
-        $version 	= TaskFile::recordFileUpload($task, $file_name, $_FILES[$form_file_field]['type'], $user_id);
+        $version 	= TaskDao::recordFileUpload($task->getId(), $file_name, $_FILES[$form_file_field]['type'], $user_id);
         $version        = $version[0]['version'];
         $upload_folder 	= self::absoluteFolderPathForUpload($task, $version);
 
@@ -279,8 +279,8 @@ class Upload {
         $preReqTask = $taskDao->getTask(array("id" => $preReqId));
         $preReqTask = $preReqTask[0];
         
-        $preReqlatestFileVersion = TaskFile::getLatestFileVersionByTaskID($preReqId);
-        $preReqFileName = TaskFile::getFilename($preReqTask, $preReqlatestFileVersion);
+        $preReqlatestFileVersion = TaskDao::getLatestFileVersion($preReqId);
+        $preReqFileName = TaskDao::getFilename($preReqId, $preReqlatestFileVersion);
         $projectId= $task->getProjectId();
         file_put_contents(Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName",
                         file_get_contents(Settings::get("files.upload_path").

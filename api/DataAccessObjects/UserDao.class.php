@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__.'/../../Common/models/User.php';
-require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
-require_once __DIR__.'/../../Common/lib/Authentication.class.php';
+require_once __DIR__."/../../Common/models/User.php";
+require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../Common/lib/Authentication.class.php";
 
 class UserDao
 {
@@ -354,11 +354,11 @@ class UserDao
     public static function createPasswordReset($user_id)
     {
         $uid = null;
-        if(!self::hasRequestedPasswordResetID($user_id)) {            
+        if(!self::hasRequestedPasswordReset($user_id)) {            
             $uid = md5(uniqid(rand()));
             self::addPasswordResetRequest($uid, $user_id);
         } else {
-            $request = self::getPasswordResetRequests(array("user_id" => $user_id));
+            $request = self::getPasswordResetRequests($user_id);
             $uid = $request->getKey();
         }
         
@@ -375,7 +375,7 @@ class UserDao
                         .",".PDOWrapper::cleanse($user_id));
         
         if($result) {
-            return $result[0];
+            return $result[0]['result'];
         } else {
             return null;
         }
@@ -386,7 +386,7 @@ class UserDao
         $result = PDOWrapper::call("removePasswordResetRequest", PDOWrapper::cleanse($user_id));
         
         if($result) {
-            return $result[0];
+            return $result[0]['result'];
         } else {
             return null;
         }
@@ -394,46 +394,32 @@ class UserDao
 
     /*
         Check if a user has requested a password reset
-    */
-    public static function hasRequestedPasswordReset($user)
+    */    
+    public static function hasRequestedPasswordReset($user_id)
     {
-        return self::hasRequestedPasswordResetID($user->getUserId());
-    }
-    
-    public static function hasRequestedPasswordResetID($user_id)
-    {
-        $ret = false;
-        if (self::getPasswordResetRequests(array('user_id'=>$user_id))) {
-            $ret = true;
+        if(self::getPasswordResetRequests($user_id)) {
+            return true;
+        } else {
+            return false;
         }
-        return $ret;
     }
 
     /*
         Get Password Reset Requests
     */
-    public static function getPasswordResetRequests($args)
+    public static function getPasswordResetRequests($userId, $uniqueId=null)
     {
-        $ret = false;
-        if (isset($args['uid']) && $args['uid'] != '') {
-            $uid = $args['uid'];
-            if ($result = PDOWrapper::call("getPasswordResetRequests", PDOWrapper::cleanseWrapStr($uid).",null")) {
-                $ret = ModelFactory::buildModel("PasswordResetRequest", $result[0]);
-            }
-        } elseif (isset($args['user_id']) && $args['user_id'] != '') {
-            $user_id = $args['user_id'];
-
-            if ($result = PDOWrapper::call("getPasswordResetRequests", "null,".PDOWrapper::cleanse($user_id))) {
-                $ret = ModelFactory::buildModel("PasswordResetRequest", $result[0]);
-            }
+        if($result = PDOWrapper::call("getPasswordResetRequests", PDOWrapper::cleanseNullOrWrapStr($uniqueId).",".PDOWrapper::cleanseNull($userId))) {
+            return ModelFactory::buildModel("PasswordResetRequest", $result[0]);            
+        } else {
+            return null;
         }
-        return $ret;
     }    
 
     public static function passwordReset($password, $key)
     {
-        $reset_request = self::getPasswordResetRequests(array('uid' => $key));
-        if ($reset_request->getUserId() == '') {
+        $reset_request = self::getPasswordResetRequests(null, $key);
+        if(is_null($reset_request->getUserId())) {
             return array("result" => 0, "message" => "Incorrect Unique ID. Are you sure you copied the URL correctly?");
         } elseif (self::changePassword($reset_request->getUserId(), $password)) {
             self::removePasswordResetRequest($reset_request->getUserId());
@@ -443,30 +429,28 @@ class UserDao
     
     public static function getTrackedProjects($user_id)
     {
-        $ret = null;
         if ($result = PDOWrapper::call("getTrackedProjects", PDOWrapper::cleanse($user_id))) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Project", $row);
             }
+            return $ret;
         }
-        return $ret;
+        return null;
     }
     public static function trackProject($projectID,$userID)
     {
-        $ret = null;
         if ($result = PDOWrapper::call("userTrackProject", PDOWrapper::cleanse($projectID).",".PDOWrapper::cleanse($userID))) {
-            $ret = $result[0]["result"];
+            return $result[0]["result"];
         }
-        return $ret;
+        return null;
     }
     
     public static function unTrackProject($projectID,$userID)
     {
-        $ret = null;
         if ($result = PDOWrapper::call("userUnTrackProject", PDOWrapper::cleanse($projectID).",".PDOWrapper::cleanse($userID))) {
-            $ret = $result[0]["result"];
+            return $result[0]["result"];
         }
-        return $ret;
+        return null;
     }
 }

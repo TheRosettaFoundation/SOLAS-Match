@@ -6,9 +6,9 @@
  * @author sean
  */
 
-require_once 'DataAccessObjects/OrganisationDao.class.php';
-require_once 'DataAccessObjects/BadgeDao.class.php';
-require_once 'DataAccessObjects/ProjectDao.class.php';
+require_once __DIR__."/../DataAccessObjects/OrganisationDao.class.php";
+require_once __DIR__."/../DataAccessObjects/BadgeDao.class.php";
+require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 
 class Orgs {
     

@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__.'/../../Common/models/Organisation.php';
-require_once __DIR__.'/../../Common/models/MembershipRequest.php';
-require_once __DIR__.'/../../Common/lib/PDOWrapper.class.php';
+require_once __DIR__."/../../Common/models/Organisation.php";
+require_once __DIR__."/../../Common/models/MembershipRequest.php";
+require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
 
 class OrganisationDao
 {     

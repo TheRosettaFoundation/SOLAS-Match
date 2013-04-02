@@ -6,7 +6,7 @@
  * @author sean
  */
 
-require_once 'DataAccessObjects/UserDao.class.php';
+require_once __DIR__.'/../DataAccessObjects/UserDao.class.php';
 
 class LoginAPI {
     
