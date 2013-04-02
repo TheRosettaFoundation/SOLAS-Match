@@ -7,7 +7,9 @@ abstract class WorkflowBuilder
 {
     public function buildProjectGraph($projectId)
     {
-        return $this->parseAndBuild($this->calculatePreReqArray($projectId));
+        $model = $this->parseAndBuild($this->calculatePreReqArray($projectId));
+        $model->setProjectId($projectId);
+        return $model;
     }
     
     public function calculatePreReqArray($projectId)

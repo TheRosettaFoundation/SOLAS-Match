@@ -3,6 +3,8 @@
 require_once "Common/TaskTypeEnum.php";
 require_once "Common/TaskStatusEnum.php";
 
+require_once "ui/lib/GraphViewer.class.php";
+
 class ProjectRouteHandler
 {
     public function init()
@@ -30,6 +32,9 @@ class ProjectRouteHandler
 
     public function test($projectId)
     {
+        $app = Slim::getInstance();
+        $extra_scripts = "";
+
         $time = microtime();
         $time = explode(" ", $time);
         $time = $time[1] + $time[0];
@@ -37,7 +42,19 @@ class ProjectRouteHandler
 
         $builder = new UIWorkflowBuilder();
         $graph = $builder->buildProjectGraph($projectId);
-        $builder->printGraph($graph);
+        $viewer = new GraphViewer($graph);
+        $body = $viewer->constructView();
+
+        $extra_scripts .= $viewer->generateDataScript();
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/GraphHelper.js\"></script>";
+        $extra_scripts .= "<script>
+                $(window).load(runStartup);
+                function runStartup()
+                {
+                    prepareGraph();
+                    $( \"#tabs\" ).tabs();
+                }
+            </script>";
 
         $time = microtime();
         $time = explode(" ", $time);
@@ -45,7 +62,12 @@ class ProjectRouteHandler
         $time2 = $time;
 
         $totaltime = ($time2 - $time1);
-        echo "<BR>Running Time: $totaltime seconds.";
+        $body .= "<br />Running Time: $totaltime seconds.";
+        $app->view()->appendData(array(
+                    "body"          => $body,
+                    "extra_scripts" => $extra_scripts
+        ));         
+        $app->render("empty.tpl");
     }
   
     public function projectView($project_id)
@@ -160,24 +182,40 @@ class ProjectRouteHandler
             $taskLanguageMap = array();
             if($project_tasks) {
                 foreach($project_tasks as $task) {                   
-                     $taskTargetLanguage = $task->getTargetLanguageCode();
-                     $taskTargetCountry = $task->getTargetCountryCode();
-                     $taskLanguageMap["$taskTargetLanguage,$taskTargetCountry"][] = $task;
-                }                
-                foreach($taskLanguageMap as $languageCountry => $tasks) {   
-                    foreach($tasks as $task) {
-                        $task_id = $task->getId(); 
-                        $metaData = array();
-                        $response = $userDao->isSubscribedToTask($user_id, $task_id);
-                        if($response == 1) {
-                            $metaData['tracking'] = true;
-                        } else {
-                            $metaData['tracking'] = false;
-                        }
-                        $taskMetaData[$task_id] = $metaData;
+                    $taskTargetLanguage = $task->getTargetLanguageCode();
+                    $taskTargetCountry = $task->getTargetCountryCode();
+                    $taskLanguageMap["$taskTargetLanguage,$taskTargetCountry"][] = $task;
+                    $task_id = $task->getId(); 
+                    $metaData = array();
+                    $response = $userDao->isSubscribedToTask($user_id, $task_id);
+                    if($response == 1) {
+                        $metaData['tracking'] = true;
+                    } else {
+                        $metaData['tracking'] = false;
                     }
-                }
+                    $taskMetaData[$task_id] = $metaData;
+                }                
             }
+
+            $graphBuilder = new UIWorkflowBuilder();
+            $graph = $graphBuilder->buildProjectGraph($project_id);
+            $viewer = new GraphViewer($graph);
+            $graphView = $viewer->constructView();
+
+            $extra_scripts = '<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+                 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>';
+
+            $extra_scripts .= $viewer->generateDataScript();
+            $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/GraphHelper.js\"></script>";
+            $extra_scripts .= "<script>
+                    window.onload = runStartup;
+
+                    function runStartup()
+                    {
+                        prepareGraph();
+                        $( \"#tabs\" ).tabs();
+                    }
+                </script>";
 
             $numTaskTypes = Settings::get("ui.task_types");
             $taskTypeColours = array();
@@ -188,6 +226,8 @@ class ProjectRouteHandler
 
             $app->view()->appendData(array(
                     "org" => $org,
+                    "graph" => $graphView,
+                    "extra_scripts" => $extra_scripts,
                     "projectTasks" => $project_tasks,
                     "taskMetaData" => $taskMetaData,
                     "taskTypeColours" => $taskTypeColours,

@@ -20,7 +20,7 @@ class Authentication {
         $algo_max = mt_getrandmax();
         return min(array($mysql_max_int, $algo_max));
     }
-
+    
     private static function hash($password, $nonce, $site_key)
     {
         return hash_hmac('sha512', $password . $nonce, $site_key);

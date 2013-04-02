@@ -24,7 +24,7 @@ class CountryDao
     public function getCountryByCode($code)
     {
         $request="{$this->siteApi}v0/countries/getByCode/$code";
-        $response=$this->client->castCall(array("Country"), $request, HTTP_Request2::METHOD_GET);
+        $response=$this->client->castCall("Country", $request, HTTP_Request2::METHOD_GET);
         return $response;
     }
 

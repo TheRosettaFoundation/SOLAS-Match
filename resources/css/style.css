@@ -18,3 +18,20 @@ section {
     padding-top: 5px;
     padding-bottom: 5px;
 }
+.graph-view {
+    width : auto;
+    height :500px;
+    overflow : auto;
+}
+
+.navbar-fixed-top .container{
+    width: 1200px;
+}
+
+.container{
+    width: 1200px;
+}
+
+.navbar-fixed-bottom .container{
+    width: 1200px;
+}
