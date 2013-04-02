@@ -8,7 +8,6 @@
 require_once 'DataAccessObjects/ProjectDao.class.php';
 require_once '../Common/models/Project.php';
 require_once 'lib/APIWorkflowBuilder.class.php';
-require_once 'lib/APIGraphViewer.class.php';
 
 class Projects
 {
@@ -159,22 +158,6 @@ class Projects
                     Dispatcher::sendResponce(null, $graph, null, $format);
                 }, 'getProjectGraph');
 
-        Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/buildGraphView/:id/',
-                function ($id, $format = ".json")
-                {
-                    if (!is_numeric($id) && strstr($id, '.')) {
-                        $id = explode('.', $id);
-                        $format = '.'.$id[1];
-                        $id = $id[0];
-                    }
-
-                    $builder = new APIWorkflowBuilder();
-                    $graph = $builder->buildProjectGraph($id);
-                    $viewer = new APIGraphViewer($graph);
-                    $view = $viewer->constructView();
-                    Dispatcher::sendResponce(null, $view, null, $format);
-                }, 'buildProjectView');
-            
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
             $dao = new ProjectTags();

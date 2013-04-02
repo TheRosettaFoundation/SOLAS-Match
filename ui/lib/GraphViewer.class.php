@@ -1,13 +1,15 @@
 <?php
 
-abstract class GraphViewer
+class GraphViewer
 {
-    protected $model;
-    protected $xPos;
-    protected $yPos;
-    protected $iconWidth;
-    protected $iconHeight;
-    protected $graphBuilder;
+    private $model;
+    private $xPos;
+    private $yPos;
+    private $iconWidth;
+    private $iconHeight;
+    private $graphBuilder;
+    private $taskDao;
+    private $projectDao;
 
     public function __construct($graph)
     {
@@ -16,6 +18,9 @@ abstract class GraphViewer
         $this->yPos = 10;
         $this->iconWidth = 175;
         $this->iconHeight = 75;
+        $this->graphBuilder = new UIWorkflowBuilder();
+        $this->taskDao = new TaskDao();
+        $this->projectDao = new ProjectDao();
     }
 
     public function generateDataScript()
@@ -33,7 +38,7 @@ abstract class GraphViewer
             $foundLanguages = array();
             while (count($currentLayer) > 0) {
                 foreach ($currentLayer as $taskId) {
-                    $task = $this->getTask($taskId);
+                    $task = $this->taskDao->getTask(array('id' => $taskId));
                     $target = $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
                     if (!in_array($target, $foundLanguages)) {
                         $ret .= "languageTasks[\"".$target."\"] = new Array();";
@@ -72,7 +77,7 @@ abstract class GraphViewer
         $doc->formatOutput = true;
         if ($this->model) {
             $viewWidth = 1200;
-            $project = $this->getProject($this->model->getProjectId());
+            $project = $this->projectDao->getProject(array('id' => $this->model->getProjectId()));
             
             $view = $doc->createElement("svg");
             $att = $doc->createAttribute("xmlns");
@@ -159,7 +164,7 @@ abstract class GraphViewer
             $roots = $this->model->getRootNodeList();
             foreach ($roots as $rootId) {
                 $thisY = $this->yPos + 20;
-                $task = $this->getTask($rootId);
+                $task = $this->taskDao->getTask(array('id' => $rootId));
                 $this->drawGraphFromNode($task, $doc, $defs);
                 $composite = $doc->createElement("use");
                 $att = $doc->createAttribute("xlink:href");
@@ -237,7 +242,7 @@ abstract class GraphViewer
         $horizontalNodeCount = 0;
         while (count($currentLayer) > 0) {
             foreach ($currentLayer as $nodeId) {
-                $task = $this->getTask($nodeId);
+                $task = $this->taskDao->getTask(array('id' => $nodeId));
                 $index = $this->graphBuilder->find($nodeId, $this->model);
                 $node = $this->model->getAllNodes($index);
                 $verticalNodeCount++;
@@ -292,7 +297,7 @@ abstract class GraphViewer
         $component->appendChild($att);
         $subGraph->appendChild($component);
         
-        $text = $doc->createElement("text", $this->getTaskTargetLanguage($rootTask));
+        $text = $doc->createElement("text", TemplateHelper::getTaskTargetLanguage($task));
         $att = $doc->createAttribute("id");
         $att->value = "text_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
         $text->appendChild($att);
@@ -522,8 +527,4 @@ abstract class GraphViewer
         
         $defs->appendChild($compositeElement);
     }
-
-    protected abstract function getTask($id);
-    protected abstract function getProject($id);    
-    protected abstract function getTaskTargetLanguage($task);
 }
