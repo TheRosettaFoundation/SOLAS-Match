@@ -221,9 +221,8 @@ class GraphViewer
         $defs->appendChild($languageBox);
         
         $component = $doc->createElement("use");
-        $att = $doc->createAttribute("xlink:href");
-        $att->value = "#language-box_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
-        $component->appendChild($att);
+        $component->setAttribute('xlink:href', "#language-box_".$rootTask->getTargetLanguageCode().
+                                                "-".$rootTask->getTargetCountryCode());
         $subGraph->appendChild($component);
         
         $text = $doc->createElement("text", TemplateHelper::getTaskTargetLanguage($task));
