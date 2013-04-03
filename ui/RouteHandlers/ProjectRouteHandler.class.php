@@ -202,9 +202,7 @@ class ProjectRouteHandler
             $viewer = new GraphViewer($graph);
             $graphView = $viewer->constructView();
 
-            $extra_scripts = '<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-                 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>';
-
+            $extra_scripts = "";
             $extra_scripts .= $viewer->generateDataScript();
             $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/GraphHelper.js\"></script>";
             $extra_scripts .= "<script>

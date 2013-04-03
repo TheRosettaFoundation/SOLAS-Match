@@ -33,7 +33,7 @@ class GraphViewer
             $foundLanguages = array();
             while (count($currentLayer) > 0) {
                 foreach ($currentLayer as $node) {
-                    $task = $taskDao->getTask(array('id' => $node->getTaskId()));
+                    $task = $taskDao->getTask($node->getTaskId());
                     $target = $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
                     if (!in_array($target, $foundLanguages)) {
                         $ret .= "languageTasks[\"".$target."\"] = new Array();";
@@ -158,7 +158,7 @@ class GraphViewer
             $taskDao = new TaskDao();
             foreach ($roots as $root) {
                 $thisY = $this->yPos + 20;
-                $task = $taskDao->getTask(array('id' => $root->getTaskId()));
+                $task = $taskDao->getTask($root->getTaskId());
                 $this->drawGraphFromNode($root, $task, $doc, $defs);
                 $composite = $doc->createElement("use");
                 $att = $doc->createAttribute("xlink:href");
@@ -235,7 +235,7 @@ class GraphViewer
         $horizontalNodeCount = 0;
         while (count($currentLayer) > 0) {
             foreach ($currentLayer as $node) {
-                $task = $taskDao->getTask(array('id' => $node->getTaskId()));
+                $task = $taskDao->getTask($node->getTaskId());
                 $verticalNodeCount++;
                 foreach ($node->getNextList() as $nextNode) {
                     if (!in_array($nextNode, $nextLayer)) {

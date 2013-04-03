@@ -1,4 +1,3 @@
-<script language='javascript'>
     var MAX_CHUNKS = 10;
     var CURR_CHUNKS = 2;
     var TOTAL_WORD_COUNT = 0;
@@ -58,5 +57,5 @@
             }             
         }  
         CURR_CHUNKS = value;              
-    } 
-</script>
+    }
+
