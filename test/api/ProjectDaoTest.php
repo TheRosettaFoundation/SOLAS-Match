@@ -75,7 +75,13 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $insertedProject->setWordCount(654321);
         $insertedProject->setSourceCountryCode("AZ");
         $insertedProject->setSourceLanguageCode("agx");
-        $insertedProject->setTag(array("Updated Project", "Updated Tags"));
+        
+        $newTags = array("Updated Project", "Updated Tags");
+        foreach($newTags as $tagLabel) {
+            TagsDao::create($tagLabel);
+        }
+        $insertedProject->setTag($newTags);
+        
         $insertedProject->setOrganisationId($insertedOrg2->getId());
         $insertedProject->setCreatedTime("2030-06-20 00:00:00");
   
@@ -116,31 +122,24 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $insertedProject = ProjectDao::createUpdate($project);
         $this->assertInstanceOf("Project", $insertedProject); 
         
-        $paramsSuccess = array(
-            "id"                => $insertedProject->getId(),
-            "title"             => $project->getTitle(),
-            "description"       => $project->getDescription(),
-            "impact"            => $project->getImpact(),
-            "deadline"          => $project->getDeadline(),
-            "organisation_id"   => $project->getOrganisationId(),
-            "reference"         => $project->getReference(),
-            "word-count"        => $project->getWordCount(),
-            "created"           => $insertedProject->getCreatedTime(),
-            "language_id"       => $project->getSourceLanguageCode(),
-            "country_id"        => $project->getSourceCountryCode()            
-        );
-        
         // Success
-        $resultGetProject = ProjectDao::getProject($paramsSuccess);
+        $resultGetProject = ProjectDao::getProject($insertedProject->getId()
+                                                   ,$project->getTitle()
+                                                   ,$project->getDescription()
+                                                   ,$project->getImpact()
+                                                   ,$project->getDeadline()                
+                                                   ,$project->getOrganisationId()
+                                                   ,$project->getReference()
+                                                   ,$project->getWordCount()
+                                                   ,$insertedProject->getCreatedTime()
+                                                   ,$project->getSourceCountryCode()
+                                                   ,$project->getSourceLanguageCode());
+        
         $this->assertCount(1, $resultGetProject);
         $this->assertInstanceOf("Project", $resultGetProject[0]);        
         
-        $paramsFail = array(
-            "id" => 99           
-        );
-        
         // Failure
-        $resultGetProjectFailure = ProjectDao::getProject($paramsFail);
+        $resultGetProjectFailure = ProjectDao::getProject(99);
         $this->assertNull($resultGetProjectFailure);
     }
     
@@ -190,25 +189,21 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getUserId());
         $this->assertInstanceOf("ArchivedProject", $resultArchiveProject);
         
-        $paramsSuccess = array(
-            "id"                => $insertedProject->getId(),
-            "title"             => $insertedProject->getTitle(),
-            "description"       => $insertedProject->getDescription(),
-            "impact"            => $insertedProject->getImpact(),
-            "deadline"          => $insertedProject->getDeadline(),
-            "organisation_id"   => $insertedProject->getOrganisationId(),
-            "reference"         => $insertedProject->getReference(),
-            "word-count"        => $insertedProject->getWordCount(),
-            "language_id"       => $insertedProject->getSourceLanguageCode(),
-            "country_id"        => $insertedProject->getSourceCountryCode(),
-            "created"           => $insertedProject->getCreatedTime(),
-            "archived-date"     => $resultArchiveProject->getArchivedDate(),
-            "user_id-archived"  => $resultArchiveProject->getTranslatorId()
-        );
-        
         // Success
-        $resultGetArchivedProject = ProjectDao::getArchivedProject($paramsSuccess);
-        $this->assertInstanceOf("ArchivedProject", $resultGetArchivedProject);
+        $resultGetArchivedProject = ProjectDao::getArchivedProject($insertedProject->getId()
+                                                                   ,$insertedProject->getTitle()
+                                                                   ,$insertedProject->getDescription()
+                                                                   ,$insertedProject->getImpact()
+                                                                   ,$insertedProject->getDeadline()
+                                                                   ,$insertedProject->getOrganisationId()
+                                                                   ,$insertedProject->getReference()
+                                                                   ,$insertedProject->getWordCount()
+                                                                   ,$insertedProject->getCreatedTime()
+                                                                   ,$resultArchiveProject->getArchivedDate()
+                                                                   ,$resultArchiveProject->getTranslatorId());        
+        $this->assertCount(1, $resultGetArchivedProject);
+        $this->assertInstanceOf("ArchivedProject", $resultGetArchivedProject[0]);
+        $resultGetArchivedProject = $resultGetArchivedProject[0];
         $this->assertEquals($insertedProject->getTitle(), $resultGetArchivedProject->getTitle());
         $this->assertEquals($insertedProject->getDescription(), $resultGetArchivedProject->getDescription());
         $this->assertEquals($insertedProject->getDeadline(), $resultGetArchivedProject->getDeadline());
@@ -220,12 +215,8 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($resultGetArchivedProject->getArchivedDate());
         $this->assertNotNull($resultGetArchivedProject->getTranslatorId());
         
-        $paramsFail = array(
-            "id" => 999
-        );
-        
         // Failure
-        $resultGetArchivedProjectFailure = ProjectDao::getArchivedProject($paramsFail);
+        $resultGetArchivedProjectFailure = ProjectDao::getArchivedProject(99);
         $this->assertNull($resultGetArchivedProjectFailure);
     }
     

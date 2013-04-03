@@ -123,7 +123,12 @@ class UnitTestHelper
         $project->setWordCount($wordcount);
         $project->setSourceCountryCode($sourceCountryCode);
         $project->setSourceLanguageCode($sourceLanguageCode);
-        $project->setTag($tags);
+        
+        foreach($tags as $tagLabel) {
+            TagsDao::create($tagLabel);
+        }
+ 
+        $project->setTag($tags);        
         $project->setOrganisationId($organisationId);
         $project->setCreatedTime($createdTime);
         return $project;

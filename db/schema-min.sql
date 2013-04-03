@@ -1305,17 +1305,25 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTag
 DROP PROCEDURE IF EXISTS `getTag`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTag`(IN `id` INT, IN `name` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTag`(IN `id` INT, IN `name` VARCHAR(50), IN `lim` INT)
 BEGIN
 	if id='' then set id=null;end if;
 	if name='' then set name=null;end if;
+	if lim='' then set lim=null;end if;
+	
 	set @q= "select t.id , t.label from Tags t where 1 ";-- set update
+	
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
 	end if;
+	
 	if name is not null then 
 		set @q = CONCAT(@q," and t.label='",name,"'") ;
+	end if;
+	
+	if lim is not null then 
+		set @q = CONCAT(@q," LIMIT ",lim);
 	end if;
 	
 	PREPARE stmt FROM @q;

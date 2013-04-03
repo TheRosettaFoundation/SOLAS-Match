@@ -21,7 +21,7 @@ class Tags {
             if ($topTags) {
                 Dispatcher::sendResponce(null, TagsDao::getTopTags($limit), null, $format);
             } else { 
-                Dispatcher::sendResponce(null, TagsDao::getTag(array("limit" => $limit)), null, $format);
+                Dispatcher::sendResponce(null, TagsDao::getTag(null,null,$limit), null, $format);
             }
         }, 'getTags');
         
@@ -40,7 +40,7 @@ class Tags {
                     }
                 }
             }
-            $data = TagsDao::find(array('label' => $label));
+            $data = TagsDao::getTag(null,$label);
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -62,7 +62,7 @@ class Tags {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $data = TagsDao::getTag(array("id" => $id));
+            $data = TagsDao::getTag($id);
             if (is_array($data)) {
                 $data = $data[0];
             }

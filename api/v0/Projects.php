@@ -38,7 +38,7 @@ class Projects
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects(:format)/',
             function ($format = '.json') 
             {
-                Dispatcher::sendResponce(null, ProjectDao::getProject(null), null, $format);
+                Dispatcher::sendResponce(null, ProjectDao::getProject(), null, $format);
             }, 'getProjects');
 
         Dispatcher::registerNamed(HTTPMethodEnum::POST, '/v0/projects(:format)/',
@@ -75,9 +75,7 @@ class Projects
                     $id = $id[0];
                 }
 
-                $params = array();
-                $params['id'] = $id;
-                $data = ProjectDao::getProject($params);
+                $data = ProjectDao::getProject($id);
                 if($data && is_array($data)) {
                     $data = $data[0];
                 }
@@ -114,7 +112,7 @@ class Projects
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects(:format)/',
             function ($format = '.json') 
             {
-                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(null), null, $format);
+                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(), null, $format);
             }, 'getArchivedProjects');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects/:id/',
@@ -126,9 +124,7 @@ class Projects
                     $id = $id[0];
                 }
 
-                $params = array();
-                $params['id'] = $id;
-                $data = ProjectDao::getArchivedProject($params);
+                $data = ProjectDao::getArchivedProject($id);
                 if($data && is_array($data)) {
                     $data = $data[0];
                 }

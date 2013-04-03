@@ -37,68 +37,16 @@ class ProjectDao
         return $project;
     }
     
-    public static function getProject($params)
+    public static function getProject($id=null, $title=null, $description=null, $impact=null, $deadline=null, $orgId=null,
+                                        $reference=null, $wordCount=null, $created=null, $countryId=null, $languageId=null)
     {
-        $args = "";
-        if (isset($params['id'])) {
-            $args .= PDOWrapper::cleanseNull($params['id']);
-        } else {
-            $args .= "null";
-        }
-        if (isset($params['title'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['title']);
-        } else {
-            $args .= ", null";
-        }
-        if (isset($params['description'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['description']);
-        } else {
-            $args .= ", null";
-        }
-        if (isset($params['impact'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['impact']);
-        } else {
-            $args .= ", null";
-        }
-        if (isset($params['deadline'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['deadline']);
-        } else {
-            $args .= ", null";
-        }
-        if (isset($params['organisation_id'])) {
-            $args .= ", ".PDOWrapper::cleanseNull($params['organisation_id']);
-        } else {
-            $args .= ", null";
-        }
-        if (isset($params['reference'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['reference']);
-        } else {
-            $args .= ", null";
-        }
-        if (isset($params['word-count'])) {
-            $args .= ", ".PDOWrapper::cleanseNull($params['word-count']);
-        } else {
-            $args .= ", null";
-        }
-        if (isset($params['created'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['created']);
-        } else {
-            $args .= ", null";
-        }
-        
-        if (isset($params['country_id'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['country_id']);
-        } else {
-            $args .= ", null";
-        }
-        if (isset($params['language_id'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['language_id']);
-        } else {
-            $args .= ", null";
-        }
-
         $projects = array();
-        $result = PDOWrapper::call("getProject", $args);
+        $result = PDOWrapper::call("getProject", PDOWrapper::cleanseNull($id).",".PDOWrapper::cleanseNullOrWrapStr($title).",".
+                            PDOWrapper::cleanseNullOrWrapStr($description).",".PDOWrapper::cleanseNullOrWrapStr($impact).",".
+                            PDOWrapper::cleanseNullOrWrapStr($deadline).",".PDOWrapper::cleanseNull($orgId).",".
+                            PDOWrapper::cleanseNullOrWrapStr($reference).",".PDOWrapper::cleanseNullOrWrapStr($wordCount).",".
+                            PDOWrapper::cleanseNullOrWrapStr($created).",".PDOWrapper::cleanseNullOrWrapStr($countryId).",".
+                            PDOWrapper::cleanseNullOrWrapStr($languageId));
         if($result) {
             foreach($result as $row) {
                 $projects[] = ModelFactory::buildModel("Project", $row);
@@ -123,83 +71,26 @@ class ProjectDao
         }
     }
 
-    public static function getArchivedProject($params)
+    public static function getArchivedProject($id=null, $title=null, $description=null, $impact=null, $deadline=null, $orgId=null, $reference=null,
+                                                $wordCount=null, $created=null, $archivedDate=null, $userIdArchived=null)
     {
-        $args = "";
-        if(isset($params['id'])) {
-            $args .= PDOWrapper::cleanseNull($params['id']);
-        } else {
-            $args .= "null";
-        }
-        if(isset($params['title'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['title']);
-        } else {
-            $args .= ", null";
-        }
-        if(isset($params['description'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['description']);
-        } else {
-            $args .= ", null";
-        }
-        if(isset($params['impact'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['impact']);
-        } else {
-            $args .= ", null";
-        }
-        if(isset($params['deadline'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['deadline']);
-        } else {
-            $args .= ", null";
-        }
-        if(isset($params['organisation_id'])) {
-            $args .= ", ".PDOWrapper::cleanseNull($params['organisation_id']);
-        } else {
-            $args .= ", null";
-        }
-        if(isset($params['reference'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['reference']);
-        } else {
-            $args .= ", null";
-        }
-        if(isset($params['word-count'])) {
-            $args .= ", ".PDOWrapper::cleanseNull($params['word-count']);
-        } else {
-            $args .= ", null";
-        }
-        if(isset($params['created'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['created']);
-        } else {
-            $args .= ", null";
-        }
-        if(isset($params['archived-date'])) {
-            $args .= ", ".PDOWrapper::cleanseNullOrWrapStr($params['archived-date']);
-        } else {
-            $args .= ", null";
-        }
-        if(isset($params['user_id-archived'])) {
-            $args .= ", ".PDOWrapper::cleanseNull($params['user_id-archived']);
-        } else {
-            $args .= ", null";
-        }
-
-        $projects = null;
-        $result = PDOWrapper::call("getArchivedProject", $args);
-        if($result) {
-            $projects = array();
+        $projects = array();
+        $result = PDOWrapper::call("getArchivedProject", PDOWrapper::cleanseNull($id).",".PDOWrapper::cleanseNullOrWrapStr($title).",".
+                PDOWrapper::cleanseNullOrWrapStr($description).",".PDOWrapper::cleanseNullOrWrapStr($impact).",".PDOWrapper::cleanseNullOrWrapStr($deadline).",".
+                PDOWrapper::cleanseNull($orgId).",".PDOWrapper::cleanseNullOrWrapStr($reference).",".PDOWrapper::cleanseNullOrWrapStr($wordCount).",".
+                PDOWrapper::cleanseWrapStr($created).",".PDOWrapper::cleanseNullOrWrapStr($archivedDate).",".PDOWrapper::cleanseNull($userIdArchived));
+        
+        if($result) {           
             foreach($result as $row) {
-                $project = ModelFactory::buildModel("ArchivedProject", $row);
-                
-                if(is_object($project)) {
-                    $projects[] = $project;
-                }
+                $projects[] = ModelFactory::buildModel("ArchivedProject", $row);
             }
         }
 
-        if(count ($projects == 1)) {
-            return $projects[0];
-        } else {
-            return $projects;
+        if(count($projects) == 0) {
+            $projects = null;
         }
+        
+        return $projects;
     }
 
     public static function getProjectTasks($projectId)

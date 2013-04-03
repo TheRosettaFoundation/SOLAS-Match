@@ -204,16 +204,8 @@ class ProjectRouteHandler
 
             $extra_scripts = "";
             $extra_scripts .= $viewer->generateDataScript();
-            $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/GraphHelper.js\"></script>";
-            $extra_scripts .= "<script>
-                    window.onload = runStartup;
-
-                    function runStartup()
-                    {
-                        prepareGraph();
-                        $( \"#tabs\" ).tabs();
-                    }
-                </script>";
+            $extra_scripts .= file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/GraphHelper.js");
+            $extra_scripts .= file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-view.js");
 
             $numTaskTypes = Settings::get("ui.task_types");
             $taskTypeColours = array();

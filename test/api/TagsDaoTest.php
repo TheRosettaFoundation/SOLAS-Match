@@ -33,7 +33,7 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();        
         
         // Failure - No Tags
-        $resultGetAllTagsFailure = TagsDao::getTag(null);
+        $resultGetAllTagsFailure = TagsDao::getTag();
         $this->assertNull($resultGetAllTagsFailure);
         
         $resultCreateTag = TagsDao::create("test");    
@@ -43,13 +43,13 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("Tag", $resultCreateTag2);        
         
         // Success - Single Tag
-        $resultGetTag = TagsDao::getTag(array("id" => null, "label" => "test"));
+        $resultGetTag = TagsDao::getTag(null, "test");
         $this->assertInstanceOf("Tag", $resultGetTag[0]);
         $this->assertNotNull($resultGetTag[0]->getId());
         $this->assertEquals("test", $resultGetTag[0]->getLabel());
         
         // Success - All Tags
-        $resultGetAllTags = TagsDao::getTag(null);
+        $resultGetAllTags = TagsDao::getTag();
         $this->assertCount(2, $resultGetAllTags);
         foreach($resultGetAllTags as $tag) {
             $this->assertInstanceOf("Tag", $tag);

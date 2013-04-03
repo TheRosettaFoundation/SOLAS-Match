@@ -97,9 +97,7 @@ class Orgs {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/projects(:format)/',
             function ($id, $format = '.json')
             {
-                $params = array();
-                $params['organisation_id'] = $id;
-                Dispatcher::sendResponce(null, ProjectDao::getProject($params), null, $format);
+                Dispatcher::sendResponce(null, ProjectDao::getProject(null,null,null,null,null,$id), null, $format);
             }, 'getOrgProjects');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects(:format)/',
@@ -107,7 +105,7 @@ class Orgs {
             {
                 $params = array();
                 $params['organisation_id'] = $id;
-                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject($params), null, $format);
+                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(null,null,null,null,null,$id), null, $format);
             }, 'getOrgArchivedProjects');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/badges(:format)/',

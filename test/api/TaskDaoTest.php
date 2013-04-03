@@ -689,10 +689,11 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $translationTask2 = TaskDao::create($task2);
         $this->assertInstanceOf("Task", $translationTask2);
         
-        $tagId = TagsDao::tagIDFromLabel("Tags");
+        $tag = TagsDao::getTag(null, "Tags");
+        $tag = $tag[0];
         
         // Success          
-        $getTasksWithTag = TaskDao::getTasksWithTag($tagId);
+        $getTasksWithTag = TaskDao::getTasksWithTag($tag->getId());
         $this->assertCount(2, $getTasksWithTag);
         foreach($getTasksWithTag as $task) {
             $this->assertInstanceOf("Task", $task);
