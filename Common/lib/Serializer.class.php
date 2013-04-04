@@ -15,8 +15,10 @@ abstract class Serializer
 
     public function cast($destination, $sourceObject)
     {
-        if (is_null($destination) || is_null($sourceObject)) {
+        if ( is_null($sourceObject)) {
             return null;
+        }elseif(is_null($destination)){
+            return $sourceObject;
         }
         
         $primitives = array("int", "integer", "string", "boolean");
