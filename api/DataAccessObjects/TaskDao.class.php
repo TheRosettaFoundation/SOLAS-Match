@@ -294,7 +294,7 @@ class TaskDao
     public static function getUserTopTasks($user_id, $limit = 15)
     {
         $ret = null;
-        if ($result = PDOWrapper::call("getUserTopTasks", PDOWrapper::cleanse($user_id)
+        if ($result = PDOWrapper::call("getUserTopTasks", PDOWrapper::cleanseNull($user_id)
                                         .",".PDOWrapper::cleanseNullOrWrapStr($limit))) {
             $ret = array();
             foreach ($result as $row) {
@@ -321,6 +321,7 @@ class TaskDao
     {
         $ret = false;
         $task = self::getTask($taskId);
+        $task = $task[0];
 
         $graphBuilder = new APIWorkflowBuilder();
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
@@ -593,10 +594,10 @@ class TaskDao
             
         if($convert){
             Upload::apiSaveFile($task, $userId, 
-            FormatConverter::convertFromXliff(Dispatcher::getDispatcher()->request()->getBody()), $filename,$version);
+            FormatConverter::convertFromXliff($file), $filename,$version);
         }else{
             //touch this and you will die painfully sinisterly sean :)
-            Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename,$version);
+            Upload::apiSaveFile($task, $userId, $file, $filename,$version);
         }
     }
     
