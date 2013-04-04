@@ -247,8 +247,8 @@ class TaskRouteHandler
             $app->view()->setData("convert", "false");
         }
 
-        $sourceLanguage = $languageDao->getLanguage(array('code' => $task->getSourceLanguageCode()));
-        $targetLanguage = $languageDao->getLanguage(array('code' => $task->getTargetLanguageCode()));
+        $sourceLanguage = $languageDao->getLanguageByCode($task->getSourceLanguageCode());
+        $targetLanguage = $languageDao->getLanguageByCode($task->getTargetLanguageCode());
         $taskMetaData = $taskDao->getTaskInfo($taskId);
         
         $app->view()->appendData(array(

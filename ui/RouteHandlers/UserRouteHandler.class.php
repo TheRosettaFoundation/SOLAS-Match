@@ -367,7 +367,7 @@ class UserRouteHandler
 
         $languageDao = new LanguageDao();
         $countryDao = new CountryDao();
-        $languages = $languageDao->getLanguage(null);
+        $languages = $languageDao->getLanguages();
         $countries = $countryDao->getCountries();
         
         if (!is_object($user)) {
