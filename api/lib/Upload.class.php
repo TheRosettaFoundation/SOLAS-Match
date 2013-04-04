@@ -102,7 +102,6 @@ class Upload {
         $mime= $finfo->buffer($file);
         if(is_null($version)){
             $version = TaskDao::recordFileUpload($task->getId(), $filename, $mime, $user_id);
-            $version = $version[0]['version'];
         }
         $upload_folder     = self::absoluteFolderPathForUpload($task, $version);
         if (!self::folderPathForUploadExists($task, $version)) {

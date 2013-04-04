@@ -594,10 +594,10 @@ class TaskDao
             
         if($convert){
             Upload::apiSaveFile($task, $userId, 
-            FormatConverter::convertFromXliff(Dispatcher::getDispatcher()->request()->getBody()), $filename,$version);
+            FormatConverter::convertFromXliff($file), $filename,$version);
         }else{
             //touch this and you will die painfully sinisterly sean :)
-            Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename,$version);
+            Upload::apiSaveFile($task, $userId, $file, $filename,$version);
         }
     }
     
