@@ -104,7 +104,7 @@ class Projects
             }
             $projectTasks = ProjectDao::getProjectTasks($projectId);
             foreach ($projectTasks as $task) {
-                TaskDao::moveToArchiveById($task->getId(), $userId);
+                TaskDao::archiveTask($task->getId(), $userId);
             }
             Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);                
             }, 'archiveProject');
