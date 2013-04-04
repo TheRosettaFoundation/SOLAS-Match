@@ -160,7 +160,7 @@ class Projects
                 $userID = $userID[0];
             }
             $data=Dispatcher::getDispatcher()->request()->getBody();
-            Dispatcher::sendResponce(null,ProjectDao::saveProjectFile($id, $data, urldecode($filename),$userID), null, $format);
+           Dispatcher::sendResponce(null,ProjectDao::saveProjectFile($id, $data, urldecode($filename),$userID), null, $format);
         }, 'saveProjectFile');
     }
 }
