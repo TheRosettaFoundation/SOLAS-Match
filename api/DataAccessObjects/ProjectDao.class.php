@@ -180,7 +180,7 @@ class ProjectDao
     }
     
     public static function getProjectFile($projectId) {
-        $projectFileInfo = $this->getProjectFileInfo($projectId, null, null, null, null);
+        $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
         $source = Settings::get("files.upload_path")."proj-$projectId/$filename";
         return file_get_contents($source);
