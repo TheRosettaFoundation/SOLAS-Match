@@ -230,7 +230,7 @@ class Upload {
                 $preReqTask = $taskDao->getTask($preReqId);
                 $taskDao->addTaskPreReq($id, $preReqId);
 
-                if($task->getTaskType() != TaskTypeEnum::POSTEDITING) {
+                if($task->getTaskType() != TaskTypeEnum::DESEGMENTATION) {
                     foreach($currentTaskNode->getPreviousList() as $node) {
                         $preReq = $taskDao->getTask($node->getTaskId());
                         $preReq = $preReq[0];      

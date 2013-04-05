@@ -6,9 +6,9 @@
     <h2>
         <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
     </h2>
-    {if $type_id == TaskTypeEnum::CHUNKING}
+    {if $type_id == TaskTypeEnum::SEGMENTATION}
         <p>Type: 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span> 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation</span> 
         </p>
     {elseif $type_id == TaskTypeEnum::TRANSLATION}
         </h2>
@@ -19,9 +19,9 @@
         <p>Type: 
             <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
         </p>
-    {elseif $type_id == TaskTypeEnum::POSTEDITING}
+    {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
         <p>Type: 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span>
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation</span>
         </p>
     {/if}
 

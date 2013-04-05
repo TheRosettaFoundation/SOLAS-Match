@@ -439,7 +439,7 @@ class ProjectRouteHandler
             }
             
             for ($i=0; $i < $post->targetLanguageArraySize; $i++) {  
-                if(!isset($post->{"chunking_".$i}) && !isset($post->{"translation_".$i}) &&
+                if(!isset($post->{"segmentation_".$i}) && !isset($post->{"translation_".$i}) &&
                     !isset($post->{"proofreading_".$i})) {
                     $targetLanguage_err = "At least one <b>Task Type</b> must be set for each <b>Target Language</b>.";
                     break;
@@ -486,12 +486,12 @@ class ProjectRouteHandler
                         $taskModel->setTargetLanguageCode($post->{"targetLanguage_".$i});
                         $taskModel->setTargetCountryCode($post->{"targetCountry_".$i});
 
-                        if(isset($post->{"chunking_".$i})) { 
-                            $taskModel->setTaskType(TaskTypeEnum::CHUNKING);
+                        if(isset($post->{"segmentation_".$i})) { 
+                            $taskModel->setTaskType(TaskTypeEnum::SEGMENTATION);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            $createdChunkTask = $taskDao->createTask($taskModel);
+                            $createdSegmentationTask = $taskDao->createTask($taskModel);
                             try {
-                                $error_message = $taskDao->saveTaskFile($createdChunkTask->getId(), urlencode($_FILES[$field_name]['name']),
+                                $error_message = $taskDao->saveTaskFile($createdSegmentationTask->getId(), urlencode($_FILES[$field_name]['name']),
                                         $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;

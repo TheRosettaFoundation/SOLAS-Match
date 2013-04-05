@@ -59,14 +59,14 @@ class TemplateHelper {
     public static function getTaskTypeFromId($taskTypeId)
     {
         switch ($taskTypeId) {
-            case TaskTypeEnum::POSTEDITING:
-                return "Postediting";
+            case TaskTypeEnum::DESEGMENTATION:
+                return "Desegmentation";
             case TaskTypeEnum::TRANSLATION:
                 return "Translation";
             case TaskTypeEnum::PROOFREADING:
                 return "Proofreading";
-            case TaskTypeEnum::CHUNKING:
-                return "Chunking";
+            case TaskTypeEnum::SEGMENTATION:
+                return "Segmentation";
             default:
                 return "Unknown Task Type";
         }

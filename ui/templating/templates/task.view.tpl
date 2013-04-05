@@ -12,14 +12,14 @@
                 <strong>
                      -
                     {assign var="type_id" value=$task->getTaskType()}
-                    {if $type_id == TaskTypeEnum::CHUNKING}
-                        <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
+                    {if $type_id == TaskTypeEnum::SEGMENTATION}
+                        <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation Task</span>                                    
                     {elseif $type_id == TaskTypeEnum::TRANSLATION}
                         <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task</span> 
                     {elseif $type_id == TaskTypeEnum::PROOFREADING}
                         <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task</span> 
-                    {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                        <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task</span> 
+                    {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
+                        <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation Task</span> 
                     {/if}
                 </strong>
             </small>  
