@@ -1,5 +1,5 @@
 
-    <h3><i class="icon-info-sign"></i> SOLAS Match Statistics</h3>
+    <h3><i class="icon-info-sign"></i> SOLAS Match Statistics:</h3>
     <table width="100%">
         <tr>
             <td>Users:</td>
