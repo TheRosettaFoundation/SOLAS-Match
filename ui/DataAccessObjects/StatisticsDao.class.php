@@ -17,8 +17,15 @@ class StatisticsDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/stats";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Statistic"), $response);
+        $ret = $this->client->castCall(array("Statistic"), $request);
+        return $ret;
+    }
+    
+    public function getStat($stat)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/stats/$stat";
+        $ret = $this->client->castCall("Statistic", $request);
         return $ret;
     }
 }

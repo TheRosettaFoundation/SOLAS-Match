@@ -13,27 +13,21 @@ class LanguageDao
         $this->siteApi = Settings::get("site.api");
     }
 
-    public function getLanguage($params)
+    public function getLanguage($id)
     {
-        $ret = null;
+        $request = "{$this->siteApi}v0/languages/$id";
+        return $this->client->castCall(array("Language"), $request);
+    }
+    
+    public function getLanguages()
+    {
         $request = "{$this->siteApi}v0/languages";
-        $id = null;
-        $code = null;
-        if (isset($params['id'])) {
-            $id = $params['id'];
-            $request = "$request/$id";
-        } elseif (isset($params['code'])) {
-            $code = $params['code'];
-            $request = "$request/getByCode/$code";
-        }
-        
-        $response = $this->client->call($request);
-        if (!is_null($id) || !is_null($code)) {
-            $ret = $this->client->cast("Language", $response);
-        } else {
-            $ret = $this->client->cast(array("Language"), $response);
-        }
-        
-        return $ret;
+        return $this->client->castCall(array("Language"), $request);
+    }
+    
+    public function getLanguageByCode($code)
+    {
+        $request = "{$this->siteApi}v0/languages/getByCode/$code";
+        return $this->client->castCall("Language", $request);
     }
 }

@@ -70,7 +70,7 @@ class GraphViewer
         if ($this->model) {
             $viewWidth = 1200;
             $projectDao = new ProjectDao();
-            $project = $projectDao->getProject(array("id" => $this->model->getProjectId()));
+            $project = $projectDao->getProject($this->model->getProjectId());
 
             $view = $doc->createElement("svg");
             $att = $doc->createAttribute("xmlns");

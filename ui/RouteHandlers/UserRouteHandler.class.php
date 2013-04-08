@@ -73,8 +73,8 @@ class UserRouteHandler
         if ($current_user_id == null) {
             $tasks = $taskDao->getTopTasks(10);
             for ($i = 0; $i < count($tasks); $i++) {
-                $tasks[$i]['Project'] = $projectDao->getProject(array('id' => $tasks[$i]->getProjectId()));
-                $tasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $tasks[$i]['Project']->getOrganisationId()));
+                $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
+                $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
             }
 
             $app->view()->appendData(array(
@@ -84,8 +84,8 @@ class UserRouteHandler
         } else {
             $tasks = $userDao->getUserTopTasks($current_user_id, 10);
             for ($i = 0; $i < count($tasks); $i++) {
-                $tasks[$i]['Project'] = $projectDao->getProject(array('id' => $tasks[$i]->getProjectId()));
-                $tasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $tasks[$i]['Project']->getOrganisationId()));
+                $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
+                $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
             }
             
             $app->view()->appendData(array(
@@ -233,7 +233,7 @@ class UserRouteHandler
             $post = (object) $app->request()->post();
             if (isset($post->password_reset)) {
                 if (isset($post->email_address) && $post->email_address != '') {
-                    $user = $userDao->getUser(array('email' => $post->email_address)); 
+                    $user = $userDao->getUserByEmail($post->email_address); 
                     if ($user) {  
                         $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($user->getUserId());
                         $message = "";
@@ -343,7 +343,7 @@ class UserRouteHandler
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
                 $userDao = new UserDao();
-                $user = $userDao->getUser(array('email' => $retvals['contact/email']));
+                $user = $userDao->getUserByEmail($retvals['contact/email']);
                 if(is_array($user)) $user = $user[0];                    
                 if(is_null($user)) {
                     $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));
@@ -363,11 +363,11 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $userDao = new UserDao();
         $user_id = UserSession::getCurrentUserID();
-        $user = $userDao->getUser(array('id' => $user_id));
+        $user = $userDao->getUser($user_id);
 
         $languageDao = new LanguageDao();
         $countryDao = new CountryDao();
-        $languages = $languageDao->getLanguage(null);
+        $languages = $languageDao->getLanguages();
         $countries = $countryDao->getCountries();
         
         if (!is_object($user)) {
@@ -419,7 +419,7 @@ class UserRouteHandler
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
 
-        $user = $userDao->getUser(array('id' => $user_id));
+        $user = $userDao->getUser($user_id);
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
@@ -442,7 +442,7 @@ class UserRouteHandler
         $orgList = array();
         foreach ($badges as $badge) {
             if ($badge->getOwnerId() != null) {
-                $org = $orgDao->getOrganisation(array('id' => $badge->getOwnerId()));
+                $org = $orgDao->getOrganisation($badge->getOwnerId());
                 $orgList[$badge->getOwnerId()] = $org;
             }
         }       

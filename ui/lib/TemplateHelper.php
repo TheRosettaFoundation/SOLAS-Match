@@ -200,7 +200,7 @@ class TemplateHelper {
     public static function languageNameFromId($languageID)
     {
         $languageDao = new LanguageDao();
-        $result = $languageDao->getLanguage(array("id" => $languageID));
+        $result = $languageDao->getLanguage($languageID);
         return self::cleanse($result->getName());
     }
 
@@ -208,7 +208,7 @@ class TemplateHelper {
     {
         $ret = "";
         $langDao = new LanguageDao();
-        $lang = $langDao->getLanguage(array("code" => $languageCode));
+        $lang = $langDao->getLanguageByCode($languageCode);
         if($lang) {
             $ret = self::cleanse($lang->getName());
         }
@@ -218,7 +218,7 @@ class TemplateHelper {
     public static function orgNameFromId($orgID)
     {
         $orgDao = new OrganisationDao();
-        $result = $orgDao->getOrganisation(array("id" => $orgID));
+        $result = $orgDao->getOrganisation($orgID);
         return self::cleanse($result->getName());
     }
 
@@ -240,7 +240,7 @@ class TemplateHelper {
     {
         $use_language_codes = Settings::get("ui.language_codes");
         $langDao = new LanguageDao();
-        $result = $langDao->getLanguage(null);        
+        $result = $langDao->getLanguages();        
         foreach($result as $lang)
         {
             if($use_language_codes == "y") {
@@ -276,7 +276,7 @@ class TemplateHelper {
     public static function saveLanguage($languageCode) 
     {
         $langDao = new LanguageDao();
-        $language = $langDao->getLanguage(array("code" => $languageCode));
+        $language = $langDao->getLanguageByCode($languageCode);
         if (is_null(($language))) {
             throw new InvalidArgumentException("A valid language code was expected.");
         }

@@ -18,7 +18,7 @@ class BadgeRouteHandler
         $badgeList = $badgeDao->getBadges();
         foreach ($badgeList as $badge) {
             if ($badge->getOwnerId() != null) {
-                $org = $orgDao->getOrganisation(array('id' => $badge->getOwnerId()));;
+                $org = $orgDao->getOrganisation($badge->getOwnerId());;
                 $org_list[$badge->getOwnerId()] = $org;
             }
         }

@@ -12,37 +12,29 @@ class UserDao
         $this->client = new APIHelper(Settings::get("ui.api_format"));
         $this->siteApi = Settings::get("site.api");
     }
-
-    public function getUser($params)
+    
+    public function getUser($userId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users";
-
-        $id = null;
-        $email = null;
-        if (isset($params['id'])) {
-            $id = $params['id'];
-            $request = "$request/$id";
-        } elseif(isset($params['email'])) {
-            $email = $params['email'];
-            $request = "$request/getByEmail/$email";
-        }
-
-        $response = $this->client->call($request);
-        if (!is_null($id) || !is_null($email)) {
-            $ret = $this->client->cast("User", $response);
-        } else {
-            $ret = $this->client->cast(array("User"), $response);
-        }
-        
+        $request = "{$this->siteApi}v0/users/$userId"; 
+        $ret = $this->client->castCall("User", $request);
         return $ret;
     }
+    
+    public function getUserByEmail($email)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/getByEmail/$email"; 
+        $ret = $this->client->castCall("User", $request);
+        return $ret;
+    }
+
 
     public function isSubscribedToTask($userId, $taskId)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/subscribedToTask/$userId/$taskId";
-        $ret = $this->client->call($request);
+        $ret = $this->client->castCall(null, $request);
         return $ret;
     }
 
@@ -50,7 +42,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/subscribedToProject/$userId/$projectId";
-        $ret = $this->client->call($request);
+        $ret = $this->client->castCall(null, $request);
         return $ret;
     }
 
@@ -58,8 +50,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/orgs";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Organisation"), $response);
+        $ret = $this->client->castCall(array("Organisation"), $request);
         return $ret;
     }
 
@@ -67,8 +58,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Badge"), $response);
+        $ret = $this->client->castCall(array("Badge"), $request);
         return $ret;
     }
 
@@ -81,9 +71,7 @@ class UserDao
         if ($limit) {
             $args = array("limit" => $limit);
         }
-
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("Tag"), $response);
+        $ret = $this->client->castCall(array("Tag"), $request, HTTP_Request2::METHOD_GET, null, $args);
         return $ret;
     }
 
@@ -91,8 +79,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Task"), $response);
+        $ret = $this->client->castCall(array("Task"), $request);
         return $ret;
     }
 
@@ -106,8 +93,7 @@ class UserDao
             $args = array("limit" => $limit);
         }
 
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("Task"), $response);
+        $ret = $this->client->castCall(array("Task"), $request, HTTP_Request2::METHOD_GET, null, $args);
         return $ret;
     }
 
@@ -121,8 +107,7 @@ class UserDao
             $args = array("limit" => $limit);
         }
 
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("Task"), $response);
+        $ret = $this->client->castCall(array("Task"), $request, HTTP_Request2::METHOD_GET, null, $args);
         return $ret;
     }
 
@@ -130,8 +115,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tracked_tasks";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Task"), $response);
+        $ret = $this->client->castCall(array("Task"), $request);
         return $ret;
     }
 
@@ -139,8 +123,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/projects";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Project"), $response);
+        $ret = $this->client->castCall(array("Project"), $request);
         return $ret;
     }
 
@@ -148,7 +131,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/passwordResetRequest";
-        $ret = $this->client->call($request);
+        $ret = $this->client->castCall(null, $request);
         return $ret;
     }
 
@@ -156,7 +139,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/passwordResetRequest/time";
-        $ret = $this->client->call($request);
+        $ret = $this->client->castCall(null, $request);
         return $ret;
     }
 
@@ -164,7 +147,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/leaveOrg/$userId/$orgId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
         return $ret;
     }
 
@@ -172,7 +155,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_POST, $badge);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_POST, $badge);
         return $ret;
     }
 
@@ -180,7 +163,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges/$badgeId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_PUT);
         return $ret;
     }
 
@@ -188,7 +171,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges/$badgeId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
         return $ret;
     }
 
@@ -196,7 +179,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_POST, $task);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_POST, $task);
         return $ret;
     }
 
@@ -204,7 +187,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
         return $ret;
     }
 
@@ -212,8 +195,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/{$user->getUserId()}";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $user);
-        $ret = $this->client->cast("User", $response);
+        $ret = $this->client->castCall("User", $request, HTTP_Request2::METHOD_PUT, $user);
         return $ret;
     }
 
@@ -221,7 +203,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tags";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_POST, $tag);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_POST, $tag);
         return $ret;
     }
 
@@ -229,7 +211,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tags/$tagId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_PUT);
         return $ret;
     }
 
@@ -237,7 +219,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tags/$tagId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
         return $ret;
     }
 
@@ -245,7 +227,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tracked_tasks/$taskId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_PUT);
         return $ret;
     }
 
@@ -253,7 +235,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tracked_tasks/$taskId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
         return $ret;
     }
 
@@ -261,7 +243,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/passwordResetRequest";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_POST);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_POST);
         return $ret;
     }
 
@@ -269,7 +251,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/projects/$projectId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_PUT);
         return $ret;
     }
 
@@ -277,7 +259,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/projects/$projectId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
         return $ret;
     }
 
@@ -288,8 +270,7 @@ class UserDao
         $login->setEmail($email);
         $login->setPassword($password);
         $request = "{$this->siteApi}v0/login";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $login);
-        $ret = $this->client->cast("User", $response);
+        $ret = $this->client->castCall("User", $request, HTTP_Request2::METHOD_POST, $login);
         return $ret;
     }
 
@@ -297,8 +278,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/password_reset/$key";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast("PasswordResetRequest", $response);
+        $ret = $this->client->castCall("PasswordResetRequest", $request);
         return $ret;
     }
 
@@ -309,7 +289,7 @@ class UserDao
         $passwordReset->setPassword($password);
         $passwordReset->setKey($key);
         $request = "{$this->siteApi}v0/password_reset";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_POST, $passwordReset);
+        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_POST, $passwordReset);
         return $ret;
     }
 
@@ -320,8 +300,7 @@ class UserDao
         $registerData->setEmail($email);
         $registerData->setPassword($password);
         $request = "{$this->siteApi}v0/register";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $registerData);
-        $ret = $this->client->cast("User", $response);
+        $ret = $this->client->castCall("User", $request, HTTP_Request2::METHOD_POST, $registerData);
         return $ret;
     }
 }
