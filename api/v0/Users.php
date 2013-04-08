@@ -208,10 +208,6 @@ class Users {
             }
             $dao = new TaskDao;
             Dispatcher::sendResponce(null, $dao->unClaimTaskbyID($tID,$id), null, $format);
-//            $dao = new UserDao();
-
-//            Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
-//            Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
         }, 'userUnClaimTask');
 
         
@@ -219,8 +215,24 @@ class Users {
                                                         function ($id, $format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
+            $filter = Dispatcher::clenseArgs('filter', HttpMethodEnum::GET, '');
+            $filters = APIHelper::parseFilterString($filter);
+
+            $filter = "";
+            if (isset($filters['taskType']) && $filters['taskType'] != '') {
+                $filter .= " AND t.`task-type_id`=".$filters['taskType'];
+            }
+            if (isset($filters['sourceLanguage']) && $filters['sourceLanguage'] != '') {
+                $filter .= " AND t.`language_id-source`= (SELECT id FROM Languages WHERE code=\'".
+                            $filters['sourceLanguage']."\')";
+            }
+            if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
+                $filter .= " AND t.`language_id-target`= (SELECT id FROM Languages WHERE code=\'".
+                            $filters['targetLanguage']."\')";
+            }
+
             $dao = new TaskDao();
-            $data = $dao->getUserTopTasks($id, $limit);
+            $data = $dao->getUserTopTasks($id, $limit, $filter);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTopTasks');
         

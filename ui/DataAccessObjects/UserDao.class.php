@@ -96,14 +96,31 @@ class UserDao
         return $ret;
     }
 
-    public function getUserTopTasks($userId, $limit = null)
+    public function getUserTopTasks($userId, $limit = null, $filter = array())
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/top_tasks";
 
-        $args = null;
+        $args = array();
         if ($limit) {
-            $args = array("limit" => $limit);
+            $args["limit"] = $limit;
+        }
+
+        $filterString = "";
+        if ($filter) {
+            if (isset($filter['taskType']) && $filter['taskType'] != '') {
+                $filterString .= "taskType:".$filter['taskType'].';';
+            }
+            if (isset($filter['sourceLanguage']) && $filter['sourceLanguage'] != '') {
+                $filterString .= "sourceLanguage:".$filter['sourceLanguage'].';';
+            }
+            if (isset($filter['targetLanguage']) && $filter['targetLanguage'] != '') {
+                $filterString .= "targetLanguage:".$filter['targetLanguage'].';';
+            }
+        }
+
+        if ($filterString != '') {
+            $args['filter'] = $filterString;
         }
 
         $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);

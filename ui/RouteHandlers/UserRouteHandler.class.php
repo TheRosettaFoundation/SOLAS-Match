@@ -13,7 +13,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
 
-        $app->get("/", array($this, "home"))->name("home");
+        $app->get("/", array($this, "home"))->via("POST")->name("home");
 
         $app->get("/register", array($this, "register")
         )->via("GET", "POST")->name("register");
@@ -82,13 +82,50 @@ class UserRouteHandler
             ));
 
         } else {
-            $tasks = $userDao->getUserTopTasks($current_user_id, 10);
+            $taskTypes = array();
+            $taskTypes[TaskTypeEnum::CHUNKING] = "Chunking";
+            $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
+            $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
+            $taskTypes[TaskTypeEnum::POSTEDITING] = "Post-Editing";
+
+            $langDao = new LanguageDao();
+            $languageList = $langDao->getLanguage(null);
+
+            $filter = array();
+            $selectedType = "";
+            $selectedSource = "";
+            $selectedTarget = "";
+            if ($app->request()->isPost()) {
+                $post = (object) $app->request()->post();
+
+                if (isset($post->taskType) && $post->taskType != '') {
+                    $selectedType = $post->taskType;
+                    $filter['taskType'] = $post->taskType;
+                }
+
+                if (isset($post->sourceLanguage) && $post->sourceLanguage != '') {
+                    $selectedSource = $post->sourceLanguage;
+                    $filter['sourceLanguage'] = $post->sourceLanguage;
+                }
+
+                if (isset($post->targetLanguage) && $post->targetLanguage != '') {
+                    $selectedTarget = $post->targetLanguage;
+                    $filter['targetLanguage'] = $post->targetLanguage;
+                }
+            }
+
+            $tasks = $userDao->getUserTopTasks($current_user_id, 10, $filter);
             for ($i = 0; $i < count($tasks); $i++) {
                 $tasks[$i]['Project'] = $projectDao->getProject(array('id' => $tasks[$i]->getProjectId()));
                 $tasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $tasks[$i]['Project']->getOrganisationId()));
             }
             
             $app->view()->appendData(array(
+                "taskTypes" => $taskTypes,
+                "languageList" => $languageList,
+                "selectedType" => $selectedType,
+                "selectedSource" => $selectedSource,
+                "selectedTarget" => $selectedTarget,
                 "tasks" => $tasks
             ));
             

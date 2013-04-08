@@ -55,6 +55,62 @@
         </div>
 
         <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; table-layout: fixed; word-break:break-all;">
+            {if isset($user)}
+                <h3>Filter:</h3>
+                <div id="filter">
+                    <form action="{urlFor name="home"}" method="post">
+                        <table>
+                            <th>Task Type</th>
+                            <th>Source Language</th>
+                            <th>Target Language</th>
+                            <tr>
+                                <td>
+                                    <select name="taskType">
+                                        <option value="">Any</option>
+                                        {foreach $taskTypes as $id => $typeName}
+                                            {if $id == $selectedType}
+                                                <option selected="true" value="{$id}">{$typeName}</option>
+                                            {else}
+                                                <option value="{$id}">{$typeName}</option>
+                                            {/if}
+                                        {/foreach}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="sourceLanguage">
+                                        <option value="">Any</option>
+                                        {foreach $languageList as $language}
+                                            {if $language->getCode() == $selectedSource}
+                                                <option selected="true" value="{$language->getCode()}">{$language->getName()}</option>
+                                            {else}
+                                                <option value="{$language->getCode()}">{$language->getName()}</option>
+                                            {/if}
+                                        {/foreach}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="targetLanguage">
+                                        <option value="">Any</option>
+                                        {foreach $languageList as $language}
+                                            {if $language->getCode() == $selectedTarget}
+                                                <option selected="true" value="{$language->getCode()}">{$language->getName()}</option>
+                                            {else}
+                                                <option value="{$language->getCode()}">{$language->getName()}</option>
+                                            {/if}
+                                        {/foreach}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="submit" class="btn" value="Filter" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <hr />
+            {/if}
             {if count($tasks) > 0}
                 <div id="tasks">
                     {foreach from=$tasks item=task name=tasks_loop}

@@ -55,7 +55,7 @@ class APIHelper
             $requestUrl = $request->getUrl();
             $requestUrl->setQueryVariables($query_args);
         }
-        
+
         $response = $request->send();
         $response_data = $this->_serializer->deserialize(trim($response->getBody()));
         return $response_data;
@@ -114,6 +114,19 @@ class APIHelper
             $format = FormatEnum::JSON;
         }
         return $format;
+    }
+
+    public static function parseFilterString($filter)
+    {
+        $ret = array();
+        $pairs = explode(";", $filter);
+        foreach ($pairs as $pair) {
+            if ($pair != '') {
+                $keyValue = explode(":", $pair);
+                $ret[$keyValue[0]] = $keyValue[1];
+            }
+        }
+        return $ret;
     }
 
     public function getContentType()
