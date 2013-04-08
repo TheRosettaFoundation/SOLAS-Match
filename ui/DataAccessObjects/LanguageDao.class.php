@@ -16,7 +16,7 @@ class LanguageDao
     public function getLanguage($id)
     {
         $request = "{$this->siteApi}v0/languages/$id";
-        return $this->client->castCall(array("Language"), $request);
+        return $this->client->castCall("Language", $request);
     }
     
     public function getLanguages()
