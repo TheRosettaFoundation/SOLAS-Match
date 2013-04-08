@@ -36,6 +36,19 @@ class OrganisationDao
         return $ret;
     }
     
+    public static function searchForOrg($org_name)
+    {
+         $ret = null;
+         if ($result = PDOWrapper::call("searchForOrg", PDOWrapper::cleanseWrapStr($org_name))) {
+             $ret = array();
+             foreach ($result as $row) {
+                 $ret[] = ModelFactory::buildModel("Organisation", $row);
+             }
+         }
+
+         return $ret;
+     }   
+    
     public static function getOrgByUser($user_id) //currently not used
     {
         $ret = null;

@@ -93,6 +93,28 @@ class Orgs {
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getOrgByName');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/searchByName/:name/',
+                                                        function ($name, $format = ".json") {
+            
+            if (!is_numeric($name) && strstr($name, '.')) {
+                $temp = array();
+                $temp = explode('.', $name);
+                $lastIndex = sizeof($temp)-1;
+                if ($lastIndex > 0) {
+                    $format = '.'.$temp[$lastIndex];
+                    $name = $temp[0];
+                    for ($i = 1; $i < $lastIndex; $i++) {
+                        $name = "{$name}.{$temp[$i]}";
+                    }
+                }
+            }
+            $data= OrganisationDao::searchForOrg($name);
+            if (!is_array($data) && !is_null($data)) {
+                $data = array($data);
+            }
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'searchByName');
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/projects(:format)/',
             function ($id, $format = '.json')
