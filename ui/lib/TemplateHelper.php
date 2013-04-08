@@ -218,7 +218,7 @@ class TemplateHelper {
     public static function orgNameFromId($orgID)
     {
         $orgDao = new OrganisationDao();
-        $result = $orgDao->getOrganisation(array("id" => $orgID));
+        $result = $orgDao->getOrganisation($orgID);
         return self::cleanse($result->getName());
     }
 

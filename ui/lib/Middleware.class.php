@@ -67,7 +67,7 @@ class Middleware
         if (isset($org_id)) {
             $siteApi = Settings::get("site.api");
             $request = "$siteApi/v0/orgs/$org_id";
-            $org = $orgDao->getOrganisation(array('id' => $org_id));
+            $org = $orgDao->getOrganisation($org_id);
             $org_name = "<a href=\"".$app->urlFor('org-public-profile',
                                                     array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
@@ -91,7 +91,7 @@ class Middleware
         if ($params != null) {
             $task_id = $params['task_id'];
             $task = $taskDao->getTask($task_id);
-            $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+            $project = $projectDao->getProject($task->getProjectId());
             
             $org_id = $project->getOrganisationId();
             $user_id = UserSession::getCurrentUserID();
@@ -111,7 +111,7 @@ class Middleware
         $app = Slim::getInstance();
         $org_name = 'this organisation';
         if (isset($org_id)) {
-            $org = $orgDao->getOrganisation(array('id' => $org_id));
+            $org = $orgDao->getOrganisation($org_id);
             $org_name = "<a href=\"".$app->urlFor('org-public-profile',
                                                     array('org_id' => $org_id))."\">".$org->getName()."</a>";
         }
@@ -130,7 +130,7 @@ class Middleware
             $user_id = UserSession::getCurrentUserID();
             $project_id = $params['project_id'];   
             $userOrgs = $userDao->getUserOrgs($user_id);
-            $project = $projectDao->getProject(array('id' => $project_id)); 
+            $project = $projectDao->getProject($project_id); 
             $project_orgid = $project->getOrganisationId();
 
             foreach($userOrgs as $org)

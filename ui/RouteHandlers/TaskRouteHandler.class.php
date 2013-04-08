@@ -74,7 +74,7 @@ class TaskRouteHandler
         $userDao = new UserDao();
         $user_id = UserSession::getCurrentUserID();
         
-        $user = $userDao->getUser(array('id' => $user_id));
+        $user = $userDao->getUser($user_id);
         $archived_tasks = $userDao->getUserArchivedTasks($user_id, 10);
         $tasks_per_page = 10;
         $total_pages = ceil(count($archived_tasks) / $tasks_per_page);
@@ -126,8 +126,8 @@ class TaskRouteHandler
         $activeTasks = $userDao->getUserTasks($user_id);
         if ($activeTasks) {
             for ($i = 0; $i < count($activeTasks); $i++) {
-                $activeTasks[$i]['Project'] = $projectDao->getProject(array('id' =>$activeTasks[$i]->getProjectId()));
-                $activeTasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $activeTasks[$i]['Project']->getOrganisationId()));
+                $activeTasks[$i]['Project'] = $projectDao->getProject($activeTasks[$i]->getProjectId());
+                $activeTasks[$i]['Org'] = $orgDao->getOrganisation($activeTasks[$i]['Project']->getOrganisationId());
             }
         }
         
@@ -305,7 +305,7 @@ class TaskRouteHandler
      
             $user_id = UserSession::getCurrentUserID();
             $task = $taskDao->getTask( $task_id);
-            $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+            $project = $projectDao->getProject($task->getProjectId());
             $numTaskTypes = Settings::get("ui.task_types");
 
             $taskTypeColours = array();
@@ -342,7 +342,7 @@ class TaskRouteHandler
         $fieldName = "mergedFile";
         $errorMessage = null;
         $task = $taskDao->getTask($taskId);
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $project = $projectDao->getProject($task->getProjectId());
 
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -434,7 +434,7 @@ class TaskRouteHandler
         $errorMessage = null;
         $userId = UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $project = $projectDao->getProject($task->getProjectId());
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();///never again cast an array to an object.
             try {
@@ -471,7 +471,7 @@ class TaskRouteHandler
             }
         }
 
-        $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
+        $org = $orgDao->getOrganisation($project->getOrganisationId());
         $taskVersion = $taskDao->getTaskVersion($task->getId());
 
         $file_previously_uploaded = false;
@@ -514,8 +514,8 @@ class TaskRouteHandler
         $tipDao = new TipDao();
 
         $task = $taskDao->getTask($task_id);
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
-        $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
+        $project = $projectDao->getProject($task->getProjectId());
+        $org = $orgDao->getOrganisation($project->getOrganisationId());
         $tip = $tipDao->getTip();
         
         $app->view()->appendData(array(
@@ -553,7 +553,7 @@ class TaskRouteHandler
             $preReqTasks = array();
         }
 
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $project = $projectDao->getProject($task->getProjectId());
         $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
         foreach ($projectTasks as $projectTask) {
             if ($projectTask->getTaskStatus() == TaskStatusEnum::IN_PROGRESS ||
@@ -776,8 +776,8 @@ class TaskRouteHandler
 
         $user_id = UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
-        $user = $userDao->getUser(array('id' => $user_id));
+        $project = $projectDao->getProject($task->getProjectId());
+        $user = $userDao->getUser($user_id);
         
         if ($task_file_info = $taskDao->getTaskInfo($task_id)) {
             $app->view()->appendData(array(
@@ -846,7 +846,7 @@ class TaskRouteHandler
                      "taskMetaData" => $taskMetaData
         ));        
         
-        $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
+        $org = $orgDao->getOrganisation($project->getOrganisationId());
         $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
         
@@ -881,7 +881,7 @@ class TaskRouteHandler
         $deadlineError = null;
         $taskPreReqs = array();
         $task = new Task();
-        $project = $projectDao->getProject(array('id' => $project_id));
+        $project = $projectDao->getProject($project_id);
         $projectTasks = $projectDao->getProjectTasks($project_id);
         $task->setProjectId($project_id);
 
@@ -1029,7 +1029,7 @@ class TaskRouteHandler
         $taskTypeErr = null;        
         
         $task = $taskDao->getTask($task_id); 
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $project = $projectDao->getProject($task->getProjectId());
         $numTaskTypes = Settings::get("ui.task_types");
         $maxChunks = Settings::get("site.max_chunking");
         $taskTypeColours = array();
@@ -1184,7 +1184,7 @@ class TaskRouteHandler
 
         $user_id = UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);   
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $project = $projectDao->getProject($task->getProjectId());
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
 
@@ -1249,8 +1249,8 @@ class TaskRouteHandler
 
         $user_id = UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);   
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
-        $organisation = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));          
+        $project = $projectDao->getProject($task->getProjectId());
+        $organisation = $orgDao->getOrganisation($project->getOrganisationId());          
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
 

@@ -133,7 +133,7 @@ $app->hook('slim.before', function () use ($app)
 {
     $userDao = new UserDao();
     if (!is_null(UserSession::getCurrentUserID()) &&
-        $current_user = $userDao->getUser(array("id" => UserSession::getCurrentUserID()))) {
+        $current_user = $userDao->getUser(UserSession::getCurrentUserID())) {
         $app->view()->appendData(array('user' => $current_user));
         $org_array = $userDao->getUserOrgs(UserSession::getCurrentUserID());
         if ($org_array && count($org_array) > 0) {
