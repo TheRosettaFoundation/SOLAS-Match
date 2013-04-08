@@ -12,6 +12,17 @@ SET FOREIGN_KEY_CHECKS=0;
 
 /*--------------------------------------------------start of tables--------------------------------*/
 
+-- Dumping structure for table Solas-Match-Test.Admins
+CREATE TABLE IF NOT EXISTS `Admins` (
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
+	INDEX `FK_Admins_Organisations` (`organisation_id`),
+	CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 -- Dumping structure for table Solas-Match-Test.ArchivedProjects
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
@@ -129,6 +140,18 @@ CREATE TABLE IF NOT EXISTS `Countries` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table Solas-Match-Test.DefaultGlobalPermissions
+CREATE TABLE IF NOT EXISTS `DefaultGlobalPermissions` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`permissiongroup_id` INT(10) UNSIGNED NOT NULL,
+	`permission_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `permissiongroup_id` (`permissiongroup_id`, `permission_id`),
+	INDEX `FK_DefaultGlobalPermissions_Permissions` (`permission_id`),
+	CONSTRAINT `FK_DefaultGlobalPermissions_PermissionGroups` FOREIGN KEY (`permissiongroup_id`) REFERENCES `PermissionGroups` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_DefaultGlobalPermissions_Permissions` FOREIGN KEY (`permission_id`) REFERENCES `Permissions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- Dumping structure for table Solas-Match-Test.Languages
 CREATE TABLE IF NOT EXISTS `Languages` (
@@ -154,6 +177,21 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
+-- Dumping structure for table Solas-Match-Test.OrganisationPermissions
+CREATE TABLE IF NOT EXISTS `OrganisationPermissions` (
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`permissiongroup_id` INT(10) UNSIGNED NOT NULL,
+	`permission_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `organisation_id` (`organisation_id`, `permissiongroup_id`, `permission_id`),
+	INDEX `FK_OrganisationPermissions_PermissionGroups` (`permissiongroup_id`),
+	INDEX `FK_OrganisationPermissions_Permissions` (`permission_id`),
+	CONSTRAINT `FK_OrganisationPermissions_PermissionGroups` FOREIGN KEY (`permissiongroup_id`) REFERENCES `PermissionGroups` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_OrganisationPermissions_Permissions` FOREIGN KEY (`permission_id`) REFERENCES `Permissions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_OrganisationPermissions_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.Organisations
@@ -208,6 +246,22 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
+-- Dumping structure for table Solas-Match-Test.PermissionGroups
+CREATE TABLE IF NOT EXISTS `PermissionGroups` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping structure for table Solas-Match-Test.Permissions
+CREATE TABLE IF NOT EXISTS `Permissions` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.ProjectFiles
@@ -442,6 +496,21 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
+-- Dumping structure for table Solas-Match-Test.UserOrganisationPermissions
+CREATE TABLE IF NOT EXISTS `UserOrganisationPermissions` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`permission_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `organisation_id` (`organisation_id`, `user_id`, `permission_id`),
+	INDEX `FK_UserOrganisationPermissions_Users` (`user_id`),
+	INDEX `FK_UserOrganisationPermissions_Permissions` (`permission_id`),
+	CONSTRAINT `FK_UserOrganisationPermissions_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserOrganisationPermissions_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserOrganisationPermissions_Permissions` FOREIGN KEY (`permission_id`) REFERENCES `Permissions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.Users
