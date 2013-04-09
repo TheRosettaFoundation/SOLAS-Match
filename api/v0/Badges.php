@@ -77,7 +77,7 @@ class Badges {
             
             $data = UserDao::getUsersWithBadge($id);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getusersWithBadge');        
+        }, 'getUsersWithBadge');        
     }
 }
 Badges::init();

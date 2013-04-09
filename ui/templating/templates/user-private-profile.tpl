@@ -19,16 +19,18 @@
 {/if}
  
     <form method='post' action='{urlFor name='user-private-profile'}' class='well'>
-        <label for='name'><strong>Public Display Name:</strong></label>
-        <input type='text' name='name' id='name'
+
+        <label for='displayName'><strong>Public Display Name:</strong></label>
+        <input type='text' name='displayName' id='displayName'
         {if $user->getDisplayName() != ''}
             value='{$user->getDisplayName()}'
         {else}
-            placeholder='Name'
-        {/if} />
+            placeholder='Display Name'
+        {/if} />           
+
         <label for='nLanguage'><strong>Native Language:</strong></label>
         {if isset($languages)}
-            <select name="nLanguage" id="nLanguage">
+            <select name="nativeLanguage" id="nativeLanguage">
                 {foreach $languages as $language}
                     {if $user->getNativeLangId() == $language->getCode()}
                         <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
@@ -37,22 +39,33 @@
                     {/if}
                 {/foreach}
             </select>
-        {if isset($countries)}
-            <select name="nLanguageCountry" id="nLanguageCountry">
-                {foreach $countries as $country}
-                    {if $user->getNativeRegionId() == $country->getCode()}
-                    <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
-                    {else}
-                        <option value="{$country->getCode()}">{$country->getName()}</option>
-                    {/if}
-                {/foreach}
-            </select>
-        {/if}
+
+            {if isset($countries)}
+                <select name="nativeCountry" id="nativeCountry">
+                    {foreach $countries as $country}
+                        {if $user->getNativeRegionId() == $country->getCode()}
+                        <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
+                        {else}
+                            <option value="{$country->getCode()}">{$country->getName()}</option>
+                        {/if}
+                    {/foreach}
+                </select>
+            {/if}
         {else}
-            <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getNativeLanguage($user)} />
+            <input type='text' name='nativeLanguage' id='nativeLanguage' value={TemplateHelper::getNativeLanguage($user)} />
         {/if}
-        <label for='bio'><strong>Biography:</strong></label>
-        <textarea name='bio' cols='40' rows='5' {if $user->getBiography() == ''} placeholder="Enter Bio Here" {/if}
+
+        <label for='extraSecondaryLanguages'><strong>Secondary Language(s):</strong></label>
+        <div id="extraSecondaryLanguages"></div>
+        <div id="alertinfo" class="alert alert-info" style="display: none; text-align: center; width: 40%">You have reached the maximum number of Secondary Language fields allowed.</div>  
+        <p>
+            <input id="addNewSecondaryLanguageBtn" type="button" onclick="addNewSecondaryLanguage()" value="Add Secondary Language"/>
+            <input id="removeNewSecondaryLanguageBtn" type="button" onclick="removeNewSecondaryLanguage()" value="Remove" disabled="true" style="visibility: hidden"/>  
+            <input type="hidden" id="secondaryLanguagesArraySize" name="secondaryLanguagesArraySize" value="1"/>
+        </p>
+
+        <label for='biography'><strong>Biography:</strong></label>
+        <textarea name='biography' cols='40' rows='5' {if $user->getBiography() == ''} placeholder="Enter Bio Here" {/if}
         >{if $user->getBiography() != ''}{$user->getBiography()}{/if}</textarea>
         <p>Register with <a href="http://en.gravatar.com/" target="_blank">Gravatar</a> to choose your avatar!</p>
 
@@ -61,6 +74,6 @@
                 <i class="icon-refresh icon-white"></i> Update
             </button>
         </p>
+
     </form>
-                  
 {include file='footer.tpl'}
