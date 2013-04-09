@@ -197,13 +197,18 @@ CREATE TABLE IF NOT EXISTS `OrganisationPermissions` (
 
 -- Dumping structure for table Solas-Match-Test.Organisations
 CREATE TABLE IF NOT EXISTS `Organisations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `home-page` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `biography` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`home-page` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`biography` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	`address` VARCHAR(128) NULL,
+	`city` VARCHAR(128) NULL,
+	`country` VARCHAR(128) NULL,
+	`regional-focus` VARCHAR(128) NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- Data exporting was unselected.
 
@@ -534,6 +539,19 @@ CREATE TABLE IF NOT EXISTS `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
+-- Dumping structure for table Solas-Match-Test.UserSecondaryLanguages
+CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`language_id` INT(10) UNSIGNED NOT NULL,
+	`country_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `user_id` (`user_id`, `language_id`, `country_id`),
+	CONSTRAINT `FK_UserSecondaryLanguages_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserSecondaryLanguages_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.UserTags
