@@ -15,12 +15,13 @@ SET FOREIGN_KEY_CHECKS=0;
 -- Dumping structure for table Solas-Match-Test.Admins
 CREATE TABLE IF NOT EXISTS `Admins` (
 	`user_id` INT(10) UNSIGNED NOT NULL,
-	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`organisation_id` INT(10) UNSIGNED NULL,
 	UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
 	INDEX `FK_Admins_Organisations` (`organisation_id`),
 	CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 
 -- Dumping structure for table Solas-Match-Test.ArchivedProjects
