@@ -57,7 +57,7 @@ class APIHelper
         }
         
         $response = $request->send();
-        $response_data = $this->_serializer->deserialize(trim($response->getBody()),$destination);
+        $response_data = $this->_serializer->deserialize($response->getBody(),$destination);
         return $response_data;
     }
 

@@ -27,14 +27,16 @@ class ProtobufSerializer extends Serializer
             }
             $ret=$ret->serialize();
         } else {
-            $ret = $data->serialize();
+            $ret = null;
         }
         return $ret;
     }
 
     public function deserialize($data,$type)
     {
-        
+        if($data==null ||$data=="null") {
+            return null;
+        }
         $result = null;
         if(is_array($type)){
             $ret = new ProtoList();
@@ -81,7 +83,8 @@ class ProtobufSerializer extends Serializer
 
     public function getContentType()
     {
-        return 'application/x-protobuf; charset=utf-8';
+        return 'text/html; charset=utf-8';
+//        return 'application/x-protobuf; charset=utf-8';
     }
 }
 
