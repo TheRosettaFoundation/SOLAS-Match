@@ -3,61 +3,56 @@
     {assign var='task_id' value=$task->getId()}
     {assign var="type_id" value=$task->getTaskType()}    
                          
-            <h2>
-                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
-            </h2>
-            {if $type_id == TaskTypeEnum::CHUNKING}
-                <p>Type: 
-                <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span> 
-            {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                <p>Type: 
-                <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span>
-            {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                <p>Type: 
-                <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
-            {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                <p>Type: 
-                <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span>
-            {/if}                
-        </p>
+    <h2>
+        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
+    </h2>
+    <p>Type:
+        {if $type_id == TaskTypeEnum::CHUNKING}
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span> 
+        {elseif $type_id == TaskTypeEnum::TRANSLATION}
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span>
+        {elseif $type_id == TaskTypeEnum::PROOFREADING}
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
+        {elseif $type_id == TaskTypeEnum::POSTEDITING}
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span>
+        {/if}                
+    </p>
 
-        <p>
-            From: <strong>{TemplateHelper::getTaskSourceLanguage($task)}</strong>
-    	</p>   
+    <p>
+        From: <strong>{TemplateHelper::getTaskSourceLanguage($task)}</strong>
+    </p>   
         
-        <p>
-            To: <strong>{TemplateHelper::getTaskTargetLanguage($task)}</strong>
-        </p>
+    <p>
+        To: <strong>{TemplateHelper::getTaskTargetLanguage($task)}</strong>
+    </p>
 
-        {assign var="taskTags" value=$task->getTagList()}
-        {if !empty($taskTags)}
-            <p>
-                Tags:
-                {foreach from=$task->getTagList() item=tag}
-                    {assign var="label" value=$tag->getLabel()}
-                    <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
-                {/foreach}
-            </p>
-        {/if}
+    {assign var="taskTags" value=$task->getTagList()}
+    {if !empty($taskTags)}
         <p>
-            {if $task->getWordCount()}
-                Word Count: <strong>{$task->getWordCount()|number_format}</strong>
-            {/if}      
-        </p> 
+            Tags:
+            {foreach from=$task->getTagList() item=tag}
+                {assign var="label" value=$tag->getLabel()}
+                <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
+            {/foreach}
+        </p>
+    {/if}
+    {if $task->getWordCount()}
+        <p>Word Count: <strong>{$task->getWordCount()|number_format}</strong></p>
+    {/if}      
 	<p class="task_details">
-            Added: <strong>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</strong> ago
+        Added: <strong>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</strong> ago
 	</p>
-        <p>
-            Due by: <strong>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</strong>
-        </p>           
+    <p>
+        Due by: <strong>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</strong>
+    </p>           
         
-        <p>            
-            {assign var="project_id" value=$task->getProjectId()}
-            {assign var="org_id" value=$task['Project']->getOrganisationId()}
+    <p>            
+        {assign var="project_id" value=$task->getProjectId()}
+        {assign var="org_id" value=$task['Project']->getOrganisationId()}
             
-            Part of: <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$task['Project']->getTitle()}</a>
-            for <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>        
-        </p>  
+        Part of: <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$task['Project']->getTitle()}</a>
+        for <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>        
+    </p>  
 
-        <p style="margin-bottom:40px;"/>        
+    <p style="margin-bottom:40px;"/>        
 </div>
