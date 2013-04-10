@@ -90,6 +90,27 @@
     {/if}
 {/if}
 
+{if isset($private_access)}
+    {if isset($interval)}
+        <div class="page-header">
+            <h1>Task Stream Notifications <small>How often you recieve task stream email updates</small>
+                <a href="{}" class="pull-right btn btn-primary">
+                    Edit
+                </a>
+            </h1>
+        </div>
+        <p>
+            You are currently receiving <strong>{$interval}</strong> emails.
+            {if $lastSent != null}
+                The last email was sent on {$lastSent}.
+            {else}
+                No emails have been sent yet.
+            {/if}
+        </p>
+        <p style="margin-bottom:50px;"/>
+    {/if}
+{/if}
+
 {if isset($user_tags)}
     {if count($user_tags) > 0}
         <div class="page-header">

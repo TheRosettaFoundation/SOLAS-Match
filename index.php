@@ -19,6 +19,7 @@ SmartyView::$smartyExtensions = array(
 require_once 'HTTP/Request2.php';
 
 require_once 'Common/Settings.class.php';
+require_once 'Common/NotificationIntervalEnum.class.php';
 require_once 'Common/lib/Authentication.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
 require_once 'Common/lib/BadgeTypes.class.php';

@@ -1883,6 +1883,18 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getUserTaskStreamNotification
+DROP PROCEDURE IF EXISTS `getUserTaskStreamNotification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskStreamNotification`(IN `uID` INT)
+BEGIN
+    SELECT *
+    FROM UserTaskStreamNotifications u
+    WHERE u.user_id = uID;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getUserTaskScore
 DROP PROCEDURE IF EXISTS `getUserTaskScore`;
 DELIMITER //
@@ -3152,6 +3164,16 @@ BEGIN
 	else
     	select 0 as 'result';
 	end if;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `userTaskStreamNotificationInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userTaskStreamNotificationInsertAndUpdate`(IN `uID` INT, IN `nInterval` INT)
+BEGIN
+    REPLACE INTO `UserTaskStreamNotifications` (`user_id`, `interval`)
+    VALUES (uID, nInterval);
 END//
 DELIMITER ;
 

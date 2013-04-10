@@ -504,7 +504,33 @@ class UserRouteHandler
         ));
                 
         if (UserSession::getCurrentUserID() === $user_id) {
-            $app->view()->appendData(array("private_access" => true));
+            $notifData = $userDao->getUserTaskStreamNotification($user_id);
+            $interval = null;
+            $lastSent = null;
+
+            if ($notifData) {
+                $interval = $notifData['interval'];
+                switch ($interval) {
+                    case NotificationIntervalEnum::DAILY:
+                        $interval = "daily";
+                        break;
+                    case NotificationIntervalEnum::WEEKLY:
+                        $interval = "weekly";
+                        break;
+                    case NotificationIntervalEnum::MONTHLY:
+                        $interval = "monthly";
+                        break;
+                }
+
+                if ($notifData['last-sent'] != null) {
+                    $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData['last-sent']));
+                }
+            }
+            $app->view()->appendData(array(
+                        "interval" => $interval,
+                        "lastSent"       => $lastSent,
+                        "private_access" => true
+            ));
         }
                     
         $app->render("user-public-profile.tpl");

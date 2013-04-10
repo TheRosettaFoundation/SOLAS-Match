@@ -96,6 +96,14 @@ class UserDao
         return $ret;
     }
 
+    public function getUserTaskStreamNotification($userId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/taskStreamNotification";
+        $ret = get_object_vars($this->client->call($request));
+        return $ret;
+    }
+
     public function getUserTopTasks($userId, $limit = null, $filter = array())
     {
         $ret = null;

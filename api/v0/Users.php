@@ -159,6 +159,14 @@ class Users {
             $dao = new UserDao();
             Dispatcher::sendResponce(null, $dao->getUserTags($id, $limit), null, $format);
         }, 'getUsertags');
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/taskStreamNotification(:format)/',
+                function ($id, $format = ".json")
+                {
+                    $userDao = new UserDao();
+                    $data = $userDao->getUserTaskStreamNotification($id);
+                    Dispatcher::sendResponce(null, $data, null, $format);
+                }, 'getUserTaskStreamNotification');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tasks(:format)/',
                                                         function ($id, $format = ".json") {
