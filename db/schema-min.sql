@@ -142,6 +142,20 @@ CREATE TABLE IF NOT EXISTS `Languages` (
 -- Data exporting was unselected.
 
 
+-- Dumping structure for table Solas-Match-Test.NotificationIntervals
+CREATE TABLE IF NOT EXISTS `NotificationIntervals` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
+	(1, "Daily"),
+	(2, "Weekly"),
+	(3, "Monthly");
+
+
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   `user_id` int(10) unsigned NOT NULL,
@@ -490,6 +504,20 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   UNIQUE KEY `taskScore` (`task_id`,`user_id`),
   CONSTRAINT `FK_user_task_score_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_task_score_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
+
+
+-- Dumping structure for table Solas-Match-Test.UserTaskScores
+CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
+  `user_id` int(11) unsigned NOT NULL,
+  `interval` int(10) unsigned NOT NULL,
+  `last-sent` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  CONSTRAINT `FK_user_task_stream_notification_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_user_task_stream_notification_interval1` FOREIGN KEY (`interval`) REFERENCES `NotificationIntervals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -1768,6 +1796,22 @@ BEGIN
 	SELECT u.* FROM Users u
 	WHERE u.id IN (SELECT tc.user_id FROM TaskClaims tc
 	WHERE tc.task_id = taskID);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getUserIdsPendingTaskStreamNotification
+DROP PROCEDURE IF EXISTS `getUserIdsPendingTaskStreamNotification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserIdsPendingTaskStreamNotification`()
+BEGIN
+	SELECT u.user_id FROM UserTaskStreamNotifications u
+	WHERE (u.interval = 1 
+            AND `last-sent` < NOW() - INTERVAL 1 DAY)
+    OR (u.interval = 2
+            AND `last-sent` < NOW() - INTERVAL 1 WEEK)
+    OR (u.interval = 3
+            AND `last-sent` < NOW() - INTERVAL 1 MONTH);
 END//
 DELIMITER ;
 
