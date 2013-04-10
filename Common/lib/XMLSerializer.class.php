@@ -16,7 +16,7 @@ class XMLSerializer extends Serializer
         return 'application/xml; charset=utf-8';
     }
 
-    public function deserialize($data)
+    public function deserialize($data,$type)
     {
         $ret = null;
         try {

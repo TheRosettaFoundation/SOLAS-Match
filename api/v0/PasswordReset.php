@@ -46,8 +46,8 @@ class PasswordResetAPI {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast('PasswordReset', $data);
+            $data = $client->deserialize($data,'PasswordReset');
+//            $data = $client->cast('PasswordReset', $data);
             $result = UserDao::passwordReset($data->getPassword(), $data->getKey());
             Dispatcher::sendResponce(null, $result, null, $format);
          }, 'resetPassword');         

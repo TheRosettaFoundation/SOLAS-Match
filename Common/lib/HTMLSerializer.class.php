@@ -16,7 +16,7 @@ class HTMLSerializer extends Serializer
         return $ret;
     }
 
-    public function deserialize($data)
+    public function deserialize($data,$type)
     {
         $ret = null;
         try {

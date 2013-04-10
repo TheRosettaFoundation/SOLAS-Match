@@ -33,8 +33,8 @@ class RegisterAPI {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Register", $data);
+            $data = $client->deserialize($data,"Register");
+//            $data = $client->cast("Register", $data);
             $data = UserDao::apiRegister($data->getEmail(), $data->getPassword());
             if (is_array($data) && isset($data[0])) {
                 $data=$data[0];

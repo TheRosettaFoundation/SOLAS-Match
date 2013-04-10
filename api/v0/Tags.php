@@ -73,8 +73,8 @@ class Tags {
                                                         function ($format = ".json") {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $client->deserialize($data);
-            $client->cast("Tag", $data);
+            $data=$client->deserialize($data,"Tag");
+//            $client->cast("Tag", $data);
             $data->setBadgeId(null);
             Dispatcher::sendResponce(null, TagsDao::save($tag), null, $format);
         }, 'createTag');
@@ -88,8 +88,8 @@ class Tags {
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Tag", $data);
+            $data = $client->deserialize($data,"Tag");
+//            $data = $client->cast("Tag", $data);
             Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
         }, 'updateTag');
         

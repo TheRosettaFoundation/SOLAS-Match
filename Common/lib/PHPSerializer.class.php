@@ -15,7 +15,7 @@ class PHPSerializer extends Serializer
         return $ret;
     }
 
-    public function deserialize($data)
+    public function deserialize($data,$type)
     {
         $ret = unserialize(trim($data));
 

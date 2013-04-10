@@ -32,31 +32,51 @@ class ProtobufSerializer extends Serializer
         return $ret;
     }
 
-    public function deserialize($data,$type=array("Tag"))
+    public function deserialize($data,$type)
     {
-        $ret = is_array($type)?array():null;
-        try {
+        
+        $result = null;
+        if(is_array($type)){
+            $ret = new ProtoList();
+            $ret->parse($data);
+            $result = array();
             
-            $temp = new ProtoList();
-            $temp->parse($data);
-            foreach ($temp->getItemList() as $value) {
-               $obj = is_array($type)? new $type[0]: new $type;
-               $obj->parse($value);
-               $ret[]=$obj;
-            }
-        } catch (Exception $e) {
-            echo "Failed to unserialize data: $data";
-        }
-
-        if (!is_null($data) && is_null($ret)) {
-            if (strcasecmp($data, "null") == 0 || $data == "null") {
-                $ret=null;
-            } elseif($data == "<data></data>") {
-                $ret = $data;
+            foreach ($ret->getItemList() as $item){
+                $current = new $type[0];
+                $current->parse($item);
+                $result[]=$current;
             }
         }
+        else {
+            
+            $current = new $type;
+            
+            $current->parse($data);
+            $result=$current;
+         }
+//        $ret = is_array($type)?array():null;
+//        try {
+//            
+//            $temp = new ProtoList();
+//            $temp->parse($data);
+//            foreach ($temp->getItemList() as $value) {
+//               $obj = is_array($type)? new $type[0]: new $type;
+//               $obj->parse($value);
+//               $ret[]=$obj;
+//            }
+//        } catch (Exception $e) {
+//            echo "Failed to unserialize data: $data";
+//        }
+//
+//        if (!is_null($data) && is_null($ret)) {
+//            if (strcasecmp($data, "null") == 0 || $data == "null") {
+//                $ret=null;
+//            } elseif($data == "<data></data>") {
+//                $ret = $data;
+//            }
+//        }
 
-        return $ret;
+        return $result;
     }
 
     public function getContentType()

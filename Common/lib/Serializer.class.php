@@ -5,7 +5,7 @@ abstract class Serializer
     protected $format;
 
     public abstract function serialize($data);
-    public abstract function deserialize($data);
+    public abstract function deserialize($data,$type);
     public abstract function getContentType();
 
     public function getFormat()

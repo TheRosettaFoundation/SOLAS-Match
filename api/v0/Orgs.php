@@ -21,8 +21,8 @@ class Orgs {
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs(:format)/', function ($format = ".json") {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Organisation", $data);
+            $data = $client->deserialize($data,"Organisation");
+//            $data = $client->cast("Organisation", $data);
             $data->setId(null);
             Dispatcher::sendResponce(null, OrganisationDao::insertAndUpdate($data), null, $format);
         }, 'createOrg');
@@ -35,8 +35,8 @@ class Orgs {
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Organisation", $data);
+            $data = $client->deserialize($data,"Organisation");
+//            $data = $client->cast("Organisation", $data);
             Dispatcher::sendResponce(null, OrganisationDao::insertAndUpdate($data), null, $format);
         }, 'updateOrg');
         

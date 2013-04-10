@@ -28,8 +28,8 @@ class Tasks {
             
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Task", $data);
+            $data = $client->deserialize($data,"Task");
+//            $data = $client->cast("Task", $data);
             Dispatcher::sendResponce(null, TaskDao::create($data), null, $format);
         }, 'createTask');
         
@@ -43,8 +43,8 @@ class Tasks {
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Task", $data);
+            $data = $client->deserialize($data,"Task");
+//            $data = $client->cast("Task", $data);
             Dispatcher::sendResponce(null, TaskDao::save($data), null, $format);
         }, 'updateTask');
         
@@ -147,8 +147,8 @@ class Tasks {
 
                     $data = Dispatcher::getDispatcher()->request()->getBody();
                     $client = new APIHelper($format);
-                    $data = $client->deserialize($data);
-                    $feedbackData = $client->cast("FeedbackEmail", $data);
+                    $data = $client->deserialize($data,"FeedbackEmail");
+//                    $feedbackData = $client->cast("FeedbackEmail", $data);
 
                     $users = $feedbackData->getUserIdList();
                     if (count($users) > 0) {

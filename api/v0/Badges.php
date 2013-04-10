@@ -24,10 +24,10 @@ class Badges {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Badge", $data);
+            $data = $client->deserialize($data,"Badge");
             $data->setId(null);            
             Dispatcher::sendResponce(null, BadgeDao::insertAndUpdateBadge($data), null, $format);
+
         }, 'createBadge');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/badges/:id/',
@@ -40,8 +40,8 @@ class Badges {
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Badge", $data);
+            $data = $client->deserialize($data,"Badge");
+//            $data = $client->cast("Badge", $data);
             Dispatcher::sendResponce(null, BadgeDao::insertAndUpdateBadge($data), null, $format);
         }, 'updateBadge');
         

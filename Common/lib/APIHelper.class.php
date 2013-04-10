@@ -36,7 +36,7 @@ class APIHelper
         }
     }
 
-    public function call($url, $method = HTTP_Request2::METHOD_GET,
+    public function call($destination,$url, $method = HTTP_Request2::METHOD_GET,
              $data = null, $query_args = array(), $file = null)
     {
         $url = $url.$this->_serializer->getFormat()."/?";
@@ -57,7 +57,7 @@ class APIHelper
         }
         
         $response = $request->send();
-        $response_data = $this->_serializer->deserialize(trim($response->getBody()));
+        $response_data = $this->_serializer->deserialize(trim($response->getBody()),$destination);
         return $response_data;
     }
 
@@ -82,10 +82,10 @@ class APIHelper
     public function castCall($destination, $url, $method = HTTP_Request2::METHOD_GET,
                     $data = null, $query_args = array(), $file = null)
     {
-        $ret = null;
-        $result = $this->call($url, $method, $data, $query_args,$file);
-        $ret = $this->cast($destination, $result);
-        return $ret;
+//        $ret = null;
+        $result = $this->call($destination,$url, $method, $data, $query_args,$file);
+//        $ret = $this->cast($destination, $result);
+        return $result;
     }
 
     public function serialize($data)
@@ -93,9 +93,9 @@ class APIHelper
         return $this->_serializer->serialize($data);
     }
 
-    public function deserialize($data)
+    public function deserialize($data,$type)
     {
-        return $this->_serializer->deserialize($data);
+        return $this->_serializer->deserialize($data,$type);
     }
 
     public static function getFormatFromString($format)
