@@ -367,7 +367,7 @@ class TaskDao
             foreach ($dependantNodes as $dependant) {
                 $dTask = self::getTask($dependant->getTaskId());
                 $preReqs = $dependant->getPreviousList();
-                if ((count($preReqs) == 2 && $dTask->getTaskType() == TaskTypeEnum::POSTEDITING) ||
+                if ((count($preReqs) == 2 && $dTask->getTaskType() == TaskTypeEnum::DESEGMENTATION) ||
                         count($preReqs) == 1) {
                     $ret = $ret && (self::archiveTaskNode($dependant, $userId));
                 }

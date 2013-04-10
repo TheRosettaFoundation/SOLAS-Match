@@ -13,31 +13,15 @@ class ProjectDao
         $this->siteApi = Settings::get("site.api");
     }
 
-    public function getProject($params)
+    public function getProject($id)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/projects";
-        
-        $id = null;
-        if (isset($params['id'])) {
-            $id = $params['id'];
-            $request = "$request/{$params['id']}";
-        }
-
-        $response = $this->client->call($request);
+        $request = "{$this->siteApi}v0/projects/$id";
         if (!is_null($id)) {
-            $ret = $this->client->cast("Project", $response);
-            if($tags=$this->getProjectTags($params['id'])){
+            $ret = $this->client->castCall("Project", $request);
+            if($tags=$this->getProjectTags($id)){
                 foreach($tags as $tag){
                     $ret->addTag($tag);
-                }
-            }
-        } else {
-            $ret = $this->client->cast(array("Project"), $response);
-            foreach($ret as $project){
-                $tags=$this->getProjectTags($project->getId());
-                foreach($tags as $tag){
-                    $project->addTag($tag);
                 }
             }
         }
@@ -49,8 +33,7 @@ class ProjectDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$projectId/tasks";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Task"), $response);
+        $ret = $this->client->castCall(array("Task"), $request);
         return $ret;
     }
 
@@ -58,8 +41,7 @@ class ProjectDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$projectId/tags";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Tag"), $response);
+        $ret = $this->client->castCall(array("Tag"), $request);
         return $ret;
     }
 
@@ -67,8 +49,7 @@ class ProjectDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $project);
-        $ret = $this->client->cast("Project", $response);
+        $ret = $this->client->castCall("Project", $request, HTTP_Request2::METHOD_POST, $project);
         return $ret;
     }
 
@@ -76,37 +57,34 @@ class ProjectDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/{$project->getId()}";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $project);
-        $ret = $this->client->cast("Project", $response);
+        $ret = $this->client->castCall("Project", $request, HTTP_Request2::METHOD_PUT, $project);
         return $ret;
     }
 
     public function archiveProject($projectId, $userId)
     {
-        $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT);        
-        $ret = $this->client->cast("ArchivedProject", $response);
+        $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";  
+        $ret = $this->client->castCall("ArchivedProject", $request, HTTP_Request2::METHOD_PUT);
         return $ret;
     }
 
-    public function getArchivedProject($params)
+    public function getArchivedProject($id)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/archivedProjects";
-        
-        $id = null;
-        if (isset($params['id'])) {
-            $id = $params['id'];
-            $request = "$request/$id";
-        }
-
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("ArchivedProject"), $response);
+        $request = "{$this->siteApi}v0/archivedProjects/$id";
+        $ret = $this->client->castCall(array("ArchivedProject"), $request);
 
         if (!is_null($id) && is_array($ret)) {
             $ret = $ret[0];
         }
-
+        return $ret;
+    }
+    
+    public function getArchivedProjects()
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/archivedProjects";
+        $ret = $this->client->castCall(array("ArchivedProject"), $request);
         return $ret;
     }
     
@@ -115,7 +93,7 @@ class ProjectDao
         $ret = null;
         $filename = urlencode($filename);
         $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
-        $ret = $this->client->call($url, HTTP_Request2::METHOD_PUT, null, null, $data);       
+        $ret = $this->client->castCall(null, $url, HTTP_Request2::METHOD_PUT, null, null, $data);       
         return $ret;
     }
     
@@ -123,16 +101,15 @@ class ProjectDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$project_id/file";
-        $response = $this->client->call($request);
+        $response = $this->client->castCall(null, $request);
         return $response;        
     }
     
     public function getProjectFileInfo($project_id)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/projects/$project_id/info";
-        $response = $this->client->call($request);        
-        $ret = $this->client->cast("ProjectFile", $response);
+        $request = "{$this->siteApi}v0/projects/$project_id/info";     
+        $ret = $this->client->castCall("ProjectFile", $request);
         return $ret;        
     }
 }

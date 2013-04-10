@@ -87,7 +87,7 @@ class Orgs {
                     }
                 }
             }
-            $data= OrganisationDao::searchForOrg($name);
+            $data= OrganisationDao::getOrg(null, $name);
             if (!is_array($data) && !is_null($data)) {
                 $data = array($data);
             }

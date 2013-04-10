@@ -79,7 +79,7 @@ class ProjectRouteHandler
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
 
-        $project = $projectDao->getProject(array('id' => $project_id));        
+        $project = $projectDao->getProject($project_id);        
         $app->view()->setData("project", $project);
          
         if ($app->request()->isPost()) {
@@ -157,7 +157,7 @@ class ProjectRouteHandler
 
                 if(isset($post->revokeTask) && $post->revokeTask) {
                     $taskRevoke = $userDao->unclaimTask($post->revokeUserId, $post->revokeTaskId);
-                    $claimant = $userDao->getUser(array('id' => $post->revokeUserId));
+                    $claimant = $userDao->getUser($post->revokeUserId);
                     if(!$taskRevoke) {
                         $app->flashNow("taskSuccess", "<b>Success</b> - The task 
                             <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
@@ -172,7 +172,7 @@ class ProjectRouteHandler
             }
         }   
 
-        $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
+        $org = $orgDao->getOrganisation($project->getOrganisationId());
         $project_tags = $projectDao->getProjectTags($project_id);
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         if($isOrgMember) {
@@ -244,7 +244,7 @@ class ProjectRouteHandler
         $deadlineError = '';
         $projectDao = new ProjectDao();
 
-        $project = $projectDao->getProject(array('id' => $project_id));
+        $project = $projectDao->getProject($project_id);
         if (isValidPost($app)) {
             $post = (object) $app->request()->post();
             
@@ -439,7 +439,7 @@ class ProjectRouteHandler
             }
             
             for ($i=0; $i < $post->targetLanguageArraySize; $i++) {  
-                if(!isset($post->{"chunking_".$i}) && !isset($post->{"translation_".$i}) &&
+                if(!isset($post->{"segmentation_".$i}) && !isset($post->{"translation_".$i}) &&
                     !isset($post->{"proofreading_".$i})) {
                     $targetLanguage_err = "At least one <b>Task Type</b> must be set for each <b>Target Language</b>.";
                     break;
@@ -486,12 +486,12 @@ class ProjectRouteHandler
                         $taskModel->setTargetLanguageCode($post->{"targetLanguage_".$i});
                         $taskModel->setTargetCountryCode($post->{"targetCountry_".$i});
 
-                        if(isset($post->{"chunking_".$i})) { 
-                            $taskModel->setTaskType(TaskTypeEnum::CHUNKING);
+                        if(isset($post->{"segmentation_".$i})) { 
+                            $taskModel->setTaskType(TaskTypeEnum::SEGMENTATION);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            $createdChunkTask = $taskDao->createTask($taskModel);
+                            $createdSegmentationTask = $taskDao->createTask($taskModel);
                             try {
-                                $error_message = $taskDao->saveTaskFile($createdChunkTask->getId(), urlencode($_FILES[$field_name]['name']),
+                                $error_message = $taskDao->saveTaskFile($createdSegmentationTask->getId(), urlencode($_FILES[$field_name]['name']),
                                         $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
@@ -599,8 +599,8 @@ class ProjectRouteHandler
         $userDao = new UserDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $project = $projectDao->getProject(array('id' => $project_id));
-        $user = $userDao->getUser(array('id' => $user_id));        
+        $project = $projectDao->getProject($project_id);
+        $user = $userDao->getUser($user_id);        
         
         if (!is_object($user)) {
             $app->flash("error", "Login required to access page.");
@@ -622,7 +622,7 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $projectDao = new ProjectDao();
 
-        $project = $projectDao->getProject(array('id' => $project_id));
+        $project = $projectDao->getProject($project_id);
         if (!is_object($project)) {
             header("HTTP/1.0 404 Not Found");
             die;

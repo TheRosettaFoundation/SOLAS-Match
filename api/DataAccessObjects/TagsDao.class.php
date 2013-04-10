@@ -69,14 +69,31 @@ class TagsDao
     {
         ProjectDao::removeAllProjectTags($project->getId());
         $tags = $project->getTagList();
-        if (count($tags) > 0) {
+        if (count($tags) > 0) {    
             $tagIds = array();
             foreach($tags as $tagLabel) {
-                $tag = self::getTag(null, $tagLabel);  
-                $tag = $tag[0];
-                $tagIds[] = $tag->getId();
+                if($tagExists = self::getTag(null, $tagLabel)) {
+                    $tagIds[] = $tagExists[0]->getId();
+                } else {
+                    $newTag = self::create($tagLabel);
+                    $tagIds[] = $newTag->getId();
+                }
             }
+    
             ProjectDao::addProjectTags($project->getId(), $tagIds);
         }
     }
+    
+//    {
+//        ProjectDao::removeAllProjectTags($project->getId());
+//        $tags = $project->getTagList();
+//        if (count($tags) > 0) {            
+//            $tagIds = array();
+//            foreach($tags as $tagLabel) {
+//                $tag = self::create($tagLabel); 
+//                $tagIds[] = $tag->getId();
+//            }
+//            ProjectDao::addProjectTags($project->getId(), $tagIds);
+//        }
+//    }
 }

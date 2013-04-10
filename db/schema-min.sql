@@ -405,10 +405,10 @@ CREATE TABLE IF NOT EXISTS `TaskTypes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
-	(1, "Chunking"),
+	(1, "Segmentation"),
 	(2, "Translation"),
 	(3, "Proofreading"),
-	(4, "Post-editing");
+	(4, "Desegmentation");
 
 
 
