@@ -57,35 +57,13 @@ class ProtobufSerializer extends Serializer
             $current->parse($data);
             $result=$current;
          }
-//        $ret = is_array($type)?array():null;
-//        try {
-//            
-//            $temp = new ProtoList();
-//            $temp->parse($data);
-//            foreach ($temp->getItemList() as $value) {
-//               $obj = is_array($type)? new $type[0]: new $type;
-//               $obj->parse($value);
-//               $ret[]=$obj;
-//            }
-//        } catch (Exception $e) {
-//            echo "Failed to unserialize data: $data";
-//        }
-//
-//        if (!is_null($data) && is_null($ret)) {
-//            if (strcasecmp($data, "null") == 0 || $data == "null") {
-//                $ret=null;
-//            } elseif($data == "<data></data>") {
-//                $ret = $data;
-//            }
-//        }
-
         return $result;
     }
 
     public function getContentType()
     {
-        return 'text/html; charset=utf-8';
-//        return 'application/x-protobuf; charset=utf-8';
+//        return 'text/html; charset=utf-8';
+        return 'application/x-protobuf; charset=utf-8';
     }
 }
 
