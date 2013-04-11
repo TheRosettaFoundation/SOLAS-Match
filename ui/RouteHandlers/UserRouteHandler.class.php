@@ -394,14 +394,14 @@ class UserRouteHandler
                 
                 $nativeLocal->setLanguageCode($nativeLang);
                 $nativeLocal->setCountryCode($langCountry);
-                $user->setLocale($nativeLocal);
+                $user->setNativeLocale($nativeLocal);
 
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
                 $userDao->addUserBadgeById($user_id, $badge_id);               
             }
             
             if ($user->getDisplayName() != ""
-                    && $user->getLocale() != null) {
+                    && $user->getNativeLocale() != null) {
 
                 $userDao->updateUser($user);
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
