@@ -109,15 +109,15 @@ class TemplateHelper {
         $use_language_codes = Settings::get("ui.language_codes"); 
         
         if($use_language_codes == "y") {
-            return $task->getSourceLanguageCode()."-".$task->getSourceCountryCode();
+            return $task->getSourceLocale()->getLanguageCode()."-".$task->getSourceLocale()->getCountryCode();
         } else if($use_language_codes == "n") {
-            $language = TemplateHelper::languageNameFromCode($task->getSourceLanguageCode());
-            $region = TemplateHelper::countryNameFromCode($task->getSourceCountryCode());
+            $language = $task->getSourceLocale()->getLanguageName();
+            $region = $task->getSourceLocale()->getCountryName();
             return $language." - ".$region;
         } else if($use_language_codes == "h") {
-            return TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())." - "
-                .TemplateHelper::countryNameFromCode($task->getSourceCountryCode())
-                ." (".$task->getSourceLanguageCode()."-".$task->getSourceCountryCode().")";
+            return $task->getSourceLocale()->getLanguageName()." - "
+                .$task->getSourceLocale()->getCountryName()
+                ." (".$task->getSourceLocale()->getLanguageCode()."-".$task->getSourceLocale()->getCountryCode().")";
         }
     }
 
@@ -126,15 +126,15 @@ class TemplateHelper {
         $use_language_codes = Settings::get("ui.language_codes"); 
         
         if($use_language_codes == "y") {
-            return $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
+            return $task->getTargetLocale()->getLanguageCode()."-".$task->getTargetLocale()->getCountryCode();
         } else if($use_language_codes == "n") {
-            $language = TemplateHelper::languageNameFromCode($task->getTargetLanguageCode());
-            $region = TemplateHelper::countryNameFromCode($task->getTargetCountryCode());
+            $language = $task->getTargetLocale()->getLanguageName();
+            $region = $task->getTargetLocale()->getCountryName();
             return $language." - ".$region;
         } else if($use_language_codes == "h") {
-            return TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())
-                ." - ".TemplateHelper::countryNameFromCode($task->getTargetCountryCode())
-                ." (".$task->getTargetLanguageCode()."-".$task->getTargetCountryCode().")";
+            return $task->getTargetLocale()->getLanguageName()." - "
+                .$task->getTargetLocale()->getCountryName()
+                ." (".$task->getTargetLocale()->getLanguageCode()."-".$task->getTargetLocale()->getCountryCode().")";
         }
     }
     
