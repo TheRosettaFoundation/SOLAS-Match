@@ -38,7 +38,7 @@
 
 {if $this_user->getNativeLocale() != null}
     <h3>Native Language: </h3>
-    <p>{TemplateHelper::getNativeLanguage($this_user->getNativeLocale())}</p>
+    <p>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</p>
 {else}
     <h3>Native Language: </h3>
     <p>

@@ -78,15 +78,15 @@ class Notify
         if ($messagingClient->init()) {
             if ($accepted) {
                 $message_type = new OrgMembershipAccepted();
-                $message_type->user_id = $users[0]->getUserId();
-                $message_type->org_id = $orgs[0]->getId();
+                $message_type->user_id = $user->getUserId();
+                $message_type->org_id = $org->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                         $messagingClient->OrgMembershipAcceptedTopic);
             } else {
                 $message_type = new OrgMembershipRefused();
-                $message_type->user_id = $users[0]->getUserId();
-                $message_type->org_id = $orgs[0]->getId();
+                $message_type->user_id = $user->getUserId();
+                $message_type->org_id = $org->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                         $messagingClient->OrgMembershipRefusedTopic);

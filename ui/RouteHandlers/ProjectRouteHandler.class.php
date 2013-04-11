@@ -181,9 +181,10 @@ class ProjectRouteHandler
             $project_tasks = $projectDao->getProjectTasks($project_id);
             $taskLanguageMap = array();
             if($project_tasks) {
-                foreach($project_tasks as $task) {                   
-                    $taskTargetLanguage = $task->getTargetLanguageCode();
-                    $taskTargetCountry = $task->getTargetCountryCode();
+                foreach($project_tasks as $task) {      
+                    $targetLocale = $task->getTargetLocale();
+                    $taskTargetLanguage = $targetLocale->getLanguageCode();
+                    $taskTargetCountry = $targetLocale->getCountryCode();
                     $taskLanguageMap["$taskTargetLanguage,$taskTargetCountry"][] = $task;
                     $task_id = $task->getId(); 
                     $metaData = array();

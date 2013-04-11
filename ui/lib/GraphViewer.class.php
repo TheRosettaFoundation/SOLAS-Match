@@ -34,7 +34,8 @@ class GraphViewer
             while (count($currentLayer) > 0) {
                 foreach ($currentLayer as $node) {
                     $task = $taskDao->getTask($node->getTaskId());
-                    $target = $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
+                    $taskTargetLocale = $task->getTargetLocale();
+                    $target = $taskTargetLocale->getLanguageCode()."-".$taskTargetLocale->getCountryCode();
                     if (!in_array($target, $foundLanguages)) {
                         $ret .= "languageTasks[\"".$target."\"] = new Array();";
                         $ret .= "languageList.push(\"".$target."\");";
@@ -159,13 +160,14 @@ class GraphViewer
             foreach ($roots as $root) {
                 $thisY = $this->yPos + 20;
                 $task = $taskDao->getTask($root->getTaskId());
+                $taskTargetLocale = $task->getTargetLocale();
                 $this->drawGraphFromNode($root, $task, $doc, $defs);
                 $composite = $doc->createElement("use");
                 $att = $doc->createAttribute("xlink:href");
-                $att->value = "#sub-graph_".$task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
+                $att->value = "#sub-graph_".$taskTargetLocale->getLanguageCode()."-".$taskTargetLocale->getCountryCode();
                 $composite->appendChild($att);
                 $att = $doc->createAttribute("id");
-                $att->value = "graph_".$task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
+                $att->value = "graph_".$taskTargetLocale->getLanguageCode()."-".$taskTargetLocale->getCountryCode();
                 $composite->appendChild($att);
                 $att = $doc->createAttribute("x");
                 $att->value = 5;
@@ -201,18 +203,19 @@ class GraphViewer
         $currentLayer = array();
         $nextLayer = array();
         $currentLayer[] = $node;
+        $rootTaskTargetLocale = $rootTask->getTargetLocale();
 
         $xRaster = 10;
         $yRaster = 10;
 
         $subGraph = $doc->createElement("g");
         $att = $doc->createAttribute("id");
-        $att->value = "sub-graph_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
+        $att->value = "sub-graph_".$rootTaskTargetLocale->getLanguageCode()."-".$rootTaskTargetLocale->getCountryCode();
         $subGraph->appendChild($att);
 
         $languageBox = $doc->createElement("rect");
         $att = $doc->createAttribute("id");
-        $att->value = "language-box_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
+        $att->value = "language-box_".$rootTaskTargetLocale->getLanguageCode()."-".$rootTaskTargetLocale->getCountryCode();
         $languageBox->appendChild($att);
         $att = $doc->createAttribute("x");
         $att->value = 5;
@@ -284,13 +287,13 @@ class GraphViewer
         
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
-        $att->value = "#language-box_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
+        $att->value = "#language-box_".$rootTaskTargetLocale->getLanguageCode()."-".$rootTaskTargetLocale->getCountryCode();
         $component->appendChild($att);
         $subGraph->appendChild($component);
 
-        $text = $doc->createElement("text", TemplateHelper::getTaskTargetLanguage($rootTask));
+        $text = $doc->createElement("text", TemplateHelper::getLanguage($rootTaskTargetLocale));
         $att = $doc->createAttribute("id");
-        $att->value = "text_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
+        $att->value = "text_".$rootTaskTargetLocale->getLanguageCode()."-".$rootTaskTargetLocale->getCountryCode();
         $text->appendChild($att);
         $att = $doc->createAttribute("x");
         $att->value = 10;
@@ -302,7 +305,7 @@ class GraphViewer
 
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
-        $att->value = "#text_".$rootTask->getTargetLanguageCode()."-".$rootTask->getTargetCountryCode();
+        $att->value = "#text_".$rootTaskTargetLocale->getLanguageCode()."-".$rootTaskTargetLocale->getCountryCode();
         $component->appendChild($att);
         $subGraph->appendChild($component);
         $defs->appendChild($subGraph);

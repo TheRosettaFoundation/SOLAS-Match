@@ -29,10 +29,10 @@
         {/if} />           
 
         <label for='nLanguage'><strong>Native Language:</strong></label>
-        {assign var="userNativeLocale" value=$user->getNativeLocale()}
-        {if isset($userLocale)}
-            {assign var="userLanguageCode" value=$userNativeLocale->getLanguageCode()}
-            {assign var="userCountryCode" value=$userNativeLocale->getCountryCode()}
+        {assign var="usersNativeLocale" value=$user->getNativeLocale()}
+        {if isset($usersNativeLocale)}
+            {assign var="userLanguageCode" value=$usersNativeLocale->getLanguageCode()}
+            {assign var="userCountryCode" value=$usersNativeLocale->getCountryCode()}
         {/if}
         {if isset($languages)}
             <select name="nativeLanguage" id="nativeLanguage">
@@ -46,7 +46,7 @@
             </select>
 
             {if isset($countries)}
-                <select name="nLanguageCountry" id="nLanguageCountry">
+                <select name="nativeCountry" id="nativeCountry">
                     {foreach $countries as $country}
                         {if isset($userLocale) && $userCountryCode == $country->getCode()}
                         <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
@@ -57,7 +57,7 @@
                 </select>
             {/if}
         {else}
-            <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getNativeLanguage($userLocale)} />
+            <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getLanguageAndCountry($userLocale)} />            
         {/if}
 
         <label for='extraSecondaryLanguages'><strong>Secondary Language(s):</strong></label>

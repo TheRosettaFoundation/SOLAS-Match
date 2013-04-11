@@ -161,16 +161,18 @@ class TaskDao
 
     private static function update($task)
     {
+        $sourceLocale = $task->getSourceLocale();
+        $targetLocale = $task->getTargetLocale();
         $result= PDOWrapper::call("taskInsertAndUpdate", PDOWrapper::cleanseNull($task->getId())
                                                 .",".PDOWrapper::cleanseNull($task->getProjectId())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
                                                 .",".PDOWrapper::cleanseNull($task->getWordCount())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceLanguageCode())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetLanguageCode())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryCode())
-                                                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryCode())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
+                                                .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode())
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
                                                 .",".PDOWrapper::cleanseNull($task->getTaskType())
                                                 .",".PDOWrapper::cleanseNull($task->getTaskStatus())
@@ -226,16 +228,19 @@ class TaskDao
 
     private static function insert(&$task)
     {
+        $sourceLocale = $task->getSourceLocale();
+        $targetLocale = $task->getTargetLocale();
+        
         $result = PDOWrapper::call("taskInsertAndUpdate", "null"
             .",".PDOWrapper::cleanseNull($task->getProjectId())
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
             .",".PDOWrapper::cleanseNull($task->getWordCount())
-            .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceLanguageCode())
-            .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetLanguageCode())
+            .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode())
+            .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode())
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
-            .",".PDOWrapper::cleanseNullOrWrapStr($task->getSourceCountryCode())
-            .",".PDOWrapper::cleanseNullOrWrapStr($task->getTargetCountryCode())
+            .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
+            .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode())
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
             .",".PDOWrapper::cleanseNull($task->getTaskType())
             .",".PDOWrapper::cleanseNull($task->getTaskStatus())

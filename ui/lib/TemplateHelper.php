@@ -154,8 +154,44 @@ class TemplateHelper {
                 ." (".$project->getSourceLanguageCode()."-".$project->getSourceCountryCode().")";
         }
     }
+    
+    public static function getLanguage($locale) 
+    {
+        $use_language_codes = Settings::get("ui.language_codes"); 
+        
+        $languageName = $locale->getLanguageName();
+        $languageCode = $locale->getLanguageCode();
+        
+        if($use_language_codes == "y") {
+            return $languageCode;
+        } else if($use_language_codes == "n") {
+            return $languageName;
+        } else if($use_language_codes == "h") {
+            return $languageName." (".$languageCode.")";
+        }
+        
+        return $languageName;        
+    }
+    
+    public static function getCountry($locale)
+    {
+        $use_language_codes = Settings::get("ui.language_codes");
+        
+        $countryName = $locale->getCountryName();
+        $countryCode = $locale->getCountryCode();
+        
+        if($use_language_codes == "y") {
+            return $countryCode;
+        } else if($use_language_codes == "n") {
+            return $countryName;
+        } else if($use_language_codes == "h") {
+            return $countryName." (".$countryCode.")";
+        }
+        
+        return $countryName;        
+    }
 
-    public static function getNativeLanguage($locale)
+    public static function getLanguageAndCountry($locale)
     {
         $use_language_codes = Settings::get("ui.language_codes"); 
         

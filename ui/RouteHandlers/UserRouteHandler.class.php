@@ -382,15 +382,20 @@ class UserRouteHandler
             $post = $app->request()->post();
             
             if(isset($post["displayName"])) $user->setDisplayName($post["displayName"]);
-            if(isset($post["biography"])) $user->setBiography($post["biography"]);            
-            if(isset($post["nativeLanguage"])) $user->setNativeLangId($post["nativeLanguage"]);
-            if(isset($post["nativeCountry"])) $user->setNativeRegionId($post["nativeCountry"]);
-
-            if(isset($post["nativeLanguage"]) && isset($post["nativeCountry"])) {
-                $badgeId = BadgeTypes::NATIVE_LANGUAGE;
-                $userDao->addUserBadgeById($userId, $badgeId);               
-            }
+            if(isset($post["biography"])) $user->setBiography($post["biography"]);           
             
+            $nativeLang = $post["nativeLanguage"];
+            $langCountry = $post["nativeCountry"];
+            if (isset($nativeLang) && isset($langCountry)) {
+                $nativeLocal = new Locale();
+                
+                $nativeLocal->setLanguageCode($nativeLang);
+                $nativeLocal->setCountryCode($langCountry);
+                $user->setNativeLocale($nativeLocal);
+
+                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
+                $userDao->addUserBadgeById($userId, $badge_id);               
+            }            
 
             if(isset($post["displayName"]) && isset($post["nativeLanguage"]) && isset($post["nativeCountry"])) {
                 $badgeId = BadgeTypes::PROFILE_FILLER;
@@ -399,30 +404,15 @@ class UserRouteHandler
             
             for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {
                 //for each new secondary language,
-                //set it in the user object and update
-            
-            }
-            $nativeLang = $app->request()->post("nLanguage");
-            $langCountry = $app->request()->post("nLanguageCountry");
-            if ($nativeLang != null && $langCountry != null) {
-                $nativeLocal = new Locale();
-                
-                $nativeLocal->setLanguageCode($nativeLang);
-                $nativeLocal->setCountryCode($langCountry);
-                $user->setNativeLocale($nativeLocal);
-
-                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $userDao->addUserBadgeById($user_id, $badge_id);               
+                //set it in the user object and update            
             }
             
             if ($user->getDisplayName() != ""
                     && $user->getNativeLocale() != null) {
-
-                $userDao->updateUser($user);
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $userDao->addUserBadgeById($user_id, $badge_id);               
+                $userDao->addUserBadgeById($userId, $badge_id);               
                 $badge_id = BadgeTypes::PROFILE_FILLER;
-                $userDao->addUserBadgeById($user_id, $badge_id);               
+                $userDao->addUserBadgeById($userId, $badge_id);               
 
             }
             
@@ -470,12 +460,14 @@ class UserRouteHandler
         $badges = $userDao->getUserBadges($user_id);
 
         $orgList = array();
-        foreach ($badges as $badge) {
-            if ($badge->getOwnerId() != null) {
-                $org = $orgDao->getOrganisation($badge->getOwnerId());
-                $orgList[$badge->getOwnerId()] = $org;
-            }
-        }       
+        if($badges) {
+            foreach ($badges as $badge) {
+                if ($badge->getOwnerId() != null) {
+                    $org = $orgDao->getOrganisation($badge->getOwnerId());
+                    $orgList[$badge->getOwnerId()] = $org;
+                }
+            }    
+        }
        
         $org_creation = Settings::get("site.organisation_creation");
             
@@ -493,7 +485,7 @@ class UserRouteHandler
                                     "org_creation" => $org_creation
         ));
                 
-        if (UserSession::getCurrentUserID() === $user_id) {
+        if (UserSession::getCurrentUserID() == $user_id) {
             $app->view()->appendData(array("private_access" => true));
         }
                     

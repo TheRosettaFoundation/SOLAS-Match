@@ -32,7 +32,7 @@ class UserDao
 
     public static function save($user)
     {
-        $nativeLocale = $user->getLocale();              
+        $nativeLocale = $user->getNativeLocale();              
         $result = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
         PDOWrapper::cleanseNull($user->getNonce()).",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".
