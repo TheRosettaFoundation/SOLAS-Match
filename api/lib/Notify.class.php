@@ -63,9 +63,16 @@ class Notify
     }
 
     public static function notifyUserOrgMembershipRequest($user_id, $org_id, $accepted)
-    {        
-        $orgs = OrganisationDao::getOrg($org_id);
-        $users = UserDao::getUser($user_id);
+
+    {
+        $org_dao = new OrganisationDao();
+        $org = $org_dao->getOrg($org_id, null, null, null);
+        $org = $org[0];
+        
+        $user_dao = new UserDao();
+        $user = $user_dao->getUser($user_id);
+        $user = $user[0];
+
 
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {

@@ -32,14 +32,15 @@ class UserDao
 
     public static function save($user)
     {
+        $nativeLocale = $user->getLocale();              
         $result = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
         PDOWrapper::cleanseNull($user->getNonce()).",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
-        PDOWrapper::cleanseNullOrWrapStr($user->getNativeLangId()).",".
-        PDOWrapper::cleanseNullOrWrapStr($user->getNativeRegionId()).",".
-        PDOWrapper::cleanseNull($user->getUserId()));
-        if($result) {
+        PDOWrapper::cleanseNullOrWrapStr($nativeLocale->getLanguageCode()).",".
+        PDOWrapper::cleanseNullOrWrapStr($nativeLocale->getCountryCode()).",".
+        PDOWrapper::cleanse($user->getUserId()));
+        if(!is_null($result)) {
             return ModelFactory::buildModel("User", $result[0]);
         } else {
             return null;
@@ -201,6 +202,7 @@ class UserDao
         return $ret;
     }
     
+
     public static function getUser($user_id=null, $email=null, $nonce=null, $password=null, $display_name=null, $biography=null
                             , $native_language_id=null, $native_region_id=null, $created=null)
     {

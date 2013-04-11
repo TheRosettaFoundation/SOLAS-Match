@@ -465,13 +465,17 @@ class ProjectRouteHandler
                     $filename = $_FILES[$field_name]["name"];
                     $projectDao->saveProjectFile($project->getId(), $filedata, $filename, $user_id);
                     
-                    $taskModel = new Task();
+                    $taskModel = new Task(); 
                     $taskModel->setTitle($filename);
-                    $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
-                    $taskModel->setSourceCountryCode($project->getSourceCountryCode());
                     $taskModel->setProjectId($project->getId());
                     $taskModel->setDeadline($project->getDeadline());
                     $taskModel->setWordCount($project->getWordCount());
+                    
+                    $sourceLocale = new Locale();
+                    $sourceLocale->setLanguageCode($project->getSourceLanguageCode());
+                    $sourceLocale->setCountryCode($project->getSourceCountryCode());
+                    $taskModel->setSourceLocale($sourceLocale);
+                    
                     if(isset($post->publishTasks) && $post->publishTasks) {
                         $taskModel->setPublished(1);
                     } else {
@@ -482,9 +486,11 @@ class ProjectRouteHandler
                     $proofreadingTaskId = 0;
                     
                     for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
-
-                        $taskModel->setTargetLanguageCode($post->{"targetLanguage_".$i});
-                        $taskModel->setTargetCountryCode($post->{"targetCountry_".$i});
+                        
+                        $targetLocale = new Locale();
+                        $targetLocale->setLanguageCode($post->{"targetLanguage_".$i});
+                        $targetLocale->setCountryCode($post->{"targetCountry_".$i});
+                        $taskModel->setTargetLocale($targetLocale);
 
                         if(isset($post->{"segmentation_".$i})) { 
                             $taskModel->setTaskType(TaskTypeEnum::SEGMENTATION);

@@ -1,10 +1,12 @@
 <?php
 
+
 require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../../Common/models/Register.php";
 require_once __DIR__."/../../Common/models/Login.php";
 require_once __DIR__."/../../Common/models/PasswordResetRequest.php";
 require_once __DIR__."/../../Common/models/PasswordReset.php";
+require_once __DIR__."/../../Common/models/Locale.php";
 
 class UserRouteHandler
 {
@@ -389,6 +391,7 @@ class UserRouteHandler
                 $userDao->addUserBadgeById($userId, $badgeId);               
             }
             
+
             if(isset($post["displayName"]) && isset($post["nativeLanguage"]) && isset($post["nativeCountry"])) {
                 $badgeId = BadgeTypes::PROFILE_FILLER;
                 $userDao->addUserBadgeById($userId, $badgeId);               
@@ -397,6 +400,30 @@ class UserRouteHandler
             for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {
                 //for each new secondary language,
                 //set it in the user object and update
+            
+            }
+            $nativeLang = $app->request()->post("nLanguage");
+            $langCountry = $app->request()->post("nLanguageCountry");
+            if ($nativeLang != null && $langCountry != null) {
+                $nativeLocal = new Locale();
+                
+                $nativeLocal->setLanguageCode($nativeLang);
+                $nativeLocal->setCountryCode($langCountry);
+                $user->setNativeLocale($nativeLocal);
+
+                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
+                $userDao->addUserBadgeById($user_id, $badge_id);               
+            }
+            
+            if ($user->getDisplayName() != ""
+                    && $user->getNativeLocale() != null) {
+
+                $userDao->updateUser($user);
+                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
+                $userDao->addUserBadgeById($user_id, $badge_id);               
+                $badge_id = BadgeTypes::PROFILE_FILLER;
+                $userDao->addUserBadgeById($user_id, $badge_id);               
+
             }
             
             $userDao->updateUser($user);
