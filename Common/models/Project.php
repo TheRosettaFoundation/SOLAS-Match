@@ -59,7 +59,7 @@ namespace  {
       $f->number    = 1;
       $f->name      = "id";
       $f->type      = \DrSlump\Protobuf::TYPE_INT32;
-      $f->rule      = \DrSlump\Protobuf::RULE_REQUIRED;
+      $f->rule      = \DrSlump\Protobuf::RULE_OPTIONAL;
       $descriptor->addField($f);
 
       // OPTIONAL STRING title = 2

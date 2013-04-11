@@ -105,7 +105,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
-        $ret = $this->client->castCall(array("Organisation"), $request, HTTP_Request2::METHOD_PUT, $org);
+        $ret = $this->client->castCall("Organisation", $request, HTTP_Request2::METHOD_PUT, $org);
         return $ret;
     }
 

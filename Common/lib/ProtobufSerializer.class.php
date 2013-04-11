@@ -27,7 +27,7 @@ class ProtobufSerializer extends Serializer
             }
             $ret=$ret->serialize();
         } else {
-            $ret = null;
+            $ret =(is_null($data)||$data="null")?null:$data;
         }
         return $ret;
     }
@@ -37,6 +37,7 @@ class ProtobufSerializer extends Serializer
         if($data==null ||$data=="null") {
             return null;
         }
+        if(is_null($type)) return $data;
         $result = null;
         if(is_array($type)){
             $ret = new ProtoList();

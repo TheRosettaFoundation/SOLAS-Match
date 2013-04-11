@@ -62,7 +62,7 @@ namespace  {
       $f->number    = 1;
       $f->name      = "id";
       $f->type      = \DrSlump\Protobuf::TYPE_INT32;
-      $f->rule      = \DrSlump\Protobuf::RULE_REQUIRED;
+      $f->rule      = \DrSlump\Protobuf::RULE_OPTIONAL;
       $descriptor->addField($f);
 
       // OPTIONAL INT32 projectId = 2
@@ -94,7 +94,7 @@ namespace  {
       $f->number    = 5;
       $f->name      = "deadline";
       $f->type      = \DrSlump\Protobuf::TYPE_STRING;
-      $f->rule      = \DrSlump\Protobuf::RULE_REQUIRED;
+      $f->rule      = \DrSlump\Protobuf::RULE_OPTIONAL;
       $descriptor->addField($f);
 
       // OPTIONAL INT32 wordCount = 6
