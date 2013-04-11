@@ -2257,6 +2257,18 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.removeTaskStreamNotification
+DROP PROCEDURE IF EXISTS `removeTaskStreamNotification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskStreamNotification`(IN `userId` INT)
+    MODIFIES SQL DATA
+BEGIN
+    DELETE FROM UserTaskStreamNotifications
+        WHERE user_id = userId;
+    SELECT 1 as 'result';
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Test.removeUserBadge
 DROP PROCEDURE IF EXISTS `removeUserBadge`;
 DELIMITER //
@@ -3174,6 +3186,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `userTaskStreamNotificationInsertAnd
 BEGIN
     REPLACE INTO `UserTaskStreamNotifications` (`user_id`, `interval`)
     VALUES (uID, nInterval);
+    select 1 as 'result';
 END//
 DELIMITER ;
 

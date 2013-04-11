@@ -270,6 +270,26 @@ class UserDao {
         return $ret;
     }
 
+    public function removeTaskStreamNotification($userId)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call('removeTaskStreamNotification', PDOWrapper::cleanse($userId))) {
+            $ret = true;
+        }
+        return $ret;
+    }
+
+    public function requestTaskStreamNotification($userId, $interval)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanse($userId).', ';
+        $args .= PDOWrapper::cleanse($interval);
+        if ($result = PDOWrapper::call("userTaskStreamNotificationInsertAndUpdate", $args)) {
+            $ret = true;
+        }
+        return $ret;
+    }
+
     public function getUserTags($user_id, $limit=null)
     {
         $ret = null;

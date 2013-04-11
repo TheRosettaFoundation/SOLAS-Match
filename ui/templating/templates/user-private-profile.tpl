@@ -7,7 +7,7 @@
         {if $user->getDisplayName() != ''}
             {$user->getDisplayName()}
         {else}
-            Public Profile
+            Private Profile
         {/if}
         <small>Update your personal details here</small>
         </h1>

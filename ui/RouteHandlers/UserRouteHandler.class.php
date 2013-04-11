@@ -34,6 +34,9 @@ class UserRouteHandler
 
         $app->get("/profile", array($middleware, "authUserIsLoggedIn"), 
         array($this, "userPrivateProfile"))->via("POST")->name("user-private-profile");
+
+        $app->get("/:user_id/notification/stream", array($middleware, "authUserIsLoggedIn"),
+        array($this, "editTaskStreamNotification"))->via("POST")->name("stream-notification-edit");
     }
 
     public function home()
@@ -527,7 +530,7 @@ class UserRouteHandler
                 }
             }
             $app->view()->appendData(array(
-                        "interval" => $interval,
+                        "interval"       => $interval,
                         "lastSent"       => $lastSent,
                         "private_access" => true
             ));
@@ -535,7 +538,69 @@ class UserRouteHandler
                     
         $app->render("user-public-profile.tpl");
     }
-    
+
+    public function editTaskStreamNotification($userId)
+    {
+        $app = Slim::getInstance();
+        $userDao = new UserDao();
+
+        $user = $userDao->getUser(array('id' => $userId));
+
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+
+            if (isset($post->interval)) {
+                $success = false;
+                if ($post->interval == 0) {
+                    $success = $userDao->removeTaskStreamNotification($userId);
+                } else {
+                    $success = $userDao->requestTaskStreamNotification($userId, $post->interval);
+                }
+
+                if ($success) {
+                    $app->flash("success", "Successfully updated user task stream notification subscription");
+                    $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
+                } else {
+                    $app->flashNow("error", "Unable to update task stream notification subscription. Please ".
+                            "try again later.");
+                }
+            }
+        }
+        
+        $notifData = $userDao->getUserTaskStreamNotification($userId);
+        $interval = null;
+        $lastSent = null;
+        if ($notifData) {
+            $interval = $notifData['interval'];
+            switch ($interval) {
+                case NotificationIntervalEnum::DAILY:
+                    $interval = "daily";
+                    break;
+                case NotificationIntervalEnum::WEEKLY:
+                    $interval = "weekly";
+                    break;
+                case NotificationIntervalEnum::MONTHLY:
+                    $interval = "monthly";
+                    break;
+            }
+            
+            if ($notifData['last-sent'] != null) {
+                $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData['last-sent']));
+            }
+
+            $app->view()->appendData(array(
+                        "interval"  => $interval,
+                        "intervalId"=> $notifData['interval'],
+                        "lastSent"  => $lastSent
+            ));
+        }
+
+        $app->view()->appendData(array(
+                    "user" => $user
+        ));
+
+        $app->render("user.task-stream-notification-edit.tpl");
+    }
 
     public static function isLoggedIn()
     {

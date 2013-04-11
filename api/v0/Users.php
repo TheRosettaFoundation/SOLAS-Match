@@ -167,6 +167,22 @@ class Users {
                     $data = $userDao->getUserTaskStreamNotification($id);
                     Dispatcher::sendResponce(null, $data, null, $format);
                 }, 'getUserTaskStreamNotification');
+
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/taskStreamNotification(:format)/',
+                function ($id, $format = ".json")
+                {
+                    $userDao = new UserDao();
+                    $ret = $userDao->removeTaskStreamNotification($id);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'removeUserTaskStreamNotification');
+
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/interval/:interval/taskStreamNotification(:format)/',
+                function ($id, $interval, $format = ".json")
+                {
+                    $userDao = new UserDao();
+                    $ret = $userDao->requestTaskStreamNotification($id, $interval);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'updateTaskStreamNotification');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tasks(:format)/',
                                                         function ($id, $format = ".json") {
