@@ -246,9 +246,11 @@ class TaskRouteHandler
         } else {
             $app->view()->setData("convert", "false");
         }
-
-        $sourceLanguage = $languageDao->getLanguageByCode($task->getSourceLanguageCode());
-        $targetLanguage = $languageDao->getLanguageByCode($task->getTargetLanguageCode());
+        
+        $sourcelocale = $task->getSourceLocale();
+        $targetLocale = $task->getTargetLocale();  
+        $sourceLanguage = $languageDao->getLanguageByCode($sourcelocale->getLanguageCode());
+        $targetLanguage = $languageDao->getLanguageByCode($targetLocale->getLanguageCode());
         $taskMetaData = $taskDao->getTaskInfo($taskId);
         
         $app->view()->appendData(array(
@@ -1296,8 +1298,11 @@ class TaskRouteHandler
         $taskModel->setTitle($_FILES["segmentationUpload_".$i]["name"]);
         $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
         $taskModel->setSourceCountryCode($project->getSourceCountryCode());
-        $taskModel->setTargetLanguageCode($task->getTargetLanguageCode());
-        $taskModel->setTargetCountryCode($task->getTargetCountryCode());
+        
+        $targetLocale = $task->getTargetLocale();
+        $taskModel->setTargetLanguageCode($targetLocale->getLanguageCode());
+        $taskModel->setTargetCountryCode($targetLocale->getCountryCode());
+        
         $taskModel->setProjectId($project->getId());
         $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
     }

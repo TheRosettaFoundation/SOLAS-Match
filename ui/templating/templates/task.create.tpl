@@ -56,7 +56,7 @@
                                 <h2>Target Language: <span style="color: red">*</span></h2><br>
                                 <select name="targetLanguage" id="targetLanguage">
                                     {foreach $languages as $language}
-                                        {if $task->getTargetLanguageCode() == $language->getCode()}
+                                        {if TemplateHelper::getLanguage($task->getTargetLocale()) == $language->getCode()}
                                             <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
                                         {else}
                                             <option value="{$language->getCode()}">{$language->getName()}</option>

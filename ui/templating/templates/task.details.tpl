@@ -18,12 +18,12 @@
                     </a>
                 {/if}
             </td>
-    
+            
             <td>
-                {TemplateHelper::getTaskSourceLanguage($task)}
+                {TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}
             </td>
             <td>
-                {TemplateHelper::getTaskTargetLanguage($task)}
+                {TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}
             </td>
             <td>
                 {date(Settings::get("ui.date_format"), strtotime($task->getCreatedTime()))}

@@ -26,10 +26,10 @@
     {/if}
 
     <p>
-        From: <strong>{TemplateHelper::getTaskSourceLanguage($task)}</strong>
+        From: <strong>{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}</strong>
     </p>   
     <p>
-        To: <strong>{TemplateHelper::getTaskTargetLanguage($task)}</strong>
+        To: <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
     </p>
 
         {assign var="taskTags" value=$task['Project']->getTagList()}
