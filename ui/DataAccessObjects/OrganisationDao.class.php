@@ -29,6 +29,14 @@ class OrganisationDao
         return $ret;       
     }
     
+    public function searchForOrgByName($name)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/orgs/searchByName/$name";
+        $ret = $this->client->castCall(array("Organisation"), $request);
+        return $ret;       
+    }
+    
     public function getOrganisations()
     {
         $ret = null;

@@ -361,54 +361,57 @@ class UserRouteHandler
     public static function userPrivateProfile()
     {
         $app = Slim::getInstance();
+        
         $userDao = new UserDao();
-        $user_id = UserSession::getCurrentUserID();
-        $user = $userDao->getUser($user_id);
+        $userId = UserSession::getCurrentUserID();
+        $user = $userDao->getUser($userId);
+        
+        if (!is_object($user)) {
+            $app->flash("error", "Login required to access page");
+            $app->redirect($app->urlFor("login"));
+        }
 
         $languageDao = new LanguageDao();
         $countryDao = new CountryDao();
         $languages = $languageDao->getLanguages();
         $countries = $countryDao->getCountries();
         
-        if (!is_object($user)) {
-            $app->flash("error", "Login required to access page");
-            $app->redirect($app->urlFor("login"));
-        }
-        
         if ($app->request()->isPost()) {
-            $displayName = $app->request()->post("name");
-            if ($displayName != null) {
-                $user->setDisplayName($displayName);
-            }
+            $post = $app->request()->post();
             
-            $userBio = $app->request()->post("bio");
-            if ($userBio != null && $userBio != '') {
-                $user->setBiography($userBio);
-            }
-            
-            $nativeLang = $app->request()->post("nLanguage");
-            $langCountry= $app->request()->post("nLanguageCountry");
-            if ($nativeLang != null && $langCountry != null) {
-                $user->setNativeLangId($nativeLang);
-                $user->setNativeRegionId($langCountry);
+            if(isset($post["displayName"])) $user->setDisplayName($post["displayName"]);
+            if(isset($post["biography"])) $user->setBiography($post["biography"]);            
+            if(isset($post["nativeLanguage"])) $user->setNativeLangId($post["nativeLanguage"]);
+            if(isset($post["nativeCountry"])) $user->setNativeRegionId($post["nativeCountry"]);
 
-                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $userDao->addUserBadgeById($user_id, $badge_id);               
+            if(isset($post["nativeLanguage"]) && isset($post["nativeCountry"])) {
+                $badgeId = BadgeTypes::NATIVE_LANGUAGE;
+                $userDao->addUserBadgeById($userId, $badgeId);               
             }
             
-            if ($user->getDisplayName() != ""
-                    && $user->getNativeLangId() != "" && $user->getNativeRegionId() != "") {
-                $userDao->updateUser($user);
-                $badge_id = BadgeTypes::PROFILE_FILLER;
-                $userDao->addUserBadgeById($user_id, $badge_id);               
+            if(isset($post["displayName"]) && isset($post["nativeLanguage"]) && isset($post["nativeCountry"])) {
+                $badgeId = BadgeTypes::PROFILE_FILLER;
+                $userDao->addUserBadgeById($userId, $badgeId);               
             }
+            
+            for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {
+                //for each new secondary language,
+                //set it in the user object and update
+            }
+            
+            $userDao->updateUser($user);
             
             $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getUserId())));
         }
         
-        $app->view()->setData("languages", $languages);
-        $app->view()->setData("countries", $countries);
+        $extraScripts = file_get_contents(__DIR__."/../js/user-private-profile.js");
         
+        $app->view()->appendData(array(
+            "private_access"    => true,
+            "languages"         => $languages,
+            "countries"         => $countries,
+            "extra_scripts"      => $extraScripts
+        ));       
        
         $app->render("user-private-profile.tpl");
     }

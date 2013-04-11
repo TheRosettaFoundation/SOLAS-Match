@@ -529,7 +529,7 @@ class OrgRouteHandler
             $post = (object) $app->request()->post();
             
             if (isset($post->search_name) && $post->search_name != '') {                
-                $found_orgs = $orgDao->getOrganisationByName($post->search_name);
+                $found_orgs = $orgDao->searchForOrgByName($post->search_name);
                 if (count($found_orgs) < 1) {
                     $app->flashNow("error", "No Organisations found.");
                 } else {
