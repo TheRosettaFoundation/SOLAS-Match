@@ -15,9 +15,7 @@
             <p>This this what you need to do (as soon as possible):</p>
             <ol>
                 <li><strong>Open the file</strong> that you have already saved to your computer.</li>
-                {if $task->getTargetLanguageCode()}
-                        <li><strong>Segment the file</strong> to <strong>appropriately sized individual segments (e.g 4000 words each or less)</strong>.</li>
-                {/if}
+                <li><strong>Segment the file</strong> to <strong>appropriately sized individual segments (e.g 4000 words each or less)</strong>.</li>
                 <li><strong>Upload your finished segmented files</strong> to the task segmentation page.</li>
             </ol>
 

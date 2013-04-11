@@ -14,9 +14,7 @@
         <p>This this what you need to do (as soon as possible):</p>
         <ol>
                 <li><strong>Open the file</strong> that you have already saved to your computer.</li>
-                {if $task->getTargetLanguageCode()}
-                        <li><strong>Proofread the file</strong> in <strong>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</strong> to ensure spelling and grammatical correctness.</li>
-                {/if}
+                <li><strong>Proofread the file</strong> in <strong>{TemplateHelper::getLanguage($task->getTargetLocale())}</strong> to ensure spelling and grammatical correctness.</li>
                 <li><strong>Upload the proofread file</strong> to the task upload page.</li>
         </ol>
         {if isset($user)}
