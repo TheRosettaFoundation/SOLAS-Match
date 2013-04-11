@@ -155,23 +155,25 @@ class TemplateHelper {
         }
     }
 
-    public static function getNativeLanguage($user)
+    public static function getNativeLanguage($locale)
     {
         $use_language_codes = Settings::get("ui.language_codes"); 
         
-        $language = TemplateHelper::languageNameFromId($user->getNativeLangId());
-        $region = TemplateHelper::countryNameFromId($user->getNativeRegionId());
-        
+        $languageName = $locale->getLanguageName();
+        $languageCode = $locale->getLanguageCode();
+        $countryName = $locale->getCountryName();
+        $countryCode = $locale->getCountryCode();
+
         if($use_language_codes == "y") {
-            return $user->getNativeLangId()."-".$user->getNativeRegionId();
+            return $languageCode."-".$countryCode;
         } else if($use_language_codes == "n") {
-            return TemplateHelper::languageNameFromCode($user->getNativeLangId())." - ".TemplateHelper::countryNameFromCode($user->getNativeRegionId());
+            return $languageName."-".$countryName;
         } else if($use_language_codes == "h") {
-            return TemplateHelper::languageNameFromCode($user->getNativeLangId())." - ".TemplateHelper::countryNameFromCode($user->getNativeRegionId())
-                    ." (".$user->getNativeLangId()."-".$user->getNativeRegionId().")";
+            return $languageName." - ".$countryName
+                    ." (".$languageCode."-".$countryCode.")";
         }
         
-        return $language." - ".$region;
+        return $languageName." - ".$countryName;
     }
     
     public static function getLanguageAndCountryFromCode($codes)

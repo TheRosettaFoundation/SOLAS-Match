@@ -71,12 +71,13 @@ class UserDao {
 
     private function update($user)
     {
+        $nativeLocale = $user->getLocale();              
         $result = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
         PDOWrapper::cleanseNull($user->getNonce()).",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
-        PDOWrapper::cleanseNullOrWrapStr($user->getNativeLangId()).",".
-        PDOWrapper::cleanseNullOrWrapStr($user->getNativeRegionId()).",".
+        PDOWrapper::cleanseNullOrWrapStr($nativeLocale->getLanguageCode()).",".
+        PDOWrapper::cleanseNullOrWrapStr($nativeLocale->getCountryCode()).",".
         PDOWrapper::cleanse($user->getUserId()));
         if(!is_null($result)) {
             return ModelFactory::buildModel("User", $result[0]);
@@ -275,8 +276,8 @@ class UserDao {
         return $ret;
     }
     
-    public function getUser($user_id, $email, $nonce, $password, $display_name, $biography
-                            , $native_language_id, $native_region_id, $created)
+    public function getUser($user_id, $email=null, $nonce=null, $password=null, $display_name=null, $biography=null
+                            , $native_language_id=null, $native_region_id=null, $created=null)
     {
         $ret = null;
         if ($result = PDOWrapper::call("getUser", PDOWrapper::cleanseNull($user_id)

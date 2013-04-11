@@ -36,9 +36,9 @@
     <h3>Public Display Name:</h3>
     <p>{$this_user->getDisplayName()}</p>
 
-{if $this_user->getNativeRegionId() != null && $this_user->getNativeLangId()!= null}
+{if $this_user->getNativeLocale() != null}
     <h3>Native Language: </h3>
-    <p>{TemplateHelper::getNativeLanguage($this_user)}</p>
+    <p>{TemplateHelper::getNativeLanguage($this_user->getNativeLocale())}</p>
 {else}
     <h3>Native Language: </h3>
     <p>

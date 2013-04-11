@@ -823,9 +823,9 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.deleteOrg
 DROP PROCEDURE IF EXISTS `deleteOrg`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`(IN `id` INT)
 BEGIN
-if EXISTS (select 1 from Organisations where Organisations.id=id) then
+if EXISTS (select 1 from Organisations o where o.id=id) then
 	delete from Organisations where Organisations.id=id;
 	select 1 as result;
 else
@@ -838,9 +838,9 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.deleteTag
 DROP PROCEDURE IF EXISTS `deleteTag`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`(IN `id` INT)
 BEGIN
-if EXISTS (select 1 from Tags where Tags.id=id) then
+if EXISTS (select 1 from Tags t where t.id=id) then
 	delete from Tags where Tags.id=id;
 	select 1 as result;
 else
@@ -885,9 +885,19 @@ DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
 BEGIN
-	SELECT o.*
-	FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
-	WHERE om.user_id = id;
+	IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
+		call getOrg(null,null,null,null);
+	ELSE		
+		SELECT o.*
+		FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
+		WHERE om.user_id = id
+		UNION
+		SELECT o.*
+		FROM Organisations o
+		JOIN Admins a ON
+		a.organisation_id=o.id
+		WHERE a.user_id=id;
+	END IF;
 END//
 DELIMITER ;
 
@@ -1461,7 +1471,7 @@ BEGIN
 	if dLine='' then set dLine=null;end if;
 	
 	
-	set @q= "select id,project_id,title,`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t where 1";-- set update
+	set @q= "select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1780,7 +1790,7 @@ BEGIN
 	if lang_id='' then set lang_id=null;end if;
 	if region_id='' then set region_id=null;end if;
 	
-	set @q= "select id,`display-name`,email,password,biography,(select code from Languages where id =u.`language_id`) as `language_id` ,(select code from Countries where id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where 1 ";-- set update
+	set @q= "select id,`display-name`,email,password,biography, (select `en-name` from Languages where id =u.`language_id`) as `languageName`, (select code from Languages where id =u.`language_id`) as `languageCode`, (select `en-name` from Countries where id =u.`country_id`) as `countryName`, (select code from Countries where id =u.`country_id`) as `countryCode`, nonce,`created-time` from Users u where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and u.id=",id) ;
@@ -3260,6 +3270,45 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.userSecondaryLanguageInsert
+DROP PROCEDURE IF EXISTS `userSecondaryLanguageInsert`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userSecondaryLanguageInsert`(IN `userId` INT, IN `languageId` INT, IN `countryId` INT)
+BEGIN
+	INSERT INTO UserSecondaryLanguages
+	VALUES(userId, languageId, countryId);
+        SELECT 1 AS `result`;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.userSecondaryLanguageInsert
+DROP PROCEDURE IF EXISTS `getUserSecondaryLanguages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserSecondaryLanguages`(IN `userId` INT)
+BEGIN
+	SELECT (select `en-name` from Languages where id =u.`language_id`) as `languageName`,
+			 (select code from Languages where id =u.`language_id`) as `languageCode`,
+			 (select `en-name` from Countries where id =u.`country_id`) as `countryName`,
+			 (select code from Countries where id =u.`country_id`) as `countryCode`	
+			  FROM UserSecondaryLanguages u WHERE u.user_id = userId;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.deleteUserSecondaryLanguage
+DROP PROCEDURE IF EXISTS `deleteUserSecondaryLanguage`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUserSecondaryLanguage`(IN `id` INT)
+BEGIN
+	IF EXISTS (SELECT 1 FROM UserSecondaryLanguages u WHERE u.id=id) THEN
+		DELETE FROM UserSecondaryLanguages WHERE UserSecondaryLanguages.id=id;
+		SELECT 1 AS result;
+	ELSE
+		SELECT 0 AS result;
+	END IF;
+END//
+DELIMITER ;
 
 
 

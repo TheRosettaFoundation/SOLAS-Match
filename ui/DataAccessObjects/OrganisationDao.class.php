@@ -25,7 +25,8 @@ class OrganisationDao
             $request = "$request/$id";
         } elseif (isset($params['name'])) {
             $name = $params['name'];
-            $request = "$request/getByName/$name";
+            $encodedname = urlencode($name);
+            $request = "$request/getByName/$encodedname";
         }
        
         $response = $this->client->call($request);

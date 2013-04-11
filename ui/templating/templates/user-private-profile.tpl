@@ -14,7 +14,7 @@
     </div>
 {/if}
 
-{if isset($warning) && $warning == true }
+{if isset($warning) && $warning == true}
     <p>Invalid input, please fill in all options below.</p>
 {/if}
  
@@ -27,29 +27,34 @@
             placeholder='Name'
         {/if} />
         <label for='nLanguage'><strong>Native Language:</strong></label>
+        {assign var="userNativeLocale" value=$user->getNativeLocale()}
+        {if isset($userLocale)}
+            {assign var="userLanguageCode" value=$userNativeLocale->getLanguageCode()}
+            {assign var="userCountryCode" value=$userNativeLocale->getCountryCode()}
+        {/if}
         {if isset($languages)}
             <select name="nLanguage" id="nLanguage">
                 {foreach $languages as $language}
-                    {if $user->getNativeLangId() == $language->getCode()}
+                    {if isset($userLocale) && $userLanguageCode == $language->getCode()}
                         <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
                     {else}
                         <option value="{$language->getCode()}">{$language->getName()}</option>
                     {/if}
                 {/foreach}
             </select>
-        {if isset($countries)}
-            <select name="nLanguageCountry" id="nLanguageCountry">
-                {foreach $countries as $country}
-                    {if $user->getNativeRegionId() == $country->getCode()}
-                    <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
-                    {else}
-                        <option value="{$country->getCode()}">{$country->getName()}</option>
-                    {/if}
-                {/foreach}
-            </select>
-        {/if}
+            {if isset($countries)}
+                <select name="nLanguageCountry" id="nLanguageCountry">
+                    {foreach $countries as $country}
+                        {if isset($userLocale) && $userCountryCode == $country->getCode()}
+                        <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
+                        {else}
+                            <option value="{$country->getCode()}">{$country->getName()}</option>
+                        {/if}
+                    {/foreach}
+                </select>
+            {/if}
         {else}
-            <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getNativeLanguage($user)} />
+            <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getNativeLanguage($userLocale)} />
         {/if}
         <label for='bio'><strong>Biography:</strong></label>
         <textarea name='bio' cols='40' rows='5' {if $user->getBiography() == ''} placeholder="Enter Bio Here" {/if}

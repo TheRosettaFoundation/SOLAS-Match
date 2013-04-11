@@ -5,6 +5,7 @@ require_once "Common/models/Register.php";
 require_once "Common/models/Login.php";
 require_once "Common/models/PasswordResetRequest.php";
 require_once "Common/models/PasswordReset.php";
+require_once "Common/models/Locale.php";
 
 class UserRouteHandler
 {
@@ -387,17 +388,20 @@ class UserRouteHandler
             }
             
             $nativeLang = $app->request()->post("nLanguage");
-            $langCountry= $app->request()->post("nLanguageCountry");
+            $langCountry = $app->request()->post("nLanguageCountry");
             if ($nativeLang != null && $langCountry != null) {
-                $user->setNativeLangId($nativeLang);
-                $user->setNativeRegionId($langCountry);
+                $nativeLocal = new Locale();
+                
+                $nativeLocal->setLanguageCode($nativeLang);
+                $nativeLocal->setCountryCode($langCountry);
+                $user->setLocale($nativeLocal);
 
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
                 $userDao->addUserBadgeById($user_id, $badge_id);               
             }
             
             if ($user->getDisplayName() != ""
-                    && $user->getNativeLangId() != "" && $user->getNativeRegionId() != "") {
+                    && $user->getLocale() != null) {
 
                 $userDao->updateUser($user);
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
