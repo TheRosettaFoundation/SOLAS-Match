@@ -1806,7 +1806,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserIdsPendingTaskStreamNotification`()
 BEGIN
 	SELECT u.user_id FROM UserTaskStreamNotifications u
-	WHERE (u.interval = 1 
+	WHERE `last-sent` is NULL
+    OR (u.interval = 1 
             AND `last-sent` < NOW() - INTERVAL 1 DAY)
     OR (u.interval = 2
             AND `last-sent` < NOW() - INTERVAL 1 WEEK)
@@ -2946,6 +2947,26 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskIsClaimed`(IN `tID` INT)
 BEGIN
 Select exists (SELECT 1	FROM TaskClaims WHERE task_id = tID) as result;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.taskStreamNotificationSent
+DROP PROCEDURE IF EXISTS `taskStreamNotificationSent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskStreamNotificationSent`(IN `uID` INT, IN `sentDate` DATETIME)
+BEGIN
+    IF EXISTS (SELECT user_id
+                FROM UserTaskStreamNotifications
+                WHERE user_id = uID) 
+    then
+        UPDATE UserTaskStreamNotifications
+            SET `last-sent` = sentDate
+            WHERE user_id = uID;
+        SELECT 1 as 'result';
+    else
+        SELECT 0 as 'result';
+    end if;
 END//
 DELIMITER ;
 
