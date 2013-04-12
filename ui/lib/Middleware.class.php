@@ -4,7 +4,7 @@ require_once 'Common/lib/APIHelper.class.php';
 
 class Middleware
 {
-    public static function authUserIsLoggedIn()
+    public function authUserIsLoggedIn()
     {
         $app = Slim::getInstance();
         
@@ -15,7 +15,7 @@ class Middleware
         return true;
     }
 
-    public static function isSiteAdmin()
+    public function isSiteAdmin()
     {
         $app = Slim::getInstance();
 
@@ -24,8 +24,12 @@ class Middleware
         return $ret;
     }
 
-    public static function authenticateUserForTask($request, $response, $route) 
+    public function authenticateUserForTask($request, $response, $route) 
     {
+        if ($this->isSiteAdmin()) {
+            return true;
+        }
+
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
         $params = $route->getParams(); 
@@ -50,8 +54,12 @@ class Middleware
         }
     }
 
-    public static function authUserForOrg($request, $response, $route) 
+    public function authUserForOrg($request, $response, $route) 
     {
+        if ($this->isSiteAdmin()) {
+            return true;
+        }
+
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
 
@@ -89,8 +97,12 @@ class Middleware
      *  Middleware for ensuring the current user belongs to the Org that uploaded the associated Task
      *  Used for altering task details
      */
-    public static function authUserForOrgTask($request, $response, $route) 
+    public function authUserForOrgTask($request, $response, $route) 
     {
+        if ($this->isSiteAdmin()) {
+            return true;
+        }
+
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $userDao = new UserDao();
@@ -129,8 +141,12 @@ class Middleware
         $app->redirect($app->urlFor('home'));
     } 
     
-    public static function authUserForOrgProject($request, $response, $route) 
+    public function authUserForOrgProject($request, $response, $route) 
     {                        
+        if ($this->isSiteAdmin()) {
+            return true;
+        }
+
         $params = $route->getParams();
         $userDao = new UserDao();
         $projectDao = new ProjectDao();
@@ -154,8 +170,12 @@ class Middleware
         $app->redirect($app->urlFor('home'));
     }    
 
-    public static function authUserForTaskDownload($request, $response, $route)
+    public function authUserForTaskDownload($request, $response, $route)
     {
+        if ($this->isSiteAdmin()) {
+            return true;
+        }
+
         $params = $route->getParams();
         $taskDao = new TaskDao();
         $userDao = new UserDao();
