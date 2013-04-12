@@ -15,6 +15,15 @@ class Middleware
         return true;
     }
 
+    public static function isSiteAdmin()
+    {
+        $app = Slim::getInstance();
+
+        $userDao = new UserDao();
+        $ret = $userDao->isAdmin(UserSession::getCurrentUserID());
+        return $ret;
+    }
+
     public static function authenticateUserForTask($request, $response, $route) 
     {
         $app = Slim::getInstance();

@@ -82,6 +82,15 @@ class Users {
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserByEmail');
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:user_id/org/:org_id/admin(:format)/',
+                function ($userId, $orgId, $format = '.json')
+                {
+                    $ret = false;
+                    $userDao = new UserDao();
+                    $ret = $userDao->isAdmin($userId, $orgId);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'isAdmin');
        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/subscribedToTask/:id/:taskID/',
                                                         function ($id, $taskID, $format = ".json") {

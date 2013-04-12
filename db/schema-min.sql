@@ -12,6 +12,18 @@ SET FOREIGN_KEY_CHECKS=0;
 
 /*--------------------------------------------------start of tables--------------------------------*/
 
+-- Dumping structure for table Solas-Match-Test.Admins
+CREATE TABLE IF NOT EXISTS `Admins` (
+    `user_id` INT(10) UNSIGNED NOT NULL,
+    `organisation_id` INT(10) UNSIGNED NULL,
+    UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
+    INDEX `FK_Admins_Organisations` (`organisation_id`),
+    CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
 -- Dumping structure for table Solas-Match-Test.ArchivedProjects
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
@@ -1964,6 +1976,20 @@ SELECT exists	(	select 1
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Test.isAdmin
+DROP PROCEDURE IF EXISTS `isAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isAdmin`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+    SELECT exists (SELECT 1
+                    FROM Admins
+                    WHERE user_id = userID
+                    AND (organisation_id = orgId
+                        OR organisation_id is NULL)
+                  ) as result;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.logFileDownload
 DROP PROCEDURE IF EXISTS `logFileDownload`;

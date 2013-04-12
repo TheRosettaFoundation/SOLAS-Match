@@ -140,8 +140,7 @@ $app->hook('slim.before', function () use ($app)
         $org_array = $userDao->getUserOrgs(UserSession::getCurrentUserID());
         if ($org_array && count($org_array) > 0) {
             $app->view()->appendData(array(
-                'user_is_organisation_member' => true,
-                'user_organisations' => $org_array
+                'user_is_organisation_member' => true
             ));
         }
 
@@ -149,6 +148,13 @@ $app->hook('slim.before', function () use ($app)
         if($tasks && count($tasks) > 0) {
             $app->view()->appendData(array(
                         "user_has_active_tasks" => true
+            ));
+        }
+
+        $isAdmin = $userDao->isAdmin(UserSession::getCurrentUserID());
+        if ($isAdmin) {
+            $app->view()->appendData(array(
+                        'site_admin' => true
             ));
         }
     }

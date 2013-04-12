@@ -38,6 +38,14 @@ class UserDao
         return $ret;
     }
 
+    public function isAdmin($userId, $orgId = "null")
+    {
+        $ret = false;
+        $request = "{$this->siteApi}v0/users/$userId/org/$orgId/admin";
+        $ret = $this->client->call($request);
+        return $ret;
+    }
+
     public function isSubscribedToTask($userId, $taskId)
     {
         $ret = null;

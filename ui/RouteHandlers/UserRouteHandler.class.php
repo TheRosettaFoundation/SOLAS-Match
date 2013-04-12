@@ -37,6 +37,9 @@ class UserRouteHandler
 
         $app->get("/:user_id/notification/stream", array($middleware, "authUserIsLoggedIn"),
         array($this, "editTaskStreamNotification"))->via("POST")->name("stream-notification-edit");
+
+        $app->get("/user/:user_id/admin", array($middleware, "authUserIsLoggedIn"),
+        array($middleware, "isSiteAdmin"), array($this, "adminDashboard"))->name("site-admin-dashboard");
     }
 
     public function home()
@@ -600,6 +603,17 @@ class UserRouteHandler
         ));
 
         $app->render("user.task-stream-notification-edit.tpl");
+    }
+
+    public function adminDashboard($userId)
+    {
+        $app = Slim::getInstance();
+
+        $app->view()->appendData(array(
+                    "current_page"  => 'admin-dashboard'
+        ));
+
+        $app->render("site-admin.dashboard.tpl");
     }
 
     public static function isLoggedIn()
