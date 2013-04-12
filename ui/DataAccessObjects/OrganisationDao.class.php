@@ -109,10 +109,10 @@ class OrganisationDao
         return $ret;
     }
 
-    public function createOrg($org)
+    public function createOrg($org, $userId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/orgs";
+        $request = "{$this->siteApi}v0/orgs/user/$userId";
         $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $org);
         $ret = $this->client->cast("Organisation", $response);
         return $ret;

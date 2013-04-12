@@ -117,15 +117,37 @@ class OrganisationDao {
     
     public function insertAndUpdate($org)
     {
-        if($result = PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanseNullOrWrapStr($org->getId())
+        $ret = null;
+        $result = PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanseNullOrWrapStr($org->getId())
                                                     .",".PDOWrapper::cleanseWrapStr($org->getHomePage())
                                                     .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
-                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography())));
+                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography()));
         if(is_array($result)) {
-            return ModelFactory::buildModel("Organisation", $result[0]);
-        } else {
-            return null;
+            $ret = ModelFactory::buildModel("Organisation", $result[0]);
         }
+
+        return $ret;
+    }
+
+    public function createOrg($userId, $org)
+    {
+        $ret = null;
+        $result = PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanseNullOrWrapStr($org->getId())
+                                                    .",".PDOWrapper::cleanseWrapStr($org->getHomePage())
+                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
+                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography()));
+        if(is_array($result)) {
+            $ret = ModelFactory::buildModel("Organisation", $result[0]);
+        }
+
+        if ($ret != null) {
+            $this->acceptMemRequest($ret->getId(), $userId);
+            $args = PDOWrapper::cleanse($userId).", ";
+            $args .= PDOWrapper::cleanse($ret->getId());
+            PDOWrapper::call("addAdmin", $args);
+        }
+
+        return $ret;
     }
     
     public function delete($orgID)

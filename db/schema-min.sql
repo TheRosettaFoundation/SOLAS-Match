@@ -570,7 +570,31 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `acceptMemRequest`(IN `uID` INT, IN `orgID` INT)
 BEGIN
 	INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
-	call removeMembershipRequest(uID,orgID);
+    if EXISTS (SELECT user_id
+                FROM OrgRequests
+                WHERE user_id = uID
+                AND org_id = orgID) then
+    	call removeMembershipRequest(uID,orgID);
+    end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.addAdmin
+DROP PROCEDURE IF EXISTS `addAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addAdmin`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+    if NOT EXISTS (SELECT 1
+                    FROM Admins
+                    WHERE user_id = userId
+                    AND (organisation_id = NULL
+                        OR organisation_id = orgId)
+    ) then
+    	INSERT INTO Admins (user_id, organisation_id) 
+            VALUES (userId, orgId);
+    end if;
+    SELECT 1 as result;
 END//
 DELIMITER ;
 

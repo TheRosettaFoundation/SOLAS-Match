@@ -84,11 +84,9 @@ class OrgRouteHandler
                     $organisation = $orgDao->getOrganisation(array('name' => $org->getName()));
 
                     if (!$organisation) {
-                        $new_org = $orgDao->createOrg($org);
+                        $new_org = $orgDao->createOrg($org, $current_user_id);
                         if ($new_org) {
                             $my_organisations[] = $new_org;
-                            $user_id = UserSession::getCurrentUserID();
-                            $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
                             $org_name = $org->getName();
                             $app->flashNow("success", "Organisation $org_name has been created.");
                         } else {

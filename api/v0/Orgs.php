@@ -19,14 +19,19 @@ class Orgs {
             Dispatcher::sendResponce(null, $dao->getOrg(null, null, null, null), null, $format);
         }, 'getOrgs');        
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs(:format)/', function ($format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs/user/:user_id/', function ($userId, $format = ".json") {
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                $userId = explode('.', $userId);
+                $format = '.'.$userId[1];
+                $userId = $userId[0];
+            }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data);
             $data = $client->cast("Organisation", $data);
             $data->setId(null);
             $dao = new OrganisationDao();
-            Dispatcher::sendResponce(null, $dao->insertAndUpdate($data), null, $format);
+            Dispatcher::sendResponce(null, $dao->createOrg($userId, $data), null, $format);
         }, 'createOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/', function ($id, $format = ".json") {
