@@ -4,7 +4,7 @@
     <div class="page-header">
         <h1>
             <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
-            {assign var="user_id" value=$this_user->getUserId()}
+            {assign var="user_id" value=$this_user->getId()}
             {if $this_user->getDisplayName() != ''}
                 {$this_user->getDisplayName()}
             {else}
@@ -64,7 +64,7 @@
 
         {foreach $badges as $badge }
             {if !is_null($badge->getOwnerId())}
-                {assign var="user_id" value=$this_user->getUserId()} 
+                {assign var="user_id" value=$this_user->getId()} 
                     {if isset($private_access)}
                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
                             <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
@@ -126,7 +126,7 @@
         {foreach $user_orgs as $org}
             <div class="row">
                 {assign var="org_id" value=$org->getId()}
-                {assign var="user_id" value=$this_user->getUserId()}
+                {assign var="user_id" value=$this_user->getId()}
                 <div class="span8">
                     <h3>
                         <i class="icon-briefcase"></i>

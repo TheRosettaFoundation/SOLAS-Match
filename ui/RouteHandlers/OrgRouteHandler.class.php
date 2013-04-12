@@ -214,7 +214,7 @@ class OrgRouteHandler
                 if (TemplateHelper::isValidEmail($post->email)) {       
                     $user = $userDao->getUserByEmail($post->email);
                     if (!is_null($user)) {
-                        $user_id = $user->getUserId();
+                        $user_id = $user->getId();
                         $user_orgs = $userDao->getUserOrgs($user_id);
                     
                         if ($user->getDisplayName() != "") {
@@ -335,14 +335,14 @@ class OrgRouteHandler
                     $user = $userDao->getUserByEmail($post->email);
                 
                     if (!is_null($user)) {
-                        $user_orgs = $userDao->getUserOrgs($user->getUserId());
+                        $user_orgs = $userDao->getUserOrgs($user->getId());
                         if ($user->getDisplayName() != "") {
                             $user_name = $user->getDisplayName();
                         } else {
                             $user_name = $user->getEmail();
                         }   
                         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-                            $orgDao->acceptMembershipRequest($org_id, $user->getUserId());
+                            $orgDao->acceptMembershipRequest($org_id, $user->getId());
                             if ($org->getName() != "") {
                                 $org_name = $org->getName();
                             } else {
@@ -402,7 +402,7 @@ class OrgRouteHandler
         $org_members = array();
         if (count($orgMemberList) > 0) {
             foreach ($orgMemberList as $usrObject) {
-                $org_members[] = $usrObject->getUserId();
+                $org_members[] = $usrObject->getId();
             }
         }
 
@@ -438,7 +438,7 @@ class OrgRouteHandler
                 if (TemplateHelper::isValidEmail($post->email)) {
                     $user = $userDao->getUserByEmail($post->email);
                     if ($user) {
-                        $user_badges = $userDao->getUserBadges($user->getUserId());
+                        $user_badges = $userDao->getUserBadges($user->getId());
                         $badge_ids = array();
                         if (count($user_badges) > 0) {
                             foreach ($user_badges as $badge_tmp) {
@@ -447,7 +447,7 @@ class OrgRouteHandler
                         }
                         
                         if (!in_array($badge_id, $badge_ids)) {
-                            $userDao->addUserBadge($user->getUserId(), $badge);
+                            $userDao->addUserBadge($user->getId(), $badge);
                             $user_name = "";
                             if ($user->getDisplayName() != "") {
                                 $user_name = $user->getDisplayName();

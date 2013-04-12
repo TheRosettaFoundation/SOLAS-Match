@@ -1253,7 +1253,7 @@ BEGIN
     if sCC="" then set sCC=null; end if;
     if sCode="" then set sCode=null; end if;
 
-    set @q="SELECT id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,(select code from Countries where id =p.`country_id`) as country_id,(select code from Languages where id =p.`language_id`) as language_id, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'  FROM Projects p WHERE 1";
+    set @q="SELECT id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,(select `en-name` from Languages where id =p.`language_id`) as `sourceLanguageName`, (select code from Languages where id =p.`language_id`) as `sourceLanguageCode`, (select `en-name` from Languages where id =p.`language_id`) as `targetLanguageName`, (select code from Languages where id =p.`language_id`) as `targetLanguageCode`, (select `en-name` from Countries where id =p.`country_id`) as `sourceCountryName`, (select code from Countries where id =p.`country_id`) as `sourceCountryCode`, (select `en-name` from Countries where id =p.`country_id`) as `targetCountryName`, (select code from Countries where id =p.`country_id`) as `targetCountryCode`, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'  FROM Projects p WHERE 1";
     if projectId is not null then
         set @q = CONCAT(@q, " and p.id=", projectId);
     end if;

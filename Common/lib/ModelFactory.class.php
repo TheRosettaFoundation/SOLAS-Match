@@ -343,7 +343,7 @@ class ModelFactory
         $locale = new Locale();
 
         if (isset($modelData['id'])) {
-            $ret->setUserId($modelData['id']);
+            $ret->setId($modelData['id']);
         }
         if (isset($modelData['email'])) {
             $ret->setEmail($modelData['email']);
@@ -465,6 +465,7 @@ class ModelFactory
     private static function generateProject($modelData)
     {
         $ret = new Project();
+        $sourceLocale = new Locale();
 
         if(isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -496,11 +497,23 @@ class ModelFactory
         if(isset($modelData['status'])) {
             $ret->setStatus($modelData['status']);
         }
-        if(isset($modelData['language_id'])) {
-            $ret->setSourceLanguageCode($modelData['language_id']);
+        
+        if (isset($modelData['sourceLanguageName'])) {
+            $sourceLocale->setLanguageName($modelData['sourceLanguageName']);
         }
-        if(isset($modelData['country_id'])) {
-            $ret->setSourceCountryCode($modelData['country_id']);
+        if (isset($modelData['sourceLanguageCode'])) {
+            $sourceLocale->setLanguageCode($modelData['sourceLanguageCode']);
+        }
+        if (isset($modelData['sourceCountryName'])) {
+            $sourceLocale->setCountryName($modelData['sourceCountryName']);
+        }
+        if (isset($modelData['sourceCountryCode'])) {
+            $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
+        }
+        
+        if(isset($modelData['sourceLanguageName']) && isset($modelData['sourceLanguageCode']) &&
+                isset($modelData['sourceCountryName']) && isset($modelData['sourceCountryCode'])) {
+            $ret->setSourceLocale($sourceLocale);
         }
 
         return $ret;

@@ -33,7 +33,7 @@ class Middleware
             $claimant = $taskDao->getUserClaimedTask($task_id);             
         }
         if ($claimant) {
-            if ($user_id != $claimant->getUserId()) {
+            if ($user_id != $claimant->getId()) {
                 $app->flash('error', 'This task has been claimed by another user');
                 $app->redirect($app->urlFor('home'));
             }

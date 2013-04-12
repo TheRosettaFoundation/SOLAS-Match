@@ -1200,26 +1200,26 @@ class TaskRouteHandler
             if(isset($post->feedback)) {
 
                 if ($post->feedback != "") {
-                    $taskDao->sendFeedback($task_id, array($claimant->getUserId()), $post->feedback);
+                    $taskDao->sendFeedback($task_id, array($claimant->getId()), $post->feedback);
     
                     $app->flashNow("success", "Feedback sent to 
-                            <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
+                            <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
                             {$claimant->getDisplayName()}</a>.");
                     if(isset($post->revokeTask) && $post->revokeTask) {
                         $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                         $taskDao->updateTask($task);
-                        $taskRevoke = $userDao->unclaimTask($claimant->getUserId(), $task_id);
+                        $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                         if($taskRevoke) {
                             $app->flash("taskSuccess", "<b>Success</b> - The task 
                                 <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
                                 has been revoked from 
-                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
+                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
                                 {$claimant->getDisplayName()}</a>. This user will be notified by e-mail and provided with your feedback.");
                             $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
                         } else {
                             $app->flashNow("error", "<b>Error</b> - Unable to revoke the task ".
                                 "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}\"</a>
-                                from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
+                                from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
                                 {$claimant->getDisplayName()}</a>. Please try again later.");
                         }
                     }
@@ -1259,9 +1259,9 @@ class TaskRouteHandler
             $post = (object) $app->request()->post();
 
             if(isset($post->feedback)) {
-                $taskDao->sendFeedback($task_id, array($claimant->getUserId()), $post->feedback);
+                $taskDao->sendFeedback($task_id, array($claimant->getId()), $post->feedback);
                 if(isset($post->revokeTask) && $post->revokeTask) {
-                    $taskRevoke = $userDao->unclaimTask($claimant->getUserId(), $task_id);
+                    $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                     if($taskRevoke) {
                         $app->flash("success", " The task ".
                               "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".

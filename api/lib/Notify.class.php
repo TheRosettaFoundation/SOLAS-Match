@@ -25,7 +25,7 @@ class Notify
         if ($messagingClient->init()) {
             $messageType = new FeedbackEmail();
             $messageType->taskId = $task->getId();
-            $messageType->userId = $user->getUserId();
+            $messageType->userId = $user->getId();
             $messageType->feedback = $feedback;
             $message = $messagingClient->createMessageFromProto($messageType);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
@@ -78,14 +78,14 @@ class Notify
         if ($messagingClient->init()) {
             if ($accepted) {
                 $message_type = new OrgMembershipAccepted();
-                $message_type->user_id = $user->getUserId();
+                $message_type->user_id = $user->getId();
                 $message_type->org_id = $org->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                         $messagingClient->OrgMembershipAcceptedTopic);
             } else {
                 $message_type = new OrgMembershipRefused();
-                $message_type->user_id = $user->getUserId();
+                $message_type->user_id = $user->getId();
                 $message_type->org_id = $org->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
@@ -109,7 +109,7 @@ class Notify
                         $message_type = new TaskArchived();
                         $message_type->task_id = $taskId;
                         foreach ($subscribed_users as $user) {
-                            $message_type->user_id = $user->getUserId();
+                            $message_type->user_id = $user->getId();
                             $message = $messagingClient->createMessageFromProto($message_type);
                             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
                                     $messagingClient->TaskArchivedTopic);
@@ -122,7 +122,7 @@ class Notify
                         $translator = TaskDao::getUserClaimedTask($taskId);
                         $message_type->translator_id = $translator->getUserId();
                         foreach ($subscribed_users as $user) {
-                            $message_type->user_id = $user->getUserId();
+                            $message_type->user_id = $user->getId();
                             $message = $messagingClient->createMessageFromProto($message_type);
                             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
                                     $messagingClient->TaskClaimedTopic);
@@ -135,7 +135,7 @@ class Notify
                         $translator = TaskDao::getUserClaimedTask($taskId);
                         $message_type->translator_id = $translator->getUserId();
                         foreach ($subscribed_users as $user) {
-                            $message_type->user_id = $user->getUserId();
+                            $message_type->user_id = $user->getId();
                             $message = $messagingClient->createMessageFromProto($message_type);
                             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
                                     $messagingClient->TaskTranslationUploadedTopic);

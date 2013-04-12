@@ -39,7 +39,7 @@ class UserDao
         PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
         PDOWrapper::cleanseNullOrWrapStr($nativeLocale->getLanguageCode()).",".
         PDOWrapper::cleanseNullOrWrapStr($nativeLocale->getCountryCode()).",".
-        PDOWrapper::cleanse($user->getUserId()));
+        PDOWrapper::cleanse($user->getId()));
         if(!is_null($result)) {
             return ModelFactory::buildModel("User", $result[0]);
         } else {
@@ -74,7 +74,7 @@ class UserDao
                                                 Please contact the site administrator for details');
         }
 
-        UserSession::setSession($user->getUserId());
+        UserSession::setSession($user->getId());
         return true;
     }
 
@@ -107,7 +107,7 @@ class UserDao
 
         if (!is_object($user) && $clear_password != "") {
             $user = self::create($email, $clear_password);
-            BadgeDao::assignBadge($user->getUserId(), BadgeTypes::REGISTERED);
+            BadgeDao::assignBadge($user->getId(), BadgeTypes::REGISTERED);
         } else {
             $user = null;
             //array("message"=>'sorry the account you enerted already exists.
@@ -137,9 +137,9 @@ class UserDao
                 if(is_array($user)) $user = $user[0];
                 if (!is_object($user)) {
                     $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
-                    BadgeDao::assignBadge($user->getUserId(),  BadgeTypes::REGISTERED);
+                    BadgeDao::assignBadge($user->getId(),  BadgeTypes::REGISTERED);
                 }
-                UserSession::setSession($user->getUserId());
+                UserSession::setSession($user->getId());
             }
             return true;
         }

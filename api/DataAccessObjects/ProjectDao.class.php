@@ -16,7 +16,8 @@ class ProjectDao
     }
     
     private static function save(&$project)
-    {        
+    {       
+        $sourceLocale = $project->getSourceLocale();
         $args =PDOWrapper::cleanseNull($project->getId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getTitle())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getDescription())
@@ -26,8 +27,8 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getReference())
                 .",".PDOWrapper::cleanseNull($project->getWordCount())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime())
-                .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceCountryCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($project->getSourceLanguageCode());
+                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
+                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode());
         $result = PDOWrapper::call("projectInsertAndUpdate", $args);
         $project->setId($result[0]['id']);
 

@@ -246,25 +246,16 @@ class ProjectRouteHandler
         $projectDao = new ProjectDao();
 
         $project = $projectDao->getProject($project_id);
-        if (isValidPost($app)) {
-            $post = (object) $app->request()->post();
+        if(isValidPost($app)) {
+            $post = $app->request()->post();
             
-            if ($post->title != "") {
-                $project->setTitle($post->title);
-            }
+            if(isset($post['title'])) $project->setTitle($post['title']);
+            if(isset($post['description'])) $project->setDescription($post['description']);            
+            if(isset($post['impact'])) $project->setImpact($post['impact']);           
 
-            if ($post->description != "") {
-                $project->setDescription($post->description);
-            }
-            
-            if ($post->impact != "") {
-                $project->setImpact($post->impact);
-            }
-
-            if ($post->deadline != "") {
-                
-                if (TemplateHelper::isValidDateTime($post->deadline) == true) {
-                    $unixTime = strtotime($post->deadline);
+            if(isset($post['deadline'])) {                
+                if (TemplateHelper::isValidDateTime($post['deadline']) == true) {
+                    $unixTime = strtotime($post['deadline']);
                     $date = date("Y-m-d H:i:s", $unixTime);  
                     $project->setDeadline($date);
                 } else {
@@ -272,26 +263,18 @@ class ProjectRouteHandler
                 }
             }
             
-            if ($post->sourceLanguage != "") {
-                $project->setSourceLanguageCode($post->sourceLanguage);
-            }
-            
-            if ($post->sourceCountry != "") {
-                $project->setSourceCountryCode($post->sourceCountry);
-            }   
-             
-            if ($post->reference != "" && $post->reference != "http://") {
-                $project->setReference($post->reference);
-            }
-            
-            if ($post->tags != "") {
-                $tags = TemplateHelper::separateTags($post->tags);
+            if(isset($post['sourceLanguage'])) $project->setSourceLanguageCode($post['sourceLanguage']); 
+            if(isset($post['sourceCountry'])) $project->setSourceCountryCode($post['sourceCountry']);              
+            if(isset($post['reference']) && $post['reference'] != "http://") $project->setReference($post['reference']);
+                        
+            if(isset($post['tags'])) {
+                $tags = TemplateHelper::separateTags($post['tags']);
                 foreach ($tags as $tag) {
                     $project->addTag($tag);
                 }
             }
             
-            if ($deadlineError == '') {
+            if($deadlineError == '') {
                 $projectDao->updateProject($project);
                 $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
             }
@@ -365,58 +348,54 @@ class ProjectRouteHandler
         $uniqueLanguageCountry_err = null;
         $project       = new Project();
 
-        if ($app->request()->isPost()) {            
-            $post = (object) $app->request()->post();
+        if($app->request()->isPost()) {            
+            $post = $app->request()->post();
             
-            if(($post->title != "")) {
-                $project->setTitle($post->title);
+            if(isset($post['title'])) {
+                $project->setTitle($post['title']);
             } else {
                 $title_err = "Project <b>Title</b> must be set.";
             }            
             
-            if($post->deadline != "") {
-                if (TemplateHelper::isValidDateTime($post->deadline) == true) {
-                    $unixTime = strtotime($post->deadline);
+            if(isset($post['deadline'])) {
+                if(TemplateHelper::isValidDateTime($post['deadline']) == true) {
+                    $unixTime = strtotime($post['deadline']);
                     $date = date("Y-m-d H:i:s", $unixTime);  
                     $project->setDeadline($date);
                 } else {
                     $deadline_err = "Invalid date/time format!";
-                }
-                
+                }                
             } else {
                 $deadline_err = "Project <b>Deadline</b> must be set.";
             }
             
-            if(($post->description != "")) {
-                $project->setDescription($post->description);
+            if(isset($post['description'])) {
+                $project->setDescription($post['description']);
             } else {
                 $description_err = "Project <b>Description</b> must be set.";
             }
             
-            if(($post->impact != "")) {
-                $project->setImpact($post->impact);
+            if(isset($post['impact'])) {
+                $project->setImpact($post['impact']);
             } else {
                 $impact_err = "Project <b>Impact</b> must be set.";
             }
             
-            if(($post->reference != "")) {
-                $project->setReference($post->reference);
-            }
+            if(isset($post['reference'])) $project->setReference($post['reference']);
             
-            $cleansedWordCount = str_replace(",", "", $post->word_count);
+            $cleansedWordCount = str_replace(",", "", $post['word_count']);
             if((ctype_digit($cleansedWordCount))) {                
                 $project->setWordCount($cleansedWordCount);
             } else {
                 $wordcount_err = "Project <b>Word Count</b> must be set and be a valid natural number.";
             }
-            if (isset($post->sourceLanguage) && $post->sourceLanguage != "") {
-                $project->setSourceLanguageCode($post->sourceLanguage);
-            }
-            if ($post->sourceCountry != "") {
-                $project->setSourceCountryCode($post->sourceCountry);
-            }
             
-            $tags = $post->tags;
+            $sourceLocale = new Locale();
+            if(isset($post['sourceLanguage'])) $sourceLocale->setLanguageCode($post['sourceLanguage']);
+            if(isset($post['sourceCountry'])) $sourceLocale->setCountryCode($post['sourceCountry']);            
+            if(isset($post['sourceLanguage']) && isset($post['sourceCountry'])) $project->setSourceLocale($sourceLocale);
+            
+            $tags = $post['tags'];
             if (is_null($tags)) {
                 $tags = "";
             }
@@ -429,19 +408,19 @@ class ProjectRouteHandler
             } 
             
             $targetLanguageCountryArray = array();
-            for ($i=0; $i < $post->targetLanguageArraySize; $i++) {                  
-                $key = $post->{"targetLanguage_".$i};
+            for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {                  
+                $key = $post["targetLanguage_$i"];
                 if(!array_key_exists($key, $targetLanguageCountryArray)) {
-                        $targetLanguageCountryArray[$key] = $post->{"targetCountry_".$i};
+                        $targetLanguageCountryArray[$key] = $post["targetCountry_$i"];
                 } else {
                     $uniqueLanguageCountry_err = "Each new <b>Target Language pair</b> added must be a <b>unique pair</b>.";
                     break;
                 }
             }
             
-            for ($i=0; $i < $post->targetLanguageArraySize; $i++) {  
-                if(!isset($post->{"segmentation_".$i}) && !isset($post->{"translation_".$i}) &&
-                    !isset($post->{"proofreading_".$i})) {
+            for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {  
+                if(!isset($post["segmentation_$i"]) && !isset($post["translation_$i"]) &&
+                    !isset($post["proofreading_$i"])) {
                     $targetLanguage_err = "At least one <b>Task Type</b> must be set for each <b>Target Language</b>.";
                     break;
                 }
@@ -472,12 +451,13 @@ class ProjectRouteHandler
                     $taskModel->setDeadline($project->getDeadline());
                     $taskModel->setWordCount($project->getWordCount());
                     
-                    $sourceLocale = new Locale();
-                    $sourceLocale->setLanguageCode($project->getSourceLanguageCode());
-                    $sourceLocale->setCountryCode($project->getSourceCountryCode());
-                    $taskModel->setSourceLocale($sourceLocale);
+                    $projectSourceLocale = $project->getSourceLocale();                    
+                    $taskSourceLocale = new Locale();
+                    $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+                    $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+                    $taskModel->setSourceLocale($taskSourceLocale);
                     
-                    if(isset($post->publishTasks) && $post->publishTasks) {
+                    if(isset($post['publishTasks']) && $post['publishTasks']) {
                         $taskModel->setPublished(1);
                     } else {
                         $taskModel->setPublished(0);
@@ -486,14 +466,14 @@ class ProjectRouteHandler
                     $translationTaskId = 0;
                     $proofreadingTaskId = 0;
                     
-                    for ($i=0; $i < $post->targetLanguageArraySize; $i++) {
+                    for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {
                         
                         $targetLocale = new Locale();
-                        $targetLocale->setLanguageCode($post->{"targetLanguage_".$i});
-                        $targetLocale->setCountryCode($post->{"targetCountry_".$i});
+                        $targetLocale->setLanguageCode($post["targetLanguage_$i"]);
+                        $targetLocale->setCountryCode($post["targetCountry_$i"]);
                         $taskModel->setTargetLocale($targetLocale);
 
-                        if(isset($post->{"segmentation_".$i})) { 
+                        if(isset($post["segmentation_$i"])) { 
                             $taskModel->setTaskType(TaskTypeEnum::SEGMENTATION);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $createdSegmentationTask = $taskDao->createTask($taskModel);
@@ -505,7 +485,7 @@ class ProjectRouteHandler
                                 $error_message = "File error: " . $e->getMessage();
                             }
                         }
-                        if(isset($post->{"translation_".$i})) {
+                        if(isset($post["translation_$i"])) {
                             $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $newTask = $taskDao->createTask($taskModel);
@@ -519,12 +499,12 @@ class ProjectRouteHandler
                                 $error_message = "File error: " . $e->getMessage();
                             } 
                         }
-                        if(isset($post->{"proofreading_".$i})) {
+                        if(isset($post["proofreading_$i"])) {
                             $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
                             $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                             $newTask = $taskDao->createTask($taskModel);
                             $proofreadingTaskId = $newTask->getId();
-                            if(isset($post->{'translation_'.$i})) {
+                            if(isset($post["translation_$i"])) {
                                 $taskDao->addTaskPreReq($proofreadingTaskId, $translationTaskId);
                             } 
                             
@@ -540,7 +520,7 @@ class ProjectRouteHandler
                     $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
                 }              
             } else {     
-                $project->setWordCount($post->word_count);
+                $project->setWordCount($post['word_count']);
                 $app->view()->appendData(array(
                     "title_err"             => $title_err,
                     "deadline_err"          => $deadline_err,      

@@ -26,7 +26,7 @@
             <small>An organisation on SOLAS Match.</small>
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
-                {if in_array($user->getUserId(), $org_members)}
+                {if in_array($user->getId(), $org_members)}
                     <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
                         <i class="icon-wrench icon-white"></i> Edit Organisation Details
                     </a>
@@ -75,7 +75,7 @@
         <small>Overview of badges created by this organisation.</small>
 
         {if isset($user)}
-            {if in_array($user->getUserId(), $org_members)}
+            {if in_array($user->getId(), $org_members)}
                 <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                     <i class="icon-star icon-white"></i> Create Badge
                 </a>
@@ -89,7 +89,7 @@
         <thead>            
             <th style="text-align: left">Name</th>
             <th>Description</th>
-            {if in_array($user->getUserId(), $org_members)}
+            {if in_array($user->getId(), $org_members)}
                 <th>Edit</th>
                 <th>Assign</th>
                 <th>Delete</th>
@@ -107,7 +107,7 @@
                     {$badge->getDescription()}
                 </td>
                 {if isset($user)}
-                    {if in_array($user->getUserId(), $org_members)}
+                    {if in_array($user->getId(), $org_members)}
                         <td>
                             <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
                                 <i class="icon-wrench icon-black"></i> Edit Badge
@@ -141,14 +141,14 @@
 {/if}
       
 {if isset($user)}
-   {if in_array($user->getUserId(), $org_members)}               
+   {if in_array($user->getId(), $org_members)}               
         <p style="margin-bottom: 40px" />         
         <h1 class="page-header">
             Membership Requests
             <small>Overview of users who have requested membership.</small>
             
         {if isset($user)}
-            {if in_array($user->getUserId(), $org_members)}
+            {if in_array($user->getId(), $org_members)}
                 <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                     <i class="icon-star icon-white"></i> Add User
                 </a>
@@ -168,7 +168,7 @@
                 <tbody>
                 {foreach $user_list as $user}
                     <tr>
-                        {assign var="user_id" value=$user->getUserId()}                        
+                        {assign var="user_id" value=$user->getId()}                        
                         {if $user->getDisplayName() != ''}
                             <td style="text-align: left">
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$user->getDisplayName()}</a>
@@ -184,7 +184,7 @@
                             </i>
                         </td>
                         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                            <input type="hidden" name="user_id" value="{$user->getUserId()}" />
+                            <input type="hidden" name="user_id" value="{$user->getId()}" />
                             <td>
                                 <input type="submit" name="accept" value="    Accept Request" class="btn btn-primary" />
                                 <i class="icon-ok-circle icon-white" style="position:relative; right:126px; top:2px;"></i>

@@ -194,7 +194,7 @@ class UserDao
     public function updateUser($user)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/{$user->getUserId()}";
+        $request = "{$this->siteApi}v0/users/{$user->getId()}";
         $ret = $this->client->castCall("User", $request, HTTP_Request2::METHOD_PUT, $user);
         return $ret;
     }

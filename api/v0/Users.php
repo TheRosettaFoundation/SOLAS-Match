@@ -221,7 +221,7 @@ class Users {
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'User');
 //            $data = $client->cast('User', $data);
-            $data->setUserId($id);
+            $data->setId($id);
             $data = UserDao::save($data);
 //            $data = $client->cast("User", $data);
 //            if (is_array($data)) {

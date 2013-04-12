@@ -147,7 +147,7 @@ class UserRouteHandler
                     $user = $userDao->login($post->email, $post->password);
                     try {                        
                         if (!is_array($user) && !is_null($user)) {
-                            UserSession::setSession($user->getUserId());
+                            UserSession::setSession($user->getId());
                         } else {
                             throw new InvalidArgumentException("Sorry, the  password or username entered is incorrect.
                                                                 Please check the credentials used and try again.");    
@@ -161,7 +161,7 @@ class UserRouteHandler
                                 $app->redirect($app->urlFor($_SESSION["previous_page"]));
                             }
                         }
-                        $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getUserId())));
+                        $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getId())));
                     } catch (InvalidArgumentException $e) {
                         $error = "<p>Unable to log in. Please check your email and password.";
                         $error .= " <a href=\"{$app->urlFor("login")}\">Try logging in again</a>";
@@ -237,22 +237,22 @@ class UserRouteHandler
                 if (isset($post->email_address) && $post->email_address != '') {
                     $user = $userDao->getUserByEmail($post->email_address); 
                     if ($user) {  
-                        $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($user->getUserId());
+                        $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($user->getId());
                         $message = "";
                         if (!$hasUserRequestedPwReset) {
                             //send request
-                            $userDao->requestPasswordReset($user->getUserId());
+                            $userDao->requestPasswordReset($user->getId());
                             $app->flash("success", "Password reset request sent. Check your email
                                                     for further instructions.");
                             $app->redirect($app->urlFor("home"));
                         } else {
                             //get request time
-                            $response = $userDao->getPasswordResetRequestTime($user->getUserId());
+                            $response = $userDao->getPasswordResetRequestTime($user->getId());
                             $app->flashNow("info", "Password reset request was already sent on $response.
                                                      Another email has been sent to your contact address.
                                                      Follow the link in this email to reset your password");
                             //Send request
-                            $userDao->requestPasswordReset($user->getUserId());
+                            $userDao->requestPasswordReset($user->getId());
                         }
                     } else {
                         $app->flashNow("error", "Please enter a valid email address");
@@ -298,7 +298,7 @@ class UserRouteHandler
                 if (isset($post->login)) {
                     $user = $userDao->login($post->email, $post->password);
                     if (!is_array($user) && !is_null($user)) {
-                        UserSession::setSession($user->getUserId());
+                        UserSession::setSession($user->getId());
                     } else {
                         throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
                             Please check the credentials used and try again.");    
@@ -350,10 +350,10 @@ class UserRouteHandler
                 if(is_null($user)) {
                     $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));
                     if(is_array($user)) $user = $user[0]; 
-                    UserSession::setSession($user->getUserId());
+                    UserSession::setSession($user->getId());
                     return false;
                 }
-                UserSession::setSession($user->getUserId());
+                UserSession::setSession($user->getId());
                 
             }
             return true;
@@ -418,7 +418,7 @@ class UserRouteHandler
             
             $userDao->updateUser($user);
             
-            $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getUserId())));
+            $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getId())));
         }
         
         $extraScripts = file_get_contents(__DIR__."/../js/user-private-profile.js");
