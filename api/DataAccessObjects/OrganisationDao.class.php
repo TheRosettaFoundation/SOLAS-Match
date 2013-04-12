@@ -151,7 +151,12 @@ class OrganisationDao {
     }
     
     public function delete($orgID)
-    {      
-        return PDOWrapper::call("deleteOrg", PDOWrapper::cleanse($orgID));
+    {
+        $ret = false;
+        $result = PDOWrapper::call("deleteOrg", PDOWrapper::cleanse($orgID));
+        if ($result[0]['result'] == 1) {
+            $ret = true;
+        }
+        return $ret;
     }
 }

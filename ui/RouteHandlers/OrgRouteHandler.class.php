@@ -270,24 +270,42 @@ class OrgRouteHandler
 
         $org = $orgDao->getOrganisation(array('id' => $org_id));
         if ($app->request()->isPost()) {
-            $name = $app->request()->post("name");
-            if ($name != null) {
-                $org->setName($name);
-            }   
+            $submit = $app->request()->post("submit");
+            if ($submit && $submit == 'update') {
+                $name = $app->request()->post("name");
+                if ($name != null) {
+                    $org->setName($name);
+                }   
             
-            $home_page = $app->request()->post("home_page");
-            if ($home_page != null) {
-                $org->setHomePage($home_page);
-            }   
+                $home_page = $app->request()->post("home_page");
+                if ($home_page != null) {
+                    $org->setHomePage($home_page);
+                }   
             
-            $bio = $app->request()->post("bio");
-            if ($bio != null) {
-                $org->setBiography($bio);
-            }  
+                $bio = $app->request()->post("bio");
+                if ($bio != null) {
+                    $org->setBiography($bio);
+                }  
             
-            $orgDao->updateOrg($org); 
-            $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
-        }   
+                $orgDao->updateOrg($org); 
+                $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+            }
+
+            $deleteId = $app->request()->post("deleteId");
+            if ($deleteId) {
+                if ($orgDao->deleteOrg($org->getId())) {
+                    $app->flash("success", "Successfully deleted org ".$org->getName());
+                    $app->redirect($app->urlFor("home"));
+                } else {
+                    $app->flashNow("error", "Unable to delete organisation. Please try again later.");
+                }
+            }
+        }
+
+        $userDao = new UserDao();
+        if ($userDao->isAdmin(UserSession::getCurrentUserId(), $org->getId())) {
+            $app->view()->appendData(array('orgAdmin' => true));
+        }
         
         $app->view()->setData("org", $org);        
         $app->render("org-private-profile.tpl");

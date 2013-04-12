@@ -123,14 +123,16 @@ class OrganisationDao
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
         $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $org);
-        $ret = $this->client->cast(array("Organisation"), $response);
+        $ret = $this->client->cast("Organisation", $response);
         return $ret;
     }
 
     public function deleteOrg($orgId)
     {
-        $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
-        $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $ret = null;
+        $request = "{$this->siteApi}v0/orgs/$orgId";
+        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        return $ret;
     }
 
     public function createMembershipRequest($orgId, $userId)

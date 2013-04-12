@@ -66,13 +66,13 @@
                         {assign var="projectStatus" value=intval(($data['project']->getStatus()*100))}
                         
                         {if $projectStatus == 100}                            
-                            <b style="color: #2F8518">{$projectStatus}%</strong>
+                            <strong style="color: #2F8518">{$projectStatus}%</strong>
                         {else if $projectStatus > 66}
-                            <b style="color: #598518">{$projectStatus}%</strong>
+                            <strong style="color: #598518">{$projectStatus}%</strong>
                         {else if $projectStatus > 33}
-                            <b style="color: #857818">{$projectStatus}%</strong>
+                            <strong style="color: #857818">{$projectStatus}%</strong>
                         {else}
-                            <b style="color: #851818">{$projectStatus}%</strong>
+                            <strong style="color: #851818">{$projectStatus}%</strong>
                         {/if}
                     </td>
                     <td>                      
