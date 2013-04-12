@@ -25,7 +25,6 @@
             var langs = document.getElementById('sourceLanguage').cloneNode(true);
             langs.setAttribute('id', 'targetLanguage_' + (fields + 1));
             langs.setAttribute('name', 'targetLanguage_' + (fields + 1));
-            langs.setAttribute('style', 'margin-right:4px');
             newColumnLangCountry.appendChild(langs);
 
             var countries = document.getElementById('sourceCountry').cloneNode(true);
@@ -75,7 +74,7 @@
             newRow.appendChild(tableColumnSegmentation);
             newRow.appendChild(tableColumnTranslation);
             newRow.appendChild(tableColumnReading);
-            table.appendChild(newRow);
+            table.appendChild(newRow);            
             isEnabledArray.push(false);
 
             var size = document.getElementById('targetLanguageArraySize');

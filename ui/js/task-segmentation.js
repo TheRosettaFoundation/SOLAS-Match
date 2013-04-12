@@ -10,6 +10,7 @@
         formSelect.setAttribute('onchange', "segmentSelectChange(this);");
         TOTAL_WORD_COUNT = $('#totalWordCount').val();
         var defaultWordCount = TOTAL_WORD_COUNT / CURR_SEGMENTS;
+        defaultWordCount = parseInt(defaultWordCount);
 
         for(var i=0; i < MAX_SEGMENTS-1; ++i) {
             var optionNode = document.createElement('option');

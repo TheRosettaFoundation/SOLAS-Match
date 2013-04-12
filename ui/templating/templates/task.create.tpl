@@ -36,43 +36,35 @@
                                     </div>
                                 {/if}
                             </label>
-                            <textarea wrap="soft" cols="1" rows="3" name="title">{$task->getTitle()}</textarea>				
+                            <textarea wrap="soft" cols="1" rows="3" name="title" style="width: 400px">{$task->getTitle()}</textarea>				
                             <p style="margin-bottom:20px;"/>
 
                             <label for="comment"><h2>Task Comment:</h2></label>
                             <p>Who and what will be affected by the translation of this task.</p>
-                            <textarea wrap="soft" cols="1" rows="4" name="comment">{$task->getComment()}</textarea>
+                            <textarea wrap="soft" cols="1" rows="4" name="comment" style="width: 400px">{$task->getComment()}</textarea>
                             <p style="margin-bottom:20px;"/>
 
                             <p>
                                 <h2>Source Language:</h2><br>
                                 <p>
-                                    {TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}
-                                    ({TemplateHelper::countryNameFromCode($project->getSourceCountryCode())})
+                                    {TemplateHelper::getLanguage($project->getSourceLocale())}
+                                    - {TemplateHelper::getCountry($project->getSourceLocale())}
                                 </p>
                             </p>
                             <p style="margin-bottom:20px;"/>
                             <p>
                                 <h2>Target Language: <span style="color: red">*</span></h2><br>
-                                <select name="targetLanguage" id="targetLanguage">
+                                <select name="targetLanguage" id="targetLanguage" style="width: 400px">
                                     {foreach $languages as $language}
-                                        {if TemplateHelper::getLanguage($task->getTargetLocale()) == $language->getCode()}
-                                            <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
-                                        {else}
-                                            <option value="{$language->getCode()}">{$language->getName()}</option>
-                                        {/if}
+                                        <option value="{$language->getCode()}">{$language->getName()}</option>
                                     {/foreach}
                                 </select>
                             </p>
                             <p>
                                 {if isset($countries)}
-                                    <select name="targetCountry" id="targetCountry">
+                                    <select name="targetCountry" id="targetCountry" style="width: 400px">
                                         {foreach $countries as $country}
-                                            {if $task->getTargetCountryCode() == $country->getCode()}
-                                                <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
-                                            {else}
-                                                <option value="{$country->getCode()}">{$country->getName()}</option>
-                                            {/if}
+                                            <option value="{$country->getCode()}">{$country->getName()}</option>
                                         {/foreach}
                                     </select> 
                                 {/if}
@@ -81,7 +73,7 @@
                         <td>                            
                             <h2>Task Type: <span style="color: red">*</span></h2>
                             <p class="desc">Provide the type of the task.</p>
-                            <select name="taskType">
+                            <select name="taskType" style="width: 400px">
                                 {assign var="taskTypeCount" value=count($taskTypes)}
                                 {for $id=1 to $taskTypeCount}
                                     <option value="{$id}">{$taskTypes[$id]}</option>
@@ -98,7 +90,7 @@
                                     </div>
                                 {/if}
                                 </label>  
-                                <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}"/>
+                                <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" style="width: 400px"/>
                             </p>
                             <p style="margin-bottom:40px;"/>
 
@@ -111,7 +103,7 @@
                             {/if}
                             <p>
                                 {assign var="deadlineDateTime" value=$task->getDeadline()}
-                                <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)} {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))} {/if}" />
+                                <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)} {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))} {/if}" style="width: 400px" />
                             </p>
                             <p style="margin-bottom:40px;"/>
 

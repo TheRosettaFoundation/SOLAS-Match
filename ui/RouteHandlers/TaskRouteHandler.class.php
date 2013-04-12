@@ -887,49 +887,41 @@ class TaskRouteHandler
         $projectTasks = $projectDao->getProjectTasks($project_id);
         $task->setProjectId($project_id);
 
-        //task inherits souce details from project
-        $task->setSourceLanguageCode($project->getSourceLanguageCode());
-        $task->setSourceCountryCode($project->getSourceCountryCode());
-
-        //default status, changed in DB on insert
-        $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-
-        if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-
-            if ($post->title != "") {
-                $task->setTitle($post->title);
+        if($post = $app->request()->post()) { 
+                    
+            if(isset($post['title'])) {
+                $task->setTitle($post['title']);
             } else {
                 $titleError = "Title must not be blank";
             }
 
-            if ($post->comment != "") {
-                $task->setComment($post->comment);
-            }
+            if(isset($post['comment'])) $task->setComment($post['comment']);            
+            
+            $projectSourceLocale = $project->getSourceLocale();
+            $taskSourceLocale = new Locale();
+            $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+            $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());            
+            $task->setSourceLocale($taskSourceLocale);
+            $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
+            
+            $taskTargetLocale = new Locale();            
+            if(isset($post['targetLanguage'])) $taskTargetLocale->setLanguageCode($post['targetLanguage']);
+            if(isset($post['targetCountry'])) $taskTargetLocale->setCountryCode($post['targetCountry']);
+            $task->setTargetLocale($taskTargetLocale);
+            
+            if(isset($post['taskType'])) $task->setTaskType($post['taskType']);            
 
-            if ($post->targetCountry != "") {
-                $task->setTargetCountryCode($post->targetCountry);
-            }
-
-            if ($post->targetLanguage != "") {
-                $task->setTargetLanguageCode($post->targetLanguage);
-            }
-
-            if ($post->taskType != "") {
-                $task->setTaskType($post->taskType);
-            }
-
-            if (ctype_digit($post->word_count)) {
-                $task->setWordCount($post->word_count);
-            } else if ($post->word_count != "") {
+            if(ctype_digit($post['word_count'])) {
+                $task->setWordCount($post['word_count']);
+            } else if($post['word_count'] != "") {
                 $wordCountError = "Word Count must be numeric";
             } else {
                 $wordCountError = "Word Count cannot be blank";
             }
 
-            if ($post->deadline != "") {
-                if (TemplateHelper::isValidDateTime($post->deadline) == true) {
-                    $unixTime = strtotime($post->deadline);
+            if(isset($post['deadline'])) {
+                if(TemplateHelper::isValidDateTime($post['deadline']) == true) {
+                    $unixTime = strtotime($post['deadline']);
                     $date = date("Y-m-d H:i:s", $unixTime);  
                     $task->setDeadline($date);
                 } else {
@@ -937,9 +929,7 @@ class TaskRouteHandler
                 }
             }
 
-            if (isset($post->published)) {
-                $task->setPublished("1");
-            }
+            if(isset($post['published'])) $task->setPublished("1");
 
             if(is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 $newTask = $taskDao->createTask($task);
@@ -953,9 +943,9 @@ class TaskRouteHandler
                     $upload_error = "File error: " . $e->getMessage();
                 }
                 
-                if(isset($post->totalTaskPreReqs) && $post->totalTaskPreReqs > 0) {
-                    for($i=0; $i < $post->totalTaskPreReqs; $i++) {
-                        if(isset($post->{"preReq_".$i})) $taskDao->addTaskPreReq($newTaskId, $post->{"preReq_".$i});
+                if(isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
+                    for($i=0; $i < $post['totalTaskPreReqs']; $i++) {
+                        if(isset($post["preReq_$i"])) $taskDao->addTaskPreReq($newTaskId, $post["preReq_$i"]);
                     }
                 }
                 
@@ -1295,13 +1285,10 @@ class TaskRouteHandler
     }
     
     private function setTaskModelData($taskModel, $project, $task, $i) {
-        $taskModel->setTitle($_FILES["segmentationUpload_".$i]["name"]);
-        $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
-        $taskModel->setSourceCountryCode($project->getSourceCountryCode());
+        $taskModel->setTitle($_FILES["segmentationUpload_$i"]["name"]);
         
-        $targetLocale = $task->getTargetLocale();
-        $taskModel->setTargetLanguageCode($targetLocale->getLanguageCode());
-        $taskModel->setTargetCountryCode($targetLocale->getCountryCode());
+        $taskModel->setSourceLocale($project->getSourceLocale());
+        $taskModel->setTargetLocale($task->getTargetLocale());
         
         $taskModel->setProjectId($project->getId());
         $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);

@@ -32,9 +32,15 @@ class ProjectDao
         $result = PDOWrapper::call("projectInsertAndUpdate", $args);
         $project->setId($result[0]['id']);
 
-        TagsDao::updateTags($project);
+        TagsDao::updateTags($project->getId(), $project->getTagList());
         $project = ModelFactory::buildModel("Project", $result[0]);
-        $project->setTag(self::getTags($project->getId()));
+        $projectTags = self::getTags($project->getId());
+        if($projectTags) {
+            foreach($projectTags as $tag) {
+                $project->setTag($tag);
+            }
+        }
+        
         return $project;
     }
     
@@ -147,10 +153,10 @@ class ProjectDao
         }
     }
 
-    public static function addProjectTags($projectId, $tagIds)
+    public static function addProjectTags($projectId, $projectTags)
     {
-        foreach ($tagIds as $tagId) {
-            self::addProjectTag($projectId, $tagId);
+        foreach ($projectTags as $tag) {
+            self::addProjectTag($projectId, $tag->getId());
         }
     }
 

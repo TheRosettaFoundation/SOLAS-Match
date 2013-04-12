@@ -348,8 +348,9 @@ class ProjectRouteHandler
         $uniqueLanguageCountry_err = null;
         $project       = new Project();
 
-        if($app->request()->isPost()) {            
-            $post = $app->request()->post();
+        if($post = $app->request()->post()) {      
+            
+            $tagDao = new TagDao();
             
             if(isset($post['title'])) {
                 $project->setTitle($post['title']);
@@ -400,13 +401,15 @@ class ProjectRouteHandler
                 $tags = "";
             }
 
-            $tag_list = TemplateHelper::separateTags($tags);
-            if($tag_list) {
-                foreach ($tag_list as $tag) {
-                    $project->addTag($tag);
-                }
-            } 
-            
+            $tagLabels = TemplateHelper::separateTags($tags);
+            if($tagLabels) {
+                foreach ($tagLabels as $tagLabel) {
+                    $newTag = new Tag();
+                    $newTag->setLabel($tagLabel);
+                    $project->addTag($newTag);
+                }                   
+            }
+                        
             $targetLanguageCountryArray = array();
             for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {                  
                 $key = $post["targetLanguage_$i"];

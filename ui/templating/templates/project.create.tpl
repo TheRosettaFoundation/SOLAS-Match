@@ -22,7 +22,7 @@
     
     <div class="well">
         <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
-            <table>
+            <table border="1">
                 <tr>
                     <td colspan="2">
                         {if (isset($title_err) || isset($description_err) || isset($wordcount_err) || isset($deadline_err)
@@ -123,13 +123,13 @@
                     <td align="left" valign="top">
                         {if isset($languages)}
                             <h2>Source Language: <span style="color: red">*</span></h2><br>
-                                <select name="sourceLanguage" id="sourceLanguage">
+                                <select name="sourceLanguage" id="sourceLanguage" style="width: 400px">
                                     {foreach $languages as $language}
                                             <option value="{$language->getCode()}">{$language->getName()}</option>
                                     {/foreach}
                                 </select>
                                 {if isset($countries)}
-                                    <select name="sourceCountry" id="sourceCountry">
+                                    <select name="sourceCountry" id="sourceCountry" style="width: 400px">
                                         {foreach $countries as $country}
                                              <option value="{$country->getCode()}">{$country->getName()}</option>
                                         {/foreach}                                
@@ -141,7 +141,7 @@
                             <input type="text" name="sourceCountry" id="source"/>
                         {/if}                     
                     </td>                
-                    <td align="center" valign="bottom">
+                    <td align="center" valign="middle">
                         <h2>Task Type: <span style="color: red">*</span></h2>
                         <p class="desc">Specify which task types you require for your workflow.</p>                 
                     </td>
@@ -162,13 +162,13 @@
                 <tr>
                     <td> 
                         {if isset($languages)}
-                            <select name="targetLanguage_0" id="targetLanguage_0" >
+                            <select name="targetLanguage_0" id="targetLanguage_0" style="width: 400px">
                                 {foreach $languages as $language}
                                     <option value="{$language->getCode()}">{$language->getName()}</option>
                                 {/foreach}
                             </select>
                             {if isset($countries)}
-                                <select name="targetCountry_0" id="targetCountry_0">
+                                <select name="targetCountry_0" id="targetCountry_0" style="width: 400px">
                                     {foreach $countries as $country}
                                         <option value="{$country->getCode()}">{$country->getName()}</option>
                                     {/foreach}
@@ -180,7 +180,7 @@
                             <input type="text" name="sourceCountry" id="source"/>
                         {/if}  
                     </td>
-                    <td valign="top">
+                    <td valign="middle">
                         <table border="0" width="100%"> 
                             <tr align="center">
                                 <td><input title="Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less." type="checkbox" id="segmentation_0" name="segmentation_0" value="y" onchange="segmentationEnabled(0)"/></td>                            
