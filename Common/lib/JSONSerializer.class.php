@@ -11,40 +11,49 @@ class JSONSerializer extends Serializer
 
     public function serialize($data)
     {
-        return json_encode($data,JSON_NUMERIC_CHECK|JSON_PRETTY_PRINT);
+        $ret = null;
+        if(is_object($data)) {
+            $ret = $data->serialize(new \DrSlump\Protobuf\Codec\Json());
+        } elseif (is_array($data)) {
+            $ret = new ProtoList();
+            foreach ($data as $obj) {
+                $ret->addItem($obj->serialize(new \DrSlump\Protobuf\Codec\Json()));
+            }
+            $ret=$ret->serialize(new \DrSlump\Protobuf\Codec\Json());
+        } else {
+            $ret =(is_null($data)||$data=="null")?null:$data;
+        }
+        return $ret;
     }
 
     public function deserialize($data,$type)
     {
-        $ret = null;
-        try {
-            $ret = json_decode($data);
-        } catch (Exception $e) {
-            $ret = "Failed to unserialize data: $data";
+        if($data==null ||$data=="null") {
+            return null;
         }
-
-        if (!is_null($data) && is_null($ret)) {
-            if (strcasecmp($data, "null") == 0 || $data == "null") {
-                $ret=null;
-            } elseif ($data=="<data></data>") {// this is for the xml serialisation
-                $ret=$data;
+        if(is_null($type)) return $data;
+        $result = null;
+        if(is_array($type)){
+            $ret = new ProtoList();
+            $ret->parse($data,new \DrSlump\Protobuf\Codec\Json());
+            $result = array();
+            
+            foreach ($ret->getItemList() as $item){
+                $current = new $type[0];
+                $current->parse($item,new \DrSlump\Protobuf\Codec\Json());
+                $result[]=$current;
             }
         }
-        $result=null;
-        if (is_array($type)) {
-            if ($ret) {
-                foreach ($ret as $row) {
-                    $result[] = $this->cast($type[0], $row);
-                }
-            }
-        } elseif (is_array($ret)) {
-            $result = $this->cast($type, $ret[0]);
-        } else { 
-            $result = $this->cast($type, $ret);
-        }
+        else {
+            
+            $current = new $type;
+            
+            $current->parse($data,new \DrSlump\Protobuf\Codec\Json());
+            $result=$current;
+         }
         return $result;
     }
-
+    
     public function getContentType()
     {
         return 'application/json; charset=utf-8';
