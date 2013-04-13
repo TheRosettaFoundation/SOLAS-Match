@@ -49,7 +49,7 @@ class ProjectDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects";
-        $ret = $this->client->castCall("Project", $request, HTTP_Request2::METHOD_POST, $project);
+        $ret = $this->client->castCall("Project", $request, HttpMethodEnum::POST, $project);
         return $ret;
     }
 
@@ -57,14 +57,14 @@ class ProjectDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/{$project->getId()}";
-        $ret = $this->client->castCall("Project", $request, HTTP_Request2::METHOD_PUT, $project);
+        $ret = $this->client->castCall("Project", $request, HttpMethodEnum::PUT, $project);
         return $ret;
     }
 
     public function archiveProject($projectId, $userId)
     {
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";  
-        $ret = $this->client->castCall("ArchivedProject", $request, HTTP_Request2::METHOD_PUT);
+        $ret = $this->client->castCall("ArchivedProject", $request, HttpMethodEnum::PUT);
         return $ret;
     }
 
@@ -93,7 +93,7 @@ class ProjectDao
         $ret = null;
         $filename = urlencode($filename);
         $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
-        $ret = $this->client->castCall(null, $url, HTTP_Request2::METHOD_PUT, null, null, $data);       
+        $ret = $this->client->castCall(null, $url, HttpMethodEnum::PUT, null, null, $data);       
         return $ret;
     }
     

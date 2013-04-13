@@ -133,3 +133,7 @@ class TagRouteHandler
         $app->render("tag.tpl");
     }
 }
+
+$route_handler = new TagRouteHandler();
+$route_handler->init();
+unset ($route_handler);

@@ -498,3 +498,7 @@ class UserRouteHandler
         return (!is_null(UserSession::getCurrentUserId()));
     }     
 }
+
+$route_handler = new UserRouteHandler();
+$route_handler->init();
+unset ($route_handler);

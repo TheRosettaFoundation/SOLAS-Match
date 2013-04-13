@@ -32,3 +32,7 @@ class BadgeRouteHandler
         $app->render("badge-list.tpl");
     }
 }
+
+$route_handler = new BadgeRouteHandler();
+$route_handler->init();
+unset ($route_handler);

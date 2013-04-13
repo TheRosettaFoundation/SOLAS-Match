@@ -105,7 +105,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs";
-        $ret = $this->client->castCall("Organisation", $request, HTTP_Request2::METHOD_POST, $org);
+        $ret = $this->client->castCall("Organisation", $request, HttpMethodEnum::POST, $org);
         return $ret;
     }
 
@@ -113,33 +113,33 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
-        $ret = $this->client->castCall("Organisation", $request, HTTP_Request2::METHOD_PUT, $org);
+        $ret = $this->client->castCall("Organisation", $request, HttpMethodEnum::PUT, $org);
         return $ret;
     }
 
     public function deleteOrg($orgId)
     {
         $request = "{$this->siteApi}v0/orgs/$orgId";
-        $this->client->castCall(null,$request, HTTP_Request2::METHOD_DELETE);
+        $this->client->castCall(null,$request, HttpMethodEnum::DELETE);
     }
 
     public function createMembershipRequest($orgId, $userId)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $ret = $this->client->castCall(null, $request, HTTP_Request2::METHOD_POST);
+        $ret = $this->client->castCall(null, $request, HttpMethodEnum::POST);
         return $ret;
     }
 
     public function acceptMembershipRequest($orgId, $userId)
     {
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $this->client->castCall(null, $request, HTTP_Request2::METHOD_PUT);
+        $this->client->castCall(null, $request, HttpMethodEnum::PUT);
     }
 
     public function rejectMembershipRequest($orgId, $userId)
     {
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $this->client->castCall(null, $request, HTTP_Request2::METHOD_DELETE);
+        $this->client->castCall(null, $request, HttpMethodEnum::DELETE);
     }
 }

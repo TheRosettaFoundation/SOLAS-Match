@@ -632,3 +632,7 @@ class ProjectRouteHandler
     }    
     
 }
+
+$route_handler = new ProjectRouteHandler();
+$route_handler->init();
+unset ($route_handler);
