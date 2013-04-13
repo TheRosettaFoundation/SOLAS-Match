@@ -278,8 +278,15 @@ class TemplateHelper {
     {
         $use_language_codes = Settings::get("ui.language_codes");
         $langDao = new LanguageDao();
-        $result = $langDao->getLanguages();        
-        foreach($result as $lang)
+        $languages=null;
+        if(apc_exists("languages")){ 
+            $languages=apc_fetch("languages");
+        }else{
+            $languages=$languageDao->getLanguages();
+            apc_add("languages", $languages);
+        }
+       
+        foreach($languages as $lang)
         {
             if($use_language_codes == "y") {
                 $lang->setName(self::cleanse($lang->getCode()));
@@ -289,15 +296,21 @@ class TemplateHelper {
                 $lang->setName(self::cleanse($lang->getName())." (".self::cleanse($lang->getCode()).")"); 
             }
         }
-        return $result;
+        return $languages;
     }
 
     public static function getCountryList()
     {
         $use_language_codes = Settings::get("ui.language_codes");     
         $countryDao = new CountryDao();
-        $result = $countryDao->getCountries();
-        foreach($result as $country)
+        $countries =null;
+        if(apc_exists("countries")){ 
+            $countries=apc_fetch("countries");
+        }else{
+            $countries=$countryDao->getCountries();
+            apc_add("languages", $countries);
+        }
+        foreach($countries as $country)
         {
             if($use_language_codes == "y") {
                 $country->setName(self::cleanse($country->getCode()));
@@ -308,7 +321,7 @@ class TemplateHelper {
             }
             
         }
-        return $result;
+        return $countries;
     }
 
     public static function saveLanguage($languageCode) 

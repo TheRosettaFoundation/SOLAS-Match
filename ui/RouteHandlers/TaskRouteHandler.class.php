@@ -1294,3 +1294,7 @@ class TaskRouteHandler
         $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
     }
 }
+
+$route_handler = new TaskRouteHandler();
+$route_handler->init();
+unset ($route_handler);

@@ -16,18 +16,18 @@ class LanguageDao
     public function getLanguage($id)
     {
         $request = "{$this->siteApi}v0/languages/$id";
-        return $this->client->castCall("Language", $request);
+        return $this->client->call("Language", $request);
     }
     
     public function getLanguages()
     {
         $request = "{$this->siteApi}v0/languages";
-        return $this->client->castCall(array("Language"), $request);
+        return $this->client->call(array("Language"), $request);
     }
     
     public function getLanguageByCode($code)
     {
         $request = "{$this->siteApi}v0/languages/getByCode/$code";
-        return $this->client->castCall("Language", $request);
+        return $this->client->call("Language", $request);
     }
 }

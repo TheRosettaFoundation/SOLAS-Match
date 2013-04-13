@@ -375,8 +375,20 @@ class UserRouteHandler
 
         $languageDao = new LanguageDao();
         $countryDao = new CountryDao();
-        $languages = $languageDao->getLanguages();
-        $countries = $countryDao->getCountries();
+        $languages=null;
+        if(apc_exists("languages")){ 
+            $languages=apc_fetch("languages");
+        }else{
+            $languages=$languageDao->getLanguages();
+            apc_add("languages", $languages);
+        }
+        $countries =null;
+        if(apc_exists("countries")){ 
+            $countries=apc_fetch("countries");
+        }else{
+            $countries=$countryDao->getCountries();
+            apc_add("languages", $countries);
+        }
         
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -498,3 +510,7 @@ class UserRouteHandler
         return (!is_null(UserSession::getCurrentUserId()));
     }     
 }
+
+$route_handler = new UserRouteHandler();
+$route_handler->init();
+unset ($route_handler);

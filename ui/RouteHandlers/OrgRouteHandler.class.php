@@ -559,3 +559,7 @@ class OrgRouteHandler
         $app->render("org.edit-badge.tpl");        
     }    
 }
+
+$route_handler = new OrgRouteHandler();
+$route_handler->init();
+unset ($route_handler);
