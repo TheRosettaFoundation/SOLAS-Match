@@ -15,7 +15,7 @@ class Orgs {
     public static function init()
     {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs(:format)/', function ($format = ".json") {
-            Dispatcher::sendResponce(null, OrganisationDao::getOrg(null, null, null, null), null, $format);
+            Dispatcher::sendResponce(null, OrganisationDao::getOrg(), null, $format);
         }, 'getOrgs');        
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs(:format)/', function ($format = ".json") {
@@ -55,7 +55,7 @@ class Orgs {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $data = OrganisationDao::getOrg($id, null, null, null);
+            $data = OrganisationDao::getOrg($id);
             if (is_array($data)) {
                 $data = $data[0];
             }

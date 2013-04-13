@@ -18,14 +18,20 @@ class OrganisationDao
         return $ret;
     }
     
-    public static function getOrg($id, $name=null, $homepage=null, $bio=null)
+    public static function getOrg($id=null, $name=null, $homepage=null, $bio=null, $email=null, $address=null, $city=null,
+                                    $country=null, $regionalFocus=null)
     {
         $ret = array();
         
         $result = PDOWrapper::call("getOrg", PDOWrapper::cleanseNull($id)
                                         .",".PDOWrapper::cleanseNullOrWrapStr($name)
                                         .",".PDOWrapper::cleanseNullOrWrapStr($homepage)
-                                        .",".PDOWrapper::cleanseNullOrWrapStr($bio));
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($bio)
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($email)
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($address)
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($city)
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($country)
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($regionalFocus));
         if(is_array($result)) {
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Organisation", $row);
@@ -121,7 +127,13 @@ class OrganisationDao
         if($result = PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanseNullOrWrapStr($org->getId())
                                                     .",".PDOWrapper::cleanseWrapStr($org->getHomePage())
                                                     .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
-                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography())));
+                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography())
+                                                    .",".PDOWrapper::cleanseNullOrWrapStr($org->getEmail())
+                .",".PDOWrapper::cleanseNullOrWrapStr($org->getAddress())
+                .",".PDOWrapper::cleanseNullOrWrapStr($org->getCity())
+                .",".PDOWrapper::cleanseNullOrWrapStr($org->getCountry())
+                .",".PDOWrapper::cleanseNullOrWrapStr($org->getRegionalFocus())));
+        
         if(is_array($result)) {
             return ModelFactory::buildModel("Organisation", $result[0]);
         } else {

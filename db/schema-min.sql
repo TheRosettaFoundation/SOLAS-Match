@@ -1162,12 +1162,18 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getOrg
 DROP PROCEDURE IF EXISTS `getOrg`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(50), IN `url` VARCHAR(50), IN `bio` vARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(50), IN `url` VARCHAR(50), IN `bio` vARCHAR(50), IN `email` VARCHAR(50), IN `address` VARCHAR(50), IN `city` VARCHAR(50), IN `country` VARCHAR(50), IN `regionalFocus` VARCHAR(50))
 BEGIN
 	if id='' then set id=null;end if;
 	if name='' then set name=null;end if;
 	if url='' then set url=null;end if;
 	if bio='' then set bio=null;end if;
+	if email='' then set email=null;end if;
+	if address='' then set address=null;end if;
+	if city='' then set city=null;end if;
+	if country='' then set country=null;end if;
+	if regionalFocus='' then set regionalFocus=null;end if;
+	
 	set @q= "select * from Organisations o where 1 ";
 	if id is not null then 
 		set @q = CONCAT(@q," and o.id=",id) ;
@@ -1180,6 +1186,21 @@ BEGIN
 	end if;
 	if bio is not null then 
 		set @q = CONCAT(@q," and o.biography='",bio,"'") ;
+	end if;	
+	if email is not null then 
+		set @q = CONCAT(@q," and o.`e-mail`='",email,"'") ;
+	end if;
+	if address is not null then 
+		set @q = CONCAT(@q," and o.address='",address,"'") ;
+	end if;
+	if city is not null then 
+		set @q = CONCAT(@q," and o.city='",city,"'") ;
+	end if;
+	if country is not null then 
+		set @q = CONCAT(@q," and o.country='",country,"'") ;
+	end if;
+	if regionalFocus is not null then 
+		set @q = CONCAT(@q," and o.`regional-focus`='",regionalFocus,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1902,55 +1923,55 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.organisationInsertAndUpdate
 DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(255), IN `bio` VARCHAR(4096))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if url='' then set url=null;end if;
 	if companyName='' then set companyName=null;end if;
 	if bio='' then set bio=null;end if;
-
+	if email='' then set email=null;end if;
+	if address='' then set address=null;end if;
+	if city='' then set city=null;end if;
+	if country='' then set country=null;end if;
+	if regionalFocus='' then set regionalFocus=null;end if;
 	
-	if id is null and not exists(select * from Organisations o where (o.`home-page`= url or o.`home-page`= concat("http://",url) ) and o.name=companyName)then
-	-- set insert
-    if bio is null then set bio='';end if;
-		insert into Organisations (name,`home-page`, biography) values (companyName,url,bio);
-		CALL getOrg(LAST_INSERT_ID(), NULL, NULL,NULL);
-	else 
-		set @first = true;
-		set @q= "update Organisations o set ";-- set update
-		if bio is not null then 
-#set paramaters to be updated
-			set @q = CONCAT(@q," o.biography='",bio,"'") ;
-			set @first = false;
-		end if;
-		if url is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," o.`home-page`='",url,"'") ;
-		end if;
+	IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name=companyName) THEN
+		INSERT INTO Organisations (name,biography,`home-page`,`e-mail`,address,city,country,`regional-focus`) values (companyName,bio,url,email,address,city,country,regionalFocus);
+		CALL getOrg(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+	ELSE
+		set @q= "update Organisations o set ";
+
 		if companyName is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
 			set @q = CONCAT(@q," o.name='",companyName,"'") ;
 		end if;
-	
-#		set where
-		if id is not null then 
-			set @q = CONCAT(@q," where  o.id= ",id);
-		elseif url is not null and companyName is not null then 
-			set @q = CONCAT(@q," where o.`home-page`='",url,"' and o.name='",companyName,"'");
+		if url is not null then 
+			set @q = CONCAT(@q," , o.`home-page`='",url,"'") ;
+		end if;
+		if bio is not null then 
+			set @q = CONCAT(@q," , o.biography='",bio,"'") ;
+		end if;	
+		if email is not null then 
+			set @q = CONCAT(@q," , o.`e-mail`='",email,"'") ;
+		end if;
+		if address is not null then 
+			set @q = CONCAT(@q," , o.address='",address,"'") ;
+		end if;
+		if city is not null then 
+			set @q = CONCAT(@q," , o.city='",city,"'") ;
+		end if;
+		if country is not null then 
+			set @q = CONCAT(@q," , o.country='",country,"'") ;
+		end if;
+		if regionalFocus is not null then 
+			set @q = CONCAT(@q," , o.`regional-focus`='",regionalFocus,"'") ;
 		end if;
 
-            PREPARE stmt FROM @q;
-            EXECUTE stmt;
-            DEALLOCATE PREPARE stmt;
-            CALL getOrg(id, NULL, NULL, NULL);
+		set @q = CONCAT(@q," WHERE o.id=",id) ;
+		
+	   PREPARE stmt FROM @q;
+	   EXECUTE stmt;
+	   DEALLOCATE PREPARE stmt;
+	   CALL getOrg(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 	end if;		
 END//

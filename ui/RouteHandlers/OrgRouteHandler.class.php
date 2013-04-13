@@ -277,21 +277,28 @@ class OrgRouteHandler
         $orgDao = new OrganisationDao();
 
         $org = $orgDao->getOrganisation($org_id);
-        if ($app->request()->isPost()) {
-            $name = $app->request()->post("name");
-            if ($name != null) {
-                $org->setName($name);
-            }   
+        if($post = $app->request()->post()) {
+
+            if(isset($post['displayName'])) $org->setName($post['displayName']); 
+            if(isset($post['homepage'])) $org->setHomePage($post['homepage']); 
+            if(isset($post['biography'])) $org->setBiography($post['biography']);
+            if(isset($post['address'])) $org->setAddress($post['address']);
+            if(isset($post['city'])) $org->setCity($post['city']);
+            if(isset($post['country'])) $org->setCountry($post['country']);
+            if(isset($post['email'])) $org->setEmail($post['email']);
             
-            $home_page = $app->request()->post("home_page");
-            if ($home_page != null) {
-                $org->setHomePage($home_page);
-            }   
+            $regionalFocus = "";
+            if(isset($post['africa'])) $regionalFocus .= "Africa";   
+            if(isset($post['asia'])) $regionalFocus .= " Asia"; 
+            if(isset($post['australia'])) $regionalFocus .= " Australia"; 
+            if(isset($post['europe'])) $regionalFocus .= " Europe"; 
+            if(isset($post['north America'])) $regionalFocus .= " North America"; 
+            if(isset($post['south America'])) $regionalFocus .= " South America"; 
             
-            $bio = $app->request()->post("bio");
-            if ($bio != null) {
-                $org->setBiography($bio);
-            }  
+            if(!empty($regionalFocus)) {
+                $regionalFocus = str_replace(" ", ", " , $regionalFocus);
+                $org->setRegionalFocus($regionalFocus);
+            }
             
             $orgDao->updateOrg($org); 
             $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));

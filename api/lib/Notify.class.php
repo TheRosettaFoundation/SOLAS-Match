@@ -66,7 +66,7 @@ class Notify
 
     {
         $org_dao = new OrganisationDao();
-        $org = $org_dao->getOrg($org_id, null, null, null);
+        $org = $org_dao->getOrg($org_id);
         $org = $org[0];
         
         $user_dao = new UserDao();

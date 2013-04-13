@@ -301,11 +301,26 @@ class ModelFactory
         if (isset($modelData['name'])) {
             $ret->setName($modelData['name']);
         }
+        if (isset($modelData['biography'])) {
+            $ret->setBiography($modelData['biography']);
+        }
         if (isset($modelData['home-page'])) {
             $ret->setHomePage($modelData['home-page']);
         }
-        if (isset($modelData['biography'])) {
-            $ret->setBiography($modelData['biography']);
+        if (isset($modelData['e-mail'])) {
+            $ret->setEmail($modelData['e-mail']);
+        }
+        if (isset($modelData['address'])) {
+            $ret->setAddress($modelData['address']);
+        }
+        if (isset($modelData['city'])) {
+            $ret->setCity($modelData['city']);
+        }
+        if (isset($modelData['country'])) {
+            $ret->setCountry($modelData['country']);
+        }
+        if (isset($modelData['regional-focus'])) {
+            $ret->setRegionalFocus($modelData['regional-focus']);
         }
 
         return $ret;

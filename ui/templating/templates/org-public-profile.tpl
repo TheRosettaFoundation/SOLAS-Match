@@ -41,33 +41,139 @@
 {/if}
 
     <div class="well">
-        <table border="0" width="100%">
-            <thead>
-            <th align="left" width="48%">Biography:<hr/></th>
-            </thead>
-            <tbody>
-                <tr valign="top">
-                    <td>
-                        <i>
-                        {if $org->getBiography() != ''}
-                            {$org->getBiography()}
-                        {else}
-                            This organisation has no biography listed.
-                        {/if}
-                        </i>
-                    </td>
-                </tr>    
-                <tr><td><hr /></td></tr>
-                <tr>
-                    <td>
-                        {if $org->getHomePage() != '' && $org->getHomePage() != 'http://'}
-                            <strong>Home Page:</strong> <a target="_blank" href='{$org->getHomePage()}'>{$org->getHomePage()}</a>
-                        {/if}
-                    </td>
-                </tr>
-            </tbody>
+        <table>
+            <tr valign="top">
+                <td  style="width: 48%">
+                    <div>
+                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                            <thead>                
+                                <th align="left">Home Page:<hr/></th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getHomePage() != 'http://'}
+                                            <a href="{$org->getHomePage()}">{$org->getHomePage()}</a>
+                                        {else}
+                                            No home page listed.
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>Address:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getAddress() != ''}
+                                            {$org->getAddress()}
+                                        {else}
+                                            No address listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>City:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getCity() != ''}
+                                            {$org->getCity()}
+                                        {else}
+                                            No city listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>Country:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getCountry() != ''}
+                                            {$org->getCountry()}
+                                        {else}
+                                            No country listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                <td style="width: 4%"/>
+                <td style="width: 48%">            
+                    <div class="pull-right">
+                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
+                            <thead>                
+                                <th align="left" width="48%">E-Mail:<hr/></th>
+                            </thead>
+                            <tbody>
+                                 <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getEmail() != ''}
+                                            <a href="mailto:{$org->getEmail()}">{$org->getEmail()}</a>
+                                        {else}
+                                            No e-mail listed.
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>Biography:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getBiography() != ''}
+                                            {$org->getBiography()}
+                                        {else}
+                                            No biography listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>Regional Focus:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getRegionalFocus() != ''}
+                                            {$org->getRegionalFocus()}
+                                        {else}
+                                            No regional focus listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
         </table>
     </div>
+    
+                        
                 
     <p style="margin-bottom: 60px" />         
     <h1 class="page-header">
