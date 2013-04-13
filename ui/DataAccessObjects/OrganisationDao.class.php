@@ -17,7 +17,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$id";
-        $ret = $this->client->castCall("Organisation", $request);
+        $ret = $this->client->call("Organisation", $request);
         return $ret;
     }
     
@@ -25,7 +25,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/getByName/$name";
-        $ret = $this->client->castCall("Organisation", $request);
+        $ret = $this->client->call("Organisation", $request);
         return $ret;       
     }
     
@@ -33,7 +33,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/searchByName/$name";
-        $ret = $this->client->castCall(array("Organisation"), $request);
+        $ret = $this->client->call(array("Organisation"), $request);
         return $ret;       
     }
     
@@ -41,7 +41,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs";
-        $ret = $this->client->castCall(array("Organisation"), $request);
+        $ret = $this->client->call(array("Organisation"), $request);
         return $ret;
     }
 
@@ -49,7 +49,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/projects";
-        $ret = $this->client->castCall(array("Project"), $request);
+        $ret = $this->client->call(array("Project"), $request);
         return $ret;
     }
 
@@ -57,7 +57,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/archivedProjects";
-        $ret = $this->client->castCall(array("ArchivedProject"), $request);
+        $ret = $this->client->call(array("ArchivedProject"), $request);
         return $ret;
     }
 
@@ -65,7 +65,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/badges";
-        $ret = $this->client->castCall(array("Badge"), $request);
+        $ret = $this->client->call(array("Badge"), $request);
         return $ret;
     }
 
@@ -73,7 +73,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/members";
-        $ret = $this->client->castCall(array("User"), $request);
+        $ret = $this->client->call(array("User"), $request);
         return $ret;
     }
 
@@ -81,7 +81,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests";
-        $ret = $this->client->castCall(array("MembershipRequest"), $request);
+        $ret = $this->client->call(array("MembershipRequest"), $request);
         return $ret;
     }
 
@@ -89,7 +89,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/tasks";
-        $ret = $this->client->castCall(array("Task"), $request);
+        $ret = $this->client->call(array("Task"), $request);
         return $ret;
     }
 
@@ -97,7 +97,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/isMember/$orgId/$userId";
-        $ret = $this->client->castCall(null, $request);
+        $ret = $this->client->call(null, $request);
         return $ret;
     }
 
@@ -105,7 +105,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs";
-        $ret = $this->client->castCall("Organisation", $request, HttpMethodEnum::POST, $org);
+        $ret = $this->client->call("Organisation", $request, HttpMethodEnum::POST, $org);
         return $ret;
     }
 
@@ -113,33 +113,33 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
-        $ret = $this->client->castCall("Organisation", $request, HttpMethodEnum::PUT, $org);
+        $ret = $this->client->call("Organisation", $request, HttpMethodEnum::PUT, $org);
         return $ret;
     }
 
     public function deleteOrg($orgId)
     {
         $request = "{$this->siteApi}v0/orgs/$orgId";
-        $this->client->castCall(null,$request, HttpMethodEnum::DELETE);
+        $this->client->call(null,$request, HttpMethodEnum::DELETE);
     }
 
     public function createMembershipRequest($orgId, $userId)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $ret = $this->client->castCall(null, $request, HttpMethodEnum::POST);
+        $ret = $this->client->call(null, $request, HttpMethodEnum::POST);
         return $ret;
     }
 
     public function acceptMembershipRequest($orgId, $userId)
     {
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $this->client->castCall(null, $request, HttpMethodEnum::PUT);
+        $this->client->call(null, $request, HttpMethodEnum::PUT);
     }
 
     public function rejectMembershipRequest($orgId, $userId)
     {
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $this->client->castCall(null, $request, HttpMethodEnum::DELETE);
+        $this->client->call(null, $request, HttpMethodEnum::DELETE);
     }
 }

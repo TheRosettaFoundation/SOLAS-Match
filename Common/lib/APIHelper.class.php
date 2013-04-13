@@ -40,37 +40,23 @@ class APIHelper
              $data = null, $query_args = array(), $file = null)
     {
         $url = $url.$this->_serializer->getFormat()."/?";
-//        $request = new HTTP_Request2($url, $method);
         if (count($query_args) > 0) {
-//            $requestUrl = $request->getUrl();
             $first= true;
             foreach ($query_args as $key=>$val){
                 if(!$first)$url.="&";
                 $url.="$key=$val";
             }
-            
-//            $requestUrl->setQueryVariables($query_args);
         }
         $re = curl_init($url);
-        
-//        switch ($method){
-//        case HTTP_Request2::METHOD_GET: curl_setopt($re, CURLOPT_CUSTOMREQUEST, "GET"); break;
-//        case HTTP_Request2::METHOD_POST: curl_setopt($re, CURLOPT_CUSTOMREQUEST, "POST"); break;
-//        case HTTP_Request2::METHOD_PUT: curl_setopt($re, CURLOPT_CUSTOMREQUEST, "PUT"); break;
-//        case HTTP_Request2::METHOD_DELETE: curl_setopt($re, CURLOPT_CUSTOMREQUEST, "DELETE"); break;
-//        }
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
-       
         $lenght = 0;
         if (!is_null($data) && "null" != $data) {
             $data=$this->_serializer->serialize($data);
             curl_setopt($re, CURLOPT_POSTFIELDS, $data);
             $lenght=strlen($data);
-//            $request->setBody($data);
         }
         
         if (!is_null($file)) {
-//            $request->setBody($file);
             $lenght=strlen($file);
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
@@ -82,7 +68,6 @@ class APIHelper
         );
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
         $res=curl_exec($re);
-//        $response = $request->send();
         $response_data = $this->_serializer->deserialize($res,$destination);
         return $response_data;
     }
@@ -103,15 +88,6 @@ class APIHelper
         }
 
         return $ret;
-    }
-
-    public function castCall($destination, $url, $method = HttpMethodEnum::GET,
-                    $data = null, $query_args = array(), $file = null)
-    {
-//        $ret = null;
-        $result = $this->call($destination,$url, $method, $data, $query_args,$file);
-//        $ret = $this->cast($destination, $result);
-        return $result;
     }
 
     public function serialize($data)

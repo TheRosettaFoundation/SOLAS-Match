@@ -18,7 +18,7 @@ class TagDao
     {
         $request="{$this->siteApi}v0/tags/$id";
         $args=$limit ? array("limit" => $limit) : null;
-        $response=$this->client->castCall("Tag", $request, HttpMethodEnum::GET, null, $args);
+        $response=$this->client->call("Tag", $request, HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
@@ -26,7 +26,7 @@ class TagDao
     {
         $request="{$this->siteApi}v0/tags";
         $args=$limit ? array("limit" => $limit) : null;
-        $response=$this->client->castCall(array("Tag"), $request, HttpMethodEnum::GET, null, $args);
+        $response=$this->client->call(array("Tag"), $request, HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
@@ -34,7 +34,7 @@ class TagDao
     {
         $request="{$this->siteApi}v0/tags/getByLabel/$label";
         $args=$limit ? array("limit" => $limit) : null;
-        $response=$this->client->castCall("Tag", $request, HttpMethodEnum::GET, null, $args);
+        $response=$this->client->call("Tag", $request, HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
@@ -42,7 +42,7 @@ class TagDao
     {
         $request="{$this->siteApi}v0/tags/topTags";
         $args=$limit ? array("limit" => $limit) : null;
-        $response=$this->client->castCall(array("Tag"), $request, HttpMethodEnum::GET, null, $args);
+        $response=$this->client->call(array("Tag"), $request, HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
@@ -50,28 +50,28 @@ class TagDao
     {
         $args=$limit ? array("limit" => $limit) : null;
         $request="{$this->siteApi}v0/tags/$tagId/tasks";
-        $response=$this->client->castCall(array("Task"), $request, HttpMethodEnum::GET, null, $args);
+        $response=$this->client->call(array("Task"), $request, HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
     public function createTag($tag)
     {
         $request="{$this->siteApi}v0/tags";
-        $response=$this->client->castCall("Tag", $request, HttpMethodEnum::POST, $tag);
+        $response=$this->client->call("Tag", $request, HttpMethodEnum::POST, $tag);
         return $response;
     }
 
     public function updateTag($tag)
     {
         $request="{$this->siteApi}v0/tags/{$tag->getId()}";
-        $response=$this->client->castCall("Tag", $request, HttpMethodEnum::PUT, $tag);
+        $response=$this->client->call("Tag", $request, HttpMethodEnum::PUT, $tag);
         return $response;
     }
 
     public function deleteTag($tagId)
     {
         $request="{$this->siteApi}v0/tags/{$tag->getId()}";
-        $response=$this->client->castCall(null, $request, HttpMethodEnum::DELETE);
+        $response=$this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $response;
     }
 

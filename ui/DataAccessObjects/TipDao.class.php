@@ -17,7 +17,7 @@ class TipDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/tips";
-        $ret = $this->client->castCall(null,$request);
+        $ret = $this->client->call(null,$request);
         return $ret;
     }
 }

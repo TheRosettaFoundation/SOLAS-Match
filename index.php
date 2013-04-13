@@ -94,6 +94,7 @@ require_once 'Common/protobufs/emails/FeedbackEmail.php';
 
 function isValidPost(&$app)
 {
+    
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }
 
