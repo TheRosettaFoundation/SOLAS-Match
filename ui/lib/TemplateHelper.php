@@ -282,7 +282,7 @@ class TemplateHelper {
         if(apc_exists("languages")){ 
             $languages=apc_fetch("languages");
         }else{
-            $languages=$languageDao->getLanguages();
+            $languages=$langDao->getLanguages();
             apc_add("languages", $languages);
         }
        
