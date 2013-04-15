@@ -3138,8 +3138,9 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.userSecondaryLanguageInsert
+-- Dumping structure for procedure SolasUpgrade2.userSecondaryLanguageInsert
 DROP PROCEDURE IF EXISTS `userSecondaryLanguageInsert`;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userSecondaryLanguageInsert`(IN `userId` INT, IN `languageCode` VARCHAR(128), IN `countryCode` VARCHAR(128))
 BEGIN
 
@@ -3189,10 +3190,10 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.userPersonalInfoInsertAndUpdate
+-- Dumping structure for procedure SolasUpgrade2.userPersonalInfoInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
 DELIMITER //
+CREATE DEFINER=`tester`@`%` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
@@ -3255,11 +3256,10 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.getUserPersonalInfo
+-- Dumping structure for procedure SolasUpgrade2.getUserPersonalInfo
 DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
 DELIMITER //
+CREATE DEFINER=`tester`@`%` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;

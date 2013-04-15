@@ -436,8 +436,10 @@ class UserRouteHandler
             }
             
             for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {
-                //for each new secondary language,
-                //set it in the user object and update            
+                $locale = new Locale();
+                $locale->setLanguageCode($post["secondaryLanguage_$i"]);
+                $locale->setCountryCode($post["secondaryCountry_$i"]);
+                $userDao->createSecondaryLanguage($userId, $locale);
             }
             
             if ($user->getDisplayName() != ""
@@ -455,13 +457,16 @@ class UserRouteHandler
         }
         
         $extraScripts = file_get_contents(__DIR__."/../js/user-private-profile.js");
+        $secondaryLanguages = $userDao->getSecondaryLanguages($userId);
         
         $app->view()->appendData(array(
+            "user"              => $user,
             "private_access"    => true,
             "languages"         => $languages,
             "countries"         => $countries,
             "extra_scripts"     => $extraScripts,
-            "userPersonalInfo"  => $userPersonalInfo
+            "userPersonalInfo"  => $userPersonalInfo,
+            "secondaryLanguages" => $secondaryLanguages
         ));       
        
         $app->render("user-private-profile.tpl");
