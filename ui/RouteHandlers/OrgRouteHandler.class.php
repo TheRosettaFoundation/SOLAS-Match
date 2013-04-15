@@ -398,6 +398,23 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
+            } elseif (isset($post->revokeUser)) {
+                $userId = $post->revokeUser;
+                $user = $userDao->getUser(array('id' => $userId));
+                if ($user) {
+                    $userName = $user->getDisplayName();
+                    if ($userDao->leaveOrganisation($userId, $org_id)) {
+                        $app->flashNow("success", "Successfully rvoked membership from user
+                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $userId))}\">
+                                $userName</a>.");
+                    } else {
+                        $app->flashNow("error", "Unable to revoke membership from user
+                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $userId))}\">
+                                $userName</a>.");
+                    }
+                } else {
+                    $app->flashNow("error", "Unable to find user in system");
+                }
             }
         }       
         

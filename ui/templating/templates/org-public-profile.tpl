@@ -207,30 +207,43 @@
         <small>A list of users that are a member of this organisation.</small>
     </h1>
     {if isset($orgMembers) && count($orgMembers) > 0}
-        <table class="table table-striped">
-            <thead>
-                <th>Username</th>
-                <th>Biography</th>
-                <th>Profile</th>
-            </thead>
-            <tbody>
-                {foreach $orgMembers as $member}
-                    <tr>
-                        <td>{$member->getDisplayName()}</td>
-                        <td>
-                            {if $member->getBiography() != ''}
-                                {$member->getBiography()}
-                            {else}
-                                No biography has been set.
-                            {/if}
+        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+            <table class="table table-striped">
+                <thead>
+                    <th>Username</th>
+                    <th>Biography</th>
+                    <th>Profile</th>
+                    {if $adminAccess}
+                        <th>Remove User</th>
+                    {/if}
+                </thead>
+                <tbody>
+                    {foreach $orgMembers as $member}
+                        <tr>
+                            <td>{$member->getDisplayName()}</td>
+                            <td>
+                                {if $member->getBiography() != ''}
+                                    {$member->getBiography()}
+                                {else}
+                                    No biography has been set.
+                                {/if}
+                            </td>
+                            <td><button class="btn btn-primary">Profile</button></td>
                         </td>
-                        <td><button class="btn btn-primary">Profile</button></td>
-                    </td>
-                {/foreach}
-            </tbody>
-        </table>
+                        {if $adminAccess}
+                            <td>
+                                <button type="submit" name="revokeUser" value="{$member->getUserId()}" class="btn btn-inverse" 
+                                        onclick="return confirm('Are you sure you want to revoke membership from this user?')">
+                                    <i class="icon-fire icon-white"></i> Revoke Membership
+                                </button>
+                            </td>
+                        {/if}
+                    {/foreach}
+                </tbody>
+            </table>
+        </form>
     {else}
-        <p class="info">This organisation does not have any members</p>
+        <p class="alert alert-info">This organisation does not have any members</p>
     {/if}
 {/if}
 
