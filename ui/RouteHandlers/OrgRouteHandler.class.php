@@ -25,8 +25,8 @@ class OrgRouteHandler
         $app->get("/org/:org_id/private", array($middleware, "authUserForOrg"), 
         array($this, "orgPrivateProfile"))->via("POST")->name("org-private-profile");
 
-        $app->get("/org/:org_id/profile", array($this, "orgPublicProfile")
-        )->via("POST")->name("org-public-profile");
+        $app->get("/org/:org_id/profile", array($middleware, "authUserIsLoggedIn"),
+        array($this, "orgPublicProfile"))->via("POST")->name("org-public-profile");
 
         $app->get("/org/:org_id/manage/:badge_id", array($middleware, "authUserForOrg"), 
         array($this, "orgManageBadge"))->via("POST")->name("org-manage-badge");
@@ -374,13 +374,16 @@ class OrgRouteHandler
                 }
             } elseif (isset($post->accept)) {
                 if ($user_id = $post->user_id) {
-                    $orgDao->acceptMembershipRequest($org_id, $user_id);
-                    $user = $userDao->getUser(array('id' => $user_id));
-                    $user_name = $user->getDisplayName();
-                    $org_name = $org->getName();
-                    $app->flashNow("success", "Successfully added ".
-                            "<a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">".
-                            "$user_name</a> as a member of $org_name");
+                    if ($orgDao->acceptMembershipRequest($org_id, $user_id)) {
+                        $user = $userDao->getUser(array('id' => $user_id));
+                        $user_name = $user->getDisplayName();
+                        $org_name = $org->getName();
+                        $app->flashNow("success", "Successfully added ".
+                                "<a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">".
+                                "$user_name</a> as a member of $org_name");
+                    } else {
+                        $app->flashNow("error", "Unable to add user to member list. Please try again later.");
+                    }
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
@@ -405,20 +408,31 @@ class OrgRouteHandler
                 $user = $userDao->getUser(array('id' => $memRequest->getUserId()));
                 $user_list[] = $user;
             }
-        }  
+        }
+
+        $currentUser = $userDao->getUser(array('id' => UserSession::getCurrentUserId()));
 
         $org_badges = $orgDao->getOrgBadges($org_id);
         $orgMemberList = $orgDao->getOrgMembers($org_id);
         $org_members = array();
+        $isMember = false;
         if (count($orgMemberList) > 0) {
-            foreach ($orgMemberList as $usrObject) {
-                $org_members[] = $usrObject->getUserId();
+            if (in_array($currentUser, $orgMemberList)) {
+                $isMember = true;
             }
         }
 
+        $adminAccess = false;
+        if ($userDao->isAdmin($currentUser->getUserId(), $org->getId())) {
+            $adminAccess = true;
+        }
+
         $app->view()->setData("current_page", "org-public-profile");
-        $app->view()->appendData(array("org" => $org,
-                "org_members" => $org_members,
+        $app->view()->appendData(array(
+                "org" => $org,
+                'isMember'  => $isMember,
+                'orgMembers' => $orgMemberList,
+                'adminAccess' => $adminAccess,
                 "org_badges" => $org_badges,
                 "user_list" => $user_list
         ));

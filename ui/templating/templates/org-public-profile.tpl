@@ -26,7 +26,7 @@
             <small>An organisation on SOLAS Match.</small>
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
-                {if in_array($user->getUserId(), $org_members)}
+                {if $isMember}
                     <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
                         <i class="icon-wrench icon-white"></i> Edit Organisation Details
                     </a>
@@ -75,7 +75,7 @@
         <small>Overview of badges created by this organisation.</small>
 
         {if isset($user)}
-            {if in_array($user->getUserId(), $org_members)}
+            {if $isMember}
                 <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                     <i class="icon-star icon-white"></i> Create Badge
                 </a>
@@ -89,7 +89,7 @@
         <thead>            
             <th style="text-align: left">Name</th>
             <th>Description</th>
-            {if in_array($user->getUserId(), $org_members)}
+            {if $isMember}
                 <th>Edit</th>
                 <th>Assign</th>
                 <th>Delete</th>
@@ -106,27 +106,25 @@
                 <td width="35%">
                     {$badge->getDescription()}
                 </td>
-                {if isset($user)}
-                    {if in_array($user->getUserId(), $org_members)}
-                        <td>
-                            <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
-                                <i class="icon-wrench icon-black"></i> Edit Badge
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
-                                <i class="icon-plus-sign icon-black"></i> Assign Badge
-                            </a>
-                        </td>
-                        <td>                        
-                            <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                <input type="hidden" name="badge_id" value="{$badge_id}" />
-                                <input type="submit" class='btn btn-inverse' name="deleteBadge" value="    Delete Badge"
-                                  onclick="return confirm('Are you sure you want to delete this badge?')" />                                 
-                           </form> 
-                            <i class="icon-fire icon-white" style="position:relative; right:44px; top:-40px;"></i> 
-                        </td>  
-                    {/if}
+                {if $isMember}
+                    <td>
+                        <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
+                            <i class="icon-wrench icon-black"></i> Edit Badge
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
+                            <i class="icon-plus-sign icon-black"></i> Assign Badge
+                        </a>
+                    </td>
+                    <td>                        
+                        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                            <input type="hidden" name="badge_id" value="{$badge_id}" />
+                            <input type="submit" class='btn btn-inverse' name="deleteBadge" value="    Delete Badge"
+                              onclick="return confirm('Are you sure you want to delete this badge?')" />                                 
+                        </form> 
+                        <i class="icon-fire icon-white" style="position:relative; right:44px; top:-40px;"></i> 
+                    </td>  
                 {/if}
             </tr>
         {/foreach}
@@ -141,19 +139,15 @@
 {/if}
       
 {if isset($user)}
-   {if in_array($user->getUserId(), $org_members)}               
+   {if $isMember}               
         <p style="margin-bottom: 40px" />         
         <h1 class="page-header">
             Membership Requests
             <small>Overview of users who have requested membership.</small>
             
-        {if isset($user)}
-            {if in_array($user->getUserId(), $org_members)}
-                <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-                    <i class="icon-star icon-white"></i> Add User
-                </a>
-            {/if}
-        {/if}
+            <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
+                <i class="icon-star icon-white"></i> Add User
+            </a>
         </h1>                  
         <p style="margin-bottom: 40px" />               
                 
@@ -166,25 +160,25 @@
                     <th>Deny</th>
                 </thead>
                 <tbody>
-                {foreach $user_list as $user}
+                {foreach $user_list as $nonMember}
                     <tr>
-                        {assign var="user_id" value=$user->getUserId()}                        
-                        {if $user->getDisplayName() != ''}
+                        {assign var="user_id" value=$nonMember->getUserId()}                        
+                        {if $nonMember->getDisplayName() != ''}
                             <td style="text-align: left">
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$user->getDisplayName()}</a>
+                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$nonMember->getDisplayName()}</a>
                             </td>
                         {/if}
                         <td width="50%">
                             <i>
-                            {if $user->getBiography() != ''}
-                                {$user->getBiography()}
+                            {if $nonMember->getBiography() != ''}
+                                {$nonMember->getBiography()}
                             {else}
                                 No biography has been added.
                             {/if}
                             </i>
                         </td>
                         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                            <input type="hidden" name="user_id" value="{$user->getUserId()}" />
+                            <input type="hidden" name="user_id" value="{$nonMember->getUserId()}" />
                             <td>
                                 <input type="submit" name="accept" value="    Accept Request" class="btn btn-primary" />
                                 <i class="icon-ok-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
@@ -203,6 +197,40 @@
                 There are no membership requests associated with this organisation.
             </p>
         {/if}
+        <p style="margin-bottom: 40px" />               
+    {/if}
+{/if}
+
+{if $adminAccess || $isMember}
+    <h1 class="page-header">
+        Organisation Members
+        <small>A list of users that are a member of this organisation.</small>
+    </h1>
+    {if isset($orgMembers) && count($orgMembers) > 0}
+        <table class="table table-striped">
+            <thead>
+                <th>Username</th>
+                <th>Biography</th>
+                <th>Profile</th>
+            </thead>
+            <tbody>
+                {foreach $orgMembers as $member}
+                    <tr>
+                        <td>{$member->getDisplayName()}</td>
+                        <td>
+                            {if $member->getBiography() != ''}
+                                {$member->getBiography()}
+                            {else}
+                                No biography has been set.
+                            {/if}
+                        </td>
+                        <td><button class="btn btn-primary">Profile</button></td>
+                    </td>
+                {/foreach}
+            </tbody>
+        </table>
+    {else}
+        <p class="info">This organisation does not have any members</p>
     {/if}
 {/if}
 

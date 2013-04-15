@@ -145,8 +145,10 @@ class OrganisationDao
 
     public function acceptMembershipRequest($orgId, $userId)
     {
+        $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $ret = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        return $ret;
     }
 
     public function rejectMembershipRequest($orgId, $userId)
