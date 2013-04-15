@@ -303,4 +303,45 @@ class UserDao
         $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $registerData);
         return $ret;
     }
+    
+    public function createPersonalInfo($userId, $personalInfo)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/personalInfo";
+        $ret = $this->client->call("UserPersonalInformation", $request, HttpMethodEnum::POST, $personalInfo);
+        return $ret;
+    }
+    
+    public function updatePersonalInfo($userId, $personalInfo)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/personalInfo";
+        $ret = $this->client->call("UserPersonalInformation", $request, HttpMethodEnum::PUT, $personalInfo);
+        return $ret;
+    }
+    
+    public function getPersonalInfo($userId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/personalInfo";
+        $ret = $this->client->call("UserPersonalInformation", $request);
+        return $ret;
+    }
+    
+    public function createSecondaryLanguage($userId, $locale)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/secondaryLanguages";
+        $ret = $this->client->call("Locale", $request, HttpMethodEnum::POST, $locale);
+        return $ret;
+    }
+    
+    public function getSecondaryLanguages($userId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/secondaryLanguages";
+        $ret = $this->client->call(array("Locale"), $request);
+        return $ret;
+    }
+    
 }

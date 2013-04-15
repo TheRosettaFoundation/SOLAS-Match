@@ -290,24 +290,24 @@ CREATE TABLE IF NOT EXISTS `ProjectFiles` (
 
 -- Dumping structure for table Solas-Match-Test.Projects
 CREATE TABLE IF NOT EXISTS `Projects` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
-  `impact` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
-  `deadline` datetime DEFAULT NULL,
-  `organisation_id` int(10) unsigned NOT NULL,
-  `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `word-count` int(10) DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `language_id` int(10) unsigned DEFAULT NULL,
-  `country_id` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `organisation_id` (`organisation_id`,`title`,`language_id`,`country_id`),
-  KEY `FK_Projects_Languages` (`language_id`),
-  KEY `FK_Projects_Countries` (`country_id`),
-  CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_Projects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`description` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	`deadline` DATETIME NULL DEFAULT NULL,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`word-count` INT(10) NULL DEFAULT NULL,
+	`created` DATETIME NOT NULL,
+	`language_id` INT(10) UNSIGNED NOT NULL,
+	`country_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `organisation_id` (`organisation_id`, `title`, `language_id`, `country_id`),
+	INDEX `FK_Projects_Languages` (`language_id`),
+	INDEX `FK_Projects_Countries` (`country_id`),
+	CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_Projects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -363,18 +363,18 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
 
 -- Dumping structure for table Solas-Match-Test.TaskFileVersions
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `task_id` bigint(20) unsigned NOT NULL,
-  `version_id` int(11) NOT NULL COMMENT 'Gets incremented within the code',
-  `filename` text COLLATE utf8_unicode_ci NOT NULL,
-  `content-type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_id` int(11) unsigned DEFAULT NULL COMMENT 'Null while we don''t have logging in',
-  `upload-time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `taskFile` (`task_id`,`version_id`,`user_id`),
-  KEY `FK_task_file_version_user` (`user_id`),
-  CONSTRAINT `FK_task_file_version_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_task_file_version_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`task_id` BIGINT(20) UNSIGNED NOT NULL,
+	`version_id` INT(11) NOT NULL COMMENT 'Gets incremented within the code',
+	`filename` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	`content-type` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`user_id` INT(11) UNSIGNED NOT NULL COMMENT 'Null while we don\'t have logging in',
+	`upload-time` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`),
+	INDEX `FK_task_file_version_user` (`user_id`),
+	CONSTRAINT `FK_task_file_version_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_task_file_version_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -519,6 +519,26 @@ CREATE TABLE IF NOT EXISTS `UserOrganisationPermissions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`first-name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`last-name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`mobile-number` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`business-number` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`sip` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`job-title` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `user_id` (`user_id`),
+	CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
+
+
 -- Dumping structure for table Solas-Match-Test.Users
 CREATE TABLE IF NOT EXISTS `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -585,26 +605,26 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedProjects
 CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `Project_id` int(10) unsigned DEFAULT NULL,
-  UNIQUE KEY `user_id` (`user_id`,`Project_id`),
-  KEY `FK_UserTrackedProjects_Projects` (`Project_id`),
-  CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`Project_id` INT(10) UNSIGNED NOT NULL,
+	UNIQUE INDEX `user_id` (`user_id`, `Project_id`),
+	INDEX `FK_UserTrackedProjects_Projects` (`Project_id`),
+	CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 -- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedTasks
 CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `task_id` bigint(10) unsigned DEFAULT NULL,
-  UNIQUE KEY `user_id` (`user_id`,`task_id`),
-  KEY `FK_UserTrackedTasks_Tasks` (`task_id`),
-  CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`task_id` BIGINT(10) UNSIGNED NOT NULL,
+	UNIQUE INDEX `user_id` (`user_id`, `task_id`),
+	INDEX `FK_UserTrackedTasks_Tasks` (`task_id`),
+	CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- Data exporting was unselected.
 
@@ -3120,15 +3140,26 @@ DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.userSecondaryLanguageInsert
 DROP PROCEDURE IF EXISTS `userSecondaryLanguageInsert`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userSecondaryLanguageInsert`(IN `userId` INT, IN `languageId` INT, IN `countryId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userSecondaryLanguageInsert`(IN `userId` INT, IN `languageCode` VARCHAR(128), IN `countryCode` VARCHAR(128))
 BEGIN
-	INSERT INTO UserSecondaryLanguages
-	VALUES(userId, languageId, countryId);
-        SELECT 1 AS `result`;
+
+	set @languageId=null;	
+	select l.id into @languageId from Languages l where l.code=languageCode;
+	
+	set @countryId=null;
+	select c.id into @countryId from Countries c where c.code=countryCode;	
+	
+	INSERT INTO UserSecondaryLanguages (user_id, language_id, country_id)
+	VALUES(userId, @languageId, @countryId);
+	
+	SELECT (select `en-name` from Languages where id =@languageId) as `languageName`,
+			 (select code from Languages where id =@languageId) as `languageCode`,
+			 (select `en-name` from Countries where id =@countryId) as `countryName`,
+			 (select code from Countries where id =@countryId) as `countryCode` FROM UserSecondaryLanguages ul
+	WHERE ul.id = LAST_INSERT_ID();
+
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.userSecondaryLanguageInsert
 DROP PROCEDURE IF EXISTS `getUserSecondaryLanguages`;
@@ -3158,6 +3189,141 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.userPersonalInfoInsertAndUpdate
+DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+DELIMITER //
+BEGIN
+	if id='' then set id=null;end if;
+	if userId='' then set userId=null;end if;
+	if firstName='' then set firstName=null;end if;
+	if lastName='' then set lastName=null;end if;
+	if mobileNumber='' then set mobileNumber=null;end if;
+	if businessNumber='' then set businessNumber=null;end if;
+	if sip='' then set sip=null;end if;
+	if jobTitle='' then set jobTitle=null;end if;
+	if address='' then set address=null;end if;
+	if city='' then set city=null;end if;
+	if country='' then set country=null;end if;
+		
+	IF id IS NULL AND NOT EXISTS(select 1 FROM UserPersonalInformation p WHERE p.`user_id`=userId) THEN
+		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`,`sip`,`job-title`,`address`,`city`,`country`)
+		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,sip,jobTitle,address,city,country);
+		CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+	ELSE
+		set @q= "UPDATE UserPersonalInformation p SET ";
+
+		if userId is not null then 
+			set @q = CONCAT(@q," p.`user_id`='",userId,"'") ;
+		end if;
+		if firstName is not null then 
+			set @q = CONCAT(@q," , p.`first-name`='",firstName,"'") ;
+		end if;
+		if lastName is not null then 
+			set @q = CONCAT(@q," , p.`last-name`='",lastName,"'") ;
+		end if;	
+		if mobileNumber is not null then 
+			set @q = CONCAT(@q," , p.`mobile-number`='",mobileNumber,"'") ;
+		end if;
+		if businessNumber is not null then 
+			set @q = CONCAT(@q," , p.`business-number`='",businessNumber,"'") ;
+		end if;
+		if sip is not null then 
+			set @q = CONCAT(@q," , p.sip='",sip,"'") ;
+		end if;
+		if jobTitle is not null then 
+			set @q = CONCAT(@q," , p.`job-title`='",jobTitle,"'") ;
+		end if;
+		if address is not null then 
+			set @q = CONCAT(@q," , p.address='",address,"'") ;
+		end if;
+		if city is not null then 
+			set @q = CONCAT(@q," , p.city='",city,"'") ;
+		end if;
+		if country is not null then 
+			set @q = CONCAT(@q," , p.country='",country,"'") ;
+		end if;
+
+		set @q = CONCAT(@q," WHERE p.id=",id) ; 
+		
+	   PREPARE stmt FROM @q;
+	   EXECUTE stmt;
+	   DEALLOCATE PREPARE stmt;
+		CALL getUserPersonalInfo(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
+	end if;		
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getUserPersonalInfo
+DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+DELIMITER //
+BEGIN
+	if id='' then set id=null;end if;
+	if userId='' then set userId=null;end if;
+	if firstName='' then set firstName=null;end if;
+	if lastName='' then set lastName=null;end if;
+	if mobileNumber='' then set mobileNumber=null;end if;
+	if businessNumber='' then set businessNumber=null;end if;
+	if sip='' then set sip=null;end if;
+	if jobTitle='' then set jobTitle=null;end if;
+	if address='' then set address=null;end if;
+	if city='' then set city=null;end if;
+	if country='' then set country=null;end if;
+	
+	set @q= "select * from UserPersonalInformation p where 1 ";
+	
+	if id is not null then 
+		set @q = CONCAT(@q," and p.id='",id,"'") ;
+	end if;
+	
+	if userId is not null then 
+		set @q = CONCAT(@q," and p.`user_id`='",userId,"'") ;
+	end if;
+	
+	if firstName is not null then 
+		set @q = CONCAT(@q," and p.`first-name`='",firstName,"'") ;
+	end if;
+	
+	if lastName is not null then 
+		set @q = CONCAT(@q," and p.`last-name`='",lastName,"'") ;
+	end if;
+	
+	if mobileNumber is not null then 
+		set @q = CONCAT(@q," and p.`mobile-number`='",mobileNumber,"'") ;
+	end if;
+	
+	if businessNumber is not null then 
+		set @q = CONCAT(@q," and p.`business-number`='",businessNumber,"'") ;
+	end if;
+	
+	if sip is not null then 
+		set @q = CONCAT(@q," and p.sip='",sip,"'") ;
+	end if;
+	
+	if jobTitle is not null then 
+		set @q = CONCAT(@q," and p.`job-title`='",jobTitle,"'") ;
+	end if;
+	
+	if address is not null then 
+		set @q = CONCAT(@q," and p.address='",address,"'") ;
+	end if;
+	
+	if city is not null then 
+		set @q = CONCAT(@q," and p.city='",city,"'") ;
+	end if;
+	
+	if country is not null then 
+		set @q = CONCAT(@q," and p.country='",country,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
 
 
 /*---------------------------------------end of procs----------------------------------------------*/
@@ -3316,6 +3482,20 @@ CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `Organisations` FOR EAC
 	if not (new.`home-page` like "http://%" or new.`home-page`  like "https://%") then
 	set new.`home-page` = concat("http://",new.`home-page`);
 	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+-- Dumping structure for trigger SolasUpgrade2.userSecondaryLanguageInsert
+DROP TRIGGER IF EXISTS `userSecondaryLanguageInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `userSecondaryLanguageInsert` BEFORE INSERT ON `UserSecondaryLanguages` FOR EACH ROW BEGIN
+
+    IF EXISTS (SELECT 1 FROM Users u WHERE u.id = NEW.user_id AND u.language_id = NEW.language_id AND u.country_id = NEW.country_id) THEN
+            set NEW.user_id = null;
+    END IF;
+
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;

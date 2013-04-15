@@ -24,7 +24,6 @@
             var langs = document.getElementById('nativeLanguage').cloneNode(true);
             langs.setAttribute('id', 'secondaryLanguage_' + (fields + 1));
             langs.setAttribute('name', 'secondaryLanguage_' + (fields + 1));
-            langs.setAttribute('style', 'margin-right:4px');
             paragraph.appendChild(langs);
 
             var countries = document.getElementById('nativeCountry').cloneNode(true);
@@ -64,7 +63,6 @@
         size.setAttribute('value', parseInt(size.getAttribute('value'))-1);
 
         if(fields == 0) {
-            document.getElementById('removeNewSecondaryLanguageBtn').style.visibility = 'hidden';
             document.getElementById('removeNewSecondaryLanguageBtn').disabled = true;
             isRemoveButtonHidden = true;
         }         

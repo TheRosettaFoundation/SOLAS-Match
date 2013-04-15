@@ -360,6 +360,82 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'userUnTrackProject'); 
         
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/personalInfo(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+
+            $data = UserDao::getPersonalInfo(null,$id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getUserPersonalInfo');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/personalInfo(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+            
+            $data = Dispatcher::getDispatcher()->request()->getBody();
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data, "UserPersonalInformation");    
+            
+            Dispatcher::sendResponce(null, UserDao::createPersonalInfo($data), null, $format);
+
+        }, 'createUserPersonalInfo');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/personalInfo(:format)/',
+                                                        function ($id, $format = ".json") {
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+            $data = Dispatcher::getDispatcher()->request()->getBody();
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data,'UserPersonalInformation');
+            $data = UserDao::updatePersonalInfo($data);
+
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'updateUserPersonalInfo');
+        
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/secondaryLanguages(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+
+            $data = UserDao::getSecondaryLanguages($id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getSecondaryLanguages');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/secondaryLanguages(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+            
+            $data = Dispatcher::getDispatcher()->request()->getBody();
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data, "Locale");    
+            
+            Dispatcher::sendResponce(null, UserDao::createSecondaryLanguage($id, $data), null, $format);
+
+        }, 'createSecondaryLanguage');
     }
 }
 Users::init();

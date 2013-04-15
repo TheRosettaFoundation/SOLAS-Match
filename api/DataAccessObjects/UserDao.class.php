@@ -32,22 +32,23 @@ class UserDao
 
     public static function save($user)
     {
-        $nativeLanguageCode = "null";
-        $nativeCountryCode = "null";
+        $userId = $user->getId();
+        $nativeLanguageCode = null;
+        $nativeCountryCode = null;
         
-        if(!is_null($user->getId())) {
+        if(!is_null($userId) && $user->hasNativeLocale()) {
             $nativeLocale = $user->getNativeLocale();
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
         }
-                      
+        
         $result = PDOWrapper::call('userInsertAndUpdate', PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
         PDOWrapper::cleanseNull($user->getNonce()).",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".
         PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
         PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode).",".
         PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode).",".
-        PDOWrapper::cleanseNull($user->getId()));
+        PDOWrapper::cleanseNull($userId));
         if(!is_null($result)) {
             return ModelFactory::buildModel("User", $result[0]);
         } else {
@@ -463,4 +464,81 @@ class UserDao
         }
         return null;
     }
+    
+    public static function createPersonalInfo($userInfo)
+    {
+        return self::savePersonalInfo($userInfo);     
+    }
+            
+    public static function updatePersonalInfo($userInfo)
+    {
+        return self::savePersonalInfo($userInfo); 
+    }
+    
+    private static function savePersonalInfo($userInfo)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("userPersonalInfoInsertAndUpdate", PDOWrapper::cleanseNull($userInfo->getId())
+                                .",".PDOWrapper::cleanseNull($userInfo->getUserId())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getFirstName())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getLastName())
+                                .",".PDOWrapper::cleanseNull($userInfo->getMobileNumber())
+                                .",".PDOWrapper::cleanseNull($userInfo->getBusinessNumber())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getSip())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getJobTitle())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry()))) {
+            $ret = ModelFactory::buildModel("UserPersonalInformation", $result[0]);
+            
+        }
+        return $ret;
+    }
+    
+    public static function getPersonalInfo($id, $userId=null, $firstName=null, $lastName=null, $mobileNumber=null,
+                            $businessNumber=null, $sip=null, $jobTitle=null, $address=null, $city=null, $country=null)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("getUserPersonalInfo", PDOWrapper::cleanseNull($id)
+                                .",".PDOWrapper::cleanseNull($userId)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($firstName)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($lastName)
+                                .",".PDOWrapper::cleanseNull($mobileNumber)
+                                .",".PDOWrapper::cleanseNull($businessNumber)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($sip)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($jobTitle)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($address)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($city)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($country))) {
+            $ret = ModelFactory::buildModel("UserPersonalInformation", $result[0]);
+            
+        }
+        return $ret;        
+    }
+    
+    public static function createSecondaryLanguage($userId, $locale)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("userSecondaryLanguageInsert", PDOWrapper::cleanseNull($userId)
+                                .",".PDOWrapper::cleanseNullOrWrapStr($locale->getLanguageCode())
+                                .",".PDOWrapper::cleanseNullOrWrapStr($locale->getCountryCode()))) {
+            $ret = ModelFactory::buildModel("Locale", $result[0]);
+            
+        }
+        return $ret;
+    }
+    
+    public static function getSecondaryLanguages($userId=null)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("getUserSecondaryLanguages", PDOWrapper::cleanseNull($userId))) {
+            $ret = array();
+            foreach($result as $locale) {
+                $ret[] = ModelFactory::buildModel("Locale", $locale);
+            }
+            
+        }
+        return $ret;        
+    }
+    
 }

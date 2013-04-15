@@ -367,6 +367,7 @@ class UserRouteHandler
         $userDao = new UserDao();
         $userId = UserSession::getCurrentUserID();
         $user = $userDao->getUser($userId);
+        $userPersonalInfo = $userDao->getPersonalInfo($userId);
         
         if (!is_object($user)) {
             $app->flash("error", "Login required to access page");
@@ -392,9 +393,29 @@ class UserRouteHandler
         
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            $personalInfo = new UserPersonalInformation(); 
+            $personalInfo->setUserId($userId);
             
             if(isset($post["displayName"])) $user->setDisplayName($post["displayName"]);
-            if(isset($post["biography"])) $user->setBiography($post["biography"]);           
+            if(isset($post["biography"])) $user->setBiography($post["biography"]);
+            
+            if(isset($post["firstName"])) $personalInfo->setFirstName($post["firstName"]);
+            if(isset($post["lastName"])) $personalInfo->setLastName($post["lastName"]);
+            if(isset($post["mobileNumber"])) $personalInfo->setMobileNumber($post["mobileNumber"]);
+            if(isset($post["businessNumber"])) $personalInfo->setBusinessNumber($post["businessNumber"]);
+            if(isset($post["sip"])) $personalInfo->setSip($post["sip"]);
+            if(isset($post["jobTitle"])) $personalInfo->setJobTitle($post["jobTitle"]);
+            if(isset($post["address"])) $personalInfo->setAddress($post["address"]);
+            if(isset($post["city"])) $personalInfo->setCity($post["city"]);
+            if(isset($post["country"])) $personalInfo->setCountry($post["country"]);
+            
+            $userInfo = $userDao->getPersonalInfo($userId);
+            if($userInfo) {
+                $personalInfo->setId($userInfo->getId());
+                $userDao->updatePersonalInfo($userId, $personalInfo);
+            } else {
+                $userDao->createPersonalInfo($userId, $personalInfo);
+            }
             
             $nativeLang = $post["nativeLanguage"];
             $langCountry = $post["nativeCountry"];
@@ -439,7 +460,8 @@ class UserRouteHandler
             "private_access"    => true,
             "languages"         => $languages,
             "countries"         => $countries,
-            "extra_scripts"      => $extraScripts
+            "extra_scripts"     => $extraScripts,
+            "userPersonalInfo"  => $userPersonalInfo
         ));       
        
         $app->render("user-private-profile.tpl");
@@ -452,6 +474,7 @@ class UserRouteHandler
         $orgDao = new OrganisationDao();
 
         $user = $userDao->getUser($user_id);
+        $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
@@ -470,6 +493,7 @@ class UserRouteHandler
         $user_tags = $userDao->getUserTags($user_id);
         $user_orgs = $userDao->getUserOrgs($user_id);
         $badges = $userDao->getUserBadges($user_id);
+        $secondaryLanguages = $userDao->getSecondaryLanguages($user_id);
 
         $orgList = array();
         if($badges) {
@@ -494,7 +518,9 @@ class UserRouteHandler
                                     "user_tags" => $user_tags,
                                     "this_user" => $user,
                                     "extra_scripts" => $extra_scripts,
-                                    "org_creation" => $org_creation
+                                    "org_creation" => $org_creation,
+                                    "userPersonalInfo" => $userPersonalInfo,
+                                    "secondaryLanguages" => $secondaryLanguages
         ));
                 
         if (UserSession::getCurrentUserID() == $user_id) {

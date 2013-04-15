@@ -22,7 +22,7 @@
     
     <div class="well">
         <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
-            <table border="1">
+            <table border="0">
                 <tr>
                     <td colspan="2">
                         {if (isset($title_err) || isset($description_err) || isset($wordcount_err) || isset($deadline_err)
