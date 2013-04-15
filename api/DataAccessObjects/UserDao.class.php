@@ -32,10 +32,11 @@ class UserDao
 
     public static function save($user)
     {
-        $nativeLanguageCode = "null";
-        $nativeCountryCode = "null";
+        $nativeLanguageCode = null;
+        $nativeCountryCode = null;
         
-        if(!is_null($user->getId())) {
+        if(!is_null($user->getId())&& $user->hasNativeLocale()) {
+            
             $nativeLocale = $user->getNativeLocale();
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();

@@ -35,6 +35,7 @@ class Users {
             if (is_array($data)) {
                 $data = $data[0];
             }
+           
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUser');
         
