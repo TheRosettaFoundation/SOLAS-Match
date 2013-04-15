@@ -40,7 +40,7 @@
                     {if isset($languages)}
                         <select name="nativeLanguage" id="nativeLanguage" style="width: 80%">
                             {foreach $languages as $language}
-                                {if isset($userLocale) && $userLanguageCode == $language->getCode()}
+                                {if isset($usersNativeLocale) && $userLanguageCode == $language->getCode()}
                                     <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
                                 {else}
                                     <option value="{$language->getCode()}">{$language->getName()}</option>
@@ -51,7 +51,7 @@
                         {if isset($countries)}
                             <select name="nativeCountry" id="nativeCountry" style="width: 80%">
                                 {foreach $countries as $country}
-                                    {if isset($userLocale) && $userCountryCode == $country->getCode()}
+                                    {if isset($usersNativeLocale) && $userCountryCode == $country->getCode()}
                                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                                     {else}
                                         <option value="{$country->getCode()}">{$country->getName()}</option>
@@ -60,16 +60,47 @@
                             </select>
                         {/if}
                     {else}
-                        <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getLanguageAndCountry($userLocale)} />            
+                        <input type='text' name='nLanguage' id='nLanguage' value={TemplateHelper::getLanguageAndCountry($usersNativeLocale)} />            
                     {/if}
                     
                     <label for='extraSecondaryLanguages'><strong>Secondary Language(s):</strong></label>
-                    <div id="extraSecondaryLanguages"></div>
+                    <div id="extraSecondaryLanguages">
+                        
+                        {if isset($languages) && isset($countries) && isset($secondaryLanguages)}
+                            
+                            {assign var=increment value=0}
+                            {foreach from=$secondaryLanguages item=secLang}
+                                <span id="newSecondaryLanguage{$increment}">
+                                    <select name="secondaryLanguage" id="secondaryLanguage_{$increment}" style="width: 80%">
+                                        {foreach $languages as $language}
+                                            {if $secLang->getLanguageCode() == $language->getCode()}
+                                                <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
+                                            {else}
+                                                <option value="{$language->getCode()}">{$language->getName()}</option>
+                                            {/if}
+                                        {/foreach}
+                                    </select>
+
+                                    <select name="secondaryCountry" id="secondaryCountry_{$increment++}" style="width: 80%">
+                                        {foreach $countries as $country}
+                                            {if $secLang->getCountryCode() == $country->getCode()}
+                                            <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
+                                            {else}
+                                                <option value="{$country->getCode()}">{$country->getName()}</option>
+                                            {/if}
+                                        {/foreach}
+                                    </select>       
+                                    <hr width="60%"/>
+                                    </span>
+                            {/foreach}
+                            
+                        {/if}
+                    </div>
                     <div id="alertinfo" class="alert alert-info" style="display: none; text-align: center; width: 80%">You have reached the maximum number of Secondary Language fields allowed.</div>  
                     <p>
                         <input id="addNewSecondaryLanguageBtn" class="btn btn-success" type="button" onclick="addNewSecondaryLanguage()" value="Add Secondary Language"/>
                         <input id="removeNewSecondaryLanguageBtn" class="btn btn-inverse"  type="button" onclick="removeNewSecondaryLanguage()" value="Remove" disabled="true" />  
-                        <input type="hidden" id="secondaryLanguagesArraySize" name="secondaryLanguagesArraySize" value="1"/>
+                        <input type="hidden" id="secondaryLanguagesArraySize" name="secondaryLanguagesArraySize" value="0"/>
                     </p>
                     
                     <label for='biography'><strong>Biography:</strong></label>

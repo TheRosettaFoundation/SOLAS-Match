@@ -45,52 +45,51 @@ class OrgRouteHandler
     {
         $app = Slim::getInstance();   
         
-        if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();  
-            if(isset($post->submit) && $post->submit == 'createOrg') {
-            
-                $org = new Organisation(null);
-                if (isset($post->name) && $post->name != null) {
-                    $org->setName($post->name);
-                }
+        if ($post = $app->request()->post()) {
 
-                if (isset($post->home_page) && ($post->home_page != "" || $post->home_page != "http://")) {
-                    $org->setHomePage($post->home_page);
-                }
+            $org = new Organisation();
 
-                if (isset($post->bio) && $post->bio != "") {
-                    $org->setBiography($post->bio);
-                }
+            if(isset($post['orgName'])) $org->setName($post['orgName']); 
+            if(isset($post['homepage'])) $org->setHomePage($post['homepage']); 
+            if(isset($post['biography'])) $org->setBiography($post['biography']);
+            if(isset($post['address'])) $org->setAddress($post['address']);
+            if(isset($post['city'])) $org->setCity($post['city']);
+            if(isset($post['country'])) $org->setCountry($post['country']);
+            if(isset($post['email'])) $org->setEmail($post['email']);
 
-                if ($org->getName() != "") {
+            $regionalFocus = "";
+            if(isset($post['africa'])) $regionalFocus .= "Africa";   
+            if(isset($post['asia'])) $regionalFocus .= " Asia"; 
+            if(isset($post['australia'])) $regionalFocus .= " Australia"; 
+            if(isset($post['europe'])) $regionalFocus .= " Europe"; 
+            if(isset($post['northAmerica'])) $regionalFocus .= " North-America"; 
+            if(isset($post['southAmerica'])) $regionalFocus .= " South-America"; 
 
-                    $orgDao = new OrganisationDao();
-                    $organisation = $orgDao->getOrganisationByName($org->getName());
-
-                    if (!$organisation) {
-                        $new_org = $orgDao->createOrg($org);
-                        if ($new_org) {
-//                            $my_organisations[] = $new_org;
-                            $user_id = UserSession::getCurrentUserID();
-                            $orgDao->createMembershipRequest($new_org->getId(), $user_id);
-                            $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
-                            $org_name = $org->getName();
-                            $app->flash("success", "Organisation $org_name has been created.");
-                            $app->redirect($app->urlFor("org-dashboard"));
-                        } else {
-                            $app->flashNow("error", "Unable to save Organisation.");
-                        }
-                    } else {
-                        $org_name = $org->getName();
-                        $app->flashNow("error", "An Organisation named $org_name is already registered
-                                                with SOLAS Match. Please use a different name.");
-                    }
-                } else {
-                    $app->flashNow("error", "You must specify a name for the organisation.");
-                }
+            if(!empty($regionalFocus)) {
+                $regionalFocus = str_replace(" ", ", " , $regionalFocus);
+                $org->setRegionalFocus($regionalFocus);
             }
-            
-            
+
+            $orgDao = new OrganisationDao();
+            $organisation = $orgDao->getOrganisationByName($org->getName());
+
+            if (!$organisation) {
+                $new_org = $orgDao->createOrg($org);
+                if ($new_org) {
+                    $user_id = UserSession::getCurrentUserID();
+                    $orgDao->createMembershipRequest($new_org->getId(), $user_id);
+                    $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
+                    $org_name = $org->getName();
+                    $app->flash("success", "The organisation <strong>$org_name</strong> has been created.");
+                    $app->redirect($app->urlFor("org-dashboard"));
+                } else {
+                    $app->flashNow("error", "Unable to save Organisation.");
+                }
+            } else {
+                $org_name = $org->getName();
+                $app->flashNow("error", "An Organisation named <strong>$org_name</strong> is already registered
+                                        with SOLAS Match. Please use a different name.");
+            }             
         }          
         $app->render("create-org.tpl");
     }    

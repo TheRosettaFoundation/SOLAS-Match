@@ -83,21 +83,23 @@
                         <tr>
                             <td style="padding-bottom: 10px"/>
                         </tr>
-                        <tr>
-                            <td>
-                                <h3>Secondary Language(s):</h3>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {foreach from=$secondaryLanguages item=language}
-                                    <p>{TemplateHelper::getLanguageAndCountry($language)}</p>
-                                {/foreach}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-bottom: 10px"/>
-                        </tr>
+                        {if isset($secondaryLanguages)}
+                            <tr>
+                                <td>
+                                    <h3>Secondary Language(s):</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {foreach from=$secondaryLanguages item=language}
+                                        <p>{TemplateHelper::getLanguageAndCountry($language)}</p>
+                                    {/foreach}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
                         <tr>
                             <td>
                                 <h3>Biography:</h3>
