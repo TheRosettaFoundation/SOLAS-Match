@@ -46,50 +46,69 @@ class OrgRouteHandler
         $app = Slim::getInstance();   
         
         if ($post = $app->request()->post()) {
+            $nameErr = null;
 
             $org = new Organisation();
 
-            if(isset($post['orgName'])) $org->setName($post['orgName']); 
-            if(isset($post['homepage'])) $org->setHomePage($post['homepage']); 
-            if(isset($post['biography'])) $org->setBiography($post['biography']);
-            if(isset($post['address'])) $org->setAddress($post['address']);
-            if(isset($post['city'])) $org->setCity($post['city']);
-            if(isset($post['country'])) $org->setCountry($post['country']);
-            if(isset($post['email'])) $org->setEmail($post['email']);
-
-            $regionalFocus = "";
-            if(isset($post['africa'])) $regionalFocus .= "Africa";   
-            if(isset($post['asia'])) $regionalFocus .= " Asia"; 
-            if(isset($post['australia'])) $regionalFocus .= " Australia"; 
-            if(isset($post['europe'])) $regionalFocus .= " Europe"; 
-            if(isset($post['northAmerica'])) $regionalFocus .= " North-America"; 
-            if(isset($post['southAmerica'])) $regionalFocus .= " South-America"; 
-
-            if(!empty($regionalFocus)) {
-                $regionalFocus = str_replace(" ", ", " , $regionalFocus);
-                $org->setRegionalFocus($regionalFocus);
-            }
-
-            $orgDao = new OrganisationDao();
-            $organisation = $orgDao->getOrganisationByName($org->getName());
-
-            if (!$organisation) {
-                $new_org = $orgDao->createOrg($org);
-                if ($new_org) {
-                    $user_id = UserSession::getCurrentUserID();
-                    $orgDao->createMembershipRequest($new_org->getId(), $user_id);
-                    $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
-                    $org_name = $org->getName();
-                    $app->flash("success", "The organisation <strong>$org_name</strong> has been created.");
-                    $app->redirect($app->urlFor("org-dashboard"));
-                } else {
-                    $app->flashNow("error", "Unable to save Organisation.");
-                }
+            if(isset($post["orgName"]) && $post["orgName"] != '') {
+                $org->setName($post['orgName']); 
             } else {
-                $org_name = $org->getName();
-                $app->flashNow("error", "An Organisation named <strong>$org_name</strong> is already registered
-                                        with SOLAS Match. Please use a different name.");
-            }             
+                $nameErr = "<strong>Organisation Name</strong> must be set.";
+            }
+            
+            if(isset($post["homepage"])) $org->setHomePage($post["homepage"]); 
+            if(isset($post["biography"])) $org->setBiography($post["biography"]);
+            if(isset($post["address"])) $org->setAddress($post["address"]);
+            if(isset($post["city"])) $org->setCity($post["city"]);
+            if(isset($post["country"])) $org->setCountry($post["country"]);
+            if(isset($post["email"])) $org->setEmail($post["email"]);
+
+            $regionalFocus = array();
+            if(isset($post["africa"])) $regionalFocus[] = "Africa";             
+            if(isset($post["asia"])) $regionalFocus[] = "Asia";             
+            if(isset($post["australia"])) $regionalFocus[] = "Australia"; 
+            if(isset($post["europe"])) $regionalFocus[] .= "Europe"; 
+            if(isset($post["northAmerica"])) $regionalFocus[] .= "North-America"; 
+            if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
+            
+            if(!empty($regionalFocus)) {
+                $regionalFocusString = "";
+                foreach($regionalFocus as $region) {
+                    $regionalFocusString .= $region.", ";
+                }
+                $lastComma = strrpos($regionalFocusString, ",");
+                $regionalFocusString[$lastComma] = "";
+                $org->setRegionalFocus($regionalFocusString);
+            }
+            
+            if(is_null($nameErr)) {
+
+                $orgDao = new OrganisationDao();
+                $organisation = $orgDao->getOrganisationByName($org->getName());
+
+                if (!$organisation) {
+                    $new_org = $orgDao->createOrg($org);
+                    if ($new_org) {
+                        $user_id = UserSession::getCurrentUserID();
+                        $orgDao->createMembershipRequest($new_org->getId(), $user_id);
+                        $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
+                        $org_name = $org->getName();
+                        $app->flash("success", "The organisation <strong>$org_name</strong> has been created.");
+                        $app->redirect($app->urlFor("org-dashboard"));
+                    } else {
+                        $app->flashNow("error", "Unable to save Organisation.");
+                    }
+                } else {
+                    $org_name = $org->getName();
+                    $app->flashNow("error", "An Organisation named <strong>$org_name</strong> is already registered
+                                            with SOLAS Match. Please use a different name.");
+                }         
+            } else {
+                $app->view()->appendData(array(
+                    "org"     => $org,
+                    "nameErr" => $nameErr
+                ));
+            }
         }          
         $app->render("create-org.tpl");
     }    
@@ -286,17 +305,22 @@ class OrgRouteHandler
             if(isset($post['country'])) $org->setCountry($post['country']);
             if(isset($post['email'])) $org->setEmail($post['email']);
             
-            $regionalFocus = "";
-            if(isset($post['africa'])) $regionalFocus .= "Africa";   
-            if(isset($post['asia'])) $regionalFocus .= " Asia"; 
-            if(isset($post['australia'])) $regionalFocus .= " Australia"; 
-            if(isset($post['europe'])) $regionalFocus .= " Europe"; 
-            if(isset($post['northAmerica'])) $regionalFocus .= " North-America"; 
-            if(isset($post['southAmerica'])) $regionalFocus .= " South-America"; 
+            $regionalFocus = array();
+            if(isset($post["africa"])) $regionalFocus[] = "Africa";             
+            if(isset($post["asia"])) $regionalFocus[] = "Asia";             
+            if(isset($post["australia"])) $regionalFocus[] = "Australia"; 
+            if(isset($post["europe"])) $regionalFocus[] .= "Europe"; 
+            if(isset($post["northAmerica"])) $regionalFocus[] .= "North-America"; 
+            if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
             
             if(!empty($regionalFocus)) {
-                $regionalFocus = str_replace(" ", ", " , $regionalFocus);
-                $org->setRegionalFocus($regionalFocus);
+                $regionalFocusString = "";
+                foreach($regionalFocus as $region) {
+                    $regionalFocusString .= $region.", ";
+                }
+                $lastComma = strrpos($regionalFocusString, ",");
+                $regionalFocusString[$lastComma] = "";
+                $org->setRegionalFocus($regionalFocusString);
             }
             
             $orgDao->updateOrg($org); 

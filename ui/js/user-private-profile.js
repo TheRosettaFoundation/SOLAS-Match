@@ -44,6 +44,10 @@
             countries.setAttribute('id', 'secondaryCountry_' + fields);
             countries.setAttribute('name', 'secondaryCountry_' + fields);
             paragraph.appendChild(countries);
+            
+            var horline = document.createElement('hr');
+            horline.setAttribute("width", "60%");
+            paragraph.appendChild(horline);
             table.appendChild(paragraph);
 
             var size = document.getElementById('secondaryLanguagesArraySize');

@@ -90,7 +90,7 @@
                                             {/if}
                                         {/foreach}
                                     </select>       
-                                    <hr width="60%"/>
+                                    <hr id="horizontalLine" width="60%"/>
                                     </span>
                             {/foreach}
                             
