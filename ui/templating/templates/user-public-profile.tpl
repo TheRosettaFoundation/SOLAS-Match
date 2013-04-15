@@ -3,53 +3,269 @@
 {if isset($this_user)}
     <div class="page-header">
         <h1>
-            <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
-            {assign var="user_id" value=$this_user->getId()}
-            {if $this_user->getDisplayName() != ''}
-                {$this_user->getDisplayName()}
-            {else}
-                User Profile
-            {/if}
-            <small>Overview of your account details.</small>   
-            {if isset($private_access) && isset($org_creation)}
-                {if $org_creation == 'y'}
-                    <a href="{urlFor name="create-org"}" class="btn btn-success pull-right">
-                        <i class="icon-star icon-white"></i> Create Organisation
-                    </a>
-                {else if $org_creation == 'h'}
-                {/if}
-            {/if} 
+        <table>
+            <tr>
+                <td>                    
+                    <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
+                    {assign var="user_id" value=$this_user->getId()}
+                    {if $this_user->getDisplayName() != ''}
+                        {$this_user->getDisplayName()}
+                    {else}
+                        User Profile
+                    {/if}
+                    <small>Overview of your account details.</small>   
+                    
+                </td>
+                <td>                    
+                    {if isset($private_access) && isset($org_creation)}
+                        {if $org_creation == 'y'}
+                            <a href="{urlFor name="create-org"}" class="btn btn-success pull-right">
+                                <i class="icon-star icon-white"></i> Create Organisation
+                            </a>
+                        {else if $org_creation == 'h'}
+                        {/if}
+                    {/if} 
+                    {if isset($private_access)}
+                        <a  href='{urlFor name="user-private-profile"}' class='btn btn-primary pull-right'>
+                            <i class="icon-wrench icon-white"></i> Edit Profile Details
+                        </a>
+                    {/if}
+                </td>
+            </tr>
+        </table>
         </h1>
     </div>
+            
 {else}
     <div class='page-header'><h1>User Profile <small>Overview of your account details.</small></h1></div>
 {/if}
 
-    <h1>
+{*    <h1>
         {if isset($private_access)}
             <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>
                 <i class="icon-wrench icon-white"></i> Edit Profile Details
             </a>
         {/if}
-    </h1>
+    </h1>*}
+    
 
-    <h3>Public Display Name:</h3>
-    <p>{$this_user->getDisplayName()}</p>
-
-{if $this_user->getNativeLocale() != null}
-    <h3>Native Language: </h3>
-    <p>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</p>
-{else}
-    <h3>Native Language: </h3>
-    <p>
-        <i>Please select a native language!</i>
-    </p>
-{/if}
- 
-{if $this_user->getBiography() != ''}
-    <h3>Biography:</h3>
-    <p>{$this_user->getBiography()}</p>
-{/if}
+<table border="0">
+    <tr valign="top">
+        <td style="{if isset($userPersonalInfo) && isset($private_access)} width: 48%  {else} width: 100% {/if}">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <thead>                
+                    <th align="left"><h3>Public Display Name:</h3></th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                {$this_user->getDisplayName()}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-bottom: 10px"/>
+                        </tr> 
+                        <tr>
+                            <td>
+                                <h3>Native Language:</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {if $this_user->getNativeLocale() != null}
+                                    {TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}
+                                {else}
+                                    <i>Please select a native language!</i>
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-bottom: 10px"/>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3>Secondary Language(s):</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {foreach from=$secondaryLanguages item=language}
+                                    <p>{TemplateHelper::getLanguageAndCountry($language)}</p>
+                                {/foreach}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-bottom: 10px"/>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3>Biography:</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {if $this_user->getBiography() != null}
+                                    {$this_user->getBiography()}
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-bottom: 20px"/>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+        
+        {if isset($userPersonalInfo) && isset($private_access)}
+            <td style="width: 4%"/>
+            <td style="width: 48%">            
+                <div class="pull-right">
+                    <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
+                        {if $userPersonalInfo->getFirstName() != null}
+                            <thead>                
+                                <th align="left" width="48%"><h3>First Name:</h3></th>
+                            </thead>
+                            <tbody>
+                               <tr>
+                                    <td>
+                                        {$userPersonalInfo->getFirstName()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 10px"/>
+                                </tr>
+                        {/if}
+                        {if $userPersonalInfo->getLastName() != null}
+                            <tr>
+                                <td>
+                                    <h3>Last Name:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {$userPersonalInfo->getLastName()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
+                        {if $userPersonalInfo->getMobileNumber() != null}
+                            <tr>
+                                <td>
+                                    <h3>Mobile Number:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {$userPersonalInfo->getMobileNumber()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                         {/if}
+                         {if $userPersonalInfo->getBusinessNumber() != null}
+                            <tr>
+                                <td>
+                                    <h3>Business Number:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {$userPersonalInfo->getBusinessNumber()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
+                        {if $userPersonalInfo->getSip() != null}
+                            <tr>
+                                <td>
+                                    <h3>Session Initiation Protocol (SIP):</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {$userPersonalInfo->getSip()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
+                        {if $userPersonalInfo->getJobTitle() != null}
+                            <tr>
+                                <td>
+                                    <h3>Job Title:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {$userPersonalInfo->getJobTitle()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
+                        {if $userPersonalInfo->getAddress() != null}
+                            <tr>
+                                <td>
+                                    <h3>Address:</h3>
+                                </td>
+                            </tr>  
+                            <tr>
+                                <td>
+                                    {if $userPersonalInfo->getAddress() != null}
+                                        {$userPersonalInfo->getAddress()}
+                                    {/if}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
+                        {if $userPersonalInfo->getCity() != null}
+                            <tr>
+                                <td>
+                                    <h3>City:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {$userPersonalInfo->getCity()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
+                        {if $userPersonalInfo->getCountry() != null}
+                            <tr>
+                                <td>
+                                    <h3>Country:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {$userPersonalInfo->getCountry()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        {/if}
+    </tr>
+</table>
 
 <p style="margin-bottom:50px;"/>
 {if isset($badges)}

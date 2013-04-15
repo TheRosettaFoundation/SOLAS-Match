@@ -19,6 +19,7 @@ require_once __DIR__."/../models/ArchivedProject.php";
 require_once __DIR__."/../models/Statistic.php";
 require_once __DIR__."/../models/ProjectFile.php";
 require_once __DIR__."/../models/Locale.php";
+require_once __DIR__."/../models/UserPersonalInformation.php";
 
 class ModelFactory
 {
@@ -81,6 +82,12 @@ class ModelFactory
                 break;
             case "ProjectFile" :
                 $ret = ModelFactory::generateProjectFile($modelData);
+                break;
+            case "UserPersonalInformation" :
+                $ret = ModelFactory::generateUserPersonalInformation($modelData);
+                break;
+            case "Locale" :
+                $ret = ModelFactory::generateLocale($modelData);
                 break;
             default :
                 echo "Unable to build model $modelName";
@@ -596,6 +603,7 @@ class ModelFactory
         return $ret;
     }
     
+    
     private static function generateProjectFile($modelData)
     {
         $ret = new ProjectFile();
@@ -614,6 +622,68 @@ class ModelFactory
         }
         if(isset($modelData['mime-type'])) {
             $ret->setMime($modelData['mime-type']);
+        }
+        
+        return $ret;
+    }
+    
+    
+    private static function generateUserPersonalInformation($modelData)
+    {
+        $ret = new UserPersonalInformation();
+
+        if(isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
+        }
+        if(isset($modelData['user_id'])) {
+            $ret->setUserId($modelData['user_id']);
+        }
+        if(isset($modelData['first-name'])) {
+            $ret->setFirstName($modelData['first-name']);
+        }
+        if(isset($modelData['last-name'])) {
+            $ret->setLastName($modelData['last-name']);
+        }
+        if(isset($modelData['mobile-number'])) {
+            $ret->setMobileNumber($modelData['mobile-number']);
+        }
+        if(isset($modelData['business-number'])) {
+            $ret->setBusinessNumber($modelData['business-number']);
+        }
+        if(isset($modelData['sip'])) {
+            $ret->setSip($modelData['sip']);
+        }
+        if(isset($modelData['job-title'])) {
+            $ret->setJobTitle($modelData['job-title']);
+        }
+        if(isset($modelData['address'])) {
+            $ret->setAddress($modelData['address']);
+        }
+        if(isset($modelData['city'])) {
+            $ret->setCity($modelData['city']);
+        }
+        if(isset($modelData['country'])) {
+            $ret->setCountry($modelData['country']);
+        }
+        
+        return $ret;
+    }
+    
+    private static function generateLocale($modelData)
+    {
+        $ret = new Locale();
+        
+        if (isset($modelData['languageName'])) {
+            $ret->setLanguageName($modelData['languageName']);
+        }
+        if (isset($modelData['languageCode'])) {
+            $ret->setLanguageCode($modelData['languageCode']);
+        }
+        if (isset($modelData['countryName'])) {
+            $ret->setCountryName($modelData['countryName']);
+        }
+        if (isset($modelData['countryCode'])) {
+            $ret->setCountryCode($modelData['countryCode']);
         }
         
         return $ret;

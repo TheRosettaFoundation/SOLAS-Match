@@ -186,7 +186,7 @@ class PDOWrapper {
         $special = array("\x00"=>'\x00', "\n"=>'\n', "\r"=>'\r', '\\'=>'\\\\', "'"=>"\\'\\'", '"'=>'\"', "\x1a"=>'\x1a');
         $str = strip_tags(trim($str));
         foreach ($special as $key => $val) {
-           $str= str_replace($key, $val, $str);
+           $str = str_replace($key, $val, $str);
         }
 
         return $str;

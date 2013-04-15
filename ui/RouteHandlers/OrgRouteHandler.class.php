@@ -292,8 +292,8 @@ class OrgRouteHandler
             if(isset($post['asia'])) $regionalFocus .= " Asia"; 
             if(isset($post['australia'])) $regionalFocus .= " Australia"; 
             if(isset($post['europe'])) $regionalFocus .= " Europe"; 
-            if(isset($post['north America'])) $regionalFocus .= " North America"; 
-            if(isset($post['south America'])) $regionalFocus .= " South America"; 
+            if(isset($post['northAmerica'])) $regionalFocus .= " North-America"; 
+            if(isset($post['southAmerica'])) $regionalFocus .= " South-America"; 
             
             if(!empty($regionalFocus)) {
                 $regionalFocus = str_replace(" ", ", " , $regionalFocus);
