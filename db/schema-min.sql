@@ -1197,7 +1197,8 @@ BEGIN
     comment,  `task-type_id`, `task-status_id`, published, deadline 
     FROM Tasks t 
     where deadline < NOW()
-    AND `task-status_id` = 3;
+    AND `task-status_id` != 4
+    AND published = 1;
 END//
 DELIMITER ;
 
