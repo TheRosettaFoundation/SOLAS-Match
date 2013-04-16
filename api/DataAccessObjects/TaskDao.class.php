@@ -296,11 +296,14 @@ class TaskDao
     /*
      * Returns an array of tasks ordered by the highest score related to the user
      */
-    public static function getUserTopTasks($user_id, $limit = 15)
+
+    public static function getUserTopTasks($user_id, $limit, $filter)
     {
-        $ret = null;
-        if ($result = PDOWrapper::call("getUserTopTasks", PDOWrapper::cleanseNull($user_id)
-                                        .",".PDOWrapper::cleanseNullOrWrapStr($limit))) {
+        $ret = false;
+        if ($result = PDOWrapper::call("getUserTopTasks", PDOWrapper::cleanse($user_id)
+                                        .",".PDOWrapper::cleanseNullOrWrapStr($limit).
+                                        ",".PDOWrapper::cleanseWrapStr($filter))) {
+
             $ret = array();
             foreach ($result as $row) {
                  $ret[] = ModelFactory::buildModel("Task", $row);
@@ -332,28 +335,13 @@ class TaskDao
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
 
         if ($graph) {
-            $currentLayer = $graph->getRootNodeList();
-            $nextLayer = array();
-            $found = false;
-            while (count($currentLayer) > 0 && !$found) {
-                foreach ($currentLayer as $node) {
-                    if ($node->getTaskId() == $taskId) {
-                        $found = true;
-                        $ret = self::archiveTaskNode($node, $userId);
-                    } else {
-                        foreach ($node->getNextList() as $nextNode) {
-                            if (!in_array($nextNode, $nextLayer)) {
-                                $nextLayer[] = $nextNode;
-                            }
-                        }
-                    }
-                }
-                $currentLayer = $nextLayer;
-                $nextLayer = array();
-            }
+
+            $index = $graphBuilder->find($taskId, $graph);
+            $node = $graph->getAllNodes($index);
+            $ret = self::archiveTaskNode($node, $graph, $userId);
         }
 
-        // UI us expecting output to be 0 or 1
+        // UI is expecting output to be 0 or 1
         if ($ret) {
             $ret = 1;
         } else {
@@ -363,18 +351,22 @@ class TaskDao
         return $ret;
     }
 
-    public static function archiveTaskNode($node, $userId)
+
+    public static function archiveTaskNode($node, $graph, $userId)
     {
         $ret = true;
         $task = self::getTask($node->getTaskId());
         $dependantNodes = $node->getNextList();
         if (count($dependantNodes) > 0) {
-            foreach ($dependantNodes as $dependant) {
-                $dTask = self::getTask($dependant->getTaskId());
+            $builder = new APIWorkflowBuilder();
+            foreach ($dependantNodes as $dependantId) {
+                $dTask = $this->find(array('id' => $dependantId));
+                $index = $builder->find($dependantId, $graph);
+                $dependant = $graph->getAllNodes($index);
                 $preReqs = $dependant->getPreviousList();
                 if ((count($preReqs) == 2 && $dTask->getTaskType() == TaskTypeEnum::DESEGMENTATION) ||
                         count($preReqs) == 1) {
-                    $ret = $ret && (self::archiveTaskNode($dependant, $userId));
+                    $ret = $ret && (self::archiveTaskNode($dependant, $graph, $userId));
                 }
             }
         }

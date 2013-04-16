@@ -160,11 +160,11 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("User", $insertedUser);
         
         // Success
-        $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getUserId());
+        $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertInstanceOf("ArchivedProject", $resultArchiveProject);
                 
         // Failure        
-        $resultArchiveProjectFailure = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getUserId());
+        $resultArchiveProjectFailure = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertNull($resultArchiveProjectFailure);
     }
     
@@ -184,9 +184,9 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
         $insertedUser = UserDao::save($user);
         $this->assertInstanceOf("User", $insertedUser);
-        $this->assertNotNull($insertedUser->getUserId());
+        $this->assertNotNull($insertedUser->getId());
 
-        $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getUserId());
+        $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertInstanceOf("ArchivedProject", $resultArchiveProject);
         
         // Success
@@ -353,14 +353,14 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
         $insertedUser = UserDao::save($user);
         $this->assertInstanceOf("User", $insertedUser);
-        $this->assertNotNull($insertedUser->getUserId());
+        $this->assertNotNull($insertedUser->getId());
         
         // Success
-        $resultRecordProjectFileInfo = ProjectDao::recordProjectFileInfo($insertedProject->getId(), "saveProjectFileTest.txt", $insertedUser->getUserId(), "text/plain");
+        $resultRecordProjectFileInfo = ProjectDao::recordProjectFileInfo($insertedProject->getId(), "saveProjectFileTest.txt", $insertedUser->getId(), "text/plain");
         $this->assertNotNull($resultRecordProjectFileInfo);
         
         // Failure
-        $resultRecordProjectFileInfoFailure = ProjectDao::recordProjectFileInfo($insertedProject->getId(), "saveProjectFileTest.txt", $insertedUser->getUserId(), "text/plain");
+        $resultRecordProjectFileInfoFailure = ProjectDao::recordProjectFileInfo($insertedProject->getId(), "saveProjectFileTest.txt", $insertedUser->getId(), "text/plain");
         $this->assertNull($resultRecordProjectFileInfoFailure);
     }    
     
@@ -380,17 +380,17 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
         $insertedUser = UserDao::save($user);
         $this->assertInstanceOf("User", $insertedUser);
-        $this->assertNotNull($insertedUser->getUserId());
+        $this->assertNotNull($insertedUser->getId());
         
-        $resultRecordProjectFileInfo = ProjectDao::recordProjectFileInfo($insertedProject->getId(), "saveProjectFileTest.txt", $insertedUser->getUserId(), "text/plain");
+        $resultRecordProjectFileInfo = ProjectDao::recordProjectFileInfo($insertedProject->getId(), "saveProjectFileTest.txt", $insertedUser->getId(), "text/plain");
         $this->assertNotNull($resultRecordProjectFileInfo);
         
         // Success
-        $resultGetProjectFileInfoSuccess = ProjectDao::getProjectFileInfo($insertedProject->getId(), $insertedUser->getUserId(), "saveProjectFileTest.txt", "saveProjectFileTest.txt", "text/plain");
+        $resultGetProjectFileInfoSuccess = ProjectDao::getProjectFileInfo($insertedProject->getId(), $insertedUser->getId(), "saveProjectFileTest.txt", "saveProjectFileTest.txt", "text/plain");
         $this->assertInstanceOf("ProjectFile", $resultGetProjectFileInfoSuccess);
         
         // Failure
-        $resultGetProjectFileInfoFailure = ProjectDao::getProjectFileInfo(999, $insertedUser->getUserId(), "saveProjectFileTest.txt", "saveProjectFileTest.txt", "text/plain");
+        $resultGetProjectFileInfoFailure = ProjectDao::getProjectFileInfo(999, $insertedUser->getId(), "saveProjectFileTest.txt", "saveProjectFileTest.txt", "text/plain");
         $this->assertNull($resultGetProjectFileInfoFailure);
     }
 }

@@ -15,7 +15,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
 
-        $app->get("/", array($this, "home"))->name("home");
+        $app->get("/", array($this, "home"))->via("POST")->name("home");
 
         $app->get("/register", array($this, "register")
         )->via("GET", "POST")->name("register");
@@ -36,6 +36,12 @@ class UserRouteHandler
 
         $app->get("/profile", array($middleware, "authUserIsLoggedIn"), 
         array($this, "userPrivateProfile"))->via("POST")->name("user-private-profile");
+
+        $app->get("/:user_id/notification/stream", array($middleware, "authUserIsLoggedIn"),
+        array($this, "editTaskStreamNotification"))->via("POST")->name("stream-notification-edit");
+
+        $app->get("/user/:user_id/admin", array($middleware, "authUserIsLoggedIn"),
+        array($middleware, "isSiteAdmin"), array($this, "adminDashboard"))->name("site-admin-dashboard");
     }
 
     public function home()
@@ -84,13 +90,50 @@ class UserRouteHandler
             ));
 
         } else {
-            $tasks = $userDao->getUserTopTasks($current_user_id, 10);
+            $taskTypes = array();
+            $taskTypes[TaskTypeEnum::SEGMENTATION] = "Segmentation";
+            $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
+            $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
+            $taskTypes[TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
+
+            $langDao = new LanguageDao();
+            $languageList = $langDao->getLanguages();
+
+            $filter = array();
+            $selectedType = "";
+            $selectedSource = "";
+            $selectedTarget = "";
+            if ($app->request()->isPost()) {
+                $post = (object) $app->request()->post();
+
+                if (isset($post->taskType) && $post->taskType != '') {
+                    $selectedType = $post->taskType;
+                    $filter['taskType'] = $post->taskType;
+                }
+
+                if (isset($post->sourceLanguage) && $post->sourceLanguage != '') {
+                    $selectedSource = $post->sourceLanguage;
+                    $filter['sourceLanguage'] = $post->sourceLanguage;
+                }
+
+                if (isset($post->targetLanguage) && $post->targetLanguage != '') {
+                    $selectedTarget = $post->targetLanguage;
+                    $filter['targetLanguage'] = $post->targetLanguage;
+                }
+            }
+
+            $tasks = $userDao->getUserTopTasks($current_user_id, 10, $filter);
             for ($i = 0; $i < count($tasks); $i++) {
                 $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
                 $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
             }
             
             $app->view()->appendData(array(
+                "taskTypes" => $taskTypes,
+                "languageList" => $languageList,
+                "selectedType" => $selectedType,
+                "selectedSource" => $selectedSource,
+                "selectedTarget" => $selectedTarget,
                 "tasks" => $tasks
             ));
             
@@ -529,12 +572,111 @@ class UserRouteHandler
         ));
                 
         if (UserSession::getCurrentUserID() == $user_id) {
-            $app->view()->appendData(array("private_access" => true));
+            $notifData = $userDao->getUserTaskStreamNotification($user_id);
+            $interval = null;
+            $lastSent = null;
+
+            if ($notifData) {
+                $interval = $notifData['interval'];
+                switch ($interval) {
+                    case NotificationIntervalEnum::DAILY:
+                        $interval = "daily";
+                        break;
+                    case NotificationIntervalEnum::WEEKLY:
+                        $interval = "weekly";
+                        break;
+                    case NotificationIntervalEnum::MONTHLY:
+                        $interval = "monthly";
+                        break;
+                }
+
+                if ($notifData['last-sent'] != null) {
+                    $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData['last-sent']));
+                }
+            }
+            $app->view()->appendData(array(
+                        "interval"       => $interval,
+                        "lastSent"       => $lastSent,
+                        "private_access" => true
+            ));
         }
                     
         $app->render("user-public-profile.tpl");
     }
-    
+
+    public function editTaskStreamNotification($userId)
+    {
+        $app = Slim::getInstance();
+        $userDao = new UserDao();
+
+        $user = $userDao->getUser($userId);
+
+        if ($app->request()->isPost()) {
+            $post = (object) $app->request()->post();
+
+            if (isset($post->interval)) {
+                $success = false;
+                if ($post->interval == 0) {
+                    $success = $userDao->removeTaskStreamNotification($userId);
+                } else {
+                    $success = $userDao->requestTaskStreamNotification($userId, $post->interval);
+                }
+
+                if ($success) {
+                    $app->flash("success", "Successfully updated user task stream notification subscription");
+                    $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
+                } else {
+                    $app->flashNow("error", "Unable to update task stream notification subscription. Please ".
+                            "try again later.");
+                }
+            }
+        }
+        
+        $notifData = $userDao->getUserTaskStreamNotification($userId);
+        $interval = null;
+        $lastSent = null;
+        if ($notifData) {
+            $interval = $notifData['interval'];
+            switch ($interval) {
+                case NotificationIntervalEnum::DAILY:
+                    $interval = "daily";
+                    break;
+                case NotificationIntervalEnum::WEEKLY:
+                    $interval = "weekly";
+                    break;
+                case NotificationIntervalEnum::MONTHLY:
+                    $interval = "monthly";
+                    break;
+            }
+            
+            if ($notifData['last-sent'] != null) {
+                $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData['last-sent']));
+            }
+
+            $app->view()->appendData(array(
+                        "interval"  => $interval,
+                        "intervalId"=> $notifData['interval'],
+                        "lastSent"  => $lastSent
+            ));
+        }
+
+        $app->view()->appendData(array(
+                    "user" => $user
+        ));
+
+        $app->render("user.task-stream-notification-edit.tpl");
+    }
+
+    public function adminDashboard($userId)
+    {
+        $app = Slim::getInstance();
+
+        $app->view()->appendData(array(
+                    "current_page"  => 'admin-dashboard'
+        ));
+
+        $app->render("site-admin.dashboard.tpl");
+    }
 
     public static function isLoggedIn()
     {

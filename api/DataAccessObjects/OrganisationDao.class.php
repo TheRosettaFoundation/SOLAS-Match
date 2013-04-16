@@ -100,7 +100,7 @@ class OrganisationDao
 
     public static function acceptMemRequest($org_id, $user_id)
     {
-        $result = PDOWrapper::call("acceptMemRequest", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($org_id));
+        $result = PDOWrapper::call("acceptMemRequest", PDOWrapper::cleanseNull($user_id).",".PDOWrapper::cleanseNull($org_id));
         return $result[0]['result'];
     }
 
@@ -124,7 +124,8 @@ class OrganisationDao
     
     public static function insertAndUpdate($org)
     {
-        if($result = PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanseNullOrWrapStr($org->getId())
+        $ret = null;        
+        $result = PDOWrapper::call("organisationInsertAndUpdate", PDOWrapper::cleanseNullOrWrapStr($org->getId())
                                                     .",".PDOWrapper::cleanseWrapStr($org->getHomePage())
                                                     .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
                                                     .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography())
@@ -132,17 +133,27 @@ class OrganisationDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($org->getAddress())
                 .",".PDOWrapper::cleanseNullOrWrapStr($org->getCity())
                 .",".PDOWrapper::cleanseNullOrWrapStr($org->getCountry())
-                .",".PDOWrapper::cleanseNullOrWrapStr($org->getRegionalFocus())));
+                .",".PDOWrapper::cleanseNullOrWrapStr($org->getRegionalFocus()));
         
+
         if(is_array($result)) {
-            return ModelFactory::buildModel("Organisation", $result[0]);
-        } else {
-            return null;
+            $ret = ModelFactory::buildModel("Organisation", $result[0]);
         }
+        
+        return $ret;
     }
-    
+
     public static function delete($orgID)
     {      
-        return PDOWrapper::call("deleteOrg", PDOWrapper::cleanse($orgID));
+        $result= PDOWrapper::call("deleteOrg", PDOWrapper::cleanse($orgID));
+        return $result[0]['result'];
+    }
+    
+    public static function addAdmin($userId, $orgId)
+    {
+        self::acceptMemRequest($orgId, $userId);
+        $args = PDOWrapper::cleanseNull($userId).", ";
+        $args .= PDOWrapper::cleanseNull($orgId);
+        PDOWrapper::call("addAdmin", $args);
     }
 }

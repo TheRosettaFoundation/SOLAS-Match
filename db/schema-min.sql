@@ -166,6 +166,20 @@ CREATE TABLE IF NOT EXISTS `Languages` (
 -- Data exporting was unselected.
 
 
+-- Dumping structure for table Solas-Match-Test.NotificationIntervals
+CREATE TABLE IF NOT EXISTS `NotificationIntervals` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
+	(1, "Daily"),
+	(2, "Weekly"),
+	(3, "Monthly");
+
+
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   `user_id` int(10) unsigned NOT NULL,
@@ -603,6 +617,20 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 -- Data exporting was unselected.
 
 
+-- Dumping structure for table Solas-Match-Test.UserTaskScores
+CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
+  `user_id` int(11) unsigned NOT NULL,
+  `interval` int(10) unsigned NOT NULL,
+  `last-sent` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  CONSTRAINT `FK_user_task_stream_notification_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_user_task_stream_notification_interval1` FOREIGN KEY (`interval`) REFERENCES `NotificationIntervals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
+
+
 -- Dumping structure for table Solas-Match-Test.UserTrackedProjects
 CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
 	`user_id` INT(10) UNSIGNED NOT NULL,
@@ -638,7 +666,31 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `acceptMemRequest`(IN `uID` INT, IN `orgID` INT)
 BEGIN
 	INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
-	call removeMembershipRequest(uID,orgID);
+    if EXISTS (SELECT user_id
+                FROM OrgRequests
+                WHERE user_id = uID
+                AND org_id = orgID) then
+    	call removeMembershipRequest(uID,orgID);
+    end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.addAdmin
+DROP PROCEDURE IF EXISTS `addAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addAdmin`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+    if NOT EXISTS (SELECT 1
+                    FROM Admins
+                    WHERE user_id = userId
+                    AND (organisation_id = NULL
+                        OR organisation_id = orgId)
+    ) then
+    	INSERT INTO Admins (user_id, organisation_id) 
+            VALUES (userId, orgId);
+    end if;
+    SELECT 1 as result;
 END//
 DELIMITER ;
 
@@ -1243,15 +1295,14 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.getOrgMembers
+-- Dumping structure for procedure big-merge.getOrgMembers
 DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `orgId` INT)
 BEGIN
-select u.id,`display-name`,email,password,biography,(select l.code from Languages l where l.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time`
+select u.id,`display-name`,email,password,biography,(select `en-name` from Languages where id =u.`language_id`) as `languageName`, (select code from Languages where id =u.`language_id`) as `languageCode`, (select `en-name` from Countries where id =u.`country_id`) as `countryName`, (select code from Countries where id =u.`country_id`) as `countryCode`, nonce,`created-time`
 	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.id
-	WHERE organisation_id=id;
+	WHERE organisation_id=orgId;
 END//
 DELIMITER ;
 
@@ -1807,6 +1858,23 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getUserIdsPendingTaskStreamNotification
+DROP PROCEDURE IF EXISTS `getUserIdsPendingTaskStreamNotification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserIdsPendingTaskStreamNotification`()
+BEGIN
+	SELECT u.user_id FROM UserTaskStreamNotifications u
+	WHERE `last-sent` is NULL
+    OR (u.interval = 1 
+            AND `last-sent` < NOW() - INTERVAL 1 DAY)
+    OR (u.interval = 2
+            AND `last-sent` < NOW() - INTERVAL 1 WEEK)
+    OR (u.interval = 3
+            AND `last-sent` < NOW() - INTERVAL 1 MONTH);
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getUserNotifications
 DROP PROCEDURE IF EXISTS `getUserNotifications`;
 DELIMITER //
@@ -1872,6 +1940,18 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getUserTaskStreamNotification
+DROP PROCEDURE IF EXISTS `getUserTaskStreamNotification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskStreamNotification`(IN `uID` INT)
+BEGIN
+    SELECT *
+    FROM UserTaskStreamNotifications u
+    WHERE u.user_id = uID;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getUserTaskScore
 DROP PROCEDURE IF EXISTS `getUserTaskScore`;
 DELIMITER //
@@ -1897,15 +1977,15 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getUserTopTasks
 DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `lim` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `lim` INT, IN `filter` TEXT)
     READS SQL DATA
     COMMENT 'relpace with more effient code later'
 BEGIN
     if lim='' then set lim=null; end if;
     if lim is not null then
-        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ORDER BY uts.score DESC limit ",lim);
+        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC limit ",lim);
     else
-        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ORDER BY uts.score DESC");
+        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC");
     end if;
     PREPARE stmt FROM @q;
     set @uID=uID;
@@ -1939,6 +2019,35 @@ SELECT exists	(	select 1
                  ) as result;
 END//
 DELIMITER ;
+
+
+
+-- Dumping structure for procedure Solas-Match-Test.isAdmin
+DROP PROCEDURE IF EXISTS `isAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isAdmin`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+    SELECT exists (SELECT 1
+                    FROM Admins
+                    WHERE user_id = userID
+                    AND (organisation_id = orgId
+                        OR organisation_id is NULL)
+                  ) as result;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.logFileDownload
+DROP PROCEDURE IF EXISTS `logFileDownload`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `logFileDownload`(IN `tID` INT, IN `vID` INT, IN `uID` INT)
+    MODIFIES SQL DATA
+BEGIN
+	insert into task_file_version_download (task_id,version_id,user_id,time_downloaded) 
+	values (tID,uID,vID,Now());
+END//
+DELIMITER ;
+
+
 
 -- Dumping structure for procedure Solas-Match-Test.organisationInsertAndUpdate
 DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
@@ -2225,6 +2334,18 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Test.removeTaskStreamNotification
+DROP PROCEDURE IF EXISTS `removeTaskStreamNotification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskStreamNotification`(IN `userId` INT)
+    MODIFIES SQL DATA
+BEGIN
+    DELETE FROM UserTaskStreamNotifications
+        WHERE user_id = userId;
+    SELECT 1 as 'result';
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.removeUserBadge
 DROP PROCEDURE IF EXISTS `removeUserBadge`;
@@ -2877,6 +2998,26 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.taskStreamNotificationSent
+DROP PROCEDURE IF EXISTS `taskStreamNotificationSent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskStreamNotificationSent`(IN `uID` INT, IN `sentDate` DATETIME)
+BEGIN
+    IF EXISTS (SELECT user_id
+                FROM UserTaskStreamNotifications
+                WHERE user_id = uID) 
+    then
+        UPDATE UserTaskStreamNotifications
+            SET `last-sent` = sentDate
+            WHERE user_id = uID;
+        SELECT 1 as 'result';
+    else
+        SELECT 0 as 'result';
+    end if;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.unClaimTask
 DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
@@ -3074,6 +3215,17 @@ BEGIN
 	else
     	select 0 as 'result';
 	end if;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `userTaskStreamNotificationInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userTaskStreamNotificationInsertAndUpdate`(IN `uID` INT, IN `nInterval` INT)
+BEGIN
+    REPLACE INTO `UserTaskStreamNotifications` (`user_id`, `interval`)
+    VALUES (uID, nInterval);
+    select 1 as 'result';
 END//
 DELIMITER ;
 

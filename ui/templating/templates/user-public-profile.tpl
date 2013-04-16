@@ -100,21 +100,22 @@
                                 <td style="padding-bottom: 10px"/>
                             </tr>
                         {/if}
-                        <tr>
-                            <td>
-                                <h3>Biography:</h3>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {if $this_user->getBiography() != null}
+                        {assign var=bio value=$this_user->getBiography()}
+                        {if isset($bio)}
+                            <tr>
+                                <td>
+                                    <h3>Biography:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> 
                                     {$this_user->getBiography()}
-                                {/if}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-bottom: 20px"/>
-                        </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 20px"/>
+                            </tr>
+                        {/if}
                     </tbody>
                 </table>
             </div>
@@ -306,6 +307,29 @@
         
         <p style="margin-bottom:50px;"/>
     {/if}
+{/if}
+
+{if isset($private_access)}
+    <div class="page-header">
+        <h1>Task Stream Notifications <small>How often you recieve task stream e-mail updates.</small>
+            <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">
+                Edit
+            </a>
+        </h1>
+    </div>
+    <p>
+        {if isset($interval)}
+            You are currently receiving <strong>{$interval}</strong> eemails.
+            {if $lastSent != null}
+                The last email was sent on {$lastSent}.
+            {else}
+                No emails have been sent yet.
+            {/if}
+        {else}
+            You are not currently receiving task stream notification e-mails.
+        {/if}
+    </p>
+    <p style="margin-bottom:50px;"/>
 {/if}
 
 {if isset($user_tags)}

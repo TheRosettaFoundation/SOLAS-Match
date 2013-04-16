@@ -4,6 +4,7 @@ require_once __DIR__.'/../Common/Settings.class.php';
 require_once __DIR__.'/../Common/lib/PDOWrapper.class.php';
 require_once __DIR__.'/../Common/TaskTypeEnum.php';
 require_once __DIR__.'/../Common/TaskStatusEnum.php';
+require_once __DIR__.'/../Common/models/Locale.php';
 
 class UnitTestHelper
 {
@@ -93,17 +94,22 @@ class UnitTestHelper
     // password = hash("sha512", "abcdefghikjlmnop")
     public static function createUser($userId = null, $displayName = "User 1", $biography = "User 1 Bio", $email = "user1@test.com", $nonce = "123456789"
             , $password = "2d5e2eb5e2d5b1358161c8418e2fd3f46a431452a724257907d4a3317677a99414463452507ef607941e14044363aab9669578ce5f9517cb36c9acb32f492393"
-            , $nativeLangId = null, $nativeRegionId = null, $createdTime = null)
+            , $languageCode = null, $countryCode = null, $createdTime = null)
     {
+        $locale = new Locale();
         $user = new User();
-        $user->setUserId($userId);
+        
+        $user->setId($userId);
         $user->setDisplayName($displayName);   
         $user->setBiography($biography);
         $user->setEmail($email);
         $user->setNonce($nonce);
         $user->setPassword($password);
-        $user->setNativeLangId($nativeLangId);
-        $user->setNativeRegionId($nativeRegionId);
+        
+        $locale->setLanguageCode($languageCode);
+        $locale->setCountryCode($countryCode);
+        $user->setNativeLocale($locale);
+        
         $user->setCreatedTime($createdTime);    
         return $user;
     }
@@ -113,7 +119,9 @@ class UnitTestHelper
             $deadline = "2020-03-29 16:30:00", $impact = "Project 1 Impact", $reference = "Project 1 Reference",
             $wordcount = 123456, $sourceCountryCode = "IE", $sourceLanguageCode = "en", $tags = array("Project", "Tags"), $createdTime = null)
     {
-        $project = new Project();                
+        $sourceLocale = new Locale();
+        $project = new Project();  
+        
         $project->setId($id);
         $project->setTitle($title);
         $project->setDescription($description);
@@ -121,14 +129,16 @@ class UnitTestHelper
         $project->setImpact($impact);
         $project->setReference($reference);
         $project->setWordCount($wordcount);
-        $project->setSourceCountryCode($sourceCountryCode);
-        $project->setSourceLanguageCode($sourceLanguageCode);
         
+        $sourceLocale->setCountryCode($sourceCountryCode);
+        $sourceLocale->setLanguageCode($sourceLanguageCode);
+        $project->setSourceLocale($sourceLocale);
+
         foreach($tags as $tagLabel) {
-            TagsDao::create($tagLabel);
+            $project->setTag(TagsDao::create($tagLabel));
         }
  
-        $project->setTag($tags);        
+        //$project->setTag($createdProjectTags);        
         $project->setOrganisationId($organisationId);
         $project->setCreatedTime($createdTime);
         return $project;

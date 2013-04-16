@@ -73,12 +73,12 @@
                             <th>South America</th>                       
                         </thead>
                         <tr align="center">
-                            <td style="width: 15%"><input id="africa" name="africa" type="checkbox" {if strstr($org->getRegionalFocus(), "Africa")} checked {/if} /></td>   
-                            <td style="width: 15%"><input id="asia" name="asia" type="checkbox" {if strstr($org->getRegionalFocus(), "Asia")} checked {/if} /></td> 
-                            <td style="width: 15%"><input id="australia" name="australia" type="checkbox" {if strstr($org->getRegionalFocus(), "Australia")} checked {/if} /></td> 
-                            <td style="width: 15%"><input id="europe" name="europe" type="checkbox" {if strstr($org->getRegionalFocus(), "Europe")} checked {/if} /></td> 
-                            <td style="width: 15%"><input id="northAmerica" name="northAmerica" type="checkbox" {if strstr($org->getRegionalFocus(), "North-America")} checked {/if} /></td> 
-                            <td style="width: 15%"><input id="southAmerica" name="southAmerica" type="checkbox" {if strstr($org->getRegionalFocus(), "South-America")} checked {/if} /></td> 
+                            <td style="width: 15%"><input id="africa" name="africa" type="checkbox" {if isset($org)} {if strstr($org->getRegionalFocus(), "Africa")} checked {/if}{/if} /></td>   
+                            <td style="width: 15%"><input id="asia" name="asia" type="checkbox" {if isset($org)} {if strstr($org->getRegionalFocus(), "Asia")} checked {/if}{/if} /></td> 
+                            <td style="width: 15%"><input id="australia" name="australia" type="checkbox" {if isset($org)} {if strstr($org->getRegionalFocus(), "Australia")} checked {/if}{/if} /></td> 
+                            <td style="width: 15%"><input id="europe" name="europe" type="checkbox" {if isset($org)} {if strstr($org->getRegionalFocus(), "Europe")} checked {/if}{/if} /></td> 
+                            <td style="width: 15%"><input id="northAmerica" name="northAmerica" type="checkbox" {if isset($org)} {if strstr($org->getRegionalFocus(), "North-America")} checked {/if}{/if} /></td> 
+                            <td style="width: 15%"><input id="southAmerica" name="southAmerica" type="checkbox" {if isset($org)} {if strstr($org->getRegionalFocus(), "South-America")} checked {/if}{/if} /></td> 
                         </tr>
                       
                     </table> 

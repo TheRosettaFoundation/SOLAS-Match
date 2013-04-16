@@ -48,6 +48,12 @@
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">Profile</a>
                             </li>
                         {/if}
+                        {if isset($site_admin)}
+                            {assign var="user_id" value=$user->getUserId()}
+                            <li {if isset($current_page) && $current_page == 'admin-dashboard'}class="active" {/if}>
+                                <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">Admin</a>
+                            </li>
+                        {/if}
                     </ul>
                     <ul class="nav pull-right">
                         {if isset($userNotifications)}   

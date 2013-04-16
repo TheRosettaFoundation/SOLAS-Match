@@ -376,31 +376,17 @@ class TaskRouteHandler
         }
 
         $graphBuilder = new UIWorkflowBuilder();
-        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+        $graph = $projectDao->getProjectGraph($task->getProjectId());
+        $index = $graphBuilder->find($task->getId(), $graph);
+        $node = $graph->getAllNodes($index);
 
-        $found = false;
-        $preReqTasks = array();
-        $currentLayer = $graph->getRootNodeList();
-        $nextLayer = array();
-        while (!$found && count($currentLayer) > 0) {
-            foreach ($currentLayer as $node) {
-                if ($node->getTaskId() == $task->getId()) {
-                    $found = true;
-                    foreach ($node->getPreviousList() as $pNode) {
-                        $pTask = $taskDao->getTask($pNode->getTaskId());
-                        if (is_object($pTask)) {
-                            $preReqTasks[] = $pTask;
-                        }
-                    }
-                }
-                foreach ($node->getNextList() as $nNode) {
-                    if (!in_array($nNode, $nextLayer)) {
-                        $nextLayer[] = $nNode;
-                    }
+        if ($node) {
+            foreach ($node->getPreviousList() as $nodeId) {
+                $pTask = $taskDao->getTask($nodeId);
+                if (is_object($pTask)) {
+                    $preReqTasks[] = $pTask;
                 }
             }
-            $currentLayer = $nextLayer;
-            $nextLayer = array();
         }
 
         $numTaskTypes = Settings::get("ui.task_types");
@@ -1127,7 +1113,6 @@ class TaskRouteHandler
                 
                 $task->setTaskStatus(TaskStatusEnum::COMPLETE);
                 $taskDao->updateTask($task);
-
                 for($i=0; $i < $segmentationValue; $i++) {
                     if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {   
                         $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);

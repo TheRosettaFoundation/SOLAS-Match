@@ -19,12 +19,13 @@ class Orgs {
         }, 'getOrgs');        
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs(:format)/', function ($format = ".json") {
+
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Organisation");
-//            $data = $client->cast("Organisation", $data);
-            $data->setId(null);
+            $data->setId(null);            
             Dispatcher::sendResponce(null, OrganisationDao::insertAndUpdate($data), null, $format);
+
         }, 'createOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/', function ($id, $format = ".json") {
@@ -36,6 +37,7 @@ class Orgs {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Organisation");
+            $data->setId($id);
 //            $data = $client->cast("Organisation", $data);
             Dispatcher::sendResponce(null, OrganisationDao::insertAndUpdate($data), null, $format);
         }, 'updateOrg');
@@ -188,6 +190,21 @@ class Orgs {
             
             Dispatcher::sendResponce(null, TaskDao::findTasksByOrg(array("organisation_ids" => $id)), null, $format);
         }, 'getOrgTasks');        
+        
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/admin/:uid/',
+                                                        function ($id, $uid, $format = ".json") {
+            
+            if (!is_numeric($uid) && strstr($uid, '.')) {
+                $uid = explode('.', $uid);
+                $format = '.'.$uid[1];
+                $uid = $uid[0];
+            }
+            Dispatcher::sendResponce(null, OrganisationDao::addAdmin($uid, $id), null, $format);
+        }, 'createOrgAdmin');   
+        
+        
+        
         
     }
 }

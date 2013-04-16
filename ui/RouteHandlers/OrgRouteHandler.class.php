@@ -25,8 +25,8 @@ class OrgRouteHandler
         $app->get("/org/:org_id/private", array($middleware, "authUserForOrg"), 
         array($this, "orgPrivateProfile"))->via("POST")->name("org-private-profile");
 
-        $app->get("/org/:org_id/profile", array($this, "orgPublicProfile")
-        )->via("POST")->name("org-public-profile");
+        $app->get("/org/:org_id/profile", array($middleware, "authUserIsLoggedIn"),
+        array($this, "orgPublicProfile"))->via("POST")->name("org-public-profile");
 
         $app->get("/org/:org_id/manage/:badge_id", array($middleware, "authUserForOrg"), 
         array($this, "orgManageBadge"))->via("POST")->name("org-manage-badge");
@@ -82,14 +82,14 @@ class OrgRouteHandler
             }
             
             if(is_null($nameErr)) {
-
+                $user_id = UserSession::getCurrentUserID();
                 $orgDao = new OrganisationDao();
                 $organisation = $orgDao->getOrganisationByName($org->getName());
 
                 if (!$organisation) {
-                    $new_org = $orgDao->createOrg($org);
+                    $new_org = $orgDao->createOrg($org, $user_id);
                     if ($new_org) {
-                        $user_id = UserSession::getCurrentUserID();
+                        
                         $orgDao->createMembershipRequest($new_org->getId(), $user_id);
                         $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
                         $org_name = $org->getName();
@@ -109,7 +109,10 @@ class OrgRouteHandler
                     "nameErr" => $nameErr
                 ));
             }
-        }          
+        }   
+        $app->view()->appendData(array(
+            "org"     => null
+        ));
         $app->render("create-org.tpl");
     }    
 
@@ -293,7 +296,6 @@ class OrgRouteHandler
     {
         $app = Slim::getInstance();
         $orgDao = new OrganisationDao();
-
         $org = $orgDao->getOrganisation($org_id);
         if($post = $app->request()->post()) {
 
@@ -304,7 +306,7 @@ class OrgRouteHandler
             if(isset($post['city'])) $org->setCity($post['city']);
             if(isset($post['country'])) $org->setCountry($post['country']);
             if(isset($post['email'])) $org->setEmail($post['email']);
-            
+
             $regionalFocus = array();
             if(isset($post["africa"])) $regionalFocus[] = "Africa";             
             if(isset($post["asia"])) $regionalFocus[] = "Asia";             
@@ -312,7 +314,7 @@ class OrgRouteHandler
             if(isset($post["europe"])) $regionalFocus[] .= "Europe"; 
             if(isset($post["northAmerica"])) $regionalFocus[] .= "North-America"; 
             if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
-            
+
             if(!empty($regionalFocus)) {
                 $regionalFocusString = "";
                 foreach($regionalFocus as $region) {
@@ -322,10 +324,27 @@ class OrgRouteHandler
                 $regionalFocusString[$lastComma] = "";
                 $org->setRegionalFocus($regionalFocusString);
             }
-            
+
+
             $orgDao->updateOrg($org); 
             $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
-        }   
+        }
+
+        $deleteId = $app->request()->post("deleteId");
+        if ($deleteId) {
+            if ($orgDao->deleteOrg($org->getId())) {
+                $app->flash("success", "Successfully deleted org ".$org->getName());
+                $app->redirect($app->urlFor("home"));
+            } else {
+                $app->flashNow("error", "Unable to delete organisation. Please try again later.");
+            }
+        }
+        
+
+        $userDao = new UserDao();
+        if ($userDao->isAdmin(UserSession::getCurrentUserId(), $org->getId())) {
+            $app->view()->appendData(array('orgAdmin' => true));
+        }
         
         $app->view()->setData("org", $org);        
         $app->render("org-private-profile.tpl");
@@ -394,13 +413,17 @@ class OrgRouteHandler
                 }
             } elseif (isset($post->accept)) {
                 if ($user_id = $post->user_id) {
-                    $orgDao->acceptMembershipRequest($org_id, $user_id);
-                    $user = $userDao->getUser($user_id);
-                    $user_name = $user->getDisplayName();
-                    $org_name = $org->getName();
-                    $app->flashNow("success", "Successfully added ".
-                            "<a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">".
-                            "$user_name</a> as a member of $org_name");
+                    if ($orgDao->acceptMembershipRequest($org_id, $user_id)){
+                        $user = $userDao->getUser($user_id);
+                        $user_name = $user->getDisplayName();
+                        $org_name = $org->getName();
+                        $app->flashNow("success", "Successfully added ".
+                                "<a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">".
+                                "$user_name</a> as a member of $org_name");
+                    } else {
+                        $app->flashNow("error", "Unable to add user to member list. Please try again later.");
+                    }
+
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
@@ -415,6 +438,23 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
+            } elseif (isset($post->revokeUser)) {
+                $userId = $post->revokeUser;
+                $user = $userDao->getUser($userId);
+                if ($user) {
+                    $userName = $user->getDisplayName();
+                    if ($userDao->leaveOrganisation($userId, $org_id)) {
+                        $app->flashNow("success", "Successfully rvoked membership from user
+                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $userId))}\">
+                                $userName</a>.");
+                    } else {
+                        $app->flashNow("error", "Unable to revoke membership from user
+                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $userId))}\">
+                                $userName</a>.");
+                    }
+                } else {
+                    $app->flashNow("error", "Unable to find user in system");
+                }
             }
         }       
         
@@ -425,20 +465,31 @@ class OrgRouteHandler
                 $user = $userDao->getUser($memRequest->getUserId());
                 $user_list[] = $user;
             }
-        }  
+        }
+
+        $currentUser = $userDao->getUser(UserSession::getCurrentUserId());
 
         $org_badges = $orgDao->getOrgBadges($org_id);
         $orgMemberList = $orgDao->getOrgMembers($org_id);
-        $org_members = array();
+        $isMember = false;
         if (count($orgMemberList) > 0) {
-            foreach ($orgMemberList as $usrObject) {
-                $org_members[] = $usrObject->getId();
+            if (in_array($currentUser, $orgMemberList)) {
+                $isMember = true;
+
             }
         }
 
+        $adminAccess = false;
+        if ($userDao->isAdmin($currentUser->getId(), $org->getId())) {
+            $adminAccess = true;
+        }
+
         $app->view()->setData("current_page", "org-public-profile");
-        $app->view()->appendData(array("org" => $org,
-                "org_members" => $org_members,
+        $app->view()->appendData(array(
+                "org" => $org,
+                'isMember'  => $isMember,
+                'orgMembers' => $orgMemberList,
+                'adminAccess' => $adminAccess,
                 "org_badges" => $org_badges,
                 "user_list" => $user_list
         ));

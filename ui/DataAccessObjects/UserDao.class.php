@@ -30,6 +30,15 @@ class UserDao
     }
 
 
+    public function isAdmin($userId, $orgId = "null")
+    {
+        $ret = false;
+        $request = "{$this->siteApi}v0/users/$userId/org/$orgId/admin";
+        $ret = $this->client->call(null,$request);
+        return $ret;
+    }
+
+
     public function isSubscribedToTask($userId, $taskId)
     {
         $ret = null;
@@ -83,14 +92,42 @@ class UserDao
         return $ret;
     }
 
-    public function getUserTopTasks($userId, $limit = null)
+    public function getUserTaskStreamNotification($userId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/taskStreamNotification";
+        $response = $this->client->call(null, $request);
+        if ($response) {
+            $ret = get_object_vars($response);
+        }
+        return $ret;
+    }
+
+    public function getUserTopTasks($userId, $limit = null, $filter = array())
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/top_tasks";
 
-        $args = null;
+        $args = array();
         if ($limit) {
-            $args = array("limit" => $limit);
+            $args["limit"] = $limit;
+        }
+
+        $filterString = "";
+        if ($filter) {
+            if (isset($filter['taskType']) && $filter['taskType'] != '') {
+                $filterString .= "taskType:".$filter['taskType'].';';
+            }
+            if (isset($filter['sourceLanguage']) && $filter['sourceLanguage'] != '') {
+                $filterString .= "sourceLanguage:".$filter['sourceLanguage'].';';
+            }
+            if (isset($filter['targetLanguage']) && $filter['targetLanguage'] != '') {
+                $filterString .= "targetLanguage:".$filter['targetLanguage'].';';
+            }
+        }
+
+        if ($filterString != '') {
+            $args['filter'] = $filterString;
         }
 
         $ret = $this->client->call(array("Task"), $request, HttpMethodEnum::GET, null, $args);
@@ -164,6 +201,22 @@ class UserDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges/$badgeId";
         $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
+        return $ret;
+    }
+
+    public function removeTaskStreamNotification($userId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/taskStreamNotification";
+        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        return $ret;
+    }
+
+    public function requestTaskStreamNotification($userId, $interval)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/interval/$interval/taskStreamNotification";
+        $ret = $this->client->call($request, HTTP_Request2::METHOD_PUT);
         return $ret;
     }
 

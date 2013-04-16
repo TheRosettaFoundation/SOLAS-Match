@@ -46,6 +46,7 @@ $app->configureMode('development', function () use ($app) {
 
 require_once 'Common/HttpMethodEnum.php';
 require_once 'Common/Settings.class.php';
+require_once 'Common/NotificationIntervalEnum.class.php';
 require_once 'Common/lib/Authentication.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
 require_once 'Common/lib/BadgeTypes.class.php';
@@ -54,6 +55,7 @@ require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
 require_once 'ui/lib/UserSession.class.php';
 require_once 'ui/lib/URL.class.php';
+require_once 'ui/lib/GraphViewer.class.php';
 require_once 'ui/lib/UIWorkflowBuilder.class.php';
 
 require_once 'ui/RouteHandlers/UserRouteHandler.class.php';
@@ -112,8 +114,7 @@ $app->hook('slim.before', function () use ($app)
         $org_array = $userDao->getUserOrgs(UserSession::getCurrentUserID());
         if ($org_array && count($org_array) > 0) {
             $app->view()->appendData(array(
-                'user_is_organisation_member' => true,
-                'user_organisations' => $org_array
+                'user_is_organisation_member' => true
             ));
         }
 
@@ -121,6 +122,13 @@ $app->hook('slim.before', function () use ($app)
         if($tasks && count($tasks) > 0) {
             $app->view()->appendData(array(
                         "user_has_active_tasks" => true
+            ));
+        }
+
+        $isAdmin = $userDao->isAdmin(UserSession::getCurrentUserID());
+        if ($isAdmin) {
+            $app->view()->appendData(array(
+                        'site_admin' => true
             ));
         }
     }

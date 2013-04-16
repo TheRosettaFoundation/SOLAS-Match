@@ -173,6 +173,35 @@ class UserDao
         return (!is_null(UserSession::getCurrentUserId()));
     }
 
+
+    public static function isAdmin($userId, $orgId)
+    {
+        $ret = false;
+        $args = PDOWrapper::cleanse($userId).", ";
+        $args .= PDOWrapper::cleanseNullOrWrapStr($orgId);
+        if ($result = PDOWrapper::call("isAdmin", $args)) {
+            $ret = $result[0]['result'];
+        }
+        return $ret;
+    }
+
+    public static function belongsToRole($user, $role)
+    {
+        $ret = false;
+        if ($role == 'translator') {
+            $ret = true;
+        } elseif ($role == 'organisation_member') {
+            $user_found = $this->find(array(
+                    'user_id' => $user->getUserId(),
+                    'role' => 'organisation_member'
+            ));
+            if (is_object($user_found)) {
+                $ret = true;
+            }
+        }
+        return $ret;
+    }
+
     public static function findOrganisationsUserBelongsTo($user_id) 
     {
         $ret = null;
@@ -193,6 +222,35 @@ class UserDao
             foreach ($result as $badge) {
                 $ret[] = ModelFactory::buildModel("Badge", $badge);
             }
+        }
+        return $ret;
+    }
+
+    public static function getUserTaskStreamNotification($userId)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("getUserTaskStreamNotification", PDOWrapper::cleanse($userId))) {
+            $ret = $result[0];
+        }
+        return $ret;
+    }
+
+    public function removeTaskStreamNotification($userId)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call('removeTaskStreamNotification', PDOWrapper::cleanse($userId))) {
+            $ret = true;
+        }
+        return $ret;
+    }
+
+    public function requestTaskStreamNotification($userId, $interval)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanse($userId).', ';
+        $args .= PDOWrapper::cleanse($interval);
+        if ($result = PDOWrapper::call("userTaskStreamNotificationInsertAndUpdate", $args)) {
+            $ret = true;
         }
         return $ret;
     }

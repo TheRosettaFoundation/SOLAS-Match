@@ -43,7 +43,8 @@ class APIHelper
         if (count($query_args) > 0) {
             $first= true;
             foreach ($query_args as $key=>$val){
-                if(!$first)$url.="&";
+                if(!$first) $url.="&";                    
+                else $first=FALSE;
                 $url.="$key=$val";
             }
         }
@@ -61,7 +62,6 @@ class APIHelper
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
         
-        
         curl_setopt($re, CURLOPT_HTTPHEADER, array(                                                                          
             $this->_serializer->getContentType(),                                                                                
             'Content-Length: ' . $lenght)                                                                       
@@ -69,6 +69,7 @@ class APIHelper
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
         $res=curl_exec($re);
         $response_data = $this->_serializer->deserialize($res,$destination);
+
         return $response_data;
     }
 
@@ -116,6 +117,19 @@ class APIHelper
             $format = FormatEnum::JSON;
         }
         return $format;
+    }
+
+    public static function parseFilterString($filter)
+    {
+        $ret = array();
+        $pairs = explode(";", $filter);
+        foreach ($pairs as $pair) {
+            if ($pair != '') {
+                $keyValue = explode(":", $pair);
+                $ret[$keyValue[0]] = $keyValue[1];
+            }
+        }
+        return $ret;
     }
 
     public function getContentType()

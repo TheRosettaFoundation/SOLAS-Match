@@ -101,11 +101,12 @@ class OrganisationDao
         return $ret;
     }
 
-    public function createOrg($org)
+    public function createOrg($org, $userId)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs";
         $ret = $this->client->call("Organisation", $request, HttpMethodEnum::POST, $org);
+        $this->createOrgAdmin($ret->getId(), $userId);
         return $ret;
     }
 
@@ -133,6 +134,7 @@ class OrganisationDao
 
     public function acceptMembershipRequest($orgId, $userId)
     {
+        $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
         $this->client->call(null, $request, HttpMethodEnum::PUT);
     }
@@ -141,5 +143,11 @@ class OrganisationDao
     {
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
         $this->client->call(null, $request, HttpMethodEnum::DELETE);
+    }
+    
+    public function createOrgAdmin($orgId, $userId)
+    {
+        $request = "{$this->siteApi}v0/orgs/$orgId/admin/$userId";
+        $this->client->call(null, $request, HttpMethodEnum::PUT);
     }
 }

@@ -222,8 +222,8 @@ class Upload {
             $taskPreReqs[$id][] = $preReqId;
         
             if($graph = $builder->parseAndBuild($taskPreReqs)) {
-
-                $currentTaskNode = $builder->find($id, $graph);
+                $index = $builder->find($id, $graph);
+                $currentTaskNode = $graph->getAllNodes($index);
                 $task = $taskDao->getTask($id);
                 $task = $task[0];
 
@@ -231,8 +231,8 @@ class Upload {
                 $taskDao->addTaskPreReq($id, $preReqId);
 
                 if($task->getTaskType() != TaskTypeEnum::DESEGMENTATION) {
-                    foreach($currentTaskNode->getPreviousList() as $node) {
-                        $preReq = $taskDao->getTask($node->getTaskId());
+                    foreach($currentTaskNode->getPreviousList() as $nodeId) {
+                        $preReq = $taskDao->getTask($nodeId);
                         $preReq = $preReq[0];      
                         if($preReq->getTaskStatus() == TaskStatusEnum::COMPLETE) {
                             Upload::copyOutputFile($id, $preReqId);

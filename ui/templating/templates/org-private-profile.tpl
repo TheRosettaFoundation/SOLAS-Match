@@ -18,6 +18,7 @@
     header({urlFor name='home'});
 {/if}
 
+{include file="handle-flash-messages.tpl"}
 
 {assign var="org_id" value=$org->getId()}
     <form method='post' action='{urlFor name='org-private-profile' options="org_id.$org_id"}' class='well'>
@@ -118,11 +119,19 @@
                 <td colspan="2" align="center">
                     <button type='submit' class='btn btn-primary' name='updateOrgDetails'>
                         <i class="icon-refresh icon-white"></i> Update Organisation Details
-                    </button>   
+                    </button>
+                    {if isset($orgAdmin)}
+                        <button type="submit" class="btn btn-inverse" value="{$org_id}" name="deleteId"
+                                onclick="return confirm('Are you sure you want to delete this organisation?');"> 
+                            <i class="icon-fire icon-white"></i> Delete Organisation
+                        </button>
+                    {/if}
                 </td>
             </tr>
   
         </table>
     </form>    
+
+
 
 {include file='footer.tpl'}

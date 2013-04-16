@@ -75,6 +75,14 @@ class Users {
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserByEmail');
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:user_id/org/:org_id/admin(:format)/',
+                function ($userId, $orgId, $format = '.json')
+                {
+                    $ret = false;
+                    $ret = UserDao::isAdmin($userId, $orgId);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'isAdmin');
        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/subscribedToTask/:id/:taskID/',
                                                         function ($id, $taskID, $format = ".json") {
@@ -144,6 +152,29 @@ class Users {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
             Dispatcher::sendResponce(null, UserDao::getUserTags($id, $limit), null, $format);
         }, 'getUsertags');
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/taskStreamNotification(:format)/',
+                function ($id, $format = ".json")
+                {
+                    $data = UserDao::getUserTaskStreamNotification($id);
+                    Dispatcher::sendResponce(null, $data, null, $format);
+                }, 'getUserTaskStreamNotification');
+
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/taskStreamNotification(:format)/',
+                function ($id, $format = ".json")
+                {
+                    $userDao = new UserDao();
+                    $ret = $userDao->removeTaskStreamNotification($id);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'removeUserTaskStreamNotification');
+
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/interval/:interval/taskStreamNotification(:format)/',
+                function ($id, $interval, $format = ".json")
+                {
+                    $userDao = new UserDao();
+                    $ret = $userDao->requestTaskStreamNotification($id, $interval);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'updateTaskStreamNotification');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tasks(:format)/',
                                                         function ($id, $format = ".json") {
@@ -187,9 +218,6 @@ class Users {
                  $tID = $tID[0];
             }
             Dispatcher::sendResponce(null, TaskDao::unClaimTask($tID,$id), null, $format);
-
-//            Notify::notifyUserClaimedTask(UserDao::getUser($id), $data);
-//            Notify::sendEmailNotifications($data, NotificationTypes::CLAIM);
         }, 'userUnClaimTask');
 
         
@@ -197,7 +225,23 @@ class Users {
                                                         function ($id, $format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
-            $data = TaskDao::getUserTopTasks($id, $limit);
+            $filter = Dispatcher::clenseArgs('filter', HttpMethodEnum::GET, '');
+            $filters = APIHelper::parseFilterString($filter);
+            $filter = "";
+            if (isset($filters['taskType']) && $filters['taskType'] != '') {
+                $filter .= " AND t.`task-type_id`=".$filters['taskType'];
+            }
+            if (isset($filters['sourceLanguage']) && $filters['sourceLanguage'] != '') {
+                $filter .= " AND t.`language_id-source`= (SELECT id FROM Languages WHERE code=\'".
+                            $filters['sourceLanguage']."\')";
+            }
+            if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
+                $filter .= " AND t.`language_id-target`= (SELECT id FROM Languages WHERE code=\'".
+                            $filters['targetLanguage']."\')";
+            }
+
+            $dao = new TaskDao();
+            $data = $dao->getUserTopTasks($id, $limit, $filter);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTopTasks');
         
