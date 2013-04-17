@@ -133,12 +133,19 @@ class UnitTestHelper
         $sourceLocale->setCountryCode($sourceCountryCode);
         $sourceLocale->setLanguageCode($sourceLanguageCode);
         $project->setSourceLocale($sourceLocale);
-
+        
+        $projectTagList = array();
         foreach($tags as $tagLabel) {
-            $project->setTag(TagsDao::create($tagLabel));
+            $tag = new Tag();
+            $tag->setLabel($tagLabel);
+            $projectTagList[] = $tag;
         }
- 
-        //$project->setTag($createdProjectTags);        
+        $projectTags = TagsDao::updateTags($project->getId(), $projectTagList);
+        
+        foreach($projectTags as $projectTag) {
+            $project->addTag($projectTag);
+        }
+        
         $project->setOrganisationId($organisationId);
         $project->setCreatedTime($createdTime);
         return $project;
@@ -146,7 +153,7 @@ class UnitTestHelper
     
     public static function createTask($projectId, $id = null, $title = "Task 1", $comment = "Task 1 Comment", $deadline = "2020-03-29 16:30:00",
             $wordcount = 123456, $tags = null, $type = TaskTypeEnum::TRANSLATION, $status = TaskStatusEnum::PENDING_CLAIM,
-            $sourceCountryCode = "IE", $sourceLanguageCode = "en", $targetCountryCode = "FR", $targetCountryLanguage = "fr",
+            $sourceCountryCode = "IE", $sourceLanguageCode = "en", $targetCountryCode = "FR", $targetLanguageCode = "fr",
             $published = 1, $createdTime = null)
     {
         $task = new Task();
@@ -158,10 +165,17 @@ class UnitTestHelper
         $task->setWordCount($wordcount);        
         $task->setTaskType($type);
         $task->setTaskStatus($status);
-        $task->setTargetCountryCode($targetCountryCode);
-        $task->setTargetLanguageCode($targetCountryLanguage);
-        $task->setSourceCountryCode($sourceCountryCode);
-        $task->setSourceLanguageCode($sourceLanguageCode);
+        
+        $sourceLocale = new Locale();
+        $sourceLocale->setLanguageCode($sourceLanguageCode);
+        $sourceLocale->setCountryCode($sourceCountryCode);
+        $task->setSourceLocale($sourceLocale);
+        
+        $targetLocale = new Locale();
+        $targetLocale->setLanguageCode($targetLanguageCode);
+        $targetLocale->setCountryCode($targetCountryCode);
+        $task->setTargetLocale($targetLocale);
+        
         $task->setPublished($published);
         $task->setCreatedTime($createdTime);
         

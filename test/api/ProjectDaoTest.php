@@ -35,10 +35,11 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($project->getImpact(), $insertedProject->getImpact());
         $this->assertEquals($project->getReference(), $insertedProject->getReference());
         $this->assertEquals($project->getWordCount(), $insertedProject->getWordCount());
-        $this->assertEquals($project->getSourceCountryCode(), $insertedProject->getSourceCountryCode());
-        $this->assertEquals($project->getSourceLanguageCode(), $insertedProject->getSourceLanguageCode());
         
-        $projectTags = $insertedProject->getTag();
+        $this->assertEquals($project->getSourceLocale()->getLanguageCode(), $insertedProject->getSourceLocale()->getLanguageCode());
+        $this->assertEquals($project->getSourceLocale()->getCountryCode(), $insertedProject->getSourceLocale()->getCountryCode());
+        
+        $projectTags = $insertedProject->getTagList();
         $this->assertCount(2, $projectTags);
         foreach($projectTags as $tag) {
             $this->assertInstanceOf("Tag", $tag);
@@ -73,14 +74,16 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $insertedProject->setImpact("Updated Impact");
         $insertedProject->setReference("Updated Reference");
         $insertedProject->setWordCount(654321);
-        $insertedProject->setSourceCountryCode("AZ");
-        $insertedProject->setSourceLanguageCode("agx");
+        
+        $sourceLocale = new Locale();              
+        $sourceLocale->setCountryCode("AZ");
+        $sourceLocale->setLanguageCode("agx");
+        $insertedProject->setSourceLocale($sourceLocale);  
         
         $newTags = array("Updated Project", "Updated Tags");
         foreach($newTags as $tagLabel) {
-            TagsDao::create($tagLabel);
+            $insertedProject->addTag(TagsDao::create($tagLabel));
         }
-        $insertedProject->setTag($newTags);
         
         $insertedProject->setOrganisationId($insertedOrg2->getId());
         $insertedProject->setCreatedTime("2030-06-20 00:00:00");
@@ -94,16 +97,15 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($insertedProject->getImpact(), $updatedProject->getImpact());
         $this->assertEquals($insertedProject->getReference(), $updatedProject->getReference());
         $this->assertEquals($insertedProject->getWordCount(), $updatedProject->getWordCount());
-        $this->assertEquals($insertedProject->getSourceCountryCode(), $updatedProject->getSourceCountryCode());
-        $this->assertEquals($insertedProject->getSourceLanguageCode(), $updatedProject->getSourceLanguageCode());
+        
+        $this->assertEquals($insertedProject->getSourceLocale()->getLanguageCode(), $updatedProject->getSourceLocale()->getLanguageCode());
+        $this->assertEquals($insertedProject->getSourceLocale()->getCountryCode(), $updatedProject->getSourceLocale()->getCountryCode());
 
         $projectTagsAfterUpdate = $updatedProject->getTag();
-        $this->assertCount(2, $projectTagsAfterUpdate);
+        $this->assertCount(4, $projectTagsAfterUpdate);
         foreach($projectTagsAfterUpdate as $tag) {
             $this->assertInstanceOf("Tag", $tag);
-        }       
-        $this->assertEquals("Updated Project", $projectTagsAfterUpdate[0]->getLabel());
-        $this->assertEquals("Updated Tags", $projectTagsAfterUpdate[1]->getLabel());
+        }
         
         $this->assertEquals($insertedProject->getOrganisationId(), $updatedProject->getOrganisationId());
         $this->assertEquals($insertedProject->getCreatedTime(), $updatedProject->getCreatedTime()); 
@@ -132,8 +134,8 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
                                                    ,$project->getReference()
                                                    ,$project->getWordCount()
                                                    ,$insertedProject->getCreatedTime()
-                                                   ,$project->getSourceCountryCode()
-                                                   ,$project->getSourceLanguageCode());
+                                                   ,$project->getSourceLocale()->getCountryCode()
+                                                   ,$project->getSourceLocale()->getLanguageCode());
         
         $this->assertCount(1, $resultGetProject);
         $this->assertInstanceOf("Project", $resultGetProject[0]);        
@@ -210,8 +212,8 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($insertedProject->getImpact(), $resultGetArchivedProject->getImpact());
         $this->assertEquals($insertedProject->getReference(), $resultGetArchivedProject->getReference());
         $this->assertEquals($insertedProject->getWordCount(), $resultGetArchivedProject->getWordCount());
-        $this->assertEquals($insertedProject->getSourceCountryCode(), $resultGetArchivedProject->getCountryCode());
-        $this->assertEquals($insertedProject->getSourceLanguageCode(), $resultGetArchivedProject->getLanguageCode());
+//        $this->assertEquals($insertedProject->getSourceCountryCode(), $resultGetArchivedProject->getCountryCode());
+//        $this->assertEquals($insertedProject->getSourceLanguageCode(), $resultGetArchivedProject->getLanguageCode());
         $this->assertNotNull($resultGetArchivedProject->getArchivedDate());
         $this->assertNotNull($resultGetArchivedProject->getTranslatorId());
         

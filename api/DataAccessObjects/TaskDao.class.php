@@ -79,15 +79,15 @@ class TaskDao
         return $tasks;
     }
         
-    public static function getTask($id=null, $projectId=null, $title=null, $wordCount=null, $languageIdSource=null,
-            $languageIdTarget=null, $createdTime=null, $countryIdSource=null, $countryIdTarget=null, $comment=null,
+    public static function getTask($id=null, $projectId=null, $title=null, $wordCount=null, $sourceLanguageCode=null,
+            $targetLanguageCode=null, $createdTime=null, $sourceCountryCode=null, $targetCountryCode=null, $comment=null,
             $taskTypeId=null, $taskStatusId=null, $published=null, $deadline=null)
     {
         $tasks = array();
         $result = PDOWrapper::call("getTask", PDOWrapper::cleanseNull($id).",".PDOWrapper::cleanseNull($projectId).",".
-                PDOWrapper::cleanseNullOrWrapStr($title).",".PDOWrapper::cleanseNull($wordCount).",".PDOWrapper::cleanseNullOrWrapStr($languageIdSource).",".
-                PDOWrapper::cleanseNullOrWrapStr($languageIdTarget).",".PDOWrapper::cleanseNullOrWrapStr($createdTime).",".
-                PDOWrapper::cleanseNullOrWrapStr($countryIdSource).",".PDOWrapper::cleanseNullOrWrapStr($countryIdTarget).",".
+                PDOWrapper::cleanseNullOrWrapStr($title).",".PDOWrapper::cleanseNull($wordCount).",".PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).",".
+                PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode).",".PDOWrapper::cleanseNullOrWrapStr($createdTime).",".
+                PDOWrapper::cleanseNullOrWrapStr($sourceCountryCode).",".PDOWrapper::cleanseNullOrWrapStr($targetCountryCode).",".
                 PDOWrapper::cleanseNullOrWrapStr($comment).",".PDOWrapper::cleanseNull($taskTypeId).",".PDOWrapper::cleanseNull($taskStatusId).",".
                 PDOWrapper::cleanseNull($published).",".PDOWrapper::cleanseNullOrWrapStr($deadline));
         if ($result) {
@@ -297,7 +297,7 @@ class TaskDao
      * Returns an array of tasks ordered by the highest score related to the user
      */
 
-    public static function getUserTopTasks($user_id, $limit, $filter)
+    public static function getUserTopTasks($user_id, $limit, $filter="")
     {
         $ret = false;
         if ($result = PDOWrapper::call("getUserTopTasks", PDOWrapper::cleanse($user_id)

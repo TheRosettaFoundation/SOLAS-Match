@@ -80,6 +80,7 @@ class TagsDao
             }
     
             ProjectDao::addProjectTags($projectId, $projectTags);
+            return $projectTags;
         }
     }
     

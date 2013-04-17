@@ -37,7 +37,7 @@ class ProjectDao
         $projectTags = self::getTags($project->getId());
         if($projectTags) {
             foreach($projectTags as $tag) {
-                $project->setTag($tag);
+                $project->addTag($tag);
             }
         }
         
@@ -45,15 +45,15 @@ class ProjectDao
     }
     
     public static function getProject($id=null, $title=null, $description=null, $impact=null, $deadline=null, $orgId=null,
-                                        $reference=null, $wordCount=null, $created=null, $countryId=null, $languageId=null)
+                                        $reference=null, $wordCount=null, $created=null, $countryCode=null, $languageCode=null)
     {
         $projects = array();
         $result = PDOWrapper::call("getProject", PDOWrapper::cleanseNull($id).",".PDOWrapper::cleanseNullOrWrapStr($title).",".
                             PDOWrapper::cleanseNullOrWrapStr($description).",".PDOWrapper::cleanseNullOrWrapStr($impact).",".
                             PDOWrapper::cleanseNullOrWrapStr($deadline).",".PDOWrapper::cleanseNull($orgId).",".
                             PDOWrapper::cleanseNullOrWrapStr($reference).",".PDOWrapper::cleanseNullOrWrapStr($wordCount).",".
-                            PDOWrapper::cleanseNullOrWrapStr($created).",".PDOWrapper::cleanseNullOrWrapStr($countryId).",".
-                            PDOWrapper::cleanseNullOrWrapStr($languageId));
+                            PDOWrapper::cleanseNullOrWrapStr($created).",".PDOWrapper::cleanseNullOrWrapStr($countryCode).",".
+                            PDOWrapper::cleanseNullOrWrapStr($languageCode));
         if($result) {
             foreach($result as $row) {
                 $projects[] = ModelFactory::buildModel("Project", $row);
