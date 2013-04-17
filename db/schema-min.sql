@@ -359,6 +359,23 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
 -- Data exporting was unselected.
 
 
+-- Dumping structure for table Solas-Match-Test.TaskReviews
+CREATE TABLE IF NOT EXISTS `TaskReviews` (
+  `task_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `corrections` int(11) unsigned NOT NULL,
+  `grammar` int(11) unsigned NOT NULL,
+  `spelling` int(11) unsigned NOT NULL,
+  `consistency` int(11) unsigned NOT NULL,
+  `comment` VARCHAR(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  UNIQUE KEY `task_id` (`task_id`,`user_id`),
+  CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_TaskReviews_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
+
+
 -- Dumping structure for table Solas-Match-Test.Tasks
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -1578,6 +1595,52 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getTaskReviews
+DROP PROCEDURE IF EXISTS `getTaskReviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskReviews`(IN `taskId` INT, IN `userId` INT, IN `correction` INT, IN `gram` INT, IN `spell` INT, IN `consis` INT, IN `comm` VARCHAR(2048))
+    READS SQL DATA
+BEGIN
+    if taskId = '' then set taskId = NULL; end if;
+    if userId = '' then set userId = NULL; end if;
+    if correction = '' then set correction = NULL; end if;
+    if gram = '' then set gram = NULL; end if;
+    if spell = '' then set spell = NULL; end if;
+    if consis = '' then set consis = NULL; end if;
+    if comm = '' then set  = NULL; end if;
+    
+    set @q = "SELECT task_id, user_id, corrections, grammar, spelling, consistency, comment
+        FROM TaskReviews
+        WHERE 1";
+    if taskId IS NOT NULL then
+        set @q = CONCAT(@q, " AND task_id = ", taskId);
+    end if;
+    if userId IS NOT NULL then
+        set @q = CONCAT(@q, " AND user_id = ", userId);
+    end if;
+    if correction IS NOT NULL then
+        set @q = CONCAT(@q, " AND corrections = ", correction);
+    end if;
+    if gram IS NOT NULL then
+        set @q = CONCAT(@q, " AND grammar = ", grammar);
+    end if;
+    if spell IS NOT NULL then
+        set @q = CONCAT(@q, " AND spelling = ", spell);
+    end if;
+    if consis IS NOT NULL then
+        set @q = CONCAT(@q, " AND consistency = ", consis);
+    end if;
+    if comm IS NOT NULL then
+        set @q = CONCAT(@q, " AND comment = '", comm, "'");
+    end if;
+
+    PREPARE stmt FROM @q;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getTasksByOrgIDs
 DROP PROCEDURE IF EXISTS `getTasksByOrgIDs`;
 DELIMITER //
@@ -2667,6 +2730,17 @@ BEGIN
 	SELECT count(1) INTO @totalUsers FROM Users;
 	REPLACE INTO Statistics (name, value)
 	VALUES ('Users', @totalUsers);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateUsers
+DROP PROCEDURE IF EXISTS `submitTaskReview`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN comm VARCHAR(2048))
+BEGIN
+    INSERT INTO TaskReviews (task_id, user_id, corrections, grammar, spelling, consistency, comment)
+        VALUES (taskId, userId, correction, gram, spell, consis, comm);
 END//
 DELIMITER ;
 
