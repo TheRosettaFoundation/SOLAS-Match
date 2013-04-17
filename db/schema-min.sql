@@ -1307,6 +1307,29 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getOverdueTasks
+DROP PROCEDURE IF EXISTS `getOverdueTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOverdueTasks`()
+BEGIN
+    select id, project_id, title, `word-count`, 
+    (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`,
+    (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`,
+    (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`,
+    (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`,
+    (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`,
+    (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`,
+    (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
+    (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
+    comment,  `task-type_id`, `task-status_id`, published, deadline 
+    FROM Tasks t 
+    where deadline < NOW()
+    AND `task-status_id` != 4
+    AND published = 1;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getPasswordResetRequests
 DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
 DELIMITER //
