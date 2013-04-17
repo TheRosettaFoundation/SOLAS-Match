@@ -3327,20 +3327,19 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.deleteUserSecondaryLanguage
 DROP PROCEDURE IF EXISTS `deleteUserSecondaryLanguage`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUserSecondaryLanguage`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUserSecondaryLanguage`(IN `userId` INT, IN `languageCode` VARCHAR(128), IN `countryCode` VARCHAR(128))
 BEGIN
-	IF EXISTS (SELECT 1 FROM UserSecondaryLanguages u WHERE u.id=id) THEN
-		DELETE FROM UserSecondaryLanguages WHERE UserSecondaryLanguages.id=id;
+	IF EXISTS (SELECT 1 FROM UserSecondaryLanguages u WHERE u.user_id=userId AND u.language_id = (SELECT l.id FROM Languages l WHERE l.code=languageCode) AND u.country_id = (SELECT c.id FROM Countries c WHERE c.code=countryCode)) THEN
+		DELETE FROM UserSecondaryLanguages WHERE user_id=userId AND language_id = (SELECT l.id FROM Languages l WHERE l.code=languageCode) AND country_id = (SELECT c.id FROM Countries c WHERE c.code=countryCode);
 		SELECT 1 AS result;
 	ELSE
 		SELECT 0 AS result;
 	END IF;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure SolasUpgrade2.userPersonalInfoInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;

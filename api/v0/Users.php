@@ -481,6 +481,17 @@ class Users {
             Dispatcher::sendResponce(null, UserDao::createSecondaryLanguage($id, $data), null, $format);
 
         }, 'createSecondaryLanguage');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/removeSecondaryLanguage/:userId/:languageCode/:countryCode/',
+                                                        function ($userId,$languageCode,$countryCode, $format=".json"){
+            if (strstr($countryCode, '.')) {
+                $countryCode = explode('.', $countryCode);
+                $format = '.'.$countryCode[1];
+                $countryCode = $countryCode[0];
+            }
+            $data = UserDao::deleteSecondaryLanguage($userId, $languageCode, $countryCode);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'deleteSecondaryLanguage'); 
     }
 }
 Users::init();

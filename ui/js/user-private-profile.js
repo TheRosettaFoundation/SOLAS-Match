@@ -8,6 +8,8 @@
     function init()
     {
         fields = jQuery("#extraSecondaryLanguages").children("span").length;
+        jQuery("#secondaryLanguagesArraySize")[0].setAttribute("value", fields);
+
         
         if(fields == MAX_SECONDARY_LANGUAGES) {
             document.getElementById('alertinfo').style.display = 'block';

@@ -478,11 +478,30 @@ class UserRouteHandler
                 $userDao->addUserBadgeById($userId, $badgeId);               
             }
             
-            for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {
+            $currentSecondaryLocales = $userDao->getSecondaryLanguages($userId);
+            
+            $csl= array();
+            if($currentSecondaryLocales){
+                foreach($currentSecondaryLocales as $currLocale) {
+                    $csl[$currLocale->getLanguageCode().'-'.$currLocale->getCountryCode()]=$currLocale;
+                }
+            }
+            $newSecondaryLocales = array();
+
+            for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {               
+                $key = $post["secondaryLanguage_$i"].'-'.$post["secondaryCountry_$i"];
+
                 $locale = new Locale();
                 $locale->setLanguageCode($post["secondaryLanguage_$i"]);
                 $locale->setCountryCode($post["secondaryCountry_$i"]);
-                $userDao->createSecondaryLanguage($userId, $locale);
+                if(!key_exists($key, $csl))$userDao->createSecondaryLanguage($userId, $locale);
+                $newSecondaryLocales[$key] = $locale;
+            }
+
+            foreach($csl as $key=>$newLocale) {
+                if(!key_exists($key, $newSecondaryLocales)) {
+                    $userDao->deleteSecondaryLanguage($userId, $newLocale);
+                }
             }
             
             if ($user->getDisplayName() != ""

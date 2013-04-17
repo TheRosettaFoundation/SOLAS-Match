@@ -397,4 +397,11 @@ class UserDao
         return $ret;
     }
     
+    public function deleteSecondaryLanguage($userId, $locale)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/removeSecondaryLanguage/$userId/{$locale->getLanguageCode()}/{$locale->getCountryCode()}";
+        $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
+        return $ret;
+    }
 }

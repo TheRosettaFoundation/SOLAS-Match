@@ -599,4 +599,15 @@ class UserDao
         return $ret;        
     }
     
+    public static function deleteSecondaryLanguage($userId, $languageCode, $countryCode)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("deleteUserSecondaryLanguage", PDOWrapper::cleanseNull($userId).",".
+                                        PDOWrapper::cleanseNullOrWrapStr($languageCode).",".
+                                        PDOWrapper::cleanseNullOrWrapStr($countryCode))) {
+            return $result[0]['result'];            
+        }
+        return $ret;        
+    }
+    
 }
