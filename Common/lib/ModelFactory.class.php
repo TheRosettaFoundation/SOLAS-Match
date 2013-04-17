@@ -18,6 +18,7 @@ require_once __DIR__."/../models/Project.php";
 require_once __DIR__."/../models/ArchivedProject.php";
 require_once __DIR__."/../models/Statistic.php";
 require_once __DIR__."/../models/ProjectFile.php";
+require_once __DIR__."/../models/TaskReview.php";
 
 class ModelFactory
 {
@@ -68,6 +69,9 @@ class ModelFactory
                 break;
             case "Task" :
                 $ret = ModelFactory::generateTask($modelData);
+                break;
+            case "TaskReview" :
+                $ret = ModelFactory::generateTaskReview($modelData);
                 break;
             case "Project" :
                 $ret = ModelFactory::generateProject($modelData);
@@ -424,6 +428,35 @@ class ModelFactory
             foreach ($modelData['tags'] as $tag) {
                 $ret->addTag($tag);
             }
+        }
+
+        return $ret;
+    }
+
+    private static function generateTaskReview($modelData)
+    {
+        $ret = new TaskReview();
+
+        if (isset($modelData['task_id'])) {
+            $ret->setTaskId($modelData['task_id']);
+        }
+        if (isset($modelData['user_id'])) {
+            $ret->setUserId($modelData['user_id']);
+        }
+        if (isset($modelData['corrections'])) {
+            $ret->setCorrections($modelData['corrections']);
+        }
+        if (isset($modelData['grammar'])) {
+            $ret->setGrammar($modelData['grammar']);
+        }
+        if (isset($modelData['spelling'])) {
+            $ret->setSpelling($modelData['spelling']);
+        }
+        if (isset($modelData['consistency'])) {
+            $ret->setConsistency($modelData['consistency']);
+        }
+        if (isset($modelData['comment'])) {
+            $ret->setComment($modelData['comment']);
         }
 
         return $ret;
