@@ -313,7 +313,7 @@
     <div class="page-header">
         <h1>Task Stream Notifications <small>How often you recieve task stream e-mail updates.</small>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">
-                Edit
+                <i class="icon-wrench icon-white"></i> Edit Notifications
             </a>
         </h1>
     </div>
