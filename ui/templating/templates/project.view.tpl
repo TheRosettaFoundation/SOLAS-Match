@@ -235,9 +235,9 @@
                                         <strong>
                                             <small>                                  
                                                 {assign var="type_id" value=$task->getTaskType()}
-                                                {if $type_id == TaskTypeEnum::CHUNKING}
-                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">
-                                                        Chunking
+                                                {if $type_id == TaskTypeEnum::SEGMENTATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">
+                                                        Segmentation
                                                     </span>                                    
                                                 {elseif $type_id == TaskTypeEnum::TRANSLATION}
                                                     <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">
@@ -247,9 +247,9 @@
                                                     <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">
                                                         Proofreading
                                                     </span> 
-                                                {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">
-                                                        Postediting
+                                                {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">
+                                                        Desegmentation
                                                     </span> 
                                                 {/if}
                                             </small>

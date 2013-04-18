@@ -1,4 +1,4 @@
-<script language='javascript'>
+<script type="text/javascript">
     var fields = 0;
     var MAX_FIELDS = 10;
     var isRemoveButtonHidden = true;
@@ -33,17 +33,17 @@
             newColumnLangCountry.appendChild(countries);
             newRow.appendChild(newColumnLangCountry);
 
-            var tableColumnChunking = document.createElement('td');  
-            tableColumnChunking.setAttribute('align', 'middle');
-            tableColumnChunking.setAttribute('valign', 'top');
-            var inputChunking = document.createElement('input');
-            inputChunking.setAttribute('type', 'checkbox');
-            inputChunking.setAttribute('id', 'chunking_' + (fields + 1));
-            inputChunking.setAttribute('name', 'chunking_' + (fields + 1));
-            inputChunking.setAttribute('value', 'y');
-            inputChunking.setAttribute('onchange', 'chunkingEnabled(' + (fields + 1) +')');     
-            inputChunking.setAttribute('title', 'Create a chunking task for dividing large source files into managable chunks of 5,000 words or less.');
-            tableColumnChunking.appendChild(inputChunking);
+            var tableColumnSegmentation = document.createElement('td');  
+            tableColumnSegmentation.setAttribute('align', 'middle');
+            tableColumnSegmentation.setAttribute('valign', 'top');
+            var inputSegmentation = document.createElement('input');
+            inputSegmentation.setAttribute('type', 'checkbox');
+            inputSegmentation.setAttribute('id', 'segmentation_' + (fields + 1));
+            inputSegmentation.setAttribute('name', 'segmentation_' + (fields + 1));
+            inputSegmentation.setAttribute('value', 'y');
+            inputSegmentation.setAttribute('onchange', 'segmentationEnabled(' + (fields + 1) +')');     
+            inputSegmentation.setAttribute('title', 'Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less.');
+            tableColumnSegmentation.appendChild(inputSegmentation);
 
 
             var tableColumnTranslation = document.createElement('td');
@@ -71,10 +71,10 @@
             inputProofReading.setAttribute('title', 'Create a proofreading task for evaluating the translation provided by a volunteer.');
             tableColumnReading.appendChild(inputProofReading);
 
-            newRow.appendChild(tableColumnChunking);
+            newRow.appendChild(tableColumnSegmentation);
             newRow.appendChild(tableColumnTranslation);
             newRow.appendChild(tableColumnReading);
-            table.appendChild(newRow);
+            table.appendChild(newRow);            
             isEnabledArray.push(false);
 
             var size = document.getElementById('targetLanguageArraySize');
@@ -113,7 +113,7 @@
         }         
     }
 
-    function chunkingEnabled(index)
+    function segmentationEnabled(index)
     {
         if(!isEnabledArray[index]) {
             document.getElementById('translation_' + index).checked = false;

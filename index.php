@@ -1,6 +1,6 @@
 <?php
 
-require "ui/vendor/autoload.php";
+require __DIR__."/ui/vendor/autoload.php";
 
 mb_internal_encoding("UTF-8");
 //header("Content-Type:application/xhtml+xml;charset=UTF-8");
@@ -13,11 +13,38 @@ SmartyView::$smartyExtensions = array(
 );
 
 \DrSlump\Protobuf::autoload();
+session_start();
+// Can we get away from the app's old system?
+//require('app/includes/smarty.php');
 
+/**
+ * Initiate the app. must be done before routes are required
+ */
+$app = new Slim(array(
+    'debug' => true,
+    'view' => new SmartyView(),
+    'mode' => 'development' // default is development.
+));
+
+$app->configureMode('production', function () use ($app) {
+    $app->config(array(
+        'log.enable' => true,
+        'log.path' => '../logs', // Need to set this...
+        'debug' => false
+    ));
+});
+
+$app->configureMode('development', function () use ($app) {
+    $app->config(array(
+        'log.enable' => false,
+        'debug' => true
+    ));
+});
 
 //TODO remove all requires bar RoutHandlers
-require_once 'HTTP/Request2.php';
+//require_once 'HTTP/Request2.php';
 
+require_once 'Common/HttpMethodEnum.php';
 require_once 'Common/Settings.class.php';
 require_once 'Common/NotificationIntervalEnum.class.php';
 require_once 'Common/lib/Authentication.class.php';
@@ -65,64 +92,11 @@ require_once 'Common/protobufs/emails/FeedbackEmail.php';
 /**
  * Start the session
  */
-session_start();
-// Can we get away from the app's old system?
-//require('app/includes/smarty.php');
 
-/**
- * Initiate the app
- */
-$app = new Slim(array(
-    'debug' => true,
-    'view' => new SmartyView(),
-    'mode' => 'development' // default is development.
-    //                   TODO get from config file, or set in environment..
-    //                   .... $_ENV['SLIM_MODE'] = 'production';
-));
-
-$app->configureMode('production', function () use ($app) {
-    $app->config(array(
-        'log.enable' => true,
-        'log.path' => '../logs', // Need to set this...
-        'debug' => false
-    ));
-});
-
-$app->configureMode('development', function () use ($app) {
-    $app->config(array(
-        'log.enable' => false,
-        'debug' => true
-    ));
-});
-
-/*
-*
-*   Routing options - List all URLs here
-*
-*/
-{
-
-    $route_handler = new UserRouteHandler();
-    $route_handler->init();
-
-    $route_handler = new OrgRouteHandler();
-    $route_handler->init();
-
-    $route_handler = new TaskRouteHandler();
-    $route_handler->init();
-
-    $route_handler = new TagRouteHandler();
-    $route_handler->init();
-
-    $route_handler = new BadgeRouteHandler();
-    $route_handler->init();
-    
-    $route_handler = new ProjectRouteHandler();
-    $route_handler->init();    
-}
 
 function isValidPost(&$app)
 {
+    
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }
 
@@ -135,7 +109,7 @@ $app->hook('slim.before', function () use ($app)
 {
     $userDao = new UserDao();
     if (!is_null(UserSession::getCurrentUserID()) &&
-        $current_user = $userDao->getUser(array("id" => UserSession::getCurrentUserID()))) {
+        $current_user = $userDao->getUser(UserSession::getCurrentUserID())) {
         $app->view()->appendData(array('user' => $current_user));
         $org_array = $userDao->getUserOrgs(UserSession::getCurrentUserID());
         if ($org_array && count($org_array) > 0) {

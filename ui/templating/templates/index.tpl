@@ -55,7 +55,7 @@
         </div>
 
         <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; table-layout: fixed; word-break:break-all;">
-            {if isset($user)}
+            {if isset($user) && isset($tasks)}
                 <h3>Filter:</h3>
                 <div id="filter">
                     <form action="{urlFor name="home"}" method="post">
@@ -81,7 +81,7 @@
                                         <option value="">Any</option>
                                         {foreach $languageList as $language}
                                             {if $language->getCode() == $selectedSource}
-                                                <option selected="true" value="{$language->getCode()}">{$language->getName()}</option>
+                                                <option selected value="{$language->getCode()}">{$language->getName()}</option>
                                             {else}
                                                 <option value="{$language->getCode()}">{$language->getName()}</option>
                                             {/if}
@@ -93,7 +93,7 @@
                                         <option value="">Any</option>
                                         {foreach $languageList as $language}
                                             {if $language->getCode() == $selectedTarget}
-                                                <option selected="true" value="{$language->getCode()}">{$language->getName()}</option>
+                                                <option selected value="{$language->getCode()}">{$language->getName()}</option>
                                             {else}
                                                 <option value="{$language->getCode()}">{$language->getName()}</option>
                                             {/if}

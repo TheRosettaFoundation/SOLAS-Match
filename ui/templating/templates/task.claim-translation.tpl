@@ -14,9 +14,7 @@
         <ol>
             <li>Can you <strong>open the file</strong> on your computer?</li>
             <li><strong>Will you have enough time to translate</strong> this file? Check how long the file is.</li>
-            {if $task->getTargetLanguageCode()}
-                <li>Do you think you're capable of translating this file <strong>to {$targetLanguage->getName()}</strong>?</li>
-            {/if}
+            <li>Do you think you're capable of translating this file <strong>to {TemplateHelper::getLanguage($task->getTargetLocale())}</strong>?</li>
         </ol>
     </section>
 

@@ -22,7 +22,7 @@
     
     <div class="well">
         <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
-            <table>
+            <table border="0">
                 <tr>
                     <td colspan="2">
                         {if (isset($title_err) || isset($description_err) || isset($wordcount_err) || isset($deadline_err)
@@ -64,22 +64,22 @@
                     <td width="493" align="center" valign="middle">
                         <label for="title"><h2>Title: <span style="color: red">*</span></h2></label>
                         <p class="desc">Provide a meaningful title for the project.</p>
-                        <textarea wrap="soft" cols="1" rows="3" name="title" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
+                        <textarea wrap="soft" cols="1" rows="3"name="title" style="width: 400px" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
                         <p style="margin-bottom:20px;"></p>
 
                         <label for="description"><h2>Description: <span style="color: red">*</span></h2></label>
                         <p class="desc">A brief summary of the project.</p>                    
-                        <textarea wrap="soft" cols="1" rows="6" name="description">{if isset($project)}{$project->getDescription()}{/if}</textarea>                    
+                        <textarea wrap="soft" cols="1" rows="8" name="description" style="width: 400px">{if isset($project)}{$project->getDescription()}{/if}</textarea>                    
                         <p style="margin-bottom:20px;"></p>
 
                         <label for="impact"><h2>Impact: <span style="color: red">*</span></h2></label>
-                        <p class="desc">Who or what will benefit from contributions to this project.</p>
-                        <textarea wrap="soft" cols="1" rows="3" name="impact">{if isset($project)}{$project->getImpact()}{/if}</textarea>    
+                        <p class="desc">Who or what will benefit from contributions to this project.<br/> Will be read by volunteers considering assigning themselves to your project.</p>
+                        <textarea wrap="soft" cols="1" rows="3" name="impact" style="width: 400px">{if isset($project)}{$project->getImpact()}{/if}</textarea>    
                         <p style="margin-bottom:20px;"></p>
 
                         <label for="reference"><h2>Reference:</h2></label>
                         <p class="desc">Enter a URL that gives context to this project.</p>
-                        <input type="text" name="reference" {if isset($project)}value="{$project->getReference()}"{/if} />    
+                        <input type="text" name="reference" {if isset($project)}value="{$project->getReference()}"{/if} style="width: 400px" />    
                     </td>
                     <td width="493" align="center" valign="middle">    
                         <div style="margin-bottom:25px;">
@@ -95,17 +95,17 @@
                                 <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.
                             </p>
                             <input type="text" name="word_count" id="word_count" maxlength="6" 
-                                    value="{if isset($project)}{$project->getWordCount()}{/if}"/>
+                                    value="{if isset($project)}{$project->getWordCount()}{/if}" style="width: 400px"/>
                         </div>                    
                         <div style="margin-bottom:25px;">                    
                             <label><h2>Deadline: <span style="color: red">*</span></h2></label>
                             <p class="desc">When the project and its tasks should be completed by.</p>
-                            <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}{/if}"/>                    
+                            <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}{/if}" style="width: 400px"/>                    
                         </div>
                         <div style="margin-bottom:25px;">
                             <label for="tags"><h2>Tags:</h2></label>
-                            <p class="desc">Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                            <input type="text" name="tags" {if isset($tagList)} value="{$tagList}"{/if} />
+                            <p class="desc">The tags you provide will be used to match volunteers to your project. <br/>Separated by spaces. For multiword tags: join-with-hyphens.</p>
+                            <textarea wrap="soft" cols="1" rows="3"name="tags" style="width: 400px" style="width: 400px">{if isset($tagList)}{$tagList}{/if}</textarea>
                         </div>
                         <div style="margin-bottom:25px;">
                             <label for="publishtasks"><h2>Publish Tasks:</h2></label>
@@ -152,7 +152,7 @@
                     <td valign="center">
                         <table border="0" width="100%"> 
                             <tr align="center">
-                                <td width="33%"><strong>Chunking</strong></td>
+                                <td width="33%"><strong>Segmentation</strong></td>
                                 <td width="33%"><strong>Translation</strong></td>
                                 <td width="33%"><strong>Proofreading</strong></td>
                             </tr> 
@@ -168,7 +168,7 @@
                                 {/foreach}
                             </select>
                             {if isset($countries)}
-                                <select name="targetCountry_0" id="targetCountry_0">
+                                <select name="targetCountry_0" id="targetCountry_0" >
                                     {foreach $countries as $country}
                                         <option value="{$country->getCode()}">{$country->getName()}</option>
                                     {/foreach}
@@ -183,7 +183,7 @@
                     <td valign="top">
                         <table border="0" width="100%"> 
                             <tr align="center">
-                                <td><input title="Create a chunking task for dividing large source files into managable chunks of 5,000 words or less." type="checkbox" id="chunking_0" name="chunking_0" value="y" onchange="chunkingEnabled(0)"/></td>                            
+                                <td><input title="Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less." type="checkbox" id="segmentation_0" name="segmentation_0" value="y" onchange="segmentationEnabled(0)"/></td>                            
                                 <td><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
                                 <td><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_0" checked="true" name="proofreading_0" value="y"/></td>
                             </tr>                        

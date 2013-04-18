@@ -3,12 +3,8 @@
     {assign var='task_id' value=$task->getId()}
 	<h2>{$task->getTitle()}</h2>
 	<p>
-            {if $task->getSourceLanguageCode()}
-                From <strong>{TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())}</strong>
-            {/if}
-            {if $task->getTargetLanguageCode()}
-                To <strong>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</strong>
-            {/if}                
+            From <strong>TemplateHelper::getLanguage($task->getSourceLocale())</strong>
+            To <strong>TemplateHelper::getLanguage($task->getTargetLocale())</strong>    
 
             {foreach from=$task->getTags() item=tag}
                 <span class="label">{$tag}</span>                        

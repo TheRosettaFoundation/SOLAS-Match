@@ -5,7 +5,7 @@ abstract class Serializer
     protected $format;
 
     public abstract function serialize($data);
-    public abstract function deserialize($data);
+    public abstract function deserialize($data,$type);
     public abstract function getContentType();
 
     public function getFormat()
@@ -15,8 +15,10 @@ abstract class Serializer
 
     public function cast($destination, $sourceObject)
     {
-        if (is_null($destination) || is_null($sourceObject)) {
+        if ( is_null($sourceObject)) {
             return null;
+        }elseif(is_null($destination)){
+            return $sourceObject;
         }
         
         $primitives = array("int", "integer", "string", "boolean");

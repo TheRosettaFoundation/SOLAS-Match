@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__.'/../../Common/models/Language.php';
-require_once __DIR__.'/../../Common/models/Country.php';
+require_once __DIR__."/../../Common/models/Language.php";
+require_once __DIR__."/../../Common/models/Country.php";
 
 class Languages {
     

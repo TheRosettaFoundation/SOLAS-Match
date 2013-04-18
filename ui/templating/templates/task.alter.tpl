@@ -58,7 +58,7 @@
                         <label for="target" style="font-size: large"><strong>Target Language:</strong></label>
                         <select name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}>
                             {foreach $languages as $language}
-                                {if $task->getTargetLanguageCode() == $language->getCode()}
+                                {if $task->getTargetLocale()->getLanguageCode() == $language->getCode()}
                                         <option value="{$language->getCode()}" selected="selected" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} >{$language->getName()}</option>
                                 {else}
                                     <option value="{$language->getCode()}" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} >{$language->getName()}</option>
@@ -70,7 +70,7 @@
                     {if isset($countries)}
                         <select name="targetCountry" id="targetCountry" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}>
                             {foreach $countries as $country}
-                                {if $task->getTargetCountryCode() == $country->getCode()}
+                                {if $task->getTargetLocale()->getCountryCode() == $country->getCode()}
                                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                                 {else}
                                     <option value="{$country->getCode()}">{$country->getName()}</option>
@@ -159,14 +159,14 @@
                                 <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
                                 <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
                                 <td>                                            
-                                    {if $type_id == TaskTypeEnum::CHUNKING}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span>                                    
+                                    {if $type_id == TaskTypeEnum::SEGMENTATION}
+                                        <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation</span>                                    
                                     {elseif $type_id == TaskTypeEnum::TRANSLATION}
                                         <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span> 
                                     {elseif $type_id == TaskTypeEnum::PROOFREADING}
                                         <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span> 
-                                    {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span> 
+                                    {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
+                                        <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation</span> 
                                     {/if}
                                 </td>
                                 <td>                                            

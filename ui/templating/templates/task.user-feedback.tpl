@@ -12,14 +12,14 @@
             <strong>
                 -
                 {assign var="type_id" value=$task->getTaskType()}
-                {if $type_id == TaskTypeEnum::CHUNKING}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking Task</span>                                    
+                {if $type_id == TaskTypeEnum::SEGMENTATION}
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation Task</span>                                    
                 {elseif $type_id == TaskTypeEnum::TRANSLATION}
                     <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
                 {elseif $type_id == TaskTypeEnum::PROOFREADING}
                     <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
-                {elseif $type_id == TaskTypeEnum::POSTEDITING}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting Task
+                {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation Task
                 {/if}
             </strong>
         </small>  
@@ -98,7 +98,7 @@
                 <td>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</td>
                 <td/>
                 <td>
-                    {assign var="user_id" value=$claimant->getUserId()}
+                    {assign var="user_id" value=$claimant->getId()}
                     <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$claimant->getDisplayName()}</a>
                 </td>            
             </tr>

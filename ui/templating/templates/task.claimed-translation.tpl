@@ -14,9 +14,7 @@
             <p>This this what you need to do (as soon as possible):</p>
             <ol>
                 <li><strong>Open the file</strong> that you have already saved to your computer.</li>
-                {if $task->getTargetLanguageCode()}
-                    <li><strong>Translate the file</strong> to <strong>{TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())}</strong> using your favourite translation software.</li>
-                {/if}
+                <li><strong>Translate the file</strong> to <strong>{TemplateHelper::getLanguage($task->getTargetLocale())}</strong> using your favourite translation software.</li>
                 <li><strong>Upload your finished translated file</strong> to the task page.</li>
             </ol>
 

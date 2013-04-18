@@ -41,7 +41,7 @@ class TagRouteHandler
 
         $tag = $tagDao->getTagByLabel($label);
         $user_id = UserSession::getCurrentUserID();
-        $current_user = $userDao->getUser(array('id' => $user_id));
+        $current_user = $userDao->getUser($user_id);
 
         if (!is_object($current_user)) {
             $app->flash("error", "Login required to access page");
@@ -89,8 +89,8 @@ class TagRouteHandler
 
         $tasks = $tagDao->getTasksWithTag($tag_id, 10);
         for ($i = 0; $i < count($tasks); $i++) {
-            $tasks[$i]['Project'] = $projectDao->getProject(array('id' => $tasks[$i]->getProjectId()));
-            $tasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $tasks[$i]['Project']->getOrganisationId()));
+            $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
+            $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
         }
 
         $app->view()->setData('tasks', $tasks);
@@ -133,3 +133,7 @@ class TagRouteHandler
         $app->render("tag.tpl");
     }
 }
+
+$route_handler = new TagRouteHandler();
+$route_handler->init();
+unset ($route_handler);

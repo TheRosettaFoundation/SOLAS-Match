@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Common/lib/APIHelper.class.php';
+require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
 class CountryDao
 {
@@ -17,21 +17,21 @@ class CountryDao
     public function getCountry($id)
     {
         $request="{$this->siteApi}v0/countries/$id";
-        $response=$this->client->castCall("Country", $request, HTTP_Request2::METHOD_GET);
+        $response=$this->client->call("Country", $request);
         return $response;
     }
 
     public function getCountryByCode($code)
     {
         $request="{$this->siteApi}v0/countries/getByCode/$code";
-        $response=$this->client->castCall("Country", $request, HTTP_Request2::METHOD_GET);
+        $response=$this->client->call("Country", $request);
         return $response;
     }
 
     public function getCountries()
     {
         $request="{$this->siteApi}v0/countries";
-        $response=$this->client->castCall(array("Country"), $request, HTTP_Request2::METHOD_GET);
+        $response=$this->client->call(array("Country"), $request);
         return $response;
     }
 

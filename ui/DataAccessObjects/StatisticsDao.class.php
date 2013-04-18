@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Common/lib/APIHelper.class.php';
+require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
 class StatisticsDao
 {
@@ -17,8 +17,15 @@ class StatisticsDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/stats";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Statistic"), $response);
+        $ret = $this->client->call(array("Statistic"), $request);
+        return $ret;
+    }
+    
+    public function getStat($stat)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/stats/$stat";
+        $ret = $this->client->call("Statistic", $request);
         return $ret;
     }
 }

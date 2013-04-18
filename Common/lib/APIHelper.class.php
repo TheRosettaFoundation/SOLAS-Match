@@ -1,11 +1,11 @@
 <?php
 
-require_once 'FormatEnum.php';
-require_once 'JSONSerializer.class.php';
-require_once 'XMLSerializer.class.php';
-require_once 'HTMLSerializer.class.php';
-require_once 'PHPSerializer.class.php';
-require_once 'ProtobufSerializer.class.php';
+require_once __DIR__."/FormatEnum.php";
+require_once __DIR__."/JSONSerializer.class.php";
+require_once __DIR__."/XMLSerializer.class.php";
+require_once __DIR__."/HTMLSerializer.class.php";
+require_once __DIR__."/PHPSerializer.class.php";
+require_once __DIR__."/ProtobufSerializer.class.php";
 
 class APIHelper
 {
@@ -36,28 +36,40 @@ class APIHelper
         }
     }
 
-    public function call($url, $method = HTTP_Request2::METHOD_GET,
+    public function call($destination,$url, $method = HttpMethodEnum::GET,
              $data = null, $query_args = array(), $file = null)
     {
         $url = $url.$this->_serializer->getFormat()."/?";
-        $request = new HTTP_Request2($url, $method);
-
+        if (count($query_args) > 0) {
+            $first= true;
+            foreach ($query_args as $key=>$val){
+                if(!$first) $url.="&";                    
+                else $first=FALSE;
+                $url.="$key=$val";
+            }
+        }
+        $re = curl_init($url);
+        curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
+        $lenght = 0;
         if (!is_null($data) && "null" != $data) {
             $data=$this->_serializer->serialize($data);
-            $request->setBody($data);
-        }
-
-        if (!is_null($file)) {
-            $request->setBody($file);
+            curl_setopt($re, CURLOPT_POSTFIELDS, $data);
+            $lenght=strlen($data);
         }
         
-        if (count($query_args) > 0) {
-            $requestUrl = $request->getUrl();
-            $requestUrl->setQueryVariables($query_args);
+        if (!is_null($file)) {
+            $lenght=strlen($file);
+            curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
+        
+        curl_setopt($re, CURLOPT_HTTPHEADER, array(                                                                          
+            $this->_serializer->getContentType(),                                                                                
+            'Content-Length: ' . $lenght)                                                                       
+        );
+        curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
+        $res=curl_exec($re);
+        $response_data = $this->_serializer->deserialize($res,$destination);
 
-        $response = $request->send();
-        $response_data = $this->_serializer->deserialize(trim($response->getBody()));
         return $response_data;
     }
 
@@ -79,23 +91,14 @@ class APIHelper
         return $ret;
     }
 
-    public function castCall($destination, $url, $method = HTTP_Request2::METHOD_GET,
-                    $data = null, $query_args = array())
-    {
-        $ret = null;
-        $result = $this->call($url, $method, $data, $query_args);
-        $ret = $this->cast($destination, $result);
-        return $ret;
-    }
-
     public function serialize($data)
     {
         return $this->_serializer->serialize($data);
     }
 
-    public function deserialize($data)
+    public function deserialize($data,$type)
     {
-        return $this->_serializer->deserialize($data);
+        return $this->_serializer->deserialize($data,$type);
     }
 
     public static function getFormatFromString($format)

@@ -14,12 +14,12 @@ SET FOREIGN_KEY_CHECKS=0;
 
 -- Dumping structure for table Solas-Match-Test.Admins
 CREATE TABLE IF NOT EXISTS `Admins` (
-    `user_id` INT(10) UNSIGNED NOT NULL,
-    `organisation_id` INT(10) UNSIGNED NULL,
-    UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
-    INDEX `FK_Admins_Organisations` (`organisation_id`),
-    CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`organisation_id` INT(10) UNSIGNED NULL,
+	UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
+	INDEX `FK_Admins_Organisations` (`organisation_id`),
+	CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -141,6 +141,18 @@ CREATE TABLE IF NOT EXISTS `Countries` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table Solas-Match-Test.DefaultGlobalPermissions
+CREATE TABLE IF NOT EXISTS `DefaultGlobalPermissions` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`permissiongroup_id` INT(10) UNSIGNED NOT NULL,
+	`permission_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `permissiongroup_id` (`permissiongroup_id`, `permission_id`),
+	INDEX `FK_DefaultGlobalPermissions_Permissions` (`permission_id`),
+	CONSTRAINT `FK_DefaultGlobalPermissions_PermissionGroups` FOREIGN KEY (`permissiongroup_id`) REFERENCES `PermissionGroups` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_DefaultGlobalPermissions_Permissions` FOREIGN KEY (`permission_id`) REFERENCES `Permissions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- Dumping structure for table Solas-Match-Test.Languages
 CREATE TABLE IF NOT EXISTS `Languages` (
@@ -181,16 +193,38 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table Solas-Match-Test.OrganisationPermissions
+CREATE TABLE IF NOT EXISTS `OrganisationPermissions` (
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`permissiongroup_id` INT(10) UNSIGNED NOT NULL,
+	`permission_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `organisation_id` (`organisation_id`, `permissiongroup_id`, `permission_id`),
+	INDEX `FK_OrganisationPermissions_PermissionGroups` (`permissiongroup_id`),
+	INDEX `FK_OrganisationPermissions_Permissions` (`permission_id`),
+	CONSTRAINT `FK_OrganisationPermissions_PermissionGroups` FOREIGN KEY (`permissiongroup_id`) REFERENCES `PermissionGroups` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_OrganisationPermissions_Permissions` FOREIGN KEY (`permission_id`) REFERENCES `Permissions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_OrganisationPermissions_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- Dumping structure for table Solas-Match-Test.Organisations
 CREATE TABLE IF NOT EXISTS `Organisations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `home-page` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `biography` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`biography` VARCHAR(4096) NULL COLLATE 'utf8_unicode_ci',
+	`home-page` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`e-mail` VARCHAR(128) NULL,
+	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`regional-focus` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 
 -- Data exporting was unselected.
 
@@ -235,6 +269,22 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table Solas-Match-Test.PermissionGroups
+CREATE TABLE IF NOT EXISTS `PermissionGroups` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping structure for table Solas-Match-Test.Permissions
+CREATE TABLE IF NOT EXISTS `Permissions` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- Dumping structure for table Solas-Match-Test.ProjectFiles
 CREATE TABLE IF NOT EXISTS `ProjectFiles` (
@@ -254,24 +304,24 @@ CREATE TABLE IF NOT EXISTS `ProjectFiles` (
 
 -- Dumping structure for table Solas-Match-Test.Projects
 CREATE TABLE IF NOT EXISTS `Projects` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
-  `impact` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
-  `deadline` datetime DEFAULT NULL,
-  `organisation_id` int(10) unsigned NOT NULL,
-  `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `word-count` int(10) DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `language_id` int(10) unsigned DEFAULT NULL,
-  `country_id` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `organisation_id` (`organisation_id`,`title`,`language_id`,`country_id`),
-  KEY `FK_Projects_Languages` (`language_id`),
-  KEY `FK_Projects_Countries` (`country_id`),
-  CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_Projects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`description` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	`deadline` DATETIME NULL DEFAULT NULL,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`word-count` INT(10) NULL DEFAULT NULL,
+	`created` DATETIME NOT NULL,
+	`language_id` INT(10) UNSIGNED NOT NULL,
+	`country_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `organisation_id` (`organisation_id`, `title`, `language_id`, `country_id`),
+	INDEX `FK_Projects_Languages` (`language_id`),
+	INDEX `FK_Projects_Countries` (`country_id`),
+	CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_Projects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -296,8 +346,6 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
   `value` double NOT NULL,
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.Tags
@@ -329,18 +377,18 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
 
 -- Dumping structure for table Solas-Match-Test.TaskFileVersions
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `task_id` bigint(20) unsigned NOT NULL,
-  `version_id` int(11) NOT NULL COMMENT 'Gets incremented within the code',
-  `filename` text COLLATE utf8_unicode_ci NOT NULL,
-  `content-type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_id` int(11) unsigned DEFAULT NULL COMMENT 'Null while we don''t have logging in',
-  `upload-time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `taskFile` (`task_id`,`version_id`,`user_id`),
-  KEY `FK_task_file_version_user` (`user_id`),
-  CONSTRAINT `FK_task_file_version_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_task_file_version_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`task_id` BIGINT(20) UNSIGNED NOT NULL,
+	`version_id` INT(11) NOT NULL COMMENT 'Gets incremented within the code',
+	`filename` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
+	`content-type` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`user_id` INT(11) UNSIGNED NOT NULL COMMENT 'Null while we don\'t have logging in',
+	`upload-time` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`),
+	INDEX `FK_task_file_version_user` (`user_id`),
+	CONSTRAINT `FK_task_file_version_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_task_file_version_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -450,10 +498,10 @@ CREATE TABLE IF NOT EXISTS `TaskTypes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
-	(1, "Chunking"),
+	(1, "Segmentation"),
 	(2, "Translation"),
 	(3, "Proofreading"),
-	(4, "Post-editing");
+	(4, "Desegmentation");
 
 
 
@@ -486,6 +534,41 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table Solas-Match-Test.UserOrganisationPermissions
+CREATE TABLE IF NOT EXISTS `UserOrganisationPermissions` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`organisation_id` INT(10) UNSIGNED NOT NULL,
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`permission_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `organisation_id` (`organisation_id`, `user_id`, `permission_id`),
+	INDEX `FK_UserOrganisationPermissions_Users` (`user_id`),
+	INDEX `FK_UserOrganisationPermissions_Permissions` (`permission_id`),
+	CONSTRAINT `FK_UserOrganisationPermissions_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserOrganisationPermissions_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserOrganisationPermissions_Permissions` FOREIGN KEY (`permission_id`) REFERENCES `Permissions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`first-name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`last-name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`mobile-number` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`business-number` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`sip` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`job-title` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `user_id` (`user_id`),
+	CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
+
 
 -- Dumping structure for table Solas-Match-Test.Users
 CREATE TABLE IF NOT EXISTS `Users` (
@@ -507,6 +590,19 @@ CREATE TABLE IF NOT EXISTS `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
+-- Dumping structure for table Solas-Match-Test.UserSecondaryLanguages
+CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`language_id` INT(10) UNSIGNED NOT NULL,
+	`country_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `user_id` (`user_id`, `language_id`, `country_id`),
+	CONSTRAINT `FK_UserSecondaryLanguages_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserSecondaryLanguages_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.UserTags
@@ -554,26 +650,26 @@ CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedProjects
 CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `Project_id` int(10) unsigned DEFAULT NULL,
-  UNIQUE KEY `user_id` (`user_id`,`Project_id`),
-  KEY `FK_UserTrackedProjects_Projects` (`Project_id`),
-  CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`Project_id` INT(10) UNSIGNED NOT NULL,
+	UNIQUE INDEX `user_id` (`user_id`, `Project_id`),
+	INDEX `FK_UserTrackedProjects_Projects` (`Project_id`),
+	CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 -- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.UserTrackedTasks
 CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `task_id` bigint(10) unsigned DEFAULT NULL,
-  UNIQUE KEY `user_id` (`user_id`,`task_id`),
-  KEY `FK_UserTrackedTasks_Tasks` (`task_id`),
-  CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`task_id` BIGINT(10) UNSIGNED NOT NULL,
+	UNIQUE INDEX `user_id` (`user_id`, `task_id`),
+	INDEX `FK_UserTrackedTasks_Tasks` (`task_id`),
+	CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- Data exporting was unselected.
 
@@ -638,6 +734,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
 BEGIN
     INSERT INTO PasswordResetRequests (uid, user_id, `request-time`) VALUES (uniqueId,userId,NOW());
+    SELECT 1 AS result;
 END//
 DELIMITER ;
 
@@ -816,10 +913,10 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.deleteOrg
 DROP PROCEDURE IF EXISTS `deleteOrg`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`(IN orgId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`(IN `id` INT)
 BEGIN
-if EXISTS (select 1 from Organisations where id=orgId) then
-	delete from Organisations where id=orgId;
+if EXISTS (select 1 from Organisations o where o.id=id) then
+	delete from Organisations where Organisations.id=id;
 	select 1 as result;
 else
 	select 0 as result;
@@ -831,10 +928,10 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.deleteTag
 DROP PROCEDURE IF EXISTS `deleteTag`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`(IN `tagID` INT)
 BEGIN
-if EXISTS (select 1 from Tags where Tags.id=id) then
-	delete from Tags where Tags.id=id;
+if EXISTS (select 1 from Tags where Tags.id=tagID) then
+	delete from Tags where Tags.id=tagID;
 	select 1 as result;
 else
 	select 0 as result;
@@ -878,9 +975,19 @@ DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
 BEGIN
-	SELECT o.*
-	FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
-	WHERE om.user_id = id;
+	IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
+		call getOrg(null,null,null,null);
+	ELSE		
+		SELECT o.*
+		FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
+		WHERE om.user_id = id
+		UNION
+		SELECT o.*
+		FROM Organisations o
+		JOIN Admins a ON
+		a.organisation_id=o.id
+		WHERE a.user_id=id;
+	END IF;
 END//
 DELIMITER ;
 
@@ -1084,9 +1191,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` I
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("SELECT t.* FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC LIMIT ",lim);
+    set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC LIMIT ",lim);
     else
-    set @q = "SELECT t.* FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC";
+    set @q = "select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -1144,12 +1251,18 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getOrg
 DROP PROCEDURE IF EXISTS `getOrg`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(50), IN `url` VARCHAR(50), IN `bio` vARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(50), IN `url` VARCHAR(50), IN `bio` vARCHAR(50), IN `email` VARCHAR(50), IN `address` VARCHAR(50), IN `city` VARCHAR(50), IN `country` VARCHAR(50), IN `regionalFocus` VARCHAR(50))
 BEGIN
 	if id='' then set id=null;end if;
 	if name='' then set name=null;end if;
 	if url='' then set url=null;end if;
 	if bio='' then set bio=null;end if;
+	if email='' then set email=null;end if;
+	if address='' then set address=null;end if;
+	if city='' then set city=null;end if;
+	if country='' then set country=null;end if;
+	if regionalFocus='' then set regionalFocus=null;end if;
+	
 	set @q= "select * from Organisations o where 1 ";
 	if id is not null then 
 		set @q = CONCAT(@q," and o.id=",id) ;
@@ -1162,6 +1275,21 @@ BEGIN
 	end if;
 	if bio is not null then 
 		set @q = CONCAT(@q," and o.biography='",bio,"'") ;
+	end if;	
+	if email is not null then 
+		set @q = CONCAT(@q," and o.`e-mail`='",email,"'") ;
+	end if;
+	if address is not null then 
+		set @q = CONCAT(@q," and o.address='",address,"'") ;
+	end if;
+	if city is not null then 
+		set @q = CONCAT(@q," and o.city='",city,"'") ;
+	end if;
+	if country is not null then 
+		set @q = CONCAT(@q," and o.country='",country,"'") ;
+	end if;
+	if regionalFocus is not null then 
+		set @q = CONCAT(@q," and o.`regional-focus`='",regionalFocus,"'") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1184,15 +1312,14 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.getOrgMembers
+-- Dumping structure for procedure big-merge.getOrgMembers
 DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `orgId` INT)
 BEGIN
-select u.id,`display-name`,email,password,biography,(select l.code from Languages l where l.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time`
+select u.id,`display-name`,email,password,biography,(select `en-name` from Languages where id =u.`language_id`) as `languageName`, (select code from Languages where id =u.`language_id`) as `languageCode`, (select `en-name` from Countries where id =u.`country_id`) as `countryName`, (select code from Countries where id =u.`country_id`) as `countryCode`, nonce,`created-time`
 	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.id
-	WHERE organisation_id=id;
+	WHERE organisation_id=orgId;
 END//
 DELIMITER ;
 
@@ -1260,7 +1387,7 @@ BEGIN
     if sCC="" then set sCC=null; end if;
     if sCode="" then set sCode=null; end if;
 
-    set @q="SELECT id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,(select code from Countries where id =p.`country_id`) as country_id,(select code from Languages where id =p.`language_id`) as language_id, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'  FROM Projects p WHERE 1";
+    set @q="SELECT id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,(select `en-name` from Languages where id =p.`language_id`) as `sourceLanguageName`, (select code from Languages where id =p.`language_id`) as `sourceLanguageCode`, (select `en-name` from Languages where id =p.`language_id`) as `targetLanguageName`, (select code from Languages where id =p.`language_id`) as `targetLanguageCode`, (select `en-name` from Countries where id =p.`country_id`) as `sourceCountryName`, (select code from Countries where id =p.`country_id`) as `sourceCountryCode`, (select `en-name` from Countries where id =p.`country_id`) as `targetCountryName`, (select code from Countries where id =p.`country_id`) as `targetCountryCode`, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'  FROM Projects p WHERE 1";
     if projectId is not null then
         set @q = CONCAT(@q, " and p.id=", projectId);
     end if;
@@ -1410,17 +1537,25 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTag
 DROP PROCEDURE IF EXISTS `getTag`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTag`(IN `id` INT, IN `name` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTag`(IN `id` INT, IN `name` VARCHAR(50), IN `lim` INT)
 BEGIN
 	if id='' then set id=null;end if;
 	if name='' then set name=null;end if;
+	if lim='' then set lim=null;end if;
+	
 	set @q= "select t.id , t.label from Tags t where 1 ";-- set update
+	
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
 	end if;
+	
 	if name is not null then 
 		set @q = CONCAT(@q," and t.label='",name,"'") ;
+	end if;
+	
+	if lim is not null then 
+		set @q = CONCAT(@q," LIMIT ",lim);
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1436,7 +1571,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `lim` INT)
     READS SQL DATA
 BEGIN
-	set @q = Concat("SELECT id 
+	set @q = Concat("SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`,t.comment,  t.`task-type_id`, t.`task-status_id`, t.published, t.deadline  
                          FROM Tasks t join ProjectTags pt on pt.project_id=t.project_id
                          WHERE pt.tag_id=? AND NOT  exists (
 							  	SELECT 1		
@@ -1477,7 +1612,7 @@ BEGIN
 	if dLine='' then set dLine=null;end if;
 	
 	
-	set @q= "select id,project_id,title,`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t where 1";-- set update
+	set @q= "select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1664,7 +1799,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
 -- Dumping structure for procedure Solas-Match-Test.getTaskTags
 DROP PROCEDURE IF EXISTS `getTaskTags`;
 DELIMITER //
@@ -1677,154 +1811,45 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTaskTranslator
-DROP PROCEDURE IF EXISTS `getTaskTranslator`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTranslator`(IN `taskId` INT)
-BEGIN
-    SELECT user_id
-    FROM TaskClaims
-    WHERE task_id=taskId;
-END//
-DELIMITER ;
-
-
 -- Dumping structure for procedure Solas-Match-Test.getTopTags
 DROP PROCEDURE IF EXISTS `getTopTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
 BEGIN
-set @q = Concat("   SELECT t.label AS label,t.id as d, COUNT( pt.tag_id ) AS frequency
-                    FROM ProjectTags AS pt 
-                    join Tags AS t on pt.tag_id = t.id
-                    join Tasks tsk on tsk.project_id=pt.project_id
-                    WHERE not exists (SELECT 1
-                                       FROM TaskClaims tc
-                                       where tc.task_id=tsk.id
-                                     )
-                    GROUP BY pt.tag_id
-                    ORDER BY frequency DESC
-                    LIMIT ",lim);
-        PREPARE stmt FROM @q;
-        EXECUTE stmt;
-        DEALLOCATE PREPARE stmt;
+	if lim='' then set lim=null;end if;
+	if not lim is null then
+		set @q = Concat("   SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
+		                    FROM ProjectTags AS pt 
+		                    join Tags AS t on pt.tag_id = t.id
+		                    GROUP BY pt.tag_id
+		                    ORDER BY frequency DESC, t.label
+		                    LIMIT ",lim);
+	else
+		set @q = "   SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
+		                    FROM ProjectTags AS pt 
+		                    join Tags AS t on pt.tag_id = t.id
+		                    GROUP BY pt.tag_id
+		                    ORDER BY frequency DESC, t.label";
+		
+	end if;
+   PREPARE stmt FROM @q;
+   EXECUTE stmt;
+   DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalArchivedTasks
-DROP PROCEDURE IF EXISTS `getTotalArchivedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalArchivedTasks`(IN `dateTime` DATETIME)
-BEGIN
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-    SET @archivedTasks = NULL;
-    SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.`created-time` >= dateTime;
-    SELECT @archivedTasks AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalClaimedTasks
-DROP PROCEDURE IF EXISTS `getTotalClaimedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalClaimedTasks`(IN `dateTime` DATETIME)
-BEGIN
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-    SET @claimedTasks = NULL;
-    SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.`claimed-time` >= dateTime;
-    SELECT @claimedTasks AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalOrgs
-DROP PROCEDURE IF EXISTS `getTotalOrgs`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalOrgs`()
-BEGIN
-    SET @totalOrgs = NULL;	
-    SELECT count(1) INTO @totalOrgs FROM Organisations;
-    SELECT @totalOrgs AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalTasks
-DROP PROCEDURE IF EXISTS `getTotalTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalTasks`(IN `dateTime` DATETIME)
-BEGIN
-    SET @totalTasks = NULL;
-    SET @claimedTasks = NULL;
-    SET @unclaimedTasks = NULL;
-    SET @archivedTasks = NULL;
-    if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-
-    SELECT count(1) INTO @claimedTasks FROM TaskClaims tc
-    WHERE tc.`claimed-time` >= dateTime;	
-
-    SELECT count(1) into @unclaimedTasks from Tasks t
-    WHERE t.`created-time` >= dateTime AND t.id NOT IN
-    (
-        SELECT task_id
-        FROM  TaskClaims
-    );
-
-    SELECT count(1) INTO @archivedTasks FROM ArchivedTasks ta
-    WHERE ta.`created-time` >= dateTime;	
-
-    SET @totalTasks = @claimedTasks + @unclaimedTasks + @archivedTasks;	
-    SELECT @totalTasks AS result;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalUnclaimedTasks
-DROP PROCEDURE IF EXISTS `getTotalUnclaimedTasks`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalUnclaimedTasks`(IN `dateTime` DATETIME)
-BEGIN
-   if dateTime is null then set dateTime='0000-00-00 00:00:00';end if;
-   SET @unclaimedTasks = NULL;
-   SELECT count(1) into @unclaimedTasks from Tasks t
-	WHERE t.id NOT IN
-            (
-                SELECT task_id
-                FROM  TaskClaims
-            );
-	SELECT @unclaimedTasks AS result;	
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getTotalUsers
-DROP PROCEDURE IF EXISTS `getTotalUsers`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalUsers`()
-BEGIN
-    SET @totalUsers = NULL;	
-    SELECT count(1) INTO @totalUsers FROM Users;
-    SELECT @totalUsers AS result;
-END//
-DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getTrackedProjects
 DROP PROCEDURE IF EXISTS `getTrackedProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrackedProjects`(IN `uID` INT)
 BEGIN
-select p.* from Projects p  
-join UserTrackedProjects utp 
-on p.id=utp.Project_id
-where utp.user_id=uID;
+    select p.* from Projects p  
+    join UserTrackedProjects utp 
+    on p.id=utp.Project_id
+    where utp.user_id=uID;
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getUser
 DROP PROCEDURE IF EXISTS `getUser`;
@@ -1842,7 +1867,7 @@ BEGIN
 	if lang_id='' then set lang_id=null;end if;
 	if region_id='' then set region_id=null;end if;
 	
-	set @q= "select id,`display-name`,email,password,biography,(select code from Languages where id =u.`language_id`) as `language_id` ,(select code from Countries where id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where 1 ";-- set update
+	set @q= "select id,`display-name`,email,password,biography, (select `en-name` from Languages where id =u.`language_id`) as `languageName`, (select code from Languages where id =u.`language_id`) as `languageCode`, (select `en-name` from Countries where id =u.`country_id`) as `countryName`, (select code from Countries where id =u.`country_id`) as `countryCode`, nonce,`created-time` from Users u where 1 ";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and u.id=",id) ;
@@ -1884,16 +1909,11 @@ DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
-
-set @q=Concat("SELECT * FROM ArchivedTasks as a 
-                WHERE user_id = ?
-                ORDER BY `created-time` DESC
-                limit ", lim);
-        PREPARE stmt FROM @q;
-        set@uID = uID;
-	EXECUTE stmt using @uID;
-	DEALLOCATE PREPARE stmt;
-
+	SELECT a.id,a.project_id, a.title, a.`comment`, a.deadline, a.`word-count`, a.`created-time`, (select code from Languages where id =a.`language_id-source`) as `language_id-source`,(select code from Languages where id =a.`language_id-target`) as `language_id-target`, (select code from Countries where id =a.`country_id-source`) as `country_id-source`, (select code from Countries where id =a.`country_id-target`) as `country_id-target`, a.taskType_id AS taskType, a.taskStatus_id AS taskStatus, a.published, (SELECT `user_id-claimed` FROM ArchivedTasksMetadata) AS `user_id-claimed`, (SELECT `user_id-archived` FROM ArchivedTasksMetadata) AS `user_id-archived`, (SELECT `archived-date` FROM ArchivedTasksMetadata) AS `archive-date`  FROM ArchivedTasks AS a 
+		WHERE a.id = (SELECT am.archivedTask_id FROM ArchivedTasksMetadata am
+		WHERE am.`user_id-archived` = uID)
+      ORDER BY `created-time` DESC
+      LIMIT lim;
 END//
 DELIMITER ;
 
@@ -1915,9 +1935,11 @@ DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `taskID` INT)
 BEGIN
-	SELECT u.* FROM Users u
-	WHERE u.id IN (SELECT tc.user_id FROM TaskClaims tc
-	WHERE tc.task_id = taskID);
+	IF EXISTS( 	SELECT 1	FROM TaskClaims tc WHERE tc.task_id=taskId) THEN
+		SET @userId = false;			
+		SELECT user_id INTO @userId FROM TaskClaims WHERE task_id=taskId;
+		call getUser(@userId,null,null,null,null,null,null,null,null);
+	END IF;
 END//
 DELIMITER ;
 
@@ -1988,11 +2010,9 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
 
-set @q=Concat(" SELECT t.id, t.project_id, t.title, t.`word-count`, 
-                (select code from Languages l where l.id =t.`language_id-source`) as `language_id-source`,
-                (select code from Languages l where l.id =t.`language_id-target`) as `language_id-target`,
+set @q=Concat(" SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
                 t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`, 
-                (select code from Countries c where c.id =t.`country_id-target`) as `country_id-target`, comment,
+                 comment,
                 `task-type_id`, `task-status_id`, published, deadline
                 FROM Tasks t JOIN TaskClaims tc ON tc.task_id = t.id
                 WHERE user_id = ?
@@ -2049,9 +2069,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `
 BEGIN
     if lim='' then set lim=null; end if;
     if lim is not null then
-        set @q = Concat("select id,project_id,title,`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC limit ",lim);
+        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC limit ",lim);
     else
-        set @q = Concat("select id,project_id,title,`word-count`,(select code from Languages where id =t.`language_id-source`) as `language_id-source`,(select code from Languages where id =t.`language_id-target`) as `language_id-target`,`created-time`, (select code from Countries where id =t.`country_id-source`) as `country_id-source`, (select code from Countries where id =t.`country_id-target`) as `country_id-target`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC");
+        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC");
     end if;
     PREPARE stmt FROM @q;
     set @uID=uID;
@@ -2087,6 +2107,7 @@ END//
 DELIMITER ;
 
 
+
 -- Dumping structure for procedure Solas-Match-Test.isAdmin
 DROP PROCEDURE IF EXISTS `isAdmin`;
 DELIMITER //
@@ -2113,58 +2134,59 @@ END//
 DELIMITER ;
 
 
+
 -- Dumping structure for procedure Solas-Match-Test.organisationInsertAndUpdate
 DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(255), IN `bio` VARCHAR(4096))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if url='' then set url=null;end if;
 	if companyName='' then set companyName=null;end if;
 	if bio='' then set bio=null;end if;
-
+	if email='' then set email=null;end if;
+	if address='' then set address=null;end if;
+	if city='' then set city=null;end if;
+	if country='' then set country=null;end if;
+	if regionalFocus='' then set regionalFocus=null;end if;
 	
-	if id is null and not exists(select * from Organisations o where (o.`home-page`= url or o.`home-page`= concat("http://",url) ) and o.name=companyName)then
-	-- set insert
-    if bio is null then set bio='';end if;
-		insert into Organisations (name,`home-page`, biography) values (companyName,url,bio);
-		CALL getOrg(LAST_INSERT_ID(), NULL, NULL,NULL);
-	else 
-		set @first = true;
-		set @q= "update Organisations o set ";-- set update
-		if bio is not null then 
-#set paramaters to be updated
-			set @q = CONCAT(@q," o.biography='",bio,"'") ;
-			set @first = false;
-		end if;
-		if url is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," o.`home-page`='",url,"'") ;
-		end if;
+	IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name=companyName) THEN
+		INSERT INTO Organisations (name,biography,`home-page`,`e-mail`,address,city,country,`regional-focus`) values (companyName,bio,url,email,address,city,country,regionalFocus);
+		CALL getOrg(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+	ELSE
+		set @q= "update Organisations o set ";
+
 		if companyName is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
 			set @q = CONCAT(@q," o.name='",companyName,"'") ;
 		end if;
-	
-#		set where
-		if id is not null then 
-			set @q = CONCAT(@q," where  o.id= ",id);
-		elseif url is not null and companyName is not null then 
-			set @q = CONCAT(@q," where o.`home-page`='",url,"' and o.name='",companyName,"'");
+		if url is not null then 
+			set @q = CONCAT(@q," , o.`home-page`='",url,"'") ;
+		end if;
+		if bio is not null then 
+			set @q = CONCAT(@q," , o.biography='",bio,"'") ;
+		end if;	
+		if email is not null then 
+			set @q = CONCAT(@q," , o.`e-mail`='",email,"'") ;
+		end if;
+		if address is not null then 
+			set @q = CONCAT(@q," , o.address='",address,"'") ;
+		end if;
+		if city is not null then 
+			set @q = CONCAT(@q," , o.city='",city,"'") ;
+		end if;
+		if country is not null then 
+			set @q = CONCAT(@q," , o.country='",country,"'") ;
+		end if;
+		if regionalFocus is not null then 
+			set @q = CONCAT(@q," , o.`regional-focus`='",regionalFocus,"'") ;
 		end if;
 
-            PREPARE stmt FROM @q;
-            EXECUTE stmt;
-            DEALLOCATE PREPARE stmt;
-            CALL getOrg(id, NULL, NULL, NULL);
+		set @q = CONCAT(@q," WHERE o.id=",id) ;
+		
+	   PREPARE stmt FROM @q;
+	   EXECUTE stmt;
+	   DEALLOCATE PREPARE stmt;
+	   CALL getOrg(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 	end if;		
 END//
@@ -2355,8 +2377,13 @@ DROP PROCEDURE IF EXISTS `removePasswordResetRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removePasswordResetRequest`(IN `userId` INT)
 BEGIN
-    DELETE FROM PasswordResetRequests 
-        WHERE user_id = userId;
+	IF EXISTS (SELECT 1 FROM PasswordResetRequests p WHERE p.user_id = userId) THEN
+		DELETE FROM PasswordResetRequests
+    	WHERE user_id = userId;
+    	SELECT 1 AS result;
+   ELSE
+   	SELECT 0 AS result;   
+   END IF;   
 END//
 DELIMITER ;
 
@@ -2685,24 +2712,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTotalProjects
-DROP PROCEDURE IF EXISTS `statsUpdateTotalProjects`;
-DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `statsUpdateTotalProjects`()
-BEGIN
-	SET @Projects = 0;
-	SET @ArchivedProjects = 0;	
-	
-	SELECT count(1) INTO @Projects FROM Projects;	
-	SELECT count(1) INTO @ArchivedProjects FROM ArchivedProjects;
-	
-	SET @totalProjects = @Projects + @ArchivedProjects;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('TotalProjects', @totalProjects);	
-END//
-DELIMITER ;
-
-
 -- Dumping structure for procedure Solas-Match-Test.statsUpdateUnclaimedTasks
 DROP PROCEDURE IF EXISTS `statsUpdateUnclaimedTasks`;
 DELIMITER //
@@ -2752,18 +2761,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tagInsert`(IN `name` VARCHAR(50))
 BEGIN
 	insert into Tags (label) values (name);
 	select *  from Tags t where t.id = LAST_INSERT_ID();
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.taskDownloadCount
-DROP PROCEDURE IF EXISTS `taskDownloadCount`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskDownloadCount`(IN `tID` INT)
-BEGIN
-	SELECT count(*) times_downloaded
-	FROM task_file_version_download
-	WHERE task_id = tID;
 END//
 DELIMITER ;
 
@@ -3135,35 +3132,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.unlinkStoredTags
-DROP PROCEDURE IF EXISTS `unlinkStoredTags`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkStoredTags`(IN `id` INT)
-    MODIFIES SQL DATA
-BEGIN
-DELETE FROM TaskTags WHERE task_id = id;
-END//
-DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.userFindByUserData
-DROP PROCEDURE IF EXISTS `userFindByUserData`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userFindByUserData`(IN `id` INT, IN `pass` VARBINARY(128), IN `email` VARCHAR(256), IN `role` TINYINT)
-BEGIN
-	if(id is not null and pass is not null) then
-		select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id and password= pass;
-   elseif(id is not null and role=1) then
-		select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id and EXISTS (select * from OrganisationMembers om where om.user_id = u.id);
-	elseif(id is not null) then
-		select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.id = id;
-   elseif (email is not null) then
-   	select u.id,u.`display-name`,u.email,u.password,u.biography,(select lg.code from Languages lg where lg.id =u.`language_id`) as `language_id` ,(select c.code from Countries c where c.id =u.`country_id`) as `country_id`, nonce,`created-time` from Users u where u.email = email;
-	end if;
-END//
-DELIMITER ;
-
-
 -- Dumping structure for procedure Solas-Match-Test.userHasBadge
 DROP PROCEDURE IF EXISTS `userHasBadge`;
 DELIMITER //
@@ -3419,7 +3387,191 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure SolasUpgrade2.userSecondaryLanguageInsert
+DROP PROCEDURE IF EXISTS `userSecondaryLanguageInsert`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userSecondaryLanguageInsert`(IN `userId` INT, IN `languageCode` VARCHAR(128), IN `countryCode` VARCHAR(128))
+BEGIN
 
+	set @languageId=null;	
+	select l.id into @languageId from Languages l where l.code=languageCode;
+	
+	set @countryId=null;
+	select c.id into @countryId from Countries c where c.code=countryCode;	
+	
+	INSERT INTO UserSecondaryLanguages (user_id, language_id, country_id)
+	VALUES(userId, @languageId, @countryId);
+	
+	SELECT (select `en-name` from Languages where id =@languageId) as `languageName`,
+			 (select code from Languages where id =@languageId) as `languageCode`,
+			 (select `en-name` from Countries where id =@countryId) as `countryName`,
+			 (select code from Countries where id =@countryId) as `countryCode` FROM UserSecondaryLanguages ul
+	WHERE ul.id = LAST_INSERT_ID();
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.userSecondaryLanguageInsert
+DROP PROCEDURE IF EXISTS `getUserSecondaryLanguages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserSecondaryLanguages`(IN `userId` INT)
+BEGIN
+	SELECT (select `en-name` from Languages where id =u.`language_id`) as `languageName`,
+			 (select code from Languages where id =u.`language_id`) as `languageCode`,
+			 (select `en-name` from Countries where id =u.`country_id`) as `countryName`,
+			 (select code from Countries where id =u.`country_id`) as `countryCode`	
+			  FROM UserSecondaryLanguages u WHERE u.user_id = userId;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `deleteUserSecondaryLanguage`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUserSecondaryLanguage`(IN `userId` INT, IN `languageCode` VARCHAR(128), IN `countryCode` VARCHAR(128))
+BEGIN
+	IF EXISTS (SELECT 1 FROM UserSecondaryLanguages u WHERE u.user_id=userId AND u.language_id = (SELECT l.id FROM Languages l WHERE l.code=languageCode) AND u.country_id = (SELECT c.id FROM Countries c WHERE c.code=countryCode)) THEN
+		DELETE FROM UserSecondaryLanguages WHERE user_id=userId AND language_id = (SELECT l.id FROM Languages l WHERE l.code=languageCode) AND country_id = (SELECT c.id FROM Countries c WHERE c.code=countryCode);
+		SELECT 1 AS result;
+	ELSE
+		SELECT 0 AS result;
+	END IF;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure SolasUpgrade2.userPersonalInfoInsertAndUpdate
+DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`tester`@`%` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+BEGIN
+	if id='' then set id=null;end if;
+	if userId='' then set userId=null;end if;
+	if firstName='' then set firstName=null;end if;
+	if lastName='' then set lastName=null;end if;
+	if mobileNumber='' then set mobileNumber=null;end if;
+	if businessNumber='' then set businessNumber=null;end if;
+	if sip='' then set sip=null;end if;
+	if jobTitle='' then set jobTitle=null;end if;
+	if address='' then set address=null;end if;
+	if city='' then set city=null;end if;
+	if country='' then set country=null;end if;
+		
+	IF id IS NULL AND NOT EXISTS(select 1 FROM UserPersonalInformation p WHERE p.`user_id`=userId) THEN
+		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`,`sip`,`job-title`,`address`,`city`,`country`)
+		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,sip,jobTitle,address,city,country);
+		CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+	ELSE
+		set @q= "UPDATE UserPersonalInformation p SET ";
+
+		if userId is not null then 
+			set @q = CONCAT(@q," p.`user_id`='",userId,"'") ;
+		end if;
+		if firstName is not null then 
+			set @q = CONCAT(@q," , p.`first-name`='",firstName,"'") ;
+		end if;
+		if lastName is not null then 
+			set @q = CONCAT(@q," , p.`last-name`='",lastName,"'") ;
+		end if;	
+		if mobileNumber is not null then 
+			set @q = CONCAT(@q," , p.`mobile-number`='",mobileNumber,"'") ;
+		end if;
+		if businessNumber is not null then 
+			set @q = CONCAT(@q," , p.`business-number`='",businessNumber,"'") ;
+		end if;
+		if sip is not null then 
+			set @q = CONCAT(@q," , p.sip='",sip,"'") ;
+		end if;
+		if jobTitle is not null then 
+			set @q = CONCAT(@q," , p.`job-title`='",jobTitle,"'") ;
+		end if;
+		if address is not null then 
+			set @q = CONCAT(@q," , p.address='",address,"'") ;
+		end if;
+		if city is not null then 
+			set @q = CONCAT(@q," , p.city='",city,"'") ;
+		end if;
+		if country is not null then 
+			set @q = CONCAT(@q," , p.country='",country,"'") ;
+		end if;
+
+		set @q = CONCAT(@q," WHERE p.id=",id) ; 
+		
+	   PREPARE stmt FROM @q;
+	   EXECUTE stmt;
+	   DEALLOCATE PREPARE stmt;
+		CALL getUserPersonalInfo(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
+	end if;		
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure SolasUpgrade2.getUserPersonalInfo
+DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
+DELIMITER //
+CREATE DEFINER=`tester`@`%` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+BEGIN
+	if id='' then set id=null;end if;
+	if userId='' then set userId=null;end if;
+	if firstName='' then set firstName=null;end if;
+	if lastName='' then set lastName=null;end if;
+	if mobileNumber='' then set mobileNumber=null;end if;
+	if businessNumber='' then set businessNumber=null;end if;
+	if sip='' then set sip=null;end if;
+	if jobTitle='' then set jobTitle=null;end if;
+	if address='' then set address=null;end if;
+	if city='' then set city=null;end if;
+	if country='' then set country=null;end if;
+	
+	set @q= "select * from UserPersonalInformation p where 1 ";
+	
+	if id is not null then 
+		set @q = CONCAT(@q," and p.id='",id,"'") ;
+	end if;
+	
+	if userId is not null then 
+		set @q = CONCAT(@q," and p.`user_id`='",userId,"'") ;
+	end if;
+	
+	if firstName is not null then 
+		set @q = CONCAT(@q," and p.`first-name`='",firstName,"'") ;
+	end if;
+	
+	if lastName is not null then 
+		set @q = CONCAT(@q," and p.`last-name`='",lastName,"'") ;
+	end if;
+	
+	if mobileNumber is not null then 
+		set @q = CONCAT(@q," and p.`mobile-number`='",mobileNumber,"'") ;
+	end if;
+	
+	if businessNumber is not null then 
+		set @q = CONCAT(@q," and p.`business-number`='",businessNumber,"'") ;
+	end if;
+	
+	if sip is not null then 
+		set @q = CONCAT(@q," and p.sip='",sip,"'") ;
+	end if;
+	
+	if jobTitle is not null then 
+		set @q = CONCAT(@q," and p.`job-title`='",jobTitle,"'") ;
+	end if;
+	
+	if address is not null then 
+		set @q = CONCAT(@q," and p.address='",address,"'") ;
+	end if;
+	
+	if city is not null then 
+		set @q = CONCAT(@q," and p.city='",city,"'") ;
+	end if;
+	
+	if country is not null then 
+		set @q = CONCAT(@q," and p.country='",country,"'") ;
+	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
 
 
 /*---------------------------------------end of procs----------------------------------------------*/
@@ -3578,6 +3730,20 @@ CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `Organisations` FOR EAC
 	if not (new.`home-page` like "http://%" or new.`home-page`  like "https://%") then
 	set new.`home-page` = concat("http://",new.`home-page`);
 	end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+-- Dumping structure for trigger SolasUpgrade2.userSecondaryLanguageInsert
+DROP TRIGGER IF EXISTS `userSecondaryLanguageInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `userSecondaryLanguageInsert` BEFORE INSERT ON `UserSecondaryLanguages` FOR EACH ROW BEGIN
+
+    IF EXISTS (SELECT 1 FROM Users u WHERE u.id = NEW.user_id AND u.language_id = NEW.language_id AND u.country_id = NEW.country_id) THEN
+            set NEW.user_id = null;
+    END IF;
+
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;

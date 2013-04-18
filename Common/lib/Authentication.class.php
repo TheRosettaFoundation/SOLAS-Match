@@ -5,7 +5,7 @@ class Authentication {
     public static function hashPassword($password, $nonce)
     {
         // Thanks to http://stackoverflow.com/questions/401656/secure-hash-and-salt-for-php-passwords/401684#401684
-        $site_key = self::getSiteKey();
+        $site_key = Settings::get('session.site_key');
         return self::hash($password, $nonce, $site_key);
     }
 
@@ -20,12 +20,7 @@ class Authentication {
         $algo_max = mt_getrandmax();
         return min(array($mysql_max_int, $algo_max));
     }
-
-    private static function getSiteKey()
-    {
-        return Settings::get('session.site_key');
-    }
-
+    
     private static function hash($password, $nonce, $site_key)
     {
         return hash_hmac('sha512', $password . $nonce, $site_key);

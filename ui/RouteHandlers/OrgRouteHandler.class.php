@@ -43,7 +43,76 @@ class OrgRouteHandler
 
     public function createOrg()
     {
-        $app = Slim::getInstance();      
+        $app = Slim::getInstance();   
+        
+        if ($post = $app->request()->post()) {
+            $nameErr = null;
+
+            $org = new Organisation();
+
+            if(isset($post["orgName"]) && $post["orgName"] != '') {
+                $org->setName($post['orgName']); 
+            } else {
+                $nameErr = "<strong>Organisation Name</strong> must be set.";
+            }
+            
+            if(isset($post["homepage"])) $org->setHomePage($post["homepage"]); 
+            if(isset($post["biography"])) $org->setBiography($post["biography"]);
+            if(isset($post["address"])) $org->setAddress($post["address"]);
+            if(isset($post["city"])) $org->setCity($post["city"]);
+            if(isset($post["country"])) $org->setCountry($post["country"]);
+            if(isset($post["email"])) $org->setEmail($post["email"]);
+
+            $regionalFocus = array();
+            if(isset($post["africa"])) $regionalFocus[] = "Africa";             
+            if(isset($post["asia"])) $regionalFocus[] = "Asia";             
+            if(isset($post["australia"])) $regionalFocus[] = "Australia"; 
+            if(isset($post["europe"])) $regionalFocus[] .= "Europe"; 
+            if(isset($post["northAmerica"])) $regionalFocus[] .= "North-America"; 
+            if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
+            
+            if(!empty($regionalFocus)) {
+                $regionalFocusString = "";
+                foreach($regionalFocus as $region) {
+                    $regionalFocusString .= $region.", ";
+                }
+                $lastComma = strrpos($regionalFocusString, ",");
+                $regionalFocusString[$lastComma] = "";
+                $org->setRegionalFocus($regionalFocusString);
+            }
+            
+            if(is_null($nameErr)) {
+                $user_id = UserSession::getCurrentUserID();
+                $orgDao = new OrganisationDao();
+                $organisation = $orgDao->getOrganisationByName($org->getName());
+
+                if (!$organisation) {
+                    $new_org = $orgDao->createOrg($org, $user_id);
+                    if ($new_org) {
+                        
+                        $orgDao->createMembershipRequest($new_org->getId(), $user_id);
+                        $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
+                        $org_name = $org->getName();
+                        $app->flash("success", "The organisation <strong>$org_name</strong> has been created.");
+                        $app->redirect($app->urlFor("org-dashboard"));
+                    } else {
+                        $app->flashNow("error", "Unable to save Organisation.");
+                    }
+                } else {
+                    $org_name = $org->getName();
+                    $app->flashNow("error", "An Organisation named <strong>$org_name</strong> is already registered
+                                            with SOLAS Match. Please use a different name.");
+                }         
+            } else {
+                $app->view()->appendData(array(
+                    "org"     => $org,
+                    "nameErr" => $nameErr
+                ));
+            }
+        }   
+        $app->view()->appendData(array(
+            "org"     => null
+        ));
         $app->render("create-org.tpl");
     }    
 
@@ -56,55 +125,15 @@ class OrgRouteHandler
         $tagDao = new TagDao();
         $projectDao = new ProjectDao();
         
-        $current_user = $userDao->getUser(array('id' => $current_user_id));        
+        $current_user = $userDao->getUser($current_user_id);        
         $my_organisations = $userDao->getUserOrgs($current_user_id);
         $org_projects = array();
         
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
-            
-            if(isset($post->submit) && $post->submit == 'createOrg') {
-            
-                $org = new Organisation(null);
-                if (isset($post->name) && $post->name != null) {
-                    $org->setName($post->name);
-                }
-
-                if (isset($post->home_page) && ($post->home_page != "" || $post->home_page != "http://")) {
-                    $org->setHomePage($post->home_page);
-                }
-
-                if (isset($post->bio) && $post->bio != "") {
-                    $org->setBiography($post->bio);
-                }
-
-                if ($org->getName() != "") {
-
-                    $orgDao = new OrganisationDao();
-                    $organisation = $orgDao->getOrganisation(array('name' => $org->getName()));
-
-                    if (!$organisation) {
-                        $new_org = $orgDao->createOrg($org, $current_user_id);
-                        if ($new_org) {
-                            $my_organisations[] = $new_org;
-                            $org_name = $org->getName();
-                            $app->flashNow("success", "Organisation $org_name has been created.");
-                        } else {
-                            $app->flashNow("error", "Unable to save Organisation.");
-                        }
-                    } else {
-                        $org_name = $org->getName();
-                        $app->flashNow("error", "An Organisation named $org_name is already registered
-                                                with SOLAS Match. Please use a different name.");
-                    }
-                } else {
-                    $app->flashNow("error", "You must specify a name for the organisation.");
-                }
-            }
-            
             if (isset($post->track)) {
                 $project_id = $post->project_id;
-                $project = $projectDao->getProject(array('id' => $project_id));
+                $project = $projectDao->getProject($project_id);
 
                 $project_title = "";
                 if ($project->getTitle() != "") {
@@ -177,7 +206,7 @@ class OrgRouteHandler
         $orgDao = new OrganisationDao();
 
         $userId = UserSession::getCurrentUserID();
-        $user = $userDao->getUser(array('id' => $userId));
+        $user = $userDao->getUser($userId);
         $user_orgs = $userDao->getUserOrgs($userId);
         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
             $requestMembership = $orgDao->createMembershipRequest($org_id, $userId);
@@ -198,15 +227,15 @@ class OrgRouteHandler
         $orgDao = new OrganisationDao();
         $userDao = new UserDao();
 
-        $org = $orgDao->getOrganisation(array('id' => $org_id));
+        $org = $orgDao->getOrganisation($org_id);
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
             if (isset($post->email)) {
                 if (TemplateHelper::isValidEmail($post->email)) {       
-                    $user = $userDao->getUser(array('email' => $post->email));
+                    $user = $userDao->getUserByEmail($post->email);
                     if (!is_null($user)) {
-                        $user_id = $user->getUserId();
+                        $user_id = $user->getId();
                         $user_orgs = $userDao->getUserOrgs($user_id);
                     
                         if ($user->getDisplayName() != "") {
@@ -253,7 +282,7 @@ class OrgRouteHandler
         $user_list = array();
         if (count($requests) > 0) {
             foreach ($requests as $memRequest) {
-                $user_list[] =  $userDao->getUser(array('id' => $memRequest->getUserId()));
+                $user_list[] =  $userDao->getUser($memRequest->getUserId());
             }
         }
         
@@ -267,40 +296,50 @@ class OrgRouteHandler
     {
         $app = Slim::getInstance();
         $orgDao = new OrganisationDao();
+        $org = $orgDao->getOrganisation($org_id);
+        if($post = $app->request()->post()) {
 
-        $org = $orgDao->getOrganisation(array('id' => $org_id));
-        if ($app->request()->isPost()) {
-            $submit = $app->request()->post("submit");
-            if ($submit && $submit == 'update') {
-                $name = $app->request()->post("name");
-                if ($name != null) {
-                    $org->setName($name);
-                }   
-            
-                $home_page = $app->request()->post("home_page");
-                if ($home_page != null) {
-                    $org->setHomePage($home_page);
-                }   
-            
-                $bio = $app->request()->post("bio");
-                if ($bio != null) {
-                    $org->setBiography($bio);
-                }  
-            
-                $orgDao->updateOrg($org); 
-                $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+            if(isset($post['displayName'])) $org->setName($post['displayName']); 
+            if(isset($post['homepage'])) $org->setHomePage($post['homepage']); 
+            if(isset($post['biography'])) $org->setBiography($post['biography']);
+            if(isset($post['address'])) $org->setAddress($post['address']);
+            if(isset($post['city'])) $org->setCity($post['city']);
+            if(isset($post['country'])) $org->setCountry($post['country']);
+            if(isset($post['email'])) $org->setEmail($post['email']);
+
+            $regionalFocus = array();
+            if(isset($post["africa"])) $regionalFocus[] = "Africa";             
+            if(isset($post["asia"])) $regionalFocus[] = "Asia";             
+            if(isset($post["australia"])) $regionalFocus[] = "Australia"; 
+            if(isset($post["europe"])) $regionalFocus[] .= "Europe"; 
+            if(isset($post["northAmerica"])) $regionalFocus[] .= "North-America"; 
+            if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
+
+            if(!empty($regionalFocus)) {
+                $regionalFocusString = "";
+                foreach($regionalFocus as $region) {
+                    $regionalFocusString .= $region.", ";
+                }
+                $lastComma = strrpos($regionalFocusString, ",");
+                $regionalFocusString[$lastComma] = "";
+                $org->setRegionalFocus($regionalFocusString);
             }
 
-            $deleteId = $app->request()->post("deleteId");
-            if ($deleteId) {
-                if ($orgDao->deleteOrg($org->getId())) {
-                    $app->flash("success", "Successfully deleted org ".$org->getName());
-                    $app->redirect($app->urlFor("home"));
-                } else {
-                    $app->flashNow("error", "Unable to delete organisation. Please try again later.");
-                }
+
+            $orgDao->updateOrg($org); 
+            $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+        }
+
+        $deleteId = $app->request()->post("deleteId");
+        if ($deleteId) {
+            if ($orgDao->deleteOrg($org->getId())) {
+                $app->flash("success", "Successfully deleted org ".$org->getName());
+                $app->redirect($app->urlFor("home"));
+            } else {
+                $app->flashNow("error", "Unable to delete organisation. Please try again later.");
             }
         }
+        
 
         $userDao = new UserDao();
         if ($userDao->isAdmin(UserSession::getCurrentUserId(), $org->getId())) {
@@ -318,7 +357,7 @@ class OrgRouteHandler
         $userDao = new UserDao();
         $badgeDao = new BadgeDao();
 
-        $org = $orgDao->getOrganisation(array('id' => $org_id));
+        $org = $orgDao->getOrganisation($org_id);
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
                    
@@ -342,17 +381,17 @@ class OrgRouteHandler
             
             if (isset($post->email)) {
                 if (TemplateHelper::isValidEmail($post->email)) {       
-                    $user = $userDao->getUser(array('email' => $post->email));
+                    $user = $userDao->getUserByEmail($post->email);
                 
                     if (!is_null($user)) {
-                        $user_orgs = $userDao->getUserOrgs($user_id);
+                        $user_orgs = $userDao->getUserOrgs($user->getId());
                         if ($user->getDisplayName() != "") {
                             $user_name = $user->getDisplayName();
                         } else {
                             $user_name = $user->getEmail();
                         }   
                         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-                            $orgDao->acceptMembershipRequest($org_id, $user_id);
+                            $orgDao->acceptMembershipRequest($org_id, $user->getId());
                             if ($org->getName() != "") {
                                 $org_name = $org->getName();
                             } else {
@@ -374,8 +413,8 @@ class OrgRouteHandler
                 }
             } elseif (isset($post->accept)) {
                 if ($user_id = $post->user_id) {
-                    if ($orgDao->acceptMembershipRequest($org_id, $user_id)) {
-                        $user = $userDao->getUser(array('id' => $user_id));
+                    if ($orgDao->acceptMembershipRequest($org_id, $user_id)){
+                        $user = $userDao->getUser($user_id);
                         $user_name = $user->getDisplayName();
                         $org_name = $org->getName();
                         $app->flashNow("success", "Successfully added ".
@@ -384,13 +423,14 @@ class OrgRouteHandler
                     } else {
                         $app->flashNow("error", "Unable to add user to member list. Please try again later.");
                     }
+
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
             } elseif (isset($post->refuse)) {
                 if ($user_id = $post->user_id) {
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
-                    $user = $userDao->getUser(array('id' => $user_id));
+                    $user = $userDao->getUser($user_id);
                     $user_name = $user->getDisplayName();
                     $app->flashNow("success", "Successfully rejected 
                             <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">
@@ -400,7 +440,7 @@ class OrgRouteHandler
                 }
             } elseif (isset($post->revokeUser)) {
                 $userId = $post->revokeUser;
-                $user = $userDao->getUser(array('id' => $userId));
+                $user = $userDao->getUser($userId);
                 if ($user) {
                     $userName = $user->getDisplayName();
                     if ($userDao->leaveOrganisation($userId, $org_id)) {
@@ -422,25 +462,25 @@ class OrgRouteHandler
         $user_list = array();
         if (count($requests) > 0) {
             foreach ($requests as $memRequest) {
-                $user = $userDao->getUser(array('id' => $memRequest->getUserId()));
+                $user = $userDao->getUser($memRequest->getUserId());
                 $user_list[] = $user;
             }
         }
 
-        $currentUser = $userDao->getUser(array('id' => UserSession::getCurrentUserId()));
+        $currentUser = $userDao->getUser(UserSession::getCurrentUserId());
 
         $org_badges = $orgDao->getOrgBadges($org_id);
         $orgMemberList = $orgDao->getOrgMembers($org_id);
-        $org_members = array();
         $isMember = false;
         if (count($orgMemberList) > 0) {
             if (in_array($currentUser, $orgMemberList)) {
                 $isMember = true;
+
             }
         }
 
         $adminAccess = false;
-        if ($userDao->isAdmin($currentUser->getUserId(), $org->getId())) {
+        if ($userDao->isAdmin($currentUser->getId(), $org->getId())) {
             $adminAccess = true;
         }
 
@@ -477,9 +517,9 @@ class OrgRouteHandler
             
             if (isset($post->email) && $post->email != "") {
                 if (TemplateHelper::isValidEmail($post->email)) {
-                    $user = $userDao->getUser(array('email' => $post->email));
+                    $user = $userDao->getUserByEmail($post->email);
                     if ($user) {
-                        $user_badges = $userDao->getUserBadges($user->getUserId());
+                        $user_badges = $userDao->getUserBadges($user->getId());
                         $badge_ids = array();
                         if (count($user_badges) > 0) {
                             foreach ($user_badges as $badge_tmp) {
@@ -488,7 +528,7 @@ class OrgRouteHandler
                         }
                         
                         if (!in_array($badge_id, $badge_ids)) {
-                            $userDao->addUserBadge($user->getUserId(), $badge);
+                            $userDao->addUserBadge($user->getId(), $badge);
                             $user_name = "";
                             if ($user->getDisplayName() != "") {
                                 $user_name = $user->getDisplayName();
@@ -512,7 +552,7 @@ class OrgRouteHandler
                 }
             } elseif (isset($post->user_id) && $post->user_id != "") {
                 $user_id = $post->user_id;
-                $user = $userDao->getUser(array('id' => $user_id));
+                $user = $userDao->getUser($user_id);
                 $userDao->removeUserBadge($user_id, $badge_id);
                 $user_name = "";
                 if ($user->getDisplayName() != "") {
@@ -570,7 +610,7 @@ class OrgRouteHandler
             $post = (object) $app->request()->post();
             
             if (isset($post->search_name) && $post->search_name != '') {                
-                $found_orgs = $orgDao->searchForOrg($post->search_name);
+                $found_orgs = $orgDao->searchForOrgByName($post->search_name);
                 if (count($found_orgs) < 1) {
                     $app->flashNow("error", "No Organisations found.");
                 } else {
@@ -593,3 +633,7 @@ class OrgRouteHandler
         $app->render("org.edit-badge.tpl");        
     }    
 }
+
+$route_handler = new OrgRouteHandler();
+$route_handler->init();
+unset ($route_handler);

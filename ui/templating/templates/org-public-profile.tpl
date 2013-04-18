@@ -41,33 +41,139 @@
 {/if}
 
     <div class="well">
-        <table border="0" width="100%">
-            <thead>
-            <th align="left" width="48%">Biography:<hr/></th>
-            </thead>
-            <tbody>
-                <tr valign="top">
-                    <td>
-                        <i>
-                        {if $org->getBiography() != ''}
-                            {$org->getBiography()}
-                        {else}
-                            This organisation has no biography listed.
-                        {/if}
-                        </i>
-                    </td>
-                </tr>    
-                <tr><td><hr /></td></tr>
-                <tr>
-                    <td>
-                        {if $org->getHomePage() != '' && $org->getHomePage() != 'http://'}
-                            <strong>Home Page:</strong> <a target="_blank" href='{$org->getHomePage()}'>{$org->getHomePage()}</a>
-                        {/if}
-                    </td>
-                </tr>
-            </tbody>
+        <table>
+            <tr valign="top">
+                <td  style="width: 48%">
+                    <div>
+                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                            <thead>                
+                                <th align="left">Home Page:<hr/></th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getHomePage() != 'http://'}
+                                            <a href="{$org->getHomePage()}">{$org->getHomePage()}</a>
+                                        {else}
+                                            No home page listed.
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>Address:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getAddress() != ''}
+                                            {$org->getAddress()}
+                                        {else}
+                                            No address listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>City:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getCity() != ''}
+                                            {$org->getCity()}
+                                        {else}
+                                            No city listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>Country:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getCountry() != ''}
+                                            {$org->getCountry()}
+                                        {else}
+                                            No country listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                <td style="width: 4%"/>
+                <td style="width: 48%">            
+                    <div class="pull-right">
+                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
+                            <thead>                
+                                <th align="left" width="48%">E-Mail:<hr/></th>
+                            </thead>
+                            <tbody>
+                                 <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getEmail() != ''}
+                                            <a href="mailto:{$org->getEmail()}">{$org->getEmail()}</a>
+                                        {else}
+                                            No e-mail listed.
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>Biography:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getBiography() != ''}
+                                            {$org->getBiography()}
+                                        {else}
+                                            No biography listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>Regional Focus:</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getRegionalFocus() != ''}
+                                            {$org->getRegionalFocus()}
+                                        {else}
+                                            No regional focus listed.
+                                        {/if}
+                                    </td>  
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
         </table>
     </div>
+    
+                        
                 
     <p style="margin-bottom: 60px" />         
     <h1 class="page-header">
@@ -75,6 +181,7 @@
         <small>Overview of badges created by this organisation.</small>
 
         {if isset($user)}
+
             {if $isMember}
                 <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                     <i class="icon-star icon-white"></i> Create Badge
@@ -89,6 +196,7 @@
         <thead>            
             <th style="text-align: left">Name</th>
             <th>Description</th>
+
             {if $isMember}
                 <th>Edit</th>
                 <th>Assign</th>
@@ -106,7 +214,7 @@
                 <td width="35%">
                     {$badge->getDescription()}
                 </td>
-                {if $isMember}
+                {if $isMember && isset($user)}
                     <td>
                         <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
                             <i class="icon-wrench icon-black"></i> Edit Badge
@@ -138,68 +246,68 @@
     <p style="margin-bottom:20px;"></p>
 {/if}
       
-{if isset($user)}
-   {if $isMember}               
-        <p style="margin-bottom: 40px" />         
-        <h1 class="page-header">
-            Membership Requests
-            <small>Overview of users who have requested membership.</small>
-            
-            <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-                <i class="icon-star icon-white"></i> Add User
-            </a>
-        </h1>                  
-        <p style="margin-bottom: 40px" />               
-                
-        {if isset($user_list) && count($user_list) > 0}
-            <table class="table table-striped">
-                <thead>            
-                    <th style="text-align: left"><strong>Name</strong></th>
-                    <th><strong>Biography</strong></th>
-                    <th>Accept</th>
-                    <th>Deny</th>
-                </thead>
-                <tbody>
-                {foreach $user_list as $nonMember}
-                    <tr>
-                        {assign var="user_id" value=$nonMember->getUserId()}                        
-                        {if $nonMember->getDisplayName() != ''}
-                            <td style="text-align: left">
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$nonMember->getDisplayName()}</a>
-                            </td>
-                        {/if}
-                        <td width="50%">
-                            <i>
-                            {if $nonMember->getBiography() != ''}
-                                {$nonMember->getBiography()}
-                            {else}
-                                No biography has been added.
-                            {/if}
-                            </i>
-                        </td>
-                        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                            <input type="hidden" name="user_id" value="{$nonMember->getUserId()}" />
-                            <td>
-                                <input type="submit" name="accept" value="    Accept Request" class="btn btn-primary" />
-                                <i class="icon-ok-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
-                            </td>
-                            <td>
-                                <input type="submit" name="refuse" value="    Refuse Request" class="btn btn-inverse" />
-                                <i class="icon-remove-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
-                            </td>
-                        </form>
-                    </tr>
-                {/foreach}
-                </tbody>
-            </table>   
-        {else}
-            <p class="alert alert-info">
-                There are no membership requests associated with this organisation.
-            </p>
-        {/if}
-        <p style="margin-bottom: 40px" />               
-    {/if}
-{/if}
+
+{if $isMember}               
+     <p style="margin-bottom: 40px" />         
+     <h1 class="page-header">
+         Membership Requests
+         <small>Overview of users who have requested membership.</small>
+
+             <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
+                 <i class="icon-star icon-white"></i> Add User
+             </a>
+     </h1>                  
+     <p style="margin-bottom: 40px" />               
+
+     {if isset($user_list) && count($user_list) > 0}
+         <table class="table table-striped">
+             <thead>            
+                 <th style="text-align: left"><strong>Name</strong></th>
+                 <th><strong>Biography</strong></th>
+                 <th>Accept</th>
+                 <th>Deny</th>
+             </thead>
+             <tbody>
+             {foreach $user_list as $nonMember}
+                 <tr>
+                     {assign var="user_id" value=$nonMember->getId()}                        
+                     {if $nonMember->getDisplayName() != ''}
+                         <td style="text-align: left">
+                             <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$nonMember->getDisplayName()}</a>
+                         </td>
+                     {/if}
+                     <td width="50%">
+                         <i>
+                         {if $nonMember->getBiography() != ''}
+                             {$nonMember->getBiography()}
+                         {else}
+                             No biography has been added.
+                         {/if}
+                         </i>
+                     </td>
+                     <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                         <input type="hidden" name="user_id" value="{$nonMember->Id()}" />
+                         <td>
+                             <input type="submit" name="accept" value="    Accept Request" class="btn btn-primary" />
+                             <i class="icon-ok-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
+                         </td>
+                         <td>
+                             <input type="submit" name="refuse" value="    Refuse Request" class="btn btn-inverse" />
+                             <i class="icon-remove-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
+                         </td>
+                     </form>
+                 </tr>
+             {/foreach}
+             </tbody>
+         </table>   
+     {else}
+         <p class="alert alert-info">
+             There are no membership requests associated with this organisation.
+         </p>
+     {/if}
+     <p style="margin-bottom: 40px" />               
+ {/if}
+
 
 {if $adminAccess || $isMember}
     <h1 class="page-header">

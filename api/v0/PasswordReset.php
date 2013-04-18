@@ -6,8 +6,8 @@
  * @author sean
  */
 
-require_once '../Common/models/PasswordResetRequest.php';
-require_once '../Common/models/PasswordReset.php';
+require_once __DIR__."/../../Common/models/PasswordResetRequest.php";
+require_once __DIR__."/../../Common/models/PasswordReset.php";
 
 class PasswordResetAPI {
     
@@ -36,9 +36,8 @@ class PasswordResetAPI {
                 $key = explode('.', $key);
                 $format = '.'.$key[1];
                 $key = $key[0];
-            }
-            $dao = new UserDao();           
-            $data = $dao->getPasswordResetRequests(array('uid' => $key));
+            }        
+            $data = UserDao::getPasswordResetRequests(null, $key);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getResetRequest');
         
@@ -47,10 +46,9 @@ class PasswordResetAPI {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast('PasswordReset', $data);
-            $dao = new UserDao;
-            $result = $dao->passwordReset($data->getPassword(), $data->getKey());
+            $data = $client->deserialize($data,'PasswordReset');
+//            $data = $client->cast('PasswordReset', $data);
+            $result = UserDao::passwordReset($data->getPassword(), $data->getKey());
             Dispatcher::sendResponce(null, $result, null, $format);
          }, 'resetPassword');         
     }

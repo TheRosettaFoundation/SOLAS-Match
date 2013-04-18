@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Common/lib/APIHelper.class.php';
+require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
 class OrganisationDao
 {
@@ -12,38 +12,36 @@ class OrganisationDao
         $this->client = new APIHelper(Settings::get("ui.api_format"));
         $this->siteApi = Settings::get("site.api");
     }
-
-    public function getOrganisation($params)
+    
+    public function getOrganisation($id)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/orgs";
-        
-        $id = null;
-        $name = null;
-        if (isset($params['id'])) {
-            $id = $params['id'];
-            $request = "$request/$id";
-        } elseif (isset($params['name'])) {
-            $name = $params['name'];
-            $request = "$request/getByName/$name";
-        }
-       
-        $response = $this->client->call($request);
-        if (!is_null($id) || !is_null($name)) {
-            $ret = $this->client->cast("Organisation", $response);
-        } else {
-            $ret = $this->client->cast(array("Organisation"), $response);
-        }
-        
+        $request = "{$this->siteApi}v0/orgs/$id";
+        $ret = $this->client->call("Organisation", $request);
         return $ret;
     }
-
-    public function searchForOrg($name)
+    
+    public function getOrganisationByName($name)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/getByName/$name";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Organisation"), $response);
+        $ret = $this->client->call("Organisation", $request);
+        return $ret;       
+    }
+    
+    public function searchForOrgByName($name)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/orgs/searchByName/$name";
+        $ret = $this->client->call(array("Organisation"), $request);
+        return $ret;       
+    }
+    
+    public function getOrganisations()
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/orgs";
+        $ret = $this->client->call(array("Organisation"), $request);
         return $ret;
     }
 
@@ -51,8 +49,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/projects";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Project"), $response);
+        $ret = $this->client->call(array("Project"), $request);
         return $ret;
     }
 
@@ -60,8 +57,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/archivedProjects";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("ArchivedProject"), $response);
+        $ret = $this->client->call(array("ArchivedProject"), $request);
         return $ret;
     }
 
@@ -69,8 +65,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/badges";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Badge"), $response);
+        $ret = $this->client->call(array("Badge"), $request);
         return $ret;
     }
 
@@ -78,8 +73,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/members";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("User"), $response);
+        $ret = $this->client->call(array("User"), $request);
         return $ret;
     }
 
@@ -87,8 +81,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("MembershipRequest"), $response);
+        $ret = $this->client->call(array("MembershipRequest"), $request);
         return $ret;
     }
 
@@ -96,8 +89,7 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/tasks";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Task"), $response);
+        $ret = $this->client->call(array("Task"), $request);
         return $ret;
     }
 
@@ -105,16 +97,16 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/isMember/$orgId/$userId";
-        $ret = $this->client->call($request);
+        $ret = $this->client->call(null, $request);
         return $ret;
     }
 
     public function createOrg($org, $userId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/orgs/user/$userId";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $org);
-        $ret = $this->client->cast("Organisation", $response);
+        $request = "{$this->siteApi}v0/orgs";
+        $ret = $this->client->call("Organisation", $request, HttpMethodEnum::POST, $org);
+        $this->createOrgAdmin($ret->getId(), $userId);
         return $ret;
     }
 
@@ -122,24 +114,21 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $org);
-        $ret = $this->client->cast("Organisation", $response);
+        $ret = $this->client->call("Organisation", $request, HttpMethodEnum::PUT, $org);
         return $ret;
     }
 
     public function deleteOrg($orgId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
-        return $ret;
+        $this->client->call(null,$request, HttpMethodEnum::DELETE);
     }
 
     public function createMembershipRequest($orgId, $userId)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_POST);
+        $ret = $this->client->call(null, $request, HttpMethodEnum::POST);
         return $ret;
     }
 
@@ -147,13 +136,18 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_PUT);
-        return $ret;
+        $this->client->call(null, $request, HttpMethodEnum::PUT);
     }
 
     public function rejectMembershipRequest($orgId, $userId)
     {
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $this->client->call(null, $request, HttpMethodEnum::DELETE);
+    }
+    
+    public function createOrgAdmin($orgId, $userId)
+    {
+        $request = "{$this->siteApi}v0/orgs/$orgId/admin/$userId";
+        $this->client->call(null, $request, HttpMethodEnum::PUT);
     }
 }

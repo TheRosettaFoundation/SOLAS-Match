@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__.'/../../Common/TaskStatusEnum.php';
-require_once __DIR__.'/../../Common/TaskTypeEnum.php';
+require_once __DIR__."/../../Common/TaskStatusEnum.php";
+require_once __DIR__."/../../Common/TaskTypeEnum.php";
 
 class Upload {
     
@@ -101,8 +101,7 @@ class Upload {
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mime= $finfo->buffer($file);
         if(is_null($version)){
-            $version = TaskFile::recordFileUpload($task, $filename, $mime, $user_id);
-            $version = $version[0]['version'];
+            $version = TaskDao::recordFileUpload($task->getId(), $filename, $mime, $user_id);
         }
         $upload_folder     = self::absoluteFolderPathForUpload($task, $version);
         if (!self::folderPathForUploadExists($task, $version)) {
@@ -131,7 +130,7 @@ class Upload {
 
         $file_name 	= $_FILES[$form_file_field]['name'];
         $file_tmp_name 	= $_FILES[$form_file_field]['tmp_name'];
-        $version 	= TaskFile::recordFileUpload($task, $file_name, $_FILES[$form_file_field]['type'], $user_id);
+        $version 	= TaskDao::recordFileUpload($task->getId(), $file_name, $_FILES[$form_file_field]['type'], $user_id);
         $version        = $version[0]['version'];
         $upload_folder 	= self::absoluteFolderPathForUpload($task, $version);
 
@@ -214,7 +213,7 @@ class Upload {
         $taskDao = new TaskDao();
         $builder = new APIWorkflowBuilder();
         
-        $currentTask =  $taskDao->getTask(array("id" => $id));
+        $currentTask =  $taskDao->getTask($id);
         $projectId = $currentTask[0]->getProjectId();
         
         $taskPreReqs = $builder->calculatePreReqArray($projectId);
@@ -223,18 +222,17 @@ class Upload {
             $taskPreReqs[$id][] = $preReqId;
         
             if($graph = $builder->parseAndBuild($taskPreReqs)) {
-
                 $index = $builder->find($id, $graph);
                 $currentTaskNode = $graph->getAllNodes($index);
-                $task = $taskDao->getTask(array("id" => $id));
+                $task = $taskDao->getTask($id);
                 $task = $task[0];
 
-                $preReqTask = $taskDao->getTask(array("id" => $preReqId));
+                $preReqTask = $taskDao->getTask($preReqId);
                 $taskDao->addTaskPreReq($id, $preReqId);
 
-                if($task->getTaskType() != TaskTypeEnum::POSTEDITING) {
+                if($task->getTaskType() != TaskTypeEnum::DESEGMENTATION) {
                     foreach($currentTaskNode->getPreviousList() as $nodeId) {
-                        $preReq = $taskDao->getTask(array("id" => $nodeId));
+                        $preReq = $taskDao->getTask($nodeId);
                         $preReq = $preReq[0];      
                         if($preReq->getTaskStatus() == TaskStatusEnum::COMPLETE) {
                             Upload::copyOutputFile($id, $preReqId);
@@ -248,7 +246,7 @@ class Upload {
     public static function removeTaskPreReq($id, $preReqId)
     {
         $taskDao = new TaskDao();
-        $task = $taskDao->getTask(array("id" => $id));
+        $task = $taskDao->getTask($id);
         $task = $task[0];
         
         $taskDao->removeTaskPreReq($id, $preReqId);
@@ -274,14 +272,14 @@ class Upload {
     private static function copyOutputFile($id, $preReqId)
     {
         $taskDao = new TaskDao();
-        $task = $taskDao->getTask(array("id" => $id));
+        $task = $taskDao->getTask($id);
         $task = $task[0];
         
-        $preReqTask = $taskDao->getTask(array("id" => $preReqId));
+        $preReqTask = $taskDao->getTask($preReqId);
         $preReqTask = $preReqTask[0];
         
-        $preReqlatestFileVersion = TaskFile::getLatestFileVersionByTaskID($preReqId);
-        $preReqFileName = TaskFile::getFilename($preReqTask, $preReqlatestFileVersion);
+        $preReqlatestFileVersion = TaskDao::getLatestFileVersion($preReqId);
+        $preReqFileName = TaskDao::getFilename($preReqId, $preReqlatestFileVersion);
         $projectId= $task->getProjectId();
         file_put_contents(Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName",
                         file_get_contents(Settings::get("files.upload_path").

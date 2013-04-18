@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Common/lib/APIHelper.class.php';
+require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
 class TaskDao
 {
@@ -13,185 +13,144 @@ class TaskDao
         $this->siteApi = Settings::get("site.api");
     }
 
-    public function getTask($params)
+    public function getTask($id)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/tasks";
-        
-        $id = null;
-        if (isset($params['id'])) {
-            $id = $params['id'];
-            $request = "$request/$id";
-        }
-        
-        $response = $this->client->call($request);
-        if (!is_null($id)) {
-            $ret = $this->client->cast("Task", $response);
-        } else {
-            $ret = $this->client->cast(array("Task"), $response);
-        }
-        
-        return $ret;
+        $request = "{$this->siteApi}v0/tasks/$id";
+        $response =$this->client->call("Task", $request);
+        return $response;
     }
+    
+    public function getTasks()
+    {
+        $request = "{$this->siteApi}v0/tasks";
+        $response =$this->client->call(array("Task"), $request);
+        return $response;
+    }
+    
 
     public function getTaskPreReqs($taskId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Task"), $response);
-        return $ret;
+        $response =$this->client->call(array("Task"), $request);
+        return $response;
     }
 
     public function getTopTasks($limit = null)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/top_tasks";
-
-        $args = null;
-        if ($limit) {
-            $args = array("limit" => $limit);
-        }
-
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("Task"), $response);
-        return $ret;
+        $args=$limit ? array("limit" => $limit) : null;
+        $response =$this->client->call(array("Task"), $request,HttpMethodEnum::GET, null, $args);
+        return $response;
     }
 
     public function getTaskTags($taskId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast(array("Tag"), $response);
-        return $ret;
+        $args=$limit ? array("limit" => $limit) : null;
+        $response =$this->client->call(array("Tag"), $request,HttpMethodEnum::GET, null, $args);
+        return $response;
     }
 
+    // this is wrong fix
     public function getTaskFile($taskId, $version = 0, $convertToXliff = false)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/tasks/$taskId/tags";
-
-        $args = array("version" => $version);
-        if ($convertToXliff) {
-            $args['convertToXliff'] = $convertToXliff;
-        }
-        
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast(array("Tag"), $response);
-        return $ret;
+        $request = "{$this->siteApi}v0/tasks/$taskId/file";
+        $args=array("version" => $version,"convertToXliff"=>$convertToXliff);
+        $response =$this->client->call(null, $request,HttpMethodEnum::GET, null, $args);
+        return $response;
     }
 
     public function getTaskVersion($taskId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/version";
-        $ret = $this->client->call($request);
-        return $ret;
+        $response =$this->client->call(null, $request);
+        return $response;
     }
 
     public function getTaskInfo($taskId, $version = 0)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/info";
         $args = array("version" => $version);
-        $response = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        $ret = $this->client->cast("TaskMetaData", $response);
-        return $ret;
+        $response =$this->client->call("TaskMetaData", $request,HttpMethodEnum::GET, null, $args);
+        return $response;
     }
 
     public function isTaskClaimed($taskId, $userId = null)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/claimed";
-
-        $args = null;
-        if (!is_null($userId)) {
-            $args = array("userID" => $userId);
-        }
-
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_GET, null, $args);
-        return $ret;
+        $args=$userId ? array("userID" => $userId) : null;
+        $response =$this->client->call(null, $request,HttpMethodEnum::GET, null, $args);
+        return $response;
     }
 
     public function getUserClaimedTask($taskId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/user";
-        $response = $this->client->call($request);
-        $ret = $this->client->cast("User", $response);
-        return $ret;
+        $response =$this->client->call("User", $request);
+        return $response;
     }
 
     public function createTask($task)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_POST, $task);
-        $ret = $this->client->cast("Task", $response);
-        return $ret;
+        $response =$this->client->call("Task", $request,HttpMethodEnum::POST, $task);
+        return $response;
     }
 
     public function updateTask($task)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/tasks/{$task->getId()}";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, $task);
-        $ret = $this->client->cast("Task", $response);
-        return $ret;
+        $response =$this->client->call("Task", $request,HttpMethodEnum::PUT, $task);
+        return $response;
     }
 
     public function deleteTask($taskId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId";
-        $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $response =$this->client->call(null, $request, HttpMethodEnum::DELETE);
     }
 
     public function addTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $response =$this->client->call(null, $request, HttpMethodEnum::PUT);
     }
 
     public function removeTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $response =$this->client->call(null, $request, HttpMethodEnum::DELETE);
     }
 
     public function archiveTask($taskId, $userId)
     {
         $request = "{$this->siteApi}v0/tasks/archiveTask/$taskId/user/$userId";
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $response =$this->client->call(null, $request, HttpMethodEnum::PUT);
         return $response;
     }
 
     public function setTaskTags($task)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";
-        $this->client->call($request, HTTP_Request2::METHOD_PUT, $task);
+        $response =$this->client->call(null, $request, HttpMethodEnum::PUT, $task);
     }
 
-    public function sendFeedback($taskId, $userIds, $feedback)
+    public function sendFeedback($taskId, $userIds, $feedback)// change to new feed back email
     {
         $feedbackData = new FeedbackEmail();
         $feedbackData->setTaskId($taskId);
-        if (is_array($userIds)) {
-            foreach ($userIds as $userId) {
-                $feedbackData->addUserId($userId);
-            }
-        } else {
-            $feedbackData->addUserId($userIds);
+        $userIds = is_array($userIds) ? $userIds : array($userIds);
+        foreach ($userIds as $userId) {
+            $feedbackData->addUserId($userId);
         }
         $feedbackData->setFeedback($feedback);
         $request = "{$this->siteApi}v0/tasks/{$feedbackData->getTaskId()}/feedback";
-        $this->client->call($request, HTTP_Request2::METHOD_PUT, $feedbackData);
+        $response =$this->client->call(null,$request, HttpMethodEnum::PUT, $feedbackData);
     }
 
     public function saveTaskFile($taskId, $filename, $userId, $fileData, $version = null, $convert = false)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/file/$filename/$userId";
-
         $args = array();
         if ($version) {
             $args["version"] = $version;
@@ -200,7 +159,7 @@ class TaskDao
             $args['convertFromXliff'] = $convert;
         }
 
-        $response = $this->client->call($request, HTTP_Request2::METHOD_PUT, null, $args,$fileData);
+        $response = $this->client->call(null,$request, HttpMethodEnum::PUT, null, $args,$fileData);
     }
 
     public function uploadOutputFile($taskId, $userId, $fileData, $convert = false)
@@ -212,6 +171,6 @@ class TaskDao
             $args= array('convertFromXliff' => $convert);
         }
 
-        $this->client->call($request, HTTP_Request2::METHOD_PUT, null, $args,$fileData);
+        $response = $this->client->call(null,$request, HttpMethodEnum::PUT, null, $args,$fileData);
     }
 }

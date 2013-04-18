@@ -35,14 +35,14 @@ class TaskRouteHandler
         $app->get("/task/:task_id/id", array($middleware, "authUserIsLoggedIn"),
         array($this, "task"))->via("POST")->name("task");
 
-        $app->get("/task/:task_id/postediting", array($middleware, "authUserIsLoggedIn"),
-        array($this, "posteditingTask"))->via("POST")->name("task-postediting");
+        $app->get("/task/:task_id/desegmentation", array($middleware, "authUserIsLoggedIn"),
+        array($this, "desegmentationTask"))->via("POST")->name("task-desegmentation");
 
         $app->get("/task/:task_id/simple-upload", array($middleware, "authUserIsLoggedIn"),
         array($this, "taskSimpleUpload"))->via("POST")->name("task-simple-upload");
 
-        $app->get("/task/:task_id/chunking", array($middleware, "authUserIsLoggedIn"),
-        array($this, "taskChunking"))->via("POST")->name("task-chunking");
+        $app->get("/task/:task_id/segmentation", array($middleware, "authUserIsLoggedIn"),
+        array($this, "taskSegmentation"))->via("POST")->name("task-segmentation");
 
         $app->get("/task/:task_id/uploaded", array($middleware, "authenticateUserForTask"),
         array($this, "taskUploaded"))->name("task-uploaded");
@@ -74,7 +74,7 @@ class TaskRouteHandler
         $userDao = new UserDao();
         $user_id = UserSession::getCurrentUserID();
         
-        $user = $userDao->getUser(array('id' => $user_id));
+        $user = $userDao->getUser($user_id);
         $archived_tasks = $userDao->getUserArchivedTasks($user_id, 10);
         $tasks_per_page = 10;
         $total_pages = ceil(count($archived_tasks) / $tasks_per_page);
@@ -126,8 +126,8 @@ class TaskRouteHandler
         $activeTasks = $userDao->getUserTasks($user_id);
         if ($activeTasks) {
             for ($i = 0; $i < count($activeTasks); $i++) {
-                $activeTasks[$i]['Project'] = $projectDao->getProject(array('id' =>$activeTasks[$i]->getProjectId()));
-                $activeTasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $activeTasks[$i]['Project']->getOrganisationId()));
+                $activeTasks[$i]['Project'] = $projectDao->getProject($activeTasks[$i]->getProjectId());
+                $activeTasks[$i]['Org'] = $orgDao->getOrganisation($activeTasks[$i]['Project']->getOrganisationId());
             }
         }
         
@@ -180,7 +180,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
 
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         if (!is_object($task)) {
             header("HTTP/1.0 404 Not Found");
             die;
@@ -201,7 +201,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
 
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         $user_id = UserSession::getCurrentUserID();
         
         $taskType = TemplateHelper::getTaskTypeFromId($task->getTaskType());
@@ -231,7 +231,7 @@ class TaskRouteHandler
         $userDao = new UserDao();
         $languageDao = new LanguageDao();
 
-        $task = $taskDao->getTask(array('id' => $taskId));
+        $task = $taskDao->getTask($taskId);
         if ($app->request()->isPost()) {
             $user_id = UserSession::getCurrentUserID();
             $userDao->claimTask($user_id, $task);
@@ -246,9 +246,11 @@ class TaskRouteHandler
         } else {
             $app->view()->setData("convert", "false");
         }
-
-        $sourceLanguage = $languageDao->getLanguage(array('code' => $task->getSourceLanguageCode()));
-        $targetLanguage = $languageDao->getLanguage(array('code' => $task->getTargetLanguageCode()));
+        
+        $sourcelocale = $task->getSourceLocale();
+        $targetLocale = $task->getTargetLocale();  
+        $sourceLanguage = $languageDao->getLanguageByCode($sourcelocale->getLanguageCode());
+        $targetLanguage = $languageDao->getLanguageByCode($targetLocale->getLanguageCode());
         $taskMetaData = $taskDao->getTaskInfo($taskId);
         
         $app->view()->appendData(array(
@@ -266,7 +268,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
 
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         $app->view()->setData("task", $task);
         $app->render("task.claimed.tpl");
     }
@@ -285,27 +287,27 @@ class TaskRouteHandler
         $projectDao = new ProjectDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
 
         if ($taskClaimed) {
             switch ($task->getTaskType()) {
-                case TaskTypeEnum::POSTEDITING:
-                    $app->redirect($app->urlFor("task-postediting", array("task_id" => $task_id)));
+                case TaskTypeEnum::DESEGMENTATION:
+                    $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $task_id)));
                     break;
                 case TaskTypeEnum::TRANSLATION:
                 case TaskTypeEnum::PROOFREADING:
                     $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $task_id)));
                     break;
-                case TaskTypeEnum::CHUNKING:
-                    $app->redirect($app->urlFor("task-chunking", array("task_id" => $task_id)));
+                case TaskTypeEnum::SEGMENTATION:
+                    $app->redirect($app->urlFor("task-segmentation", array("task_id" => $task_id)));
                     break;
             }
         }else{
      
             $user_id = UserSession::getCurrentUserID();
-            $task = $taskDao->getTask(array('id' => $task_id));
-            $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+            $task = $taskDao->getTask( $task_id);
+            $project = $projectDao->getProject($task->getProjectId());
             $numTaskTypes = Settings::get("ui.task_types");
 
             $taskTypeColours = array();
@@ -332,7 +334,7 @@ class TaskRouteHandler
         }
     }
 
-    public function posteditingTask($taskId)
+    public function desegmentationTask($taskId)
     {
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
@@ -341,8 +343,8 @@ class TaskRouteHandler
         $userId = UserSession::getCurrentUserID();
         $fieldName = "mergedFile";
         $errorMessage = null;
-        $task = $taskDao->getTask(array('id' => $taskId));
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $task = $taskDao->getTask($taskId);
+        $project = $projectDao->getProject($task->getProjectId());
 
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -380,7 +382,7 @@ class TaskRouteHandler
 
         if ($node) {
             foreach ($node->getPreviousList() as $nodeId) {
-                $pTask = $taskDao->getTask(array('id' => $nodeId));
+                $pTask = $taskDao->getTask($nodeId);
                 if (is_object($pTask)) {
                     $preReqTasks[] = $pTask;
                 }
@@ -406,7 +408,7 @@ class TaskRouteHandler
                     "taskTypeColours"   => $taskTypeColours
         ));
 
-        $app->render("task-postediting.tpl");
+        $app->render("task-desegmentation.tpl");
     }
 
     public function taskSimpleUpload($taskId)
@@ -419,8 +421,8 @@ class TaskRouteHandler
         $fieldName = "fileUpload";
         $errorMessage = null;
         $userId = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $taskId));
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $task = $taskDao->getTask($taskId);
+        $project = $projectDao->getProject($task->getProjectId());
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();///never again cast an array to an object.
             try {
@@ -457,7 +459,7 @@ class TaskRouteHandler
             }
         }
 
-        $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
+        $org = $orgDao->getOrganisation($project->getOrganisationId());
         $taskVersion = $taskDao->getTaskVersion($task->getId());
 
         $file_previously_uploaded = false;
@@ -499,9 +501,9 @@ class TaskRouteHandler
         $orgDao = new OrganisationDao();
         $tipDao = new TipDao();
 
-        $task = $taskDao->getTask(array('id' => $task_id));
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
-        $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
+        $task = $taskDao->getTask($task_id);
+        $project = $projectDao->getProject($task->getProjectId());
+        $org = $orgDao->getOrganisation($project->getOrganisationId());
         $tip = $tipDao->getTip();
         
         $app->view()->appendData(array(
@@ -517,7 +519,7 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
-        $currentTask = $taskDao->getTask(array("id" => $task_id));
+        $currentTask = $taskDao->getTask($task_id);
         $currentTaskStatus = $currentTask->getTaskStatus();
 
         $word_count_err = null;
@@ -532,14 +534,14 @@ class TaskRouteHandler
         <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>"
         .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-alter.js");
 
-        $task = $taskDao->getTask(array('id' => $task_id));
+        $task = $taskDao->getTask($task_id);
 
         $preReqTasks = $taskDao->getTaskPreReqs($task_id); 
         if (!$preReqTasks) {
             $preReqTasks = array();
         }
 
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $project = $projectDao->getProject($task->getProjectId());
         $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
         foreach ($projectTasks as $projectTask) {
             if ($projectTask->getTaskStatus() == TaskStatusEnum::IN_PROGRESS ||
@@ -761,9 +763,9 @@ class TaskRouteHandler
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $task_id));
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
-        $user = $userDao->getUser(array('id' => $user_id));
+        $task = $taskDao->getTask($task_id);
+        $project = $projectDao->getProject($task->getProjectId());
+        $user = $userDao->getUser($user_id);
         
         if ($task_file_info = $taskDao->getTaskInfo($task_id)) {
             $app->view()->appendData(array(
@@ -832,7 +834,7 @@ class TaskRouteHandler
                      "taskMetaData" => $taskMetaData
         ));        
         
-        $org = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));
+        $org = $orgDao->getOrganisation($project->getOrganisationId());
         $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
         
@@ -867,53 +869,45 @@ class TaskRouteHandler
         $deadlineError = null;
         $taskPreReqs = array();
         $task = new Task();
-        $project = $projectDao->getProject(array('id' => $project_id));
+        $project = $projectDao->getProject($project_id);
         $projectTasks = $projectDao->getProjectTasks($project_id);
         $task->setProjectId($project_id);
 
-        //task inherits souce details from project
-        $task->setSourceLanguageCode($project->getSourceLanguageCode());
-        $task->setSourceCountryCode($project->getSourceCountryCode());
-
-        //default status, changed in DB on insert
-        $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-
-        if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-
-            if ($post->title != "") {
-                $task->setTitle($post->title);
+        if($post = $app->request()->post()) { 
+                    
+            if(isset($post['title'])) {
+                $task->setTitle($post['title']);
             } else {
                 $titleError = "Title must not be blank";
             }
 
-            if ($post->comment != "") {
-                $task->setComment($post->comment);
-            }
+            if(isset($post['comment'])) $task->setComment($post['comment']);            
+            
+            $projectSourceLocale = $project->getSourceLocale();
+            $taskSourceLocale = new Locale();
+            $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+            $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());            
+            $task->setSourceLocale($taskSourceLocale);
+            $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
+            
+            $taskTargetLocale = new Locale();            
+            if(isset($post['targetLanguage'])) $taskTargetLocale->setLanguageCode($post['targetLanguage']);
+            if(isset($post['targetCountry'])) $taskTargetLocale->setCountryCode($post['targetCountry']);
+            $task->setTargetLocale($taskTargetLocale);
+            
+            if(isset($post['taskType'])) $task->setTaskType($post['taskType']);            
 
-            if ($post->targetCountry != "") {
-                $task->setTargetCountryCode($post->targetCountry);
-            }
-
-            if ($post->targetLanguage != "") {
-                $task->setTargetLanguageCode($post->targetLanguage);
-            }
-
-            if ($post->taskType != "") {
-                $task->setTaskType($post->taskType);
-            }
-
-            if (ctype_digit($post->word_count)) {
-                $task->setWordCount($post->word_count);
-            } else if ($post->word_count != "") {
+            if(ctype_digit($post['word_count'])) {
+                $task->setWordCount($post['word_count']);
+            } else if($post['word_count'] != "") {
                 $wordCountError = "Word Count must be numeric";
             } else {
                 $wordCountError = "Word Count cannot be blank";
             }
 
-            if ($post->deadline != "") {
-                if (TemplateHelper::isValidDateTime($post->deadline) == true) {
-                    $unixTime = strtotime($post->deadline);
+            if(isset($post['deadline'])) {
+                if(TemplateHelper::isValidDateTime($post['deadline']) == true) {
+                    $unixTime = strtotime($post['deadline']);
                     $date = date("Y-m-d H:i:s", $unixTime);  
                     $task->setDeadline($date);
                 } else {
@@ -921,9 +915,7 @@ class TaskRouteHandler
                 }
             }
 
-            if (isset($post->published)) {
-                $task->setPublished("1");
-            }
+            if(isset($post['published'])) $task->setPublished("1");
 
             if(is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 $newTask = $taskDao->createTask($task);
@@ -937,9 +929,9 @@ class TaskRouteHandler
                     $upload_error = "File error: " . $e->getMessage();
                 }
                 
-                if(isset($post->totalTaskPreReqs) && $post->totalTaskPreReqs > 0) {
-                    for($i=0; $i < $post->totalTaskPreReqs; $i++) {
-                        if(isset($post->{"preReq_".$i})) $taskDao->addTaskPreReq($newTaskId, $post->{"preReq_".$i});
+                if(isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
+                    for($i=0; $i < $post['totalTaskPreReqs']; $i++) {
+                        if(isset($post["preReq_$i"])) $taskDao->addTaskPreReq($newTaskId, $post["preReq_$i"]);
                     }
                 }
                 
@@ -957,10 +949,10 @@ class TaskRouteHandler
         $countries = TemplateHelper::getCountryList();
 
         $taskTypes = array();
-        $taskTypes[TaskTypeEnum::CHUNKING] = "Chunking";
+        $taskTypes[TaskTypeEnum::SEGMENTATION] = "Segmentation";
         $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
         $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
-        $taskTypes[TaskTypeEnum::POSTEDITING] = "Postediting";
+        $taskTypes[TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
         
         $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
@@ -996,7 +988,7 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
-        $task = $taskDao->getTask(array('id' => $taskId));
+        $task = $taskDao->getTask($taskId);
         $app->view()->appendData(array(
                 "project_id" => $task->getProjectId(),
                 "task_id"    => $task->getId()
@@ -1005,7 +997,7 @@ class TaskRouteHandler
         $app->render("task.created.tpl");
     }
     
-    public function taskChunking($task_id)
+    public function taskSegmentation($task_id)
     {  
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
@@ -1014,10 +1006,10 @@ class TaskRouteHandler
         $user_id = UserSession::getCurrentUserID();
         $taskTypeErr = null;        
         
-        $task = $taskDao->getTask(array('id' => $task_id)); 
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $task = $taskDao->getTask($task_id); 
+        $project = $projectDao->getProject($task->getProjectId());
         $numTaskTypes = Settings::get("ui.task_types");
-        $maxChunks = Settings::get("site.max_chunking");
+        $maxSegments = Settings::get("site.max_segmentation");
         $taskTypeColours = array();
         
         for($i=1; $i <= $numTaskTypes; $i++) {
@@ -1036,13 +1028,13 @@ class TaskRouteHandler
             $fileHashes = array();
             foreach($_FILES as $file) {
                 if($file["error"] != UPLOAD_ERR_OK) {
-                    $errors["missingFile"] = "You have not selected a <b>Chunked File</b> to upload.";
+                    $errors["missingFile"] = "You have not selected a <b>Segmented File</b> to upload.";
                     break;
                 }
                 if(!in_array($file["name"],$fileNames)) {
                     $fileNames[] = $file["name"];
                 } else {
-                    $errors["uniqueFileName"] = "Each <b>Chunked File</b> that you upload must have a <b>unique file name.</b>";
+                    $errors["uniqueFileName"] = "Each <b>Segmented File</b> that you upload must have a <b>unique file name.</b>";
                     break;
                 }
                     
@@ -1059,13 +1051,13 @@ class TaskRouteHandler
             }
             
             if(empty($errors)) {
-                $chunkValue = $post["chunkValue"];
+                $segmentationValue = $post["segmentationValue"];
                 $upload_error = false;      
                 $translationTaskIds = array();
                 $proofreadTaskIds = array();
-                for($i=0; $i < $chunkValue && !$upload_error; $i++) {                    
+                for($i=0; $i < $segmentationValue && !$upload_error; $i++) {                    
                     try {
-                        TemplateHelper::validateFileHasBeenSuccessfullyUploaded("chunkUpload_".$i);
+                        TemplateHelper::validateFileHasBeenSuccessfullyUploaded("segmentationUpload_".$i);
                         $taskModel = new Task();
                         $this->setTaskModelData($taskModel, $project, $task, $i);
                         if(isset($post["translation_0"])) {
@@ -1073,9 +1065,9 @@ class TaskRouteHandler
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             $createdTranslation = $taskDao->createTask($taskModel);
                             try {                    
-                                $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);                    
+                                $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);                    
                                 $error_message = $taskDao->saveTaskFile($createdTranslation->getId(),
-                                        urlencode($_FILES['chunkUpload_'.$i]['name']), $user_id, $filedata);
+                                        urlencode($_FILES['segmentationUpload_'.$i]['name']), $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = "File error: {$e->getMessage()}";
@@ -1088,9 +1080,9 @@ class TaskRouteHandler
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             $createdProofReading = $taskDao->createTask($taskModel);
                             try {                    
-                                $filedata = file_get_contents($_FILES['chunkUpload_'.$i]['tmp_name']);
+                                $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
                                 $error_message = $taskDao->saveTaskFile($createdProofReading->getId(),
-                                        urlencode($_FILES['chunkUpload_'.$i]['name']), $user_id, $filedata);
+                                        urlencode($_FILES['segmentationUpload_'.$i]['name']), $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
                                 $error_message = "File error: {$e->getMessage()}";
@@ -1106,38 +1098,36 @@ class TaskRouteHandler
                 $taskModel = new Task();
                 $this->setTaskModelData($taskModel, $project, $task, 0);                       
                 $taskModel->setWordCount($task->getWordCount());
-                $taskModel->setTaskType(TaskTypeEnum::POSTEDITING);                         
-                $createdPostEditing = $taskDao->createTask($taskModel);
-                $createdPostEditingId = $createdPostEditing->getId();
+                $taskModel->setTaskType(TaskTypeEnum::DESEGMENTATION);                         
+                $createdDesegmentation = $taskDao->createTask($taskModel);
+                $createdDesegmentationId = $createdDesegmentation->getId();
 
                 try {                    
-                    $filedata = file_get_contents($_FILES["chunkUpload_0"]["tmp_name"]);                    
-                    $error_message = $taskDao->saveTaskFile($createdPostEditing->getId(),
-                                    urlencode($_FILES['chunkUpload_0']['name']), $user_id, $filedata);
+                    $filedata = file_get_contents($_FILES["segmentationUpload_0"]["tmp_name"]);                    
+                    $error_message = $taskDao->saveTaskFile($createdDesegmentation->getId(),
+                                    urlencode($_FILES['segmentationUpload_0']['name']), $user_id, $filedata);
                 } catch (Exception  $e) {
                     $upload_error = true;
                     $error_message = "File error: " . $e->getMessage();
-                }                 
-
+                }  
+                
                 $task->setTaskStatus(TaskStatusEnum::COMPLETE);
-                $taskDao->updateTask($task); 
-
-                for($i=0; $i < $chunkValue; $i++) {
+                $taskDao->updateTask($task);
+                for($i=0; $i < $segmentationValue; $i++) {
                     if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {   
                         $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
                         $taskDao->addTaskPreReq($proofreadTaskIds[$i], $translationTaskIds[$i]);
-                        $taskDao->addTaskPreReq($createdPostEditingId, $proofreadTaskIds[$i]);
+                        $taskDao->addTaskPreReq($createdDesegmentationId, $proofreadTaskIds[$i]);
                     }
                     if(!isset($post["translation_0"]) && isset($post["proofreading_0"])) {
                         $taskDao->addTaskPreReq($proofreadTaskIds[$i], $task_id);
-                        $taskDao->addTaskPreReq($createdPostEditingId, $proofreadTaskIds[$i]);
+                        $taskDao->addTaskPreReq($createdDesegmentationId, $proofreadTaskIds[$i]);
                     }
                     if(isset($post["translation_0"]) && !isset($post["proofreading_0"])) {   
                         $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
-                        $taskDao->addTaskPreReq($createdPostEditingId, $translationTaskIds[$i]);
+                        $taskDao->addTaskPreReq($createdDesegmentationId, $translationTaskIds[$i]);
                     }
                 }
-            
                 $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
             } else {
                 $app->view()->appendData(array(
@@ -1146,19 +1136,19 @@ class TaskRouteHandler
             }
         }      
         
-        $extraScripts = file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-chunking.js");
+        $extraScripts = file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-segmentation.js");
         
         $app->view()->appendData(array(
             "project"           => $project,
             "task"              => $task,
             "taskTypeColours"   => $taskTypeColours,
-            "maxChunks"         => $maxChunks,
+            "maxSegmentation"   => $maxSegments,
             "languages"         => $language_list,
             "countries"         => $countries,
-            "extra_scripts"      => $extraScripts
+            "extra_scripts"     => $extraScripts
         ));
         
-        $app->render("task-chunking.tpl");
+        $app->render("task-segmentation.tpl");
     }
     
     public function taskOrgFeedback($task_id)
@@ -1169,8 +1159,8 @@ class TaskRouteHandler
         $projectDao = new ProjectDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $task_id));   
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
+        $task = $taskDao->getTask($task_id);   
+        $project = $projectDao->getProject($task->getProjectId());
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
 
@@ -1185,26 +1175,26 @@ class TaskRouteHandler
             if(isset($post->feedback)) {
 
                 if ($post->feedback != "") {
-                    $taskDao->sendFeedback($task_id, array($claimant->getUserId()), $post->feedback);
+                    $taskDao->sendFeedback($task_id, array($claimant->getId()), $post->feedback);
     
                     $app->flashNow("success", "Feedback sent to 
-                            <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
+                            <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
                             {$claimant->getDisplayName()}</a>.");
                     if(isset($post->revokeTask) && $post->revokeTask) {
                         $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                         $taskDao->updateTask($task);
-                        $taskRevoke = $userDao->unclaimTask($claimant->getUserId(), $task_id);
+                        $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                         if($taskRevoke) {
                             $app->flash("taskSuccess", "<b>Success</b> - The task 
                                 <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
                                 has been revoked from 
-                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
+                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
                                 {$claimant->getDisplayName()}</a>. This user will be notified by e-mail and provided with your feedback.");
                             $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
                         } else {
                             $app->flashNow("error", "<b>Error</b> - Unable to revoke the task ".
                                 "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}\"</a>
-                                from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getUserId()))}\">
+                                from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
                                 {$claimant->getDisplayName()}</a>. Please try again later.");
                         }
                     }
@@ -1234,9 +1224,9 @@ class TaskRouteHandler
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask(array('id' => $task_id));   
-        $project = $projectDao->getProject(array('id' => $task->getProjectId()));
-        $organisation = $orgDao->getOrganisation(array('id' => $project->getOrganisationId()));          
+        $task = $taskDao->getTask($task_id);   
+        $project = $projectDao->getProject($task->getProjectId());
+        $organisation = $orgDao->getOrganisation($project->getOrganisationId());          
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
 
@@ -1244,9 +1234,9 @@ class TaskRouteHandler
             $post = (object) $app->request()->post();
 
             if(isset($post->feedback)) {
-                $taskDao->sendFeedback($task_id, array($claimant->getUserId()), $post->feedback);
+                $taskDao->sendFeedback($task_id, array($claimant->getId()), $post->feedback);
                 if(isset($post->revokeTask) && $post->revokeTask) {
-                    $taskRevoke = $userDao->unclaimTask($claimant->getUserId(), $task_id);
+                    $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                     if($taskRevoke) {
                         $app->flash("success", " The task ".
                               "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".
@@ -1280,12 +1270,16 @@ class TaskRouteHandler
     }
     
     private function setTaskModelData($taskModel, $project, $task, $i) {
-        $taskModel->setTitle($_FILES["chunkUpload_".$i]["name"]);
-        $taskModel->setSourceLanguageCode($project->getSourceLanguageCode());
-        $taskModel->setSourceCountryCode($project->getSourceCountryCode());
-        $taskModel->setTargetLanguageCode($task->getTargetLanguageCode());
-        $taskModel->setTargetCountryCode($task->getTargetCountryCode());
+        $taskModel->setTitle($_FILES["segmentationUpload_$i"]["name"]);
+        
+        $taskModel->setSourceLocale($project->getSourceLocale());
+        $taskModel->setTargetLocale($task->getTargetLocale());
+        
         $taskModel->setProjectId($project->getId());
         $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
     }
 }
+
+$route_handler = new TaskRouteHandler();
+$route_handler->init();
+unset ($route_handler);

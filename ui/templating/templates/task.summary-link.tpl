@@ -3,39 +3,43 @@
     {assign var='task_id' value=$task->getId()}
     {assign var="type_id" value=$task->getTaskType()}    
                          
-    <h2>
-        <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
-    </h2>
-    <p>Type:
-        {if $type_id == TaskTypeEnum::CHUNKING}
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span> 
+        <h2>
+            <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
+        </h2>
+        {if $type_id == TaskTypeEnum::SEGMENTATION}
+            <p>Type: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation</span> 
         {elseif $type_id == TaskTypeEnum::TRANSLATION}
+            <p>Type: 
             <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span>
         {elseif $type_id == TaskTypeEnum::PROOFREADING}
+            <p>Type: 
             <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
-        {elseif $type_id == TaskTypeEnum::POSTEDITING}
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span>
+        {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
+            <p>Type: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation</span>
         {/if}                
     </p>
 
     <p>
-        From: <strong>{TemplateHelper::getTaskSourceLanguage($task)}</strong>
+        From: <strong>{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}</strong>
     </p>   
-        
+
     <p>
-        To: <strong>{TemplateHelper::getTaskTargetLanguage($task)}</strong>
+        To: <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
     </p>
 
-    {assign var="taskTags" value=$task->getTagList()}
+    {assign var="taskTags" value=$task['Project']->getTagList()}
     {if !empty($taskTags)}
         <p>
             Tags:
-            {foreach from=$task->getTagList() item=tag}
+            {foreach from=$taskTags item=tag}
                 {assign var="label" value=$tag->getLabel()}
                 <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
             {/foreach}
         </p>
     {/if}
+    
     {if $task->getWordCount()}
         <p>Word Count: <strong>{$task->getWordCount()|number_format}</strong></p>
     {/if}      

@@ -6,14 +6,14 @@
  * @author sean
  */
 
-require_once "../Common/models/Register.php";
+require_once __DIR__."/../../Common/models/Register.php";
 
 class RegisterAPI {
     
     public  $email;
     public  $pass;
     
-    public function __construct($e = "", $p = "")
+    public function __construct($e = "test@test.org", $p = "test")
     {         
         $this->email = $e;
         $this->pass = $p;
@@ -25,6 +25,8 @@ class RegisterAPI {
                                                         function ($format = ".json") {
             
             $data = new Register();
+            $data->setPassword("test");
+            $data->setEmail("test@test.rog");
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getRegisterTemplate');
         
@@ -32,11 +34,14 @@ class RegisterAPI {
                                                         function ($format = ".json") {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
+//            $data = new Register();
+//            $data->setPassword("test");
+//            $data->setEmail("test@test.rog");
+//            $data= $data->serialize();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Register", $data);
-            $dao = new UserDao;
-            $data = $dao->apiRegister($data->getEmail(), $data->getPassword());
+            $data = $client->deserialize($data,"Register");
+//            $data = $client->cast("Register", $data);
+            $data = UserDao::apiRegister($data->getEmail(), $data->getPassword());
             if (is_array($data) && isset($data[0])) {
                 $data=$data[0];
             }

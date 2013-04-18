@@ -6,8 +6,7 @@
  * @author sean
  */
 
-require_once 'DataAccessObjects/TagsDao.class.php';
-require_once 'DataAccessObjects/TaskTags.class.php';
+require_once __DIR__."/../DataAccessObjects/TagsDao.class.php";
 
 class Tags {
     
@@ -19,11 +18,10 @@ class Tags {
 
             $topTags = Dispatcher::clenseArgs('topTags', HttpMethodEnum::GET, false);
 
-            $dao = new TagsDao();
             if ($topTags) {
-                Dispatcher::sendResponce(null, $dao->getTopTags($limit), null, $format);
+                Dispatcher::sendResponce(null, TagsDao::getTopTags($limit), null, $format);
             } else { 
-                Dispatcher::sendResponce(null, $dao->getTag(array("limit" => $limit)), null, $format);
+                Dispatcher::sendResponce(null, TagsDao::getTag(null,null,$limit), null, $format);
             }
         }, 'getTags');
         
@@ -42,8 +40,7 @@ class Tags {
                     }
                 }
             }
-            $dao = new TagsDao();
-            $data = $dao->find(array('label' => $label));
+            $data = TagsDao::getTag(null,$label);
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -65,8 +62,7 @@ class Tags {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $dao = new TagsDao();
-            $data = $dao->getTag(array("id" => $id));
+            $data = TagsDao::getTag($id);
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -77,11 +73,10 @@ class Tags {
                                                         function ($format = ".json") {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $client->deserialize($data);
-            $client->cast("Tag", $data);
+            $data=$client->deserialize($data,"Tag");
+//            $client->cast("Tag", $data);
             $data->setBadgeId(null);
-            $dao = new TagsDao();
-            Dispatcher::sendResponce(null, $dao->save($tag), null, $format);
+            Dispatcher::sendResponce(null, TagsDao::save($tag), null, $format);
         }, 'createTag');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tags/:id/',
@@ -93,10 +88,9 @@ class Tags {
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Tag", $data);
-            $dao = new TagsDao();
-            Dispatcher::sendResponce(null, $dao->save($data), null, $format);
+            $data = $client->deserialize($data,"Tag");
+//            $data = $client->cast("Tag", $data);
+            Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
         }, 'updateTag');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tags/:id/',
@@ -106,15 +100,13 @@ class Tags {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $dao = new TagsDao();
-            Dispatcher::sendResponce(null, $dao->delete($id), null, $format);
+            Dispatcher::sendResponce(null, TagsDao::delete($id), null, $format);
         }, 'deleteTag');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:id/tasks(:format)/',
                                                         function ($id, $format=".json") {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
-            $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->getTasksWithTag($id, $limit), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::getTasksWithTag($id, $limit), null, $format);
         }, 'getTaskForTag');
     }
 }

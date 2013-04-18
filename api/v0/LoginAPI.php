@@ -6,7 +6,7 @@
  * @author sean
  */
 
-require_once 'DataAccessObjects/UserDao.class.php';
+require_once __DIR__.'/../DataAccessObjects/UserDao.class.php';
 
 class LoginAPI {
     
@@ -31,10 +31,9 @@ class LoginAPI {
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/login(:format)/', function ($format = ".json") {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast("Login", $data);
-            $dao = new UserDao;
-            $data = $dao->apiLogin($data->getEmail(), $data->getPassword());
+            $data = $client->deserialize($data,"Login");
+            
+            $data = UserDao::apiLogin($data->getEmail(), $data->getPassword());
 //            if (is_array($data)) {
 //                $data = $data[0];
 //            }

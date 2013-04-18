@@ -42,7 +42,7 @@
                     {else}
                         {assign var="displayName" value=$user->getEmail()}
                     {/if}
-                    {assign var="user_id" value=$user->getUserId()}
+                    {assign var="user_id" value=$user->getId()}
                     <li>
                         <div class="span8">
                             <h4>Display Name:</h4>
@@ -52,7 +52,7 @@
                         </div>
                         <div class="right">
                             <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="">
-                                <input type="hidden" name="user_id" value="{$user->getUserId()}" />
+                                <input type="hidden" name="user_id" value="{$user->getId()}" />
                                 <input type="hidden" value="Remove" onClick="return confirmPost()" />
                                 <a href="#" onclick="this.parentNode.submit()" class="pull-right btn btn-inverse">
                                     <i class="icon-fire icon-white"></i> Remove Badge

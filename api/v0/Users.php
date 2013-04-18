@@ -6,10 +6,10 @@
  * @author sean
  */
 
-require_once 'DataAccessObjects/UserDao.class.php';
-require_once 'DataAccessObjects/TaskDao.class.php';
-require_once 'lib/Notify.class.php';
-require_once 'lib/NotificationTypes.class.php';
+require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
+require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
+require_once __DIR__."/../lib/Notify.class.php";
+require_once __DIR__."/../lib/NotificationTypes.class.php";
 
 class Users {
     
@@ -29,18 +29,13 @@ class Users {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            
-            $role = Dispatcher::clenseArgs('role', HttpMethodEnum::GET, false);
-            $dao = new UserDao();
-            if (!$role) {
-                $data = $dao->getUser($id, null, null, null, null, null, null, null, null);
-            } else {
-                $data = $dao->find(array("user_id" => $id,
-                                        "role" => $role));
-            }
+
+            $data = UserDao::getUser($id);
+
             if (is_array($data)) {
                 $data = $data[0];
             }
+           
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUser');
         
@@ -52,8 +47,7 @@ class Users {
                 $format = '.'.$org[1];
                 $org = $org[0];
             }
-            $dao = new OrganisationDao();
-            $data = $dao->revokeMembership($org, $id);
+            $data = OrganisationDao::revokeMembership($org, $id);
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -75,8 +69,7 @@ class Users {
                     }
                 }
             }
-            $dao = new UserDao();
-            $data = $dao->getUser(null, $email, null, null, null, null, null, null, null);
+            $data = UserDao::getUser(null, $email);
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -87,8 +80,7 @@ class Users {
                 function ($userId, $orgId, $format = '.json')
                 {
                     $ret = false;
-                    $userDao = new UserDao();
-                    $ret = $userDao->isAdmin($userId, $orgId);
+                    $ret = UserDao::isAdmin($userId, $orgId);
                     Dispatcher::sendResponce(null, $ret, null, $format);
                 }, 'isAdmin');
        
@@ -100,8 +92,7 @@ class Users {
                 $format = '.'.$taskID[1];
                 $taskID = $taskID[0];
             }
-            $dao = new UserDao();
-            Dispatcher::sendResponce(null, $dao->isSubscribedToTask($id, $taskID), null, $format);
+            Dispatcher::sendResponce(null, UserDao::isSubscribedToTask($id, $taskID), null, $format);
         }, 'userSubscribedToTask');        
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/subscribedToProject/:id/:projectID/',
@@ -112,20 +103,17 @@ class Users {
                 $format = '.'.$projectID[1];
                 $projectID = $projectID[0];
             }
-            $dao = new UserDao();
-            Dispatcher::sendResponce(null, $dao->isSubscribedToProject($id, $projectID), null, $format);
+            Dispatcher::sendResponce(null, UserDao::isSubscribedToProject($id, $projectID), null, $format);
         }, 'userSubscribedToProject');  
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/orgs(:format)/',
                                                         function ($id, $format = ".json") {
-            $dao = new UserDao();
-            Dispatcher::sendResponce(null, $dao->findOrganisationsUserBelongsTo($id), null, $format);
+            Dispatcher::sendResponce(null, UserDao::findOrganisationsUserBelongsTo($id), null, $format);
         }, 'getUserOrgs');
        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/badges(:format)/',
                                                         function ($id, $format = ".json") {
-            $dao = new UserDao();
-            Dispatcher::sendResponce(null, $dao->getUserBadgesbyID($id), null, $format);
+            Dispatcher::sendResponce(null, UserDao::getUserBadges($id), null, $format);
         }, 'getUserbadges');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/badges(:format)/',
@@ -133,10 +121,9 @@ class Users {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast('Badge', $data);
-            $dao = new BadgeDao();
-            Dispatcher::sendResponce(null, $dao->assignBadge($id, $data->getId()), null, $format);
+            $data = $client->deserialize($data,'Badge');
+//            $data = $client->cast('Badge', $data);
+            Dispatcher::sendResponce(null, BadgeDao::assignBadge($id, $data->getId()), null, $format);
         }, 'addUserbadges');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/badges/:badge/',
@@ -147,8 +134,7 @@ class Users {
                  $format = '.'.$badge[1];
                  $badge = $badge[0];
             }
-            $dao = new BadgeDao();
-            Dispatcher::sendResponce(null, $dao->assignBadge($id, $badge), null, $format);
+            Dispatcher::sendResponce(null, BadgeDao::assignBadge($id, $badge), null, $format);
         }, 'addUserbadgesByID');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/badges/:badge/',
@@ -158,22 +144,19 @@ class Users {
                 $format = '.'.$badge[1];
                 $badge = $badge[0];
             }
-            $dao = new BadgeDao();
-            Dispatcher::sendResponce(null, $dao->removeUserBadgeByID($id, $badge), null, $format);
+            Dispatcher::sendResponce(null, BadgeDao::removeUserBadgeByID($id, $badge), null, $format);
         }, 'deleteUserbadgesByID');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
-            $dao = new UserDao();
-            Dispatcher::sendResponce(null, $dao->getUserTags($id, $limit), null, $format);
+            Dispatcher::sendResponce(null, UserDao::getUserTags($id, $limit), null, $format);
         }, 'getUsertags');
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/taskStreamNotification(:format)/',
                 function ($id, $format = ".json")
                 {
-                    $userDao = new UserDao();
-                    $data = $userDao->getUserTaskStreamNotification($id);
+                    $data = UserDao::getUserTaskStreamNotification($id);
                     Dispatcher::sendResponce(null, $data, null, $format);
                 }, 'getUserTaskStreamNotification');
 
@@ -195,8 +178,7 @@ class Users {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tasks(:format)/',
                                                         function ($id, $format = ".json") {
-            $dao = new TaskDao();
-            Dispatcher::sendResponce(null, $dao->getUserTasksByID($id), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::getUserTasks($id), null, $format);
         }, 'getUsertasks');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tasks(:format)/',
@@ -204,13 +186,11 @@ class Users {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast('Task', $data);
-            $dao = new TaskDao;
-            Dispatcher::sendResponce(null, array("result" => $dao->claimTaskbyID($data->getId(), $id)), null, $format);
-            $dao = new UserDao();
-
-            Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
+            $data = $client->deserialize($data,'Task');
+//            $data = $client->cast('Task', $data);
+            Dispatcher::sendResponce(null, array("result" => TaskDao::claimTask($data->getId(), $id)), null, $format);
+            
+            Notify::notifyUserClaimedTask($id, $data->getId());
             Notify::sendEmailNotifications($data->getId(), NotificationTypes::CLAIM);
         }, 'userClaimTask');
        
@@ -220,13 +200,11 @@ class Users {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast('Task', $data);
-            $dao = new TaskDao;
-            Dispatcher::sendResponce(null,$dao->claimTaskbyID($data->getId(), $id), null, $format);
-            $dao = new UserDao();
+            $data = $client->deserialize($data,'Task');
+//            $data = $client->cast('Task', $data);
+            Dispatcher::sendResponce(null,TaskDao::claimTask($data->getId(), $id), null, $format);
 
-            Notify::notifyUserClaimedTask($dao->find(array("user_id" => $id)), $data);
+            Notify::notifyUserClaimedTask($id, $data->getId());
             Notify::sendEmailNotifications($data->getId(), NotificationTypes::CLAIM);
         }, 'userClaimTaskByID');
         
@@ -239,8 +217,7 @@ class Users {
                  $format = '.'.$tID[1];
                  $tID = $tID[0];
             }
-            $dao = new TaskDao;
-            Dispatcher::sendResponce(null, $dao->unClaimTaskbyID($tID,$id), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::unClaimTask($tID,$id), null, $format);
         }, 'userUnClaimTask');
 
         
@@ -250,7 +227,6 @@ class Users {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
             $filter = Dispatcher::clenseArgs('filter', HttpMethodEnum::GET, '');
             $filters = APIHelper::parseFilterString($filter);
-
             $filter = "";
             if (isset($filters['taskType']) && $filters['taskType'] != '') {
                 $filter .= " AND t.`task-type_id`=".$filters['taskType'];
@@ -274,8 +250,7 @@ class Users {
                                                         function ($id, $format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
-            $dao = new TaskDao();
-            $data = $dao->getUserArchivedTasksByID($id, $limit);
+            $data = TaskDao::getUserArchivedTasks($id, $limit);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserArchivedTasks');
         
@@ -289,15 +264,14 @@ class Users {
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast('User', $data);
-            $dao = new UserDao();
-            $data->setUserId($id);
-            $data = $dao->save($data);
-            $data = $client->cast("User", $data);
-            if (is_array($data)) {
-                $data = $data[0];
-            }
+            $data = $client->deserialize($data,'User');
+//            $data = $client->cast('User', $data);
+            $data->setId($id);
+            $data = UserDao::save($data);
+//            $data = $client->cast("User", $data);
+//            if (is_array($data)) {
+//                $data = $data[0];
+//            }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'updateUser');
         
@@ -305,10 +279,9 @@ class Users {
                                                         function ($id, $format = ".json"){
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast('Tag', $data);
-            $dao = new UserDao();
-            $data = $dao->likeTag($id, $data->getId());
+            $data = $client->deserialize($data,'Tag');
+//            $data = $client->cast('Tag', $data);
+            $data = UserDao::likeTag($id, $data->getId());
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -322,8 +295,7 @@ class Users {
                 $format = '.'.$tagId[1];
                 $tagId = $tagId[0];
             }
-            $dao = new UserDao();
-            $data = $dao->likeTag($id, $tagId);
+            $data = UserDao::likeTag($id, $tagId);
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -337,8 +309,7 @@ class Users {
                 $format = '.'.$tagId[1];
                 $tagId = $tagId[0];
             }
-            $dao = new UserDao();
-            $data = $dao->removeTag($id, $tagId);
+            $data = UserDao::removeTag($id, $tagId);
             if (is_array($data)) {
                 $data = $data[0];
             }
@@ -348,19 +319,17 @@ class Users {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tracked_tasks(:format)/',
                                                         function ($id, $format = ".json") {
             
-            $dao = new UserDao();
-            $data=$dao->getTrackedTasks($id);
+            $data=UserDao::getTrackedTasks($id);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTrackedTasks');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tracked_tasks(:format)/',
                                                         function ($id, $format=".json"){
-            $dao = new UserDao();
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data);
-            $data = $client->cast('Task', $data);
-            $data = $dao->trackTask($id, $data->getId());
+            $data = $client->deserialize($data,'Task');
+//            $data = $client->cast('Task', $data);
+            $data = UserDao::trackTask($id, $data->getId());
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'addUserTrackedTasks');
         
@@ -372,8 +341,7 @@ class Users {
                 $format = '.'.$taskID[1];
                 $taskID = $taskID[0];
             }
-            $dao = new UserDao();
-            $data = $dao->trackTask($id, $taskID);
+            $data = UserDao::trackTask($id, $taskID);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'addUserTrackedTasksById');
         
@@ -385,29 +353,25 @@ class Users {
                 $format = '.'.$taskID[1];
                 $taskID = $taskID[0];
             }
-            $dao = new UserDao();
-            $data=$dao->ignoreTask($id, $taskID);
+            $data=UserDao::ignoreTask($id, $taskID);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'deleteUserTrackedTasksById');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/passwordResetRequest(:format)/',
                                                         function ($id, $format = ".json") {
-            $dao = new UserDao();
-            $data = $dao->hasRequestedPasswordResetID($id) ? 1 : 0;
+            $data = UserDao::hasRequestedPasswordReset($id) ? 1 : 0;
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'hasUserRequestedPasswordReset');
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/passwordResetRequest/time(:format)/',
                                                         function ($id, $format = ".json"){
-            $dao = new UserDao();
-            $resetRequest = $dao->getPasswordResetRequests(array('user_id' => $id));
+            $resetRequest = UserDao::getPasswordResetRequests($id);
             Dispatcher::sendResponce(null, $resetRequest->getRequestTime(), null, $format);
         }, "PasswordResetRequestTime");
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/passwordResetRequest(:format)/',
                                                         function ($id, $format=".json"){
-            $dao = new UserDao();
-            $data = $dao->createPasswordReset($id);
+            $data = UserDao::createPasswordReset($id);
             Dispatcher::sendResponce(null, array("result" => $data,
                 "message" => $data == 1 ? "a password reset request has been created and sent to your contact address"
                 : "password reset request already exists"), null, $format);
@@ -415,8 +379,7 @@ class Users {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/projects(:format)/',
                                                         function ($id, $format=".json"){
-            $dao = new UserDao();
-            $data = $dao->getTrackedProjects($id);
+            $data = UserDao::getTrackedProjects($id);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTrackedProjects'); 
         
@@ -427,8 +390,7 @@ class Users {
                 $format = '.'.$pID[1];
                 $pID = $pID[0];
             }
-            $dao = new UserDao();
-            $data = $dao->trackProject($pID,$id);
+            $data = UserDao::trackProject($pID,$id);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'userTrackProject'); 
         
@@ -439,11 +401,97 @@ class Users {
                 $format = '.'.$pID[1];
                 $pID = $pID[0];
             }
-            $dao = new UserDao();
-            $data = $dao->unTrackProject($pID,$id);
+            $data = UserDao::unTrackProject($pID,$id);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'userUnTrackProject'); 
         
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/personalInfo(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+
+            $data = UserDao::getPersonalInfo(null,$id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getUserPersonalInfo');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/personalInfo(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+            
+            $data = Dispatcher::getDispatcher()->request()->getBody();
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data, "UserPersonalInformation");    
+            
+            Dispatcher::sendResponce(null, UserDao::createPersonalInfo($data), null, $format);
+
+        }, 'createUserPersonalInfo');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/personalInfo(:format)/',
+                                                        function ($id, $format = ".json") {
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+            $data = Dispatcher::getDispatcher()->request()->getBody();
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data,'UserPersonalInformation');
+            $data = UserDao::updatePersonalInfo($data);
+
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'updateUserPersonalInfo');
+        
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/secondaryLanguages(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+
+            $data = UserDao::getSecondaryLanguages($id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getSecondaryLanguages');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/secondaryLanguages(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+            
+            $data = Dispatcher::getDispatcher()->request()->getBody();
+            $client = new APIHelper($format);
+            $data = $client->deserialize($data, "Locale");    
+            
+            Dispatcher::sendResponce(null, UserDao::createSecondaryLanguage($id, $data), null, $format);
+
+        }, 'createSecondaryLanguage');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/removeSecondaryLanguage/:userId/:languageCode/:countryCode/',
+                                                        function ($userId,$languageCode,$countryCode, $format=".json"){
+            if (strstr($countryCode, '.')) {
+                $countryCode = explode('.', $countryCode);
+                $format = '.'.$countryCode[1];
+                $countryCode = $countryCode[0];
+            }
+            $data = UserDao::deleteSecondaryLanguage($userId, $languageCode, $countryCode);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'deleteSecondaryLanguage'); 
     }
 }
 Users::init();

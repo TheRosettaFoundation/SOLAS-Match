@@ -1,10 +1,12 @@
 <?php
 
-require_once "ui/DataAccessObjects/UserDao.class.php";
-require_once "Common/models/Register.php";
-require_once "Common/models/Login.php";
-require_once "Common/models/PasswordResetRequest.php";
-require_once "Common/models/PasswordReset.php";
+
+require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
+require_once __DIR__."/../../Common/models/Register.php";
+require_once __DIR__."/../../Common/models/Login.php";
+require_once __DIR__."/../../Common/models/PasswordResetRequest.php";
+require_once __DIR__."/../../Common/models/PasswordReset.php";
+require_once __DIR__."/../../Common/models/Locale.php";
 
 class UserRouteHandler
 {
@@ -79,8 +81,8 @@ class UserRouteHandler
         if ($current_user_id == null) {
             $tasks = $taskDao->getTopTasks(10);
             for ($i = 0; $i < count($tasks); $i++) {
-                $tasks[$i]['Project'] = $projectDao->getProject(array('id' => $tasks[$i]->getProjectId()));
-                $tasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $tasks[$i]['Project']->getOrganisationId()));
+                $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
+                $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
             }
 
             $app->view()->appendData(array(
@@ -89,13 +91,13 @@ class UserRouteHandler
 
         } else {
             $taskTypes = array();
-            $taskTypes[TaskTypeEnum::CHUNKING] = "Chunking";
+            $taskTypes[TaskTypeEnum::SEGMENTATION] = "Segmentation";
             $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
             $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
-            $taskTypes[TaskTypeEnum::POSTEDITING] = "Post-Editing";
+            $taskTypes[TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
 
             $langDao = new LanguageDao();
-            $languageList = $langDao->getLanguage(null);
+            $languageList = $langDao->getLanguages();
 
             $filter = array();
             $selectedType = "";
@@ -122,8 +124,8 @@ class UserRouteHandler
 
             $tasks = $userDao->getUserTopTasks($current_user_id, 10, $filter);
             for ($i = 0; $i < count($tasks); $i++) {
-                $tasks[$i]['Project'] = $projectDao->getProject(array('id' => $tasks[$i]->getProjectId()));
-                $tasks[$i]['Org'] = $orgDao->getOrganisation(array('id' => $tasks[$i]['Project']->getOrganisationId()));
+                $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
+                $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
             }
             
             $app->view()->appendData(array(
@@ -188,7 +190,7 @@ class UserRouteHandler
                     $user = $userDao->login($post->email, $post->password);
                     try {                        
                         if (!is_array($user) && !is_null($user)) {
-                            UserSession::setSession($user->getUserId());
+                            UserSession::setSession($user->getId());
                         } else {
                             throw new InvalidArgumentException("Sorry, the  password or username entered is incorrect.
                                                                 Please check the credentials used and try again.");    
@@ -202,7 +204,7 @@ class UserRouteHandler
                                 $app->redirect($app->urlFor($_SESSION["previous_page"]));
                             }
                         }
-                        $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getUserId())));
+                        $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getId())));
                     } catch (InvalidArgumentException $e) {
                         $error = "<p>Unable to log in. Please check your email and password.";
                         $error .= " <a href=\"{$app->urlFor("login")}\">Try logging in again</a>";
@@ -276,24 +278,24 @@ class UserRouteHandler
             $post = (object) $app->request()->post();
             if (isset($post->password_reset)) {
                 if (isset($post->email_address) && $post->email_address != '') {
-                    $user = $userDao->getUser(array('email' => $post->email_address)); 
+                    $user = $userDao->getUserByEmail($post->email_address); 
                     if ($user) {  
-                        $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($user->getUserId());
+                        $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($user->getId());
                         $message = "";
                         if (!$hasUserRequestedPwReset) {
                             //send request
-                            $userDao->requestPasswordReset($user->getUserId());
+                            $userDao->requestPasswordReset($user->getId());
                             $app->flash("success", "Password reset request sent. Check your email
                                                     for further instructions.");
                             $app->redirect($app->urlFor("home"));
                         } else {
                             //get request time
-                            $response = $userDao->getPasswordResetRequestTime($user->getUserId());
+                            $response = $userDao->getPasswordResetRequestTime($user->getId());
                             $app->flashNow("info", "Password reset request was already sent on $response.
                                                      Another email has been sent to your contact address.
                                                      Follow the link in this email to reset your password");
                             //Send request
-                            $userDao->requestPasswordReset($user->getUserId());
+                            $userDao->requestPasswordReset($user->getId());
                         }
                     } else {
                         $app->flashNow("error", "Please enter a valid email address");
@@ -339,7 +341,7 @@ class UserRouteHandler
                 if (isset($post->login)) {
                     $user = $userDao->login($post->email, $post->password);
                     if (!is_array($user) && !is_null($user)) {
-                        UserSession::setSession($user->getUserId());
+                        UserSession::setSession($user->getId());
                     } else {
                         throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
                             Please check the credentials used and try again.");    
@@ -386,15 +388,15 @@ class UserRouteHandler
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
                 $userDao = new UserDao();
-                $user = $userDao->getUser(array('email' => $retvals['contact/email']));
+                $user = $userDao->getUserByEmail($retvals['contact/email']);
                 if(is_array($user)) $user = $user[0];                    
                 if(is_null($user)) {
                     $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));
                     if(is_array($user)) $user = $user[0]; 
-                    UserSession::setSession($user->getUserId());
+                    UserSession::setSession($user->getId());
                     return false;
                 }
-                UserSession::setSession($user->getUserId());
+                UserSession::setSession($user->getId());
                 
             }
             return true;
@@ -404,57 +406,130 @@ class UserRouteHandler
     public static function userPrivateProfile()
     {
         $app = Slim::getInstance();
+        
         $userDao = new UserDao();
-        $user_id = UserSession::getCurrentUserID();
-        $user = $userDao->getUser(array('id' => $user_id));
-
-        $languageDao = new LanguageDao();
-        $countryDao = new CountryDao();
-        $languages = $languageDao->getLanguage(null);
-        $countries = $countryDao->getCountries();
+        $userId = UserSession::getCurrentUserID();
+        $user = $userDao->getUser($userId);
+        $userPersonalInfo = $userDao->getPersonalInfo($userId);
         
         if (!is_object($user)) {
             $app->flash("error", "Login required to access page");
             $app->redirect($app->urlFor("login"));
         }
+
+        $languageDao = new LanguageDao();
+        $countryDao = new CountryDao();
+        $languages=null;
+        if(apc_exists("languages")){ 
+            $languages=apc_fetch("languages");
+        }else{
+            $languages=$languageDao->getLanguages();
+            apc_add("languages", $languages);
+        }
+        $countries =null;
+        if(apc_exists("countries")){ 
+            $countries=apc_fetch("countries");
+        }else{
+            $countries=$countryDao->getCountries();
+            apc_add("languages", $countries);
+        }
         
         if ($app->request()->isPost()) {
-            $displayName = $app->request()->post("name");
-            if ($displayName != null) {
-                $user->setDisplayName($displayName);
+            $post = $app->request()->post();
+            $personalInfo = new UserPersonalInformation(); 
+            $personalInfo->setUserId($userId);
+            
+            if(isset($post["displayName"])) $user->setDisplayName($post["displayName"]);
+            if(isset($post["biography"])) $user->setBiography($post["biography"]);
+            
+            if(isset($post["firstName"])) $personalInfo->setFirstName($post["firstName"]);
+            if(isset($post["lastName"])) $personalInfo->setLastName($post["lastName"]);
+            if(isset($post["mobileNumber"])) $personalInfo->setMobileNumber($post["mobileNumber"]);
+            if(isset($post["businessNumber"])) $personalInfo->setBusinessNumber($post["businessNumber"]);
+            if(isset($post["sip"])) $personalInfo->setSip($post["sip"]);
+            if(isset($post["jobTitle"])) $personalInfo->setJobTitle($post["jobTitle"]);
+            if(isset($post["address"])) $personalInfo->setAddress($post["address"]);
+            if(isset($post["city"])) $personalInfo->setCity($post["city"]);
+            if(isset($post["country"])) $personalInfo->setCountry($post["country"]);
+            
+            $userInfo = $userDao->getPersonalInfo($userId);
+            if($userInfo) {
+                $personalInfo->setId($userInfo->getId());
+                $userDao->updatePersonalInfo($userId, $personalInfo);
+            } else {
+                $userDao->createPersonalInfo($userId, $personalInfo);
             }
             
-            $userBio = $app->request()->post("bio");
-            if ($userBio != null && $userBio != '') {
-                $user->setBiography($userBio);
-            }
-            
-            $nativeLang = $app->request()->post("nLanguage");
-            $langCountry= $app->request()->post("nLanguageCountry");
-            if ($nativeLang != null && $langCountry != null) {
-                $user->setNativeLangId($nativeLang);
-                $user->setNativeRegionId($langCountry);
+            $nativeLang = $post["nativeLanguage"];
+            $langCountry = $post["nativeCountry"];
+            if (isset($nativeLang) && isset($langCountry)) {
+                $nativeLocal = new Locale();
+                
+                $nativeLocal->setLanguageCode($nativeLang);
+                $nativeLocal->setCountryCode($langCountry);
+                $user->setNativeLocale($nativeLocal);
 
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $userDao->addUserBadgeById($user_id, $badge_id);               
+                $userDao->addUserBadgeById($userId, $badge_id);               
+            }            
+
+            if(isset($post["displayName"]) && isset($post["nativeLanguage"]) && isset($post["nativeCountry"])) {
+                $badgeId = BadgeTypes::PROFILE_FILLER;
+                $userDao->addUserBadgeById($userId, $badgeId);               
+            }
+            
+            $currentSecondaryLocales = $userDao->getSecondaryLanguages($userId);
+            
+            $csl= array();
+            if($currentSecondaryLocales){
+                foreach($currentSecondaryLocales as $currLocale) {
+                    $csl[$currLocale->getLanguageCode().'-'.$currLocale->getCountryCode()]=$currLocale;
+                }
+            }
+            $newSecondaryLocales = array();
+
+            for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {               
+                $key = $post["secondaryLanguage_$i"].'-'.$post["secondaryCountry_$i"];
+
+                $locale = new Locale();
+                $locale->setLanguageCode($post["secondaryLanguage_$i"]);
+                $locale->setCountryCode($post["secondaryCountry_$i"]);
+                if(!key_exists($key, $csl))$userDao->createSecondaryLanguage($userId, $locale);
+                $newSecondaryLocales[$key] = $locale;
+            }
+
+            foreach($csl as $key=>$newLocale) {
+                if(!key_exists($key, $newSecondaryLocales)) {
+                    $userDao->deleteSecondaryLanguage($userId, $newLocale);
+                }
             }
             
             if ($user->getDisplayName() != ""
-                    && $user->getNativeLangId() != "" && $user->getNativeRegionId() != "") {
-
-                $userDao->updateUser($user);
+                    && $user->getNativeLocale() != null) {
                 $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $userDao->addUserBadgeById($user_id, $badge_id);               
+                $userDao->addUserBadgeById($userId, $badge_id);               
                 $badge_id = BadgeTypes::PROFILE_FILLER;
-                $userDao->addUserBadgeById($user_id, $badge_id);               
+                $userDao->addUserBadgeById($userId, $badge_id);               
+
             }
             
-            $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getUserId())));
+            $userDao->updateUser($user);
+            
+            $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getId())));
         }
         
-        $app->view()->setData("languages", $languages);
-        $app->view()->setData("countries", $countries);
+        $extraScripts = file_get_contents(__DIR__."/../js/user-private-profile.js");
+        $secondaryLanguages = $userDao->getSecondaryLanguages($userId);
         
+        $app->view()->appendData(array(
+            "user"              => $user,
+            "private_access"    => true,
+            "languages"         => $languages,
+            "countries"         => $countries,
+            "extra_scripts"     => $extraScripts,
+            "userPersonalInfo"  => $userPersonalInfo,
+            "secondaryLanguages" => $secondaryLanguages
+        ));       
        
         $app->render("user-private-profile.tpl");
     }
@@ -465,7 +540,8 @@ class UserRouteHandler
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
 
-        $user = $userDao->getUser(array('id' => $user_id));
+        $user = $userDao->getUser($user_id);
+        $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
             
@@ -484,14 +560,17 @@ class UserRouteHandler
         $user_tags = $userDao->getUserTags($user_id);
         $user_orgs = $userDao->getUserOrgs($user_id);
         $badges = $userDao->getUserBadges($user_id);
+        $secondaryLanguages = $userDao->getSecondaryLanguages($user_id);
 
         $orgList = array();
-        foreach ($badges as $badge) {
-            if ($badge->getOwnerId() != null) {
-                $org = $orgDao->getOrganisation(array('id' => $badge->getOwnerId()));
-                $orgList[$badge->getOwnerId()] = $org;
-            }
-        }       
+        if($badges) {
+            foreach ($badges as $badge) {
+                if ($badge->getOwnerId() != null) {
+                    $org = $orgDao->getOrganisation($badge->getOwnerId());
+                    $orgList[$badge->getOwnerId()] = $org;
+                }
+            }    
+        }
        
         $org_creation = Settings::get("site.organisation_creation");
             
@@ -506,10 +585,12 @@ class UserRouteHandler
                                     "user_tags" => $user_tags,
                                     "this_user" => $user,
                                     "extra_scripts" => $extra_scripts,
-                                    "org_creation" => $org_creation
+                                    "org_creation" => $org_creation,
+                                    "userPersonalInfo" => $userPersonalInfo,
+                                    "secondaryLanguages" => $secondaryLanguages
         ));
                 
-        if (UserSession::getCurrentUserID() === $user_id) {
+        if (UserSession::getCurrentUserID() == $user_id) {
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
             $lastSent = null;
@@ -547,7 +628,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $userDao = new UserDao();
 
-        $user = $userDao->getUser(array('id' => $userId));
+        $user = $userDao->getUser($userId);
 
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -621,3 +702,7 @@ class UserRouteHandler
         return (!is_null(UserSession::getCurrentUserId()));
     }     
 }
+
+$route_handler = new UserRouteHandler();
+$route_handler->init();
+unset ($route_handler);

@@ -5,9 +5,9 @@
  *
  * @author Dave
  */
-require_once 'DataAccessObjects/ProjectDao.class.php';
-require_once '../Common/models/Project.php';
-require_once 'lib/APIWorkflowBuilder.class.php';
+require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
+require_once __DIR__."/../../Common/models/Project.php";
+require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 
 class Projects
 {
@@ -38,8 +38,7 @@ class Projects
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects(:format)/',
             function ($format = '.json') 
             {
-                $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->getProject(null), null, $format);
+                Dispatcher::sendResponce(null, ProjectDao::getProject(), null, $format);
             }, 'getProjects');
 
         Dispatcher::registerNamed(HTTPMethodEnum::POST, '/v0/projects(:format)/',
@@ -47,10 +46,9 @@ class Projects
             {
                 $data=Dispatcher::getDispatcher()->request()->getBody();
                 $client = new APIHelper($format);
-                $data = $client->deserialize($data);
-                $data = $client->cast('Project', $data);
-                $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->createUpdate($data), null, $format);
+                $data = $client->deserialize($data,'Project');
+//                $data = $client->cast('Project', $data);
+                Dispatcher::sendResponce(null, ProjectDao::createUpdate($data), null, $format);
             }, 'createProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:id/',
@@ -63,10 +61,9 @@ class Projects
                 }
                 $data=Dispatcher::getDispatcher()->request()->getBody();
                 $client = new APIHelper($format);
-                $data = $client->deserialize($data);
-                $data = $client->cast('Project', $data);
-                $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->createUpdate($data), null, $format);
+                $data = $client->deserialize($data,'Project');
+//                $data = $client->cast('Project', $data);
+                Dispatcher::sendResponce(null, ProjectDao::createUpdate($data), null, $format);
             }, 'updateProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/',
@@ -78,10 +75,7 @@ class Projects
                     $id = $id[0];
                 }
 
-                $dao = new ProjectDao();
-                $params = array();
-                $params['id'] = $id;
-                $data = $dao->getProject($params);
+                $data = ProjectDao::getProject($id);
                 if($data && is_array($data)) {
                     $data = $data[0];
                 }
@@ -97,8 +91,7 @@ class Projects
                     $id = $id[0];
                 }
                 
-                $dao = new ProjectDao();
-                $data = $dao->getProjectTasks($id);
+                $data = ProjectDao::getProjectTasks($id);
                 Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getProjectTasks');
 
@@ -109,20 +102,17 @@ class Projects
                 $format = '.'.$userId[1];
                 $userId = $userId[0];
             }
-            $projectDao = new ProjectDao();
-            $taskDao = new TaskDao();
-            $projectTasks = $projectDao->getProjectTasks($projectId);
+            $projectTasks = ProjectDao::getProjectTasks($projectId);
             foreach ($projectTasks as $task) {
-                $taskDao->moveToArchiveById($task->getId(), $userId);
+                TaskDao::archiveTask($task->getId(), $userId);
             }
-            Dispatcher::sendResponce(null, $projectDao->archiveProject($projectId, $userId), null, $format);                
+            Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);                
             }, 'archiveProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects(:format)/',
             function ($format = '.json') 
             {
-                $dao = new ProjectDao();
-                Dispatcher::sendResponce(null, $dao->getArchivedProject(null), null, $format);
+                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(), null, $format);
             }, 'getArchivedProjects');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects/:id/',
@@ -134,10 +124,7 @@ class Projects
                     $id = $id[0];
                 }
 
-                $dao = new ProjectDao();
-                $params = array();
-                $params['id'] = $id;
-                $data = $dao->getArchivedProject($params);
+                $data = ProjectDao::getArchivedProject($id);
                 if($data && is_array($data)) {
                     $data = $data[0];
                 }
@@ -160,14 +147,12 @@ class Projects
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
-            $dao = new ProjectTags();
-            Dispatcher::sendResponce(null, $dao->getTags($id), null, $format);
+            Dispatcher::sendResponce(null, ProjectDao::getTags($id), null, $format);
         }, 'getProjectTags');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/info(:format)/',
                                                         function ($id, $format = ".json") {
-            $dao = new ProjectDao();    
-            Dispatcher::sendResponce(null,$dao->getProjectFileInfo($id, null, null, null, null), null, $format);
+            Dispatcher::sendResponce(null,ProjectDao::getProjectFileInfo($id, null, null, null, null), null, $format);
         }, 'getProjectFileInfo');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/file(:format)/',
@@ -177,21 +162,19 @@ class Projects
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-            $dao = new ProjectDao();    
-            Dispatcher::sendResponce(null,$dao->getProjectFile($id), null, $format);
+            Dispatcher::sendResponce(null,ProjectDao::getProjectFile($id), null, $format);
         }, 'getProjectFile');
         
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/projects/:id/file/:filename/:userId/',
                                                         function ($id, $filename, $userID, $format = ".json") {
-            
+                     
             if (!is_numeric($userID) && strstr($userID, '.')) {
                 $userID = explode('.', $userID);
                 $format = '.'.$userID[1];
                 $userID = $userID[0];
             }
             $data=Dispatcher::getDispatcher()->request()->getBody();
-            $dao = new ProjectDao();
-            Dispatcher::sendResponce(null,$dao->saveProjectFile($id, $data, urldecode($filename),$userID), null, $format);
+           Dispatcher::sendResponce(null,ProjectDao::saveProjectFile($id, $data, urldecode($filename),$userID), null, $format);
         }, 'saveProjectFile');
     }
 }

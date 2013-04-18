@@ -6,9 +6,9 @@
     <h2>
         <a href="{urlFor name="task" options="task_id.$task_id"}">{$task->getTitle()}</a>
     </h2>
-    {if $type_id == TaskTypeEnum::CHUNKING}
+    {if $type_id == TaskTypeEnum::SEGMENTATION}
         <p>Type: 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::CHUNKING]}">Chunking</span> 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation</span> 
         </p>
     {elseif $type_id == TaskTypeEnum::TRANSLATION}
         </h2>
@@ -19,24 +19,24 @@
         <p>Type: 
             <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
         </p>
-    {elseif $type_id == TaskTypeEnum::POSTEDITING}
+    {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
         <p>Type: 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::POSTEDITING]}">Postediting</span>
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation</span>
         </p>
     {/if}
 
     <p>
-        From: <strong>{TemplateHelper::getTaskSourceLanguage($task)}</strong>
+        From: <strong>{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}</strong>
     </p>   
     <p>
-        To: <strong>{TemplateHelper::getTaskTargetLanguage($task)}</strong>
+        To: <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
     </p>
 
-        {assign var="taskTags" value=$task->getTagList()}
+        {assign var="taskTags" value=$task['Project']->getTagList()}
         {if !empty($taskTags)}
             <p>
                 Tags:
-                {foreach from=$task->getTagList() item=tag}
+                {foreach from=$taskTags item=tag}
                     {assign var="label" value=$tag->getLabel()}
                     <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
                 {/foreach}

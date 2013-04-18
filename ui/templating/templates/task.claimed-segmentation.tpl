@@ -2,11 +2,11 @@
 
     <section>
         <div class="page-header">
-            <h1>Chunking task claimed <small>Please chunk it!</small></h1>
+            <h1>Segmentation task claimed <small>Please segment it!</small></h1>
         </div>
 
         <div class="alert alert-success">
-            <strong>Success</strong> You have claimed the chunking task &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
+            <strong>Success</strong> You have claimed the Segmentation task &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
         </div>
     </section>
 
@@ -15,10 +15,8 @@
             <p>This this what you need to do (as soon as possible):</p>
             <ol>
                 <li><strong>Open the file</strong> that you have already saved to your computer.</li>
-                {if $task->getTargetLanguageCode()}
-                        <li><strong>Chunk the file</strong> to <strong>appropriately sized individual chunks (e.g 2000 words each or less)</strong>.</li>
-                {/if}
-                <li><strong>Upload your finished chunked files</strong> to the task chunking page.</li>
+                <li><strong>Segment the file</strong> to <strong>appropriately sized individual segments (e.g 4000 words each or less)</strong>.</li>
+                <li><strong>Upload your finished segmented files</strong> to the task segmentation page.</li>
             </ol>
 
         {if isset($user)}
@@ -27,11 +25,11 @@
     </section>
 
     <section>
-            <h3>When you have finished chunking the file you downloaded:</h3>
+            <h3>When you have finished segmenting the file you downloaded:</h3>
             <p></p>
             <p>
                 <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
-                    <i class="icon-share-alt icon-white"></i> Upload Task Chunks
+                    <i class="icon-share-alt icon-white"></i> Upload Task Segments
                 </a>
                 <a href="{urlFor name="home"}" class="btn">
                     <i class="icon-arrow-left icon-black"></i> Go Back Home

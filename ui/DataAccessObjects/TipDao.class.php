@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Common/lib/APIHelper.class.php';
+require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
 class TipDao
 {
@@ -17,7 +17,7 @@ class TipDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/tips";
-        $ret = $this->client->call($request);
+        $ret = $this->client->call(null,$request);
         return $ret;
     }
 }

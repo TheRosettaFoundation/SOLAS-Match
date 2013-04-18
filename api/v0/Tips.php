@@ -1,6 +1,6 @@
 <?php
 
-require_once 'lib/TipSelector.class.php';
+require_once __DIR__."/../lib/TipSelector.class.php";
 
 class Tips
 {

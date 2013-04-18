@@ -59,14 +59,14 @@ class TemplateHelper {
     public static function getTaskTypeFromId($taskTypeId)
     {
         switch ($taskTypeId) {
-            case TaskTypeEnum::POSTEDITING:
-                return "Postediting";
+            case TaskTypeEnum::DESEGMENTATION:
+                return "Desegmentation";
             case TaskTypeEnum::TRANSLATION:
                 return "Translation";
             case TaskTypeEnum::PROOFREADING:
                 return "Proofreading";
-            case TaskTypeEnum::CHUNKING:
-                return "Chunking";
+            case TaskTypeEnum::SEGMENTATION:
+                return "Segmentation";
             default:
                 return "Unknown Task Type";
         }
@@ -109,15 +109,15 @@ class TemplateHelper {
         $use_language_codes = Settings::get("ui.language_codes"); 
         
         if($use_language_codes == "y") {
-            return $task->getSourceLanguageCode()."-".$task->getSourceCountryCode();
+            return $task->getSourceLocale()->getLanguageCode()."-".$task->getSourceLocale()->getCountryCode();
         } else if($use_language_codes == "n") {
-            $language = TemplateHelper::languageNameFromCode($task->getSourceLanguageCode());
-            $region = TemplateHelper::countryNameFromCode($task->getSourceCountryCode());
+            $language = $task->getSourceLocale()->getLanguageName();
+            $region = $task->getSourceLocale()->getCountryName();
             return $language." - ".$region;
         } else if($use_language_codes == "h") {
-            return TemplateHelper::languageNameFromCode($task->getSourceLanguageCode())." - "
-                .TemplateHelper::countryNameFromCode($task->getSourceCountryCode())
-                ." (".$task->getSourceLanguageCode()."-".$task->getSourceCountryCode().")";
+            return $task->getSourceLocale()->getLanguageName()." - "
+                .$task->getSourceLocale()->getCountryName()
+                ." (".$task->getSourceLocale()->getLanguageCode()."-".$task->getSourceLocale()->getCountryCode().")";
         }
     }
 
@@ -126,15 +126,15 @@ class TemplateHelper {
         $use_language_codes = Settings::get("ui.language_codes"); 
         
         if($use_language_codes == "y") {
-            return $task->getTargetLanguageCode()."-".$task->getTargetCountryCode();
+            return $task->getTargetLocale()->getLanguageCode()."-".$task->getTargetLocale()->getCountryCode();
         } else if($use_language_codes == "n") {
-            $language = TemplateHelper::languageNameFromCode($task->getTargetLanguageCode());
-            $region = TemplateHelper::countryNameFromCode($task->getTargetCountryCode());
+            $language = $task->getTargetLocale()->getLanguageName();
+            $region = $task->getTargetLocale()->getCountryName();
             return $language." - ".$region;
         } else if($use_language_codes == "h") {
-            return TemplateHelper::languageNameFromCode($task->getTargetLanguageCode())
-                ." - ".TemplateHelper::countryNameFromCode($task->getTargetCountryCode())
-                ." (".$task->getTargetLanguageCode()."-".$task->getTargetCountryCode().")";
+            return $task->getTargetLocale()->getLanguageName()." - "
+                .$task->getTargetLocale()->getCountryName()
+                ." (".$task->getTargetLocale()->getLanguageCode()."-".$task->getTargetLocale()->getCountryCode().")";
         }
     }
     
@@ -154,24 +154,62 @@ class TemplateHelper {
                 ." (".$project->getSourceLanguageCode()."-".$project->getSourceCountryCode().")";
         }
     }
-
-    public static function getNativeLanguage($user)
+    
+    public static function getLanguage($locale) 
     {
         $use_language_codes = Settings::get("ui.language_codes"); 
         
-        $language = TemplateHelper::languageNameFromId($user->getNativeLangId());
-        $region = TemplateHelper::countryNameFromId($user->getNativeRegionId());
+        $languageName = $locale->getLanguageName();
+        $languageCode = $locale->getLanguageCode();
         
         if($use_language_codes == "y") {
-            return $user->getNativeLangId()."-".$user->getNativeRegionId();
+            return $languageCode;
         } else if($use_language_codes == "n") {
-            return TemplateHelper::languageNameFromCode($user->getNativeLangId())." - ".TemplateHelper::countryNameFromCode($user->getNativeRegionId());
+            return $languageName;
         } else if($use_language_codes == "h") {
-            return TemplateHelper::languageNameFromCode($user->getNativeLangId())." - ".TemplateHelper::countryNameFromCode($user->getNativeRegionId())
-                    ." (".$user->getNativeLangId()."-".$user->getNativeRegionId().")";
+            return $languageName." (".$languageCode.")";
         }
         
-        return $language." - ".$region;
+        return $languageName;        
+    }
+    
+    public static function getCountry($locale)
+    {
+        $use_language_codes = Settings::get("ui.language_codes");
+        
+        $countryName = $locale->getCountryName();
+        $countryCode = $locale->getCountryCode();
+        
+        if($use_language_codes == "y") {
+            return $countryCode;
+        } else if($use_language_codes == "n") {
+            return $countryName;
+        } else if($use_language_codes == "h") {
+            return $countryName." (".$countryCode.")";
+        }
+        
+        return $countryName;        
+    }
+
+    public static function getLanguageAndCountry($locale)
+    {
+        $use_language_codes = Settings::get("ui.language_codes"); 
+        
+        $languageName = $locale->getLanguageName();
+        $languageCode = $locale->getLanguageCode();
+        $countryName = $locale->getCountryName();
+        $countryCode = $locale->getCountryCode();
+
+        if($use_language_codes == "y") {
+            return $languageCode."-".$countryCode;
+        } else if($use_language_codes == "n") {
+            return $languageName."-".$countryName;
+        } else if($use_language_codes == "h") {
+            return $languageName." - ".$countryName
+                    ." (".$languageCode."-".$countryCode.")";
+        }
+        
+        return $languageName." - ".$countryName;
     }
     
     public static function getLanguageAndCountryFromCode($codes)
@@ -200,7 +238,7 @@ class TemplateHelper {
     public static function languageNameFromId($languageID)
     {
         $languageDao = new LanguageDao();
-        $result = $languageDao->getLanguage(array("id" => $languageID));
+        $result = $languageDao->getLanguage($languageID);
         return self::cleanse($result->getName());
     }
 
@@ -208,7 +246,7 @@ class TemplateHelper {
     {
         $ret = "";
         $langDao = new LanguageDao();
-        $lang = $langDao->getLanguage(array("code" => $languageCode));
+        $lang = $langDao->getLanguageByCode($languageCode);
         if($lang) {
             $ret = self::cleanse($lang->getName());
         }
@@ -218,7 +256,7 @@ class TemplateHelper {
     public static function orgNameFromId($orgID)
     {
         $orgDao = new OrganisationDao();
-        $result = $orgDao->getOrganisation(array("id" => $orgID));
+        $result = $orgDao->getOrganisation($orgID);
         return self::cleanse($result->getName());
     }
 
@@ -240,8 +278,15 @@ class TemplateHelper {
     {
         $use_language_codes = Settings::get("ui.language_codes");
         $langDao = new LanguageDao();
-        $result = $langDao->getLanguage(null);        
-        foreach($result as $lang)
+        $languages=null;
+        if(apc_exists("languages")){ 
+            $languages=apc_fetch("languages");
+        }else{
+            $languages=$langDao->getLanguages();
+            apc_add("languages", $languages);
+        }
+       
+        foreach($languages as $lang)
         {
             if($use_language_codes == "y") {
                 $lang->setName(self::cleanse($lang->getCode()));
@@ -251,15 +296,21 @@ class TemplateHelper {
                 $lang->setName(self::cleanse($lang->getName())." (".self::cleanse($lang->getCode()).")"); 
             }
         }
-        return $result;
+        return $languages;
     }
 
     public static function getCountryList()
     {
         $use_language_codes = Settings::get("ui.language_codes");     
         $countryDao = new CountryDao();
-        $result = $countryDao->getCountries();
-        foreach($result as $country)
+        $countries =null;
+        if(apc_exists("countries")){ 
+            $countries=apc_fetch("countries");
+        }else{
+            $countries=$countryDao->getCountries();
+            apc_add("languages", $countries);
+        }
+        foreach($countries as $country)
         {
             if($use_language_codes == "y") {
                 $country->setName(self::cleanse($country->getCode()));
@@ -270,13 +321,13 @@ class TemplateHelper {
             }
             
         }
-        return $result;
+        return $countries;
     }
 
     public static function saveLanguage($languageCode) 
     {
         $langDao = new LanguageDao();
-        $language = $langDao->getLanguage(array("code" => $languageCode));
+        $language = $langDao->getLanguageByCode($languageCode);
         if (is_null(($language))) {
             throw new InvalidArgumentException("A valid language code was expected.");
         }

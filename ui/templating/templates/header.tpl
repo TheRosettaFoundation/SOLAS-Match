@@ -43,7 +43,7 @@
                             </li>
                         {/if}
                         {if isset($user)}
-                            {assign var="user_id" value=$user->getUserId()}
+                            {assign var="user_id" value=$user->getId()}
                             <li {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if}>
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">Profile</a>
                             </li>
