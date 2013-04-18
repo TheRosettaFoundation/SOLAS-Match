@@ -103,7 +103,9 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="submit" class="btn" value="Filter" />
+                                    <button type="submit" value="Filter" class="btn btn-primary">
+                                        <i class="icon-refresh icon-white"></i> Filter Task Stream
+                                    </button>
                                 </td>
                             </tr>
                         </table>
