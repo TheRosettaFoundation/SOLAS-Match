@@ -176,6 +176,11 @@ class Projects
             $data=Dispatcher::getDispatcher()->request()->getBody();
            Dispatcher::sendResponce(null,ProjectDao::saveProjectFile($id, $data, urldecode($filename),$userID), null, $format);
         }, 'saveProjectFile');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/archivedTasks(:format)/',
+                                                        function ($id, $format = ".json") {
+            Dispatcher::sendResponce(null, ProjectDao::getArchivedTask($id), null, $format);
+        }, 'getArchivedProjectTasks');
     }
 }
 Projects::init();

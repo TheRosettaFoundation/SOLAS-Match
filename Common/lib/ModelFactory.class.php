@@ -115,6 +115,8 @@ class ModelFactory
     private static function generateArchivedTask($modelData)
     {
         $ret = new ArchivedTask();
+        $sourceLocale = new Locale();
+        $targetLocale = new Locale();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -137,18 +139,39 @@ class ModelFactory
         if (isset($modelData['created-time'])) {
             $ret->setCreatedTime($modelData['created-time']);
         }
-        if (isset($modelData['language_id-source'])) {
-            $ret->setSourceLanguageCode($modelData['language_id-source']);
+        
+        
+        if (isset($modelData['sourceLanguageName'])) {
+            $sourceLocale->setLanguageName($modelData['sourceLanguageName']);
         }
-        if (isset($modelData['language_id-target'])) {
-            $ret->setTargetLanguageCode($modelData['language_id-target']);
+        if (isset($modelData['sourceLanguageCode'])) {
+            $sourceLocale->setLanguageCode($modelData['sourceLanguageCode']);
         }
-        if (isset($modelData['country_id-source'])) {
-            $ret->setSourceCountryCode($modelData['country_id-source']);
+        if (isset($modelData['sourceCountryName'])) {
+            $sourceLocale->setCountryName($modelData['sourceCountryName']);
         }
-        if (isset($modelData['country_id-target'])) {
-            $ret->setTargetCountryCode($modelData['country_id-target']);
+        if (isset($modelData['sourceCountryCode'])) {
+            $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
         }
+        
+        $ret->setSourceLocale($sourceLocale);
+        
+        if (isset($modelData['targetLanguageName'])) {
+            $targetLocale->setLanguageName($modelData['targetLanguageName']);
+        }
+        if (isset($modelData['targetLanguageCode'])) {
+            $targetLocale->setLanguageCode($modelData['targetLanguageCode']);
+        }
+        if (isset($modelData['targetCountryName'])) {
+            $targetLocale->setCountryName($modelData['targetCountryName']);
+        }
+        if (isset($modelData['targetCountryCode'])) {
+            $targetLocale->setCountryCode($modelData['targetCountryCode']);
+        }        
+
+        $ret->setTargetLocale($targetLocale);
+        
+        
         if (isset($modelData['taskType'])) {
             $ret->setTaskType($modelData['taskType']);
         }
@@ -448,10 +471,7 @@ class ModelFactory
             $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
         }
         
-        if(isset($modelData['sourceLanguageName']) && isset($modelData['sourceLanguageCode']) &&
-                isset($modelData['sourceCountryName']) && isset($modelData['sourceCountryCode'])) {
-            $ret->setSourceLocale($sourceLocale);
-        }
+        $ret->setSourceLocale($sourceLocale);
         
         if (isset($modelData['targetLanguageName'])) {
             $targetLocale->setLanguageName($modelData['targetLanguageName']);
@@ -464,12 +484,9 @@ class ModelFactory
         }
         if (isset($modelData['targetCountryCode'])) {
             $targetLocale->setCountryCode($modelData['targetCountryCode']);
-        }
-        
-        if(isset($modelData['targetLanguageName']) && isset($modelData['targetLanguageCode']) &&
-                isset($modelData['targetCountryName']) && isset($modelData['targetCountryCode'])) {
-            $ret->setTargetLocale($targetLocale);
-        }
+        }        
+
+        $ret->setTargetLocale($targetLocale);
         
         if (isset($modelData['task-type_id'])) {
             $ret->setTaskType($modelData['task-type_id']);
@@ -532,11 +549,9 @@ class ModelFactory
         if (isset($modelData['sourceCountryCode'])) {
             $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
         }
-        
-        if(isset($modelData['sourceLanguageName']) && isset($modelData['sourceLanguageCode']) &&
-                isset($modelData['sourceCountryName']) && isset($modelData['sourceCountryCode'])) {
-            $ret->setSourceLocale($sourceLocale);
-        }
+
+        $ret->setSourceLocale($sourceLocale);
+
 
         return $ret;
     }
@@ -544,6 +559,7 @@ class ModelFactory
     private static function generateArchivedProject($modelData)
     {
         $ret = new ArchivedProject();
+        $sourceLocale = new Locale();
 
         if(isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -572,12 +588,22 @@ class ModelFactory
         if(isset($modelData['created'])) {
             $ret->setCreatedTime($modelData['created']);
         }
-        if(isset($modelData['language_id'])) {
-            $ret->setLanguageCode($modelData['language_id']);
+        
+        if (isset($modelData['sourceLanguageName'])) {
+            $sourceLocale->setLanguageName($modelData['sourceLanguageName']);
         }
-        if(isset($modelData['country_id'])) {
-            $ret->setCountryCode($modelData['country_id']);
+        if (isset($modelData['sourceLanguageCode'])) {
+            $sourceLocale->setLanguageCode($modelData['sourceLanguageCode']);
         }
+        if (isset($modelData['sourceCountryName'])) {
+            $sourceLocale->setCountryName($modelData['sourceCountryName']);
+        }
+        if (isset($modelData['sourceCountryCode'])) {
+            $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
+        }
+        
+        $ret->setSourceLocale($sourceLocale);
+
         if(isset($modelData['archived-date'])) {
             $ret->setArchivedDate($modelData['archived-date']);
         }
