@@ -21,6 +21,7 @@ require_once __DIR__."/../models/ProjectFile.php";
 require_once __DIR__."/../models/TaskReview.php";
 require_once __DIR__."/../models/Locale.php";
 require_once __DIR__."/../models/UserPersonalInformation.php";
+require_once __DIR__."/../models/UserTaskStreamNotification.php";
 
 class ModelFactory
 {
@@ -68,6 +69,9 @@ class ModelFactory
                 break;
             case "User" :
                 $ret = ModelFactory::generateUser($modelData);
+                break;
+            case "UserTaskStreamNotification" :
+                $ret = ModelFactory::generateUserTaskStreamNotification($modelData);
                 break;
             case "Task" :
                 $ret = ModelFactory::generateTask($modelData);
@@ -406,6 +410,23 @@ class ModelFactory
         
         if (isset($modelData['created-time'])) {
             $ret->setCreatedTime($modelData['created-time']);
+        }
+
+        return $ret;
+    }
+
+    private static function generateUserTaskStreamNotification($modelData)
+    {
+        $ret = new UserTaskStreamNotification();
+
+        if (isset($modelData['user_id'])) {
+            $ret->setUserId($modelData['user_id']);
+        }
+        if (isset($modelData['interval'])) {
+            $ret->setInterval($modelData['interval']);
+        }
+        if (isset($modelData['last-sent'])) {
+            $ret->setLastSent($modelData['last-sent']);
         }
 
         return $ret;

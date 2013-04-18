@@ -96,10 +96,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/taskStreamNotification";
-        $response = $this->client->call(null, $request);
-        if ($response) {
-            $ret = get_object_vars($response);
-        }
+        $ret = $this->client->call("UserTaskStreamNotification", $request);
         return $ret;
     }
 
@@ -208,7 +205,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/taskStreamNotification";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_DELETE);
+        $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $ret;
     }
 
@@ -216,7 +213,7 @@ class UserDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/interval/$interval/taskStreamNotification";
-        $ret = $this->client->call($request, HTTP_Request2::METHOD_PUT);
+        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
         return $ret;
     }
 

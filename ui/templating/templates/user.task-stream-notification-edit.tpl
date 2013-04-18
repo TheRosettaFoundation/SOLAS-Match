@@ -10,7 +10,7 @@
 
 {include file="handle-flash-messages.tpl"}
 
-{assign var="user_id" value=$user->getUserId()}
+{assign var="user_id" value=$user->getId()}
 <form method="post" action="{urlFor name="stream-notification-edit" options="user_id.$user_id"}">
     <p>
         This notification will periodically send you a list of the tasks that are most suited to your skills
