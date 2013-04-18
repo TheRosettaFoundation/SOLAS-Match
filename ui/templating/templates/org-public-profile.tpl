@@ -286,7 +286,7 @@
                          </i>
                      </td>
                      <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                         <input type="hidden" name="user_id" value="{$nonMember->Id()}" />
+                         <input type="hidden" name="user_id" value="{$nonMember->getId()}" />
                          <td>
                              <input type="submit" name="accept" value="    Accept Request" class="btn btn-primary" />
                              <i class="icon-ok-circle icon-white" style="position:relative; right:126px; top:2px;"></i>

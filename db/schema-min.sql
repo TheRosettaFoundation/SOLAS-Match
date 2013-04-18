@@ -787,27 +787,45 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.archiveProject
+-- Dumping structure for procedure big-merge.archiveProject
 DROP PROCEDURE IF EXISTS `archiveProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject`(IN `projectId` INT, IN `user_id` INT)
     MODIFIES SQL DATA
 BEGIN
-    if not exists(select 1 from ArchivedProjects where id = projectId) then
-        INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id, country_id)
+	Declare taskId int;
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE cur1 CURSOR FOR SELECT t.id FROM Tasks t WHERE t.project_id=projectId;
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+	
+	if not exists(select 1 from ArchivedProjects where id = projectId) then
+		INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id, country_id)
+		
+		SELECT *
+		FROM Projects p
+		WHERE p.id=projectId;
+		
+		INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`, `archived-date`, `user_id-archived`)
+		VALUES (projectId, NOW(), user_id);		
+		
+		OPEN cur1;
+		
+		read_loop: LOOP
+			FETCH cur1 INTO taskId;
+			IF done THEN
+			 	LEAVE read_loop;
+			END IF;
+			call archiveTask(taskId, user_id);
+		END LOOP;
+		CLOSE cur1;
+		
+		DELETE FROM Projects WHERE id=projectId;
+		CALL getArchivedProject(projectId,null,null,null,null,null,null,null,null,null, user_id);
 
-        SELECT *
-        FROM Projects p
-        WHERE p.id=projectId;
-
-        INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`, `archived-date`, `user_id-archived`)
-        VALUES (projectId, NOW(), user_id);
-
-        DELETE FROM Projects WHERE id=projectId;
-        CALL getArchivedProject(projectId,null,null,null,null,null,null,null,null,null, user_id);
-   
-	END IF;	    
+                SELECT 1 AS result;
+        ELSE
+                SELECT 0 AS result;
+        END IF;  
 END//
 DELIMITER ;
 
@@ -1052,24 +1070,76 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getArchivedTasks
-DROP PROCEDURE IF EXISTS `getArchivedTasks`;
+-- Dumping structure for procedure big-merge.getArchivedTask
+DROP PROCEDURE IF EXISTS `getArchivedTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTasks`(IN `arc_id` INT, IN `o_id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTask`(IN `archiveId` BIGINT, IN `projectId` INT, IN `title` VARCHAR(128), IN `comment` VARCHAR(4096), IN `deadline` DATETIME, IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceLanguageId` INT, IN `targetLanguageId` INT, IN `sourceCountryId` INT, IN `targetCountryId` INT, IN `taskTypeId` INT, IN `taskStatusId` INT, IN `published` VARCHAR(50))
 BEGIN
 
-    if arc_id='' then set arc_id=null; end if;
-    if o_id='' then set o_id=null; end if;
-    set @q="SELECT * FROM ArchivedTasks WHERE 1";
-    if arc_id is not null then
-        set @q=CONCAT(@q, " and id=", arc_id);
-    end if;
-    if o_id is not null then
-        set @q=CONCAT(@q, " and organisation_id=", o_id);
-    end if;
-    
-    PREPARE stmt FROM @q;
-	EXECUTE stmt;
+	if archiveId='' then set archiveId=null; end if;
+	if projectId='' then set projectId=null; end if;
+	if title='' then set title=null; end if;
+	if `comment`='' then set `comment`=null; end if;
+	if deadline='' then set deadline=null; end if;
+	if wordCount='' then set wordCount=null; end if;
+	if createdTime='' then set createdTime=null; end if;	
+	if sourceLanguageId='' then set sourceLanguageId=null; end if;
+	if targetLanguageId='' then set targetLanguageId=null; end if;
+	if sourceCountryId='' then set sourceCountryId=null; end if;
+	if targetCountryId='' then set targetCountryId=null; end if;
+	if taskTypeId='' then set taskTypeId=null; end if;
+	if taskStatusId='' then set taskStatusId=null; end if;
+	if published='' then set published=null; end if;
+	
+	set @q="SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, t.`taskType_id`, t.`taskStatus_id`, t.published FROM ArchivedTasks t
+	          WHERE 1";  
+	          
+	if archiveId is not null then
+	  set @q = CONCAT(@q, " and t.id='", archiveId, "'");
+	end if;                 
+	if projectId is not null then
+	  set @q = CONCAT(@q, " and t.project_id='", projectId, "'");
+	end if;                 
+	if title is not null then
+	  set @q = CONCAT(@q, " and t.title='", title, "'");
+	end if;                 
+	if `comment` is not null then
+	  set @q = CONCAT(@q, " and t.`comment`='", `comment`, "'");
+	end if;                 
+	if deadline is not null then
+	  set @q = CONCAT(@q, " and t.deadline='", deadline, "'");
+	end if;                 
+	if wordCount is not null then
+	  set @q = CONCAT(@q, " and t.`word-count`='", wordCount, "'");
+	end if;       
+	if createdTime is not null then
+	  set @q = CONCAT(@q, " and t.`created-time`='", createdTime, "'");
+	end if;
+	if sourceLanguageId is not null then
+	  set @q = CONCAT(@q, " and t.`language_id-source`='", sourceLanguageId, "'");
+	end if; 	
+	if targetLanguageId is not null then
+	  set @q = CONCAT(@q, " and t.`language_id-target`='", targetLanguageId, "'");
+	end if; 	
+	if sourceCountryId is not null then
+	  set @q = CONCAT(@q, " and t.`country_id-source`='", sourceCountryId, "'");
+	end if; 	
+	if targetCountryId is not null then
+	  set @q = CONCAT(@q, " and t.`country_id-target`='", targetCountryId, "'");
+	end if;  	
+	if taskTypeId is not null then
+	  set @q = CONCAT(@q, " and t.`taskType_id`='", taskTypeId, "'");
+	end if;	
+	if taskStatusId is not null then
+	  set @q = CONCAT(@q, " and t.`taskStatus_id`='", taskStatusId, "'");
+	end if;	
+	if published is not null then
+	  set @q = CONCAT(@q, " and t.`published`='", published, "'");
+	end if;       
+	                         
+	                         
+	PREPARE stmt FROM @q; 
+	EXECUTE stmt;           
 	DEALLOCATE PREPARE stmt;
 
 END//

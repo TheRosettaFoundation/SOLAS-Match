@@ -172,8 +172,8 @@ class ProjectDao
         }
     }
     
-    public static function getProjectFileInfo($project_id, $user_id, $filename, $token, $mime) {
-        
+    public static function getProjectFileInfo($project_id, $user_id, $filename, $token, $mime)
+    {        
         $args = PDOWrapper::cleanseNull($project_id).",".PDOWrapper::cleanseNull($user_id)
                 .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token)
                 .",".PDOWrapper::cleanseNullOrWrapStr($mime);
@@ -186,7 +186,8 @@ class ProjectDao
         }        
     }
     
-    public static function getProjectFile($projectId) {
+    public static function getProjectFile($projectId)
+    {
         $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
         $source = Settings::get("files.upload_path")."proj-$projectId/$filename";
@@ -194,7 +195,8 @@ class ProjectDao
         //IO::downloadFile($source, $projectFileInfo->getMime());
     }
     
-    public static function saveProjectFile($projectId,$file,$filename,$userId){
+    public static function saveProjectFile($projectId,$file,$filename,$userId)
+    {
         $destination =Settings::get("files.upload_path")."proj-$projectId/";
         if(!file_exists($destination)) mkdir ($destination);
         $finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -204,7 +206,8 @@ class ProjectDao
         return $token;        
     }
     
-    public static function recordProjectFileInfo($projectId,$filename,$userId, $mime){
+    public static function recordProjectFileInfo($projectId,$filename,$userId, $mime)
+    {
         $token = $filename;//generate guid in future.
         $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token)
@@ -215,6 +218,35 @@ class ProjectDao
         } else {
             return null;
         }        
+    }
+    
+    public static function getArchivedTask($projectId, $archiveId=null, $title=null, $comment=null, $deadline=null,
+            $wordCount=null, $createdTime=null, $sourceLanguageId=null, $targetLanguageId=null, $sourceCountryId=null,
+            $targetCountryId=null, $taskTypeId=null, $taskStatusId=null, $published=null)
+    {
+        $args =PDOWrapper::cleanseNull($archiveId)
+                .",".PDOWrapper::cleanseNull($projectId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($title)
+                .",".PDOWrapper::cleanseNullOrWrapStr($comment)
+                .",".PDOWrapper::cleanseNullOrWrapStr($deadline)
+                .",".PDOWrapper::cleanseNull($wordCount)
+                .",".PDOWrapper::cleanseNullOrWrapStr($createdTime)
+                .",".PDOWrapper::cleanseNull($sourceLanguageId)
+                .",".PDOWrapper::cleanseNull($targetLanguageId)
+                .",".PDOWrapper::cleanseNull($sourceCountryId)
+                .",".PDOWrapper::cleanseNull($targetCountryId)
+                .",".PDOWrapper::cleanseNull($taskTypeId)
+                .",".PDOWrapper::cleanseNull($taskStatusId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($published);
+        
+        $ret = null;
+        if ($result = PDOWrapper::call("getArchivedTask", $args)) { 
+           $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("ArchivedTask", $row);
+            }
+        }
+        return $ret; 
     }
     
 }

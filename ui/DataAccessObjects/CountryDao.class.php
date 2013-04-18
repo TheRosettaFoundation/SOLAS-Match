@@ -31,8 +31,15 @@ class CountryDao
     public function getCountries()
     {
         $request="{$this->siteApi}v0/countries";
-        $response=$this->client->call(array("Country"), $request);
-        return $response;
+        $countries = null;
+        if(apc_exists("countries")){ 
+            $countries=apc_fetch("countries");
+        }else{
+            $countries=$this->client->call(array("Country"), $request);
+            apc_add("countries", $countries);
+        }
+
+        return $countries;
     }
 
 }

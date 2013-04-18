@@ -22,7 +22,14 @@ class LanguageDao
     public function getLanguages()
     {
         $request = "{$this->siteApi}v0/languages";
-        return $this->client->call(array("Language"), $request);
+        $languages = null;
+        if(apc_exists("languages")){ 
+            $languages=apc_fetch("languages");
+        }else{
+            $languages=$this->client->call(array("Language"), $request);
+            apc_add("languages", $languages);
+        }
+        return $languages;
     }
     
     public function getLanguageByCode($code)
