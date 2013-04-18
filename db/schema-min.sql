@@ -410,15 +410,15 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
 -- Dumping structure for table Solas-Match-Test.TaskReviews
 CREATE TABLE IF NOT EXISTS `TaskReviews` (
   `task_id` bigint(20) unsigned NOT NULL,
-  `user_id` bigint(20) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
   `corrections` int(11) unsigned NOT NULL,
   `grammar` int(11) unsigned NOT NULL,
   `spelling` int(11) unsigned NOT NULL,
   `consistency` int(11) unsigned NOT NULL,
   `comment` VARCHAR(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
-  UNIQUE KEY `task_id` (`task_id`,`user_id`),
+  UNIQUE KEY `user_task` (`task_id`,`user_id`),
   CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_TaskReviews_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_TaskReviews_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -1060,8 +1060,7 @@ BEGIN
 
     if arc_id='' then set arc_id=null; end if;
     if o_id='' then set o_id=null; end if;
-    set @q="SELECT * FROM ArchivedTasks
-                WHERE 1";
+    set @q="SELECT * FROM ArchivedTasks WHERE 1";
     if arc_id is not null then
         set @q=CONCAT(@q, " and id=", arc_id);
     end if;
@@ -1742,11 +1741,8 @@ BEGIN
     if gram = '' then set gram = NULL; end if;
     if spell = '' then set spell = NULL; end if;
     if consis = '' then set consis = NULL; end if;
-    if comm = '' then set  = NULL; end if;
-    
-    set @q = "SELECT task_id, user_id, corrections, grammar, spelling, consistency, comment
-        FROM TaskReviews
-        WHERE 1";
+    if comm = '' then set comm = NULL; end if;
+    set @q= "SELECT task_id, user_id, corrections, grammar, spelling, consistency, comment FROM TaskReviews WHERE 1";
     if taskId IS NOT NULL then
         set @q = CONCAT(@q, " AND task_id = ", taskId);
     end if;
