@@ -279,12 +279,7 @@ class TemplateHelper {
         $use_language_codes = Settings::get("ui.language_codes");
         $langDao = new LanguageDao();
         $languages=null;
-        if(apc_exists("languages")){ 
-            $languages=apc_fetch("languages");
-        }else{
-            $languages=$langDao->getLanguages();
-            apc_add("languages", $languages);
-        }
+        $languages=$langDao->getLanguages();
        
         foreach($languages as $lang)
         {
@@ -304,12 +299,8 @@ class TemplateHelper {
         $use_language_codes = Settings::get("ui.language_codes");     
         $countryDao = new CountryDao();
         $countries =null;
-        if(apc_exists("countries")){ 
-            $countries=apc_fetch("countries");
-        }else{
-            $countries=$countryDao->getCountries();
-            apc_add("languages", $countries);
-        }
+        $countries=$countryDao->getCountries();
+
         foreach($countries as $country)
         {
             if($use_language_codes == "y") {

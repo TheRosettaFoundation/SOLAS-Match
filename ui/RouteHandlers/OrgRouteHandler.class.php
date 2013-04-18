@@ -282,7 +282,7 @@ class OrgRouteHandler
         $user_list = array();
         if (count($requests) > 0) {
             foreach ($requests as $memRequest) {
-                $user_list[] =  $userDao->getUser($memRequest->getUserId());
+                $user_list[] =  $userDao->getUser($memRequest->getId());
             }
         }
         
@@ -462,7 +462,7 @@ class OrgRouteHandler
         $user_list = array();
         if (count($requests) > 0) {
             foreach ($requests as $memRequest) {
-                $user = $userDao->getUser($memRequest->getUserId());
+                $user = $userDao->getUser($memRequest->getId());
                 $user_list[] = $user;
             }
         }

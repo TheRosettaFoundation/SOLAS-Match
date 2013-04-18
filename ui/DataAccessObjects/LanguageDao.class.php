@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/../../Common/lib/CacheHelper.class.php";
+require_once __DIR__."/../../Common/TimeToLiveEnum.php";
 
 class LanguageDao
 {
@@ -21,14 +23,12 @@ class LanguageDao
     
     public function getLanguages()
     {
-        $request = "{$this->siteApi}v0/languages";
-        $languages = null;
-        if(apc_exists("languages")){ 
-            $languages=apc_fetch("languages");
-        }else{
-            $languages=$this->client->call(array("Language"), $request);
-            apc_add("languages", $languages);
-        }
+        $languages = CacheHelper::getCached(CacheHelper::LANGUAGES, TimeToLiveEnum::MONTH, 
+                function($client){
+                    $request = "{$this->siteApi}v0/languages";
+                    return $client->call(array("Language"), $request);
+                },
+            $this->client);
         return $languages;
     }
     

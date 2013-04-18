@@ -75,8 +75,8 @@ class Tags {
             $client = new APIHelper($format);
             $data=$client->deserialize($data,"Tag");
 //            $client->cast("Tag", $data);
-            $data->setBadgeId(null);
-            Dispatcher::sendResponce(null, TagsDao::save($tag), null, $format);
+            $data->setId(null);
+            Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
         }, 'createTag');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tags/:id/',

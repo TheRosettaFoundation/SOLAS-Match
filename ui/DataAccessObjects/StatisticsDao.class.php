@@ -15,10 +15,13 @@ class StatisticsDao
 
     public function getStats()
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/stats";
-        $ret = $this->client->call(array("Statistic"), $request);
-        return $ret;
+        $stats = CacheHelper::getCached(CacheHelper::STATISTICS, TimeToLiveEnum::HOUR, 
+                function($client){
+                    $request = "{$this->siteApi}v0/stats";
+                    return $client->call(array("Statistic"), $request);
+                },
+            $this->client);
+        return $stats;
     }
     
     public function getStat($stat)
