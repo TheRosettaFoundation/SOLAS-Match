@@ -62,7 +62,7 @@ class TaskDao
     public function getTaskVersion($taskId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/version";
-        $response =$this->client->call(null, $request);
+        $response = intval($this->client->call(null, $request));
         return $response;
     }
 
