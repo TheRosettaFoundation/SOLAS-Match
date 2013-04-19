@@ -59,32 +59,6 @@
                 <p><strong>Warning! </strong>Uploading a new version of the file will overwrite the old one.</p>
             </div>
         {/if}
-
-        <h3>Can't find the task file? <small>Misplaced the original file or the latest uploaded file?</small></h3>
-        <br />
-        <p>Click 
-            <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>
-            to re-download the <strong>original task file</strong>.
-        </p> 
-
-        {if ($converter == "y")}
-        <p>Click
-            <a href="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true">here</a>   
-            to re-download the <strong>original task file</strong> as XLIFF.
-        </p>     
-        {/if}  
-
-        <p>Click 
-            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">here</a>
-            to re-download the <strong>latest uploaded file</strong>.
-        </p> 
-
-        {if ($converter == "y")}
-        <p>Click
-            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}?convertToXliff=true">here</a>   
-            to re-download the <strong>latest uploaded file</strong> as XLIFF.
-        </p>     
-        {/if}
     </div>
 
 {include file="footer.tpl"}
