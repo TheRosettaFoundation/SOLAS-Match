@@ -155,13 +155,12 @@ class Tasks {
 
                     $data = Dispatcher::getDispatcher()->request()->getBody();
                     $client = new APIHelper($format);
-                    $data = $client->deserialize($data,"FeedbackEmail");
-//                    $feedbackData = $client->cast("FeedbackEmail", $data);
+                    $feedbackData = $client->deserialize($data,"FeedbackEmail");
 
                     $users = $feedbackData->getUserIdList();
                     if (count($users) > 0) {
                         if (count($users) == 1) {
-                            $user = UserDao::getUser($users[0]);
+                            $user = UserDao::getUser($users[0])[0];
 
                             Notify::sendOrgFeedback($task, $user, $feedbackData->getFeedback());
                         } else {
