@@ -689,7 +689,7 @@ BEGIN
     IF NOT EXISTS (SELECT user_id
                     FROM OrganisationMembers
                     WHERE user_id = uID
-                    AND org_id = orgID) then
+                    AND organisation_id = orgID) then
     	INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
         if EXISTS (SELECT user_id
                 FROM OrgRequests

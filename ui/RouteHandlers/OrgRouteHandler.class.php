@@ -90,7 +90,6 @@ class OrgRouteHandler
                     $new_org = $orgDao->createOrg($org, $user_id);
                     if ($new_org) {
                         
-                        $orgDao->createMembershipRequest($new_org->getId(), $user_id);
                         $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
                         $org_name = $org->getName();
                         $app->flash("success", "The organisation <strong>$org_name</strong> has been created.");
