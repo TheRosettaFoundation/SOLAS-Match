@@ -598,13 +598,17 @@ class TaskRouteHandler
                 $task->setPublished(0);
             }
             
+            $targetLocale = new Locale();
+            
             if ($post->target != "") {
-                $task->setTargetLanguageCode($post->target);
+                $targetLocale->setLanguageCode($post->target);
             }   
              
             if ($post->targetCountry != "") {
-                $task->setTargetCountryCode($post->targetCountry);
+                $targetLocale->setCountryCode($post->targetCountry);
             }   
+            
+            $task->setTargetLocale($targetLocale);
               
             if (ctype_digit($post->word_count)) {
                 $task->setWordCount($post->word_count);                
