@@ -1598,15 +1598,31 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getSubscribedUsers
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               5.5.29-0ubuntu0.12.10.1 - (Ubuntu)
+-- Server OS:                    debian-linux-gnu
+-- HeidiSQL version:             7.0.0.4053
+-- Date/time:                    2013-04-19 14:10:43
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
+
+-- Dumping structure for procedure Solas-Match-Dev.getSubscribedUsers
 DROP PROCEDURE IF EXISTS `getSubscribedUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscribedUsers`(IN `taskId` INT)
 BEGIN
-    SELECT *
-    FROM UserTrackedTasks
+    SELECT u.id,`display-name`,email,u.password,biography, (select `en-name` from Languages where id =u.`language_id`) as `languageName`, (select code from Languages where id =u.`language_id`) as `languageCode`, (select `en-name` from Countries where id =u.`country_id`) as `countryName`, (select code from Countries where id =u.`country_id`) as `countryCode`, nonce,`created-time` from Users u
+    join UserTrackedTasks utt on u.id=utt.user_id
     WHERE task_id = taskId;
 END//
 DELIMITER ;
+/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
 
 
 -- Dumping structure for procedure Solas-Match-Test.getTag

@@ -498,10 +498,10 @@ class TaskDao
     {
         $ret = null;
 
-        $result = PDOWrapper::call('getSubscribedUsers', "$task_id");
-        if ($result) {
+        
+        if ($result = PDOWrapper::call('getSubscribedUsers', "$task_id")) {
             foreach ($result as $row) {
-                $ret[] = UserDao::getUser($row['user_id'])[0];
+               ModelFactory::buildModel("User", $row);
             }
         }
 
