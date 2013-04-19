@@ -160,8 +160,8 @@ class Tasks {
                     $users = $feedbackData->getUserIdList();
                     if (count($users) > 0) {
                         if (count($users) == 1) {
-                            $user = UserDao::getUser($users[0])[0];
-
+                            $user = UserDao::getUser($users[0]);
+                            $user= $user[0];
                             Notify::sendOrgFeedback($task, $user, $feedbackData->getFeedback());
                         } else {
                             //send user feedback
