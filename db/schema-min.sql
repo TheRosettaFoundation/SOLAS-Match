@@ -684,12 +684,21 @@ DROP PROCEDURE IF EXISTS `acceptMemRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `acceptMemRequest`(IN `uID` INT, IN `orgID` INT)
 BEGIN
-	INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
-    if EXISTS (SELECT user_id
+    IF NOT EXISTS (SELECT user_id
+                    FROM OrganisationMembers
+                    WHERE user_id = uID
+                    AND org_id = orgID) then
+    	INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
+        if EXISTS (SELECT user_id
                 FROM OrgRequests
                 WHERE user_id = uID
                 AND org_id = orgID) then
-    	call removeMembershipRequest(uID,orgID);
+    	    call removeMembershipRequest(uID,orgID);
+        else
+            SELECT 1 as result;
+        end if;
+    else
+        select 0 as result;
     end if;
 END//
 DELIMITER ;
