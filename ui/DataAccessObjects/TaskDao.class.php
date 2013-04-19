@@ -43,7 +43,7 @@ class TaskDao
         return $response;
     }
 
-    public function getTaskTags($taskId)
+    public function getTaskTags($taskId, $limit = null)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";
         $args=$limit ? array("limit" => $limit) : null;

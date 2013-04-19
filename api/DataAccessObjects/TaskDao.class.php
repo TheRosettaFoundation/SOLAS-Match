@@ -501,7 +501,7 @@ class TaskDao
         $result = PDOWrapper::call('getSubscribedUsers', "$task_id");
         if ($result) {
             foreach ($result as $row) {
-                $ret[] = UserDao::find($row);
+                $ret[] = UserDao::getUser($row['user_id'])[0];
             }
         }
 

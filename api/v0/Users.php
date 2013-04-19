@@ -185,28 +185,12 @@ class Users {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'Task');
-//            $data = $client->cast('Task', $data);
-            Dispatcher::sendResponce(null, array("result" => TaskDao::claimTask($data->getId(), $id)), null, $format);
             
             Notify::notifyUserClaimedTask($id, $data->getId());
-            Notify::sendEmailNotifications($data->getId(), NotificationTypes::CLAIM);
+            Notify::notifyOrgClaimedTask($id, $data->getId());
+            Dispatcher::sendResponce(null, array("result" => TaskDao::claimTask($data->getId(), $id)), null, $format);
         }, 'userClaimTask');
        
-        //Which of these actually gets called??
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tasks(:format)/',
-                                                        function ($id, $format = ".json") {
-            
-            $data = Dispatcher::getDispatcher()->request()->getBody();
-            $client = new APIHelper($format);
-            $data = $client->deserialize($data,'Task');
-//            $data = $client->cast('Task', $data);
-            Dispatcher::sendResponce(null,TaskDao::claimTask($data->getId(), $id), null, $format);
-
-            Notify::notifyUserClaimedTask($id, $data->getId());
-            Notify::sendEmailNotifications($data->getId(), NotificationTypes::CLAIM);
-        }, 'userClaimTaskByID');
-        
-        
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/tasks/:tID/',
                                                         function ($id, $tID ,$format = ".json") {
              
