@@ -144,7 +144,7 @@ class Users {
                 $format = '.'.$badge[1];
                 $badge = $badge[0];
             }
-            Dispatcher::sendResponce(null, BadgeDao::removeUserBadgeByID($id, $badge), null, $format);
+            Dispatcher::sendResponce(null, BadgeDao::removeUserBadge($id, $badge), null, $format);
         }, 'deleteUserbadgesByID');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tags(:format)/',
