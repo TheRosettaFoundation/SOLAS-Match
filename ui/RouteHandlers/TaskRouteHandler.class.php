@@ -688,40 +688,26 @@ class TaskRouteHandler
         $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
                 
         if ($graph) {
-            $currentRow = $graph->getRootNodeList();
-            $nextRow = array();
-            $foundTask = false;
-            while (count($currentRow) > 0) {
-                foreach ($currentRow as $node) {
-                    if (!$foundTask) {
-                        if ($node->getTaskId() == $task_id) {
-                            $foundTask = true;
-                            $nextRow = array();
 
-                            foreach ($node->getNextList() as $nextNode) {
-                                if (!in_array($nextNode, $nextRow)) {
-                                    $nextRow[] = $nextNode;
-                                }
-                            }
-                            break;  //Break out of foreach
-                        } else {
-                            foreach ($node->getNextList() as $nextNode) {
-                                if (!in_array($nextNode, $nextRow)) {
-                                    $nextRow[] = $nextNode;
-                                }
-                            }
-                        }
-                    } else {
-                        $tasksEnabled[$node->getTaskId()] = false;
-                        foreach ($node->getNextList() as $nextNode) {
-                            if (!in_array($nextNode, $nextRow)) {
-                                $nextRow[] = $nextNode;
-                            }
+            $index = $graphBuilder->find($task_id, $graph);
+            $node = $graph->getAllNodes($index);
+
+            $currentRow = $node->getPreviousList();
+            $previousRow = array();
+
+            while (count($currentRow) > 0) {
+                foreach ($currentRow as $nodeIndex) {
+                    $node = $graphBuilder->getAllNodes($nodeIndex);
+                    $tasksEnabled[$node->getTaskId()] = false;
+
+                    foreach ($node->getPreviousList() as $prevIndex) {
+                        if (!in_array($prevIndex, $previousRow)) {
+                            $previousRow[] = $prevIndex;
                         }
                     }
                 }
-                $currentRow = $nextRow;
-                $nextRow = array();
+                $currentRow = $previousRow;
+                $previousRow = array();
             }
         } else {
             echo "<p>Graph building failed</p>";
