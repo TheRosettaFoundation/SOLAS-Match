@@ -704,7 +704,7 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.addAdmin
+-- Dumping structure for procedure SolasMatch.addAdmin
 DROP PROCEDURE IF EXISTS `addAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addAdmin`(IN `userId` INT, IN `orgId` INT)
@@ -717,10 +717,14 @@ BEGIN
     ) then
     	INSERT INTO Admins (user_id, organisation_id) 
             VALUES (userId, orgId);
+              SELECT 1 as result;
+    else
+    SELECT 0 as result;
     end if;
-    SELECT 1 as result;
+    
 END//
 DELIMITER ;
+
 
 
 -- Dumping structure for procedure Solas-Match-Test.addBadge
@@ -3514,11 +3518,10 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure SolasUpgrade2.userPersonalInfoInsertAndUpdate
+-- Dumping structure for procedure big-merge.userPersonalInfoInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+CREATE DEFINER=`tester`@`%` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;

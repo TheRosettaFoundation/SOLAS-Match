@@ -71,7 +71,7 @@
                             {assign var=increment value=0}
                             {foreach from=$secondaryLanguages item=secLang}
                                 <span id="newSecondaryLanguage{$increment}">
-                                    <select name="secondaryLanguage" id="secondaryLanguage_{$increment}" style="width: 80%">
+                                    <select name="secondaryLanguage_{$increment}" id="secondaryLanguage_{$increment}" style="width: 80%">
                                         {foreach $languages as $language}
                                             {if $secLang->getLanguageCode() == $language->getCode()}
                                                 <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
@@ -81,7 +81,7 @@
                                         {/foreach}
                                     </select>
 
-                                    <select name="secondaryCountry" id="secondaryCountry_{$increment++}" style="width: 80%">
+                                    <select name="secondaryCountry_{$increment}" id="secondaryCountry_{$increment++}" style="width: 80%">
                                         {foreach $countries as $country}
                                             {if $secLang->getCountryCode() == $country->getCode()}
                                             <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>

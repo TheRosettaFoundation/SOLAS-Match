@@ -260,14 +260,20 @@ class ProjectRouteHandler
                 }
             }
             
-            if(isset($post['sourceLanguage'])) $project->setSourceLanguageCode($post['sourceLanguage']); 
-            if(isset($post['sourceCountry'])) $project->setSourceCountryCode($post['sourceCountry']);              
+            $sourceLocale = new Locale();
+            if(isset($post['sourceLanguage'])) $sourceLocale->setLanguageCode($post['sourceLanguage']); 
+            if(isset($post['sourceCountry'])) $sourceLocale->setCountryCode($post['sourceCountry']);              
             if(isset($post['reference']) && $post['reference'] != "http://") $project->setReference($post['reference']);
+            $project->setSourceLocale($sourceLocale);
                         
             if(isset($post['tags'])) {
-                $tags = TemplateHelper::separateTags($post['tags']);
-                foreach ($tags as $tag) {
-                    $project->addTag($tag);
+                $tagLabels = TemplateHelper::separateTags($post['tags']);
+                if($tagLabels) {
+                    foreach ($tagLabels as $tagLabel) {
+                        $newTag = new Tag();
+                        $newTag->setLabel($tagLabel);
+                        $project->addTag($newTag);
+                    }                   
                 }
             }
             

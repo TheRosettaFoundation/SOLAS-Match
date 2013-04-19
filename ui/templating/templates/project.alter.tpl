@@ -17,34 +17,31 @@
             <tr align="center">
                 <td>
                     <label for="title" style="font-size: large"><strong>Title:</strong></label>
-                    <textarea wrap="soft" cols="1" rows="4" name="title">{$project->getTitle()}</textarea>
-                    <p style="margin-bottom:30px;"/>
+                    <textarea wrap="soft" cols="1" rows="4" name="title" style="width: 400px; margin-bottom: 40px">{$project->getTitle()}</textarea>
 
                     <label for="description" style="font-size: large"><strong>Description:</strong></label>
-                    <textarea wrap="soft" cols="1" rows="6" name="description">{$project->getDescription()}</textarea>
-
-                    <p style="margin-bottom:30px;"/>
+                    <textarea wrap="soft" cols="1" rows="6" name="description" style="width: 400px; margin-bottom: 40px">{$project->getDescription()}</textarea>
+                    
                     <label for="impact" style="font-size: large"><strong>Impact:</strong></label>
-                    <textarea wrap="soft" cols="1" rows="4" name="impact">{$project->getImpact()}</textarea>
+                    <textarea wrap="soft" cols="1" rows="4" name="impact" style="width: 400px; margin-bottom: 40px">{$project->getImpact()}</textarea>
                 </td>
                 <td>
                     <label for="tags" style="font-size: large"><strong>Tags:</strong></label>
-                    <input id="tags" name="tags" value="{$tag_list}">
-                    <p style="margin-bottom:20px;"/>
+                    <textarea wrap="soft" cols="1" rows="4" id="tags" name="tags" style="width: 400px;  margin-bottom: 20px">{$tag_list}</textarea>
 
                     <label for="deadline" style="font-size: large"><strong>Deadline:</strong></label>
                     {if isset($deadlineError) && $deadlineError != ''}
                         <p class="alert alert-error">{$deadlineError}</p>
                     {/if}
                     <p>
-                        <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}" />
+                        <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}" style="width: 400px;  margin-bottom: 20px" />
                     </p>
                     <p style="margin-bottom:20px;"/>
 
                     {if isset($languages)}
                     <p>
                         <label for="source" style="font-size: large"><strong>Source Language:</strong></label>
-                        <select name="sourceLanguage" id="sourceLanguage">
+                        <select name="sourceLanguage" id="sourceLanguage" style="width: 400px;">
                             {foreach $languages as $language}
                                 {if $project->getSourceLocale()->getLanguageCode() == $language->getCode()}
                                     <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
@@ -58,7 +55,7 @@
 
                     {if isset($countries)}
                     <p>
-                        <select name="sourceCountry" id="sourceCountry">
+                        <select name="sourceCountry" id="sourceCountry" style="width: 400px; margin-bottom: 20px">
                             {foreach $countries as $country}
                                 {if $project->getSourceLocale()->getCountryCode() == $country->getCode()}
                                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
@@ -72,7 +69,7 @@
                     <p style="margin-bottom:20px;"/>
 
                     <label for="reference" style="font-size: large"><strong>Reference:</strong></label>
-                    <textarea wrap="soft" cols="1" rows="4" name="reference">{$project->getReference()}</textarea>
+                    <textarea wrap="soft" cols="1" rows="4" name="reference" style="width: 400px">{$project->getReference()}</textarea>
                 </td>
             </tr>
             <tr>
