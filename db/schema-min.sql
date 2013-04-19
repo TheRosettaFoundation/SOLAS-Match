@@ -550,22 +550,24 @@ CREATE TABLE IF NOT EXISTS `UserOrganisationPermissions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+-- Dumping structure for table big-merge.UserPersonalInformation
 CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`user_id` INT(10) UNSIGNED NOT NULL,
-	`first-name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`last-name` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`mobile-number` INT(10) UNSIGNED NULL DEFAULT NULL,
-	`business-number` INT(10) UNSIGNED NULL DEFAULT NULL,
-	`sip` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`job-title` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `user_id` (`user_id`),
-	CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `first-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `last-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `mobile-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `business-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sip` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `job-title` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- Data exporting was unselected.
 
