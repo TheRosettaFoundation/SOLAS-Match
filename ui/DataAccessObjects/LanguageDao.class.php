@@ -24,11 +24,11 @@ class LanguageDao
     public function getLanguages()
     {
         $languages = CacheHelper::getCached(CacheHelper::LANGUAGES, TimeToLiveEnum::MONTH, 
-                function($client){
-                    $request = "{$this->siteApi}v0/languages";
-                    return $client->call(array("Language"), $request);
+                function($args){
+                    $request = "{$args[1]}v0/languages";
+                    return $args[0]->call(array("Language"), $request);
                 },
-            $this->client);
+            array($this->client, $this->siteApi));
         return $languages;
     }
     
