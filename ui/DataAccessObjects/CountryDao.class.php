@@ -31,11 +31,11 @@ class CountryDao
     public function getCountries()
     {
         $countries = CacheHelper::getCached(CacheHelper::COUNTRIES, TimeToLiveEnum::MONTH, 
-                function($client){
-                    $request = "{$this->siteApi}v0/countries";
-                    return $client->call(array("Country"), $request);
+                function($args){
+                    $request = "{$args[1]}v0/countries";
+                    return $args[0]->call(array("Country"), $request);
                 },
-            $this->client);
+            array($this->client, $this->siteApi));
         return $countries;
     }
 

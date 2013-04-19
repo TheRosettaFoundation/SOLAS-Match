@@ -43,10 +43,10 @@ class TagDao
         $args=$limit ? array("limit" => $limit) : null;
         $topTags = CacheHelper::getCached(CacheHelper::TOP_TAGS, TimeToLiveEnum::QUARTER_HOUR, 
                 function($args) {
-                    $request = "{$this->siteApi}v0/tags/topTags";
+                    $request = "{$args[2]}v0/tags/topTags";
                     return $args[1]->call(array("Tag"), $request, HttpMethodEnum::GET, null, $args[0]);
                 },
-            array($args,$this->client));
+            array($args,$this->client,$this->siteApi));
         return $topTags;
     }
 
