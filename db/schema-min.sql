@@ -125,9 +125,11 @@ CREATE TABLE IF NOT EXISTS `Badges` (
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
-	(3, NULL, 'Profile-Filler', 'Filled in required info for user profile.'),
+	(3, NULL, 'Profile-Filler', 'Filled in all info for user  public profile.'),
 	(4, NULL, 'Registered', 'Successfully set up an account'),
-	(5, NULL, 'Native-Language', 'Filled in your native language on your user profile.');
+	(5, NULL, 'Native-Language', 'Filled in your native language on your user profile successfully.'),
+        (6, NULL, 'Translator', 'This volenteer has successfully completed a translation task.'),
+        (7, NULL, 'Proofreader', 'This volenteer has successfully completed a proofreading task.');
 ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
 -- Dumping structure for table Solas-Match-Test.Countries
@@ -1607,15 +1609,31 @@ DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.getSubscribedUsers
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               5.5.29-0ubuntu0.12.10.1 - (Ubuntu)
+-- Server OS:                    debian-linux-gnu
+-- HeidiSQL version:             7.0.0.4053
+-- Date/time:                    2013-04-19 14:10:43
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
+
+-- Dumping structure for procedure Solas-Match-Dev.getSubscribedUsers
 DROP PROCEDURE IF EXISTS `getSubscribedUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscribedUsers`(IN `taskId` INT)
 BEGIN
-    SELECT *
-    FROM UserTrackedTasks
+    SELECT u.id,`display-name`,email,u.password,biography, (select `en-name` from Languages where id =u.`language_id`) as `languageName`, (select code from Languages where id =u.`language_id`) as `languageCode`, (select `en-name` from Countries where id =u.`country_id`) as `countryName`, (select code from Countries where id =u.`country_id`) as `countryCode`, nonce,`created-time` from Users u
+    join UserTrackedTasks utt on u.id=utt.user_id
     WHERE task_id = taskId;
 END//
 DELIMITER ;
+/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
 
 
 -- Dumping structure for procedure Solas-Match-Test.getTag
@@ -3584,10 +3602,10 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure SolasUpgrade2.getUserPersonalInfo
+-- Dumping structure for procedure big-merge.getUserPersonalInfo
 DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
 DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+CREATE DEFINER=`tester`@`%` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
