@@ -284,7 +284,7 @@ class ProjectRouteHandler
         $tag_list = "";
         if ($tags != null) {
             foreach ($tags as $tag) {
-                $tag_list .= $tag . " ";
+                $tag_list .= $tag->getLabel() . " ";
             }
         }
 
