@@ -136,7 +136,8 @@ class OrganisationDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $this->client->call(null, $request, HttpMethodEnum::PUT);
+        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
+        return $ret;
     }
 
     public function rejectMembershipRequest($orgId, $userId)
