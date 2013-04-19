@@ -241,7 +241,7 @@ class UserRouteHandler
             $app->redirect($app->urlFor("home"));
         }
         
-        $user_id = $reset_request->getId();
+        $user_id = $reset_request->getUserId();
         $app->view()->setData("uid", $uid);
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
