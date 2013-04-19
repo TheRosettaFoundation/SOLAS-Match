@@ -695,7 +695,7 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.addAdmin
+-- Dumping structure for procedure SolasMatch.addAdmin
 DROP PROCEDURE IF EXISTS `addAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addAdmin`(IN `userId` INT, IN `orgId` INT)
@@ -708,10 +708,14 @@ BEGIN
     ) then
     	INSERT INTO Admins (user_id, organisation_id) 
             VALUES (userId, orgId);
+              SELECT 1 as result;
+    else
+    SELECT 0 as result;
     end if;
-    SELECT 1 as result;
+    
 END//
 DELIMITER ;
+
 
 
 -- Dumping structure for procedure Solas-Match-Test.addBadge
