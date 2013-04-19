@@ -46,7 +46,7 @@
                         <label for="source" style="font-size: large"><strong>Source Language:</strong></label>
                         <select name="sourceLanguage" id="sourceLanguage">
                             {foreach $languages as $language}
-                                {if $project->getSourceLanguageCode() == $language->getCode()}
+                                {if $project->getSourceLocale()->getLanguageCode() == $language->getCode()}
                                     <option value="{$language->getCode()}" selected="selected">{$language->getName()}</option>
                                 {else}
                                     <option value="{$language->getCode()}">{$language->getName()}</option>
@@ -60,7 +60,7 @@
                     <p>
                         <select name="sourceCountry" id="sourceCountry">
                             {foreach $countries as $country}
-                                {if $project->getSourceCountryCode() == $country->getCode()}
+                                {if $project->getSourceLocale()->getCountryCode() == $country->getCode()}
                                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
                                 {else}
                                     <option value="{$country->getCode()}">{$country->getName()}</option>
