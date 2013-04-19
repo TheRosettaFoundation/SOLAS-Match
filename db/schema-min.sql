@@ -3505,11 +3505,10 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure SolasUpgrade2.userPersonalInfoInsertAndUpdate
+-- Dumping structure for procedure big-merge.userPersonalInfoInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` INT, IN `businessNumber` INT, IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+CREATE DEFINER=`tester`@`%` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
