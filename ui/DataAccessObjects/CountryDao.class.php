@@ -30,15 +30,12 @@ class CountryDao
 
     public function getCountries()
     {
-        $request="{$this->siteApi}v0/countries";
-        $countries = null;
-        if(apc_exists("countries")){ 
-            $countries=apc_fetch("countries");
-        }else{
-            $countries=$this->client->call(array("Country"), $request);
-            apc_add("countries", $countries);
-        }
-
+        $countries = CacheHelper::getCached(CacheHelper::COUNTRIES, TimeToLiveEnum::MONTH, 
+                function($client){
+                    $request = "{$this->siteApi}v0/countries";
+                    return $client->call(array("Country"), $request);
+                },
+            $this->client);
         return $countries;
     }
 

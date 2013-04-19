@@ -340,7 +340,7 @@
                         </td>
                         {if $adminAccess}
                             <td>
-                                <button type="submit" name="revokeUser" value="{$member->getUserId()}" class="btn btn-inverse" 
+                                <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse" 
                                         onclick="return confirm('Are you sure you want to revoke membership from this user?')">
                                     <i class="icon-fire icon-white"></i> Revoke Membership
                                 </button>

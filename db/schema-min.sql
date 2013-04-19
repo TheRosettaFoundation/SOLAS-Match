@@ -2562,7 +2562,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `requestMembership`(IN `uID` INT, IN `orgID` INT)
     MODIFIES SQL DATA
 BEGIN
-if not exists (select 1 from OrgRequests where user_id=uID and org_id=orgID) then
+if not exists (select 1 from OrgRequests where user_id=uID and org_id=orgID) AND NOT EXISTS (SELECT 1 FROM OrganisationMembers om WHERE om.user_id=uID AND om.organisation_id=orgID) then
 	INSERT INTO OrgRequests (user_id, org_id) VALUES (uID, orgID);
 	select 1 as result;
 else 

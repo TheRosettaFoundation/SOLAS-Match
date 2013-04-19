@@ -241,7 +241,7 @@ class UserRouteHandler
             $app->redirect($app->urlFor("home"));
         }
         
-        $user_id = $reset_request->getUserId();
+        $user_id = $reset_request->getId();
         $app->view()->setData("uid", $uid);
         if ($app->request()->isPost()) {
             $post = (object) $app->request()->post();
@@ -420,19 +420,11 @@ class UserRouteHandler
         $languageDao = new LanguageDao();
         $countryDao = new CountryDao();
         $languages=null;
-        if(apc_exists("languages")){ 
-            $languages=apc_fetch("languages");
-        }else{
-            $languages=$languageDao->getLanguages();
-            apc_add("languages", $languages);
-        }
+        $languages=$languageDao->getLanguages();
+
         $countries =null;
-        if(apc_exists("countries")){ 
-            $countries=apc_fetch("countries");
-        }else{
-            $countries=$countryDao->getCountries();
-            apc_add("languages", $countries);
-        }
+        $countries=$countryDao->getCountries();
+
         
         if ($app->request()->isPost()) {
             $post = $app->request()->post();

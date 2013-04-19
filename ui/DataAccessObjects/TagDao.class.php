@@ -39,11 +39,15 @@ class TagDao
     }
 
     public function getTopTags($limit = null)
-    {
-        $request="{$this->siteApi}v0/tags/topTags";
+    {       
         $args=$limit ? array("limit" => $limit) : null;
-        $response=$this->client->call(array("Tag"), $request, HttpMethodEnum::GET, null, $args);
-        return $response;
+        $topTags = CacheHelper::getCached(CacheHelper::TOP_TAGS, TimeToLiveEnum::QUARTER_HOUR, 
+                function($args) {
+                    $request = "{$this->siteApi}v0/tags/topTags";
+                    return $args[1]->call(array("Tag"), $request, HttpMethodEnum::GET, null, $args[0]);
+                },
+            array($args,$this->client));
+        return $topTags;
     }
 
     public function getTasksWithTag($tagId, $limit = null)
