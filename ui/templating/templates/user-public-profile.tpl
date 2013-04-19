@@ -17,19 +17,21 @@
                     
                 </td>
                 <td>                    
-                    {if isset($private_access) && isset($org_creation)}
-                        {if $org_creation == 'y'}
-                            <a href="{urlFor name="create-org"}" class="btn btn-success pull-right">
-                                <i class="icon-star icon-white"></i> Create Organisation
+                    <div class="pull-right">
+                        {if isset($private_access) && isset($org_creation)}
+                            {if $org_creation == 'y'}
+                                <a href="{urlFor name="create-org"}" class="btn btn-success">
+                                    <i class="icon-star icon-white"></i> Create Organisation
+                                </a>
+                            {else if $org_creation == 'h'}
+                            {/if}
+                        {/if} 
+                        {if isset($private_access)}
+                            <a  href='{urlFor name="user-private-profile"}' class='btn btn-primary'>
+                                <i class="icon-wrench icon-white"></i> Edit Profile Details
                             </a>
-                        {else if $org_creation == 'h'}
                         {/if}
-                    {/if} 
-                    {if isset($private_access)}
-                        <a  href='{urlFor name="user-private-profile"}' class='btn btn-primary pull-right'>
-                            <i class="icon-wrench icon-white"></i> Edit Profile Details
-                        </a>
-                    {/if}
+                    </div>
                 </td>
             </tr>
         </table>
