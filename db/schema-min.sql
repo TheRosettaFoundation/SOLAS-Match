@@ -125,9 +125,11 @@ CREATE TABLE IF NOT EXISTS `Badges` (
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
-	(3, NULL, 'Profile-Filler', 'Filled in required info for user profile.'),
+	(3, NULL, 'Profile-Filler', 'Filled in all info for user  public profile.'),
 	(4, NULL, 'Registered', 'Successfully set up an account'),
-	(5, NULL, 'Native-Language', 'Filled in your native language on your user profile.');
+	(5, NULL, 'Native-Language', 'Filled in your native language on your user profile successfully.'),
+        (6, NULL, 'Translator', 'This volenteer has successfully completed a translation task.'),
+        (7, NULL, 'Proofreader', 'This volenteer has successfully completed a proofreading task.');
 ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
 -- Dumping structure for table Solas-Match-Test.Countries
