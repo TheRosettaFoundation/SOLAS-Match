@@ -122,6 +122,58 @@ class TaskDao
         return $task;
     }
 
+
+    public function getTaskReviews($params)
+    {
+        $args = "";
+        if (isset($params['task_id'])) {
+            $args .= PDOWrapper::cleanseNull($params['task_id']).", ";
+        } else {
+            $args .= "null, ";
+        }
+        if (isset($params['user_id'])) {
+            $args .= PDOWrapper::cleanseNull($params['user_id']).", ";
+        } else {
+            $args .= "null, ";
+        }
+        if (isset($params['corrections'])) {
+            $args .= PDOWrapper::cleanseNull($params['corrections']).", ";
+        } else {
+            $args .= "null, ";
+        }
+        if (isset($params['grammar'])) {
+            $args .= PDOWrapper::cleanseNull($params['grammar']).", ";
+        } else {
+            $args .= "null, ";
+        }
+        if (isset($params['spelling'])) {
+            $args .= PDOWrapper::cleanseNull($params['spelling']).", ";
+        } else {
+            $args .= "null, ";
+        }
+        if (isset($params['consistency'])) {
+            $args .= PDOWrapper::cleanseNull($params['consistency']).", ";
+        } else {
+            $args .= "null, ";
+        }
+        if (isset($params['comment'])) {
+            $args .= PDOWrapper::cleanseNullOrWrapStr($params['comment']).", ";
+        } else {
+            $args .= "null, ";
+        }
+
+        $reviews = NULL;
+        $result = PDOWrapper::call("getTaskReviews", $args);
+        if ($result) {
+            $reviews = array();
+            foreach ($result as $row) {
+                $reviews[] = ModelFactory::buildModel('TaskReview', $row);
+            }
+        }
+
+        return $reviews;
+    }
+
     /*
      * Add an identicle entry with a different ID and target Language
      * Used for bulk uploads
@@ -449,7 +501,7 @@ class TaskDao
         $result = PDOWrapper::call('getSubscribedUsers', "$task_id");
         if ($result) {
             foreach ($result as $row) {
-                $ret[] = UserDao::find($row);
+                $ret[] = UserDao::getUser($row['user_id'])[0];
             }
         }
 

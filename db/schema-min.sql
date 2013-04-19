@@ -407,6 +407,23 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
 -- Data exporting was unselected.
 
 
+-- Dumping structure for table Solas-Match-Test.TaskReviews
+CREATE TABLE IF NOT EXISTS `TaskReviews` (
+  `task_id` bigint(20) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `corrections` int(11) unsigned NOT NULL,
+  `grammar` int(11) unsigned NOT NULL,
+  `spelling` int(11) unsigned NOT NULL,
+  `consistency` int(11) unsigned NOT NULL,
+  `comment` VARCHAR(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  UNIQUE KEY `user_task` (`task_id`,`user_id`),
+  CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_TaskReviews_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
+
+
 -- Dumping structure for table Solas-Match-Test.Tasks
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -1074,7 +1091,6 @@ BEGIN
 	if taskStatusId='' then set taskStatusId=null; end if;
 	if published='' then set published=null; end if;
 	
-    
 	set @q="SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, t.`taskType_id`, t.`taskStatus_id`, t.published FROM ArchivedTasks t
 	          WHERE 1";  
 	          
@@ -1665,7 +1681,7 @@ BEGIN
 	if dLine='' then set dLine=null;end if;
 	
 	
-	set @q= "select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t where 1";-- set update
+	set @q= "select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` from Tasks t where 1";-- set update
 	if id is not null then 
 #set paramaters to be updated
 		set @q = CONCAT(@q," and t.id=",id) ;
@@ -1779,6 +1795,49 @@ BEGIN
 		
 	FROM Tasks t JOIN TaskPrerequisites tp ON tp.`task_id-prerequisite`=t.id
 	WHERE tp.task_id=taskId;	
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getTaskReviews
+DROP PROCEDURE IF EXISTS `getTaskReviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskReviews`(IN `taskId` INT, IN `userId` INT, IN `correction` INT, IN `gram` INT, IN `spell` INT, IN `consis` INT, IN `comm` VARCHAR(2048))
+    READS SQL DATA
+BEGIN
+    if taskId = '' then set taskId = NULL; end if;
+    if userId = '' then set userId = NULL; end if;
+    if correction = '' then set correction = NULL; end if;
+    if gram = '' then set gram = NULL; end if;
+    if spell = '' then set spell = NULL; end if;
+    if consis = '' then set consis = NULL; end if;
+    if comm = '' then set comm = NULL; end if;
+    set @q= "SELECT task_id, user_id, corrections, grammar, spelling, consistency, comment FROM TaskReviews WHERE 1";
+    if taskId IS NOT NULL then
+        set @q = CONCAT(@q, " AND task_id = ", taskId);
+    end if;
+    if userId IS NOT NULL then
+        set @q = CONCAT(@q, " AND user_id = ", userId);
+    end if;
+    if correction IS NOT NULL then
+        set @q = CONCAT(@q, " AND corrections = ", correction);
+    end if;
+    if gram IS NOT NULL then
+        set @q = CONCAT(@q, " AND grammar = ", grammar);
+    end if;
+    if spell IS NOT NULL then
+        set @q = CONCAT(@q, " AND spelling = ", spell);
+    end if;
+    if consis IS NOT NULL then
+        set @q = CONCAT(@q, " AND consistency = ", consis);
+    end if;
+    if comm IS NOT NULL then
+        set @q = CONCAT(@q, " AND comment = '", comm, "'");
+    end if;
+
+    PREPARE stmt FROM @q;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -2746,6 +2805,17 @@ BEGIN
 	SELECT count(1) INTO @totalUsers FROM Users;
 	REPLACE INTO Statistics (name, value)
 	VALUES ('Users', @totalUsers);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateUsers
+DROP PROCEDURE IF EXISTS `submitTaskReview`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN comm VARCHAR(2048))
+BEGIN
+    INSERT INTO TaskReviews (task_id, user_id, corrections, grammar, spelling, consistency, comment)
+        VALUES (taskId, userId, correction, gram, spell, consis, comm);
 END//
 DELIMITER ;
 

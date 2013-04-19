@@ -230,12 +230,12 @@ class UserDao
     {
         $ret = null;
         if ($result = PDOWrapper::call("getUserTaskStreamNotification", PDOWrapper::cleanse($userId))) {
-            $ret = $result[0];
+            $ret = ModelFactory::buildModel("UserTaskStreamNotification", $result[0]);;
         }
         return $ret;
     }
 
-    public function removeTaskStreamNotification($userId)
+    public static function removeTaskStreamNotification($userId)
     {
         $ret = null;
         if ($result = PDOWrapper::call('removeTaskStreamNotification', PDOWrapper::cleanse($userId))) {
@@ -244,13 +244,13 @@ class UserDao
         return $ret;
     }
 
-    public function requestTaskStreamNotification($userId, $interval)
+    public static function requestTaskStreamNotification($userId, $interval)
     {
-        $ret = null;
+        $ret = 0;
         $args = PDOWrapper::cleanse($userId).', ';
         $args .= PDOWrapper::cleanse($interval);
         if ($result = PDOWrapper::call("userTaskStreamNotificationInsertAndUpdate", $args)) {
-            $ret = true;
+            $ret = 1;
         }
         return $ret;
     }

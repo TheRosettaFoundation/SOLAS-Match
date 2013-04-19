@@ -42,8 +42,6 @@ $app->configureMode('development', function () use ($app) {
 });
 
 //TODO remove all requires bar RoutHandlers
-//require_once 'HTTP/Request2.php';
-
 require_once 'Common/HttpMethodEnum.php';
 require_once 'Common/Settings.class.php';
 require_once 'Common/NotificationIntervalEnum.class.php';
@@ -85,6 +83,7 @@ require_once 'Common/models/Language.php';
 require_once 'Common/models/Country.php';
 require_once 'Common/models/TaskMetadata.php';
 require_once 'Common/models/MembershipRequest.php';
+require_once 'Common/models/UserTaskStreamNotification.php';
 
 require_once 'Common/protobufs/emails/EmailMessage.php';
 require_once 'Common/protobufs/emails/FeedbackEmail.php';

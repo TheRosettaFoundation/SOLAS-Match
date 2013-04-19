@@ -96,6 +96,25 @@ class Notify
         }
     }
 
+    public static function notifyOrgClaimedTask($userId, $taskId)
+    {
+        $subscribed_users = TaskDao::getSubscribedUsers($taskId);
+        if (count($subscribed_users) > 0) {
+            $messagingClient = new MessagingClient();
+            if ($messagingClient->init()) {
+                $message_type = new TaskClaimed();
+                $message_type->task_id = $taskId;
+                $message_type->translator_id = $userId;
+                foreach ($subscribed_users as $user) {
+                    $message_type->user_id = $user->getId();
+                    $message = $messagingClient->createMessageFromProto($message_type);
+                    $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                            $messagingClient->TaskClaimedTopic);
+                }
+            }
+        }
+    }
+
     public static function sendEmailNotifications($taskId, $notificationType)
     {
         $subscribed_users = TaskDao::getSubscribedUsers($taskId);
@@ -116,24 +135,11 @@ class Notify
                         }
                         break;
                             
-                    case NotificationTypes::CLAIM:
-                        $message_type = new TaskClaimed();
-                        $message_type->task_id = $taskId;
-                        $translator = TaskDao::getUserClaimedTask($taskId);
-                        $message_type->translator_id = $translator->getUserId();
-                        foreach ($subscribed_users as $user) {
-                            $message_type->user_id = $user->getId();
-                            $message = $messagingClient->createMessageFromProto($message_type);
-                            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                                    $messagingClient->TaskClaimedTopic);
-                        }
-                        break;
-                            
                     case NotificationTypes::UPLOAD:
                         $message_type = new TaskTranslationUploaded();
                         $message_type->task_id = $taskId;
                         $translator = TaskDao::getUserClaimedTask($taskId);
-                        $message_type->translator_id = $translator->getUserId();
+                        $message_type->translator_id = $translator->getId();
                         foreach ($subscribed_users as $user) {
                             $message_type->user_id = $user->getId();
                             $message = $messagingClient->createMessageFromProto($message_type);

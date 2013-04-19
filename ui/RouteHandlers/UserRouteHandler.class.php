@@ -588,7 +588,7 @@ class UserRouteHandler
             $lastSent = null;
 
             if ($notifData) {
-                $interval = $notifData['interval'];
+                $interval = $notifData->getInterval();
                 switch ($interval) {
                     case NotificationIntervalEnum::DAILY:
                         $interval = "daily";
@@ -601,8 +601,8 @@ class UserRouteHandler
                         break;
                 }
 
-                if ($notifData['last-sent'] != null) {
-                    $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData['last-sent']));
+                if ($notifData->getLastSent() != null) {
+                    $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
                 }
             }
             $app->view()->appendData(array(
@@ -647,7 +647,7 @@ class UserRouteHandler
         $interval = null;
         $lastSent = null;
         if ($notifData) {
-            $interval = $notifData['interval'];
+            $interval = $notifData->getInterval();
             switch ($interval) {
                 case NotificationIntervalEnum::DAILY:
                     $interval = "daily";
@@ -660,13 +660,13 @@ class UserRouteHandler
                     break;
             }
             
-            if ($notifData['last-sent'] != null) {
-                $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData['last-sent']));
+            if ($notifData->getLastSent() != null) {
+                $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
             }
 
             $app->view()->appendData(array(
                         "interval"  => $interval,
-                        "intervalId"=> $notifData['interval'],
+                        "intervalId"=> $notifData->getInterval(),
                         "lastSent"  => $lastSent
             ));
         }
