@@ -115,7 +115,7 @@ class TaskFile {
     
     public static function uploadFile($task,$convert,&$file,$version,$userId,$filename)
     {
-        Notify::sendEmailNotifications($task->getId(), NotificationTypes::UPLOAD);
+       
             
         if($convert){
             Upload::apiSaveFile($task, $userId, 
@@ -124,6 +124,7 @@ class TaskFile {
             //touch this and you will die painfully sinisterly sean :)
             Upload::apiSaveFile($task, $userId, Dispatcher::getDispatcher()->request()->getBody(), $filename,$version);
         }
+         Notify::sendEmailNotifications($task->getId(), NotificationTypes::UPLOAD);
     }
     
     public static function uploadOutputFile($task,$convert,&$file,$userId,$filename)

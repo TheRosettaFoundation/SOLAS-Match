@@ -43,9 +43,7 @@ class Notify
             $message = $messagingClient->createMessageFromProto($message_type);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                     $messagingClient->UserTaskClaimTopic);
-        } else {
-            echo "<p>Failed to initialize messaging client</p>";
-        }
+        } 
     }
 
     public static function sendPasswordResetEmail($user_id)
@@ -57,9 +55,7 @@ class Notify
             $message = $messagingClient->createMessageFromProto($message_type);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                     $messagingClient->PasswordResetTopic);
-        } else {
-            echo "<p>Failed to initialize messaging client</p>";
-        }
+        } 
     }
 
     public static function notifyUserOrgMembershipRequest($user_id, $org_id, $accepted)
@@ -91,9 +87,7 @@ class Notify
                 $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                         $messagingClient->OrgMembershipRefusedTopic);
             }
-        } else {
-                echo "<p>Failed to initialize messaging client</p>";
-        }
+        } 
     }
 
     public static function notifyOrgClaimedTask($userId, $taskId)
@@ -148,12 +142,9 @@ class Notify
                         }
                         break;
                             
-                    default:
-                        echo "<p>Invalid email type</p>";
+                 
                 }
-            } else {
-                echo "<p>Failed to initialize messaging client</p>";
-            }
+            } 
         }
     }
 }
