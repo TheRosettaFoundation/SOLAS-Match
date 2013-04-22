@@ -25,6 +25,9 @@ class ProjectRouteHandler
         $app->get("/project/id/:project_id/mark-archived", array($middleware, "authUserForOrgProject"),
         array($this, "archiveProject"))->name("archive-project");
 
+        $app->get("/project/:project_id/file", array($this, "downloadProjectFile")
+        )->name("download-project-file");
+
         $app->get("/project/:project_id/test", array($this, "test"));
     }
 
@@ -634,6 +637,12 @@ class ProjectRouteHandler
         $app->redirect($ref = $app->request()->getReferrer());
     }    
     
+    public function downloadProjectFile($projectId)
+    {
+        $app = Slim::getInstance();
+        $siteApi = Settings::get("site.api");
+        $app->redirect("{$siteApi}v0/projects/$projectId/file/");
+    }
 }
 
 $route_handler = new ProjectRouteHandler();

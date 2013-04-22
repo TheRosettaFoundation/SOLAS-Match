@@ -149,7 +149,7 @@ class TaskDao
 
     public function submitReview($review)
     {
-        $request = "{$this->siteApi}v0/tasks/{$review->getTaskId()}/review";
+        $request = "{$this->siteApi}v0/tasks/review";
         $response = $this->client->call(null, $request, HttpMethodEnum::POST, $review);
         return $response;
     }

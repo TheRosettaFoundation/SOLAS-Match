@@ -11,11 +11,18 @@
 
 <form class="well" method="post" action="{urlFor name="task-review" options="task_id.$taskId"}">
     {foreach $tasks as $task}
-        {assign var="id" value=$task->getId()}
         <h2>{$task->getTitle()}</h2>
-        <p>You can redownload this source file 
-            <a href="{urlFor name="download-task-latest-version" options="task_id.$id"}">here</a>.
-        </p>
+        {if $task->getId() != null}
+            {assign var="id" value=$task->getId()}
+            <p>You can redownload this source file 
+                <a href="{urlFor name="download-task-latest-version" options="task_id.$id"}">here</a>.
+            </p>
+        {else}
+            {assign var="id" value=$task->getProjectId()}
+            <p>You can download the project file
+                <a href="{urlFor name="download-project-file" options="project_id.$id"}">here</a>.
+            </p>
+        {/if}
         <h3>Corrections <small>Were there many mistakes in the source file?</h3>
         <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
         <input type="text" name="corrections_{$id}" value="3" />

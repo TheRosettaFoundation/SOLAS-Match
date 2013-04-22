@@ -1285,13 +1285,26 @@ class TaskRouteHandler
         }
 
         $preReqTasks = $taskDao->getTaskPreReqs($taskId);
+        if ($preReqTasks == null || count($preReqTasks) == 0) {
+            $projectDao = new ProjectDao();
+            $project = $projectDao->getProject($task->getProjectId());
+
+            $dummyTask = new Task();        //Create a dummy task to hold the project info
+            $dummyTask->setProjectId($task->getProjectId());
+            $dummyTask->setTitle($project->getTitle());
+            $preReqTasks = array();
+            $preReqTasks[] = $dummyTask;
+        }
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             $userId = UserSession::getCurrentUserID();
 
             if (isset($post['submitReview'])) {
-                foreach ($preReqTasks as $pTask) {
+                $i = 0;
+                $error = null;
+                while ($i < count($preReqTasks) && $error == null) {
+                    $pTask = $preReqTasks[$i++];
                     $review = new TaskReview();
                     $id = $pTask->getId();
 
@@ -1299,44 +1312,61 @@ class TaskRouteHandler
                     $review->setTaskId($id);
                     $review->setProjectId($pTask->getProjectId());
 
+                    if (is_null($id)) {
+                        $id = $pTask->getProjectId();
+                    }
+
                     if (isset($post["corrections_$id"]) && ctype_digit($post["corrections_$id"])) {
                         $value = intval($post["corrections_$id"]);
                         if ($value > 0 && $value <= 5) {
                             $review->setCorrections($value);
+                        } else {
+                            $error = "Corrections value must be between 1 and 5";
                         }
                     }
                     if (isset($post["grammar_$id"]) && ctype_digit($post["grammar_$id"])) {
                         $value = intval($post["grammar_$id"]);
                         if ($value > 0 && $value <= 5) {
                             $review->setGrammar($value);
+                        } else {
+                            $error = "Grammar value must be between 1 and 5";
                         }
                     }
                     if (isset($post["spelling_$id"]) && ctype_digit($post["spelling_$id"])) {
                         $value = intval($post["spelling_$id"]);
                         if ($value > 0 && $value <= 5) {
                             $review->setSpelling($value);
+                        } else {
+                            $error = "Spelling value must be between 1 and 5";
                         }
                     }
                     if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
                         $value = intval($post["consistency_$id"]);
                         if ($value > 0 && $value <= 5) {
                             $review->setConsistency($value);
+                        } else {
+                            $error = "Consistency value must be between 1 and 5";
                         }
                     }
                     if (isset($post["comment_$id"]) && $post["comment_$id"] != "") {
                         $review->setComment($post["comment_$id"]);
                     }
 
-                    if ($review->getTaskId() != null && $review->getUserId() != null) {
-                        if ($taskDao->submitReview($review)) {
-                            $app->flash("success", 
-                                    "Review of task {$pTask->getTitle()} has been submitted successfully");
-                            $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
-                        } else {
-                            $app->flashNow("error", 
-                                    "Unable to submit review for {$pTask->getTitle()}, please try again later");
+                    if ($review->getProjectId() != null && $review->getUserId() != null && $error == null) {
+                        if (!$taskDao->submitReview($review)) {
+                            $error = "Unable to submit review for {$pTask->getTitle()}, please try again later";
+                        }
+                    } else {
+                        if ($error != null) {
+                            $app->flashNow("error", $error);
                         }
                     }
+                }
+                if ($error == null) {
+                    $app->flash("success", "Review of task {$pTask->getTitle()} has been submitted successfully");
+                    $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+                } else {
+                    $app->flashNow("error", $error);
                 }
             }
         }

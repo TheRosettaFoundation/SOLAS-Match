@@ -125,7 +125,7 @@ class Tasks {
                     Dispatcher::sendResponce(null, $review, null, $format);
                 }, 'getTaskReview');
 
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/:id/review(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/review(:format)/',
                 function ($id, $format = '.json')
                 {
                     $data=Dispatcher::getDispatcher()->request()->getBody();

@@ -158,11 +158,6 @@ class Projects
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/file(:format)/',
                                                         function ($id, $format = ".json") {
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
-            }
             Dispatcher::sendResponce(null,ProjectDao::getProjectFile($id), null, $format);
         }, 'getProjectFile');
         

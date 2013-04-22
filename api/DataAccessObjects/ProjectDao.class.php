@@ -191,8 +191,8 @@ class ProjectDao
         $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
         $source = Settings::get("files.upload_path")."proj-$projectId/$filename";
-        return file_get_contents($source);
-        //IO::downloadFile($source, $projectFileInfo->getMime());
+        //return file_get_contents($source);
+        IO::downloadFile($source, $projectFileInfo->getMime());
     }
     
     public static function saveProjectFile($projectId,$file,$filename,$userId)
