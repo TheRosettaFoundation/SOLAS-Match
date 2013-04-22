@@ -120,8 +120,10 @@ class OrganisationDao
 
     public function deleteOrg($orgId)
     {
+        $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId";
-        $this->client->call(null,$request, HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null,$request, HttpMethodEnum::DELETE);
+        return $ret;
     }
 
     public function createMembershipRequest($orgId, $userId)

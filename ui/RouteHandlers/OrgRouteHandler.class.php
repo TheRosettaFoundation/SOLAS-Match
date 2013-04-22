@@ -298,44 +298,49 @@ class OrgRouteHandler
         $org = $orgDao->getOrganisation($org_id);
         if($post = $app->request()->post()) {
 
-            if(isset($post['displayName'])) $org->setName($post['displayName']); 
-            if(isset($post['homepage'])) $org->setHomePage($post['homepage']); 
-            if(isset($post['biography'])) $org->setBiography($post['biography']);
-            if(isset($post['address'])) $org->setAddress($post['address']);
-            if(isset($post['city'])) $org->setCity($post['city']);
-            if(isset($post['country'])) $org->setCountry($post['country']);
-            if(isset($post['email'])) $org->setEmail($post['email']);
+            if (isset($post['updateOrgDetails'])) {
+                if(isset($post['displayName'])) $org->setName($post['displayName']); 
+                if(isset($post['homepage'])) $org->setHomePage($post['homepage']); 
+                if(isset($post['biography'])) $org->setBiography($post['biography']);
+                if(isset($post['address'])) $org->setAddress($post['address']);
+                if(isset($post['city'])) $org->setCity($post['city']);
+                if(isset($post['country'])) $org->setCountry($post['country']);
+                if(isset($post['email'])) $org->setEmail($post['email']);
 
-            $regionalFocus = array();
-            if(isset($post["africa"])) $regionalFocus[] = "Africa";             
-            if(isset($post["asia"])) $regionalFocus[] = "Asia";             
-            if(isset($post["australia"])) $regionalFocus[] = "Australia"; 
-            if(isset($post["europe"])) $regionalFocus[] .= "Europe"; 
-            if(isset($post["northAmerica"])) $regionalFocus[] .= "North-America"; 
-            if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
+                $regionalFocus = array();
+                if(isset($post["africa"])) $regionalFocus[] = "Africa";             
+                if(isset($post["asia"])) $regionalFocus[] = "Asia";             
+                if(isset($post["australia"])) $regionalFocus[] = "Australia"; 
+                if(isset($post["europe"])) $regionalFocus[] .= "Europe"; 
+                if(isset($post["northAmerica"])) $regionalFocus[] .= "North-America"; 
+                if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
 
-            if(!empty($regionalFocus)) {
-                $regionalFocusString = "";
-                foreach($regionalFocus as $region) {
-                    $regionalFocusString .= $region.", ";
+                if(!empty($regionalFocus)) {
+                    $regionalFocusString = "";
+                    foreach($regionalFocus as $region) {
+                        $regionalFocusString .= $region.", ";
+                    }
+                    $lastComma = strrpos($regionalFocusString, ",");
+                    $regionalFocusString[$lastComma] = "";
+                    $org->setRegionalFocus($regionalFocusString);
                 }
-                $lastComma = strrpos($regionalFocusString, ",");
-                $regionalFocusString[$lastComma] = "";
-                $org->setRegionalFocus($regionalFocusString);
+
+
+                $orgDao->updateOrg($org); 
+                $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
             }
 
+            if (isset($post['deleteId'])) {
 
-            $orgDao->updateOrg($org); 
-            $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
-        }
-
-        $deleteId = $app->request()->post("deleteId");
-        if ($deleteId) {
-            if ($orgDao->deleteOrg($org->getId())) {
-                $app->flash("success", "Successfully deleted org ".$org->getName());
-                $app->redirect($app->urlFor("home"));
-            } else {
-                $app->flashNow("error", "Unable to delete organisation. Please try again later.");
+                $deleteId = $post["deleteId"];
+                if ($deleteId) {
+                    if ($orgDao->deleteOrg($org->getId())) {
+                        $app->flash("success", "Successfully deleted org ".$org->getName());
+                        $app->redirect($app->urlFor("home"));
+                    } else {
+                        $app->flashNow("error", "Unable to delete organisation. Please try again later.");
+                    }
+                }
             }
         }
         
