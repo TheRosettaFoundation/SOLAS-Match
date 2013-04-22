@@ -32,7 +32,7 @@
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">Home</a>
                         </li> 
-                        {if isset($user_is_organisation_member)}
+                        {if isset($user_is_organisation_member)||isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if} >
                                  <a href="{urlFor name="org-dashboard"}">Dashboard</a>
                              </li>
