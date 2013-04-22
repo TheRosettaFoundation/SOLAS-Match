@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-
--- Dumping structure for table Solas-Match-Test.ArchivedProjects
+-- Dumping structure for table big-merge.ArchivedProjects
+DROP TABLE IF EXISTS `ArchivedProjects`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -33,40 +33,47 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `deadline` datetime NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
   `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `word-count` INT(10) NOT NULL,
+  `word-count` int(10) NOT NULL,
   `created` datetime NOT NULL,
   `language_id` int(10) unsigned NOT NULL,
   `country_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `organisation_id` (`organisation_id`,`title`,`language_id`,`country_id`),
-  CONSTRAINT `FK_archivedproject_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE
+  UNIQUE KEY `id` (`id`),
+  KEY `organisation_id` (`organisation_id`,`language_id`,`country_id`),
+  KEY `FK_ArchivedProjects_Languages` (`language_id`),
+  KEY `FK_ArchivedProjects_Countries` (`country_id`),
+  CONSTRAINT `FK_archivedproject_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ArchivedProjects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ArchivedProjects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table Solas-Match-Test.ArchivedProjectsMetaData
+-- Dumping structure for table big-merge.ArchivedProjectsMetaData
+DROP TABLE IF EXISTS `ArchivedProjectsMetaData`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
   `archived-project_id` int(10) unsigned NOT NULL,
-  `archived-date` datetime NOT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
+  `user_id-projectCreator` int(10) unsigned NOT NULL,
+  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `file-token` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `mime-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `archived-date` datetime NOT NULL,
   UNIQUE KEY `archived-project_id` (`archived-project_id`),
   KEY `FK_ArchivedProjectsMetaData_Users` (`user_id-archived`),
+  KEY `FK_ArchivedProjectsMetaData_Users_2` (`user_id-projectCreator`),
   CONSTRAINT `FK_ArchivedProjectsMetaData_ArchivedProjects` FOREIGN KEY (`archived-project_id`) REFERENCES `ArchivedProjects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_ArchivedProjectsMetaData_Users` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_ArchivedProjectsMetaData_Users` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ArchivedProjectsMetaData_Users_2` FOREIGN KEY (`user_id-projectCreator`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.ArchivedTasks
+-- Dumping structure for table big-merge.ArchivedTasks
+DROP TABLE IF EXISTS `ArchivedTasks`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
   `project_id` int(20) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
   `deadline` datetime NOT NULL,
-  `word-count` int(11) DEFAULT NULL,
+  `word-count` int(11) NOT NULL,
   `created-time` datetime NOT NULL,
   `language_id-source` int(11) unsigned NOT NULL,
   `language_id-target` int(11) unsigned NOT NULL,
@@ -75,14 +82,13 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `taskType_id` int(11) unsigned NOT NULL,
   `taskStatus_id` int(11) unsigned NOT NULL,
   `published` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  UNIQUE KEY `title` (`title`,`project_id`,`language_id-source`,`language_id-target`,`country_id-source`,`country_id-target`,`taskType_id`),
+  UNIQUE KEY `id` (`id`),
   KEY `FK_ArchivedTasks_Languages` (`language_id-source`),
   KEY `FK_ArchivedTasks_Languages_2` (`language_id-target`),
   KEY `FK_ArchivedTasks_Countries` (`country_id-source`),
   KEY `FK_ArchivedTasks_Countries_2` (`country_id-target`),
   KEY `FK_ArchivedTasks_TaskTypes` (`taskType_id`),
   KEY `FK_ArchivedTasks_TaskStatus` (`taskStatus_id`),
-  KEY `id` (`id`),
   CONSTRAINT `FK_ArchivedTasks_Countries` FOREIGN KEY (`country_id-source`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasks_Countries_2` FOREIGN KEY (`country_id-target`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasks_Languages` FOREIGN KEY (`language_id-source`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -91,24 +97,29 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   CONSTRAINT `FK_ArchivedTasks_TaskTypes` FOREIGN KEY (`taskType_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.ArchivedTasksMetadata
+-- Dumping structure for table big-merge.ArchivedTasksMetadata
+DROP TABLE IF EXISTS `ArchivedTasksMetadata`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
+  `version` int(10) unsigned NOT NULL,
+  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `content-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `upload-time` datetime NOT NULL,
   `user_id-claimed` int(10) unsigned DEFAULT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
+  `prerequisites` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_id-taskCreator` int(10) unsigned NOT NULL,
   `archived-date` datetime NOT NULL,
   UNIQUE KEY `archivedTask_id` (`archivedTask_id`),
   KEY `FK_ArchivedTasksMetadata_Users` (`user_id-claimed`),
   KEY `FK_ArchivedTasksMetadata_Users_2` (`user_id-archived`),
+  KEY `FK_ArchivedTasksMetadata_Users_3` (`user_id-taskCreator`),
   CONSTRAINT `FK_ArchivedTasksMetadata_ArchivedTasks` FOREIGN KEY (`archivedTask_id`) REFERENCES `ArchivedTasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasksMetadata_Users` FOREIGN KEY (`user_id-claimed`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_ArchivedTasksMetadata_Users_2` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_ArchivedTasksMetadata_Users_2` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ArchivedTasksMetadata_Users_3` FOREIGN KEY (`user_id-taskCreator`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.Badges
@@ -815,15 +826,26 @@ BEGIN
 	DECLARE cur1 CURSOR FOR SELECT t.id FROM Tasks t WHERE t.project_id=projectId;
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 	
+		 
 	if not exists(select 1 from ArchivedProjects where id = projectId) then
 		INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id, country_id)
-		
+
 		SELECT *
 		FROM Projects p
-		WHERE p.id=projectId;
+		WHERE p.id=projectId;		
 		
-		INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`, `archived-date`, `user_id-archived`)
-		VALUES (projectId, NOW(), user_id);		
+		set @`userIdProjectCreator` = null;
+		set @`filename` = null;
+		set @`fileToken` = null;
+		set @`mimeType` = null;
+		
+		SELECT pf.user_id INTO @`userIdProjectCreator` FROM ProjectFiles pf WHERE pf.project_id=projectId;
+		SELECT pf.filename INTO @`filename` FROM ProjectFiles pf WHERE pf.project_id=projectId;
+		SELECT pf.`file-token` INTO @`fileToken` FROM ProjectFiles pf WHERE pf.project_id=projectId;
+		SELECT pf.`mime-type` INTO @`mimeType` FROM ProjectFiles pf WHERE pf.project_id=projectId;
+				
+		INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`,`user_id-archived`,`user_id-projectCreator`,`filename`,`file-token`,`mime-type`,`archived-date`)
+		VALUES (projectId,user_id,@`userIdProjectCreator`,@`filename`,@`fileToken`,@`mimeType`,NOW());
 		
 		OPEN cur1;
 		
@@ -832,41 +854,53 @@ BEGIN
 			IF done THEN
 			 	LEAVE read_loop;
 			END IF;
-			call archiveTask(taskId, user_id);
+         call archiveTask(taskId, user_id);
 		END LOOP;
-		CLOSE cur1;
+		CLOSE cur1;	  	
 		
 		DELETE FROM Projects WHERE id=projectId;
-		CALL getArchivedProject(projectId,null,null,null,null,null,null,null,null,null, user_id);
-
-                SELECT 1 AS result;
-        ELSE
-                SELECT 0 AS result;
-        END IF;  
+	   SELECT 1 AS archivedResult;
+   ELSE
+      SELECT 0 AS archivedResult;
+   END IF;	
+	  
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.archiveTask
+-- Dumping structure for procedure big-merge.archiveTask
 DROP PROCEDURE IF EXISTS `archiveTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT, IN `uID` INT)
     MODIFIES SQL DATA
 BEGIN
+
 	if not exists(select 1 from ArchivedTasks where id = tID) then
+	
+		set @`version` = null;
+		set @`filename` = null;
+		set @`contentType` = null;
+		set @`userIdClaimed` = null;
+		set @`preRequisites` = null;
+		set @`userIdTaskCreator` = null;
+		set @`uploadTime` = null;
+	
+		SELECT MAX(`version`) INTO @`version` FROM TaskFileVersions tf WHERE tf.task_id=tID;
+		SELECT `filename` INTO @`filename` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
+		SELECT `content-type` INTO @`contentType` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
+		SELECT `upload-time` INTO @`uploadTime` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
+		SELECT tc.`user_id` INTO @`userIdClaimed` FROM TaskClaims tc WHERE tc.`task_id` = tID LIMIT 1; 
+		SELECT GROUP_CONCAT(p.`task_id-prerequisite`) INTO @`preRequisites` FROM TaskPrerequisites p WHERE p.task_id=tID;
+		SELECT tf.user_id INTO @`userIdTaskCreator` FROM TaskFileVersions tf WHERE tf.task_id=tID AND tf.`version`=0 LIMIT 1;
+	
 		INSERT INTO `ArchivedTasks` (`id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `taskType_id`, `taskStatus_id`, `published`)
-			SELECT * FROM Tasks t WHERE t.id = tID;
+			SELECT t.* FROM Tasks t WHERE t.id = tID;
 		
 		INSERT INTO ArchivedTasksMetadata 
-		(`user_id-claimed`,`user_id-archived`,`archived-date`,`archivedTask_id`) 
-		select 
-		(SELECT  tc.user_id
-			FROM TaskClaims tc
-			WHERE tc.task_id = tID
-			limit 1)  as `user_id-claimed`
-		,uID
-		,now()
-		,tID;
+		(`archivedTask_id`,`version`,`filename`,`content-type`,`user_id-claimed`,`user_id-archived`,`prerequisites`,`user_id-taskCreator`,`upload-time`,`archived-date`) 
+
+		VALUES
+		(tID, @`version`,@`filename`,@`contentType`,@`userIdClaimed`,uID,@`prerequisites`,@`userIdTaskCreator`,@`uploadTime`,NOW());
+
 	   
 	   DELETE FROM Tasks WHERE id = tID ;
 	   select 1 as result;
