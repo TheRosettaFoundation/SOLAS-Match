@@ -321,14 +321,14 @@
     </div>
     <p>
         {if isset($interval)}
-            You are currently receiving <strong>{$interval}</strong> eemails.
+            You are currently receiving <strong>{$interval}</strong> emails.
             {if $lastSent != null}
                 The last email was sent on {$lastSent}.
             {else}
                 No emails have been sent yet.
             {/if}
         {else}
-            You are not currently receiving task stream notification e-mails.
+            You are not currently receiving task stream notification emails.
         {/if}
     </p>
     <p style="margin-bottom:50px;"/>
