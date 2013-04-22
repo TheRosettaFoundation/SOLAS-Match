@@ -64,6 +64,9 @@ class TaskRouteHandler
         
         $app->get("/task/:task_id/user-feedback/", array($middleware, "authenticateUserForTask"), 
         array($this, "taskUserFeedback"))->via("POST")->name("task-user-feedback");   
+
+        $app->get("/task/:task_id/review", array($middleware, "authenticateUserForTask"),
+        array($this, "taskReview"))->via("POST")->name("task-review");
         
         $app->get(Settings::get("site.api"), array($middleware, "authUserForOrgTask"))->name("api");
     }
@@ -1257,6 +1260,93 @@ class TaskRouteHandler
         ));
         
         $app->render("task.user-feedback.tpl");
+    }
+
+    public function taskReview($taskId)
+    {
+        $app = Slim::getInstance();
+        $taskDao = new TaskDao();
+
+        $task = $taskDao->getTask($taskId);
+        $action = "";
+        switch ($task->getTaskType()) {
+            case TaskTypeEnum::SEGMENTATION:
+                $action = "segmented";
+                break;
+            case TaskTypeEnum::TRANSLATION:
+                $action = "translated";
+                break;
+            case TaskTypeEnum::PROOFREADING:
+                $action = "proofread";
+                break;
+            case TaskTypeEnum::DESEGMENTATION:
+                $action = "merged";
+                break;
+        }
+
+        $preReqTasks = $taskDao->getTaskPreReqs($taskId);
+
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            $userId = UserSession::getCurrentUserID();
+
+            if (isset($post['submitReview'])) {
+                foreach ($preReqTasks as $pTask) {
+                    $review = new TaskReview();
+                    $id = $pTask->getId();
+
+                    $review->setUserId($userId);
+                    $review->setTaskId($id);
+
+                    if (isset($post["corrections_$id"]) && ctype_digit($post["corrections_$id"])) {
+                        $value = intval($post["corrections_$id"]);
+                        if ($value > 0 && $value <= 5) {
+                            $review->setCorrections($value);
+                        }
+                    }
+                    if (isset($post["grammar_$id"]) && ctype_digit($post["grammar_$id"])) {
+                        $value = intval($post["grammar_$id"]);
+                        if ($value > 0 && $value <= 5) {
+                            $review->setGrammar($value);
+                        }
+                    }
+                    if (isset($post["spelling_$id"]) && ctype_digit($post["spelling_$id"])) {
+                        $value = intval($post["spelling_$id"]);
+                        if ($value > 0 && $value <= 5) {
+                            $review->setSpelling($value);
+                        }
+                    }
+                    if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
+                        $value = intval($post["consistency_$id"]);
+                        if ($value > 0 && $value <= 5) {
+                            $review->setConsistency($value);
+                        }
+                    }
+                    if (isset($post["comment_$id"]) && $post["comment_$id"] != "") {
+                        $review->setComment($post["comment_$id"]);
+                    }
+
+                    if ($review->getTaskId() != null && $review->getUserId() != null) {
+                        if ($taskDao->submitReview($review)) {
+                            $app->flash("success", 
+                                    "Review of task {$pTask->getTitle()} has been submitted successfully");
+                            $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+                        } else {
+                            $app->flashNow("error", 
+                                    "Unable to submit review for {$pTask->getTitle()}, please try again later");
+                        }
+                    }
+                }
+            }
+        }
+
+        $app->view()->appendData(array(
+                    'taskId'    => $taskId,
+                    'tasks'     => $preReqTasks,
+                    'action'    => $action
+        ));
+
+        $app->render("task.review.tpl");
     }
     
     private function setTaskModelData($taskModel, $project, $task, $i) {

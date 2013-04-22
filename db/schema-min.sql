@@ -2847,8 +2847,16 @@ DROP PROCEDURE IF EXISTS `submitTaskReview`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN comm VARCHAR(2048))
 BEGIN
-    INSERT INTO TaskReviews (task_id, user_id, corrections, grammar, spelling, consistency, comment)
-        VALUES (taskId, userId, correction, gram, spell, consis, comm);
+    IF NOT EXISTS (SELECT 1 
+                    FROM TaskReviews
+                    WHERE task_id = taskId
+                    AND user_id = userId) then
+        INSERT INTO TaskReviews (task_id, user_id, corrections, grammar, spelling, consistency, comment)
+            VALUES (taskId, userId, correction, gram, spell, consis, comm);
+        SELECT 1 as result;
+    else
+        SELECT 0 as result;
+    end if;
 END//
 DELIMITER ;
 

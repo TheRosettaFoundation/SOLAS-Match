@@ -121,10 +121,18 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/review(:format)/',
                 function ($id, $format = '.json')
                 {
-                    $taskDao = new TaskDao();
-                    $review = $taskDao->getTaskReviews(array('task_id' => $id));
+                    $review = TaskDao::getTaskReviews(array('task_id' => $id));
                     Dispatcher::sendResponce(null, $review, null, $format);
                 }, 'getTaskReview');
+
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/:id/review(:format)/',
+                function ($id, $format = '.json')
+                {
+                    $data=Dispatcher::getDispatcher()->request()->getBody();
+                    $client = new APIHelper($format);
+                    $review = $client->deserialize($data,"TaskReview");
+                    Dispatcher::sendResponce(null, TaskDao::submitReview($review), null, $format);
+                }, 'submitReview');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {

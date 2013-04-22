@@ -147,6 +147,13 @@ class TaskDao
         $response =$this->client->call(null,$request, HttpMethodEnum::PUT, $feedbackData);
     }
 
+    public function submitReview($review)
+    {
+        $request = "{$this->siteApi}v0/tasks/{$review->getTaskId()}/review";
+        $response = $this->client->call(null, $request, HttpMethodEnum::POST, $review);
+        return $response;
+    }
+
     public function saveTaskFile($taskId, $filename, $userId, $fileData, $version = null, $convert = false)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/file/$filename/$userId";
