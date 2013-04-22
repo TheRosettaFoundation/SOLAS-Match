@@ -443,7 +443,7 @@ class ProjectRouteHandler
             
 
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && is_null($upload_error)
-                && is_null($uniqueLanguageCountry_err)) { 
+                && is_null($uniqueLanguageCountry_err) && is_null(($wordcount_err))) { 
                 
                 $project->setOrganisationId($org_id);
                 if($project = $projectDao->createProject($project)) {
@@ -526,7 +526,8 @@ class ProjectRouteHandler
                     $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
                 }              
             } else {     
-                $project->setWordCount($post['word_count']);
+                $project->setWordCount($post["word_count"]);
+                $project->setDeadline($post["deadline"]);
                 $app->view()->appendData(array(
                     "title_err"             => $title_err,
                     "deadline_err"          => $deadline_err,      
