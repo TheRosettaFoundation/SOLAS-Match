@@ -530,6 +530,9 @@ class ModelFactory
     {
         $ret = new TaskReview();
 
+        if (isset($modelData['project_id'])) {
+            $ret->setProjectId($modelData['project_id']);
+        }
         if (isset($modelData['task_id'])) {
             $ret->setTaskId($modelData['task_id']);
         }

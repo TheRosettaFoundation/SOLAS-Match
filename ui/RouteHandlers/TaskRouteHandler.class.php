@@ -1297,6 +1297,7 @@ class TaskRouteHandler
 
                     $review->setUserId($userId);
                     $review->setTaskId($id);
+                    $review->setProjectId($pTask->getProjectId());
 
                     if (isset($post["corrections_$id"]) && ctype_digit($post["corrections_$id"])) {
                         $value = intval($post["corrections_$id"]);

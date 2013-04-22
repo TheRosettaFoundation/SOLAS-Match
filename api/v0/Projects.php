@@ -82,15 +82,16 @@ class Projects
                 Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getProject');
 
+        Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/reviews(:format)/',
+                function ($id, $format = '.json')
+                {
+                    $reviews = TaskDao::getTaskReviews(array('project_id' => $id));
+                    Dispatcher::sendResponce(null, $reviews, null, $format);
+                }, 'getProjectTaskReviews');
+
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/tasks(:format)/',
             function ($id, $format = '.json')
             {
-                if(!is_numeric($id) && strstr($id, '.')) {
-                    $id = explode('.', $id);
-                    $format = '.'.$id[1];
-                    $id = $id[0];
-                }
-                
                 $data = ProjectDao::getProjectTasks($id);
                 Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getProjectTasks');

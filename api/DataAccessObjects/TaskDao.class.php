@@ -127,6 +127,7 @@ class TaskDao
         $ret = null;
 
         $args = '';
+        $args .= PDOWrapper::cleanseNull($review->getProjectId()).', ';
         $args .= PDOWrapper::cleanseNull($review->getTaskId()).', ';
         $args .= PDOWrapper::cleanseNull($review->getUserId()).', ';
         $args .= PDOWrapper::cleanseNull($review->getCorrections()).', ';
@@ -146,6 +147,12 @@ class TaskDao
     public static function getTaskReviews($params)
     {
         $args = "";
+
+        if (isset($params['project_id'])) {
+            $args .= PDOWrapper::cleanseNull($params['project_id']);
+        } else {
+            $args .= 'null, ';
+        }
         if (isset($params['task_id'])) {
             $args .= PDOWrapper::cleanseNull($params['task_id']).", ";
         } else {
