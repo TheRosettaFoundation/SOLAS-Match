@@ -79,7 +79,7 @@ class GraphViewer
         $doc = new DOMDocument();
         $doc->formatOutput = true;
         if ($this->model) {
-            $viewWidth = 1200;
+            $viewWidth = 1150;
 
             $projectDao = new ProjectDao();
             $project = $projectDao->getProject($this->model->getProjectId());

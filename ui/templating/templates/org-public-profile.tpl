@@ -318,9 +318,8 @@
         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
             <table class="table table-striped">
                 <thead>
-                    <th>Username</th>
-                    <th>Biography</th>
-                    <th>Profile</th>
+                    <th style="width: 33%">Username</th>
+                    <th style="width: 33%">Biography</th>
                     {if $adminAccess}
                         <th>Remove User</th>
                     {/if}
@@ -328,15 +327,16 @@
                 <tbody>
                     {foreach $orgMembers as $member}
                         <tr>
-                            <td>{$member->getDisplayName()}</td>
                             <td>
+                                <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{$member->getDisplayName()}</a>
+                            </td>
+                            <td style="font-style: italic">
                                 {if $member->getBiography() != ''}
                                     {$member->getBiography()}
                                 {else}
-                                    No biography has been set.
+                                    No biography listed.
                                 {/if}
                             </td>
-                            <td><button class="btn btn-primary">Profile</button></td>
                         </td>
                         {if $adminAccess}
                             <td>

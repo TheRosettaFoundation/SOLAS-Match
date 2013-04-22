@@ -278,8 +278,7 @@ class TemplateHelper {
     {
         $use_language_codes = Settings::get("ui.language_codes");
         $langDao = new LanguageDao();
-        $languages=null;
-        $languages=$langDao->getLanguages();
+        $languages = $langDao->getLanguages();
        
         foreach($languages as $lang)
         {
@@ -298,8 +297,7 @@ class TemplateHelper {
     {
         $use_language_codes = Settings::get("ui.language_codes");     
         $countryDao = new CountryDao();
-        $countries =null;
-        $countries=$countryDao->getCountries();
+        $countries = $countryDao->getCountries();
 
         foreach($countries as $country)
         {

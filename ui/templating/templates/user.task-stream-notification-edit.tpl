@@ -24,9 +24,9 @@
             {/if}
         </p>
     {else}
-        <p>You are not currently receiving task stream notifications</p>
+        <p style="font-weight: bold">You are not currently receiving task stream notifications!</p>
     {/if}
-    <p>I would like to receive this e-mail notification
+    <p>I would like to receive this e-mail notification: 
         <select name="interval">
             <option value="0"
                 {if !isset($intervalId)}

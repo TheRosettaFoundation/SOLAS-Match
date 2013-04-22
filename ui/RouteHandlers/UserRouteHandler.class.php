@@ -96,8 +96,7 @@ class UserRouteHandler
             $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
             $taskTypes[TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
 
-            $langDao = new LanguageDao();
-            $languageList = $langDao->getLanguages();
+            $languageList = TemplateHelper::getLanguageList();
 
             $filter = array();
             $selectedType = "";
@@ -475,7 +474,7 @@ class UserRouteHandler
             $csl= array();
             if($currentSecondaryLocales){
                 foreach($currentSecondaryLocales as $currLocale) {
-                    $csl[$currLocale->getLanguageCode().'-'.$currLocale->getCountryCode()]=$currLocale;
+                    $csl[$currLocale->getLanguageCode().'-'.$currLocale->getCountryCode()] = $currLocale;
                 }
             }
             $newSecondaryLocales = array();
@@ -486,11 +485,11 @@ class UserRouteHandler
                 $locale = new Locale();
                 $locale->setLanguageCode($post["secondaryLanguage_$i"]);
                 $locale->setCountryCode($post["secondaryCountry_$i"]);
-                if(!key_exists($key, $csl))$userDao->createSecondaryLanguage($userId, $locale);
+                if(!key_exists($key, $csl)) $userDao->createSecondaryLanguage($userId, $locale);
                 $newSecondaryLocales[$key] = $locale;
             }
 
-            foreach($csl as $key=>$newLocale) {
+            foreach($csl as $key => $newLocale) {
                 if(!key_exists($key, $newSecondaryLocales)) {
                     $userDao->deleteSecondaryLanguage($userId, $newLocale);
                 }
