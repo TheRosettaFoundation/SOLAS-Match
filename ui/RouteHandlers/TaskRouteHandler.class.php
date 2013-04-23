@@ -1375,10 +1375,31 @@ class TaskRouteHandler
             }
         }
 
+        $extra_scripts = "";
+        $extra_scripts .= "<script type='text/javascript'>";
+        $extra_scripts .= "var taskIds = new Array();";
+        $index = 0;
+        foreach ($preReqTasks as $pTask) {
+            if ($pTask->getId() != null) {
+                $id = $pTask->getId();
+            } else {
+                $id = $pTask->getProjectId();
+            }
+            $extra_scripts .= "taskIds[$index] = $id;";
+            $index++;
+            $taskIds[] = $pTask->getId();
+        }
+        $extra_scripts .= "</script>";
+
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}resources/css/rateit.css\"/>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery.rateit.min.js\"></script>";
+        $extra_scripts .= file_get_contents(__DIR__."/../js/review.js");
+
         $app->view()->appendData(array(
-                    'taskId'    => $taskId,
-                    'tasks'     => $preReqTasks,
-                    'action'    => $action
+                    'extra_scripts' => $extra_scripts,
+                    'taskId'        => $taskId,
+                    'tasks'         => $preReqTasks,
+                    'action'        => $action
         ));
 
         $app->render("task.review.tpl");

@@ -11,7 +11,8 @@
     {$action} based on the following criteria:
 </p>
 
-<form class="well" method="post" action="{urlFor name="task-review" options="task_id.$taskId"}">
+<form class="well" method="post" action="{urlFor name="task-review" options="task_id.$taskId"}" 
+        onsubmit="createHiddenFields()" id="TaskReviewForm">
     {foreach $tasks as $task}
         <h2>{$task->getTitle()}</h2>
         {if $task->getId() != null}
@@ -27,19 +28,27 @@
         {/if}
         <h3>Corrections <small>Were there many mistakes in the source file?</h3>
         <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
-        <input type="text" name="corrections_{$id}" value="3" />
+        <div class="rateit" data-rateit-value="3" data-rateit-step="1" data-rateit-ispreset=true 
+                data-rateit-resetable=false id="rateit_corrections_{$id}">
+        </div>
 
         <h3>Grammar <small>How was the use of grammar in the source file?</small></h3>
         <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
-        <input type="text" name="grammar_{$id}" value="3" />
+        <div class="rateit" data-rateit-value="3" data-rateit-step="1" data-rateit-ispreset=true 
+                data-rateit-resetable=false id="rateit_grammar_{$id}">
+        </div>
 
         <h3>Spelling <small>Were there many spelling errors in the source file?</small></h3>
         <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
-        <input type="text" name="spelling_{$id}" value="3" />
+        <div class="rateit" data-rateit-value="3" data-rateit-step="1" data-rateit-ispreset=true 
+                data-rateit-resetable=false id="rateit_spelling_{$id}">
+        </div>
 
         <h3>Consistency <small>Were there any errors in consistency in the source file?</small></h3>
         <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
-        <input type="text" name="consistency_{$id}" value="3" />
+        <div class="rateit" data-rateit-value="3" data-rateit-step="1" data-rateit-ispreset=true 
+                data-rateit-resetable=false id="rateit_consistency_{$id}">
+        </div>
 
         <h3>Comment <small>An optional comment about the file in general</small></h3>
         <textarea name="comment_{$id}" cols='40' rows='10' style="width: 80%">
