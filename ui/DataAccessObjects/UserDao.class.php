@@ -103,7 +103,7 @@ class UserDao
     public function getUserTopTasks($userId, $limit = null, $filter = array())
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/top_tasks";
+        $request = "{$this->siteApi}v0/users/$userId/topTasks";
 
         $args = array();
         if ($limit) {
@@ -134,7 +134,7 @@ class UserDao
     public function getUserArchivedTasks($userId, $limit = null)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/archived_tasks";
+        $request = "{$this->siteApi}v0/users/$userId/archivedTasks";
 
         $args = null;
         if ($limit) {
@@ -148,7 +148,7 @@ class UserDao
     public function getUserTrackedTasks($userId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tracked_tasks";
+        $request = "{$this->siteApi}v0/users/$userId/trackedTasks";
         $ret = $this->client->call(array("Task"), $request);
         return $ret;
     }
@@ -276,7 +276,7 @@ class UserDao
     public function trackTask($userId, $taskId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tracked_tasks/$taskId";
+        $request = "{$this->siteApi}v0/users/$userId/trackedTasks/$taskId";
         $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
         return $ret;
     }
@@ -284,7 +284,7 @@ class UserDao
     public function untrackTask($userId, $taskId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tracked_tasks/$taskId";
+        $request = "{$this->siteApi}v0/users/$userId/trackedTasks/$taskId";
         $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $ret;
     }
@@ -327,7 +327,7 @@ class UserDao
     public function getPasswordResetRequest($key)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/password_reset/$key";
+        $request = "{$this->siteApi}v0/passwordReset/$key";
         $ret = $this->client->call("PasswordResetRequest", $request);
         return $ret;
     }
@@ -338,7 +338,7 @@ class UserDao
         $passwordReset = new PasswordReset();
         $passwordReset->setPassword($password);
         $passwordReset->setKey($key);
-        $request = "{$this->siteApi}v0/password_reset";
+        $request = "{$this->siteApi}v0/passwordReset";
         $ret = $this->client->call(null, $request, HttpMethodEnum::POST, $passwordReset);
         return $ret;
     }

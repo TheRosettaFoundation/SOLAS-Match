@@ -96,7 +96,7 @@ class Tasks {
             Dispatcher::sendResponce(null, TaskDao::moveToArchiveByID($taskId, $userId), null, $format);
         }, 'archiveTask');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/top_tasks(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/topTasks(:format)/',
                                                         function ($format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);

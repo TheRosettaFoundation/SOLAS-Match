@@ -49,17 +49,17 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
 -- Dumping structure for table big-merge.ArchivedProjectsMetaData
 DROP TABLE IF EXISTS `ArchivedProjectsMetaData`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
-  `archived-project_id` int(10) unsigned NOT NULL,
+  `archivedProject_id` int(10) unsigned NOT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
   `user_id-projectCreator` int(10) unsigned NOT NULL,
   `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `file-token` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `mime-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `archived-date` datetime NOT NULL,
-  UNIQUE KEY `archived-project_id` (`archived-project_id`),
+  UNIQUE KEY `archivedProject_id` (`archivedProject_id`),
   KEY `FK_ArchivedProjectsMetaData_Users` (`user_id-archived`),
   KEY `FK_ArchivedProjectsMetaData_Users_2` (`user_id-projectCreator`),
-  CONSTRAINT `FK_ArchivedProjectsMetaData_ArchivedProjects` FOREIGN KEY (`archived-project_id`) REFERENCES `ArchivedProjects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ArchivedProjectsMetaData_ArchivedProjects` FOREIGN KEY (`archivedProject_id`) REFERENCES `ArchivedProjects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjectsMetaData_Users` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjectsMetaData_Users_2` FOREIGN KEY (`user_id-projectCreator`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -844,7 +844,7 @@ BEGIN
 		SELECT pf.`file-token` INTO @`fileToken` FROM ProjectFiles pf WHERE pf.project_id=projectId;
 		SELECT pf.`mime-type` INTO @`mimeType` FROM ProjectFiles pf WHERE pf.project_id=projectId;
 				
-		INSERT INTO `ArchivedProjectsMetaData` (`archived-project_id`,`user_id-archived`,`user_id-projectCreator`,`filename`,`file-token`,`mime-type`,`archived-date`)
+		INSERT INTO `ArchivedProjectsMetaData` (`archivedProject_id`,`user_id-archived`,`user_id-projectCreator`,`filename`,`file-token`,`mime-type`,`archived-date`)
 		VALUES (projectId,user_id,@`userIdProjectCreator`,@`filename`,@`fileToken`,@`mimeType`,NOW());
 		
 		OPEN cur1;
@@ -867,7 +867,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure big-merge.archiveTask
 DROP PROCEDURE IF EXISTS `archiveTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT, IN `uID` INT)
@@ -884,13 +883,13 @@ BEGIN
 		set @`userIdTaskCreator` = null;
 		set @`uploadTime` = null;
 	
-		SELECT MAX(`version`) INTO @`version` FROM TaskFileVersions tf WHERE tf.task_id=tID;
+		SELECT MAX(tf.version_id) INTO @`version` FROM TaskFileVersions tf WHERE tf.task_id=tID;
 		SELECT `filename` INTO @`filename` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
 		SELECT `content-type` INTO @`contentType` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
 		SELECT `upload-time` INTO @`uploadTime` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
 		SELECT tc.`user_id` INTO @`userIdClaimed` FROM TaskClaims tc WHERE tc.`task_id` = tID LIMIT 1; 
 		SELECT GROUP_CONCAT(p.`task_id-prerequisite`) INTO @`preRequisites` FROM TaskPrerequisites p WHERE p.task_id=tID;
-		SELECT tf.user_id INTO @`userIdTaskCreator` FROM TaskFileVersions tf WHERE tf.task_id=tID AND tf.`version`=0 LIMIT 1;
+		SELECT tf.user_id INTO @`userIdTaskCreator` FROM TaskFileVersions tf WHERE tf.task_id=tID AND tf.version_id=0 LIMIT 1;
 	
 		INSERT INTO `ArchivedTasks` (`id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `taskType_id`, `taskStatus_id`, `published`)
 			SELECT t.* FROM Tasks t WHERE t.id = tID;
@@ -1079,7 +1078,7 @@ BEGIN
     if archiveDate='' then set archiveDate=null;end if;
     if archiverId='' then set archiverId=null;end if;
 
-    set @q = "SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, (select code from Languages where id =p.language_id) as language_id, (select code from Countries where id =p.country_id) as country_id, m.`archived-date`, m.`user_id-archived` FROM ArchivedProjects p JOIN ArchivedProjectsMetaData m ON p.id=m.`archived-project_id` WHERE 1";
+    set @q = "SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, (select code from Languages where id =p.language_id) as language_id, (select code from Countries where id =p.country_id) as country_id, m.`archived-date`, m.`user_id-archived` FROM ArchivedProjects p JOIN ArchivedProjectsMetaData m ON p.id=m.`archivedProject_id` WHERE 1";
     if projectId is not null then
         set @q = CONCAT(@q, " and p.id=", projectId);
     end if;
@@ -1117,6 +1116,15 @@ BEGIN
     PREPARE stmt from @q;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure big-merge.getArchivedProjectMetaData
+DROP PROCEDURE IF EXISTS `getArchivedProjectMetaData`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProjectMetaData`(IN `archivedProjectId` INT)
+BEGIN
+	SELECT p.* FROM ArchivedProjectsMetaData p WHERE p.archivedProject_id=archivedProjectId;
 END//
 DELIMITER ;
 
@@ -1193,6 +1201,16 @@ BEGIN
 	EXECUTE stmt;           
 	DEALLOCATE PREPARE stmt;
 
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure big-merge.getArchivedTaskmetaData
+DROP PROCEDURE IF EXISTS `getArchivedTaskmetaData`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTaskmetaData`(IN `archivedTaskId` INT)
+BEGIN
+	SELECT t.* FROM ArchivedTasksMetadata t WHERE t.archivedTask_id=archivedTaskId;
 END//
 DELIMITER ;
 
@@ -3573,7 +3591,7 @@ DELIMITER ;
 -- Dumping structure for procedure big-merge.userPersonalInfoInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
@@ -3639,7 +3657,7 @@ DELIMITER ;
 -- Dumping structure for procedure big-merge.getUserPersonalInfo
 DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
 DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;

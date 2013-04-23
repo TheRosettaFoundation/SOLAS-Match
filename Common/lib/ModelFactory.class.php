@@ -21,7 +21,8 @@ require_once __DIR__."/../models/ProjectFile.php";
 require_once __DIR__."/../models/TaskReview.php";
 require_once __DIR__."/../models/Locale.php";
 require_once __DIR__."/../models/UserPersonalInformation.php";
-require_once __DIR__."/../models/UserTaskStreamNotification.php";
+require_once __DIR__."/../models/ArchivedProjectMetaData.php";
+require_once __DIR__."/../models/ArchivedTaskMetaData.php";
 
 class ModelFactory
 {
@@ -96,6 +97,12 @@ class ModelFactory
                 break;
             case "Locale" :
                 $ret = ModelFactory::generateLocale($modelData);
+                break;
+            case "ArchivedProjectMetaData" :
+                $ret = ModelFactory::generateArchivedProjectMetaData($modelData);
+                break;
+            case "ArchivedTaskMetaData" :
+                $ret = ModelFactory::generateArchivedTaskMetaData($modelData);
                 break;
             default :
                 echo "Unable to build model $modelName";
@@ -764,6 +771,73 @@ class ModelFactory
         }
         if (isset($modelData['countryCode'])) {
             $ret->setCountryCode($modelData['countryCode']);
+        }
+        
+        return $ret;
+    }
+    
+    private static function generateArchivedProjectMetaData($modelData)
+    {
+        $ret = new ArchivedProjectMetaData();
+        
+        if (isset($modelData['archivedProject_id'])) {
+            $ret->setArchivedProjectId($modelData['archivedProject_id']);
+        }
+        if (isset($modelData['user_id-archived'])) {
+            $ret->setUserIdArchived($modelData['user_id-archived']);
+        }
+        if (isset($modelData['user_id-projectCreator'])) {
+            $ret->setUserIdProjectCreator($modelData['user_id-projectCreator']);
+        }
+        if (isset($modelData['filename'])) {
+            $ret->setFileName($modelData['filename']);
+        }
+        if (isset($modelData['file-token'])) {
+            $ret->setFileToken($modelData['file-token']);
+        }
+        if (isset($modelData['mime-type'])) {
+            $ret->setMimeType($modelData['mime-type']);
+        }
+        if (isset($modelData['archived-date'])) {
+            $ret->setArchivedDate($modelData['archived-date']);
+        }
+        
+        return $ret;
+    }
+    
+    private static function generateArchivedTaskMetaData($modelData)
+    {
+        $ret = new ArchivedTaskMetaData();
+        
+        if (isset($modelData['archivedTask_id'])) {
+            $ret->setArchivedTaskId($modelData['archivedTask_id']);
+        }
+        if (isset($modelData['version'])) {
+            $ret->setVersion($modelData['version']);
+        }
+        if (isset($modelData['filename'])) {
+            $ret->setFileName($modelData['filename']);
+        }
+        if (isset($modelData['content-type'])) {
+            $ret->setContentType($modelData['content-type']);
+        }
+        if (isset($modelData['upload-time'])) {
+            $ret->setUploadTime($modelData['upload-time']);
+        }
+        if (isset($modelData['user_id-claimed'])) {
+            $ret->setUserIdClaimed($modelData['user_id-claimed']);
+        }
+        if (isset($modelData['user_id-archived'])) {
+            $ret->setUserIdArchived($modelData['user_id-archived']);
+        }
+        if (isset($modelData['prerequisites'])) {
+            $ret->setPrerequisites($modelData['prerequisites']);
+        }
+        if (isset($modelData['user_id-taskCreator'])) {
+            $ret->setUserIdTaskCreator($modelData['user_id-taskCreator']);
+        }
+        if (isset($modelData['archived-date'])) {
+            $ret->setArchivedDate($modelData['archived-date']);
         }
         
         return $ret;

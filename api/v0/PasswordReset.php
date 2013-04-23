@@ -22,14 +22,14 @@ class PasswordResetAPI {
     
     public static function init()
     {   
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/password_reset(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/passwordReset(:format)/',
                                                         function ($format = ".json") {
             
             $data = ModelFactory::buildModel("PasswordReset", array());
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getResetTemplate');
 
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/password_reset/:key/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/passwordReset/:key/',
                                                         function ($key, $format = ".json") {
             
             if (!is_numeric($key) && strstr($key, '.')) {
@@ -41,7 +41,7 @@ class PasswordResetAPI {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getResetRequest');
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/password_reset(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/passwordReset(:format)/',
                                                         function ($format = ".json") {
             
             $data = Dispatcher::getDispatcher()->request()->getBody();

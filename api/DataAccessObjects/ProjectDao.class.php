@@ -249,5 +249,14 @@ class ProjectDao
         return $ret; 
     }
     
+    public static function getArchivedProjectMetaData($projectId)
+    {
+        $ret = null;
+        if ($result = PDOWrapper::call("getArchivedProjectMetaData", PDOWrapper::cleanseNull($projectId))) { 
+            $ret = ModelFactory::buildModel("ArchivedProjectMetaData", $result[0]);
+        }
+        return $ret;     
+    }
+    
 }
 

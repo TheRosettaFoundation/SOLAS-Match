@@ -37,7 +37,7 @@ class TaskDao
 
     public function getTopTasks($limit = null)
     {
-        $request = "{$this->siteApi}v0/tasks/top_tasks";
+        $request = "{$this->siteApi}v0/tasks/topTasks";
         $args=$limit ? array("limit" => $limit) : null;
         $response =$this->client->call(array("Task"), $request,HttpMethodEnum::GET, null, $args);
         return $response;
