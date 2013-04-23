@@ -28,17 +28,6 @@
     <p>
         To: <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
     </p>
-
-{*    {assign var="taskTags" value=$task['Project']->getTagList()}
-    {if !empty($taskTags)}
-        <p>
-            Tags:
-            {foreach from=$taskTags item=tag}
-                {assign var="label" value=$tag->getLabel()}
-                <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
-            {/foreach}
-        </p>
-    {/if}*}
     
     {if $task->getWordCount()}
         <p>Word Count: <strong>{$task->getWordCount()|number_format}</strong></p>
@@ -52,15 +41,7 @@
     </p>
     <p>
         Due by: <strong>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</strong>
-    </p>           
-{*        
-    <p>            
-        {assign var="project_id" value=$task->getProjectId()}
-        {assign var="org_id" value=$task['Project']->getOrganisationId()}
-            
-        Part of: <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$task['Project']->getTitle()}</a>
-        for <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>        
-    </p>  *}
+    </p>
 
     <p style="margin-bottom:40px;"/>        
 </div>
