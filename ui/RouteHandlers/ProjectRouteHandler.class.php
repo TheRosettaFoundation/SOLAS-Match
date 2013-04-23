@@ -354,9 +354,9 @@ class ProjectRouteHandler
         $targetLanguage_err = null;
         $wordcount_err = null;
         $uniqueLanguageCountry_err = null;
-        $project       = new Project();
+        $project = new Project();
 
-        if($post = $app->request()->post()) {      
+        if($post = $app->request()->post()) {   
             
             $tagDao = new TagDao();
             
