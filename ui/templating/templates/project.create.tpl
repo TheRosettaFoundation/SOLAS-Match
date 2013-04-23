@@ -100,7 +100,7 @@
                         <div style="margin-bottom:25px;">                    
                             <label><h2>Deadline: <span style="color: red">*</span></h2></label>
                             <p class="desc">When the project and its tasks should be completed by.</p>
-                            <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}{/if}" style="width: 400px"/>                    
+                            <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{$project->getDeadline()}{/if}" style="width: 400px"/>                    
                         </div>
                         <div style="margin-bottom:25px;">
                             <label for="tags"><h2>Tags:</h2></label>

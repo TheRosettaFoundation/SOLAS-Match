@@ -204,7 +204,30 @@ class Orgs {
         }, 'createOrgAdmin');   
         
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects/:pID/archiveMetaData(:format)/',
+                                                        function ($id, $pID, $format = ".json") {
+            if (!is_numeric($pID) && strstr($pID, '.')) {
+                 $pID = explode('.', $pID);
+                 $format = '.'.$pID[1];
+                 $pID = $pID[0];
+            }
+            
+            $data = ProjectDao::getArchivedProjectMetaData($pID);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getOrgArchivedProjectMetaData');     
         
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedTasks/:tID/archiveMetaData(:format)/',
+                                                        function ($id, $tID, $format = ".json") {
+            if (!is_numeric($tID) && strstr($tID, '.')) {
+                 $tID = explode('.', $tID);
+                 $format = '.'.$tID[1];
+                 $tID = $tID[0];
+            }
+            
+            $data = TaskDao::getArchivedTaskMetaData($tID);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getOrgArchivedTaskMetaData'); 
         
     }
 }

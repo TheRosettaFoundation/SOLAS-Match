@@ -37,7 +37,7 @@ class TaskDao
 
     public function getTopTasks($limit = null)
     {
-        $request = "{$this->siteApi}v0/tasks/top_tasks";
+        $request = "{$this->siteApi}v0/tasks/topTasks";
         $args=$limit ? array("limit" => $limit) : null;
         $response =$this->client->call(array("Task"), $request,HttpMethodEnum::GET, null, $args);
         return $response;
@@ -154,15 +154,15 @@ class TaskDao
         return $response;
     }
 
-    public function saveTaskFile($taskId, $filename, $userId, $fileData, $version = null, $convert = false)
+    public function saveTaskFile($taskId, $filename, $userId, $fileData, $version = null, $convert = null)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/file/$filename/$userId";
         $args = array();
-        if ($version) {
+        if (!is_null($version)) {
             $args["version"] = $version;
         }
-        if ($convert) {
-            $args['convertFromXliff'] = $convert;
+        if (!is_null($convert)) {
+            $args['convertFromXliff'] = $convert?1:0;
         }
 
         $response = $this->client->call(null,$request, HttpMethodEnum::PUT, null, $args,$fileData);

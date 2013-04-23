@@ -203,7 +203,7 @@ class Users {
         }, 'userUnClaimTask');
 
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/top_tasks(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/topTasks(:format)/',
                                                         function ($id, $format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
@@ -228,13 +228,26 @@ class Users {
         }, 'getUserTopTasks');
         
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/archived_tasks(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/archivedTasks(:format)/',
                                                         function ($id, $format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
             $data = TaskDao::getUserArchivedTasks($id, $limit);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserArchivedTasks');
+        
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/archivedTasks/:tid/archiveMetaData(:format)/',
+                                                        function ($id, $tID, $format = ".json") {
+            if (!is_numeric($tID) && strstr($tID, '.')) {
+                 $tID = explode('.', $tID);
+                 $format = '.'.$tID[1];
+                 $tID = $tID[0];
+            }
+            
+            $data = TaskDao::getArchivedTaskMetaData($tID);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getUserArchivedTaskMetaData');     
         
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/',
@@ -298,14 +311,14 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'deleteUserTagById');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tracked_tasks(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/trackedTasks(:format)/',
                                                         function ($id, $format = ".json") {
             
             $data=UserDao::getTrackedTasks($id);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTrackedTasks');
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tracked_tasks(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/trackedTasks(:format)/',
                                                         function ($id, $format=".json"){
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
@@ -315,7 +328,7 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'addUserTrackedTasks');
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/tracked_tasks/:taskID/',
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/trackedTasks/:taskID/',
                                                         function ($id, $taskID, $format = ".json") {
             
             if (!is_numeric($taskID) && strstr($taskID, '.')) {
@@ -327,7 +340,7 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'addUserTrackedTasksById');
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/tracked_tasks/:taskID/',
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/trackedTasks/:taskID/',
                                                             function ($id, $taskID, $format = ".json") {
             
             if (!is_numeric($taskID) && strstr($taskID, '.')) {

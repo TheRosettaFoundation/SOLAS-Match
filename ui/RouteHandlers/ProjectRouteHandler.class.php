@@ -354,13 +354,13 @@ class ProjectRouteHandler
         $targetLanguage_err = null;
         $wordcount_err = null;
         $uniqueLanguageCountry_err = null;
-        $project       = new Project();
+        $project = new Project();
 
-        if($post = $app->request()->post()) {      
+        if($post = $app->request()->post()) {   
             
             $tagDao = new TagDao();
             
-            if(isset($post['title'])) {
+            if(isset($post['title']) && $post['title'] != '') {
                 $project->setTitle($post['title']);
             } else {
                 $title_err = "Project <b>Title</b> must be set.";
@@ -378,19 +378,19 @@ class ProjectRouteHandler
                 $deadline_err = "Project <b>Deadline</b> must be set.";
             }
             
-            if(isset($post['description'])) {
+            if(isset($post['description']) && $post['description'] != '') {
                 $project->setDescription($post['description']);
             } else {
                 $description_err = "Project <b>Description</b> must be set.";
             }
             
-            if(isset($post['impact'])) {
+            if(isset($post['impact']) && $post['impact'] != '') {
                 $project->setImpact($post['impact']);
             } else {
                 $impact_err = "Project <b>Impact</b> must be set.";
             }
             
-            if(isset($post['reference'])) $project->setReference($post['reference']);
+            if(isset($post['reference']) && $post['reference'] != '') $project->setReference($post['reference']);
             
             $cleansedWordCount = str_replace(",", "", $post['word_count']);
             if((ctype_digit($cleansedWordCount))) {                
@@ -448,7 +448,7 @@ class ProjectRouteHandler
             
 
             if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && is_null($upload_error)
-                && is_null($uniqueLanguageCountry_err) && is_null(($wordcount_err))) { 
+                && is_null($impact_err)&& is_null($uniqueLanguageCountry_err) && is_null(($wordcount_err))) { 
                 
                 $project->setOrganisationId($org_id);
                 if($project = $projectDao->createProject($project)) {

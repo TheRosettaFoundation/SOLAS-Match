@@ -712,4 +712,13 @@ class TaskDao
             }
     }
     
+    public static function getArchivedTaskMetaData($taskId)
+    {      
+        $ret = null;
+        if ($result = PDOWrapper::call("getArchivedTaskMetaData", PDOWrapper::cleanseNull($taskId))) { 
+            $ret = ModelFactory::buildModel("ArchivedTaskMetaData", $result[0]);            
+        }
+        return $ret;     
+    }
+    
 }
