@@ -185,10 +185,9 @@ class Users {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'Task');
-            
+            Dispatcher::sendResponce(null, TaskDao::claimTask($data->getId(), $id), null, $format);
             Notify::notifyUserClaimedTask($id, $data->getId());
             Notify::notifyOrgClaimedTask($id, $data->getId());
-            Dispatcher::sendResponce(null, array("result" => TaskDao::claimTask($data->getId(), $id)), null, $format);
         }, 'userClaimTask');
        
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/tasks/:tID/',
@@ -366,10 +365,8 @@ class Users {
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/passwordResetRequest(:format)/',
                                                         function ($id, $format=".json"){
-            $data = UserDao::createPasswordReset($id);
-            Dispatcher::sendResponce(null, array("result" => $data,
-                "message" => $data == 1 ? "a password reset request has been created and sent to your contact address"
-                : "password reset request already exists"), null, $format);
+            Dispatcher::sendResponce(null, UserDao::createPasswordReset($id), null, $format);
+            Notify::sendPasswordResetEmail($id);
         }, 'createPasswordResetRequest');   
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/projects(:format)/',

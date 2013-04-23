@@ -107,7 +107,12 @@ class Projects
             foreach ($projectTasks as $task) {
                 TaskDao::archiveTask($task->getId(), $userId);
             }
-            Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);                
+            Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);
+            foreach ($projectTasks as $task) {
+                Notify::sendEmailNotifications($task->getId(), NotificationTypes::ARCHIVE);
+            }
+            
+            
             }, 'archiveProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects(:format)/',
