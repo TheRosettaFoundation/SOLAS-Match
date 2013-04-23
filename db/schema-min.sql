@@ -1013,7 +1013,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
 BEGIN
 	IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
-		call getOrg(null,null,null,null);
+		call getOrg(null,null,null,null,null,null,null,null,null);
 	ELSE		
 		SELECT o.*
 		FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
@@ -1392,11 +1392,19 @@ DROP PROCEDURE IF EXISTS `getOrgByUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgByUser`(IN `id` INT)
 BEGIN
-	SELECT *
-	FROM Organisations o
-	WHERE o.id IN (SELECT organisation_id
-						 FROM OrganisationMembers
-					 	 WHERE user_id=id); 
+	IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
+		call getOrg(null,null,null,null,null,null,null,null,null);
+	ELSE		
+		SELECT o.*
+		FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
+		WHERE om.user_id = id
+		UNION
+		SELECT o.*
+		FROM Organisations o
+		JOIN Admins a ON
+		a.organisation_id=o.id
+		WHERE a.user_id=id;
+	END IF;
 END//
 DELIMITER ;
 
