@@ -372,7 +372,7 @@ class TaskRouteHandler
             }
 
             if (is_null($errorMessage)) {
-                $app->redirect($app->urlFor("task-uploaded", array("task_id" => $taskId)));
+                $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
             } else {
                 $app->flashNow("error", $errorMessage);
             }
@@ -456,7 +456,7 @@ class TaskRouteHandler
             }
 
             if (is_null($errorMessage)) {
-                $app->redirect($app->urlFor("task-uploaded", array("task_id" => $taskId)));
+                $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
             } else {
                 $app->flashNow("error", $errorMessage);
             }
@@ -1121,7 +1121,7 @@ class TaskRouteHandler
                         $taskDao->addTaskPreReq($createdDesegmentationId, $translationTaskIds[$i]);
                     }
                 }
-                $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
+                $app->redirect($app->urlFor("task-review", array("task_id" => $task->getId())));
             } else {
                 $app->view()->appendData(array(
                     "errors" => $errors
@@ -1368,6 +1368,10 @@ class TaskRouteHandler
                 } else {
                     $app->flashNow("error", $error);
                 }
+            }
+
+            if (isset($post['skip'])) {
+                $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
             }
         }
 
