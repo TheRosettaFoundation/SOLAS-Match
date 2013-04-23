@@ -418,6 +418,8 @@ class TaskDao
             $index = $graphBuilder->find($taskId, $graph);
             $node = $graph->getAllNodes($index);
             $ret = self::archiveTaskNode($node, $graph, $userId);
+            
+       
         }
 
         // UI is expecting output to be 0 or 1
@@ -452,14 +454,20 @@ class TaskDao
 
         if ($ret) {
             $ret = self::archiveTask($node->getTaskId(), $userId);
+            try{
+                Notify::sendEmailNotifications($node->getTaskId(), NotificationTypes::ARCHIVE);
+            }catch (Exception $e){ 
+                
+            }
         }
+        
 
         return $ret;
     }
 
     public static function archiveTask($taskId, $userId)
     {
-        Notify::sendEmailNotifications($taskId, NotificationTypes::ARCHIVE);
+        
         $result = PDOWrapper::call("archiveTask", PDOWrapper::cleanseNull($taskId).", ".PDOWrapper::cleanseNull($userId));
         self::delete($taskId);
         return $result[0]['result'];
@@ -667,7 +675,7 @@ class TaskDao
     
     public static function uploadFile($task,$convert,&$file,$version,$userId,$filename)
     {
-        Notify::sendEmailNotifications($task->getId(), NotificationTypes::UPLOAD);
+        
             
         if($convert){
             Upload::apiSaveFile($task, $userId, 
@@ -676,6 +684,7 @@ class TaskDao
             //touch this and you will die painfully sinisterly sean :)
             Upload::apiSaveFile($task, $userId, $file, $filename,$version);
         }
+        Notify::sendEmailNotifications($task->getId(), NotificationTypes::UPLOAD);
     }
     
     public static function uploadOutputFile($task,$convert,&$file,$userId,$filename){

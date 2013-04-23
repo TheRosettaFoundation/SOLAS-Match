@@ -103,7 +103,8 @@ class Projects
                 $format = '.'.$userId[1];
                 $userId = $userId[0];
             }
-             Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);                
+             Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);               
+
             }, 'archiveProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects(:format)/',

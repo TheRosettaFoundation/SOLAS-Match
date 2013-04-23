@@ -78,7 +78,7 @@ class ProjectDao
         }
     }
 
-    public static function getArchivedProject($id=null, $title=null, $description=null, $impact=null, $deadline=null, $orgId=null, $reference=null,
+    public static function getArchivedProject($id=null,$orgId=null, $title=null, $description=null, $impact=null, $deadline=null,  $reference=null,
                                                 $wordCount=null, $created=null, $archivedDate=null, $userIdArchived=null)
     {
         $projects = array();

@@ -5,7 +5,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class MessagingClient
 {
-    public $MainExchange    = "SOLAS_MATCH";
+    public $MainExchange    = "SOLAS_MATCH"; // change to consts
     public $AlertsExchange  = "ALERTS";
 
     public $TaskScoreTopic                  = "timed.task.score";
@@ -19,50 +19,34 @@ class MessagingClient
     public $FeedbackEmailTopic              = "email.user.feedback";
 
     private $connection;
-
-    private $host;
-    private $port;
-    private $user;
-    private $pass;
-    private $vhost;
-
     public function messagingClient()
     {
-        $this->host = Settings::get('messaging.host');
-        $this->port = Settings::get('messaging.port');
-        $this->user = Settings::get('messaging.username');
-        $this->pass = Settings::get('messaging.password');
-        $vhost = Settings::get('messaging.virtualhost');
-        if ($vhost != '') {
-            $this->vhost = $vhost;
-        }
+
     }
 
     public function init()
     {
+        $ret=null;
+       
         $ret = $this->openConnection();
-        $this->user = false;
-        $this->pass = false;
+       
         return $ret;
     }
 
     private function openConnection()
     {
-        $conn = false;
         $ret = false;
 
         try {
-            $conn = new AMQPConnection($this->host, $this->port, $this->user, $this->pass);
-        } catch (AMQPException $e) {
-            echo "ERROR: ".$e->getMessage();
+            if ($this->connection = new AMQPConnection(Settings::get('messaging.host'), Settings::get('messaging.port'), settings::get('messaging.username'), Settings::get('messaging.password'))) {
+                $ret = true;
+            }
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage();
+            //echo "ERROR: ".$e->getMessage(); //do not echo any exception ever, it will break the api clients. 
+            //log it to a file if needed.
         }
 
-        if ($conn) {
-            $this->connection = $conn;
-            $ret = true;
-        }
+       
 
         return $ret;
     }

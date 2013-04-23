@@ -119,18 +119,31 @@ class Orgs {
         }, 'searchByName');
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/projects(:format)/',
-            function ($id, $format = '.json')
-            {
+            function ($id, $format = '.json'){
                 Dispatcher::sendResponce(null, ProjectDao::getProject(null,null,null,null,null,$id), null, $format);
             }, 'getOrgProjects');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects(:format)/',
-            function ($id, $format = '.json')
-            {
-                $params = array();
-                $params['organisation_id'] = $id;
-                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(null,null,null,null,null,$id), null, $format);
+            function ($id, $format = '.json'){
+                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(null,$id), null, $format);
             }, 'getOrgArchivedProjects');
+            
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects/:projectID/',
+            function ($id,$projectID, $format = '.json'){
+                if (!is_numeric($projectID) && strstr($projectID, '.')) {
+                    $projectID = explode('.', $projectID);
+                    $format = '.'.$projectID[1];
+                    $projectID = $projectID[0];
+                }
+                $data=ProjectDao::getArchivedProject($projectID,$id);
+                Dispatcher::sendResponce(null,$data[0] , null, $format);
+            }, 'getOrgArchivedProject');
+            
+            
+         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects/:projectID/tasks(:format)/',
+            function ($id,$projectID, $format = '.json'){
+                Dispatcher::sendResponce(null,ProjectDao::getArchivedTask($projectId), null, $format);
+            }, 'getOrgArchivedProjectTasks');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/badges(:format)/',
                                                         function ($id, $format= ".json") {
@@ -169,8 +182,11 @@ class Orgs {
                 $format = '.'.$uid[1];
                 $uid = $uid[0];
             }
-            Notify::notifyUserOrgMembershipRequest($uid, $id, true);
+            
             Dispatcher::sendResponce(null, OrganisationDao::acceptMemRequest($id, $uid), null, $format);
+            
+            Notify::notifyUserOrgMembershipRequest($uid, $id, true);
+
         }, 'acceptMembershipRequests');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:id/requests/:uid/',
@@ -181,8 +197,9 @@ class Orgs {
                 $format = '.'.$uid[1];
                 $uid = $uid[0];
             }
-            Notify::notifyUserOrgMembershipRequest($uid, $id, false);
+//            Notify::notifyUserOrgMembershipRequest($uid, $id, false); always put after failure to send notification should not break the site.
             Dispatcher::sendResponce(null, OrganisationDao::refuseMemRequest($id, $uid), null, $format);
+            Notify::notifyUserOrgMembershipRequest($uid, $id, false);
         }, 'rejectMembershipRequests');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/tasks(:format)/',

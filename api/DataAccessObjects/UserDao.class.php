@@ -430,9 +430,7 @@ class UserDao
             $request = self::getPasswordResetRequests($user_id);
             $uid = $request->getKey();
         }
-        
-        Notify::sendPasswordResetEmail($user_id);
-        return 1;
+
     }    
     
     /*
