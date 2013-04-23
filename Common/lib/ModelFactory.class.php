@@ -19,6 +19,7 @@ require_once __DIR__."/../models/ArchivedProject.php";
 require_once __DIR__."/../models/Statistic.php";
 require_once __DIR__."/../models/ProjectFile.php";
 require_once __DIR__."/../models/TaskReview.php";
+require_once __DIR__."/../models/UserTaskStreamNotification.php";
 require_once __DIR__."/../models/Locale.php";
 require_once __DIR__."/../models/UserPersonalInformation.php";
 require_once __DIR__."/../models/ArchivedProjectMetaData.php";
