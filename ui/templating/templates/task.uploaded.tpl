@@ -8,6 +8,8 @@
         <strong>Success</strong> Your file has been uploaded.
     </div>
 
+    {include file="handle-flash-messages.tpl"}
+
     <section>
             <h1>What now? <small>Give the organisation time to review</small></h1>
             <p>Here's what will now happen:</p>

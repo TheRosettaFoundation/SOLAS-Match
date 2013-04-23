@@ -122,10 +122,37 @@ class TaskDao
         return $task;
     }
 
+    public static function submitReview($review)
+    {
+        $ret = null;
 
-    public function getTaskReviews($params)
+        $args = '';
+        $args .= PDOWrapper::cleanseNull($review->getProjectId()).', ';
+        $args .= PDOWrapper::cleanseNull($review->getTaskId()).', ';
+        $args .= PDOWrapper::cleanseNull($review->getUserId()).', ';
+        $args .= PDOWrapper::cleanseNull($review->getCorrections()).', ';
+        $args .= PDOWrapper::cleanseNull($review->getGrammar()).', ';
+        $args .= PDOWrapper::cleanseNull($review->getSpelling()).', ';
+        $args .= PDOWrapper::cleanseNull($review->getConsistency()).', ';
+        $args .= PDOWrapper::cleanseNullOrWrapStr($review->getComment());
+
+        $result = PDOWrapper::call('submitTaskReview', $args);
+        if ($result) {
+            $ret = $result[0]['result'];
+        }
+
+        return $ret;
+    }
+
+    public static function getTaskReviews($params)
     {
         $args = "";
+
+        if (isset($params['project_id'])) {
+            $args .= PDOWrapper::cleanseNull($params['project_id']);
+        } else {
+            $args .= 'null, ';
+        }
         if (isset($params['task_id'])) {
             $args .= PDOWrapper::cleanseNull($params['task_id']).", ";
         } else {
@@ -156,10 +183,10 @@ class TaskDao
         } else {
             $args .= "null, ";
         }
-        if (isset($params['comment'])) {
+        if (isset($params['comment']) && $params['comment'] != '') {
             $args .= PDOWrapper::cleanseNullOrWrapStr($params['comment']).", ";
         } else {
-            $args .= "null, ";
+            $args .= "null";
         }
 
         $reviews = NULL;

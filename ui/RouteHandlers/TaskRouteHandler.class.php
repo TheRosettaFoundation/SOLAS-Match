@@ -64,6 +64,9 @@ class TaskRouteHandler
         
         $app->get("/task/:task_id/user-feedback/", array($middleware, "authenticateUserForTask"), 
         array($this, "taskUserFeedback"))->via("POST")->name("task-user-feedback");   
+
+        $app->get("/task/:task_id/review", array($middleware, "authenticateUserForTask"),
+        array($this, "taskReview"))->via("POST")->name("task-review");
         
         $app->get(Settings::get("site.api"), array($middleware, "authUserForOrgTask"))->name("api");
     }
@@ -273,7 +276,7 @@ class TaskRouteHandler
         $app->render("task.claimed.tpl");
     }
 
-    public function downloadTaskVersion($task_id, $version, $convert = false)
+    public function downloadTaskVersion($task_id, $version, $convert = 0)
     {
         $app = Slim::getInstance();
         $siteApi = Settings::get("site.api");
@@ -369,7 +372,7 @@ class TaskRouteHandler
             }
 
             if (is_null($errorMessage)) {
-                $app->redirect($app->urlFor("task-uploaded", array("task_id" => $taskId)));
+                $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
             } else {
                 $app->flashNow("error", $errorMessage);
             }
@@ -453,7 +456,7 @@ class TaskRouteHandler
             }
 
             if (is_null($errorMessage)) {
-                $app->redirect($app->urlFor("task-uploaded", array("task_id" => $taskId)));
+                $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
             } else {
                 $app->flashNow("error", $errorMessage);
             }
@@ -1118,7 +1121,7 @@ class TaskRouteHandler
                         $taskDao->addTaskPreReq($createdDesegmentationId, $translationTaskIds[$i]);
                     }
                 }
-                $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
+                $app->redirect($app->urlFor("task-review", array("task_id" => $task->getId())));
             } else {
                 $app->view()->appendData(array(
                     "errors" => $errors
@@ -1257,6 +1260,128 @@ class TaskRouteHandler
         ));
         
         $app->render("task.user-feedback.tpl");
+    }
+
+    public function taskReview($taskId)
+    {
+        $app = Slim::getInstance();
+        $taskDao = new TaskDao();
+
+        $task = $taskDao->getTask($taskId);
+        $action = "";
+        switch ($task->getTaskType()) {
+            case TaskTypeEnum::SEGMENTATION:
+                $action = "segmented";
+                break;
+            case TaskTypeEnum::TRANSLATION:
+                $action = "translated";
+                break;
+            case TaskTypeEnum::PROOFREADING:
+                $action = "proofread";
+                break;
+            case TaskTypeEnum::DESEGMENTATION:
+                $action = "merged";
+                break;
+        }
+
+        $preReqTasks = $taskDao->getTaskPreReqs($taskId);
+        if ($preReqTasks == null || count($preReqTasks) == 0) {
+            $projectDao = new ProjectDao();
+            $project = $projectDao->getProject($task->getProjectId());
+
+            $dummyTask = new Task();        //Create a dummy task to hold the project info
+            $dummyTask->setProjectId($task->getProjectId());
+            $dummyTask->setTitle($project->getTitle());
+            $preReqTasks = array();
+            $preReqTasks[] = $dummyTask;
+        }
+
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            $userId = UserSession::getCurrentUserID();
+
+            if (isset($post['submitReview'])) {
+                $i = 0;
+                $error = null;
+                while ($i < count($preReqTasks) && $error == null) {
+                    $pTask = $preReqTasks[$i++];
+                    $review = new TaskReview();
+                    $id = $pTask->getId();
+
+                    $review->setUserId($userId);
+                    $review->setTaskId($id);
+                    $review->setProjectId($pTask->getProjectId());
+
+                    if (is_null($id)) {
+                        $id = $pTask->getProjectId();
+                    }
+
+                    if (isset($post["corrections_$id"]) && ctype_digit($post["corrections_$id"])) {
+                        $value = intval($post["corrections_$id"]);
+                        if ($value > 0 && $value <= 5) {
+                            $review->setCorrections($value);
+                        } else {
+                            $error = "Corrections value must be between 1 and 5";
+                        }
+                    }
+                    if (isset($post["grammar_$id"]) && ctype_digit($post["grammar_$id"])) {
+                        $value = intval($post["grammar_$id"]);
+                        if ($value > 0 && $value <= 5) {
+                            $review->setGrammar($value);
+                        } else {
+                            $error = "Grammar value must be between 1 and 5";
+                        }
+                    }
+                    if (isset($post["spelling_$id"]) && ctype_digit($post["spelling_$id"])) {
+                        $value = intval($post["spelling_$id"]);
+                        if ($value > 0 && $value <= 5) {
+                            $review->setSpelling($value);
+                        } else {
+                            $error = "Spelling value must be between 1 and 5";
+                        }
+                    }
+                    if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
+                        $value = intval($post["consistency_$id"]);
+                        if ($value > 0 && $value <= 5) {
+                            $review->setConsistency($value);
+                        } else {
+                            $error = "Consistency value must be between 1 and 5";
+                        }
+                    }
+                    if (isset($post["comment_$id"]) && $post["comment_$id"] != "") {
+                        $review->setComment($post["comment_$id"]);
+                    }
+
+                    if ($review->getProjectId() != null && $review->getUserId() != null && $error == null) {
+                        if (!$taskDao->submitReview($review)) {
+                            $error = "Unable to submit review for {$pTask->getTitle()}, please try again later";
+                        }
+                    } else {
+                        if ($error != null) {
+                            $app->flashNow("error", $error);
+                        }
+                    }
+                }
+                if ($error == null) {
+                    $app->flash("success", "Review of task {$pTask->getTitle()} has been submitted successfully");
+                    $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+                } else {
+                    $app->flashNow("error", $error);
+                }
+            }
+
+            if (isset($post['skip'])) {
+                $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+            }
+        }
+
+        $app->view()->appendData(array(
+                    'taskId'    => $taskId,
+                    'tasks'     => $preReqTasks,
+                    'action'    => $action
+        ));
+
+        $app->render("task.review.tpl");
     }
     
     private function setTaskModelData($taskModel, $project, $task, $i) {

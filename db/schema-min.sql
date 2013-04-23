@@ -422,16 +422,18 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
 
 -- Dumping structure for table Solas-Match-Test.TaskReviews
 CREATE TABLE IF NOT EXISTS `TaskReviews` (
-  `task_id` bigint(20) unsigned NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
+  `task_id` bigint(20) unsigned DEFAULT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `corrections` int(11) unsigned NOT NULL,
   `grammar` int(11) unsigned NOT NULL,
   `spelling` int(11) unsigned NOT NULL,
   `consistency` int(11) unsigned NOT NULL,
   `comment` VARCHAR(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
-  UNIQUE KEY `user_task` (`task_id`,`user_id`),
+  UNIQUE KEY `user_task_project` (`task_id`,`user_id`,`project_id`),
   CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_TaskReviews_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_TaskReviews_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_TaskReviews_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -1044,7 +1046,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
 BEGIN
 	IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
-		call getOrg(null,null,null,null);
+		call getOrg(null,null,null,null,null,null,null,null,null);
 	ELSE		
 		SELECT o.*
 		FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
@@ -1442,11 +1444,19 @@ DROP PROCEDURE IF EXISTS `getOrgByUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgByUser`(IN `id` INT)
 BEGIN
-	SELECT *
-	FROM Organisations o
-	WHERE o.id IN (SELECT organisation_id
-						 FROM OrganisationMembers
-					 	 WHERE user_id=id); 
+	IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
+		call getOrg(null,null,null,null,null,null,null,null,null);
+	ELSE		
+		SELECT o.*
+		FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
+		WHERE om.user_id = id
+		UNION
+		SELECT o.*
+		FROM Organisations o
+		JOIN Admins a ON
+		a.organisation_id=o.id
+		WHERE a.user_id=id;
+	END IF;
 END//
 DELIMITER ;
 
@@ -1887,9 +1897,10 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTaskReviews
 DROP PROCEDURE IF EXISTS `getTaskReviews`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskReviews`(IN `taskId` INT, IN `userId` INT, IN `correction` INT, IN `gram` INT, IN `spell` INT, IN `consis` INT, IN `comm` VARCHAR(2048))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskReviews`(IN `projectId` INT, IN `taskId` INT, IN `userId` INT, IN `correction` INT, IN `gram` INT, IN `spell` INT, IN `consis` INT, IN `comm` VARCHAR(2048))
     READS SQL DATA
 BEGIN
+    if projectId = '' then set projectId = NULL; end if;
     if taskId = '' then set taskId = NULL; end if;
     if userId = '' then set userId = NULL; end if;
     if correction = '' then set correction = NULL; end if;
@@ -1898,6 +1909,9 @@ BEGIN
     if consis = '' then set consis = NULL; end if;
     if comm = '' then set comm = NULL; end if;
     set @q= "SELECT task_id, user_id, corrections, grammar, spelling, consistency, comment FROM TaskReviews WHERE 1";
+    if projectId IS NOT NULL then
+        set @q = CONCAT(@q, " AND project_id = ", projectId);
+    end if;
     if taskId IS NOT NULL then
         set @q = CONCAT(@q, " AND task_id = ", taskId);
     end if;
@@ -2897,10 +2911,19 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.statsUpdateUsers
 DROP PROCEDURE IF EXISTS `submitTaskReview`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN comm VARCHAR(2048))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN comm VARCHAR(2048))
 BEGIN
-    INSERT INTO TaskReviews (task_id, user_id, corrections, grammar, spelling, consistency, comment)
-        VALUES (taskId, userId, correction, gram, spell, consis, comm);
+    IF NOT EXISTS (SELECT 1 
+                    FROM TaskReviews
+                    WHERE task_id = taskId
+                    AND user_id = userId
+                    AND project_id = projectId) then
+        INSERT INTO TaskReviews (project_id, task_id, user_id, corrections, grammar, spelling, consistency, comment)
+            VALUES (projectId, taskId, userId, correction, gram, spell, consis, comm);
+        SELECT 1 as result;
+    else
+        SELECT 0 as result;
+    end if;
 END//
 DELIMITER ;
 

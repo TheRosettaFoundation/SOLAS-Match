@@ -25,6 +25,9 @@ class ProjectRouteHandler
         $app->get("/project/id/:project_id/mark-archived", array($middleware, "authUserForOrgProject"),
         array($this, "archiveProject"))->name("archive-project");
 
+        $app->get("/project/:project_id/file", array($this, "downloadProjectFile")
+        )->name("download-project-file");
+
         $app->get("/project/:project_id/test", array($this, "test"));
     }
 
@@ -173,7 +176,9 @@ class ProjectRouteHandler
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $project_tags = $projectDao->getProjectTags($project_id);
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
-        if($isOrgMember) {
+        $isAdmin = $userDao->isAdmin($user_id, $project->getOrganisationId())|$userDao->isAdmin($user_id, null);
+        
+        if($isOrgMember|$isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
             $project_tasks = $projectDao->getProjectTasks($project_id);
@@ -635,6 +640,12 @@ class ProjectRouteHandler
         $app->redirect($ref = $app->request()->getReferrer());
     }    
     
+    public function downloadProjectFile($projectId)
+    {
+        $app = Slim::getInstance();
+        $siteApi = Settings::get("site.api");
+        $app->redirect("{$siteApi}v0/projects/$projectId/file/");
+    }
 }
 
 $route_handler = new ProjectRouteHandler();

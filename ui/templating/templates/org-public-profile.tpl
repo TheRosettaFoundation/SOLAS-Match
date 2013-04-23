@@ -27,6 +27,7 @@
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
                 {if $isMember}
+<!--                    do not add ||$adminAccess-->
                     <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
                         <i class="icon-wrench icon-white"></i> Edit Organisation Details
                     </a>
@@ -182,7 +183,7 @@
 
         {if isset($user)}
 
-            {if $isMember}
+            {if $isMember||$adminAccess  }
                 <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                     <i class="icon-star icon-white"></i> Create Badge
                 </a>
@@ -197,7 +198,7 @@
             <th style="text-align: left">Name</th>
             <th>Description</th>
 
-            {if $isMember}
+            {if $isMember||$adminAccess  }
                 <th>Edit</th>
                 <th>Assign</th>
                 <th>Delete</th>
@@ -214,7 +215,7 @@
                 <td width="35%">
                     {$badge->getDescription()}
                 </td>
-                {if $isMember && isset($user)}
+                {if ($isMember||$adminAccess  ) && isset($user)}
                     <td>
                         <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
                             <i class="icon-wrench icon-black"></i> Edit Badge
@@ -247,7 +248,7 @@
 {/if}
       
 
-{if $isMember}               
+{if $isMember||$adminAccess  }               
      <p style="margin-bottom: 40px" />         
      <h1 class="page-header">
          Membership Requests
@@ -309,7 +310,7 @@
  {/if}
 
 
-{if $adminAccess || $isMember}
+{if $isMember||$adminAccess}
     <h1 class="page-header">
         Organisation Members
         <small>A list of users that are a member of this organisation.</small>
