@@ -27,6 +27,7 @@
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
                 {if $isMember}
+<!--                    do not add ||$adminAccess-->
                     <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
                         <i class="icon-wrench icon-white"></i> Edit Organisation Details
                     </a>
@@ -182,7 +183,7 @@
 
         {if isset($user)}
 
-            {if $isMember}
+            {if $isMember||$adminAccess  }
                 <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                     <i class="icon-star icon-white"></i> Create Badge
                 </a>
@@ -197,7 +198,7 @@
             <th style="text-align: left">Name</th>
             <th>Description</th>
 
-            {if $isMember}
+            {if $isMember||$adminAccess  }
                 <th>Edit</th>
                 <th>Assign</th>
                 <th>Delete</th>
@@ -214,7 +215,7 @@
                 <td width="35%">
                     {$badge->getDescription()}
                 </td>
-                {if $isMember && isset($user)}
+                {if ($isMember||$adminAccess  ) && isset($user)}
                     <td>
                         <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
                             <i class="icon-wrench icon-black"></i> Edit Badge
@@ -247,7 +248,7 @@
 {/if}
       
 
-{if $isMember}               
+{if $isMember||$adminAccess  }               
      <p style="margin-bottom: 40px" />         
      <h1 class="page-header">
          Membership Requests
@@ -309,7 +310,7 @@
  {/if}
 
 
-{if $adminAccess || $isMember}
+{if $isMember||$adminAccess}
     <h1 class="page-header">
         Organisation Members
         <small>A list of users that are a member of this organisation.</small>
@@ -318,9 +319,8 @@
         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
             <table class="table table-striped">
                 <thead>
-                    <th>Username</th>
-                    <th>Biography</th>
-                    <th>Profile</th>
+                    <th style="width: 33%">Username</th>
+                    <th style="width: 33%">Biography</th>
                     {if $adminAccess}
                         <th>Remove User</th>
                     {/if}
@@ -328,15 +328,16 @@
                 <tbody>
                     {foreach $orgMembers as $member}
                         <tr>
-                            <td>{$member->getDisplayName()}</td>
                             <td>
+                                <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{$member->getDisplayName()}</a>
+                            </td>
+                            <td style="font-style: italic">
                                 {if $member->getBiography() != ''}
                                     {$member->getBiography()}
                                 {else}
-                                    No biography has been set.
+                                    No biography listed.
                                 {/if}
                             </td>
-                            <td><button class="btn btn-primary">Profile</button></td>
                         </td>
                         {if $adminAccess}
                             <td>

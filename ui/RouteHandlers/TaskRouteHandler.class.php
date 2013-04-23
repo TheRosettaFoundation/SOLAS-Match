@@ -276,7 +276,7 @@ class TaskRouteHandler
         $app->render("task.claimed.tpl");
     }
 
-    public function downloadTaskVersion($task_id, $version, $convert = false)
+    public function downloadTaskVersion($task_id, $version, $convert = 0)
     {
         $app = Slim::getInstance();
         $siteApi = Settings::get("site.api");

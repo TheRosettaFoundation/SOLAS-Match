@@ -59,11 +59,11 @@
                     <label for='homepage'><strong>Home Page:</strong></label>
                     <input type='text' name='homepage' id='homepage' style="width: 80%"
                     {if $org->getHomePage() != 'http://'}
-                         value="{$org->getHomePage()}"
+                        value="{$org->getHomePage()}"
                     {else}
-                        placeholder='http://www.example.com'
+                        value='http://'
                     {/if}
-                    /> 
+                     /> 
                     
                     <label for='email'><strong>E-Mail:</strong></label>
                     <input type='text' name='email' id='email' style="width: 80%"
@@ -77,7 +77,7 @@
                     <label for='biography'><strong>Biography:</strong></label>
                     <textarea name='biography' cols='40' rows='10' style="width: 80%" 
                     {if $org->getBiography() == ''}
-                        placeholder="Enter Organisation Biography Here"
+                        placeholder="Enter Organisation biography here."
                     {/if}
                     >{if $org->getBiography() != ''}{$org->getBiography()}{/if}</textarea>
                     
