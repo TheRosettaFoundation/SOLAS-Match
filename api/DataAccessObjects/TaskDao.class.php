@@ -461,6 +461,7 @@ class TaskDao
     {
         Notify::sendEmailNotifications($taskId, NotificationTypes::ARCHIVE);
         $result = PDOWrapper::call("archiveTask", PDOWrapper::cleanseNull($taskId).", ".PDOWrapper::cleanseNull($userId));
+        self::delete($taskId);
         return $result[0]['result'];
     }
         
@@ -710,15 +711,6 @@ class TaskDao
                     self::uploadFile($dTask ,$convert,$file,0,$userId,$filename);
                 }
             }
-    }
-    
-    public static function getArchivedTaskMetaData($taskId)
-    {      
-        $ret = null;
-        if ($result = PDOWrapper::call("getArchivedTaskMetaData", PDOWrapper::cleanseNull($taskId))) { 
-            $ret = ModelFactory::buildModel("ArchivedTaskMetaData", $result[0]);            
-        }
-        return $ret;     
     }
     
 }

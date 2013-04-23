@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- Dumping structure for table big-merge.ArchivedProjects
+-- Dumping structure for table debug-test.ArchivedProjects
 DROP TABLE IF EXISTS `ArchivedProjects`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   CONSTRAINT `FK_ArchivedProjects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping structure for table big-merge.ArchivedProjectsMetaData
-DROP TABLE IF EXISTS `ArchivedProjectsMetaData`;
-CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
+-- Dumping structure for table debug-test.ArchivedProjectsMetadata
+DROP TABLE IF EXISTS `ArchivedProjectsMetadata`;
+CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
   `archivedProject_id` int(10) unsigned NOT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
   `user_id-projectCreator` int(10) unsigned NOT NULL,
@@ -56,16 +56,17 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetaData` (
   `file-token` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `mime-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `archived-date` datetime NOT NULL,
+  `tags` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `archivedProject_id` (`archivedProject_id`),
-  KEY `FK_ArchivedProjectsMetaData_Users` (`user_id-archived`),
-  KEY `FK_ArchivedProjectsMetaData_Users_2` (`user_id-projectCreator`),
-  CONSTRAINT `FK_ArchivedProjectsMetaData_ArchivedProjects` FOREIGN KEY (`archivedProject_id`) REFERENCES `ArchivedProjects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_ArchivedProjectsMetaData_Users` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_ArchivedProjectsMetaData_Users_2` FOREIGN KEY (`user_id-projectCreator`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `FK_ArchivedProjectsMetadata_Users` (`user_id-archived`),
+  KEY `FK_ArchivedProjectsMetadata_Users_2` (`user_id-projectCreator`),
+  CONSTRAINT `FK_ArchivedProjectsMetadata_ArchivedProjects` FOREIGN KEY (`archivedProject_id`) REFERENCES `ArchivedProjects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ArchivedProjectsMetadata_Users` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ArchivedProjectsMetadata_Users_2` FOREIGN KEY (`user_id-projectCreator`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- Dumping structure for table big-merge.ArchivedTasks
+-- Dumping structure for table debug-test.ArchivedTasks
 DROP TABLE IF EXISTS `ArchivedTasks`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
@@ -98,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- Dumping structure for table big-merge.ArchivedTasksMetadata
+-- Dumping structure for table debug-test.ArchivedTasksMetadata
 DROP TABLE IF EXISTS `ArchivedTasksMetadata`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
@@ -817,7 +818,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure big-merge.archiveProject
+-- Dumping structure for procedure debug-test.archiveProject
 DROP PROCEDURE IF EXISTS `archiveProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject`(IN `projectId` INT, IN `user_id` INT)
@@ -840,14 +841,16 @@ BEGIN
 		set @`filename` = null;
 		set @`fileToken` = null;
 		set @`mimeType` = null;
+		set @`projectTags` = null;
 		
 		SELECT pf.user_id INTO @`userIdProjectCreator` FROM ProjectFiles pf WHERE pf.project_id=projectId;
 		SELECT pf.filename INTO @`filename` FROM ProjectFiles pf WHERE pf.project_id=projectId;
 		SELECT pf.`file-token` INTO @`fileToken` FROM ProjectFiles pf WHERE pf.project_id=projectId;
 		SELECT pf.`mime-type` INTO @`mimeType` FROM ProjectFiles pf WHERE pf.project_id=projectId;
+		SELECT GROUP_CONCAT(t.label) INTO @`projectTags` FROM Tags t JOIN ProjectTags pt ON t.id = pt.tag_id WHERE pt.project_id=projectId;
 				
-		INSERT INTO `ArchivedProjectsMetaData` (`archivedProject_id`,`user_id-archived`,`user_id-projectCreator`,`filename`,`file-token`,`mime-type`,`archived-date`)
-		VALUES (projectId,user_id,@`userIdProjectCreator`,@`filename`,@`fileToken`,@`mimeType`,NOW());
+		INSERT INTO `ArchivedProjectsMetadata` (`archivedProject_id`,`user_id-archived`,`user_id-projectCreator`,`filename`,`file-token`,`mime-type`,`archived-date`,`tags`)
+		VALUES (projectId,user_id,@`userIdProjectCreator`,@`filename`,@`fileToken`,@`mimeType`,NOW(),@`projectTags`);
 		
 		OPEN cur1;
 		
@@ -858,7 +861,19 @@ BEGIN
 			END IF;
          call archiveTask(taskId, user_id);
 		END LOOP;
-		CLOSE cur1;	  	
+		CLOSE cur1;
+			  
+		
+		OPEN cur1;
+		
+		read_loop: LOOP
+			FETCH cur1 INTO taskId;
+			IF done THEN
+			 	LEAVE read_loop;
+			END IF;
+         call deleteTask(taskId);
+		END LOOP;
+		CLOSE cur1;	
 		
 		DELETE FROM Projects WHERE id=projectId;
 	   SELECT 1 AS archivedResult;
@@ -869,6 +884,7 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure debug-test.archiveTask
 DROP PROCEDURE IF EXISTS `archiveTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT, IN `uID` INT)
@@ -902,8 +918,6 @@ BEGIN
 		VALUES
 		(tID, @`version`,@`filename`,@`contentType`,@`userIdClaimed`,uID,@`prerequisites`,@`userIdTaskCreator`,@`uploadTime`,NOW());
 
-	   
-	   DELETE FROM Tasks WHERE id = tID ;
 	   select 1 as result;
    else
       select 0 as result;
@@ -1080,7 +1094,7 @@ BEGIN
     if archiveDate='' then set archiveDate=null;end if;
     if archiverId='' then set archiverId=null;end if;
 
-    set @q = "SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, (select code from Languages where id =p.language_id) as language_id, (select code from Countries where id =p.country_id) as country_id, m.`archived-date`, m.`user_id-archived` FROM ArchivedProjects p JOIN ArchivedProjectsMetaData m ON p.id=m.`archivedProject_id` WHERE 1";
+    set @q = "SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, (select code from Languages where id =p.language_id) as language_id, (select code from Countries where id =p.country_id) as country_id, m.`archived-date`, m.`user_id-archived` FROM ArchivedProjects p JOIN ArchivedProjectsMetadata m ON p.id=m.`archivedProject_id` WHERE 1";
     if projectId is not null then
         set @q = CONCAT(@q, " and p.id=", projectId);
     end if;
@@ -1121,17 +1135,17 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure big-merge.getArchivedProjectMetaData
-DROP PROCEDURE IF EXISTS `getArchivedProjectMetaData`;
+-- Dumping structure for procedure big-merge.getArchivedProjectMetadata
+DROP PROCEDURE IF EXISTS `getArchivedProjectMetadata`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProjectMetaData`(IN `archivedProjectId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProjectMetadata`(IN `archivedProjectId` INT)
 BEGIN
-	SELECT p.* FROM ArchivedProjectsMetaData p WHERE p.archivedProject_id=archivedProjectId;
+	SELECT p.* FROM ArchivedProjectsMetadata p WHERE p.archivedProject_id=archivedProjectId;
 END//
 DELIMITER ;
 
 
--- Dumping structure for procedure big-merge.getArchivedTask
+-- Dumping structure for procedure debug-test.getArchivedTask
 DROP PROCEDURE IF EXISTS `getArchivedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTask`(IN `archiveId` BIGINT, IN `projectId` INT, IN `title` VARCHAR(128), IN `comment` VARCHAR(4096), IN `deadline` DATETIME, IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceLanguageId` INT, IN `targetLanguageId` INT, IN `sourceCountryId` INT, IN `targetCountryId` INT, IN `taskTypeId` INT, IN `taskStatusId` INT, IN `published` VARCHAR(50))
@@ -1151,9 +1165,9 @@ BEGIN
 	if taskTypeId='' then set taskTypeId=null; end if;
 	if taskStatusId='' then set taskStatusId=null; end if;
 	if published='' then set published=null; end if;
-	
-	set @q="SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, t.`taskType_id`, t.`taskStatus_id`, t.published FROM ArchivedTasks t
-	          WHERE 1";  
+
+	set @q="SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, t.`taskType_id`, t.`taskStatus_id`, t.published, tm.version,tm.filename,tm.`content-type`,tm.`upload-time`,tm.`user_id-claimed`, tm.`user_id-archived`,tm.prerequisites,tm.`user_id-taskCreator`,tm.`archived-date` FROM ArchivedTasks t
+	 JOIN ArchivedTasksMetadata tm ON t.id = tm.archivedTask_id WHERE 1";  
 	          
 	if archiveId is not null then
 	  set @q = CONCAT(@q, " and t.id='", archiveId, "'");
@@ -1167,13 +1181,13 @@ BEGIN
 	if `comment` is not null then
 	  set @q = CONCAT(@q, " and t.`comment`='", `comment`, "'");
 	end if;                 
-	if deadline is not null then
+	if (deadline is not null and deadline !='0000-00-00 00:00:00') then
 	  set @q = CONCAT(@q, " and t.deadline='", deadline, "'");
 	end if;                 
 	if wordCount is not null then
 	  set @q = CONCAT(@q, " and t.`word-count`='", wordCount, "'");
 	end if;       
-	if createdTime is not null then
+	if (createdTime is not null and createdTime !='0000-00-00 00:00:00') then
 	  set @q = CONCAT(@q, " and t.`created-time`='", createdTime, "'");
 	end if;
 	if sourceLanguageId is not null then
@@ -1196,8 +1210,8 @@ BEGIN
 	end if;	
 	if published is not null then
 	  set @q = CONCAT(@q, " and t.`published`='", published, "'");
-	end if;       
-	                         
+	end if;
+                         
 	                         
 	PREPARE stmt FROM @q; 
 	EXECUTE stmt;           
@@ -2069,16 +2083,17 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserArchivedTasks
+-- Dumping structure for procedure debug-test.getUserArchivedTasks
 DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
-	SELECT a.id,a.project_id, a.title, a.`comment`, a.deadline, a.`word-count`, a.`created-time`, (select code from Languages where id =a.`language_id-source`) as `language_id-source`,(select code from Languages where id =a.`language_id-target`) as `language_id-target`, (select code from Countries where id =a.`country_id-source`) as `country_id-source`, (select code from Countries where id =a.`country_id-target`) as `country_id-target`, a.taskType_id AS taskType, a.taskStatus_id AS taskStatus, a.published, (SELECT `user_id-claimed` FROM ArchivedTasksMetadata) AS `user_id-claimed`, (SELECT `user_id-archived` FROM ArchivedTasksMetadata) AS `user_id-archived`, (SELECT `archived-date` FROM ArchivedTasksMetadata) AS `archive-date`  FROM ArchivedTasks AS a 
-		WHERE a.id = (SELECT am.archivedTask_id FROM ArchivedTasksMetadata am
-		WHERE am.`user_id-archived` = uID)
-      ORDER BY `created-time` DESC
-      LIMIT lim;
+	SELECT id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `taskType_id`, `taskStatus_id`, published, deadline, `created-time` ,am.*
+	FROM ArchivedTasks t 
+	join ArchivedTasksMetadata am
+	on t.id=am.archivedTask_id
+	where	am.`user_id-claimed` = uID;
+ 
 END//
 DELIMITER ;
 
@@ -3761,6 +3776,24 @@ if new.`display-name` is null then set new.`display-name` = substring_index(new.
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
+
+-- Dumping structure for trigger debug-test.deleteArchiveTaskOnArchiveProjectDeletion
+DROP TRIGGER IF EXISTS `deleteArchiveTaskOnArchiveProjectDeletion`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `deleteArchiveTaskOnArchiveProjectDeletion` BEFORE DELETE ON `ArchivedProjects` FOR EACH ROW BEGIN
+
+	DELETE FROM ArchivedTasks WHERE project_id=OLD.id;
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
 
 -- Dumping structure for trigger Solas-Match-Test.updateDependentTaskOnComplete

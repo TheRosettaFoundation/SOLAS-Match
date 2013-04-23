@@ -103,11 +103,7 @@ class Projects
                 $format = '.'.$userId[1];
                 $userId = $userId[0];
             }
-            $projectTasks = ProjectDao::getProjectTasks($projectId);
-            foreach ($projectTasks as $task) {
-                TaskDao::archiveTask($task->getId(), $userId);
-            }
-            Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);                
+             Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);                
             }, 'archiveProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects(:format)/',

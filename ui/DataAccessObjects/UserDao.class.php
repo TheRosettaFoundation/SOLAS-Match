@@ -141,7 +141,7 @@ class UserDao
             $args = array("limit" => $limit);
         }
 
-        $ret = $this->client->call(array("Task"), $request, HttpMethodEnum::GET, null, $args);
+        $ret = $this->client->call(array("ArchivedTask"), $request, HttpMethodEnum::GET, null, $args);
         return $ret;
     }
 
