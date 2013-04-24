@@ -703,8 +703,9 @@ class TaskRouteHandler
             $previousRow = array();
 
             while (count($currentRow) > 0) {
-                foreach ($currentRow as $nodeIndex) {
-                    $node = $graphBuilder->getAllNodes($nodeIndex);
+                foreach ($currentRow as $nodeId) {
+                    $index = $graphBuilder->find($nodeId, $graph);
+                    $node = $graph->getAllNodes($index);
                     $tasksEnabled[$node->getTaskId()] = false;
 
                     foreach ($node->getPreviousList() as $prevIndex) {
