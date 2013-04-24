@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 
 
 -- Dumping structure for table debug-test.ArchivedProjects
-DROP TABLE IF EXISTS `ArchivedProjects`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -47,7 +46,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping structure for table debug-test.ArchivedProjectsMetadata
-DROP TABLE IF EXISTS `ArchivedProjectsMetadata`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
   `archivedProject_id` int(10) unsigned NOT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
@@ -67,7 +65,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
 
 
 -- Dumping structure for table debug-test.ArchivedTasks
-DROP TABLE IF EXISTS `ArchivedTasks`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
   `project_id` int(20) unsigned NOT NULL,
@@ -100,7 +97,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
 
 
 -- Dumping structure for table debug-test.ArchivedTasksMetadata
-DROP TABLE IF EXISTS `ArchivedTasksMetadata`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
   `version` int(10) unsigned NOT NULL,
