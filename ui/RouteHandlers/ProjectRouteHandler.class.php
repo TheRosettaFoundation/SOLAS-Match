@@ -393,10 +393,10 @@ class ProjectRouteHandler
             if(isset($post['reference']) && $post['reference'] != '') $project->setReference($post['reference']);
             
             $cleansedWordCount = str_replace(",", "", $post['word_count']);
-            if((ctype_digit($cleansedWordCount))) {                
+            if(!is_null($cleansedWordCount) && ctype_digit($cleansedWordCount) && $cleansedWordCount > 0) {                
                 $project->setWordCount($cleansedWordCount);
             } else {
-                $wordcount_err = "Project <b>Word Count</b> must be set and be a valid natural number.";
+                $wordcount_err = "Project <b>Word Count</b> must be set and be a valid <b>natural</b> number.";
             }
             
             $sourceLocale = new Locale();

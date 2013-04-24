@@ -5,7 +5,8 @@
         {foreach $top_tags as $tag}
             <div class="tag">
                 {assign var="tag_label" value=$tag->getLabel()}
-                <a href="{urlFor name="tag-details" options="label.$tag_label"}" class="label">{$tag_label}</a>
+                {assign var="tagId" value=$tag->getId()}
+                <a href="{urlFor name="tag-details" options="id.$tagId"}" class="label">{$tag_label}</a>
             </div>            
         {/foreach}
         </li>
