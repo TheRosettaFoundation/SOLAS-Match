@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 
 
 -- Dumping structure for table debug-test.ArchivedProjects
-DROP TABLE IF EXISTS `ArchivedProjects`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -47,7 +46,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping structure for table debug-test.ArchivedProjectsMetadata
-DROP TABLE IF EXISTS `ArchivedProjectsMetadata`;
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
   `archivedProject_id` int(10) unsigned NOT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
@@ -67,7 +65,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
 
 
 -- Dumping structure for table debug-test.ArchivedTasks
-DROP TABLE IF EXISTS `ArchivedTasks`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
   `project_id` int(20) unsigned NOT NULL,
@@ -100,7 +97,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
 
 
 -- Dumping structure for table debug-test.ArchivedTasksMetadata
-DROP TABLE IF EXISTS `ArchivedTasksMetadata`;
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
   `version` int(10) unsigned NOT NULL,
@@ -2189,15 +2185,18 @@ DROP PROCEDURE IF EXISTS `getUserTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
+    if lim = '' then set lim = null; end if;
 
-set @q=Concat(" SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
+    set @q= " SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
                 t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`, 
                  comment,
                 `task-type_id`, `task-status_id`, published, deadline
                 FROM Tasks t JOIN TaskClaims tc ON tc.task_id = t.id
                 WHERE user_id = ?
-                ORDER BY `created-time` DESC
-                limit ", lim);
+                ORDER BY `created-time` DESC";
+if lim IS NOT NULL then
+    set @q=CONCAT(@q, " limit ", lim);
+end if;
         PREPARE stmt FROM @q;
         set@uID = uID;
 	EXECUTE stmt using @uID;

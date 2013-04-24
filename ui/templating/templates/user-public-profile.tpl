@@ -334,27 +334,29 @@
     <p style="margin-bottom:50px;"/>
 {/if}
 
-{if isset($user_tags)}
-    {if count($user_tags) > 0}
-        <div class="page-header">
-            <h1>Tags<small> A list of tags you have subscribed to.</small>
-                <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
-                    <i class="icon-list icon-white"></i> List All Tags
-                </a>
-            </h1>
-        </div>
+<div class="page-header">
+    <h1>Tags<small> A list of tags you have subscribed to.</small>
+        <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
+            <i class="icon-list icon-white"></i> List All Tags
+        </a>
+    </h1>
+</div>
 
-        {foreach $user_tags as $tag}
-            <p>
-                {assign var="tag_label" value=$tag->getLabel()}
-                <a class="tag" href="{urlFor name="tag-details" options="label.$tag_label"}">
-                    <span class="label">{$tag_label}</span>
-                </a>
-            </p>
-        {/foreach}
-        <p style="margin-bottom:50px;"/>
-    {/if}
+{if isset($user_tags) && count($user_tags) > 0}
+    {foreach $user_tags as $tag}
+        <p>
+            {assign var="tag_label" value=$tag->getLabel()}
+            <a class="tag" href="{urlFor name="tag-details" options="label.$tag_label"}">
+                <span class="label">{$tag_label}</span>
+            </a>
+        </p>
+    {/foreach}
+{else}
+    <p class="alert alert-info">
+        You are not subscribed to any Tags on the system at the moment.
+    </p>
 {/if}
+<p style="margin-bottom:50px;"/>
 
 {if isset($user_orgs)}
     {if count($user_orgs) > 0}

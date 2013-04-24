@@ -499,9 +499,9 @@ class TaskDao
         return $result[0]['result'];
     }
     
-    public static function getUserTasks($user_id, $limit = 10)
+    public static function getUserTasks($user_id, $limit = null)
     {
-        $result = PDOWrapper::call("getUserTasks", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($limit));
+        $result = PDOWrapper::call("getUserTasks", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanseNull($limit));
         if($result) { 
             $tasks = array();
             foreach($result as $taskData) {

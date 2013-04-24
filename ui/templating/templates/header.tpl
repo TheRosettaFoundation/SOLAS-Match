@@ -5,7 +5,7 @@
         <meta name="google-translate-customization" content="d0b5975e5905d60f-4e4c167261d2937a-g4574d0ff41a34d5b-10" />
 
         <!-- css -->
-        <title>{if isset($title)}{$title}{else}SOLAS Match{/if}</title>
+        <title>{Settings::get('site.title')}</title>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
@@ -27,7 +27,7 @@
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a class="brand" href="{urlFor name='home'}">SOLAS Match</a>
+                    <a class="brand" href="{urlFor name='home'}">{Settings::get('site.name')}</a>
                     <ul class="nav">
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">Home</a>
