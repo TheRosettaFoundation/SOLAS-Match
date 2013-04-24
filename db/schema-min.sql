@@ -2185,15 +2185,18 @@ DROP PROCEDURE IF EXISTS `getUserTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT)
 BEGIN
+    if lim = '' then set lim = null; end if;
 
-set @q=Concat(" SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
+    set @q= " SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
                 t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`, 
                  comment,
                 `task-type_id`, `task-status_id`, published, deadline
                 FROM Tasks t JOIN TaskClaims tc ON tc.task_id = t.id
                 WHERE user_id = ?
-                ORDER BY `created-time` DESC
-                limit ", lim);
+                ORDER BY `created-time` DESC";
+if lim IS NOT NULL then
+    set @q=CONCAT(@q, " limit ", lim);
+end if;
         PREPARE stmt FROM @q;
         set@uID = uID;
 	EXECUTE stmt using @uID;
