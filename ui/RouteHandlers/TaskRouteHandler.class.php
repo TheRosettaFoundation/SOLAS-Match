@@ -1310,7 +1310,9 @@ class TaskRouteHandler
             $preReqTasks[] = $dummyTask;
         } else {
             foreach ($preReqTasks as $pTask) {
-                $reviews[$pTask->getId()] = $userDao->getUserTaskReviews($userId, $pTask->getId());
+                if ($taskReview = $userDao->getUserTaskReviews($userId, $pTask->getId())) {
+                    $reviews[$pTask->getId()] = $taskReview;
+                }
             }
         }
 
