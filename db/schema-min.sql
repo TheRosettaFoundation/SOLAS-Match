@@ -1922,7 +1922,7 @@ BEGIN
     if spell = '' then set spell = NULL; end if;
     if consis = '' then set consis = NULL; end if;
     if comm = '' then set comm = NULL; end if;
-    set @q= "SELECT task_id, user_id, corrections, grammar, spelling, consistency, comment FROM TaskReviews WHERE 1";
+    set @q= "SELECT project_id, task_id, user_id, corrections, grammar, spelling, consistency, comment FROM TaskReviews WHERE 1";
     if projectId IS NOT NULL then
         set @q = CONCAT(@q, " AND project_id = ", projectId);
     end if;

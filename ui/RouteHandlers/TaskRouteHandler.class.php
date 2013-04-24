@@ -1266,6 +1266,8 @@ class TaskRouteHandler
     {
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
+        $userDao = new UserDao();
+        $userId = UserSession::getCurrentUserID();
 
         $task = $taskDao->getTask($taskId);
         $action = "";
@@ -1284,21 +1286,39 @@ class TaskRouteHandler
                 break;
         }
 
+        $reviews = array();
         $preReqTasks = $taskDao->getTaskPreReqs($taskId);
         if ($preReqTasks == null || count($preReqTasks) == 0) {
             $projectDao = new ProjectDao();
             $project = $projectDao->getProject($task->getProjectId());
+
+            $reviews = $projectDao->getProjectReviews($task->getProjectId());
+            if ($reviews) {
+                foreach ($reviews as $projectReview) {
+                    if ($projectReview->getTaskId() == null
+                            && $projectReview->getUserId() == $userId) {
+                        $reviews[$task->getProjectId()] = $projectReview;
+                    }
+                }
+            }
 
             $dummyTask = new Task();        //Create a dummy task to hold the project info
             $dummyTask->setProjectId($task->getProjectId());
             $dummyTask->setTitle($project->getTitle());
             $preReqTasks = array();
             $preReqTasks[] = $dummyTask;
+        } else {
+            foreach ($preReqTasks as $pTask) {
+                $reviews[$pTask->getId()] = $userDao->getUserTaskReviews($userId, $pTask->getId());
+            }
+        }
+
+        if (count($reviews) > 0) {
+            $app->flashNow("info", "You have already submitted a review for this file.");
         }
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            $userId = UserSession::getCurrentUserID();
 
             if (isset($post['submitReview'])) {
                 $i = 0;
@@ -1399,6 +1419,7 @@ class TaskRouteHandler
                     'extra_scripts' => $extra_scripts,
                     'taskId'        => $taskId,
                     'tasks'         => $preReqTasks,
+                    'reviews'       => $reviews,
                     'action'        => $action
         ));
 

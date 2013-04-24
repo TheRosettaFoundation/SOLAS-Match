@@ -37,6 +37,14 @@ class ProjectDao
         return $ret;
     }
 
+    public function getProjectReviews($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$projectId/reviews";
+        $ret = $this->client->call(array("TaskReview"), $request);
+        return $ret;
+    }
+
     public function getProjectGraph($projectId)
     {
         $ret = null;

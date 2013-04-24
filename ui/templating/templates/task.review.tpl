@@ -26,33 +26,57 @@
                 <a href="{urlFor name="download-project-file" options="project_id.$id"}">here</a>.
             </p>
         {/if}
+
+        {if isset($reviews[$id])}
+            {assign var='review' value=$reviews[$id]}
+        {/if}
+
+        {if isset($review)}
+            {assign var='value' value=$review->getCorrections()}
+        {else}
+            {assign var='value' value=3}
+        {/if}
         <h3>Corrections <small>Were there many mistakes in the source file?</h3>
         <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
-        <div class="rateit" data-rateit-value="3" data-rateit-step="1" data-rateit-ispreset=true 
+        <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
                 data-rateit-resetable=false id="rateit_corrections_{$id}">
         </div>
 
+        {if isset($review)}
+            {assign var='value' value=$review->getGrammar()}
+        {else}
+            {assign var='value' value=3}
+        {/if}
         <h3>Grammar <small>How was the use of grammar in the source file?</small></h3>
         <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
-        <div class="rateit" data-rateit-value="3" data-rateit-step="1" data-rateit-ispreset=true 
+        <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
                 data-rateit-resetable=false id="rateit_grammar_{$id}">
         </div>
 
+        {if isset($review)}
+            {assign var='value' value=$review->getSpelling()}
+        {else}
+            {assign var='value' value=3}
+        {/if}
         <h3>Spelling <small>Were there many spelling errors in the source file?</small></h3>
         <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
-        <div class="rateit" data-rateit-value="3" data-rateit-step="1" data-rateit-ispreset=true 
+        <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
                 data-rateit-resetable=false id="rateit_spelling_{$id}">
         </div>
 
+        {if isset($review)}
+            {assign var='value' value=$review->getConsistency()}
+        {else}
+            {assign var='value' value=3}
+        {/if}
         <h3>Consistency <small>Were there any errors in consistency in the source file?</small></h3>
         <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
-        <div class="rateit" data-rateit-value="3" data-rateit-step="1" data-rateit-ispreset=true 
+        <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
                 data-rateit-resetable=false id="rateit_consistency_{$id}">
         </div>
 
         <h3>Comment <small>An optional comment about the file in general</small></h3>
-        <textarea name="comment_{$id}" cols='40' rows='10' style="width: 80%">
-        </textarea>
+        <textarea name="comment_{$id}" cols='40' rows='10' style="width: 80%">{if isset($review)}{$review->getComment()}{/if}</textarea>
     {/foreach}
 
     <br />

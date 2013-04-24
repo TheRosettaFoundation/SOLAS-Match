@@ -149,7 +149,7 @@ class TaskDao
         $args = "";
 
         if (isset($params['project_id'])) {
-            $args .= PDOWrapper::cleanseNull($params['project_id']);
+            $args .= PDOWrapper::cleanseNull($params['project_id']).', ';
         } else {
             $args .= 'null, ';
         }
@@ -184,7 +184,7 @@ class TaskDao
             $args .= "null, ";
         }
         if (isset($params['comment']) && $params['comment'] != '') {
-            $args .= PDOWrapper::cleanseNullOrWrapStr($params['comment']).", ";
+            $args .= PDOWrapper::cleanseNullOrWrapStr($params['comment']);
         } else {
             $args .= "null";
         }

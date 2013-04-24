@@ -92,6 +92,14 @@ class UserDao
         return $ret;
     }
 
+    public function getUserTaskReviews($userId, $taskId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId/review";
+        $ret = $this->client->call("TaskReview", $request);
+        return $ret;
+    }
+
     public function getUserTaskStreamNotification($userId)
     {
         $ret = null;

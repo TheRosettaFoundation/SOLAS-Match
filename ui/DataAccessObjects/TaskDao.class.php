@@ -89,6 +89,14 @@ class TaskDao
         return $response;
     }
 
+    public function getTaskReviews($taskId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/tasks/$taskId/reviews";
+        $ret = $this->client->call(array("TaskReview"), $request);
+        return $ret;
+    }
+
     public function createTask($task)
     {
         $request = "{$this->siteApi}v0/tasks";

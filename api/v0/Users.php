@@ -201,6 +201,15 @@ class Users {
             Dispatcher::sendResponce(null, TaskDao::unClaimTask($tID,$id), null, $format);
         }, 'userUnClaimTask');
 
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:user_id/tasks/:task_id/review(:format)/',
+                function ($userId, $taskId, $format = '.json')
+                {
+                    $reviews = TaskDao::getTaskReviews(array(
+                            'user_id'   => $userId,
+                            'task_id'   => $taskId
+                    ));
+                    Dispatcher::sendResponce(null, $reviews[0], null, $format);
+                }, 'getUserTaskReview');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/topTasks(:format)/',
                                                         function ($id, $format = ".json") {
