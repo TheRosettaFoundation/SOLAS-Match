@@ -25,7 +25,7 @@
 
 <div class="well alert-info">
     <p><strong>Please Note:</strong></p>
-    <p>All these fields are optional, however filling them out will provide us with valuable information for contacting you and for matching you with more relevant more tasks for your Task Stream.</p>
+    <p>All these fields are optional. However, filling them out will provide us with valuable information for contacting you and for matching you with more relevant tasks for your Task Stream.</p>
 </div>
  
     <form method='post' action='{urlFor name='user-private-profile'}' class='well'>
