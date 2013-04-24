@@ -27,7 +27,7 @@
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a class="brand" href="{urlFor name='home'}">SOLAS Match</a>
+                    <a class="brand" href="{urlFor name='home'}">{Settings::get('site.name')}</a>
                     <ul class="nav">
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">Home</a>
