@@ -9,7 +9,12 @@
         {else}
             Private Profile
         {/if}
-        <small>Update your personal details here</small>
+        <small>Update your personal details here.</small><br>
+        <small>
+            Note:
+            <span style="color: red">*</span>
+            denotes a required field.
+        </small>
         </h1>
     </div>
 {/if}
@@ -17,13 +22,18 @@
 {if isset($warning) && $warning == true}
     <p>Invalid input, please fill in all options below.</p>
 {/if}
+
+<div class="well alert-info">
+    <p><strong>Please Note:</strong></p>
+    <p>All these fields are optional, however filling them out will provide us with valuable information for contacting you and for matching you with more relevant more tasks for your Task Stream.</p>
+</div>
  
     <form method='post' action='{urlFor name='user-private-profile'}' class='well'>
         
         <table border="0">
             <tr valign="top" align="center"> 
                 <td width="50%">
-                    <label for='displayName'><strong>Public Display Name:</strong></label>
+                    <label for='displayName'><strong>Public Display Name: <span style="color: red">*</span></strong></label>
                     <input type='text' name='displayName' id='displayName' style="width: 80%"
                     {if $user->getDisplayName() != ''}
                         value='{$user->getDisplayName()}'

@@ -346,7 +346,8 @@
     {foreach $user_tags as $tag}
         <p>
             {assign var="tag_label" value=$tag->getLabel()}
-            <a class="tag" href="{urlFor name="tag-details" options="label.$tag_label"}">
+            {assign var="tagId" value=$tag->getId()}
+            <a class="tag" href="{urlFor name="tag-details" options="id.$tagId"}">
                 <span class="label">{$tag_label}</span>
             </a>
         </p>
