@@ -742,8 +742,8 @@ class OrgRouteHandler
         $extra_scripts .= "taskIds[0] = $taskId;";
         $extra_scripts .= "</script>";
         
-        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}resources/css/rateit.css\"/>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery.rateit.min.js\"></script>";
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
         $extra_scripts .= file_get_contents(__DIR__."/../js/review.js");
 
         $app->view()->appendData(array(
