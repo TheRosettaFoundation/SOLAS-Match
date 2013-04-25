@@ -255,7 +255,7 @@ class TaskDao
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
                                                 .",".PDOWrapper::cleanseNull($task->getTaskType())
                                                 .",".PDOWrapper::cleanseNull($task->getTaskStatus())
-                                                .",".PDOWrapper::cleanseNull($task->getPublished()));
+                                                .",".PDOWrapper::cleanse($task->getPublished()));
         
         if($result) {
             $task = ModelFactory::buildModel('Task', $result);
@@ -323,7 +323,7 @@ class TaskDao
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
             .",".PDOWrapper::cleanseNull($task->getTaskType())
             .",".PDOWrapper::cleanseNull($task->getTaskStatus())
-            .",".PDOWrapper::cleanseNull($task->getPublished()));
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getPublished()));
         
         if($result) {
             $task = ModelFactory::buildModel("Task", $result[0]);           

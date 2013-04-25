@@ -184,8 +184,8 @@ class PDOWrapper {
             $str = stripslashes($str);
         }
         $special = array("\x00"=>'\x00', "\n"=>'\n', "\r"=>'\r', '\\'=>'\\\\', "'"=>"\\'\\'", '"'=>'\"', "\x1a"=>'\x1a');
-        $str = strip_tags(trim($str));
         foreach ($special as $key => $val) {
+           if(is_bool($str)) return $str?1:0;
            $str = str_replace($key, $val, $str);
         }
 

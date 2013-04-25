@@ -4,111 +4,81 @@
     var isRemoveButtonHidden = true;
 
     var isEnabledArray = new Array(false); 
-
+    
     function addNewTarget() {
 
         if(isRemoveButtonHidden) {
-            document.getElementById('removeBottomTargetBtn').style.visibility = 'visible';
-            document.getElementById('removeBottomTargetBtn').disabled = false;
+            jQuery('#removeBottomTargetBtn')
+                    .css('visibility', 'visible')
+                    .attr('disabled', false);
+            
             isRemoveButtonHidden = false;
         }
 
         if(fields < MAX_FIELDS) {
+            
+            var clonedTarget = jQuery('#targetLanguageTemplate_0').clone();
+            var clonedHorizLine = jQuery('#horizontalLine_0').clone();
+            
+            clonedHorizLine.attr('id', 'horizontalLine_' + (++fields));
+            
+            clonedTarget.attr('id', 'targetLanguageTemplate_' + fields);
+            
+            clonedTarget.find('#targetLanguage_0')
+                        .attr('name', 'targetLanguage_' + fields)
+                        .attr('id', 'targetLanguage_' + fields);   
 
-            var table = document.getElementById('moreTargetLanguages');            
-            var newRow = document.createElement('tr');                        
+            clonedTarget.find('#targetCountry_0')
+                        .attr('name', 'targetCountry_' + fields)
+                        .attr('id', 'targetCountry_' + fields);
+            
+            clonedTarget.find('#segmentation_0')
+                        .attr('name', 'segmentation_' + fields)
+                        .attr('onchange', 'segmentationEnabled(' + fields + ')')
+                        .attr('id', 'segmentation_' + fields);
+            
+            clonedTarget.find('#translation_0')
+                        .attr('name', 'translation_' + fields)
+                        .attr('id', 'translation_' + fields)
+                        .attr('name', 'proofreading_' + fields)
+                        .attr('id', 'proofreading_' + fields);
+            
 
-            newRow.setAttribute('id', 'newTargetLanguage' + fields);
-            var newColumnLangCountry = document.createElement('td');
-            newColumnLangCountry.setAttribute('width', "50%");
-
-            var langs = document.getElementById('sourceLanguage').cloneNode(true);
-            langs.setAttribute('id', 'targetLanguage_' + (fields + 1));
-            langs.setAttribute('name', 'targetLanguage_' + (fields + 1));
-            newColumnLangCountry.appendChild(langs);
-
-            var countries = document.getElementById('sourceCountry').cloneNode(true);
-            countries.setAttribute('id', 'targetCountry_' + (fields + 1));
-            countries.setAttribute('name', 'targetCountry_' + (fields + 1));
-            newColumnLangCountry.appendChild(countries);
-            newRow.appendChild(newColumnLangCountry);
-
-            var tableColumnSegmentation = document.createElement('td');  
-            tableColumnSegmentation.setAttribute('align', 'middle');
-            tableColumnSegmentation.setAttribute('valign', 'top');
-            var inputSegmentation = document.createElement('input');
-            inputSegmentation.setAttribute('type', 'checkbox');
-            inputSegmentation.setAttribute('id', 'segmentation_' + (fields + 1));
-            inputSegmentation.setAttribute('name', 'segmentation_' + (fields + 1));
-            inputSegmentation.setAttribute('value', 'y');
-            inputSegmentation.setAttribute('onchange', 'segmentationEnabled(' + (fields + 1) +')');     
-            inputSegmentation.setAttribute('title', 'Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less.');
-            tableColumnSegmentation.appendChild(inputSegmentation);
-
-
-            var tableColumnTranslation = document.createElement('td');
-            tableColumnTranslation.setAttribute('align', 'middle'); 
-            tableColumnTranslation.setAttribute('valign', 'top');
-            var inputTranslation = document.createElement('input');
-            inputTranslation.setAttribute('type', 'checkbox');
-            inputTranslation.setAttribute('id', 'translation_' + (fields + 1));
-            inputTranslation.setAttribute('checked', 'true');
-            inputTranslation.setAttribute('name', 'translation_' + (fields + 1))
-            inputTranslation.setAttribute('value', 'y');
-            inputTranslation.setAttribute('title', 'Create a translation task for volunteer translators to pick up.');
-            tableColumnTranslation.appendChild(inputTranslation);
-
-
-            var tableColumnReading = document.createElement('td');
-            tableColumnReading.setAttribute('align', 'middle');
-            tableColumnReading.setAttribute('valign', 'top');
-            var inputProofReading = document.createElement('input');
-            inputProofReading.setAttribute('type', 'checkbox');
-            inputProofReading.setAttribute('id', 'proofreading_' + (fields + 1));
-            inputProofReading.setAttribute('checked', 'true');
-            inputProofReading.setAttribute('name', 'proofreading_' + (fields + 1));
-            inputProofReading.setAttribute('value', 'y');
-            inputProofReading.setAttribute('title', 'Create a proofreading task for evaluating the translation provided by a volunteer.');
-            tableColumnReading.appendChild(inputProofReading);
-
-            newRow.appendChild(tableColumnSegmentation);
-            newRow.appendChild(tableColumnTranslation);
-            newRow.appendChild(tableColumnReading);
-            table.appendChild(newRow);            
+            jQuery('#horizontalLine_' + (fields-1)).after(clonedTarget);            
+            jQuery('#targetLanguageTemplate_' + fields).after(clonedHorizLine);
+            
+          
             isEnabledArray.push(false);
 
-            var size = document.getElementById('targetLanguageArraySize');
-            fields++;   
-            size.setAttribute('value', parseInt(size.getAttribute('value'))+1);        
+            jQuery('#targetLanguageArraySize').attr('value', parseInt(jQuery('#targetLanguageArraySize').val()) + 1);
         }
 
         if(fields == MAX_FIELDS) {
-            document.getElementById('alertinfo').style.display = 'block';
-            document.getElementById('addMoreTargetsBtn').disabled = true;
+            jQuery('#alertinfo').css('display', 'block');
+            jQuery('#addMoreTargetsBtn').attr('disabled', true);
         }            
     } 
 
 
     function removeNewTarget() {    
-        var id = fields-1;  
-
-        var table = document.getElementById('moreTargetLanguages');
-        var tableRow = document.getElementById('newTargetLanguage' + id);
-        table.removeChild(tableRow);  
+        var id = fields;  
+        
+        jQuery("#targetLanguageTemplate_" + id).remove();
+        jQuery("#horizontalLine_" + id).remove();
         isEnabledArray.pop();
 
         if(fields == MAX_FIELDS) {
-            document.getElementById('addMoreTargetsBtn').disabled = false;
-            document.getElementById('alertinfo').style.display = 'none';
+            jQuery('#addMoreTargetsBtn').attr('disabled', false);
+            jQuery('#alertinfo').css('display', 'none');
         }
 
-        var size = document.getElementById('targetLanguageArraySize');
         fields--;
-        size.setAttribute('value', parseInt(size.getAttribute('value'))-1);
+        jQuery('#targetLanguageArraySize').attr('value', parseInt(jQuery('#targetLanguageArraySize').val()) - 1);
 
-        if(fields == 0) {
-            document.getElementById('removeBottomTargetBtn').style.visibility = 'hidden';
-            document.getElementById('removeBottomTargetBtn').disabled = true;
+        if(fields == 0) {            
+            jQuery('#removeBottomTargetBtn')
+                    .css('visibility', 'hidden')
+                    .attr('disabled', true);
             isRemoveButtonHidden = true;
         }         
     }
@@ -116,16 +86,24 @@
     function segmentationEnabled(index)
     {
         if(!isEnabledArray[index]) {
-            document.getElementById('translation_' + index).checked = false;
-            document.getElementById('proofreading_' + index).checked = false;     
-            document.getElementById('translation_' + index).disabled = true;
-            document.getElementById('proofreading_' + index).disabled = true;  
+            jQuery('#translation_' + index)
+                    .attr('checked', false)
+                    .attr('disabled', true);
+                        
+            jQuery('#proofreading_' + index)
+                    .attr('checked', false)
+                    .attr('disabled', true);
+            
             isEnabledArray[index] = true;
         } else {
-            document.getElementById('translation_' + index).disabled = false;
-            document.getElementById('proofreading_' + index).disabled = false;
-            document.getElementById('translation_' + index).checked = true;
-            document.getElementById('proofreading_' + index).checked = true;
+            jQuery('#translation_' + index)
+                    .attr('checked', true)
+                    .attr('disabled', false);
+            
+            jQuery('#proofreading_' + index)
+                    .attr('checked', true)
+                    .attr('disabled', false);
+
             isEnabledArray[index] = false;
         }
     }    

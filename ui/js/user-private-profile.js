@@ -8,80 +8,79 @@
     function init()
     {
         fields = jQuery("#extraSecondaryLanguages").children("span").length;
-        jQuery("#secondaryLanguagesArraySize")[0].setAttribute("value", fields);
+        jQuery("#secondaryLanguagesArraySize").attr("value", fields);
 
         
         if(fields == MAX_SECONDARY_LANGUAGES) {
-            document.getElementById('alertinfo').style.display = 'block';
-            document.getElementById('addNewSecondaryLanguageBtn').disabled = true;
+            jQuery('#alertinfo').css('display', 'block');
+            jQuery('#addNewSecondaryLanguageBtn').attr('disabled', true);
         }    
         
-        if(isRemoveButtonHidden) {
-            document.getElementById('removeNewSecondaryLanguageBtn').style.visibility = 'visible';
-            document.getElementById('removeNewSecondaryLanguageBtn').disabled = false;
+        if(isRemoveButtonHidden && fields != 0) {
+            jQuery('#removeNewSecondaryLanguageBtn')
+                    .css('visibility', 'visible')
+                    .attr('disabled', false);
+            
             isRemoveButtonHidden = false;
         }
     }
 
     function addNewSecondaryLanguage() {
 
-        if(isRemoveButtonHidden) {
-            document.getElementById('removeNewSecondaryLanguageBtn').style.visibility = 'visible';
-            document.getElementById('removeNewSecondaryLanguageBtn').disabled = false;
+        if(isRemoveButtonHidden) {           
+            jQuery('#removeNewSecondaryLanguageBtn')
+                    .css('visibility', 'visible')
+                    .attr('disabled', false);
+            
             isRemoveButtonHidden = false;
         }
 
         if(fields < MAX_SECONDARY_LANGUAGES) {
-
-            var table = document.getElementById('extraSecondaryLanguages');            
-            var paragraph = document.createElement('span');
-            paragraph.setAttribute('id', 'newSecondaryLanguage' + fields);
-
-            var langs = document.getElementById('nativeLanguage').cloneNode(true);
-            langs.setAttribute('id', 'secondaryLanguage_' + fields);
-            langs.setAttribute('name', 'secondaryLanguage_' + fields);
-            paragraph.appendChild(langs);
-
-            var countries = document.getElementById('nativeCountry').cloneNode(true);
-            countries.setAttribute('id', 'secondaryCountry_' + fields);
-            countries.setAttribute('name', 'secondaryCountry_' + fields);
-            paragraph.appendChild(countries);
             
-            var horline = document.createElement('hr');
-            horline.setAttribute("width", "60%");
-            paragraph.appendChild(horline);
-            table.appendChild(paragraph);
+            var clonedTarget = jQuery('#userNativeLanguage').clone();
+            
+            clonedTarget.attr('id', 'newSecondaryLanguage' + fields);
+            
+            clonedTarget.find('#nativeLanguage')
+                        .attr('name', 'secondaryLanguage_' + fields)           
+                        .attr('id', 'secondaryLanguage_' + fields);   
 
-            var size = document.getElementById('secondaryLanguagesArraySize');
+            clonedTarget.find('#nativeCountry')
+                        .attr('name', 'secondaryCountry_' + fields)
+                        .attr('id', 'secondaryCountry_' + fields);
+                
+            if(jQuery('#newSecondaryLanguage' + (fields-1)).length) {
+                jQuery('#newSecondaryLanguage' + (fields-1)).after(clonedTarget);
+            } else {
+                jQuery('#extraSecondaryLanguages').append(clonedTarget);
+            }
+
             fields++;   
-            size.setAttribute('value', parseInt(size.getAttribute('value'))+1);        
+            jQuery('#secondaryLanguagesArraySize').attr('value', parseInt(jQuery('#secondaryLanguagesArraySize').val()) + 1);
         }
 
         if(fields == MAX_SECONDARY_LANGUAGES) {
-            document.getElementById('alertinfo').style.display = 'block';
-            document.getElementById('addNewSecondaryLanguageBtn').disabled = true;
+            jQuery('#alertinfo').css('display', 'block');
+            jQuery('#addNewSecondaryLanguageBtn').attr('disabled', true);
         }            
     } 
 
 
     function removeNewSecondaryLanguage() {    
         var id = fields-1;  
-
-        var table = document.getElementById('extraSecondaryLanguages');
-        var tableRow = document.getElementById('newSecondaryLanguage' + id);
-        table.removeChild(tableRow);  
+        
+        jQuery("#newSecondaryLanguage" + id).remove();
 
         if(fields == MAX_SECONDARY_LANGUAGES) {
-            document.getElementById('addNewSecondaryLanguageBtn').disabled = false;
-            document.getElementById('alertinfo').style.display = 'none';
+            jQuery('#addNewSecondaryLanguageBtn').attr('disabled', false);
+            jQuery('#alertinfo').css('display', 'none');
         }
 
-        var size = document.getElementById('secondaryLanguagesArraySize');
         fields--;
-        size.setAttribute('value', parseInt(size.getAttribute('value'))-1);
+        jQuery('#secondaryLanguagesArraySize').attr('value', parseInt(jQuery('#secondaryLanguagesArraySize').val()) - 1);
 
         if(fields == 0) {
-            document.getElementById('removeNewSecondaryLanguageBtn').disabled = true;
+            jQuery('#removeNewSecondaryLanguageBtn').attr('disabled', true);
             isRemoveButtonHidden = true;
         }         
     }  
