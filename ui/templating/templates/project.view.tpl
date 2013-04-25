@@ -226,7 +226,8 @@
                                                 In Progress
                                             </a>
                                         {elseif $status_id == TaskStatusEnum::COMPLETE}
-                                            <a href="{urlFor name="home"}api/v0/tasks/{$task_id}/file/?">
+                                            {assign var="org_id" value=$project->getOrganisationId()}
+                                            <a href="{urlFor name="org-task-review" options="task_id.$task_id|org_id.$org_id"}">
                                                 Complete
                                             </a>
                                         {/if}

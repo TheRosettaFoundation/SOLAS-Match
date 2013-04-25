@@ -39,6 +39,9 @@ class OrgRouteHandler
         
         $app->get("/org/:org_id/edit/:badge_id", array($middleware, "authUserForOrg"), 
         array($this, "orgEditBadge"))->via("POST")->name("org-edit-badge");         
+
+        $app->get("/org/:org_id/task/:task_id/review", array($middleware, "authUserForOrg"),
+        array($this, "orgTaskReview"))->via("POST")->name("org-task-review");
     }
 
     public function createOrg()
@@ -636,6 +639,124 @@ class OrgRouteHandler
         
         $app->render("org.edit-badge.tpl");        
     }    
+
+    public function orgTaskReview($orgId, $taskId)
+    {
+        $app = Slim::getInstance();
+        $taskDao = new TaskDao();
+        $userDao = new UserDao();
+
+        $userId = UserSession::getCurrentUserID();
+
+        $task = $taskDao->getTask($taskId);
+        $tasks = array();
+        $tasks[] = $task;
+
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+
+            if (isset($post['submitReview'])) {
+                $review = new TaskReview();
+                $review->setUserId($userId);
+                $review->setTaskId($taskId);
+                $review->setProjectId($task->getProjectId());
+
+                $error = '';
+
+                $id = $taskId;
+                if (isset($post["corrections_$id"]) && ctype_digit($post["corrections_$id"])) {
+                    $value = intval($post["corrections_$id"]);
+                    if ($value > 0 && $value <= 5) {
+                        $review->setCorrections($value);
+                    } else {
+                        $error = "Corrections value must be between 1 and 5";
+                    }
+                }
+                if (isset($post["grammar_$id"]) && ctype_digit($post["grammar_$id"])) {
+                    $value = intval($post["grammar_$id"]);
+                    if ($value > 0 && $value <= 5) {
+                        $review->setGrammar($value);
+                    } else {
+                        $error = "Grammar value must be between 1 and 5";
+                    }
+                }
+                if (isset($post["spelling_$id"]) && ctype_digit($post["spelling_$id"])) {
+                    $value = intval($post["spelling_$id"]);
+                    if ($value > 0 && $value <= 5) {
+                        $review->setSpelling($value);
+                    } else {
+                        $error = "Spelling value must be between 1 and 5";
+                    }
+                }
+                if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
+                    $value = intval($post["consistency_$id"]);
+                    if ($value > 0 && $value <= 5) {
+                        $review->setConsistency($value);
+                    } else {
+                        $error = "Consistency value must be between 1 and 5";
+                    }
+                }
+                if (isset($post["comment_$id"]) && $post["comment_$id"] != "") {
+                    $review->setComment($post["comment_$id"]);
+                }
+                
+                if ($review->getProjectId() != null && $review->getUserId() != null && $error == '') {
+                    if (!$taskDao->submitReview($review)) {
+                        $error = "Unable to submit review for {$task->getTitle()}, please try again later";
+                    }
+                }
+
+                if ($error != '') {
+                    $app->flashNow("error", $error);
+                } else {
+                    $app->flash("success", "Review of task {$task->getTitle()} has been submitted successfully");
+                    $app->redirect($app->urlFor('project-view', array("project_id" => $task->getProjectId())));
+                }
+            }
+
+            if (isset($post['skip'])) {
+                $app->redirect($app->urlFor("project-view", array(
+                                'project_id' => $task->getProjectId())));
+            }
+        }
+
+        $reviews = array();
+        if ($taskReview = $userDao->getUserTaskReviews($userId, $taskId)) {
+            $reviews[$taskId] = $taskReview;
+        }
+
+        if (count($reviews) > 0) {
+            $app->flashNow("info", "You have already submitted a review for this task.");
+        }
+
+        $translator = $taskDao->getUserClaimedTask($taskId);
+
+        $formAction = $app->urlFor("org-task-review", array(
+                    'org_id'    => $orgId,
+                    'task_id'   => $taskId
+        ));
+
+        $extra_scripts = "";
+        $extra_scripts .= "<script type='text/javascript'>";
+        $extra_scripts .= "var taskIds = new Array();";
+        $extra_scripts .= "taskIds[0] = $taskId;";
+        $extra_scripts .= "</script>";
+        
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}resources/css/rateit.css\"/>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery.rateit.min.js\"></script>";
+        $extra_scripts .= file_get_contents(__DIR__."/../js/review.js");
+
+        $app->view()->appendData(array(
+                    'extra_scripts' => $extra_scripts,
+                    'task'      => $task,
+                    'tasks'     => $tasks,
+                    'reviews'   => $reviews,
+                    'translator'=> $translator,
+                    'formAction'=> $formAction
+        ));
+
+        $app->render("org.task-review.tpl");
+    }
 }
 
 $route_handler = new OrgRouteHandler();

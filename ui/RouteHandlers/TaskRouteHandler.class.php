@@ -1418,11 +1418,14 @@ class TaskRouteHandler
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery.rateit.min.js\"></script>";
         $extra_scripts .= file_get_contents(__DIR__."/../js/review.js");
 
+        $formAction = $app->urlFor("task-review", array('task_id' => $taskId));
+
         $app->view()->appendData(array(
                     'extra_scripts' => $extra_scripts,
                     'taskId'        => $taskId,
                     'tasks'         => $preReqTasks,
                     'reviews'       => $reviews,
+                    'formAction'    => $formAction,
                     'action'        => $action
         ));
 
