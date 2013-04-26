@@ -95,9 +95,9 @@ class ProjectRouteHandler
             
             if(isset($post->publishedTask) && isset($post->task_id)) { 
                 if($post->publishedTask) {                     
-                    $task->setPublished(1);
+                    $task->setPublished(true);
                 } else {
-                    $task->setPublished(0);                    
+                    $task->setPublished(false);                    
                 }
                 $taskDao->updateTask($task);
             }
