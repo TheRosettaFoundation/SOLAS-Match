@@ -16,7 +16,8 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/jquery-ui.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/google-translate.js"></script>
         <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
+        <!-- google analytics -->
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
             {$extra_scripts}
