@@ -29,11 +29,11 @@
                 <td width="50%">
                     <div style="margin-bottom:20px;">
                         <label for="title" style="font-size: large"><strong>Title:</strong></label>
-                        <textarea wrap="soft" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} >{$task->getTitle()}</textarea>
+                        <textarea wrap="soft" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()}</textarea>
                     </div>
                     <div style="margin-bottom:20px;">
                         <label for="impact" style="font-size: large"><strong>Task Comment:</strong></label>
-                        <textarea wrap="soft" cols="1" rows="6" name="impact">{$task->getComment()}</textarea>
+                        <textarea wrap="soft" cols="1" rows="6" name="impact" style="width: 400px">{$task->getComment()}</textarea>
                     </div>
                     <div style="margin-bottom:20px;">
                         <label for="deadline" style="font-size: large"><strong>Deadline:</strong></label>
@@ -44,7 +44,7 @@
                         {/if}
                         <p>
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}{/if}" />
+                            <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                         </p>
                     </div>
                 </td>
@@ -56,7 +56,7 @@
                     </div>
                     <p>
                         <label for="target" style="font-size: large"><strong>Target Language:</strong></label>
-                        <select name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}>
+                        <select name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
                             {foreach $languages as $language}
                                 {if $task->getTargetLocale()->getLanguageCode() == $language->getCode()}
                                         <option value="{$language->getCode()}" selected="selected" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} >{$language->getName()}</option>
@@ -68,7 +68,7 @@
                     </p>
                     <p>
                     {if isset($countries)}
-                        <select name="targetCountry" id="targetCountry" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}>
+                        <select name="targetCountry" id="targetCountry" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
                             {foreach $countries as $country}
                                 {if $task->getTargetLocale()->getCountryCode() == $country->getCode()}
                                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
@@ -89,7 +89,7 @@
                     <p style="margin-bottom:40px;"/>
 
                     <label for="word_count" style="font-size: large"><strong>Word Count:</strong></label>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} />
+                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px" />
                 </td>             
             </tr>
             <tr>

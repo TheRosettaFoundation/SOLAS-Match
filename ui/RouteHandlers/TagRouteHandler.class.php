@@ -11,7 +11,7 @@ class TagRouteHandler
         $app->get("/tag/:label/:subscribe", array($this, "tagSubscribe")
         )->name("tag-subscribe");
         
-        $app->get("/tag/:label/", array($this, "tagDetails")
+        $app->get("/tag/:id", array($this, "tagDetails")
         )->via("POST")->name("tag-details");
     }
 
@@ -72,7 +72,7 @@ class TagRouteHandler
         $app->response()->redirect($app->request()->getReferer());
     }
 
-    public function tagDetails($label)
+    public function tagDetails($id)
     {
         $app = Slim::getInstance();
         $tagDao = new TagDao();
@@ -80,7 +80,8 @@ class TagRouteHandler
         $orgDao = new OrganisationDao();
         $userDao = new UserDao();
 
-        $tag = $tagDao->getTagByLabel($label);
+        $tag = $tagDao->getTag($id);
+        $label = $tag->getLabel();
         $tag_id = $tag->getId();
         if (is_null($tag_id)) {
             header("HTTP/1.0 404 Not Found");

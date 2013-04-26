@@ -255,7 +255,7 @@ class TaskDao
                                                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
                                                 .",".PDOWrapper::cleanseNull($task->getTaskType())
                                                 .",".PDOWrapper::cleanseNull($task->getTaskStatus())
-                                                .",".PDOWrapper::cleanseNull($task->getPublished()));
+                                                .",".PDOWrapper::cleanse($task->getPublished()));
         
         if($result) {
             $task = ModelFactory::buildModel('Task', $result);
@@ -323,7 +323,7 @@ class TaskDao
             .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
             .",".PDOWrapper::cleanseNull($task->getTaskType())
             .",".PDOWrapper::cleanseNull($task->getTaskStatus())
-            .",".PDOWrapper::cleanseNull($task->getPublished()));
+            .",".PDOWrapper::cleanseNullOrWrapStr($task->getPublished()));
         
         if($result) {
             $task = ModelFactory::buildModel("Task", $result[0]);           
@@ -499,9 +499,9 @@ class TaskDao
         return $result[0]['result'];
     }
     
-    public static function getUserTasks($user_id, $limit = 10)
+    public static function getUserTasks($user_id, $limit = null)
     {
-        $result = PDOWrapper::call("getUserTasks", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanse($limit));
+        $result = PDOWrapper::call("getUserTasks", PDOWrapper::cleanse($user_id).",".PDOWrapper::cleanseNull($limit));
         if($result) { 
             $tasks = array();
             foreach($result as $taskData) {

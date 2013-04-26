@@ -11,8 +11,9 @@
     {foreach $user_tags as $tag}
         <li>
             {assign var="tag_label" value=$tag->getLabel()}
+            {assign var="tagId" value=$tag->getId()}
             <p>
-                <a class="tag label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a>
+                <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
             </p>
         </li>
     {/foreach}
@@ -28,8 +29,9 @@
     {foreach $all_tags as $tag}
         <li>
             {assign var="tag_label" value=$tag->getLabel()}
+            {assign var="tagId" value=$tag->getId()}
             <p>
-                <a class="tag label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a>
+                <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
             </p>
         </li>
     {/foreach}

@@ -4,8 +4,9 @@
         {foreach $user_tags as $tag}
             <li>
                 {assign var="tag_label" value=$tag->getLabel()}
+                {assign var="tagId" value=$tag->getId()}
                 <div class="tag">
-                    <a class="label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a>
+                    <a class="label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                     <a class="label label-close" href="{urlFor name="home"}tag/{$tag_label}/false" 
                     title="Click to remove tag from subscription list"><strong>| x</strong></a>
                 </div>

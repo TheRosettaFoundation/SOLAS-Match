@@ -472,7 +472,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedUser->getId()); 
         
         // Success
-        $createPwResetRequest = UserDao::createPasswordReset($insertedUser->getId());
+        $createPwResetRequest = UserDao::addPasswordResetRequest("asfjkosagijo".$insertedUser->getId(), $insertedUser->getId());
         $this->assertEquals("1", $createPwResetRequest);
     }
     
@@ -485,7 +485,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getId()); 
         
-        $createPwResetRequest = UserDao::createPasswordReset($insertedUser->getId());
+        $createPwResetRequest = UserDao::addPasswordResetRequest("asfjkosagijo".$insertedUser->getId(), $insertedUser->getId());
         $this->assertEquals("1", $createPwResetRequest);  
         
         // Success
@@ -506,7 +506,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getId()); 
         
-        $createPwResetRequest = UserDao::createPasswordReset($insertedUser->getId());
+        $createPwResetRequest = UserDao::addPasswordResetRequest("asfjkosagijo".$insertedUser->getId(), $insertedUser->getId());
         $this->assertEquals("1", $createPwResetRequest);
         
         // Success        

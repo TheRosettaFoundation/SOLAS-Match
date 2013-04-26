@@ -22,7 +22,7 @@
     
     <div class="well">
         <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
-            <table border="0">
+            <table id="createProjectTable">
                 <tr>
                     <td colspan="2">
                         {if (isset($title_err) || isset($description_err) || isset($wordcount_err) || isset($deadline_err)
@@ -123,13 +123,13 @@
                     <td align="left" valign="top">
                         {if isset($languages)}
                             <h2>Source Language: <span style="color: red">*</span></h2><br>
-                                <select name="sourceLanguage" id="sourceLanguage">
+                                <select name="sourceLanguage" id="sourceLanguage" style="width: 400px">
                                     {foreach $languages as $language}
                                             <option value="{$language->getCode()}">{$language->getName()}</option>
                                     {/foreach}
                                 </select>
                                 {if isset($countries)}
-                                    <select name="sourceCountry" id="sourceCountry">
+                                    <select name="sourceCountry" id="sourceCountry" style="width: 400px">
                                         {foreach $countries as $country}
                                              <option value="{$country->getCode()}">{$country->getName()}</option>
                                         {/foreach}                                
@@ -141,7 +141,7 @@
                             <input type="text" name="sourceCountry" id="source"/>
                         {/if}                     
                     </td>                
-                    <td align="center" valign="bottom">
+                    <td align="center" valign="middle">
                         <h2>Task Type: <span style="color: red">*</span></h2>
                         <p class="desc">Specify which task types you require for your workflow.</p>                 
                     </td>
@@ -159,16 +159,16 @@
                         </table>
                     </td>
                 </tr>
-                <tr>
+                <tr id="targetLanguageTemplate_0">
                     <td> 
                         {if isset($languages)}
-                            <select name="targetLanguage_0" id="targetLanguage_0" >
+                            <select name="targetLanguage_0" id="targetLanguage_0" style="width: 400px">
                                 {foreach $languages as $language}
                                     <option value="{$language->getCode()}">{$language->getName()}</option>
                                 {/foreach}
                             </select>
                             {if isset($countries)}
-                                <select name="targetCountry_0" id="targetCountry_0" >
+                                <select name="targetCountry_0" id="targetCountry_0" style="width: 400px">
                                     {foreach $countries as $country}
                                         <option value="{$country->getCode()}">{$country->getName()}</option>
                                     {/foreach}
@@ -178,29 +178,27 @@
                             <label for="source"><h2>Source Language: <span style="color: red">*</span></h2></label>
                             <input type="text" name="source" id="source"/>
                             <input type="text" name="sourceCountry" id="source"/>
-                        {/if}  
+                        {/if} 
                     </td>
-                    <td valign="top">
-                        <table border="0" width="100%"> 
+                    <td valign="middle">
+                        <table> 
                             <tr align="center">
-                                <td><input title="Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less." type="checkbox" id="segmentation_0" name="segmentation_0" value="y" onchange="segmentationEnabled(0)"/></td>                            
-                                <td><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
-                                <td><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_0" checked="true" name="proofreading_0" value="y"/></td>
+                                <td valign="middle"><input title="Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less." type="checkbox" id="segmentation_0" name="segmentation_0" value="y" onchange="segmentationEnabled(0)"/></td>                            
+                                <td valign="middle"><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
+                                <td valign="middle"><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_0" checked="true" name="proofreading_0" value="y"/></td>
                             </tr>                        
-                        </table>                    
+                        </table>  
                     </td>
-
                 </tr>
-                <tr>
-                    <td colspan="2">     
-                        <table id="moreTargetLanguages" border="0" width="100%"></table>
-                    </td>
-                </tr> 
+                <tr id="horizontalLine_0">
+                    <td colspan="2"><hr/></td>
+                </tr>
                 <tr>
                     <td colspan="2">
                         <div id="alertinfo" class="alert alert-info" style="display: none; text-align: center">You have reached the maximum number of target translation fields allowed.</div>  
-                        <input id="addMoreTargetsBtn" type="button" onclick="addNewTarget()" value="Add More Target Languages"/>
-                        <input id="removeBottomTargetBtn" type="button" onclick="removeNewTarget()" value="Remove" disabled="true" style="visibility: hidden"/>  
+
+                        <button id="addMoreTargetsBtn" class="btn btn-success" type="button" onclick="addNewTarget()"><i class="icon-upload icon-white"></i> Add More Target Languages</button>
+                        <button id="removeBottomTargetBtn" class="btn btn-inverse" type="button" onclick="removeNewTarget()" disabled="true" style="visibility: hidden"><i class="icon-fire icon-white"></i> Remove</button>
                         <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1"/>
                     </td>
                 </tr>                

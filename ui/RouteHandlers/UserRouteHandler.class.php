@@ -641,13 +641,8 @@ class UserRouteHandler
                     $success = $userDao->requestTaskStreamNotification($userId, $post->interval);
                 }
 
-                if ($success) {
-                    $app->flash("success", "Successfully updated user task stream notification subscription");
-                    $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
-                } else {
-                    $app->flashNow("error", "Unable to update task stream notification subscription. Please ".
-                            "try again later.");
-                }
+                $app->flash("success", "Successfully updated user task stream notification subscription");
+                $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
             }
         }
         

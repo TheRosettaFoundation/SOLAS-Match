@@ -42,7 +42,8 @@
                 {if isset($task_tags) && is_array($task_tags)}
                     {foreach $task_tags as $tag}
                         {assign var="tag_label" value=$tag->getLabel()}
-                        <a class="tag label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a>
+                        {assign var="tagId" value=$tag->getId()}
+                        <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                     {/foreach}
                 {else}
                     <i>There are no tags associated with this project.</i>                    

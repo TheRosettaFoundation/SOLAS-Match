@@ -142,7 +142,8 @@
                     {if isset($project_tags) && is_array($project_tags)}
                         {foreach $project_tags as $ptag}
                             {assign var="tag_label" value=$ptag->getLabel()}
-                            <a class="tag label" href="{urlFor name="tag-details" options="label.$tag_label"}">{$tag_label}</a>
+                            {assign var="tagId" value=$ptag->getId()}
+                            <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                         {/foreach}
                     {else}
                         <i>There are no tags associated with this project.</i>                    
@@ -226,7 +227,8 @@
                                                 In Progress
                                             </a>
                                         {elseif $status_id == TaskStatusEnum::COMPLETE}
-                                            <a href="{urlFor name="home"}api/v0/tasks/{$task_id}/file/?">
+                                            {assign var="org_id" value=$project->getOrganisationId()}
+                                            <a href="{urlFor name="org-task-review" options="task_id.$task_id|org_id.$org_id"}">
                                                 Complete
                                             </a>
                                         {/if}
