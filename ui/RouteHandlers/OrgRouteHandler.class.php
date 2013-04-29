@@ -612,19 +612,28 @@ class OrgRouteHandler
     {
         $app = Slim::getInstance();
         $orgDao = new OrganisationDao();
+        $foundOrgs = array();
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if (isset($post->search_name) && $post->search_name != '') {                
-                $found_orgs = $orgDao->searchForOrgByName($post->search_name);
-                if (count($found_orgs) < 1) {
+            if (isset($post['search_name']) && $post['search_name'] != '') {                
+                $foundOrgs = $orgDao->searchForOrgByName($post['search_name']);
+                if (count($foundOrgs) < 1) {
                     $app->flashNow("error", "No Organisations found.");
-                } else {
-                    $app->view()->setData("found_orgs", $found_orgs);
                 }
+                $app->view()->appendData(array('searchedText' => $post['search_name']));
+            }
+
+            if (isset($post['allOrgs'])) {
+                $foundOrgs = $orgDao->getOrganisations();
             }
         }        
+
+        $app->view()->appendData(array(
+                    'foundOrgs'     => $foundOrgs
+        ));
+
         $app->render("org-search.tpl");
     }
     
