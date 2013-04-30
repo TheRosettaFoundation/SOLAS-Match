@@ -6,7 +6,7 @@ class TagRouteHandler
     {
         $app = Slim::getInstance();
 
-        $app->get("/all/tags", array($this, "tagsList"))->name("tags-list");
+        $app->get("/all/tags", array($this, "tagsList"))->via("POST")->name("tags-list");
 
         $app->get("/tag/:label/:subscribe", array($this, "tagSubscribe")
         )->name("tag-subscribe");
@@ -23,11 +23,26 @@ class TagRouteHandler
 
         $user_id = UserSession::getCurrentUserID();
         $user_tags = $userDao->getUserTags($user_id);
-        $all_tags = $tagDao->getTags(null);
+        $foundTags = null;
+        $name = "";
+
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+
+            if (isset($post['search'])) {
+                $name = $post['searchName'];
+                $foundTags = $tagDao->searchForTag($name);
+            }
+
+            if (isset($post['listAll'])) {
+                $foundTags = $tagDao->getTags(null);
+            }
+        }
         
         $app->view()->appendData(array(
             "user_tags" => $user_tags,
-            "all_tags" => $all_tags
+            "foundTags" => $foundTags,
+            'searchedText'  => $name
         )); 
         
         $app->render("tag-list.tpl");

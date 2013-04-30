@@ -337,7 +337,7 @@
 <div class="page-header">
     <h1>Tags<small> A list of tags you have subscribed to.</small>
         <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
-            <i class="icon-list icon-white"></i> List All Tags
+            <i class="icon-search icon-white"></i> Search For Tags
         </a>
     </h1>
 </div>
