@@ -55,16 +55,32 @@
                             <p>
                                 <h2>Target Language: <span style="color: red">*</span></h2><br>
                                 <select name="targetLanguage" id="targetLanguage" style="width: 400px">
+                                    {if $task->hasTargetLocale()}
+                                        {assign var="languageCode" value=$task->getTargetLocale()->getLanguageCode()}
+                                    {else}
+                                        {assign var="languageCode" value=""}
+                                    {/if}
                                     {foreach $languages as $language}
-                                        <option value="{$language->getCode()}">{$language->getName()}</option>
+                                        <option value="{$language->getCode()}"
+                                                {if $language->getCode() == $languageCode} selected="true" {/if}>
+                                            {$language->getName()}
+                                        </option>
                                     {/foreach}
                                 </select>
                             </p>
                             <p>
                                 {if isset($countries)}
                                     <select name="targetCountry" id="targetCountry" style="width: 400px">
+                                        {if $task->hasTargetLocale()}
+                                            {assign var="countryCode" value=$task->getTargetLocale()->getCountryCode()}
+                                        {else}
+                                            {assign var="countryCode" value=""}
+                                        {/if}
                                         {foreach $countries as $country}
-                                            <option value="{$country->getCode()}">{$country->getName()}</option>
+                                            <option value="{$country->getCode()}"
+                                                    {if $country->getCode() == $countryCode} selected="true" {/if}>
+                                                {$country->getName()}
+                                            </option>
                                         {/foreach}
                                     </select> 
                                 {/if}
