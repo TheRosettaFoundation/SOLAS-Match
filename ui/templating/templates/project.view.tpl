@@ -202,7 +202,7 @@
                                 <th>Published</th>                    
                                 <th>Tracked</th>
                                 <th>Edit</th>
-                                <th>Archive</th>
+                                <th>Archive/Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -299,9 +299,20 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{urlFor name="archive-task" options="task_id.$task_id"}" class="btn btn-inverse">
-                                            <i class="icon-fire icon-white"></i> Archive Task
-                                        </a>
+                                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                            <input type="hidden" name="task_id" value="{$task_id}" />
+                                            {if $status_id < TaskStatusEnum::IN_PROGRESS}
+                                                <input type="submit" class="btn btn-inverse" name="deleteTask" value="   Delete" />
+                                                <i class="icon-fire icon-white" style="position:relative; right:85px; top:2px;"></i>
+                                            {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                                <input type="submit" class="btn btn-inverse" name="archiveTask" 
+                                                        disabled="true" value="   Archive" title="Cannot archive in progress tasks" />
+                                                <i class="icon-fire icon-white" style="position:relative; right:85px; top:2px;"></i>
+                                            {else}
+                                                <input type="submit" class="btn btn-inverse" name="archiveTask" value="  Archive" />
+                                                <i class="icon-fire icon-white" style="position:relative; right:85px; top:2px;"></i>
+                                            {/if}
+                                        </form>
                                     </td>
                                 </tr>                        
                             {/foreach}
