@@ -264,15 +264,13 @@
                                         <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
+                                                <input type="submit" class="btn btn-small" value="   Published" />
+                                                <i class="icon-check icon-black" style="position:relative; right:85px; top:4px;"></i>
                                                 <input type="hidden" name="publishedTask" value="0" />
-                                                <a onclick="this.parentNode.submit()" class="btn btn-small">
-                                                    <i class="icon-check icon-black"></i> Published
-                                                </a>
                                             {else}                                        
                                                 <input type="hidden" name="publishedTask" value="1" />
-                                                <a onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                                                    <i class="icon-remove-circle icon-white"></i> Unpublished
-                                                </a>
+                                                <input type="submit" class="btn btn-small btn-inverse" value="  Unpublished" />
+                                                <i class="icon-remove-circle icon-white" style="position:relative; right:100px; top:4px;"></i>
                                             {/if}
                                         </form>
 
@@ -306,7 +304,7 @@
                                                 <i class="icon-fire icon-white" style="position:relative; right:85px; top:2px;"></i>
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                                 <input type="submit" class="btn btn-inverse" name="archiveTask" 
-                                                        disabled="true" value="   Archive" title="Cannot archive in progress tasks" />
+                                                        disabled="true" value="  Archive" title="Cannot archive in progress tasks" />
                                                 <i class="icon-fire icon-white" style="position:relative; right:85px; top:2px;"></i>
                                             {else}
                                                 <input type="submit" class="btn btn-inverse" name="archiveTask" value="  Archive" />

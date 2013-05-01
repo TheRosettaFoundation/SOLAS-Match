@@ -23,5 +23,7 @@ section {
     height :500px;
     overflow : auto;
 }
-
+button.btn.btn-small, input.btn.btn-small[type="submit"] {
+    font-size: 11px;
+}
 
