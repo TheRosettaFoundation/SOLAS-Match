@@ -64,6 +64,18 @@ class TagsDao
         }
         return null;
     }  
+
+    public static function searchForTag($name)
+    {
+        $ret = array();
+        if ($result = PDOWrapper::call("searchForTag", PDOWrapper::cleanseNullOrWrapStr($name))) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Tag", $row);
+            }
+        }
+        return $ret;
+    }
     
     public static function updateTags($projectId, $projectTagList)
     {

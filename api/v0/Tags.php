@@ -46,6 +46,24 @@ class Tags {
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTagByLabel');
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/search/:name/',
+                function ($name, $format = '.json') {
+                    if (!is_numeric($name) && strstr($name, '.')) {
+                        $temp = array();
+                        $temp = explode('.', $name);
+                        $lastIndex = sizeof($temp)-1;
+                        if ($lastIndex > 0) {
+                            $format = '.'.$temp[$lastIndex];
+                            $name = $temp[0];
+                            for ($i = 1; $i < $lastIndex; $i++) {
+                                $name = "{$name}.{$temp[$i]}";
+                            }
+                        }
+                    }
+                    $ret = TagsDao::searchForTag($name);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'searchForTag');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/topTags(:format)/',
                                                         function ($format = ".json") {

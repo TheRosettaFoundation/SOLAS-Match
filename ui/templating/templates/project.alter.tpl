@@ -27,7 +27,7 @@
                 </td>
                 <td>
                     <label for="tags" style="font-size: large"><strong>Tags:</strong></label>
-                    <textarea wrap="soft" cols="1" rows="4" id="tags" name="tags" style="width: 400px;  margin-bottom: 20px">{$tag_list}</textarea>
+                    <input id="tags" name="tags" value="{$tag_list}" />
 
                     <label for="deadline" style="font-size: large"><strong>Deadline:</strong></label>
                     {if isset($deadlineError) && $deadlineError != ''}

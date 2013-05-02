@@ -26,16 +26,18 @@
             <small>An organisation on SOLAS Match.</small>
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
-                {if $isMember}
-<!--                    do not add ||$adminAccess-->
-                    <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
-                        <i class="icon-wrench icon-white"></i> Edit Organisation Details
-                    </a>
-                {else}
-                    <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='pull-right btn btn-primary'>
-                        <i class="icon-ok-circle icon-white"></i> Request Membership
-                    </a>
-                {/if}
+                <div class="pull-right">
+                    {if $isMember || $adminAccess}
+                            <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
+                            <i class="icon-wrench icon-white"></i> Edit Organisation Details
+                        </a>
+                    {/if}
+                    {if !$isMember}
+                        <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
+                            <i class="icon-ok-circle icon-white"></i> Request Membership
+                        </a>
+                    {/if}
+                </div>
             {/if}
         </h1>
     </div>
