@@ -350,6 +350,14 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
 -- Data exporting was unselected.
 
 
+-- Dumping structure for table Solas-Match-Test.RegisteredUsers
+CREATE TABLE IF NOT EXISTS `RegisteredUsers` (
+  `user_id` int(10) unsigned NOT NULL,
+  `unique_id` VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 -- Dumping structure for table Solas-Match-Test.Statistics
 CREATE TABLE IF NOT EXISTS `Statistics` (
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -1071,6 +1079,24 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.finishRegistration
+DROP PROCEDURE IF EXISTS `finishRegistration`;
+
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `finishRegistration`(IN `userId` INT)
+BEGIN
+    if exists (SELECT 1
+                FROM RegisteredUsers
+                WHERE user_id = userId) then
+        DELETE FROM RegisteredUsers
+            WHERE user_id = userId;
+        SELECT 1 as result;
+    else
+        SELECT 0 as result;
+    end if;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getArchivedProject
 DROP PROCEDURE IF EXISTS `getArchivedProject`;
@@ -1656,6 +1682,34 @@ from Tags t
 join ProjectTags pt
 on pt.tag_id = t.id
 where pt.project_id = pID;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getRegistrationId
+DROP PROCEDURE IF EXISTS `getRegistrationId`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRegistrationId`(IN `userId` INT)
+BEGIN
+    SELECT unique_id
+        FROM RegisteredUsers
+        WHERE user_id = userId;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getRegisteredUser
+DROP PROCEDURE IF EXISTS `getRegisteredUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRegisteredUser`(IN `uuid` INT)
+BEGIN
+    if EXISTS (SELECT 1
+                FROM RegisteredUsers
+                WHERE unique_id = uuid) then
+        CALL getUser((SELECT user_id
+                        FROM RegisteredUsers
+                        WHERE unique_id = uuid), null, null, null, null, null, null, null, null);
+    end if;
 END//
 DELIMITER ;
 
@@ -2301,6 +2355,26 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Test.isUserVerified
+DROP PROCEDURE IF EXISTS `isUserVerified`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserVerified`(IN `userId` INT)
+BEGIN
+    IF EXISTS (SELECT 1
+                FROM Users
+                WHERE id = userId)
+        AND NOT EXISTS (SELECT 1
+                        FROM RegisteredUsers
+                        WHERE user_id = userId) then
+        SELECT 1 as result;
+    else
+        SELECT 0 as result;
+    end if;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.logFileDownload
 DROP PROCEDURE IF EXISTS `logFileDownload`;
 DELIMITER //
@@ -2530,6 +2604,25 @@ else
 	VALUES (tID,1+@maxVer,name, content, uID, Now());
 end if;
 select 1+@maxVer as version;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.registerUser
+DROP PROCEDURE IF EXISTS `registerUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `registerUser`(IN `userId` INT, IN `uuid` VARCHAR(128))
+BEGIN
+    if not EXISTS (SELECT 1
+                    FROM RegisteredUsers
+                    WHERE user_id = userId)
+            AND userId IS NOT NULL then
+        INSERT INTO RegisteredUsers (`user_id`, `unique_id`)
+            VALUES (userId, uuid);
+        SELECT 1 as result;
+    else
+        SELECT 0 as result;
+    end if;
 END//
 DELIMITER ;
 

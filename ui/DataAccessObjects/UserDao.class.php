@@ -38,6 +38,13 @@ class UserDao
         return $ret;
     }
 
+    public function isUserVerified($userId)
+    {
+        $ret = false;
+        $request = "{$this->siteApi}v0/users/$userId/verified";
+        $ret = $this->client->call(null, $request);
+        return $ret;
+    }
 
     public function isSubscribedToTask($userId, $taskId)
     {
@@ -358,7 +365,22 @@ class UserDao
         $registerData->setEmail($email);
         $registerData->setPassword($password);
         $request = "{$this->siteApi}v0/register";
-        $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $registerData);
+        $ret = $this->client->call(null, $request, HttpMethodEnum::POST, $registerData);
+        return $ret;
+    }
+
+    public function finishRegistration($userId)
+    {
+        $request = "{$this->siteApi}v0/users/$userId/finishRegistration";
+        echo "<p>Calling $request</p>";
+        $resp = $this->client->call(null, $request, HttpMethodEnum::POST);
+    }
+
+    public function getRegisteredUser($registrationId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$registrationId/registered";
+        $ret = $this->client->call("User", $request);
         return $ret;
     }
     

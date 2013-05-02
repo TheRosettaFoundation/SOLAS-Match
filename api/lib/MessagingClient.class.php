@@ -17,8 +17,10 @@ class MessagingClient
     public $TaskClaimedTopic                = "email.user.task.claimed";
     public $TaskTranslationUploadedTopic    = "email.user.task.translation-uploaded";
     public $FeedbackEmailTopic              = "email.user.feedback";
+    public $EmailVerificationTopic          = "email";
 
     private $connection;
+
     public function messagingClient()
     {
 
