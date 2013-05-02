@@ -164,10 +164,12 @@ class OrgRouteHandler
         }
         
         $orgs = array();
-        foreach ($my_organisations as $org) {
-            $my_org_projects = $orgDao->getOrgProjects($org->getId());
-            $org_projects[$org->getId()] = $my_org_projects;
-            $orgs[$org->getId()] = $org;
+        if($my_organisations){
+            foreach ($my_organisations as $org) {
+                $my_org_projects = $orgDao->getOrgProjects($org->getId());
+                $org_projects[$org->getId()] = $my_org_projects;
+                $orgs[$org->getId()] = $org;
+            }
         }
         
         if (count($org_projects) > 0) {

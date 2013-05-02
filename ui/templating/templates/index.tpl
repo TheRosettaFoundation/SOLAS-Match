@@ -52,6 +52,11 @@
             {if isset($statsArray) && is_array($statsArray)}
                     {include file="statistics.tpl"}
             {/if}
+            <div id="globe" style="text-align: center">
+                <br/>
+                <script type="text/javascript" src="http://jh.revolvermaps.com/p.js"></script><script type="text/javascript">rm2d_ki101('7','300','150','7puikkj5km8','ff00ff',0);</script>
+                <br/>
+            </div>
         </div>
 
         <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; table-layout: fixed; word-break:break-all;">
