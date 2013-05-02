@@ -173,18 +173,6 @@ class UserDao
         return (!is_null(UserSession::getCurrentUserId()));
     }
 
-
-    public static function isAdmin($userId, $orgId)
-    {
-        $ret = false;
-        $args = PDOWrapper::cleanse($userId).", ";
-        $args .= PDOWrapper::cleanseNullOrWrapStr($orgId);
-        if ($result = PDOWrapper::call("isAdmin", $args)) {
-            $ret = $result[0]['result'];
-        }
-        return $ret;
-    }
-
     public static function belongsToRole($user, $role)
     {
         $ret = false;

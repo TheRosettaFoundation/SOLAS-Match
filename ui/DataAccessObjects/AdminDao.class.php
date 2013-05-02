@@ -34,7 +34,14 @@ class AdminDao
     
     public function isSiteAdmin($userId)
     {
-        $request = "{$this->siteApi}v0/admins/isAdmin/$userId";
+        $request = "{$this->siteApi}v0/admins/isSiteAdmin/$userId";
+        $response = $this->client->call(null, $request);
+        return $response;
+    }
+    
+    public function isOrgAdmin($orgId, $userId)
+    {
+        $request = "{$this->siteApi}v0/admins/isOrgAdmin/$orgId/$userId";
         $response = $this->client->call(null, $request);
         return $response;
     }

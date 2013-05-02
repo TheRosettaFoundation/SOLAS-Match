@@ -545,7 +545,9 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
-        $app->view()->setData("isSiteAdmin", $userDao->isAdmin($user_id, null));
+        $adminDao = new AdminDao();
+        
+        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($user_id));
         $user = $userDao->getUser($user_id);
         $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         if ($app->request()->isPost()) {

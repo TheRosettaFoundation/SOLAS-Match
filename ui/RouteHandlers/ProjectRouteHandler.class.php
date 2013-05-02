@@ -186,9 +186,11 @@ class ProjectRouteHandler
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $project_tags = $projectDao->getProjectTags($project_id);
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
-        $isAdmin = $userDao->isAdmin($user_id, $project->getOrganisationId())|$userDao->isAdmin($user_id, null);
         
-        if($isOrgMember|$isAdmin) {
+        $adminDao = new AdminDao();
+        $isAdmin = $adminDao->isOrgAdmin($user_id, $project->getOrganisationId()) || $adminDao->isSiteAdmin($user_id);
+        
+        if($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
             $project_tasks = $projectDao->getProjectTasks($project_id);

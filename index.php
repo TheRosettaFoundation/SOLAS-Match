@@ -128,8 +128,8 @@ $app->hook('slim.before', function () use ($app)
                         "user_has_active_tasks" => true
             ));
         }
-
-        $isAdmin = $userDao->isAdmin(UserSession::getCurrentUserID());
+        $adminDao = new AdminDao();
+        $isAdmin = $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
         if ($isAdmin) {
             $app->view()->appendData(array(
                         'site_admin' => true
