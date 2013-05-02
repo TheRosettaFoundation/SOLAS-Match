@@ -269,8 +269,8 @@
                                                 <input type="hidden" name="publishedTask" value="0" />
                                             {else}                                        
                                                 <input type="hidden" name="publishedTask" value="1" />
-                                                <input type="submit" class="btn btn-small btn-inverse" value="  Unpublished" />
-                                                <i class="icon-remove-circle icon-white" style="position:relative; right:100px; top:4px;"></i>
+                                                <input type="submit" class="btn btn-small btn-inverse" value=" Unpublished" />
+                                                <i class="icon-remove-circle icon-white" style="position:relative; right:98px; top:4px;"></i>
                                             {/if}
                                         </form>
 
@@ -280,14 +280,12 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
-                                                <a onclick="this.parentNode.submit()" class="btn btn-small">
-                                                    <i class="icon-inbox icon-black"></i> Tracked
-                                                </a>
+                                                <input type="submit" name="tracking" class="btn btn-small" value="   Tracked" />
+                                                <i class="icon-inbox icon-black" style="position:relative; right:75px; top:4px;"></i>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
-                                                <a onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                                                    <i class="icon-envelope icon-white"></i> Untracked
-                                                </a>
+                                                <input type="submit" name="tracking" class="btn btn-small btn-inverse" value=" Untracked" />
+                                                <i class="icon-envelope icon-white" style="position:relative; right:87px; top:4px;"></i>
                                             {/if}
                                         </form>
                                     </td>    
