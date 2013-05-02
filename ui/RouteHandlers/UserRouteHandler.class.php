@@ -339,8 +339,16 @@ class UserRouteHandler
             if (isValidPost($app)) {
                 $post = (object) $app->request()->post();
 
-                if (isset($post->login)) {
+                if (isset($post->login)) {                    
                     $user = $userDao->login($post->email, $post->password);
+                    
+                    $adminDao = new AdminDao();
+                    $isUserBanned = $adminDao->isUserBanned($user->getId());
+                    
+                    if($isUserBanned) {
+                        throw new InvalidArgumentException("Sorry, this user account has been banned.");  
+                    }
+                    
                     if (!is_array($user) && !is_null($user)) {
                         UserSession::setSession($user->getId());
                     } else {
@@ -364,7 +372,7 @@ class UserRouteHandler
             $error = "<p>Unable to log in. Please check your email and password.";
             $error .= " <a href=\"{$app->urlFor("login")}\">Try logging in again</a>";
             $error .= " or <a href=\"{$app->urlFor("register")}\">register</a> for an account.</p>";
-            $error .= "<p>System error: <em> {$e->getMessage()} </em></p>";
+            $error .= "<b>{$e->getMessage()}</b></p>";
             
             $app->flash("error", $error);
             $app->redirect($app->urlFor("login"));

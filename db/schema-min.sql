@@ -1001,26 +1001,46 @@ BEGIN
 END//
 DELIMITER ;
 
-
 -- Dumping structure for procedure debug-test3.bannedOrgInsert
-DROP PROCEDURE IF EXISTS `bannedOrgInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedOrgInsert`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
 BEGIN
 
-	if orgId='' then set orgId=null;end if;
-	if userIdAdmin='' then set userIdAdmin=null;end if;
-	if bannedTypeId='' then set bannedTypeId=null;end if;
-	if adminComment='' then set adminComment=null;end if;
+	Declare userId int;
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE cur1 CURSOR FOR SELECT m.user_id FROM OrganisationMembers m WHERE  m.organisation_id=orgId AND m.user_id NOT IN (SELECT s.user_id FROM Admins s WHERE s.organisation_id IS NULL);
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-	INSERT INTO BannedOrganisations (org_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
-	VALUES (orgId, userIdAdmin, bannedTypeId, adminComment,NOW());
+	IF NOT EXISTS(SELECT 1 FROM BannedOrganisations b WHERE b.org_id = orgId) THEN
+		if orgId='' then set orgId=null;end if;
+		if userIdAdmin='' then set userIdAdmin=null;end if;
+		if bannedTypeId='' then set bannedTypeId=null;end if;
+		if adminComment='' then set adminComment=null;end if;
+	
+	
+		INSERT INTO BannedOrganisations (org_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
+		VALUES (orgId, userIdAdmin, bannedTypeId, adminComment,NOW());
+		
+		set @orgName = null;
+		SELECT o.name INTO @orgName FROM Organisations o WHERE o.id=orgId;
+		
+		OPEN cur1;
+		
+		read_loop: LOOP
+			FETCH cur1 INTO userId;
+			IF done THEN
+			 	LEAVE read_loop;
+			END IF;
+	      call bannedUserInsert(userId, userIdAdmin, bannedTypeId, Concat('You have been banned because the organisation ',@Orgname,' has been banned. ', adminComment));
+		END LOOP;
+		CLOSE cur1;
+		
+	END IF;
 
 END//
 DELIMITER ;
 
 -- Dumping structure for procedure debug-test3.bannedUserInsert
-DROP PROCEDURE IF EXISTS `bannedUserInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedUserInsert`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
 BEGIN
@@ -1029,13 +1049,14 @@ BEGIN
 	if userIdAdmin='' then set userIdAdmin=null;end if;
 	if bannedTypeId='' then set bannedTypeId=null;end if;
 	if adminComment='' then set adminComment=null;end if;
-
-	INSERT INTO BannedUsers (user_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
-	VALUES (userId, userIdAdmin, bannedTypeId, adminComment,NOW());
+	
+	IF NOT EXISTS (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) THEN
+		INSERT INTO BannedUsers (user_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
+		VALUES (userId, userIdAdmin, bannedTypeId, adminComment,NOW());
+	END IF;
 
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.claimTask
 DROP PROCEDURE IF EXISTS `claimTask`;
