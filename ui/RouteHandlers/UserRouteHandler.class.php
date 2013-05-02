@@ -42,18 +42,11 @@ class UserRouteHandler
 
         $app->get("/:user_id/notification/stream", array($middleware, "authUserIsLoggedIn"),
         array($this, "editTaskStreamNotification"))->via("POST")->name("stream-notification-edit");
-
-        $app->get("/user/:user_id/admin", array($middleware, "authUserIsLoggedIn"),
-        array($middleware, "isSiteAdmin"), array($this, "adminDashboard"))->name("site-admin-dashboard");
         
-        $app->get("/static/privacy", array($this, "privacy"))->name("privacy");
+  
     }
 
-     public function privacy()
-    {
-         $app = Slim::getInstance();
-         $app->render("privacy.tpl");
-    }
+   
      
     
     public function home()
@@ -351,9 +344,17 @@ class UserRouteHandler
             if (isValidPost($app)) {
                 $post = (object) $app->request()->post();
 
-                if (isset($post->login)) {
+                if (isset($post->login)) {                    
                     $user = $userDao->login($post->email, $post->password);
+                    
                     if (!is_array($user) && !is_null($user)) {
+                        $adminDao = new AdminDao();
+                        $isUserBanned = $adminDao->isUserBanned($user->getId());
+                    
+                        if($isUserBanned) {
+                            throw new InvalidArgumentException("Sorry, this user account has been banned.");  
+                        }
+                    
                         UserSession::setSession($user->getId());
                     } else {
                         throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
@@ -376,7 +377,7 @@ class UserRouteHandler
             $error = "<p>Unable to log in. Please check your email and password.";
             $error .= " <a href=\"{$app->urlFor("login")}\">Try logging in again</a>";
             $error .= " or <a href=\"{$app->urlFor("register")}\">register</a> for an account.</p>";
-            $error .= "<p>System error: <em> {$e->getMessage()} </em></p>";
+            $error .= "<b>{$e->getMessage()}</b></p>";
             
             $app->flash("error", $error);
             $app->redirect($app->urlFor("login"));
@@ -409,7 +410,13 @@ class UserRouteHandler
                     UserSession::setSession($user->getId());
                     return false;
                 }
-                UserSession::setSession($user->getId());
+                $adminDao = new AdminDao();
+                if(!$adminDao->isUserBanned($user->getId())) {
+                    UserSession::setSession($user->getId());
+                } else {
+                    $app->flash('error', "This user account has been banned.");
+                    $app->redirect($app->urlFor('home'));
+                }
                 
             }
             return true;
@@ -683,17 +690,6 @@ class UserRouteHandler
         ));
 
         $app->render("user.task-stream-notification-edit.tpl");
-    }
-
-    public function adminDashboard($userId)
-    {
-        $app = Slim::getInstance();
-
-        $app->view()->appendData(array(
-                    "current_page"  => 'admin-dashboard'
-        ));
-
-        $app->render("site-admin.dashboard.tpl");
     }
 
     public static function isLoggedIn()

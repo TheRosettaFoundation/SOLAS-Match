@@ -130,6 +130,48 @@ CREATE TABLE IF NOT EXISTS `Badges` (
   CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+-- Dumping structure for table debug-test3.BannedOrganisations
+CREATE TABLE IF NOT EXISTS `BannedOrganisations` (
+  `org_id` int(10) unsigned NOT NULL,
+  `user_id-admin` int(10) unsigned NOT NULL,
+  `bannedtype_id` int(10) unsigned NOT NULL,
+  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `banned-date` datetime NOT NULL,
+  UNIQUE KEY `org_id` (`org_id`),
+  KEY `FK_BannedOrganisations_Users` (`user_id-admin`),
+  KEY `FK_BannedOrganisations_BannedTypes` (`bannedtype_id`),
+  CONSTRAINT `FK_BannedOrganisations_BannedTypes` FOREIGN KEY (`bannedtype_id`) REFERENCES `BannedTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_BannedOrganisations_Organisations` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_BannedOrganisations_Users` FOREIGN KEY (`user_id-admin`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- Dumping structure for table debug-test3.BannedTypes
+CREATE TABLE IF NOT EXISTS `BannedTypes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- Dumping structure for table debug-test3.BannedUsers
+CREATE TABLE IF NOT EXISTS `BannedUsers` (
+  `user_id` int(10) unsigned NOT NULL,
+  `user_id-admin` int(10) unsigned NOT NULL,
+  `bannedtype_id` int(10) unsigned NOT NULL,
+  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `banned-date` datetime NOT NULL,
+  UNIQUE KEY `user_id` (`user_id`),
+  KEY `FK_BannedUsers_Users_2` (`user_id-admin`),
+  KEY `FK_BannedUsers_BannedTypes` (`bannedtype_id`),
+  CONSTRAINT `FK_BannedUsers_BannedTypes` FOREIGN KEY (`bannedtype_id`) REFERENCES `BannedTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_BannedUsers_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_BannedUsers_Users_2` FOREIGN KEY (`user_id-admin`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
@@ -724,27 +766,28 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure SolasMatch.addAdmin
+-- Dumping structure for procedure debug-test3.addAdmin
 DROP PROCEDURE IF EXISTS `addAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addAdmin`(IN `userId` INT, IN `orgId` INT)
 BEGIN
-    if NOT EXISTS (SELECT 1
-                    FROM Admins
-                    WHERE user_id = userId
-                    AND (organisation_id = NULL
-                        OR organisation_id = orgId)
-    ) then
-    	INSERT INTO Admins (user_id, organisation_id) 
-            VALUES (userId, orgId);
-              SELECT 1 as result;
-    else
-    SELECT 0 as result;
-    end if;
-    
+
+	IF orgId='' THEN SET orgId=NULL; END IF;
+
+	SET @q= "INSERT INTO Admins (user_id,organisation_id) VALUES(";
+	
+	IF orgId IS NULL AND (NOT EXISTS (SELECT 1 FROM Admins a WHERE a.user_id=userId)) THEN	
+		SET @q = CONCAT(@q, userId, ",NULL", ")");	
+	ELSE
+		SET @q = CONCAT(@q, userId, ",", orgId ,")");
+	END IF;
+
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+	
 END//
 DELIMITER ;
-
 
 
 -- Dumping structure for procedure Solas-Match-Test.addBadge
@@ -966,6 +1009,62 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure debug-test3.bannedOrgInsert
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedOrgInsert`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
+BEGIN
+
+	Declare userId int;
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE cur1 CURSOR FOR SELECT m.user_id FROM OrganisationMembers m WHERE  m.organisation_id=orgId AND m.user_id NOT IN (SELECT s.user_id FROM Admins s WHERE s.organisation_id IS NULL);
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+	IF NOT EXISTS(SELECT 1 FROM BannedOrganisations b WHERE b.org_id = orgId) THEN
+		if orgId='' then set orgId=null;end if;
+		if userIdAdmin='' then set userIdAdmin=null;end if;
+		if bannedTypeId='' then set bannedTypeId=null;end if;
+		if adminComment='' then set adminComment=null;end if;
+	
+	
+		INSERT INTO BannedOrganisations (org_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
+		VALUES (orgId, userIdAdmin, bannedTypeId, adminComment,NOW());
+		
+		set @orgName = null;
+		SELECT o.name INTO @orgName FROM Organisations o WHERE o.id=orgId;
+		
+		OPEN cur1;
+		
+		read_loop: LOOP
+			FETCH cur1 INTO userId;
+			IF done THEN
+			 	LEAVE read_loop;
+			END IF;
+	      call bannedUserInsert(userId, userIdAdmin, bannedTypeId, Concat('You have been banned because the organisation ',@Orgname,' has been banned. ', adminComment));
+		END LOOP;
+		CLOSE cur1;
+		
+	END IF;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure debug-test3.bannedUserInsert
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedUserInsert`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
+BEGIN
+
+	if userId='' then set userId=null;end if;
+	if userIdAdmin='' then set userIdAdmin=null;end if;
+	if bannedTypeId='' then set bannedTypeId=null;end if;
+	if adminComment='' then set adminComment=null;end if;
+	
+	IF NOT EXISTS (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) THEN
+		INSERT INTO BannedUsers (user_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
+		VALUES (userId, userIdAdmin, bannedTypeId, adminComment,NOW());
+	END IF;
+
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.claimTask
 DROP PROCEDURE IF EXISTS `claimTask`;
@@ -1081,7 +1180,6 @@ DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.finishRegistration
 DROP PROCEDURE IF EXISTS `finishRegistration`;
-
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `finishRegistration`(IN `userId` INT)
 BEGIN
@@ -1094,6 +1192,29 @@ BEGIN
     else
         SELECT 0 as result;
     end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure debug-test3.getAdmin
+DROP PROCEDURE IF EXISTS `getAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `orgId` INT)
+BEGIN
+
+	IF orgId = '' THEN SET orgId = NULL; END IF;	
+	
+	set @q= "SELECT u.id,u.`display-name`,u.email,u.password,u.biography, (SELECT `en-name` FROM Languages WHERE id =u.`language_id`) AS `languageName`, (SELECT code FROM Languages WHERE id =u.`language_id`) AS `languageCode`, (SELECT `en-name` FROM Countries WHERE id =u.`country_id`) AS `countryName`, (SELECT code FROM Countries WHERE id =u.`country_id`) AS `countryCode`, u.nonce,u.`created-time` FROM Users u JOIN Admins a ON a.user_id = u.id WHERE 1";
+	
+	IF orgId IS NOT NULL THEN	
+		SET @q = CONCAT(@q, " AND a.organisation_id =", orgId);	
+	ELSE
+		SET @q = CONCAT(@q, " AND a.organisation_id IS NULL");
+	END IF;
+
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -1278,6 +1399,81 @@ BEGIN
 	if orgID is not null then 
 		set @q = CONCAT(@q," and b.owner_id='",orgID,"'") ;
 	end if;
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure debug-test3.getBannedOrg
+DROP PROCEDURE IF EXISTS `getBannedOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedOrg`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
+BEGIN
+	if orgId='' then set orgId=null;end if;
+	if userIdAdmin='' then set userIdAdmin=null;end if;
+	if bannedTypeId='' then set bannedTypeId=null;end if;
+	if adminComment='' then set adminComment=null;end if;
+	if bannedDate='' then set bannedDate=null;end if;
+
+	set @q= "SELECT b.org_id, b.`user_id-admin`, (SELECT t.type FROM BannedTypes t WHERE t.id = b.bannedtype_id) AS bannedType, b.`comment`, b.`banned-date` FROM BannedOrganisations b WHERE 1 ";
+
+	if orgId is not null then 
+		set @q = CONCAT(@q," and b.org_id=",orgId);
+	end if;
+	if userIdAdmin is not null then 
+		set @q = CONCAT(@q," and b.`user_id-admin`=",userIdAdmin);
+	end if;
+	if bannedTypeId is not null then 
+		set @q = CONCAT(@q," and b.`bannedtype_id`=",bannedTypeId) ;
+	end if;
+	if adminComment is not null then 
+		set @q = CONCAT(@q," and b.comment='",adminComment,"'");
+	end if;
+	
+	if (bannedDate is not null and bannedDate !='0000-00-00 00:00:00') then
+	  set @q = CONCAT(@q, " and b.`banned-date`='", bannedDate, "'");
+	end if;
+	
+	
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure debug-test3.getBannedUser
+DROP PROCEDURE IF EXISTS `getBannedUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedUser`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
+BEGIN
+	if userId='' then set userId=null;end if;
+	if userIdAdmin='' then set userIdAdmin=null;end if;
+	if bannedTypeId='' then set bannedTypeId=null;end if;
+	if adminComment='' then set adminComment=null;end if;
+	if bannedDate='' then set bannedDate=null;end if;
+
+	set @q= "SELECT b.user_id, b.`user_id-admin`, (SELECT t.type FROM BannedTypes t WHERE t.id = b.bannedtype_id) AS bannedType, b.`comment`, b.`banned-date` FROM BannedUsers b WHERE 1 ";
+	if userId is not null then 
+		set @q = CONCAT(@q," and b.user_id=",userId);
+	end if;
+	if userIdAdmin is not null then 
+		set @q = CONCAT(@q," and b.`user_id-admin`=",userIdAdmin);
+	end if;
+	if bannedTypeId is not null then 
+		set @q = CONCAT(@q," and b.`bannedtype_id`=",bannedTypeId) ;
+	end if;
+	if adminComment is not null then 
+		set @q = CONCAT(@q," and b.comment='",adminComment,"'");
+	end if;
+	
+	if (bannedDate is not null and bannedDate !='0000-00-00 00:00:00') then
+	  set @q = CONCAT(@q, " and b.`banned-date`='", bannedDate, "'");
+	end if;
+	
 	
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -2375,6 +2571,26 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure debug-test3.isOrgBanned
+DROP PROCEDURE IF EXISTS `isOrgBanned`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isOrgBanned`(IN `orgId` INT)
+BEGIN
+    SELECT exists (SELECT 1 FROM BannedOrganisations b WHERE b.org_id=orgId) as result;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure debug-test3.isUserBanned
+DROP PROCEDURE IF EXISTS `isUserBanned`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBanned`(IN `userId` INT)
+BEGIN
+    SELECT exists (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) as result;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.logFileDownload
 DROP PROCEDURE IF EXISTS `logFileDownload`;
 DELIMITER //
@@ -2385,7 +2601,6 @@ BEGIN
 	values (tID,uID,vID,Now());
 END//
 DELIMITER ;
-
 
 
 -- Dumping structure for procedure Solas-Match-Test.organisationInsertAndUpdate
@@ -2623,6 +2838,47 @@ BEGIN
     else
         SELECT 0 as result;
     end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure debug-test3.removeAdmin
+DROP PROCEDURE IF EXISTS `removeAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeAdmin`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+	IF orgId='' THEN SET orgId=NULL; END IF;
+
+	SET @q= "DELETE FROM Admins WHERE user_id=";
+	SET @q = CONCAT(@q, userId);
+	
+	IF orgId IS NOT NULL THEN	
+		SET @q = CONCAT(@q, " AND organisation_id =", orgId);	
+	ELSE
+		SET @q = CONCAT(@q, " AND organisation_id IS NULL");
+	END IF;
+
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure debug-test3.removeBannedOrg
+DROP PROCEDURE IF EXISTS `removeBannedOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeBannedOrg`(IN `orgId` INT)
+BEGIN
+	DELETE FROM BannedOrganisations WHERE org_id=orgId;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure debug-test3.removeBannedUser
+DROP PROCEDURE IF EXISTS `removeBannedUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeBannedUser`(IN `userId` INT)
+BEGIN
+	DELETE FROM BannedUsers WHERE user_id = userId;
 END//
 DELIMITER ;
 

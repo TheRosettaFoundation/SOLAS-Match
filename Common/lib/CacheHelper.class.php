@@ -6,6 +6,7 @@ class CacheHelper
     const LANGUAGES     = "Languages";
     const COUNTRIES     = "Countries";
     const TOP_TAGS      = "TopTags";
+    const GET_USER      = "GetUser:";
     
     public static function getCached($key, $ttl, $function, $args=null)
     {
@@ -19,4 +20,11 @@ class CacheHelper
         
         return $ret;
     } 
+    
+    public static function unCache($key)
+    {
+        if(apc_exists($key)) {
+            apc_delete($key);
+        }
+    }
 }

@@ -5,7 +5,7 @@
  *
  * @author sean
  */
-
+require_once __DIR__."/../DataAccessObjects/AdminDao.class.php";
 require_once __DIR__."/../DataAccessObjects/OrganisationDao.class.php";
 require_once __DIR__."/../DataAccessObjects/BadgeDao.class.php";
 require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
@@ -90,9 +90,10 @@ class Orgs {
                 }
             }
             $data= OrganisationDao::getOrg(null, $name);
-            if (!is_array($data) && !is_null($data)) {
-                $data = array($data);
-            }
+            $data = $data[0];
+//            if (!is_array($data) && !is_null($data)) {
+//                $data = array($data);
+//            }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getOrgByName');
         
@@ -208,8 +209,13 @@ class Orgs {
             Dispatcher::sendResponce(null, TaskDao::findTasksByOrg(array("organisation_ids" => $id)), null, $format);
         }, 'getOrgTasks');        
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/admins(:format)/',
+                                                        function ($id, $format=".json") {
+            
+            Dispatcher::sendResponce(null, AdminDao::getAdmins($id), null, $format);
+        }, 'getOrgAdmins');       
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/admin/:uid/',
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/admins/:uid/',
                                                         function ($id, $uid, $format = ".json") {
             
             if (!is_numeric($uid) && strstr($uid, '.')) {
@@ -217,9 +223,31 @@ class Orgs {
                 $format = '.'.$uid[1];
                 $uid = $uid[0];
             }
-            Dispatcher::sendResponce(null, OrganisationDao::addAdmin($uid, $id), null, $format);
+            Dispatcher::sendResponce(null, AdminDao::addOrgAdmin($uid, $id), null, $format);
         }, 'createOrgAdmin');   
         
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:orgId/admins/:userId/', 
+                                                           function ($orgId, $userId, $format = ".json"){
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                $userId = explode('.', $userId);
+                $format = '.'.$userId[1];
+                $userId = $userId[0];
+            }
+            Dispatcher::sendResponce(null, AdminDao::removeOrgAdmin($userId, $orgId), null, $format);
+        }, 'deleteOrgAdmin');    
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/isAdmin/:orgId/:userId/',
+                                                        function ($orgId, $userId, $format = '.json') {
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                 $userId = explode('.', $userId);
+                 $format = '.'.$userId[1];
+                 $userId = $userId[0];
+            }
+            $ret = 0;
+            $ret = UserDao::isAdmin($userId, $orgId);
+            if(is_null($orgId)) $ret = 0;
+            Dispatcher::sendResponce(null, $ret, null, $format);
+        }, 'isOrgAdmin');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects/:pID/archiveMetaData(:format)/',
                                                         function ($id, $pID, $format = ".json") {

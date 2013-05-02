@@ -43,6 +43,7 @@ $app->configureMode('development', function () use ($app) {
 
 //TODO remove all requires bar RoutHandlers
 require_once 'Common/HttpMethodEnum.php';
+require_once 'Common/BanTypeEnum.php';
 require_once 'Common/Settings.class.php';
 require_once 'Common/NotificationIntervalEnum.class.php';
 require_once 'Common/lib/Authentication.class.php';
@@ -56,13 +57,16 @@ require_once 'ui/lib/URL.class.php';
 require_once 'ui/lib/GraphViewer.class.php';
 require_once 'ui/lib/UIWorkflowBuilder.class.php';
 
+require_once 'ui/RouteHandlers/AdminRouteHandler.class.php';
 require_once 'ui/RouteHandlers/UserRouteHandler.class.php';
 require_once 'ui/RouteHandlers/OrgRouteHandler.class.php';
 require_once 'ui/RouteHandlers/TaskRouteHandler.class.php';
 require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
 require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
 require_once 'ui/RouteHandlers/ProjectRouteHandler.class.php';
+require_once 'ui/RouteHandlers/StaticRouteHandeler.php';
 
+require_once 'ui/DataAccessObjects/AdminDao.class.php';
 require_once 'ui/DataAccessObjects/BadgeDao.class.php';
 require_once 'ui/DataAccessObjects/CountryDao.class.php';
 require_once 'ui/DataAccessObjects/LanguageDao.class.php';

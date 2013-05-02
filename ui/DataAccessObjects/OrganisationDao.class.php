@@ -153,4 +153,10 @@ class OrganisationDao
         $request = "{$this->siteApi}v0/orgs/$orgId/admin/$userId";
         $this->client->call(null, $request, HttpMethodEnum::PUT);
     }
+    
+    public function removeOrgAdmin($orgId, $userId)
+    {
+        $request = "{$this->siteApi}v0/orgs/$orgId/admin/$userId";
+        $this->client->call(null, $request, HttpMethodEnum::DELETE);
+    }
 }

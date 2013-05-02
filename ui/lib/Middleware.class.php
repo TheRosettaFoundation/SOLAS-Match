@@ -8,15 +8,18 @@ class Middleware
     {
         $app = Slim::getInstance();
         
+        $this->isUserBanned();        
         if (!UserSession::getCurrentUserID()) {
             $app->flash('error', "Login required to access page");
             $app->redirect($app->urlFor('login'));
-        }        
+        }
+
         return true;
     }
 
     public function isSiteAdmin()
     {
+        $this->isUserBanned(); 
         if(is_null(UserSession::getCurrentUserID())) return false;
         $userDao = new UserDao();
         return $userDao->isAdmin(UserSession::getCurrentUserID());
@@ -202,5 +205,16 @@ class Middleware
         $app = Slim::getInstance();
         $app->flash('error', "You are not authorised to download this task");
         $app->redirect($app->urlFor('home'));
+    }
+    
+    public function isUserBanned()
+    {        
+        $adminDao = new AdminDao();        
+        if($adminDao->isUserBanned(UserSession::getCurrentUserID())) {
+            $app = Slim::getInstance();
+            UserSession::destroySession();
+            $app->flash('error', "This user account has been banned.");
+            $app->redirect($app->urlFor('home'));
+        }       
     }
 }
