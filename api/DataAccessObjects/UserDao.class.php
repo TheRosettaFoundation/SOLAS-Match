@@ -122,12 +122,12 @@ class UserDao
         if (!is_object($user) && $clear_password != "") {
             $user = self::create($email, $clear_password);
             BadgeDao::assignBadge($user->getId(), BadgeTypes::REGISTERED);
-            $ret = self::registerUser($user->getId());
+            self::registerUser($user->getId());
         }
 
         Notify::sendEmailVerification($user->getId());
 
-        return $ret;
+        return $user;
     }
 
     private static function registerUser($userId)
@@ -138,7 +138,7 @@ class UserDao
         $args .= PDOWrapper::cleanseNullOrWrapStr($uid);
         $result = PDOWrapper::call("registerUser", $args);
         if ($result) {
-            $ret = $result;
+            $ret = $result[0]['result'];
         }
         return $ret;
     }
