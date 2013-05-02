@@ -10,7 +10,7 @@ require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/NotificationTypes.class.php";
-require_once __DIR__."/../DataAccessObjects/AdminDao.class.php";
+
 
 class Users {
     

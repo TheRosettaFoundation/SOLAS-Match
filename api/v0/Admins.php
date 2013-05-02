@@ -36,7 +36,7 @@ class Admins {
             Dispatcher::sendResponce(null, null, null, $format);
         }, 'deleteSiteAdmin');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/isAdmin/:userId/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/isSiteAdmin/:userId/',
                                                         function ($userId, $format = '.json') {
             if (!is_numeric($userId) && strstr($userId, '.')) {
                  $userId = explode('.', $userId);
@@ -44,9 +44,22 @@ class Admins {
                  $userId = $userId[0];
             }
             $ret = false;
-            $ret = UserDao::isAdmin($userId, null);
+            $ret = AdminDao::isAdmin($userId, null);
             Dispatcher::sendResponce(null, $ret, null, $format);
-        }, 'isAdmin');
+        }, 'isSiteAdmin');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/isOrgAdmin/:orgId/:userId/',
+                                                        function ($orgId, $userId, $format = '.json') {
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                 $userId = explode('.', $userId);
+                 $format = '.'.$userId[1];
+                 $userId = $userId[0];
+            }
+            $ret = 0;
+            $ret = AdminDao::isAdmin($userId, $orgId);
+            if(is_null($orgId)) $ret = 0;
+            Dispatcher::sendResponce(null, $ret, null, $format);
+        }, 'isOrgAdmin');
         
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/getBannedUsers(:format)/',

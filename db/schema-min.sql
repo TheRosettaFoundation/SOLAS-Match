@@ -153,8 +153,13 @@ CREATE TABLE IF NOT EXISTS `BannedTypes` (
   `type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+REPLACE INTO `BannedTypes` (`id`, `type`) VALUES
+	(1, 'Day'),
+	(3, 'Month'),
+	(4, 'Permanent'),
+	(2, 'Week');
 
 -- Dumping structure for table debug-test3.BannedUsers
 CREATE TABLE IF NOT EXISTS `BannedUsers` (

@@ -21,8 +21,8 @@ class Middleware
     {
         $this->isUserBanned(); 
         if(is_null(UserSession::getCurrentUserID())) return false;
-        $userDao = new UserDao();
-        return $userDao->isAdmin(UserSession::getCurrentUserID());
+        $adminDao = new AdminDao();
+        return $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
     }
 
     public function authenticateUserForTask($request, $response, $route) 

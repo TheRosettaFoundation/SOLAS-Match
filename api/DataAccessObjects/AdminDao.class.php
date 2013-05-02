@@ -178,4 +178,15 @@ class AdminDao
         
         return $ret;
     }
+    
+    public static function isAdmin($userId, $orgId)
+    {
+        $ret = false;
+        $args = PDOWrapper::cleanse($userId).", ";
+        $args .= PDOWrapper::cleanseNullOrWrapStr($orgId);
+        if ($result = PDOWrapper::call("isAdmin", $args)) {
+            $ret = $result[0]['result'];
+        }
+        return $ret;
+    }
 }

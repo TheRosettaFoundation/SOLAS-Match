@@ -95,11 +95,11 @@ class UserDao
             $user = $user[0];
         }
         
-        if (!self::isUserVerified($user->getId())) {
+        if (!is_object($user)) {
             return null;
         }
-
-        if (!is_object($user)) {
+        
+        if ( !self::isUserVerified($user->getId())) {
             return null;
         }
 
@@ -216,18 +216,6 @@ class UserDao
     public static function isLoggedIn()
     {
         return (!is_null(UserSession::getCurrentUserId()));
-    }
-
-
-    public static function isAdmin($userId, $orgId)
-    {
-        $ret = false;
-        $args = PDOWrapper::cleanse($userId).", ";
-        $args .= PDOWrapper::cleanseNullOrWrapStr($orgId);
-        if ($result = PDOWrapper::call("isAdmin", $args)) {
-            $ret = $result[0]['result'];
-        }
-        return $ret;
     }
 
     public static function belongsToRole($user, $role)

@@ -185,7 +185,7 @@
 
         {if isset($user)}
 
-            {if $isMember||$adminAccess  }
+            {if $isMember || $adminAccess}
                 <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                     <i class="icon-star icon-white"></i> Create Badge
                 </a>
@@ -200,7 +200,7 @@
             <th style="text-align: left">Name</th>
             <th>Description</th>
 
-            {if $isMember||$adminAccess  }
+            {if $isMember || $adminAccess}
                 <th>Edit</th>
                 <th>Assign</th>
                 <th>Delete</th>
@@ -217,7 +217,7 @@
                 <td width="35%">
                     {$badge->getDescription()}
                 </td>
-                {if ($isMember||$adminAccess  ) && isset($user)}
+                {if ($isMember || $adminAccess) && isset($user)}
                     <td>
                         <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
                             <i class="icon-wrench icon-black"></i> Edit Badge
@@ -250,7 +250,7 @@
 {/if}
       
 
-{if $isMember||$adminAccess  }               
+{if $isMember || $adminAccess}               
      <p style="margin-bottom: 40px" />         
      <h1 class="page-header">
          Membership Requests
@@ -312,7 +312,7 @@
  {/if}
 
 
-{if $isMember||$adminAccess}
+{if $isMember || $adminAccess}
     <h1 class="page-header">
         Organisation Members
         <small>A list of users that are a member of this organisation.</small>
@@ -321,8 +321,8 @@
         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
             <table class="table table-striped">
                 <thead>
-                    <th style="width: 33%">Username</th>
-                    <th style="width: 33%">Biography</th>
+                    <th>Member Type</th>
+                    <th>Username</th>
                     {if $adminAccess}
                         <th>Remove User</th>
                     {/if}
@@ -331,14 +331,14 @@
                     {foreach $orgMembers as $member}
                         <tr>
                             <td>
-                                <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{$member->getDisplayName()}</a>
-                            </td>
-                            <td style="font-style: italic">
-                                {if $member->getBiography() != ''}
-                                    {$member->getBiography()}
+                                {if $member['orgAdmin']}
+                                    <button class="btn btn-danger" disabled>Administrator</button>
                                 {else}
-                                    No biography listed.
+                                    <button class="btn btn-primary" disabled>Member</button>
                                 {/if}
+                            </td>
+                            <td>
+                                <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{$member->getDisplayName()}</a>
                             </td>
                         </td>
                         {if $adminAccess}

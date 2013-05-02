@@ -350,8 +350,8 @@ class OrgRouteHandler
         }
         
 
-        $userDao = new UserDao();
-        if ($userDao->isAdmin(UserSession::getCurrentUserId(), $org->getId())) {
+        $adminDao = new AdminDao();
+        if ($adminDao->isOrgAdmin(UserSession::getCurrentUserId(), $org->getId())) {
             $app->view()->appendData(array('orgAdmin' => true));
         }
         
@@ -480,16 +480,27 @@ class OrgRouteHandler
 
         $org_badges = $orgDao->getOrgBadges($org_id);
         $orgMemberList = $orgDao->getOrgMembers($org_id);
+        
+        if($orgMemberList) {
+            $adminDao = new AdminDao();
+            foreach($orgMemberList as $orgMember) {
+                if($adminDao->isOrgAdmin($org_id, $orgMember->getId())) {
+                    $orgMember['orgAdmin'] = true;
+                }
+            }
+        }
+        
+        
         $isMember = false;
         if (count($orgMemberList) > 0) {
             if (in_array($currentUser, $orgMemberList)) {
                 $isMember = true;
-
             }
         }
 
         $adminAccess = false;
-        if ($userDao->isAdmin($currentUser->getId(), $org->getId())) {
+        $adminDao = new AdminDao();
+        if ($adminDao->isSiteAdmin($currentUser->getId()) || $adminDao->isOrgAdmin($currentUser->getId(), $org->getId())) {
             $adminAccess = true;
         }
 

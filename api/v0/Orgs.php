@@ -236,19 +236,7 @@ class Orgs {
             Dispatcher::sendResponce(null, AdminDao::removeOrgAdmin($userId, $orgId), null, $format);
         }, 'deleteOrgAdmin');    
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/isAdmin/:orgId/:userId/',
-                                                        function ($orgId, $userId, $format = '.json') {
-            if (!is_numeric($userId) && strstr($userId, '.')) {
-                 $userId = explode('.', $userId);
-                 $format = '.'.$userId[1];
-                 $userId = $userId[0];
-            }
-            $ret = 0;
-            $ret = UserDao::isAdmin($userId, $orgId);
-            if(is_null($orgId)) $ret = 0;
-            Dispatcher::sendResponce(null, $ret, null, $format);
-        }, 'isOrgAdmin');
-        
+       
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects/:pID/archiveMetaData(:format)/',
                                                         function ($id, $pID, $format = ".json") {
             if (!is_numeric($pID) && strstr($pID, '.')) {
