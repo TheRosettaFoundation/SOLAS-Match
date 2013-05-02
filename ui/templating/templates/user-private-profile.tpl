@@ -28,7 +28,7 @@
     <p>All these fields are optional. However, filling them out will provide us with valuable information for contacting you and for matching you with more relevant tasks for your Task Stream.</p>
 </div>
  
-    <form method='post' action='{urlFor name='user-private-profile'}' class='well'>
+    <form method='post' action='#' class='well'>
         
         <table border="0">
             <tr valign="top" align="center"> 

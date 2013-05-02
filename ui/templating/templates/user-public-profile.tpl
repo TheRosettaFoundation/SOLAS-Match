@@ -1,3 +1,4 @@
+
 {include file='header.tpl'}
 
 {if isset($this_user)}
@@ -26,8 +27,8 @@
                             {else if $org_creation == 'h'}
                             {/if}
                         {/if} 
-                        {if isset($private_access)}
-                            <a  href='{urlFor name="user-private-profile"}' class='btn btn-primary'>
+                        {if isset($private_access)|| $isSiteAdmin}
+                            <a  href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> Edit Profile Details
                             </a>
                         {/if}
@@ -53,7 +54,7 @@
 
 <table border="0">
     <tr valign="top">
-        <td style="{if isset($userPersonalInfo) && isset($private_access)} width: 48%  {else} width: 100% {/if}">
+        <td style="{if isset($userPersonalInfo) && (isset($private_access)|| $isSiteAdmin)} width: 48%  {else} width: 100% {/if}">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <thead>                
@@ -65,6 +66,21 @@
                                 {$this_user->getDisplayName()}
                             </td>
                         </tr>
+                        {if isset($private_access) || $isSiteAdmin}
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr> 
+                            <tr>
+                                <td>
+                                    <h3>E-Mail:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {mailto address={$this_user->getEMail()} encode='hex' text={$this_user->getEMail()}}
+                                </td>
+                            </tr>
+                        {/if}
                         <tr>
                             <td style="padding-bottom: 10px"/>
                         </tr> 
@@ -123,7 +139,7 @@
             </div>
         </td>
         
-        {if isset($userPersonalInfo) && isset($private_access)}
+        {if isset($userPersonalInfo) && (isset($private_access)  || $isSiteAdmin)}
             <td style="width: 4%"/>
             <td style="width: 48%">            
                 <div class="pull-right">
@@ -283,7 +299,7 @@
             </h1>
         </div>
 
-        {foreach $badges as $badge }
+        {foreach $badges as $badge}
             {if !is_null($badge->getOwnerId())}
                 {assign var="user_id" value=$this_user->getId()} 
                     {if isset($private_access)}
@@ -438,3 +454,4 @@
 {/if}
 
 {include file='footer.tpl'}
+
