@@ -95,6 +95,10 @@ class UserDao
             $user = $user[0];
         }
         
+        if (!self::isUserVerified($user->getId())) {
+            return null;
+        }
+
         if (!is_object($user)) {
             return null;
         }
