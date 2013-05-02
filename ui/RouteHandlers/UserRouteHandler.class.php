@@ -405,7 +405,13 @@ class UserRouteHandler
                     UserSession::setSession($user->getId());
                     return false;
                 }
-                UserSession::setSession($user->getId());
+                $adminDao = new AdminDao();
+                if(!$adminDao->isUserBanned($user->getId())) {
+                    UserSession::setSession($user->getId());
+                } else {
+                    $app->flash('error', "This user account has been banned.");
+                    $app->redirect($app->urlFor('home'));
+                }
                 
             }
             return true;
