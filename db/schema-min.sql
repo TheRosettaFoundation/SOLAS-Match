@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `BannedTypes` (
   UNIQUE KEY `type` (`type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `BannedTypes` (`id`, `type`) VALUES
+REPLACE INTO `BannedTypes` (`id`, `type`) VALUES
 	(1, 'Day'),
 	(3, 'Month'),
 	(4, 'Permanent'),
