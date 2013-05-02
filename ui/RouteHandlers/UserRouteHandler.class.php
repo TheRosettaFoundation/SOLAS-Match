@@ -34,7 +34,7 @@ class UserRouteHandler
         $app->get("/:user_id/profile", array($this, "userPublicProfile")
         )->via("POST")->name("user-public-profile");
 
-        $app->get("/profile", array($middleware, "authUserIsLoggedIn"), 
+        $app->get("/:user_id/privateProfile", array($middleware, "authUserIsLoggedIn"), 
         array($this, "userPrivateProfile"))->via("POST")->name("user-private-profile");
 
         $app->get("/:user_id/notification/stream", array($middleware, "authUserIsLoggedIn"),
@@ -408,12 +408,11 @@ class UserRouteHandler
         }
     }        
 
-    public static function userPrivateProfile()
+    public static function userPrivateProfile($userId)
     {
         $app = Slim::getInstance();
         
         $userDao = new UserDao();
-        $userId = UserSession::getCurrentUserID();
         $user = $userDao->getUser($userId);
         $userPersonalInfo = $userDao->getPersonalInfo($userId);
         
@@ -536,7 +535,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
-
+        $app->view()->setData("isSiteAdmin", $userDao->isAdmin($user_id, null));
         $user = $userDao->getUser($user_id);
         $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         if ($app->request()->isPost()) {

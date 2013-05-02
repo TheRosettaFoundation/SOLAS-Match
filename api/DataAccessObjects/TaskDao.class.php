@@ -441,7 +441,7 @@ class TaskDao
         if (count($dependantNodes) > 0) {
             $builder = new APIWorkflowBuilder();
             foreach ($dependantNodes as $dependantId) {
-                $dTask = $this->find(array('id' => $dependantId));
+                $dTask = self::getTask($dependantId);
                 $index = $builder->find($dependantId, $graph);
                 $dependant = $graph->getAllNodes($index);
                 $preReqs = $dependant->getPreviousList();

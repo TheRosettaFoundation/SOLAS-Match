@@ -2962,6 +2962,19 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.searchForTag
+DROP PROCEDURE IF EXISTS `searchForTag`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchForTag`(IN `tagName` VARCHAR(50))
+    COMMENT 'Search for a tag by label'
+BEGIN
+	SELECT *
+	    FROM Tags
+	    WHERE label LIKE CONCAT('%', tagName, '%');
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.setTaskStatus
 DROP PROCEDURE IF EXISTS `setTaskStatus`;
 DELIMITER //

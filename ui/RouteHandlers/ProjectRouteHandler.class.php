@@ -146,6 +146,16 @@ class ProjectRouteHandler
                     }
                 }
             }
+
+            if (isset($post->deleteTask)) {
+                $taskDao->deleteTask($post->task_id);
+                $app->flashNow("success", "The task \"{$task->getTitle()}\" has been deleted");
+            }
+
+            if (isset($post->archiveTask)) {
+                $taskDao->archiveTask($post->task_id, $user_id);
+                $app->flashNow("success", "The task \"{$task->getTitle()}\" has been archived");
+            }
             
             //This should not be here!!!!!!!!!
             if(isset($post->feedback)) {

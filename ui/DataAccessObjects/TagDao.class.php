@@ -38,6 +38,13 @@ class TagDao
         return $response;
     }
 
+    public function searchForTag($name)
+    {
+        $request = "{$this->siteApi}v0/tags/search/$name";
+        $ret = $this->client->call(array("Tag"), $request);
+        return $ret;
+    }
+
     public function getTopTags($limit = null)
     {       
         $args=$limit ? array("limit" => $limit) : null;

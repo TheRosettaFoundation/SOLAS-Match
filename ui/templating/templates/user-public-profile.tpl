@@ -1,3 +1,4 @@
+
 {include file='header.tpl'}
 
 {if isset($this_user)}
@@ -26,8 +27,8 @@
                             {else if $org_creation == 'h'}
                             {/if}
                         {/if} 
-                        {if isset($private_access)}
-                            <a  href='{urlFor name="user-private-profile"}' class='btn btn-primary'>
+                        {if isset($private_access)|| $isSiteAdmin}
+                            <a  href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> Edit Profile Details
                             </a>
                         {/if}
@@ -53,7 +54,7 @@
 
 <table border="0">
     <tr valign="top">
-        <td style="{if isset($userPersonalInfo) && isset($private_access)} width: 48%  {else} width: 100% {/if}">
+        <td style="{if isset($userPersonalInfo) && (isset($private_access)|| $isSiteAdmin)} width: 48%  {else} width: 100% {/if}">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <thead>                
@@ -65,7 +66,7 @@
                                 {$this_user->getDisplayName()}
                             </td>
                         </tr>
-                        {if isset($private_access)}
+                        {if isset($private_access) || $isSiteAdmin}
                             <tr>
                                 <td style="padding-bottom: 10px"/>
                             </tr> 
@@ -138,7 +139,7 @@
             </div>
         </td>
         
-        {if isset($userPersonalInfo) && isset($private_access)}
+        {if isset($userPersonalInfo) && (isset($private_access)  || $isSiteAdmin)}
             <td style="width: 4%"/>
             <td style="width: 48%">            
                 <div class="pull-right">
@@ -352,7 +353,7 @@
 <div class="page-header">
     <h1>Tags<small> A list of tags you have subscribed to.</small>
         <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
-            <i class="icon-list icon-white"></i> List All Tags
+            <i class="icon-search icon-white"></i> Search For Tags
         </a>
     </h1>
 </div>
@@ -453,3 +454,4 @@
 {/if}
 
 {include file='footer.tpl'}
+
