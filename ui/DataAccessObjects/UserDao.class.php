@@ -19,10 +19,10 @@ class UserDao
          
         $ret=CacheHelper::getCached(CacheHelper::GET_USER.$userId, TimeToLiveEnum::MINUTE,
                 function($args){
-                    $request = "{$this->siteApi}v0/users/$args[1]";
+                    $request = "{$args[2]}v0/users/$args[1]";
                     return $args[0]->call("User", $request);
                 },
-            array($this->client, $userId)); 
+            array($this->client, $userId,$this->siteApi)); 
         return $ret;
     }
     

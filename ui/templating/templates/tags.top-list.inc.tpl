@@ -10,7 +10,7 @@
                 </div>            
             {/foreach}
             <div class="tag">
-                <a href="{urlFor name="tags-list"}">More Tags</a>
+                <a class="btn btn-primary btn-small" href="{urlFor name="tags-list"}"><i class="icon-list icon-white"></i> More Tags</a>
             </div>
         </li>
     </ul>
