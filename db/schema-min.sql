@@ -2808,24 +2808,43 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.recordFileUpload
 DROP PROCEDURE IF EXISTS `recordFileUpload`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN `name` TeXT, IN `content` VARCHAR(255), IN `uID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN `name` TeXT, IN `content` VARCHAR(255), IN `uID` INT, IN `ver` INT)
     MODIFIES SQL DATA
 BEGIN
-set @maxVer =-1;
-if not exists (select 1 from TaskFileVersions tfv where tfv.task_id=tID) then
-	INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`) 
-	VALUES (tID,1+@maxVer,name, content, uID, Now());
+if ver is null then
+    set @maxVer =-1;
+    if not exists (select 1 
+                from TaskFileVersions tfv 
+                where tfv.task_id=tID
+                and version_id = 1+@maxVer) then
+	    INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`) 
+    	VALUES (tID,1+@maxVer,name, content, uID, Now());
+    else
+	    select tfv.version_id into @maxVer
+        	from TaskFileVersions tfv 
+        	where tfv.task_id=tID 
+        	order by tfv.version_id desc
+        	limit 1;
+
+        INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`) 
+        	VALUES (tID,1+@maxVer,name, content, uID, Now());
+    end if;
+    select 1+@maxVer as version;
 else
-	
-	select tfv.version_id into @maxVer
-	from TaskFileVersions tfv 
-	where tfv.task_id=tID 
-	order by tfv.version_id desc
-	limit 1;
-	INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`) 
-	VALUES (tID,1+@maxVer,name, content, uID, Now());
+    if not exists (select 1 
+                from TaskFileVersions tfv 
+                where tfv.task_id=tID
+                and version_id = ver) then
+        INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`)
+            VALUES (tID, ver, name, content, uID, NOW());
+    else
+        UPDATE `TaskFileVersions`
+            SET filename = name, `content-type` = content, user_id = uID, `upload-time` = NOW()
+            WHERE task_id = tID
+            AND version_id = ver;
+    end if;
+    select ver as version;
 end if;
-select 1+@maxVer as version;
 END//
 DELIMITER ;
 
