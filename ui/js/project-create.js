@@ -39,7 +39,9 @@
             
             clonedTarget.find('#translation_0')
                         .attr('name', 'translation_' + fields)
-                        .attr('id', 'translation_' + fields)
+                        .attr('id', 'translation_' + fields);
+                
+            clonedTarget.find('#proofreading_0')
                         .attr('name', 'proofreading_' + fields)
                         .attr('id', 'proofreading_' + fields);
             

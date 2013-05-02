@@ -16,8 +16,13 @@ class UserDao
     public function getUser($userId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId"; 
-        $ret = $this->client->call("User", $request);
+         
+        $ret=CacheHelper::getCached(CacheHelper::GET_USER.$userId, TimeToLiveEnum::MINUTE,
+                function($args){
+                    $request = "{$this->siteApi}v0/users/$args[1]";
+                    return $args[0]->call("User", $request);
+                },
+            array($this->client, $userId)); 
         return $ret;
     }
     
@@ -254,6 +259,7 @@ class UserDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/{$user->getId()}";
         $ret = $this->client->call("User", $request, HttpMethodEnum::PUT, $user);
+        CacheHelper::unCache(CacheHelper::GET_USER.$user->getId());
         return $ret;
     }
 
@@ -408,5 +414,5 @@ class UserDao
         $request = "{$this->siteApi}v0/users/removeSecondaryLanguage/$userId/{$locale->getLanguageCode()}/{$locale->getCountryCode()}";
         $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $ret;
-    }
+    } 
 }

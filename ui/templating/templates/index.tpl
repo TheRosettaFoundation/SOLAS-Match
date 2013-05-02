@@ -50,7 +50,7 @@
             {include file="tags.user-tags.inc.tpl"}	
             {include file="tags.top-list.inc.tpl"}
             {if isset($statsArray) && is_array($statsArray)}
-                    {include file="statistics.tpl"}
+                {include file="statistics.tpl"}
             {/if}
             <div id="globe" style="text-align: center">
                 <br/>

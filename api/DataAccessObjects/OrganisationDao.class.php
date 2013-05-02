@@ -147,13 +147,6 @@ class OrganisationDao
     {      
         $result= PDOWrapper::call("deleteOrg", PDOWrapper::cleanse($orgID));
         return $result[0]['result'];
-    }
-    
-    public static function addAdmin($userId, $orgId)
-    {
-        self::acceptMemRequest($orgId, $userId);
-        $args = PDOWrapper::cleanseNull($userId).", ";
-        $args .= PDOWrapper::cleanseNull($orgId);
-        PDOWrapper::call("addAdmin", $args);
-    }
+    }    
+
 }

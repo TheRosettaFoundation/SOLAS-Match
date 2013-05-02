@@ -1053,7 +1053,7 @@ class TaskRouteHandler
                     try {
                         TemplateHelper::validateFileHasBeenSuccessfullyUploaded("segmentationUpload_".$i);
                         $taskModel = new Task();
-                        $this->setTaskModelData($taskModel, $project, $task, $i);
+                        $this->setTaskModelData($taskModel, $project, $task, $i, $segmentationValue);
                         if(isset($post["translation_0"])) {
                             $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
                             $taskModel->setWordCount($post["wordCount_$i"]);
@@ -1090,7 +1090,7 @@ class TaskRouteHandler
                 }            
 
                 $taskModel = new Task();
-                $this->setTaskModelData($taskModel, $project, $task, 0);                       
+                $this->setTaskModelData($taskModel, $project, $task);                       
                 $taskModel->setWordCount($task->getWordCount());
                 $taskModel->setTaskType(TaskTypeEnum::DESEGMENTATION);                         
                 $createdDesegmentation = $taskDao->createTask($taskModel);
@@ -1432,8 +1432,13 @@ class TaskRouteHandler
         $app->render("task.review.tpl");
     }
     
-    private function setTaskModelData($taskModel, $project, $task, $i) {
-        $taskModel->setTitle($_FILES["segmentationUpload_$i"]["name"]);
+    private function setTaskModelData($taskModel, $project, $task, $i=null, $segmentationValue=null) {
+        
+        if(is_null($i) && is_null($segmentationValue)) {
+            $taskModel->setTitle($project->getTitle());
+        } else {
+            $taskModel->setTitle($project->getTitle()." (".($i+1)." of $segmentationValue)");
+        }
         
         $taskModel->setSourceLocale($project->getSourceLocale());
         $taskModel->setTargetLocale($task->getTargetLocale());

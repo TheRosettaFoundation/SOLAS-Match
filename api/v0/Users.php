@@ -10,6 +10,7 @@ require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/NotificationTypes.class.php";
+require_once __DIR__."/../DataAccessObjects/AdminDao.class.php";
 
 class Users {
     
@@ -76,13 +77,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserByEmail');
 
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:user_id/org/:org_id/admin(:format)/',
-                function ($userId, $orgId, $format = '.json')
-                {
-                    $ret = false;
-                    $ret = UserDao::isAdmin($userId, $orgId);
-                    Dispatcher::sendResponce(null, $ret, null, $format);
-                }, 'isAdmin');
        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/subscribedToTask/:id/:taskID/',
                                                         function ($id, $taskID, $format = ".json") {
@@ -485,7 +479,7 @@ class Users {
             }
             $data = UserDao::deleteSecondaryLanguage($userId, $languageCode, $countryCode);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'deleteSecondaryLanguage'); 
+        }, 'deleteSecondaryLanguage');
     }
 }
 Users::init();
