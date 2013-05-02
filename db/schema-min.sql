@@ -1015,6 +1015,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure debug-test3.bannedOrgInsert
+DROP PROCEDURE IF EXISTS `bannedOrgInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedOrgInsert`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
 BEGIN
@@ -1054,6 +1055,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure debug-test3.bannedUserInsert
+DROP PROCEDURE IF EXISTS `bannedUserInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedUserInsert`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
 BEGIN
