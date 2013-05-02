@@ -619,20 +619,21 @@ class TaskDao
         return $result[0]['latest_version'] > 0;
     }
     
-    public static function recordFileUpload($taskId, $filename, $content_type, $user_id) 
+    public static function recordFileUpload($taskId, $filename, $content_type, $user_id, $version = null) 
     {
         $args = "";
         $args .= PDOWrapper::cleanseNull($taskId);
         $args .= ",".PDOWrapper::cleanseWrapStr($filename);
         $args .= ",".PDOWrapper::cleanseWrapStr($content_type);
         $args .= ",".PDOWrapper::cleanseNull($user_id);
+        $args .= ','.PDOWrapper::cleanseNull($version);
         if($result = PDOWrapper::call("recordFileUpload", $args)) {
             return $result[0]['version'];
         } else {
             return null;
         }        
     }
-    
+
     public static function getTaskFileInfo($taskID, $version = 0)
     {
         $ret = false;
@@ -675,8 +676,6 @@ class TaskDao
     
     public static function uploadFile($task,$convert,&$file,$version,$userId,$filename)
     {
-        
-            
         if($convert){
             Upload::apiSaveFile($task, $userId, 
             FormatConverter::convertFromXliff($file), $filename,$version);
@@ -687,39 +686,20 @@ class TaskDao
         Notify::sendEmailNotifications($task->getId(), NotificationTypes::UPLOAD);
     }
     
-    public static function uploadOutputFile($task,$convert,&$file,$userId,$filename){
+    public static function uploadOutputFile($task,$convert,&$file,$userId,$filename)
+    {
         self::uploadFile($task,$convert,$file,null,$userId,$filename);
         $graphBuilder = new APIWorkflowBuilder();
-            $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
-            if ($graph->hasRootNode()) {
-                $currentLayer = $graph->getRootNodeList();
-                $nextLayer = array();
-                $found = false;
+        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+        if ($graph) {
+            $index = $graphBuilder->find($task->getId(), $graph);
+            $taskNode = $graph->getAllNodes($index);
 
-                $dependants = array();
-                while(!$found && count($currentLayer) > 0) {
-                    foreach ($currentLayer as $node) {
-                        if ($node->getTaskId() == $task->getId()) {
-                            $found = true;
-                            foreach ($node->getNextList() as $nextNode) {
-                                $dependants[] = $nextNode->getTaskId();
-                            }
-                        }
-                        foreach ($node->getNextList() as $nextNode) {
-                            if(!in_array($nextNode, $nextLayer)) {
-                                $nextLayer[] = $nextNode;
-                            }
-                        }
-                    }
-                    $currentLayer = $nextLayer;
-                    $nextLayer = array();
-                }
-
-                foreach ($dependants as $nextTask) {
-                    $dTask = TaskDao::getTask($nextTask);
-                    self::uploadFile($dTask ,$convert,$file,0,$userId,$filename);
-                }
+            foreach ($taskNode->getNextList() as $nextTaskId) {
+                $result = TaskDao::getTask($nextTaskId);
+                $nextTask = $result[0];
+                self::uploadFile($nextTask ,$convert,$file,0,$userId,$filename);
             }
+        }
     }
-    
 }
