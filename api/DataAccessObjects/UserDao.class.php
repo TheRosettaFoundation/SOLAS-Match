@@ -95,6 +95,10 @@ class UserDao
             $user = $user[0];
         }
         
+        if (!self::isUserVerified($user->getId())) {
+            return null;
+        }
+
         if (!is_object($user)) {
             return null;
         }
@@ -108,6 +112,7 @@ class UserDao
 
     public static function apiRegister($email, $clear_password)
     {
+        $ret = null;
         $user = self::getUser(null, $email);
         
         if(is_array($user)) {
@@ -117,12 +122,52 @@ class UserDao
         if (!is_object($user) && $clear_password != "") {
             $user = self::create($email, $clear_password);
             BadgeDao::assignBadge($user->getId(), BadgeTypes::REGISTERED);
-        } else {
-            $user = null;
-            //array("message"=>'sorry the account you enerted already exists.
-            // \n please login.',"status code"=>500);
+            $ret = self::registerUser($user->getId());
         }
-        return $user;
+
+        Notify::sendEmailVerification($user->getId());
+
+        return $ret;
+    }
+
+    private static function registerUser($userId)
+    {
+        $ret = null;
+        $uid = md5(uniqid(rand()));
+        $args = PDOWrapper::cleanseNull($userId).', ';
+        $args .= PDOWrapper::cleanseNullOrWrapStr($uid);
+        $result = PDOWrapper::call("registerUser", $args);
+        if ($result) {
+            $ret = $result;
+        }
+        return $ret;
+    }
+
+    public static function finishRegistration($userId)
+    {
+        $args = PDOWrapper::cleanseNull($userId);
+        $response = PDOWrapper::call('finishRegistration', $args);
+        return $response;
+    }
+
+    public static function getRegisteredUser($uuid)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNullOrWrapStr($uuid);
+        $result = PDOWrapper::call('getRegisteredUser', $args);
+        if ($result) {
+            $ret = ModelFactory::buildModel("User", $result[0]);
+        }
+        return $ret;
+    }
+
+    public static function isUserVerified($userId)
+    {
+        $ret = '0';
+        if ($result = PDOWrapper::call('isUserVerified', PDOWrapper::cleanseNull($userId))) {
+            $ret = $result[0]['result'];
+        }
+        return $ret;
     }
     
     public static function openIdLogin($openid,$app)

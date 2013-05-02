@@ -39,7 +39,27 @@ class Users {
            
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUser');
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:uuid/registered(:format)/',
+                function ($uuid, $format = '.json')
+                {
+                    $user = UserDao::getRegisteredUser($uuid);
+                    Dispatcher::sendResponce(null, $user, null, $format);
+                }, 'getRegisteredUser');
+
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:userId/finishRegistration(:format)/',
+                function ($userId, $format = '.json')
+                {
+                    $ret = UserDao::finishRegistration($userId);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'finishRegistration');
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/verified(:format)/',
+                function ($userId, $format = '.json')
+                {
+                    $ret = UserDao::isUserVerified($userId);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'isUserVerified');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/leaveOrg/:id/:org/',
                                                            function ($id, $org, $format = ".json") {

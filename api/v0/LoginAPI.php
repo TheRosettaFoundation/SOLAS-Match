@@ -34,9 +34,6 @@ class LoginAPI {
             $data = $client->deserialize($data,"Login");
             
             $data = UserDao::apiLogin($data->getEmail(), $data->getPassword());
-//            if (is_array($data)) {
-//                $data = $data[0];
-//            }
             Dispatcher::sendResponce(null, $data, null, $format);
          }, 'login');
     }

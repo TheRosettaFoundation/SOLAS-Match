@@ -20,6 +20,9 @@ class UserRouteHandler
         $app->get("/register", array($this, "register")
         )->via("GET", "POST")->name("register");
 
+        $app->get("/user/:uuid/verification", array($this, 'emailVerification')
+        )->via('POST')->name('email-verification');
+
         $app->get("/:uid/password/reset", array($this, "passwordReset")
         )->via("POST")->name("password-reset");
 
@@ -183,43 +186,18 @@ class UserRouteHandler
                 $error = "The email address you entered was not valid. Please cheak for typos and try again.";
             } elseif (!TemplateHelper::isValidPassword($post->password)) {
                 $error = "You didn\"t enter a password. Please try again.";
+            } elseif ($user = $userDao->getUserByEmail($post->email)) {
+                if ($return = $userDao->isUserVerified($user->getId())) {
+                    $error = "You are already a verified user. Please "
+                            ."<a href=\"{$app->urlFor("login")}\">log in</a>.";
+                }
             }
             
             if (is_null($error)) {
-                $response = $userDao->register($post->email, $post->password);
-                if ($response) {
-                    $user = $userDao->login($post->email, $post->password);
-                    try {                        
-                        if (!is_array($user) && !is_null($user)) {
-                            UserSession::setSession($user->getId());
-                        } else {
-                            throw new InvalidArgumentException("Sorry, the  password or username entered is incorrect.
-                                                                Please check the credentials used and try again.");    
-                        }                    
-                                       
-                        
-                        if (isset($_SESSION["previous_page"])) {
-                            if (isset($_SESSION["old_page_vars"])) {
-                                $app->redirect($app->urlFor($_SESSION["previous_page"], $_SESSION["old_page_vars"]));
-                            } else {
-                                $app->redirect($app->urlFor($_SESSION["previous_page"]));
-                            }
-                        }
-                        $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getId())));
-                    } catch (InvalidArgumentException $e) {
-                        $error = "<p>Unable to log in. Please check your email and password.";
-                        $error .= " <a href=\"{$app->urlFor("login")}\">Try logging in again</a>";
-                        $error .= " or <a href=\"{$app->urlFor("register")}\">register</a> for an account.</p>";
-                        $error .= "<p>System error: <em> {$e->getMessage()}</em></p>";
-
-                        $app->flash("error", $error);
-                        $app->redirect($app->urlFor("login"));
-                        echo $error;                                        
-                    }
-                } else {
-                    $warning = "You have already created an account.
-                        <a href=\"{$app->urlFor("login")}\">Please log in.</a>";
-                }
+                $userDao->register($post->email, $post->password);
+                $app->flashNow("success", "A verification email has been sent to the email address you registered with. "
+                            ."Please follow the link in that email to finish registration. Once you have verified your "
+                            ."email address you can log in <a href=\"{$app->urlFor("login")}\">here</a>.");
             }
         }
         if ($error !== null) {
@@ -229,6 +207,33 @@ class UserRouteHandler
             $app->view()->appendData(array("warning" => $warning));
         }
         $app->render("register.tpl");
+    }
+
+    public function emailVerification($uuid)
+    {
+        $app = Slim::getInstance();
+        $userDao = new UserDao();
+
+        $user = $userDao->getRegisteredUser($uuid);
+
+        if (is_null($user)) {
+            $app->flash("error", "Invalid registration id. Please try to register again");
+            $app->redirect($app->urlFor("home"));
+        }
+
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            if (isset($post['verify'])) {
+                $userDao->finishRegistration($user->getId());
+                UserSession::setSession($user->getId());
+                $app->flash("success", "Registration complete");
+                $app->redirect($app->urlFor("home"));
+            }
+        }
+
+        $app->view()->appendData(array('uuid' => $uuid));
+
+        $app->render("email.verification.tpl");
     }
 
     public function passwordReset($uid)
@@ -342,14 +347,14 @@ class UserRouteHandler
                 if (isset($post->login)) {                    
                     $user = $userDao->login($post->email, $post->password);
                     
-                    $adminDao = new AdminDao();
-                    $isUserBanned = $adminDao->isUserBanned($user->getId());
-                    
-                    if($isUserBanned) {
-                        throw new InvalidArgumentException("Sorry, this user account has been banned.");  
-                    }
-                    
                     if (!is_array($user) && !is_null($user)) {
+                        $adminDao = new AdminDao();
+                        $isUserBanned = $adminDao->isUserBanned($user->getId());
+                    
+                        if($isUserBanned) {
+                            throw new InvalidArgumentException("Sorry, this user account has been banned.");  
+                        }
+                    
                         UserSession::setSession($user->getId());
                     } else {
                         throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.

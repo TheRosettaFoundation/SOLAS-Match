@@ -16,9 +16,22 @@ require_once __DIR__."/../../Common/protobufs/emails/TaskArchived.php";
 require_once __DIR__."/../../Common/protobufs/emails/TaskClaimed.php";
 require_once __DIR__."/../../Common/protobufs/emails/TaskTranslationUploaded.php";
 require_once __DIR__."/../../Common/protobufs/emails/FeedbackEmail.php";
+require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
 
 class Notify 
 {
+    public static function sendEmailVerification($userId)
+    {
+        $messagingClient = new MessagingClient();
+        if ($messagingClient->init()) {
+            $messageProto = new EmailVerification();
+            $messageProto->setUserId($userId);
+            $message = $messagingClient->createMessageFromProto($messageProto);
+            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                    $messagingClient->EmailVerificationTopic);
+        }
+    }
+
     public static function sendOrgFeedback($task, $user, $feedback)
     {
         $messagingClient = new MessagingClient();
