@@ -71,6 +71,6 @@
         <i class="icon-upload icon-white"></i> Submit
     </button>
     <button class="btn btn-inverse" type="submit" name="skip">
-        Skip
+        <i class="icon-circle-arrow-right icon-white"></i> Skip
     </button>
 </form>

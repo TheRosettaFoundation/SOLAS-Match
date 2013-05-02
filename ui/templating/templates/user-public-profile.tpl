@@ -65,6 +65,21 @@
                                 {$this_user->getDisplayName()}
                             </td>
                         </tr>
+                        {if isset($private_access)}
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr> 
+                            <tr>
+                                <td>
+                                    <h3>E-Mail:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {mailto address={$this_user->getEMail()} encode='hex' text={$this_user->getEMail()}}
+                                </td>
+                            </tr>
+                        {/if}
                         <tr>
                             <td style="padding-bottom: 10px"/>
                         </tr> 
@@ -283,7 +298,7 @@
             </h1>
         </div>
 
-        {foreach $badges as $badge }
+        {foreach $badges as $badge}
             {if !is_null($badge->getOwnerId())}
                 {assign var="user_id" value=$this_user->getId()} 
                     {if isset($private_access)}

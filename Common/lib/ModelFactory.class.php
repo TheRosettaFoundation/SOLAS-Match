@@ -22,7 +22,8 @@ require_once __DIR__."/../models/TaskReview.php";
 require_once __DIR__."/../models/UserTaskStreamNotification.php";
 require_once __DIR__."/../models/Locale.php";
 require_once __DIR__."/../models/UserPersonalInformation.php";
-
+require_once __DIR__."/../models/BannedUser.php";
+require_once __DIR__."/../models/BannedOrganisation.php";
 
 class ModelFactory
 {
@@ -97,6 +98,12 @@ class ModelFactory
                 break;
             case "Locale" :
                 $ret = ModelFactory::generateLocale($modelData);
+                break;
+            case "BannedUser" :
+                $ret = ModelFactory::generateBannedUser($modelData);
+                break;
+            case "BannedOrganisation" :
+                $ret = ModelFactory::generateBannedOrganisation($modelData);
                 break;
             default :
                 echo "Unable to build model $modelName";
@@ -819,4 +826,50 @@ class ModelFactory
         
         return $ret;
     }    
+    
+    private static function generateBannedUser($modelData)
+    {
+        $ret = new BannedUser();
+        
+        if (isset($modelData['user_id'])) {
+            $ret->setUserId($modelData['user_id']);
+        }
+        if (isset($modelData['user_id-admin'])) {
+            $ret->setUserIdAdmin($modelData['user_id-admin']);
+        }
+        if (isset($modelData['bannedType'])) {
+            $ret->setBanType($modelData['bannedType']);
+        }
+        if (isset($modelData['comment'])) {
+            $ret->setComment($modelData['comment']);
+        }
+        if (isset($modelData['banned-date'])) {
+            $ret->setBannedDate($modelData['banned-date']);
+        }
+        
+        return $ret;
+    } 
+    
+    private static function generateBannedOrganisation($modelData)
+    {
+        $ret = new BannedOrganisation();
+        
+        if (isset($modelData['org_id'])) {
+            $ret->setOrgId($modelData['org_id']);
+        }
+        if (isset($modelData['user_id-admin'])) {
+            $ret->setUserIdAdmin($modelData['user_id-admin']);
+        }
+        if (isset($modelData['bannedType'])) {
+            $ret->setBanType($modelData['bannedType']);
+        }
+        if (isset($modelData['comment'])) {
+            $ret->setComment($modelData['comment']);
+        }
+        if (isset($modelData['banned-date'])) {
+            $ret->setBannedDate($modelData['banned-date']);
+        }
+        
+        return $ret;
+    } 
 }

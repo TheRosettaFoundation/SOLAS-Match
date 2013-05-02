@@ -457,7 +457,7 @@ class ProjectRouteHandler
                     $projectDao->saveProjectFile($project->getId(), $filedata, $filename, $user_id);
                     
                     $taskModel = new Task(); 
-                    $taskModel->setTitle($filename);
+                    $taskModel->setTitle($project->getTitle());
                     $taskModel->setProjectId($project->getId());
                     $taskModel->setDeadline($project->getDeadline());
                     $taskModel->setWordCount($project->getWordCount());
