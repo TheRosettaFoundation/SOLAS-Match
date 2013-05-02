@@ -4,7 +4,7 @@
                     <table>
                         <tr>
                             <td width="31%" style="text-align: center">
-                                    <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/"><img alt="Creative Commons Licence" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/ie/88x31.png" /></a><br />Unless otherwise stated, all works contributed are licensed under the <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/">Creative Commons Attribution 3.0 Ireland License </a> in accourdace with the terms and conditons of trommons.org
+                                    <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/"><img alt="Creative Commons Licence" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/ie/88x31.png" /></a><br />Unless otherwise stated, all works contributed are licensed under the <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/">Creative Commons Attribution 3.0 Ireland License </a> in accordance with the terms and conditons of trommons.org
                             </td>
                             <td width="38%" style="text-align: center">
                                 
