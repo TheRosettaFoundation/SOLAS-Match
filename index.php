@@ -62,6 +62,7 @@ require_once 'ui/RouteHandlers/TaskRouteHandler.class.php';
 require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
 require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
 require_once 'ui/RouteHandlers/ProjectRouteHandler.class.php';
+require_once 'ui/RouteHandlers/StaticRouteHandeler.php';
 
 require_once 'ui/DataAccessObjects/BadgeDao.class.php';
 require_once 'ui/DataAccessObjects/CountryDao.class.php';

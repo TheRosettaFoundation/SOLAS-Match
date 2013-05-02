@@ -43,14 +43,10 @@ class UserRouteHandler
         $app->get("/user/:user_id/admin", array($middleware, "authUserIsLoggedIn"),
         array($middleware, "isSiteAdmin"), array($this, "adminDashboard"))->name("site-admin-dashboard");
         
-        $app->get("/static/privacy", array($this, "privacy"))->name("privacy");
+  
     }
 
-     public function privacy()
-    {
-         $app = Slim::getInstance();
-         $app->render("privacy.tpl");
-    }
+   
      
     
     public function home()
