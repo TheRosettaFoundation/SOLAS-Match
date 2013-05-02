@@ -201,12 +201,12 @@ class TemplateHelper {
         $countryCode = $locale->getCountryCode();
 
         if($use_language_codes == "y") {
-            return $languageCode."-".$countryCode;
+            return $languageCode." - ".$countryCode;
         } else if($use_language_codes == "n") {
-            return $languageName."-".$countryName;
+            return $languageName." - ".$countryName;
         } else if($use_language_codes == "h") {
             return $languageName." - ".$countryName
-                    ." (".$languageCode."-".$countryCode.")";
+                    ." (".$languageCode." - ".$countryCode.")";
         }
         
         return $languageName." - ".$countryName;
@@ -221,7 +221,7 @@ class TemplateHelper {
         $use_language_codes = Settings::get("ui.language_codes");
         
         if($use_language_codes == "y") {
-            return $languageCode."-".$countryCode;
+            return $languageCode." - ".$countryCode;
         } else if($use_language_codes == "n") {
             $language = TemplateHelper::languageNameFromCode($languageCode);
             $region = TemplateHelper::countryNameFromCode($countryCode);
@@ -229,7 +229,7 @@ class TemplateHelper {
         } else if($use_language_codes == "h") {
             return TemplateHelper::languageNameFromCode($languageCode)." - "
                 .TemplateHelper::countryNameFromCode($countryCode)
-                ." (".$languageCode."-".$countryCode.")";
+                ." (".$languageCode." - ".$countryCode.")";
         }
         
         return $language." - ".$region;

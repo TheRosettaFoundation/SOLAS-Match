@@ -19,7 +19,7 @@ class AdminDao
         return $ret;
     }
     
-    public static function addAdmin($userId)
+    public static function addSiteAdmin($userId)
     {
         $ret = null;
         $args = PDOWrapper::cleanseNull($userId).", ";

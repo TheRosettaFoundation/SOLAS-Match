@@ -106,7 +106,9 @@ class OrganisationDao
         $ret = null;
         $request = "{$this->siteApi}v0/orgs";
         $ret = $this->client->call("Organisation", $request, HttpMethodEnum::POST, $org);
-        $this->createOrgAdmin($ret->getId(), $userId);
+        
+        $adminDao = new AdminDao();
+        $adminDao->createOrgAdmin($userId, $ret->getId());
         return $ret;
     }
 

@@ -332,9 +332,9 @@
                         <tr>
                             <td>
                                 {if $member['orgAdmin']}
-                                    <button class="btn btn-danger" disabled>Administrator</button>
+                                    <span class="marker org-admin-marker">Administrator</span>
                                 {else}
-                                    <button class="btn btn-primary" disabled>Member</button>
+                                    <span class="marker org-member-marker">Member</span >
                                 {/if}
                             </td>
                             <td>
