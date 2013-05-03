@@ -464,6 +464,15 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow("error", "Unable to find user in system");
                 }
+            } else if(isset($post->revokeOrgAdmin)) {
+                $userId = $post->revokeOrgAdmin;
+                $adminDao = new AdminDao();
+                $adminDao->removeOrgAdmin($userId, $org_id);
+                
+            } else if(isset($post->makeOrgAdmin)) {
+                $userId = $post->makeOrgAdmin;
+                $adminDao = new AdminDao();
+                $adminDao->createOrgAdmin($userId, $org_id);
             }
         }       
         

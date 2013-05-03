@@ -195,7 +195,7 @@
                     <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; margin-bottom: 60px">
                         <thead>
                             <tr>
-                                <th style="width: 20%">Title</th>
+                                <th>Title</th>
                                 <th>Status</th>       
                                 <th>Type</th> 
                                 <th>Task Deadline</th>                  
@@ -261,16 +261,16 @@
                                         {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
                                     </td>
                                     <td>
-                                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
                                                 <input type="submit" class="btn btn-small" value="   Published" />
-                                                <i class="icon-check icon-black" style="position:relative; right:85px; top:4px;"></i>
+                                                <i class="icon-check icon-black" style="position:relative; right:77px; top:1px;"></i>
                                                 <input type="hidden" name="publishedTask" value="0" />
                                             {else}                                        
                                                 <input type="hidden" name="publishedTask" value="1" />
-                                                <input type="submit" class="btn btn-small btn-inverse" value=" Unpublished" />
-                                                <i class="icon-remove-circle icon-white" style="position:relative; right:98px; top:4px;"></i>
+                                                <input type="submit" class="btn btn-small btn-inverse" value="   Unpublished" />
+                                                <i class="icon-remove-circle icon-white" style="position:relative; right:90px; top:1px;"></i>
                                             {/if}
                                         </form>
 
@@ -281,11 +281,11 @@
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <input type="submit" name="tracking" class="btn btn-small" value="   Tracked" />
-                                                <i class="icon-inbox icon-black" style="position:relative; right:75px; top:4px;"></i>
+                                                <i class="icon-inbox icon-black" style="position:relative; right:70px; top:1px;"></i>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
-                                                <input type="submit" name="tracking" class="btn btn-small btn-inverse" value=" Untracked" />
-                                                <i class="icon-envelope icon-white" style="position:relative; right:87px; top:4px;"></i>
+                                                <input type="submit" name="tracking" class="btn btn-small btn-inverse" value="   Untracked" />
+                                                <i class="icon-envelope icon-white" style="position:relative; right:80px; top:1px;"></i>
                                             {/if}
                                         </form>
                                     </td>    
@@ -299,14 +299,14 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
                                                 <input type="submit" class="btn btn-inverse" name="deleteTask" value="   Delete" />
-                                                <i class="icon-fire icon-white" style="position:relative; right:85px; top:2px;"></i>
+                                                <i class="icon-fire icon-white" style="position:relative; right:75px; top:2px;"></i>
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                                 <input type="submit" class="btn btn-inverse" name="archiveTask" 
                                                         disabled="true" value="  Archive" title="Cannot archive in progress tasks" />
-                                                <i class="icon-fire icon-white" style="position:relative; right:85px; top:2px;"></i>
+                                                <i class="icon-fire icon-white" style="position:relative; right:80px; top:2px;"></i>
                                             {else}
                                                 <input type="submit" class="btn btn-inverse" name="archiveTask" value="  Archive" />
-                                                <i class="icon-fire icon-white" style="position:relative; right:85px; top:2px;"></i>
+                                                <i class="icon-fire icon-white" style="position:relative; right:80px; top:2px;"></i>
                                             {/if}
                                         </form>
                                     </td>

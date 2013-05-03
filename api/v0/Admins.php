@@ -12,6 +12,17 @@ class Admins {
             Dispatcher::sendResponce(null, AdminDao::getAdmins(), null, $format);
         }, 'getSiteAdmins');
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/getOrgAdmins/:orgId/',
+                                                        function ($orgId, $format=".json") {
+            if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                 $orgId = explode('.', $orgId);
+                 $format = '.'.$orgId[1];
+                 $orgId = $orgId[0];
+            }
+            
+            Dispatcher::sendResponce(null, AdminDao::getAdmins($orgId), null, $format);
+        }, 'getOrgAdmins'); 
+        
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/admins/:user_id/',
                                                         function ($userId, $format = '.json') {            
@@ -20,7 +31,7 @@ class Admins {
                  $format = '.'.$userId[1];
                  $userId = $userId[0];
             }
-            AdminDao::addAdmin($userId);
+            AdminDao::addSiteAdmin($userId);
             Dispatcher::sendResponce(null, null, null, $format);
         }, 'createSiteAdmin');
         
@@ -35,6 +46,29 @@ class Admins {
             AdminDao::removeAdmin($userId);
             Dispatcher::sendResponce(null, null, null, $format);
         }, 'deleteSiteAdmin');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/admins/createOrgAdmin/:orgId/:userId/',
+                                                        function ($orgId, $userId, $format = '.json') {            
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                 $userId = explode('.', $userId);
+                 $format = '.'.$userId[1];
+                 $userId = $userId[0];
+            }
+            AdminDao::addOrgAdmin($userId, $orgId);
+            Dispatcher::sendResponce(null, null, null, $format);
+        }, 'createOrgAdmin');
+        
+               
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/admins/removeOrgAdmin/:orgId/:userId/',
+                                                        function ($orgId, $userId, $format = '.json') {
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                 $userId = explode('.', $userId);
+                 $format = '.'.$userId[1];
+                 $userId = $userId[0];
+            }
+            AdminDao::removeOrgAdmin($userId, $orgId);
+            Dispatcher::sendResponce(null, null, null, $format);
+        }, 'deleteOrgAdmin');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/isSiteAdmin/:userId/',
                                                         function ($userId, $format = '.json') {

@@ -19,6 +19,13 @@ class AdminDao
         $response = $this->client->call(array("User"), $request);
         return $response;
     }
+    
+    public function getOrgAdmins($orgId)
+    {       
+        $request = "{$this->siteApi}v0/admins/getOrgAdmins/$orgId";
+        $response = $this->client->call(array("User"), $request);
+        return $response;
+    }
 
     public function createSiteAdmin($userId)
     {
@@ -29,6 +36,18 @@ class AdminDao
     public function removeSiteAdmin($userId)
     {
         $request = "{$this->siteApi}v0/admins/$userId";
+        $this->client->call(null, $request, HttpMethodEnum::DELETE);
+    }
+    
+    public function createOrgAdmin($userId, $orgId)
+    {
+        $request = "{$this->siteApi}v0/admins/createOrgAdmin/$orgId/$userId";
+        $this->client->call(null, $request, HttpMethodEnum::PUT);
+    }
+    
+    public function removeOrgAdmin($userId, $orgId)
+    {
+        $request = "{$this->siteApi}v0/admins/removeOrgAdmin/$orgId/$userId";
         $this->client->call(null, $request, HttpMethodEnum::DELETE);
     }
     

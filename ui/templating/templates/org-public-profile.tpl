@@ -325,6 +325,7 @@
                     <th>Username</th>
                     {if $adminAccess}
                         <th>Remove User</th>
+                        <th>Alter Permissions</th>
                     {/if}
                 </thead>
                 <tbody>
@@ -332,9 +333,9 @@
                         <tr>
                             <td>
                                 {if $member['orgAdmin']}
-                                    <button class="btn btn-danger" disabled>Administrator</button>
+                                    <span class="marker org-admin-marker">Administrator</span>
                                 {else}
-                                    <button class="btn btn-primary" disabled>Member</button>
+                                    <span class="marker org-member-marker">Member</span >
                                 {/if}
                             </td>
                             <td>
@@ -347,6 +348,19 @@
                                         onclick="return confirm('Are you sure you want to revoke membership from this user?')">
                                     <i class="icon-fire icon-white"></i> Revoke Membership
                                 </button>
+                            </td>
+                            <td>
+                                {if $member['orgAdmin']}
+                                    <button type="submit" name="revokeOrgAdmin" value="{$member->getId()}" class="btn btn-inverse" 
+                                            onclick="return confirm('Are you sure you want to revoke the administrator rights of this user?')">
+                                            <i class="icon-fire icon-white"></i> Revoke Administrator
+                                    </button>
+                                {else}
+                                    <button type="submit" name="makeOrgAdmin" value="{$member->getId()}" class="btn btn-success" 
+                                            onclick="return confirm('Are you sure you want to make this user an administrator of this organisation?')"> 
+                                            <i class="icon-star icon-white"></i> Make Administrator
+                                    </button>
+                                {/if}
                             </td>
                         {/if}
                     {/foreach}
