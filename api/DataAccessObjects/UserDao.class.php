@@ -103,6 +103,11 @@ class UserDao
             return null;
         }
 
+        if (AdminDao::isUserBanned($user->getId())) {
+            Notify::sendBannedLoginEmail($user->getId());
+            return null;
+        }
+
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
             return null;
         }

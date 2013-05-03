@@ -18,6 +18,7 @@ class MessagingClient
     public $TaskTranslationUploadedTopic    = "email.user.task.translation-uploaded";
     public $FeedbackEmailTopic              = "email.user.feedback";
     public $EmailVerificationTopic          = "email";
+    public $BannedLoginTopic                = "email";
 
     private $connection;
 

@@ -348,13 +348,6 @@ class UserRouteHandler
                     $user = $userDao->login($post->email, $post->password);
                     
                     if (!is_array($user) && !is_null($user)) {
-                        $adminDao = new AdminDao();
-                        $isUserBanned = $adminDao->isUserBanned($user->getId());
-                    
-                        if($isUserBanned) {
-                            throw new InvalidArgumentException("Sorry, this user account has been banned.");  
-                        }
-                    
                         UserSession::setSession($user->getId());
                     } else {
                         throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
