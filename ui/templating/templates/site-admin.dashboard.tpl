@@ -22,7 +22,7 @@
                     <input type="text" name="userEmail" placeholder="User e-mail address goes here." style="width: 95%"/>
                 </td>
                 <td valign="top">
-                    <button class="btn btn-success" type="submit" name="addAdmin" value="1"><i class="icon-upload icon-white"></i> Add Admin</button>
+                    <button class="btn btn-success" type="submit" name="addAdmin" value="1"><i class="icon-star icon-white"></i> Add Admin</button>
                 </td>
             </tr>
         </table> 
