@@ -350,8 +350,15 @@ class UserRouteHandler
                     if (!is_array($user) && !is_null($user)) {
                         UserSession::setSession($user->getId());
                     } else {
-                        throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
-                            Please check the credentials used and try again.");    
+                        $adminDao = new AdminDao();
+                        $isUserBanned = $adminDao->isUserBanned($user->getId());
+                    
+                        if($isUserBanned) {
+                            throw new InvalidArgumentException("Sorry, this user account has been banned.");  
+                        } else {
+                            throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
+                                Please check the credentials used and try again.");  
+                        }  
                     }
                     
                     $app->redirect($app->urlFor("home"));
