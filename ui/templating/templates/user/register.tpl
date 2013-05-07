@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>Register on Solas Match <small>As a volunteer.</small></h1>
+    <h1>Register on {Settings::get('site.title')}.</h1>
 </div>
 
 {include file="handle-flash-messages.tpl"}

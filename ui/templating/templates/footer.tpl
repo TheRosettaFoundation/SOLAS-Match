@@ -9,7 +9,7 @@
                             <td width="38%" style="text-align: center">
                                 
                                     <p>
-                                        &copy; 2012-2013 University of Limerick &middot; <a href="http://www.therosettafoundation.org/">The Rosetta Foundation</a>
+                                        <a href="http://www.therosettafoundation.org/">The Rosetta Foundation</a>
                                     </p>
                                     <p>
                                         {mailto address={Settings::get("site.system_email_address")} encode='hex' text='Contact Us'} | <a href="{urlFor name='terms'}">Terms and Conditons</a> | <a href="{urlFor name='privacy'}">Privacy Policy</a> | <a href="http://forum.solas.uni.me/" target="_blank">Community Forum</a>
@@ -20,7 +20,7 @@
                                 
                              <td>
                              <td width="31%" style="text-align: center">
-                                 <img alt="Creative Commons Licence" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" /><br /> Powered by <b>Solas Match</b>
+                                 <img alt="Creative Commons Licence" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" /><br /> Powered by <b>Solas</b>
                              </td>
                         <tr>
                     </table>

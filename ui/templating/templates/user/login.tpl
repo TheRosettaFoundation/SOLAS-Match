@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1>Log In <small>to Solas Match.</small></h1>
+            <h1>Log In To {Settings::get('site.title')}.</h1>
     </div>
 
     {if isset($flash['error'])}
