@@ -17,9 +17,22 @@ require_once __DIR__."/../../Common/protobufs/emails/TaskClaimed.php";
 require_once __DIR__."/../../Common/protobufs/emails/TaskTranslationUploaded.php";
 require_once __DIR__."/../../Common/protobufs/emails/FeedbackEmail.php";
 require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
+require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
 
 class Notify 
 {
+    public static function sendBannedLoginEmail($userId)
+    {
+        $messagingClient = new MessagingClient();
+        if ($messagingClient->init()) {
+            $proto = new BannedLogin();
+            $proto->setUserId($userId);
+            $message = $messagingClient->createMessageFromProto($proto);
+            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                    $messagingClient->BannedLoginTopic);
+        }
+    }
+
     public static function sendEmailVerification($userId)
     {
         $messagingClient = new MessagingClient();

@@ -298,14 +298,14 @@
                                         <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
-                                                <input type="submit" class="btn btn-inverse" name="deleteTask" value="   Delete" />
+                                                <input type="submit" class="btn btn-small btn-inverse" name="deleteTask" value="   Delete" />
                                                 <i class="icon-fire icon-white" style="position:relative; right:75px; top:2px;"></i>
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                                <input type="submit" class="btn btn-inverse" name="archiveTask" 
+                                                <input type="submit" class="btn btn-small btn-inverse" name="archiveTask" 
                                                         disabled="true" value="  Archive" title="Cannot archive in progress tasks" />
                                                 <i class="icon-fire icon-white" style="position:relative; right:80px; top:2px;"></i>
                                             {else}
-                                                <input type="submit" class="btn btn-inverse" name="archiveTask" value="  Archive" />
+                                                <input type="submit" class="btn btn-small btn-inverse" name="archiveTask" value="  Archive" />
                                                 <i class="icon-fire icon-white" style="position:relative; right:80px; top:2px;"></i>
                                             {/if}
                                         </form>

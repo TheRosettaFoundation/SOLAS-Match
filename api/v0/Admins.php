@@ -115,6 +115,7 @@ class Admins {
             $data = $client->deserialize($data,'BannedUser');
             AdminDao::saveBannedUser($data);
             Dispatcher::sendResponce(null, null, null, $format);
+            Notify::sendBannedLoginEmail($data->getUserId());
         }, 'banUser');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/admins/banOrg(:format)/',
