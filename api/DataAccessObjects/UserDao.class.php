@@ -104,7 +104,6 @@ class UserDao
         }
 
         if (AdminDao::isUserBanned($user->getId())) {
-            Notify::sendBannedLoginEmail($user->getId());
             return null;
         }
 
