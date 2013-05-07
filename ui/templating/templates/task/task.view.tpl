@@ -52,7 +52,7 @@
     </p>
 {/if}
 
-{include file="task.details.tpl"} 
+{include file="task/task.details.tpl"} 
 
     <p style="margin-bottom: 40px"/>        
     <table width="100%">

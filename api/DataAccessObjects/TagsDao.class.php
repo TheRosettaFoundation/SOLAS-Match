@@ -8,9 +8,11 @@ class TagsDao
     public static function getTag($id=null, $label=null, $limit=30)
     {
         $ret = null;
+        $args = PDOWrapper::cleanseNull($id)
+                .",".PDOWrapper::cleanseNullOrWrapStr($label)
+                .",".PDOWrapper::cleanseNull($limit);
         
-        if($result = PDOWrapper::call("getTag", PDOWrapper::cleanseNull($id).",".PDOWrapper::cleanseNullOrWrapStr($label).",".
-                                       PDOWrapper::cleanseNull($limit))) {
+        if($result = PDOWrapper::call("getTag", $args)) {
             $ret = array();
             foreach ($result as $tag) {
                 $ret[] = ModelFactory::buildModel("Tag", $tag);
@@ -37,7 +39,9 @@ class TagsDao
 
     private static function insert($tag)
     {
-        $result = PDOWrapper::call("tagInsert", PDOWrapper::cleanseWrapStr($tag->getLabel()));
+        $args = PDOWrapper::cleanseWrapStr($tag->getLabel());
+        
+        $result = PDOWrapper::call("tagInsert", $args);
         if($result) {
             return ModelFactory::buildModel("Tag", $result[0]);
         } else {
@@ -48,7 +52,9 @@ class TagsDao
     public static function getTopTags($limit = 30)
     {
         $ret = null;
-        if ($result = PDOWrapper::call("getTopTags", PDOWrapper::cleanse($limit))) {
+        $args = PDOWrapper::cleanseNull($limit);
+        
+        if ($result = PDOWrapper::call("getTopTags", $args)) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Tag", $row);
@@ -59,7 +65,8 @@ class TagsDao
 
     public static function delete($id)
     {
-        if ($result = PDOWrapper::call("deleteTag", PDOWrapper::cleanse($id))) {
+        $args = PDOWrapper::cleanseNull($id);
+        if ($result = PDOWrapper::call("deleteTag", $args)) {
             return $result[0]['result'];
         }
         return null;
@@ -68,7 +75,8 @@ class TagsDao
     public static function searchForTag($name)
     {
         $ret = array();
-        if ($result = PDOWrapper::call("searchForTag", PDOWrapper::cleanseNullOrWrapStr($name))) {
+        $args = PDOWrapper::cleanseNullOrWrapStr($name);
+        if ($result = PDOWrapper::call("searchForTag", $args)) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Tag", $row);

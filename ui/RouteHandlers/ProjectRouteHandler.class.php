@@ -250,7 +250,7 @@ class ProjectRouteHandler
             ));
         }
         
-        $app->render("project.view.tpl");
+        $app->render("project/project.view.tpl");
     }  
     
     public function projectAlter($project_id)
@@ -344,7 +344,7 @@ class ProjectRouteHandler
                               "extra_scripts"   => $extra_scripts
         ));
         
-        $app->render("project.alter.tpl");
+        $app->render("project/project.alter.tpl");
     }
     
     public function projectCreate($org_id)
@@ -596,7 +596,7 @@ class ProjectRouteHandler
             "extra_scripts"     => $extra_scripts
         ));
         
-        $app->render("project.create.tpl");
+        $app->render("project/project.create.tpl");
     }    
     
     public function projectCreated($project_id)
@@ -621,7 +621,7 @@ class ProjectRouteHandler
                 "project_id" => $project_id
         ));     
         
-        $app->render("project.created.tpl");
+        $app->render("project/project.created.tpl");
     }    
     
     public function archiveProject($project_id)

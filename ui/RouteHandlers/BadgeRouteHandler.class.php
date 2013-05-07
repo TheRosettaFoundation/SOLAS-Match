@@ -29,7 +29,7 @@ class BadgeRouteHandler
                 "org_list"  => $org_list
         ));
         
-        $app->render("badge-list.tpl");
+        $app->render("badge/badge-list.tpl");
     }
 }
 

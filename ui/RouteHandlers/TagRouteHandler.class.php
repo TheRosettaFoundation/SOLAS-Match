@@ -5,8 +5,9 @@ class TagRouteHandler
     public function init()
     {
         $app = Slim::getInstance();
+        $middleware = new Middleware();
 
-        $app->get("/all/tags", array($this, "tagsList"))->via("POST")->name("tags-list");
+        $app->get("/all/tags", array($middleware, "authUserIsLoggedIn"), array($this, "tagsList"))->via("POST")->name("tags-list");
 
         $app->get("/tag/:label/:subscribe", array($this, "tagSubscribe")
         )->name("tag-subscribe");
@@ -45,7 +46,7 @@ class TagRouteHandler
             'searchedText'  => $name
         )); 
         
-        $app->render("tag-list.tpl");
+        $app->render("tag/tag-list.tpl");
     }
 
     public function tagSubscribe($label, $subscribe)
@@ -146,7 +147,7 @@ class TagRouteHandler
                  "top_tags" => $top_tags,
                  "taskTypeColours" => $taskTypeColours
         )); 
-        $app->render("tag.tpl");
+        $app->render("tag/tag.tpl");
     }
 }
 

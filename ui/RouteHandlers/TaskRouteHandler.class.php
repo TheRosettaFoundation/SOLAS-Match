@@ -110,7 +110,7 @@ class TaskRouteHandler
                                     "top" => $top,
                                     "bottom" => $bottom
         ));
-        $app->render("archived-tasks.tpl");
+        $app->render("task/archived-tasks.tpl");
     }
 
     public function claimedTasks($page_no)
@@ -175,7 +175,7 @@ class TaskRouteHandler
                         "taskTypeColours" => $taskTypeColours
         ));
         
-        $app->render("claimed-tasks.tpl");
+        $app->render("task/claimed-tasks.tpl");
     }
 
     public function downloadTaskLatestVersion($task_id)
@@ -263,7 +263,7 @@ class TaskRouteHandler
                     "taskMetadata"  => $taskMetaData
         ));
        
-        $app->render("task.claim.tpl");
+        $app->render("task/task.claim.tpl");
     }
 
     public function taskClaimed($task_id)
@@ -273,7 +273,7 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($task_id);
         $app->view()->setData("task", $task);
-        $app->render("task.claimed.tpl");
+        $app->render("task/task.claimed.tpl");
     }
 
     public function downloadTaskVersion($task_id, $version, $convert = 0)
@@ -333,7 +333,7 @@ class TaskRouteHandler
                         "filename" => $task_file_info->getFilename()
             ));
 
-            $app->render("task.view.tpl");
+            $app->render("task/task.view.tpl");
         }
     }
 
@@ -411,7 +411,7 @@ class TaskRouteHandler
                     "taskTypeColours"   => $taskTypeColours
         ));
 
-        $app->render("task-desegmentation.tpl");
+        $app->render("task/task-desegmentation.tpl");
     }
 
     public function taskSimpleUpload($taskId)
@@ -493,7 +493,7 @@ class TaskRouteHandler
                     "file_previously_uploaded" => $file_previously_uploaded
         ));
 
-        $app->render("task-simple-upload.tpl");
+        $app->render("task/task-simple-upload.tpl");
     }
 
     public function taskUploaded($task_id)
@@ -514,7 +514,7 @@ class TaskRouteHandler
                 "tip"      => $tip
         ));     
         
-        $app->render("task.uploaded.tpl");
+        $app->render("task/task.uploaded.tpl");
     }
 
     public function taskAlter($task_id)
@@ -745,7 +745,7 @@ class TaskRouteHandler
                               "taskTypeColours"     => $taskTypeColours
         ));
         
-        $app->render("task.alter.tpl");
+        $app->render("task/task.alter.tpl");
     }
 
     public function taskView($task_id)
@@ -848,7 +848,7 @@ class TaskRouteHandler
                 "taskTypeColours" => $taskTypeColours
         ));
 
-        $app->render("task.view.tpl");
+        $app->render("task/task.view.tpl");
     }
 
     public function taskCreate($project_id)
@@ -975,7 +975,7 @@ class TaskRouteHandler
                 "taskTypeColours" => $taskTypeColours
         ));
 
-        $app->render("task.create.tpl");
+        $app->render("task/task.create.tpl");
     }
 
     public function taskCreated($taskId)
@@ -988,7 +988,7 @@ class TaskRouteHandler
                 "task_id"    => $task->getId()
         ));
 
-        $app->render("task.created.tpl");
+        $app->render("task/task.created.tpl");
     }
     
     public function taskSegmentation($task_id)
@@ -1142,7 +1142,7 @@ class TaskRouteHandler
             "extra_scripts"     => $extraScripts
         ));
         
-        $app->render("task-segmentation.tpl");
+        $app->render("task/task-segmentation.tpl");
     }
     
     public function taskOrgFeedback($task_id)
@@ -1206,7 +1206,7 @@ class TaskRouteHandler
             "task_tags" => $task_tags
         ));
         
-        $app->render("task.org-feedback.tpl");
+        $app->render("task/task.org-feedback.tpl");
     }
     
     public function taskUserFeedback($task_id)
@@ -1260,7 +1260,7 @@ class TaskRouteHandler
             "task_tags" => $task_tags
         ));
         
-        $app->render("task.user-feedback.tpl");
+        $app->render("task/task.user-feedback.tpl");
     }
 
     public function taskReview($taskId)
@@ -1429,7 +1429,7 @@ class TaskRouteHandler
                     'action'        => $action
         ));
 
-        $app->render("task.review.tpl");
+        $app->render("task/task.review.tpl");
     }
     
     private function setTaskModelData($taskModel, $project, $task, $i=null, $segmentationValue=null) {

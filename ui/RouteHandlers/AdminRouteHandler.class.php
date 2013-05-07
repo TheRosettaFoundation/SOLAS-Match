@@ -100,7 +100,7 @@ class AdminRouteHandler
                     "extra_scripts" => $extra_scripts
         ));
 
-        $app->render("site-admin.dashboard.tpl");
+        $app->render("admin/site-admin.dashboard.tpl");
     }
 
     public function adminList()
@@ -132,7 +132,7 @@ class AdminRouteHandler
                 "siteName"      => $siteName
         ));
         
-        $app->render("admin.site-admins-list.tpl");
+        $app->render("admin/admin.site-admins-list.tpl");
     }
 }
 

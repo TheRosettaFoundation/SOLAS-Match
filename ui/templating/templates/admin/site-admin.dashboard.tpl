@@ -30,7 +30,7 @@
     
     {if !empty($adminList)}
         <hr/>
-        {include file="admin.site-admins-list.tpl" adminList=$adminList adminUserId=$adminUserId}
+        {include file="admin/admin.site-admins-list.tpl" adminList=$adminList adminUserId=$adminUserId}
         <hr/>
     {/if}    
     
@@ -77,7 +77,7 @@
                 
     {if !empty($bannedOrgList)}
         <hr/>
-        {include file="admin.banned-orgs-list.tpl" bannedOrgList=$bannedOrgList adminUserId=$adminUserId}
+        {include file="admin/admin.banned-orgs-list.tpl" bannedOrgList=$bannedOrgList adminUserId=$adminUserId}
         <hr/>
     {/if}  
         
@@ -124,7 +124,7 @@
                 
     {if !empty($bannedUserList)}
         <hr/>
-        {include file="admin.banned-users-list.tpl" bannedUserList=$bannedUserList adminUserId=$adminUserId}
+        {include file="admin/admin.banned-users-list.tpl" bannedUserList=$bannedUserList adminUserId=$adminUserId}
         <hr/>
     {/if} 
 </div>

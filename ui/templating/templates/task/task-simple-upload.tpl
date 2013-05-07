@@ -26,7 +26,7 @@
         {assign var="task_id" value=$task->getId()}
     </h1>
 
-{include file="task.details.tpl"}        
+{include file="task/task.details.tpl"}        
 
     <div class="well">
         <div class="page-header">

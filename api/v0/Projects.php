@@ -85,7 +85,7 @@ class Projects
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/reviews(:format)/',
                 function ($id, $format = '.json')
                 {
-                    $reviews = TaskDao::getTaskReviews(array('project_id' => $id));
+                    $reviews = TaskDao::getTaskReviews($id);
                     Dispatcher::sendResponce(null, $reviews, null, $format);
                 }, 'getProjectTaskReviews');
 

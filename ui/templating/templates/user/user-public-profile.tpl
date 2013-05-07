@@ -447,7 +447,7 @@
         </div>
 
         {foreach $archivedJobs as $job}
-            {include file="task.profile-display.tpl" task=$job}
+            {include file="task/task.profile-display.tpl" task=$job}
         {/foreach}
         <p style="margin-bottom:50px;"/>
     {/if}

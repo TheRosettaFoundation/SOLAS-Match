@@ -10,7 +10,7 @@
 {if isset($archived_projects) && count($archived_projects) > 0}
     {for $count=$top to $bottom}
         {assign var="project" value=$archived_projects[$count]}
-        {include file="project.profile-display.tpl" project=$project}
+        {include file="project/project.profile-display.tpl" project=$project}
     {/for}
     {include file="pagination.tpl" url_name="archived-projects" current_page=$page_no last_page=$last}
 {/if}

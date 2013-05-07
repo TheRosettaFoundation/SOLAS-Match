@@ -24,7 +24,7 @@
             {if isset($tasks)}
                 <div id="tasks">
                     {foreach from=$tasks item=task}
-                            {include file="task.summary-link.tpl" task=$task}
+                            {include file="task/task.summary-link.tpl" task=$task}
                     {/foreach}
                 </div>
             {else}
@@ -36,10 +36,10 @@
 
         <div class="span4 pull-right">
             {if isset($user)}
-                {include file="tags.user-tags.inc.tpl"}
+                {include file="tag/tags.user-tags.inc.tpl"}
             {/if}
 
-            {include file="tags.top-list.inc.tpl"}
+            {include file="tag/tags.top-list.inc.tpl"}
         </div>
     </div>
 

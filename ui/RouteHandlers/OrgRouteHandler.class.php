@@ -115,7 +115,7 @@ class OrgRouteHandler
         $app->view()->appendData(array(
             "org"     => null
         ));
-        $app->render("create-org.tpl");
+        $app->render("org/create-org.tpl");
     }    
 
     public function orgDashboard()
@@ -199,7 +199,7 @@ class OrgRouteHandler
         $app->view()->appendData(array(
             "current_page"  => "org-dashboard"
         ));
-        $app->render("org.dashboard.tpl");
+        $app->render("org/org.dashboard.tpl");
     }    
     
 
@@ -293,7 +293,7 @@ class OrgRouteHandler
         $app->view()->setData("org", $org);
         $app->view()->appendData(array("user_list" => $user_list));
         
-        $app->render("org.request_queue.tpl");
+        $app->render("org/org.request_queue.tpl");
     }
 
     public function orgPrivateProfile($org_id)
@@ -356,7 +356,7 @@ class OrgRouteHandler
         }
         
         $app->view()->setData("org", $org);        
-        $app->render("org-private-profile.tpl");
+        $app->render("org/org-private-profile.tpl");
     }
 
     public function orgPublicProfile($org_id)
@@ -523,7 +523,7 @@ class OrgRouteHandler
                 "user_list" => $user_list
         ));
         
-        $app->render("org-public-profile.tpl");
+        $app->render("org/org-public-profile.tpl");
     }
 
     public function orgManageBadge($org_id, $badge_id)
@@ -601,7 +601,7 @@ class OrgRouteHandler
             "user_list" => $user_list
         ));
         
-        $app->render("org.manage-badge.tpl");
+        $app->render("org/org.manage-badge.tpl");
     }
 
     public function orgCreateBadge($org_id)
@@ -627,7 +627,7 @@ class OrgRouteHandler
         }
         
         $app->view()->setData("org_id", $org_id);        
-        $app->render("org.create-badge.tpl");
+        $app->render("org/org.create-badge.tpl");
     }
 
     public function orgSearch()
@@ -656,7 +656,7 @@ class OrgRouteHandler
                     'foundOrgs'     => $foundOrgs
         ));
 
-        $app->render("org-search.tpl");
+        $app->render("org/org-search.tpl");
     }
     
     public function orgEditBadge($org_id, $badge_id)
@@ -668,7 +668,7 @@ class OrgRouteHandler
         $app->view()->setData("badge", $badge);        
         $app->view()->appendData(array("org_id" => $org_id));        
         
-        $app->render("org.edit-badge.tpl");        
+        $app->render("org/org.edit-badge.tpl");        
     }    
 
     public function orgTaskReview($orgId, $taskId)
@@ -786,7 +786,7 @@ class OrgRouteHandler
                     'formAction'=> $formAction
         ));
 
-        $app->render("org.task-review.tpl");
+        $app->render("org/org.task-review.tpl");
     }
 }
 

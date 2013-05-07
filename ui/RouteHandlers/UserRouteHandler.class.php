@@ -206,7 +206,7 @@ class UserRouteHandler
         if ($warning !== null) {
             $app->view()->appendData(array("warning" => $warning));
         }
-        $app->render("register.tpl");
+        $app->render("user/register.tpl");
     }
 
     public function emailVerification($uuid)
@@ -233,7 +233,7 @@ class UserRouteHandler
 
         $app->view()->appendData(array('uuid' => $uuid));
 
-        $app->render("email.verification.tpl");
+        $app->render("user/email.verification.tpl");
     }
 
     public function passwordReset($uid)
@@ -272,7 +272,7 @@ class UserRouteHandler
                                 It was not found to be valid.");
             }
         }        
-        $app->render("password-reset.tpl");
+        $app->render("user/password-reset.tpl");
     }
 
     public function passResetRequest()
@@ -311,7 +311,7 @@ class UserRouteHandler
                 }
             }
         }
-        $app->render("user.reset-password.tpl");
+        $app->render("user/user.reset-password.tpl");
     }
     
     public function logout()
@@ -372,7 +372,7 @@ class UserRouteHandler
                     $app->redirect($app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID())));
                 }
             }
-            $app->render("login.tpl");
+            $app->render("user/login.tpl");
         } catch (InvalidArgumentException $e) {
             $error = "<p>Unable to log in. Please check your email and password.";
             $error .= " <a href=\"{$app->urlFor("login")}\">Try logging in again</a>";
@@ -542,7 +542,7 @@ class UserRouteHandler
             "secondaryLanguages" => $secondaryLanguages
         ));       
        
-        $app->render("user-private-profile.tpl");
+        $app->render("user/user-private-profile.tpl");
     }
 
     public static function userPublicProfile($user_id)
@@ -633,7 +633,7 @@ class UserRouteHandler
             ));
         }
                     
-        $app->render("user-public-profile.tpl");
+        $app->render("user/user-public-profile.tpl");
     }
 
     public function editTaskStreamNotification($userId)
@@ -691,7 +691,7 @@ class UserRouteHandler
                     "user" => $user
         ));
 
-        $app->render("user.task-stream-notification-edit.tpl");
+        $app->render("user/user.task-stream-notification-edit.tpl");
     }
 
     public static function isLoggedIn()

@@ -12,13 +12,13 @@ class StaticRouteHandeler
     public function privacy()
     {
          $app = Slim::getInstance();
-         $app->render("privacy.tpl");
+         $app->render("static/privacy.tpl");
     }
     
     public function terms()
     {
          $app = Slim::getInstance();
-         $app->render("terms.tpl");
+         $app->render("static/terms.tpl");
     }
 }
 

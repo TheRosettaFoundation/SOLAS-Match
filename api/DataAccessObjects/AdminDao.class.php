@@ -22,8 +22,8 @@ class AdminDao
     public static function addSiteAdmin($userId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($userId).", ";
-        $args .= PDOWrapper::cleanseNullOrWrapStr(null);
+        $args = PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNullOrWrapStr(null);
         
         if($result = PDOWrapper::call("addAdmin", $args)) {
             $ret = $result[0]['result'];
@@ -35,8 +35,8 @@ class AdminDao
     public static function removeAdmin($userId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($userId).", ";
-        $args .= PDOWrapper::cleanseNullOrWrapStr(null);
+        $args = PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNullOrWrapStr(null);
         
         if($result = PDOWrapper::call("removeAdmin", $args)) {
             $ret = $result[0]['result'];
@@ -49,8 +49,8 @@ class AdminDao
     {
         $ret = null;
         OrganisationDao::acceptMemRequest($orgId, $userId);
-        $args = PDOWrapper::cleanseNull($userId).", ";
-        $args .= PDOWrapper::cleanseNull($orgId);
+        $args = PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNull($orgId);
         
         if($result = PDOWrapper::call("addAdmin", $args)) {
             $ret = $result[0]['result'];
@@ -62,8 +62,8 @@ class AdminDao
     public static function removeOrgAdmin($userId, $orgId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($userId).", ";
-        $args .= PDOWrapper::cleanseNull($orgId);
+        $args = PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNull($orgId);
         
         if($result = PDOWrapper::call("removeAdmin", $args)) {
             $ret = $result[0]['result'];
@@ -80,10 +80,10 @@ class AdminDao
     
     private static function banUser($userId, $userIdAdmin, $bannedTypeId, $adminComment=null)
     {
-        $args = PDOWrapper::cleanseNull($userId).",";
-        $args .= PDOWrapper::cleanseNull($userIdAdmin).",";
-        $args .= PDOWrapper::cleanseNull($bannedTypeId).",";
-        $args .= PDOWrapper::cleanseNullOrWrapStr($adminComment);
+        $args = PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNull($userIdAdmin)
+                .",".PDOWrapper::cleanseNull($bannedTypeId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($adminComment);
         
         PDOWrapper::call("bannedUserInsert", $args);        
     }
@@ -98,11 +98,11 @@ class AdminDao
     public static function getBannedUser($userId=null, $userIdAdmin=null, $bannedTypeId=null, $adminComment=null, $bannedDate=null)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($userId).",";
-        $args .= PDOWrapper::cleanseNull($userIdAdmin).",";
-        $args .= PDOWrapper::cleanseNull($bannedTypeId).",";
-        $args .= PDOWrapper::cleanseNullOrWrapStr($adminComment).",";
-        $args .= PDOWrapper::cleanseNullOrWrapStr($bannedDate);
+        $args = PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNull($userIdAdmin)
+                .",".PDOWrapper::cleanseNull($bannedTypeId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($adminComment)
+                .",".PDOWrapper::cleanseNullOrWrapStr($bannedDate);
         
         if($result = PDOWrapper::call("getBannedUser", $args)) {
             $ret = array();
@@ -121,10 +121,10 @@ class AdminDao
     
     private static function banOrg($orgId, $userIdAdmin, $bannedTypeId, $adminComment=null)
     {
-        $args = PDOWrapper::cleanseNull($orgId).",";
-        $args .= PDOWrapper::cleanseNull($userIdAdmin).",";
-        $args .= PDOWrapper::cleanseNull($bannedTypeId).",";
-        $args .= PDOWrapper::cleanseNullOrWrapStr($adminComment);
+        $args = PDOWrapper::cleanseNull($orgId)
+                .",".PDOWrapper::cleanseNull($userIdAdmin)
+                .",".$args .= PDOWrapper::cleanseNull($bannedTypeId)
+                .",".$args .= PDOWrapper::cleanseNullOrWrapStr($adminComment);
         
         PDOWrapper::call("bannedOrgInsert", $args);      
     }
@@ -139,11 +139,11 @@ class AdminDao
     public static function getBannedOrg($orgId=null, $userIdAdmin=null, $bannedTypeId=null, $adminComment=null, $bannedDate=null)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($orgId).",";
-        $args .= PDOWrapper::cleanseNull($userIdAdmin).",";
-        $args .= PDOWrapper::cleanseNull($bannedTypeId).",";
-        $args .= PDOWrapper::cleanseNullOrWrapStr($adminComment).",";
-        $args .= PDOWrapper::cleanseNullOrWrapStr($bannedDate);
+        $args = PDOWrapper::cleanseNull($orgId)
+                .",".PDOWrapper::cleanseNull($userIdAdmin)
+                .",".PDOWrapper::cleanseNull($bannedTypeId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($adminComment)
+                .",".PDOWrapper::cleanseNullOrWrapStr($bannedDate);
         
         if($result = PDOWrapper::call("getBannedOrg", $args)) {
             $ret = array();
@@ -182,8 +182,8 @@ class AdminDao
     public static function isAdmin($userId, $orgId)
     {
         $ret = false;
-        $args = PDOWrapper::cleanse($userId).", ";
-        $args .= PDOWrapper::cleanseNullOrWrapStr($orgId);
+        $args = PDOWrapper::cleanse($userId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($orgId);
         if ($result = PDOWrapper::call("isAdmin", $args)) {
             $ret = $result[0]['result'];
         }

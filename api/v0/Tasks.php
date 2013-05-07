@@ -121,7 +121,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/review(:format)/',
                 function ($id, $format = '.json')
                 {
-                    $review = TaskDao::getTaskReviews(array('task_id' => $id));
+                    $review = TaskDao::getTaskReviews(null,$id);
                     Dispatcher::sendResponce(null, $review, null, $format);
                 }, 'getTaskReview');
 

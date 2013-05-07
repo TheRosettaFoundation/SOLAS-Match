@@ -48,12 +48,20 @@ class ProjectDao
                                         $reference=null, $wordCount=null, $created=null, $countryCode=null, $languageCode=null)
     {
         $projects = array();
-        $result = PDOWrapper::call("getProject", PDOWrapper::cleanseNull($id).",".PDOWrapper::cleanseNullOrWrapStr($title).",".
-                            PDOWrapper::cleanseNullOrWrapStr($description).",".PDOWrapper::cleanseNullOrWrapStr($impact).",".
-                            PDOWrapper::cleanseNullOrWrapStr($deadline).",".PDOWrapper::cleanseNull($orgId).",".
-                            PDOWrapper::cleanseNullOrWrapStr($reference).",".PDOWrapper::cleanseNullOrWrapStr($wordCount).",".
-                            PDOWrapper::cleanseNullOrWrapStr($created).",".PDOWrapper::cleanseNullOrWrapStr($countryCode).",".
-                            PDOWrapper::cleanseNullOrWrapStr($languageCode));
+        
+        $args = PDOWrapper::cleanseNull($id)
+                .",".PDOWrapper::cleanseNullOrWrapStr($title)
+                .",".PDOWrapper::cleanseNullOrWrapStr($description)
+                .",".PDOWrapper::cleanseNullOrWrapStr($impact)
+                .",".PDOWrapper::cleanseNullOrWrapStr($deadline)
+                .",".PDOWrapper::cleanseNull($orgId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($reference)
+                .",".PDOWrapper::cleanseNullOrWrapStr($wordCount)
+                .",".PDOWrapper::cleanseNullOrWrapStr($created)
+                .",".PDOWrapper::cleanseNullOrWrapStr($countryCode)
+                .",".PDOWrapper::cleanseNullOrWrapStr($languageCode);
+        
+        $result = PDOWrapper::call("getProject", $args);
         if($result) {
             foreach($result as $row) {
                 $projects[] = ModelFactory::buildModel("Project", $row);
@@ -69,7 +77,9 @@ class ProjectDao
 
     public static function archiveProject($projectId, $userId)
     {
-        $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId);
+        $args = PDOWrapper::cleanseNull($projectId)
+                .",".PDOWrapper::cleanseNull($userId);
+        
         $result = PDOWrapper::call("archiveProject", $args);        
         if($result) {
             return ModelFactory::buildModel("ArchivedProject", $result[0]);
@@ -82,10 +92,20 @@ class ProjectDao
                                                 $wordCount=null, $created=null, $archivedDate=null, $userIdArchived=null)
     {
         $projects = array();
-        $result = PDOWrapper::call("getArchivedProject", PDOWrapper::cleanseNull($id).",".PDOWrapper::cleanseNullOrWrapStr($title).",".
-                PDOWrapper::cleanseNullOrWrapStr($description).",".PDOWrapper::cleanseNullOrWrapStr($impact).",".PDOWrapper::cleanseNullOrWrapStr($deadline).",".
-                PDOWrapper::cleanseNull($orgId).",".PDOWrapper::cleanseNullOrWrapStr($reference).",".PDOWrapper::cleanseNullOrWrapStr($wordCount).",".
-                PDOWrapper::cleanseWrapStr($created).",".PDOWrapper::cleanseNullOrWrapStr($archivedDate).",".PDOWrapper::cleanseNull($userIdArchived));
+        
+        $args = PDOWrapper::cleanseNull($id)
+                .",".PDOWrapper::cleanseNullOrWrapStr($title)
+                .",".PDOWrapper::cleanseNullOrWrapStr($description)
+                .",".PDOWrapper::cleanseNullOrWrapStr($impact)
+                .",".PDOWrapper::cleanseNullOrWrapStr($deadline)
+                .",".PDOWrapper::cleanseNull($orgId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($reference)
+                .",".PDOWrapper::cleanseNullOrWrapStr($wordCount)
+                .",".PDOWrapper::cleanseWrapStr($created)
+                .",".PDOWrapper::cleanseNullOrWrapStr($archivedDate)
+                .",".PDOWrapper::cleanseNull($userIdArchived);
+        
+        $result = PDOWrapper::call("getArchivedProject", $args);
         
         if($result) {           
             foreach($result as $row) {
@@ -103,9 +123,9 @@ class ProjectDao
     public static function getProjectTasks($projectId)
     {
         $tasks = null;
-        $args = "null, ";
-        $args .= PDOWrapper::cleanseNull($projectId).", ";
-        $args .= "null, null, null, null, null, null, null, null, null, null, null, null";
+        $args = "null"
+                .",".PDOWrapper::cleanseNull($projectId)
+                .",null, null, null, null, null, null, null, null, null, null, null, null";
         $result = PDOWrapper::call("getTask", $args);
         if($result) {
             $tasks = array();
@@ -134,8 +154,9 @@ class ProjectDao
 
     public static function removeProjectTag($projectId, $tagId)
     {
-        $args = PDOWrapper::cleanseNull($projectId).", ";
-        $args .= PDOWrapper::cleanseNull($tagId);
+        $args = PDOWrapper::cleanseNull($projectId)
+                .",".PDOWrapper::cleanseNull($tagId);
+        
         $result = PDOWrapper::call("removeProjectTag", $args);
         if($result) {
             return $result[0]['result'];
@@ -162,8 +183,9 @@ class ProjectDao
 
     public static function addProjectTag($projectId, $tagId)
     {
-        $args = PDOWrapper::cleanseNull($projectId).", ";
-        $args .= PDOWrapper::cleanseNull($tagId);
+        $args = PDOWrapper::cleanseNull($projectId)
+                .",".PDOWrapper::cleanseNull($tagId);
+        
         $result = PDOWrapper::call("addProjectTag", $args);
         if($result) {
             return $result[0]['result'];
@@ -174,9 +196,12 @@ class ProjectDao
     
     public static function getProjectFileInfo($project_id, $user_id, $filename, $token, $mime)
     {        
-        $args = PDOWrapper::cleanseNull($project_id).",".PDOWrapper::cleanseNull($user_id)
-                .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token)
+        $args = PDOWrapper::cleanseNull($project_id)
+                .",".PDOWrapper::cleanseNull($user_id)
+                .",".PDOWrapper::cleanseNullOrWrapStr($filename)
+                .",".PDOWrapper::cleanseNullOrWrapStr($token)
                 .",".PDOWrapper::cleanseNullOrWrapStr($mime);
+        
         $result = PDOWrapper::call("getProjectFile", $args);
         
         if($result) {
@@ -209,9 +234,12 @@ class ProjectDao
     public static function recordProjectFileInfo($projectId,$filename,$userId, $mime)
     {
         $token = $filename;//generate guid in future.
-        $args = PDOWrapper::cleanseNull($projectId).",".PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNullOrWrapStr($filename).",".PDOWrapper::cleanseNullOrWrapStr($token)
+        $args = PDOWrapper::cleanseNull($projectId)
+                .",".PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($filename)
+                .",".PDOWrapper::cleanseNullOrWrapStr($token)
                 .",".PDOWrapper::cleanseNullOrWrapStr($mime);
+        
         $result = PDOWrapper::call("addProjectFile", $args);        
         if($result[0]['result'] == "1") {            
             return $token;
@@ -224,7 +252,7 @@ class ProjectDao
             $wordCount=null, $createdTime=null, $sourceLanguageId=null, $targetLanguageId=null, $sourceCountryId=null,
             $targetCountryId=null, $taskTypeId=null, $taskStatusId=null, $published=null)
     {
-        $args =PDOWrapper::cleanseNull($archiveId)
+        $args = PDOWrapper::cleanseNull($archiveId)
                 .",".PDOWrapper::cleanseNull($projectId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($title)
                 .",".PDOWrapper::cleanseNullOrWrapStr($comment)

@@ -11,6 +11,6 @@
     {$action} based on the following criteria:
 </p>
 
-{include file="task.review-form.tpl"}
+{include file="task/task.review-form.tpl"}
 
 {include file="footer.tpl"}

@@ -34,8 +34,8 @@
         <p>
             Tags:
             {foreach from=$taskTags item=tag}
-                {assign var="label" value=$tag->getLabel()}
-                <a href="{urlFor name="tag-details" options="label.$label"}" class="label"><span class="label">{$label}</span></a>
+                {assign var="tagId" value=$tag->getId()}
+                <a href="{urlFor name="tag-details" options="id.$tagId"}" class="label"><span class="label">{$tag->getLabel()}</span></a>
             {/foreach}
         </p>
     {/if}

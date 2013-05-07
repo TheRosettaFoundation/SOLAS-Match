@@ -13,6 +13,6 @@
     here</a>. Please provide a review of this task to help improve the system.
 </p>
 
-{include file="task.review-form.tpl"}
+{include file="task/task.review-form.tpl"}
 
 {include file="footer.tpl"}
