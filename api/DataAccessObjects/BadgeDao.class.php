@@ -54,7 +54,7 @@ class BadgeDao
     public static function assignBadge($userID, $badgeID)
     {
         $args = PDOWrapper::cleanseNull($userID)
-                .",".$args .= PDOWrapper::cleanseNull($badgeID);
+                .",".PDOWrapper::cleanseNull($badgeID);
         
         if (!$validation = self::validateUserBadge($userID, $badgeID)) {
             if ($result = PDOWrapper::call("assignBadge", $args)) {
