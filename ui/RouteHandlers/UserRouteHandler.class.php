@@ -450,83 +450,93 @@ class UserRouteHandler
             $personalInfo = new UserPersonalInformation(); 
             $personalInfo->setUserId($userId);
             
-            if(isset($post["displayName"])) $user->setDisplayName($post["displayName"]);
-            if(isset($post["biography"])) $user->setBiography($post["biography"]);
-            
-            if(isset($post["firstName"])) $personalInfo->setFirstName($post["firstName"]);
-            if(isset($post["lastName"])) $personalInfo->setLastName($post["lastName"]);
-            if(isset($post["mobileNumber"])) $personalInfo->setMobileNumber($post["mobileNumber"]);
-            if(isset($post["businessNumber"])) $personalInfo->setBusinessNumber($post["businessNumber"]);
-            if(isset($post["sip"])) $personalInfo->setSip($post["sip"]);
-            if(isset($post["jobTitle"])) $personalInfo->setJobTitle($post["jobTitle"]);
-            if(isset($post["address"])) $personalInfo->setAddress($post["address"]);
-            if(isset($post["city"])) $personalInfo->setCity($post["city"]);
-            if(isset($post["country"])) $personalInfo->setCountry($post["country"]);
-            
-            $userInfo = $userDao->getPersonalInfo($userId);
-            if($userInfo) {
-                $personalInfo->setId($userInfo->getId());
-                $userDao->updatePersonalInfo($userId, $personalInfo);
-            } else {
-                $userDao->createPersonalInfo($userId, $personalInfo);
-            }
-            
-            $nativeLang = $post["nativeLanguage"];
-            $langCountry = $post["nativeCountry"];
-            if (isset($nativeLang) && isset($langCountry)) {
-                $nativeLocal = new Locale();
+            if(isset($post["deleteUser"]) && $post["deleteUser"] != "") {
+                $userDao = new UserDao();
+                $userDao->deleteUser($post["deleteUser"]);
+                UserSession::destroySession();
+                $app->redirect($app->urlFor("home"));
                 
-                $nativeLocal->setLanguageCode($nativeLang);
-                $nativeLocal->setCountryCode($langCountry);
-                $user->setNativeLocale($nativeLocal);
+            } else {
 
-                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $userDao->addUserBadgeById($userId, $badge_id);               
-            }            
+                if(isset($post["displayName"])) $user->setDisplayName($post["displayName"]);
+                if(isset($post["biography"])) $user->setBiography($post["biography"]);
 
-            if(isset($post["displayName"]) && isset($post["nativeLanguage"]) && isset($post["nativeCountry"])) {
-                $badgeId = BadgeTypes::PROFILE_FILLER;
-                $userDao->addUserBadgeById($userId, $badgeId);               
-            }
-            
-            $currentSecondaryLocales = $userDao->getSecondaryLanguages($userId);
-            
-            $csl= array();
-            if($currentSecondaryLocales){
-                foreach($currentSecondaryLocales as $currLocale) {
-                    $csl[$currLocale->getLanguageCode().'-'.$currLocale->getCountryCode()] = $currLocale;
+                if(isset($post["firstName"])) $personalInfo->setFirstName($post["firstName"]);
+                if(isset($post["lastName"])) $personalInfo->setLastName($post["lastName"]);
+                if(isset($post["mobileNumber"])) $personalInfo->setMobileNumber($post["mobileNumber"]);
+                if(isset($post["businessNumber"])) $personalInfo->setBusinessNumber($post["businessNumber"]);
+                if(isset($post["sip"])) $personalInfo->setSip($post["sip"]);
+                if(isset($post["jobTitle"])) $personalInfo->setJobTitle($post["jobTitle"]);
+                if(isset($post["address"])) $personalInfo->setAddress($post["address"]);
+                if(isset($post["city"])) $personalInfo->setCity($post["city"]);
+                if(isset($post["country"])) $personalInfo->setCountry($post["country"]);
+
+                $userInfo = $userDao->getPersonalInfo($userId);
+                if($userInfo) {
+                    $personalInfo->setId($userInfo->getId());
+                    $userDao->updatePersonalInfo($userId, $personalInfo);
+                } else {
+                    $userDao->createPersonalInfo($userId, $personalInfo);
                 }
-            }
-            $newSecondaryLocales = array();
 
-            for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {               
-                $key = $post["secondaryLanguage_$i"].'-'.$post["secondaryCountry_$i"];
+                $nativeLang = $post["nativeLanguage"];
+                $langCountry = $post["nativeCountry"];
+                if (isset($nativeLang) && isset($langCountry)) {
+                    $nativeLocal = new Locale();
 
-                $locale = new Locale();
-                $locale->setLanguageCode($post["secondaryLanguage_$i"]);
-                $locale->setCountryCode($post["secondaryCountry_$i"]);
-                if(!key_exists($key, $csl)) $userDao->createSecondaryLanguage($userId, $locale);
-                $newSecondaryLocales[$key] = $locale;
-            }
+                    $nativeLocal->setLanguageCode($nativeLang);
+                    $nativeLocal->setCountryCode($langCountry);
+                    $user->setNativeLocale($nativeLocal);
 
-            foreach($csl as $key => $newLocale) {
-                if(!key_exists($key, $newSecondaryLocales)) {
-                    $userDao->deleteSecondaryLanguage($userId, $newLocale);
+                    $badge_id = BadgeTypes::NATIVE_LANGUAGE;
+                    $userDao->addUserBadgeById($userId, $badge_id);               
+                }            
+
+                if(isset($post["displayName"]) && isset($post["nativeLanguage"]) && isset($post["nativeCountry"])) {
+                    $badgeId = BadgeTypes::PROFILE_FILLER;
+                    $userDao->addUserBadgeById($userId, $badgeId);               
                 }
-            }
-            
-            if ($user->getDisplayName() != ""
-                    && $user->getNativeLocale() != null) {
-                $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                $userDao->addUserBadgeById($userId, $badge_id);               
-                $badge_id = BadgeTypes::PROFILE_FILLER;
-                $userDao->addUserBadgeById($userId, $badge_id);               
 
+                $currentSecondaryLocales = $userDao->getSecondaryLanguages($userId);
+
+                $csl= array();
+                if($currentSecondaryLocales){
+                    foreach($currentSecondaryLocales as $currLocale) {
+                        $csl[$currLocale->getLanguageCode().'-'.$currLocale->getCountryCode()] = $currLocale;
+                    }
+                }
+                $newSecondaryLocales = array();
+
+                for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {               
+                    $key = $post["secondaryLanguage_$i"].'-'.$post["secondaryCountry_$i"];
+
+                    $locale = new Locale();
+                    $locale->setLanguageCode($post["secondaryLanguage_$i"]);
+                    $locale->setCountryCode($post["secondaryCountry_$i"]);
+                    if(!key_exists($key, $csl)) $userDao->createSecondaryLanguage($userId, $locale);
+                    $newSecondaryLocales[$key] = $locale;
+                }
+
+                foreach($csl as $key => $newLocale) {
+                    if(!key_exists($key, $newSecondaryLocales)) {
+                        $userDao->deleteSecondaryLanguage($userId, $newLocale);
+                    }
+                }
+
+                if ($user->getDisplayName() != ""
+                        && $user->getNativeLocale() != null) {
+                    $badge_id = BadgeTypes::NATIVE_LANGUAGE;
+                    $userDao->addUserBadgeById($userId, $badge_id);               
+                    $badge_id = BadgeTypes::PROFILE_FILLER;
+                    $userDao->addUserBadgeById($userId, $badge_id);               
+
+                }
+
+                $userDao->updateUser($user);
+                $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getId())));
             }
             
-            $userDao->updateUser($user);
             
-            $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getId())));
         }
         
         $extraScripts = file_get_contents(__DIR__."/../js/user-private-profile.js");

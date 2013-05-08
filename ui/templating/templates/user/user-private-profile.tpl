@@ -176,6 +176,10 @@
                     <button type='submit' class='btn btn-primary' name='updateProfileDetails'>
                         <i class="icon-refresh icon-white"></i> Update Profile Details
                     </button>   
+                    <button type="submit" class="btn btn-inverse" value="{$user->getId()}" name="deleteUser"
+                            onclick="return confirm('Are you sure you want permanently delete your account?');"> 
+                        <i class="icon-fire icon-white"></i> Delete User Account
+                    </button>
                 </td>
             </tr>
   

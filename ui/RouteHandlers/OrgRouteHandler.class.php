@@ -301,6 +301,7 @@ class OrgRouteHandler
         $app = Slim::getInstance();
         $orgDao = new OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
+        $userId = UserSession::getCurrentUserId();
         if($post = $app->request()->post()) {
 
             if (isset($post['updateOrgDetails'])) {
@@ -351,7 +352,7 @@ class OrgRouteHandler
         
 
         $adminDao = new AdminDao();
-        if ($adminDao->isOrgAdmin(UserSession::getCurrentUserId(), $org->getId())) {
+        if ($adminDao->isOrgAdmin($userId, $org->getId()) || $adminDao->isSiteAdmin($userId)) {
             $app->view()->appendData(array('orgAdmin' => true));
         }
         
