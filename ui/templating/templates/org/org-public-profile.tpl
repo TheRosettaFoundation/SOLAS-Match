@@ -119,8 +119,8 @@
                 </td>
                 <td style="width: 4%"/>
                 <td style="width: 48%">            
-                    <div class="pull-right">
-                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
+                    <div>
+                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                             <thead>                
                                 <th align="left" width="48%">E-Mail:<hr/></th>
                             </thead>

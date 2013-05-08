@@ -142,8 +142,8 @@
         {if isset($userPersonalInfo) && (isset($private_access)  || $isSiteAdmin)}
             <td style="width: 4%"/>
             <td style="width: 48%">            
-                <div class="pull-right">
-                    <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
+                <div>
+                    <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                         {if $userPersonalInfo->getFirstName() != null}
                             <thead>                
                                 <th align="left" width="48%"><h3>First Name:</h3></th>

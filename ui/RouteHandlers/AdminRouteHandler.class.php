@@ -31,7 +31,7 @@ class AdminRouteHandler
                 $adminDao->removeSiteAdmin($post['userId']);
             }
             
-            if(isset($post['banOrg'])) {
+            if(isset($post['banOrg']) && $post['orgName'] != '') {
                 $orgDao = new OrganisationDao();
                 $bannedOrg = new BannedOrganisation();
                 $org = $orgDao->getOrganisationByName(urlencode($post['orgName']));
@@ -42,7 +42,7 @@ class AdminRouteHandler
                 if(isset($post['banReasonOrg'])) $bannedOrg->setComment($post['banReasonOrg']);
                 $adminDao->banOrg($bannedOrg);
             }
-            if(isset($post['banUser'])) {
+            if(isset($post['banUser']) && $post['userEmail'] != '') {
                 $bannedUser = new BannedUser();
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 
@@ -53,12 +53,16 @@ class AdminRouteHandler
                 $adminDao->banUser($bannedUser);
             }         
             
-            if(isset($post['unBanOrg'])) {
+            if(isset($post['unBanOrg']) && $post['orgId'] != '') {
                 $adminDao->unBanOrg($post['orgId']);
             }
-            if(isset($post['unBanUser'])) {
+            if(isset($post['unBanUser']) && $post['userId'] != '') {
                 $adminDao->unBanUser($post['userId']);
             } 
+            if(isset($post['deleteUser']) && $post['userEmail'] != '') {
+                $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
+                $userDao->deleteUser($user->getId());
+            }
             
             
         }               

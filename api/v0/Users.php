@@ -39,6 +39,19 @@ class Users {
            
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUser');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/',
+                                                        function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+
+            UserDao::deleteUser($id);           
+            Dispatcher::sendResponce(null, null, null, $format);
+        }, 'deleteUser');
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:uuid/registered(:format)/',
                 function ($uuid, $format = '.json')

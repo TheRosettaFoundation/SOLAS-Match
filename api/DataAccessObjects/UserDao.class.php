@@ -687,4 +687,10 @@ class UserDao
         return $ret;        
     }
     
+    public static function deleteUser($userId)
+    {
+        $args = PDOWrapper::cleanseNull($userId);
+        PDOWrapper::call("deleteUser", $args);
+    }
+    
 }

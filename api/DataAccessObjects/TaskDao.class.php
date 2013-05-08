@@ -226,7 +226,6 @@ class TaskDao
                 .",".PDOWrapper::cleanseNull($task->getWordCount())
                 .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode())
                 .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
                 .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
                 .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
                 .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode())
@@ -294,20 +293,21 @@ class TaskDao
         $sourceLocale = $task->getSourceLocale();
         $targetLocale = $task->getTargetLocale();
         
-        $result = PDOWrapper::call("taskInsertAndUpdate", "null"
-                    .",".PDOWrapper::cleanseNull($task->getProjectId())
-                    .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
-                    .",".PDOWrapper::cleanseNull($task->getWordCount())
-                    .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode())
-                    .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode())
-                    .",".PDOWrapper::cleanseNullOrWrapStr($task->getCreatedTime())
-                    .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
-                    .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
-                    .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode())
-                    .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
-                    .",".PDOWrapper::cleanseNull($task->getTaskType())
-                    .",".PDOWrapper::cleanseNull($task->getTaskStatus())
-                    .",".PDOWrapper::cleanseNullOrWrapStr($task->getPublished()));
+        $args = "null"
+                .",".PDOWrapper::cleanseNull($task->getProjectId())
+                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
+                .",".PDOWrapper::cleanseNull($task->getWordCount())
+                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode())
+                .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode())
+                .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
+                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
+                .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode())
+                .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
+                .",".PDOWrapper::cleanseNull($task->getTaskType())
+                .",".PDOWrapper::cleanseNull($task->getTaskStatus())
+                .",".PDOWrapper::cleanseNull($task->getPublished());
+        
+        $result = PDOWrapper::call("taskInsertAndUpdate", $args);
         
         if($result) {
             $task = ModelFactory::buildModel("Task", $result[0]);           

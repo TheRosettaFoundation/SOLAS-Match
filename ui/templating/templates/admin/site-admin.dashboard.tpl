@@ -127,6 +127,31 @@
         {include file="admin/admin.banned-users-list.tpl" bannedUserList=$bannedUserList adminUserId=$adminUserId}
         <hr/>
     {/if} 
+    
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.{$adminUserId}"}">
+        <table style="width: 40%">
+            <tr>
+                <td colspan="2"> 
+                    <label for="addAdmin"><h2>Delete User:</h2></label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <strong>Permanently</strong> delete a user from <strong>{$siteName}</strong>.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="userEmail" placeholder="User e-mail address goes here." style="width: 95%"/>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-inverse" type="submit" name="deleteUser" value="1" onclick="return confirm('Are you sure you want to permanently delete this user? You will not be able to reverse this action.')"/>
+                        <i class="icon-fire icon-white"></i> Delete User
+                    </button>
+                </td>
+            </tr>
+        </table> 
+    </form>
 </div>
 
 {include file='footer.tpl'}

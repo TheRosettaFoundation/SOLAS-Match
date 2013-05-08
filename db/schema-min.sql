@@ -1151,6 +1151,15 @@ end if;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure debug-test3.deleteUser
+DROP PROCEDURE IF EXISTS `deleteUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUser`(IN `userId` INT)
+BEGIN
+	DELETE FROM Users WHERE id = userId;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.findOrganisation
 DROP PROCEDURE IF EXISTS `findOrganisation`;
@@ -2497,7 +2506,7 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserTopTasks
+-- Dumping structure for procedure debug-test3.getUserTopTasks
 DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `lim` INT, IN `filter` TEXT)
@@ -2506,9 +2515,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `
 BEGIN
     if lim='' then set lim=null; end if;
     if lim is not null then
-        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC limit ",lim);
+        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC limit ",lim);
     else
-        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC");
+        set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` from Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ?) AS uts ON t.id = uts.task_id WHERE t.id NOT IN (SELECT task_id FROM TaskClaims) AND t.published = 1 AND t.`task-status_id` = 2 and not exists(select 1 from TaskTranslatorBlacklist where user_id = ? and task_id=t.id) ", filter, " ORDER BY uts.score DESC");
     end if;
     PREPARE stmt FROM @q;
     set @uID=uID;
@@ -3342,10 +3351,10 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.taskInsertAndUpdate
+-- Dumping structure for procedure debug-test3.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
 BEGIN
 
 	if id='' then set id=null;end if;
@@ -3359,8 +3368,6 @@ BEGIN
 	if tCode='' then set tCode=null;end if;
 
 	if wordCount='' then set wordCount=null;end if;
-
-	if created='' then set created=null;end if;
 
 	if taskComment='' then set taskComment=null;end if;
 
@@ -3381,8 +3388,6 @@ BEGIN
 	if id is null then
 
 		if taskComment is null then set taskComment="";end if;
-
-		if created is null or created ='0000-00-00 00:00:00' then set created=now();end if;
 
 		if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
 
@@ -3408,7 +3413,9 @@ BEGIN
 
 		insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`task-type_id`,`task-status_id`,`published`)
 
-		 values (projectID,name,wordCount,@sID,@tID,created,taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
+		 values (projectID,name,wordCount,@sID,@tID,now(),taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
+		 
+		 call getTask(LAST_INSERT_ID(),null,null,null,null,null,null,null,null,null,null,null,null,null);
 
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 
@@ -3566,22 +3573,6 @@ BEGIN
 
 		end if;
 
-		if (created is not null  and created!='0000-00-00 00:00:00') then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @q = CONCAT(@q," t.`created-time`='",created,"'") ;
-
-		end if;
-
 		if (dLine is not null  and dLine!='0000-00-00 00:00:00') then 
 
 			if (@first = false) then 
@@ -3653,10 +3644,10 @@ BEGIN
 		EXECUTE stmt;
 
 		DEALLOCATE PREPARE stmt;
+		
+		call getTask(id,null,null,null,null,null,null,null,null,null,null,null,null,null);
 
-	end if;
-
-	call getTask(id,projectID,name,wordCount,sCode,tCode,created,sCC,tCC,taskComment,taskType,tStatus,pub,dLine);
+	end if;	
 
 END//
 DELIMITER ;

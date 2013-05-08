@@ -481,9 +481,9 @@ class ProjectRouteHandler
                     $taskModel->setSourceLocale($taskSourceLocale);
                     
                     if(isset($post['publishTasks']) && $post['publishTasks']) {
-                        $taskModel->setPublished(1);
+                        $taskModel->setPublished(true);
                     } else {
-                        $taskModel->setPublished(0);
+                        $taskModel->setPublished(false);
                     }
                     
                     $translationTaskId = 0;

@@ -427,5 +427,11 @@ class UserDao
         $request = "{$this->siteApi}v0/users/removeSecondaryLanguage/$userId/{$locale->getLanguageCode()}/{$locale->getCountryCode()}";
         $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $ret;
-    } 
+    }
+    
+    public function deleteUser($userId)
+    {
+        $request = "{$this->siteApi}v0/users/$userId";
+        $this->client->call(null, $request, HttpMethodEnum::DELETE);
+    }
 }
