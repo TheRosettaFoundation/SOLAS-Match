@@ -777,21 +777,11 @@ DROP PROCEDURE IF EXISTS `addAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addAdmin`(IN `userId` INT, IN `orgId` INT)
 BEGIN
+	IF orgId = '' THEN SET orgId=NULL; END IF;
 
-	IF orgId='' THEN SET orgId=NULL; END IF;
-
-	SET @q= "INSERT INTO Admins (user_id,organisation_id) VALUES(";
-	
-	IF orgId IS NULL AND (NOT EXISTS (SELECT 1 FROM Admins a WHERE a.user_id=userId)) THEN	
-		SET @q = CONCAT(@q, userId, ",NULL", ")");	
-	ELSE
-		SET @q = CONCAT(@q, userId, ",", orgId ,")");
-	END IF;
-
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
-	
+	IF NOT EXISTS (SELECT 1 FROM Admins a WHERE a.user_id=userId and a.organisation_id=orgId) THEN	
+		INSERT INTO Admins (user_id,organisation_id) VALUES(userId,orgId);
+	END IF;	
 END//
 DELIMITER ;
 
