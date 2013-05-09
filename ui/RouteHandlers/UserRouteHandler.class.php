@@ -344,24 +344,24 @@ class UserRouteHandler
             if (isValidPost($app)) {
                 $post = (object) $app->request()->post();
 
-                if (isset($post->login)) {                    
-                    $user = $userDao->login($post->email, $post->password);
-                    
-                    if (!is_array($user) && !is_null($user)) {
-                        UserSession::setSession($user->getId());
-                    } else {
+                if (isset($post->login)) {    
+                    $user = null;
+                    if($user = $userDao->getUserByEmail($post->email)) {
                         $adminDao = new AdminDao();
                         $isUserBanned = $adminDao->isUserBanned($user->getId());
-                    
+                        
                         if($isUserBanned) {
-                            throw new InvalidArgumentException("Sorry, this user account has been banned.");  
+                            throw new InvalidArgumentException("Sorry, this user account has been banned.");
                         } else {
-                            throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
-                                Please check the credentials used and try again.");  
-                        }  
-                    }
-                    
+                            $user = $userDao->login($post->email, $post->password);
+                            UserSession::setSession($user->getId());
+                        }
+                    } else {
+                        throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
+                            Please check the credentials used and try again.");
+                    }                    
                     $app->redirect($app->urlFor("home"));
+                    
                 } elseif (isset($post->password_reset)) {
                     $app->redirect($app->urlFor("password-reset-request"));
                 }
