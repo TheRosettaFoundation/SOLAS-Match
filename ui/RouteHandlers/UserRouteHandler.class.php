@@ -428,6 +428,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         
         $userDao = new UserDao();
+        $loggedInuser = $userDao->getUser(UserSession::getCurrentUserID());
         $user = $userDao->getUser($userId);
         $userPersonalInfo = $userDao->getPersonalInfo($userId);
         
@@ -543,7 +544,8 @@ class UserRouteHandler
         $secondaryLanguages = $userDao->getSecondaryLanguages($userId);
         
         $app->view()->appendData(array(
-            "user"              => $user,
+            "user"              => $loggedInuser,
+            "profileUser"              => $user,
             "private_access"    => true,
             "languages"         => $languages,
             "countries"         => $countries,
