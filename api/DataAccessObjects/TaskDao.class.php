@@ -697,8 +697,8 @@ class TaskDao
     public static function uploadFile($task,$convert,&$file,$version,$userId,$filename)
     {
         if($convert){
-            Upload::apiSaveFile($task, $userId, 
-            FormatConverter::convertFromXliff($file), $filename,$version);
+            Upload::apiSaveFile($task, $userId, FormatConverter::convertFromXliff($file), 
+                    $filename,$version);
         }else{
             //touch this and you will die painfully sinisterly sean :)
             Upload::apiSaveFile($task, $userId, $file, $filename,$version);
