@@ -703,7 +703,7 @@ class TaskDao
             //touch this and you will die painfully sinisterly sean :)
             Upload::apiSaveFile($task, $userId, $file, $filename,$version);
         }
-        Notify::sendTaskUploadNotifications($task->getId());
+        Notify::sendTaskUploadNotifications($task->getId(), $version);
     }
     
     public static function uploadOutputFile($task,$convert,&$file,$userId,$filename)

@@ -135,12 +135,13 @@ class Notify
         }
     }
 
-    public static function sendTaskUploadNotifications($taskId)
+    public static function sendTaskUploadNotifications($taskId, $version)
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
             $messageProto = new TaskUploadNotificationRequest();
             $messageProto->setTaskId($taskId);
+            $messageProto->setFileVersion($version);
             $message = $messagingClient->createMessageFromProto($messageProto);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
                     $messagingClient->TaskUploadNotificationTopic);
