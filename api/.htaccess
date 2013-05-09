@@ -10,5 +10,6 @@ IndexIgnore *
 
 #AllowOverride All
 
-Order Deny,Allow
-Deny from all
+#Order Deny,Allow
+#Deny from all
+#Allow
