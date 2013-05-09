@@ -15,10 +15,10 @@ class MessagingClient
     public $OrgMembershipRefusedTopic       = "email.org.membership.rejected";
     public $TaskArchivedTopic               = "email.user.task.archived";
     public $TaskClaimedTopic                = "email.user.task.claimed";
-    public $TaskTranslationUploadedTopic    = "email.user.task.translation-uploaded";
     public $FeedbackEmailTopic              = "email.user.feedback";
     public $EmailVerificationTopic          = "email";
     public $BannedLoginTopic                = "email";
+    public $TaskUploadNotificationTopic     = "tasks";
 
     private $connection;
 

@@ -14,10 +14,10 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipAccepted.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipRefused.php";
 require_once __DIR__."/../../Common/protobufs/emails/TaskArchived.php";
 require_once __DIR__."/../../Common/protobufs/emails/TaskClaimed.php";
-require_once __DIR__."/../../Common/protobufs/emails/TaskTranslationUploaded.php";
 require_once __DIR__."/../../Common/protobufs/emails/FeedbackEmail.php";
 require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
 require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
+require_once __DIR__."/../../Common/Requests/TaskUploadNotificationRequest.php";
 
 class Notify 
 {
@@ -139,19 +139,11 @@ class Notify
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
-            $translator = TaskDao::getUserClaimedTask($taskId);
-            $subscribed_users = TaskDao::getSubscribedUsers($taskId);
-            if (count($subscribed_users) > 0) {
-                $message_type = new TaskTranslationUploaded();
-                $message_type->task_id = $taskId;
-                $message_type->translator_id = $translator->getId();
-                foreach ($subscribed_users as $user) {
-                    $message_type->user_id = $user->getId();
-                    $message = $messagingClient->createMessageFromProto($message_type);
-                    $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                            $messagingClient->TaskTranslationUploadedTopic);
-                }
-            }
+            $messageProto = new TaskUploadNotificationRequest();
+            $messageProto->setTaskId($taskId);
+            $message = $messagingClient->createMessageFromProto($messageProto);
+            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                    $messagingClient->TaskUploadNotificationTopic);
         }
     }
 
@@ -174,21 +166,6 @@ class Notify
                                     $messagingClient->TaskArchivedTopic);
                         }
                         break;
-                            
-                    case NotificationTypes::UPLOAD:
-                        $message_type = new TaskTranslationUploaded();
-                        $message_type->task_id = $taskId;
-                        $translator = TaskDao::getUserClaimedTask($taskId);
-                        $message_type->translator_id = $translator->getId();
-                        foreach ($subscribed_users as $user) {
-                            $message_type->user_id = $user->getId();
-                            $message = $messagingClient->createMessageFromProto($message_type);
-                            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                                    $messagingClient->TaskTranslationUploadedTopic);
-                        }
-                        break;
-                            
-                 
                 }
             } 
         }
