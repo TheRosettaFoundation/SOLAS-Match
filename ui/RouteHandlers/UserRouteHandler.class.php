@@ -562,7 +562,7 @@ class UserRouteHandler
         $orgDao = new OrganisationDao();
         $adminDao = new AdminDao();
         
-        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($user_id));
+        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(UserSession::getCurrentUserID()));
         $user = $userDao->getUser($user_id);
         $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         if ($app->request()->isPost()) {

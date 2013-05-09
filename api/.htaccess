@@ -9,3 +9,6 @@ RewriteRule ^(.*)$ dispatcher.php [QSA,L]
 IndexIgnore *
 
 #AllowOverride All
+
+Order Deny,Allow
+Deny from all
