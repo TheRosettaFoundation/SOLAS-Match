@@ -575,19 +575,43 @@ class TaskRouteHandler
         $app->view()->setData("task", $task);
         
         if (isValidPost($app)) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
+           
+            if ($task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS) {
+                if (isset($post['title']) && $post['title'] != "") {
+                    $task->setTitle($post['title']);
+                }
+
+                if(isset($post['publishTask']) && $post['publishTask']) {
+                    $task->setPublished(1);
+                } else {
+                    $task->setPublished(0);
+                }
             
-            if ($post->title != "") {
-                $task->setTitle($post->title);
-            }
+                $targetLocale = new Locale();
             
-            if ($post->impact != "") {
-                $task->setComment($post->impact);
+                if (isset($post['target']) && $post['target'] != "") {
+                    $targetLocale->setLanguageCode($post['target']);
+                }   
+             
+                if (isset($post['targetCountry']) && $post['targetCountry'] != "") {
+                    $targetLocale->setCountryCode($post['targetCountry']);
+                }   
+            
+                $task->setTargetLocale($targetLocale);
+              
+                if (isset($post['word_count']) && ctype_digit($post['word_count'])) {
+                    $task->setWordCount($post['word_count']);                
+                } else if (isset($post['word_count']) && $post['word_count'] != "") {
+                    $word_count_err = "Word Count must be numeric";
+                } else {
+                    $word_count_err = "Word Count cannot be blank";
+                }
             }
 
-            if ($post->deadline != "") {
-                if (TemplateHelper::isValidDateTime($post->deadline) == true) {
-                    $unixTime = strtotime($post->deadline);
+            if (isset($post['deadline']) && $post['deadline'] != "") {
+                if (TemplateHelper::isValidDateTime($post['deadline']) == true) {
+                    $unixTime = strtotime($post['deadline']);
                     $date = date("Y-m-d H:i:s", $unixTime);  
                     $task->setDeadline($date);
                 } else {
@@ -595,37 +619,15 @@ class TaskRouteHandler
                 }
             }
             
-            if(isset($post->publishTask) && $post->publishTask) {
-                $task->setPublished(1);
-            } else {
-                $task->setPublished(0);
-            }
-            
-            $targetLocale = new Locale();
-            
-            if ($post->target != "") {
-                $targetLocale->setLanguageCode($post->target);
-            }   
-             
-            if ($post->targetCountry != "") {
-                $targetLocale->setCountryCode($post->targetCountry);
-            }   
-            
-            $task->setTargetLocale($targetLocale);
-              
-            if (ctype_digit($post->word_count)) {
-                $task->setWordCount($post->word_count);                
-            } else if ($post->word_count != "") {
-                $word_count_err = "Word Count must be numeric";
-            } else {
-                $word_count_err = "Word Count cannot be blank";
+            if (isset($post['impact']) && $post['impact'] != "") {
+                $task->setComment($post['impact']);
             }
 
             if ($word_count_err == "" && $deadlineError == "") {
                 $selectedPreReqs = array();
-                if(isset($post->totalTaskPreReqs) && $post->totalTaskPreReqs > 0) {
-                    for($i=0; $i < $post->totalTaskPreReqs; $i++) {                        
-                        if(isset($post->{"preReq_".$i})) $selectedPreReqs[] = $post->{"preReq_".$i};
+                if(isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
+                    for($i=0; $i < $post['totalTaskPreReqs']; $i++) {                        
+                        if(isset($post["preReq_$i"])) $selectedPreReqs[] = $post["preReq_$i"];
                     }
                 }
                 
@@ -645,24 +647,11 @@ class TaskRouteHandler
                 
                 if ($graph) {
 
+                    $index = $graphBuilder->find($task->getId(), $graph);
+                    $node = $graph->getAllNodes($index);
                     $selectedList = array();
-                    $nextLayer = array();
-                    $currentLayer = $graph->getRootNodeList();
-                    $found = false;
-                    while (!$found && count($currentLayer) > 0) {
-                        foreach ($currentLayer as $node) {
-                            if ($node->getTaskId() == $task->getId()) {
-                                $found = true;
-                                foreach ($node->getPreviousList() as $preReqNode) {
-                                    $selectedList[] = $preReqNode->getTaskId();
-                                }
-                            }
-                            foreach ($node->getNextList() as $nextNode) {
-                                $nextLayer[] = $nextNode;
-                            }
-                        }
-                        $currentLayer = $nextLayer;
-                        $nextLayer = array();
+                    foreach ($node->getPreviousList() as $prevId) {
+                        $selectedList[] = $prevId;
                     }
 
                     $taskDao->updateTask($task);

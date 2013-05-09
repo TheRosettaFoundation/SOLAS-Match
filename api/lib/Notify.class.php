@@ -135,6 +135,26 @@ class Notify
         }
     }
 
+    public static function sendTaskUploadNotifications($taskId)
+    {
+        $messagingClient = new MessagingClient();
+        if ($messagingClient->init()) {
+            $translator = TaskDao::getUserClaimedTask($taskId);
+            $subscribed_users = TaskDao::getSubscribedUsers($taskId);
+            if (count($subscribed_users) > 0) {
+                $message_type = new TaskTranslationUploaded();
+                $message_type->task_id = $taskId;
+                $message_type->translator_id = $translator->getId();
+                foreach ($subscribed_users as $user) {
+                    $message_type->user_id = $user->getId();
+                    $message = $messagingClient->createMessageFromProto($message_type);
+                    $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                            $messagingClient->TaskTranslationUploadedTopic);
+                }
+            }
+        }
+    }
+
     public static function sendEmailNotifications($taskId, $notificationType)
     {
         $subscribed_users = TaskDao::getSubscribedUsers($taskId);
