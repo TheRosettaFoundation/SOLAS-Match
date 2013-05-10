@@ -23,7 +23,7 @@ class ProtobufSerializer extends Serializer
         } elseif (is_array($data)) {
             $ret = new ProtoList();
             foreach ($data as $obj) {
-                $ret->addItem($obj->serialize());
+                if(!is_null($obj)) $ret->addItem($obj->serialize());
             }
             $ret=$ret->serialize();
         } else {

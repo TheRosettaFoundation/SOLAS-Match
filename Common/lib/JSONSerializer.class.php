@@ -17,7 +17,7 @@ class JSONSerializer extends Serializer
         } elseif (is_array($data)) {
             $ret = new ProtoList();
             foreach ($data as $obj) {
-                $ret->addItem($obj->serialize(new \DrSlump\Protobuf\Codec\Json()));
+                if(!is_null($obj)) $ret->addItem($obj->serialize(new \DrSlump\Protobuf\Codec\Json()));
             }
             $ret=$ret->serialize(new \DrSlump\Protobuf\Codec\Json());
         } else {
