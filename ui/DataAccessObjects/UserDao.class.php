@@ -362,7 +362,7 @@ class UserDao
         $registerData->setEmail($email);
         $registerData->setPassword($password);
         $request = "{$this->siteApi}v0/register";
-        $ret = $this->client->call(null, $request, HttpMethodEnum::POST, $registerData);
+        $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $registerData);
         return $ret;
     }
 
