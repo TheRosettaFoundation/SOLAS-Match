@@ -2,6 +2,7 @@
 
 require_once __DIR__."/../../Common/TaskStatusEnum.php";
 require_once __DIR__."/../../Common/TaskTypeEnum.php";
+require_once __DIR__."/Notify.class.php";
 
 class Upload {
     
@@ -110,7 +111,9 @@ class Upload {
                 self::createFolderForUpload($task, $version);
         }
         $destination_path = self::absoluteFilePathForUpload($task, $version, $filename);
-        return file_put_contents($destination_path, $file)?1:0;
+        $ret = file_put_contents($destination_path, $file)?1:0;
+        Notify::sendTaskUploadNotifications($task->getId(), $version);
+        return $ret;
     }
        
         
