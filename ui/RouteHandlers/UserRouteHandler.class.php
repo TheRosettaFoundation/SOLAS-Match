@@ -342,19 +342,23 @@ class UserRouteHandler
         
         try {
             if (isValidPost($app)) {
-                $post = (object) $app->request()->post();
+                $post = $app->request()->post();
 
-                if (isset($post->login)) {    
+                if (isset($post['login'])) {    
                     $user = null;
-                    if($user = $userDao->getUserByEmail($post->email)) {
+                    if($user = $userDao->getUserByEmail($post['email'])) {
                         $adminDao = new AdminDao();
                         $isUserBanned = $adminDao->isUserBanned($user->getId());
                         
                         if($isUserBanned) {
                             throw new InvalidArgumentException("Sorry, this user account has been banned.");
                         } else {
-                            $user = $userDao->login($post->email, $post->password);
-                            UserSession::setSession($user->getId());
+                            if($user = $userDao->login($post['email'], $post['password'])) {
+                                UserSession::setSession($user->getId());
+                            } else {
+                                throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
+                                    Please check the credentials used and try again.");
+                            } 
                         }
                     } else {
                         throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
@@ -362,7 +366,7 @@ class UserRouteHandler
                     }                    
                     $app->redirect($app->urlFor("home"));
                     
-                } elseif (isset($post->password_reset)) {
+                } elseif (isset($post['password_reset'])) {
                     $app->redirect($app->urlFor("password-reset-request"));
                 }
             } elseif ($app->request()->isPost() || $openid->mode) {
@@ -562,7 +566,7 @@ class UserRouteHandler
         $orgDao = new OrganisationDao();
         $adminDao = new AdminDao();
         
-        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($user_id));
+        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(UserSession::getCurrentUserID()));
         $user = $userDao->getUser($user_id);
         $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         if ($app->request()->isPost()) {

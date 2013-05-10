@@ -2308,7 +2308,7 @@ BEGIN
 		set @q = CONCAT(@q," and u.`display-name`='",name,"'") ;
 	end if;
 	if mail is not null then 
-		set @q = CONCAT(@q," and u.email='",mail,"'") ;
+		set @q = CONCAT(@q," and LOWER(u.email)='",LOWER(mail),"'") ;
 	end if;
 	if pass is not null then 
 		set @q = CONCAT(@q," and u.password='",pass,"'") ;
@@ -3344,7 +3344,7 @@ DELIMITER ;
 -- Dumping structure for procedure debug-test3.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` INT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VarCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
 BEGIN
 
 	if id='' then set id=null;end if;
@@ -3700,10 +3700,10 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.userInsertAndUpdate
+-- Dumping structure for procedure debug-test3.userInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(256), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(3), IN `region` VARCHAR(3), IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(128), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(3), IN `region` VARCHAR(3), IN `id` INT)
 BEGIN
 	if pass='' then set pass=null;end if;
 	if bio='' then set bio=null;end if;

@@ -57,6 +57,7 @@ class Dispatcher {
     
     public static function sendResponce($headers, $body, $code = 200, $format = ".json")
     {
+        header('Access-Control-Allow-Origin: *');
         $response = Dispatcher::getDispatcher()->response();
         $apiHelper = new APIHelper($format);
         $response['Content-Type'] = $apiHelper->getContentType();

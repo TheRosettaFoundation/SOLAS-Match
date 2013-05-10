@@ -27,7 +27,7 @@
                             {else if $org_creation == 'h'}
                             {/if}
                         {/if} 
-                        {if isset($private_access) || isset($isSiteAdmin)}
+                        {if isset($private_access) || $isSiteAdmin}
                             <a  href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> Edit Profile Details
                             </a>
