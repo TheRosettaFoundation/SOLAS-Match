@@ -3,7 +3,7 @@
     <h1>Privacy Policy</h1>
 </div>  
 <div>
-This Privacy Policy governs the manner in which The Rossetta Foundation collects, uses, maintains and discloses information collected from users (each, a "User") of the <a href="http://trommons.org">trommons.org</a> website ("Site"). This privacy policy applies to the Site and all products and services offered by The Rossetta Foundation.<br><br>
+This Privacy Policy governs the manner in which The Rosetta Foundation collects, uses, maintains and discloses information collected from users (each, a "User") of the <a href="http://trommons.org">trommons.org</a> website ("Site"). This privacy policy applies to the Site and all products and services offered by The Rosetta Foundation.<br><br>
 
 <b>Personal identification information</b><br><br>
 
@@ -19,7 +19,7 @@ Our Site may use "cookies" to enhance User experience. User's web browser places
 
 <b>How we use collected information</b><br><br>
 
-The Rossetta Foundation may collect and use Users personal information for the following purposes:<br>
+The Rosetta Foundation may collect and use Users personal information for the following purposes:<br>
 <ul>
 <li><i>- To personalize user experience</i><br>
 	We may use information in the aggregate to understand how our Users as a group use the services and resources provided on our Site.</li>
@@ -38,7 +38,7 @@ We do not sell, trade, or rent Users personal identification information to othe
 
 <b>Changes to this privacy policy</b><br><br>
 
-The Rossetta Foundation has the discretion to update this privacy policy at any time. When we do, we will revise the updated date at the bottom of this page. We encourage Users to frequently check this page for any changes to stay informed about how we are helping to protect the personal information we collect. You acknowledge and agree that it is your responsibility to review this privacy policy periodically and become aware of modifications.<br><br>
+The Rosetta Foundation has the discretion to update this privacy policy at any time. When we do, we will revise the updated date at the bottom of this page. We encourage Users to frequently check this page for any changes to stay informed about how we are helping to protect the personal information we collect. You acknowledge and agree that it is your responsibility to review this privacy policy periodically and become aware of modifications.<br><br>
 
 <b>Your acceptance of these terms</b><br><br>
 

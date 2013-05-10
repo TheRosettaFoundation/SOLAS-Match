@@ -4323,6 +4323,25 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
+
+-- Dumping structure for trigger debug-test3.onUserUpdate
+DROP TRIGGER IF EXISTS `onUserUpdate`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `onUserUpdate` BEFORE UPDATE ON `Users` FOR EACH ROW BEGIN
+	IF (( old.language_id IS not NULL) or (OLD.language_id != NEW.language_id)
+		AND ( old.country_id IS not NULL) or (OLD.country_id != NEW.country_id)
+		AND ( old.biography IS not NULL) or (OLD.biography != NEW.biography)
+		AND NOT EXISTS (SELECT 1 FROM UserBadges b WHERE b.user_id = OLD.id AND b.badge_id=3)) THEN
+		
+		INSERT INTO UserBadges VALUES(OLD.id, 3);
+	END IF;
+	
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+
 /*---------------------------------------end of triggers-------------------------------------------*/
 SET FOREIGN_KEY_CHECKS=1;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

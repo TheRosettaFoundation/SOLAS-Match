@@ -30,7 +30,7 @@
  
     <form method='post' action='#' class='well'>
         
-        <table border="0">
+        <table>
             <tr valign="top" align="center"> 
                 <td width="50%">
                     <label for='displayName'><strong>Public Display Name: <span style="color: red">*</span></strong></label>
@@ -169,7 +169,47 @@
                     {/if} />
                 </td>
             <tr>                
-                <td colspan="2" style="padding-bottom: 20px"><hr/></td>
+                <td colspan="2">
+                    <hr/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td colspan="3" align="center" style="font-weight: bold">
+                                Task Type Preferences:
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                Translating
+                            </td>
+                            <td>
+                                Proofreading
+                            </td>
+                            <td>
+                                Interpreting
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <input name="translating" value="1" type="checkbox" {if in_array(BadgeTypes::TRANSLATOR, $userBadgeIds)} checked {/if} />  
+                            </td>
+                            <td>
+                                <input name="proofreading" value="1" type="checkbox" {if in_array(BadgeTypes::PROOFREADER, $userBadgeIds)} checked {/if} />
+                            </td>
+                            <td>
+                                <input name="interpreting" value="1" type="checkbox" {if in_array(BadgeTypes::INTERPRETOR, $userBadgeIds)} checked {/if} />
+                            </td>
+                        </tr>                        
+                    </table>  
+                </td>
+            </tr>
+            <tr>                
+                <td colspan="2" style="padding-bottom: 20px">
+                    <hr/>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" align="center">

@@ -447,6 +447,14 @@ class UserRouteHandler
 
         $countries =null;
         $countries=$countryDao->getCountries();
+        
+        $currentUserBadges = $userDao->getUserBadges($userId);                    
+        $badgeIds = array();
+        if($currentUserBadges){
+            foreach($currentUserBadges as $currentBadge) {
+                $badgeIds[] = $currentBadge->getId();
+            }
+        }  
 
         
         if ($app->request()->isPost()) {
@@ -525,22 +533,41 @@ class UserRouteHandler
                     if(!key_exists($key, $newSecondaryLocales)) {
                         $userDao->deleteSecondaryLanguage($userId, $newLocale);
                     }
+                }    
+
+                if(isset($post["translating"])) {
+                    if(!in_array(BadgeTypes::TRANSLATOR, $badgeIds)) {
+                        $userDao->addUserBadgeById($userId, BadgeTypes::TRANSLATOR);
+                    }
+                } else {
+                    if(in_array(BadgeTypes::TRANSLATOR, $badgeIds)) {
+                        $userDao->removeUserBadge($userId, BadgeTypes::TRANSLATOR);
+                    }
                 }
 
-                if ($user->getDisplayName() != ""
-                        && $user->getNativeLocale() != null) {
-                    $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                    $userDao->addUserBadgeById($userId, $badge_id);               
-                    $badge_id = BadgeTypes::PROFILE_FILLER;
-                    $userDao->addUserBadgeById($userId, $badge_id);               
-
+                if(isset($post["proofreading"])) {
+                    if(!in_array(BadgeTypes::PROOFREADER, $badgeIds)) {
+                        $userDao->addUserBadgeById($userId, BadgeTypes::PROOFREADER);
+                    }
+                } else {
+                    if(in_array(BadgeTypes::PROOFREADER, $badgeIds)) {
+                        $userDao->removeUserBadge($userId, BadgeTypes::PROOFREADER);
+                    }
                 }
 
-                $userDao->updateUser($user);
+                if(isset($post["interpreting"])) {
+                    if(!in_array(BadgeTypes::INTERPRETOR, $badgeIds)) {
+                        $userDao->addUserBadgeById($userId, BadgeTypes::INTERPRETOR);
+                    }
+                } else {
+                    if(in_array(BadgeTypes::INTERPRETOR, $badgeIds)) {
+                        $userDao->removeUserBadge($userId, BadgeTypes::INTERPRETOR);
+                    }
+                }
+
+                $userDao->updateUser($user); 
                 $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getId())));
-            }
-            
-            
+            }  
         }
         
         $extraScripts = file_get_contents(__DIR__."/../js/user-private-profile.js");
@@ -553,7 +580,8 @@ class UserRouteHandler
             "countries"         => $countries,
             "extra_scripts"     => $extraScripts,
             "userPersonalInfo"  => $userPersonalInfo,
-            "secondaryLanguages" => $secondaryLanguages
+            "secondaryLanguages" => $secondaryLanguages,
+            "userBadgeIds"      => $badgeIds
         ));       
        
         $app->render("user/user-private-profile.tpl");
