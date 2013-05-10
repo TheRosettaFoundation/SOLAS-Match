@@ -2308,7 +2308,7 @@ BEGIN
 		set @q = CONCAT(@q," and u.`display-name`='",name,"'") ;
 	end if;
 	if mail is not null then 
-		set @q = CONCAT(@q," and u.email='",mail,"'") ;
+		set @q = CONCAT(@q," and LOWER(u.email)='",LOWER(mail),"'") ;
 	end if;
 	if pass is not null then 
 		set @q = CONCAT(@q," and u.password='",pass,"'") ;
