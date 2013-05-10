@@ -9,7 +9,7 @@ class TagRouteHandler
 
         $app->get("/all/tags", array($middleware, "authUserIsLoggedIn"), array($this, "tagsList"))->via("POST")->name("tags-list");
 
-        $app->get("/tag/:label/:subscribe", array($this, "tagSubscribe")
+        $app->get("/tag/:id/:subscribe", array($this, "tagSubscribe")
         )->name("tag-subscribe");
         
         $app->get("/tag/:id", array($this, "tagDetails")
@@ -49,13 +49,13 @@ class TagRouteHandler
         $app->render("tag/tag-list.tpl");
     }
 
-    public function tagSubscribe($label, $subscribe)
+    public function tagSubscribe($id, $subscribe)
     {
         $app = Slim::getInstance();
         $tagDao = new TagDao();
         $userDao = new UserDao();
 
-        $tag = $tagDao->getTagByLabel($label);
+        $tag = $tagDao->getTag($id);
         $user_id = UserSession::getCurrentUserID();
         $current_user = $userDao->getUser($user_id);
 
@@ -64,24 +64,23 @@ class TagRouteHandler
             $app->redirect($app->urlFor("login"));
         }   
         
-        $tag_id = $tag->getId();
         $displayName = $current_user->getDisplayName();
         
         if ($subscribe == "true") {
-            $userLikeTag = $userDao->addUserTagById($user_id, $tag_id);            
+            $userLikeTag = $userDao->addUserTagById($user_id, $id);            
             if ($userLikeTag) {
-                $app->flash("success", "Successfully added tag, $label, to subscription list");
+                $app->flash("success", "Successfully added tag, {$tag->getLabel()}, to subscription list");
             } else {
-                $app->flash("error", "Unable to save tag, $label, for user $displayName");
+                $app->flash("error", "Unable to save tag, {$tag->getLabel()}, for user $displayName");
             }   
         }   
         
         if ($subscribe == "false") {
-            $removedTag = $userDao->removeUserTag($user_id, $tag_id);
+            $removedTag = $userDao->removeUserTag($user_id, $id);
             if ($removedTag) {
-                $app->flash("success", "Successfully removed tag $label for user $displayName");
+                $app->flash("success", "Successfully removed tag {$tag->getLabel()} for user $displayName");
             } else {
-                $app->flash("error", "Unable to remove tag $label for user $displayName");
+                $app->flash("error", "Unable to remove tag {$tag->getLabel()} for user $displayName");
             }
         }   
         
@@ -124,8 +123,8 @@ class TagRouteHandler
                 $app->view()->appendData(array(
                         'user_tags' => $user_tags
                 )); 
-                foreach ($user_tags as $tag) {
-                    if ($label == $tag->getLabel()) {
+                foreach ($user_tags as $userTag) {
+                    if ($label == $userTag->getLabel()) {
                         $app->view()->appendData(array(
                            'subscribed' => true
                         )); 
@@ -143,7 +142,7 @@ class TagRouteHandler
 
         $top_tags= $tagDao->getTopTags(30);
         $app->view()->appendData(array(
-                 "tag" => $label,
+                 "tag" => $tag,
                  "top_tags" => $top_tags,
                  "taskTypeColours" => $taskTypeColours
         )); 

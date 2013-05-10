@@ -105,7 +105,7 @@
                         <div style="margin-bottom:25px;">
                             <label for="tags"><h2>Tags:</h2></label>
                             <p class="desc">The tags you provide will be used to match volunteers to your project. <br/>Separated by spaces. For multiword tags: join-with-hyphens.</p>
-                            <input id="tags" name="tags" value="{if isset($tagList)}{$tagList}{/if}" />
+                            <input id="tags" name="tags" value="{if isset($tagList)}{$tagList}{/if}" style="width: 400px" />
                         </div>
                         <div style="margin-bottom:25px;">
                             <label for="publishtasks"><h2>Publish Tasks:</h2></label>
