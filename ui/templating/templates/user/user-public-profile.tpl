@@ -42,15 +42,7 @@
 {else}
     <div class='page-header'><h1>User Profile <small>Overview of your account details.</small></h1></div>
 {/if}
-
-{*    <h1>
-        {if isset($private_access)}
-            <a href='{urlFor name="user-private-profile"}' class='pull-right btn btn-primary'>
-                <i class="icon-wrench icon-white"></i> Edit Profile Details
-            </a>
-        {/if}
-    </h1>*}
-    
+ 
 
 <table border="0">
     <tr valign="top">
