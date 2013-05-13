@@ -3,13 +3,14 @@ php_flag display_errors on
 RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} (.*/users/.*)  [NC]
+RewriteCond %{REMOTE_ADDR} ^(127.0.0.1|localhost|193.1.104.2|trommons.org|77.235.58.241)$ 
+RewriteRule ^(.*)$ dispatcher.php [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(.*/users/.*)  [NC]
 RewriteRule ^(.*)$ dispatcher.php [QSA,L]
 
 # Disable listing of directory contents
 IndexIgnore *
 
-#AllowOverride All
-
-#Order Deny,Allow
-#Deny from all
-#Allow
