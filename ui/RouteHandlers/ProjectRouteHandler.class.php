@@ -10,23 +10,23 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();     
         
-        $app->get("/project/:project_id/view", array($middleware, "authUserIsLoggedIn"),
-        array($this, "projectView"))->via("POST")->name("project-view");
+        $app->get("/project/:project_id/view", array($middleware, "authUserIsLoggedIn")
+        , array($this, "projectView"))->via("POST")->name("project-view");
         
-        $app->get("/project/:project_id/alter", array($middleware, "authUserForOrgProject"), 
-        array($this, "projectAlter"))->via("POST")->name("project-alter");
+        $app->get("/project/:project_id/alter", array($middleware, "authUserForOrgProject")
+        , array($this, "projectAlter"))->via("POST")->name("project-alter");
         
-        $app->get("/project/:org_id/create", array($middleware, "authUserForOrg"),
-        array($this, "projectCreate"))->via("GET", "POST")->name("project-create");    
+        $app->get("/project/:org_id/create", array($middleware, "authUserForOrg")
+        , array($this, "projectCreate"))->via("GET", "POST")->name("project-create");    
         
-        $app->get("/project/id/:project_id/created", array($middleware, "authUserForOrgProject"),
-        array($this, "projectCreated"))->name("project-created");
+        $app->get("/project/id/:project_id/created", array($middleware, "authUserForOrgProject")
+        , array($this, "projectCreated"))->name("project-created");
         
-        $app->get("/project/id/:project_id/mark-archived", array($middleware, "authUserForOrgProject"),
-        array($this, "archiveProject"))->name("archive-project");
+        $app->get("/project/id/:project_id/mark-archived", array($middleware, "authUserForOrgProject")
+        , array($this, "archiveProject"))->name("archive-project");
 
-        $app->get("/project/:project_id/file", array($this, "downloadProjectFile")
-        )->name("download-project-file");
+        $app->get("/project/:project_id/file", array($middleware, "authUserIsLoggedIn")
+        , array($this, "downloadProjectFile"))->name("download-project-file");
 
         $app->get("/project/:project_id/test", array($this, "test"));
     }

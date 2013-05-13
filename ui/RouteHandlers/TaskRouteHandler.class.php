@@ -7,66 +7,66 @@ class TaskRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
 
-        $app->get("/tasks/archive/p/:page_no", array($this, "archivedTasks")
-        )->name("archived-tasks");
+        $app->get("/tasks/archive/p/:page_no", array($middleware, "authUserIsLoggedIn")
+        , array($this, "archivedTasks"))->name("archived-tasks");
 
-        $app->get("/tasks/claimed/p/:page_no", array($this, "claimedTasks")
-        )->name("claimed-tasks");        
+        $app->get("/tasks/claimed/p/:page_no", array($middleware, "authUserIsLoggedIn")
+        , array($this, "claimedTasks"))->name("claimed-tasks");        
 
-        $app->get("/task/:task_id/download-task-latest-file", array($middleware, "authenticateUserForTask"),
-        array($this, "downloadTaskLatestVersion"))->name("download-task-latest-version");
+        $app->get("/task/:task_id/download-task-latest-file", array($middleware, "authenticateUserForTask")
+        , array($this, "downloadTaskLatestVersion"))->name("download-task-latest-version");
         
-        $app->get("/task/:task_id/mark-archived", array($middleware, "authUserForOrgTask"),
-        array($this, "archiveTask"))->name("archive-task");
+        $app->get("/task/:task_id/mark-archived", array($middleware, "authUserForOrgTask")
+        , array($this, "archiveTask"))->name("archive-task");
 
-        $app->get("/task/:task_id/download-file-user", array($middleware, "authUserIsLoggedIn"),
-        array($this, "downloadTask"))->name("download-task");
+        $app->get("/task/:task_id/download-file-user", array($middleware, "authUserIsLoggedIn")
+        , array($this, "downloadTask"))->name("download-task");
 
-        $app->get("/task/:task_id/claim", array($middleware, "authUserIsLoggedIn"),
-        array($this, "taskClaim"))->via("POST")->name("task-claim-page");
+        $app->get("/task/:task_id/claim", array($middleware, "authUserIsLoggedIn")
+        , array($this, "taskClaim"))->via("POST")->name("task-claim-page");
 
-        $app->get("/task/:task_id/claimed", array($middleware, "authenticateUserForTask"),
-        array($this, "taskClaimed"))->name("task-claimed");
+        $app->get("/task/:task_id/claimed", array($middleware, "authenticateUserForTask")
+        , array($this, "taskClaimed"))->name("task-claimed");
 
-        $app->get("/task/:task_id/download-file/v/:version", array($middleware, "authUserIsLoggedIn"), 
-        array($middleware, "authUserForTaskDownload"), 
-        array($this, "downloadTaskVersion"))->name("download-task-version");
+        $app->get("/task/:task_id/download-file/v/:version", array($middleware, "authUserIsLoggedIn")
+        , array($middleware, "authUserForTaskDownload")
+        , array($this, "downloadTaskVersion"))->name("download-task-version");
 
-        $app->get("/task/:task_id/id", array($middleware, "authUserIsLoggedIn"),
-        array($this, "task"))->via("POST")->name("task");
+        $app->get("/task/:task_id/id", array($middleware, "authUserIsLoggedIn")
+        , array($this, "task"))->via("POST")->name("task");
 
-        $app->get("/task/:task_id/desegmentation", array($middleware, "authUserIsLoggedIn"),
-        array($this, "desegmentationTask"))->via("POST")->name("task-desegmentation");
+        $app->get("/task/:task_id/desegmentation", array($middleware, "authUserIsLoggedIn")
+        , array($this, "desegmentationTask"))->via("POST")->name("task-desegmentation");
 
-        $app->get("/task/:task_id/simple-upload", array($middleware, "authUserIsLoggedIn"),
-        array($this, "taskSimpleUpload"))->via("POST")->name("task-simple-upload");
+        $app->get("/task/:task_id/simple-upload", array($middleware, "authUserIsLoggedIn")
+        , array($this, "taskSimpleUpload"))->via("POST")->name("task-simple-upload");
 
-        $app->get("/task/:task_id/segmentation", array($middleware, "authUserIsLoggedIn"),
-        array($this, "taskSegmentation"))->via("POST")->name("task-segmentation");
+        $app->get("/task/:task_id/segmentation", array($middleware, "authUserIsLoggedIn")
+        , array($this, "taskSegmentation"))->via("POST")->name("task-segmentation");
 
-        $app->get("/task/:task_id/uploaded", array($middleware, "authenticateUserForTask"),
-        array($this, "taskUploaded"))->name("task-uploaded");
+        $app->get("/task/:task_id/uploaded", array($middleware, "authenticateUserForTask")
+        , array($this, "taskUploaded"))->name("task-uploaded");
 
-        $app->get("/task/:task_id/alter", array($middleware, "authUserForOrgTask"), 
-        array($this, "taskAlter"))->via("POST")->name("task-alter");
+        $app->get("/task/:task_id/alter", array($middleware, "authUserForOrgTask")
+        , array($this, "taskAlter"))->via("POST")->name("task-alter");
 
-        $app->get("/task/:task_id/view", array($middleware, "authUserIsLoggedIn"),
-        array($this, "taskView"))->via("POST")->name("task-view");
+        $app->get("/task/:task_id/view", array($middleware, "authUserIsLoggedIn")
+        , array($this, "taskView"))->via("POST")->name("task-view");
 
-        $app->get("/project/:project_id/create-task", array($middleware, "authUserForOrgProject"), 
-        array($this, "taskCreate"))->via("GET", "POST")->name("task-create");
+        $app->get("/project/:project_id/create-task", array($middleware, "authUserForOrgProject")
+        , array($this, "taskCreate"))->via("GET", "POST")->name("task-create");
 
-        $app->get("/task/:task_id/created", array($middleware, "authenticateUserForTask"),
-        array($this, "taskCreated"))->name("task-created");
+        $app->get("/task/:task_id/created", array($middleware, "authenticateUserForTask")
+        , array($this, "taskCreated"))->name("task-created");
         
-        $app->get("/task/:task_id/org-feedback/", array($middleware, "authUserForOrgTask"), 
-        array($this, "taskOrgFeedback"))->via("POST")->name("task-org-feedback");
+        $app->get("/task/:task_id/org-feedback/", array($middleware, "authUserForOrgTask")
+        , array($this, "taskOrgFeedback"))->via("POST")->name("task-org-feedback");
         
-        $app->get("/task/:task_id/user-feedback/", array($middleware, "authenticateUserForTask"), 
-        array($this, "taskUserFeedback"))->via("POST")->name("task-user-feedback");   
+        $app->get("/task/:task_id/user-feedback/", array($middleware, "authenticateUserForTask")
+        , array($this, "taskUserFeedback"))->via("POST")->name("task-user-feedback");   
 
-        $app->get("/task/:task_id/review", array($middleware, "authenticateUserForTask"),
-        array($this, "taskReview"))->via("POST")->name("task-review");
+        $app->get("/task/:task_id/review", array($middleware, "authenticateUserForTask")
+        , array($this, "taskReview"))->via("POST")->name("task-review");
         
         $app->get(Settings::get("site.api"), array($middleware, "authUserForOrgTask"))->name("api");
     }
@@ -121,10 +121,6 @@ class TaskRouteHandler
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
-        if (is_null($user_id)) {
-            $app->flash("error", "Login required to access page.");
-            $app->redirect($app->urlFor("login"));
-        }
 
         $activeTasks = $userDao->getUserTasks($user_id);
         if ($activeTasks) {

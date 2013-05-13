@@ -15,9 +15,24 @@ class Middleware
         }
 
         return true;
+    }    
+    
+    public static function notFound()
+    {
+        $app = Slim::getInstance();
+        $app->flash('error', "You do not have sufficient privileges to access this page or the page does not exist.");
+        $app->redirect($app->urlFor('home'));
     }
-
-    public function isSiteAdmin()
+    
+    public function authenticateSiteAdmin()
+    {
+        if(!$this->isSiteAdmin()) {
+            self::notFound();          
+        }
+        return true;
+    }
+    
+    private function isSiteAdmin()
     {
         $this->isUserBanned(); 
         if(is_null(UserSession::getCurrentUserID())) return false;

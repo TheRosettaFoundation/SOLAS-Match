@@ -350,26 +350,16 @@ class TemplateHelper {
 
     private static function maxUploadSizeFromPHPSettings()
     {
-        return ini_get("post_max_size");
+        return ini_get("upload_max_filesize");
     }
         
     public static function validateFileHasBeenSuccessfullyUploaded($field_name)
     {
-        if (self::isPostTooLarge()) {
-            $max_file_size = ini_get("post_max_size");
-            throw new Exception("Sorry, the file you tried uploading is too large.
-                                The max file size is $max_file_size.
-                                 Please consider saving the file in multiple smaller parts for upload.");
-        }
-
-        if (!self::isUploadedFile($field_name)) {
-            throw new Exception("You did not upload a file. Please try again.");
-        }
-
         if (!self::isUploadedWithoutError($field_name)) {
-            $error_message = self::fileUploadErrorMessage($_FILES[$form_file_field]["error"]);
-            throw new Exception("Sorry, we were not able to upload your file. Error: $error_message");
+            $error_message = self::fileUploadErrorMessage($_FILES[$field_name]["error"]);
+            throw new Exception("Sorry, we were not able to upload your file. $error_message");
         }
+
     }
 
     /* Thanks to http://andrewcurioso.com/2010/06/detecting-file-size-overflow-in-php/ */
@@ -379,29 +369,31 @@ class TemplateHelper {
                     $_SERVER["REQUEST_METHOD"] == "POST" && 
                     empty($_POST) &&
                     empty($_FILES) && 
-                    $_SERVER["CONTENT_LENGTH"] > 0
+                    $_SERVER["CONTENT_LENGTH"] > 0 
+                                        
             );
     }
 
     private static function fileUploadErrorMessage($error_code)
     {
+        $max_file_size = self::maxFileSizeMB();
         switch ($error_code) {
             case UPLOAD_ERR_INI_SIZE :
-                return "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+                return "The file you tried uploading is too large. The max file size is <strong>{$max_file_size}MB</strong>.";
             case UPLOAD_ERR_FORM_SIZE :
-                return "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+                return "The file you tried uploading is too large. The max file size is <strong>{$max_file_size}MB.</strong>";
             case UPLOAD_ERR_PARTIAL :
-                return "The uploaded file was only partially uploaded";
+                return "The uploaded file was only partially uploaded. Please try again.";
             case UPLOAD_ERR_NO_FILE :
-                return "No file was uploaded";
+                return "You did not select a file to upload. Please try again.";
             case UPLOAD_ERR_NO_TMP_DIR :
-                return "Missing a temporary folder";
+                return "Server is missing a temporary folder.";
             case UPLOAD_ERR_CANT_WRITE :
-                return "Failed to write file to disk";
+                return "Server failed to write file to disk.";
             case UPLOAD_ERR_EXTENSION :
-                return "File upload stopped by extension";
+                return "File upload stopped by extension.";
             default :
-                return "Unknown upload error";
+                return "Unknown upload error. Please contact the administrators.";
         }
     }
 

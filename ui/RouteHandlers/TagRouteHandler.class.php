@@ -7,13 +7,14 @@ class TagRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
 
-        $app->get("/all/tags", array($middleware, "authUserIsLoggedIn"), array($this, "tagsList"))->via("POST")->name("tags-list");
+        $app->get("/all/tags", array($middleware, "authUserIsLoggedIn")
+        , array($this, "tagsList"))->via("POST")->name("tags-list");
 
-        $app->get("/tag/:id/:subscribe", array($this, "tagSubscribe")
-        )->name("tag-subscribe");
+        $app->get("/tag/:id/:subscribe", array($middleware, "authUserIsLoggedIn")
+        , array($this, "tagSubscribe"))->via("POST")->name("tag-subscribe");
         
-        $app->get("/tag/:id", array($this, "tagDetails")
-        )->via("POST")->name("tag-details");
+        $app->get("/tag/:id", array($middleware, "authUserIsLoggedIn")
+        , array($this, "tagDetails"))->via("POST")->name("tag-details");
     }
 
     public function tagsList()
@@ -58,11 +59,6 @@ class TagRouteHandler
         $tag = $tagDao->getTag($id);
         $user_id = UserSession::getCurrentUserID();
         $current_user = $userDao->getUser($user_id);
-
-        if (!is_object($current_user)) {
-            $app->flash("error", "Login required to access page");
-            $app->redirect($app->urlFor("login"));
-        }   
         
         $displayName = $current_user->getDisplayName();
         
@@ -96,12 +92,13 @@ class TagRouteHandler
         $userDao = new UserDao();
 
         $tag = $tagDao->getTag($id);
-        $label = $tag->getLabel();
-        $tag_id = $tag->getId();
-        if (is_null($tag_id)) {
+        if (is_null($tag)) {
             header("HTTP/1.0 404 Not Found");
             die;
         }
+        
+        $label = $tag->getLabel();
+        $tag_id = $tag->getId();
 
         $tasks = $tagDao->getTasksWithTag($tag_id, 10);
         for ($i = 0; $i < count($tasks); $i++) {
