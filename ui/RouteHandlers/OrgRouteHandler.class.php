@@ -7,41 +7,41 @@ class OrgRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
 
-        $app->get("/org/create", array($middleware, "authUserIsLoggedIn"), 
-        array($this, "createOrg"))->via("POST")->name("create-org");
+        $app->get("/org/create", array($middleware, "authUserIsLoggedIn")
+        , array($this, "createOrg"))->via("POST")->name("create-org");
         
-        $app->get("/org/dashboard", array($middleware, "authUserIsLoggedIn"), 
-        array($this, "orgDashboard"))->via("POST")->name("org-dashboard");        
+        $app->get("/org/dashboard", array($middleware, "authUserIsLoggedIn")
+        , array($this, "orgDashboard"))->via("POST")->name("org-dashboard");        
 
-        $app->get("/org/:org_id/request", array($this, "orgRequestMembership")
-        )->name("org-request-membership");
+        $app->get("/org/:org_id/request", array($middleware, "authUserIsLoggedIn")
+        , array($this, "orgRequestMembership"))->name("org-request-membership");
 
-        $app->get("/org/:org_id/request/:user_id/:accept", array($middleware, "authUserForOrg"), 
-        array($this, "orgProcessRequest"))->name("org-process-request");
+        $app->get("/org/:org_id/request/:user_id/:accept", array($middleware, "authUserForOrg")
+        , array($this, "orgProcessRequest"))->name("org-process-request");
 
-        $app->get("/org/:org_id/request/queue", array($middleware, "authUserForOrg"), 
-        array($this, "orgRequestQueue"))->via("POST")->name("org-request-queue");
+        $app->get("/org/:org_id/request/queue", array($middleware, "authUserForOrg")
+        , array($this, "orgRequestQueue"))->via("POST")->name("org-request-queue");
 
-        $app->get("/org/:org_id/private", array($middleware, "authUserForOrg"), 
-        array($this, "orgPrivateProfile"))->via("POST")->name("org-private-profile");
+        $app->get("/org/:org_id/private", array($middleware, "authUserForOrg")
+        , array($this, "orgPrivateProfile"))->via("POST")->name("org-private-profile");
 
-        $app->get("/org/:org_id/profile", array($middleware, "authUserIsLoggedIn"),
-        array($this, "orgPublicProfile"))->via("POST")->name("org-public-profile");
+        $app->get("/org/:org_id/profile", array($middleware, "authUserIsLoggedIn")
+        , array($this, "orgPublicProfile"))->via("POST")->name("org-public-profile");
 
-        $app->get("/org/:org_id/manage/:badge_id", array($middleware, "authUserForOrg"), 
-        array($this, "orgManageBadge"))->via("POST")->name("org-manage-badge");
+        $app->get("/org/:org_id/manage/:badge_id", array($middleware, "authUserForOrg")
+        , array($this, "orgManageBadge"))->via("POST")->name("org-manage-badge");
 
-        $app->get("/org/:org_id/create/badge", array($middleware, "authUserForOrg"), 
-        array($this, "orgCreateBadge"))->via("POST")->name("org-create-badge");
+        $app->get("/org/:org_id/create/badge", array($middleware, "authUserForOrg")
+        , array($this, "orgCreateBadge"))->via("POST")->name("org-create-badge");
 
-        $app->get("/org/search", array($this, "orgSearch")
-        )->via("POST")->name("org-search");
+        $app->get("/org/search", array($middleware, "authUserIsLoggedIn")
+        , array($this, "orgSearch"))->via("POST")->name("org-search");
         
-        $app->get("/org/:org_id/edit/:badge_id", array($middleware, "authUserForOrg"), 
-        array($this, "orgEditBadge"))->via("POST")->name("org-edit-badge");         
+        $app->get("/org/:org_id/edit/:badge_id", array($middleware, "authUserForOrg")
+        , array($this, "orgEditBadge"))->via("POST")->name("org-edit-badge");         
 
-        $app->get("/org/:org_id/task/:task_id/review", array($middleware, "authUserForOrg"),
-        array($this, "orgTaskReview"))->via("POST")->name("org-task-review");
+        $app->get("/org/:org_id/task/:task_id/review", array($middleware, "authUserForOrg")
+        , array($this, "orgTaskReview"))->via("POST")->name("org-task-review");
     }
 
     public function createOrg()

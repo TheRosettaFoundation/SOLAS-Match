@@ -33,7 +33,7 @@ class Upload {
 
     private static function maxUploadSizeFromPHPSettings()
     {
-        return ini_get('post_max_size');
+        return ini_get('upload_max_filesize');
     }
 
     public static function validateFileHasBeenSuccessfullyUploaded($field_name)
