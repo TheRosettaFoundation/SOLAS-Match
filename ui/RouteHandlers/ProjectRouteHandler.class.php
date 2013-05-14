@@ -540,6 +540,7 @@ class ProjectRouteHandler
                             } 
                         }
                     } 
+                    $projectDao->calculateProjectDeadlines($project->getId());
                     $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
                 }              
             } else {     

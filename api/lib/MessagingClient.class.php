@@ -19,6 +19,7 @@ class MessagingClient
     public $EmailVerificationTopic          = "email";
     public $BannedLoginTopic                = "email";
     public $TaskUploadNotificationTopic     = "tasks";
+    public $CalculateProjectDeadlinesTopic  = "projects";
 
     private $connection;
 

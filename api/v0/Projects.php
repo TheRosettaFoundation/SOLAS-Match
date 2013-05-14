@@ -82,6 +82,14 @@ class Projects
                 Dispatcher::sendResponce(null, $data, null, $format);
             }, 'getProject');
 
+        Dispatcher::registerNamed(HTTPMethodEnum::POST, '/v0/projects/:id/calculateDeadlines(:format)/',
+                function ($id, $format = '.json')
+                {
+                    $ret = null;
+                    $ret = ProjectDao::calculateProjectDeadlines($id);
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'calculateProjectDeadlines');
+
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:id/reviews(:format)/',
                 function ($id, $format = '.json')
                 {

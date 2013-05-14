@@ -77,6 +77,14 @@ class ProjectDao
         return $ret;
     }
 
+    public function calculateProjectDeadlines($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$projectId/calculateDeadlines";
+        $ret = $this->client->call(null, $request, HttpMethodEnum::POST);
+        return $ret;
+    }
+
     public function archiveProject($projectId, $userId)
     {
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";  
