@@ -397,13 +397,16 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
 
 -- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.RegisteredUsers
+-- Dumping structure for table SolasMatch.RegisteredUsers
+DROP TABLE IF EXISTS `RegisteredUsers`;
 CREATE TABLE IF NOT EXISTS `RegisteredUsers` (
   `user_id` int(10) unsigned NOT NULL,
-  `unique_id` VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
-  UNIQUE KEY `user_id` (`user_id`)
+  `unique_id` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `user_id` (`user_id`),
+  CONSTRAINT `FK_RegisteredUsers_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.Statistics
@@ -441,20 +444,21 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table Solas-Match-Test.TaskFileVersions
+-- Dumping structure for table SolasMatch.TaskFileVersions
+DROP TABLE IF EXISTS `TaskFileVersions`;
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
-	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-	`task_id` BIGINT(20) UNSIGNED NOT NULL,
-	`version_id` INT(11) NOT NULL COMMENT 'Gets incremented within the code',
-	`filename` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
-	`content-type` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`user_id` INT(11) UNSIGNED NOT NULL COMMENT 'Null while we don\'t have logging in',
-	`upload-time` DATETIME NULL DEFAULT NULL,
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`),
-	INDEX `FK_task_file_version_user` (`user_id`),
-	CONSTRAINT `FK_task_file_version_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_task_file_version_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `task_id` bigint(20) unsigned NOT NULL,
+  `version_id` int(11) NOT NULL COMMENT 'Gets incremented within the code',
+  `filename` text COLLATE utf8_unicode_ci NOT NULL,
+  `content-type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_id` int(11) unsigned NOT NULL COMMENT 'Null while we don''t have logging in',
+  `upload-time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `taskFile` (`task_id`,`version_id`,`user_id`),
+  KEY `FK_task_file_version_user` (`user_id`),
+  CONSTRAINT `FK_TaskFileVersions_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_TaskFileVersions_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -1901,17 +1905,17 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getRegisteredUser
+-- Dumping structure for procedure SolasMatch.getRegisteredUser
 DROP PROCEDURE IF EXISTS `getRegisteredUser`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getRegisteredUser`(IN `uuid` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRegisteredUser`(IN `uuid` VARCHAR(128))
 BEGIN
     if EXISTS (SELECT 1
                 FROM RegisteredUsers
                 WHERE unique_id = uuid) then
         CALL getUser((SELECT user_id
                         FROM RegisteredUsers
-                        WHERE unique_id = uuid), null, null, null, null, null, null, null, null);
+                        WHERE unique_id = uuid limit 1), null, null, null, null, null, null, null, null);
     end if;
 END//
 DELIMITER ;
