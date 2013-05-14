@@ -75,20 +75,20 @@
                 {if isset($userSubscribedToProject)}
                     <td>
 
-                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                        <form id="trackedProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                              {if $userSubscribedToProject}
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
-                                    <input type="submit" class="btn btn-small" value="    Tracked" />
-
-                                    <i class="icon-inbox icon-black" style="position:relative; right:70px; top:2px;"></i>
+                                    <a class="btn btn-small" onclick="$('#trackedProjectForm').submit();" >
+                                        <i class="icon-check icon-black"></i> Tracked
+                                    </a>
                                 </p>
                             {else}
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
-                                    <input type="submit" class="btn btn-small btn-inverse" value="    Untracked" />
-
-                                    <i class="icon-envelope icon-white" style="position:relative; right:81px; top:2px;"></i>
+                                    <a class="btn btn-small btn-inverse" onclick="$('#trackedProjectForm').submit();" >
+                                        <i class="icon-envelope icon-white"></i> Untracked
+                                    </a>
                                 </p>
                             {/if}
                         </form>                     
@@ -261,31 +261,35 @@
                                         {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
                                     </td>
                                     <td>
-                                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
+                                        <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
-                                                <input type="submit" class="btn btn-small" value="   Published" />
-                                                <i class="icon-check icon-black" style="position:relative; right:77px; top:2px;"></i>
+                                                <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();" >
+                                                    <i class="icon-check icon-black"></i> Published
+                                                </a>                                                
                                                 <input type="hidden" name="publishedTask" value="0" />
                                             {else}                                        
                                                 <input type="hidden" name="publishedTask" value="1" />
-                                                <input type="submit" class="btn btn-small btn-inverse" value="   Unpublished" />
-                                                <i class="icon-remove-circle icon-white" style="position:relative; right:90px; top:2px;"></i>
+                                                <a class="btn btn-small btn-inverse" onclick="$('#publishedForm{$task_id}').submit();" >
+                                                    <i class="icon-remove-circle icon-white"></i> Unpublished
+                                                </a>
                                             {/if}
                                         </form>
 
                                     </td>
                                     <td>
-                                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                        <form id="trackedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
-                                                <input type="submit" name="tracking" class="btn btn-small" value="   Tracked" />
-                                                <i class="icon-inbox icon-black" style="position:relative; right:70px; top:2px;"></i>
+                                                <a class="btn btn-small" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                    <i class="icon-inbox icon-black"></i> Tracked
+                                                </a>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
-                                                <input type="submit" name="tracking" class="btn btn-small btn-inverse" value="   Untracked" />
-                                                <i class="icon-envelope icon-white" style="position:relative; right:80px; top:2px;"></i>
+                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                    <i class="icon-envelope icon-white"></i> Untracked
+                                                </a>
                                             {/if}
                                         </form>
                                     </td>    
@@ -295,18 +299,22 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                        <form id="archiveDeleteForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
-                                                <input type="submit" class="btn btn-small btn-inverse" name="deleteTask" value="   Delete" />
-                                                <i class="icon-fire icon-white" style="position:relative; right:60px; top:2px;"></i>
+                                                <input type="hidden" name="deleteTask" value="Delete" />
+                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                    <i class="icon-fire icon-white"></i> Delete
+                                                </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                                <input type="submit" class="btn btn-small btn-inverse" name="archiveTask" 
-                                                        disabled="true" value="  Archive" title="Cannot archive in progress tasks" />
-                                                <i class="icon-fire icon-white" style="position:relative; right:65px; top:2px;"></i>
+                                                <button class="btn btn-small btn-inverse" disabled>
+                                                    <i class="icon-fire icon-white"></i> Cannot archive in progress tasks.
+                                                </button>  
                                             {else}
-                                                <input type="submit" class="btn btn-small btn-inverse" name="archiveTask" value="  Archive" />
-                                                <i class="icon-fire icon-white" style="position:relative; right:65px; top:2px;"></i>
+                                                <input type="hidden" name="archiveTask" value="Delete" />
+                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                    <i class="icon-fire icon-white"></i> Archive
+                                                </a> 
                                             {/if}
                                         </form>
                                     </td>

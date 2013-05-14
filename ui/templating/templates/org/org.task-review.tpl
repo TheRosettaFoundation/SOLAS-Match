@@ -8,7 +8,7 @@
 {include file="handle-flash-messages.tpl"}
 
 <p>
-    The volunteer, {$translator->getDisplayName()}, has completed work on this task. You can download
+    The volunteer, <a href="{urlFor name="user-public-profile" options="user_id.{$translator->getId()}"}">{$translator->getDisplayName()}</a>, has completed work on this task. You can download
     the output file <a href="{urlFor name="download-task-latest-version" options="task_id.$taskId"}">
     here</a>. Please provide a review of this task to help improve the system.
 </p>
