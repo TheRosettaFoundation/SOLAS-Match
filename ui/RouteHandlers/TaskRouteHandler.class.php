@@ -526,12 +526,8 @@ class TaskRouteHandler
         $deadlineError = "";
 
         $extra_scripts = "
-
-        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/selectable.css\" />
-        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>"
-        .file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-alter.js");
+        <script type=\"text/javascript\">".file_get_contents(__DIR__."/../js/lib/jquery-ui-timepicker-addon.js")."</script>"
+        .file_get_contents(__DIR__."/../js/datetime-picker.js");
 
         $task = $taskDao->getTask($task_id);
 
@@ -606,9 +602,8 @@ class TaskRouteHandler
             }
 
             if (isset($post['deadline']) && $post['deadline'] != "") {
-                if (TemplateHelper::isValidDateTime($post['deadline']) == true) {
-                    $unixTime = strtotime($post['deadline']);
-                    $date = date("Y-m-d H:i:s", $unixTime);  
+                if ($validTime = TemplateHelper::isValidDateTime($post['deadline'])) {
+                    $date = date("Y-m-d H:i:s", $validTime);  
                     $task->setDeadline($date);
                 } else {
                     $deadlineError = "Invalid date/time format!";
@@ -885,9 +880,8 @@ class TaskRouteHandler
             }
 
             if(isset($post['deadline'])) {
-                if(TemplateHelper::isValidDateTime($post['deadline']) == true) {
-                    $unixTime = strtotime($post['deadline']);
-                    $date = date("Y-m-d H:i:s", $unixTime);  
+                if($validTime = TemplateHelper::isValidDateTime($post['deadline'])) {
+                    $date = date("Y-m-d H:i:s", $validTime);  
                     $task->setDeadline($date);
                 } else {
                     $deadlineError = "Invalid date/time format!";
@@ -941,9 +935,8 @@ class TaskRouteHandler
         }
 
         $extra_scripts = "
-        <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
+            <script type=\"text/javascript\">".file_get_contents(__DIR__."/../js/lib/jquery-ui-timepicker-addon.js")."</script>"
+            .file_get_contents(__DIR__."/../js/datetime-picker.js");
 
         $app->view()->appendData(array(
                 "project"       => $project,

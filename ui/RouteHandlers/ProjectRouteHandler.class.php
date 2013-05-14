@@ -268,9 +268,8 @@ class ProjectRouteHandler
             if(isset($post['impact'])) $project->setImpact($post['impact']);           
 
             if(isset($post['deadline'])) {                
-                if (TemplateHelper::isValidDateTime($post['deadline']) == true) {
-                    $unixTime = strtotime($post['deadline']);
-                    $date = date("Y-m-d H:i:s", $unixTime);  
+                if ($validTime = TemplateHelper::isValidDateTime($post['deadline'])) {
+                    $date = date("Y-m-d H:i:s", $validTime);  
                     $project->setDeadline($date);
                 } else {
                     $deadlineError = "Invalid date/time format!";
@@ -323,17 +322,12 @@ class ProjectRouteHandler
         $tagList .= "]";
 
         $extra_scripts = "
-            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui-timepicker-addon.css\" />
-            <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/jquery-ui.css\" />
-            <script src=\"{$app->urlFor("home")}ui/js/jquery-1.9.0.min.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/js/jquery-ui.js\"></script>
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
+            <script type=\"text/javascript\">".file_get_contents(__DIR__."/../js/lib/jquery-ui-timepicker-addon.js")."</script>"
+            .file_get_contents(__DIR__."/../js/datetime-picker.js")."
             <script type=\"text/javascript\">
                 var tagList = $tagList;
-            </script>
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/tags-autocomplete.js\"></script>
-        ";
+            </script>"
+            .file_get_contents(__DIR__."/../js/tags-autocomplete.js");
         
         $app->view()->appendData(array(
                               "project"         => $project,
@@ -379,9 +373,8 @@ class ProjectRouteHandler
             }            
             
             if(isset($post['deadline'])) {
-                if(TemplateHelper::isValidDateTime($post['deadline']) == true) {
-                    $unixTime = strtotime($post['deadline']);
-                    $date = date("Y-m-d H:i:s", $unixTime);  
+                if($validTime = TemplateHelper::isValidDateTime($post['deadline'])) {
+                    $date = date("Y-m-d H:i:s", $validTime);  
                     $project->setDeadline($date);
                 } else {
                     $deadline_err = "Invalid date/time format!";
@@ -569,14 +562,14 @@ class ProjectRouteHandler
         $tagString .= "]";
         // todo
         $extra_scripts = "
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/jquery-ui-timepicker-addon.js\"></script>
-            </script>".file_get_contents("http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/project-create.js")."
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
+            <script type=\"text/javascript\">".file_get_contents(__DIR__."/../js/lib/jquery-ui-timepicker-addon.js")."</script>
+            ".file_get_contents(__DIR__."/../js/project-create.js")
+            .file_get_contents(__DIR__."/../js/datetime-picker.js")
+            ."
             <script type=\"text/javascript\">
                 var tagList = $tagString;
-            </script>
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/tags-autocomplete.js\"></script>
-        ";
+            </script>"
+            .file_get_contents(__DIR__."/../js/tags-autocomplete.js");
 
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();

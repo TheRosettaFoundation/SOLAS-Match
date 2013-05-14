@@ -1,3 +1,4 @@
+<script type="text/javascript">
     $(function() {
         var availableTags = tagList; 
         function split( val ) {
@@ -38,3 +39,4 @@
             }
         });
     });
+</script>

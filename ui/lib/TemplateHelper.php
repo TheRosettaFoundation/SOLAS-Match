@@ -78,8 +78,13 @@ class TemplateHelper {
     }
     
     public static function isValidDateTime($dateTime)
-    {   
-        return (false !== strtotime(trim(str_replace(" - ", " ", $dateTime))));
+    { 
+        //Does not support daylight saving time - Use UTC
+        if($validTime = strtotime(trim(str_replace(" - ", " ", $dateTime)))) {
+            return $validTime;
+        } else {
+            return false;
+        }
     }
     
     public static function addTimeToUnixTime($unixTime, $timeStr) 
