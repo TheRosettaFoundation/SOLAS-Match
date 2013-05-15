@@ -398,7 +398,6 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
 -- Data exporting was unselected.
 
 -- Dumping structure for table SolasMatch.RegisteredUsers
-DROP TABLE IF EXISTS `RegisteredUsers`;
 CREATE TABLE IF NOT EXISTS `RegisteredUsers` (
   `user_id` int(10) unsigned NOT NULL,
   `unique_id` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -445,7 +444,7 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
 
 
 -- Dumping structure for table SolasMatch.TaskFileVersions
-DROP TABLE IF EXISTS `TaskFileVersions`;
+
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
