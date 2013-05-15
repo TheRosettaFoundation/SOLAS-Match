@@ -2107,6 +2107,20 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure debug-test3.getTaskClaimedTime
+DROP PROCEDURE IF EXISTS `getTaskClaimedTime`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskClaimedTime`(IN `taskId` INT)
+BEGIN
+	IF EXISTS ( SELECT 1 FROM TaskClaims WHERE task_id = taskId) THEN
+		SELECT t.`claimed-time` as result FROM TaskClaims t WHERE t.task_id=taskId;
+	ELSE
+		SELECT 0 as result;
+	END IF;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getTaskFileMetaData
 DROP PROCEDURE IF EXISTS `getTaskFileMetaData`;
 DELIMITER //

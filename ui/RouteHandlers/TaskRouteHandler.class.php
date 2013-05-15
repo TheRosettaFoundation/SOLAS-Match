@@ -1131,7 +1131,8 @@ class TaskRouteHandler
         $projectDao = new ProjectDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask($task_id);   
+        $task = $taskDao->getTask($task_id);        
+        $taskClaimedDate = $taskDao->getClaimedDate($task_id); 
         $project = $projectDao->getProject($task->getProjectId());
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
@@ -1179,6 +1180,7 @@ class TaskRouteHandler
         $app->view()->appendData(array(
             "project" => $project,
             "task" => $task,
+            "taskClaimedDate" => $taskClaimedDate,
             "claimant" => $claimant,
             "taskTypeColours" => $taskTypeColours,
             "task_tags" => $task_tags
@@ -1196,7 +1198,8 @@ class TaskRouteHandler
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $task = $taskDao->getTask($task_id);   
+        $task = $taskDao->getTask($task_id);  
+        $taskClaimedDate = $taskDao->getClaimedDate($task_id);
         $project = $projectDao->getProject($task->getProjectId());
         $organisation = $orgDao->getOrganisation($project->getOrganisationId());          
         $claimant = $taskDao->getUserClaimedTask($task_id);
@@ -1233,6 +1236,7 @@ class TaskRouteHandler
             "org" => $organisation,
             "project" => $project,
             "task" => $task,
+            "taskClaimedDate" =>$taskClaimedDate,
             "claimant" => $claimant,
             "taskTypeColours" => $taskTypeColours,
             "task_tags" => $task_tags
