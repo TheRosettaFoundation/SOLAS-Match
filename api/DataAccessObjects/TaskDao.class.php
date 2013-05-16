@@ -721,4 +721,14 @@ class TaskDao
             }
         }
     }
+    
+    public static function getClaimedTime($taskId)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanse($taskId);
+        if ($result = PDOWrapper::call('getTaskClaimedTime', $args)) {            
+            $ret = $result[0]['result'];
+        }
+        return $ret;
+    }
 }

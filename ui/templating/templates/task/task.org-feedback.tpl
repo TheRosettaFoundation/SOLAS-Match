@@ -96,7 +96,9 @@
         <tbody>            
             <tr>
                 <td>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</td>
-                <td/>
+                <td>
+                    {date(Settings::get("ui.date_format"), strtotime($taskClaimedDate))}
+                </td>
                 <td>
                     {assign var="user_id" value=$claimant->getId()}
                     <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$claimant->getDisplayName()}</a>

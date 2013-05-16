@@ -168,8 +168,8 @@ class UserRouteHandler
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
                 $extra_scripts = "
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/openid-jquery.js\"></script>
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/openid-en.js\"></script>
+                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
+                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
                     <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
                 $app->view()->appendData(array("extra_scripts" => $extra_scripts));
             }   
@@ -330,8 +330,8 @@ class UserRouteHandler
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
                 $extra_scripts = "
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/openid-jquery.js\"></script>
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/openid-en.js\"></script>
+                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
+                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
                     <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
                 $app->view()->appendData(array("extra_scripts" => $extra_scripts));
             }
@@ -429,6 +429,7 @@ class UserRouteHandler
         $app = Slim::getInstance();
         
         $userDao = new UserDao();
+        $loggedInuser = $userDao->getUser(UserSession::getCurrentUserID());
         $user = $userDao->getUser($userId);
         $userPersonalInfo = $userDao->getPersonalInfo($userId);
         
@@ -571,7 +572,8 @@ class UserRouteHandler
         $secondaryLanguages = $userDao->getSecondaryLanguages($userId);
         
         $app->view()->appendData(array(
-            "user"              => $user,
+            "user"              => $loggedInuser,
+            "profileUser"              => $user,
             "private_access"    => true,
             "languages"         => $languages,
             "countries"         => $countries,

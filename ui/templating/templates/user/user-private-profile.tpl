@@ -1,11 +1,11 @@
 {include file='header.tpl'}
 
-{if isset($user)}
+{if isset($profileUser)}
     <div class="page-header">
         <h1>
-        <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
-        {if $user->getDisplayName() != ''}
-            {$user->getDisplayName()}
+        <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($profileUser->getEmail())))}?s=80&r=g" alt="" />
+        {if $profileUser->getDisplayName() != ''}
+            {$profileUser->getDisplayName()}
         {else}
             Private Profile
         {/if}
@@ -35,15 +35,15 @@
                 <td width="50%">
                     <label for='displayName'><strong>Public Display Name: <span style="color: red">*</span></strong></label>
                     <input type='text' name='displayName' id='displayName' style="width: 80%"
-                    {if $user->getDisplayName() != ''}
-                        value='{$user->getDisplayName()}'
+                    {if $profileUser->getDisplayName() != ''}
+                        value='{$profileUser->getDisplayName()}'
                     {else}
                         placeholder='Display Name'
                     {/if} /> 
                     
                     <label for='nLanguage'><strong>Native Language:</strong></label>
                     <div id='userNativeLanguage'>
-                        {assign var="usersNativeLocale" value=$user->getNativeLocale()}
+                        {assign var="usersNativeLocale" value=$profileUser->getNativeLocale()}
                         {if isset($usersNativeLocale)}
                             {assign var="userLanguageCode" value=$usersNativeLocale->getLanguageCode()}
                             {assign var="userCountryCode" value=$usersNativeLocale->getCountryCode()}
@@ -112,8 +112,8 @@
                     </p>
                     
                     <label for='biography'><strong>Biography:</strong></label>
-                    <textarea name='biography' cols='40' rows='7' {if $user->getBiography() == ''} placeholder="Enter Bio Here" {/if}
-                    style="width: 80%">{if $user->getBiography() != ''}{$user->getBiography()}{/if}</textarea>
+                    <textarea name='biography' cols='40' rows='7' {if $profileUser->getBiography() == ''} placeholder="Enter Bio Here" {/if}
+                    style="width: 80%">{if $profileUser->getBiography() != ''}{$profileUser->getBiography()}{/if}</textarea>
                     
                 </td>
                 <td width="50%">
@@ -216,7 +216,7 @@
                     <button type='submit' class='btn btn-primary' name='updateProfileDetails'>
                         <i class="icon-refresh icon-white"></i> Update Profile Details
                     </button>   
-                    <button type="submit" class="btn btn-inverse" value="{$user->getId()}" name="deleteUser"
+                    <button type="submit" class="btn btn-inverse" value="{$profileUser->getId()}" name="deleteUser"
                             onclick="return confirm('Are you sure you want permanently delete your account?');"> 
                         <i class="icon-fire icon-white"></i> Delete User Account
                     </button>

@@ -397,13 +397,15 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
 
 -- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.RegisteredUsers
+-- Dumping structure for table SolasMatch.RegisteredUsers
 CREATE TABLE IF NOT EXISTS `RegisteredUsers` (
   `user_id` int(10) unsigned NOT NULL,
-  `unique_id` VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
-  UNIQUE KEY `user_id` (`user_id`)
+  `unique_id` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `user_id` (`user_id`),
+  CONSTRAINT `FK_RegisteredUsers_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.Statistics
@@ -441,20 +443,21 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table Solas-Match-Test.TaskFileVersions
+-- Dumping structure for table SolasMatch.TaskFileVersions
+
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
-	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-	`task_id` BIGINT(20) UNSIGNED NOT NULL,
-	`version_id` INT(11) NOT NULL COMMENT 'Gets incremented within the code',
-	`filename` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
-	`content-type` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`user_id` INT(11) UNSIGNED NOT NULL COMMENT 'Null while we don\'t have logging in',
-	`upload-time` DATETIME NULL DEFAULT NULL,
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `taskFile` (`task_id`, `version_id`, `user_id`),
-	INDEX `FK_task_file_version_user` (`user_id`),
-	CONSTRAINT `FK_task_file_version_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_task_file_version_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `task_id` bigint(20) unsigned NOT NULL,
+  `version_id` int(11) NOT NULL COMMENT 'Gets incremented within the code',
+  `filename` text COLLATE utf8_unicode_ci NOT NULL,
+  `content-type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_id` int(11) unsigned NOT NULL COMMENT 'Null while we don''t have logging in',
+  `upload-time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `taskFile` (`task_id`,`version_id`,`user_id`),
+  KEY `FK_task_file_version_user` (`user_id`),
+  CONSTRAINT `FK_TaskFileVersions_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_TaskFileVersions_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -1563,16 +1566,16 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getLatestAvailableTasks
+-- Dumping structure for procedure debug-test3.getLatestAvailableTasks
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT)
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC LIMIT ",lim);
+    set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC LIMIT ",lim);
     else
-    set @q = "select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC";
+    set @q = "select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -1901,17 +1904,17 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getRegisteredUser
+-- Dumping structure for procedure SolasMatch.getRegisteredUser
 DROP PROCEDURE IF EXISTS `getRegisteredUser`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getRegisteredUser`(IN `uuid` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRegisteredUser`(IN `uuid` VARCHAR(128))
 BEGIN
     if EXISTS (SELECT 1
                 FROM RegisteredUsers
                 WHERE unique_id = uuid) then
         CALL getUser((SELECT user_id
                         FROM RegisteredUsers
-                        WHERE unique_id = uuid), null, null, null, null, null, null, null, null);
+                        WHERE unique_id = uuid limit 1), null, null, null, null, null, null, null, null);
     end if;
 END//
 DELIMITER ;
@@ -2099,6 +2102,20 @@ BEGIN
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure debug-test3.getTaskClaimedTime
+DROP PROCEDURE IF EXISTS `getTaskClaimedTime`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskClaimedTime`(IN `taskId` INT)
+BEGIN
+	IF EXISTS ( SELECT 1 FROM TaskClaims WHERE task_id = taskId) THEN
+		SELECT t.`claimed-time` as result FROM TaskClaims t WHERE t.task_id=taskId;
+	ELSE
+		SELECT 0 as result;
+	END IF;
 END//
 DELIMITER ;
 
@@ -4163,6 +4180,51 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+
+-- Dumping structure for trigger Solas-Match-Test.onTasksUpdate
+DROP TRIGGER IF EXISTS `onTasksUpdate`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
+    DECLARE userId INT DEFAULT 1;
+
+    if (new.`task-status_id`=4) then
+        SELECT user_id INTO userId
+                FROM TaskClaims
+                WHERE task_id = new.id;
+
+        SELECT 1 INTO userId;
+
+        if EXISTS (SELECT 1
+                    FROM Tasks
+                    WHERE new.`task-type_id` = 2) then
+            if NOT EXISTS (SELECT 1
+                            FROM UserBadges
+                            WHERE user_id = userId
+                            AND badge_id = 6) then
+                INSERT INTO UserBadges (user_id, badge_id)
+                        VALUES (userId, 6);
+            end if;
+        end if;
+        if EXISTS (SELECT 1
+                    FROM Tasks
+                    WHERE new.`task-type_id` = 3) then
+            if NOT EXISTS (SELECT 1
+                            FROM UserBadges
+                            WHERE user_id = userId
+                            AND badge_id = 7) then
+                INSERT INTO UserBadges (user_id, badge_id)
+                        VALUES (userId, 7);
+            end if;
+        end if;
+    end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
 
 
 -- Dumping structure for trigger Solas-Match-Test.updateDependentTaskOnComplete

@@ -1,6 +1,7 @@
 SOLAS Match
 ====================
 
+
 ## What is this?
 
 The Rosetta Foundation SOLAS Match is a web application. It
@@ -120,6 +121,11 @@ SHOW GRANTS FOR 'tester'@'localhost';
     setting openid='h' will enable hybrid login.(both login options will be avaiable to the user).
 4.2 for more reliable openid support install php5-curl. sudo apt-get install php5-curl(fixes issue with google/yahoo connection reset).
 5.  Under user session control, enter a long random string.
+
+## Git Pre-Commit Hook
+
+If you are interested in developing for SOLAS Match, you will need to copy the git pre-commit file in the SOLAS Match root directory to the .git/hooks/ directory.
+This will check any of your commits for harmful sql statements or unwanted debug statements.
 
 ## Add Cron Job
 

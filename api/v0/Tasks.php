@@ -284,6 +284,13 @@ class Tasks {
             $data = TaskDao::getUserClaimedTask($id);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserClaimedTask');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/timeClaimed(:format)/',
+                                                        function ($id, $format = ".json") {
+            
+            $data = TaskDao::getClaimedTime($id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'getClaimedTime');
     }
 }
 Tasks::init();

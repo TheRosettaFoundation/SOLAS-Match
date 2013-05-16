@@ -7,16 +7,15 @@ class AdminRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
         
-        $app->get("/admin/:user_id", array($middleware, "authUserIsLoggedIn"),
+        $app->get("/admin/", array($middleware, "authenticateSiteAdmin"),
         array($middleware, "isSiteAdmin"), array($this, "adminDashboard"))->via("POST")->name("site-admin-dashboard");
-        
-        $app->get("/admin/list", array($middleware, "authUserIsLoggedIn"),
-        array($this, "adminList"))->via("POST")->name("admin-list");
+
     }
     
-    public function adminDashboard($userId)
+    public function adminDashboard()
     {
         $app = Slim::getInstance();
+        $userId = UserSession::getCurrentUserID();
         
         if($post = $app->request()->post()) {
             $userDao = new UserDao();
@@ -105,38 +104,6 @@ class AdminRouteHandler
         ));
 
         $app->render("admin/site-admin.dashboard.tpl");
-    }
-
-    public function adminList()
-    {
-        $app = Slim::getInstance();
-
-        $adminList = array();
-        $adminDao = new AdminDao();
-        
-        if($post = $app->request()->post()) {
-            $adminDao = new AdminDao();
-            if(isset($post['revokeAdmin'])) {
-                $adminDao->removeSiteAdmin($post['userId']);
-            }
-        }
-        
-        $admins = $adminDao->getSiteAdmins();
-        if($admins) {
-            foreach($admins as $admin) {
-                $adminList[] = $admin;
-            }
-        }           
-       
-        $siteName = Settings::get("site.name");
-
-        $app->view()->appendData(array(
-                "current_page"  => "admin-list",
-                "adminList"     => $adminList,
-                "siteName"      => $siteName
-        ));
-        
-        $app->render("admin/admin.site-admins-list.tpl");
     }
 }
 

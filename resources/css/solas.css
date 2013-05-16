@@ -115,3 +115,13 @@ table{
   filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
 
+.ui-widget-content a {
+    color:#08c;
+}
+.ui-widget-content a.btn{
+    color:#000;
+}
+.ui-widget-content a.btn-inverse{
+    color:#fff;
+}
+

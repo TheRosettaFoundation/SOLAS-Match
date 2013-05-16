@@ -27,14 +27,14 @@
                 </td>
                 <td>
                     <label for="tags" style="font-size: large"><strong>Tags:</strong></label>
-                    <input id="tags" name="tags" value="{$tag_list}" />
+                    <input id="tags" name="tags" value="{$tag_list}" style="width: 400px;  margin-bottom: 20px"/>
 
                     <label for="deadline" style="font-size: large"><strong>Deadline:</strong></label>
                     {if isset($deadlineError) && $deadlineError != ''}
                         <p class="alert alert-error">{$deadlineError}</p>
                     {/if}
                     <p>
-                        <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{$project->getDeadline()}" style="width: 400px;  margin-bottom: 20px" />
+                        <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}" style="width: 400px;  margin-bottom: 20px" />
                     </p>
                     <p style="margin-bottom:20px;"/>
 

@@ -187,4 +187,12 @@ class TaskDao
 
         $response = $this->client->call(null,$request, HttpMethodEnum::PUT, null, $args,$fileData);
     }
+    
+    public function getClaimedDate($taskId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/tasks/$taskId/timeClaimed";
+        $ret = $this->client->call(null, $request);
+        return $ret;
+    }
 }

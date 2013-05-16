@@ -21,7 +21,7 @@
     <p style="margin-bottom:20px;"/>
     
     <div class="well">
-        <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}"> {*$project_id*}
+        <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}">
             <table id="createProjectTable">
                 <tr>
                     <td colspan="2">
@@ -84,8 +84,8 @@
                     <td width="493" align="center" valign="middle">    
                         <div style="margin-bottom:25px;">
                             <label for="{$field_name}"><h2>Source Text: <span style="color: red">*</span></h2></label>
-                            <p class="desc">Upload your source file for the project. Max file size is 8 MB.</p> {*$max_file_size_mb*}
-                            <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/> {*$max_file_size_bytes*}
+                            <p class="desc">Upload your source file for the project. Max file size is <strong>{TemplateHelper::maxFileSizeMB()}MB</strong>.</p>
+                            <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/>
                             <input type="file" name="{$field_name}" id="{$field_name}"/>
                             <input type="hidden" name="organisation_id" value="1"/>
                         </div>
@@ -104,7 +104,7 @@
                         </div>
                         <div style="margin-bottom:25px;">
                             <label for="tags"><h2>Tags:</h2></label>
-                            <p class="desc">The tags you provide will be used to match volunteers to your project. <br/>Separated by spaces. For multiword tags: join-with-hyphens.</p>
+                            <p class="desc">The tags you provide will be used to match volunteers to your project. <br/>Separated by <strong>spaces</strong>. For multiword tags: join-with-hyphens.</p>
                             <input id="tags" name="tags" value="{if isset($tagList)}{$tagList}{/if}" style="width: 400px" />
                         </div>
                         <div style="margin-bottom:25px;">
