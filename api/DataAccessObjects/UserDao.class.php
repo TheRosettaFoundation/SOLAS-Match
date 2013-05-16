@@ -155,7 +155,7 @@ class UserDao
     {
         $args = PDOWrapper::cleanseNull($userId);
         $response = PDOWrapper::call('finishRegistration', $args);
-        return $response;
+        return $response[0]['result'];
     }
 
     public static function getRegisteredUser($uuid)
