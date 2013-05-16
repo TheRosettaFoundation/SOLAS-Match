@@ -837,8 +837,8 @@ class ModelFactory
         if (isset($modelData['user_id-admin'])) {
             $ret->setUserIdAdmin($modelData['user_id-admin']);
         }
-        if (isset($modelData['bannedType'])) {
-            $ret->setBanType($modelData['bannedType']);
+        if (isset($modelData['bannedtype_id'])) {
+            $ret->setBanType($modelData['bannedtype_id']);
         }
         if (isset($modelData['comment'])) {
             $ret->setComment($modelData['comment']);

@@ -1484,7 +1484,7 @@ BEGIN
 	if adminComment='' then set adminComment=null;end if;
 	if bannedDate='' then set bannedDate=null;end if;
 
-	set @q= "SELECT b.user_id, b.`user_id-admin`, (SELECT t.type FROM BannedTypes t WHERE t.id = b.bannedtype_id) AS bannedType, b.`comment`, b.`banned-date` FROM BannedUsers b WHERE 1 ";
+	set @q= "SELECT b.user_id, b.`user_id-admin`, b.bannedtype_id, b.`comment`, b.`banned-date` FROM BannedUsers b WHERE 1 ";
 	if userId is not null then 
 		set @q = CONCAT(@q," and b.user_id=",userId);
 	end if;

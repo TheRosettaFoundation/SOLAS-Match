@@ -19,8 +19,16 @@
                     <td>                
                         <a href="{urlFor name="user-public-profile" options="user_id.{$bannedUser->getUserIdAdmin()}"}">{$bannedUser['adminUser']->getDisplayName()}</a>
                     </td>
-                    <td>                
-                        {$bannedUser->getBanType()}
+                    <td>
+                        {if $bannedUser->getBanType() == BanTypeEnum::DAY}
+                            Day
+                        {elseif $bannedUser->getBanType() == BanTypeEnum::WEEK}
+                            Week
+                        {elseif $bannedUser->getBanType() == BanTypeEnum::MONTH}
+                            Month
+                        {elseif $bannedUser->getBanType() == BanTypeEnum::PERMANENT}
+                            Permanent
+                        {/if}
                     </td>
                     <td>                
                         {$bannedUser->getComment()}
