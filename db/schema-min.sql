@@ -2628,7 +2628,22 @@ DROP PROCEDURE IF EXISTS `isUserBanned`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBanned`(IN `userId` INT)
 BEGIN
-    SELECT exists (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) as result;
+    if EXISTS (SELECT 1 
+                FROM BannedUsers 
+                WHERE user_id = userId) then
+        if NOT EXISTS (SELECT 1
+                    FROM BannedUsers
+                    WHERE user_id = userId
+                    AND ((bannedtype_id = 1 AND DATE_ADD(`banned-date`, INTERVAL 1 DAY) < NOW())
+                    OR (bannedtype_id = 2 AND DATE_ADD(`banned-date`, INTERVAL 1 WEEK) < NOW())
+                    OR (bannedtype_id = 3 AND DATE_ADD(`banned-date`, INTERVAL 1 MONTH) < NOW()))) then
+            SELECT 1 as result;
+        else
+            DELETE FROM BannedUsers
+                WHERE user_id = userId;
+        end if;
+    end if;
+    SELECT 0 as result;
 END//
 DELIMITER ;
 
