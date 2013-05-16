@@ -4153,6 +4153,18 @@ DELIMITER ;
 
 /*---------------------------------------start of triggers-----------------------------------------*/
 
+-- Dumping structure for trigger Solas-Match-Dev.afterProjectUpdate
+DROP TRIGGER IF EXISTS `afterProjectUpdate`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `afterProjectUpdate` AFTER UPDATE ON `Projects` FOR EACH ROW BEGIN
+if (old.language_id!= new.language_id) or (old.country_id !=new.country_id) then
+update Tasks set `language_id-source`=new.language_id, `country_id-source` = new.country_id where project_id = old.id;
+end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
 -- Dumping structure for trigger Solas-Match-Test.defaultUserName
 DROP TRIGGER IF EXISTS `defaultUserName`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
