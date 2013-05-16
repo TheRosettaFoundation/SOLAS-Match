@@ -1,7 +1,16 @@
 #!/bin/sh
 
-FILES_PATTERN='\.(sql)(\..+)?$'
-FORBIDDEN='DROP TABLE'
-git diff --cached --name-only | \
-    grep -E $FILES_PATTERN | \
-    GREP_COLOR='4;5;37;41' xargs grep --color --with-filename -n -i $FORBIDDEN && echo 'COMMIT REJECTED Found "$FORBIDDEN" references. Please remove them before commiting' && exit 1
+#echo Running $BASH_SOURCE
+#set | egrep GIT
+#echo PWD is $PWD
+
+
+FILES_PATTERN='*.sql$|*.php$'
+FORBIDDEN='DROP TABLE\|echo\|xdebug_\|var_dump\|print_r\|(object)'
+if git diff --name-only |     grep -E "$FILES_PATTERN" |  GREP_COLOR='4;5;37;41' xargs grep --color --with-filename -n -i "$FORBIDDEN" 
+then 
+echo "COMMIT REJECTED Found $FORBIDDEN references. Please remove them before commiting"
+ exit 1
+fi
+exit 0
+
