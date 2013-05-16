@@ -4187,36 +4187,24 @@ DROP TRIGGER IF EXISTS `onTasksUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
-    DECLARE userId INT DEFAULT 1;
-
     if (new.`task-status_id`=4) then
-        SELECT user_id INTO userId
+        set @userID = null;
+		  SELECT user_id INTO @userId
                 FROM TaskClaims
                 WHERE task_id = new.id;
 
-        SELECT 1 INTO userId;
-
-        if EXISTS (SELECT 1
-                    FROM Tasks
-                    WHERE new.`task-type_id` = 2) then
-            if NOT EXISTS (SELECT 1
+        if new.`task-type_id` = 2 and NOT EXISTS (SELECT 1
                             FROM UserBadges
-                            WHERE user_id = userId
+                            WHERE user_id = @userId
                             AND badge_id = 6) then
-                INSERT INTO UserBadges (user_id, badge_id)
-                        VALUES (userId, 6);
-            end if;
+        		INSERT INTO UserBadges (user_id, badge_id) VALUES (@userId, 6);
         end if;
-        if EXISTS (SELECT 1
-                    FROM Tasks
-                    WHERE new.`task-type_id` = 3) then
-            if NOT EXISTS (SELECT 1
+        if new.`task-type_id` = 3  
+		  and NOT EXISTS (SELECT 1
                             FROM UserBadges
-                            WHERE user_id = userId
-                            AND badge_id = 7) then
-                INSERT INTO UserBadges (user_id, badge_id)
-                        VALUES (userId, 7);
-            end if;
+                            WHERE user_id = @userId
+                            AND badge_id = 7)then
+            INSERT INTO UserBadges (user_id, badge_id) VALUES (@userId, 7);
         end if;
     end if;
 END//
