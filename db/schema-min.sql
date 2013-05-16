@@ -864,6 +864,24 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Test.addUserToTaskBlacklist
+DROP PROCEDURE IF EXISTS `addUserToTaskBlacklist`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addUserToTaskBlacklist`(IN `userId` INT, IN `taskId` INT)
+    MODIFIES SQL DATA
+BEGIN
+	if not exists(SELECT 1
+                    FROM TaskTranslatorBlacklist
+                    WHERE user_id = userId
+                    AND task_id = taskId) then
+        INSERT INTO TaskTranslatorBlacklist (task_id, user_id)
+            VALUES (taskId, userId);
+    end if;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure debug-test.archiveProject
 DROP PROCEDURE IF EXISTS `archiveProject`;
 DELIMITER //
@@ -4200,6 +4218,10 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
     DECLARE userId INT DEFAULT 0;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE dependantTaskId INT DEFAULT 0;
+    DECLARE dependantTasks CURSOR FOR SELECT task_id FROM TaskPrerequisites WHERE `task_id-prerequisite` = new.id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
     if (new.`task-status_id`=4) then
         set @userID = null;
@@ -4220,6 +4242,16 @@ CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
                             AND badge_id = 7)then
             INSERT INTO UserBadges (user_id, badge_id) VALUES (@userId, 7);
         end if;
+
+        OPEN dependantTasks;
+        read_loop: LOOP
+            FETCH dependantTasks INTO dependantTaskId;
+            if done then
+                LEAVE read_loop;
+            end if;
+            CALL addUserToTaskBlacklist(@userId, dependantTaskId);
+        END LOOP;
+        CLOSE dependantTasks;
     end if;
 END//
 DELIMITER ;
