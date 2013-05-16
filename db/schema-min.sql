@@ -4187,14 +4187,12 @@ DROP TRIGGER IF EXISTS `onTasksUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
-    DECLARE userId INT DEFAULT 1;
+    DECLARE userId INT DEFAULT 0;
 
     if (new.`task-status_id`=4) then
         SELECT user_id INTO userId
                 FROM TaskClaims
                 WHERE task_id = new.id;
-
-        SELECT 1 INTO userId;
 
         if EXISTS (SELECT 1
                     FROM Tasks
