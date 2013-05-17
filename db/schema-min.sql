@@ -1113,6 +1113,23 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure debug-test3.deleteProjectTags
+DROP PROCEDURE IF EXISTS `deleteProjectTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProjectTags`(IN `projectId` INT)
+BEGIN
+
+	IF EXISTS (SELECT 1 FROM ProjectTags p WHERE p.project_id = projectId) THEN
+		DELETE FROM ProjectTags WHERE project_id = projectId;
+		SELECT 1 AS result;
+	ELSE
+		SELECT 0 AS result;
+	END IF;
+
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.deleteTag
 DROP PROCEDURE IF EXISTS `deleteTag`;
 DELIMITER //

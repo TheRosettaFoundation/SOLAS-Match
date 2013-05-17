@@ -128,4 +128,12 @@ class ProjectDao
         $ret = $this->client->call("ProjectFile", $request);
         return $ret;        
     }
+    
+    public function deleteProjectTags($project_id)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$project_id/deleteTags";
+        $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
+        return $ret;
+    }
 }

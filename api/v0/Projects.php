@@ -174,6 +174,11 @@ class Projects
                                                         function ($id, $format = ".json") {
             Dispatcher::sendResponce(null, ProjectDao::getArchivedTask($id), null, $format);
         }, 'getArchivedProjectTasks');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/projects/:id/deleteTags(:format)/',
+                                                        function ($projectId, $format = ".json") {
+            Dispatcher::sendResponce(null,ProjectDao::deleteProjectTags($projectId), null, $format);
+        }, 'deleteProjectTags');
     }
 }
 Projects::init();

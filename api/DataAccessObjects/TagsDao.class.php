@@ -85,35 +85,36 @@ class TagsDao
         return $ret;
     }
     
-    public static function updateTags($projectId, $projectTagList)
-    {
-        ProjectDao::removeAllProjectTags($projectId);
-        if (count($projectTagList) > 0) {    
-            $projectTags = array();
-            foreach($projectTagList as $tag) {                
-                if($tagExists = self::getTag(null, $tag->getLabel())) {
-                    $projectTags[] = $tagExists[0];
-                } else {
-                    $newTag = self::create($tag->getLabel());
-                    $projectTags[] = $newTag;
+    public static function updateTags($projectId, $updatedProjectTagList)
+    {        
+        if($updatedProjectTagList) {
+            $oldProjectTagList = ProjectDao::getTags($projectId);
+            
+            $tagsToRemove = array_udiff($oldProjectTagList, $updatedProjectTagList, 'TagsDao::compareTo');
+
+            if(!empty($tagsToRemove)) {                    
+                foreach($tagsToRemove as $removedTag) {
+                    ProjectDao::removeProjectTag($projectId, $removedTag->getId()); 
+                }
+            } 
+
+            $tagsToAdd = array_udiff($updatedProjectTagList, $oldProjectTagList, 'TagsDao::compareTo');
+
+            if(!empty($tagsToAdd)) {                    
+                foreach($tagsToAdd as $newTag) {
+                    if($tagExists = TagsDao::getTag(null, $newTag->getLabel())) {
+                        ProjectDao::addProjectTag($projectId, $tagExists->getId());
+                    } else {
+                        $tag = TagsDao::create($newTag->getLabel());
+                        ProjectDao::addProjectTag($projectId, $tag->getId());
+                    } 
                 }
             }
-    
-            ProjectDao::addProjectTags($projectId, $projectTags);
-            return $projectTags;
         }
     }
-    
-//    {
-//        ProjectDao::removeAllProjectTags($project->getId());
-//        $tags = $project->getTagList();
-//        if (count($tags) > 0) {            
-//            $tagIds = array();
-//            foreach($tags as $tagLabel) {
-//                $tag = self::create($tagLabel); 
-//                $tagIds[] = $tag->getId();
-//            }
-//            ProjectDao::addProjectTags($project->getId(), $tagIds);
-//        }
-//    }
+
+    private static function compareTo($tag1, $tag2)
+    {
+        return strcasecmp($tag1->getLabel(), $tag2->getLabel());
+    }
 }

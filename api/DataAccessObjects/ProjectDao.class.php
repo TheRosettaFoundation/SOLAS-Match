@@ -277,5 +277,15 @@ class ProjectDao
         return $ret; 
     }
     
+    public static function deleteProjectTags($projectId)
+    {
+        $args = PDOWrapper::cleanseNull($projectId);        
+           
+        if($result = PDOWrapper::call("deleteProjectTags", $args)) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }    
 }
 
