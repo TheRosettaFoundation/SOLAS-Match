@@ -45,9 +45,6 @@ class UserRouteHandler
         
   
     }
-
-   
-     
     
     public function home()
     {

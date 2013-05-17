@@ -5,6 +5,8 @@ include_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
 include_once __DIR__."/../../Common/lib/ModelFactory.class.php";
 include_once __DIR__."/../../Common/models/Project.php";
 include_once __DIR__."/../../Common/models/ArchivedProject.php";
+include_once __DIR__."/../lib/MessagingClient.class.php";
+include_once __DIR__."/../../Common/Requests/CalculateProjectDeadlinesRequest.php";
 
 class ProjectDao
 {
@@ -42,6 +44,18 @@ class ProjectDao
         }
         
         return $project;
+    }
+
+    public static function calculateProjectDeadlines($projectId)
+    {
+        $messagingClient = new MessagingClient();
+        if ($messagingClient->init()) {
+            $proto = new CalculateProjectDeadlinesRequest();
+            $proto->setProjectId($projectId);
+            $message = $messagingClient->createMessageFromProto($proto);
+            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                    $messagingClient->CalculateProjectDeadlinesTopic);
+        }
     }
     
     public static function getProject($id=null, $title=null, $description=null, $impact=null, $deadline=null, $orgId=null,
@@ -288,4 +302,3 @@ class ProjectDao
         }
     }    
 }
-

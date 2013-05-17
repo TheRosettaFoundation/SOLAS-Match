@@ -864,6 +864,24 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Test.addUserToTaskBlacklist
+DROP PROCEDURE IF EXISTS `addUserToTaskBlacklist`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addUserToTaskBlacklist`(IN `userId` INT, IN `taskId` INT)
+    MODIFIES SQL DATA
+BEGIN
+	if not exists(SELECT 1
+                    FROM TaskTranslatorBlacklist
+                    WHERE user_id = userId
+                    AND task_id = taskId) then
+        INSERT INTO TaskTranslatorBlacklist (task_id, user_id)
+            VALUES (taskId, userId);
+    end if;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure debug-test.archiveProject
 DROP PROCEDURE IF EXISTS `archiveProject`;
 DELIMITER //
@@ -1483,7 +1501,7 @@ BEGIN
 	if adminComment='' then set adminComment=null;end if;
 	if bannedDate='' then set bannedDate=null;end if;
 
-	set @q= "SELECT b.user_id, b.`user_id-admin`, (SELECT t.type FROM BannedTypes t WHERE t.id = b.bannedtype_id) AS bannedType, b.`comment`, b.`banned-date` FROM BannedUsers b WHERE 1 ";
+	set @q= "SELECT b.user_id, b.`user_id-admin`, b.bannedtype_id, b.`comment`, b.`banned-date` FROM BannedUsers b WHERE 1 ";
 	if userId is not null then 
 		set @q = CONCAT(@q," and b.user_id=",userId);
 	end if;
@@ -2627,7 +2645,22 @@ DROP PROCEDURE IF EXISTS `isUserBanned`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBanned`(IN `userId` INT)
 BEGIN
-    SELECT exists (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) as result;
+    if EXISTS (SELECT 1 
+                FROM BannedUsers 
+                WHERE user_id = userId) then
+        if NOT EXISTS (SELECT 1
+                    FROM BannedUsers
+                    WHERE user_id = userId
+                    AND ((bannedtype_id = 1 AND DATE_ADD(`banned-date`, INTERVAL 1 DAY) < NOW())
+                    OR (bannedtype_id = 2 AND DATE_ADD(`banned-date`, INTERVAL 1 WEEK) < NOW())
+                    OR (bannedtype_id = 3 AND DATE_ADD(`banned-date`, INTERVAL 1 MONTH) < NOW()))) then
+            SELECT 1 as result;
+        else
+            DELETE FROM BannedUsers
+                WHERE user_id = userId;
+        end if;
+    end if;
+    SELECT 0 as result;
 END//
 DELIMITER ;
 
@@ -4170,6 +4203,18 @@ DELIMITER ;
 
 /*---------------------------------------start of triggers-----------------------------------------*/
 
+-- Dumping structure for trigger Solas-Match-Dev.afterProjectUpdate
+DROP TRIGGER IF EXISTS `afterProjectUpdate`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `afterProjectUpdate` AFTER UPDATE ON `Projects` FOR EACH ROW BEGIN
+if (old.language_id!= new.language_id) or (old.country_id !=new.country_id) then
+update Tasks set `language_id-source`=new.language_id, `country_id-source` = new.country_id where project_id = old.id;
+end if;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
 -- Dumping structure for trigger Solas-Match-Test.defaultUserName
 DROP TRIGGER IF EXISTS `defaultUserName`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
@@ -4204,37 +4249,41 @@ DROP TRIGGER IF EXISTS `onTasksUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
-    DECLARE userId INT DEFAULT 1;
+    DECLARE userId INT DEFAULT 0;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE dependantTaskId INT DEFAULT 0;
+    DECLARE dependantTasks CURSOR FOR SELECT task_id FROM TaskPrerequisites WHERE `task_id-prerequisite` = new.id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
     if (new.`task-status_id`=4) then
-        SELECT user_id INTO userId
+        set @userID = null;
+		SELECT user_id INTO @userId
                 FROM TaskClaims
                 WHERE task_id = new.id;
 
-        SELECT 1 INTO userId;
-
-        if EXISTS (SELECT 1
-                    FROM Tasks
-                    WHERE new.`task-type_id` = 2) then
-            if NOT EXISTS (SELECT 1
+        if new.`task-type_id` = 2 and NOT EXISTS (SELECT 1
                             FROM UserBadges
-                            WHERE user_id = userId
+                            WHERE user_id = @userId
                             AND badge_id = 6) then
-                INSERT INTO UserBadges (user_id, badge_id)
-                        VALUES (userId, 6);
-            end if;
+        		INSERT INTO UserBadges (user_id, badge_id) VALUES (@userId, 6);
         end if;
-        if EXISTS (SELECT 1
-                    FROM Tasks
-                    WHERE new.`task-type_id` = 3) then
-            if NOT EXISTS (SELECT 1
+        if new.`task-type_id` = 3  
+		  and NOT EXISTS (SELECT 1
                             FROM UserBadges
-                            WHERE user_id = userId
-                            AND badge_id = 7) then
-                INSERT INTO UserBadges (user_id, badge_id)
-                        VALUES (userId, 7);
-            end if;
+                            WHERE user_id = @userId
+                            AND badge_id = 7)then
+            INSERT INTO UserBadges (user_id, badge_id) VALUES (@userId, 7);
         end if;
+
+        OPEN dependantTasks;
+        read_loop: LOOP
+            FETCH dependantTasks INTO dependantTaskId;
+            if done then
+                LEAVE read_loop;
+            end if;
+            CALL addUserToTaskBlacklist(@userId, dependantTaskId);
+        END LOOP;
+        CLOSE dependantTasks;
     end if;
 END//
 DELIMITER ;
