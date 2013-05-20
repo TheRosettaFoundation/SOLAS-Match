@@ -91,7 +91,8 @@ require_once 'Common/models/UserTaskStreamNotification.php';
 require_once 'Common/models/TaskReview.php';
 
 require_once 'Common/protobufs/emails/EmailMessage.php';
-require_once 'Common/protobufs/emails/FeedbackEmail.php';
+require_once 'Common/protobufs/emails/UserFeedback.php';
+require_once 'Common/protobufs/emails/OrgFeedback.php';
 
 /**
  * Start the session

@@ -14,7 +14,8 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipAccepted.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipRefused.php";
 require_once __DIR__."/../../Common/protobufs/emails/TaskArchived.php";
 require_once __DIR__."/../../Common/protobufs/emails/TaskClaimed.php";
-require_once __DIR__."/../../Common/protobufs/emails/FeedbackEmail.php";
+require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
+require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
 require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
 require_once __DIR__."/../../Common/Requests/TaskUploadNotificationRequest.php";
@@ -45,17 +46,23 @@ class Notify
         }
     }
 
-    public static function sendOrgFeedback($task, $user, $feedback)
+    public static function sendOrgFeedback($feedback)
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
-            $messageType = new FeedbackEmail();
-            $messageType->taskId = $task->getId();
-            $messageType->userId = $user->getId();
-            $messageType->feedback = $feedback;
-            $message = $messagingClient->createMessageFromProto($messageType);
+            $message = $messagingClient->createMessageFromProto($feedback);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                    $messagingClient->FeedbackEmailTopic);
+                    $messagingClient->OrgFeedbackTopic);
+        }
+    }
+
+    public static function sendUserFeedback($feedback)
+    {
+        $messagingClient = new MessagingClient();
+        if ($messagingClient->init()) {
+            $message = $messagingClient->createMessageFromProto($feedback);
+            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                    $messagingClient->UserFeedbackTopic);
         }
     }
 

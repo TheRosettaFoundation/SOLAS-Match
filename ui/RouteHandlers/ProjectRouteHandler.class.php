@@ -156,31 +156,6 @@ class ProjectRouteHandler
                 $taskDao->archiveTask($post->task_id, $user_id);
                 $app->flashNow("success", "The task \"{$task->getTitle()}\" has been archived");
             }
-            
-            //This should not be here!!!!!!!!!
-            if(isset($post->feedback)) {
-                $feedback = new FeedbackEmail();               
-    
-                $feedback->setTaskId($task_id);
-                $feedback->addUserId($post->revokeUserId);
-                $feedback->setFeedback($post->feedback);
-                $taskDao->sendFeedback($feedback);
-
-                if(isset($post->revokeTask) && $post->revokeTask) {
-                    $taskRevoke = $userDao->unclaimTask($post->revokeUserId, $post->revokeTaskId);
-                    $claimant = $userDao->getUser($post->revokeUserId);
-                    if(!$taskRevoke) {
-                        $app->flashNow("taskSuccess", "<b>Success</b> - The task 
-                            <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
-                            has been successfully revoked from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">{$claimant->getDisplayName()}</a> 
-                            This user will be notified by e-mail and provided with your feedback.");
-                    } else {
-                        $app->flashNow("taskError", "<b>Error</b> - Unable to revoke the task ".
-                            "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}\"</a>
-                             from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">{$claimant->getDisplayName()}</a>. Please try again later.");                                
-                    }
-                }
-            }
         }   
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
