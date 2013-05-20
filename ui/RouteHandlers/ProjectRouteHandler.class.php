@@ -163,7 +163,7 @@ class ProjectRouteHandler
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         
         $adminDao = new AdminDao();
-        $isAdmin = $adminDao->isOrgAdmin($user_id, $project->getOrganisationId()) || $adminDao->isSiteAdmin($user_id);
+        $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $adminDao->isSiteAdmin($user_id);
         
         if($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
@@ -213,7 +213,6 @@ class ProjectRouteHandler
                     "taskTypeColours" => $taskTypeColours,
                     "userSubscribedToProject" => $userSubscribedToProject,
                     "project_tags" => $project_tags,
-                    "isOrgMember"   => $isOrgMember,
                     "taskLanguageMap" => $taskLanguageMap
             ));
             
@@ -224,6 +223,11 @@ class ProjectRouteHandler
                     "project_tags" => $project_tags
             ));
         }
+        
+        $app->view()->appendData(array(
+                "isOrgMember"   => $isOrgMember,
+                "isAdmin"       => $isAdmin
+        ));
         
         $app->render("project/project.view.tpl");
     }  

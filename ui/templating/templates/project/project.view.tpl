@@ -156,7 +156,7 @@
                 
     <p style="margin-bottom:40px;"/>
 
-{if isset($user) && isset($isOrgMember)}
+{if isset($user) && ($isOrgMember || $isAdmin)}
     <hr />    
     <h1 class="page-header" style="margin-bottom: 60px">
         Tasks
