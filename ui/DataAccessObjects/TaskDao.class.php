@@ -142,16 +142,24 @@ class TaskDao
         $response =$this->client->call(null, $request, HttpMethodEnum::PUT, $task);
     }
 
-    public function sendFeedback($taskId, $userIds, $feedback)// change to new feed back email
+    public function sendOrgFeedback($taskId, $userId, $claimantId, $feedback)
     {
-        $feedbackData = new FeedbackEmail();
+        $feedbackData = new OrgFeedback();
         $feedbackData->setTaskId($taskId);
-        $userIds = is_array($userIds) ? $userIds : array($userIds);
-        foreach ($userIds as $userId) {
-            $feedbackData->addUserId($userId);
-        }
+        $feedbackData->setUserId($userId);
+        $feedbackData->setClaimantId($claimantId);
         $feedbackData->setFeedback($feedback);
-        $request = "{$this->siteApi}v0/tasks/{$feedbackData->getTaskId()}/feedback";
+        $request = "{$this->siteApi}v0/tasks/{$feedbackData->getTaskId()}/orgFeedback";
+        $response =$this->client->call(null,$request, HttpMethodEnum::PUT, $feedbackData);
+    }
+
+    public function sendUserFeedback($taskId, $userId, $feedback)
+    {
+        $feedbackData = new UserFeedback();
+        $feedbackData->setTaskId($taskId);
+        $feedbackData->setClaimantId($userId);
+        $feedbackData->setFeedback($feedback);
+        $request = "{$this->siteApi}v0/tasks/{$feedbackData->getTaskId()}/userFeedback";
         $response =$this->client->call(null,$request, HttpMethodEnum::PUT, $feedbackData);
     }
 

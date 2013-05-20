@@ -1148,7 +1148,7 @@ class TaskRouteHandler
             if(isset($post->feedback)) {
 
                 if ($post->feedback != "") {
-                    $taskDao->sendFeedback($task_id, array($claimant->getId()), $post->feedback);
+                    $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post->feedback);
     
                     $app->flashNow("success", "Feedback sent to 
                             <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
@@ -1209,7 +1209,7 @@ class TaskRouteHandler
             $post = (object) $app->request()->post();
 
             if(isset($post->feedback)) {
-                $taskDao->sendFeedback($task_id, array($claimant->getId()), $post->feedback);
+                $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post->feedback);
                 if(isset($post->revokeTask) && $post->revokeTask) {
                     $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                     if($taskRevoke) {
