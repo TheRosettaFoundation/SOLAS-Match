@@ -8,18 +8,19 @@ class MessagingClient
     public $MainExchange    = "SOLAS_MATCH"; // change to consts
     public $AlertsExchange  = "ALERTS";
 
-    public $TaskScoreTopic                  = "tasks.score";
-    public $UserTaskClaimTopic              = "email.user.task.claim";
-    public $PasswordResetTopic              = "email.user.password-reset";
-    public $OrgMembershipAcceptedTopic      = "email.org.membership.accepted";
-    public $OrgMembershipRefusedTopic       = "email.org.membership.rejected";
-    public $TaskArchivedTopic               = "email.user.task.archived";
-    public $TaskClaimedTopic                = "email.user.task.claimed";
-    public $FeedbackEmailTopic              = "email.user.feedback";
-    public $EmailVerificationTopic          = "email";
-    public $BannedLoginTopic                = "email";
+    public $TaskScoreTopic                  = "tasks";
     public $TaskUploadNotificationTopic     = "tasks";
     public $CalculateProjectDeadlinesTopic  = "projects";
+    public $UserTaskClaimTopic              = "email";
+    public $PasswordResetTopic              = "email";
+    public $OrgMembershipAcceptedTopic      = "email";
+    public $OrgMembershipRefusedTopic       = "email";
+    public $TaskArchivedTopic               = "email";
+    public $TaskClaimedTopic                = "email";
+    public $EmailVerificationTopic          = "email";
+    public $BannedLoginTopic                = "email";
+    public $UserFeedbackTopic               = "email";
+    public $OrgFeedbackTopic                = "email";
 
     private $connection;
 

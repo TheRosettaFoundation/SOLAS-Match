@@ -1,5 +1,23 @@
 <script type="text/javascript">
     var fields = 0;
+    $(window).load(function () {
+      fields = parseInt(jQuery('#targetLanguageArraySize').val())-1;
+      
+      if(!isNaN(fields) && fields > 0) {
+            jQuery('#removeBottomTargetBtn')
+                    .css('visibility', 'visible')
+                    .attr('disabled', false);
+            
+            var totalTargetLanguages = parseInt(jQuery('#targetLanguageArraySize').val());
+            for(var iter=0; iter < totalTargetLanguages; iter++) {
+                if(jQuery('#segmentation_'+iter).is(':checked')) {
+                    isEnabledArray[iter] = true;
+                    segmentationEnabled[iter];
+                }
+            }
+      } 
+    });
+
     var MAX_FIELDS = 10;
     var isRemoveButtonHidden = true;
 
@@ -47,8 +65,7 @@
             
 
             jQuery('#horizontalLine_' + (fields-1)).after(clonedTarget);            
-            jQuery('#targetLanguageTemplate_' + fields).after(clonedHorizLine);
-            
+            jQuery('#targetLanguageTemplate_' + fields).after(clonedHorizLine);            
           
             isEnabledArray.push(false);
 
@@ -99,11 +116,11 @@
             isEnabledArray[index] = true;
         } else {
             jQuery('#translation_' + index)
-                    .attr('checked', true)
+                    .prop('checked', true)
                     .attr('disabled', false);
             
             jQuery('#proofreading_' + index)
-                    .attr('checked', true)
+                    .prop('checked', true)
                     .attr('disabled', false);
 
             isEnabledArray[index] = false;

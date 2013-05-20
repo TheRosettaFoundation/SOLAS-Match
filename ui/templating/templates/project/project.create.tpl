@@ -124,15 +124,36 @@
                         {if isset($languages)}
                             <h2>Source Language: <span style="color: red">*</span></h2><br>
                                 <select name="sourceLanguage" id="sourceLanguage" style="width: 400px">
-                                    {foreach $languages as $language}
-                                            <option value="{$language->getCode()}">{$language->getName()}</option>
-                                    {/foreach}
+                                    
+                                    {if isset($project) && $project->hasSourceLocale()}                                    
+                                        {foreach $languages as $language} 
+                                            {if $language->getCode() == $project->getSourceLocale()->getLanguageCode()}
+                                                <option value="{$language->getCode()}" selected>{$language->getName()}</option>
+                                            {else}                                           
+                                                <option value="{$language->getCode()}">{$language->getName()}</option>
+                                            {/if}
+                                        {/foreach}
+                                    {else}
+                                        {foreach $languages as $language} 
+                                           <option value="{$language->getCode()}">{$language->getName()}</option>
+                                        {/foreach}
+                                    {/if}
                                 </select>
                                 {if isset($countries)}
                                     <select name="sourceCountry" id="sourceCountry" style="width: 400px">
-                                        {foreach $countries as $country}
-                                             <option value="{$country->getCode()}">{$country->getName()}</option>
-                                        {/foreach}                                
+                                        {if isset($project) && $project->hasSourceLocale()}
+                                            {foreach $countries as $country}
+                                                {if $country->getCode() == $project->getSourceLocale()->getCountryCode()}
+                                                    <option value="{$country->getCode()}" selected>{$country->getName()}</option>
+                                                {else}
+                                                    <option value="{$country->getCode()}">{$country->getName()}</option>
+                                                {/if}
+                                            {/foreach}     
+                                        {else}
+                                            {foreach $countries as $country}
+                                                 <option value="{$country->getCode()}">{$country->getName()}</option>
+                                            {/foreach} 
+                                        {/if}
                                     </select>
                                 {/if}
                         {else}
@@ -163,15 +184,35 @@
                     <td> 
                         {if isset($languages)}
                             <select name="targetLanguage_0" id="targetLanguage_0" style="width: 400px">
-                                {foreach $languages as $language}
-                                    <option value="{$language->getCode()}">{$language->getName()}</option>
-                                {/foreach}
+                                {if !empty($targetLocales)}
+                                    {foreach $languages as $language}
+                                        {if $targetLocales[0]->getLanguageCode() == $language->getCode()}
+                                            <option value="{$language->getCode()}" selected>{$language->getName()}</option>
+                                        {else}
+                                            <option value="{$language->getCode()}">{$language->getName()}</option>
+                                        {/if}
+                                    {/foreach}
+                                {else}
+                                    {foreach $languages as $language}
+                                        <option value="{$language->getCode()}">{$language->getName()}</option>
+                                    {/foreach}
+                                {/if}
                             </select>
                             {if isset($countries)}
                                 <select name="targetCountry_0" id="targetCountry_0" style="width: 400px">
-                                    {foreach $countries as $country}
-                                        <option value="{$country->getCode()}">{$country->getName()}</option>
-                                    {/foreach}
+                                    {if !empty($targetLocales)}
+                                        {foreach $countries as $country}
+                                            {if $targetLocales[0]->getCountryCode() == $country->getCode()}
+                                                <option value="{$country->getCode()}" selected>{$country->getName()}</option>
+                                            {else}
+                                                <option value="{$country->getCode()}">{$country->getName()}</option>
+                                            {/if}
+                                        {/foreach}
+                                    {else}
+                                        {foreach $countries as $country}
+                                            <option value="{$country->getCode()}">{$country->getName()}</option>
+                                        {/foreach}
+                                    {/if}
                                 </select> 
                             {/if}
                         {else}
@@ -183,9 +224,9 @@
                     <td valign="middle">
                         <table> 
                             <tr align="center">
-                                <td valign="middle"><input title="Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less." type="checkbox" id="segmentation_0" name="segmentation_0" value="y" onchange="segmentationEnabled(0)"/></td>                            
-                                <td valign="middle"><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_0" checked="true" name="translation_0" value="y"/></td>
-                                <td valign="middle"><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_0" checked="true" name="proofreading_0" value="y"/></td>
+                                <td valign="middle"><input title="Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less." type="checkbox" id="segmentation_0" name="segmentation_0" value="y" onchange="segmentationEnabled(0)" {if !empty($targetLocales) && $targetLocales[0]['segmentation']} checked {/if} /></td>                            
+                                <td valign="middle"><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_0" name="translation_0" value="y" {if !empty($targetLocales)} {if $targetLocales[0]['translation']} checked {/if} {else} checked {/if} /></td>
+                                <td valign="middle"><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_0" name="proofreading_0" value="y" {if !empty($targetLocales)} {if $targetLocales[0]['proofreading']} checked {/if} {else} checked {/if} /></td>
                             </tr>                        
                         </table>  
                     </td>
@@ -193,13 +234,54 @@
                 <tr id="horizontalLine_0">
                     <td colspan="2"><hr/></td>
                 </tr>
+                {if !empty($targetLocales)}
+                    {for $i=1 to (count($targetLocales)-1)}
+                    <tr id="targetLanguageTemplate_{$i}">
+                        <td> 
+                            <select name="targetLanguage_{$i}" id="targetLanguage_{$i}" style="width: 400px">
+                                {foreach $languages as $language} 
+                                    {if $language->getCode() == $targetLocales[$i]->getLanguageCode()}
+                                        <option value="{$language->getCode()}" selected>{$language->getName()}</option>
+                                    {else}                                           
+                                        <option value="{$language->getCode()}">{$language->getName()}</option>
+                                    {/if}
+                                {/foreach}
+                            </select>
+
+                            <select name="targetCountry_{$i}" id="targetCountry_{$i}" style="width: 400px">
+                                {foreach $countries as $country}
+                                    {if $country->getCode() == $targetLocales[$i]->getCountryCode()}
+                                        <option value="{$country->getCode()}" selected>{$country->getName()}</option>
+                                    {else}
+                                        <option value="{$country->getCode()}">{$country->getName()}</option>
+                                    {/if}
+                                {/foreach}     
+                            </select> 
+                        </td>
+                        <td valign="middle">
+                            <table> 
+                                <tr align="center">
+                                    
+                                    
+                                    <td valign="middle"><input title="Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less." type="checkbox" id="segmentation_{$i}" name="segmentation_{$i}" value="y" onchange="segmentationEnabled({$i})" {if $targetLocales[$i]['segmentation']} checked {/if} /></td>                            
+                                    <td valign="middle"><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_{$i}" name="translation_{$i}" value="y" {if $targetLocales[$i]['translation']} checked {/if} /></td>
+                                    <td valign="middle"><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_{$i}" name="proofreading_{$i}" value="y" {if $targetLocales[$i]['proofreading']} checked {/if} /></td>
+                                </tr>                        
+                            </table>  
+                        </td>
+                    </tr>
+                    <tr id="horizontalLine_{$i}">
+                        <td colspan="2"><hr/></td>
+                    </tr>
+                    {/for}
+                {/if}
                 <tr>
                     <td colspan="2">
                         <div id="alertinfo" class="alert alert-info" style="display: none; text-align: center">You have reached the maximum number of target translation fields allowed.</div>  
 
                         <button id="addMoreTargetsBtn" class="btn btn-success" type="button" onclick="addNewTarget()"><i class="icon-upload icon-white"></i> Add More Target Languages</button>
                         <button id="removeBottomTargetBtn" class="btn btn-inverse" type="button" onclick="removeNewTarget()" disabled="true" style="visibility: hidden"><i class="icon-fire icon-white"></i> Remove</button>
-                        <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" value="1"/>
+                        <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" {if !empty($targetLocales)} value="{count($targetLocales)}" {else} value="1" {/if} />
                     </td>
                 </tr>                
                 <tr>

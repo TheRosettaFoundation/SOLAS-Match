@@ -6,5 +6,3 @@ class BanTypeEnum {
     const MONTH      = 3;
     const PERMANENT  = 4;
 }
-
-?>

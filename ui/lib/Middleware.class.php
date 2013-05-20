@@ -50,12 +50,8 @@ class Middleware
         $taskDao = new TaskDao();
         $params = $route->getParams(); 
 
+        $this->authUserIsLoggedIn();
         $user_id = UserSession::getCurrentUserID();
-        if (is_null($user_id)) {
-            $app->flash('error', 'Login required to access page');
-            $app->redirect($app->urlFor('login'));
-        }
-
         $claimant = null;
         if ($params !== null) {
             $task_id = $params['task_id'];
@@ -95,18 +91,7 @@ class Middleware
             }
         }
         
-        $app = Slim::getInstance();
-        $org_name = 'this organisation';
-        if (isset($org_id)) {
-            $siteApi = Settings::get("site.api");
-            $request = "$siteApi/v0/orgs/$org_id";
-            $org = $orgDao->getOrganisation($org_id);
-            $org_name = "<a href=\"".$app->urlFor('org-public-profile',
-                                                    array('org_id' => $org_id))."\">".$org->getName()."</a>";
-        }
-        $app->flash('error', "You are not authorised to view this profile.
-                    Only members of ".$org_name." may view this page.");
-        $app->redirect($app->urlFor('home'));
+        self::notFound();
     }
 
     /*
@@ -122,7 +107,6 @@ class Middleware
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $userDao = new UserDao();
-        $orgDao = new OrganisationDao();
 
         $params= $route->getParams();
         if ($params != null) {
@@ -145,16 +129,7 @@ class Middleware
             }
         }
        
-        $app = Slim::getInstance();
-        $org_name = 'this organisation';
-        if (isset($org_id)) {
-            $org = $orgDao->getOrganisation($org_id);
-            $org_name = "<a href=\"".$app->urlFor('org-public-profile',
-                                                    array('org_id' => $org_id))."\">".$org->getName()."</a>";
-        }
-        $app->flash('error', "You are not authorised to view this page.
-                    Only members of ".$org_name." may view this page.");
-        $app->redirect($app->urlFor('home'));
+        self::notFound();
     } 
     
     public function authUserForOrgProject($request, $response, $route) 
@@ -181,9 +156,7 @@ class Middleware
                 }
             }
         }
-        $app = Slim::getInstance();
-        $app->flash('error', "Only organisation members are authorised to view this page.");
-        $app->redirect($app->urlFor('home'));
+        self::notFound();
     }    
 
     public function authUserForTaskDownload($request, $response, $route)
@@ -192,34 +165,35 @@ class Middleware
             return true;
         }
 
-        $params = $route->getParams();
         $taskDao = new TaskDao();
+        $projectDao = new ProjectDao();
         $userDao = new UserDao();
+
+        $params= $route->getParams();
         if ($params != null) {
             $task_id = $params['task_id'];
-            $user_id = UserSession::getCurrentUserID();
             $task = $taskDao->getTask($task_id);
-            $user_orgs = $userDao->getUserOrgs($user_id);
+//            if($taskDao->getUserClaimedTask($task_id) && $task->getStatus() != TaskStatusEnum::COMPLETE) return true;
+            if($taskDao->getUserClaimedTask($task_id)) return true;
+
+            $project = $projectDao->getProject($task->getProjectId());
             
-            //If the task has not been claimed yet then anyone can download it
-            $taskClaimed = $taskDao->isTaskClaimed($task_id);            
-            $userClaimedTask = $taskDao->isTaskClaimed($task_id, $user_id);
-            if (!$taskClaimed) {
-                return true;
-            } elseif ($userClaimedTask) {
-                return true;
-            } elseif (!is_null($user_orgs)) {
-                foreach ($user_orgs as $orgObject) {
-                    if ($orgObject->getId() == $task->getOrganisationId()) {
-                        return true;
+            $org_id = $project->getOrganisationId();
+            $user_id = UserSession::getCurrentUserID();
+
+            if ($user_id) {
+                $user_orgs = $userDao->getUserOrgs($user_id);
+                if (!is_null($user_orgs)) {
+                    foreach ($user_orgs as $orgObject) {
+                        if ($orgObject->getId() == $org_id) {
+                            return true;
+                        }
                     }
                 }                
             }
         }
-
-        $app = Slim::getInstance();
-        $app->flash('error', "You are not authorised to download this task");
-        $app->redirect($app->urlFor('home'));
+       
+        self::notFound();
     }
     
     public function isUserBanned()

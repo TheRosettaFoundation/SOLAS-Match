@@ -8,7 +8,8 @@
 
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../../Common/models/TaskMetadata.php";
-require_once __DIR__."/../../Common/protobufs/emails/FeedbackEmail.php";
+require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
+require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../lib/IO.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
 require_once __DIR__."/../lib/FormatConverter.php";
@@ -156,29 +157,24 @@ class Tasks {
             Dispatcher::sendResponce(null, array("status message" => TaskDao::getTaskStatus($id)), null, $format);
         }, 'getTaskStatus');
 
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/feedback(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/orgFeedback(:format)/',
                 function ($id, $format = ".json") {
-                    $tasks = TaskDao::getTask($id);
-                    $task = $tasks[0];
-
                     $data = Dispatcher::getDispatcher()->request()->getBody();
                     $client = new APIHelper($format);
-                    $feedbackData = $client->deserialize($data,"FeedbackEmail");
-
-                    $users = $feedbackData->getUserIdList();
-                    if (count($users) > 0) {
-                        if (count($users) == 1) {
-                            $user = UserDao::getUser($users[0]);
-                            $user= $user[0];
-                            Notify::sendOrgFeedback($task, $user, $feedbackData->getFeedback());
-                        } else {
-                            //send user feedback
-                            //not implemented
-                        }
-                    }
+                    $feedbackData = $client->deserialize($data,"OrgFeedback");
+                    Notify::sendOrgFeedback($feedbackData);
                     Dispatcher::sendResponce(null, null, null, $format);
-        }, 'sendFeedback');
+        }, 'sendOrgFeedback');
         
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/userFeedback(:format)/',
+                function ($id, $format = ".json") {
+                    $data = Dispatcher::getDispatcher()->request()->getBody();
+                    $client = new APIHelper($format);
+                    $feedbackData = $client->deserialize($data,"UserFeedback");
+                    Notify::sendUserFeedback($feedbackData);
+                    Dispatcher::sendResponce(null, null, null, $format);
+        }, 'sendUserFeedback');
+
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/file(:format)/',
                                                         function ($id, $format=".json") {
             

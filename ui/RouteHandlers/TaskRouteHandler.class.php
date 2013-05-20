@@ -13,7 +13,7 @@ class TaskRouteHandler
         $app->get("/tasks/claimed/p/:page_no", array($middleware, "authUserIsLoggedIn")
         , array($this, "claimedTasks"))->name("claimed-tasks");        
 
-        $app->get("/task/:task_id/download-task-latest-file", array($middleware, "authenticateUserForTask")
+        $app->get("/task/:task_id/download-task-latest-file", array($middleware, "authUserForTaskDownload")
         , array($this, "downloadTaskLatestVersion"))->name("download-task-latest-version");
         
         $app->get("/task/:task_id/mark-archived", array($middleware, "authUserForOrgTask")
@@ -28,7 +28,7 @@ class TaskRouteHandler
         $app->get("/task/:task_id/claimed", array($middleware, "authenticateUserForTask")
         , array($this, "taskClaimed"))->name("task-claimed");
 
-        $app->get("/task/:task_id/download-file/v/:version", array($middleware, "authUserIsLoggedIn")
+        $app->get("/task/:task_id/download-file/v/:version", array($middleware, "authUserForTaskDownload")
         , array($middleware, "authUserForTaskDownload")
         , array($this, "downloadTaskVersion"))->name("download-task-version");
 
@@ -1148,7 +1148,7 @@ class TaskRouteHandler
             if(isset($post->feedback)) {
 
                 if ($post->feedback != "") {
-                    $taskDao->sendFeedback($task_id, array($claimant->getId()), $post->feedback);
+                    $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post->feedback);
     
                     $app->flashNow("success", "Feedback sent to 
                             <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
@@ -1209,7 +1209,7 @@ class TaskRouteHandler
             $post = (object) $app->request()->post();
 
             if(isset($post->feedback)) {
-                $taskDao->sendFeedback($task_id, array($claimant->getId()), $post->feedback);
+                $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post->feedback);
                 if(isset($post->revokeTask) && $post->revokeTask) {
                     $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                     if($taskRevoke) {

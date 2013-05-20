@@ -156,31 +156,6 @@ class ProjectRouteHandler
                 $taskDao->archiveTask($post->task_id, $user_id);
                 $app->flashNow("success", "The task \"{$task->getTitle()}\" has been archived");
             }
-            
-            //This should not be here!!!!!!!!!
-            if(isset($post->feedback)) {
-                $feedback = new FeedbackEmail();               
-    
-                $feedback->setTaskId($task_id);
-                $feedback->addUserId($post->revokeUserId);
-                $feedback->setFeedback($post->feedback);
-                $taskDao->sendFeedback($feedback);
-
-                if(isset($post->revokeTask) && $post->revokeTask) {
-                    $taskRevoke = $userDao->unclaimTask($post->revokeUserId, $post->revokeTaskId);
-                    $claimant = $userDao->getUser($post->revokeUserId);
-                    if(!$taskRevoke) {
-                        $app->flashNow("taskSuccess", "<b>Success</b> - The task 
-                            <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
-                            has been successfully revoked from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">{$claimant->getDisplayName()}</a> 
-                            This user will be notified by e-mail and provided with your feedback.");
-                    } else {
-                        $app->flashNow("taskError", "<b>Error</b> - Unable to revoke the task ".
-                            "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}\"</a>
-                             from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">{$claimant->getDisplayName()}</a>. Please try again later.");                                
-                    }
-                }
-            }
         }   
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
@@ -285,6 +260,7 @@ class ProjectRouteHandler
             if(isset($post['tags'])) {
                 $tagLabels = TemplateHelper::separateTags($post['tags']);
                 if($tagLabels) {
+                    $project->clearTag();
                     foreach ($tagLabels as $tagLabel) {
                         $newTag = new Tag();
                         $newTag->setLabel($tagLabel);
@@ -536,7 +512,20 @@ class ProjectRouteHandler
                     $projectDao->calculateProjectDeadlines($project->getId());
                     $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
                 }              
-            } else {     
+            } else {
+                $tLocales = array();
+                for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {
+                    $locale = new Locale();
+                    $locale->setLanguageCode($post["targetLanguage_$i"]);
+                    $locale->setCountryCode($post["targetCountry_$i"]);                   
+                    
+                    $locale['segmentation'] = isset($post["segmentation_$i"]) && $post["segmentation_$i"];
+                    $locale['translation'] = isset($post["translation_$i"]) && $post["translation_$i"];
+                    $locale['proofreading'] = isset($post["proofreading_$i"]) && $post["proofreading_$i"];
+                    
+                    $tLocales[$i] = $locale;  
+                }
+                
                 $project->setWordCount($post["word_count"]);
                 $project->setDeadline($post["deadline"]);
                 $app->view()->appendData(array(
@@ -546,7 +535,8 @@ class ProjectRouteHandler
                     "targetLanguage_err"    => $targetLanguage_err,
                     "project"               => $project,
                     "file_upload_err"       => $file_upload_err,
-                    "uniqueLanguageCountry_err" => $uniqueLanguageCountry_err
+                    "uniqueLanguageCountry_err" => $uniqueLanguageCountry_err,
+                    "targetLocales"         => $tLocales
                 ));               
             }
         }

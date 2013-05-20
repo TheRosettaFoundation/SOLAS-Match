@@ -865,6 +865,24 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Test.addUserToTaskBlacklist
+DROP PROCEDURE IF EXISTS `addUserToTaskBlacklist`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addUserToTaskBlacklist`(IN `userId` INT, IN `taskId` INT)
+    MODIFIES SQL DATA
+BEGIN
+	if not exists(SELECT 1
+                    FROM TaskTranslatorBlacklist
+                    WHERE user_id = userId
+                    AND task_id = taskId) then
+        INSERT INTO TaskTranslatorBlacklist (task_id, user_id)
+            VALUES (taskId, userId);
+    end if;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure debug-test.archiveProject
 DROP PROCEDURE IF EXISTS `archiveProject`;
 DELIMITER //
@@ -1110,6 +1128,23 @@ if EXISTS (select 1 from Organisations o where o.id=id) then
 else
 	select 0 as result;
 end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure debug-test3.deleteProjectTags
+DROP PROCEDURE IF EXISTS `deleteProjectTags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProjectTags`(IN `projectId` INT)
+BEGIN
+
+	IF EXISTS (SELECT 1 FROM ProjectTags p WHERE p.project_id = projectId) THEN
+		DELETE FROM ProjectTags WHERE project_id = projectId;
+		SELECT 1 AS result;
+	ELSE
+		SELECT 0 AS result;
+	END IF;
+
 END//
 DELIMITER ;
 
@@ -1467,7 +1502,7 @@ BEGIN
 	if adminComment='' then set adminComment=null;end if;
 	if bannedDate='' then set bannedDate=null;end if;
 
-	set @q= "SELECT b.user_id, b.`user_id-admin`, (SELECT t.type FROM BannedTypes t WHERE t.id = b.bannedtype_id) AS bannedType, b.`comment`, b.`banned-date` FROM BannedUsers b WHERE 1 ";
+	set @q= "SELECT b.user_id, b.`user_id-admin`, b.bannedtype_id, b.`comment`, b.`banned-date` FROM BannedUsers b WHERE 1 ";
 	if userId is not null then 
 		set @q = CONCAT(@q," and b.user_id=",userId);
 	end if;
@@ -1674,6 +1709,8 @@ BEGIN
 	if regionalFocus is not null then 
 		set @q = CONCAT(@q," and o.`regional-focus`='",regionalFocus,"'") ;
 	end if;
+
+	set @q = CONCAT(@q, " GROUP BY o.name");
 	
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -2611,7 +2648,22 @@ DROP PROCEDURE IF EXISTS `isUserBanned`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBanned`(IN `userId` INT)
 BEGIN
-    SELECT exists (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) as result;
+    if EXISTS (SELECT 1 
+                FROM BannedUsers 
+                WHERE user_id = userId) then
+        if NOT EXISTS (SELECT 1
+                    FROM BannedUsers
+                    WHERE user_id = userId
+                    AND ((bannedtype_id = 1 AND DATE_ADD(`banned-date`, INTERVAL 1 DAY) < NOW())
+                    OR (bannedtype_id = 2 AND DATE_ADD(`banned-date`, INTERVAL 1 WEEK) < NOW())
+                    OR (bannedtype_id = 3 AND DATE_ADD(`banned-date`, INTERVAL 1 MONTH) < NOW()))) then
+            SELECT 1 as result;
+        else
+            DELETE FROM BannedUsers
+                WHERE user_id = userId;
+        end if;
+    end if;
+    SELECT 0 as result;
 END//
 DELIMITER ;
 
@@ -4200,9 +4252,15 @@ DROP TRIGGER IF EXISTS `onTasksUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
+    DECLARE userId INT DEFAULT 0;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE dependantTaskId INT DEFAULT 0;
+    DECLARE dependantTasks CURSOR FOR SELECT task_id FROM TaskPrerequisites WHERE `task_id-prerequisite` = new.id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
     if (new.`task-status_id`=4) then
         set @userID = null;
-		  SELECT user_id INTO @userId
+		SELECT user_id INTO @userId
                 FROM TaskClaims
                 WHERE task_id = new.id;
 
@@ -4219,6 +4277,18 @@ CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
                             AND badge_id = 7)then
             INSERT INTO UserBadges (user_id, badge_id) VALUES (@userId, 7);
         end if;
+
+        OPEN dependantTasks;
+        read_loop: LOOP
+            FETCH dependantTasks INTO dependantTaskId;
+            if done then
+                LEAVE read_loop;
+            end if;
+            CALL addUserToTaskBlacklist(@userId, dependantTaskId);
+        END LOOP;
+        CLOSE dependantTasks;
+
+        DELETE FROM UserTaskScores WHERE task_id = NEW.id;
     end if;
 END//
 DELIMITER ;
