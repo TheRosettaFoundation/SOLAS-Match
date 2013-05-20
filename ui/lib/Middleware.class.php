@@ -51,7 +51,7 @@ class Middleware
         $params = $route->getParams(); 
 
         $this->authUserIsLoggedIn();
-
+        $user_id = UserSession::getCurrentUserID();
         $claimant = null;
         if ($params !== null) {
             $task_id = $params['task_id'];
@@ -165,31 +165,34 @@ class Middleware
             return true;
         }
 
-        $params = $route->getParams();
         $taskDao = new TaskDao();
+        $projectDao = new ProjectDao();
         $userDao = new UserDao();
+
+        $params= $route->getParams();
         if ($params != null) {
             $task_id = $params['task_id'];
-            $user_id = UserSession::getCurrentUserID();
             $task = $taskDao->getTask($task_id);
-            $user_orgs = $userDao->getUserOrgs($user_id);
+//            if($taskDao->getUserClaimedTask($task_id) && $task->getStatus() != TaskStatusEnum::COMPLETE) return true;
+            if($taskDao->getUserClaimedTask($task_id)) return true;
+
+            $project = $projectDao->getProject($task->getProjectId());
             
-            //If the task has not been claimed yet then anyone can download it
-            $taskClaimed = $taskDao->isTaskClaimed($task_id);            
-            $userClaimedTask = $taskDao->isTaskClaimed($task_id, $user_id);
-            if (!$taskClaimed) {
-                return true;
-            } elseif ($userClaimedTask) {
-                return true;
-            } elseif (!is_null($user_orgs)) {
-                foreach ($user_orgs as $orgObject) {
-                    if ($orgObject->getId() == $task->getOrganisationId()) {
-                        return true;
+            $org_id = $project->getOrganisationId();
+            $user_id = UserSession::getCurrentUserID();
+
+            if ($user_id) {
+                $user_orgs = $userDao->getUserOrgs($user_id);
+                if (!is_null($user_orgs)) {
+                    foreach ($user_orgs as $orgObject) {
+                        if ($orgObject->getId() == $org_id) {
+                            return true;
+                        }
                     }
                 }                
             }
         }
-
+       
         self::notFound();
     }
     
