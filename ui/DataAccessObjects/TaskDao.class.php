@@ -142,11 +142,12 @@ class TaskDao
         $response =$this->client->call(null, $request, HttpMethodEnum::PUT, $task);
     }
 
-    public function sendOrgFeedback($taskId, $userId, $feedback)
+    public function sendOrgFeedback($taskId, $userId, $claimantId, $feedback)
     {
         $feedbackData = new OrgFeedback();
         $feedbackData->setTaskId($taskId);
-        $feedbackData->setClaimantId($userId);
+        $feedbackData->setUserId($userId);
+        $feedbackData->setClaimantId($claimantId);
         $feedbackData->setFeedback($feedback);
         $request = "{$this->siteApi}v0/tasks/{$feedbackData->getTaskId()}/orgFeedback";
         $response =$this->client->call(null,$request, HttpMethodEnum::PUT, $feedbackData);
