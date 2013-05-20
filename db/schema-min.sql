@@ -1708,6 +1708,8 @@ BEGIN
 	if regionalFocus is not null then 
 		set @q = CONCAT(@q," and o.`regional-focus`='",regionalFocus,"'") ;
 	end if;
+
+	set @q = CONCAT(@q, " GROUP BY o.name");
 	
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -4284,6 +4286,8 @@ CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
             CALL addUserToTaskBlacklist(@userId, dependantTaskId);
         END LOOP;
         CLOSE dependantTasks;
+
+        DELETE FROM UserTaskScores WHERE task_id = NEW.id;
     end if;
 END//
 DELIMITER ;

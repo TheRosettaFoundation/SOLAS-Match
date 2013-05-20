@@ -50,11 +50,7 @@ class Middleware
         $taskDao = new TaskDao();
         $params = $route->getParams(); 
 
-        $user_id = UserSession::getCurrentUserID();
-        if (is_null($user_id)) {
-            $app->flash('error', 'Login required to access page');
-            $app->redirect($app->urlFor('login'));
-        }
+        $this->authUserIsLoggedIn();
 
         $claimant = null;
         if ($params !== null) {
@@ -95,18 +91,7 @@ class Middleware
             }
         }
         
-        $app = Slim::getInstance();
-        $org_name = 'this organisation';
-        if (isset($org_id)) {
-            $siteApi = Settings::get("site.api");
-            $request = "$siteApi/v0/orgs/$org_id";
-            $org = $orgDao->getOrganisation($org_id);
-            $org_name = "<a href=\"".$app->urlFor('org-public-profile',
-                                                    array('org_id' => $org_id))."\">".$org->getName()."</a>";
-        }
-        $app->flash('error', "You are not authorised to view this profile.
-                    Only members of ".$org_name." may view this page.");
-        $app->redirect($app->urlFor('home'));
+        self::notFound();
     }
 
     /*
@@ -122,7 +107,6 @@ class Middleware
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $userDao = new UserDao();
-        $orgDao = new OrganisationDao();
 
         $params= $route->getParams();
         if ($params != null) {
@@ -145,16 +129,7 @@ class Middleware
             }
         }
        
-        $app = Slim::getInstance();
-        $org_name = 'this organisation';
-        if (isset($org_id)) {
-            $org = $orgDao->getOrganisation($org_id);
-            $org_name = "<a href=\"".$app->urlFor('org-public-profile',
-                                                    array('org_id' => $org_id))."\">".$org->getName()."</a>";
-        }
-        $app->flash('error', "You are not authorised to view this page.
-                    Only members of ".$org_name." may view this page.");
-        $app->redirect($app->urlFor('home'));
+        self::notFound();
     } 
     
     public function authUserForOrgProject($request, $response, $route) 
@@ -181,9 +156,7 @@ class Middleware
                 }
             }
         }
-        $app = Slim::getInstance();
-        $app->flash('error', "Only organisation members are authorised to view this page.");
-        $app->redirect($app->urlFor('home'));
+        self::notFound();
     }    
 
     public function authUserForTaskDownload($request, $response, $route)
@@ -217,9 +190,7 @@ class Middleware
             }
         }
 
-        $app = Slim::getInstance();
-        $app->flash('error', "You are not authorised to download this task");
-        $app->redirect($app->urlFor('home'));
+        self::notFound();
     }
     
     public function isUserBanned()

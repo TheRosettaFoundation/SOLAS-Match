@@ -13,7 +13,7 @@ class TaskRouteHandler
         $app->get("/tasks/claimed/p/:page_no", array($middleware, "authUserIsLoggedIn")
         , array($this, "claimedTasks"))->name("claimed-tasks");        
 
-        $app->get("/task/:task_id/download-task-latest-file", array($middleware, "authenticateUserForTask")
+        $app->get("/task/:task_id/download-task-latest-file", array($middleware, "authUserForTaskDownload")
         , array($this, "downloadTaskLatestVersion"))->name("download-task-latest-version");
         
         $app->get("/task/:task_id/mark-archived", array($middleware, "authUserForOrgTask")
@@ -28,7 +28,7 @@ class TaskRouteHandler
         $app->get("/task/:task_id/claimed", array($middleware, "authenticateUserForTask")
         , array($this, "taskClaimed"))->name("task-claimed");
 
-        $app->get("/task/:task_id/download-file/v/:version", array($middleware, "authUserIsLoggedIn")
+        $app->get("/task/:task_id/download-file/v/:version", array($middleware, "authUserForTaskDownload")
         , array($middleware, "authUserForTaskDownload")
         , array($this, "downloadTaskVersion"))->name("download-task-version");
 
