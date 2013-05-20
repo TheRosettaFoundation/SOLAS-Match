@@ -260,6 +260,7 @@ class ProjectRouteHandler
             if(isset($post['tags'])) {
                 $tagLabels = TemplateHelper::separateTags($post['tags']);
                 if($tagLabels) {
+                    $project->clearTag();
                     foreach ($tagLabels as $tagLabel) {
                         $newTag = new Tag();
                         $newTag->setLabel($tagLabel);
@@ -511,7 +512,20 @@ class ProjectRouteHandler
                     $projectDao->calculateProjectDeadlines($project->getId());
                     $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
                 }              
-            } else {     
+            } else {
+                $tLocales = array();
+                for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {
+                    $locale = new Locale();
+                    $locale->setLanguageCode($post["targetLanguage_$i"]);
+                    $locale->setCountryCode($post["targetCountry_$i"]);                   
+                    
+                    $locale['segmentation'] = isset($post["segmentation_$i"]) && $post["segmentation_$i"];
+                    $locale['translation'] = isset($post["translation_$i"]) && $post["translation_$i"];
+                    $locale['proofreading'] = isset($post["proofreading_$i"]) && $post["proofreading_$i"];
+                    
+                    $tLocales[$i] = $locale;  
+                }
+                
                 $project->setWordCount($post["word_count"]);
                 $project->setDeadline($post["deadline"]);
                 $app->view()->appendData(array(
@@ -521,7 +535,8 @@ class ProjectRouteHandler
                     "targetLanguage_err"    => $targetLanguage_err,
                     "project"               => $project,
                     "file_upload_err"       => $file_upload_err,
-                    "uniqueLanguageCountry_err" => $uniqueLanguageCountry_err
+                    "uniqueLanguageCountry_err" => $uniqueLanguageCountry_err,
+                    "targetLocales"         => $tLocales
                 ));               
             }
         }
