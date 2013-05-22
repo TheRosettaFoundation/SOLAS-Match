@@ -121,8 +121,8 @@
 {if isset($isOrgMember)}
     <table width="100%" class="table table-striped">
         <thead>
-            <th>Task Published</th>
-            <th>Task Tracked</th>
+            <th>Publish Task</th>
+            <th>Tracking</th>
         </thead>
         <tr align="center">
             <td>
@@ -132,12 +132,12 @@
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                            <i class="icon-check icon-black"></i> Published
+                            <i class="icon-check icon-black"></i> Unpublish
                         </a>
                     {else}
                         <input type="hidden" name="published" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                            <i class="icon-remove-circle icon-white"></i> Unpublished
+                            <i class="icon-remove-circle icon-white"></i> Publish
                         </a>
                     {/if}
                 </form>
@@ -148,12 +148,12 @@
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                            <i class="icon-inbox icon-black"></i> Tracked
+                            <i class="icon-inbox icon-black"></i> Untrack Task
                         </a>
                     {else}
                         <input type="hidden" name="track" value="Track" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                            <i class="icon-envelope icon-white"></i> Untracked
+                            <i class="icon-envelope icon-white"></i> Track Task
                         </a>
                     {/if}
                 </form>

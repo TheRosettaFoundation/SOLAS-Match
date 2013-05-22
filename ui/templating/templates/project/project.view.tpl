@@ -37,7 +37,7 @@
             <th>Created</th>
             <th>Project Deadline</th>
             {if isset($userSubscribedToProject)}
-                <th>Tracked</th>
+                <th>Tracking</th>
             {/if}
 
         </thead>
@@ -80,14 +80,14 @@
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
                                     <a class="btn btn-small" onclick="$('#trackedProjectForm').submit();" >
-                                        <i class="icon-check icon-black"></i> Tracked
+                                        <i class="icon-check icon-black"></i> Untrack Project
                                     </a>
                                 </p>
                             {else}
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
                                     <a class="btn btn-small btn-inverse" onclick="$('#trackedProjectForm').submit();" >
-                                        <i class="icon-envelope icon-white"></i> Untracked
+                                        <i class="icon-envelope icon-white"></i> Track Project
                                     </a>
                                 </p>
                             {/if}
@@ -199,8 +199,8 @@
                                 <th>Status</th>       
                                 <th>Type</th> 
                                 <th>Task Deadline</th>                  
-                                <th>Published</th>                    
-                                <th>Tracked</th>
+                                <th>Publish</th>                    
+                                <th>Tracking</th>
                                 <th>Edit</th>
                                 <th>Archive/Delete</th>
                             </tr>
@@ -265,13 +265,13 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
                                                 <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();" >
-                                                    <i class="icon-check icon-black"></i> Published
+                                                    <i class="icon-check icon-black"></i> Unpublish
                                                 </a>                                                
                                                 <input type="hidden" name="publishedTask" value="0" />
                                             {else}                                        
                                                 <input type="hidden" name="publishedTask" value="1" />
                                                 <a class="btn btn-small btn-inverse" onclick="$('#publishedForm{$task_id}').submit();" >
-                                                    <i class="icon-remove-circle icon-white"></i> Unpublished
+                                                    <i class="icon-remove-circle icon-white"></i> Publish
                                                 </a>
                                             {/if}
                                         </form>
@@ -283,12 +283,12 @@
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <a class="btn btn-small" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                    <i class="icon-inbox icon-black"></i> Tracked
+                                                    <i class="icon-inbox icon-black"></i> Untrack Task
                                                 </a>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
                                                 <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                    <i class="icon-envelope icon-white"></i> Untracked
+                                                    <i class="icon-envelope icon-white"></i> Track Task
                                                 </a>
                                             {/if}
                                         </form>
