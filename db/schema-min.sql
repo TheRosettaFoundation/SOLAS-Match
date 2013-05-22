@@ -1995,9 +1995,34 @@ DROP PROCEDURE IF EXISTS `getSubscribedUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscribedUsers`(IN `taskId` INT)
 BEGIN
-    SELECT u.id,`display-name`,email,u.password,biography, (select `en-name` from Languages where id =u.`language_id`) as `languageName`, (select code from Languages where id =u.`language_id`) as `languageCode`, (select `en-name` from Countries where id =u.`country_id`) as `countryName`, (select code from Countries where id =u.`country_id`) as `countryCode`, nonce,`created-time` from Users u
-    join UserTrackedTasks utt on u.id=utt.user_id
-    WHERE task_id = taskId;
+    if EXISTS (SELECT 1
+                FROM UserTrackedTasks
+                WHERE task_id = taskId) then
+        SELECT u.id,`display-name`,email,u.password,biography, 
+                (select `en-name` 
+                    from Languages 
+                    where id =u.`language_id`) as `languageName`, 
+                (select code 
+                    from Languages 
+                    where id =u.`language_id`) as `languageCode`, 
+                (select `en-name` 
+                    from Countries 
+                    where id =u.`country_id`) as `countryName`, 
+                (select code 
+                    from Countries 
+                    where id =u.`country_id`) as `countryCode`, 
+                nonce,`created-time` 
+            from Users u
+            join UserTrackedTasks utt on u.id=utt.user_id
+            WHERE task_id = taskId;
+    else
+        SET @orgId = -1;
+        SELECT p.organisation_id INTO @orgId
+            FROM Tasks t JOIN Projects p
+            ON t.project_id = p.id
+            WHERE t.id = taskId;
+        CALL getAdmin(@orgId);
+    end if;
 END//
 DELIMITER ;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
