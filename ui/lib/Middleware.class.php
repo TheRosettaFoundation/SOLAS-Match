@@ -149,10 +149,12 @@ class Middleware
             $project = $projectDao->getProject($project_id); 
             $project_orgid = $project->getOrganisationId();
 
-            foreach($userOrgs as $org)
-            {                
-                if($org->getId() == $project_orgid) {
-                    return true;
+            if($userOrgs) {
+                foreach($userOrgs as $org)
+                {                
+                    if($org->getId() == $project_orgid) {
+                        return true;
+                    }
                 }
             }
         }
