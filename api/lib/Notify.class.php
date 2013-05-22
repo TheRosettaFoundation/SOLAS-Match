@@ -155,25 +155,18 @@ class Notify
         }
     }
 
-    public static function sendEmailNotifications($taskId, $notificationType)
+    public static function sendTaskArchivedNotifications($taskId, $subscribedUsers)
     {
-        $subscribed_users = TaskDao::getSubscribedUsers($taskId);
-
-        if (count($subscribed_users) > 0) {
+        if (count($subscribedUsers) > 0) {
             $messagingClient = new MessagingClient();
             if ($messagingClient->init()) {
-                switch ($notificationType) {
-                        
-                    case NotificationTypes::ARCHIVE:
-                        $message_type = new TaskArchived();
-                        $message_type->task_id = $taskId;
-                        foreach ($subscribed_users as $user) {
-                            $message_type->user_id = $user->getId();
-                            $message = $messagingClient->createMessageFromProto($message_type);
-                            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                                    $messagingClient->TaskArchivedTopic);
-                        }
-                        break;
+                $message_type = new TaskArchived();
+                $message_type->task_id = $taskId;
+                foreach ($subscribedUsers as $user) {
+                    $message_type->user_id = $user->getId();
+                    $message = $messagingClient->createMessageFromProto($message_type);
+                    $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                        $messagingClient->TaskArchivedTopic);
                 }
             } 
         }
