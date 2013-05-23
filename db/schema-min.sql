@@ -1241,6 +1241,22 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getActiveLanguages
+DROP PROCEDURE IF EXISTS `getActiveLanguages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveLanguages`()
+BEGIN
+    SELECT `en-name` as language, code, id
+        FROM Languages
+        WHERE id IN (SELECT `language_id-source`
+                        FROM Tasks
+                        WHERE published = 1 AND `task-status_id` = 2)
+        OR id IN (SELECT `language_id-target`
+                        FROM Tasks
+                        WHERE published = 1 AND `task-status_id` = 2);
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure debug-test3.getAdmin
 DROP PROCEDURE IF EXISTS `getAdmin`;
 DELIMITER //
