@@ -23,9 +23,12 @@ class Orgs {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Organisation");
-            $data->setId(null);            
-            Dispatcher::sendResponce(null, OrganisationDao::insertAndUpdate($data), null, $format);
-
+            $data->setId(null);
+            $org = OrganisationDao::insertAndUpdate($data);
+            Dispatcher::sendResponce(null, $org, null, $format);
+            if ($org->getId() > 0) {
+                Notify::sendOrgCreatedNotifications($org->getId());
+            }
         }, 'createOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/', function ($id, $format = ".json") {

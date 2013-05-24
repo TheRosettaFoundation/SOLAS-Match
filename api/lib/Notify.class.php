@@ -19,6 +19,7 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
 require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
 require_once __DIR__."/../../Common/Requests/TaskUploadNotificationRequest.php";
+require_once __DIR__.'/../../Common/Requests/OrgCreatedNotificationRequest.php';
 
 class Notify 
 {
@@ -53,6 +54,18 @@ class Notify
             $message = $messagingClient->createMessageFromProto($feedback);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
                     $messagingClient->OrgFeedbackTopic);
+        }
+    }
+
+    public static function sendOrgCreatedNotifications($orgId)
+    {
+        $client = new MessagingClient();
+        if ($client->init()) {
+            $proto = new OrgCreatedNotificationRequest();
+            $proto->setOrgId($orgId);
+            $message = $client->createMessageFromProto($proto);
+            $client->sendTopicMessage($message, $client->MainExchange, 
+                    $client->OrgCreatedTopic);
         }
     }
 
