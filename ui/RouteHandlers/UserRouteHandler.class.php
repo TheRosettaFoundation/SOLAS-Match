@@ -17,6 +17,8 @@ class UserRouteHandler
 
         $app->get("/", array($this, "home"))->via("POST")->name("home");
 
+        $app->get("/videos", array($this, 'videos'))->name('videos');
+
         $app->get("/register", array($this, "register")
         )->via("GET", "POST")->name("register");
 
@@ -157,6 +159,13 @@ class UserRouteHandler
         ));
         
         $app->render("index.tpl");
+    }
+
+    public function videos()
+    {
+        $app = Slim::getInstance();
+        $app->view()->appendData(array('current_page' => 'videos'));
+        $app->render("videos.tpl");
     }
 
     public function register()

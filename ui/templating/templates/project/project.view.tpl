@@ -303,7 +303,7 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
                                                 <input type="hidden" name="deleteTask" value="Delete" />
-                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                <a class="btn btn-small btn-inverse" onclick="$('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> Delete
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
@@ -312,7 +312,7 @@
                                                 </button>  
                                             {else}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
-                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                <a class="btn btn-small btn-inverse" onclick="$('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> Archive
                                                 </a> 
                                             {/if}
