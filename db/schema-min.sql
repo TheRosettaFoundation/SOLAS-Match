@@ -2326,6 +2326,31 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure DropTableFix.getTaskTagIds
+DROP PROCEDURE IF EXISTS `getTaskTagIds`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTagIds`(IN `lim` INT, IN `offs` INT)
+BEGIN
+	if lim='' then set lim=null;end if;
+	if offs ='' then set offs=null;end if;	
+	
+	set @q = ("select t.id as task_id , pt.tag_id from ProjectTags pt join Tasks t on t.project_id = pt.project_id order by t.id ");
+	
+	if not lim is null then
+		set @q = Concat(@q, " LIMIT ", lim);	
+	end if;
+	
+	if not offs is null then
+		set @q = Concat(@q, " OFFSET ", offs);	
+	end if;
+
+   PREPARE stmt FROM @q;
+   EXECUTE stmt;
+   DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getTaskTags
 DROP PROCEDURE IF EXISTS `getTaskTags`;
 DELIMITER //
@@ -2488,6 +2513,54 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure DropTableFix.getUserLCCodes
+DROP PROCEDURE IF EXISTS `getUserLCCodes`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserLCCodes`(IN `lim` INT, IN `offs` INT)
+BEGIN
+	if lim='' then set lim=null;end if;
+	if offs ='' then set offs=null;end if;
+	
+	set @q = Concat("select s.user_id, (select lg.code from Languages lg where lg.id = s.language_id) as languageCode, (select c.code from Countries c where c.id = s.country_id) as countryCode FROM UserSecondaryLanguages s order by s.user_id ");
+	
+	if not lim is null then
+		set @q = Concat(@q, " LIMIT ", lim);	
+	end if;
+	
+	if not offs is null then
+		set @q = Concat(@q, " OFFSET ", offs);	
+	end if;
+
+   PREPARE stmt FROM @q;
+   EXECUTE stmt;
+   DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure DropTableFix.getUserNativeLCCodes
+DROP PROCEDURE IF EXISTS `getUserNativeLCCodes`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserNativeLCCodes`(IN `lim` INT, IN `offs` INT)
+BEGIN
+	if lim='' then set lim=null;end if;
+	if offs ='' then set offs=null;end if;
+	
+	set @q = ("select u.id, (select l.code from Languages l where l.id = u.language_id) as languageCode, (select c.code from Countries c where c.id = u.country_id) as countryCode from Users u ");
+
+	if not lim is null then
+		set @q = Concat(@q, " LIMIT ", lim);	
+	end if;
+	
+	if not offs is null then
+		set @q = Concat(@q, " OFFSET ", offs);	
+	end if;
+
+   PREPARE stmt FROM @q;
+   EXECUTE stmt;
+   DEALLOCATE PREPARE stmt;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getUserNotifications
 DROP PROCEDURE IF EXISTS `getUserNotifications`;
@@ -2509,6 +2582,31 @@ BEGIN
 	SELECT *
 	FROM Users JOIN UserBadges ON Users.id = UserBadges.user_id
 	WHERE badge_id = bID;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure DropTableFix.getUserTagIds
+DROP PROCEDURE IF EXISTS `getUserTagIds`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTagIds`(IN `lim` INT, IN `offs` INT)
+BEGIN
+	if lim='' then set lim=null;end if;
+	if offs ='' then set offs=null;end if;
+	
+	set @q = ("select ut.user_id, ut.tag_id from UserTags ut order by ut.user_id ");
+
+	if not lim is null then
+		set @q = Concat(@q, " LIMIT ", lim);	
+	end if;
+	
+	if not offs is null then
+		set @q = Concat(@q, " OFFSET ", offs);	
+	end if;
+
+   PREPARE stmt FROM @q;
+   EXECUTE stmt;
+   DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
