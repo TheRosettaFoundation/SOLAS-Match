@@ -54,6 +54,18 @@ class Languages {
         return $languages;
     }
 
+    public static function getActiveLanguages()
+    {
+        $languages = null;
+        if ($result = PDOWrapper::call("getActiveLanguages", "")) {
+            $languages = array();
+            foreach ($result as $row) {
+                $languages[] = ModelFactory::buildModel("Language", $row);
+            }
+        }
+        return $languages;
+    }
+
     public static function getCountryList()
     {
         $countries = array();

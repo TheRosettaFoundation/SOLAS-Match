@@ -49,6 +49,7 @@ class UserRouteHandler
     public function home()
     {
         $app = Slim::getInstance();
+        $langDao = new LanguageDao();
         $tagDao = new TagDao();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
@@ -98,7 +99,7 @@ class UserRouteHandler
             $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
             $taskTypes[TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
 
-            $languageList = TemplateHelper::getLanguageList();
+            $languageList = $langDao->getActiveLanguages();
 
             $filter = array();
             $selectedType = "";

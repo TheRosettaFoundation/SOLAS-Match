@@ -1241,6 +1241,22 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getActiveLanguages
+DROP PROCEDURE IF EXISTS `getActiveLanguages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveLanguages`()
+BEGIN
+    SELECT `en-name` as language, code, id
+        FROM Languages
+        WHERE id IN (SELECT `language_id-source`
+                        FROM Tasks
+                        WHERE published = 1 AND `task-status_id` = 2)
+        OR id IN (SELECT `language_id-target`
+                        FROM Tasks
+                        WHERE published = 1 AND `task-status_id` = 2);
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure debug-test3.getAdmin
 DROP PROCEDURE IF EXISTS `getAdmin`;
 DELIMITER //
@@ -1995,9 +2011,34 @@ DROP PROCEDURE IF EXISTS `getSubscribedUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscribedUsers`(IN `taskId` INT)
 BEGIN
-    SELECT u.id,`display-name`,email,u.password,biography, (select `en-name` from Languages where id =u.`language_id`) as `languageName`, (select code from Languages where id =u.`language_id`) as `languageCode`, (select `en-name` from Countries where id =u.`country_id`) as `countryName`, (select code from Countries where id =u.`country_id`) as `countryCode`, nonce,`created-time` from Users u
-    join UserTrackedTasks utt on u.id=utt.user_id
-    WHERE task_id = taskId;
+    if EXISTS (SELECT 1
+                FROM UserTrackedTasks
+                WHERE task_id = taskId) then
+        SELECT u.id,`display-name`,email,u.password,biography, 
+                (select `en-name` 
+                    from Languages 
+                    where id =u.`language_id`) as `languageName`, 
+                (select code 
+                    from Languages 
+                    where id =u.`language_id`) as `languageCode`, 
+                (select `en-name` 
+                    from Countries 
+                    where id =u.`country_id`) as `countryName`, 
+                (select code 
+                    from Countries 
+                    where id =u.`country_id`) as `countryCode`, 
+                nonce,`created-time` 
+            from Users u
+            join UserTrackedTasks utt on u.id=utt.user_id
+            WHERE task_id = taskId;
+    else
+        SET @orgId = -1;
+        SELECT p.organisation_id INTO @orgId
+            FROM Tasks t JOIN Projects p
+            ON t.project_id = p.id
+            WHERE t.id = taskId;
+        CALL getAdmin(@orgId);
+    end if;
 END//
 DELIMITER ;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;

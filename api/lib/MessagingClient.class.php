@@ -8,6 +8,7 @@ class MessagingClient
     public $MainExchange    = "SOLAS_MATCH"; // change to consts
     public $AlertsExchange  = "ALERTS";
 
+    public $OrgCreatedTopic                 = "users";
     public $TaskScoreTopic                  = "tasks";
     public $TaskUploadNotificationTopic     = "tasks";
     public $CalculateProjectDeadlinesTopic  = "projects";

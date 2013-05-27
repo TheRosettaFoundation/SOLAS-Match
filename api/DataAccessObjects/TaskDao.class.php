@@ -428,7 +428,7 @@ class TaskDao
     }
 
 
-    public static function archiveTaskNode($node, $graph, $userId)
+    private static function archiveTaskNode($node, $graph, $userId)
     {
         $ret = true;
         $task = self::getTask($node->getTaskId());
@@ -448,19 +448,16 @@ class TaskDao
         }
 
         if ($ret) {
+            $subscribedUsers = self::getSubscribedUsers($node->getTaskId());
             $ret = self::archiveTask($node->getTaskId(), $userId);
-            try{
-                Notify::sendEmailNotifications($node->getTaskId(), NotificationTypes::ARCHIVE);
-            }catch (Exception $e){ 
-                
-            }
+            Notify::sendTaskArchivedNotifications($node->getTaskId(), $subscribedUsers);
         }
         
 
         return $ret;
     }
 
-    public static function archiveTask($taskId, $userId)
+    private static function archiveTask($taskId, $userId)
     {
         $args = PDOWrapper::cleanseNull($taskId)
                 .",".PDOWrapper::cleanseNull($userId);

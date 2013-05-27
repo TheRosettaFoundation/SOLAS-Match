@@ -121,8 +121,8 @@
 {if isset($isOrgMember)}
     <table width="100%" class="table table-striped">
         <thead>
-            <th>Task Published</th>
-            <th>Task Tracked</th>
+            <th>Publish Task</th>
+            <th>Tracking</th>
         </thead>
         <tr align="center">
             <td>
@@ -131,13 +131,13 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                            <i class="icon-check icon-black"></i> Published
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                            <i class="icon-remove-circle icon-white"></i> Unpublish
                         </a>
                     {else}
                         <input type="hidden" name="published" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                            <i class="icon-remove-circle icon-white"></i> Unpublished
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                            <i class="icon-check icon-black"></i> Publish
                         </a>
                     {/if}
                 </form>
@@ -147,13 +147,13 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                            <i class="icon-inbox icon-black"></i> Tracked
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                            <i class="icon-inbox icon-white"></i> Untrack Task
                         </a>
                     {else}
                         <input type="hidden" name="track" value="Track" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                            <i class="icon-envelope icon-white"></i> Untracked
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                            <i class="icon-envelope icon-black"></i> Track Task
                         </a>
                     {/if}
                 </form>
