@@ -8,6 +8,7 @@ class StaticRouteHandeler
         
         $app->get("/static/privacy", array($this, "privacy"))->name("privacy");
         $app->get("/static/terms", array($this, "terms"))->name("terms");
+        $app->get("/static/videos", array($this, "videos"))->name("videos");
         $app->notFound(array("Middleware::notFound"));
     }
 
@@ -21,6 +22,13 @@ class StaticRouteHandeler
     {
          $app = Slim::getInstance();
          $app->render("static/terms.tpl");
+    }
+    
+    public function videos()
+    {
+         $app = Slim::getInstance();
+         $app->view()->setData("current_page", "videos");
+         $app->render("static/videos.tpl");
     }
 }
 
