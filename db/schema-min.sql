@@ -185,7 +185,7 @@ REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
 	(5, NULL, 'Native-Language', 'Filled in your native language on your user profile successfully.'),
         (6, NULL, 'Translator', 'This volunteer is available for translation tasks.'),
         (7, NULL, 'Proofreader', 'This volunteer is available for proofreading tasks.'),
-        (8, NULL, 'Interpretor', 'This volunteer is available for interpreting tasks.'),
+        (8, NULL, 'Interpreter', 'This volunteer is available for interpreting tasks.'),
         (9, NULL, 'Polyglot', 'One or more secondary languages selected on your profile.');
 ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
