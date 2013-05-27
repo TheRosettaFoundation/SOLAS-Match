@@ -35,14 +35,17 @@ class TaskRouteHandler
         $app->get("/task/:task_id/id", array($middleware, "authUserIsLoggedIn")
         , array($this, "task"))->via("POST")->name("task");
 
-        $app->get("/task/:task_id/desegmentation", array($middleware, "authUserIsLoggedIn")
-        , array($this, "desegmentationTask"))->via("POST")->name("task-desegmentation");
+        $app->get("/task/:task_id/desegmentation", array($middleware, "authUserIsLoggedIn"), 
+        array($middleware, 'authenticateUserForTask'), 
+        array($this, "desegmentationTask"))->via("POST")->name("task-desegmentation");
 
-        $app->get("/task/:task_id/simple-upload", array($middleware, "authUserIsLoggedIn")
-        , array($this, "taskSimpleUpload"))->via("POST")->name("task-simple-upload");
+        $app->get("/task/:task_id/simple-upload", array($middleware, "authUserIsLoggedIn"),
+        array($middleware, 'authenticateUserForTask'),
+        array($this, "taskSimpleUpload"))->via("POST")->name("task-simple-upload");
 
-        $app->get("/task/:task_id/segmentation", array($middleware, "authUserIsLoggedIn")
-        , array($this, "taskSegmentation"))->via("POST")->name("task-segmentation");
+        $app->get("/task/:task_id/segmentation", array($middleware, "authUserIsLoggedIn"),
+        array($middleware, 'authenticateUserForTask'),
+        array($this, "taskSegmentation"))->via("POST")->name("task-segmentation");
 
         $app->get("/task/:task_id/uploaded", array($middleware, "authenticateUserForTask")
         , array($this, "taskUploaded"))->name("task-uploaded");

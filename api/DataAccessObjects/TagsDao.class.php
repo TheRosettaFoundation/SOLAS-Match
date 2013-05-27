@@ -88,7 +88,7 @@ class TagsDao
     public static function updateTags($projectId, $updatedProjectTagList)
     {        
         if($updatedProjectTagList) {
-            $oldProjectTagList = ProjectDao::getTags($projectId);
+            if(is_null($oldProjectTagList = ProjectDao::getTags($projectId))) $oldProjectTagList = array();
             
             $tagsToRemove = array_udiff($oldProjectTagList, $updatedProjectTagList, 'TagsDao::compareTo');
 
@@ -103,7 +103,7 @@ class TagsDao
             if(!empty($tagsToAdd)) {                    
                 foreach($tagsToAdd as $newTag) {
                     if($tagExists = TagsDao::getTag(null, $newTag->getLabel())) {
-                        ProjectDao::addProjectTag($projectId, $tagExists->getId());
+                        ProjectDao::addProjectTag($projectId, $tagExists[0]->getId());
                     } else {
                         $tag = TagsDao::create($newTag->getLabel());
                         ProjectDao::addProjectTag($projectId, $tag->getId());

@@ -65,6 +65,9 @@
                                 <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">Admin</a>
                             </li>
                         {/if}
+                            <li {if isset($current_page) && $current_page == 'videos'}class="active" {/if}>
+                                <a href="{urlFor name="videos"}">Videos</a>
+                            </li>
                     </ul>
                     <ul class="nav pull-right">
                         {if isset($userNotifications)}   

@@ -19,6 +19,7 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
 require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
 require_once __DIR__."/../../Common/Requests/TaskUploadNotificationRequest.php";
+require_once __DIR__.'/../../Common/Requests/OrgCreatedNotificationRequest.php';
 
 class Notify 
 {
@@ -53,6 +54,18 @@ class Notify
             $message = $messagingClient->createMessageFromProto($feedback);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
                     $messagingClient->OrgFeedbackTopic);
+        }
+    }
+
+    public static function sendOrgCreatedNotifications($orgId)
+    {
+        $client = new MessagingClient();
+        if ($client->init()) {
+            $proto = new OrgCreatedNotificationRequest();
+            $proto->setOrgId($orgId);
+            $message = $client->createMessageFromProto($proto);
+            $client->sendTopicMessage($message, $client->MainExchange, 
+                    $client->OrgCreatedTopic);
         }
     }
 
@@ -155,25 +168,18 @@ class Notify
         }
     }
 
-    public static function sendEmailNotifications($taskId, $notificationType)
+    public static function sendTaskArchivedNotifications($taskId, $subscribedUsers)
     {
-        $subscribed_users = TaskDao::getSubscribedUsers($taskId);
-
-        if (count($subscribed_users) > 0) {
+        if (count($subscribedUsers) > 0) {
             $messagingClient = new MessagingClient();
             if ($messagingClient->init()) {
-                switch ($notificationType) {
-                        
-                    case NotificationTypes::ARCHIVE:
-                        $message_type = new TaskArchived();
-                        $message_type->task_id = $taskId;
-                        foreach ($subscribed_users as $user) {
-                            $message_type->user_id = $user->getId();
-                            $message = $messagingClient->createMessageFromProto($message_type);
-                            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                                    $messagingClient->TaskArchivedTopic);
-                        }
-                        break;
+                $message_type = new TaskArchived();
+                $message_type->task_id = $taskId;
+                foreach ($subscribedUsers as $user) {
+                    $message_type->user_id = $user->getId();
+                    $message = $messagingClient->createMessageFromProto($message_type);
+                    $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
+                        $messagingClient->TaskArchivedTopic);
                 }
             } 
         }

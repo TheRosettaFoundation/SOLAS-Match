@@ -37,7 +37,7 @@
             <th>Created</th>
             <th>Project Deadline</th>
             {if isset($userSubscribedToProject)}
-                <th>Tracked</th>
+                <th>Tracking</th>
             {/if}
 
         </thead>
@@ -79,15 +79,15 @@
                              {if $userSubscribedToProject}
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
-                                    <a class="btn btn-small" onclick="$('#trackedProjectForm').submit();" >
-                                        <i class="icon-check icon-black"></i> Tracked
+                                    <a class="btn btn-small btn-inverse" onclick="$('#trackedProjectForm').submit();" >
+                                        <i class="icon-remove-circle icon-white"></i> Untrack Project
                                     </a>
                                 </p>
                             {else}
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
-                                    <a class="btn btn-small btn-inverse" onclick="$('#trackedProjectForm').submit();" >
-                                        <i class="icon-envelope icon-white"></i> Untracked
+                                    <a class="btn btn-small" onclick="$('#trackedProjectForm').submit();" >
+                                        <i class="icon-envelope icon-black"></i> Track Project
                                     </a>
                                 </p>
                             {/if}
@@ -156,7 +156,7 @@
                 
     <p style="margin-bottom:40px;"/>
 
-{if isset($user) && isset($isOrgMember)}
+{if isset($user) && ($isOrgMember || $isAdmin)}
     <hr />    
     <h1 class="page-header" style="margin-bottom: 60px">
         Tasks
@@ -199,8 +199,8 @@
                                 <th>Status</th>       
                                 <th>Type</th> 
                                 <th>Task Deadline</th>                  
-                                <th>Published</th>                    
-                                <th>Tracked</th>
+                                <th>Publish</th>                    
+                                <th>Tracking</th>
                                 <th>Edit</th>
                                 <th>Archive/Delete</th>
                             </tr>
@@ -264,14 +264,14 @@
                                         <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
-                                                <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();" >
-                                                    <i class="icon-check icon-black"></i> Published
+                                                <a class="btn btn-small btn-inverse" onclick="$('#publishedForm{$task_id}').submit();" >
+                                                    <i class="icon-remove-circle icon-white"></i> Unpublish
                                                 </a>                                                
                                                 <input type="hidden" name="publishedTask" value="0" />
                                             {else}                                        
                                                 <input type="hidden" name="publishedTask" value="1" />
-                                                <a class="btn btn-small btn-inverse" onclick="$('#publishedForm{$task_id}').submit();" >
-                                                    <i class="icon-remove-circle icon-white"></i> Unpublished
+                                                <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();" >
+                                                    <i class="icon-check icon-black"></i> Publish
                                                 </a>
                                             {/if}
                                         </form>
@@ -282,13 +282,13 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
-                                                <a class="btn btn-small" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                    <i class="icon-inbox icon-black"></i> Tracked
+                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                    <i class="icon-inbox icon-white"></i> Untrack
                                                 </a>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
-                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                    <i class="icon-envelope icon-white"></i> Untracked
+                                                <a class="btn btn-small" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                    <i class="icon-envelope icon-black"></i> Track
                                                 </a>
                                             {/if}
                                         </form>
@@ -303,7 +303,7 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
                                                 <input type="hidden" name="deleteTask" value="Delete" />
-                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                <a class="btn btn-small btn-inverse" onclick="$('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> Delete
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
@@ -312,7 +312,7 @@
                                                 </button>  
                                             {else}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
-                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                <a class="btn btn-small btn-inverse" onclick="$('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> Archive
                                                 </a> 
                                             {/if}
