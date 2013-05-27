@@ -503,14 +503,15 @@ class OrgRouteHandler
         
         $isMember = false;
         if (count($orgMemberList) > 0) {
-            if (in_array($currentUser, $orgMemberList)) {
-                $isMember = true;
+            foreach ($orgMemberList as $member) {
+                if ($currentUser->getId() ==  $member->getId()) {
+                    $isMember = true;
+                }
             }
         }
 
         $adminAccess = false;
-        $adminDao = new AdminDao();
-        if ($adminDao->isSiteAdmin($currentUser->getId()) || $adminDao->isOrgAdmin($currentUser->getId(), $org->getId())) {
+        if ($adminDao->isSiteAdmin($currentUser->getId()) == 1 || $adminDao->isOrgAdmin($org->getId(), $currentUser->getId()) == 1) {
             $adminAccess = true;
         }
 
