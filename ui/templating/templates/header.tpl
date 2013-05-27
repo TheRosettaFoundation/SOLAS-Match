@@ -59,6 +59,9 @@
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">Profile</a>
                             </li>
                         {/if}
+                        <li {if isset($current_page) && $current_page == 'videos'}class="active"{/if} >
+                            <a href="{urlFor name="videos"}">Video Tutorials</a>
+                        </li>
                         {if isset($site_admin)}
                             {assign var="user_id" value=$user->getId()}
                             <li {if isset($current_page) && $current_page == 'admin-dashboard'}class="active" {/if}>
