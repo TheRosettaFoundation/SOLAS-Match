@@ -17,8 +17,6 @@ class UserRouteHandler
 
         $app->get("/", array($this, "home"))->via("POST")->name("home");
 
-        $app->get("/videos", array($this, 'videos'))->name('videos');
-
         $app->get("/register", array($this, "register")
         )->via("GET", "POST")->name("register");
 
