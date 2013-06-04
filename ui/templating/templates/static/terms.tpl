@@ -52,7 +52,6 @@
        </ol>
 
    </li>
-
    <li>
        Under this license you confirm that:
        <ol>
@@ -73,6 +72,24 @@
    
 
 </ol>
+<h4> 2.2 Offensive Content</h4>
+
+    You may not publish any content that Trommons.org reasonably believes:
+<ol>
+   <li>constitutes child pornography;</li>
+   <li>constitutes pornography;</li>
+   <li>is excessively violent, incites violence, threatens violence, or contains harassing content or hate speech;</li>
+   <li> is unfair or deceptive under the consumer protection laws of any jurisdiction, including chain letters and pyramid schemes;</li>
+   <li>is defamatory or violates a person's privacy;</li>
+   <li>creates a risk to a person's safety or health, creates a risk to public safety or health, compromises national security, or interferes with a investigation by law enforcement;</li>
+   <li> improperly exposes trade secrets or other confidential or proprietary information of another person;</li>
+   <li>is intended to assist others in defeating technical copyright protections;</li>
+   <li> clearly infringes on another person's trade or service mark, patent, or other property right;</li>
+   <li> promotes illegal drugs, violates export control laws, relates to illegal gambling, or illegal arms trafficking;</li>
+   <li> is otherwise illegal or solicits conduct that is illegal under laws applicable to you or to Trommons.org;</li>
+   <li> is otherwise malicious, fraudulent, or may result in retaliation against Trommons.org by offended Trommons.org;</li>
+</ol>
+
 
 
 
