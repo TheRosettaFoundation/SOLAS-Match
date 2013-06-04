@@ -29,7 +29,7 @@
         <div class="pull-right">
             {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
                 <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btn btn-primary">
-                <i class="icon-download icon-white"></i> Claim Task</a>
+                <i class="icon-download icon-white"></i> Download Task</a>
             {/if}
 
             {if isset($isOrgMember)}

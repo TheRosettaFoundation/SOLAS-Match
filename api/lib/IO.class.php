@@ -113,6 +113,7 @@ class IO {
                 header('Content-type: '.$contentType);
                 header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
                 header("Content-length: $fsize");
+                header("X-Frame-Options: ALLOWALL");
                 header("Cache-control: private"); //use this to open files directly
                 header("X-Sendfile: ".realpath($absoluteFilePath));
                // TODO -> this die is to get around Slim's $app->reponse() header/body response.
@@ -132,6 +133,7 @@ class IO {
                 header('Content-type: '.$contentType);
                 header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
                 header("Content-length: $fsize");
+                header("X-Frame-Options: ALLOWALL");
                 header("Cache-control: private"); //use this to open files directly
 //                header("X-Sendfile: ".realpath($absoluteFilePath));
                 $file = file_get_contents($absoluteFilePath);
