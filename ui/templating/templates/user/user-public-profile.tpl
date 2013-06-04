@@ -21,7 +21,8 @@
                     <div class="pull-right">
                         {if isset($private_access) && isset($org_creation)}
                             {if $org_creation == 'y'}
-                                <a href="{urlFor name="create-org"}" class="btn btn-success">
+                                <a href="{urlFor name="create-org"}" class="btn btn-success"
+                                   onclick="return confirm('By creating an organisation, you confirm that it's activities are not in conflict with the general terms and conditions for the use of this site.')">
                                     <i class="icon-star icon-white"></i> Create Organisation
                                 </a>
                             {else if $org_creation == 'h'}

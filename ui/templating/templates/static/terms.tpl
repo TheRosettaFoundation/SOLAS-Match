@@ -27,7 +27,58 @@
 
 <h3>
 
-   2. Volunteer Use License
+   2. Organisation Use of Trommons.org
+
+</h3>
+
+<p>Permission is granted to Organisations to publish content subject to the terms of the  following licence.</p>
+
+<h4>
+  2.1 Organisation Use License
+</h4>
+
+<ol type="a">
+
+   <li>
+        This is the grant of a license, not a transfer of title, and under this license you may not:
+       <ol type="i">
+
+           <li>use Trommons.org to publish any commercial for-profit content;</li>
+
+           <li>attempt to decompile or reverse engineer any software contained on Trommons.org's web site;</li>
+
+           <li>remove any copyright or other proprietary notations from the materials</li>
+
+       </ol>
+
+   </li>
+
+   <li>
+       Under this license you confirm that:
+       <ol>
+           <li>
+               your organisation does not discriminate on any unlawful basis with regard to hiring or employment practices,
+               <br/>including discrimination or harassment on the basis of race, colour, religion, veteran status, national origin, ancestry, 
+               <br/>pregnancy status, sex, gender identity or expression, age, marital status, mental or physical disability, medical condition, 
+               <br/>sexual orientation or any other characteristics protected by law, in the administration or provision of all programmes and services.
+           </li>    
+           <li>all conntent submitted by your organisation  will be used solely for not for profit activities.</li>
+           <li>your organisation agrees to license any content published on trommons.org under the terms of the Volunteer Use License, section 3 of this document.</li>
+       </ol>
+       
+   </li>
+   <li>
+       This license shall automatically terminate if you violate any of these restrictions and may be terminated by Trommons.org at any time. Upon terminating your viewing of these materials or upon the termination of this license, you must destroy any downloaded materials in your possession whether in electronic or printed format.
+   </li>
+   
+
+</ol>
+
+
+
+<h3>
+
+   3. Volunteer Use License
 
 </h3>
 
@@ -76,7 +127,7 @@
 
 <h3>
 
-   3. Disclaimer
+   4. Disclaimer
 
 </h3>
 <p>
@@ -88,7 +139,7 @@
 
 <h3>
 
-   4. Limitations
+   5. Limitations
 
 </h3>
 
@@ -106,7 +157,7 @@
 
 <h3>
 
-   5. Revisions and Errata
+   6. Revisions and Errata
 
 </h3>
 
@@ -118,7 +169,7 @@
 
 <h3>
 
-   6. Links
+   7. Links
 
 </h3>
 
@@ -130,7 +181,7 @@
 
 <h3>
 
-   7. Site Terms of Use Modifications
+   8. Site Terms of Use Modifications
 
 </h3>
 
@@ -142,7 +193,7 @@
 
 <h3>
 
-   8. Governing Law
+   9. Governing Law
 
 </h3>
 
@@ -162,7 +213,7 @@
 
 <h2>
 
-   Privacy Policy
+  10. Privacy Policy
 
 </h2>
 
