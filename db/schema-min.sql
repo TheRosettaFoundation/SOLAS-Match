@@ -183,9 +183,10 @@ REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
 	(3, NULL, 'Profile-Filler', 'Filled in all info for user  public profile.'),
 	(4, NULL, 'Registered', 'Successfully set up an account'),
 	(5, NULL, 'Native-Language', 'Filled in your native language on your user profile successfully.'),
-        (6, NULL, 'Translator', 'This volunteer has successfully completed a translation task.'),
-        (7, NULL, 'Proofreader', 'This volunteer has successfully completed a proofreading task.'),
-        (8, NULL, 'Interpreter', 'This volunteer has successfully completed an interperting task.');
+        (6, NULL, 'Translator', 'This volunteer is available for translation tasks.'),
+        (7, NULL, 'Proofreader', 'This volunteer is available for proofreading tasks.'),
+        (8, NULL, 'Interpreter', 'This volunteer is available for interpreting tasks.'),
+        (9, NULL, 'Polyglot', 'One or more secondary languages selected on your profile.');
 ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
 -- Dumping structure for table Solas-Match-Test.Countries
