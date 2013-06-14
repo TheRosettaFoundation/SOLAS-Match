@@ -91,7 +91,11 @@
                         </a>
                     </td>
                     <td>
-                        <a href="{urlFor name="archive-project" options="project_id.$project_id"}" class="btn btn-inverse">
+                        <a href="{urlFor name="archive-project" options="project_id.$project_id"}" class="btn btn-inverse" 
+                            onclick="return confirm('Warning: Archiving a project removes it and all ' +
+                                    'its tasks from the system and stores it in our database. Once ' +
+                                    'the project has been archived no further work can be done to ' +
+                                    'it.\n\nAre you sure you want to archive this project?')">
                             <i class="icon-fire icon-white"></i> Archive Project
                         </a>
                     </td>

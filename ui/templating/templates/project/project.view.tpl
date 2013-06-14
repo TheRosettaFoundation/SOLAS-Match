@@ -303,7 +303,13 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
                                                 <input type="hidden" name="deleteTask" value="Delete" />
-                                                <a class="btn btn-small btn-inverse" onclick="$('#archiveDeleteForm{$task_id}').submit();" >
+                                                <a class="btn btn-small btn-inverse" 
+                                                    onclick="if (confirm('Deleting a task will ' +
+                                                            'remove all trace of it from the system. ' +
+                                                            'A task should only be deleted if a ' +
+                                                            'mistake was made.\n\nAre you sure you ' +
+                                                            'want to delete this task?')) 
+                                                        $('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> Delete
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
@@ -312,7 +318,13 @@
                                                 </button>  
                                             {else}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
-                                                <a class="btn btn-small btn-inverse" onclick="$('#archiveDeleteForm{$task_id}').submit();" >
+                                                <a class="btn btn-small btn-inverse" 
+                                                    onclick="if (confirm('Archiving a task will ' +
+                                                            'remove it from the system and store it ' +
+                                                            'in our database. Once a task has been ' +
+                                                            'archived it can no longer be updated.' +
+                                                            '\n\nAre you sure you want to archive this task?')) 
+                                                        $('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> Archive
                                                 </a> 
                                             {/if}
