@@ -432,7 +432,7 @@ class TaskRouteHandler
                 $projectFile = $projectDao->getProjectFileInfo($project->getId());
                 $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
-                if($fileUploadType != $projectFileType) {
+                if(strcasecmp($fileUploadType,$projectFileType)===0) {
                     throw new Exception("The file extension differs from the originally downloaded file. Please upload as .$projectFileType!");
                 }
             } catch (Exception $e) {
