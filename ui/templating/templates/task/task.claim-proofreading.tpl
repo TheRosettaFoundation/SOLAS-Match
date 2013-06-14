@@ -14,7 +14,7 @@
         <ol>
             <li>Can you <strong>open the file</strong> on your computer?</li>
             <li><strong>Will you have enough time to proofread</strong> this file? Check how long the file is.</li>
-            <li>Do you think you're capable of proofreading a file <strong>in {$sourceLanguage->getName()}</strong>?</li>
+            <li>Do you think you're capable of proofreading a file <strong>in {TemplateHelper::getLanguage($task->getTargetLocale())}</strong>?</li>
         </ol>
     </section>
 

@@ -1212,19 +1212,24 @@ class TaskRouteHandler
             $post = (object) $app->request()->post();
 
             if(isset($post->feedback)) {
-                $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post->feedback);
-                if(isset($post->revokeTask) && $post->revokeTask) {
-                    $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
-                    if($taskRevoke) {
-                        $app->flash("success", " The task ".
-                              "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".
-                              "has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.");
-                        $app->redirect($app->urlFor("home"));
-                    } else {
-                        $app->flashNow("error", " Unable to unclaim the task ".
-                              "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".
-                              ". Please try again later.");
+                if ($post->feedback != '') {
+                    $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post->feedback);
+                    if(isset($post->revokeTask) && $post->revokeTask) {
+                        $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
+                        if($taskRevoke) {
+                            $app->flash("success", " The task ".
+                                  "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".
+                                  "has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.");
+                            $app->redirect($app->urlFor("home"));
+                        } else {
+                            $app->flashNow("error", " Unable to unclaim the task ".
+                                  "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".
+                                  ". Please try again later.");
+                        }
                     }
+                } else {
+                    $app->flashNow('error', 'Feedback cannot be empty, please fill in the feedback '.
+                            'field before continuing.');
                 }
             }
         }

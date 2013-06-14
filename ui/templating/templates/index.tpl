@@ -66,8 +66,8 @@
                     <form action="{urlFor name="home"}" method="post">
                         <table>
                             <th>Task Type</th>
-                            <th>Source Language</th>
-                            <th>Target Language</th>
+                            <th>Source Language <span style="color: red">*</span></th>
+                            <th>Target Language <span style="color: red">*</span></th>
                             <tr>
                                 <td>
                                     <select name="taskType">
@@ -115,6 +115,10 @@
                             </tr>
                         </table>
                     </form>
+                    <small>
+                        <span style="color: red">*</span> Only languages that are active in the system are listed in the filter boxes. 
+                        If your language is not present then please check back again later.
+                    </small>
                 </div>
                 <hr />
             {/if}

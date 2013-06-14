@@ -30,7 +30,7 @@
 
     <div class="well">
         <div class="page-header">
-            <h1>Finished translating?
+            <h1>Finished processing?
                 <form method="post" action="{urlFor name="task-user-feedback" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
                     <button style="float: right" class="btn btn-success" type="submit" value="Submit Feedback"><i class="icon-upload icon-white"></i> Provide Feedback</button>   
                 </form>
@@ -73,6 +73,10 @@
 
         <h3>Can't find the task file? <small>Misplaced the original file or the latest uploaded file?</small></h3>
         <br />
+        <p>
+            Click <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">here</a> to download
+            the <strong>original project file</strong>.
+        </p>
         <p>Click 
             <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>
             to re-download the <strong>original task file</strong>.
