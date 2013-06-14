@@ -15,6 +15,13 @@
             <span style="color: red">*</span>
             denotes a required field.
         </small>
+        <form id="deleteProfileForm" method='post' action='' class="pull-right">
+            <input type="hidden" value="{$profileUser->getId()}" name="deleteUser" />
+            
+            <button class='btn btn-inverse' onclick="return confirm('Are you sure you want to permanently delete your account?')">
+                <i class="icon-fire icon-white"></i> Delete Profile
+            </button>
+        </form>
         </h1>
     </div>
 {/if}
