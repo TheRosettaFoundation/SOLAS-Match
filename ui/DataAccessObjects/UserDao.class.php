@@ -220,11 +220,11 @@ class UserDao
         return $ret;
     }
 
-    public function requestTaskStreamNotification($userId, $interval)
+    public function requestTaskStreamNotification($notifData)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/interval/$interval/taskStreamNotification";
-        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
+        $request = "{$this->siteApi}v0/users/{$notifData->getUserId()}/taskStreamNotification";
+        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT, $notifData);
         return $ret;
     }
 

@@ -712,6 +712,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
   `user_id` int(11) unsigned NOT NULL,
   `interval` int(10) unsigned NOT NULL,
+  `strict` int(1) NOT NULL DEFAULT '0',
   `last-sent` DATETIME DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id` (`user_id`),
@@ -2661,7 +2662,7 @@ DROP PROCEDURE IF EXISTS `getUserTaskStreamNotification`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskStreamNotification`(IN `uID` INT)
 BEGIN
-    SELECT *
+    SELECT CAST(u.strict as UNSIGNED) AS strict, u.user_id, u.interval, u.`last-sent`
     FROM UserTaskStreamNotifications u
     WHERE u.user_id = uID;
 END//
@@ -4085,10 +4086,10 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `userTaskStreamNotificationInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userTaskStreamNotificationInsertAndUpdate`(IN `uID` INT, IN `nInterval` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userTaskStreamNotificationInsertAndUpdate`(IN `uID` INT, IN `nInterval` INT, IN `strictEnabled` INT)
 BEGIN
-    REPLACE INTO `UserTaskStreamNotifications` (`user_id`, `interval`)
-    VALUES (uID, nInterval);
+    REPLACE INTO `UserTaskStreamNotifications` (`user_id`, `interval`, `strict`)
+    VALUES (uID, nInterval, strictEnabled);
     select 1 as 'result';
 END//
 DELIMITER ;

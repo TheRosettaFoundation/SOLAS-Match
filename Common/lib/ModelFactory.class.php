@@ -487,6 +487,13 @@ class ModelFactory
         if (isset($modelData['last-sent'])) {
             $ret->setLastSent($modelData['last-sent']);
         }
+        if (isset($modelData['strict'])) {
+            if ($modelData['strict']) {
+                $ret->setStrict(true);
+            } else {
+                $ret->setStrict(false);
+            }
+        }
 
         return $ret;
     }

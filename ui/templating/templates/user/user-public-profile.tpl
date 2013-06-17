@@ -330,7 +330,11 @@
     </div>
     <p>
         {if isset($interval)}
-            You are currently receiving <strong>{$interval}</strong> emails.
+            You are currently receiving 
+            {if $strict}
+                <strong>strict</strong>
+            {/if}
+            <strong>{$interval}</strong> emails.
             {if $lastSent != null}
                 The last email was sent on {$lastSent}.
             {else}

@@ -656,6 +656,7 @@ class UserRouteHandler
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
             $lastSent = null;
+            $strict = null;
 
             if ($notifData) {
                 $interval = $notifData->getInterval();
@@ -674,10 +675,13 @@ class UserRouteHandler
                 if ($notifData->getLastSent() != null) {
                     $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
                 }
+
+                $strict = $notifData->getStrict();
             }
             $app->view()->appendData(array(
                         "interval"       => $interval,
                         "lastSent"       => $lastSent,
+                        "strict"         => $strict,
                         "private_access" => true
             ));
         }
@@ -693,14 +697,22 @@ class UserRouteHandler
         $user = $userDao->getUser($userId);
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
 
-            if (isset($post->interval)) {
+            if (isset($post['interval'])) {
                 $success = false;
-                if ($post->interval == 0) {
+                if ($post['interval'] == 0) {
                     $success = $userDao->removeTaskStreamNotification($userId);
                 } else {
-                    $success = $userDao->requestTaskStreamNotification($userId, $post->interval);
+                    $notifData = new UserTaskStreamNotification();
+                    $notifData->setUserId($userId);
+                    $notifData->setInterval($post['interval']);
+                    if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
+                        $notifData->setStrict(true);
+                    } else {
+                        $notifData->setStrict(false);
+                    }
+                    $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
                 $app->flash("success", "Successfully updated user task stream notification subscription");
@@ -729,10 +741,17 @@ class UserRouteHandler
                 $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
             }
 
+            if ($notifData->hasStrict()) {
+                $strict = $notifData->getStrict();
+            } else {
+                $strict = false;
+            }
+
             $app->view()->appendData(array(
                         "interval"  => $interval,
                         "intervalId"=> $notifData->getInterval(),
-                        "lastSent"  => $lastSent
+                        "lastSent"  => $lastSent,
+                        'strict'    => $strict
             ));
         }
 

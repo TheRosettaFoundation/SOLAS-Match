@@ -290,11 +290,17 @@ class UserDao
         return $ret;
     }
 
-    public static function requestTaskStreamNotification($userId, $interval)
+    public static function requestTaskStreamNotification($request)
     {
         $ret = 0;
-        $args = PDOWrapper::cleanse($userId)
-                .",".PDOWrapper::cleanse($interval);
+        $args = PDOWrapper::cleanse($request->getUserId()).', '.
+                PDOWrapper::cleanse($request->getInterval()).', ';
+        if ($request->getStrict()) {
+            $strict = 1;
+        } else {
+            $strict = 0;
+        }
+        $args .= PDOWrapper::cleanse($strict);
         
         if ($result = PDOWrapper::call("userTaskStreamNotificationInsertAndUpdate", $args)) {
             $ret = 1;
