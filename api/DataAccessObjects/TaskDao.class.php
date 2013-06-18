@@ -366,12 +366,18 @@ class TaskDao
      * Returns an array of tasks ordered by the highest score related to the user
      */
 
-    public static function getUserTopTasks($user_id, $limit, $filter=" and 1")
+    public static function getUserTopTasks($user_id, $strict, $limit, $filter=" and 1")
     {
         $ret = false;
-        $args = PDOWrapper::cleanse($user_id)
-                .",".PDOWrapper::cleanseNullOrWrapStr($limit)
-                .",'$filter'";                
+        $args = PDOWrapper::cleanse($user_id).", ";
+
+        if ($strict) {
+            $args .= "1, ";
+        } else {
+            $args .= "0, ";
+        }
+        $args .= PDOWrapper::cleanseNullOrWrapStr($limit).", ".
+                "'$filter'";                
                 
         if ($result = PDOWrapper::call("getUserTopTasks", $args)) {
 

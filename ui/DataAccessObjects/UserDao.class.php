@@ -111,7 +111,7 @@ class UserDao
         return $ret;
     }
 
-    public function getUserTopTasks($userId, $limit = null, $filter = array())
+    public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array())
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/topTasks";
@@ -137,6 +137,8 @@ class UserDao
         if ($filterString != '') {
             $args['filter'] = $filterString;
         }
+
+        $args['strict'] = $strict;
 
         $ret = $this->client->call(array("Task"), $request, HttpMethodEnum::GET, null, $args);
         return $ret;

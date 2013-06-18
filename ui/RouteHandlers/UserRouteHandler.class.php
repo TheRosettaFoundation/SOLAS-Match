@@ -124,7 +124,7 @@ class UserRouteHandler
                 }
             }
 
-            $tasks = $userDao->getUserTopTasks($current_user_id, 10, $filter);
+            $tasks = $userDao->getUserTopTasks($current_user_id, false, 10, $filter);
             for ($i = 0; $i < count($tasks); $i++) {
                 $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
                 $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());

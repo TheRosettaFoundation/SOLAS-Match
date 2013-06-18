@@ -350,7 +350,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedUser->getId());
         
         // Success
-        $userTopTasks = TaskDao::getUserTopTasks($insertedUser->getId(), 30);
+        $userTopTasks = TaskDao::getUserTopTasks($insertedUser->getId(), false, 30);
         $this->assertCount(2, $userTopTasks);
         foreach($userTopTasks as $task) {
             $this->assertInstanceOf("Task", $task);
