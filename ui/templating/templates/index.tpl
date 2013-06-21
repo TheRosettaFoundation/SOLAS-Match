@@ -61,7 +61,7 @@
 
         <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
             {if isset($user) && isset($tasks)}
-                <h3>Filter:</h3>
+                <h3>Filter Available Tasks:</h3>
                 <div id="filter">
                     <form action="{urlFor name="home"}" method="post">
                         <table>
