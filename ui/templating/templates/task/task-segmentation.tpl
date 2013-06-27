@@ -55,7 +55,9 @@
                         <p class="desc">Divide large source files into smaller and more managable tasks.<br />
                             Recommended limit of approximately 2000 words or less per task.<br />
                             If you would like to re-download the file click 
-                            <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>.
+                            <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>.<br />
+                            If you would like to re-download the original project file, click
+                            <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">here</a>.
                         </p>
 
                         <hr/>
