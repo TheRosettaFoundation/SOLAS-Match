@@ -38,6 +38,10 @@
             {assign var="pTaskId" value=$pTask->getId()}
             <p>Download {$pTask->getTitle()} <a href="{urlFor name="download-task-latest-version" options="task_id.$pTaskId"}">here</a></p>
         {/foreach}
+        <p>
+            You can download the <strong>original project file</strong> 
+            <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">here</a>.
+        </p>
         <p style="margin-bottom: 40px"/>
 
         <h2>Upload the merged file here:</h2>
