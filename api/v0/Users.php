@@ -242,6 +242,7 @@ class Users {
                                                         function ($id, $format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
+            $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
             $filter = Dispatcher::clenseArgs('filter', HttpMethodEnum::GET, '');
             $strict = Dispatcher::clenseArgs('strict', HttpMethodEnum::GET, false);
             $filters = APIHelper::parseFilterString($filter);
@@ -259,7 +260,7 @@ class Users {
             }
 
             $dao = new TaskDao();
-            $data = $dao->getUserTopTasks($id, $strict, $limit, $filter);
+            $data = $dao->getUserTopTasks($id, $strict, $limit, $offset, $filter);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTopTasks');
         

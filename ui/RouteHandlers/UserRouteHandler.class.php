@@ -55,7 +55,7 @@ class UserRouteHandler
         $projectDao = new ProjectDao();
         $orgDao = new OrganisationDao();
         $userDao = new UserDao(); 
-                
+
         $use_statistics = Settings::get("site.stats"); 
         if ($use_statistics == 'y') {
             $statsDao = new StatisticsDao();
@@ -129,7 +129,7 @@ class UserRouteHandler
                 $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
                 $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
             }
-            
+
             $app->view()->appendData(array(
                 "taskTypes" => $taskTypes,
                 "languageList" => $languageList,

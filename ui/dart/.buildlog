@@ -1,0 +1,390 @@
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+---
+build.dart --machine --full
+Total time spent on web/solasmatchdart.html                  -- 607 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1279 ms
+build.dart finished [1512 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+[{"method":"warning","params":{"file":"web/components/TaskStream.html","message":"Unexpected table cell start tag (th) in the table body phase.","line":15,"charStart":324,"charEnd":328}}]
+Total time spent on web/solasmatchdart.html                  -- 828 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1461 ms
+Total time spent on web/components/TaskStream.html           -- 818 ms
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/components/TaskStream.html","to":"web/compiled/components/TaskStream.html"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html"}}]
+Total time                                                   -- 842 ms
+build.dart finished [1704 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+[{"method":"warning","params":{"file":"web/components/TaskStream.html","message":"Unexpected table cell start tag (th) in the table body phase.","line":15,"charStart":324,"charEnd":328}}]
+Total time spent on web/solasmatchdart.html                  -- 837 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1463 ms
+Total time spent on web/components/TaskStream.html           -- 831 ms
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/components/TaskStream.html","to":"web/compiled/components/TaskStream.html"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html"}}]
+Total time                                                   -- 850 ms
+build.dart finished [1704 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+[{"method":"warning","params":{"file":"web/components/TaskStream.html","message":"Unexpected table cell start tag (th) in the table body phase.","line":15,"charStart":324,"charEnd":328}}]
+Total time spent on web/solasmatchdart.html                  -- 831 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1444 ms
+Total time spent on web/components/TaskStream.html           -- 825 ms
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/components/TaskStream.html","to":"web/compiled/components/TaskStream.html"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html"}}]
+Total time                                                   -- 843 ms
+build.dart finished [1682 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+[{"method":"warning","params":{"file":"web/components/TaskStream.html","message":"Unexpected table cell start tag (th) in the table body phase.","line":15,"charStart":324,"charEnd":328}}]
+Total time spent on web/solasmatchdart.html                  -- 825 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1444 ms
+Total time spent on web/components/TaskStream.html           -- 820 ms
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/components/TaskStream.html","to":"web/compiled/components/TaskStream.html"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html"}}]
+Total time                                                   -- 839 ms
+build.dart finished [1677 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+[{"method":"warning","params":{"file":"web/components/TaskStream.html","message":"Unexpected table cell start tag (th) in the table body phase.","line":15,"charStart":324,"charEnd":328}}]
+Total time spent on web/solasmatchdart.html                  -- 821 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1437 ms
+Total time spent on web/components/TaskStream.html           -- 815 ms
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/components/TaskStream.html","to":"web/compiled/components/TaskStream.html"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html"}}]
+Total time                                                   -- 833 ms
+build.dart finished [1668 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+[{"method":"warning","params":{"file":"web/components/TaskStream.html","message":"Unexpected table cell start tag (th) in the table body phase.","line":15,"charStart":324,"charEnd":328}}]
+Total time spent on web/solasmatchdart.html                  -- 853 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1480 ms
+Total time spent on web/components/TaskStream.html           -- 847 ms
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/components/TaskStream.html","to":"web/compiled/components/TaskStream.html"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html"}}]
+Total time                                                   -- 864 ms
+build.dart finished [1713 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+[{"method":"warning","params":{"file":"web/components/TaskStream.html","message":"Unexpected table cell start tag (th) in the table body phase.","line":15,"charStart":324,"charEnd":328}}]
+Total time spent on web/solasmatchdart.html                  -- 841 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1476 ms
+Total time spent on web/components/TaskStream.html           -- 833 ms
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/components/TaskStream.html","to":"web/compiled/components/TaskStream.html"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html"}}]
+Total time                                                   -- 855 ms
+build.dart finished [1714 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+Total time spent on web/solasmatchdart.html                  -- 550 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1182 ms
+build.dart finished [1410 ms]
+
+---
+build.dart --machine --changed=web/lib/APIHelper.dart
+Total time spent on web/solasmatchdart.html                  -- 547 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1197 ms
+build.dart finished [1434 ms]
+
+---
+build.dart --machine --changed=web/lib/APIHelper.dart
+Total time spent on web/solasmatchdart.html                  -- 564 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1212 ms
+build.dart finished [1452 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.html
+Total time spent on web/solasmatchdart.html                  -- 551 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1173 ms
+build.dart finished [1408 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+Total time spent on web/solasmatchdart.html                  -- 542 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1176 ms
+build.dart finished [1407 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+Total time spent on web/solasmatchdart.html                  -- 551 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1181 ms
+build.dart finished [1415 ms]
+
+---
+build.dart --machine --changed=web/lib/APIHelper.dart
+Total time spent on web/solasmatchdart.html                  -- 552 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1178 ms
+build.dart finished [1410 ms]
+
+---
+build.dart --machine --changed=web/lib/APIHelper.dart
+Total time spent on web/solasmatchdart.html                  -- 575 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1232 ms
+build.dart finished [1470 ms]
+
+---
+build.dart --machine --changed=web/lib/APIHelper.dart
+Total time spent on web/solasmatchdart.html                  -- 555 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1186 ms
+build.dart finished [1429 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+Total time spent on web/solasmatchdart.html                  -- 561 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1200 ms
+build.dart finished [1438 ms]
+
+---
+build.dart --machine --changed=web/lib/APIHelper.dart
+Total time spent on web/solasmatchdart.html                  -- 548 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1197 ms
+build.dart finished [1441 ms]
+
+---
+build.dart --machine --changed=web/lib/APIHelper.dart
+Total time spent on web/solasmatchdart.html                  -- 572 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1200 ms
+build.dart finished [1436 ms]
+
+---
+build.dart --machine --full
+Total time spent on web/solasmatchdart.html                  -- 601 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1305 ms
+build.dart finished [1554 ms]
+
+---
+build.dart --machine --removed=web/xclickcounter.dart
+Total time spent on web/solasmatchdart.html                  -- 558 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1196 ms
+build.dart finished [1427 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.html
+Total time spent on web/solasmatchdart.html                  -- 570 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1279 ms
+build.dart finished [1549 ms]
+
+---
+build.dart --machine --removed=web/Routes/Users/UserProfile.dart
+Total time spent on web/solasmatchdart.html                  -- 575 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1222 ms
+build.dart finished [1457 ms]
+
+---
+build.dart --machine --removed=web/Routes/Users/UserProfile.dart.js
+Total time                                                   -- 651 ms
+build.dart finished [883 ms]
+
+---
+build.dart --machine --removed=web/Routes/Users/UserProfile.dart.js.deps
+Total time                                                   -- 636 ms
+build.dart finished [863 ms]
+
+---
+build.dart --machine --removed=web/Routes/Users/UserProfile.dart.js.map
+Total time                                                   -- 643 ms
+build.dart finished [864 ms]
+
+---
+build.dart --machine --removed=web/Routes/Users/home.dart.js
+Total time                                                   -- 640 ms
+build.dart finished [878 ms]
+
+---
+build.dart --machine --removed=web/Routes/Users/home.dart.js.deps
+Total time                                                   -- 628 ms
+build.dart finished [852 ms]
+
+---
+build.dart --machine --removed=web/Routes/Users/home.dart.js.map
+Total time                                                   -- 622 ms
+build.dart finished [853 ms]
+

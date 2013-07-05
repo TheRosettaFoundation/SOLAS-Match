@@ -43,7 +43,6 @@
 {else}
     <div class='page-header'><h1>User Profile <small>Overview of your account details.</small></h1></div>
 {/if}
- 
 
 <table border="0">
     <tr valign="top">
