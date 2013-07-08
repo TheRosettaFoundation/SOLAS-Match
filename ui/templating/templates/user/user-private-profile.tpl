@@ -7,19 +7,19 @@
         {if $profileUser->getDisplayName() != ''}
             {$profileUser->getDisplayName()}
         {else}
-            Private Profile
+            {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_PRIVATE_PROFILE)}
         {/if}
-        <small>Update your personal details here.</small><br>
+        <small>{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_0)}</small><br>
         <small>
-            Note:
+            {Localisation::getTranslation(Strings::COMMON_NOTE)}:
             <span style="color: red">*</span>
-            denotes a required field.
+            {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}
         </small>
         <form id="deleteProfileForm" method='post' action='' class="pull-right">
             <input type="hidden" value="{$profileUser->getId()}" name="deleteUser" />
             
-            <button class='btn btn-inverse' onclick="return confirm('Are you sure you want to permanently delete your account?')">
-                <i class="icon-fire icon-white"></i> Delete Profile
+            <button class='btn btn-inverse' onclick="return confirm('{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_1)}')">
+                <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_DELETE_PROFILE)}
             </button>
         </form>
         </h1>
@@ -27,12 +27,12 @@
 {/if}
 
 {if isset($warning) && $warning == true}
-    <p>Invalid input, please fill in all options below.</p>
+    <p>{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_2)}</p>
 {/if}
 
 <div class="well alert-info">
-    <p><strong>Please Note:</strong></p>
-    <p>All these fields are optional. However, filling them out will provide us with valuable information for contacting you and for matching you with more relevant tasks for your Task Stream.</p>
+    <p><strong>{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_PLEASE_NOTE)}</strong></p>
+    <p>{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_3)} {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_4)}</p>
 </div>
  
     <form method='post' action='#' class='well'>
@@ -40,15 +40,15 @@
         <table>
             <tr valign="top" align="center"> 
                 <td width="50%">
-                    <label for='displayName'><strong>Public Display Name: <span style="color: red">*</span></strong></label>
+                    <label for='displayName'><strong>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}: <span style="color: red">*</span></strong></label>
                     <input type='text' name='displayName' id='displayName' style="width: 80%"
                     {if $profileUser->getDisplayName() != ''}
                         value='{$profileUser->getDisplayName()}'
                     {else}
-                        placeholder='Display Name'
+                        placeholder='{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}'
                     {/if} /> 
                     
-                    <label for='nLanguage'><strong>Native Language:</strong></label>
+                    <label for='nLanguage'><strong>{Localisation::getTranslation(Strings::COMMON_NATIVE_LANGUAGE)}:</strong></label>
                     <div id='userNativeLanguage'>
                         {assign var="usersNativeLocale" value=$profileUser->getNativeLocale()}
                         {if isset($usersNativeLocale)}
@@ -78,7 +78,7 @@
                         <hr id="horizontalLine" width="60%"/>
                     </div>
                     
-                    <label for='extraSecondaryLanguages'><strong>Secondary Language(s):</strong></label>
+                    <label for='extraSecondaryLanguages'><strong>{Localisation::getTranslation(Strings::COMMON_SECONDARY_LANGUAGES)}:</strong></label>
                     <div id="extraSecondaryLanguages">
                         
                         {if isset($languages) && isset($countries) && isset($secondaryLanguages)}
@@ -111,38 +111,38 @@
                             
                         {/if}
                     </div>
-                    <div id="alertinfo" class="alert alert-info" style="display: none; text-align: center; width: 80%">You have reached the maximum number of Secondary Language fields allowed.</div>  
+                    <div id="alertinfo" class="alert alert-info" style="display: none; text-align: center; width: 80%">{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_5)}</div>  
                     <p>
-                        <button id="addNewSecondaryLanguageBtn" class="btn btn-success" type="button" onclick="addNewSecondaryLanguage()"><i class="icon-upload icon-white"></i> Add Secondary Language</button>
-                        <button id="removeNewSecondaryLanguageBtn" class="btn btn-inverse"  type="button" onclick="removeNewSecondaryLanguage()" disabled><i class="icon-fire icon-white"></i> Remove</button>
+                        <button id="addNewSecondaryLanguageBtn" class="btn btn-success" type="button" onclick="addNewSecondaryLanguage()"><i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_ADD_SECONDARY_LANGUAGE)}</button>
+                        <button id="removeNewSecondaryLanguageBtn" class="btn btn-inverse"  type="button" onclick="removeNewSecondaryLanguage()" disabled><i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::COMMON_REMOVE)}</button>
                         <input type="hidden" id="secondaryLanguagesArraySize" name="secondaryLanguagesArraySize" value="0"/>
                     </p>
                     
-                    <label for='biography'><strong>Biography:</strong></label>
+                    <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong></label>
                     <textarea name='biography' cols='40' rows='7' {if $profileUser->getBiography() == ''} placeholder="Enter Bio Here" {/if}
                     style="width: 80%">{if $profileUser->getBiography() != ''}{$profileUser->getBiography()}{/if}</textarea>
                     
                 </td>
                 <td width="50%">
-                    <label for='firstName'><strong>First Name:</strong></label>
+                    <label for='firstName'><strong>{Localisation::getTranslation(Strings::COMMON_FIRST_NAME)}:</strong></label>
                     <input type='text' name='firstName' id='firstName' style="width: 80%"
                     {if !is_null($userPersonalInfo) && $userPersonalInfo->getFirstName() != ''}
                         value='{$userPersonalInfo->getFirstName()}'
                     {/if} />
                     
-                    <label for='lastName'><strong>Last Name:</strong></label>
+                    <label for='lastName'><strong>{Localisation::getTranslation(Strings::COMMON_LAST_NAME)}:</strong></label>
                     <input type='text' name='lastName' id='lastName' style="width: 80%"
                     {if !is_null($userPersonalInfo) && $userPersonalInfo->getLastName() != ''}
                         value='{$userPersonalInfo->getLastName()}'
                     {/if} />
 
-                    <label for='mobileNumber'><strong>Mobile Number:</strong></label>
+                    <label for='mobileNumber'><strong>{Localisation::getTranslation(Strings::COMMON_MOBILE_NUMBER)}:</strong></label>
                     <input type='text' name='mobileNumber' id='mobileNumber' style="width: 80%"
                     {if !is_null($userPersonalInfo) && $userPersonalInfo->getMobileNumber() != ''}
                         value='{$userPersonalInfo->getMobileNumber()}'
                     {/if} />
                     
-                    <label for='businessNumber'><strong>Business Number:</strong></label>
+                    <label for='businessNumber'><strong>{Localisation::getTranslation(Strings::COMMON_BUSINESS_NUMBER)}:</strong></label>
                     <input type='text' name='businessNumber' id='businessNumber' style="width: 80%"
                     {if !is_null($userPersonalInfo) && $userPersonalInfo->getBusinessNumber() != ''}
                         value='{$userPersonalInfo->getBusinessNumber()}'
@@ -154,22 +154,22 @@
                         value='{$userPersonalInfo->getSip()}'
                     {/if} />
                     
-                    <label for='jobTitle'><strong>Job Title:</strong></label>
+                    <label for='jobTitle'><strong>{Localisation::getTranslation(Strings::COMMON_JOB_TITLE)}:</strong></label>
                     <input type='text' name='jobTitle' id='jobTitle' style="width: 80%"
                     {if !is_null($userPersonalInfo) && $userPersonalInfo->getJobTitle() != ''}
                         value='{$userPersonalInfo->getJobTitle()}'
                     {/if} />
                     
-                    <label for='address'><strong>Address:</strong></label>
+                    <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}:</strong></label>
                     <textarea id="address" name='address' cols='40' rows='5' style="width: 80%">{if !is_null($userPersonalInfo) && $userPersonalInfo->getAddress() != ''}{$userPersonalInfo->getAddress()}{/if}</textarea>
                     
-                    <label for='city'><strong>City:</strong></label>
+                    <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}:</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%"
                     {if !is_null($userPersonalInfo) && $userPersonalInfo->getCity() != ''}
                         value='{$userPersonalInfo->getCity()}'
                     {/if} />
                     
-                    <label for='country'><strong>Country:</strong></label>
+                    <label for='country'><strong>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}:</strong></label>
                     <input type='text' name='country' id='country' style="width: 80%"
                     {if !is_null($userPersonalInfo) && $userPersonalInfo->getCountry() != ''}
                         value='{$userPersonalInfo->getCountry()}'
@@ -185,18 +185,18 @@
                     <table>
                         <tr>
                             <td colspan="3" align="center" style="font-weight: bold">
-                                Task Type Preferences:
+                                {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_TASK_TYPE_PREFERENCES)}
                             </td>
                         </tr>
                         <tr align="center">
                             <td>
-                                Translating
+                                {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_TRANSLATING)}
                             </td>
                             <td>
-                                Proofreading
+                                {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_PROOFREADING)}
                             </td>
                             <td>
-                                Interpreting
+                                {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_INTERPRETING)}
                             </td>
                         </tr>
                         <tr align="center">
@@ -221,11 +221,11 @@
             <tr>
                 <td colspan="2" align="center">
                     <button type='submit' class='btn btn-primary' name='updateProfileDetails'>
-                        <i class="icon-refresh icon-white"></i> Update Profile Details
+                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_UPDATE_PROFILE_DETAILS)}
                     </button>   
                     <button type="submit" class="btn btn-inverse" value="{$profileUser->getId()}" name="deleteUser"
-                            onclick="return confirm('Are you sure you want permanently delete your account?');"> 
-                        <i class="icon-fire icon-white"></i> Delete User Account
+                            onclick="return confirm('{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_6)}');"> 
+                        <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_DELETE_USER_ACCOUNT)}
                     </button>
                 </td>
             </tr>

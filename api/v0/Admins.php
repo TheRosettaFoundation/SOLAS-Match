@@ -102,11 +102,33 @@ class Admins {
             Dispatcher::sendResponce(null, AdminDao::getBannedUser(), null, $format);
         }, 'getBannedUsers');
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/getBannedUser/:userId/',
+                                                        function ($userId, $format = ".json") {        
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                 $userId = explode('.', $userId);
+                 $format = '.'.$userId[1];
+                 $userId = $userId[0];
+            }
+            $data=AdminDao::getBannedUser($userId);
+            Dispatcher::sendResponce(null, $data[0], null, $format);
+        }, 'getBannedUser');
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/getBannedOrgs(:format)/',
                                                         function ($format = ".json") {           
             
             Dispatcher::sendResponce(null, AdminDao::getBannedOrg(), null, $format);
         }, 'getBannedOrgs');
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/getBannedOrg/:orgId/',
+                                                        function ($orgId, $format = ".json") {           
+            if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                 $orgId = explode('.', $orgId);
+                 $format = '.'.$orgId[1];
+                 $orgId = $orgId[0];
+            }
+            $data=AdminDao::getBannedOrg($orgId);
+            Dispatcher::sendResponce(null, $data[0], null, $format);
+        }, 'getBannedOrg');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/admins/banUser(:format)/',
                                                         function ($format = '.json') {            

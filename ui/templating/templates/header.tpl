@@ -22,7 +22,6 @@
         <!-- javascript -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/google-translate.js"></script>
         <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         
         <!-- google analytics -->
@@ -41,42 +40,50 @@
                     <a class="brand" href="{urlFor name='home'}">{Settings::get('site.name')}</a>
                     <ul class="nav">
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
-                            <a href="{urlFor name="home"}">Home</a>
+                            <a href="{urlFor name="home"}">{Localisation::getTranslation(Strings::HEADER_HOME)}</a>
                         </li> 
                         {if isset($user_is_organisation_member)||isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if} >
-                                 <a href="{urlFor name="org-dashboard"}">Dashboard</a>
+                                 <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation(Strings::HEADER_DASHBOARD)}</a>
                              </li>
                          {/if}
                         {if isset($user_has_active_tasks)}
                             <li {if isset($current_page) && $current_page == 'claimed-tasks'}class="active" {/if}>
-                                <a href="{urlFor name="claimed-tasks" options="page_no.1"}">Claimed Tasks</a>
+                                <a href="{urlFor name="claimed-tasks" options="page_no.1"}">{Localisation::getTranslation(Strings::HEADER_CLAIMED_TASKS)}</a>
                             </li>
                         {/if}
                         {if isset($user)}
                             {assign var="user_id" value=$user->getId()}
                             <li {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if}>
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">Profile</a>
+                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{Localisation::getTranslation(Strings::HEADER_PROFILE)}</a>
                             </li>
                         {/if}
                         {if isset($site_admin)}
                             {assign var="user_id" value=$user->getId()}
                             <li {if isset($current_page) && $current_page == 'admin-dashboard'}class="active" {/if}>
-                                <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">Admin</a>
+                                <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation(Strings::HEADER_ADMIN)}</a>
                             </li>
                         {/if}
                             <li {if isset($current_page) && $current_page == 'videos'}class="active" {/if}>
-                                <a href="{urlFor name="videos"}">Videos</a>
+                                <a href="{urlFor name="videos"}">{Localisation::getTranslation(Strings::HEADER_VIDEOS)}</a>
                             </li>
                     </ul>
-                    <ul class="nav pull-right">
+                    <ul class="nav pull-right" style="max-height: 38px">
                         {if isset($userNotifications)}   
                             <li>
-                                <a>Notifications:<span id="notificationCount">{$userNotifications->lenght()}</span></a>
+                                <a>{Localisation::getTranslation(Strings::HEADER_NOTIFICATIONS)}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                             </li>
                         {/if}
-                        <li style="padding-top: 7px">
-                            <div id="google_translate_element"></div>
+                        <li>
+                            <div class="languageForm">
+                                <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
+                                    <select id="languagelist" name="language" onchange="jQuery('#languageListForm').submit();">
+                                        <option value="en">English</option>
+                                        <option value="fr">French</option>
+                                        <option value="de">German</option>
+                                    </select>
+                                </form>
+                            </div>
                         </li>
                         {if isset($user)}
                             <li>
@@ -86,11 +93,11 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{urlFor name="logout"}">Log out</a>
+                                <a href="{urlFor name="logout"}">{Localisation::getTranslation(Strings::HEADER_LOG_OUT)}</a>
                             </li>
                         {else}
-                            <li><a href="{urlFor name="register"}">Register</a></li>
-                            <li><a href="{urlFor name="login"}">Log in</a></li>
+                            <li><a href="{urlFor name="register"}">{Localisation::getTranslation(Strings::COMMON_REGISTER)}</a></li>
+                            <li><a href="{urlFor name="login"}">{Localisation::getTranslation(Strings::COMMON_LOG_IN)}</a></li>
                         {/if}
                     </ul>
                 </div>

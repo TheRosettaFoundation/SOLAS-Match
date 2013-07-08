@@ -3,7 +3,7 @@
 <div class='page-header'>
     <h1>
         {if isset($user) && $user->getDisplayName() != ''}{$user->getDisplayName()}'s {else} Your{/if}
-        Archived Tasks <small>A list of tasks you have worked on in the past</small>
+        {Localisation::getTranslation(Strings::ARCHIVED_TASKS_ARCHIVED_TASKS)} <small>{Localisation::getTranslation(Strings::ARCHIVED_TASKS_0)}</small>
     </h1>
 </div>
 

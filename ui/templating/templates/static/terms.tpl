@@ -1,93 +1,83 @@
 {include file="header.tpl"}
 <div class="page-header" style="text-align: center">
-    <h1>Terms and Conditions</h1>
+    <h1>{Localisation::getTranslation(Strings::TERMS_TERMS_AND_CONDITIONS)}</h1>
 </div>  
 <div>
 <h3>
 
-   1. Terms
+   1. {Localisation::getTranslation(Strings::TERMS_TERMS)}
 
 </h3>
 
 <p>
 
-   By accessing this web site, you are agreeing to be bound by the
-
-   website Terms and Conditions, all applicable laws and regulations,
-
-   and agree that you are responsible for compliance with any applicable local
-
-   laws. If you do not agree with any of these terms, you are prohibited from
-
-   using or accessing this site. The materials contained in this web site are
-
-   protected by applicable copyright and trade mark law.
+   {Localisation::getTranslation(Strings::TERMS_0)} {Localisation::getTranslation(Strings::TERMS_1)} {Localisation::getTranslation(Strings::TERMS_2)}
 
 </p>
 
 <h3>
 
-   2. Organisation Use of Trommons.org
+   2. {Localisation::getTranslation(Strings::TERMS_ORGANISATION_USE_OF)} Trommons.org
 
 </h3>
 
-<p>Permission is granted to Organisations to publish content subject to the terms of the  following licence.</p>
+<p>{Localisation::getTranslation(Strings::TERMS_3)}</p>
 
 <h4>
-  2.1 Organisation Use License
+  2.1 {Localisation::getTranslation(Strings::TERMS_ORGANISATION_USE_LICENSE)}
 </h4>
 
 <ol type="a">
 
    <li>
-        This is the grant of a license, not a transfer of title, and under this license you may not:
+        {Localisation::getTranslation(Strings::TERMS_4)}
        <ol type="i">
 
-           <li>use Trommons.org to publish any commercial for-profit content;</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_5)}</li>
 
-           <li>attempt to decompile or reverse engineer any software contained on Trommons.org's web site;</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_6)}</li>
 
-           <li>remove any copyright or other proprietary notations from the materials</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_7)}</li>
 
        </ol>
 
    </li>
    <li>
-       Under this license you confirm that:
+       {Localisation::getTranslation(Strings::TERMS_8)}:
        <ol>
            <li>
-               your organisation does not discriminate on any unlawful basis with regard to hiring or employment practices,
-               <br/>including discrimination or harassment on the basis of race, colour, religion, veteran status, national origin, ancestry, 
-               <br/>pregnancy status, sex, gender identity or expression, age, marital status, mental or physical disability, medical condition, 
-               <br/>sexual orientation or any other characteristics protected by law, in the administration or provision of all programmes and services.
+               {Localisation::getTranslation(Strings::TERMS_9)}
+               <br/>{Localisation::getTranslation(Strings::TERMS_10)}
+               <br/>{Localisation::getTranslation(Strings::TERMS_11)}
+               <br/>{Localisation::getTranslation(Strings::TERMS_12)}
            </li>    
-           <li>all conntent submitted by your organisation  will be used solely for not for profit activities.</li>
-           <li>your organisation agrees to license any content published on trommons.org under the terms of the Volunteer Use License, section 3 of this document.</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_13)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_14)}</li>
        </ol>
        
    </li>
    <li>
-       This license shall automatically terminate if you violate any of these restrictions and may be terminated by Trommons.org at any time. Upon terminating your viewing of these materials or upon the termination of this license, you must destroy any downloaded materials in your possession whether in electronic or printed format.
+       {Localisation::getTranslation(Strings::TERMS_15)} {Localisation::getTranslation(Strings::TERMS_16)}
    </li>
    
 
 </ol>
-<h4> 2.2 Offensive Content</h4>
+<h4> 2.2 {Localisation::getTranslation(Strings::TERMS_OFFENSIVE_CONTENT)}</h4>
 
-    You may not publish any content that Trommons.org reasonably believes:
+    {Localisation::getTranslation(Strings::TERMS_17)}
 <ol>
-   <li>constitutes child pornography;</li>
-   <li>constitutes pornography;</li>
-   <li>is excessively violent, incites violence, threatens violence, or contains harassing content or hate speech;</li>
-   <li> is unfair or deceptive under the consumer protection laws of any jurisdiction, including chain letters and pyramid schemes;</li>
-   <li>is defamatory or violates a person's privacy;</li>
-   <li>creates a risk to a person's safety or health, creates a risk to public safety or health, compromises national security, or interferes with a investigation by law enforcement;</li>
-   <li> improperly exposes trade secrets or other confidential or proprietary information of another person;</li>
-   <li>is intended to assist others in defeating technical copyright protections;</li>
-   <li> clearly infringes on another person's trade or service mark, patent, or other property right;</li>
-   <li> promotes illegal drugs, violates export control laws, relates to illegal gambling, or illegal arms trafficking;</li>
-   <li> is otherwise illegal or solicits conduct that is illegal under laws applicable to you or to Trommons.org;</li>
-   <li> is otherwise malicious, fraudulent, or may result in retaliation against Trommons.org by offended Trommons.org;</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_CONSTITUTES_CHILD_PORNOGRAPHY)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_CONSTITUTES_PORNOGRAPHY)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_18)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_19)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_20)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_21)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_22)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_23)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_24)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_25)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_26)}</li>
+   <li>{Localisation::getTranslation(Strings::TERMS_27)}</li>
 </ol>
 
 
@@ -95,7 +85,7 @@
 
 <h3>
 
-   3. Volunteer Use License
+   3. {Localisation::getTranslation(Strings::TERMS_VOLUNTEER_USE_LICENSE)}
 
 </h3>
 
@@ -103,25 +93,19 @@
 
    <li>
 
-       Permission is granted to temporarily download one copy of the materials
-
-       (information or software) on Trommons.org's web site for personal,
-
-       non-commercial transitory viewing only. This is the grant of a license,
-
-       not a transfer of title, and under this license you may not:
+       {Localisation::getTranslation(Strings::TERMS_28)} {Localisation::getTranslation(Strings::TERMS_29)}
 
        
 
        <ol type="i">
 
-           <li>use the materials for any commercial purpose, or for any public display (commercial or non-commercial);</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_30)}</li>
 
-           <li>attempt to decompile or reverse engineer any software contained on Trommons.org's web site;</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_31)}</li>
 
-           <li>remove any copyright or other proprietary notations from the materials; or</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_32)}</li>
 
-           <li>transfer the materials to another person or "mirror" the materials on any other server.</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_33)}</li>
 
        </ol>
 
@@ -129,44 +113,40 @@
 
    <li>
 
-       This license shall automatically terminate if you violate any of these restrictions and may be terminated by Trommons.org at any time. Upon terminating your viewing of these materials or upon the termination of this license, you must destroy any downloaded materials in your possession whether in electronic or printed format.
+       {Localisation::getTranslation(Strings::TERMS_34)} {Localisation::getTranslation(Strings::TERMS_35)}
 
    </li>
    <li>
 
-       Permission is granted to modify the downloaded work, to the extent necessary, to complete a claimed task. 
-       Unless otherwise stated in the task details, all contributions by Volunteers are contributed under the terms of the
+       {Localisation::getTranslation(Strings::TERMS_36)} 
+       {Localisation::getTranslation(Strings::TERMS_37)}
        <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/">Creative Commons Attribution 3.0 Ireland License </a>.
-       By claiming a task, you agree that your contribution will be bound by the terms  under which the task is published.
+       {Localisation::getTranslation(Strings::TERMS_38)}
    </li>
 
 </ol>
 
 <h3>
 
-   4. Disclaimer
+   4. {Localisation::getTranslation(Strings::TERMS_DISCLAIMER)}
 
 </h3>
 <p>
-   TO THE FULLEST EXTENT PERMITTED BY THE APPLICABLE LAW, THE ROSETTA FOUNDATION OFFERS THE WEBSITES AND SERVICES AS-IS AND MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND CONCERNING THE WEBSITES OR SERVICES, 
-   EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, WARRANTIES OF TITLE, MERCHANTIBILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NONINFRINGEMENT. 
-   THE ROSETTA FOUNDATION DOES NOT WARRANT THAT THE FUNCTIONS OR CONTENT CONTAINED ON THE WEBSITE OR SERVICES WILL BE UNINTERRUPTED OR ERROR-FREE, THAT DEFECTS WILL BE CORRECTED, OR THAT TROMMONS.ORG SERVERS ARE FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS. 
-   THE ROSETTA FOUNDATION DOES NOT WARRANT OR MAKE ANY REPRESENTATION REGARDING USE OR THE RESULT OF USE OF THE CONTENT IN TERMS OF ACCURACY, RELIABILITY, OR OTHERWISE.
+   {Localisation::getTranslation(Strings::TERMS_39)}
+   {Localisation::getTranslation(Strings::TERMS_40)} 
+   {Localisation::getTranslation(Strings::TERMS_41)}
 </p>
 
 <h3>
 
-   5. Limitations
+   5. {Localisation::getTranslation(Strings::TERMS_LIMITATIONS)}
 
 </h3>
 
 <p>
 
-   EXCEPT TO THE EXTENT REQUIRED BY APPLICABLE LAW AND THEN ONLY TO THAT EXTENT, IN NO EVENT WILL THE ROSETTA FOUNDATION, ITS EMPLOYEES, OFFICERS, DIRECTORS, AFFILIATES OR AGENTS BE LIABLE TO YOU ON ANY LEGAL THEORY FOR ANY INCIDENTAL, DIRECT, INDIRECT, PUNITIVE, ACTUAL, CONSEQUENTIAL, SPECIAL, EXEMPLARY OR OTHER DAMAGES, 
-   INCLUDING WITHOUT LIMITATION, LOSS OF REVENUE OR INCOME, LOST PROFITS, PAIN AND SUFFERING, EMOTIONAL DISTRESS, COST OF SUBSTITUTE GOODS OR SERVICES, OR SIMILAR DAMAGES SUFFERED OR INCURRED BY YOU OR ANY THIRD PARTY THAT ARISE IN CONNECTION WITH THE WEBSITES OR SERVICES (OR THE TERMINATION THEREOF FOR ANY REASON), 
-   EVEN IF THE ROSETTA FOUNDATION HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-   THE ROSETTA FOUNDATION SHALL NOT BE RESPONSIBLE OR LIABLE WHATSOEVER IN ANY MANNER FOR ANY CONTENT POSTED ON THE WEBSITES OR SERVICES (INCLUDING CLAIMS OF INFRINGEMENT RELATING TO CONTENT POSTED ON THE WEBSITES OR SERVICES, FOR YOUR USE OF THE WEBSITES AND SERVICES, OR FOR THE CONDUCT OF THIRD PARTIES WHETHER ON THE WEBSITES, 
-   IN CONNECTION WITH THE SERVICES OR OTHERWISE RELATING TO THE WEBSITES OR SERVICES.
+   {Localisation::getTranslation(Strings::TERMS_42)}
+   {Localisation::getTranslation(Strings::TERMS_43)}
 
 </p>
 
@@ -174,55 +154,55 @@
 
 <h3>
 
-   6. Revisions and Errata
+   6. {Localisation::getTranslation(Strings::TERMS_REVISIONS_AND_ERRATA)}
 
 </h3>
 
 <p>
 
-   The materials appearing on Trommons.org's web site could include technical, typographical, or photographic errors. Trommons.org does not warrant that any of the materials on its web site are accurate, complete, or current. Trommons.org may make changes to the materials contained on its web site at any time without notice. Trommons.org does not, however, make any commitment to update the materials.
+   {Localisation::getTranslation(Strings::TERMS_44)} {Localisation::getTranslation(Strings::TERMS_45)} {Localisation::getTranslation(Strings::TERMS_46)}
 
 </p>
 
 <h3>
 
-   7. Links
+   7. {Localisation::getTranslation(Strings::TERMS_LINKS)}
 
 </h3>
 
 <p>
 
-   Trommons.org has not reviewed all of the sites linked to its Internet web site and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Trommons.org of the site. Use of any such linked web site is at the user's own risk.
+   {Localisation::getTranslation(Strings::TERMS_47)} {Localisation::getTranslation(Strings::TERMS_48)}
 
 </p>
 
 <h3>
 
-   8. Site Terms of Use Modifications
+   8. {Localisation::getTranslation(Strings::TERMS_49)}
 
 </h3>
 
 <p>
 
-   The Rosetta Foundataion may revise these terms of use for its web site at any time without notice. By using this web site you are agreeing to be bound by the then current version of these Terms and Conditions of Use.
+   {Localisation::getTranslation(Strings::TERMS_50)} {Localisation::getTranslation(Strings::TERMS_51)}
 
 </p>
 
 <h3>
 
-   9. Governing Law
+   9. {Localisation::getTranslation(Strings::TERMS_GOVERNING_LAW)}
 
 </h3>
 
 <p>
 
-   Any claim relating to the Trommons.org web site shall be governed by the laws of the State of Ireland without regard to its conflict of law provisions.
+   {Localisation::getTranslation(Strings::TERMS_52)}
 
 </p>
 
 <p>
 
-   General Terms and Conditions applicable to Use of a Web Site.
+   {Localisation::getTranslation(Strings::TERMS_53)}
 
 </p>
 
@@ -230,19 +210,19 @@
 
 <h2>
 
-  10. Privacy Policy
+  10. {Localisation::getTranslation(Strings::TERMS_PRIVACY_POLICY)}
 
 </h2>
 
 <p>
 
-   Your privacy is very important to us. Accordingly, we have developed this Policy in order for you to understand how we collect, use, communicate and disclose and make use of personal information. The following outlines our <a href="{urlFor name='privacy'}">privacy policy</a>.
+   {Localisation::getTranslation(Strings::TERMS_54)} {Localisation::getTranslation(Strings::TERMS_55 TERMS_THE_FOLLOWING_OUTLINES_OUR)} <a href="{urlFor name='privacy'}">{Localisation::getTranslation(Strings::TERMS_PRIVACY_POLICY)}</a>.
 
 </p>
 
 <p>
 
-   We are committed to conducting our business in accordance with these principles in order to ensure that the confidentiality of personal information is protected and maintained.
+   {Localisation::getTranslation(Strings::TERMS_56)}
 
 </p>        
 </div>

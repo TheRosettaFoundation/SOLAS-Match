@@ -28,7 +28,7 @@ class JSONSerializer extends Serializer
 
     public function deserialize($data,$type)
     {
-        if($data==null ||$data=="null") {
+        if($data==null || $data=="null" || $data == '') {
             return null;
         }
         if(is_null($type)) return $data;

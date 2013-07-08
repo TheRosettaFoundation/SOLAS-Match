@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__."/../../Common/HttpStatusEnum.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
 class UserDao
@@ -335,6 +336,25 @@ class UserDao
         $login->setPassword($password);
         $request = "{$this->siteApi}v0/login";
         $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $login);
+
+        switch($this->client->getResponseCode()) {
+            
+            case HttpStatusEnum::NOT_FOUND : 
+                throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
+                                    Please check the credentials used and try again."); 
+                
+            case HttpStatusEnum::UNAUTHORIZED : 
+                throw new InvalidArgumentException("Sorry, this user account has not been verified. Please check your e-mail.");              
+                
+            case HttpStatusEnum::FORBIDDEN :
+                $userDao = new UserDao();
+                $user = $userDao->getUserByEmail($email);
+                
+                $adminDao = new AdminDao();                
+                $bannedUser = $adminDao->getBannedUser($user->getId());
+                throw new InvalidArgumentException("{$bannedUser->getComment()}");
+
+        }
         return $ret;
     }
 

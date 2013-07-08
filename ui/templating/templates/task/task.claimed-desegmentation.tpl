@@ -2,34 +2,34 @@
 
     <section>
         <div class="page-header">
-            <h1>Post Editing task claimed <small>Please merge the relevent files!</small></h1>
+            <h1>{Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_DESEGMENTATION_TASK_CLAIMED)} <small>{Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_0)}</small></h1>
         </div>
         <div class="alert alert-success">
-            <strong>Success</strong> You have claimed the post editing task &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
+            <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_1)} &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
         </div>
     </section>
 
     <section>
-        <h1>What now?</h1>
-        <p>This this what you need to do (as soon as possible):</p>
+        <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}?</h1>
+        <p>{Localisation::getTranslation(Strings::COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE)}:</p>
         <ol>
-            <li>Go <a href="{urlFor name="task" options="task_id.$task_id"}">here</a> to download each of the segments of the total file.</li>
-            <li><strong>Merge the files back together</strong> and upload the merged file.</li>
+            <li>{Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_GO)} <a href="{urlFor name="task" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a> {Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_2)}</li>
+            <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_3)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_4)}</li>
         </ol>
         {if isset($user)}
-            <p>We have also emailed you these instructions to <strong>{$user->getEmail()}</strong>.</p>
+            <p>{Localisation::getTranslation(Strings::COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO)} <strong>{$user->getEmail()}</strong>.</p>
         {/if}
     </section>
 
     <section>
-        <h3>Want to get started?</h3>
+        <h3>{Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_WANT_TO_GET_STARTED)}</h3>
         <p></p>
         <p>
             <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
-                <i class="icon-share-alt icon-white"></i> Merge Files
+                <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_MERGE_FILES)}
             </a>
             <a href="{urlFor name="home"}" class="btn">
-                <i class="icon-arrow-left icon-black"></i> Go Back Home
+                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation(Strings::TASK_CLAIMED_DESEGMENTATION_5)}
             </a>
         </p>
     </section>

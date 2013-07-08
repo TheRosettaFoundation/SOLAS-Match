@@ -12,9 +12,9 @@
                     {if $this_user->getDisplayName() != ''}
                         {$this_user->getDisplayName()}
                     {else}
-                        User Profile
+                        {Localisation::getTranslation(Strings::COMMON_USER_PROFILE)}
                     {/if}
-                    <small>Overview of your account details.</small>   
+                    <small>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_0)}</small>   
                     
                 </td>
                 <td>                    
@@ -22,15 +22,15 @@
                         {if isset($private_access) && isset($org_creation)}
                             {if $org_creation == 'y'}
                                 <a href="{urlFor name="create-org"}" class="btn btn-success"
-                                   onclick="return confirm('By creating an organisation, you confirm that it's activities are not in conflict with the general terms and conditions for the use of this site.')">
-                                    <i class="icon-star icon-white"></i> Create Organisation
+                                   onclick="return confirm('{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_1)}')">
+                                    <i class="icon-star icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CREATE_ORGANISATION)}
                                 </a>
                             {else if $org_creation == 'h'}
                             {/if}
                         {/if} 
                         {if isset($private_access) || $isSiteAdmin}
                             <a  href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
-                                <i class="icon-wrench icon-white"></i> Edit Profile Details
+                                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_EDIT_PROFILE_DETAILS)}
                             </a>
                         {/if}
                     </div>
@@ -41,7 +41,7 @@
     </div>
             
 {else}
-    <div class='page-header'><h1>User Profile <small>Overview of your account details.</small></h1></div>
+    <div class='page-header'><h1>{Localisation::getTranslation(Strings::COMMON_USER_PROFILE)} <small>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_2)}</small></h1></div>
 {/if}
  
 
@@ -51,7 +51,7 @@
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <thead>                
-                    <th align="left"><h3>Public Display Name:</h3></th>
+                    <th align="left"><h3>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}:</h3></th>
                     </thead>
                     <tbody>
                         <tr>
@@ -65,7 +65,7 @@
                             </tr> 
                             <tr>
                                 <td>
-                                    <h3>E-Mail:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_EMAIL)}:</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -79,7 +79,7 @@
                         </tr> 
                         <tr>
                             <td>
-                                <h3>Native Language:</h3>
+                                <h3>{Localisation::getTranslation(Strings::COMMON_NATIVE_LANGUAGE)}:</h3>
                             </td>
                         </tr>
                         <tr>
@@ -87,7 +87,7 @@
                                 {if $this_user->getNativeLocale() != null}
                                     {TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}
                                 {else}
-                                    <i>Please select a native language!</i>
+                                    <i>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_3)}</i>
                                 {/if}
                             </td>
                         </tr>
@@ -97,7 +97,7 @@
                         {if isset($secondaryLanguages)}
                             <tr>
                                 <td>
-                                    <h3>Secondary Language(s):</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_SECONDARY_LANGUAGES)}:</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -115,7 +115,7 @@
                         {if isset($bio)}
                             <tr>
                                 <td>
-                                    <h3>Biography:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -139,7 +139,7 @@
                     <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                         {if $userPersonalInfo->getFirstName() != null}
                             <thead>                
-                                <th align="left" width="48%"><h3>First Name:</h3></th>
+                                <th align="left" width="48%"><h3>{Localisation::getTranslation(Strings::COMMON_FIRST_NAME)}:</h3></th>
                             </thead>
                             <tbody>
                                <tr>
@@ -154,7 +154,7 @@
                         {if $userPersonalInfo->getLastName() != null}
                             <tr>
                                 <td>
-                                    <h3>Last Name:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_LAST_NAME)}:</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -169,7 +169,7 @@
                         {if $userPersonalInfo->getMobileNumber() != null}
                             <tr>
                                 <td>
-                                    <h3>Mobile Number:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_MOBILE_NUMBER)}:</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -184,7 +184,7 @@
                          {if $userPersonalInfo->getBusinessNumber() != null}
                             <tr>
                                 <td>
-                                    <h3>Business Number:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_BUSINESS_NUMBER)}:</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -214,7 +214,7 @@
                         {if $userPersonalInfo->getJobTitle() != null}
                             <tr>
                                 <td>
-                                    <h3>Job Title:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_JOB_TITLE)}:</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -229,7 +229,7 @@
                         {if $userPersonalInfo->getAddress() != null}
                             <tr>
                                 <td>
-                                    <h3>Address:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}:</h3>
                                 </td>
                             </tr>  
                             <tr>
@@ -246,7 +246,7 @@
                         {if $userPersonalInfo->getCity() != null}
                             <tr>
                                 <td>
-                                    <h3>City:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_CITY)}:</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -261,7 +261,7 @@
                         {if $userPersonalInfo->getCountry() != null}
                             <tr>
                                 <td>
-                                    <h3>Country:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}:</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -285,9 +285,9 @@
 {if isset($badges)}
     {if count($badges) > 0}
         <div class='page-header'>
-            <h1>Badges<small> A list of badges you have earned.</small>
+            <h1>{Localisation::getTranslation(Strings::COMMON_BADGES)}<small> {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_4)}</small>
                 <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>
-                    <i class="icon-list icon-white"></i> List All Badges
+                    <i class="icon-list icon-white"></i> {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_LIST_ALL_BADGES)}
                 </a>
             </h1>
         </div>
@@ -299,8 +299,8 @@
                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
                             <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
                             <input type="hidden" name="badge_id" value="{$badge->getId()}" />
-                            <input type="submit" class='btn btn-inverse' name="revokeBadge" value="    Remove Badge" 
-                           onclick="return confirm('Are you sure you want to remove this badge?')"/>
+                            <input type="submit" class='btn btn-inverse' name="revokeBadge" value="    {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_REMOVE_BADGE)}" 
+                           onclick="return confirm('{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_5)}')"/>
                         </form>   
                     {/if}
                 {assign var="org_id" value=$badge->getOwnerId()}
@@ -310,7 +310,7 @@
                 </h3>
                 <p>{$badge->getDescription()}</p>    
             {else}
-                <h3>SOLAS Badge: {$badge->getTitle()}</h3>            
+                <h3>{Settings::get('site.title')} {Localisation::getTranslation(Strings::COMMON_BADGE)}: {$badge->getTitle()}</h3>            
                 <p>{$badge->getDescription()}</p>                
             {/if}
             <p style="margin-bottom:20px;"/>
@@ -322,35 +322,35 @@
 
 {if isset($private_access)}
     <div class="page-header">
-        <h1>Task Stream Notifications <small>How often you recieve task stream e-mail updates.</small>
+        <h1>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_TASK_STREAM_NOTIFICATIONS)} <small>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_6)}</small>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">
-                <i class="icon-wrench icon-white"></i> Edit Notifications
+                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_EDIT_NOTIFICATIONS)}
             </a>
         </h1>
     </div>
     <p>
         {if isset($interval)}
-            You are currently receiving 
+            {Localisation::getTranslation(Strings::COMMON_YOU_ARE_CURRENTLY_RECEIVING)}
             {if $strict}
-                <strong>strict</strong>
+                <strong>{Localisation::getTranslation(Strings::COMMON_STRICT)}</strong>
             {/if}
-            <strong>{$interval}</strong> emails.
+            <strong>{$interval}</strong> {Localisation::getTranslation(Strings::COMMON_EMAILS)}.
             {if $lastSent != null}
-                The last email was sent on {$lastSent}.
+                {Localisation::getTranslation(Strings::COMMON_THE_LAST_EMAIL_WAS_SENT_ON)} {$lastSent}.
             {else}
-                No emails have been sent yet.
+                {Localisation::getTranslation(Strings::COMMON_NO_EMAILS_HAVE_BEEN_SENT_YET)}.
             {/if}
         {else}
-            You are not currently receiving task stream notification emails.
+            {Localisation::getTranslation(Strings::COMMON_YOU_ARE_NOT_CURRENTLY_RECEIVING_TASK_STREAM_NOTIFICATION_EMAILS)}.
         {/if}
     </p>
     <p style="margin-bottom:50px;"/>
 {/if}
 
 <div class="page-header">
-    <h1>Tags<small> A list of tags you have subscribed to.</small>
+    <h1>{Localisation::getTranslation(Strings::COMMON_TAGS)}<small> {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_8)}</small>
         <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
-            <i class="icon-search icon-white"></i> Search For Tags
+            <i class="icon-search icon-white"></i> {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_SEARCH_FOR_TAGS)}
         </a>
     </h1>
 </div>
@@ -367,7 +367,7 @@
     {/foreach}
 {else}
     <p class="alert alert-info">
-        You are not subscribed to any Tags on the system at the moment.
+        {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_9)}
     </p>
 {/if}
 <p style="margin-bottom:50px;"/>
@@ -376,9 +376,9 @@
     {if count($user_orgs) > 0}
         <div class='page-header'>
             <h1>
-                Organisations <small>A list of organisations you belong to.</small>
+                {Localisation::getTranslation(Strings::COMMON_ORGANISATIONS)} <small>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_10)}</small>
                 <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
-                    <i class="icon-search icon-white"></i> Search for Organisations
+                    <i class="icon-search icon-white"></i> {Localisation::getTranslation(Strings::COMMON_SEARCH_FOR_ORGANISATIONS)}
                 </a>
             </h1>
         </div>
@@ -398,27 +398,27 @@
                         {if isset($private_access)}
                             <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
                             <input type="hidden" name="org_id" value="{$org_id}" />
-                            <input type="submit" class='btn btn-inverse' name="revoke" value="    Leave Organisation" 
-                                   onclick="return confirm('Are you sure you want to leave the organisation?')"/>
+                            <input type="submit" class='btn btn-inverse' name="revoke" value="    {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_LEAVE_ORGANISATION)}" 
+                                   onclick="return confirm('{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_11)}')"/>
                         {/if}                      
                     </form>
                 </div>
                 <div class="span8">
                     <p>
-                        <strong>Biography:</strong><br/>
+                        <strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong><br/>
                         
                         {if $org->getBiography() == ''}
-                            This organisation does not have a biography listed.
+                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}
                         {else}                            
                             {$org->getBiography()}
                         {/if}
                     </p>
                     <p>
-                    <strong>Home Page:</strong><br/>
+                    <strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}:</strong><br/>
                     {if $org->getHomePage() != "http://"}
                         <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
                     {else}
-                        This organisation does not have a web site listed.
+                        {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_HOME_PAGE_LISTED)}
                     {/if}
                     </p>
                 </div>
@@ -434,10 +434,10 @@
 {if isset($archivedJobs)}
     {if count($archivedJobs) > 0}
         <div class='page-header'>
-            <h1>Archived Tasks <small>A list of tasks you have worked on in the past.</small>
+            <h1>{Localisation::getTranslation(Strings::COMMON_ARCHIVED_TASKS)} <small>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_14)}</small>
                 {if isset($private_access)}
                     <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
-                        <i class="icon-list icon-white"></i> List All Archived Tasks
+                        <i class="icon-list icon-white"></i> {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_LIST_ALL_ARCHIVED_TASKS)}
                     </a>
                 {/if}
             </h1>

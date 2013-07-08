@@ -4,10 +4,10 @@
     <h2>{$project->getTitle()}</h2>
     <p>
         {if $project->getSourceLanguageCode()}
-            From <strong>{TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}</strong>
+            {Localisation::getTranslation(Strings::COMMON_FROM)} <strong>{TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}</strong>
         {/if}
         {if $project->getTargetLanguageCode()}
-            To <strong>{TemplateHelper::languageNameFromCode($project->getTargetLanguageCode())}</strong>
+            {Localisation::getTranslation(Strings::COMMON_TO)} <strong>{TemplateHelper::languageNameFromCode($project->getTargetLanguageCode())}</strong>
         {/if}                
 
         {foreach from=$project->getTags() item=tag}
@@ -16,10 +16,10 @@
     </p>
 
     <p class="task_details">
-        Added {TemplateHelper::timeSinceSqlTime($project->getCreatedTime())} ago
-        &middot; By Project
+        {Localisation::getTranslation(Strings::COMMON_ADDED)} {TemplateHelper::timeSinceSqlTime($project->getCreatedTime())} {Localisation::getTranslation(Strings::COMMON_AGO)}
+        &middot; {Localisation::getTranslation(Strings::PROJECT_PROFILE_DISPLAY_BY_PROJECT)}
         {if $task->getWordCount()}
-                &middot; {$task->getWordCount()|number_format} words
+                &middot; {$task->getWordCount()|number_format} {Localisation::getTranslation(Strings::PROJECT_PROFILE_DISPLAY_WORDS)}
         {/if}
         <p style="margin-bottom:30px;"/>
     </p>

@@ -4,7 +4,7 @@
     <h1>
         <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
         {$user->getDisplayName()}
-        <small>Select how often you want to receive task stream e-mails.</small>
+        <small>{Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_0)}</small>
     </h1>
 </div>
 
@@ -17,68 +17,65 @@
 {assign var="user_id" value=$user->getId()}
 <form method="post" action="{urlFor name="stream-notification-edit" options="user_id.$user_id"}">
     <p>
-        This notification will periodically send you a list of the tasks that are most suited to your skills
-        and areas of interest. If you select strict notifications then you will only receive notifications
-        for tasks that match a language you have expressed an interest in (i.e. by setting it as your native
-        language or as a secondary language).
+        {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_1)} {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_2)}
     </p>
     {if isset($interval)}
         <p>
-            You are currently receiving 
+            {Localisation::getTranslation(Strings::COMMON_YOU_ARE_CURRENTLY_RECEIVING)}
             {if $strict}
-                <strong>strict</strong>
+                <strong>{Localisation::getTranslation(Strings::COMMON_STRICT)}</strong>
             {/if}
-            notifications <strong>{$interval}</strong>.
+            {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_NOTIFICATIONS)} <strong>{$interval}</strong>.
             {if $lastSent != null}
-                The last e-mail was sent on {$lastSent}.
+                {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_4)} {$lastSent}.
             {/if}
         </p>
     {else}
-        <p style="font-weight: bold">You are not currently receiving task stream notifications!</p>
+        <p style="font-weight: bold">{Localisation::getTranslation(Strings::COMMON_YOU_ARE_NOT_CURRENTLY_RECEIVING_TASK_STREAM_NOTIFICATION_EMAILS)}</p>
     {/if}
-    <p>I would like to receive 
+    <p>{Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_3)}
         <select name="strictMode">
             <option value="disabled" {if (!$strict)}selected="true"{/if}>
-                all
+                {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_ALL)}
             </option>
             <option value="enabled" {if ($strict)}selected="true"{/if}>
-                strict
+                {Localisation::getTranslation(Strings::COMMON_STRICT)}
             </option>
         </select>
-        notification(s): 
+        {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_NOTIFICATIONS)}
         <select name="interval">
             <option value="0"
                 {if !isset($intervalId)}
                     selected="true"
                 {/if}
             >
-                Never
+               {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_NEVER)}
             </option>
             <option value="{NotificationIntervalEnum::DAILY}"
                 {if isset($intervalId) && $intervalId == NotificationIntervalEnum::DAILY}
                     selected="true"
                 {/if}
             >
-                Daily
+                {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_DAILY)}
             </option>
             <option value="{NotificationIntervalEnum::WEEKLY}"
                 {if isset($intervalId) && $intervalId == NotificationIntervalEnum::WEEKLY}
                     selected="true"
                 {/if}
             >
-                Weekly
+                {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_WEEKLY)}
             </option>
             <option value="{NotificationIntervalEnum::MONTHLY}"
                 {if isset($intervalId) && $intervalId == NotificationIntervalEnum::MONTHLY}
                     selected="true"
                 {/if}
             >
-                Monthly
+                {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_MONTHLY)}
             </option>
         </select>
     </p>
     <button type="submit" value="Submit" class="btn btn-success">
-        <i class="icon-upload icon-white"></i> Submit
+        <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_SUBMIT)}
     </button>      
 </form>
 

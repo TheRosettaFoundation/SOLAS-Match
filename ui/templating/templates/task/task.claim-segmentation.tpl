@@ -2,33 +2,33 @@
 
     <section>
         <div class="page-header">
-            <h1>{$task->getTitle()} <small>Segmentation task</small></h1>
+            <h1>{$task->getTitle()} <small>{Localisation::getTranslation(Strings::COMMON_SEGMENTATION_TASK)}</small></h1>
         </div>
     </section>
 
     <section>
-        <h2>Do you want to segment this file? <small>After downloading</small></h2>
+        <h2>{Localisation::getTranslation(Strings::TASK_CLAIM_SEGMENTATION_0)} <small>{Localisation::getTranslation(Strings::COMMON_AFTER_DOWNLOADING)}</small></h2>
         <hr />
-        <h3>Review this checklist for your downloaded file <small>Will you be able to segment this file?</small></h3>
+        <h3>{Localisation::getTranslation(Strings::COMMON_REVIEW_THIS_CHECKLIST_FOR_YOUR_DOWNLOADED_FILE)} <small>{Localisation::getTranslation(Strings::TASK_CLAIM_SEGMENTATION_1)}</small></h3>
         <p style="margin-bottom:20px;"></p>
         <ol>
-            <li>Can you <strong>open the file</strong> on your computer?</li>
-            <li><strong>Will you have enough time to segment</strong> this file? Check how long the file is.</li>
+            <li>{Localisation::getTranslation(Strings::COMMON_CAN_YOU)} <strong>{Localisation::getTranslation(Strings::COMMON_OPEN_THE_FILE)}</strong> {Localisation::getTranslation(Strings::COMMON_ON_YOUR_COMPUTER)}</li>
+            <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIM_SEGMENTATION_5)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIM_PROOFREADING_THIS_FILE)} {Localisation::getTranslation(Strings::COMMON_CHECK_HOW_LONG_THE_FILE_IS)}.</li>
         </ol>
     </section>
 
     <section>
-         <h3>It&rsquo;s time to decide</h3>
+         <h3>{Localisation::getTranslation(Strings::COMMON_IT_IS_TIME_TO_DECIDE)}</h3>
          <p> 
-             Do you want to segment this file? When you are finished segmenting the file, you will need to upload a file for each segment.
+             {Localisation::getTranslation(Strings::TASK_CLAIM_SEGMENTATION_2)} {Localisation::getTranslation(Strings::TASK_CLAIM_SEGMENTATION_3)}
          </p>
          <p> 
             <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                  <button type="submit" class="btn btn-primary">
-                     <i class="icon-ok-circle icon-white"></i> Yes, I promise I will segment this file
+                     <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation(Strings::TASK_CLAIM_SEGMENTATION_4)}
                  </button>
                  <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn">
-                     <i class="icon-ban-circle icon-black"></i> No, just bring me back to the task page
+                     <i class="icon-ban-circle icon-black"></i> {Localisation::getTranslation(Strings::COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE)}
                  </a>
             </form>
         </p>

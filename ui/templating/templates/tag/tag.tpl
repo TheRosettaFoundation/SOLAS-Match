@@ -2,17 +2,17 @@
 {include file="handle-flash-messages.tpl"}
 
     <div class="page-header">
-        <h1>Tasks related to "{$tag->getLabel()}" <small>Find tasks tagged with this tag</small>
+        <h1>{Localisation::getTranslation(Strings::TAG_TASKS_RELATED_TO)} "{$tag->getLabel()}" <small>{Localisation::getTranslation(Strings::TAG_0)}</small>
              {if isset($user)}
                 {if isset($subscribed)}
                     <a href="{urlFor name="tag-subscribe" options="id.{$tag->getId()}|subscribe.false"}" class="pull-right btn btn-inverse"
-                        title="Remove tag from a list of tags you have subscribed to">
-                        <i class="icon-ban-circle icon-white"></i> Unsubscribe
+                        title="{Localisation::getTranslation(Strings::TAG_1)}">
+                        <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation(Strings::TAG_UNSUBSCRIBE)}
                     </a>
                 {else}
                     <a href="{urlFor name="tag-subscribe" options="id.{$tag->getId()}|subscribe.true"}" class="pull-right btn btn-primary"
-                        title="Save the tag to a list of subscribed tags">
-                        <i class="icon-ok-circle icon-white"></i> Subscribe to Tag
+                        title="{Localisation::getTranslation(Strings::TAG_2)}">
+                        <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation(Strings::TAG_SUBSCRIBE_TO_TAG)}
                     </a>
                 {/if}
             {/if}           
@@ -29,7 +29,7 @@
                 </div>
             {else}
                 <div class="alert alert-warning">
-                    <strong>No open tasks</strong> Sorry, there are currently no open tasks for this label.
+                    <strong>{Localisation::getTranslation(Strings::TAG_NO_OPEN_TASKS)}</strong> {Localisation::getTranslation(Strings::TAG_3)}
                 </div>
             {/if}
         </div>

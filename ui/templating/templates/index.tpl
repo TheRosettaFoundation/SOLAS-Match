@@ -2,14 +2,14 @@
 
 {if !isset($user)}
     <div class="hero-unit">
-        <h1>Translation Commons.</h1>
-        <p>Empowering conversation in language communities.</p>
+        <h1>{Localisation::getTranslation(Strings::INDEX_TRANSLATION_COMMONS)}</h1>
+        <p>{Localisation::getTranslation(Strings::INDEX_0)}</p>
         <p>
             <a class="btn btn-success btn-large" href="{urlFor name="register"}">
-                <i class="icon-star icon-white"></i> Register
+                <i class="icon-star icon-white"></i> {Localisation::getTranslation(Strings::COMMON_REGISTER)}
             </a>
             <a class="btn btn-primary btn-large" href="{urlFor name="login"}">
-                <i class="icon-share icon-white"></i> Login
+                <i class="icon-share icon-white"></i> {Localisation::getTranslation(Strings::COMMON_LOG_IN)}
             </a>
         </p>
     </div>
@@ -18,29 +18,29 @@
 {if isset($flash['error'])}
     <div class="alert alert-error">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>Warning! </strong>{$flash['error']}</p>
+        <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{$flash['error']}</p>
     </div>
 {/if}
 
 {if isset($flash['info'])}
     <div class="alert alert-info">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>NOTE: </strong>{$flash['info']}</p>
+        <p><strong>{Localisation::getTranslation(Strings::COMMON_NOTE)}: </strong>{$flash['info']}</p>
     </div>
 {/if}
 
 {if isset($flash['success'])}
     <div class="alert alert-success">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>Success! </strong>{$flash['success']}</p>
+        <p><strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}! </strong>{$flash['success']}</p>
     </div>
 {/if}
 
     <div class="page-header">
         <h1>
-            Translation tasks <small>Claim a task, translate it, upload it.</small>
+            {Localisation::getTranslation(Strings::INDEX_TRANSLATION_TASKS)} <small>{Localisation::getTranslation(Strings::INDEX_1)}</small>
             <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
-                <i class="icon-search icon-white"></i> Search for Organisations
+                <i class="icon-search icon-white"></i> {Localisation::getTranslation(Strings::COMMON_SEARCH_FOR_ORGANISATIONS)}
             </a>
         </h1>
     </div>
@@ -61,17 +61,17 @@
 
         <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
             {if isset($user) && isset($tasks)}
-                <h3>Filter:</h3>
+                <h3>{Localisation::getTranslation(Strings::INDEX_FILTER)}</h3>
                 <div id="filter">
                     <form action="{urlFor name="home"}" method="post">
                         <table>
-                            <th>Task Type</th>
-                            <th>Source Language <span style="color: red">*</span></th>
-                            <th>Target Language <span style="color: red">*</span></th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_TASK_TYPE)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)} <span style="color: red">*</span></th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_TARGET_LANGUAGE)} <span style="color: red">*</span></th>
                             <tr>
                                 <td>
                                     <select name="taskType">
-                                        <option value="">Any</option>
+                                        <option value="">{Localisation::getTranslation(Strings::INDEX_ANY)}</option>
                                         {foreach $taskTypes as $id => $typeName}
                                             {if $id == $selectedType}
                                                 <option selected="true" value="{$id}">{$typeName}</option>
@@ -83,7 +83,7 @@
                                 </td>
                                 <td>
                                     <select name="sourceLanguage">
-                                        <option value="">Any</option>
+                                        <option value="">{Localisation::getTranslation(Strings::INDEX_ANY)}</option>
                                         {foreach $languageList as $language}
                                             {if $language->getCode() == $selectedSource}
                                                 <option selected value="{$language->getCode()}">{$language->getName()}</option>
@@ -95,7 +95,7 @@
                                 </td>
                                 <td>
                                     <select name="targetLanguage">
-                                        <option value="">Any</option>
+                                        <option value="">{Localisation::getTranslation(Strings::INDEX_ANY)}</option>
                                         {foreach $languageList as $language}
                                             {if $language->getCode() == $selectedTarget}
                                                 <option selected value="{$language->getCode()}">{$language->getName()}</option>
@@ -109,15 +109,15 @@
                             <tr>
                                 <td>
                                     <button type="submit" value="Filter" class="btn btn-primary">
-                                        <i class="icon-refresh icon-white"></i> Filter Task Stream
+                                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation(Strings::INDEX_FILTER_TASK_STREAM)}
                                     </button>
                                 </td>
                             </tr>
                         </table>
                     </form>
                     <small>
-                        <span style="color: red">*</span> Only languages that are active in the system are listed in the filter boxes. 
-                        If your language is not present then please check back again later.
+                        <span style="color: red">*</span> {Localisation::getTranslation(Strings::INDEX_2)}
+                        {Localisation::getTranslation(Strings::INDEX_3)}
                     </small>
                 </div>
                 <hr />
@@ -131,17 +131,17 @@
             {else}
                 <div class="alert alert-warning">
                     {if isset($user_is_organisation_member)}
-                        <strong>No open tasks!</strong> You can upload a new task from your Dashboard in the navigation menu above.
+                        <strong>{Localisation::getTranslation(Strings::INDEX_NO_OPEN_TASKS)}</strong> {Localisation::getTranslation(Strings::INDEX_4)}
                     {else}
-                        <strong>No tasks available!</strong> Please wait for organisations to upload more translation tasks.
+                        <strong>{Localisation::getTranslation(Strings::INDEX_NO_TASKS_AVAILABLE)}</strong> {Localisation::getTranslation(Strings::INDEX_5)}
                     {/if}
                 </div>
             {/if}
 
             {if !isset($user)}
                 <div class="alert">
-                    <p>Help us match you with the most suitable translation tasks.</p>
-                    <p><a href={urlFor name="register"}>Register now</a> to find the translation tasks best suited to you.</p>
+                    <p>{Localisation::getTranslation(Strings::INDEX_6)}</p>
+                    <p><a href={urlFor name="register"}>{Localisation::getTranslation(Strings::INDEX_REGISTER_NOW)}</a> {Localisation::getTranslation(Strings::INDEX_7)}</p>
                 </div>
             {/if}      
         </div>

@@ -4,13 +4,13 @@
         <h2>{$task->getTitle()}</h2>
         {if $task->getId() != null}
             {assign var="id" value=$task->getId()}
-            <p>You can redownload this source file
-                <a href="{urlFor name="download-task-latest-version" options="task_id.$id"}">here</a>.
+            <p>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_0)}
+                <a href="{urlFor name="download-task-latest-version" options="task_id.$id"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>.
             </p>
         {else}
             {assign var="id" value=$task->getProjectId()}
-            <p>You can download the project file
-                <a href="{urlFor name="download-project-file" options="project_id.$id"}">here</a>.
+            <p>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_1)}
+                <a href="{urlFor name="download-project-file" options="project_id.$id"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>.
             </p>
         {/if}
 
@@ -23,8 +23,8 @@
         {else}
             {assign var='value' value=3}
         {/if}
-        <h3>Corrections <small>Were there many mistakes in the source file?</h3>
-        <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
+        <h3>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_CORRECTIONS)} <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_2)}</h3>
+        <p><i>(1 - 5) 5 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_FEW_ERRORS)}" | 1 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_A_LOT_OF_ERRORS)}"</i></p>
         <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
                 data-rateit-resetable=false id="rateit_corrections_{$id}">
         </div>
@@ -34,8 +34,8 @@
         {else}
             {assign var='value' value=3}
         {/if}
-        <h3>Grammar <small>How was the use of grammar in the source file?</small></h3>
-        <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
+        <h3>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_GRAMMAR)} <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_3)}</small></h3>
+        <p><i>(1 - 5) 5 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_FEW_ERRORS)}" | 1 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_A_LOT_OF_ERRORS)}"</i></p>
         <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
                 data-rateit-resetable=false id="rateit_grammar_{$id}">
         </div>
@@ -45,8 +45,8 @@
         {else}
             {assign var='value' value=3}
         {/if}
-        <h3>Spelling <small>Were there many spelling errors in the source file?</small></h3>
-        <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
+        <h3>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_SPELLING)} <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_4)}</small></h3>
+        <p><i>(1 - 5) 5 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_FEW_ERRORS)}" | 1 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_A_LOT_OF_ERRORS)}"</i></p>
         <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
                 data-rateit-resetable=false id="rateit_spelling_{$id}">
         </div>
@@ -56,21 +56,21 @@
         {else}
             {assign var='value' value=3}
         {/if}
-        <h3>Consistency <small>Were there any errors in consistency in the source file?</small></h3>
-        <p><i>(1 - 5 where 5 = "few errors" and 1 = "a lot of errors")</i></p>
+        <h3>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_CONSISTENCY)} <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_5)}</small></h3>
+        <p><i>(1 - 5) 5 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_FEW_ERRORS_}" | 1 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_A_LOT_OF_ERRORS)}"</i></p>
         <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
                 data-rateit-resetable=false id="rateit_consistency_{$id}">
         </div>
 
-        <h3>Comment <small>An optional comment about the file in general</small></h3>
+        <h3>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_COMMENT)} <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_6)}</small></h3>
         <textarea name="comment_{$id}" cols='40' rows='10' style="width: 80%">{if isset($review)}{$review->getComment()}{/if}</textarea>
     {/foreach}
 
     <br />
     <button class="btn btn-primary" type="submit" name="submitReview">
-        <i class="icon-upload icon-white"></i> Submit
+        <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_SUBMIT)}
     </button>
     <button class="btn btn-inverse" type="submit" name="skip">
-        <i class="icon-circle-arrow-right icon-white"></i> Skip
+        <i class="icon-circle-arrow-right icon-white"></i> {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_SKIP)}
     </button>
 </form>

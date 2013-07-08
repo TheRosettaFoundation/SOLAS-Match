@@ -26,4 +26,18 @@ class UserSession {
     {
         return (is_numeric($user_id) && $user_id > 0);
     }
+    
+    public static function setUserLanguage($lang)
+    {
+        $_SESSION['siteLanguage'] = $lang;
+    }
+    
+    public static function getUserLanguage()
+    {
+        if (isset($_SESSION['siteLanguage'])) {
+            return $_SESSION['siteLanguage'];
+        } else {
+            return null;
+        }        
+    }
 }

@@ -9,7 +9,7 @@
         {$task->getTitle()}
         <small>
             <strong>
-                - <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation Task
+                - <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(COMMON_DESEGMENTATION_TASK)}
             </strong>
         </small>   
         {assign var="task_id" value=$task->getId()}
@@ -20,9 +20,9 @@
     <div class="well">
         <div class="page-header">
             <h1>
-                {$task->getTitle()} <small>Post-Editing task details</small>
+                {$task->getTitle()} <small>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_POSTEDITING_TASK_DETAILS)}</small>
                 <a href="{urlFor name="task-user-feedback" options="task_id.$task_id"}" style="float: right" class="btn btn-success">
-                    <i class="icon-upload icon-white"></i> Provide Feedback
+                    <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_PROVIDE_FEEDBACK)}
                 </a>
             </h1>
         </div>
@@ -31,32 +31,32 @@
             <p class="alert alert-error">{$errorMessage}</p>
         {/if}
 
-        <h2>Download:</h2>
-        <p>Download the following files and merge them:</p>
+        <h2>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_DOWNLOAD)}</h2>
+        <p>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_0)}</p>
 
         {foreach from=$preReqTasks item=pTask}
             {assign var="pTaskId" value=$pTask->getId()}
-            <p>Download {$pTask->getTitle()} <a href="{urlFor name="download-task-latest-version" options="task_id.$pTaskId"}">here</a></p>
+            <p>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_DOWNLOAD)} {$pTask->getTitle()} <a href="{urlFor name="download-task-latest-version" options="task_id.$pTaskId"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a></p>
         {/foreach}
         <p style="margin-bottom: 40px"/>
 
-        <h2>Upload the merged file here:</h2>
+        <h2>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_1)}</h2>
         <form class="well" method="post" enctype="multipart/form-data" action="{urlFor name="task-desegmentation" options="task_id.$taskId"}">
             <p><input type="file" name="{$fieldName}" id="{$fieldName}" /></p>
-            <p><button type="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload</button>
+            <p><button type="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::TASK_DESEGMENTATION_UPLOAD)}</button>
         </form>
 
         {if isset($file_previously_uploaded) && $file_previously_uploaded}
             <br />
             <div class="alert">
-                <p>Thanks for providing your translation for this task. 
+                <p>{Localisation::getTranslation(Strings::COMMON_THANKS_FOR_PROVIDING_YOUR_TRANSLATION_FOR_THIS_TASK)}
                 {if $org != null && $org->getName() != ''}
                     {$org->getName()}
                 {else}
-                    This organisation
+                    {Localisation::getTranslation(Strings::COMMON_THIS_ORGANISATION)}
                 {/if}
-                will be able to use it for their benefit.</p>
-                <p><strong>Warning! </strong>Uploading a new version of the file will overwrite the old one.</p>
+                {Localisation::getTranslation(Strings::TASK_DESEGMENTATION_2)}</p>
+                <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_2)}</p>
             </div>
         {/if}
     </div>
