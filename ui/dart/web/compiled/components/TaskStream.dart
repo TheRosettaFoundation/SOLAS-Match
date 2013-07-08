@@ -257,7 +257,7 @@ class TaskStream extends WebComponent with Observable
 
   /** Original code from the component. */
 
-  static const int limit = 3;
+  static const int limit = 10;
   
   int taskCount = 0;
   String filter = '';

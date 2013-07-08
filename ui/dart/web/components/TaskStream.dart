@@ -18,7 +18,7 @@ import '../lib/Settings.dart';
 
 class TaskStream extends WebComponent
 {
-  static const int limit = 3;
+  static const int limit = 10;
   
   int taskCount = 0;
   String filter = '';

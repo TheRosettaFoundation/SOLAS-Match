@@ -388,3 +388,489 @@ build.dart --machine --removed=web/Routes/Users/home.dart.js.map
 Total time                                                   -- 622 ms
 build.dart finished [853 ms]
 
+---
+build.dart --machine --changed=web/lib/Settings.dart
+
+build.dart finished [218 ms]
+
+---
+build.dart --machine --changed=web/lib/Settings.dart
+
+build.dart finished [209 ms]
+
+---
+build.dart --machine --changed=web/lib/Settings.dart
+
+build.dart finished [203 ms]
+
+---
+build.dart --machine --changed=web/lib/Settings.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [207 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [200 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [221 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+Total time spent on web/solasmatchdart.html                  -- 453 ms
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.dart.map"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/solasmatchdart.html","to":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.html"}}]
+[{"method":"generated","params":{"file":"web/out/solasmatchdart.css"}}]
+Total time                                                   -- 1086 ms
+build.dart finished [1386 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [199 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [214 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [213 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [216 ms]
+
+---
+build.dart --machine --full
+
+build.dart finished [212 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.html
+
+build.dart finished [211 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [204 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [201 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [215 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [211 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [202 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [201 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [205 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [210 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [215 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [204 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [216 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [203 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [208 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [203 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [208 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [207 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [217 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [201 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [255 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [212 ms]
+
+---
+build.dart --machine --changed=web/solasmatchdart.dart
+
+build.dart finished [213 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [215 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [203 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [209 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [218 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [218 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [214 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [210 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [213 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [215 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [208 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [215 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [217 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [215 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [210 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [218 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [213 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [211 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [209 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [205 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [208 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [210 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [207 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [204 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [215 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [210 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [211 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [210 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [210 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [201 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [202 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [212 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [212 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [216 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [210 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [211 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [210 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [209 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [211 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [206 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [203 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [222 ms]
+
+---
+build.dart --machine --changed=web/DataAccessObjects/LanguageDao.dart
+
+build.dart finished [202 ms]
+
+---
+build.dart --machine --changed=web/Routes/Users/home.dart.js --changed=web/Routes/Users/home.dart.js.deps --cha...
+
+build.dart finished [204 ms]
+
+---
+build.dart --machine --changed=web/lib/Settings.dart
+
+build.dart finished [217 ms]
+
+---
+build.dart --machine --changed=web/Routes/Users/home.dart.js --changed=web/Routes/Users/home.dart.js.deps --cha...
+
+build.dart finished [212 ms]
+
+---
+build.dart --machine --changed=web/components/TaskStream.dart
+
+build.dart finished [208 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+[{"method":"warning","params":{"file":"web/components/TaskStream.html","message":"Unexpected table cell start tag (th) in the table body phase.","line":15,"charStart":324,"charEnd":328}}]
+Total time spent on web/components/TaskStream.html           -- 698 ms
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.dart"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html.dart.map"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html_bootstrap.dart"}}]
+[{"method":"mapping","params":{"from":"web/components/TaskStream.html","to":"web/compiled/components/TaskStream.html"}}]
+[{"method":"generated","params":{"file":"web/compiled/components/TaskStream.html"}}]
+Total time                                                   -- 1327 ms
+build.dart finished [1599 ms]
+
+---
+build.dart --machine --changed=web/compiled/components/TaskStream.dart --changed=web/compiled/components/TaskSt...
+
+build.dart finished [208 ms]
+
+---
+build.dart --machine --changed=web/Routes/Users/home.dart.js --changed=web/Routes/Users/home.dart.js.deps --cha...
+
+build.dart finished [214 ms]
+
+---
+build.dart --machine --changed=compileDart2JS.sh
+
+build.dart finished [200 ms]
+
+---
+build.dart --machine --changed=web/Routes/Users/home.dart.js --changed=web/Routes/Users/home.dart.js.deps --cha...
+
+build.dart finished [209 ms]
+

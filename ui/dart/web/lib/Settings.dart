@@ -19,8 +19,8 @@ class Settings
     
   Future<bool> loadConf()
   {
-    //Future<bool> ret = HttpRequest.getString("ui/dart/web/conf/conf.json")
-    Future<bool> ret = HttpRequest.getString("../conf/conf.json")
+    Future<bool> ret = HttpRequest.getString("ui/dart/web/conf/conf.json")
+    //Future<bool> ret = HttpRequest.getString("conf/conf.json")
                .then((String data) {
                  print("Conf data: $data");
                  _instance._conf = new JsonObject.fromJsonString(data);
