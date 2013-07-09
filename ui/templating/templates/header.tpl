@@ -75,12 +75,17 @@
                             </li>
                         {/if}
                         <li>
+                       
                             <div class="languageForm">
                                 <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
-                                    <select id="languagelist" name="language" onchange="jQuery('#languageListForm').submit();">
-                                        <option value="en">English</option>
-                                        <option value="fr">French</option>
-                                        <option value="de">German</option>
+                                    <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
+                                        {foreach $locs as $loc}
+                                            {if $loc->getCode() == {UserSession::getUserLanguage()}}
+                                                <option value="{$loc->getCode()}" selected>{$loc->getName()}</option>
+                                            {else}
+                                                <option value="{$loc->getCode()}">{$loc->getName()}</option>
+                                            {/if}
+                                        {/foreach}
                                     </select>
                                 </form>
                             </div>

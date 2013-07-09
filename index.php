@@ -149,17 +149,20 @@ $app->hook('slim.before', function () use ($app)
         $tasks = $userDao->getUserTasks(UserSession::getCurrentUserID());
         if($tasks && count($tasks) > 0) {
             $app->view()->appendData(array(
-                        "user_has_active_tasks" => true
+                "user_has_active_tasks" => true
             ));
         }
         $adminDao = new AdminDao();
         $isAdmin = $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
         if ($isAdmin) {
             $app->view()->appendData(array(
-                        'site_admin' => true
+                'site_admin' => true
             ));
         }
     }
+    $app->view()->appendData(array(
+        'locs' => Localisation::loadTranslationFiles()
+    ));
 });
 
 $app->run();

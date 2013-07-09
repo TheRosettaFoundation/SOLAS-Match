@@ -15,7 +15,7 @@ class Localisation {
     {   
         self::$ready = true;      
         $userLang = UserSession::getUserLanguage();
-        if(!$userLang || strcasecmp("en", $userLang) === 0) {
+        if(!$userLang || strcasecmp(Settings::get('site.default_site_language_code'), $userLang) === 0) {
             self::$currentLanguage = null;
         } else {
             self::$currentLanguage = $userLang;
@@ -31,13 +31,12 @@ class Localisation {
 
     public static function getTranslation($stringId)
     {
-        //apc_clear_cache();
         if(!self::$ready) self::init();
         self::$xPath = new DOMXPath(self::$doc);
         $stringElement = self::$xPath->query("/resources/string[@name='$stringId']");
-//        if($stringElement->length == 0) {
-//            return "Could not find/load: $stringId";
-//        }
+        if($stringElement->length == 0) {
+            return "Could not find/load: $stringId";
+        }
         return $stringElement->item(0)->nodeValue;
     }
     
@@ -45,4 +44,20 @@ class Localisation {
     {   
         return file_get_contents(__DIR__."/../localisation/$lang");
     }
+    
+    public static function loadTranslationFiles()
+    {
+        $matches = array();
+        $locales = array();
+        $filePaths = glob(__DIR__."/../localisation/strings_*.xml");
+        $langDao = new LanguageDao();
+        $locales[] = $langDao->getLanguageByCode(Settings::get('site.default_site_language_code')); 
+        foreach($filePaths as $filePath) {
+            preg_match('/_(.*)\.xml/', realpath($filePath), $matches);
+            $lang = CacheHelper::getCached(CacheHelper::LOADED_LANGUAGES."_$matches[1]", TimeToLiveEnum::QUARTER_HOUR, array($langDao, 'getLanguageByCode'), $matches[1]);
+            if(!in_array($lang, $locales)) $locales[] = $lang;
+        }   
+        return $locales;        
+    }
+    
 }
