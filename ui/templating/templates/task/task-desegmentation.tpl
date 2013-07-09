@@ -38,6 +38,10 @@
             {assign var="pTaskId" value=$pTask->getId()}
             <p>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_DOWNLOAD)} {$pTask->getTitle()} <a href="{urlFor name="download-task-latest-version" options="task_id.$pTaskId"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a></p>
         {/foreach}
+        <p>
+            You can download the <strong>original project file</strong> 
+            <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">here</a>.
+        </p>
         <p style="margin-bottom: 40px"/>
 
         <h2>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_1)}</h2>

@@ -532,6 +532,7 @@
 	<string name="task_segmentation_4">Divide large source files into smaller and more managable tasks.</string>
 	<string name="task_segmentation_number_of_segments">Number of segments:</string>
 	<string name="task_segmentation_5">Create a desegmentation task for merging together task segments created by a segmentation task.</string>
+        <string name="task_segmentation_6">If you would like to re-download the original project file, click</string>
 	<string name="task_segmentation_upload_your_segmented_file">Upload your segmented file.</string>
 	<string name="task_segmentation_submit_segmented_tasks">Submit Segmented Tasks</string>
 
@@ -825,7 +826,7 @@
 	<string name="index_translation_tasks">Translation tasks</string>
 	<string name="index_1">Claim a task, translate it, upload it.</string>
 	<string name="index_any">Any</string>
-        <string name="index_filter">Filter:</string>
+        <string name="index_filter_available_tasks">Filter Available Tasks:</string>
 	<string name="index_filter_task_stream">Filter Task Stream</string>
 	<string name="index_2">Only languages that are active in the system are listed in the filter boxes.</string>
 	<string name="index_3">If your language is not present then please check back again later.</string>

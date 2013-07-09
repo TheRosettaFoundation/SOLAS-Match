@@ -502,6 +502,7 @@ class Strings
 		const TASK_SEGMENTATION_4 = 'task_segmentation_4';
 		const TASK_SEGMENTATION_NUMBER_OF_SEGMENTS = 'task_segmentation_number_of_segments';
 		const TASK_SEGMENTATION_5 = 'task_segmentation_5';
+                const TASK_SEGMENTATION_6 = 'task_segmentation_6';
 		const TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE = 'task_segmentation_upload_your_segmented_file';
 		const TASK_SEGMENTATION_SUBMIT_SEGMENTED_TASKS = 'task_segmentation_submit_segmented_tasks';
 		const TASK_SIMPLE_UPLOAD_FINISHED_PROCESSING = 'task_simple_upload_finished_processing';
@@ -760,7 +761,7 @@ class Strings
 		const INDEX_TRANSLATION_TASKS = 'index_translation_tasks';
 		const INDEX_1 = 'index_1';
 		const INDEX_ANY = 'index_any';
-                const INDEX_FILTER = 'index_filter';
+                const INDEX_FILTER_AVAILABLE_TASKS = 'index_filter_available_tasks';
 		const INDEX_FILTER_TASK_STREAM = 'index_filter_task_stream';
 		const INDEX_2 = 'index_2';
 		const INDEX_3 = 'index_3';

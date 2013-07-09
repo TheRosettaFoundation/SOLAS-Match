@@ -61,7 +61,7 @@
 
         <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
             {if isset($user) && isset($tasks)}
-                <h3>{Localisation::getTranslation(Strings::INDEX_FILTER)}</h3>
+                <h3>{Localisation::getTranslation(Strings::INDEX_FILTER_AVAILABLE_TASKS)}</h3>
                 <div id="filter">
                     <form action="{urlFor name="home"}" method="post">
                         <table>

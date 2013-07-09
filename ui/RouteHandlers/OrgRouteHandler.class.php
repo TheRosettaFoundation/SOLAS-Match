@@ -363,6 +363,7 @@ class OrgRouteHandler
     public function orgPublicProfile($org_id)
     {
         $app = Slim::getInstance();
+        $adminDao = new AdminDao();
         $orgDao = new OrganisationDao();
         $userDao = new UserDao();
         $badgeDao = new BadgeDao();
@@ -467,12 +468,10 @@ class OrgRouteHandler
                 }
             } else if(isset($post->revokeOrgAdmin)) {
                 $userId = $post->revokeOrgAdmin;
-                $adminDao = new AdminDao();
                 $adminDao->removeOrgAdmin($userId, $org_id);
                 
             } else if(isset($post->makeOrgAdmin)) {
                 $userId = $post->makeOrgAdmin;
-                $adminDao = new AdminDao();
                 $adminDao->createOrgAdmin($userId, $org_id);
             }
         }       
@@ -492,7 +491,6 @@ class OrgRouteHandler
         $orgMemberList = $orgDao->getOrgMembers($org_id);
         
         if($orgMemberList) {
-            $adminDao = new AdminDao();
             foreach($orgMemberList as $orgMember) {
                 if($adminDao->isOrgAdmin($org_id, $orgMember->getId())) {
                     $orgMember['orgAdmin'] = true;

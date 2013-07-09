@@ -242,7 +242,7 @@ class ProjectRouteHandler
         if(isValidPost($app)) {
             $post = $app->request()->post();
             
-            if(isset($post['title'])) $project->setTitle($post['title']);
+            if(isset($post['title'])) $project->setTitle(htmlspecialchars($post['title']));
             if(isset($post['description'])) $project->setDescription($post['description']);            
             if(isset($post['impact'])) $project->setImpact($post['impact']);           
 
@@ -347,7 +347,7 @@ class ProjectRouteHandler
             $tagDao = new TagDao();
             
             if(isset($post['title']) && $post['title'] != '') {
-                $project->setTitle($post['title']);
+                $project->setTitle(htmlspecialchars($post['title']));
             } else {
                 $title_err = "Project <b>Title</b> must be set.";
             }            

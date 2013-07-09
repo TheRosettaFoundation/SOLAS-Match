@@ -1,22 +1,12 @@
-Japanese hotel room - You are invited to take advantage of the chambermaid.
-Paris hotel elevator - Please leave your values at the front desk.
-Tokyo hotel - It is forbidden to steal hotel towels please. If you are not a person to do such a thing is please not read this notice.
-Bucharest hotel - The list is being fixed for the next day. During this time you will be unbearable.
-Leipzig elevator - Do not enter the lift backwards, and only when lit up.
-Athens hotel - Visitors are expected to complain at the office between the hours of 9 and 11am daily.
-Belgrade elevator - To move the cabin, push button for wishing floor. If the cabin should enter more persons, each one should press a number of wishing floor. Driving then going alphabetically in national order.
-Sarajevo hotel - The flattening of underwear with pleasure is the job of the chambermaid.
-Moscow hotel - You are welcome to visit the cemetery where famous Russian and Soviet composers, artists and writers are buried daily except Thursday.
-Swiss menu - Our wines leave you nothing to hope for.
-Hong Kong tailors shop - Ladies may have a fit upstairs.
-Bangkok dry cleaners - Drop your trousers here for best results.
-Paris dress shop - Dresses for street walking.
-Rhodes tailor shop - Order your summer suit. Because is big rush we will execute customers in strict rotation.
-Hong Kong advert - Teeth extracted by the latest methodists.
-Rome laundry - Ladies, leave your clothes here and spend the afternoon having a good time.
-Swiss mountain inn - Special today... no ice cream.
-Copenhagen airline - We take your bags and send them in all directions.
-Moscow hotel - If this is your first visit to the USSR, you are welcome to it.
-Norwegian lounge - Ladies are requested not to have children in the bar.
-Tokyo shop - Our nylons cost more than common but they are better for the long run.
-Acapulco hotel - The manager has personally passed all the water served here.
+In a hotel elevator - Please leave your values at the front desk.
+A hotel sign - It is forbidden to steal hotel towels please. If you are not a person to do such a thing is please not read this notice.
+A hotel sign - The list is being fixed for the next day. During this time you will be unbearable.
+In a hotel elevator - Do not enter the lift backwards, and only when lit up.
+A hotel sign - Visitors are expected to complain at the office between the hours of 9 and 11am daily.
+In a hotel elevator - To move the cabin, push button for wishing floor. If the cabin should enter more persons, each one should press a number of wishing floor. Driving then going alphabetically in national order.
+On a restaurant menu - Our wines leave you nothing to hope for.
+In a tailor shop - Order your summer suit. Because is big rush we will execute customers in strict rotation.
+On a restaurant menu - Special today... no ice cream.
+In an airline ticket office - We take your bags and send them in all directions.
+In a cocktail lounge - Ladies are requested not to have children in the bar.
+A hotel sign - The manager has personally passed all the water served here.
