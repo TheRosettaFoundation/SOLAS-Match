@@ -53,15 +53,21 @@
             clonedTarget.find('#segmentation_0')
                         .attr('name', 'segmentation_' + fields)
                         .attr('onchange', 'segmentationEnabled(' + fields + ')')
-                        .attr('id', 'segmentation_' + fields);
+                        .attr('id', 'segmentation_' + fields)
+                        .prop("disabled", false)
+                        .prop("checked", false);                        
             
             clonedTarget.find('#translation_0')
                         .attr('name', 'translation_' + fields)
-                        .attr('id', 'translation_' + fields);
+                        .attr('id', 'translation_' + fields)
+                        .prop("disabled", false)
+                        .prop("checked", true);
                 
             clonedTarget.find('#proofreading_0')
                         .attr('name', 'proofreading_' + fields)
-                        .attr('id', 'proofreading_' + fields);
+                        .attr('id', 'proofreading_' + fields)
+                        .prop("disabled", false)
+                        .prop("checked", true);
             
 
             jQuery('#horizontalLine_' + (fields-1)).after(clonedTarget);            
