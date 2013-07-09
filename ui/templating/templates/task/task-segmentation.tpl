@@ -98,7 +98,7 @@
                     <td colspan="4"> 
                         <p class="desc">{Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 8 MB.</p>
                         <input type="file" name="segmentationUpload_1" id="segmentationUpload_1"/>
-                        <label>{Localisation::getTranslation(COMMON_WORD_COUNT)}:</label>
+                        <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</label>
                         <input type="text" name="wordCount_1" id="wordCount_1" />
                         <hr/>
                     </td>                

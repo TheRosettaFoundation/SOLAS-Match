@@ -9,7 +9,7 @@
     <section>
         <h2>{Localisation::getTranslation(Strings::TASK_CLAIM_TRANSLATION_0)} <small>{Localisation::getTranslation(Strings::COMMON_AFTER_DOWNLOADING)}</small></h2>
         <hr />
-        <h3>{Localisation::getTranslation(Strings::COMMON_REVIEW_THIS_CHECKLIST_FOR_YOUR_DOWNLOADED_FILE)} <small>TASK_CLAIM_TRANSLATION_1</small></h3>
+        <h3>{Localisation::getTranslation(Strings::COMMON_REVIEW_THIS_CHECKLIST_FOR_YOUR_DOWNLOADED_FILE)} <small>{Localisation::getTranslation(Strings::TASK_CLAIM_TRANSLATION_1)}</small></h3>
         <p style="margin-bottom:20px;"></p>
         <ol>
             <li>{Localisation::getTranslation(Strings::COMMON_CAN_YOU)} <strong>{Localisation::getTranslation(Strings::COMMON_OPEN_THE_FILE)}</strong> {Localisation::getTranslation(Strings::COMMON_ON_YOUR_COMPUTER)}</li>
@@ -22,7 +22,7 @@
         <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
             <h3>{Localisation::getTranslation(Strings::COMMON_IT_IS_TIME_TO_DECIDE)}</h3>
             <p>
-                {Localisation::getTranslation(Strings::TASK_CLAIM_TRANSLATION_0 TASK_CLAIM_TRANSLATION_4)}
+                {Localisation::getTranslation(Strings::TASK_CLAIM_TRANSLATION_0)} {Localisation::getTranslation(Strings::TASK_CLAIM_TRANSLATION_4)}
             </p>
             <p>
                 <button type="submit" class="btn btn-primary">

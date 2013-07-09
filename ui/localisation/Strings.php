@@ -157,8 +157,8 @@ class Strings
                 const COMMON_TARGET = 'common_target';
                 const COMMON_RESET = 'common_reset';
                 const COMMON_SUBMIT_FEEDBACK = 'common_submit_feedback';
-                CONST COMMON_CLAIMED_DATE = 'common_claimed_date';
-                CONST COMMON_CLAIMED_BY = 'common_claimed_by';
+                const COMMON_CLAIMED_DATE = 'common_claimed_date';
+                const COMMON_CLAIMED_BY = 'common_claimed_by';
 		const ADMIN_BANNED_ORGS_LIST_ALL_BANNED_ORGANISATIONS_OF = 'admin_banned_orgs_list_all_banned_organisations_of';
 		const ADMIN_BANNED_ORGS_LIST_0 = 'admin_banned_orgs_list_0';
 		const ADMIN_BANNED_USERS_LIST_ALL_BANNED_USERS_OF = 'admin_banned_users_list_all_banned_users_of';

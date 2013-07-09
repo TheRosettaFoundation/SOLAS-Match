@@ -57,7 +57,7 @@
             {assign var='value' value=3}
         {/if}
         <h3>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_CONSISTENCY)} <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_5)}</small></h3>
-        <p><i>(1 - 5) 5 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_FEW_ERRORS_}" | 1 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_A_LOT_OF_ERRORS)}"</i></p>
+        <p><i>(1 - 5) 5 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_FEW_ERRORS)}" | 1 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_A_LOT_OF_ERRORS)}"</i></p>
         <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
                 data-rateit-resetable=false id="rateit_consistency_{$id}">
         </div>

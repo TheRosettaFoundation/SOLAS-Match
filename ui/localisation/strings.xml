@@ -90,7 +90,7 @@
 	<string name="common_after_downloading">After downloading</string>
 	<string name="common_this_this_what_you_need_to_do_as_soon_as_possible">This this what you need to do (as soon as possible)</string>
 	<string name="common_we_have_also_emailed_you_these_instructions_to">We have also emailed you these instructions to</string>
-	<string name="common_can't_find_the_file_on_your_desktop">Can't find the file on your desktop?</string>
+	<string name="common_cant_find_the_file_on_your_desktop">Can't find the file on your desktop?</string>
 	<string name="common_download_the_file">Download the file</string>
 	<string name="common_and_save_it_to_your_desktop">and save it to your desktop</string>
 	<string name="common_from">From</string>
@@ -156,6 +156,7 @@
         <string name="common_source">Source</string>
         <string name="common_target">Target</string>
         <string name="common_reset">Reset</string>
+        <string name="common_submit_feedback">Submit Feedback</string>
         <string name="common_claimed_date">Claimed Date</string>
         <string name="common_claimed_by">Claimed By</string>
               

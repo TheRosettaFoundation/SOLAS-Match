@@ -66,7 +66,7 @@
                         {if $task->getComment() != ''}
                             {$task->getComment()}
                         {else}
-                           {Localisation::getTranslation(Strings::COMMON_NO_COMMENT_HAS_BEEN_LISTED.)}
+                           {Localisation::getTranslation(Strings::COMMON_NO_COMMENT_HAS_BEEN_LISTED)}.
                         {/if}
                         </i>
                     </td>
@@ -76,7 +76,7 @@
                         {if $project->getDescription() != ''}
                             {$project->getDescription()}
                         {else}
-                            {Localisation::getTranslation(Strings::COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED.)}
+                            {Localisation::getTranslation(Strings::COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED)}.
                         {/if}
                         </i>
                     </td>

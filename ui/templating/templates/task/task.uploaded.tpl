@@ -16,7 +16,7 @@
             <ol>
                 <li>{Localisation::getTranslation(Strings::TASK_UPLOADED_YOUR_TASK)} <strong>{Localisation::getTranslation(Strings::TASK_UPLOADED_IS_COMPLETE)}</strong>.</li>
                 <li>{Localisation::getTranslation(Strings::TASK_UPLOADED_3)}</li>
-                <li>{$org_name} {Localisation::getTranslation(Strings::TASK_UPLOADED_4 TASK_UPLOADED_THANK_YOU)}</li>
+                <li>{$org_name} {Localisation::getTranslation(Strings::TASK_UPLOADED_4)} {Localisation::getTranslation(Strings::TASK_UPLOADED_THANK_YOU)}</li>
             </ol>
     </section>
     <section>    
