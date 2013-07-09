@@ -216,7 +216,7 @@
 
 <p>
 
-   {Localisation::getTranslation(Strings::TERMS_54)} {Localisation::getTranslation(Strings::TERMS_55 TERMS_THE_FOLLOWING_OUTLINES_OUR)} <a href="{urlFor name='privacy'}">{Localisation::getTranslation(Strings::TERMS_PRIVACY_POLICY)}</a>.
+   {Localisation::getTranslation(Strings::TERMS_54)} {Localisation::getTranslation(Strings::TERMS_55)} {Localisation::getTranslation(Strings::TERMS_THE_FOLLOWING_OUTLINES_OUR)} <a href="{urlFor name='privacy'}">{Localisation::getTranslation(Strings::TERMS_PRIVACY_POLICY)}</a>.
 
 </p>
 

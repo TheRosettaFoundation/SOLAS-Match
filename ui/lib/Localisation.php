@@ -34,9 +34,9 @@ class Localisation {
         if(!self::$ready) self::init();
         self::$xPath = new DOMXPath(self::$doc);
         $stringElement = self::$xPath->query("/resources/string[@name='$stringId']");
-//        if($stringElement->length == 0) {
-//            return "Could not find/load: $stringId";
-//        }
+        if($stringElement->length == 0) {
+            return "Could not find/load: $stringId";
+        }
         return $stringElement->item(0)->nodeValue;
     }
     

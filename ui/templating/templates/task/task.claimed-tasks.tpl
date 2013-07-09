@@ -51,15 +51,15 @@
             {Localisation::getTranslation(Strings::COMMON_ADDED)}: <strong>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</strong> {Localisation::getTranslation(Strings::COMMON_AGO)}
 	</p>
         <p>
-            {Localisation::getTranslation(Strings::TASK_CLAIMED_TASKS_DUE_BY)} <strong>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</strong>
+            {Localisation::getTranslation(Strings::COMMON_DUE_BY)} <strong>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</strong>
         </p>          
         
         <p>            
             {assign var="project_id" value=$task->getProjectId()}
             {assign var="org_id" value=$task['Project']->getOrganisationId()}
             
-           {Localisation::getTranslation(Strings::TASK_CLAIMED_TASKS_PART_OF)} <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$task['Project']->getTitle()}</a>
-            {Localisation::getTranslation(Strings::TASK_CLAIMED_TASKS_FOR)} <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>        
+           {Localisation::getTranslation(Strings::COMMON_PART_OF)} <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$task['Project']->getTitle()}</a>
+            {Localisation::getTranslation(Strings::COMMON_FOR)} <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$task['Org']->getName()}</a>        
         </p>  
 
         <p style="margin-bottom:40px;"/>        
