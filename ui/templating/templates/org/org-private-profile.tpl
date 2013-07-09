@@ -79,7 +79,7 @@
                     {if $org->getBiography() == ''}
                         placeholder="{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_ENTER_ORGANISATION_BIOGRAPHY_HERE)}."
                     {/if}
-                    >{if $org->getBiography() != ''}{$org->getBiography()}{/if}</textarea>
+                    >{if $org->getBiography() != ''}{TemplateHelper::uiCleanseNewlineAndTabs({$org->getBiography()})}{/if}</textarea>
                     
                 </td>
             </tr>

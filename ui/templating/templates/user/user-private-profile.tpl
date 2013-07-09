@@ -120,7 +120,7 @@
                     
                     <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong></label>
                     <textarea name='biography' cols='40' rows='7' {if $profileUser->getBiography() == ''} placeholder="Enter Bio Here" {/if}
-                    style="width: 80%">{if $profileUser->getBiography() != ''}{$profileUser->getBiography()}{/if}</textarea>
+                    style="width: 80%">{if $profileUser->getBiography() != ''} {TemplateHelper::uiCleanseNewlineAndTabs({$profileUser->getBiography()})} {/if}</textarea>
                     
                 </td>
                 <td width="50%">

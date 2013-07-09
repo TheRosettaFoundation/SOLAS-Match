@@ -51,7 +51,7 @@
                     <input type='text' name='email' id='email' style="width: 80%"{if isset($org)} value="{$org->getEmail()}" {/if}/>   
                     
                     <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong></label>
-                    <textarea name='biography' cols='40' rows='10' style="width: 80%">{if isset($org)} {$org->getBiography()} {/if}</textarea>
+                    <textarea name='biography' cols='40' rows='10' style="width: 80%">{if isset($org)} {TemplateHelper::uiCleanseNewlineAndTabs({$org->getBiography()})} {/if}</textarea>
                     
                 </td>
             </tr>

@@ -111,7 +111,7 @@
                                 <td style="padding-bottom: 10px"/>
                             </tr>
                         {/if}
-                        {assign var=bio value=$this_user->getBiography()}
+                        {assign var=bio value={TemplateHelper::uiCleanseNewlineAndTabs($this_user->getBiography())}}
                         {if isset($bio)}
                             <tr>
                                 <td>
@@ -120,7 +120,7 @@
                             </tr>
                             <tr>
                                 <td> 
-                                    {$this_user->getBiography()}
+                                    {$bio}
                                 </td>
                             </tr>
                             <tr>
