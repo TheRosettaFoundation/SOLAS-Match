@@ -10,6 +10,7 @@ require_once __DIR__."/ProtobufSerializer.class.php";
 class APIHelper
 {
     private $_serializer;
+    private $responseCode;
 
     public function __construct($format)
     {
@@ -68,7 +69,10 @@ class APIHelper
         );
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
         $res=curl_exec($re);
+
+        $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
         $response_data = $this->_serializer->deserialize($res,$destination);
+        curl_close($re);
 
         return $response_data;
     }
@@ -139,5 +143,10 @@ class APIHelper
             $ret = $this->_serializer->getContentType();
         }
         return $ret;
+    }
+    
+    public function getResponseCode()
+    {
+        return $this->responseCode;
     }
 }

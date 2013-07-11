@@ -424,7 +424,12 @@ class TemplateHelper {
         }
         return $separated_tags;
     }
-
+    
+    public static function uiCleanseNewlineAndTabs($string)
+    {
+        return str_replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;', str_replace(array('\r\n', '\n', '\r'), "<br/>", $string)) ;
+    }
+    
     private static function cleanTag($tag)
     {
         $cleaned = trim($tag);

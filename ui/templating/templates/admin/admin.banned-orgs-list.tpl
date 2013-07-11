@@ -1,15 +1,15 @@
 
 <div id="accordionBannedOrgs">
-    <h3>All banned Organisations of {$siteName}.</h3>
+    <h3>{Localisation::getTranslation(Strings::ADMIN_BANNED_ORGS_LIST_ALL_BANNED_ORGANISATIONS_OF)} {$siteName}.</h3>
     <div name="bannedOrgList">
         <table class="table table-striped">
             <thead>
-                <th>Organisation Name</th>
-                <th>Banned By</th> 
-                <th>Ban Duration</th>
-                <th>Ban Reason</th>
-                <th>Banned Date</th>
-                <th>Restore</th>
+                <th>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}</th>
+                <th>{Localisation::getTranslation(Strings::COMMON_BANNED_BY)}</th> 
+                <th>{Localisation::getTranslation(Strings::COMMON_BAN_DURATION)}</th>
+                <th>{Localisation::getTranslation(Strings::COMMON_BAN_REASON)}</th>
+                <th>{Localisation::getTranslation(Strings::COMMON_BANNED_DATE)}</th>
+                <th>{Localisation::getTranslation(Strings::COMMON_RESTORE)}</th>
             </thead>
             {foreach $bannedOrgList as $bannedOrg}
             <tr>
@@ -32,8 +32,8 @@
                     <form method="post" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}">
                         <i class="icon-upload icon-white" style="position:relative; right:-25px; top:1px;"></i>
                         <input type="hidden" name="orgId" value="{$bannedOrg->getOrgId()}" />
-                        <input type="submit" class='btn btn-primary' name="unBanOrg" value="    Restore" 
-                       onclick="return confirm('Are you sure you want to unban this Organisation and its members?')"/>
+                        <input type="submit" class='btn btn-primary' name="unBanOrg" value="    {Localisation::getTranslation(Strings::COMMON_RESTORE)}" 
+                       onclick="return confirm('{Localisation::getTranslation(Strings::ADMIN_BANNED_ORGS_LIST_0)}')"/>
                     </form> 
                 </td>
             </tr>

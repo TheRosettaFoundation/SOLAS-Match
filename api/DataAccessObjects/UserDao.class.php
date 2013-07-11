@@ -3,6 +3,7 @@
 require_once __DIR__."/../../Common/models/User.php";
 require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/Authentication.class.php";
+require_once __DIR__."/../../Common/HttpStatusEnum.php";
 
 class UserDao
 {
@@ -98,21 +99,28 @@ class UserDao
             $user = $user[0];
         }
         
-        if (!is_object($user)) {
-            return null;
-        }
-        
+        if (!is_object($user)) {            
+            self::logLoginAttempt(null, $email, 0);
+            throw new Exception(HttpStatusEnum::NOT_FOUND);
+        }        
+                
         if ( !self::isUserVerified($user->getId())) {
-            return null;
+             self::logLoginAttempt($user->getId(), $email, 0);
+             throw new Exception(HttpStatusEnum::UNAUTHORIZED);
         }
 
         if (AdminDao::isUserBanned($user->getId())) {
-            return null;
+            self::logLoginAttempt($user->getId(), $email, 0);
+//            Notify::sendBannedLoginEmail($user->getId());
+            throw new Exception(HttpStatusEnum::FORBIDDEN);
         }
 
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
-            return null;
+            self::logLoginAttempt($user->getId(), $email, 0);
+            throw new Exception(HttpStatusEnum::NOT_FOUND);
         }
+        
+        self::logLoginAttempt($user->getId(), $email, 1);
 
         return $user;
     }
@@ -697,6 +705,14 @@ class UserDao
     {
         $args = PDOWrapper::cleanseNull($userId);
         PDOWrapper::call("deleteUser", $args);
+    }
+    
+    private static function logLoginAttempt($userId, $email, $loginSuccess)
+    {
+        $args = PDOWrapper::cleanseNull($userId)
+            .",".PDOWrapper::cleanseNullOrWrapStr($email)
+            .",".PDOWrapper::cleanseNull($loginSuccess);        
+        PDOWrapper::call("userLoginInsert", $args);
     }
     
 }

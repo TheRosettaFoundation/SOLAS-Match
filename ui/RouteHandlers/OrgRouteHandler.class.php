@@ -221,7 +221,7 @@ class OrgRouteHandler
             }   
         } else {
             $app->flash("error", "You are already a member of this organisation.");
-        }   
+        }
         $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
     }
 
@@ -513,6 +513,7 @@ class OrgRouteHandler
             $adminAccess = true;
         }
 
+        $siteName = Settings::get("site.name");
         $app->view()->setData("current_page", "org-public-profile");
         $app->view()->appendData(array(
                 "org" => $org,
@@ -520,7 +521,7 @@ class OrgRouteHandler
                 'orgMembers' => $orgMemberList,
                 'adminAccess' => $adminAccess,
                 "org_badges" => $org_badges,
-                "user_list" => $user_list
+                "siteName" => $siteName
         ));
         
         $app->render("org/org-public-profile.tpl");

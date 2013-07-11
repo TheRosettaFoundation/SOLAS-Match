@@ -3,11 +3,11 @@
     <div class="grid_8">
         <div class="page-header">
             <h1>
-                Create A Project <small>Provide as much information as possible.</small><br>   
+                {Localisation::getTranslation(Strings::PROJECT_CREATE_CREATE_A_PROJECT)} <small>{Localisation::getTranslation(Strings::PROJECT_CREATE_0)}.</small><br>   
                 <small>
-                    Note:
+                    {Localisation::getTranslation(Strings::COMMON_NOTE)}:
                     <span style="color: red">*</span>
-                    denotes a required field.
+                    {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}.
                 </small>
             </h1>
         </div>           
@@ -29,7 +29,7 @@
                             || isset($impact_err) || isset($targetLanguage_err) || isset($uniqueLanguageCountry_err)
                             || isset($file_upload_err))}
                             <div class="alert alert-error">
-                                <h3>Please fill in all required fields:</h3>
+                                <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}:</h3>
                                 <ol>
                                     {if isset($title_err)}
                                         <li>{$title_err}</li>
@@ -53,7 +53,7 @@
                                         <li>{$uniqueLanguageCountry_err}</li>
                                     {/if}
                                     {if isset($file_upload_err)}
-                                        <li><strong>Source Text</strong> - {$file_upload_err}</li>
+                                        <li><strong>{Localisation::getTranslation(Strings::PROJECT_CREATE_SOURCE_TEXT)}</strong> - {$file_upload_err}</li>
                                     {/if}
                                 </ol>
                             </div>                        
@@ -62,54 +62,54 @@
                 </tr>
                 <tr valign="middle">
                     <td width="493" align="center" valign="middle">
-                        <label for="title"><h2>Title: <span style="color: red">*</span></h2></label>
-                        <p class="desc">Provide a meaningful title for the project.</p>
+                        <label for="title"><h2>{Localisation::getTranslation(Strings::COMMON_TITLE)}: <span style="color: red">*</span></h2></label>
+                        <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_1)}.</p>
                         <textarea wrap="soft" cols="1" rows="3"name="title" style="width: 400px" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
                         <p style="margin-bottom:20px;"></p>
 
-                        <label for="description"><h2>Description: <span style="color: red">*</span></h2></label>
-                        <p class="desc">A brief summary of the project.</p>                    
+                        <label for="description"><h2>{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}: <span style="color: red">*</span></h2></label>
+                        <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_2)}.</p>                    
                         <textarea wrap="soft" cols="1" rows="8" name="description" style="width: 400px">{if isset($project)}{$project->getDescription()}{/if}</textarea>                    
                         <p style="margin-bottom:20px;"></p>
 
-                        <label for="impact"><h2>Impact: <span style="color: red">*</span></h2></label>
-                        <p class="desc">Who or what will benefit from contributions to this project.<br/> Will be read by volunteers considering assigning themselves to your project.</p>
+                        <label for="impact"><h2>{Localisation::getTranslation(Strings::COMMON_IMPACT)}: <span style="color: red">*</span></h2></label>
+                        <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_3)}.<br/> {Localisation::getTranslation(Strings::PROJECT_CREATE_4)}.</p>
                         <textarea wrap="soft" cols="1" rows="3" name="impact" style="width: 400px">{if isset($project)}{$project->getImpact()}{/if}</textarea>    
                         <p style="margin-bottom:20px;"></p>
 
-                        <label for="reference"><h2>Reference:</h2></label>
-                        <p class="desc">Enter a URL that gives context to this project.</p>
+                        <label for="reference"><h2>{Localisation::getTranslation(Strings::COMMON_REFERENCE)}:</h2></label>
+                        <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_5)}.</p>
                         <input type="text" name="reference" {if isset($project)}value="{$project->getReference()}"{/if} style="width: 400px" />    
                     </td>
                     <td width="493" align="center" valign="middle">    
                         <div style="margin-bottom:25px;">
-                            <label for="{$field_name}"><h2>Source Text: <span style="color: red">*</span></h2></label>
-                            <p class="desc">Upload your source file for the project. Max file size is <strong>{TemplateHelper::maxFileSizeMB()}MB</strong>.</p>
+                            <label for="{$field_name}"><h2>{Localisation::getTranslation(Strings::PROJECT_CREATE_SOURCE_TEXT)}: <span style="color: red">*</span></h2></label>
+                            <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_6)}. {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} <strong>{TemplateHelper::maxFileSizeMB()}MB</strong>.</p>
                             <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/>
                             <input type="file" name="{$field_name}" id="{$field_name}"/>
                             <input type="hidden" name="organisation_id" value="1"/>
                         </div>
                         <div style="margin-bottom: 25px;">
-                        <label for="word_count"><h2>Word Count: <span style="color: red">*</span></h2></label>
-                            <p class="desc">Approximate or use a site such as 
+                        <label for="word_count"><h2>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}: <span style="color: red">*</span></h2></label>
+                            <p class="desc">{Localisation::getTranslation(Strings::COMMON_APPROXIMATE_OR_USE_A_WEBSITE_SUCH_AS)} 
                                 <a href="http://wordcounttool.net/" target="_blank">Word Count Tool</a>.
                             </p>
                             <input type="text" name="word_count" id="word_count" maxlength="6" 
                                     value="{if isset($project)}{$project->getWordCount()}{/if}" style="width: 400px"/>
                         </div>                    
                         <div style="margin-bottom:25px;">                    
-                            <label><h2>Deadline: <span style="color: red">*</span></h2></label>
-                            <p class="desc">When the project and its tasks should be completed by.</p>
+                            <label><h2>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}: <span style="color: red">*</span></h2></label>
+                            <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_7)}.</p>
                             <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{$project->getDeadline()}{/if}" style="width: 400px"/>                    
                         </div>
                         <div style="margin-bottom:25px;">
                             <label for="tags"><h2>Tags:</h2></label>
-                            <p class="desc">The tags you provide will be used to match volunteers to your project. <br/>Separated by <strong>spaces</strong>. For multiword tags: join-with-hyphens.</p>
+                            <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_8)}. <br/>{Localisation::getTranslation(Strings::PROJECT_CREATE_SEPARATED_BY)} <strong>spaces</strong>. {Localisation::getTranslation(Strings::PROJECT_CREATE_FOR_MULTIWORD_TAGS_JOINWITHHYPHENS)}.</p>
                             <input id="tags" name="tags" value="{if isset($tagList)}{$tagList}{/if}" style="width: 400px" />
                         </div>
                         <div style="margin-bottom:25px;">
-                            <label for="publishtasks"><h2>Publish Tasks:</h2></label>
-                            <p class="desc">If checked, tasks will appear in the task stream.</p>
+                            <label for="publishtasks"><h2>{Localisation::getTranslation(Strings::PROJECT_CREATE_PUBLISH_TASKS)}:</h2></label>
+                            <p class="desc">{Localisation::getTranslation(Strings::COMMON_IF_CHECKED_TASKS_WILL_APPEAR_IN_THE_TASK_STREAM)}.</p>
                             <input type="checkbox" name="publishTasks" value="1" checked="true"/>
                         </div>
                     </td>                    
@@ -122,7 +122,7 @@
                 <tr>
                     <td align="left" valign="top">
                         {if isset($languages)}
-                            <h2>Source Language: <span style="color: red">*</span></h2><br>
+                            <h2>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)}: <span style="color: red">*</span></h2><br>
                                 <select name="sourceLanguage" id="sourceLanguage" style="width: 400px">
                                     
                                     {if isset($project) && $project->hasSourceLocale()}                                    
@@ -157,25 +157,25 @@
                                     </select>
                                 {/if}
                         {else}
-                            <label for="source"><h2>Source Language: <span style="color: red">*</span></h2></label>
+                            <label for="source"><h2>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)}: <span style="color: red">*</span></h2></label>
                             <input type="text" name="source" id="source"/>
                             <input type="text" name="sourceCountry" id="source"/>
                         {/if}                     
                     </td>                
                     <td align="center" valign="middle">
-                        <h2>Task Type: <span style="color: red">*</span></h2>
-                        <p class="desc">Specify which task types you require for your workflow.</p>                 
+                        <h2>{Localisation::getTranslation(Strings::COMMON_TASK_TYPE)}: <span style="color: red">*</span></h2>
+                        <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_9)}.</p>                 
                     </td>
                 <tr>
                     <td>                    
-                        <h2>Target Language(s): <span style="color: red">*</span></h2><br>
+                        <h2>{Localisation::getTranslation(Strings::PROJECT_CREATE_TARGET_LANGUAGES)}: <span style="color: red">*</span></h2><br>
                     </td>
                     <td valign="center">
                         <table border="0" width="100%"> 
                             <tr align="center">
-                                <td width="33%"><strong>Segmentation</strong></td>
-                                <td width="33%"><strong>Translation</strong></td>
-                                <td width="33%"><strong>Proofreading</strong></td>
+                                <td width="33%"><strong>{Localisation::getTranslation(Strings::COMMON_SEGMENTATION)}</strong></td>
+                                <td width="33%"><strong>{Localisation::getTranslation(Strings::COMMON_TRANSLATION)}</strong></td>
+                                <td width="33%"><strong>{Localisation::getTranslation(Strings::COMMON_PROOFREADING)}</strong></td>
                             </tr> 
                         </table>
                     </td>
@@ -216,7 +216,7 @@
                                 </select> 
                             {/if}
                         {else}
-                            <label for="source"><h2>Source Language: <span style="color: red">*</span></h2></label>
+                            <label for="source"><h2>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)}: <span style="color: red">*</span></h2></label>
                             <input type="text" name="source" id="source"/>
                             <input type="text" name="sourceCountry" id="source"/>
                         {/if} 
@@ -224,9 +224,9 @@
                     <td valign="middle">
                         <table> 
                             <tr align="center">
-                                <td valign="middle"><input title="Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less." type="checkbox" id="segmentation_0" name="segmentation_0" value="y" onchange="segmentationEnabled(0)" {if !empty($targetLocales) && $targetLocales[0]['segmentation']} checked {/if} /></td>                            
-                                <td valign="middle"><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_0" name="translation_0" value="y" {if !empty($targetLocales)} {if $targetLocales[0]['translation']} checked {/if} {else} checked {/if} /></td>
-                                <td valign="middle"><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_0" name="proofreading_0" value="y" {if !empty($targetLocales)} {if $targetLocales[0]['proofreading']} checked {/if} {else} checked {/if} /></td>
+                                <td valign="middle"><input title="{Localisation::getTranslation(Strings::PROJECT_CREATE_10)}." type="checkbox" id="segmentation_0" name="segmentation_0" value="y" onchange="segmentationEnabled(0)" {if !empty($targetLocales) && $targetLocales[0]['segmentation']} checked {/if} /></td>                            
+                                <td valign="middle"><input title="{Localisation::getTranslation(Strings::COMMON_CREATE_A_TRANSLATION_TASK_FOR_VOLUNTEER_TRANSLATORS_TO_PICK_UP)}." type="checkbox" id="translation_0" name="translation_0" value="y" {if !empty($targetLocales)} {if $targetLocales[0]['translation']} checked {/if} {else} checked {/if} /></td>
+                                <td valign="middle"><input title="{Localisation::getTranslation(Strings::COMMON_CREATE_A_PROOFREADING_TASK_FOR_EVALUATING_THE_TRANSLATION_PROVIDED_BY_A_VOLUNTEER)}." type="checkbox" id="proofreading_0" name="proofreading_0" value="y" {if !empty($targetLocales)} {if $targetLocales[0]['proofreading']} checked {/if} {else} checked {/if} /></td>
                             </tr>                        
                         </table>  
                     </td>
@@ -263,9 +263,9 @@
                                 <tr align="center">
                                     
                                     
-                                    <td valign="middle"><input title="Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less." type="checkbox" id="segmentation_{$i}" name="segmentation_{$i}" value="y" onchange="segmentationEnabled({$i})" {if $targetLocales[$i]['segmentation']} checked {/if} /></td>                            
-                                    <td valign="middle"><input title="Create a translation task for volunteer translators to pick up." type="checkbox" id="translation_{$i}" name="translation_{$i}" value="y" {if $targetLocales[$i]['translation']} checked {/if} /></td>
-                                    <td valign="middle"><input title="Create a proofreading task for evaluating the translation provided by a volunteer." type="checkbox" id="proofreading_{$i}" name="proofreading_{$i}" value="y" {if $targetLocales[$i]['proofreading']} checked {/if} /></td>
+                                    <td valign="middle"><input title="{Localisation::getTranslation(Strings::PROJECT_CREATE_10)}." type="checkbox" id="segmentation_{$i}" name="segmentation_{$i}" value="y" onchange="segmentationEnabled({$i})" {if $targetLocales[$i]['segmentation']} checked {/if} /></td>                            
+                                    <td valign="middle"><input title="{Localisation::getTranslation(Strings::COMMON_CREATE_A_TRANSLATION_TASK_FOR_VOLUNTEER_TRANSLATORS_TO_PICK_UP)}." type="checkbox" id="translation_{$i}" name="translation_{$i}" value="y" {if $targetLocales[$i]['translation']} checked {/if} /></td>
+                                    <td valign="middle"><input title="{Localisation::getTranslation(Strings::COMMON_CREATE_A_PROOFREADING_TASK_FOR_EVALUATING_THE_TRANSLATION_PROVIDED_BY_A_VOLUNTEER)}." type="checkbox" id="proofreading_{$i}" name="proofreading_{$i}" value="y" {if $targetLocales[$i]['proofreading']} checked {/if} /></td>
                                 </tr>                        
                             </table>  
                         </td>
@@ -277,10 +277,10 @@
                 {/if}
                 <tr>
                     <td colspan="2">
-                        <div id="alertinfo" class="alert alert-info" style="display: none; text-align: center">You have reached the maximum number of target translation fields allowed.</div>  
+                        <div id="alertinfo" class="alert alert-info" style="display: none; text-align: center">{Localisation::getTranslation(Strings::PROJECT_CREATE_11)}.</div>  
 
-                        <button id="addMoreTargetsBtn" class="btn btn-success" type="button" onclick="addNewTarget()"><i class="icon-upload icon-white"></i> Add More Target Languages</button>
-                        <button id="removeBottomTargetBtn" class="btn btn-inverse" type="button" onclick="removeNewTarget()" disabled="true" style="visibility: hidden"><i class="icon-fire icon-white"></i> Remove</button>
+                        <button id="addMoreTargetsBtn" class="btn btn-success" type="button" onclick="addNewTarget()"><i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::PROJECT_CREATE_ADD_MORE_TARGET_LANGUAGES)}</button>
+                        <button id="removeBottomTargetBtn" class="btn btn-inverse" type="button" onclick="removeNewTarget()" disabled="true" style="visibility: hidden"><i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::COMMON_REMOVE)}</button>
                         <input type="hidden" id="targetLanguageArraySize" name="targetLanguageArraySize" {if !empty($targetLocales)} value="{count($targetLocales)}" {else} value="1" {/if} />
                     </td>
                 </tr>                
@@ -293,7 +293,7 @@
                     <td>
                         <p style="margin-bottom:20px;"/> 
                             <a href='{urlFor name="org-dashboard"}' class='btn btn-danger'>
-                                <i class="icon-ban-circle icon-white"></i> Cancel
+                                <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CANCEL)}
                             </a>
                         <p style="margin-bottom:20px;"/> 
                     </td>
@@ -301,7 +301,7 @@
 
                         <p style="margin-bottom:20px;"/> 
                             <button type="submit" name="submit" value="createproject" class="btn btn-success">
-                                <i class="icon-upload icon-white"></i> Create Project
+                                <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CREATE_PROJECT)}
                             </button>                            
                         <p style="margin-bottom:20px;"/>                     
                     </td>

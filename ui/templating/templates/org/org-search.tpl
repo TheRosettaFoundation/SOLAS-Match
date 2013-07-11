@@ -2,18 +2,18 @@
 
     <div class="page-header">
         <h1>
-            Organisation Search <small>Search for organisations by name.</small>
+            {Localisation::getTranslation(Strings::ORG_SEARCH_ORGANISATION_SEARCH)} <small>{Localisation::getTranslation(Strings::ORG_SEARCH_0)}</small>
         </h1>
     </div>
 
     <form class="well" method="post" action="{urlFor name="org-search"}">
-        <label for="search_name"><strong>Organisation Name:</strong></label>
+        <label for="search_name"><strong>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}:</strong></label>
         <input type="text" name="search_name" id="search_name" style="height: 20px" 
                 value="{if isset($searchedText)}{$searchedText}{/if}" />
         <br />
-        <input type="submit" name="submit" value="    Search" class="btn btn-primary" />
+        <input type="submit" name="submit" value="    {Localisation::getTranslation(Strings::ORG_SEARCH_SEARCH)}" class="btn btn-primary" />
         <i class="icon-search icon-white" style="position:relative; right:75px; top:2px;"></i>
-        <input type="submit" name="allOrgs" value="    List All" class="btn btn-inverse" />
+        <input type="submit" name="allOrgs" value="    {Localisation::getTranslation(Strings::COMMON_LIST_ALL)}" class="btn btn-inverse" />
         <i class="icon-list icon-white" style="position:relative; right:75px; top:2px;"></i>
     </form>
 
@@ -21,7 +21,7 @@
     {assign var="org_count" value=count($foundOrgs)}
     {if $org_count > 0}
         <p>
-            <h3>Search Results: Found {$org_count} match(es)</h3>    
+            <h3>{Localisation::getTranslation(Strings::ORG_SEARCH_SEARCH_RESULTS)}: {Localisation::getTranslation(Strings::ORG_SEARCH_FOUND)} {$org_count} {Localisation::getTranslation(Strings::ORG_SEARCH_MATCHES)}</h3>    
         </p>
             {foreach $foundOrgs as $org}
             <div class="row">
@@ -35,20 +35,20 @@
                 </div>
                 <div class="span8">
                     <p>
-                        <strong>Biography:</strong><br/>
+                        <strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong><br/>
 
                         {if $org->getBiography() == ''}
-                            This organisation does not have a biography listed.
+                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}.
                         {else}                            
-                            {$org->getBiography()}
+                            {TemplateHelper::uiCleanseNewlineAndTabs({$org->getBiography()})}
                         {/if}
                     </p>
                     <p>
-                    <strong>Home Page:</strong><br/>
+                    <strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}:</strong><br/>
                     {if $org->getHomePage() != "http://"}
                         <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
                     {else}
-                        This organisation does not have a web site listed.
+                        {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_HOME_PAGE_LISTED)}.
                     {/if}
                     </p>
                 </div>
@@ -61,7 +61,7 @@
 
 {if isset($flash['error'])}
     <div class="alert alert-error">
-        <p><strong>Warning! </strong>{$flash['error']}</p>
+        <p>{$flash['error']}</p>
     </div>
 {/if}
 

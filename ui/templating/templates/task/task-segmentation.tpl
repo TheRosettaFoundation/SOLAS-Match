@@ -4,20 +4,20 @@
         {if $task->getTitle() != ''}
             {$task->getTitle()}
         {else}
-            Task {$task->getId()}
+            {Localisation::getTranslation(Strings::COMMON_TASK)} {$task->getId()}
         {/if}
         <small>
             <strong>
                 -
                 {assign var="type_id" value=$task->getTaskType()}
                 {if $type_id == TaskTypeEnum::SEGMENTATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation Task</span>                                    
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_SEGMENTATION_TASK)}</span>                                   
                 {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation(Strings::COMMON_TRANSLATION_TASK)}</span>
                 {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation(Strings::COMMON_PROOFREADING_TASK)}</span>
                 {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation Task
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_DESEGMENTATION_TASK)}</span>
                 {/if}
             </strong>
         </small>   
@@ -28,7 +28,7 @@
 
     {if isset($errors)}
         <div class="alert alert-error">
-            <h3>Please fill in all required fields:</h3>
+            <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}:</h3>
             <ol>
                 {foreach from=$errors item=error}
                         <li>{$error}</li>
@@ -46,18 +46,19 @@
                 <tr>
                     <td colspan="4">
                         <label for="title">
-                            <h2>Segmentation:
+                            <h2>{Localisation::getTranslation(Strings::COMMON_SEGMENTATION)}:
                                 <a href="{urlFor name="task-user-feedback" options="task_id.$task_id"}" style="float: right" class="btn btn-success">
-                                    <i class="icon-upload icon-white"></i> Provide Feedback
+                                    <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_PROVIDE_FEEDBACK)}
                                 </a>
                             </h2>
                         </label>
-                        <p class="desc">Divide large source files into smaller and more managable tasks.<br />
-                            Recommended limit of approximately 2000 words or less per task.<br />
-                            If you would like to re-download the file click 
-                            <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>.<br />
-                            If you would like to re-download the original project file, click
-                            <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">here</a>.
+                        <p class="desc">{Localisation::getTranslation(Strings::TASK_SEGMENTATION_0)}<br />
+                            {Localisation::getTranslation(Strings::TASK_SEGMENTATION_2)}<br />
+                            {Localisation::getTranslation(Strings::TASK_SEGMENTATION_3)}
+                            <a href="{urlFor name="download-task" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>.
+
+                            {Localisation::getTranslation(Strings::TASK_SEGMENTATION_6)}
+                            <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>.
                         </p>
 
                         <hr/>
@@ -65,20 +66,20 @@
 
                 </tr>
                 <tr>
-                    <td><strong>Number of segments:</strong></td>         
-                    <td align="center" valign="bottom"><strong>Translation</strong></td>
-                    <td align="center" valign="bottom"><strong>Proofreading</strong></td>
-                    <td align="center" valign="bottom"><strong>Desegmentation</strong></td>
+                    <td><strong>{Localisation::getTranslation(Strings::TASK_SEGMENTATION_NUMBER_OF_SEGMENTS)}</strong></td>         
+                    <td align="center" valign="bottom"><strong>{Localisation::getTranslation(Strings::COMMON_TRANSLATION)}</strong></td>
+                    <td align="center" valign="bottom"><strong>{Localisation::getTranslation(Strings::COMMON_PROOFREADING)}</strong></td>
+                    <td align="center" valign="bottom"><strong>{Localisation::getTranslation(Strings::COMMON_DESEGMENTATION)}</strong></td>
                 </tr>
                 <tr>
                     <td id="segmentationElements"></td>  
-                    <td align="center" title="Create a translation task for volunteer translators to pick up." valign="middle">
+                    <td align="center" title="{Localisation::getTranslation(Strings::COMMON_CREATE_A_TRANSLATION_TASK_FOR_VOLUNTEER_TRANSLATORS_TO_PICK_UP)}" valign="middle">
                         <input type="checkbox" id="translation_0" name="translation_0" value="y" />
                      </td>
-                    <td align="center" title="Create a proofreading task for evaluating the translation provided by a volunteer." valign="middle">
+                    <td align="center" title="{Localisation::getTranslation(Strings::COMMON_CREATE_A_PROOFREADING_TASK_FOR_EVALUATING_THE_TRANSLATION_PROVIDED_BY_A_VOLUNTEER)}" valign="middle">
                         <input type="checkbox" id="proofreading_0" name="proofreading_0" value="y" />
                     </td>
-                    <td align="center" title="Create a desegmentation task for merging together task segments created by a segmentation task." valign="middle">
+                    <td align="center" title="{Localisation::getTranslation(Strings::COMMON_THANKS_FOR_PROVIDING_YOUR_TRANSLATION_FOR_THIS_TASK)} "valign="middle">
                         <input type="checkbox" id="desegmentation_0" checked="true" name="desegmentation_0" value="y" disabled />
                     </td>
                 </tr>
@@ -89,18 +90,18 @@
                 </tr>
                 <tr id="taskUploadTemplate_0" valign="top">
                     <td colspan="4">
-                        <p class="desc">Upload your segmented file. Max file size is 8 MB.</p>
+                        <p class="desc">{Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 8 MB.</p>
                         <input type="file" name="segmentationUpload_0" id="segmentationUpload_0"/>
-                        <label>Word Count:</label>
+                        <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</label>
                         <input type="text" name="wordCount_0" id="wordCount_0" />
                         <hr/>
                     </td>                
                 </tr>
                 <tr id="taskUploadTemplate_1" valign="top">
                     <td colspan="4"> 
-                        <p class="desc">Upload your segmented file. Max file size is 8 MB.</p>
+                        <p class="desc">{Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 8 MB.</p>
                         <input type="file" name="segmentationUpload_1" id="segmentationUpload_1"/>
-                        <label>Word Count:</label>
+                        <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</label>
                         <input type="text" name="wordCount_1" id="wordCount_1" />
                         <hr/>
                     </td>                
@@ -112,7 +113,7 @@
                 <td align="center" colspan="5">
                     <p style="margin-bottom:20px;"></p> 
                     <button type="submit" name="createSegmentation" value="1" class="btn btn-success">
-                        <i class="icon-upload icon-white"></i> Submit Segmented Tasks
+                        <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::TASK_SEGMENTATION_SUBMIT_SEGMENTED_TASKS)}
                     </button>
                 </td>
             </tr>                        

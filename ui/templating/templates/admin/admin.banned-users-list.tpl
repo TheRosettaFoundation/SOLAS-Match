@@ -1,15 +1,15 @@
 
 <div id="accordionBannedUsers">
-    <h3>All banned Users of {$siteName}.</h3>
+    <h3>{Localisation::getTranslation(Strings::ADMIN_BANNED_USERS_LIST_ALL_BANNED_USERS_OF)} {$siteName}.</h3>
     <div name="bannedOrgList">
         <table class="table table-striped">
             <thead>
-                <th>User Display Name</th>
-                <th>Banned By</th>
-                <th>Ban Duration</th>
-                <th>Ban Reason</th>
-                <th>Banned Date</th>
-                <th style="width: 12%">Restore</th>
+                <th>{Localisation::getTranslation(Strings::ADMIN_BANNED_USERS_LIST_USER_DISPLAY_NAME)}</th>
+                <th>{Localisation::getTranslation(Strings::COMMON_BANNED_BY)}</th> 
+                <th>{Localisation::getTranslation(Strings::COMMON_BAN_DURATION)}</th>
+                <th>{Localisation::getTranslation(Strings::COMMON_BAN_REASON)}</th>
+                <th>{Localisation::getTranslation(Strings::COMMON_BANNED_DATE)}</th>
+                <th style="width: 12%">{Localisation::getTranslation(Strings::COMMON_RESTORE)}</th>
             </thead>
             {foreach $bannedUserList as $bannedUser}
                 <tr>
@@ -21,13 +21,13 @@
                     </td>
                     <td>
                         {if $bannedUser->getBanType() == BanTypeEnum::DAY}
-                            Day
+                            {Localisation::getTranslation(Strings::COMMON_DAY)}
                         {elseif $bannedUser->getBanType() == BanTypeEnum::WEEK}
-                            Week
+                            {Localisation::getTranslation(Strings::COMMON_WEEK)}
                         {elseif $bannedUser->getBanType() == BanTypeEnum::MONTH}
-                            Month
+                            {Localisation::getTranslation(Strings::COMMON_MONTH)}
                         {elseif $bannedUser->getBanType() == BanTypeEnum::PERMANENT}
-                            Permanent
+                            {Localisation::getTranslation(Strings::COMMON_PERMANENT)}
                         {/if}
                     </td>
                     <td>                
@@ -40,8 +40,8 @@
                         <form method="post" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}">
                             <i class="icon-upload icon-white" style="position:relative; right:-25px; top:1px;"></i>
                             <input type="hidden" name="userId" value="{$bannedUser->getUserId()}" />
-                            <input type="submit" class='btn btn-primary' name="unBanUser" value="    Restore" 
-                           onclick="return confirm('Are you sure you want to unban this User?')"/>
+                            <input type="submit" class='btn btn-primary' name="unBanUser" value="    {Localisation::getTranslation(Strings::COMMON_RESTORE)}" 
+                           onclick="return confirm('{Localisation::getTranslation(Strings::ADMIN_BANNED_USERS_LIST_0)}')"/>
                         </form> 
                     </td>
                 </tr>

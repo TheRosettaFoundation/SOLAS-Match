@@ -2,11 +2,13 @@
 
 class CacheHelper
 {
-    const STATISTICS    = "Statistics";
-    const LANGUAGES     = "Languages";
-    const COUNTRIES     = "Countries";
-    const TOP_TAGS      = "TopTags";
-    const GET_USER      = "GetUser:";
+    const STATISTICS            = "Statistics";
+    const LANGUAGES             = "Languages";
+    const COUNTRIES             = "Countries";
+    const TOP_TAGS              = "TopTags";
+    const GET_USER              = "GetUser";
+    const SITE_LANGUAGE         = "SiteLanguage";
+    const LOADED_LANGUAGES      = "LoadedLanguages";
     
     public static function getCached($key, $ttl, $function, $args=null)
     {

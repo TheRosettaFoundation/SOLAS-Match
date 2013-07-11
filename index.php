@@ -1,6 +1,7 @@
 <?php
 
-require __DIR__."/ui/vendor/autoload.php";
+require_once __DIR__."/ui/vendor/autoload.php";
+require_once 'Common/Settings.class.php';
 
 mb_internal_encoding("UTF-8");
 //header("Content-Type:application/xhtml+xml;charset=UTF-8");
@@ -13,7 +14,7 @@ SmartyView::$smartyExtensions = array(
 );
 
 \DrSlump\Protobuf::autoload();
-session_start();
+
 // Can we get away from the app's old system?
 //require('app/includes/smarty.php');
 
@@ -30,21 +31,42 @@ $app->configureMode('production', function () use ($app) {
     $app->config(array(
         'log.enable' => true,
         'log.path' => '../logs', // Need to set this...
-        'debug' => false
+        'debug' => false,
+        'cookies.lifetime' => Settings::get('site.cookie_timeout'),
+        'cookies.secret_key' => Settings::get('session.site_key'),
+        'cookies.cipher' => MCRYPT_RIJNDAEL_256,
+        'cookies.cipher_mode' => MCRYPT_MODE_CBC
     ));
 });
 
 $app->configureMode('development', function () use ($app) {
     $app->config(array(
         'log.enable' => false,
-        'debug' => true
+        'debug' => true,
+        'cookies.lifetime' => Settings::get('site.cookie_timeout'),
+        'cookies.secret_key' => Settings::get('session.site_key'),
+        'cookies.cipher' => MCRYPT_RIJNDAEL_256,
+        'cookies.cipher_mode' => MCRYPT_MODE_CBC
     ));
 });
+
+$app->add(new  Slim_Middleware_SessionCookie(array(
+    'expires' => Settings::get('site.cookie_timeout'),
+    'path' => '/',
+    'domain' => null,
+    'secure' => false,
+    'httponly' => false,
+    'name' => 'slim_session',
+    'secret' => Settings::get('session.site_key'),
+    'cipher' => MCRYPT_RIJNDAEL_256,
+    'cipher_mode' => MCRYPT_MODE_CBC
+)));
+
+
 
 //TODO remove all requires bar RoutHandlers
 require_once 'Common/HttpMethodEnum.php';
 require_once 'Common/BanTypeEnum.php';
-require_once 'Common/Settings.class.php';
 require_once 'Common/NotificationIntervalEnum.class.php';
 require_once 'Common/lib/Authentication.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
@@ -56,6 +78,7 @@ require_once 'ui/lib/UserSession.class.php';
 require_once 'ui/lib/URL.class.php';
 require_once 'ui/lib/GraphViewer.class.php';
 require_once 'ui/lib/UIWorkflowBuilder.class.php';
+require_once 'ui/lib/Localisation.php';
 
 require_once 'ui/RouteHandlers/AdminRouteHandler.class.php';
 require_once 'ui/RouteHandlers/UserRouteHandler.class.php';
@@ -126,17 +149,20 @@ $app->hook('slim.before', function () use ($app)
         $tasks = $userDao->getUserTasks(UserSession::getCurrentUserID());
         if($tasks && count($tasks) > 0) {
             $app->view()->appendData(array(
-                        "user_has_active_tasks" => true
+                "user_has_active_tasks" => true
             ));
         }
         $adminDao = new AdminDao();
         $isAdmin = $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
         if ($isAdmin) {
             $app->view()->appendData(array(
-                        'site_admin' => true
+                'site_admin' => true
             ));
         }
     }
+    $app->view()->appendData(array(
+        'locs' => Localisation::loadTranslationFiles()
+    ));
 });
 
 $app->run();
