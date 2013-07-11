@@ -12,7 +12,7 @@
                                         <a href="http://www.therosettafoundation.org/">The Rosetta Foundation</a>
                                     </p>
                                     <p>
-                                        {mailto address={Settings::get("site.system_email_address")} encode='hex' text='Contact Us'} | <a href="{urlFor name='terms'}">{Localisation::getTranslation(Strings::FOOTER_TERMS_AND_CONDITONS)}</a> | <a href="{urlFor name='privacy'}">{Localisation::getTranslation(Strings::FOOTER_PRIVACY_POLICY)}</a> | <a href="http://forum.solas.uni.me/" target="_blank">{Localisation::getTranslation(Strings::FOOTER_COMMUNITY_FORUM)}</a>
+                                        {mailto address={Settings::get("site.system_email_address")} encode='hex' text='Contact Us'} | <a href="{urlFor name='terms'}">{Localisation::getTranslation(Strings::FOOTER_TERMS_AND_CONDITONS)}</a> | <a href="{urlFor name='privacy'}">{Localisation::getTranslation(Strings::FOOTER_PRIVACY_POLICY)}</a> <!--| <a href="http://forum.solas.uni.me/" target="_blank">{Localisation::getTranslation(Strings::FOOTER_COMMUNITY_FORUM)}</a>-->
                                     </p>
                                     <p>                
                                         {Localisation::getTranslation(Strings::COMMON_YOUR)} <a href="https://docs.google.com/a/ul.ie/spreadsheet/viewform?formkey=dER4VFJZQVpNY0g2anpLb2dJSGJEbFE6MQ#gid=0">{Localisation::getTranslation(Strings::FOOTER_FEEDBACK)}</a> {Localisation::getTranslation(Strings::FOOTER_IS_APPRECIATED)}.
