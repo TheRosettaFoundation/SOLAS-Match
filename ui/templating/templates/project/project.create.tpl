@@ -65,17 +65,17 @@
                         <label for="title"><h2>{Localisation::getTranslation(Strings::COMMON_TITLE)}: <span style="color: red">*</span></h2></label>
                         <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_1)}.</p>
                         <textarea wrap="soft" cols="1" rows="3"name="title" style="width: 400px" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
-                        <p style="margin-bottom:20px;"></p>
+                        <p style="margin-bottom:40px;"></p>
 
                         <label for="description"><h2>{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}: <span style="color: red">*</span></h2></label>
                         <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_2)}.</p>                    
                         <textarea wrap="soft" cols="1" rows="8" name="description" style="width: 400px">{if isset($project)}{$project->getDescription()}{/if}</textarea>                    
-                        <p style="margin-bottom:20px;"></p>
+                        <p style="margin-bottom:37.5px;"></p>
 
                         <label for="impact"><h2>{Localisation::getTranslation(Strings::COMMON_IMPACT)}: <span style="color: red">*</span></h2></label>
                         <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_3)}.<br/> {Localisation::getTranslation(Strings::PROJECT_CREATE_4)}.</p>
                         <textarea wrap="soft" cols="1" rows="3" name="impact" style="width: 400px">{if isset($project)}{$project->getImpact()}{/if}</textarea>    
-                        <p style="margin-bottom:20px;"></p>
+                        <p style="margin-bottom:37.5px;"></p>
 
                         <label for="reference"><h2>{Localisation::getTranslation(Strings::COMMON_REFERENCE)}:</h2></label>
                         <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_5)}.</p>
@@ -111,6 +111,11 @@
                             <label for="publishtasks"><h2>{Localisation::getTranslation(Strings::PROJECT_CREATE_PUBLISH_TASKS)}:</h2></label>
                             <p class="desc">{Localisation::getTranslation(Strings::COMMON_IF_CHECKED_TASKS_WILL_APPEAR_IN_THE_TASK_STREAM)}.</p>
                             <input type="checkbox" name="publishTasks" value="1" checked="true"/>
+                        </div>
+                        <div style="margin-bottom:25px;">
+                            <label for="trackProject"><h2>{Localisation::getTranslation(Strings::COMMON_TRACK_PROJECT)}:</h2></label>
+                            <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_12)}</p>
+                            <input type="checkbox" name="trackProject" value="1" checked="true"/>
                         </div>
                     </td>                    
                 </tr>

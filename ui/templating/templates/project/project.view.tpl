@@ -87,7 +87,7 @@
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
                                     <a class="btn btn-small" onclick="$('#trackedProjectForm').submit();" >
-                                        <i class="icon-envelope icon-black"></i> {Localisation::getTranslation(Strings::PROJECT_VIEW_TRACK_PROJECT)}
+                                        <i class="icon-envelope icon-black"></i> {Localisation::getTranslation(Strings::COMMON_TRACK_PROJECT)}
                                     </a>
                                 </p>
                             {/if}
@@ -288,7 +288,7 @@
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
                                                 <a class="btn btn-small" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                    <i class="icon-envelope icon-black"></i> {Localisation::getTranslation(Strings::PROJECT_VIEW_TRACK_PROJECT)}
+                                                    <i class="icon-envelope icon-black"></i> {Localisation::getTranslation(Strings::COMMON_TRACK_PROJECT)}
                                                 </a>
                                             {/if}
                                         </form>

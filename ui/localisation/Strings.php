@@ -159,6 +159,7 @@ class Strings
                 const COMMON_SUBMIT_FEEDBACK = 'common_submit_feedback';
                 const COMMON_CLAIMED_DATE = 'common_claimed_date';
                 const COMMON_CLAIMED_BY = 'common_claimed_by';
+                const COMMON_TRACK_PROJECT = 'common_track_project';
 		const ADMIN_BANNED_ORGS_LIST_ALL_BANNED_ORGANISATIONS_OF = 'admin_banned_orgs_list_all_banned_organisations_of';
 		const ADMIN_BANNED_ORGS_LIST_0 = 'admin_banned_orgs_list_0';
 		const ADMIN_BANNED_USERS_LIST_ALL_BANNED_USERS_OF = 'admin_banned_users_list_all_banned_users_of';
@@ -307,7 +308,7 @@ class Strings
 		const PROJECT_CREATE_9 = 'project_create_9';		
 		const PROJECT_CREATE_10 = 'project_create_10';
 		const PROJECT_CREATE_11 = 'project_create_11';
-                const PROJECT_CREATE_12 = 'project_create_12';  
+                const PROJECT_CREATE_12 = 'project_create_12';
                 const PROJECT_CREATE_TARGET_LANGUAGES = 'project_create_target_languages';
 		const PROJECT_CREATE_ADD_MORE_TARGET_LANGUAGES = 'project_create_add_more_target_languages';
 		const PROJECT_CREATED_PROJECT_IS_NOW_LIVE = 'project_created_project_is_now_live';
@@ -328,7 +329,6 @@ class Strings
 		const PROJECT_VIEW_CREATED = 'project_view_created';
 		const PROJECT_VIEW_PROJECT_DEADLINE = 'project_view_project_deadline';
 		const PROJECT_VIEW_UNTRACK_PROJECT = 'project_view_untrack_project';
-		const PROJECT_VIEW_TRACK_PROJECT = 'project_view_track_project';
 		const PROJECT_VIEW_TASKS = 'project_view_tasks';
 		const PROJECT_VIEW_0 = 'project_view_0';
 		const PROJECT_VIEW_LIST_VIEW = 'project_view_list_view';

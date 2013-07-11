@@ -120,7 +120,7 @@
                     
                     <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong></label>
                     <textarea name='biography' cols='40' rows='7' {if $profileUser->getBiography() == ''} placeholder="Enter Bio Here" {/if}
-                    style="width: 80%">{if $profileUser->getBiography() != ''} {TemplateHelper::uiCleanseNewlineAndTabs({$profileUser->getBiography()})} {/if}</textarea>
+                    style="width: 80%">{if $profileUser->getBiography() != ''} {TemplateHelper::uiCleanseNewlineAndTabs($profileUser->getBiography())} {/if}</textarea>
                     
                 </td>
                 <td width="50%">
@@ -161,7 +161,7 @@
                     {/if} />
                     
                     <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}:</strong></label>
-                    <textarea id="address" name='address' cols='40' rows='5' style="width: 80%">{if !is_null($userPersonalInfo) && $userPersonalInfo->getAddress() != ''}{$userPersonalInfo->getAddress()}{/if}</textarea>
+                    <textarea id="address" name='address' cols='40' rows='5' style="width: 80%">{if !is_null($userPersonalInfo) && $userPersonalInfo->getAddress() != ''} {TemplateHelper::uiCleanseNewlineAndTabs($userPersonalInfo->getAddress())} {/if}</textarea>
                     
                     <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}:</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%"

@@ -426,7 +426,7 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();///never again cast an array to an object.
+            $post = $app->request()->post();
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
                 $projectFile = $projectDao->getProjectFileInfo($project->getId());
@@ -444,9 +444,9 @@ class TaskRouteHandler
                 try {
                     $filedata = file_get_contents($_FILES["fileUpload"]["tmp_name"]);
                     
-                    if ($post->submit == 'XLIFF') {
+                    if ($post['submit'] == 'XLIFF') {
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
-                    } else if ($post->submit == 'submit') {
+                    } else if ($post['submit'] == 'submit') {
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata);
                     }
                 

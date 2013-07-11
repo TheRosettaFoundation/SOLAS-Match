@@ -159,6 +159,7 @@
         <string name="common_submit_feedback">Submit Feedback</string>
         <string name="common_claimed_date">Claimed Date</string>
         <string name="common_claimed_by">Claimed By</string>
+        <string name="common_track_project">Track Project</string>
               
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of</string>
 	<string name="admin_banned_orgs_list_0">Are you sure you want to unban this Organisation and its members?</string>
@@ -326,7 +327,8 @@
 	<string name="project_create_9">Specify which task types you require for your workflow</string>
 	<string name="project_create_target_languages">Target Language(s)</string>
 	<string name="project_create_10">Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less</string>
-	<string name="project_create_11">You have reached the maximum number of target translation fields allowed</string>	
+	<string name="project_create_11">You have reached the maximum number of target translation fields allowed</string>
+        <string name="project_create_12">If checked, you will automatically track this project and receive e-mail notifications.</string>
         <string name="project_create_add_more_target_languages">Add More Target Languages</string>
 
 	<string name="project_created_project_is_now_live">Project is now live</string>
@@ -347,7 +349,6 @@
 	<string name="project_view_created">Created</string>
 	<string name="project_view_project_deadline">Project Deadline</string>
 	<string name="project_view_untrack_project">Untrack Project</string>
-	<string name="project_view_track_project">Track Project</string>
 	<string name="project_view_tasks">Tasks</string>
 	<string name="project_view_0">Overview of tasks created for this project</string>
 	<string name="project_view_list_view">List View</string>

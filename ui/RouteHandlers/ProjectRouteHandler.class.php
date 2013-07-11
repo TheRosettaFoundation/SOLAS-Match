@@ -514,6 +514,11 @@ class ProjectRouteHandler
                         }
                     } 
                     $projectDao->calculateProjectDeadlines($project->getId());
+                    
+                    if(isset($post["trackProject"]) && $post['trackProject'] == 1) {
+                        $userDao = new UserDao();
+                        $userDao->trackProject($user_id, $project->getId());
+                    }
                     $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
                 }              
             } else {

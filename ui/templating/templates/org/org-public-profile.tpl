@@ -73,7 +73,7 @@
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getAddress() != ''}
-                                            {$org->getAddress()}
+                                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())}
                                         {else}
                                             {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_ADDRESS_LISTED)}.
                                         {/if}
@@ -145,7 +145,7 @@
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getBiography() != ''}
-                                            {TemplateHelper::uiCleanseNewlineAndTabs({$org->getBiography()})}
+                                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
                                         {else}
                                             {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}.
                                         {/if}
@@ -282,7 +282,7 @@
                      <td width="50%">
                          <i>
                          {if $nonMember->getBiography() != ''}
-                             {TemplateHelper::uiCleanseNewlineAndTabs({$nonMember->getBiography()})}
+                             {TemplateHelper::uiCleanseNewlineAndTabs($nonMember->getBiography())}
                          {else}
                              {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}.
                          {/if}

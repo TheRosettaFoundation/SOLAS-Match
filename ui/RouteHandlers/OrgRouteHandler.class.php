@@ -75,13 +75,7 @@ class OrgRouteHandler
             if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
             
             if(!empty($regionalFocus)) {
-                $regionalFocusString = "";
-                foreach($regionalFocus as $region) {
-                    $regionalFocusString .= $region.", ";
-                }
-                $lastComma = strrpos($regionalFocusString, ",");
-                $regionalFocusString[$lastComma] = "";
-                $org->setRegionalFocus($regionalFocusString);
+                $org->setRegionalFocus(implode(",", $regionalFocus));
             }
             
             if(is_null($nameErr)) {
@@ -132,9 +126,9 @@ class OrgRouteHandler
         $org_projects = array();
         
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-            if (isset($post->track)) {
-                $project_id = $post->project_id;
+            $post = $app->request()->post();
+            if (isset($post['track'])) {
+                $project_id = $post['project_id'];
                 $project = $projectDao->getProject($project_id);
 
                 $project_title = "";
@@ -143,14 +137,14 @@ class OrgRouteHandler
                 } else {
                     $project_title = "project ".$project->getId();
                 }
-                if ($post->track == "Ignore") {
+                if ($post['track'] == "Ignore") {
                     $success = $userDao->untrackProject($current_user_id, $project_id);                    
                     if ($success) {
                         $app->flashNow("success", "No longer receiving notifications from $project_title.");
                     } else {
                         $app->flashNow("error", "Unable to unsubscribe from $project_title 's notifications.");
                     }                    
-                } elseif ($post->track == "Track") {
+                } elseif ($post['track'] == "Track") {
                     $success = $userDao->trackProject($current_user_id, $project_id);                    
                     if ($success) {
                         $app->flashNow("success", "You will now receive notifications for $project_title.");
@@ -233,11 +227,11 @@ class OrgRouteHandler
 
         $org = $orgDao->getOrganisation($org_id);
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if (isset($post->email)) {
-                if (TemplateHelper::isValidEmail($post->email)) {       
-                    $user = $userDao->getUserByEmail($post->email);
+            if (isset($post['email'])) {
+                if (TemplateHelper::isValidEmail($post['email'])) {       
+                    $user = $userDao->getUserByEmail($post['email']);
                     if (!is_null($user)) {
                         $user_id = $user->getId();
                         $user_orgs = $userDao->getUserOrgs($user_id);
@@ -259,7 +253,7 @@ class OrgRouteHandler
                             $app->flashNow("error", "$user_name is already a member of this organisation.");
                         }   
                     } else {
-                        $email = $post->email;
+                        $email = $post['email'];
                         $app->flashNow("error",
                             "The email address $email is not registered with this system.
                             Are you sure you have the right email addess?"
@@ -268,14 +262,14 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow("error", "You did not enter a valid email address.");
                 }
-            } elseif (isset($post->accept)) {
-                if ($user_id = $post->user_id) {
+            } elseif (isset($post['accept'])) {
+                if ($user_id = $post['user_id']) {
                     $orgDao->acceptMembershipRequest($org_id, $user_id);
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
-            } elseif (isset($post->refuse)) {
-                if ($user_id = $post->user_id) {
+            } elseif (isset($post['refuse'])) {
+                if ($user_id = $post['user_id']) {
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
@@ -322,15 +316,8 @@ class OrgRouteHandler
                 if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
 
                 if(!empty($regionalFocus)) {
-                    $regionalFocusString = "";
-                    foreach($regionalFocus as $region) {
-                        $regionalFocusString .= $region.", ";
-                    }
-                    $lastComma = strrpos($regionalFocusString, ",");
-                    $regionalFocusString[$lastComma] = "";
-                    $org->setRegionalFocus($regionalFocusString);
+                    $org->setRegionalFocus(implode(",", $regionalFocus));
                 }
-
 
                 $orgDao->updateOrg($org); 
                 $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
@@ -370,29 +357,29 @@ class OrgRouteHandler
 
         $org = $orgDao->getOrganisation($org_id);
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
                    
-            if (isset($post->deleteBadge)) {
-                $badgeDao->deleteBadge($post->badge_id);
+            if (isset($post['deleteBadge'])) {
+                $badgeDao->deleteBadge($post['badge_id']);
             } 
             
-            if (isset($post->title) && isset($post->description)) {
-                if ($post->title == "" || $post->description == "") {
+            if (isset($post['title']) && isset($post['description'])) {
+                if ($post['title'] == "" || $post['description'] == "") {
                     $app->flash("error", "All fields must be filled out.");
                 } else {
                     $badge = new Badge();
-                    $badge->setId($post->badge_id);
-                    $badge->setTitle($post->title);
-                    $badge->setDescription($post->description);
+                    $badge->setId($post['badge_id']);
+                    $badge->setTitle($post['title']);
+                    $badge->setDescription($post['description']);
                     $badge->setOwnerId(null);
                     $badgeDao->updateBadge($badge); 
                     $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
                 }
             }
             
-            if (isset($post->email)) {
-                if (TemplateHelper::isValidEmail($post->email)) {       
-                    $user = $userDao->getUserByEmail($post->email);
+            if (isset($post['email'])) {
+                if (TemplateHelper::isValidEmail($post['email'])) {       
+                    $user = $userDao->getUserByEmail($post['email']);
                 
                     if (!is_null($user)) {
                         $user_orgs = $userDao->getUserOrgs($user->getId());
@@ -413,7 +400,7 @@ class OrgRouteHandler
                             $app->flashNow("error", "$user_name is already a member of this organisation.");
                         }   
                     } else {
-                        $email = $post->email;
+                        $email = $post['email'];
                         $app->flashNow("error",
                             "The email address $email is not registered with this system.
                             Are you sure you have the right email addess?"
@@ -422,8 +409,8 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow("error", "You did not enter a valid email address");
                 }
-            } elseif (isset($post->accept)) {
-                if ($user_id = $post->user_id) {
+            } elseif (isset($post['accept'])) {
+                if ($user_id = $post['user_id']) {
                     if ($orgDao->acceptMembershipRequest($org_id, $user_id)){
                         $user = $userDao->getUser($user_id);
                         $user_name = $user->getDisplayName();
@@ -438,8 +425,8 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
-            } elseif (isset($post->refuse)) {
-                if ($user_id = $post->user_id) {
+            } elseif (isset($post['refuse'])) {
+                if ($user_id = $post['user_id']) {
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
                     $user = $userDao->getUser($user_id);
                     $user_name = $user->getDisplayName();
@@ -449,8 +436,8 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow("error", "Invalid User ID: $user_id");
                 }
-            } elseif (isset($post->revokeUser)) {
-                $userId = $post->revokeUser;
+            } elseif (isset($post['revokeUser'])) {
+                $userId = $post['revokeUser'];
                 $user = $userDao->getUser($userId);
                 if ($user) {
                     $userName = $user->getDisplayName();
@@ -466,12 +453,12 @@ class OrgRouteHandler
                 } else {
                     $app->flashNow("error", "Unable to find user in system");
                 }
-            } else if(isset($post->revokeOrgAdmin)) {
-                $userId = $post->revokeOrgAdmin;
+            } else if(isset($post['revokeOrgAdmin'])) {
+                $userId = $post['revokeOrgAdmin'];
                 $adminDao->removeOrgAdmin($userId, $org_id);
                 
-            } else if(isset($post->makeOrgAdmin)) {
-                $userId = $post->makeOrgAdmin;
+            } else if(isset($post['makeOrgAdmin'])) {
+                $userId = $post['makeOrgAdmin'];
                 $adminDao->createOrgAdmin($userId, $org_id);
             }
         }       
