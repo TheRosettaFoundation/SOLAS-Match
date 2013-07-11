@@ -349,8 +349,6 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-
             $uploadError = false;
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
@@ -762,10 +760,10 @@ class TaskRouteHandler
         
          
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if(isset($post->published)) {
-                if($post->published) {                     
+            if(isset($post['published'])) {
+                if($post['published']) {                     
                     $task->setPublished(1);                    
                 } else {
                     $task->setPublished(0);                    
@@ -774,8 +772,8 @@ class TaskRouteHandler
                 
             }
 
-            if (isset($post->track)) {
-                if ($post->track == "Ignore") {
+            if (isset($post['track'])) {
+                if ($post['track'] == "Ignore") {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
                         $app->flashNow("success", 
@@ -1148,16 +1146,16 @@ class TaskRouteHandler
         }
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-            if(isset($post->feedback)) {
+            $post = $app->request()->post();
+            if(isset($post['feedback'])) {
 
-                if ($post->feedback != "") {
-                    $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post->feedback);
+                if ($post['feedback'] != "") {
+                    $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
     
                     $app->flashNow("success", "Feedback sent to 
                             <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
                             {$claimant->getDisplayName()}</a>.");
-                    if(isset($post->revokeTask) && $post->revokeTask) {
+                    if(isset($post['revokeTask']) && $post['revokeTask']) {
                         $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                         $taskDao->updateTask($task);
                         $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
@@ -1210,12 +1208,12 @@ class TaskRouteHandler
         $task_tags = $taskDao->getTaskTags($task_id);
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
 
-            if(isset($post->feedback)) {
-                if ($post->feedback != '') {
-                    $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post->feedback);
-                    if(isset($post->revokeTask) && $post->revokeTask) {
+            if(isset($post['feedback'])) {
+                if ($post['feedback'] != '') {
+                    $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post['feedback']);
+                    if(isset($post['revokeTask']) && $post['revokeTask']) {
                         $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                         if($taskRevoke) {
                             $app->flash("success", " The task ".

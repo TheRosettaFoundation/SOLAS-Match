@@ -84,17 +84,17 @@ class ProjectRouteHandler
         $app->view()->setData("project", $project);
          
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
            
             $task = null;
-            if(isset($post->task_id)) {
-                $task = $taskDao->getTask($post->task_id);
-            } elseif (isset($post->revokeTaskId)) {
-                $task = $taskDao->getTask($post->revokeTaskId);
+            if(isset($post['task_id'])) {
+                $task = $taskDao->getTask($post['task_id']);
+            } elseif (isset($post['revokeTaskId'])) {
+                $task = $taskDao->getTask($post['revokeTaskId']);
             }
             
-            if(isset($post->publishedTask) && isset($post->task_id)) { 
-                if($post->publishedTask) {                     
+            if(isset($post['publishedTask']) && isset($post['task_id'])) { 
+                if($post['publishedTask']) {                     
                     $task->setPublished(true);
                 } else {
                     $task->setPublished(false);                    
@@ -102,8 +102,8 @@ class ProjectRouteHandler
                 $taskDao->updateTask($task);
             }
             
-            if (isset($post->trackProject)) {
-                if ($post->trackProject) {
+            if (isset($post['trackProject'])) {
+                if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
                     if ($userTrackProject) {
                         $app->flashNow("success", 
@@ -123,14 +123,14 @@ class ProjectRouteHandler
                         $app->flashNow("error", "Unable to unregister for this notification.");
                     }   
                 }
-            } elseif(isset($post->trackTask)) {
+            } elseif(isset($post['trackTask'])) {
                 if($task && $task->getTitle() != "") {
                     $task_title = $task->getTitle();
                 } else {
                     $task_title = "task {$task->getId()}";
                 }
 
-                if(!$post->trackTask) {
+                if(!$post['trackTask']) {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
                         $app->flashNow("success", "No longer receiving notifications from $task_title.");
@@ -138,7 +138,7 @@ class ProjectRouteHandler
                         $app->flashNow("error", "Unable to unsubscribe from $task_title's notifications");
                     }
                 } else {
-                    $response = $userDao->trackTask($user_id, $post->task_id);
+                    $response = $userDao->trackTask($user_id, $post['task_id']);
                     if ($response) {
                         $app->flashNow("success", "You will now receive notifications for $task_title.");
                     } else {
@@ -147,13 +147,13 @@ class ProjectRouteHandler
                 }
             }
 
-            if (isset($post->deleteTask)) {
-                $taskDao->deleteTask($post->task_id);
+            if (isset($post['deleteTask'])) {
+                $taskDao->deleteTask($post['task_id']);
                 $app->flashNow("success", "The task \"{$task->getTitle()}\" has been deleted");
             }
 
-            if (isset($post->archiveTask)) {
-                $taskDao->archiveTask($post->task_id, $user_id);
+            if (isset($post['archiveTask'])) {
+                $taskDao->archiveTask($post['task_id'], $user_id);
                 $app->flashNow("success", "The task \"{$task->getTitle()}\" has been archived");
             }
         }   

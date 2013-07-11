@@ -106,21 +106,21 @@ class UserRouteHandler
             $selectedSource = "";
             $selectedTarget = "";
             if ($app->request()->isPost()) {
-                $post = (object) $app->request()->post();
+                $post = $app->request()->post();
 
-                if (isset($post->taskType) && $post->taskType != '') {
-                    $selectedType = $post->taskType;
-                    $filter['taskType'] = $post->taskType;
+                if (isset($post['taskType']) && $post['taskType'] != '') {
+                    $selectedType = $post['taskType'];
+                    $filter['taskType'] = $post['taskType'];
                 }
 
-                if (isset($post->sourceLanguage) && $post->sourceLanguage != '') {
-                    $selectedSource = $post->sourceLanguage;
-                    $filter['sourceLanguage'] = $post->sourceLanguage;
+                if (isset($post['sourceLanguage']) && $post['sourceLanguage'] != '') {
+                    $selectedSource = $post['sourceLanguage'];
+                    $filter['sourceLanguage'] = $post['sourceLanguage'];
                 }
 
-                if (isset($post->targetLanguage) && $post->targetLanguage != '') {
-                    $selectedTarget = $post->targetLanguage;
-                    $filter['targetLanguage'] = $post->targetLanguage;
+                if (isset($post['targetLanguage']) && $post['targetLanguage'] != '') {
+                    $selectedTarget = $post['targetLanguage'];
+                    $filter['targetLanguage'] = $post['targetLanguage'];
                 }
             }
 
@@ -185,13 +185,13 @@ class UserRouteHandler
         $error = null;
         $warning = null;
         if (isValidPost($app)) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if (!TemplateHelper::isValidEmail($post->email)) {
+            if (!TemplateHelper::isValidEmail($post['email'])) {
                 $error = "The email address you entered was not valid. Please cheak for typos and try again.";
-            } elseif (!TemplateHelper::isValidPassword($post->password)) {
+            } elseif (!TemplateHelper::isValidPassword($post['password'])) {
                 $error = "You didn\"t enter a password. Please try again.";
-            } elseif ($user = $userDao->getUserByEmail($post->email)) {
+            } elseif ($user = $userDao->getUserByEmail($post['email'])) {
                 if ($return = $userDao->isUserVerified($user->getId())) {
                     $error = "You are already a verified user. Please "
                             ."<a href=\"{$app->urlFor("login")}\">log in</a>.";
@@ -199,7 +199,7 @@ class UserRouteHandler
             }
             
             if (is_null($error)) {
-                $userDao->register($post->email, $post->password);
+                $userDao->register($post['email'], $post['password']);
                 $app->flashNow("success", "A verification email has been sent to the email address you registered with. "
                             ."Please follow the link in that email to finish registration. Once you have verified your "
                             ."email address you can log in <a href=\"{$app->urlFor("login")}\">here</a>.");
@@ -255,13 +255,13 @@ class UserRouteHandler
         $user_id = $reset_request->getUserId();
         $app->view()->setData("uid", $uid);
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
 
-            if (isset($post->new_password) && TemplateHelper::isValidPassword($post->new_password)) {
-                if (isset($post->confirmation_password) && 
-                        $post->confirmation_password == $post->new_password) {
+            if (isset($post['new_password']) && TemplateHelper::isValidPassword($post['new_password'])) {
+                if (isset($post['confirmation_password']) && 
+                        $post['confirmation_password'] == $post['new_password']) {
 
-                    $response = $userDao->resetPassword($post->new_password, $uid);
+                    $response = $userDao->resetPassword($post['new_password'], $uid);
                     if ($response) {
                         $app->flash("success", "You have successfully changed your password");
                         $app->redirect($app->urlFor("home"));
@@ -286,10 +286,10 @@ class UserRouteHandler
         $userDao = new UserDao();
         
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-            if (isset($post->password_reset)) {
-                if (isset($post->email_address) && $post->email_address != '') {
-                    $user = $userDao->getUserByEmail($post->email_address); 
+            $post = $app->request()->post();
+            if (isset($post['password_reset'])) {
+                if (isset($post['email_address']) && $post['email_address'] != '') {
+                    $user = $userDao->getUserByEmail($post['email_address']); 
                     if ($user) {  
                         $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($user->getId());
                         $message = "";
@@ -589,15 +589,15 @@ class UserRouteHandler
         $user = $userDao->getUser($user_id);
         $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if (isset($post->revokeBadge) && isset($post->badge_id) && $post->badge_id != ""){
-                $badge_id = $post->badge_id;
+            if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != ""){
+                $badge_id = $post['badge_id'];
                 $userDao->removeUserBadge($user_id, $badge_id);
             }
                 
-            if (isset($post->revoke)) {
-                $org_id = $post->org_id;
+            if (isset($post['revoke'])) {
+                $org_id = $post['org_id'];
                 $userDao->leaveOrganisation($user_id, $org_id); 
             } 
         }

@@ -530,11 +530,11 @@ class OrgRouteHandler
         ));
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if (isset($post->email) && $post->email != "") {
-                if (TemplateHelper::isValidEmail($post->email)) {
-                    $user = $userDao->getUserByEmail($post->email);
+            if (isset($post['email']) && $post['email'] != "") {
+                if (TemplateHelper::isValidEmail($post['email'])) {
+                    $user = $userDao->getUserByEmail($post['email']);
                     if ($user) {
                         $user_badges = $userDao->getUserBadges($user->getId());
                         $badge_ids = array();
@@ -556,19 +556,19 @@ class OrgRouteHandler
                             $app->flashNow("success", "Successfully Assigned Badge 
                                             {$badge->getTitle()} to user $user_name");
                         } else {
-                            $app->flashNow("error", "The user $post->email already has that badge.");
+                            $app->flashNow("error", "The user {$post['email']} already has that badge.");
                         }
                     } else {
                         $app->flashNow("error",
-                            "The email address $post->email is not registered on the system. 
+                            "The email address {$post['email']} is not registered on the system. 
                             Are you using the correct email address?"
                         );
                     }
                 } else {
                     $app->flashNow("error", "You did not enter a valid email address.");
                 }
-            } elseif (isset($post->user_id) && $post->user_id != "") {
-                $user_id = $post->user_id;
+            } elseif (isset($post['user_id']) && $post['user_id'] != "") {
+                $user_id = $post['user_id'];
                 $user = $userDao->getUser($user_id);
                 $userDao->removeUserBadge($user_id, $badge_id);
                 $user_name = "";
@@ -598,14 +598,14 @@ class OrgRouteHandler
         $badgeDao = new BadgeDao();
 
         if (isValidPost($app)) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if ($post->title == "" || $post->description == "") {
+            if ($post['title'] == "" || $post['description'] == "") {
                 $app->flashNow("error", "All fields must be filled out.");
             } else {
                 $badge = new Badge();
-                $badge->setTitle($post->title);
-                $badge->setDescription($post->description);
+                $badge->setTitle($post['title']);
+                $badge->setDescription($post['description']);
                 $badge->setOwnerId($org_id);
                 $badgeDao->createBadge($badge);                
                 
