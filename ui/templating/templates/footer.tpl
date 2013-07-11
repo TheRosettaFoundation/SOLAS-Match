@@ -20,7 +20,7 @@
                                 
                              <td>
                              <td width="31%" style="text-align: center">
-                                 <img alt="Creative Commons Licence" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" /><br /> {Localisation::getTranslation(Strings::FOOTER_POWERED_BY)} <b>Solas</b>
+                                 <img alt="Creative Commons Licence" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" /><br /> {Localisation::getTranslation(Strings::FOOTER_POWERED_BY)} <a href="https://github.com/TheRosettaFoundation/SOLAS-Match">Solas</a>
                              </td>
                         <tr>
                     </table>

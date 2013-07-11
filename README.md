@@ -12,14 +12,13 @@ translation tasks previously uploaded to the system. A task may have
 one resource file attached to it which can be downloaded, translated,
 and re-uploaded. Development began in February 2011.
 
-# Copyright notice
+# License notice
 
-© 2011 University of Limerick. All rights reserved. This material may
-not be reproduced, displayed, modified or distributed without the
-express prior written permission of the copyright holder.
+This software is licensed under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
-The copyright notice applies to all code in this distribution, unless
-explicitly stated otherwise.
+
 
 # Technical Requirements
 
