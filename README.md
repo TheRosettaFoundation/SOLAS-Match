@@ -155,7 +155,7 @@ https://github.com/TheRosettaFoundation/SOLAS-Match-Backend/blob/master/README.m
 
 # Create an Org Account
 
-Create a user by registering with the app. This can be done  by supplying a vaild email and a password.
+Create a user by registering with the app. This can be done  by supplying a valid email and a password.
 Once a user has been created you can create an organisation and begin to create projects and tasks.
 For more infomation see the videos tab in thw web ui.
 

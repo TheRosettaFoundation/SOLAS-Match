@@ -25,6 +25,16 @@ class Tags {
             }
         }, 'getTags');
         
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tags(:format)/',
+                                                        function ($format = ".json") {
+            $data = Dispatcher::getDispatcher()->request()->getBody();
+            $client = new APIHelper($format);
+            $data=$client->deserialize($data,"Tag");
+//            $client->cast("Tag", $data);
+            $data->setId(null);
+            Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
+        }, 'createTag');
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/getByLabel/:label/',
                                                         function ($label, $format = ".json") {
             
@@ -87,15 +97,7 @@ class Tags {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTag');
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tags(:format)/',
-                                                        function ($format = ".json") {
-            $data = Dispatcher::getDispatcher()->request()->getBody();
-            $client = new APIHelper($format);
-            $data=$client->deserialize($data,"Tag");
-//            $client->cast("Tag", $data);
-            $data->setId(null);
-            Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
-        }, 'createTag');
+        
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tags/:id/',
                                                         function ($id, $format = ".json") {

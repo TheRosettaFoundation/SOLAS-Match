@@ -36,7 +36,7 @@ class Langs {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getLanguage');
 
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/active/languages(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/getActiveLanguages(:format)/',
                 function ($format = '.json') {
                     Dispatcher::sendResponce(null, Languages::getActiveLanguages(), null, $format);
                 }, 'getActiveLanguages');

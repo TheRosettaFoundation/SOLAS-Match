@@ -85,14 +85,6 @@ class OrganisationDao
         return $ret;
     }
 
-    public function getOrgTasks($orgId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/$orgId/tasks";
-        $ret = $this->client->call(array("Task"), $request);
-        return $ret;
-    }
-
     public function isMember($orgId, $userId)
     {
         $ret = null;
