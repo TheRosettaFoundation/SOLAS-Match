@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-
+    
+        <!-- Routehandler Strings -->
+        
+        
+    
+        <!-- Smarty Template Strings -->
+        <string name="testy">The <b>contents</b> of the file you are uploading is not a valid .%s If you are having problems opening and working in .%s format, consider using <a href='http://www.libreoffice.org/download/?nodetect' target='_blank'>LibreOffice</a>.</string>
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>

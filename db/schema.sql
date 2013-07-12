@@ -180,9 +180,10 @@ CREATE TABLE IF NOT EXISTS `BannedTypes` (
 
 REPLACE INTO `BannedTypes` (`id`, `type`) VALUES
 	(1, 'Day'),
+    (2, 'Week'),
 	(3, 'Month'),
 	(4, 'Permanent'),
-	(2, 'Week');
+    (5, 'Hour');
 
 -- Dumping structure for table debug-test3.BannedUsers
 CREATE TABLE IF NOT EXISTS `BannedUsers` (
@@ -613,6 +614,17 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
 
 -- Data exporting was unselected.
 
+
+-- Dumping structure for table debug-test3.UserLogins
+CREATE TABLE IF NOT EXISTS `UserLogins` (
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `success` char(1) COLLATE utf8_unicode_ci NOT NULL,
+  `login-time` datetime NOT NULL,
+  KEY `FK_UserLogins_Users` (`user_id`),
+  CONSTRAINT `FK_UserLogins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ 
 
 -- Dumping structure for table Solas-Match-Test.UserNotifications
 CREATE TABLE IF NOT EXISTS `UserNotifications` (
@@ -4102,6 +4114,21 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure debug-test3.userLoginInsert
+DROP PROCEDURE IF EXISTS `userLoginInsert`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userLoginInsert`(IN `userId` INT, IN `eMail` VARCHAR(128), IN `loginSuccess` CHAR(1))
+BEGIN
+
+       IF userId = '' THEN SET userId = NULL; END IF;
+       IF eMail = '' THEN SET eMail = NULL;END IF;
+       IF loginSuccess = '' THEN SET loginSuccess = NULL; END IF;
+       
+       INSERT INTO UserLogins VALUES(userId, eMail, loginSuccess, NOW());
+
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.userNotificationsInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userNotificationsInsertAndUpdate`;
@@ -4421,6 +4448,25 @@ end if;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
+
+-- Dumping structure for trigger debug-test3.beforeUserLoginInsert
+DROP TRIGGER IF EXISTS `beforeUserLoginInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `beforeUserLoginInsert` BEFORE INSERT ON `UserLogins` FOR EACH ROW BEGIN
+
+set @loginAttempts = null;
+ 
+       SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVA
+       
+       IF @loginAttempts = 4 THEN
+               INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW())
+       END IF;
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
 
 -- Dumping structure for trigger Solas-Match-Test.defaultUserName
 DROP TRIGGER IF EXISTS `defaultUserName`;

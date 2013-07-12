@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__.'/../../api/lib/IO.class.php';
+
 class TaskRouteHandler
 {
     public function init()
@@ -428,11 +430,17 @@ class TaskRouteHandler
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
                 $projectFile = $projectDao->getProjectFileInfo($project->getId());
+                $projectFileMimeType = $projectFile->getMime();
                 $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
+                
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
+                $fileUploadMime = IO::detectMimeType(file_get_contents($_FILES[$fieldName]["tmp_name"]), $_FILES[$fieldName]["name"]);
 
                 if(!strcasecmp($fileUploadType,$projectFileType)===0) {
-                    throw new Exception("The file extension differs from the originally downloaded file. Please upload as .$projectFileType!");
+                    throw new Exception("The file type differs from the originally downloaded file. Please upload a valid .$projectFileType!");
+                } else if($fileUploadMime != $projectFileMimeType) {
+                    $temp = "";
+                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TESTY), $fileUploadType, $fileUploadType));
                 }
             } catch (Exception $e) {
                 $errorMessage = $e->getMessage();
@@ -440,7 +448,7 @@ class TaskRouteHandler
         
             if (is_null($errorMessage)) {
                 try {
-                    $filedata = file_get_contents($_FILES["fileUpload"]["tmp_name"]);
+                    $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
                     
                     if ($post['submit'] == 'XLIFF') {
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
