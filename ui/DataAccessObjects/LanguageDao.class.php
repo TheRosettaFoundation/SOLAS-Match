@@ -35,7 +35,7 @@ class LanguageDao
     public function getActiveLanguages()
     {
         $languages = null;
-        $request = "{$this->siteApi}v0/languages/active/languages";
+        $request = "{$this->siteApi}v0/languages/getActiveLanguages";
         $languages = $this->client->call(array('Language'), $request);
         return $languages;
     }

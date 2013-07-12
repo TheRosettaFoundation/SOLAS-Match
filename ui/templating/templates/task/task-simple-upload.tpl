@@ -44,7 +44,11 @@
                         <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_UPLOAD_ERROR)}</strong> {$upload_error}
                 </div>
         {/if}
-        <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0)} {$filename}</h3>
+        {if $type_id == TaskTypeEnum::TRANSLATION}
+            <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0)} {$filename}</h3>
+        {else}
+            <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0_PROOFREADING)} {$filename}</h3>
+        {/if}   
         <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
                 <input type="hidden" name="task_id" value="{$task->getId()}"/>
                 <input type="file" name="{$fieldName}" id="{$fieldName}"/>
