@@ -547,6 +547,7 @@
 	<string name="task_simple_upload_provide_feedback">Provide Feedback</string>
 	<string name="task_simple_upload_upload_error">Upload error</string>
 	<string name="task_simple_upload_0">Upload your translated version of</string>
+        <string name="task_simple_upload_0_proofreading">Upload your proofread version of</string>
 	<string name="task_simple_upload_upload">Upload</string>
 	<string name="task_simple_upload_1">will be able to use it for their benefit.</string>
 	<string name="task_simple_upload_2">Uploading a new version of the file will overwrite the old one.</string>

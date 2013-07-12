@@ -510,6 +510,7 @@ class Strings
 		const TASK_SIMPLE_UPLOAD_PROVIDE_FEEDBACK = 'task_simple_upload_provide_feedback';
 		const TASK_SIMPLE_UPLOAD_UPLOAD_ERROR = 'task_simple_upload_upload_error';
 		const TASK_SIMPLE_UPLOAD_0 = 'task_simple_upload_0';
+                const TASK_SIMPLE_UPLOAD_0_PROOFREADING='task_simple_upload_0_proofreading';
 		const TASK_SIMPLE_UPLOAD_UPLOAD = 'task_simple_upload_upload';
 		const TASK_SIMPLE_UPLOAD_1 = 'task_simple_upload_1';
 		const TASK_SIMPLE_UPLOAD_2 = 'task_simple_upload_2';

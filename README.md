@@ -12,14 +12,24 @@ translation tasks previously uploaded to the system. A task may have
 one resource file attached to it which can be downloaded, translated,
 and re-uploaded. Development began in February 2011.
 
-# Copyright notice
+# License notice
 
-© 2011 University of Limerick. All rights reserved. This material may
-not be reproduced, displayed, modified or distributed without the
-express prior written permission of the copyright holder.
+This software is licensed under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
-The copyright notice applies to all code in this distribution, unless
-explicitly stated otherwise.
+# Contact
+
+Contact:
+
+  Reinhard Schäler <reinhard.schaler@ul.ie>
+
+Coded by:
+
+  Eoin Ó Conchúir   <eoin.oconchuir@ul.ie>
+  David O Carroll   <david.ocarroll@ul.ie>
+  Sean Mooney       <Sean.Mooney@ul.ie>
+  Manuel Honegger   <Manuel.Honegger@ul.ie>	
 
 # Technical Requirements
 
@@ -34,18 +44,7 @@ database
 Several additional libraries also need to be installed alongside
 SOLAS Match. See the following installation instructions.
 
-# Contact
 
-Contact:
-
-  Reinhard Schäler <reinhard.schaler@ul.ie>
-
-Coded by:
-
-  Eoin Ó Conchúir   <eoin.oconchuir@ul.ie>
-  David O Carroll   <david.ocarroll@ul.ie>
-  Sean Mooney       <Sean.Mooney@ul.ie>
-  Manuel Honegger   <Manuel.Honegger@ul.ie>	
 
 # Installation
 
@@ -128,22 +127,6 @@ SHOW GRANTS FOR 'tester'@'localhost';
 If you are interested in developing for SOLAS Match, you will need to copy the git pre-commit file in the SOLAS Match root directory to the .git/hooks/ directory.
 This will check any of your commits for harmful sql statements or unwanted debug statements.
 
-## Add Cron Job
-
-The user's individual task stream is calculated by a python script which should be run at regular 
-intervals to keep everything up to date. This is achieved by adding it as a cron job.
-
-To edit your crontab file run:
-
-    crontab -e
-
-Choose your default editor and add the following line:
-
-    10 * * * * cd /absolute/path/to/SOLAS-Match/api/scripts/ && ./calculate_scores.py
-
-Change the path above so that it points to the correct location. This will run the python script 
-every hour at 10 past the hour.
-
 ## Configure PHP
 
  * In php.ini set appropriate values for upload_max_filesize and post_max_size (such as 20M each).
@@ -163,24 +146,20 @@ nstructions as appropricate.
 1. Download 960 Grid System from http://960.gs/
 2. Extract just the file 960.css to ./resources/css/
 
+## Install solas Match Backend
+The solas match front-end sould now be fully configured.
+To install the Solas Match Backend please follow the instructions at 
+https://github.com/TheRosettaFoundation/SOLAS-Match-Backend/blob/master/README.md
+
+
+
 # Create an Org Account
 
-Once the app has been configured and is running succesfully you must create an Organisation
-on the database. Tasks are uploaded by Organisation so it is not possible to upload a file
-without creating an Organisation. To do this create a new database entry in the organisation
-table consisting of the org name, home page and biography. The id is automatically generated
-can be left blank.
+Create a user by registering with the app. This can be done  by supplying a valid email and a password.
+Once a user has been created you can create an organisation and begin to create projects and tasks.
+For more infomation see the videos tab in thw web ui.
 
-Create a user by registering with the app. This can be done from the app itself instead of in
-phpmyadmin. Once a user has been created log in to phpmyadmin again and create a new entry in 
-the organisation\_member table consisting of the org id from the organisation table and the user
-id from the user table.
 
-You can now upload files using the client dashboard while logged in as the organisation member
-
-# Resources for future work
-
-[Twitter's Active Reputation System](https://github.com/twitter/activerecord-reputation-system)
 
 # Collaborative source code management
 
