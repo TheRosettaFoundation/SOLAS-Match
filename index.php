@@ -4,7 +4,8 @@ require_once __DIR__."/ui/vendor/autoload.php";
 require_once 'Common/Settings.class.php';
 
 mb_internal_encoding("UTF-8");
-//header("Content-Type:application/xhtml+xml;charset=UTF-8");
+
+header("Content-Type:application/xhtml+xml;charset=UTF-8");
 
 SmartyView::$smartyDirectory = 'ui/vendor/smarty/smarty/distribution/libs';
 SmartyView::$smartyCompileDirectory = 'ui/templating/templates_compiled';
