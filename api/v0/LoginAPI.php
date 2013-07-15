@@ -33,8 +33,13 @@ class LoginAPI {
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Login");
             
-            $data = UserDao::apiLogin($data->getEmail(), $data->getPassword());
-            Dispatcher::sendResponce(null, $data, null, $format);
+            try {             
+                $data = UserDao::apiLogin($data->getEmail(), $data->getPassword());
+                Dispatcher::sendResponce(null, $data, null, $format);
+            } catch(Exception $e) {
+                Dispatcher::sendResponce(null, null, $e->getMessage(), $format);
+            }
+            
          }, 'login');
     }
 }

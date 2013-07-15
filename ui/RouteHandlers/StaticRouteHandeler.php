@@ -9,6 +9,7 @@ class StaticRouteHandeler
         $app->get("/static/privacy", array($this, "privacy"))->name("privacy");
         $app->get("/static/terms", array($this, "terms"))->name("terms");
         $app->get("/static/videos", array($this, "videos"))->name("videos");
+        $app->get("/static/siteLanguage", array($this, "siteLanguage"))->via("POST")->name("siteLanguage");
         $app->notFound(array("Middleware::notFound"));
     }
 
@@ -29,6 +30,17 @@ class StaticRouteHandeler
          $app = Slim::getInstance();
          $app->view()->setData("current_page", "videos");
          $app->render("static/videos.tpl");
+    }
+    
+    public function siteLanguage()
+    {
+        $app = Slim::getInstance();           
+        if($post = $app->request()->post()) {
+            if(isset($post['language'])) {
+                UserSession::setUserLanguage($post['language']);
+            }
+            $app->redirect($app->request()->getReferrer());
+        }
     }
 }
 

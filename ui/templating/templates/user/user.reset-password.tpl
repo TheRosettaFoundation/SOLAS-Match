@@ -3,24 +3,23 @@
 {include file="handle-flash-messages.tpl"}
 
     <div class="page-header">
-        <h1>Reset User Password</h1>
+        <h1>{Localisation::getTranslation(Strings::USER_RESET_PASSWORD_RESET_USER_PASSWORD)}</h1>
     </div>
 
     <form class="well" action="{urlFor name="password-reset-request"}" method="post">
         <p>
-            To reset your password enter the email address you registered with below.
+            {Localisation::getTranslation(Strings::USER_RESET_PASSWORD_0)}
         </p>
         <p>
-            When you click the button below you will receive an email to that email
-            address with a link to a page where you can reset your password. 
+            {Localisation::getTranslation(Strings::USER_RESET_PASSWORD_1)}
         </p>
         <label for="email">
             <h2>
-                Email Address:
+                {Localisation::getTranslation(Strings::COMMON_EMAIL)}:
             </h2>
         </label>
         <p><input type="text" name="email_address" id="email_address" /></p>
-        <input type="submit" name="password_reset" value="    Send Request" class="btn btn-primary"/>
+        <input type="submit" name="password_reset" value="    {Localisation::getTranslation(Strings::USER_RESET_PASSWORD_SEND_REQUEST)}" class="btn btn-primary"/>
         <i class="icon-share-alt icon-white" style="position:relative; right:116px; top:2px;"></i>    
     </form>
 

@@ -2,45 +2,45 @@
 
     <section>
         <div class="page-header">
-            <h1>Segmentation task claimed <small>Please segment it!</small></h1>
+            <h1>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_SEGMENTATION_TASK_CLAIMED)} <small>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_PLEASE_SEGMENT_IT)}</small></h1>
         </div>
 
         <div class="alert alert-success">
-            <strong>Success</strong> You have claimed the Segmentation task &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
+            <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_0)} &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
         </div>
     </section>
 
     <section>
-            <h1>What now?</h1>
-            <p>This this what you need to do (as soon as possible):</p>
+            <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}</h1>
+            <p>{Localisation::getTranslation(Strings::COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE)}:</p>
             <ol>
-                <li><strong>Open the file</strong> that you have already saved to your computer.</li>
-                <li><strong>Segment the file</strong> to <strong>appropriately sized individual segments (e.g 4000 words each or less)</strong>.</li>
-                <li><strong>Upload your finished segmented files</strong> to the task segmentation page.</li>
+                <li><strong>{Localisation::getTranslation(Strings::COMMON_OPEN_THE_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_5)}</li>
+                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_SEGMENT_THE_FILE)}</strong> to <strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_1)}</strong>.</li>
+                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_2)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_3)}</li>
             </ol>
 
         {if isset($user)}
-            <p>We have also emailed you these instructions to <strong>{$user->getEmail()}</strong>.</p>
+            <p>{Localisation::getTranslation(Strings::COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO)} <strong>{$user->getEmail()}</strong>.</p>
         {/if}
     </section>
 
     <section>
-            <h3>When you have finished segmenting the file you downloaded:</h3>
+            <h3>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_4)}</h3>
             <p></p>
             <p>
                 <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
-                    <i class="icon-share-alt icon-white"></i> Upload Task Segments
+                    <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_UPLOAD_TASK_SEGMENTS)}
                 </a>
                 <a href="{urlFor name="home"}" class="btn">
-                    <i class="icon-arrow-left icon-black"></i> Go Back Home
+                    <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation(Strings::COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE)}
                 </a>
             </p>
     </section>
 
     <p>
-        <small>(Can't find the file on your desktop? 
-        <a href="{urlFor name="download-task" options="task_id.$task_id"}">Download the file</a>
-        and save it to your desktop.)
+        <small>({Localisation::getTranslation(Strings::COMMON_CANT_FIND_THE_FILE_ON_YOUR_DESKTOP)}
+        <a href="{urlFor name="download-task" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_DOWNLOAD_THE_FILE)}</a>
+        {Localisation::getTranslation(Strings::COMMON_AND_SAVE_IT_TO_YOUR_DESKTOP)})
         </small>
     </p>
 

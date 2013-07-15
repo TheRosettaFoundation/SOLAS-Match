@@ -3298,14 +3298,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserBadge`(IN `uID` INT, IN `
 BEGIN
 	set @owner = null;
 	select b.owner_id into @owner from Badges b where b.id=bID;
-	if @owner is not null  then
-		DELETE FROM UserBadges
-		WHERE user_id=uID
-		AND badge_id=bID;
-	   select 1 as result;
-   else 
-	   select 0 as result;
-   end if;
+        if @owner is not null  or bID in(6,7,8) then
+            DELETE FROM UserBadges
+            WHERE user_id=uID
+            AND badge_id=bID;
+            select 1 as result;
+        else 
+            select 0 as result;
+        end if;
 END//
 DELIMITER ;
 

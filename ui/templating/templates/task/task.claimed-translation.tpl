@@ -2,43 +2,43 @@
 
     <section>
         <div class="page-header">
-            <h1>Translation task claimed <small>Please translate it!</small></h1>
+            <h1>{Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_TRANSLATION_TASK_CLAIMED)} <small>{Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_PLEASE_TRANSLATE_IT)}</small></h1>
         </div>
         <div class="alert alert-success">
-            <strong>Success</strong> You have claimed the translation task &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
+            <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_0)} &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
         </div>
     </section>
         
     <section>
-            <h1>What now? <small>We need your translation.</small></h1>
-            <p>This this what you need to do (as soon as possible):</p>
+            <h1>What now? <small>{Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_WE_NEED_YOUR_TRANSLATION)}</small></h1>
+            <p>{Localisation::getTranslation(Strings::COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE)}</p>
             <ol>
-                <li><strong>Open the file</strong> that you have already saved to your computer.</li>
-                <li><strong>Translate the file</strong> to <strong>{TemplateHelper::getLanguage($task->getTargetLocale())}</strong> using your favourite translation software.</li>
-                <li><strong>Upload your finished translated file</strong> to the task page.</li>
+                <li><strong>{Localisation::getTranslation(Strings::COMMON_OPEN_THE_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_2)}</li>
+                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_TRANSLATE_THE_FILE_TO)}</strong> <strong>{TemplateHelper::getLanguage($task->getTargetLocale())}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_3)}</li>
+                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_5)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_6)}</li>
             </ol>
 
         {if isset($user)}
-            <p>We have also emailed you these instructions to <strong>{$user->getEmail()}</strong>.</p>
+            <p>{Localisation::getTranslation(Strings::COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO)} <strong>{$user->getEmail()}</strong>.</p>
         {/if}
     </section>
 
     <section>
-        <h3>When you have finished translating the file you downloaded:</h3>
+        <h3>{Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_4)}</h3>
         <p></p>
         <p>
             <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
-                <i class="icon-share-alt icon-white"></i> Upload Translated Task
+                <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_UPLOAD_TRANSLATED_TASK)}
             </a>
             <a href="{urlFor name="home"}" class="btn">
-                <i class="icon-arrow-left icon-black"></i> Go Back Home
+                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation(Strings::COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE)}
             </a>
         </p>
     </section>
 
     <p>
         <small>
-            (Can't find the file on your desktop? <a href="{urlFor name="download-task" options="task_id.$task_id"}">Download the file</a> and save it to your desktop.)
+            ({Localisation::getTranslation(Strings::COMMON_CANT_FIND_THE_FILE_ON_YOUR_DESKTOP)} <a href="{urlFor name="download-task" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_DOWNLOAD_THE_FILE)}</a> {Localisation::getTranslation(Strings::COMMON_AND_SAVE_IT_TO_YOUR_DESKTOP)}))
         </small>
     </p>
 

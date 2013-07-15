@@ -3,7 +3,7 @@
 
 <table class="table table-striped" width="100%">
     <tr>
-        <td colspan="2" style="font-weight: bold">Volunteer Videos</td>
+        <td colspan="2" style="font-weight: bold">{Localisation::getTranslation(Strings::VIDEOS_VOLUNTEER_VIDEOS)}</td>
     </tr>
     <tr >
        <td>
@@ -14,7 +14,7 @@
        </td>
     </tr>
     <tr >
-        <td colspan="2" style="font-weight: bold">Organisation Videos</td>
+        <td colspan="2" style="font-weight: bold">{Localisation::getTranslation(Strings::VIDEOS_ORGANISATION_VIDEOS)}</td>
     </tr>
     <tr>
        <td>

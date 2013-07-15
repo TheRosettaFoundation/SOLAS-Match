@@ -2,42 +2,42 @@
 
     <section>
         <div class="page-header">
-            <h1>Proofreading task claimed <small>Please proofread it!</small></h1>
+            <h1>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_PROOFREADING_TASK_CLAIMED)} <small>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_PLEASE_PROOFREAD_IT)}</small></h1>
         </div>
         <div class="alert alert-success">
-            <strong>Success</strong> You have claimed the proofreading task &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
+            <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_0)} &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
         </div>
     </section>
 
     <section>
-        <h1>What now?</h1>
-        <p>This this what you need to do (as soon as possible):</p>
+        <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}</h1>
+        <p>{Localisation::getTranslation(Strings::COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE)}:</p>
         <ol>
-                <li><strong>Open the file</strong> that you have already saved to your computer.</li>
-                <li><strong>Proofread the file</strong> in <strong>{TemplateHelper::getLanguage($task->getTargetLocale())}</strong> to ensure spelling and grammatical correctness.</li>
-                <li><strong>Upload the proofread file</strong> to the task upload page.</li>
+                <li><strong>{Localisation::getTranslation(Strings::COMMON_OPEN_THE_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_1)}</li>
+                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_PROOFREAD_THE_FILE_IN)}</strong> <strong>{TemplateHelper::getLanguage($task->getTargetLocale())}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_2)}</li>
+                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_UPLOAD_THE_PROOFREAD_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_3)}</li>
         </ol>
         {if isset($user)}
-            <p>We have also emailed you these instructions to <strong>{$user->getEmail()}</strong>.</p>
+            <p>{Localisation::getTranslation(Strings::COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO)} <strong>{$user->getEmail()}</strong>.</p>
         {/if}
     </section>
 
     <section>
-        <h3>When you have finished proofreading the file you downloaded:</h3>
+        <h3>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_4)}</h3>
         <p></p>
         <p>
             <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
-                <i class="icon-share-alt icon-white"></i> Upload Proofread Task
+                <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_UPLOAD_PROOFREAD_TASK)}
             </a>
             <a href="{urlFor name="home"}" class="btn">
-                <i class="icon-arrow-left icon-black"></i> Go Back Home
+                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation(Strings::COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE)}
             </a>
         </p>
     </section>
 
     <p>
-        <small>(Can't find the file on your desktop? 
-            <a href="{urlFor name="download-task" options="task_id.$task_id"}">Download the file</a> and save it to your desktop.)
+        <small>({Localisation::getTranslation(Strings::COMMON_CANT_FIND_THE_FILE_ON_YOUR_DESKTOP)}
+            <a href="{urlFor name="download-task" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_DOWNLOAD_THE_FILE)}</a> {Localisation::getTranslation(Strings::COMMON_AND_SAVE_IT_TO_YOUR_DESKTOP)})
         </small>
     </p>
 

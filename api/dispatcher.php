@@ -72,11 +72,12 @@ class Dispatcher {
                 $response[$key] = $val;
             }
         }
-        $response->body($body);
         
         if ($code != null) {
             $response->status($code);
         }
+        
+        $response->body($body);        
     }
     
     public static function register($httpMethod, $url, $function)

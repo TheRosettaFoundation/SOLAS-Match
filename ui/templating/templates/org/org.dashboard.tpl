@@ -2,7 +2,7 @@
 
     <div class="page-header" style="margin-bottom: 50px">
         <h1>
-            Organisation Dashboard <small>Overview of projects created by your organisation(s).</small>
+            {Localisation::getTranslation(Strings::ORG_DASHBOARD_ORGANISATION_DASHBOARD)} <small>{Localisation::getTranslation(Strings::ORG_DASHBOARD_0)}.</small>
         </h1>
     </div>
 
@@ -30,23 +30,23 @@
         </div>
         <div style="display: inline-block; float: right; font-weight: bold; font-size: large">
             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class="btn btn-primary">
-                <i class="icon-wrench icon-white"></i> Edit Organisation
+                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation(Strings::ORG_DASHBOARD_EDIT_ORGANISATION)}
             </a>
             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
-                <i class="icon-upload icon-white"></i> Create Project
+                <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CREATE_PROJECT)}
             </a>  
         </div>
                 
         <hr />           
         <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; margin-bottom:50px">
         <thead>
-            <th>Title</th>
-            <th>Deadline</th>
-            <th>Status</th>
-            <th>Word Count</th>
-            <th>Created</th>
-            <th>Edit</th>
-            <th>Archive</th>  
+            <th>{Localisation::getTranslation(Strings::COMMON_TITLE)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_STATUS)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_CREATED)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_EDIT)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_ARCHIVE)}</th>  
         </thead>
         <tbody>
             
@@ -87,16 +87,13 @@
                     </td>
                     <td>
                         <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class="btn btn-small">
-                            <i class="icon-wrench icon-black"></i> Edit Project
+                            <i class="icon-wrench icon-black"></i> {Localisation::getTranslation(Strings::COMMON_EDIT_PROJECT)}
                         </a>
                     </td>
                     <td>
                         <a href="{urlFor name="archive-project" options="project_id.$project_id"}" class="btn btn-inverse" 
-                            onclick="return confirm('Warning: Archiving a project removes it and all ' +
-                                    'its tasks from the system and stores it in our database. Once ' +
-                                    'the project has been archived no further work can be done to ' +
-                                    'it.\n\nAre you sure you want to archive this project?')">
-                            <i class="icon-fire icon-white"></i> Archive Project
+                            onclick="return confirm('{Localisation::getTranslation(Strings::ORG_DASHBOARD_1)}')">
+                            <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::ORG_DASHBOARD_ARCHIVE_PROJECT)}
                         </a>
                     </td>
                 </tr>
@@ -104,7 +101,7 @@
         {else}
         <td colspan="7">
                 <p class="alert alert-info">
-                    This organisation has no projects listed.
+                    {Localisation::getTranslation(Strings::ORG_DASHBOARD_3)}
                 </p>
             </td>
         {/if}
@@ -115,7 +112,7 @@
 
 {else}
     <div class="alert alert-warning">
-    <strong>What now?</strong> You don't have any tasks uploaded for your organisation. If you have content to be translated, please add a new task for that content.
+    <strong>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}?</strong> {Localisation::getTranslation(Strings::ORG_DASHBOARD_3)}.
     </div>
 {/if}
 <p style="margin-bottom:60px;"/>

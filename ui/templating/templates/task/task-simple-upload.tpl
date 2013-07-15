@@ -10,16 +10,16 @@
         {if $task->getTitle() != ''}
             {$task->getTitle()}
         {else}
-            Task {$task->getId()}
+            {Localisation::getTranslation(Strings::COMMON_TASK)} {$task->getId()}
         {/if}
         <small>
             <strong>
                 -
                 {assign var="type_id" value=$task->getTaskType()}
                 {if $type_id == TaskTypeEnum::TRANSLATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation(Strings::COMMON_TRANSLATION_TASK)}
                 {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation(Strings::COMMON_PROOFREADING_TASK)}
                 {/if}
             </strong>
         </small>   
@@ -30,9 +30,9 @@
 
     <div class="well">
         <div class="page-header">
-            <h1>Finished processing?
+            <h1>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_FINISHED_PROCESSING)}
                 <form method="post" action="{urlFor name="task-user-feedback" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
-                    <button style="float: right" class="btn btn-success" type="submit" value="Submit Feedback"><i class="icon-upload icon-white"></i> Provide Feedback</button>   
+                    <button style="float: right" class="btn btn-success" type="submit" value="Submit Feedback"><i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_PROVIDE_FEEDBACK)}</button>   
                 </form>
             </h1>
             <div class="pull-right" >
@@ -41,63 +41,67 @@
         </div>
         {if isset($upload_error)}
                 <div class="alert alert-error">
-                        <strong>Upload error</strong> {$upload_error}
+                        <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_UPLOAD_ERROR)}</strong> {$upload_error}
                 </div>
         {/if}
-        <h3>Upload your translated version of {$filename}</h3>
+        {if $type_id == TaskTypeEnum::TRANSLATION}
+            <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0)} {$filename}</h3>
+        {else}
+            <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0_PROOFREADING)} {$filename}</h3>
+        {/if}   
         <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
                 <input type="hidden" name="task_id" value="{$task->getId()}"/>
                 <input type="file" name="{$fieldName}" id="{$fieldName}"/>
                 <p class="help-block">
-                        Max file size {$max_file_size}MB.
+                        {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} {$max_file_size}MB.
                 </p> 
-                <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload</button>
+                <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_UPLOAD)}</button>
             {if ($converter == "y")}
-                <button type="submit" value="XLIFF" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload as XLIFF</button>
+                <button type="submit" value="XLIFF" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_AS_XLIFF)}</button>
             {/if}
         </form>
 
         {if isset($file_previously_uploaded) && $file_previously_uploaded}
             <br />
             <div class="alert">
-                <p>Thanks for providing your translation for this task. 
+                <p>{Localisation::getTranslation(Strings::COMMON_THANKS_FOR_PROVIDING_YOUR_TRANSLATION_FOR_THIS_TASK)}
                 {if $org != null && $org->getName() != ''}
                     {$org->getName()}
                 {else}
-                    This organisation
+                    {Localisation::getTranslation(Strings::COMMON_THIS_ORGANISATION)}
                 {/if}
-                will be able to use it for their benefit.</p>
-                <p><strong>Warning! </strong>Uploading a new version of the file will overwrite the old one.</p>
+                {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_1)}</p>
+                <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_2)}</p>
             </div>
         {/if}
 
-        <h3>Can't find the task file? <small>Misplaced the original file or the latest uploaded file?</small></h3>
+        <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_3)} <small>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_4)}</small></h3>
         <br />
         <p>
-            Click <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">here</a> to download
-            the <strong>original project file</strong>.
+            {Localisation::getTranslation(Strings::COMMON_CLICK)} <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">{Localisation::getTranslation(Strings::COMMON_HERE)}</a> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_DOWNLOAD_THE)}
+            <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_ORIGINAL_PROJECT_FILE)}</strong>.
         </p>
-        <p>Click 
-            <a href="{urlFor name="download-task" options="task_id.$task_id"}">here</a>
-            to re-download the <strong>original task file</strong>.
+        <p>{Localisation::getTranslation(Strings::COMMON_CLICK)}
+            <a href="{urlFor name="download-task" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>
+            {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_REDOWNLOAD_THE)} <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_ORIGINAL_TASK_FILE)}</strong>.
         </p> 
 
         {if ($converter == "y")}
-        <p>Click
-            <a href="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true">here</a>   
-            to re-download the <strong>original task file</strong> as XLIFF.
+        <p>{Localisation::getTranslation(Strings::COMMON_CLICK)}
+            <a href="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>   
+            {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_REDOWNLOAD_THE)} <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_ORIGINAL_TASK_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_AS_XLIFF)}
         </p>     
         {/if}  
 
-        <p>Click 
-            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">here</a>
-            to re-download the <strong>latest uploaded file</strong>.
+        <p>{Localisation::getTranslation(Strings::COMMON_CLICK)}
+            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>
+            {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_REDOWNLOAD_THE)} <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_LATEST_UPLOADED_FILE)}</strong>.
         </p> 
 
         {if ($converter == "y")}
-        <p>Click
-            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}?convertToXliff=true">here</a>   
-            to re-download the <strong>latest uploaded file</strong> as XLIFF.
+        <p>{Localisation::getTranslation(Strings::COMMON_CLICK)}
+            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}?convertToXliff=true">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>   
+            {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_REDOWNLOAD_THE)} <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_LATEST_UPLOADED_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_AS_XLIFF)}
         </p>     
         {/if}
     </div>

@@ -6,13 +6,13 @@
             {if $user->getDisplayName() != ''}
                 {$user->getDisplayName()}'s
             {else}
-                Your
+                {Localisation::getTranslation(Strings::COMMON_YOUR)}
             {/if}
         {else}
-            Your
+            {Localisation::getTranslation(Strings::COMMON_YOUR)}
         {/if}
-        Claimed Tasks
-        <small>A list of tasks you are currently working on.</small>
+        {Localisation::getTranslation(Strings::CLAIMED_TASKS_CLAIMED_TASKS)}
+        <small>{Localisation::getTranslation(Strings::CLAIMED_TASKS_0)}</small>
     </h1>
 </div>
 
@@ -25,7 +25,7 @@
         {include file="pagination.tpl" url_name="claimed-tasks" current_page=$page_no last_page=$last}
     {else}
         <div class="alert alert-warning">
-            <strong>No Active Tasks available!</strong> You can claim tasks from the 'Task Stream' on the home page.
+            <strong>{Localisation::getTranslation(Strings::CLAIMED_TASKS_NO_ACTIVE_TASKS_AVAILABLE)}</strong> {Localisation::getTranslation(Strings::CLAIMED_TASKS_1)}
         </div>        
     {/if}
 {/if}

@@ -159,7 +159,8 @@ REPLACE INTO `BannedTypes` (`id`, `type`) VALUES
 	(1, 'Day'),
 	(3, 'Month'),
 	(4, 'Permanent'),
-	(2, 'Week');
+	(2, 'Week'),
+        (5, 'Hour');
 
 -- Dumping structure for table debug-test3.BannedUsers
 CREATE TABLE IF NOT EXISTS `BannedUsers` (
@@ -588,7 +589,16 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
   CONSTRAINT `FK_user_badges_users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
+
+-- Dumping structure for table debug-test3.UserLogins
+CREATE TABLE IF NOT EXISTS `UserLogins` (
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `success` char(1) COLLATE utf8_unicode_ci NOT NULL,
+  `login-time` datetime NOT NULL,
+  KEY `FK_UserLogins_Users` (`user_id`),
+  CONSTRAINT `FK_UserLogins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.UserNotifications
@@ -3277,14 +3287,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserBadge`(IN `uID` INT, IN `
 BEGIN
 	set @owner = null;
 	select b.owner_id into @owner from Badges b where b.id=bID;
-	if @owner is not null  then
-		DELETE FROM UserBadges
-		WHERE user_id=uID
-		AND badge_id=bID;
-	   select 1 as result;
-   else 
-	   select 0 as result;
-   end if;
+        if @owner is not null  or bID in(6,7,8) then
+            DELETE FROM UserBadges
+            WHERE user_id=uID
+            AND badge_id=bID;
+            select 1 as result;
+        else 
+            select 0 as result;
+        end if;
 END//
 DELIMITER ;
 
@@ -4413,6 +4423,21 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure debug-test3.userLoginInsert
+DROP PROCEDURE IF EXISTS `userLoginInsert`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userLoginInsert`(IN `userId` INT, IN `eMail` VARCHAR(128), IN `loginSuccess` CHAR(1))
+BEGIN
+
+	IF userId = '' THEN SET userId = NULL; END IF;
+	IF eMail = '' THEN SET eMail = NULL;END IF;
+	IF loginSuccess = '' THEN SET loginSuccess = NULL; END IF;
+	
+	INSERT INTO UserLogins VALUES(userId, eMail, loginSuccess, NOW());
+
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
@@ -4669,7 +4694,6 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
-
 -- Dumping structure for trigger Solas-Match.onUserUpdate
 DROP TRIGGER IF EXISTS `onUserUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
@@ -4683,6 +4707,24 @@ CREATE TRIGGER `onUserUpdate` BEFORE UPDATE ON `Users` FOR EACH ROW BEGIN
 		INSERT INTO UserBadges VALUES(OLD.id, 3);
 		
 	END IF;	
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+-- Dumping structure for trigger debug-test3.beforeUserLoginInsert
+DROP TRIGGER IF EXISTS `beforeUserLoginInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `beforeUserLoginInsert` BEFORE INSERT ON `UserLogins` FOR EACH ROW BEGIN
+
+set @loginAttempts = null;
+ 
+	SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVAL 1 MINUTE); 
+	
+	IF @loginAttempts = 4 THEN
+		INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW());
+	END IF;
+
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;

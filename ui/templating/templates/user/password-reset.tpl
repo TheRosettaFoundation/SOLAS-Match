@@ -1,9 +1,9 @@
 {include file="header.tpl"}
 
     <h1 class="page-header"}>
-        Password Reset
+        {Localisation::getTranslation(Strings::PASSWORD_RESET_PASSWORD_RESET)}
         <small>
-            Reset your password here.
+            {Localisation::getTranslation(Strings::PASSWORD_RESET_RESET_YOUR_PASSWORD_HERE)}
         </small>
     </h1>
 
@@ -29,14 +29,14 @@
 {/if}
 
     <form method="post" action="{urlFor name="password-reset" options="uid.$uid"}" class="well">
-        <label for="nPassword">New Password:</label>
+        <label for="nPassword">{Localisation::getTranslation(Strings::PASSWORD_RESET_NEW_PASSWORD)}</label>
         <input type="password" name="new_password" />
 
-        <label for="cPassword">Confirm new Password:</label>
+        <label for="cPassword">{Localisation::getTranslation(Strings::PASSWORD_RESET_CONFIRM_NEW_PASSWORD)}</label>
         <input type="password" name="confirmation_password" />
 
         <p>
-            <input type="submit" class="btn btn-primary" value="    Change Password"/>
+            <input type="submit" class="btn btn-primary" value="    {Localisation::getTranslation(Strings::PASSWORD_RESET_CHANGE_PASSWORD)}"/>
             <i class="icon-check icon-white" style="position:relative; right:138px;top:2px;"></i>
         </p>
     </form>
