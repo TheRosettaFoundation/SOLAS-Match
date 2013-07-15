@@ -7,6 +7,16 @@ class Locale
   String countryName;
   String countryCode;
   
+  dynamic toJson()
+  {
+    return {
+      "languageName" : languageName,
+      "languageCode" : languageCode,
+      "countryName" : countryName,
+      "countryCode" : countryCode
+    };
+  }
+  
   String print()
   {
     String ret = "{ Locale : { languageName : " + languageName + 

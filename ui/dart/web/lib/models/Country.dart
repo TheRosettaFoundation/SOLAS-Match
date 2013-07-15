@@ -1,6 +1,6 @@
 library SolasMatchDart;
 
-class Language
+class Country
 {
   int id;
   String code;

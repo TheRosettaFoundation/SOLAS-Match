@@ -11,4 +11,19 @@ class Organisation
   String city;
   String country;
   String regionalFocus;
+  
+  dynamic toJson()
+  {
+    return {
+      "id" : id,
+      "name" : name,
+      "biography" : biography,
+      "homepage" : homepage,
+      "email" : email,
+      "address" : address,
+      "city" : city,
+      "country" : country,
+      "regionalFocus" : regionalFocus
+    };
+  }
 }

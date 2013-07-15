@@ -297,13 +297,8 @@ class Users {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'User');
-//            $data = $client->cast('User', $data);
             $data->setId($id);
             $data = UserDao::save($data);
-//            $data = $client->cast("User", $data);
-//            if (is_array($data)) {
-//                $data = $data[0];
-//            }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'updateUser');
         

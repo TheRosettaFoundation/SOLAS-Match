@@ -18,4 +18,21 @@ class Project
   String status;
   Locale sourceLocale;
   List<Tag> tag;
+  
+  dynamic toJson()
+  {
+    return {
+      "id" : id,
+      "title" : title,
+      "description" : description,
+      "deadline" : deadline,
+      "organisationId" : organisationId,
+      "impact" : impact,
+      "reference" : reference,
+      "wordCount" : wordCount,
+      "createdTime" : createdTime,
+      "status" : status,
+      "sourceLocale" : sourceLocale,
+    };
+  }
 }

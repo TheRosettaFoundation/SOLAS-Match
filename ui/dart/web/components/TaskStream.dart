@@ -2,7 +2,6 @@ library SolasMatchDart;
 
 import "package:web_ui/web_ui.dart";
 import "dart:async";
-import 'package:web_ui/watcher.dart' as watchers;
 import "dart:json";
 
 import '../DataAccessObjects/TaskDao.dart';
@@ -59,7 +58,6 @@ class TaskStream extends WebComponent
       taskTypeIndexes.add(1);
       taskTypes[1] = "Segmentation";
       taskOneColour = settings.conf.task_colours.colour_1;
-      print("Task 1 colour: $taskOneColour");
       taskTypeIndexes.add(2);
       taskTypes[2] = "Translation";
       taskTwoColour = settings.conf.task_colours.colour_2;

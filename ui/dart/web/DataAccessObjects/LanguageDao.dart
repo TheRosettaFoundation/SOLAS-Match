@@ -2,7 +2,7 @@ library SolasMatchDart;
 
 import "dart:async";
 import "dart:json" as json;
-//import 'package:js/js.dart' as js;
+import 'package:js/js.dart' as js;
 
 import "../lib/models/Language.dart";
 import "../lib/APIHelper.dart";
@@ -10,6 +10,22 @@ import "../lib/ModelFactory.dart";
 
 class LanguageDao
 {
+  static Future<List<Language>> getAllLanguages()
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<List<Language>> ret = client.call("Language", "v0/languages", "GET")
+        .then((String jsonText) {
+          List<Language> languages = new List<Language>();
+          Map jsonParsed = json.parse(jsonText);
+          jsonParsed['item'].forEach((String data) {
+            Map lang = json.parse(data);
+            languages.add(ModelFactory.generateLanguageFromMap(lang));
+          });
+          return languages;
+        });
+    return ret;
+  }
+  
   static Future<List<dynamic>> getActiveLanguages()
   {
     APIHelper client = new APIHelper(".proto");
@@ -18,8 +34,9 @@ class LanguageDao
       /*.then((String proto) {
       List<dynamic> activeLangs = new List<dynamic>();
       var SolasMatch = client.getJSProtoContext();
+      var protoList;
       try {
-        var protoList = SolasMatch.ProtoList.decode(json);  //This doesn't work
+        protoList = SolasMatch.ProtoList.decode(proto);  //This doesn't work
       } catch (e) {
         print("ERROR: " + e.toString());
       }

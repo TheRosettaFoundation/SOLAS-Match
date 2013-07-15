@@ -17,6 +17,24 @@ class Task
   int taskStatus;
   bool published;
   
+  dynamic toJson()
+  {
+    return {
+      "id" : id,
+      "projectId" : projectId,
+      "title" : title,
+      "comment" : comment,
+      "deadline" : deadline,
+      "wordCount" : wordCount,
+      "createdTime" : createdTime,
+      "sourceLocale" : sourceLocale,
+      "targetLocale" : targetLocale,
+      "taskType" : taskType,
+      "taskstatus" : taskStatus,
+      "published" : published
+    };
+  }
+  
   String print()
   {
     String ret = "{ Task : { id : " + id.toString() + ", projectId : " + projectId.toString() +
