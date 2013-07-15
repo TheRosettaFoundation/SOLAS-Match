@@ -14,6 +14,7 @@ import '../lib/models/Project.dart';
 import '../lib/models/Org.dart';
 import '../lib/models/Language.dart';
 import '../lib/Settings.dart';
+import '../lib/Localisation.dart';
 
 class TaskStream extends WebComponent
 {
@@ -54,18 +55,18 @@ class TaskStream extends WebComponent
       loadActiveLanguages();
       addTasks();
       taskTypeIndexes.add(0);
-      taskTypes[0] = "Any";
+      taskTypes[0] = Localisation.getTranslation("index_any");
       taskTypeIndexes.add(1);
-      taskTypes[1] = "Segmentation";
+      taskTypes[1] = Localisation.getTranslation("common_segmentation");
       taskOneColour = settings.conf.task_colours.colour_1;
       taskTypeIndexes.add(2);
-      taskTypes[2] = "Translation";
+      taskTypes[2] = Localisation.getTranslation("common_translation");
       taskTwoColour = settings.conf.task_colours.colour_2;
       taskTypeIndexes.add(3);
-      taskTypes[3] = "Proofreading";
+      taskTypes[3] = Localisation.getTranslation("common_proofreading");
       taskThreeColour = settings.conf.task_colours.colour_3;
       taskTypeIndexes.add(4);
-      taskTypes[4] = "Desegmentation";
+      taskTypes[4] = Localisation.getTranslation("common_desegmentation");
       taskFourColour = settings.conf.task_colours.colour_4;
     });
   }
@@ -73,7 +74,7 @@ class TaskStream extends WebComponent
   void loadActiveLanguages()
   {
     Language any = new Language();
-    any.name = "Any";
+    any.name = Localisation.getTranslation("index_any");
     any.code = "";
     activeLanguages.add(any);
     LanguageDao.getActiveLanguages().then((List<Language> langs) {
@@ -108,7 +109,6 @@ class TaskStream extends WebComponent
       }
     } else {
       moreTasks = false;
-      print("No tasks found for user " + userId.toString());
     }
   }
   

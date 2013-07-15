@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <resources>
 
 	<string name="common_banned_by">Banned By</string>
@@ -838,6 +837,7 @@
 	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
 	<string name="index_register_now">Register now</string>
 	<string name="index_7">to find the translation tasks best suited to you.</string>
+    <string name="index_load_more">Load More</string>
 
 	<string name="pagination_page">Page</string>
 	<string name="pagination_of">of</string>

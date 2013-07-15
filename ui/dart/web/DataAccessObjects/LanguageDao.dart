@@ -28,8 +28,8 @@ class LanguageDao
   
   static Future<List<dynamic>> getActiveLanguages()
   {
-    APIHelper client = new APIHelper(".proto");
-    Future<List<dynamic>> languages = client.call("Language", "v0/languages/active/languages", 
+    APIHelper client = new APIHelper(".json");
+    Future<List<dynamic>> languages = client.call("Language", "v0/languages/getActiveLanguages", 
       "GET", "", new Map())
       /*.then((String proto) {
       List<dynamic> activeLangs = new List<dynamic>();
