@@ -106,21 +106,16 @@ class ProjectRouteHandler
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
                     if ($userTrackProject) {
-                        $app->flashNow("success", 
-                                "You are now tracking this Project and will receive email notifications
-                                when its status changes.");
+                        $app->flashNow("success", Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_1));
                     } else {
-                        $app->flashNow("error", "Unable to register for notifications for this Project.");
+                        $app->flashNow("error", Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_2));
                     }   
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
                     if ($userUntrackProject) {
-                        $app->flashNow("success", 
-                                "You are no longer tracking this Project and will receive no
-                                further emails."
-                        );
+                        $app->flashNow("success", Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_3));
                     } else {
-                        $app->flashNow("error", "Unable to unregister for this notification.");
+                        $app->flashNow("error", Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_4));
                     }   
                 }
             } elseif(isset($post['trackTask'])) {
@@ -133,28 +128,28 @@ class ProjectRouteHandler
                 if(!$post['trackTask']) {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", "No longer receiving notifications from $task_title.");
+                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_5), $task_title));
                     } else {
-                        $app->flashNow("error", "Unable to unsubscribe from $task_title's notifications");
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_6), $task_title));
                     }
                 } else {
                     $response = $userDao->trackTask($user_id, $post['task_id']);
                     if ($response) {
-                        $app->flashNow("success", "You will now receive notifications for $task_title.");
+                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_7), $task_title));
                     } else {
-                        $app->flashNow("error", "Unable to subscribe to $task_title.");
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_8), $task_title));
                     }
                 }
             }
 
             if (isset($post['deleteTask'])) {
                 $taskDao->deleteTask($post['task_id']);
-                $app->flashNow("success", "The task \"{$task->getTitle()}\" has been deleted");
+                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_9), $task->getTitle()));
             }
 
             if (isset($post['archiveTask'])) {
                 $taskDao->archiveTask($post['task_id'], $user_id);
-                $app->flashNow("success", "The task \"{$task->getTitle()}\" has been archived");
+                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_10), $task->getTitle()));
             }
         }   
 
@@ -251,7 +246,7 @@ class ProjectRouteHandler
                     $date = date("Y-m-d H:i:s", $validTime);  
                     $project->setDeadline($date);
                 } else {
-                    $deadlineError = "Invalid date/time format!";
+                    $deadlineError = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_11);
                 }
             }
             
@@ -349,7 +344,7 @@ class ProjectRouteHandler
             if(isset($post['title']) && $post['title'] != '') {
                 $project->setTitle(htmlspecialchars($post['title']));
             } else {
-                $title_err = "Project <b>Title</b> must be set.";
+                $title_err = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_12);
             }            
             
             if(isset($post['deadline'])) {
@@ -360,19 +355,19 @@ class ProjectRouteHandler
                     $deadline_err = "Invalid date/time format!";
                 }                
             } else {
-                $deadline_err = "Project <b>Deadline</b> must be set.";
+                $deadline_err = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_13);
             }
             
             if(isset($post['description']) && $post['description'] != '') {
                 $project->setDescription($post['description']);
             } else {
-                $description_err = "Project <b>Description</b> must be set.";
+                $description_err = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_14);
             }
             
             if(isset($post['impact']) && $post['impact'] != '') {
                 $project->setImpact($post['impact']);
             } else {
-                $impact_err = "Project <b>Impact</b> must be set.";
+                $impact_err = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_15);
             }
             
             if(isset($post['reference']) && $post['reference'] != '') $project->setReference($post['reference']);
@@ -381,7 +376,7 @@ class ProjectRouteHandler
             if(!is_null($cleansedWordCount) && ctype_digit($cleansedWordCount) && $cleansedWordCount > 0) {                
                 $project->setWordCount($cleansedWordCount);
             } else {
-                $wordcount_err = "Project <b>Word Count</b> must be set and be a valid <b>natural</b> number.";
+                $wordcount_err = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_16);
             }
             
             $sourceLocale = new Locale();
@@ -409,7 +404,7 @@ class ProjectRouteHandler
                 if(!array_key_exists($key, $targetLanguageCountryArray)) {
                         $targetLanguageCountryArray[$key] = $post["targetCountry_$i"];
                 } else {
-                    $uniqueLanguageCountry_err = "Each new <b>Target Language pair</b> added must be a <b>unique pair</b>.";
+                    $uniqueLanguageCountry_err = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_17);
                     break;
                 }
             }
@@ -417,7 +412,7 @@ class ProjectRouteHandler
             for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {  
                 if(!isset($post["segmentation_$i"]) && !isset($post["translation_$i"]) &&
                     !isset($post["proofreading_$i"])) {
-                    $targetLanguage_err = "At least one <b>Task Type</b> must be set for each <b>Target Language</b>.";
+                    $targetLanguage_err = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_18);
                     break;
                 }
             }
@@ -478,7 +473,7 @@ class ProjectRouteHandler
                                         $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
-                                $error_message = "File error: " . $e->getMessage();
+                                $error_message = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_21) . $e->getMessage();
                             }
                         }
                         if(isset($post["translation_$i"])) {
@@ -492,7 +487,7 @@ class ProjectRouteHandler
                                         $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
-                                $error_message = "File error: " . $e->getMessage();
+                                $error_message = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_21) . $e->getMessage();
                             } 
                         }
                         if(isset($post["proofreading_$i"])) {
@@ -509,7 +504,7 @@ class ProjectRouteHandler
                                         $user_id, $filedata);
                             } catch (Exception  $e) {
                                 $upload_error = true;
-                                $error_message = "File error: " . $e->getMessage();
+                                $error_message = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_21) . $e->getMessage();
                             } 
                         }
                     } 
@@ -596,17 +591,7 @@ class ProjectRouteHandler
     {
         $app = Slim::getInstance();
         $projectDao = new ProjectDao();
-        $userDao = new UserDao();
-
-        $user_id = UserSession::getCurrentUserID();
-        $project = $projectDao->getProject($project_id);
-        $user = $userDao->getUser($user_id);        
-        
-        if (!is_object($user)) {
-            $app->flash("error", "Login required to access page.");
-            $app->redirect($app->urlFor("login"));
-        }   
-        
+        $project = $projectDao->getProject($project_id);        
         $org_id = $project->getOrganisationId();
 
         $app->view()->appendData(array(
@@ -623,23 +608,13 @@ class ProjectRouteHandler
         $projectDao = new ProjectDao();
 
         $project = $projectDao->getProject($project_id);
-        if (!is_object($project)) {
-            header("HTTP/1.0 404 Not Found");
-            die;
-        }   
         $user_id = UserSession::getCurrentUserID();
-        
-        if (is_null($user_id)) {
-            $app->flash("error", "Login required to access page.");
-            $app->redirect($app->urlFor("login"));
-        }   
-
         $archivedProject = $projectDao->archiveProject($project_id, $user_id);     
         
         if($archivedProject) {            
-            $app->flash("success", "You have successfully archived the project <b>{$project->getTitle()}</b>.");
+            $app->flash("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_19), $project->getTitle()));
         } else {
-            $app->flash("error",  "There was an error archiving the project <b>{$project->getTitle()}</b>.");
+            $app->flash("error",  sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_20), $project->getTitle()));
         }       
         
         $app->redirect($ref = $app->request()->getReferrer());

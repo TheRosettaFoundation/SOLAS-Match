@@ -148,12 +148,12 @@
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                            <i class="icon-inbox icon-white"></i> {Localisation::getTranslation(Strings::TASK_DETAILS_UNTRACK_TASK)}
+                            <i class="icon-inbox icon-white"></i> {Localisation::getTranslation(Strings::COMMON_UNTRACK_TASK)}
                         </a>
                     {else}
                         <input type="hidden" name="track" value="Track" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                            <i class="icon-envelope icon-black"></i> {Localisation::getTranslation(Strings::TASK_DETAILS_TRACK_TASK)}
+                            <i class="icon-envelope icon-black"></i> {Localisation::getTranslation(Strings::COMMON_TRACK_TASK)}
                         </a>
                     {/if}
                 </form>

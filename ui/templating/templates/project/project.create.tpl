@@ -21,7 +21,7 @@
     <p style="margin-bottom:20px;"/>
     
     <div class="well">
-        <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}">
+        <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}" onsubmit="return checkWordCount()">
             <table id="createProjectTable">
                 <tr>
                     <td colspan="2">
@@ -86,7 +86,7 @@
                             <label for="{$field_name}"><h2>{Localisation::getTranslation(Strings::PROJECT_CREATE_SOURCE_TEXT)}: <span style="color: red">*</span></h2></label>
                             <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_6)}. {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} <strong>{TemplateHelper::maxFileSizeMB()}MB</strong>.</p>
                             <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/>
-                            <input type="file" name="{$field_name}" id="{$field_name}"/>
+                            <input type="file" name="{$field_name}" id="{$field_name}" onchange="checkFormat()"/>
                             <input type="hidden" name="organisation_id" value="1"/>
                         </div>
                         <div style="margin-bottom: 25px;">
@@ -305,7 +305,7 @@
                     <td>
 
                         <p style="margin-bottom:20px;"/> 
-                            <button type="submit" name="submit" value="createproject" class="btn btn-success">
+                        <button type="submit" name="submit" value="createproject" class="btn btn-success">
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CREATE_PROJECT)}
                             </button>                            
                         <p style="margin-bottom:20px;"/>                     

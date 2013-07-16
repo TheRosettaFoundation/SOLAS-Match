@@ -3,10 +3,129 @@
     
         <!-- Routehandler Strings -->
         
+        <string name="org_routehandler_1"><strong>Organisation name</strong> must be set.</string>
+        <string name="org_routehandler_2">The organisation <strong>%s</strong> has been created.</string>
+        <string name="org_routehandler_3">Unable to create Organisation.</string>
+        <string name="org_routehandler_4">An organisation named <strong>%s</strong> is already registered. Please use a different name.</string>
+        <string name="org_routehandler_5">No longer receiving notifications from %s.</string>
+        <string name="org_routehandler_6">Unable to unsubscribe from %s's notifications.</string>
+        <string name="org_routehandler_7">You will now receive notifications for %s.</string>
+        <string name="org_routehandler_8">Unable to subscribe to %s.</string>
+        <string name="org_routehandler_9">Successfully requested membership.</string>
+        <string name="org_routehandler_10">You have already sent a membership request to this organisation.</string>        
+        <string name="org_routehandler_11">You are already a member of this organisation.</string>        
+        <string name="org_routehandler_12">Successfully added %s as a member of %s.</string>        
+        <string name="org_routehandler_13">%s is already a member of this organisation.</string>        
+        <string name="org_routehandler_14">The email address %s is not registered with this system. Are you sure you have the right email addess?</string>      
+        <string name="org_routehandler_15">You did not enter a valid email address.</string>
+        <string name="org_routehandler_16">Invalid User ID: %s</string>        
+        <string name="org_routehandler_17">Successfully deleted the organisation %s</string>        
+        <string name="org_routehandler_18">Unable to delete organisation. Please try again later.</string>        
+        <string name="org_routehandler_19">All fields must be filled out.</string> 
+        <string name="org_routehandler_20">%s is already a member of this organisation.</string>        
+        <string name="org_routehandler_21">The email address %s is not registered with this system. Are you sure you have the right email addess?</string>        
+        <string name="org_routehandler_22">You did not enter a valid email address.</string>        
+        <string name="org_routehandler_23">Successfully added <a href="%s">%s</a> as a member of %s</string>
+        <string name="org_routehandler_24">Unable to add user to member list. Please try again later.</string>        
+        <string name="org_routehandler_25">Successfully rejected <a href="%s"> %s's</a> membership request.</string>        
+        <string name="org_routehandler_26">Successfully revoked membership from user <a href="%s">%s</a>.</string>        
+        <string name="org_routehandler_27">Unable to revoke membership from user <a href="%s">%s</a>.</string>        
+        <string name="org_routehandler_28">Unable to find the user in the system.</string>        
+        <string name="org_routehandler_29">Successfully assigned badge %s to user %s.</string>
+        <string name="org_routehandler_30">The user %s already has that badge.</string>        
+        <string name="org_routehandler_31">The email address %s is not registered on the system. Are you using the correct email address?</string>        
+        <string name="org_routehandler_32">Successfully removed badge from user %s.</string>
+        <string name="org_routehandler_33">Successfully created new Organisation Badge.</string>        
+        <string name="org_routehandler_34">No organisations found.</string>
+        <string name="org_routehandler_35">Corrections value must be between 1 and 5</string>
+        <string name="org_routehandler_36">Grammar value must be between 1 and 5</string>
+        <string name="org_routehandler_37">Spelling value must be between 1 and 5</string>
+        <string name="org_routehandler_38">Consistency value must be between 1 and 5</string>
+        <string name="org_routehandler_39">Unable to submit review for %s, please try again later.</string>
+        <string name="org_routehandler_40">Review of task %s has been submitted successfully.</string>
+        <string name="org_routehandler_41">You have already submitted a review for this task.</string>
         
-    
-        <!-- Smarty Template Strings -->
-        <string name="testy">The <b>contents</b> of the file you are uploading is not a valid .%s If you are having problems opening and working in .%s format, consider using <a href='http://www.libreoffice.org/download/?nodetect' target='_blank'>LibreOffice</a>.</string>
+        <string name="project_routehandler_1">"You are now tracking this Project and will receive email notifications when its status changes."</string>
+        <string name="project_routehandler_2">Unable to register for notifications for this Project.</string>
+        <string name="project_routehandler_3">You are no longer tracking this Project and will receive no further emails.</string>
+        <string name="project_routehandler_4">Unable to unregister for this notification.</string>
+        <string name="project_routehandler_5">No longer receiving notifications from %s.</string>
+        <string name="project_routehandler_6">Unable to unsubscribe from %s's notifications</string>
+        <string name="project_routehandler_7">You will now receive notifications for %s.</string>
+        <string name="project_routehandler_8">Unable to subscribe to %s.</string>
+        <string name="project_routehandler_9">The task %s has been deleted.</string>
+        <string name="project_routehandler_10">The task %s has been archived.</string>
+        <string name="project_routehandler_11">Invalid date/time format!</string>
+        <string name="project_routehandler_12">Project <strong>Title</strong> must be set.</string>
+        <string name="project_routehandler_13">Project <strong>Deadline</strong> must be set.</string>
+        <string name="project_routehandler_14">Project <strong>Description</strong> must be set.</string>
+        <string name="project_routehandler_15">Project <strong>Impact</strong> must be set.</string>
+        <string name="project_routehandler_16">Project <strong>Word Count</strong> must be set and be a valid <strong>natural</strong> number.</string>
+        <string name="project_routehandler_17">Each new <strong>Target Language pair</strong> added must be a <strong>unique pair</strong>.</string>
+        <string name="project_routehandler_18">At least one <strong>Task Type</strong> must be set for each <strong>Target Language</strong>.</string>
+        <string name="project_routehandler_19">You have successfully archived the project <strong>%s</strong>.</string>
+        <string name="project_routehandler_20">There was an error archiving the project <strong>%s</strong>.</string>
+        <string name="project_routehandler_21">File Error:</string>
+        
+        <string name="tag_routehandler_1">Successfully added tag, %s, to subscription list</string>
+        <string name="tag_routehandler_2">Unable to save tag, %s, for user %s.</string>
+        <string name="tag_routehandler_3">Successfully removed tag %s for user %s</string>
+        <string name="tag_routehandler_4">Unable to remove tag %s for user %s</string>
+
+        <string name="task_routehandler_1">You have successfully archived the <strong>%s Task %s</strong>.</string>
+        <string name="task_routehandler_2">There was an error archiving the <strong>%s Task %s</strong>.</string>
+        <string name="task_routehandler_3">The file type differs from the originally downloaded file. Please upload a valid %s!</string>
+        <string name="task_routehandler_4">The <strong>contents</strong> of the file you are uploading is not a valid .%s If you are having problems opening and working in .%s format, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
+        <string name="task_routehandler_5">File error:</string>
+        <string name="task_routehandler_6">Word Count must be numeric.</string>
+        <string name="task_routehandler_7">Word Count cannot be empty.</string>
+        <string name="task_routehandler_8">Invalid date/time format!</string>
+        <string name="task_routehandler_9">A deadlock has occured, please check your task prerequisites.</string>
+        <string name="task_routehandler_10">You are now tracking this task and will receive email notifications when its status changes.</string>
+        <string name="task_routehandler_11">Unable to register for notifications for this task.</string>
+        <string name="task_routehandler_12">You are no longer tracking this task and will receive no further emails.</string>
+        <string name="task_routehandler_13">Unable to unregister for this notification.</string>
+        <string name="task_routehandler_14">Title must not be empty.</string>
+        <string name="task_routehandler_15">You have not selected a <strong>Segmented File</strong> to upload.</string>
+        <string name="task_routehandler_16">Each <strong>Segmented File</strong> that you upload must have a <strong>unique file name.</strong></string>
+        <string name="task_routehandler_17">You have selected <strong>one or more</strong> files with the exact same <strong>file content</strong>.</string>
+        <string name="task_routehandler_18">At least one task type such as <strong>Translation</strong> and/or <strong>Proofreading</strong> must be set.</string>
+        <string name="task_routehandler_19">The task <a href="%s">%s</a> has been revoked from <a href="%s">%s</a>. This user will be notified by e-mail and provided with your feedback.</string>
+        <string name="task_routehandler_20">Unable to revoke the task <a href="%s">%s</a> from <a href="%s">%s</a>. Please try again later.</string>
+        <string name="task_routehandler_21">The feedback form cannot be empty.</string>
+        <string name="task_routehandler_22">The task <a href="%s">%s</a> has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback."</string>
+        <string name="task_routehandler_23">Unable to unclaim the task <a href="%s">%s</a>. Please try again later.</string>
+        <string name="task_routehandler_24">Feedback cannot be empty, please fill in the feedback form before continuing.</string>
+        <string name="task_routehandler_25">You have already submitted a review for this file.</string>
+        <string name="task_routehandler_26">Corrections value must be between 1 and 5</string>
+        <string name="task_routehandler_27">Grammar value must be between 1 and 5</string>
+        <string name="task_routehandler_28">Spelling value must be between 1 and 5</string>
+        <string name="task_routehandler_29">Consistency value must be between 1 and 5</string>
+        <string name="task_routehandler_30">Unable to submit review for %s, please try again later.</string>
+        <string name="task_routehandler_31">Review of task %s has been submitted successfully.</string>
+       
+        <string name="user_routehandler_1">The email address you entered was not valid. Please try again.</string>
+        <string name="user_routehandler_2">You did not enter a password. Please try again.</string>
+        <string name="user_routehandler_3">You are already a verified user. Please <a href="%s">log in</a>.</string>
+        <string name="user_routehandler_4">A verification email has been sent to the email address you registered with. Please follow the link in that email to finish registration. Once you have verified your email address you can log in <a href="%s">here</a>.</string>
+        <string name="user_routehandler_5">Invalid registration id. Please try to register again.</string>
+        <string name="user_routehandler_6">Registration complete.</string>
+        <string name="user_routehandler_7">Incorrect Unique ID. Are you sure you copied the URL correctly?</string>
+        <string name="user_routehandler_8">You have successfully changed your password.</string>
+        <string name="user_routehandler_9">Unable to change password.</string>
+        <string name="user_routehandler_10">The passwords entered do not match. Please try again.</string>
+        <string name="user_routehandler_11">Please check the password provided, and try again. It was not found to be valid.</string>
+        <string name="user_routehandler_12">Password reset request sent. Check your email for further instructions.</string>
+        <string name="user_routehandler_13">Password reset request was already sent to %s. Another email has been sent to your contact address. Follow the link in this email to reset your password.</string>
+        <string name="user_routehandler_14">Please enter a valid email address.</string>
+        <string name="user_routehandler_15"><p>Unable to log in. Please check your email and password. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
+        <string name="user_routehandler_16">User has cancelled authentication!</string>
+        <string name="user_routehandler_17">This user account has been banned.</string>
+        <string name="user_routehandler_18">Login required to access page</string>
+        <string name="user_routehandler_19">Successfully updated user task stream notification subscription</string>
+        
+        <!-- Smarty Template Strings -->        
+        
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>
@@ -96,7 +215,7 @@
 	<string name="common_after_downloading">After downloading</string>
 	<string name="common_this_this_what_you_need_to_do_as_soon_as_possible">This this what you need to do (as soon as possible)</string>
 	<string name="common_we_have_also_emailed_you_these_instructions_to">We have also emailed you these instructions to</string>
-	<string name="common_cant_find_the_file_on_your_desktop">Can't find the file on your desktop?</string>
+	<string name="common_cant_find_the_file_on_your_desktop">Cannot find the file on your desktop?</string>
 	<string name="common_download_the_file">Download the file</string>
 	<string name="common_and_save_it_to_your_desktop">and save it to your desktop</string>
 	<string name="common_from">From</string>
@@ -151,7 +270,7 @@
         <string name="common_create_organisation">Create Organisation</string>
         <string name="common_success">Success</string>
         <string name="common_if_checked_tasks_will_appear_in_the_tasks_stream">If checked, tasks will appear in the task stream</string>
-        <string name="common_here_is_what_will_now_happen">Here's what will now happen</string>
+        <string name="common_here_is_what_will_now_happen">Here is what will now happen</string>
         <string name="common_back_to_home_page">Back to Home Page</string>
         <string name="common_create_new_task">Create new Task</string>
         <string name="common_project_description">Project Description</string>
@@ -166,6 +285,9 @@
         <string name="common_claimed_date">Claimed Date</string>
         <string name="common_claimed_by">Claimed By</string>
         <string name="common_track_project">Track Project</string>
+	<string name="common_untrack_task">Untrack Task</string>
+	<string name="common_track_task">Track Task</string>
+        <string name="common_error">Error</string>
               
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of</string>
 	<string name="admin_banned_orgs_list_0">Are you sure you want to unban this Organisation and its members?</string>
@@ -276,7 +398,7 @@
 	<string name="org_dashboard_edit_organisation">Edit Organisation</string>
 	<string name="org_dashboard_1">Warning: Archiving a project removes it and all its tasks from the system and stores it in our database. Once the project has been archived no further work can be done to it. Are you sure you want to archive this project?</string>
 	<string name="org_dashboard_archive_project">Archive Project</string>
-	<string name="org_dashboard_2">You don't have any tasks uploaded for your organisation. If you have content to be translated, please create a new task for that content</string>
+	<string name="org_dashboard_2">You do not have any projects created for your organisation. If you have content to be translated, please create a new project.</string>
         <string name="org_dashboard_3">This organisation has no projects listed.</string>
 
 	<string name="org_edit_badge_edit_organisation_badge_details">Edit organisation badge details</string>
@@ -342,7 +464,7 @@
 	<string name="project_created_0">Your project has been uploaded</string>
 	<string name="project_created_1">It is now listed on your organisations</string>
 	<string name="project_created_dashboard">dashboard</string>
-	<string name="project_created_2">You can view the project details and it's associated tasks on the</string>
+	<string name="project_created_2">You can view the project details and its associated tasks on the</string>
 	<string name="project_created_4">Volunteer translators will see the new Tasks associated with your project</string>
 	<string name="project_created_5">If a volunteer translator is interested, they will claim a task, download it and upload their work</string>
 	<string name="project_created_6">This may take several days or weeks, depending on the tasks</string>
@@ -367,7 +489,7 @@
 	<string name="project_view_1">Deleting a task will remove all trace of it from the system. A task should only be deleted if a mistake was made. Are you sure you want to delete this task?</string>
 	<string name="project_view_2">Cannot archive in progress tasks</string>
 	<string name="project_view_3">Archiving a task will remove it from the system and store it in our database. Once a task has been archived it can no longer be updated. Are you sure you want to archive this task?</string>
-	<string name="project_view_4">You don't have any tasks uploaded for your organisation</string>
+	<string name="project_view_4">You do not have any tasks uploaded for your organisation</string>
 	<string name="project_view_5">If you have content to be translated, please add a new task for that content</string>
 	<string name="project_view_6">Please log in to register for notifications for this project</string>
 
@@ -551,7 +673,7 @@
 	<string name="task_simple_upload_upload">Upload</string>
 	<string name="task_simple_upload_1">will be able to use it for their benefit.</string>
 	<string name="task_simple_upload_2">Uploading a new version of the file will overwrite the old one.</string>
-	<string name="task_simple_upload_3">Can't find the task file?</string>
+	<string name="task_simple_upload_3">Cannot find the task file?</string>
 	<string name="task_simple_upload_4">Misplaced the original file or the latest uploaded file?</string>
 	<string name="task_simple_upload_upload_as">Upload as</string>
 	<string name="task_simple_upload_to_download_the">to download the</string>
@@ -578,7 +700,7 @@
 	<string name="task_claim_desegmentation_on_your_computer">on your computer?</string>
 	<string name="task_claim_desegmentation_4">Will you have enough time to merge</string>
 	<string name="task_claim_desegmentation_5">these files? Check how long the file is.</string>
-	<string name="task_claim_desegmentation_6">Do you think you're capable of merging files in</string>
+	<string name="task_claim_desegmentation_6">Do you think you are capable of merging files in</string>
 	<string name="task_claim_desegmentation_7">Do you want to merge these files?</string>
 	<string name="task_claim_desegmentation_8">The files you need to merge can be downloaded after claiming.</string>
 	<string name="task_claim_desegmentation_9">Yes, I promise I will merge these files</string>
@@ -587,7 +709,7 @@
 	<string name="task_claim_proofreading_1">Will you be able to proofread this file?</string>
 	<string name="task_claim_proofreading_2">Will you have enough time to proofread</string>
 	<string name="task_claim_proofreading_this_file">this file?</string>
-	<string name="task_claim_proofreading_3">Do you think you're capable of proofreading a file in</string>
+	<string name="task_claim_proofreading_3">Do you think you are capable of proofreading a file in</string>
 	<string name="task_claim_proofreading_4">When you are finished proofreading the file, you will need to upload it again.</string>
 	<string name="task_claim_proofreading_5">Yes, I promise I will proofread this file</string>
 
@@ -601,7 +723,7 @@
 	<string name="task_claim_translation_0">Do you want to translate this file?</string>
 	<string name="task_claim_translation_1">Will you be able to translate this file?</string>
 	<string name="task_claim_translation_2">Will you have enough time to translate</string>
-	<string name="task_claim_translation_3">Do you think you're capable of translating this file into</string>
+	<string name="task_claim_translation_3">Do you think you are capable of translating this file into</string>
 	<string name="task_claim_translation_4">When you are finished translating the file, you will need to upload it again.</string>
 	<string name="task_claim_translation_5">Yes, I promise I will translate this file</string>
 
@@ -673,8 +795,6 @@
 
 	<string name="task_details_project_impact">Project Impact:</string>
 	<string name="task_details_project_tags">Project Tags:</string>
-	<string name="task_details_untrack_task">Untrack Task</string>
-	<string name="task_details_track_task">Track Task</string>
 
 	<string name="task_org_feedback_user_feedback">User Feedback</string>
 	<string name="task_org_feedback_1">You can provide direct feedback to the translator who claimed this task here</string>

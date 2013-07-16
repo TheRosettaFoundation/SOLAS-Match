@@ -262,7 +262,7 @@
      </h1>                  
      <p style="margin-bottom: 40px" />               
 
-     {if isset($user_list) && count($user_list) > 0}
+     {if isset($membershipRequestUsers) && count($membershipRequestUsers) > 0}
          <table class="table table-striped">
              <thead>            
                  <th style="text-align: left"><strong>{Localisation::getTranslation(Strings::COMMON_NAME)}</strong></th>
@@ -271,7 +271,7 @@
                  <th>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_DENY)}</th>
              </thead>
              <tbody>
-             {foreach $user_list as $nonMember}
+             {foreach $membershipRequestUsers as $nonMember}
                  <tr>
                      {assign var="user_id" value=$nonMember->getId()}                        
                      {if $nonMember->getDisplayName() != ''}

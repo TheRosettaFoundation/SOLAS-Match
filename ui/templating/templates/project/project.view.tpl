@@ -283,12 +283,12 @@
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                    <i class="icon-inbox icon-white"></i> {Localisation::getTranslation(Strings::PROJECT_VIEW_UNTRACK_PROJECT)}
+                                                    <i class="icon-inbox icon-white"></i> {Localisation::getTranslation(Strings::COMMON_UNTRACK_TASK)}
                                                 </a>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
                                                 <a class="btn btn-small" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                    <i class="icon-envelope icon-black"></i> {Localisation::getTranslation(Strings::COMMON_TRACK_PROJECT)}
+                                                    <i class="icon-envelope icon-black"></i> {Localisation::getTranslation(Strings::COMMON_TRACK_TASK)}
                                                 </a>
                                             {/if}
                                         </form>
