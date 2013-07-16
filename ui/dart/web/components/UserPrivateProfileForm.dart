@@ -16,6 +16,7 @@ import '../lib/models/Locale.dart';
 import '../lib/models/Language.dart';
 import '../lib/models/Country.dart';
 import '../lib/Settings.dart';
+import '../lib/Localisation.dart';
 
 class UserPrivateProfileForm extends WebComponent
 {
@@ -92,16 +93,17 @@ class UserPrivateProfileForm extends WebComponent
       
       dataLoaded.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
         Language lang = new Language();
-        lang.name = "Any";
+        lang.name = Localisation.getTranslation("index_any");
         lang.code = "";
         languages.add(lang);
         languages.addAll(langs);
+        print("LanguageCount Is: " + languages.length.toString());
         return true;
       }));
       
       dataLoaded.add(CountryDao.getAllCountries().then((List<Country> regions) {
         Country any = new Country();
-        any.name = "Any";
+        any.name = Localisation.getTranslation("index_any");
         any.code = "";
         countries.add(any);
         countries.addAll(regions);
@@ -180,7 +182,7 @@ class UserPrivateProfileForm extends WebComponent
     var nativeLanguageDiv = new DivElement()
         ..id = "nativeLanguageDiv";
     var label = new LabelElement()
-        ..innerHtml = "<strong>Native Language:</strong>";
+        ..innerHtml = "<strong>" + Localisation.getTranslation("common_native_language") + ":</strong>";
     var nativeLanguageSelect = langSelect.clone(true);
     nativeLanguageSelect.id = "nativeLanguageSelect";
     nativeLanguageSelect.selectedIndex = nativeLanguageIndex;
@@ -194,12 +196,12 @@ class UserPrivateProfileForm extends WebComponent
     var secondaryLanguageDiv = new DivElement()
         ..id = "secondaryLanguageDiv";
     label = new LabelElement()
-        ..innerHtml = "<strong>Secondary Language(s):</strong>";
+        ..innerHtml = "<strong>" + Localisation.getTranslation("common_secondary_languages") + ":</strong>";
     secondaryLanguageDiv.children.add(label);
     
     ButtonElement button = new ButtonElement()
         ..id = "addLanguageButton"
-        ..innerHtml = "<i class='icon-upload icon-white'></i> Add Secondary Language "
+        ..innerHtml = "<i class='icon-upload icon-white'></i> " +  Localisation.getTranslation("user_private_profile_add_secondary_language") 
         ..classes.add("btn")
         ..classes.add("btn-success")
         ..onClick.listen((event) => addSecondaryLanguage());
@@ -210,7 +212,7 @@ class UserPrivateProfileForm extends WebComponent
     
     button = new ButtonElement()
         ..id = "removeLanguageButton"
-        ..innerHtml = "<i class='icon-fire icon-white'></i> Remove"
+        ..innerHtml = "<i class='icon-fire icon-white'></i> " + Localisation.getTranslation("common_remove")
         ..classes.add("btn")
         ..classes.add("btn-inverse")
         ..onClick.listen((event) => removeSecondaryLanguage());
@@ -219,7 +221,7 @@ class UserPrivateProfileForm extends WebComponent
     }
     secondaryLanguageDiv.children.add(button);
     
-    var div = query("#languageList");
+    DivElement div = query("#language_area");
     div.children.add(nativeLanguageDiv);
     div.children.add(secondaryLanguageDiv);
     
@@ -289,7 +291,7 @@ class UserPrivateProfileForm extends WebComponent
   {
     alert = "";
     if (user.display_name == "") {
-      alert = "Your Display Name cannot be blank.";
+      alert = Localisation.getTranslation("user_private_profile_2");
     } else {
       List<Future<bool>> updated = new List<Future<bool>>();
       SelectElement nativeLanguageSelect = query("#nativeLanguageSelect");
@@ -361,6 +363,11 @@ class UserPrivateProfileForm extends WebComponent
       }
       
       Future.wait(updated).then((List<bool> updatesSuccessful) {
+        updatesSuccessful.forEach((bool success) {
+          if (!success) {
+            print("Failed to save some data");
+          }
+        });
         Settings settings = new Settings();
         window.location.assign(settings.conf.urls.SiteLocation + "$userId/profile");
       });
@@ -369,9 +376,7 @@ class UserPrivateProfileForm extends WebComponent
   
   void deleteUser()
   {
-    print("Deleting User");
-    if (window.confirm("Are you sure you want to permanently delete your account?")) {
-      print("Confirmation received");
+    if (window.confirm(Localisation.getTranslation("user_private_profile_6"))) {
       UserDao.deleteUser(userId).then((bool success) {
         Settings settings = new Settings();
         window.location.assign(settings.conf.urls.SiteLocation);

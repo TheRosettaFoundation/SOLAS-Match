@@ -14,7 +14,7 @@
             <td width="50%">
               <label for='displayName'>
                 <strong>
-                  Public Display Name: <span style="color: red">*</span>
+                  {{Localisation.getTranslation("common_display_name")}}: <span style="color: red">*</span>
                 </strong>
               </label>
               <template instantiate="if alert != ''">
@@ -23,43 +23,43 @@
               <input type='text' style="width: 80%" bind-value="user.display_name" />
 
               <template instantiate="if !isLoaded">
-                <p><i>Loading...</i></p> 
+                <p><i>{{Localisation.getTranslation("common_loading")}}</i></p> 
               </template>
               
-              <div id="languageList"></div>
+              <div id="language_area"></div>
  
-              <label for='biography'><strong>Biography:</strong></label>
+              <label for='biography'><strong>{{Localisation.getTranslation("common_biography")}}:</strong></label>
               <textarea bind-value="user.biography" cols='40' rows='7' style="width: 80%">
               </textarea>
 
             </td>
             <td width="50%">
-              <label for='firstName'><strong>First Name:</strong></label>
+              <label for='firstName'><strong>{{Localisation.getTranslation("common_first_name")}}:</strong></label>
               <input type='text' bind-value="userInfo.firstName" style="width: 80%" />
 
-              <label for='lastName'><strong>Last Name:</strong></label>
+              <label for='lastName'><strong>{{Localisation.getTranslation("common_last_name")}}:</strong></label>
               <input type='text' bind-value="userInfo.lastName" style="width: 80%" />
  
-              <label for='mobileNumber'><strong>Mobile Number:</strong></label>
+              <label for='mobileNumber'><strong>{{Localisation.getTranslation("common_mobile_number")}}:</strong></label>
               <input type='text' bind-value="userInfo.mobileNumber" style="width: 80%" />
 
-              <label for='businessNumber'><strong>Business Number:</strong></label>
+              <label for='businessNumber'><strong>{{Localisation.getTranslation("common_business_number")}}:</strong></label>
               <input type='text' bind-value="userInfo.businessNumber" style="width: 80%" />
 
-              <label for='sip'><strong>Session Initiation Protocol (SIP):</strong></label>
+              <label for='sip'><strong>{{Localisation.getTranslation("common_sip")}}:</strong></label>
               <input type='text' bind-value="userInfo.sip" style="width: 80%" />
 
-              <label for='jobTitle'><strong>Job Title:</strong></label>
+              <label for='jobTitle'><strong>{{Localisation.getTranslation("common_job_title")}}:</strong></label>
               <input type='text' bind-value="userInfo.jobTitle" style="width: 80%" />
 
-              <label for='address'><strong>Address:</strong></label>
+              <label for='address'><strong>{{Localisation.getTranslation("common_address")}}:</strong></label>
               <textarea bind-value="userInfo.address" cols='40' rows='5' style="width: 80%">
               </textarea>
 
-              <label for='city'><strong>City:</strong></label>
+              <label for='city'><strong>{{Localisation.getTranslation("common_city")}}:</strong></label>
               <input type='text' bind-value="userInfo.city" style="width: 80%" />
 
-              <label for='country'><strong>Country:</strong></label>
+              <label for='country'><strong>{{Localisation.getTranslation("common_country")}}:</strong></label>
               <input type='text' bind-value="userInfo.country" style="width: 80%" />
             </td>
           </tr>
@@ -73,18 +73,18 @@
               <table>
                 <tr>
                   <td colspan="3" align="center" style="font-weight: bold">
-                    Task Type Preferences:
+                    {{Localisation.getTranslation("user_private_profile_task_type_preferences")}}:
                   </td>
                 </tr>
                 <tr align="center">
                   <td>
-                    Translating
+                    {{Localisation.getTranslation("user_private_profile_translating")}}
                   </td>
                   <td>
-                    Proofreading
+                    {{Localisation.getTranslation("user_private_profile_proofreading")}}
                   </td>
                   <td>
-                    Interpreting
+                    {{Localisation.getTranslation("user_private_profile_interpreting")}}
                   </td>
                 </tr>
                 <tr align="center">
@@ -105,17 +105,17 @@
             <td colspan="2" style="padding-bottom: 20px">
               <hr/>
               <template instantiate="if alert!= ''">
-                <p class="alert alert-error">There was an error in the data provided, please check for missing/incorrect data</p>
+                <p class="alert alert-error">{{Localisation.getTranslation("common_missing_data")}}</p>
               </template>
             </td>
           </tr>
           <tr>
             <td colspan="2" align="center">
               <button type='submit' class='btn btn-primary' on-click="submitForm()">
-                <i class="icon-refresh icon-white"></i> Update Profile Details
+                <i class="icon-refresh icon-white"></i> {{Localisation.getTranslation("user_private_profile_update_profile_details")}}
               </button>
               <button type="submit" class="btn btn-inverse" on-click="deleteUser()">
-                <i class="icon-fire icon-white"></i> Delete User Account
+                <i class="icon-fire icon-white"></i> {{Localisation.getTranslation("user_private_profile_delete_user_account")}}
               </button>
             </td>
           </tr>

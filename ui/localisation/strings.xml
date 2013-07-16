@@ -158,7 +158,10 @@
         <string name="common_submit_feedback">Submit Feedback</string>
         <string name="common_claimed_date">Claimed Date</string>
         <string name="common_claimed_by">Claimed By</string>
-              
+    <string name="common_loading">Loading...</string>
+    <string name="common_sip">Session Initiation Protocol (SIP)</string>
+    <string name="common_missing_data">There was an error in the data provided, please check for missing/incorrect data</string>
+             
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of</string>
 	<string name="admin_banned_orgs_list_0">Are you sure you want to unban this Organisation and its members?</string>
 
@@ -748,7 +751,7 @@
 	<string name="user_private_profile_0">Update your personal details here.</string>
 	<string name="user_private_profile_1">Are you sure you want to permanently delete your account?</string>
 	<string name="user_private_profile_delete_profile">Delete Profile</string>
-	<string name="user_private_profile_2">Invalid input, please fill in all options below.</string>
+	<string name="user_private_profile_2">Invalid input, your display name cannot be blank.</string>
 	<string name="user_private_profile_please_note">Please Note:</string>
 	<string name="user_private_profile_3">All these fields are optional.</string>
 	<string name="user_private_profile_4">However, filling them out will provide us with valuable information for contacting you and for matching you with more relevant tasks for your Task Stream.</string>

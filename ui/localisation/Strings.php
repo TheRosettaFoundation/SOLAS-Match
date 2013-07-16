@@ -159,6 +159,7 @@ class Strings
                 const COMMON_SUBMIT_FEEDBACK = 'common_submit_feedback';
                 const COMMON_CLAIMED_DATE = 'common_claimed_date';
                 const COMMON_CLAIMED_BY = 'common_claimed_by';
+                const COMMON_LOADING = 'common_loading';
 		const ADMIN_BANNED_ORGS_LIST_ALL_BANNED_ORGANISATIONS_OF = 'admin_banned_orgs_list_all_banned_organisations_of';
 		const ADMIN_BANNED_ORGS_LIST_0 = 'admin_banned_orgs_list_0';
 		const ADMIN_BANNED_USERS_LIST_ALL_BANNED_USERS_OF = 'admin_banned_users_list_all_banned_users_of';
@@ -773,6 +774,7 @@ class Strings
 		const INDEX_6 = 'index_6';
 		const INDEX_REGISTER_NOW = 'index_register_now';
 		const INDEX_7 = 'index_7';
+        const INDEX_LOAD_MORE = 'index_load_more';
 		const PAGINATION_PAGE = 'pagination_page';
 		const PAGINATION_OF = 'pagination_of';
 		const STATISTICS_STATISTICS = 'statistics_statistics';

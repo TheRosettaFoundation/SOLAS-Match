@@ -9,6 +9,7 @@ import '../../compiled/components/UserPrivateProfileForm.dart';
 import 'dart:html';
 import "package:web_ui/web_ui.dart";
 import "../../lib/Settings.dart";
+import "../../lib/Localisation.dart";
 
 UserPrivateProfileForm form;
 
@@ -20,7 +21,12 @@ main()
     if (!loaded) {
       print("Failed to load conf file");
     }
-    init();
+    Localisation.loadFile().then((bool success) {
+      if (!success) {
+        print("Failed to load strings.xml file");
+      }
+      init();
+    });
   });
 }
 
