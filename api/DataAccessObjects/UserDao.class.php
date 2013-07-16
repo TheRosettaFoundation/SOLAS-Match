@@ -143,10 +143,8 @@ class UserDao
             $user = self::create($email, $clear_password);
             BadgeDao::assignBadge($user->getId(), BadgeTypes::REGISTERED);
             self::registerUser($user->getId());
+            Notify::sendEmailVerification($user->getId());
         }
-
-        Notify::sendEmailVerification($user->getId());
-
         return $user;
     }
 

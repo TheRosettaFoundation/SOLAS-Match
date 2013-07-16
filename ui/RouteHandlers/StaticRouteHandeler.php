@@ -10,7 +10,7 @@ class StaticRouteHandeler
         $app->get("/static/terms", array($this, "terms"))->name("terms");
         $app->get("/static/videos", array($this, "videos"))->name("videos");
         $app->get("/static/siteLanguage", array($this, "siteLanguage"))->via("POST")->name("siteLanguage");
-        $app->notFound(array("Middleware::notFound"));
+        $app->notFound("Middleware::notFound");
     }
 
     public function privacy()

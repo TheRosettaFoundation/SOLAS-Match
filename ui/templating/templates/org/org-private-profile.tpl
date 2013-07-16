@@ -37,7 +37,7 @@
                     
                     <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}:</strong></label>
                     <textarea name='address' cols='40' rows='7' style="width: 80%"
-                    >{if $org->getAddress() != ''}{$org->getAddress()}{/if}</textarea>
+                    >{if $org->getAddress() != ''} {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())} {/if}</textarea>
                     
                     <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}:</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%"
@@ -79,7 +79,7 @@
                     {if $org->getBiography() == ''}
                         placeholder="{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_ENTER_ORGANISATION_BIOGRAPHY_HERE)}."
                     {/if}
-                    >{if $org->getBiography() != ''}{TemplateHelper::uiCleanseNewlineAndTabs({$org->getBiography()})}{/if}</textarea>
+                    >{if $org->getBiography() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}{/if}</textarea>
                     
                 </td>
             </tr>

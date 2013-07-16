@@ -65,18 +65,18 @@ class TagRouteHandler
         if ($subscribe == "true") {
             $userLikeTag = $userDao->addUserTagById($user_id, $id);            
             if ($userLikeTag) {
-                $app->flash("success", "Successfully added tag, {$tag->getLabel()}, to subscription list");
+                $app->flash("success", sprintf(Localisation::getTranslation(Strings::TAG_ROUTEHANDLER_1), $tag->getLabel()));
             } else {
-                $app->flash("error", "Unable to save tag, {$tag->getLabel()}, for user $displayName");
+                $app->flash("error", sprintf(Localisation::getTranslation(Strings::TAG_ROUTEHANDLER_2), $tag->getLabel(), $displayName));
             }   
         }   
         
         if ($subscribe == "false") {
             $removedTag = $userDao->removeUserTag($user_id, $id);
             if ($removedTag) {
-                $app->flash("success", "Successfully removed tag {$tag->getLabel()} for user $displayName");
+                $app->flash("success", sprintf(Localisation::getTranslation(Strings::TAG_ROUTEHANDLER_3), $tag->getLabel(), $displayName));
             } else {
-                $app->flash("error", "Unable to remove tag {$tag->getLabel()} for user $displayName");
+                $app->flash("error", sprintf(Localisation::getTranslation(Strings::TAG_ROUTEHANDLER_4), $tag->getLabel(), $displayName));
             }
         }   
         
@@ -91,12 +91,7 @@ class TagRouteHandler
         $orgDao = new OrganisationDao();
         $userDao = new UserDao();
 
-        $tag = $tagDao->getTag($id);
-        if (is_null($tag)) {
-            header("HTTP/1.0 404 Not Found");
-            die;
-        }
-        
+        $tag = $tagDao->getTag($id);       
         $label = $tag->getLabel();
         $tag_id = $tag->getId();
 

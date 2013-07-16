@@ -21,7 +21,7 @@
     <p style="margin-bottom:20px;"/>
     
     <div class="well">
-        <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}">
+        <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}" onsubmit="return checkWordCount()">
             <table id="createProjectTable">
                 <tr>
                     <td colspan="2">
@@ -65,17 +65,17 @@
                         <label for="title"><h2>{Localisation::getTranslation(Strings::COMMON_TITLE)}: <span style="color: red">*</span></h2></label>
                         <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_1)}.</p>
                         <textarea wrap="soft" cols="1" rows="3"name="title" style="width: 400px" >{if isset($project)}{$project->getTitle()}{/if}</textarea>
-                        <p style="margin-bottom:20px;"></p>
+                        <p style="margin-bottom:40px;"></p>
 
                         <label for="description"><h2>{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}: <span style="color: red">*</span></h2></label>
                         <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_2)}.</p>                    
                         <textarea wrap="soft" cols="1" rows="8" name="description" style="width: 400px">{if isset($project)}{$project->getDescription()}{/if}</textarea>                    
-                        <p style="margin-bottom:20px;"></p>
+                        <p style="margin-bottom:37.5px;"></p>
 
                         <label for="impact"><h2>{Localisation::getTranslation(Strings::COMMON_IMPACT)}: <span style="color: red">*</span></h2></label>
                         <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_3)}.<br/> {Localisation::getTranslation(Strings::PROJECT_CREATE_4)}.</p>
                         <textarea wrap="soft" cols="1" rows="3" name="impact" style="width: 400px">{if isset($project)}{$project->getImpact()}{/if}</textarea>    
-                        <p style="margin-bottom:20px;"></p>
+                        <p style="margin-bottom:37.5px;"></p>
 
                         <label for="reference"><h2>{Localisation::getTranslation(Strings::COMMON_REFERENCE)}:</h2></label>
                         <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_5)}.</p>
@@ -86,7 +86,7 @@
                             <label for="{$field_name}"><h2>{Localisation::getTranslation(Strings::PROJECT_CREATE_SOURCE_TEXT)}: <span style="color: red">*</span></h2></label>
                             <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_6)}. {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} <strong>{TemplateHelper::maxFileSizeMB()}MB</strong>.</p>
                             <input type="hidden" name="MAX_FILE_SIZE" value="{$max_file_size_bytes}"/>
-                            <input type="file" name="{$field_name}" id="{$field_name}"/>
+                            <input type="file" name="{$field_name}" id="{$field_name}" onchange="checkFormat()"/>
                             <input type="hidden" name="organisation_id" value="1"/>
                         </div>
                         <div style="margin-bottom: 25px;">
@@ -111,6 +111,11 @@
                             <label for="publishtasks"><h2>{Localisation::getTranslation(Strings::PROJECT_CREATE_PUBLISH_TASKS)}:</h2></label>
                             <p class="desc">{Localisation::getTranslation(Strings::COMMON_IF_CHECKED_TASKS_WILL_APPEAR_IN_THE_TASK_STREAM)}.</p>
                             <input type="checkbox" name="publishTasks" value="1" checked="true"/>
+                        </div>
+                        <div style="margin-bottom:25px;">
+                            <label for="trackProject"><h2>{Localisation::getTranslation(Strings::COMMON_TRACK_PROJECT)}:</h2></label>
+                            <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_12)}</p>
+                            <input type="checkbox" name="trackProject" value="1" checked="true"/>
                         </div>
                     </td>                    
                 </tr>
@@ -300,7 +305,7 @@
                     <td>
 
                         <p style="margin-bottom:20px;"/> 
-                            <button type="submit" name="submit" value="createproject" class="btn btn-success">
+                        <button type="submit" name="submit" value="createproject" class="btn btn-success">
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CREATE_PROJECT)}
                             </button>                            
                         <p style="margin-bottom:20px;"/>                     

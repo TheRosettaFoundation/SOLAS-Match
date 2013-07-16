@@ -234,7 +234,7 @@
                             <tr>
                                 <td>
                                     {if $userPersonalInfo->getAddress() != null}
-                                        {$userPersonalInfo->getAddress()}
+                                        {TemplateHelper::uiCleanseNewlineAndTabs($userPersonalInfo->getAddress())}
                                     {/if}
                                 </td>
                             </tr>
@@ -409,7 +409,7 @@
                         {if $org->getBiography() == ''}
                             {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}
                         {else}                            
-                            {$org->getBiography()}
+                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
                         {/if}
                     </p>
                     <p>

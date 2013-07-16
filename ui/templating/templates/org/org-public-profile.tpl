@@ -73,7 +73,7 @@
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getAddress() != ''}
-                                            {$org->getAddress()}
+                                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())}
                                         {else}
                                             {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_ADDRESS_LISTED)}.
                                         {/if}
@@ -145,7 +145,7 @@
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getBiography() != ''}
-                                            {TemplateHelper::uiCleanseNewlineAndTabs({$org->getBiography()})}
+                                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
                                         {else}
                                             {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}.
                                         {/if}
@@ -262,7 +262,7 @@
      </h1>                  
      <p style="margin-bottom: 40px" />               
 
-     {if isset($user_list) && count($user_list) > 0}
+     {if isset($membershipRequestUsers) && count($membershipRequestUsers) > 0}
          <table class="table table-striped">
              <thead>            
                  <th style="text-align: left"><strong>{Localisation::getTranslation(Strings::COMMON_NAME)}</strong></th>
@@ -271,7 +271,7 @@
                  <th>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_DENY)}</th>
              </thead>
              <tbody>
-             {foreach $user_list as $nonMember}
+             {foreach $membershipRequestUsers as $nonMember}
                  <tr>
                      {assign var="user_id" value=$nonMember->getId()}                        
                      {if $nonMember->getDisplayName() != ''}
@@ -282,7 +282,7 @@
                      <td width="50%">
                          <i>
                          {if $nonMember->getBiography() != ''}
-                             {TemplateHelper::uiCleanseNewlineAndTabs({$nonMember->getBiography()})}
+                             {TemplateHelper::uiCleanseNewlineAndTabs($nonMember->getBiography())}
                          {else}
                              {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}.
                          {/if}
