@@ -284,6 +284,9 @@ class Strings
     const COMMON_UNTRACK_TASK = 'common_untrack_task';
     const COMMON_TRACK_TASK = 'common_track_task';
     const COMMON_ERROR = 'common_error';
+    const COMMON_LOADING = 'common_loading';
+    const COMMON_SIP = 'common_sip';
+    const COMMON_MISSING_DATA = 'common_missing_data';
 
     const ADMIN_BANNED_ORGS_LIST_ALL_BANNED_ORGANISATIONS_OF = 'admin_banned_orgs_list_all_banned_organisations_of';
     const ADMIN_BANNED_ORGS_LIST_0 = 'admin_banned_orgs_list_0';
@@ -971,3 +974,4 @@ class Strings
     const STATISTICS_TASKS_WITH_PREREQUISITES = 'statistics_tasks_with_prerequisites';
     const STATISTICS_TASKS_ARCHIVED = 'statistics_tasks_archived';
 }
+

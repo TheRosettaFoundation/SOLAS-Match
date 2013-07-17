@@ -22,11 +22,19 @@
         <!-- javascript -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/google-translate.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/Long.min.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/ByteBuffer.min.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/ProtoBuf.min.js">var ProtoBuf = dcodeIO.ProtoBuf;</script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/ProtoClasses.js"></script>
         <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         
         <!-- google analytics -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
         
+        <!-- dart conf file location -->
+        <input type="hidden" id="ConfFileLocation" value="{urlFor name="home"}ui/dart/web/conf/conf.json" />
+
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
             {$extra_scripts}

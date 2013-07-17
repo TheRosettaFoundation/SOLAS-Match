@@ -1,5 +1,9 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers : Content-Type');
+header('Access-Control-Allow-Methods : GET, POST, PUT, DELETE');
+
 require __DIR__."/vendor/autoload.php";
 mb_internal_encoding("UTF-8");
 

@@ -41,6 +41,11 @@ class UserDao
             $nativeLocale = $user->getNativeLocale();
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
+            BadgeDao::assignBadge($user->getId(), BadgeTypes::NATIVE_LANGUAGE);
+        }
+
+        if ($user->getBiography() != '') {
+            BadgeDao::assignBadge($user->getId(), BadgeTypes::PROFILE_FILLER);
         }
         
         $args = PDOWrapper::cleanseNullOrWrapStr($user->getEmail())

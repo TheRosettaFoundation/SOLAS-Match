@@ -21,6 +21,13 @@ class Users {
             
             Dispatcher::sendResponce(null, "display all users", null, $format);
         }, 'getUsers');
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/localisation/:code/',
+                function ($code = "en") {
+                    $data = file_get_contents(__DIR__.'/../../ui/localisation/strings.xml');
+                    Dispatcher::sendResponce(null, $data, null, ".xml");
+        }, 'getLocalisationFile');
+                    
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/',
                                                         function ($id, $format = ".json") {
@@ -242,6 +249,7 @@ class Users {
                                                         function ($id, $format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
+            $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
             $filter = Dispatcher::clenseArgs('filter', HttpMethodEnum::GET, '');
             $strict = Dispatcher::clenseArgs('strict', HttpMethodEnum::GET, false);
             $filters = APIHelper::parseFilterString($filter);
@@ -259,7 +267,7 @@ class Users {
             }
 
             $dao = new TaskDao();
-            $data = $dao->getUserTopTasks($id, $strict, $limit, $filter);
+            $data = $dao->getUserTopTasks($id, $strict, $limit, $offset, $filter);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTopTasks');
         
@@ -296,13 +304,8 @@ class Users {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'User');
-//            $data = $client->cast('User', $data);
             $data->setId($id);
             $data = UserDao::save($data);
-//            $data = $client->cast("User", $data);
-//            if (is_array($data)) {
-//                $data = $data[0];
-//            }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'updateUser');
         

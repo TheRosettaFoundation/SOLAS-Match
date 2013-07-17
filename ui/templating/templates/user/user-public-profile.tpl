@@ -43,7 +43,6 @@
 {else}
     <div class='page-header'><h1>{Localisation::getTranslation(Strings::COMMON_USER_PROFILE)} <small>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_2)}</small></h1></div>
 {/if}
- 
 
 <table border="0">
     <tr valign="top">

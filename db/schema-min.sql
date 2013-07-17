@@ -1632,13 +1632,42 @@ DELIMITER ;
 -- Dumping structure for procedure debug-test3.getLatestAvailableTasks
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT, IN `offset` INT)
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC LIMIT ",lim);
+        set @q = Concat("select id,project_id,title,`word-count`, 
+                            (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
+                            (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
+                            (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
+                            (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
+                            (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
+                            (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
+                            (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
+                            (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
+                            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+                            FROM Tasks AS t 
+                            WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) 
+                                AND t.published = 1 
+                                AND t.`task-status_id` = 2 
+                            ORDER BY `created-time` 
+                            DESC LIMIT ", offset, ", ",lim);
     else
-    set @q = "select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` FROM Tasks AS t WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC";
+        set @q = "select id,project_id,title,`word-count`, 
+                    (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
+                    (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
+                    (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
+                    (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
+                    (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
+                    (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
+                    (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
+                    (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
+                    comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+                    FROM Tasks AS t 
+                    WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) 
+                        AND t.published = 1 
+                        AND t.`task-status_id` = 2 
+                    ORDER BY `created-time` DESC";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -2690,11 +2719,12 @@ DELIMITER ;
 -- Dumping structure for procedure debug-test3.getUserTopTasks
 DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, IN `filter` TEXT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, IN `offset` INT, IN `filter` TEXT)
     READS SQL DATA
     COMMENT 'relpace with more effient code later'
 BEGIN
     if lim='' then set lim=null; end if;
+    if offset='' then set offset=0; end if;
     set @q = Concat("SELECT id,project_id,title,`word-count`, 
                         (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
                         (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
@@ -2741,7 +2771,7 @@ BEGIN
     set @q = Concat(@q, " ORDER BY uts.score 
                         DESC");
     if lim is not null then
-        set @q = Concat(@q, " limit ",lim);
+        set @q = Concat(@q, " limit ",offset,", ",lim);
     end if;
     PREPARE stmt FROM @q;
     set @uID=uID;

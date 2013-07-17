@@ -100,8 +100,9 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/topTasks(:format)/',
                                                         function ($format = ".json") {
             
-            $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
-            Dispatcher::sendResponce(null, TaskDao::getLatestAvailableTasks($limit), null, $format);
+            $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 15);
+            $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
+            Dispatcher::sendResponce(null, TaskDao::getLatestAvailableTasks($limit, $offset), null, $format);
         }, 'getTopTasks');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/',

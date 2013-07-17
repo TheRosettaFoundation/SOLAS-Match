@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <resources>
     
         <!-- Routehandler Strings -->
@@ -284,9 +283,12 @@
         <string name="common_submit_feedback">Submit Feedback</string>
         <string name="common_claimed_date">Claimed Date</string>
         <string name="common_claimed_by">Claimed By</string>
+        <string name="common_loading">Loading...</string>
+        <string name="common_sip">Session Initiation Protocol (SIP)</string>
+        <string name="common_missing_data">There was an error in the data provided, please check for missing/incorrect data</string>
         <string name="common_track_project">Track Project</string>
-	<string name="common_untrack_task">Untrack Task</string>
-	<string name="common_track_task">Track Task</string>
+    	<string name="common_untrack_task">Untrack Task</string>
+    	<string name="common_track_task">Track Task</string>
         <string name="common_error">Error</string>
               
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of</string>
@@ -876,7 +878,7 @@
 	<string name="user_private_profile_0">Update your personal details here.</string>
 	<string name="user_private_profile_1">Are you sure you want to permanently delete your account?</string>
 	<string name="user_private_profile_delete_profile">Delete Profile</string>
-	<string name="user_private_profile_2">Invalid input, please fill in all options below.</string>
+	<string name="user_private_profile_2">Invalid input, your display name cannot be blank.</string>
 	<string name="user_private_profile_please_note">Please Note:</string>
 	<string name="user_private_profile_3">All these fields are optional.</string>
 	<string name="user_private_profile_4">However, filling them out will provide us with valuable information for contacting you and for matching you with more relevant tasks for your Task Stream.</string>
@@ -965,6 +967,7 @@
 	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
 	<string name="index_register_now">Register now</string>
 	<string name="index_7">to find the translation tasks best suited to you.</string>
+    <string name="index_load_more">Load More</string>
 
 	<string name="pagination_page">Page</string>
 	<string name="pagination_of">of</string>
