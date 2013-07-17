@@ -103,7 +103,7 @@
                             <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($project)}{$project->getDeadline()}{/if}" style="width: 400px"/>                    
                         </div>
                         <div style="margin-bottom:25px;">
-                            <label for="tags"><h2>Tags:</h2></label>
+                            <label for="tags"><h2>{Localisation::getTranslation(Strings::COMMON_TAGS)}:</h2></label>
                             <p class="desc">{Localisation::getTranslation(Strings::PROJECT_CREATE_8)}. <br/>{Localisation::getTranslation(Strings::PROJECT_CREATE_SEPARATED_BY)} <strong>spaces</strong>. {Localisation::getTranslation(Strings::PROJECT_CREATE_FOR_MULTIWORD_TAGS_JOINWITHHYPHENS)}.</p>
                             <input id="tags" name="tags" value="{if isset($tagList)}{$tagList}{/if}" style="width: 400px" />
                         </div>
