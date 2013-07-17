@@ -3592,6 +3592,17 @@ Localisation_loadFile_closure: {"": "Closure;",
 
 "+Localisation_loadFile_closure": 0,
 
+Localisation_loadFile_closure0: {"": "Closure;",
+  call$1: function(data) {
+    $.Localisation_root = $.XML_parse(data, false);
+    return true;
+  },
+  "+call:1:0": 0,
+  $isFunction: true
+},
+
+"+Localisation_loadFile_closure": 0,
+
 Localisation_getTranslation: function(key) {
   var t1, list, data;
   t1 = $.Localisation_root;
@@ -3608,7 +3619,11 @@ Localisation_getTranslation: function(key) {
 "+getTranslation:1:0": 0,
 
 Localisation_loadFile: function(languageCode) {
-  return $.HttpRequest_getString($.$add$ns($.Settings_Settings().get$conf().get$urls().get$SOLASMatch(), "v0/localisation/" + languageCode), null, null).then$1(new $.Localisation_loadFile_closure());
+  var settings = $.Settings_Settings();
+  if ($.JSString_methods.compareTo$1(languageCode, "en") === 0)
+    return $.HttpRequest_getString($.$add$ns(settings.get$conf().get$urls().get$SiteLocation(), "ui/localisation/strings.xml"), null, null).then$1(new $.Localisation_loadFile_closure());
+  else
+    return $.HttpRequest_getString($.$add$ns(settings.get$conf().get$urls().get$SiteLocation(), "ui/localisation/strings_" + languageCode + ".xml"), null, null).then$1(new $.Localisation_loadFile_closure0());
 },
 
 "+loadFile:0:1": 0}],
@@ -18944,7 +18959,7 @@ LinkedListIterator$: function(_list) {
 },
 
 "+new LinkedListIterator:1:0": 0}],
-["metadata", "/opt/google/dartsdk/lib/html/html_common/metadata.dart", , {
+["metadata", "../../../../../../../Downloads/dart/dart-sdk/lib/html/html_common/metadata.dart", , {
 SupportedBrowser: {"": "Object;browserName,minimumVersion"},
 
 "+SupportedBrowser": 0,

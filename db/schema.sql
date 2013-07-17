@@ -4476,11 +4476,11 @@ CREATE TRIGGER `beforeUserLoginInsert` BEFORE INSERT ON `UserLogins` FOR EACH RO
 
 set @loginAttempts = null;
  
-       SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVA
-       
-       IF @loginAttempts = 4 THEN
-               INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW())
-       END IF;
+	SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVAL 1 MINUTE); 
+	
+	IF @loginAttempts = 4 THEN
+		INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW());
+	END IF;
 
 END//
 DELIMITER ;

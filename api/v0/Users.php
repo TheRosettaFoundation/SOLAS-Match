@@ -21,12 +21,6 @@ class Users {
             
             Dispatcher::sendResponce(null, "display all users", null, $format);
         }, 'getUsers');
-
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/localisation/:code/',
-                function ($code = "en") {
-                    $data = file_get_contents(__DIR__.'/../../ui/localisation/strings.xml');
-                    Dispatcher::sendResponce(null, $data, null, ".xml");
-        }, 'getLocalisationFile');
                     
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/',
