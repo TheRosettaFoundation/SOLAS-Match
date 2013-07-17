@@ -26,12 +26,14 @@ class TaskStream extends WebComponent
   int selectedTaskTypeFilter = 0;
   int selectedSourceFilter = 0;
   int selectedTargetFilter = 0;
+  DateTime currentDateTime;
   @observable String taskOneColour;
   @observable String taskTwoColour;
   @observable String taskThreeColour;
   @observable String taskFourColour;
   @observable bool moreTasks = true;
   @observable List<Task> tasks;
+  @observable Map<int, String> taskAges;
   @observable Map<int, Project> projectMap;
   @observable Map<int, Organisation> orgMap;
   @observable List<Language> activeLanguages;
@@ -40,7 +42,9 @@ class TaskStream extends WebComponent
   
   TaskStream()
   {
+    currentDateTime = new DateTime.now();
     tasks = toObservable(new List<Task>());
+    taskAges = toObservable(new Map<int, String>());
     projectMap = toObservable(new Map<int, Project>());    
     orgMap = toObservable(new Map<int, Organisation>());
     activeLanguages = toObservable(new List<Language>());
@@ -115,6 +119,17 @@ class TaskStream extends WebComponent
   void addTask(Task task)
   {
     tasks.add(task);
+    DateTime taskTime = DateTime.parse(task.createdTime);
+    Duration dur = currentDateTime.difference(taskTime);
+    if (dur.inDays > 0) {
+      taskAges[task.id] = dur.inDays.toString() + " day(s)";
+    } else if (dur.inHours > 0) {
+      taskAges[task.id] = dur.inHours.toString() + " hour(s)";
+    } else if (dur.inMinutes > 0) {
+      taskAges[task.id] = dur.inMinutes.toString() + " minutes(s)";
+    } else {
+      taskAges[task.id] = dur.inSeconds.toString() + " second(s)";
+    }
     taskCount++;
     if (!projectMap.containsKey(task.projectId)) {
       ProjectDao.getProject(task.projectId).then((Project proj) {
