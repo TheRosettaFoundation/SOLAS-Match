@@ -82,6 +82,13 @@
                 {{Localisation.getTranslation("common_to")}}: <strong>{{task.targetLocale.languageName}} - {{task.targetLocale.countryName}}</strong>
               </p>
               <p>
+                <template instantiate="if taskTags[task.id].length > 0">
+                  <template iterate="tag in taskTags[task.id]">
+                    <a href="{{siteAddress}}tag/{{tag.id}}" class="label"><span class="label">{{tag.label}}</span></a>
+                  </template>
+                </template>
+              </p>
+              <p>
                 {{Localisation.getTranslation("common_word_count")}}: <strong>{{task.wordCount}}</strong>
               </p>
               <p class="task_details">
@@ -94,11 +101,11 @@
                 <template instantiate="if orgMap[projectMap[task.projectId].organisationId] != null">
                   <p>
                     {{Localisation.getTranslation("common_part_of")}}:
-                    <a href="http://127.0.0.1/Solas-Match/project/{{projectMap[task.projectId].id}}/view">
+                    <a href="{{siteAddress}}project/{{projectMap[task.projectId].id}}/view">
                       {{projectMap[task.projectId].title}}
                     </a>
                     {{Localisation.getTranslation("common_for")}}
-                    <a href="http://127.0.0.1/Solas-Match/org/{{orgMap[projectMap[task.projectId].organisationId].id}}/profile">
+                    <a href="{{siteAddress}}org/{{orgMap[projectMap[task.projectId].organisationId].id}}/profile">
                       {{orgMap[projectMap[task.projectId].organisationId].name}}
                     </a>
                   </p>

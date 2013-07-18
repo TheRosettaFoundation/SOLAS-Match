@@ -29,7 +29,7 @@
                             {/if}
                         {/if} 
                         {if isset($private_access) || $isSiteAdmin}
-                            <a  href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
+                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_EDIT_PROFILE_DETAILS)}
                             </a>
                         {/if}
@@ -279,8 +279,25 @@
         {/if}
     </tr>
 </table>
-
 <p style="margin-bottom:50px;"/>
+{if $this_user->getId() == UserSession::getCurrentUserID()}
+    <div class="page-header">
+        <h1>
+            {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_REFERENCE_EMAIL)} 
+            <small>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_16)}</small>
+        </h1>
+    </div>
+    {if isset($requestSuccess)}
+        <p class="alert alert-success">{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_REFERENCE_REQUEST_SUCCESS)}</p>
+    {/if}
+    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+        <p>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_15)}</p>
+        <input type="submit" class="btn btn-primary" name="referenceRequest" 
+            value="{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_REQUEST_REFERENCE)}" />
+    </form>
+    <p style="margin-bottom:50px;"/>
+{/if}
+
 {if isset($badges)}
     {if count($badges) > 0}
         <div class='page-header'>

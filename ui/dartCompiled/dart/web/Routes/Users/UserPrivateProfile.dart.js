@@ -3620,9 +3620,10 @@ Localisation_getTranslation: function(key) {
 
 Localisation_loadFile: function(languageCode) {
   var settings = $.Settings_Settings();
-  if ($.JSString_methods.compareTo$1(languageCode, "en") === 0)
+  if ($.JSString_methods.compareTo$1(languageCode, "en") === 0) {
+    $.print($.JSString_methods.$add($.JSString_methods.$add("Calling ", settings.get$conf().get$urls().get$SiteLocation()), "ui/localisation/strings.xml"));
     return $.HttpRequest_getString($.$add$ns(settings.get$conf().get$urls().get$SiteLocation(), "ui/localisation/strings.xml"), null, null).then$1(new $.Localisation_loadFile_closure());
-  else
+  } else
     return $.HttpRequest_getString($.$add$ns(settings.get$conf().get$urls().get$SiteLocation(), "ui/localisation/strings_" + languageCode + ".xml"), null, null).then$1(new $.Localisation_loadFile_closure0());
 },
 

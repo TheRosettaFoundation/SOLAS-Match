@@ -908,6 +908,11 @@ class Strings
     const USER_PUBLIC_PROFILE_13 = 'user_public_profile_13';
     const USER_PUBLIC_PROFILE_14 = 'user_public_profile_14';
     const USER_PUBLIC_PROFILE_LIST_ALL_ARCHIVED_TASKS = 'user_public_profile_list_all_archived_tasks';
+    const USER_PUBLIC_PROFILE_REFERENCE_EMAIL = 'user_public_profile_reference_email';
+    const USER_PUBLIC_PROFILE_REQUEST_REFERENCE = 'user_public_profile_request_reference';
+    const USER_PUBLIC_PROFILE_15 = 'user_public_profile_15';
+    const USER_PUBLIC_PROFILE_16 = 'user_public_profile_16';
+    const USER_PUBLIC_PROFILE_REFERENCE_REQUEST_SUCCESS = 'user_public_profile_reference_request_success';
 
     const USER_RESET_PASSWORD_RESET_USER_PASSWORD = 'user_reset_password_reset_user_password';
     const USER_RESET_PASSWORD_0 = 'user_reset_password_0';

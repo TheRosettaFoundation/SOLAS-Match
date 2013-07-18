@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-part of visitor;
+part of csslib.visitor;
 
 /**
  * The base type for all nodes in a CSS abstract syntax tree.

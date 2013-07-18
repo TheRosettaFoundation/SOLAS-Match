@@ -16,7 +16,7 @@ packages:
   csslib:
     description: csslib
     source: hosted
-    version: "0.4.7+7"
+    version: "0.4.7+10"
   html5lib:
     description: html5lib
     source: hosted
@@ -24,7 +24,7 @@ packages:
   js:
     description: js
     source: hosted
-    version: "0.0.23"
+    version: "0.0.24"
   json_object:
     description: json_object
     source: hosted

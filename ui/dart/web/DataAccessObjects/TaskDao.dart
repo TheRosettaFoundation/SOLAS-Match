@@ -5,9 +5,29 @@ import "dart:async";
 import "../lib/APIHelper.dart";
 import "../lib/ModelFactory.dart";
 import "../lib/models/Task.dart";
+import "../lib/models/Tag.dart";
 
 class TaskDao
 {
+  static Future<List<Tag>> getTaskTags(int taskId)
+  {
+    APIHelper client = new APIHelper('.json');
+    Future<List<Tag>> ret = client.call("Tag", 'v0/tasks/$taskId/tags', 'GET').then((String jsonText) {
+      List<Tag> tags = new List<Tag>();
+      if (jsonText != '') {
+        Map jsonParsed = json.parse(jsonText);
+        if (jsonParsed.length > 0) {
+          jsonParsed['item'].forEach((String data) {            
+            Map tag = json.parse(data);
+            tags.add(ModelFactory.generateTagFromMap(tag));
+          });
+        }
+      }
+      return tags;
+    });
+    return ret;
+  }
+  
   static Future<List<Task>> getUserTopTasks(int userId, [int offset = 0, int limit = 15, 
                                             String filter = '', bool strict = false])
   {

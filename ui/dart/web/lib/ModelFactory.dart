@@ -69,6 +69,7 @@ class ModelFactory
     Tag tag = new Tag();
     tag.id = tagData['id'];
     tag.label = tagData['label'];
+    return tag;
   }
   
   static Task generateTaskFromMap(Map taskData)

@@ -10,6 +10,7 @@ import '../DataAccessObjects/OrgDao.dart';
 import '../DataAccessObjects/LanguageDao.dart';
 
 import '../lib/models/Task.dart';
+import '../lib/models/Tag.dart';
 import '../lib/models/Project.dart';
 import '../lib/models/Org.dart';
 import '../lib/models/Language.dart';
@@ -20,6 +21,7 @@ class TaskStream extends WebComponent
 {
   static const int limit = 10;
   
+  String siteAddress;
   int taskCount = 0;
   String filter = '';
   int userId = 0;
@@ -39,9 +41,12 @@ class TaskStream extends WebComponent
   @observable List<Language> activeLanguages;
   @observable Map<int, String> taskTypes;
   @observable List<int> taskTypeIndexes;
+  @observable Map<int, List<Tag>> taskTags;
   
   TaskStream()
   {
+    Settings settings = new Settings();
+    siteAddress = settings.conf.urls.SiteLocation;
     currentDateTime = new DateTime.now();
     tasks = toObservable(new List<Task>());
     taskAges = toObservable(new Map<int, String>());
@@ -50,6 +55,7 @@ class TaskStream extends WebComponent
     activeLanguages = toObservable(new List<Language>());
     taskTypes = toObservable(new Map<int, String>());
     taskTypeIndexes = toObservable(new List<int>());
+    taskTags = toObservable(new Map<int, List<Tag>>());
   }
   
   void inserted()
@@ -130,6 +136,10 @@ class TaskStream extends WebComponent
     } else {
       taskAges[task.id] = dur.inSeconds.toString() + " second(s)";
     }
+    taskTags[task.id] = new List<Tag>();
+    TaskDao.getTaskTags(task.id).then((List<Tag> tags) {
+      taskTags[task.id] = tags;
+    });
     taskCount++;
     if (!projectMap.containsKey(task.projectId)) {
       ProjectDao.getProject(task.projectId).then((Project proj) {

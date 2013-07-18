@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-part of visitor;
+part of csslib.visitor;
 
 /////////////////////////////////////////////////////////////////////////
 // CSS specific types:
@@ -897,9 +897,9 @@ class FontExpression extends DartStyleExpression {
 }
 
 abstract class BoxExpression extends DartStyleExpression {
-  final BoxEdge boxEdge;
+  final BoxEdge box;
 
-  BoxExpression(int styleType, Span span, this.boxEdge)
+  BoxExpression(int styleType, Span span, this.box)
       : super(styleType, span);
 
   /*
@@ -912,14 +912,14 @@ abstract class BoxExpression extends DartStyleExpression {
   visit(VisitorBase visitor) => visitor.visitBoxExpression(this);
 
   String get formattedBoxEdge {
-    if (boxEdge.top == boxEdge.left && boxEdge.top == boxEdge.bottom &&
-        boxEdge.top== boxEdge.right) {
-      return '.uniform(${boxEdge.top})';
+    if (box.top == box.left && box.top == box.bottom &&
+        box.top== box.right) {
+      return '.uniform(${box.top})';
     } else {
-      var left = boxEdge.left == null ? 0 : boxEdge.left;
-      var top = boxEdge.top == null ? 0 : boxEdge.top;
-      var right = boxEdge.right == null ? 0 : boxEdge.right;
-      var bottom = boxEdge.bottom == null ? 0 : boxEdge.bottom;
+      var left = box.left == null ? 0 : box.left;
+      var top = box.top == null ? 0 : box.top;
+      var right = box.right == null ? 0 : box.right;
+      var bottom = box.bottom == null ? 0 : box.bottom;
       return '.clockwiseFromTop($top,$right,$bottom,$left)';
     }
   }
@@ -951,7 +951,7 @@ class MarginExpression extends BoxExpression {
   }
 
   MarginExpression._merge(MarginExpression x, MarginExpression y, Span span)
-      : super(x._styleType, span, new BoxEdge.merge(x.boxEdge, y.boxEdge));
+      : super(x._styleType, span, new BoxEdge.merge(x.box, y.box));
 
   visit(VisitorBase visitor) => visitor.visitMarginExpression(this);
 }
@@ -983,7 +983,7 @@ class BorderExpression extends BoxExpression {
   BorderExpression._merge(BorderExpression x, BorderExpression y,
       Span span)
       : super(DartStyleExpression.borderStyle, span,
-              new BoxEdge.merge(x.boxEdge, y.boxEdge));
+              new BoxEdge.merge(x.box, y.box));
 
   visit(VisitorBase visitor) => visitor.visitBorderExpression(this);
 }
@@ -1048,7 +1048,7 @@ class PaddingExpression extends BoxExpression {
 
   PaddingExpression._merge(PaddingExpression x, PaddingExpression y, Span span)
       : super(DartStyleExpression.paddingStyle, span,
-            new BoxEdge.merge(x.boxEdge, y.boxEdge));
+            new BoxEdge.merge(x.box, y.box));
 
   visit(VisitorBase visitor) => visitor.visitPaddingExpression(this);
 }
