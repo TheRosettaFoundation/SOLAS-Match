@@ -202,7 +202,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
                                                                    ,$insertedProject->getWordCount()
                                                                    ,$insertedProject->getCreatedTime()
                                                                    ,$resultArchiveProject->getArchivedDate()
-                                                                   ,$resultArchiveProject->getTranslatorId());        
+                                                                   ,$resultArchiveProject->getUserIdArchived());        
         $this->assertCount(1, $resultGetArchivedProject);
         $this->assertInstanceOf("ArchivedProject", $resultGetArchivedProject[0]);
         $resultGetArchivedProject = $resultGetArchivedProject[0];
@@ -215,7 +215,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
 //        $this->assertEquals($insertedProject->getSourceCountryCode(), $resultGetArchivedProject->getCountryCode());
 //        $this->assertEquals($insertedProject->getSourceLanguageCode(), $resultGetArchivedProject->getLanguageCode());
         $this->assertNotNull($resultGetArchivedProject->getArchivedDate());
-        $this->assertNotNull($resultGetArchivedProject->getTranslatorId());
+        $this->assertNotNull($resultGetArchivedProject->getUserIdArchived());
         
         // Failure
         $resultGetArchivedProjectFailure = ProjectDao::getArchivedProject(99);
