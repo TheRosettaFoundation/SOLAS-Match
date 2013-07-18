@@ -183,7 +183,7 @@ class PDOWrapper {
         if (get_magic_quotes_gpc()) {
             $str = stripslashes($str);
         }
-        $special = array("\x00"=>'\x00', "\n"=>'\n', "\r"=>'\r', '\\'=>'\\\\', "'"=>"\\'\\'", '"'=>'\"', "\x1a"=>'\x1a');
+        $special = array("\x00"=>'\x00', "\n"=>'\n', "\r"=>'\r', '\\'=>'\\\\', "'"=>"\\'", '"'=>'\"', "\x1a"=>'\x1a');
         foreach ($special as $key => $val) {
            if(is_bool($str)) return $str?1:0;
            $str = str_replace($key, $val, $str);

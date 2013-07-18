@@ -32,11 +32,20 @@ class Localisation
   static Future<bool> loadFile([String languageCode = "en"])
   {
     Settings settings = new Settings();
-    return HttpRequest.getString(settings.conf.urls.SOLASMatch + "v0/localisation/$languageCode")
+    if (languageCode.compareTo("en")==0) {
+      print("Calling " + settings.conf.urls.SiteLocation + "ui/localisation/strings.xml");
+      return HttpRequest.getString(settings.conf.urls.SiteLocation + "ui/localisation/strings.xml")
         .then((String data) {
           root = XML.parse(data);
           return true;
         });
+    } else {
+      return HttpRequest.getString(settings.conf.urls.SiteLocation + "ui/localisation/strings_$languageCode.xml")
+        .then((String data) {
+          root = XML.parse(data);
+          return true;
+        });
+    }
   }
   
   Localisation._internal();

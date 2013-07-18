@@ -1340,31 +1340,31 @@ BEGIN
         set @q = CONCAT(@q, " and p.id=", projectId);
     end if;
     if titleText is not null then
-        set @q = CONCAT(@q, " and title='", titleText, "'");
+        set @q = CONCAT(@q, " and title=\"", titleText, "\"");
     end if;
     if descr is not null then
-        set @q = CONCAT(@q, " and description='", descr, "'");
+        set @q = CONCAT(@q, " and description=\"", descr, "\"");
     end if;
     if imp is not null then
-        set @q = CONCAT(@q, " and impact='", imp, "'");
+        set @q = CONCAT(@q, " and impact=\"", imp, "\"");
     end if;
     if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and deadline='", deadlineTime, "'");
+        set @q = CONCAT(@q, " and deadline=\"", deadlineTime, "\"");
     end if;
     if orgId is not null then
         set @q = CONCAT(@q, " and organisation_id=", orgId);
     end if;
     if ref is not null then
-        set @q = CONCAT(@q, " and reference='", ref, "'");
+        set @q = CONCAT(@q, " and reference=\"", ref, "\"");
     end if;
     if wordCount is not null then
         set @q = CONCAT(@q, " and `word-count`=", wordCount);
     end if;
     if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and created='", createdTime, "'");
+        set @q = CONCAT(@q, " and created=\"", createdTime, "\"");
     end if;
     if (archiveDate is not null and archiveDate!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and m.`archived-date`='", archiveDate, "'");
+        set @q = CONCAT(@q, " and m.`archived-date`=\"", archiveDate, "\"");
     end if;
     if archiverId is not null then
         set @q = CONCAT(@q, " and m.`user_id-archived`=", archiverId);
@@ -1411,46 +1411,46 @@ BEGIN
 	 JOIN ArchivedTasksMetadata tm ON t.id = tm.archivedTask_id WHERE 1";  
 	          
 	if archiveId is not null then
-	  set @q = CONCAT(@q, " and t.id='", archiveId, "'");
+	  set @q = CONCAT(@q, " and t.id=", archiveId);
 	end if;                 
 	if projectId is not null then
-	  set @q = CONCAT(@q, " and t.project_id='", projectId, "'");
+	  set @q = CONCAT(@q, " and t.project_id=", projectId);
 	end if;                 
 	if title is not null then
-	  set @q = CONCAT(@q, " and t.title='", title, "'");
+	  set @q = CONCAT(@q, " and t.title=\"", title, "\"");
 	end if;                 
 	if `comment` is not null then
-	  set @q = CONCAT(@q, " and t.`comment`='", `comment`, "'");
+	  set @q = CONCAT(@q, " and t.`comment`=\"", `comment`, "\"");
 	end if;                 
 	if (deadline is not null and deadline !='0000-00-00 00:00:00') then
-	  set @q = CONCAT(@q, " and t.deadline='", deadline, "'");
+	  set @q = CONCAT(@q, " and t.deadline=\"", deadline, "\"");
 	end if;                 
 	if wordCount is not null then
-	  set @q = CONCAT(@q, " and t.`word-count`='", wordCount, "'");
+	  set @q = CONCAT(@q, " and t.`word-count`=", wordCount);
 	end if;       
 	if (createdTime is not null and createdTime !='0000-00-00 00:00:00') then
-	  set @q = CONCAT(@q, " and t.`created-time`='", createdTime, "'");
+	  set @q = CONCAT(@q, " and t.`created-time`=\"", createdTime, "\"");
 	end if;
 	if sourceLanguageId is not null then
-	  set @q = CONCAT(@q, " and t.`language_id-source`='", sourceLanguageId, "'");
+	  set @q = CONCAT(@q, " and t.`language_id-source`=", sourceLanguageId);
 	end if; 	
 	if targetLanguageId is not null then
-	  set @q = CONCAT(@q, " and t.`language_id-target`='", targetLanguageId, "'");
+	  set @q = CONCAT(@q, " and t.`language_id-target`=", targetLanguageId);
 	end if; 	
 	if sourceCountryId is not null then
-	  set @q = CONCAT(@q, " and t.`country_id-source`='", sourceCountryId, "'");
+	  set @q = CONCAT(@q, " and t.`country_id-source`=", sourceCountryId);
 	end if; 	
 	if targetCountryId is not null then
-	  set @q = CONCAT(@q, " and t.`country_id-target`='", targetCountryId, "'");
+	  set @q = CONCAT(@q, " and t.`country_id-target`=", targetCountryId);
 	end if;  	
 	if taskTypeId is not null then
-	  set @q = CONCAT(@q, " and t.`taskType_id`='", taskTypeId, "'");
+	  set @q = CONCAT(@q, " and t.`taskType_id`=", taskTypeId);
 	end if;	
 	if taskStatusId is not null then
-	  set @q = CONCAT(@q, " and t.`taskStatus_id`='", taskStatusId, "'");
+	  set @q = CONCAT(@q, " and t.`taskStatus_id`=", taskStatusId);
 	end if;	
 	if published is not null then
-	  set @q = CONCAT(@q, " and t.`published`='", published, "'");
+	  set @q = CONCAT(@q, " and t.`published`=", published);
 	end if;
                          
 	                         
@@ -1488,14 +1488,14 @@ BEGIN
 		set @q = CONCAT(@q," and b.id=",id) ;
 	end if;
 	if des is not null then 
-		set @q = CONCAT(@q," and b.description='",des,"'") ;
+		set @q = CONCAT(@q," and b.description=\"",des,"\"") ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and b.title='",name,"'") ;
+		set @q = CONCAT(@q," and b.title=\"",name,"\"") ;
 	end if;
 	
 	if orgID is not null then 
-		set @q = CONCAT(@q," and b.owner_id='",orgID,"'") ;
+		set @q = CONCAT(@q," and b.owner_id=\"",orgID,"\"") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1528,11 +1528,11 @@ BEGIN
 		set @q = CONCAT(@q," and b.`bannedtype_id`=",bannedTypeId) ;
 	end if;
 	if adminComment is not null then 
-		set @q = CONCAT(@q," and b.comment='",adminComment,"'");
+		set @q = CONCAT(@q," and b.comment=\"",adminComment,"\"");
 	end if;
 	
 	if (bannedDate is not null and bannedDate !='0000-00-00 00:00:00') then
-	  set @q = CONCAT(@q, " and b.`banned-date`='", bannedDate, "'");
+	  set @q = CONCAT(@q, " and b.`banned-date`=\"", bannedDate, "\"");
 	end if;
 	
 	
@@ -1565,11 +1565,11 @@ BEGIN
 		set @q = CONCAT(@q," and b.`bannedtype_id`=",bannedTypeId) ;
 	end if;
 	if adminComment is not null then 
-		set @q = CONCAT(@q," and b.comment='",adminComment,"'");
+		set @q = CONCAT(@q," and b.comment=\"",adminComment,"\"");
 	end if;
 	
 	if (bannedDate is not null and bannedDate !='0000-00-00 00:00:00') then
-	  set @q = CONCAT(@q, " and b.`banned-date`='", bannedDate, "'");
+	  set @q = CONCAT(@q, " and b.`banned-date`=\"", bannedDate, "\"");
 	end if;
 	
 	
@@ -1604,10 +1604,10 @@ BEGIN
 		set @q = CONCAT(@q," and c.id=",id) ;
 	end if;
 	if code is not null then 
-		set @q = CONCAT(@q," and c.code='",code,"'") ;
+		set @q = CONCAT(@q," and c.code=\"",code,"\"") ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and c.`en-name`='",name,"'") ;
+		set @q = CONCAT(@q," and c.`en-name`=\"",name,"\"") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1631,10 +1631,10 @@ BEGIN
 		set @q = CONCAT(@q," and l.id=",id) ;
 	end if;
 	if code is not null then 
-		set @q = CONCAT(@q," and l.code='",code,"'") ;
+		set @q = CONCAT(@q," and l.code=\"",code,"\"") ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and l.`en-name`='",name,"'") ;
+		set @q = CONCAT(@q," and l.`en-name`=\"",name,"\"") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -1767,28 +1767,28 @@ BEGIN
 		set @q = CONCAT(@q," and o.id=",id) ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and o.name='",name,"'") ;
+		set @q = CONCAT(@q," and o.name=\"",name,"\"") ;
 	end if;
 	if url is not null then 
-		set @q = CONCAT(@q," and o.`home-page`='",url,"'") ;
+		set @q = CONCAT(@q," and o.`home-page`=\"",url,"\"") ;
 	end if;
 	if bio is not null then 
-		set @q = CONCAT(@q," and o.biography='",bio,"'") ;
+		set @q = CONCAT(@q," and o.biography=\"",bio,"\"") ;
 	end if;	
 	if email is not null then 
-		set @q = CONCAT(@q," and o.`e-mail`='",email,"'") ;
+		set @q = CONCAT(@q," and o.`e-mail`=\"",email,"\"") ;
 	end if;
 	if address is not null then 
-		set @q = CONCAT(@q," and o.address='",address,"'") ;
+		set @q = CONCAT(@q," and o.address=\"",address,"\"") ;
 	end if;
 	if city is not null then 
-		set @q = CONCAT(@q," and o.city='",city,"'") ;
+		set @q = CONCAT(@q," and o.city=\"",city,"\"") ;
 	end if;
 	if country is not null then 
-		set @q = CONCAT(@q," and o.country='",country,"'") ;
+		set @q = CONCAT(@q," and o.country=\"",country,"\"") ;
 	end if;
 	if regionalFocus is not null then 
-		set @q = CONCAT(@q," and o.`regional-focus`='",regionalFocus,"'") ;
+		set @q = CONCAT(@q," and o.`regional-focus`=\"",regionalFocus,"\"") ;
 	end if;
 
 	set @q = CONCAT(@q, " GROUP BY o.name");
@@ -1865,7 +1865,7 @@ BEGIN
     if userId='' then set userId=null;end if;
     set @q= "SELECT * FROM PasswordResetRequests p WHERE 1 ";
     if unique_id is not null then
-        set @q= CONCAT(@q," and p.uid='",unique_id,"'");
+        set @q= CONCAT(@q," and p.uid=\"",unique_id,"\"");
     end if;
     if userId is not null then
         set @q= CONCAT(@q, " and p.user_id=", userId);
@@ -1901,28 +1901,28 @@ BEGIN
         set @q = CONCAT(@q, " and p.id=", projectId);
     end if;
     if titleText is not null then
-        set @q = CONCAT(@q, " and p.title='", titleText, "'");
+        set @q = CONCAT(@q, " and p.title=\"", titleText, "\"");
     end if;
     if descr is not null then
-        set @q = CONCAT(@q, " and p.description='", descr, "'");
+        set @q = CONCAT(@q, " and p.description=\"", descr, "\"");
     end if;
     if impact is not null then
-        set @q = CONCAT(@q, " and p.impact='", impact, "'");
+        set @q = CONCAT(@q, " and p.impact=\"", impact, "\"");
     end if;
     if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and p.deadline='", deadlineTime, "'");
+        set @q = CONCAT(@q, " and p.deadline=\"", deadlineTime, "\"");
     end if;
     if orgId is not null then
         set @q = CONCAT(@q, " and p.organisation_id=", orgId);
     end if;
     if ref is not null then
-        set @q = CONCAT(@q, " and p.reference='", ref, "'");
+        set @q = CONCAT(@q, " and p.reference=\"", ref, "\"");
     end if;
     if wordCount is not null then
         set @q = CONCAT(@q, " and p.`word-count`=", wordCount);
     end if;
     if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and p.created='", createdTime, "'");
+        set @q = CONCAT(@q, " and p.created=\"", createdTime, "\"");
     end if;
     if sCC is not null then
     	set @scID=false;
@@ -1978,13 +1978,13 @@ BEGIN
         set @q = CONCAT(@q, " and p.user_id=", uID);
     end if;
   	 if fName is not null then
-        set @q = CONCAT(@q, " and p.filename='", fName, "'");
+        set @q = CONCAT(@q, " and p.filename=\"", fName, "\"");
     end if;
  	 if token is not null then
-        set @q = CONCAT(@q, " and p.`file-token`='",  token, "'");
+        set @q = CONCAT(@q, " and p.`file-token`=\"",  token, "\"");
     end if;
  	 if mime is not null then
-        set @q = CONCAT(@q, " and p.`mime-type`='",  mime, "'");
+        set @q = CONCAT(@q, " and p.`mime-type`=\"",  mime, "\"");
     end if;
 
     
@@ -2049,7 +2049,7 @@ BEGIN
 	set @q = "SELECT * FROM Statistics st where 1";
 	
 	if statName is not null then 
-		set @q = CONCAT(@q," and st.name='", statName,"'");
+		set @q = CONCAT(@q," and st.name=\"", statName,"\"");
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -2057,20 +2057,6 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getSubscribedUsers
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               5.5.29-0ubuntu0.12.10.1 - (Ubuntu)
--- Server OS:                    debian-linux-gnu
--- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-04-19 14:10:43
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
 
 -- Dumping structure for procedure Solas-Match-Dev.getSubscribedUsers
 DROP PROCEDURE IF EXISTS `getSubscribedUsers`;
@@ -2129,7 +2115,7 @@ BEGIN
 	end if;
 	
 	if name is not null then 
-		set @q = CONCAT(@q," and t.label='",name,"'") ;
+		set @q = CONCAT(@q," and t.label=\"",name,"\"") ;
 	end if;
 	
 	if lim is not null then 
@@ -2199,7 +2185,7 @@ BEGIN
 		set @q = CONCAT(@q," and t.project_id=",projectID) ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and t.title='",name,"'") ;
+		set @q = CONCAT(@q," and t.title=\"",name,"\"") ;
 	end if;
 	if sCode is not null then 
 		set @sID=null;
@@ -2225,10 +2211,10 @@ BEGIN
 		set @q = CONCAT(@q," and t.`word-count`=",wordCount) ;
 	end if;
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
-		set @q = CONCAT(@q," and t.`created-time`='",created,"'") ;
+		set @q = CONCAT(@q," and t.`created-time`=\"",created,"\"") ;
 	end if;
 	if taskComment is not null then 
-		set @q = CONCAT(@q," and t.`comment`='",taskComment,"'") ;
+		set @q = CONCAT(@q," and t.`comment`=\"",taskComment,"\"") ;
 	end if;
 	if tStatus is not null then 
 		set @q = CONCAT(@q," and t.`task-status_id`=",tStatus) ;
@@ -2240,7 +2226,7 @@ BEGIN
 		set @q = CONCAT(@q," and t.`published`=",pub) ;
 	end if;
 	if dLine is not null and dLine!='0000-00-00 00:00:00' then 
-		set @q = CONCAT(@q," and t.`deadline`='",dLine,"'") ;
+		set @q = CONCAT(@q," and t.`deadline`=\"",dLine,"\"") ;
 	end if;
 
 	PREPARE stmt FROM @q;
@@ -2287,13 +2273,13 @@ BEGIN
 		set @q = CONCAT(@q," and t.filename='",name,"'") ;
 	end if;
 	if content is not null then 
-		set @q = CONCAT(@q," and t.`content-type`='",content,"'") ;
+		set @q = CONCAT(@q," and t.`content-type`=\"",content,"\"") ;
 	end if;
 	if uID is not null then 
 		set @q = CONCAT(@q," and t.user_id=",uID) ;
 	end if;
 	if (uTime is not null  and uTime!='0000-00-00 00:00:00')then 
-		set @q = CONCAT(@q," and t.`upload-time`='",uTime,"'") ;
+		set @q = CONCAT(@q," and t.`upload-time`=\"",uTime,"\"") ;
 	end if;
 	PREPARE stmt FROM @q;
 	EXECUTE stmt;
@@ -2359,7 +2345,7 @@ BEGIN
         set @q = CONCAT(@q, " AND consistency = ", consis);
     end if;
     if comm IS NOT NULL then
-        set @q = CONCAT(@q, " AND comment = '", comm, "'");
+        set @q = CONCAT(@q, " AND comment = \"", comm, "\"");
     end if;
 
     PREPARE stmt FROM @q;
@@ -2491,22 +2477,22 @@ BEGIN
 		set @q = CONCAT(@q," and u.id=",id) ;
 	end if;
 	if name is not null then 
-		set @q = CONCAT(@q," and u.`display-name`='",name,"'") ;
+		set @q = CONCAT(@q," and u.`display-name`=\"",name,"\"") ;
 	end if;
 	if mail is not null then 
-		set @q = CONCAT(@q," and LOWER(u.email)='",LOWER(mail),"'") ;
+		set @q = CONCAT(@q," and LOWER(u.email)=\"",LOWER(mail),"\"") ;
 	end if;
 	if pass is not null then 
-		set @q = CONCAT(@q," and u.password='",pass,"'") ;
+		set @q = CONCAT(@q," and u.password=\"",pass,"\"") ;
 	end if;
 	if bio is not null then 
-		set @q = CONCAT(@q," and u.biography='",bio,"'") ;
+		set @q = CONCAT(@q," and u.biography=\"",bio,"\"") ;
 	end if;
 	if nonce is not null then 
 		set @q = CONCAT(@q," and u.nonce=",nonce) ;
 	end if;
 	if (created is not null  and created!='0000-00-00 00:00:00') then 
-		set @q = CONCAT(@q," and u.`created-time`='",created,"'") ;
+		set @q = CONCAT(@q," and u.`created-time`=\"",created,"\"") ;
 	end if;
 	if lang_id is not null then 
 		set @q = CONCAT(@q," and u.language_id=",lang_id) ;
@@ -2765,28 +2751,29 @@ BEGIN
     if lim='' then set lim=null; end if;
     if offset='' then set offset=0; end if;
     set @q = Concat("SELECT id,project_id,title,`word-count`, 
-            (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
-            (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
-            (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
-            (SELECT code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
-            (SELECT `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
-            (SELECT code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
-            (SELECT `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
-            (SELECT code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
-            FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts 
-            ON t.id = uts.task_id 
-            WHERE t.id NOT IN (
-                SELECT task_id 
-                FROM TaskClaims)
-            AND t.published = 1 
-            AND t.`task-status_id` = 2 
-            AND not exists(
-                SELECT 1 
-                FROM TaskTranslatorBlacklist 
-                WHERE user_id = ? 
-                AND task_id=t.id) ",
-            filter);
+                        (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
+                        (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
+                        (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
+                        (SELECT code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
+                        (SELECT `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
+                        (SELECT code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
+                        (SELECT `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
+                        (SELECT code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
+                        comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+                        FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts 
+                        ON t.id = uts.task_id 
+                        WHERE t.id NOT IN (
+                            SELECT task_id 
+                            FROM TaskClaims)
+                        AND t.published = 1 
+                        AND t.`task-status_id` = 2 
+                        AND not exists(
+                            SELECT 1 
+                            FROM TaskTranslatorBlacklist 
+                            WHERE user_id = ? 
+                            AND task_id=t.id) ", 
+                        filter);
+
     if (strict = 1) then
         set @q = Concat(@q, "AND (t.`language_id-source` IN (
                                     SELECT language_id
@@ -2805,7 +2792,7 @@ BEGIN
                                     FROM UserSecondaryLanguages
                                     WHERE user_id = ", uID, "))");
     end if;
-    
+
     set @q = Concat(@q, " ORDER BY uts.score 
                         DESC");
     if lim is not null then
@@ -2817,6 +2804,7 @@ BEGIN
     DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTrackedTasks
 DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;
@@ -2907,9 +2895,11 @@ BEGIN
         else
             DELETE FROM BannedUsers
                 WHERE user_id = userId;
+                SELECT 0 as result;
         end if;
+    else
+    	SELECT 0 as result;
     end if;
-    SELECT 0 as result;
 END//
 DELIMITER ;
 
@@ -2948,28 +2938,28 @@ BEGIN
 		set @q= "update Organisations o set ";
 
 		if companyName is not null then 
-			set @q = CONCAT(@q," o.name='",companyName,"'") ;
+			set @q = CONCAT(@q," o.name=\"",companyName,"\"") ;
 		end if;
 		if url is not null then 
-			set @q = CONCAT(@q," , o.`home-page`='",url,"'") ;
+			set @q = CONCAT(@q," , o.`home-page`=\"",url,"\"") ;
 		end if;
 		if bio is not null then 
-			set @q = CONCAT(@q," , o.biography='",bio,"'") ;
+			set @q = CONCAT(@q," , o.biography=\"",bio,"\"") ;
 		end if;	
 		if email is not null then 
-			set @q = CONCAT(@q," , o.`e-mail`='",email,"'") ;
+			set @q = CONCAT(@q," , o.`e-mail`=\"",email,"\"") ;
 		end if;
 		if address is not null then 
-			set @q = CONCAT(@q," , o.address='",address,"'") ;
+			set @q = CONCAT(@q," , o.address=\"",address,"\"") ;
 		end if;
 		if city is not null then 
-			set @q = CONCAT(@q," , o.city='",city,"'") ;
+			set @q = CONCAT(@q," , o.city=\"",city,"\"") ;
 		end if;
 		if country is not null then 
-			set @q = CONCAT(@q," , o.country='",country,"'") ;
+			set @q = CONCAT(@q," , o.country=\"",country,"\"") ;
 		end if;
 		if regionalFocus is not null then 
-			set @q = CONCAT(@q," , o.`regional-focus`='",regionalFocus,"'") ;
+			set @q = CONCAT(@q," , o.`regional-focus`=\"",regionalFocus,"\"") ;
 		end if;
 
 		set @q = CONCAT(@q," WHERE o.id=",id) ;
@@ -3032,7 +3022,7 @@ BEGIN
             else
                 set @first = false;
             end if;
-            set @q = CONCAT(@q, " p.title='", titleText, "'");
+            set @q = CONCAT(@q, " p.title=\"", titleText, "\"");
         end if;
         if descr is not null then
             if (@first = false) then
@@ -3040,7 +3030,7 @@ BEGIN
             else
                 set @first = false;
             end if;
-            set @q = CONCAT(@q, " p.description='", descr, "'");
+            set @q = CONCAT(@q, " p.description=\"", descr, "\"");
         end if;
         if impact is not null then
             if (@first = false) then
@@ -3048,7 +3038,7 @@ BEGIN
             else
                 set @first = false;
             end if;
-            set @q = CONCAT(@q, " p.impact='", impact, "'");
+            set @q = CONCAT(@q, " p.impact=\"", impact, "\"");
         end if;
         if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
             if (@first = false) then
@@ -3056,7 +3046,7 @@ BEGIN
             else
                 set @first = false;
             end if;
-            set @q = CONCAT(@q, " p.deadline='", deadlineTime, "'");
+            set @q = CONCAT(@q, " p.deadline=\"", deadlineTime, "\"");
         end if;
         if orgId is not null then
             if (@first = false) then
@@ -3072,7 +3062,7 @@ BEGIN
             else
                 set @first = false;
             end if;
-            set @q = CONCAT(@q, " p.reference='", ref, "'");
+            set @q = CONCAT(@q, " p.reference=\"", ref, "\"");
         end if;
         if wordCount is not null then
             if (@first = false) then
@@ -3109,7 +3099,7 @@ BEGIN
             else
                 set @first = false;
             end if;
-            set @q = CONCAT(@q, " p.created='", createdTime, "'");
+            set @q = CONCAT(@q, " p.created=\"", createdTime, "\"");
         end if;
         set @q = CONCAT(@q, " WHERE p.id=", projectId);
         PREPARE stmt FROM @q;
@@ -3759,7 +3749,7 @@ BEGIN
 
 			end if;
 
-			set @q = CONCAT(@q," t.title='",name,"'") ;
+			set @q = CONCAT(@q," t.title=\"",name,"\"") ;
 
 		end if;
 
@@ -3875,7 +3865,7 @@ BEGIN
 
 			end if;
 
-			set @q = CONCAT(@q," t.comment='",taskComment,"'");
+			set @q = CONCAT(@q," t.comment=\"",taskComment,"\"");
 
 		end if;
 
@@ -3891,7 +3881,7 @@ BEGIN
 
 			end if;
 
-			set @q = CONCAT(@q," t.`deadline`='",dLine,"'") ;
+			set @q = CONCAT(@q," t.`deadline`=\"",dLine,"\"") ;
 
 		end if;
 
@@ -4045,7 +4035,7 @@ BEGIN
 		set @q= "update Users u set ";-- set update
 		if bio is not null then 
 #set paramaters to be updated
-			set @q = CONCAT(@q," u.biography='",bio,"'") ;
+			set @q = CONCAT(@q," u.biography=\"",bio,"\"") ;
 			set @first = false;
 		end if;
 		if lang is not null then 
@@ -4057,7 +4047,7 @@ BEGIN
 
 			set @langID=null;
 			select l.id into @langID from Languages l where l.code=lang;
-			set @q = CONCAT(@q," u.language_id='",@langID,"'") ;
+			set @q = CONCAT(@q," u.language_id=",@langID) ;
 		end if;
 		if region is not null then 
 			if (@first = false) then 
@@ -4067,7 +4057,7 @@ BEGIN
 			end if;
 			set @countryID=null;
 			select c.id into @countryID from Countries c where c.code=region;
-			set @q = CONCAT(@q," u.country_id='",@countryID,"'") ;
+			set @q = CONCAT(@q," u.country_id=",@countryID) ;
 		end if;
 		if name is not null then 
 				if (@first = false) then 
@@ -4075,7 +4065,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.`display-name`='",name,"'");
+			set @q = CONCAT(@q," u.`display-name`=\"",name,"\"");
 		
 		end if;
 		
@@ -4085,7 +4075,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.email='",email,"'");
+			set @q = CONCAT(@q," u.email=\"",email,"\"");
 		
 		end if;
 		if nonce is not null then 
@@ -4104,7 +4094,7 @@ BEGIN
 			else
 				set @first = false;
 			end if;
-			set @q = CONCAT(@q," u.password='",pass,"'");
+			set @q = CONCAT(@q," u.password=\"",pass,"\"");
 		
 		end if;
 #		set where
@@ -4114,7 +4104,7 @@ BEGIN
 #    	allows email to be changed but not user id
 		
 		elseif email is not null then 
-			set @q = CONCAT(@q," where  u.email= ,",email,"'");-- allows anything but email and user_id to change
+			set @q = CONCAT(@q," where  u.email= \"",email,"\"");-- allows anything but email and user_id to change
 		else
 			set @q = CONCAT(@q," where  u.email= null AND u.id=null");-- will always fail to update anyting
 		end if;
@@ -4141,21 +4131,6 @@ BEGIN
 	else
 	select 0 as 'result';
 	end if;
-END//
-DELIMITER ;
-
--- Dumping structure for procedure debug-test3.userLoginInsert
-DROP PROCEDURE IF EXISTS `userLoginInsert`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userLoginInsert`(IN `userId` INT, IN `eMail` VARCHAR(128), IN `loginSuccess` CHAR(1))
-BEGIN
-
-       IF userId = '' THEN SET userId = NULL; END IF;
-       IF eMail = '' THEN SET eMail = NULL;END IF;
-       IF loginSuccess = '' THEN SET loginSuccess = NULL; END IF;
-       
-       INSERT INTO UserLogins VALUES(userId, eMail, loginSuccess, NOW());
-
 END//
 DELIMITER ;
 
@@ -4351,34 +4326,34 @@ BEGIN
 		set @q= "UPDATE UserPersonalInformation p SET ";
 
 		if userId is not null then 
-			set @q = CONCAT(@q," p.`user_id`='",userId,"'") ;
+			set @q = CONCAT(@q," p.`user_id`=",userId) ;
 		end if;
 		if firstName is not null then 
-			set @q = CONCAT(@q," , p.`first-name`='",firstName,"'") ;
+			set @q = CONCAT(@q," , p.`first-name`=\"",firstName,"\"") ;
 		end if;
 		if lastName is not null then 
-			set @q = CONCAT(@q," , p.`last-name`='",lastName,"'") ;
+			set @q = CONCAT(@q," , p.`last-name`=\"",lastName,"\"") ;
 		end if;	
 		if mobileNumber is not null then 
-			set @q = CONCAT(@q," , p.`mobile-number`='",mobileNumber,"'") ;
+			set @q = CONCAT(@q," , p.`mobile-number`=\"",mobileNumber,"\"") ;
 		end if;
 		if businessNumber is not null then 
-			set @q = CONCAT(@q," , p.`business-number`='",businessNumber,"'") ;
+			set @q = CONCAT(@q," , p.`business-number`=\"",businessNumber,"\"") ;
 		end if;
 		if sip is not null then 
-			set @q = CONCAT(@q," , p.sip='",sip,"'") ;
+			set @q = CONCAT(@q," , p.sip=\"",sip,"\"") ;
 		end if;
 		if jobTitle is not null then 
-			set @q = CONCAT(@q," , p.`job-title`='",jobTitle,"'") ;
+			set @q = CONCAT(@q," , p.`job-title`=\"",jobTitle,"\"") ;
 		end if;
 		if address is not null then 
-			set @q = CONCAT(@q," , p.address='",address,"'") ;
+			set @q = CONCAT(@q," , p.address=\"",address,"\"") ;
 		end if;
 		if city is not null then 
-			set @q = CONCAT(@q," , p.city='",city,"'") ;
+			set @q = CONCAT(@q," , p.city=\"",city,"\"") ;
 		end if;
 		if country is not null then 
-			set @q = CONCAT(@q," , p.country='",country,"'") ;
+			set @q = CONCAT(@q," , p.country=\"",country,"\"") ;
 		end if;
 
 		set @q = CONCAT(@q," WHERE p.id=",id) ; 
@@ -4416,43 +4391,43 @@ BEGIN
 	end if;
 	
 	if userId is not null then 
-		set @q = CONCAT(@q," and p.`user_id`='",userId,"'") ;
+		set @q = CONCAT(@q," and p.`user_id`=",userId) ;
 	end if;
 	
 	if firstName is not null then 
-		set @q = CONCAT(@q," and p.`first-name`='",firstName,"'") ;
+		set @q = CONCAT(@q," and p.`first-name`=\"",firstName,"\"") ;
 	end if;
 	
 	if lastName is not null then 
-		set @q = CONCAT(@q," and p.`last-name`='",lastName,"'") ;
+		set @q = CONCAT(@q," and p.`last-name`=\"",lastName,"\"") ;
 	end if;
 	
 	if mobileNumber is not null then 
-		set @q = CONCAT(@q," and p.`mobile-number`='",mobileNumber,"'") ;
+		set @q = CONCAT(@q," and p.`mobile-number`=\"",mobileNumber,"\"") ;
 	end if;
 	
 	if businessNumber is not null then 
-		set @q = CONCAT(@q," and p.`business-number`='",businessNumber,"'") ;
+		set @q = CONCAT(@q," and p.`business-number`=\"",businessNumber,"\"") ;
 	end if;
 	
 	if sip is not null then 
-		set @q = CONCAT(@q," and p.sip='",sip,"'") ;
+		set @q = CONCAT(@q," and p.sip=\"",sip,"\"") ;
 	end if;
 	
 	if jobTitle is not null then 
-		set @q = CONCAT(@q," and p.`job-title`='",jobTitle,"'") ;
+		set @q = CONCAT(@q," and p.`job-title`=\"",jobTitle,"\"") ;
 	end if;
 	
 	if address is not null then 
-		set @q = CONCAT(@q," and p.address='",address,"'") ;
+		set @q = CONCAT(@q," and p.address=\"",address,"\"") ;
 	end if;
 	
 	if city is not null then 
-		set @q = CONCAT(@q," and p.city='",city,"'") ;
+		set @q = CONCAT(@q," and p.city=\"",city,"\"") ;
 	end if;
 	
 	if country is not null then 
-		set @q = CONCAT(@q," and p.country='",country,"'") ;
+		set @q = CONCAT(@q," and p.country=\"",country,"\"") ;
 	end if;
 	
 	PREPARE stmt FROM @q;
@@ -4461,6 +4436,20 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure debug-test3.userLoginInsert
+DROP PROCEDURE IF EXISTS `userLoginInsert`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userLoginInsert`(IN `userId` INT, IN `eMail` VARCHAR(128), IN `loginSuccess` CHAR(1))
+BEGIN
+
+	IF userId = '' THEN SET userId = NULL; END IF;
+	IF eMail = '' THEN SET eMail = NULL;END IF;
+	IF loginSuccess = '' THEN SET loginSuccess = NULL; END IF;
+	
+	INSERT INTO UserLogins VALUES(userId, eMail, loginSuccess, NOW());
+
+END//
+DELIMITER ;
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
@@ -4487,11 +4476,11 @@ CREATE TRIGGER `beforeUserLoginInsert` BEFORE INSERT ON `UserLogins` FOR EACH RO
 
 set @loginAttempts = null;
  
-       SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVA
-       
-       IF @loginAttempts = 4 THEN
-               INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW())
-       END IF;
+	SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVAL 1 MINUTE); 
+	
+	IF @loginAttempts = 4 THEN
+		INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW());
+	END IF;
 
 END//
 DELIMITER ;
