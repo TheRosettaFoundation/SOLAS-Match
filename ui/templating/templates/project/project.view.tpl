@@ -304,7 +304,7 @@
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
                                                 <input type="hidden" name="deleteTask" value="Delete" />
                                                 <a class="btn btn-small btn-inverse" 
-                                                    onclick="if (confirm('{Localisation::getTranslation(Strings::PROJECT_VIEW_0)}')) 
+                                                    onclick="if (confirm('{Localisation::getTranslation(Strings::PROJECT_VIEW_1)}')) 
                                                         $('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::COMMON_DELETE)}
                                                 </a> 

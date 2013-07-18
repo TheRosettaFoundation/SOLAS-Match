@@ -7,5 +7,5 @@ main() {
   var args = new List.from(new Options().arguments);
   args.addAll(['--', '--basedir', 'web/', '--out', 'web/compiled']);
   // Uncomment to build web components
-  //build(args, ['web/components/TaskStream.html', 'web/components/UserPrivateProfileForm.html']);
+  build(args, ['web/components/TaskStream.html', 'web/components/UserPrivateProfileForm.html']);
 }

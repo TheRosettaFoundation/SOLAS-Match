@@ -44,7 +44,7 @@
         <string name="org_routehandler_40">Review of task %s has been submitted successfully.</string>
         <string name="org_routehandler_41">You have already submitted a review for this task.</string>
         
-        <string name="project_routehandler_1">"You are now tracking this Project and will receive email notifications when its status changes."</string>
+        <string name="project_routehandler_1">You are now tracking this Project and will receive email notifications when its status changes.</string>
         <string name="project_routehandler_2">Unable to register for notifications for this Project.</string>
         <string name="project_routehandler_3">You are no longer tracking this Project and will receive no further emails.</string>
         <string name="project_routehandler_4">Unable to unregister for this notification.</string>
@@ -967,7 +967,7 @@
 	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
 	<string name="index_register_now">Register now</string>
 	<string name="index_7">to find the translation tasks best suited to you.</string>
-    <string name="index_load_more">Load More</string>
+        <string name="index_load_more">Load More</string>
 
 	<string name="pagination_page">Page</string>
 	<string name="pagination_of">of</string>

@@ -10,6 +10,7 @@ class Middleware
         
         $this->isUserBanned();        
         if (!UserSession::getCurrentUserID()) {
+            UserSession::setReferer($app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo());
             $app->flash('error', "Login required to access page");
             $app->redirect($app->urlFor('login'));
         }

@@ -931,13 +931,8 @@ BEGIN
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 	
 		 
-	if not exists(select 1 from ArchivedProjects where id = projectId) then
-		INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id, country_id)
+	if not exists(select 1 from ArchivedProjects where id = projectId) then		
 
-		SELECT *
-		FROM Projects p
-		WHERE p.id=projectId;		
-		
 		set @`userIdProjectCreator` = null;
 		set @`filename` = null;
 		set @`fileToken` = null;
@@ -949,7 +944,13 @@ BEGIN
 		SELECT pf.`file-token` INTO @`fileToken` FROM ProjectFiles pf WHERE pf.project_id=projectId;
 		SELECT pf.`mime-type` INTO @`mimeType` FROM ProjectFiles pf WHERE pf.project_id=projectId;
 		SELECT GROUP_CONCAT(t.label) INTO @`projectTags` FROM Tags t JOIN ProjectTags pt ON t.id = pt.tag_id WHERE pt.project_id=projectId;
-				
+			
+		START TRANSACTION;
+		INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id, country_id)
+		SELECT *
+		FROM Projects p
+		WHERE p.id=projectId;
+		
 		INSERT INTO `ArchivedProjectsMetadata` (`archivedProject_id`,`user_id-archived`,`user_id-projectCreator`,`filename`,`file-token`,`mime-type`,`archived-date`,`tags`)
 		VALUES (projectId,user_id,@`userIdProjectCreator`,@`filename`,@`fileToken`,@`mimeType`,NOW(),@`projectTags`);
 		
@@ -977,6 +978,8 @@ BEGIN
 		CLOSE cur1;	
 		
 		DELETE FROM Projects WHERE id=projectId;
+		
+		COMMIT;
 	   SELECT 1 AS archivedResult;
    ELSE
       SELECT 0 AS archivedResult;
@@ -993,7 +996,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT, IN `uID`
 BEGIN
 
 	if not exists(select 1 from ArchivedTasks where id = tID) then
-	
+		
 		set @`version` = null;
 		set @`filename` = null;
 		set @`contentType` = null;
@@ -1010,15 +1013,16 @@ BEGIN
 		SELECT GROUP_CONCAT(p.`task_id-prerequisite`) INTO @`preRequisites` FROM TaskPrerequisites p WHERE p.task_id=tID;
 		SELECT tf.user_id INTO @`userIdTaskCreator` FROM TaskFileVersions tf WHERE tf.task_id=tID AND tf.version_id=0 LIMIT 1;
 	
-		INSERT INTO `ArchivedTasks` (`id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `taskType_id`, `taskStatus_id`, `published`)
-			SELECT t.* FROM Tasks t WHERE t.id = tID;
-		
-		INSERT INTO ArchivedTasksMetadata 
-		(`archivedTask_id`,`version`,`filename`,`content-type`,`user_id-claimed`,`user_id-archived`,`prerequisites`,`user_id-taskCreator`,`upload-time`,`archived-date`) 
-
-		VALUES
-		(tID, @`version`,@`filename`,@`contentType`,@`userIdClaimed`,uID,@`prerequisites`,@`userIdTaskCreator`,@`uploadTime`,NOW());
-
+		START TRANSACTION;
+			INSERT INTO `ArchivedTasks` (`id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `taskType_id`, `taskStatus_id`, `published`)
+				SELECT t.* FROM Tasks t WHERE t.id = tID;
+			
+			INSERT INTO ArchivedTasksMetadata 
+			(`archivedTask_id`,`version`,`filename`,`content-type`,`user_id-claimed`,`user_id-archived`,`prerequisites`,`user_id-taskCreator`,`upload-time`,`archived-date`) 
+	
+			VALUES
+			(tID, @`version`,@`filename`,@`contentType`,@`userIdClaimed`,uID,@`prerequisites`,@`userIdTaskCreator`,@`uploadTime`,NOW());
+		COMMIT;
 	   select 1 as result;
    else
       select 0 as result;
@@ -1080,7 +1084,7 @@ BEGIN
 		if bannedTypeId='' then set bannedTypeId=null;end if;
 		if adminComment='' then set adminComment=null;end if;
 	
-	
+	 	START TRANSACTION;
 		INSERT INTO BannedOrganisations (org_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
 		VALUES (orgId, userIdAdmin, bannedTypeId, adminComment,NOW());
 		
@@ -1097,6 +1101,7 @@ BEGIN
 	      call bannedUserInsert(userId, userIdAdmin, bannedTypeId, Concat('You have been banned because the organisation ',@Orgname,' has been banned. ', adminComment));
 		END LOOP;
 		CLOSE cur1;
+		COMMIT;
 		
 	END IF;
 
@@ -1128,8 +1133,10 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `claimTask`(IN `tID` INT, IN `uID` INT)
 BEGIN
 	if not EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
+		START TRANSACTION;
 		insert into TaskClaims  (task_id,user_id,`claimed-time`) values (tID,uID,now());
 		update Tasks set `task-status_id`=3 where id = tID;
+		COMMIT;
 		select 1 as result;
 	else
 	select 0 as result;
@@ -1661,7 +1668,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` I
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-    set @q = Concat("select id,project_id,title,`word-count`, 
+        set @q = Concat("select id,project_id,title,`word-count`, 
                             (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
                             (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
                             (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
@@ -1678,21 +1685,21 @@ BEGIN
                             ORDER BY `created-time` 
                             DESC LIMIT ", offset, ", ",lim);
     else
-    set @q = "select id,project_id,title,`word-count`, 
-                (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
-                (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
-                (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
-                (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
-                (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
-                (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
-                (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
-                (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-                comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
-                FROM Tasks AS t 
-                WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) 
-                    AND t.published = 1 
-                    AND t.`task-status_id` = 2 
-                ORDER BY `created-time` DESC";
+        set @q = "select id,project_id,title,`word-count`, 
+                    (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
+                    (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
+                    (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
+                    (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
+                    (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
+                    (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
+                    (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
+                    (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
+                    comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+                    FROM Tasks AS t 
+                    WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) 
+                        AND t.published = 1 
+                        AND t.`task-status_id` = 2 
+                    ORDER BY `created-time` DESC";
     end if;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
@@ -3985,9 +3992,11 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT)
 BEGIN
 	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
+		START TRANSACTION;
       delete from TaskClaims where task_id=tID and user_id=uID;
       insert into TaskTranslatorBlacklist (task_id,user_id) values (tID,uID);
       update Tasks set `task-status_id`=2 where id = tID;
+      COMMIT;
 		select 1 as result;
 	else
 		select 0 as result;
@@ -4196,12 +4205,35 @@ DROP PROCEDURE IF EXISTS `userTrackProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackProject`(IN `pID` INT, IN `uID` INT)
 BEGIN
+	
+	DECLARE taskId INT DEFAULT FALSE;
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE cur1 CURSOR FOR SELECT t.id FROM Tasks t WHERE t.project_id=pID;
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+	
+	
 	if not exists (select 1 from UserTrackedProjects utp where utp.user_id=uID and utp.Project_id=pID) then
+	
+		START TRANSACTION;
 		insert into UserTrackedProjects (project_id,user_id) values (pID,uID);
+		
+		OPEN cur1;
+		
+		read_loop: LOOP
+			FETCH cur1 INTO taskId;
+			IF done THEN
+			 	LEAVE read_loop;
+			END IF;
+         call userTrackTask(uID, taskId);
+		END LOOP;
+		CLOSE cur1;
+		
+		COMMIT;
 		select 1 as result;
 	else
 		select 0 as result;
 	end if;
+	
 END//
 DELIMITER ;
 
@@ -4227,8 +4259,28 @@ DROP PROCEDURE IF EXISTS `userUnTrackProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackProject`(IN `pID` INT, IN `uID` INT)
 BEGIN
+	DECLARE taskId INT DEFAULT FALSE;
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE cur1 CURSOR FOR SELECT t.id FROM Tasks t WHERE t.project_id=pID;
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+	
 	if exists (select 1 from UserTrackedProjects utp where utp.user_id=uID and utp.Project_id=pID) then
+		
+		START TRANSACTION;
 		delete from UserTrackedProjects  where user_id=uID and Project_id=pID;
+		
+		OPEN cur1;
+		
+		read_loop: LOOP
+			FETCH cur1 INTO taskId;
+			IF done THEN
+			 	LEAVE read_loop;
+			END IF;
+         call userUnTrackTask(uID, taskId);
+		END LOOP;
+		CLOSE cur1;
+		COMMIT;
+		
 		select 1 as result;
 	else
 		select 0 as result;

@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__."/../../Common/Requests/UserTaskScoreRequest.php";
-require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/models/Task.php";
 require_once __DIR__."/../../api/lib/Upload.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
@@ -471,7 +471,7 @@ class TaskDao
                 .",".PDOWrapper::cleanseNull($userId);
         
         $result = PDOWrapper::call("archiveTask", $args);
-        self::delete($taskId);
+        if($result[0]['result']) self::delete($taskId);
         return $result[0]['result'];
     }
         

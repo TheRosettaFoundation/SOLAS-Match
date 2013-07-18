@@ -345,14 +345,18 @@ class UserRouteHandler
                     if($user = $userDao->login($post['email'], $post['password'])) {
                         UserSession::setSession($user->getId());
                     }                   
-                    $app->redirect($app->urlFor("home"));
+                    $request = UserSession::getReferer();
+                    UserSession::clearReferer();
+                    $app->redirect(strpos($request, $app->request()->getRootUri()) ? $request : $app->urlFor("home"));   
                     
                 } elseif (isset($post['password_reset'])) {
                     $app->redirect($app->urlFor("password-reset-request"));
                 }
             } elseif ($app->request()->isPost() || $openid->mode) {
                 if($this->openIdLogin($openid, $app)){
-                   $app->redirect($app->urlFor("home"));
+                    $request = UserSession::getReferer();
+                    UserSession::clearReferer();
+                    $app->redirect(strpos($request, $app->request()->getRootUri()) ? $request : $app->urlFor("home"));                    
                 }  else {
                     $app->redirect($app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID())));
                 }
