@@ -4,6 +4,8 @@ require_once __DIR__."/../../Common/models/User.php";
 require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/Authentication.class.php";
 require_once __DIR__."/../../Common/HttpStatusEnum.php";
+require_once __DIR__."/../lib/MessagingClient.class.php";
+require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
 
 class UserDao
 {
@@ -586,6 +588,19 @@ class UserDao
         }
         return null;
     }
+
+    public static function requestReference($userId)
+    {
+        $messagingClient = new MessagingClient();
+        if ($messagingClient->init()) {
+            $request = new UserReferenceEmail();
+            $request->setUserId($userId);
+            $message = $messagingClient->createMessageFromProto($request);
+            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
+                    $messagingClient->UserReferenceRequestTopic);
+        }
+    }
+
     public static function trackProject($projectID,$userID)
     {
         $args = PDOWrapper::cleanse($projectID)

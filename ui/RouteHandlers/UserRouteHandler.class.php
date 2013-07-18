@@ -448,6 +448,11 @@ class UserRouteHandler
                 $org_id = $post['org_id'];
                 $userDao->leaveOrganisation($user_id, $org_id); 
             } 
+
+            if (isset($post['referenceRequest'])) {
+                $userDao->requestReferenceEmail($user_id);
+                $app->view()->appendData(array("requestSuccess" => true));
+            }
         }
                     
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 10);
@@ -471,8 +476,8 @@ class UserRouteHandler
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
 
-        $app->view()->setData("orgList", $orgList);
         $app->view()->appendData(array("badges" => $badges,
+                                    "orgList", $orgList,
                                     "user_orgs" => $user_orgs,
                                     "current_page" => "user-profile",
                                     "archivedJobs" => $archivedJobs,

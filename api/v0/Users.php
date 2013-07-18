@@ -88,6 +88,13 @@ class Users {
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'userLeaveOrg');        
+
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/requestReference(:format)/',
+                function ($id, $format = ".json")
+                {
+                    UserDao::requestReference($id);
+                    Dispatcher::sendResponce(null, null, null, $format);
+                }, "userRequestReference");
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/getByEmail/:email/',
                                                         function ($email, $format = ".json") {
