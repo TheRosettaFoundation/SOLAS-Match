@@ -3,6 +3,7 @@ author: spaceindaver
 description: The Dart Framework for UI work in SOLAS Match
 dependencies:
   browser: any
+  crypto: any
   js: any
   json_object: any
   web_ui: any
