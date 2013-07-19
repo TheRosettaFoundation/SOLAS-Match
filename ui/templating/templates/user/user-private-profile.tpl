@@ -29,8 +29,8 @@
     
 <div class="well" is="x-user-private-profile-form" user-id="{$profileUser->getId()}" id="PrivateProfileForm"></div>
 
-<script type="application/dart" src="{urlFor name="home"}ui/dart/web/Routes/Users/UserPrivateProfile.dart"></script>
-<script src="{urlFor name="home"}ui/dart/web/packages/browser/dart.js"></script>
-<script src="{urlFor name="home"}ui/dart/web/packages/browser/interop.js"></script>
+<script type="application/dart" src="{urlFor name="home"}ui/dartCompiled/dart/web/Routes/Users/UserPrivateProfile.dart"></script>
+<script src="{urlFor name="home"}ui/dartCompiled/dart/web/packages/browser/dart.js"></script>
+<script src="{urlFor name="home"}ui/dartCompiled/dart/web/packages/browser/interop.js"></script>
  
 {include file='footer.tpl'}

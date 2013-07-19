@@ -13,6 +13,10 @@ packages:
     description: browser
     source: hosted
     version: "0.6.3+1"
+  crypto:
+    description: crypto
+    source: hosted
+    version: "0.6.5"
   csslib:
     description: csslib
     source: hosted
