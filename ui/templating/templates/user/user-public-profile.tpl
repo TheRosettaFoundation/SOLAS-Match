@@ -285,16 +285,17 @@
         <h1>
             {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_REFERENCE_EMAIL)} 
             <small>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_16)}</small>
-        </h1>
+            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right"> 
+                <i class="icon-list-alt icon-white" style="position:relative; right:-30px; top:12px;"></i>
+                <input type="submit" class="btn btn-primary" name="referenceRequest" 
+                    value="    {Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_REQUEST_REFERENCE)}" />
+            </form>
+        </h1>            
     </div>
+    <p>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_15)}</p>
     {if isset($requestSuccess)}
         <p class="alert alert-success">{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_REFERENCE_REQUEST_SUCCESS)}</p>
     {/if}
-    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-        <p>{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_15)}</p>
-        <input type="submit" class="btn btn-primary" name="referenceRequest" 
-            value="{Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_REQUEST_REFERENCE)}" />
-    </form>
     <p style="margin-bottom:50px;"/>
 {/if}
 
