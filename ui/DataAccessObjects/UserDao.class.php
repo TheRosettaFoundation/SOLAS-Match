@@ -290,6 +290,12 @@ class UserDao
         return $ret;
     }
 
+    public function requestReferenceEmail($userId)
+    {
+        $request = "{$this->siteApi}v0/users/$userId/requestReference";
+        $this->client->call(null, $request, HttpMethodEnum::PUT);
+    }
+
     public function removeUserTag($userId, $tagId)
     {
         $ret = null;

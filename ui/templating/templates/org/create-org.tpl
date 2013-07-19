@@ -33,7 +33,7 @@
                     <input type='text' name='orgName' id='orgName' style="width: 80%" {if isset($org)} value="{$org->getName()}" {/if}/>
                     
                     <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}:</strong></label>
-                    <textarea name='address' cols='40' rows='7' style="width: 80%">{if isset($org)} {$org->getAddress()} {/if}</textarea>
+                    <textarea name='address' cols='40' rows='7' style="width: 80%">{if isset($org)} {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())} {/if}</textarea>
                     
                     <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}:</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%" {if isset($org)} value="{$org->getCity()}" {/if}/>
@@ -51,7 +51,7 @@
                     <input type='text' name='email' id='email' style="width: 80%"{if isset($org)} value="{$org->getEmail()}" {/if}/>   
                     
                     <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong></label>
-                    <textarea name='biography' cols='40' rows='10' style="width: 80%">{if isset($org)} {TemplateHelper::uiCleanseNewlineAndTabs({$org->getBiography()})} {/if}</textarea>
+                    <textarea name='biography' cols='40' rows='10' style="width: 80%">{if isset($org)} {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())} {/if}</textarea>
                     
                 </td>
             </tr>

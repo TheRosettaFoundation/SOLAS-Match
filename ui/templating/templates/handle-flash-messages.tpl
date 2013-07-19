@@ -1,6 +1,6 @@
 {if isset($flash['error'])}
     <div class="alert alert-error">
-        <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{$flash['error']}</p>
+        <p><strong>{Localisation::getTranslation(Strings::COMMON_ERROR)}! </strong>{$flash['error']}</p>
     </div>
 {/if}
 

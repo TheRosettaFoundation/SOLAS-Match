@@ -1,9 +1,11 @@
 <?php
 
 require_once __DIR__."/../../Common/models/User.php";
-require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/Authentication.class.php";
 require_once __DIR__."/../../Common/HttpStatusEnum.php";
+require_once __DIR__."/../lib/MessagingClient.class.php";
+require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
 
 class UserDao
 {
@@ -41,6 +43,11 @@ class UserDao
             $nativeLocale = $user->getNativeLocale();
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
+            BadgeDao::assignBadge($user->getId(), BadgeTypes::NATIVE_LANGUAGE);
+        }
+
+        if ($user->getBiography() != '') {
+            BadgeDao::assignBadge($user->getId(), BadgeTypes::PROFILE_FILLER);
         }
         
         $args = PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
@@ -138,10 +145,8 @@ class UserDao
             $user = self::create($email, $clear_password);
             BadgeDao::assignBadge($user->getId(), BadgeTypes::REGISTERED);
             self::registerUser($user->getId());
+            Notify::sendEmailVerification($user->getId());
         }
-
-        Notify::sendEmailVerification($user->getId());
-
         return $user;
     }
 
@@ -583,6 +588,19 @@ class UserDao
         }
         return null;
     }
+
+    public static function requestReference($userId)
+    {
+        $messagingClient = new MessagingClient();
+        if ($messagingClient->init()) {
+            $request = new UserReferenceEmail();
+            $request->setUserId($userId);
+            $message = $messagingClient->createMessageFromProto($request);
+            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
+                    $messagingClient->UserReferenceRequestTopic);
+        }
+    }
+
     public static function trackProject($projectID,$userID)
     {
         $args = PDOWrapper::cleanse($projectID)

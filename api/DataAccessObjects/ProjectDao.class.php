@@ -1,7 +1,7 @@
 <?php
 
 include_once __DIR__."/TagsDao.class.php";
-include_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 include_once __DIR__."/../../Common/lib/ModelFactory.class.php";
 include_once __DIR__."/../../Common/models/Project.php";
 include_once __DIR__."/../../Common/models/ArchivedProject.php";
@@ -238,11 +238,12 @@ class ProjectDao
     {
         $destination =Settings::get("files.upload_path")."proj-$projectId/";
         if(!file_exists($destination)) mkdir ($destination);
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mime= $finfo->buffer($file);
+//        $finfo = new finfo(FILEINFO_MIME_TYPE);
+//        $mime= $finfo->buffer($file);
+        $mime = IO::detectMimeType($file, $filename);
         $token=self::recordProjectFileInfo($projectId,$filename,$userId,$mime);
         file_put_contents($destination.$token, $file);
-        return $token;        
+        return $token;
     }
     
     public static function recordProjectFileInfo($projectId,$filename,$userId, $mime)
