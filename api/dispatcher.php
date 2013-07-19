@@ -80,7 +80,7 @@ class Dispatcher {
         $response->body($body);        
     }
     
-    public static function register($httpMethod, $url, $function)
+    public static function register($httpMethod, $url, $function, $middleware = null)
     {        
         switch ($httpMethod) {
             
@@ -106,7 +106,7 @@ class Dispatcher {
         }
     }
     
-    public static function registerNamed($httpMethod, $url, $function, $name)
+    public static function registerNamed($httpMethod, $url, $function, $name,  $middleware = null)
     {        
         switch ($httpMethod) {
             

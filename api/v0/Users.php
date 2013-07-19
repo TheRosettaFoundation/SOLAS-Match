@@ -35,8 +35,10 @@ class Users {
             if (is_array($data)) {
                 $data = $data[0];
             }
-            $data->setPassword(null);
-            $data->setNonce(null);
+            if(!is_null($data)){
+                $data->setPassword(null);
+                $data->setNonce(null);
+            }
            
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUser');
