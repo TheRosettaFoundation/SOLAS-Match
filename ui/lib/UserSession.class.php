@@ -54,4 +54,16 @@ class UserSession {
     public static function clearReferer(){
         if (isset($_SESSION['ref']))unset($_SESSION['ref']);
     }
+    
+    public static function setHash($hash) {
+        $_SESSION['hash'] = $hash;
+    }
+    
+    public static function getHash(){
+        if (isset($_SESSION['hash'])) {
+            return $_SESSION['hash'];
+        } else {
+            return null;
+        }        
+    }
 }

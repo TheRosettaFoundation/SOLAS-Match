@@ -425,11 +425,11 @@ class TaskRouteHandler
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
                 $fileUploadMime = IO::detectMimeType(file_get_contents($_FILES[$fieldName]["tmp_name"]), $_FILES[$fieldName]["name"]);
 
-                if(!strcasecmp($fileUploadType,$projectFileType)===0) {
+                if(strcasecmp($fileUploadType,$projectFileType) != 0) {
                     throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_3), $projectFileType));
                 } else if($fileUploadMime != $projectFileMimeType) {
                     $temp = "";
-                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_4), $fileUploadType, $fileUploadType));
+                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_4), $projectFileType, $projectFileType));
                 }
             } catch (Exception $e) {
                 $errorMessage = $e->getMessage();

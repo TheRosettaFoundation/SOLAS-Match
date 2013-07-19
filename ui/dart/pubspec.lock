@@ -16,7 +16,7 @@ packages:
   crypto:
     description: crypto
     source: hosted
-    version: "0.6.5"
+    version: "0.6.3+1"
   csslib:
     description: csslib
     source: hosted

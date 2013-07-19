@@ -44,7 +44,7 @@ class APIHelper
     if (UserObject != null) {
       String key = UserObject.email + ":" + UserObject.display_name;
       key = CryptoUtils.bytesToHex((new MD5()..add(key.codeUnits)).close());
-      headers["Authorization"] = key;
+      headers["X-Custom-Authorization"] = key;
     }
     Settings settings = new Settings();
     url = settings.conf.urls.SOLASMatch + url + format + "/";
