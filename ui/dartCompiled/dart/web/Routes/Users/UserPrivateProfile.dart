@@ -10,23 +10,19 @@ import 'dart:html';
 import "package:web_ui/web_ui.dart";
 import "../../lib/Settings.dart";
 import "../../lib/Localisation.dart";
+import "../../lib/Loader.dart";
 
 UserPrivateProfileForm form;
 
 main() 
 {
   watcher.useObservers = true;
-  Settings settings = new Settings();
-  settings.loadConf().then((bool loaded) {
+  Loader.load().then((bool loaded) {
     if (!loaded) {
-      print("Failed to load conf file");
-    }
-    Localisation.loadFile().then((bool success) {
-      if (!success) {
-        print("Failed to load strings.xml file");
-      }
+      print("Failed to load data");
+    } else {
       init();
-    });
+    }
   });
 }
 
