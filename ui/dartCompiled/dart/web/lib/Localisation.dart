@@ -29,23 +29,20 @@ class Localisation
     return data;
   }
   
-  static Future<bool> loadFile([String languageCode = "en"])
+  static Future<bool> loadFile()
   {
     Settings settings = new Settings();
-    if (languageCode.compareTo("en")==0) {
-      print("Calling " + settings.conf.urls.SiteLocation + "ui/localisation/strings.xml");
-      return HttpRequest.getString(settings.conf.urls.SiteLocation + "ui/localisation/strings.xml")
-        .then((String data) {
+    return HttpRequest.getString(settings.conf.urls.SiteLocation + "static/getStrings/")
+      .then((String data) {
+        bool ret;
+        if (data != "") {
           root = XML.parse(data);
-          return true;
-        });
-    } else {
-      return HttpRequest.getString(settings.conf.urls.SiteLocation + "ui/localisation/strings_$languageCode.xml")
-        .then((String data) {
-          root = XML.parse(data);
-          return true;
-        });
-    }
+          ret = true;
+        } else {
+          ret = false;
+        }
+        return ret;
+      });
   }
   
   Localisation._internal();

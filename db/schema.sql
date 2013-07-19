@@ -4796,6 +4796,32 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
+-- Dumping structure for trigger debug-test3.afterTaskCreate
+DROP TRIGGER IF EXISTS `afterTaskCreate`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `afterTaskCreate` AFTER INSERT ON `Tasks` FOR EACH ROW BEGIN
+	Declare userId int;
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE cur1 CURSOR FOR SELECT u.user_id FROM UserTrackedProjects u WHERE u.Project_id = NEW.project_id;
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+	OPEN cur1;
+	
+	read_loop: LOOP
+		FETCH cur1 INTO userId;
+		IF done THEN
+		 	LEAVE read_loop;
+		END IF;
+      INSERT INTO UserTrackedTasks VALUES(userId, NEW.id);
+	END LOOP;
+	CLOSE cur1;
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+
 /*---------------------------------------end of triggers-------------------------------------------*/
 SET FOREIGN_KEY_CHECKS=1;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

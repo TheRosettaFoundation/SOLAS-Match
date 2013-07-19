@@ -146,6 +146,15 @@
     
     function checkWordCount()
     {
+        var segCheckedSize = isEnabledArray.length;
+        var checkedCount = 0;
+        
+        for(var i=0; i < segCheckedSize; i++) {
+            if(isEnabledArray[i]) checkedCount++;
+        }
+        
+        if(checkedCount === segCheckedSize) return;
+        
         var wordCount = jQuery("#word_count").val();
         if(wordCount > 3500) {
             return confirm("Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?");

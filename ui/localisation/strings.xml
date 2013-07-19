@@ -73,8 +73,8 @@
 
         <string name="task_routehandler_1">You have successfully archived the <strong>%s Task %s</strong>.</string>
         <string name="task_routehandler_2">There was an error archiving the <strong>%s Task %s</strong>.</string>
-        <string name="task_routehandler_3">The file type differs from the originally downloaded file. Please upload a valid %s!</string>
-        <string name="task_routehandler_4">The <strong>contents</strong> of the file you are uploading is not a valid .%s If you are having problems opening and working in .%s format, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
+        <string name="task_routehandler_3">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>%s!</strong></string>
+        <string name="task_routehandler_4">The <strong>contents</strong> of the file you are uploading is not a valid <strong>.%s</strong> If you are having problems opening and working in <strong>.%s format</strong>, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
         <string name="task_routehandler_5">File error:</string>
         <string name="task_routehandler_6">Word Count must be numeric.</string>
         <string name="task_routehandler_7">Word Count cannot be empty.</string>

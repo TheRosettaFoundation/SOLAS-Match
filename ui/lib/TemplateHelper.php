@@ -398,7 +398,7 @@ class TemplateHelper {
             case UPLOAD_ERR_EXTENSION :
                 return "File upload stopped by extension.";
             default :
-                return "Unknown upload error. Please contact the administrators.";
+                return "Please make sure the file is valid and not empty.";
         }
     }
 
@@ -409,7 +409,7 @@ class TemplateHelper {
 
     public static function isUploadedWithoutError($field_name)
     {
-        return $_FILES[$field_name]["error"] == UPLOAD_ERR_OK;
+        return $_FILES[$field_name]["error"] == UPLOAD_ERR_OK && filesize($_FILES[$field_name]['tmp_name']) != 0;
     }
         
     public static function separateTags($tags)

@@ -4,9 +4,9 @@
             <h1>
                 {Localisation::getTranslation(Strings::COMMON_CREATE_NEW_TASK)} <small>{Localisation::getTranslation(Strings::TASK_CREATE_FOR_PROJECT)} <strong>{$project->getTitle()}</strong></small><br>   
                 <small>
-                    {Localisation::getTranslation(Strings::COMMON_NOTE:)}
+                    {Localisation::getTranslation(Strings::COMMON_NOTE)}:
                     <span style="color: red">*</span>
-                    {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD.)}
+                    {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}.
                 </small>
             </h1>
         </div>           

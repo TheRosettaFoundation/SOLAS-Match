@@ -2,7 +2,7 @@ library SolasMatchDart;
 
 import "dart:async";
 import "dart:json" as json;
-import 'package:js/js.dart' as js;
+//import 'package:js/js.dart' as js;
 
 import "../lib/models/Language.dart";
 import "../lib/APIHelper.dart";

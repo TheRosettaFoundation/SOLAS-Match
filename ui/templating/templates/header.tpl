@@ -27,7 +27,6 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/ByteBuffer.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/ProtoBuf.min.js">var ProtoBuf = dcodeIO.ProtoBuf;</script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/ProtoClasses.js"></script>
-        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         
         <!-- google analytics -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
