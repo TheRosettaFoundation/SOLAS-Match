@@ -6,10 +6,12 @@ class StaticRouteHandeler
     {
         $app = Slim::getInstance();       
         
-        $app->get("/static/privacy", array($this, "privacy"))->name("privacy");
-        $app->get("/static/terms", array($this, "terms"))->name("terms");
-        $app->get("/static/videos", array($this, "videos"))->name("videos");
-        $app->get("/static/siteLanguage", array($this, "siteLanguage"))->via("POST")->name("siteLanguage");
+        $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");
+        $app->get("/static/terms/", array($this, "terms"))->name("terms");
+        $app->get("/static/videos/", array($this, "videos"))->name("videos");
+        $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST","GET")->name("siteLanguage");
+        $app->get("/static/getStrings/", array($this, "getStrings"))->name("staticGetStrings");
+        $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
         $app->notFound(array("Middleware::notFound"));
     }
 
@@ -40,7 +42,18 @@ class StaticRouteHandeler
                 UserSession::setUserLanguage($post['language']);
             }
             $app->redirect($app->request()->getReferrer());
+        }else{
+            $app->response()->body(UserSession::getUserLanguage());
         }
+    }
+    
+    public function getUser(){
+        $dao = new UserDao();
+        Slim::getInstance()->response()->body($dao->getUserDart(UserSession::getCurrentUserID()));           
+    }
+    
+    public function getStrings(){
+        Slim::getInstance()->response()->body(Localisation::getStrings());
     }
 }
 

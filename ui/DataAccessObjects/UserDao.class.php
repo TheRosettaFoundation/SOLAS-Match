@@ -14,6 +14,16 @@ class UserDao
         $this->siteApi = Settings::get("site.api");
     }
     
+    
+    
+    
+    public function getUserDart($userId)
+    {
+        $ret = null;
+        $helper = new APIHelper(FormatEnum::JSON);
+        return $helper->serialize($this->getUser($userId));
+    }
+    
     public function getUser($userId)
     {
         $ret = null;

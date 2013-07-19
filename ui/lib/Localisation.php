@@ -28,6 +28,12 @@ class Localisation {
             self::$doc->loadXML(CacheHelper::getCached(CacheHelper::SITE_LANGUAGE."_".self::$currentLanguage, TimeToLiveEnum::HOUR, 'Localisation::fetchTranslationFile', "strings_".self::$currentLanguage.".xml"));
         }
     }
+    
+    public static function getStrings(){
+        if(!self::$ready) self::init();
+        return self::$doc->saveXml();
+    }
+
 
     public static function getTranslation($stringId)
     {
