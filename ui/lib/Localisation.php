@@ -31,7 +31,7 @@ class Localisation {
     
     public static function getStrings(){
         if(!self::$ready) self::init();
-        return self::$doc->saveXml();
+        return self::$doc->saveXML(self::$doc->firstChild);
     }
 
 
