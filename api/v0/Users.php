@@ -31,12 +31,12 @@ class Users {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-
             $data = UserDao::getUser($id);
-
             if (is_array($data)) {
                 $data = $data[0];
             }
+            $data->setPassword(null);
+            $data->setNonce(null);
            
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUser');

@@ -35,6 +35,8 @@ class LoginAPI {
             
             try {             
                 $data = UserDao::apiLogin($data->getEmail(), $data->getPassword());
+                $data->setPassword(null);
+                $data->setNonce(null);
                 Dispatcher::sendResponce(null, $data, null, $format);
             } catch(Exception $e) {
                 Dispatcher::sendResponce(null, null, $e->getMessage(), $format);
