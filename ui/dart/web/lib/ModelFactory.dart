@@ -116,6 +116,8 @@ class ModelFactory
     }
     if (userData.containsKey("nativeLocale")) {
       user.nativeLocale = ModelFactory.generateLocaleFromMap(userData['nativeLocale']);
+    } else {
+      user.nativeLocale = new Locale();
     }
     return user;
   }

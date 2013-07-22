@@ -3503,6 +3503,8 @@ ModelFactory_generateUserFromMap: function(userData) {
     user.created_time = $.$index$asx(userData, "created_time");
   if (userData.containsKey$1("nativeLocale") === true)
     user.nativeLocale = $.ModelFactory_generateLocaleFromMap($.$index$asx(userData, "nativeLocale"));
+  else
+    user.nativeLocale = $.Locale$();
   return user;
 },
 
