@@ -39,6 +39,18 @@ class Dispatcher {
                 ));
             });
             
+            $app->add(new  Slim_Middleware_SessionCookie(array(
+                'expires' => Settings::get('site.cookie_timeout'),
+                'path' => '/',
+                'domain' => null,
+                'secure' => false,
+                'httponly' => false,
+                'name' => 'slim_session',
+                'secret' => Settings::get('session.site_key'),
+                'cipher' => MCRYPT_RIJNDAEL_256,
+                'cipher_mode' => MCRYPT_MODE_CBC
+            )));
+            
         }
         return Dispatcher::$apiDispatcher;
     }
