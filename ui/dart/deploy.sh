@@ -1,0 +1,2 @@
+rsync -RLr web/ deploy/
+
