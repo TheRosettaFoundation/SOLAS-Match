@@ -69,7 +69,6 @@ $app->add(new  Slim_Middleware_SessionCookie(array(
 require_once 'Common/HttpMethodEnum.php';
 require_once 'Common/BanTypeEnum.php';
 require_once 'Common/NotificationIntervalEnum.class.php';
-require_once 'Common/lib/Authentication.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
 require_once 'Common/lib/BadgeTypes.class.php';
 

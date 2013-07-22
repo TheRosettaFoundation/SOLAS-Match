@@ -40,4 +40,30 @@ class UserSession {
             return null;
         }        
     }
+    
+    public static function setReferer($ref){
+        $_SESSION['ref'] = $ref;
+    }
+    public static function getReferer(){
+        if (isset($_SESSION['ref'])) {
+            return $_SESSION['ref'];
+        } else {
+            return null;
+        }        
+    }
+    public static function clearReferer(){
+        if (isset($_SESSION['ref']))unset($_SESSION['ref']);
+    }
+    
+    public static function setHash($hash) {
+        $_SESSION['hash'] = $hash;
+    }
+    
+    public static function getHash(){
+        if (isset($_SESSION['hash'])) {
+            return $_SESSION['hash'];
+        } else {
+            return null;
+        }        
+    }
 }

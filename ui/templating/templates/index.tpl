@@ -60,83 +60,16 @@
         </div>
 
         <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
-            {if isset($user) && isset($tasks)}
-                <h3>{Localisation::getTranslation(Strings::INDEX_FILTER_AVAILABLE_TASKS)}</h3>
-                <div id="filter">
-                    <form action="{urlFor name="home"}" method="post">
-                        <table>
-                            <th>{Localisation::getTranslation(Strings::COMMON_TASK_TYPE)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)} <span style="color: red">*</span></th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_TARGET_LANGUAGE)} <span style="color: red">*</span></th>
-                            <tr>
-                                <td>
-                                    <select name="taskType">
-                                        <option value="">{Localisation::getTranslation(Strings::INDEX_ANY)}</option>
-                                        {foreach $taskTypes as $id => $typeName}
-                                            {if $id == $selectedType}
-                                                <option selected="true" value="{$id}">{$typeName}</option>
-                                            {else}
-                                                <option value="{$id}">{$typeName}</option>
-                                            {/if}
-                                        {/foreach}
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="sourceLanguage">
-                                        <option value="">{Localisation::getTranslation(Strings::INDEX_ANY)}</option>
-                                        {foreach $languageList as $language}
-                                            {if $language->getCode() == $selectedSource}
-                                                <option selected value="{$language->getCode()}">{$language->getName()}</option>
-                                            {else}
-                                                <option value="{$language->getCode()}">{$language->getName()}</option>
-                                            {/if}
-                                        {/foreach}
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="targetLanguage">
-                                        <option value="">{Localisation::getTranslation(Strings::INDEX_ANY)}</option>
-                                        {foreach $languageList as $language}
-                                            {if $language->getCode() == $selectedTarget}
-                                                <option selected value="{$language->getCode()}">{$language->getName()}</option>
-                                            {else}
-                                                <option value="{$language->getCode()}">{$language->getName()}</option>
-                                            {/if}
-                                        {/foreach}
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button type="submit" value="Filter" class="btn btn-primary">
-                                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation(Strings::INDEX_FILTER_TASK_STREAM)}
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                    <small>
-                        <span style="color: red">*</span> {Localisation::getTranslation(Strings::INDEX_2)}
-                        {Localisation::getTranslation(Strings::INDEX_3)}
-                    </small>
-                </div>
-                <hr />
-            {/if}
-            {if count($tasks) > 0}
-                <div id="tasks">
-                    {foreach from=$tasks item=task name=tasks_loop}
-                        {include file="task/task.summary-link.tpl" task=$task}
-                    {/foreach}
-                </div>
+
+            {if isset($user)}
+                <div is="x-task-stream" user-id="{$user->getId()}" id="taskStream"></div>
             {else}
-                <div class="alert alert-warning">
-                    {if isset($user_is_organisation_member)}
-                        <strong>{Localisation::getTranslation(Strings::INDEX_NO_OPEN_TASKS)}</strong> {Localisation::getTranslation(Strings::INDEX_4)}
-                    {else}
-                        <strong>{Localisation::getTranslation(Strings::INDEX_NO_TASKS_AVAILABLE)}</strong> {Localisation::getTranslation(Strings::INDEX_5)}
-                    {/if}
-                </div>
+                <div is="x-task-stream" user-id="0" id="taskStream"></div>
             {/if}
+
+            <script src="{urlFor name="home"}ui/dartCompiled/dart/web/packages/browser/dart.js"></script>
+            <script type="application/dart" src="{urlFor name="home"}ui/dartCompiled/dart/web/Routes/Users/home.dart"></script>
+
 
             {if !isset($user)}
                 <div class="alert">

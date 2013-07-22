@@ -1,7 +1,7 @@
 <?php
 
 include_once __DIR__."/OrganisationDao.class.php";
-require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class AdminDao
 { 

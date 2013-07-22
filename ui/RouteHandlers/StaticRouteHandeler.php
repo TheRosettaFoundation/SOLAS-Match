@@ -5,14 +5,14 @@ class StaticRouteHandeler
     public function init()
     {
         $app = Slim::getInstance();       
-        
         $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");
         $app->get("/static/terms/", array($this, "terms"))->name("terms");
         $app->get("/static/videos/", array($this, "videos"))->name("videos");
         $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST","GET")->name("siteLanguage");
         $app->get("/static/getStrings/", array($this, "getStrings"))->name("staticGetStrings");
         $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
-        $app->notFound(array("Middleware::notFound"));
+        $app->notFound("Middleware::notFound");
+
     }
 
     public function privacy()

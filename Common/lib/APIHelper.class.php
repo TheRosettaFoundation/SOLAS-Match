@@ -63,10 +63,14 @@ class APIHelper
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
         
-        curl_setopt($re, CURLOPT_HTTPHEADER, array(                                                                          
-            $this->_serializer->getContentType(),                                                                                
-            'Content-Length: ' . $lenght)                                                                       
-        );
+        if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, $_COOKIE['slim_session']);        
+        
+        $httpHeaders = array(
+                $this->_serializer->getContentType(),                                                                                
+                'Content-Length:'.$lenght,
+                'X-Custom-Authorization:'.UserSession::getHash());       
+
+        curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
         $res=curl_exec($re);
 

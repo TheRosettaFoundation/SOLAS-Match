@@ -35,6 +35,12 @@ class LoginAPI {
             
             try {             
                 $data = UserDao::apiLogin($data->getEmail(), $data->getPassword());
+                if(!is_null($data)){
+                    $data->setPassword(null);
+                    $data->setNonce(null);
+                    UserSession::setSession($data->getId());
+                    UserSession::setHash(md5("{$data->getEmail()}:{$data->getDisplayName()}"));
+                }
                 Dispatcher::sendResponce(null, $data, null, $format);
             } catch(Exception $e) {
                 Dispatcher::sendResponce(null, null, $e->getMessage(), $format);

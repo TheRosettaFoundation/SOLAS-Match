@@ -31,7 +31,7 @@ class Localisation {
     
     public static function getStrings(){
         if(!self::$ready) self::init();
-        return self::$doc->saveXml();
+        return self::$doc->saveXML(self::$doc->firstChild);
     }
 
 
@@ -43,7 +43,9 @@ class Localisation {
         if($stringElement->length == 0) {
             return "Could not find/load: $stringId";
         }
-        return $stringElement->item(0)->nodeValue;
+        $foundNode = self::$doc->saveXML($stringElement->item(0));
+        $foundNode = substr($foundNode, strpos($foundNode, ">")+1);
+        return substr($foundNode,0,strrpos($foundNode,"<"));
     }
     
     public static function fetchTranslationFile($lang = "strings.xml")
