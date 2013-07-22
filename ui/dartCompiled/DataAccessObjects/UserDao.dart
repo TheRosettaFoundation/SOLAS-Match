@@ -42,6 +42,7 @@ class UserDao
     Future<UserPersonalInformation> ret = client.call("UserPersonalInformation", "v0/users/$userId/personalInfo", "GET")
         .then((String jsonText) {
           UserPersonalInformation userInfo = new UserPersonalInformation();
+          userInfo.userId = userId;
           if (jsonText != '') {
             Map jsonParsed = json.parse(jsonText);
             userInfo = ModelFactory.generateUserInfoFromMap(jsonParsed);

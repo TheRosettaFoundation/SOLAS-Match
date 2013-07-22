@@ -1455,9 +1455,10 @@ UserDao_deleteUser_closure: {"": "Closure;",
 
 "+UserDao_deleteUser_closure": 0,
 
-UserDao_getUserPersonalInfo_closure: {"": "Closure;",
+UserDao_getUserPersonalInfo_closure: {"": "Closure;userId_0",
   call$1: function(jsonText) {
     var userInfo = $.UserPersonalInformation$();
+    userInfo.userId = this.userId_0;
     return !$.$eq(jsonText, "") ? $.ModelFactory_generateUserInfoFromMap($.parse(jsonText, null)) : userInfo;
   },
   "+call:1:0": 0,
@@ -1587,7 +1588,7 @@ UserDao_deleteUser: function(userId) {
 "+deleteUser:1:0": 0,
 
 UserDao_getUserPersonalInfo: function(userId) {
-  return $.APIHelper$(".json").call$3("UserPersonalInformation", "v0/users/" + $.S(userId) + "/personalInfo", "GET").then$1(new $.UserDao_getUserPersonalInfo_closure());
+  return $.APIHelper$(".json").call$3("UserPersonalInformation", "v0/users/" + $.S(userId) + "/personalInfo", "GET").then$1(new $.UserDao_getUserPersonalInfo_closure(userId));
 },
 
 "+getUserPersonalInfo:1:0": 0,
