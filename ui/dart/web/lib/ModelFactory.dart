@@ -149,10 +149,18 @@ class ModelFactory
   static Locale generateLocaleFromMap(Map localeData)
   {
     Locale locale = new Locale();
-    locale.languageName = localeData["languageName"];
-    locale.languageCode = localeData["languageCode"];
-    locale.countryName = localeData["countryName"];
-    locale.countryCode = localeData["countryCode"];
+    if (localeData.containsKey("languageName")) {
+      locale.languageName = localeData["languageName"];
+    }
+    if (localeData.containsKey("languageCode")) {
+      locale.languageCode = localeData["languageCode"];
+    }
+    if (localeData.containsKey("countryName")) {
+      locale.countryName = localeData["countryName"];
+    }
+    if (localeData.containsKey("countryCode")) {
+      locale.countryCode = localeData["countryCode"];
+    }
     return locale;
   }
 }
