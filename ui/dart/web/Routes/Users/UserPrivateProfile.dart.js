@@ -1376,11 +1376,10 @@ init.mangledNames = {$$dom_replaceChild$2: "$dom_replaceChild:2:0", $add: "+:1:0
 ["SolasMatchDart", "../../DataAccessObjects/CountryDao.dart", , {
 CountryDao_getAllCountries_closure: {"": "Closure;",
   call$1: function(jsonText) {
-    var parsed, countries;
-    parsed = $.parse(jsonText, null);
-    countries = $.List_List(null, $.Country);
+    var countries = $.List_List(null, $.Country);
     $.setRuntimeTypeInfo(countries, [$.Country]);
-    $.forEach$1$ax($.$index$asx(parsed, "item"), new $.CountryDao_getAllCountries__closure(countries));
+    if (!$.$eq(jsonText, ""))
+      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.CountryDao_getAllCountries__closure(countries));
     return countries;
   },
   "+call:1:0": 0,
@@ -1409,7 +1408,8 @@ LanguageDao_getAllLanguages_closure: {"": "Closure;",
   call$1: function(jsonText) {
     var languages = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(languages, [$.Language]);
-    $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
+    if (!$.$eq(jsonText, ""))
+      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
     return languages;
   },
   "+call:1:0": 0,
@@ -1436,7 +1436,8 @@ LanguageDao_getAllLanguages: function() {
 ["SolasMatchDart", "../../DataAccessObjects/UserDao.dart", , {
 UserDao_getUser_closure: {"": "Closure;",
   call$1: function(jsonText) {
-    return $.ModelFactory_generateUserFromMap($.parse(jsonText, null));
+    var user = $.User$();
+    return $.$gt$n($.get$length$asx(jsonText), 0) === true ? $.ModelFactory_generateUserFromMap($.parse(jsonText, null)) : user;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -1469,7 +1470,8 @@ UserDao_getSecondaryLanguages_closure: {"": "Closure;",
   call$1: function(jsonText) {
     var locales = $.List_List(null, $.Locale);
     $.setRuntimeTypeInfo(locales, [$.Locale]);
-    $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getSecondaryLanguages__closure(locales));
+    if ($.$gt$n($.get$length$asx(jsonText), 0) === true)
+      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getSecondaryLanguages__closure(locales));
     return locales;
   },
   "+call:1:0": 0,
@@ -1492,7 +1494,8 @@ UserDao_getUserBadges_closure: {"": "Closure;",
   call$1: function(jsonText) {
     var badges = $.List_List(null, $.Badge);
     $.setRuntimeTypeInfo(badges, [$.Badge]);
-    $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getUserBadges__closure(badges));
+    if ($.$gt$n($.get$length$asx(jsonText), 0) === true)
+      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getUserBadges__closure(badges));
     return badges;
   },
   "+call:1:0": 0,

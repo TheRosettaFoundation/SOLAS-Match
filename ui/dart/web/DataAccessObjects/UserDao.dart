@@ -17,8 +17,11 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     Future<User> ret = client.call("User", "v0/users/$id", "GET")
         .then((String jsonText) {
-          Map jsonParsed = json.parse(jsonText);
-          User user = ModelFactory.generateUserFromMap(jsonParsed);
+          User user = new User();
+          if (jsonText.length > 0) {
+            Map jsonParsed = json.parse(jsonText);
+            user = ModelFactory.generateUserFromMap(jsonParsed);
+          }
           return user;
         });
     return ret;
@@ -54,11 +57,13 @@ class UserDao
     Future<List<Locale>> ret = client.call("Locale", "v0/users/$userId/secondaryLanguages", "GET")
         .then((String jsonText) {
           List<Locale> locales = new List<Locale>();
-          Map parsed = json.parse(jsonText);
-          parsed['item'].forEach((String data) {
-            Map localeData = json.parse(data);
-            locales.add(ModelFactory.generateLocaleFromMap(localeData));
-          });
+          if (jsonText.length > 0) {
+            Map parsed = json.parse(jsonText);
+            parsed['item'].forEach((String data) {
+              Map localeData = json.parse(data);
+              locales.add(ModelFactory.generateLocaleFromMap(localeData));
+            });
+          }
           return locales;
         });
     return ret;
@@ -70,11 +75,13 @@ class UserDao
     Future<List<Badge>> ret = client.call("Badge", "v0/users/$userId/badges", "GET")
         .then((String jsonText) {
           List<Badge> badges = new List<Badge>();
-          Map parsed = json.parse(jsonText);
-          parsed['item'].forEach((String data) {
-            Map badgeData = json.parse(data);
-            badges.add(ModelFactory.generateBadgeFromMap(badgeData));
-          });
+          if (jsonText.length > 0) {
+            Map parsed = json.parse(jsonText);
+            parsed['item'].forEach((String data) {
+              Map badgeData = json.parse(data);
+              badges.add(ModelFactory.generateBadgeFromMap(badgeData));
+            });
+          }
           return badges;
         });
     return ret;

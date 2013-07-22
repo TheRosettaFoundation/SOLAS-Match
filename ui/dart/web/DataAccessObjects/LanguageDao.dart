@@ -16,11 +16,13 @@ class LanguageDao
     Future<List<Language>> ret = client.call("Language", "v0/languages", "GET")
         .then((String jsonText) {
           List<Language> languages = new List<Language>();
-          Map jsonParsed = json.parse(jsonText);
-          jsonParsed['item'].forEach((String data) {
-            Map lang = json.parse(data);
-            languages.add(ModelFactory.generateLanguageFromMap(lang));
-          });
+          if (jsonText != "") {
+            Map jsonParsed = json.parse(jsonText);
+            jsonParsed['item'].forEach((String data) {
+              Map lang = json.parse(data);
+              languages.add(ModelFactory.generateLanguageFromMap(lang));
+            });
+          }
           return languages;
         });
     return ret;
@@ -45,12 +47,14 @@ class LanguageDao
       });*/
       .then((String jsonText) {
       List<Language> activeLangs = new List<Language>();
-      Map jsonParsed = json.parse(jsonText);
-      if (jsonParsed.length > 0) {
-        jsonParsed['item'].forEach((String data) {
-          Map lang = json.parse(data);
-          activeLangs.add(ModelFactory.generateLanguageFromMap(lang));
-        });
+      if (jsonText != '') {
+        Map jsonParsed = json.parse(jsonText);
+        if (jsonParsed.length > 0) {
+          jsonParsed['item'].forEach((String data) {
+            Map lang = json.parse(data);
+            activeLangs.add(ModelFactory.generateLanguageFromMap(lang));
+          });
+        }
       }
       return activeLangs;
     });

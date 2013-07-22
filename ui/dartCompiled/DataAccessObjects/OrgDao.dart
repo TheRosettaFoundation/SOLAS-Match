@@ -15,8 +15,11 @@ class OrgDao
     Future<String> jsonData = client.call("Organisation", 
         "v0/orgs/" + id.toString(), "GET", "", new Map());
     Future<Organisation> organisation = jsonData.then((String jsonText) {
-      Map jsonParsed = json.parse(jsonText);
-      Organisation org = ModelFactory.generateOrgFromMap(jsonParsed);
+      Organisation org = new Organisation();
+      if (jsonText != '') {
+        Map jsonParsed = json.parse(jsonText);
+        org = ModelFactory.generateOrgFromMap(jsonParsed);
+      }
       return org;
     });
     return organisation;

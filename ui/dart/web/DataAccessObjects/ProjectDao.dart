@@ -20,8 +20,11 @@ class ProjectDao
     Future<String> jsonData = client.call("Project", 
         "v0/projects/" + id.toString(), "GET", "", new Map());
     Future<Project> project = jsonData.then((String jsonText) {
-      Map jsonParsed = json.parse(jsonText);
-      Project pro = ModelFactory.generateProjectFromMap(jsonParsed);
+      Project pro = new Project();
+      if (jsonText != '') {
+        Map jsonParsed = json.parse(jsonText);
+        pro = ModelFactory.generateProjectFromMap(jsonParsed);
+      }
       return pro;
     });
     return project;

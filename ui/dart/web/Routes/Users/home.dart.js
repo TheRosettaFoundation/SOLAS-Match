@@ -1298,10 +1298,12 @@ LanguageDao_getActiveLanguages_closure: {"": "Closure;",
     var activeLangs, jsonParsed, t1;
     activeLangs = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(activeLangs, [$.Language]);
-    jsonParsed = $.parse(jsonText, null);
-    t1 = $.getInterceptor$asx(jsonParsed);
-    if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
-      $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveLanguages__closure(activeLangs));
+    if (!$.$eq(jsonText, "")) {
+      jsonParsed = $.parse(jsonText, null);
+      t1 = $.getInterceptor$asx(jsonParsed);
+      if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
+        $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveLanguages__closure(activeLangs));
+    }
     return activeLangs;
   },
   "+call:1:0": 0,
@@ -1328,7 +1330,8 @@ LanguageDao_getActiveLanguages: function() {
 ["SolasMatchDart", "../../DataAccessObjects/OrgDao.dart", , {
 OrgDao_getOrg_closure: {"": "Closure;",
   call$1: function(jsonText) {
-    return $.ModelFactory_generateOrgFromMap($.parse(jsonText, null));
+    var org = $.Organisation$();
+    return !$.$eq(jsonText, "") ? $.ModelFactory_generateOrgFromMap($.parse(jsonText, null)) : org;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -1344,7 +1347,8 @@ OrgDao_getOrg: function(id) {
 ["SolasMatchDart", "../../DataAccessObjects/ProjectDao.dart", , {
 ProjectDao_getProject_closure: {"": "Closure;",
   call$1: function(jsonText) {
-    return $.ModelFactory_generateProjectFromMap($.parse(jsonText, null));
+    var pro = $.Project$();
+    return !$.$eq(jsonText, "") ? $.ModelFactory_generateProjectFromMap($.parse(jsonText, null)) : pro;
   },
   "+call:1:0": 0,
   $isFunction: true

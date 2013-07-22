@@ -1376,11 +1376,10 @@ init.mangledNames = {$$dom_replaceChild$2: "$dom_replaceChild:2:0", $add: "+:1:0
 ["SolasMatchDart", "../../DataAccessObjects/CountryDao.dart", , {
 CountryDao_getAllCountries_closure: {"": "Closure;",
   call$1: function(jsonText) {
-    var parsed, countries;
-    parsed = $.parse(jsonText, null);
-    countries = $.List_List(null, $.Country);
+    var countries = $.List_List(null, $.Country);
     $.setRuntimeTypeInfo(countries, [$.Country]);
-    $.forEach$1$ax($.$index$asx(parsed, "item"), new $.CountryDao_getAllCountries__closure(countries));
+    if (!$.$eq(jsonText, ""))
+      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.CountryDao_getAllCountries__closure(countries));
     return countries;
   },
   "+call:1:0": 0,
@@ -1409,7 +1408,8 @@ LanguageDao_getAllLanguages_closure: {"": "Closure;",
   call$1: function(jsonText) {
     var languages = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(languages, [$.Language]);
-    $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
+    if (!$.$eq(jsonText, ""))
+      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
     return languages;
   },
   "+call:1:0": 0,
@@ -1436,7 +1436,8 @@ LanguageDao_getAllLanguages: function() {
 ["SolasMatchDart", "../../DataAccessObjects/UserDao.dart", , {
 UserDao_getUser_closure: {"": "Closure;",
   call$1: function(jsonText) {
-    return $.ModelFactory_generateUserFromMap($.parse(jsonText, null));
+    var user = $.User$();
+    return $.$gt$n($.get$length$asx(jsonText), 0) === true ? $.ModelFactory_generateUserFromMap($.parse(jsonText, null)) : user;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -1456,7 +1457,8 @@ UserDao_deleteUser_closure: {"": "Closure;",
 
 UserDao_getUserPersonalInfo_closure: {"": "Closure;",
   call$1: function(jsonText) {
-    return $.ModelFactory_generateUserInfoFromMap($.parse(jsonText, null));
+    var userInfo = $.UserPersonalInformation$();
+    return !$.$eq(jsonText, "") ? $.ModelFactory_generateUserInfoFromMap($.parse(jsonText, null)) : userInfo;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -1468,7 +1470,8 @@ UserDao_getSecondaryLanguages_closure: {"": "Closure;",
   call$1: function(jsonText) {
     var locales = $.List_List(null, $.Locale);
     $.setRuntimeTypeInfo(locales, [$.Locale]);
-    $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getSecondaryLanguages__closure(locales));
+    if ($.$gt$n($.get$length$asx(jsonText), 0) === true)
+      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getSecondaryLanguages__closure(locales));
     return locales;
   },
   "+call:1:0": 0,
@@ -1491,7 +1494,8 @@ UserDao_getUserBadges_closure: {"": "Closure;",
   call$1: function(jsonText) {
     var badges = $.List_List(null, $.Badge);
     $.setRuntimeTypeInfo(badges, [$.Badge]);
-    $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getUserBadges__closure(badges));
+    if ($.$gt$n($.get$length$asx(jsonText), 0) === true)
+      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getUserBadges__closure(badges));
     return badges;
   },
   "+call:1:0": 0,
@@ -3549,7 +3553,7 @@ APIHelper: {"": "Object;format",
       key = $.$add$ns($.$add$ns(t2.email, ":"), $.APIHelper_UserObject.display_name);
       t2 = $.MD5$();
       t2.add$1(t2, $.get$codeUnits$s(key));
-      headers.$indexSet(headers, "Authorization", $.CryptoUtils_bytesToHex(t2.close$0(t2)));
+      headers.$indexSet(headers, "X-Custom-Authorization", $.CryptoUtils_bytesToHex(t2.close$0(t2)));
     }
     t1.url_0 = $.$add$ns($.$add$ns($.$add$ns($.Settings_Settings().get$conf().get$urls().get$SOLASMatch(), t1.url_0), this.format), "/");
     if (queryArgs != null) {
@@ -3732,17 +3736,23 @@ ModelFactory_generateCountryFromMap: function(data) {
 "+generateCountryFromMap:1:0": 0,
 
 ModelFactory_generateUserFromMap: function(userData) {
-  var user, t1;
-  user = $.User$();
-  t1 = $.getInterceptor$asx(userData);
-  user.id = t1.$index(userData, "id");
-  user.display_name = t1.$index(userData, "display_name");
-  user.email = t1.$index(userData, "email");
-  user.password = t1.$index(userData, "password");
-  user.biography = t1.$index(userData, "biography");
-  user.nonce = t1.$index(userData, "nonce");
-  user.created_time = t1.$index(userData, "created_time");
-  user.nativeLocale = $.ModelFactory_generateLocaleFromMap(t1.$index(userData, "nativeLocale"));
+  var user = $.User$();
+  if (userData.containsKey$1("id") === true)
+    user.id = $.$index$asx(userData, "id");
+  if (userData.containsKey$1("display_name") === true)
+    user.display_name = $.$index$asx(userData, "display_name");
+  if (userData.containsKey$1("email") === true)
+    user.email = $.$index$asx(userData, "email");
+  if (userData.containsKey$1("password") === true)
+    user.password = $.$index$asx(userData, "password");
+  if (userData.containsKey$1("biography") === true)
+    user.biography = $.$index$asx(userData, "biography");
+  if (userData.containsKey$1("nonce") === true)
+    user.nonce = $.$index$asx(userData, "nonce");
+  if (userData.containsKey$1("created_time") === true)
+    user.created_time = $.$index$asx(userData, "created_time");
+  if (userData.containsKey$1("nativeLocale") === true)
+    user.nativeLocale = $.ModelFactory_generateLocaleFromMap($.$index$asx(userData, "nativeLocale"));
   return user;
 },
 
@@ -3781,13 +3791,15 @@ ModelFactory_generateLanguageFromMap: function(languageData) {
 "+generateLanguageFromMap:1:0": 0,
 
 ModelFactory_generateLocaleFromMap: function(localeData) {
-  var locale, t1;
-  locale = $.Locale$();
-  t1 = $.getInterceptor$asx(localeData);
-  locale.languageName = t1.$index(localeData, "languageName");
-  locale.languageCode = t1.$index(localeData, "languageCode");
-  locale.countryName = t1.$index(localeData, "countryName");
-  locale.countryCode = t1.$index(localeData, "countryCode");
+  var locale = $.Locale$();
+  if (localeData.containsKey$1("languageName") === true)
+    locale.languageName = $.$index$asx(localeData, "languageName");
+  if (localeData.containsKey$1("languageCode") === true)
+    locale.languageCode = $.$index$asx(localeData, "languageCode");
+  if (localeData.containsKey$1("countryName") === true)
+    locale.countryName = $.$index$asx(localeData, "countryName");
+  if (localeData.containsKey$1("countryCode") === true)
+    locale.countryCode = $.$index$asx(localeData, "countryCode");
   return locale;
 },
 

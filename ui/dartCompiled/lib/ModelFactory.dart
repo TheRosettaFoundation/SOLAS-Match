@@ -93,14 +93,30 @@ class ModelFactory
   static User generateUserFromMap(Map userData)
   {
     User user = new User();
-    user.id = userData['id'];
-    user.display_name = userData['display_name'];
-    user.email = userData['email'];
-    user.password = userData['password'];
-    user.biography = userData['biography'];
-    user.nonce = userData['nonce'];
-    user.created_time = userData['created_time'];
-    user.nativeLocale = ModelFactory.generateLocaleFromMap(userData['nativeLocale']);
+    if (userData.containsKey("id")) {
+      user.id = userData['id'];
+    }
+    if (userData.containsKey("display_name")) {
+      user.display_name = userData['display_name'];
+    }
+    if (userData.containsKey("email")) {
+      user.email = userData['email'];
+    }
+    if (userData.containsKey("password")) {
+      user.password = userData['password'];
+    }
+    if (userData.containsKey("biography")) {
+      user.biography = userData['biography'];
+    }
+    if (userData.containsKey("nonce")) {
+      user.nonce = userData['nonce'];
+    }
+    if (userData.containsKey("created_time")) {
+      user.created_time = userData['created_time'];
+    }
+    if (userData.containsKey("nativeLocale")) {
+      user.nativeLocale = ModelFactory.generateLocaleFromMap(userData['nativeLocale']);
+    }
     return user;
   }
   
@@ -133,10 +149,18 @@ class ModelFactory
   static Locale generateLocaleFromMap(Map localeData)
   {
     Locale locale = new Locale();
-    locale.languageName = localeData["languageName"];
-    locale.languageCode = localeData["languageCode"];
-    locale.countryName = localeData["countryName"];
-    locale.countryCode = localeData["countryCode"];
+    if (localeData.containsKey("languageName")) {
+      locale.languageName = localeData["languageName"];
+    }
+    if (localeData.containsKey("languageCode")) {
+      locale.languageCode = localeData["languageCode"];
+    }
+    if (localeData.containsKey("countryName")) {
+      locale.countryName = localeData["countryName"];
+    }
+    if (localeData.containsKey("countryCode")) {
+      locale.countryCode = localeData["countryCode"];
+    }
     return locale;
   }
 }
