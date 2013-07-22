@@ -137,8 +137,10 @@ class UserPrivateProfileForm extends WebComponent
           ..text = languages[i].name;
       langSelect.children.add(option);
       
-      if (languages[i].code == user.nativeLocale.languageCode) {
-        nativeLanguageIndex = i;
+      if (user.nativeLocale != null) {
+        if (languages[i].code == user.nativeLocale.languageCode) {
+          nativeLanguageIndex = i;
+        }
       }
       
       if (userSecondaryLanguages.length > 0) {
@@ -162,8 +164,10 @@ class UserPrivateProfileForm extends WebComponent
           ..text = countries[i].name;
       countrySelect.children.add(option);
       
-      if (countries[i].code == user.nativeLocale.countryCode) {
-        nativeCountryIndex = i;
+      if (user.nativeLocale != null) {
+        if (countries[i].code == user.nativeLocale.countryCode) {
+          nativeCountryIndex = i;
+        }
       }
       
       if (userSecondaryLanguages.length > 0) {

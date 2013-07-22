@@ -1907,13 +1907,18 @@ UserPrivateProfileForm: {"": "WebComponent_Observable;_css,__e59,__t,userId@,__$
       $.add$1$ax($.get$children$x(this.langSelect), option);
       t2 = $._activeObserver;
       if (t2 != null)
-        t2._addRead$3(this, 1, "languages");
-      t2 = $.get$code$x($.$index$asx(this.__$languages, i));
-      t3 = $._activeObserver;
-      if (t3 != null)
-        t3._addRead$3(this, 1, "user");
-      if ($.$eq(t2, this.__$user.get$nativeLocale().get$languageCode()))
-        nativeLanguageIndex = i;
+        t2._addRead$3(this, 1, "user");
+      if (this.__$user.get$nativeLocale() != null) {
+        t2 = $._activeObserver;
+        if (t2 != null)
+          t2._addRead$3(this, 1, "languages");
+        t2 = $.get$code$x($.$index$asx(this.__$languages, i));
+        t3 = $._activeObserver;
+        if (t3 != null)
+          t3._addRead$3(this, 1, "user");
+        if ($.$eq(t2, this.__$user.get$nativeLocale().get$languageCode()))
+          nativeLanguageIndex = i;
+      }
       t2 = $._activeObserver;
       if (t2 != null)
         t2._addRead$3(this, 1, "userSecondaryLanguages");
@@ -1976,13 +1981,18 @@ UserPrivateProfileForm: {"": "WebComponent_Observable;_css,__e59,__t,userId@,__$
       $.add$1$ax($.get$children$x(this.countrySelect), option);
       t3 = $._activeObserver;
       if (t3 != null)
-        t3._addRead$3(this, 1, "countries");
-      t3 = $.get$code$x($.$index$asx(this.__$countries, i));
-      t4 = $._activeObserver;
-      if (t4 != null)
-        t4._addRead$3(this, 1, "user");
-      if ($.$eq(t3, this.__$user.get$nativeLocale().get$countryCode()))
-        nativeCountryIndex = i;
+        t3._addRead$3(this, 1, "user");
+      if (this.__$user.get$nativeLocale() != null) {
+        t3 = $._activeObserver;
+        if (t3 != null)
+          t3._addRead$3(this, 1, "countries");
+        t3 = $.get$code$x($.$index$asx(this.__$countries, i));
+        t4 = $._activeObserver;
+        if (t4 != null)
+          t4._addRead$3(this, 1, "user");
+        if ($.$eq(t3, this.__$user.get$nativeLocale().get$countryCode()))
+          nativeCountryIndex = i;
+      }
       t3 = $._activeObserver;
       if (t3 != null)
         t3._addRead$3(this, 1, "userSecondaryLanguages");
