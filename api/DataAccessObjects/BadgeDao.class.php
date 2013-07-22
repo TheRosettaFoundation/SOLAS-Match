@@ -57,6 +57,7 @@ class BadgeDao
                 .",".PDOWrapper::cleanseNull($badgeID);
         
         if (!$validation = self::validateUserBadge($userID, $badgeID)) {
+            Notify::sendUserAssignedBadgeEmail($userID, $badgeID);
             if ($result = PDOWrapper::call("assignBadge", $args)) {
                 return $result[0]["result"];
             }

@@ -23,6 +23,7 @@ class MessagingClient
     public $UserFeedbackTopic               = "email";
     public $OrgFeedbackTopic                = "email";
     public $UserReferenceRequestTopic       = "email";
+    public $UserBadgeAwardedTopic           = "email";
 
     private $connection;
 
