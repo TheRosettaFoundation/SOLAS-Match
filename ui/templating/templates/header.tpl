@@ -32,7 +32,7 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
         
         <!-- dart conf file location -->
-        <input type="hidden" id="ConfFileLocation" value="{urlFor name="home"}ui/dartCompiled/conf/conf.json" />
+        <input type="hidden" id="ConfFileLocation" value="{urlFor name="home"}ui/dart/deploy/web/conf/conf.json" />
 
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
