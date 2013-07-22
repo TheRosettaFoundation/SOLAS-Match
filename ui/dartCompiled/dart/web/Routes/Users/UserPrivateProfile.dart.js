@@ -1456,7 +1456,8 @@ UserDao_deleteUser_closure: {"": "Closure;",
 
 UserDao_getUserPersonalInfo_closure: {"": "Closure;",
   call$1: function(jsonText) {
-    return $.ModelFactory_generateUserInfoFromMap($.parse(jsonText, null));
+    var userInfo = $.UserPersonalInformation$();
+    return !$.$eq(jsonText, "") ? $.ModelFactory_generateUserInfoFromMap($.parse(jsonText, null)) : userInfo;
   },
   "+call:1:0": 0,
   $isFunction: true

@@ -38,8 +38,11 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     Future<UserPersonalInformation> ret = client.call("UserPersonalInformation", "v0/users/$userId/personalInfo", "GET")
         .then((String jsonText) {
-          Map jsonParsed = json.parse(jsonText);
-          UserPersonalInformation userInfo = ModelFactory.generateUserInfoFromMap(jsonParsed);
+          UserPersonalInformation userInfo = new UserPersonalInformation();
+          if (jsonText != '') {
+            Map jsonParsed = json.parse(jsonText);
+            userInfo = ModelFactory.generateUserInfoFromMap(jsonParsed);
+          }
           return userInfo;
         });
     return ret;
