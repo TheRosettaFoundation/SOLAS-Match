@@ -880,7 +880,11 @@ class TaskRouteHandler
                 }
             }
 
-            if(isset($post['published'])) $task->setPublished("1");
+            if(isset($post['published'])) {
+                $task->setPublished(1);
+            } else {
+                $task->setPublished(0);
+            }
 
             if(is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 $newTask = $taskDao->createTask($task);
@@ -1160,9 +1164,7 @@ class TaskRouteHandler
                 if ($post['feedback'] != "") {
                     $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
     
-                    $app->flashNow("success", "Feedback sent to 
-                            <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
-                            {$claimant->getDisplayName()}</a>.");
+                    $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_32), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
                     if(isset($post['revokeTask']) && $post['revokeTask']) {
                         $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                         $taskDao->updateTask($task);

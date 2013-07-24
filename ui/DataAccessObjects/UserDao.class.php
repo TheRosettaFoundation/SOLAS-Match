@@ -352,11 +352,10 @@ class UserDao extends BaseDao
         switch($this->client->getResponseCode()) {
             
             case HttpStatusEnum::NOT_FOUND : 
-                throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
-                                    Please check the credentials used and try again."); 
+                throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_DAO_1)); 
                 
             case HttpStatusEnum::UNAUTHORIZED : 
-                throw new InvalidArgumentException("Sorry, this user account has not been verified. Please check your e-mail.");              
+                throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_DAO_2));              
                 
             case HttpStatusEnum::FORBIDDEN :
                 $userDao = new UserDao();

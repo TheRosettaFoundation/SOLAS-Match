@@ -71,8 +71,8 @@
         <string name="tag_routehandler_3">Successfully removed tag %s for user %s</string>
         <string name="tag_routehandler_4">Unable to remove tag %s for user %s</string>
 
-        <string name="task_routehandler_1">You have successfully archived the <strong>%s Task %s</strong>.</string>
-        <string name="task_routehandler_2">There was an error archiving the <strong>%s Task %s</strong>.</string>
+        <string name="task_routehandler_1">You have successfully archived the <strong>%s %s</strong>.</string>
+        <string name="task_routehandler_2">There was an error archiving the <strong>%s %s</strong>.</string>
         <string name="task_routehandler_3">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
         <string name="task_routehandler_4">The <strong>contents</strong> of the file you are uploading is not a valid <strong>(.%s)</strong> If you are having problems opening and working in <strong>(.%s) format</strong>, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
         <string name="task_routehandler_5">File error:</string>
@@ -102,6 +102,7 @@
         <string name="task_routehandler_29">Consistency value must be between 1 and 5</string>
         <string name="task_routehandler_30">Unable to submit review for %s, please try again later.</string>
         <string name="task_routehandler_31">Review of task %s has been submitted successfully.</string>
+        <string name="task_routehandler_32">Feedback sent to <a href="%s">%s</a>.</string>
        
         <string name="user_routehandler_1">The email address you entered was not valid. Please try again.</string>
         <string name="user_routehandler_2">You did not enter a password. Please try again.</string>
@@ -118,12 +119,36 @@
         <string name="user_routehandler_13">Password reset request was already sent to %s. Another email has been sent to your contact address. Follow the link in this email to reset your password.</string>
         <string name="user_routehandler_14">Please enter a valid email address.</string>
         <string name="user_routehandler_15"><p>Unable to log in. Please check your email and password. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
-        <string name="user_routehandler_16">User has cancelled authentication!</string>
-        <string name="user_routehandler_17">This user account has been banned.</string>
-        <string name="user_routehandler_18">Login required to access page</string>
+        <string name="user_routehandler_16">User has cancelled authentication!</string>       
         <string name="user_routehandler_19">Successfully updated user task stream notification subscription</string>
         
-        <!-- Smarty Template Strings -->        
+        <!-- UI DAO Strings -->
+        
+        <string name="task_dao_1">The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.%s</strong>) file with a valid content type of (<strong>%s</strong>).</string>
+        <string name="task_dao_2">Internal server error. Please contact the administrators.</string>
+        
+        <string name="user_dao_1">Sorry, the username or password entered is incorrect. Please check the credentials used and try again.</string>
+        <string name="user_dao_2">Sorry, this user account has not been verified. Please check your e-mail."</string>        
+        
+        <!-- UI Lib Strings -->
+        
+        <string name="middleware_1">You do not have sufficient privileges to access this page or the page does not exist.</string>
+        <string name="middleware_2">This task has been claimed by another user.</string>
+        <string name="middleware_3">You cannot reclaim the task <a href="%s">%s</a>, because you have previously unclaimed it.</string>
+        
+        <string name="templatehelper_1">Unknown task type.</string>
+        <string name="templatehelper_2">A valid language code was expected.</string>
+        <string name="templatehelper_3">Sorry, we were not able to upload your file. %s</string>
+        <string name="templatehelper_4">The file you tried uploading is too large. The max file size is <strong>{$max_file_size}MB</strong>.</string>
+        <string name="templatehelper_5">The uploaded file was only partially uploaded. Please try again.</string>
+        <string name="templatehelper_6">You did not select a file to upload. Please try again.</string>
+        <string name="templatehelper_7">Server is missing a temporary folder.</string>
+        <string name="templatehelper_8">Server failed to write the file to disk.</string>
+        <string name="templatehelper_9">File upload stopped by extension.</string>
+        <string name="templatehelper_10">Please make sure the file you are trying to upload is valid and not empty.</string>
+
+        
+        <!-- Smarty Template Strings -->
         
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
@@ -290,6 +315,8 @@
     	<string name="common_untrack_task">Untrack Task</string>
     	<string name="common_track_task">Track Task</string>
         <string name="common_error">Error</string>
+        <string name="common_login_required_to_access_page">Login required to access page.</string>
+        <string name="common_this_user_account_has_been_banned">This user account has been banned.</string>
               
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of</string>
 	<string name="admin_banned_orgs_list_0">Are you sure you want to unban this Organisation and its members?</string>

@@ -11,7 +11,7 @@ class Middleware
         $this->isUserBanned();        
         if (!UserSession::getCurrentUserID()) {
             UserSession::setReferer($app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo());
-            $app->flash('error', "Login required to access page");
+            $app->flash('error', Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
             $app->redirect($app->urlFor('login'));
         }
 
@@ -21,7 +21,7 @@ class Middleware
     public static function notFound()
     {
         $app = Slim::getInstance();
-        $app->flash('error', "You do not have sufficient privileges to access this page or the page does not exist.");
+        $app->flash('error', Localisation::getTranslation(Strings::MIDDLEWARE_1));
         $app->redirect($app->urlFor('home'));
     }
     
@@ -60,7 +60,7 @@ class Middleware
         }
         if ($claimant) {
             if ($user_id != $claimant->getId()) {
-                $app->flash('error', 'This task has been claimed by another user');
+                $app->flash('error', Localisation::getTranslation(Strings::MIDDLEWARE_2));
                 $app->redirect($app->urlFor('home'));
             }
 
@@ -205,7 +205,7 @@ class Middleware
         if($adminDao->isUserBanned(UserSession::getCurrentUserID())) {
             $app = Slim::getInstance();
             UserSession::destroySession();
-            $app->flash('error', "This user account has been banned.");
+            $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
             $app->redirect($app->urlFor('home'));
         }       
     }
@@ -224,7 +224,7 @@ class Middleware
                     $taskDao = new TaskDao();
                     $task = $taskDao->getTask($taskId);                    
                     $app = Slim::getInstance();
-                    $app->flash('error', "You cannot reclaim the task <a href='{$app->urlFor("task-claimed", array("task_id" => $taskId))}'>{$task->getTitle()}</a> that you have previously unclaimed.");
+                    $app->flash('error', sprintf(Localisation::getStrings(Strings::MIDDLEWARE_3), $app->urlFor("task-claimed", array("task_id" => $taskId)), $task->getTitle()));
                     $app->redirect($app->urlFor('home'));   
                 } else {
                     return true;

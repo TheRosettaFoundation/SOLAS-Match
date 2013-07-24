@@ -194,11 +194,11 @@ class TaskDao extends BaseDao
                 $projectFileExtension = explode(".", $projectFileName);
                 $projectFileExtension = $projectFileExtension[count($projectFileExtension)-1];                                        
                 $projectMime = $projectFile->getMime();
-                throw new SolasMatchException("The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.$projectFileExtension</strong>) file with a valid content type of (<strong>$projectMime</strong>).", $this->client->getResponseCode());                                 
+                throw new SolasMatchException(sprintf(Localisation::getTranslation(Strings::TASK_DAO_1), $projectFileExtension, $projectMime), $this->client->getResponseCode());                                 
                 break;
             }
             case HttpStatusEnum::INTERNAL_SERVER_ERROR :
-                throw new SolasMatchException("Internal server error. Please contact the administrators.", $this->client->getResponseCode());
+                throw new SolasMatchException(Localisation::getTranslation(Strings::TASK_DAO_2), $this->client->getResponseCode());
                 break;                                
         }
     }

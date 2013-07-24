@@ -403,7 +403,7 @@ class UserRouteHandler
                     UserSession::setSession($user->getId());
                     UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 } else {
-                    $app->flash('error', Localisation::getTranslation(Strings::USER_ROUTEHANDLER_17));
+                    $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
                     $app->redirect($app->urlFor('home'));
                 }
                 
@@ -421,7 +421,7 @@ class UserRouteHandler
         $user = $userDao->getUser($userId);
         
         if (!is_object($user)) {
-            $app->flash("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_18));
+            $app->flash("error", Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
             $app->redirect($app->urlFor("login"));
         }
 

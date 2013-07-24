@@ -60,15 +60,15 @@ class TemplateHelper {
     {
         switch ($taskTypeId) {
             case TaskTypeEnum::DESEGMENTATION:
-                return "Desegmentation";
+                return Localisation::getTranslation(Strings::COMMON_DESEGMENTATION_TASK);
             case TaskTypeEnum::TRANSLATION:
-                return "Translation";
+                return Localisation::getTranslation(Strings::COMMON_TRANSLATION_TASK);
             case TaskTypeEnum::PROOFREADING:
-                return "Proofreading";
+                return Localisation::getTranslation(Strings::COMMON_PROOFREADING_TASK);
             case TaskTypeEnum::SEGMENTATION:
-                return "Segmentation";
+                return Localisation::getTranslation(Strings::COMMON_SEGMENTATION_TASK);
             default:
-                return "Unknown Task Type";
+                return Localisation::getTranslation(Strings::TEMPLATEHELPER_1);
         }
     }
 
@@ -323,7 +323,7 @@ class TemplateHelper {
         $langDao = new LanguageDao();
         $language = $langDao->getLanguageByCode($languageCode);
         if (is_null(($language))) {
-            throw new InvalidArgumentException("A valid language code was expected.");
+            throw new InvalidArgumentException(Localisation::getTranslation(Strings::TEMPLATEHELPER_2));
         }
         return $language->getId();
     }
@@ -362,7 +362,7 @@ class TemplateHelper {
     {
         if (!self::isUploadedWithoutError($field_name)) {
             $error_message = self::fileUploadErrorMessage($_FILES[$field_name]["error"]);
-            throw new Exception("Sorry, we were not able to upload your file. $error_message");
+            throw new Exception(sprintf(Localisation::getTranslation(Strings::TEMPLATEHELPER_3), $error_message));
         }
 
     }
@@ -384,21 +384,21 @@ class TemplateHelper {
         $max_file_size = self::maxFileSizeMB();
         switch ($error_code) {
             case UPLOAD_ERR_INI_SIZE :
-                return "The file you tried uploading is too large. The max file size is <strong>{$max_file_size}MB</strong>.";
+                return sprintf(Localisation::getTranslation(Strings::TEMPLATEHELPER_4), $max_file_size);
             case UPLOAD_ERR_FORM_SIZE :
-                return "The file you tried uploading is too large. The max file size is <strong>{$max_file_size}MB.</strong>";
+                return Localisation::getTranslation(Strings::TEMPLATEHELPER_4);
             case UPLOAD_ERR_PARTIAL :
-                return "The uploaded file was only partially uploaded. Please try again.";
+                return Localisation::getTranslation(Strings::TEMPLATEHELPER_5);
             case UPLOAD_ERR_NO_FILE :
-                return "You did not select a file to upload. Please try again.";
+                return Localisation::getTranslation(Strings::TEMPLATEHELPER_6);
             case UPLOAD_ERR_NO_TMP_DIR :
-                return "Server is missing a temporary folder.";
+                return Localisation::getTranslation(Strings::TEMPLATEHELPER_7);
             case UPLOAD_ERR_CANT_WRITE :
-                return "Server failed to write file to disk.";
+                return Localisation::getTranslation(Strings::TEMPLATEHELPER_8);
             case UPLOAD_ERR_EXTENSION :
-                return "File upload stopped by extension.";
+                return Localisation::getTranslation(Strings::TEMPLATEHELPER_9);
             default :
-                return "Please make sure the file is valid and not empty.";
+                return Localisation::getTranslation(Strings::TEMPLATEHELPER_10);
         }
     }
 
