@@ -23,7 +23,7 @@ class Tags {
             } else { 
                 Dispatcher::sendResponce(null, TagsDao::getTag(null,null,$limit), null, $format);
             }
-        }, 'getTags');
+        }, 'getTags',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tags(:format)/',
                                                         function ($format = ".json") {
@@ -55,7 +55,7 @@ class Tags {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getTagByLabel');
+        }, 'getTagByLabel',null);
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/search/:name/',
                 function ($name, $format = '.json') {
@@ -80,7 +80,7 @@ class Tags {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 30);
             $data= TagsDao::getTopTags($limit);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getTopTags');
+        }, 'getTopTags',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:id/', 
                                                         function ($id, $format = ".json") {

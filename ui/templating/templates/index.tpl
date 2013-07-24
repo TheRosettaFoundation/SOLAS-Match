@@ -67,7 +67,7 @@
                 <div is="x-task-stream" user-id="0" id="taskStream"></div>
             {/if}
 
-            <script src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/dart.js"></script>
+            <script type="text/javascript" src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/dart.js"></script>
             <script type="application/dart" src="{urlFor name="home"}ui/dart/deploy/web/Routes/Users/home.dart"></script>
 
 

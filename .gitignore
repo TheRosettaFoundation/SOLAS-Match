@@ -6,3 +6,5 @@ vendor
 /Common/includes/conf.ini
 Common/includes/conf.ini
 backup/
+ui/dart/deploy/web/conf/conf.json
+

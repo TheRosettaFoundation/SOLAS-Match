@@ -1,8 +1,10 @@
 <?php
 
+
 require_once __DIR__."/../../Common/HttpStatusEnum.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
+
 
 class UserDao extends BaseDao
 {
@@ -27,7 +29,7 @@ class UserDao extends BaseDao
         $ret=CacheHelper::getCached(CacheHelper::GET_USER.$userId, TimeToLiveEnum::MINUTE,
                 function($args){
                     $request = "{$args[2]}v0/users/$args[1]";
-                    return $args[0]->call("User", $request);
+                     return $args[0]->call("User", $request);
                 },
             array($this->client, $userId,$this->siteApi)); 
         return $ret;

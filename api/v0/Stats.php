@@ -16,7 +16,7 @@ class Stats {
                                                         function ($format = ".json") {
             $data = StatDao::getStatistics('');
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getStatistics'); 
+        }, 'getStatistics',null); 
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/stats/:name/',
                                                         function ($name,$format = ".json") {
@@ -27,7 +27,7 @@ class Stats {
             }
             $data = StatDao::getStatistics($name);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getStatisticByName'); 
+        }, 'getStatisticByName',null);
     }
 }
 Stats::init();

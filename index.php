@@ -71,10 +71,10 @@ require_once 'Common/BanTypeEnum.php';
 require_once 'Common/NotificationIntervalEnum.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
 require_once 'Common/lib/BadgeTypes.class.php';
+require_once 'Common/lib/UserSession.class.php';
 
 require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
-require_once 'ui/lib/UserSession.class.php';
 require_once 'ui/lib/GraphViewer.class.php';
 require_once 'ui/lib/UIWorkflowBuilder.class.php';
 require_once 'ui/lib/Localisation.php';
