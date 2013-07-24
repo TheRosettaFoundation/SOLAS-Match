@@ -9,7 +9,7 @@
         {$task->getTitle()}
         <small>
             <strong>
-                - <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(COMMON_DESEGMENTATION_TASK)}
+                - <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_DESEGMENTATION_TASK)}
             </strong>
         </small>   
         {assign var="task_id" value=$task->getId()}
@@ -20,17 +20,13 @@
     <div class="well">
         <div class="page-header">
             <h1>
-                {$task->getTitle()} <small>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_POSTEDITING_TASK_DETAILS)}</small>
+                {$task->getTitle()} <small>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_DESEGMENTATION_TASK_DETAILS)}</small>
                 <a href="{urlFor name="task-user-feedback" options="task_id.$task_id"}" style="float: right" class="btn btn-success">
                     <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_PROVIDE_FEEDBACK)}
                 </a>
             </h1>
         </div>
-
-        {if $errorMessage}
-            <p class="alert alert-error">{$errorMessage}</p>
-        {/if}
-
+                
         <h2>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_DOWNLOAD)}</h2>
         <p>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_0)}</p>
 

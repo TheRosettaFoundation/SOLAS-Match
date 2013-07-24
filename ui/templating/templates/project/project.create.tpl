@@ -27,7 +27,7 @@
                     <td colspan="2">
                         {if (isset($title_err) || isset($description_err) || isset($wordcount_err) || isset($deadline_err)
                             || isset($impact_err) || isset($targetLanguage_err) || isset($uniqueLanguageCountry_err)
-                            || isset($file_upload_err))}
+                            || isset($file_upload_err) || isset($file_err))}
                             <div class="alert alert-error">
                                 <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}:</h3>
                                 <ol>
@@ -54,6 +54,9 @@
                                     {/if}
                                     {if isset($file_upload_err)}
                                         <li><strong>{Localisation::getTranslation(Strings::PROJECT_CREATE_SOURCE_TEXT)}</strong> - {$file_upload_err}</li>
+                                    {/if}
+                                    {if isset($file_err)}
+                                        <li>{$file_err}</li>
                                     {/if}
                                 </ol>
                             </div>                        

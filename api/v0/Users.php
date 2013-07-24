@@ -141,6 +141,17 @@ class Users {
             Dispatcher::sendResponce(null, UserDao::isSubscribedToProject($id, $projectID), null, $format);
         }, 'userSubscribedToProject');  
         
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/isBlacklistedForTask/:userId/:taskId/',
+                                                        function ($userId, $taskId, $format = ".json") {
+
+            if (!is_numeric($taskId) && strstr($taskId, '.')) {
+                $taskId = explode('.', $taskId);
+                $format = '.'.$taskId[1];
+                $taskId = $taskId[0];
+            }
+            Dispatcher::sendResponce(null, UserDao::isBlacklistedForTask($userId, $taskId), null, $format);
+        }, 'isBlacklistedForTask');  
+        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/orgs(:format)/',
                                                         function ($id, $format = ".json") {
             Dispatcher::sendResponce(null, UserDao::findOrganisationsUserBelongsTo($id), null, $format);

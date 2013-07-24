@@ -153,4 +153,56 @@ class APIHelper
     {
         return $this->responseCode;
     }
+    
+    
+    // http://stackoverflow.com/a/1147952
+    private function system_extension_mime_types() {
+        # Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
+        $out = array();
+        $file = fopen('/etc/mime.types', 'r');
+        while(($line = fgets($file)) !== false) {
+            $line = trim(preg_replace('/#.*/', '', $line));
+            if(!$line)
+                continue;
+            $parts = preg_split('/\s+/', $line);
+            if(count($parts) == 1)
+                continue;
+            $type = array_shift($parts);
+            foreach($parts as $part)
+                $out[$part] = $type;
+        }
+        fclose($file);
+        return $out;
+    }
+
+    private function getMimeTypeFromSystem($ext) {
+   
+        static $types;
+        if(!isset($types))
+            $types = $this->system_extension_mime_types();
+  
+        return isset($types[$ext]) ? $types[$ext] : null;
+    }
+    
+    public function getCanonicalMime($filename)
+    {
+        $mimeMap = array(
+             "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
+            ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
+            ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
+            ,"pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            ,"sldx" => "application/vnd.openxmlformats-officedocument.presentationml.slide"
+            ,"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ,"dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
+            ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
+            ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
+            ,"xlf"  => "application/xliff+xml"
+        );         
+        
+        $extension = explode(".", $filename);
+        $extension =  strtolower($extension[count($extension)-1]);
+
+        return array_key_exists($extension, $mimeMap)? $mimeMap[$extension] : $this->getMimeTypeFromSystem($extension);
+    }
 }

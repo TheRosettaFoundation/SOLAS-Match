@@ -644,7 +644,7 @@ class Strings
     const CLAIMED_TASKS_NO_ACTIVE_TASKS_AVAILABLE = 'claimed_tasks_no_active_tasks_available';
     const CLAIMED_TASKS_1 = 'claimed_tasks_1';
 
-    const TASK_DESEGMENTATION_POSTEDITING_TASK_DETAILS = 'task_desegmentation_postediting_task_details';
+    const TASK_DESEGMENTATION_DESEGMENTATION_TASK_DETAILS = 'task_desegmentation_desegmentation_task_details';
     const TASK_DESEGMENTATION_DOWNLOAD = 'task_desegmentation_download';
     const TASK_DESEGMENTATION_0 = 'task_desegmentation_0';
     const TASK_DESEGMENTATION_DOWNLOAD_HERE = 'task_desegmentation_download_here';

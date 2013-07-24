@@ -2,20 +2,16 @@
 
 require_once __DIR__."/../../Common/HttpStatusEnum.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/BaseDao.php";
 
-class UserDao
+class UserDao extends BaseDao
 {
-    private $client;
-    private $siteApi;
     
     public function __construct()
     {
         $this->client = new APIHelper(Settings::get("ui.api_format"));
         $this->siteApi = Settings::get("site.api");
-    }
-    
-    
-    
+    } 
     
     public function getUserDart($userId)
     {
@@ -471,5 +467,13 @@ class UserDao
     {
         $request = "{$this->siteApi}v0/users/$userId";
         $this->client->call(null, $request, HttpMethodEnum::DELETE);
+    }
+    
+    public function isBlacklistedForTask($userId, $taskId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/isBlacklistedForTask/$userId/$taskId";
+        $ret = $this->client->call(null, $request);
+        return $ret;
     }
 }

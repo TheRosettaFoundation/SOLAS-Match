@@ -13,6 +13,7 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../lib/IO.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
 require_once __DIR__."/../lib/FormatConverter.php";
+require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class Tasks {
     
@@ -188,8 +189,8 @@ class Tasks {
             }
         }, 'getTaskFile');
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:filename/:userId/',
-                                                        function ($id, $filename, $userID, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/saveFile/:id/:userId/',
+                                                        function ($id, $userID, $format = ".json") {
             
             if (!is_numeric($userID) && strstr($userID, '.')) {
                 $userID = explode('.', $userID);
@@ -203,7 +204,16 @@ class Tasks {
             $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, null);
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
-            TaskDao::uploadFile($task, $convert,$data,$version,$userID,$filename);
+            $projectFile = ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
+            $filename = $projectFile->getFilename();
+            try {
+                TaskDao::uploadFile($task, $convert,$data,$version,$userID,$filename);
+            } catch(SolasMatchException $e) {
+                Dispatcher::sendResponce(null, $e->getMessage(), $e->getCode());
+                return;
+            }
+            Dispatcher::sendResponce(null, null, HttpStatusEnum::CREATED);
+            
         }, 'saveTaskFile');
         
         

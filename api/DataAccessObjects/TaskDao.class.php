@@ -8,6 +8,7 @@ require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/NotificationTypes.class.php";
 require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
+include_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 
 /**
@@ -17,7 +18,7 @@ require_once __DIR__."/../lib/Upload.class.php";
  * @author eoin.oconchuir@ul.ie
  **/
 
-class TaskDao
+class TaskDao 
 {
 
     public static function create($task)
@@ -702,13 +703,16 @@ class TaskDao
     
     public static function uploadFile($task,$convert,&$file,$version,$userId,$filename)
     {
+        $success = null;
         if($convert){
-            Upload::apiSaveFile($task, $userId, FormatConverter::convertFromXliff($file), 
+           $success = Upload::apiSaveFile($task, $userId, FormatConverter::convertFromXliff($file), 
                     $filename,$version);
         }else{
             //touch this and you will die painfully sinisterly sean :)
-            Upload::apiSaveFile($task, $userId, $file, $filename,$version);
+            $success = Upload::apiSaveFile($task, $userId, $file, $filename,$version);
         }
+        
+        if(!$success) throw new SolasMatchException("Failed to write file data.", HttpStatusEnum::INTERNAL_SERVER_ERROR);
     }
     
     public static function uploadOutputFile($task,$convert,&$file,$userId,$filename)

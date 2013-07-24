@@ -3,11 +3,10 @@
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/lib/CacheHelper.class.php";
 require_once __DIR__."/../../Common/TimeToLiveEnum.php";
+require_once __DIR__."/BaseDao.php";
 
-class LanguageDao
+class LanguageDao extends BaseDao
 {
-    private $client;
-    private $siteApi;
     
     public function __construct()
     {

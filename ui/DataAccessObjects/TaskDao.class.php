@@ -1,11 +1,10 @@
 <?php
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/BaseDao.php";
 
-class TaskDao
-{
-    private $client;
-    private $siteApi;
+class TaskDao extends BaseDao
+{    
 
     public function __construct()
     {
@@ -170,9 +169,9 @@ class TaskDao
         return $response;
     }
 
-    public function saveTaskFile($taskId, $filename, $userId, $fileData, $version = null, $convert = null)
+    public function saveTaskFile($taskId, $userId, $fileData, $version = null, $convert = null)
     {
-        $request = "{$this->siteApi}v0/tasks/$taskId/file/$filename/$userId";
+        $request = "{$this->siteApi}v0/tasks/saveFile/$taskId/$userId";
         $args = array();
         if (!is_null($version)) {
             $args["version"] = $version;
@@ -182,6 +181,26 @@ class TaskDao
         }
 
         $response = $this->client->call(null,$request, HttpMethodEnum::PUT, null, $args,$fileData);
+        
+        switch($this->client->getResponseCode()) {
+            case HttpStatusEnum::CREATED :                                        
+                return;
+            case HttpStatusEnum::BAD_REQUEST : {
+                $projectDao = new ProjectDao();
+                $taskDao = new TaskDao();
+                $task = $taskDao->getTask($taskId);
+                $projectFile = $projectDao->getProjectFileInfo($task->getProjectId());
+                $projectFileName = $projectFile->getFileName();
+                $projectFileExtension = explode(".", $projectFileName);
+                $projectFileExtension = $projectFileExtension[count($projectFileExtension)-1];                                        
+                $projectMime = $projectFile->getMime();
+                throw new SolasMatchException("The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.$projectFileExtension</strong>) file with a valid content type of (<strong>$projectMime</strong>).", $this->client->getResponseCode());                                 
+                break;
+            }
+            case HttpStatusEnum::INTERNAL_SERVER_ERROR :
+                throw new SolasMatchException("Internal server error. Please contact the administrators.", $this->client->getResponseCode());
+                break;                                
+        }
     }
 
     public function uploadOutputFile($taskId, $userId, $fileData, $convert = false)
@@ -192,7 +211,7 @@ class TaskDao
         if ($convert) {
             $args= array('convertFromXliff' => $convert);
         }
-
+        
         $response = $this->client->call(null,$request, HttpMethodEnum::PUT, null, $args,$fileData);
     }
     

@@ -80,7 +80,18 @@ class Projects
                     $data = $data[0];
                 }
                 Dispatcher::sendResponce(null, $data, null, $format);
-            }, 'getProject');
+            }, 'getProject'); 
+            
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/projects/:id/',
+                                                            function ($id, $format = ".json") {
+            
+            if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+            Dispatcher::sendResponce(null, ProjectDao::delete($id), null, $format);
+        }, 'deleteProject');
 
         Dispatcher::registerNamed(HTTPMethodEnum::POST, '/v0/projects/:id/calculateDeadlines(:format)/',
                 function ($id, $format = '.json')
@@ -113,7 +124,7 @@ class Projects
             }
              Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);               
 
-            }, 'archiveProject');
+            }, 'archiveProject'); 
 
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects(:format)/',
             function ($format = '.json') 
@@ -175,7 +186,13 @@ class Projects
                 $userID = $userID[0];
             }
             $data=Dispatcher::getDispatcher()->request()->getBody();
-           Dispatcher::sendResponce(null,ProjectDao::saveProjectFile($id, $data, urldecode($filename),$userID), null, $format);
+            try {
+                $token = ProjectDao::saveProjectFile($id, $data, urldecode($filename),$userID);
+                Dispatcher::sendResponce(null, $token, HttpStatusEnum::CREATED, $format);
+            } catch(Exception $e) {
+                Dispatcher::sendResponce(null, $e->getMessage(), $e->getCode());
+            }
+           
         }, 'saveProjectFile');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/archivedTasks(:format)/',

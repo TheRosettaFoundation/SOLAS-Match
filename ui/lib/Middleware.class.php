@@ -209,4 +209,27 @@ class Middleware
             $app->redirect($app->urlFor('home'));
         }       
     }
+    
+    public function isBlacklisted($request, $response, $route)
+    {
+        $isLoggedIn = $this->authUserIsLoggedIn();
+        if($isLoggedIn) {            
+            $params = $route->getParams();
+            if(!is_null($params)) {
+                $taskId = $params['task_id'];
+                $userDao = new UserDao();
+                $isBlackListed = $userDao->isBlacklistedForTask(UserSession::getCurrentUserID(), $taskId);
+                
+                if($isBlackListed) {
+                    $taskDao = new TaskDao();
+                    $task = $taskDao->getTask($taskId);                    
+                    $app = Slim::getInstance();
+                    $app->flash('error', "You cannot reclaim the task <a href='{$app->urlFor("task-claimed", array("task_id" => $taskId))}'>{$task->getTitle()}</a> that you have previously unclaimed.");
+                    $app->redirect($app->urlFor('home'));   
+                } else {
+                    return true;
+                }                
+            }
+        }        
+    }
 }

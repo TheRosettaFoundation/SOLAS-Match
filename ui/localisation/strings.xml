@@ -73,8 +73,8 @@
 
         <string name="task_routehandler_1">You have successfully archived the <strong>%s Task %s</strong>.</string>
         <string name="task_routehandler_2">There was an error archiving the <strong>%s Task %s</strong>.</string>
-        <string name="task_routehandler_3">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>%s!</strong></string>
-        <string name="task_routehandler_4">The <strong>contents</strong> of the file you are uploading is not a valid <strong>.%s</strong> If you are having problems opening and working in <strong>.%s format</strong>, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
+        <string name="task_routehandler_3">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
+        <string name="task_routehandler_4">The <strong>contents</strong> of the file you are uploading is not a valid <strong>(.%s)</strong> If you are having problems opening and working in <strong>(.%s) format</strong>, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
         <string name="task_routehandler_5">File error:</string>
         <string name="task_routehandler_6">Word Count must be numeric.</string>
         <string name="task_routehandler_7">Word Count cannot be empty.</string>
@@ -647,7 +647,7 @@
 	<string name="claimed_tasks_no_active_tasks_available">No Active Tasks available!</string>
 	<string name="claimed_tasks_1">You can claim tasks from the 'Task Stream' on the home page</string>
 
-	<string name="task_desegmentation_postediting_task_details">Post-Editing task details</string>
+	<string name="task_desegmentation_desegmentation_task_details">Desegmentation task details</string>
 	<string name="task_desegmentation_download">Download</string>
 	<string name="task_desegmentation_0">Download the following files and merge them</string>
 	<string name="task_desegmentation_download_here">Download here</string>
@@ -755,7 +755,7 @@
 	<string name="task_claimed_segmentation_please_segment_it">Please segment it!</string>
 	<string name="task_claimed_segmentation_0">You have claimed the Segmentation task</string>
 	<string name="task_claimed_segmentation_segment_the_file">Segment the file</string>
-	<string name="task_claimed_segmentation_1">appropriately sized individual segments (e.g 4000 words each or less)</string>
+	<string name="task_claimed_segmentation_1">appropriately sized individual segments (e.g 2000 words each or less)</string>
 	<string name="task_claimed_segmentation_2">Upload your finished segmented files</string>
 	<string name="task_claimed_segmentation_3">to the task segmentation page.</string>
 	<string name="task_claimed_segmentation_4">When you have finished segmenting the file you downloaded:</string>

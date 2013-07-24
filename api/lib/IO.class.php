@@ -160,6 +160,7 @@ class IO {
             ,"dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
             ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
             ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
+            ,"xlf"  => "application/xliff+xml"
         ); 
         
         $finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -168,7 +169,7 @@ class IO {
         $extension = explode(".", $filename);
         $extension = $extension[count($extension)-1];
         
-        if($mime == "application/zip" && array_key_exists($extension, $mimeMap)) {
+        if(($mime == "application/zip" || ($extension == "xlf" && $mime == "text/html")) && array_key_exists($extension, $mimeMap)) {
             $result = $mimeMap[$extension];
         } else {
             $result = $mime;

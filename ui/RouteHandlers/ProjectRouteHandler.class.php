@@ -2,6 +2,7 @@
 
 require_once __DIR__."/../../Common/TaskTypeEnum.php";
 require_once __DIR__."/../../Common/TaskStatusEnum.php";
+require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class ProjectRouteHandler
 {
@@ -334,6 +335,7 @@ class ProjectRouteHandler
         $impact_err     = null;
         $targetLanguage_err = null;
         $wordcount_err = null;
+        $file_err = null;
         $uniqueLanguageCountry_err = null;
         $project = new Project();
 
@@ -426,125 +428,131 @@ class ProjectRouteHandler
                 $file_upload_err = $e->getMessage();
             }
             
+            try {
+                if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && is_null($upload_error)
+                    && is_null($impact_err)&& is_null($uniqueLanguageCountry_err) && is_null(($wordcount_err))) { 
 
-            if(is_null($title_err) && is_null($deadline_err) && is_null($targetLanguage_err) && is_null($upload_error)
-                && is_null($impact_err)&& is_null($uniqueLanguageCountry_err) && is_null(($wordcount_err))) { 
-                
-                $project->setOrganisationId($org_id);
-                if($project = $projectDao->createProject($project)) {
-                    $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
-                    $filename = $_FILES[$field_name]["name"];
-                    $projectDao->saveProjectFile($project->getId(), $filedata, $filename, $user_id);
-                    
-                    $taskModel = new Task(); 
-                    $taskModel->setTitle($project->getTitle());
-                    $taskModel->setProjectId($project->getId());
-                    $taskModel->setDeadline($project->getDeadline());
-                    $taskModel->setWordCount($project->getWordCount());
-                    
-                    $projectSourceLocale = $project->getSourceLocale();                    
-                    $taskSourceLocale = new Locale();
-                    $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
-                    $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
-                    $taskModel->setSourceLocale($taskSourceLocale);
-                    
-                    if(isset($post['publishTasks']) && $post['publishTasks']) {
-                        $taskModel->setPublished(true);
-                    } else {
-                        $taskModel->setPublished(false);
-                    }
-                    
-                    $translationTaskId = 0;
-                    $proofreadingTaskId = 0;
-                    
-                    for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {
-                        
-                        $targetLocale = new Locale();
-                        $targetLocale->setLanguageCode($post["targetLanguage_$i"]);
-                        $targetLocale->setCountryCode($post["targetCountry_$i"]);
-                        $taskModel->setTargetLocale($targetLocale);
+                    $project->setOrganisationId($org_id);
+                    if($project = $projectDao->createProject($project)) {
+                        $filedata = file_get_contents($_FILES[$field_name]['tmp_name']);
+                        $filename = $_FILES[$field_name]["name"];
 
-                        if(isset($post["segmentation_$i"])) { 
-                            $taskModel->setTaskType(TaskTypeEnum::SEGMENTATION);
-                            $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            $createdSegmentationTask = $taskDao->createTask($taskModel);
-                            try {
-                                $error_message = $taskDao->saveTaskFile($createdSegmentationTask->getId(), urlencode($_FILES[$field_name]['name']),
-                                        $user_id, $filedata);
-                            } catch (Exception  $e) {
-                                $upload_error = true;
-                                $error_message = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_21) . $e->getMessage();
+                        $projectDao->saveProjectFile($project->getId(), $filedata, $filename, $user_id);  
+                        $taskModel = new Task(); 
+                        $taskModel->setTitle($project->getTitle());
+                        $taskModel->setProjectId($project->getId());
+                        $taskModel->setDeadline($project->getDeadline());
+                        $taskModel->setWordCount($project->getWordCount());
+
+                        $projectSourceLocale = $project->getSourceLocale();                    
+                        $taskSourceLocale = new Locale();
+                        $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+                        $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+                        $taskModel->setSourceLocale($taskSourceLocale);
+
+                        if(isset($post['publishTasks']) && $post['publishTasks']) {
+                            $taskModel->setPublished(true);
+                        } else {
+                            $taskModel->setPublished(false);
+                        }
+
+                        $translationTaskId = 0;
+                        $proofreadingTaskId = 0;
+
+                        for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {
+
+                            $targetLocale = new Locale();
+                            $targetLocale->setLanguageCode($post["targetLanguage_$i"]);
+                            $targetLocale->setCountryCode($post["targetCountry_$i"]);
+                            $taskModel->setTargetLocale($targetLocale);
+
+                            if(isset($post["segmentation_$i"])) { 
+                                $taskModel->setTaskType(TaskTypeEnum::SEGMENTATION);
+                                $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
+                                $createdSegmentationTask = $taskDao->createTask($taskModel);
+                                try {
+                                    $error_message = $taskDao->saveTaskFile($createdSegmentationTask->getId(), 
+                                            $user_id, $filedata);
+                                } catch (Exception  $e) {
+                                    $upload_error = true;
+                                    $error_message = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_21) . $e->getMessage();
+                                }
                             }
-                        }
-                        if(isset($post["translation_$i"])) {
-                            $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
-                            $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            $newTask = $taskDao->createTask($taskModel);
-                            $translationTaskId = $newTask->getId();
-                            
-                            try {
-                                $error_message = $taskDao->saveTaskFile($translationTaskId, urlencode($_FILES[$field_name]['name']),
-                                        $user_id, $filedata);
-                            } catch (Exception  $e) {
-                                $upload_error = true;
-                                $error_message = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_21) . $e->getMessage();
-                            } 
-                        }
-                        if(isset($post["proofreading_$i"])) {
-                            $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
-                            $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
-                            $newTask = $taskDao->createTask($taskModel);
-                            $proofreadingTaskId = $newTask->getId();
                             if(isset($post["translation_$i"])) {
-                                $taskDao->addTaskPreReq($proofreadingTaskId, $translationTaskId);
-                            } 
-                            
-                            try {
-                                $error_message = $taskDao->saveTaskFile($proofreadingTaskId, urlencode($_FILES[$field_name]['name']),
-                                        $user_id, $filedata);
-                            } catch (Exception  $e) {
-                                $upload_error = true;
-                                $error_message = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_21) . $e->getMessage();
-                            } 
-                        }
-                    } 
-                    $projectDao->calculateProjectDeadlines($project->getId());
-                    
-                    if(isset($post["trackProject"]) && $post['trackProject'] == 1) {
-                        $userDao = new UserDao();
-                        $userDao->trackProject($user_id, $project->getId());
-                    }
-                    $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
-                }              
-            } else {
-                $tLocales = array();
-                for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {
-                    $locale = new Locale();
-                    $locale->setLanguageCode($post["targetLanguage_$i"]);
-                    $locale->setCountryCode($post["targetCountry_$i"]);                   
-                    
-                    $locale['segmentation'] = isset($post["segmentation_$i"]) && $post["segmentation_$i"];
-                    $locale['translation'] = isset($post["translation_$i"]) && $post["translation_$i"];
-                    $locale['proofreading'] = isset($post["proofreading_$i"]) && $post["proofreading_$i"];
-                    
-                    $tLocales[$i] = $locale;  
-                }
-                
-                $project->setWordCount($post["word_count"]);
-                $project->setDeadline($post["deadline"]);
-                $app->view()->appendData(array(
-                    "title_err"             => $title_err,
-                    "deadline_err"          => $deadline_err,      
-                    "wordcount_err"         => $wordcount_err,
-                    "targetLanguage_err"    => $targetLanguage_err,
-                    "project"               => $project,
-                    "file_upload_err"       => $file_upload_err,
-                    "uniqueLanguageCountry_err" => $uniqueLanguageCountry_err,
-                    "targetLocales"         => $tLocales
-                ));               
-            }
-        }
+                                $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
+                                $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
+                                $newTask = $taskDao->createTask($taskModel);
+                                $translationTaskId = $newTask->getId();
 
+                                try {
+                                    $error_message = $taskDao->saveTaskFile($translationTaskId,
+                                            $user_id, $filedata);
+                                } catch (Exception  $e) {
+                                    $upload_error = true;
+                                    $error_message = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_21) . $e->getMessage();
+                                } 
+                            }
+                            if(isset($post["proofreading_$i"])) {
+                                $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);
+                                $taskModel->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
+                                $newTask = $taskDao->createTask($taskModel);
+                                $proofreadingTaskId = $newTask->getId();
+                                if(isset($post["translation_$i"])) {
+                                    $taskDao->addTaskPreReq($proofreadingTaskId, $translationTaskId);
+                                } 
+
+                                try {
+                                    $error_message = $taskDao->saveTaskFile($proofreadingTaskId,
+                                            $user_id, $filedata);
+                                } catch (Exception  $e) {
+                                    $upload_error = true;
+                                    $error_message = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_21) . $e->getMessage();
+                                } 
+                            }
+                        } 
+                        $projectDao->calculateProjectDeadlines($project->getId());
+
+                        if(isset($post["trackProject"]) && $post['trackProject'] == 1) {
+                            $userDao = new UserDao();
+                            $userDao->trackProject($user_id, $project->getId());
+                        }
+                        $app->redirect($app->urlFor("project-created", array("project_id" => $project->getId())));
+                    }
+                }
+
+            } catch(SolasMatchException $e) {
+                $projectDao->deleteProject($project->getId());   
+                $file_err = $e->getMessage();
+                $app->view()->appendData(array("file_err" => $file_err));
+            }
+            
+            $tLocales = array();
+            for ($i=0; $i < $post['targetLanguageArraySize']; $i++) {
+                $locale = new Locale();
+                $locale->setLanguageCode($post["targetLanguage_$i"]);
+                $locale->setCountryCode($post["targetCountry_$i"]);                   
+
+                $locale['segmentation'] = isset($post["segmentation_$i"]) && $post["segmentation_$i"];
+                $locale['translation'] = isset($post["translation_$i"]) && $post["translation_$i"];
+                $locale['proofreading'] = isset($post["proofreading_$i"]) && $post["proofreading_$i"];
+
+                $tLocales[$i] = $locale;  
+            }
+
+            $project->setWordCount($post["word_count"]);
+            $project->setDeadline($post["deadline"]);
+            $app->view()->appendData(array(
+                "title_err"             => $title_err,
+                "deadline_err"          => $deadline_err,      
+                "wordcount_err"         => $wordcount_err,
+                "targetLanguage_err"    => $targetLanguage_err,
+                "project"               => $project,
+                "file_upload_err"       => $file_upload_err,
+                "uniqueLanguageCountry_err" => $uniqueLanguageCountry_err,
+                "targetLocales"         => $tLocales
+            )); 
+        }   
+        
         $tagString = "[";
         $tagDao = new TagDao();
         $allTags = $tagDao->getTags(null);

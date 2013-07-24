@@ -1150,6 +1150,21 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure debug-test3.deleteProject
+DROP PROCEDURE IF EXISTS `deleteProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProject`(IN `projectId` INT)
+BEGIN
+	IF EXISTS(SELECT 1 FROM Projects p WHERE p.id = projectId) THEN	
+		DELETE FROM Projects WHERE id = projectId;
+		SELECT 1 AS result;
+	ELSE
+		SELECT 0 AS result;
+	END IF;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure debug-test3.deleteProjectTags
 DROP PROCEDURE IF EXISTS `deleteProjectTags`;
 DELIMITER //
@@ -2885,6 +2900,18 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure debug-test3.isUserBlacklistedForTask
+DROP PROCEDURE IF EXISTS `isUserBlacklistedForTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBlacklistedForTask`(IN `userId` INT, IN `taskId` INT)
+BEGIN
+	IF EXISTS(SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.task_id = taskId AND t.user_id = userId) THEN
+		SELECT 1 as result;
+	ELSE
+		SELECT 0 as result;
+	END IF;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.logFileDownload
 DROP PROCEDURE IF EXISTS `logFileDownload`;
