@@ -80,7 +80,7 @@ class Projects
                     $data = $data[0];
                 }
                 Dispatcher::sendResponce(null, $data, null, $format);
-            }, 'getProject');
+            }, 'getProject',null);
 
         Dispatcher::registerNamed(HTTPMethodEnum::POST, '/v0/projects/:id/calculateDeadlines(:format)/',
                 function ($id, $format = '.json')
@@ -154,7 +154,7 @@ class Projects
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
             Dispatcher::sendResponce(null, ProjectDao::getTags($id), null, $format);
-        }, 'getProjectTags');
+        }, 'getProjectTags',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/info(:format)/',
                                                         function ($id, $format = ".json") {

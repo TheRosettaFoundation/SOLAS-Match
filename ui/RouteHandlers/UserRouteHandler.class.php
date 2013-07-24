@@ -389,6 +389,9 @@ class UserRouteHandler
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
                 $userDao = new UserDao();
+                $temp =$retvals['contact/email'].substr(Settings::get("session.site_key"),0,20);
+                UserSession::clearCurrentUserID();
+                UserSession::setHash(md5($temp));
                 $user = $userDao->getUserByEmail($retvals['contact/email']);
                 if(is_array($user)) $user = $user[0];                    
                 if(is_null($user)) {
@@ -415,6 +418,7 @@ class UserRouteHandler
     public static function userPrivateProfile($userId)
     {
         $app = Slim::getInstance();
+        CacheHelper::unCache(CacheHelper::GET_USER.$userId);
         
         $userDao = new UserDao();
         $loggedInuser = $userDao->getUser(UserSession::getCurrentUserID());

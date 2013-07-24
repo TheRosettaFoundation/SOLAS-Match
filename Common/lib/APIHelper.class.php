@@ -62,8 +62,8 @@ class APIHelper
             $lenght=strlen($file);
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
-        
-        if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, $_COOKIE['slim_session']);        
+
+        if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");        
         
         $httpHeaders = array(
                 $this->_serializer->getContentType(),                                                                                

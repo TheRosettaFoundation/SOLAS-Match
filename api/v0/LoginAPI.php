@@ -24,7 +24,7 @@ class LoginAPI {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/login(:format)/', function ($format = ".json") {
             $data = new Login();
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getLoginTemplate');
+        }, 'getLoginTemplate',null);
         
         
         
@@ -40,13 +40,14 @@ class LoginAPI {
                     $data->setNonce(null);
                     UserSession::setSession($data->getId());
                     UserSession::setHash(md5("{$data->getEmail()}:{$data->getDisplayName()}"));
+
                 }
                 Dispatcher::sendResponce(null, $data, null, $format);
             } catch(Exception $e) {
                 Dispatcher::sendResponce(null, null, $e->getMessage(), $format);
             }
             
-         }, 'login');
+         }, 'login',null);
     }
 }
 LoginAPI::init();

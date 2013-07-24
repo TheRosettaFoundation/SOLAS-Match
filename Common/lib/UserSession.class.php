@@ -21,6 +21,11 @@ class UserSession {
             return null;
         }
     }
+    
+    public static function clearCurrentUserID()
+    {
+         if (isset($_SESSION['user_id'])) unset($_SESSION['user_id']);
+    }
 
     public static function isValidUserId($user_id) 
     {

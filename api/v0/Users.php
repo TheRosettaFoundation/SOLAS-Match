@@ -10,6 +10,7 @@ require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/NotificationTypes.class.php";
+require_once __DIR__."/../lib/Middleware.php";
 
 
 class Users {
@@ -35,13 +36,15 @@ class Users {
             if (is_array($data)) {
                 $data = $data[0];
             }
-             if(!is_null($data)){
+            if(!is_null($data)){
                 $data->setPassword(null);
                 $data->setNonce(null);
-             }
+            }
+
+
            
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUser');
+        }, 'getUser',"Middleware::isloggedIn");
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/',
                                                         function ($id, $format = ".json") {
@@ -272,7 +275,7 @@ class Users {
             $dao = new TaskDao();
             $data = $dao->getUserTopTasks($id, $strict, $limit, $offset, $filter);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUserTopTasks');
+        }, 'getUserTopTasks',  "Middleware::authUserOwnsResource");
         
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/archivedTasks(:format)/',
@@ -452,7 +455,7 @@ class Users {
 
             $data = UserDao::getPersonalInfo(null,$id);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUserPersonalInfo');
+        }, 'getUserPersonalInfo',  "Middleware::authUserOwnsResource");
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/personalInfo(:format)/',
                                                         function ($id, $format = ".json") {

@@ -293,6 +293,7 @@ class UserPrivateProfileForm extends WebComponent
   
   void submitForm()
   {
+    this.
     alert = "";
     if (user.display_name == "") {
       alert = Localisation.getTranslation("user_private_profile_2");

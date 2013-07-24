@@ -103,7 +103,7 @@ class Tasks {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 15);
             $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
             Dispatcher::sendResponce(null, TaskDao::getLatestAvailableTasks($limit, $offset), null, $format);
-        }, 'getTopTasks');
+        }, 'getTopTasks',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/',
                                                         function ($id, $format = ".json") {
@@ -118,7 +118,7 @@ class Tasks {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getTask');
+        }, 'getTask',null);
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/review(:format)/',
                 function ($id, $format = '.json')
@@ -139,7 +139,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
             Dispatcher::sendResponce(null, TaskDao::getTags($id), null, $format);
-        }, 'getTasksTags');
+        }, 'getTasksTags',null);
 //        
 //        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/tags(:format)/',
 //                                                        function ($id, $format = ".json") {
