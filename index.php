@@ -132,8 +132,9 @@ function isValidPost(&$app)
  * 
  * Given that we don't have object factories implemented, we'll initialise them directly here.
  */
-$app->hook('slim.before', function () use ($app)
+$app->hook('slim.before.dispatch', function () use ($app)
 {
+            apc_clear_cache();
     $userDao = new UserDao();
     if (!is_null(UserSession::getCurrentUserID()) &&
         $current_user = $userDao->getUser(UserSession::getCurrentUserID())) {

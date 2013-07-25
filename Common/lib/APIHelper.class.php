@@ -73,9 +73,11 @@ class APIHelper
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
         $res=curl_exec($re);
-
+        $success = array(200,201,202,203,204);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+//        if(in_array($this->responseCode, $success)){
         $response_data = $this->_serializer->deserialize($res,$destination);
+//        }else $response_data=null;
         curl_close($re);
 
         return $response_data;

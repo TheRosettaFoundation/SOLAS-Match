@@ -48,8 +48,10 @@ class StaticRouteHandeler
     }
     
     public function getUser(){
-        $dao = new UserDao();
-        Slim::getInstance()->response()->body($dao->getUserDart(UserSession::getCurrentUserID()));           
+        if(!is_null(UserSession::getCurrentUserID())){
+            $dao = new UserDao();
+            Slim::getInstance()->response()->body($dao->getUserDart(UserSession::getCurrentUserID()));           
+        }
     }
     
     public function getStrings(){
