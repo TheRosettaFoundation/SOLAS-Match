@@ -179,7 +179,7 @@ class Admins {
                 $userId = $userId[0];
             }
             Dispatcher::sendResponce(null, AdminDao::isUserBanned($userId), null, $format);
-        }, 'isUserBanned');
+        }, 'isUserBanned',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/isOrgBanned/:orgId/',
                                                         function ($orgId, $format = ".json") {           

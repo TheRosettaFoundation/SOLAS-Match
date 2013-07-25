@@ -19,12 +19,11 @@ class Middleware
 {
     public static function isloggedIn ($request, $response, $route){
         $params = $route->getParams();
-        if(isset ($_SESSION['hash']) && (isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION']) || isset ($params['email']))){
+         
+        
        
-//        if(isset ($_SESSION['hash']) && isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
-            $cookieHash = $_SESSION['hash'];
-             
-            if(isset ($params['email'])){
+            if(isset ($params['email'])&& isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
+                $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
                 $email =$params['email'];
                  if (!is_numeric($email) && strstr($email, '.')) {
                     $temp = array();
@@ -39,21 +38,19 @@ class Middleware
                     }
                 }
                 $openidHash = md5($email.substr(Settings::get("session.site_key"),0,20));
-                if ($cookieHash!=$openidHash) {
+                if ($headerHash!=$openidHash) {
                     Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
                 } 
-            }else{
-                  $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
+            }elseif(isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])&& isset($_SESSION['hash'])){
+                 $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
+                 $cookieHash = $_SESSION['hash'];
                   if ($headerHash!=$cookieHash) {
                         Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
                   }
 
+            }else{
+                 Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, "You must be logged in to view this resource ");  
             }
-          
-        }else{
- 
-            Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, "You must be logged in to view this resource ");  
-        }
         
     } 
     
