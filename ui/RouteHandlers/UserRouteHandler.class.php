@@ -494,7 +494,7 @@ class UserRouteHandler
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
 
         $app->view()->appendData(array("badges" => $badges,
-                                    "orgList", $orgList,
+                                    "orgList"=> $orgList,
                                     "user_orgs" => $user_orgs,
                                     "current_page" => "user-profile",
                                     "archivedJobs" => $archivedJobs,
