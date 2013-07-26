@@ -28,7 +28,7 @@ class RegisterAPI {
             $data->setPassword("test");
             $data->setEmail("test@test.rog");
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getRegisterTemplate');
+        }, 'getRegisterTemplate',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/register(:format)/',
                                                         function ($format = ".json") {
@@ -41,7 +41,7 @@ class RegisterAPI {
                 $data=$data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'register');
+        }, 'register',null);
     }    
 }
 RegisterAPI::init();

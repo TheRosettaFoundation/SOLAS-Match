@@ -72,9 +72,12 @@ class APIHelper
 
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($re, CURLINFO_HEADER_OUT, true);
         $res=curl_exec($re);
-        $success = array(200,201,202,203,204);
+        $sentHeaders = curl_getinfo($re);
+        $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
         
         curl_close($re);
         

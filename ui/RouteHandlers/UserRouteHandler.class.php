@@ -186,7 +186,9 @@ class UserRouteHandler
         $warning = null;
         if (isValidPost($app)) {
             $post = $app->request()->post();
-            
+            $temp =$post['email'].substr(Settings::get("session.site_key"),0,20);
+                UserSession::clearCurrentUserID();
+                UserSession::setHash(md5($temp));
             if (!TemplateHelper::isValidEmail($post['email'])) {
                 $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_1);
             } elseif (!TemplateHelper::isValidPassword($post['password'])) {
@@ -447,7 +449,10 @@ class UserRouteHandler
         
         $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(UserSession::getCurrentUserID()));
         $user = $userDao->getUser($user_id);
-        $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        $userPersonalInfo=null;
+        try{
+            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        }catch(SolasMatchException $e){}
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             

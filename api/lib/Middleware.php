@@ -19,7 +19,7 @@ class Middleware
 {
     public static function isloggedIn ($request, $response, $route){
         $params = $route->getParams();
-         
+      
         
        
             if(isset ($params['email'])&& isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
@@ -63,6 +63,9 @@ class Middleware
     
      public static function authUserOwnsResource($request, $response, $route)
     {
+              if (self::isSiteAdmin()) {
+            return true;
+        }
         self::authUser($request, $response, $route);
         $user_id = UserSession::getCurrentUserID();
         $params = $route->getParams();
