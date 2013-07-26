@@ -39,6 +39,22 @@ class LanguageDao extends BaseDao
         return $languages;
     }
     
+    public function getActiveSourceLanguages()
+    {
+        $languages = null;
+        $request = "{$this->siteApi}v0/languages/getActiveSourceLanguages";
+        $languages = $this->client->call(array('Language'), $request);
+        return $languages;
+    }
+     
+    public function getActiveTargetLanguages()
+    {
+        $languages = null;
+        $request = "{$this->siteApi}v0/languages/getActiveTargetLanguages";
+        $languages = $this->client->call(array('Language'), $request);
+        return $languages;
+    }
+    
     public function getLanguageByCode($code)
     {
         $request = "{$this->siteApi}v0/languages/getByCode/$code";

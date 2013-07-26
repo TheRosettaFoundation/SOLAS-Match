@@ -24,6 +24,17 @@ class Langs {
             function ($format = '.json') {
                 Dispatcher::sendResponce(null, Languages::getActiveLanguages(), null, $format);
             }, 'getActiveLanguages',null);
+                    
+                    
+                     Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/getActiveSourceLanguages(:format)/',
+            function ($format = '.json') {
+                Dispatcher::sendResponce(null, Languages::getActiveSourceLanguages(), null, $format);
+            }, 'getActiveSourceLanguages',null);
+            
+             Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/getActiveTargetLanguages(:format)/',
+            function ($format = '.json') {
+                Dispatcher::sendResponce(null, Languages::getActiveTargetLanguages(), null, $format);
+            }, 'getActiveTargetLanguages',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/:id/', 
                                                         function ($id, $format = ".json") {

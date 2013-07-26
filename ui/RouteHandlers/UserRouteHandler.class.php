@@ -448,7 +448,13 @@ class UserRouteHandler
         $adminDao = new AdminDao();
         
         $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(UserSession::getCurrentUserID()));
+        $user=null;
+        try{
         $user = $userDao->getUser($user_id);
+        }catch (SolasMatchException $e){
+             $app->flash('error', Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
+             $app->redirect($app->urlFor('login'));
+        }
         $userPersonalInfo=null;
         try{
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);

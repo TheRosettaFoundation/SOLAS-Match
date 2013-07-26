@@ -1316,6 +1316,37 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Dev.getActiveSourceLanguages
+DROP PROCEDURE IF EXISTS `getActiveSourceLanguages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveSourceLanguages`()
+ READS SQL DATA
+BEGIN
+    SELECT `en-name` as language, code, id
+        FROM Languages
+        WHERE id IN (SELECT `language_id-source`
+                        FROM Tasks
+                        WHERE published = 1 AND `task-status_id` = 2);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.getActiveTargetLanguages
+DROP PROCEDURE IF EXISTS `getActiveTargetLanguages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveTargetLanguages`()
+    READS SQL DATA
+BEGIN
+    SELECT `en-name` as language, code, id
+        FROM Languages
+        WHERE id IN (SELECT `language_id-target`
+                        FROM Tasks
+                        WHERE published = 1 AND `task-status_id` = 2);
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Dev.getAdmin
 DROP PROCEDURE IF EXISTS `getAdmin`;
 DELIMITER //
