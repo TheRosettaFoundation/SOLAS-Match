@@ -150,7 +150,7 @@ class Strings
     
 
     // Smarty Template Strings
-    
+    const COMMON_FAQ ="common_faq";
     const COMMON_BANNED_BY = 'common_banned_by';
     const COMMON_BAN_DURATION = 'common_ban_duration';
     const COMMON_BAN_REASON = 'common_ban_reason';

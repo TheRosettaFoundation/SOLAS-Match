@@ -7,6 +7,7 @@ class StaticRouteHandeler
         $app = Slim::getInstance();       
         $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");
         $app->get("/static/terms/", array($this, "terms"))->name("terms");
+        $app->get("/static/faq/", array($this, "faq"))->name("faq");
         $app->get("/static/videos/", array($this, "videos"))->name("videos");
         $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST","GET")->name("siteLanguage");
         $app->get("/static/getStrings/", array($this, "getStrings"))->name("staticGetStrings");
@@ -25,6 +26,12 @@ class StaticRouteHandeler
     {
          $app = Slim::getInstance();
          $app->render("static/terms.tpl");
+    }
+    
+    public function faq()
+    {
+         $app = Slim::getInstance();
+         $app->render("static/FAQ.tpl");
     }
     
     public function videos()

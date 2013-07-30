@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>-->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
-        <meta name="google-translate-customization" content="d0b5975e5905d60f-4e4c167261d2937a-g4574d0ff41a34d5b-10" />
+<!--        <meta name="google-translate-customization" content="d0b5975e5905d60f-4e4c167261d2937a-g4574d0ff41a34d5b-10" />-->
 
         <!-- css -->
         <title>{Settings::get('site.title')}</title>
@@ -73,6 +73,9 @@
                         {/if}
                             <li {if isset($current_page) && $current_page == 'videos'}class="active" {/if}>
                                 <a href="{urlFor name="videos"}">{Localisation::getTranslation(Strings::HEADER_VIDEOS)}</a>
+                            </li>
+                             <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
+                                <a href="{urlFor name="faq"}">{Localisation::getTranslation(Strings::COMMON_FAQ)}</a>
                             </li>
                     </ul>
                     <ul class="nav pull-right" style="max-height: 38px">
