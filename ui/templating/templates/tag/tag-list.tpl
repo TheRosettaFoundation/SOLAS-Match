@@ -24,7 +24,7 @@
 <hr />
 
 <h2>{Localisation::getTranslation(Strings::TAG_LIST_TAG_SEARCH)} <small>{Localisation::getTranslation(Strings::TAG_LIST_1)}</small></h2>
-<form method="post" action="{urlFor name="tags-list"}" class="well">
+<form method="post" action="{urlFor name="tags-list"}" class="well" accept-charset="utf-8">
     <p>{Localisation::getTranslation(Strings::TAG_LIST_2)}</p>
     <input type="text" name="searchName" 
             value="{if isset($searchedText)}{$searchedText}{/if}" />

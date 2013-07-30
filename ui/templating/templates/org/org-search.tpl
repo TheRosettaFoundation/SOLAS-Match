@@ -6,7 +6,7 @@
         </h1>
     </div>
 
-    <form class="well" method="post" action="{urlFor name="org-search"}">
+    <form class="well" method="post" action="{urlFor name="org-search"}" accept-charset="utf-8">
         <label for="search_name"><strong>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}:</strong></label>
         <input type="text" name="search_name" id="search_name" style="height: 20px" 
                 value="{if isset($searchedText)}{$searchedText}{/if}" />

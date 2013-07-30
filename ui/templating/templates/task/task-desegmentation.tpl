@@ -41,7 +41,7 @@
         <p style="margin-bottom: 40px"/>
 
         <h2>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_1)}</h2>
-        <form class="well" method="post" enctype="multipart/form-data" action="{urlFor name="task-desegmentation" options="task_id.$taskId"}">
+        <form class="well" method="post" enctype="multipart/form-data" action="{urlFor name="task-desegmentation" options="task_id.$taskId"}" accept-charset="utf-8">
             <p><input type="file" name="{$fieldName}" id="{$fieldName}" /></p>
             <p><button type="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::TASK_DESEGMENTATION_UPLOAD)}</button>
         </form>

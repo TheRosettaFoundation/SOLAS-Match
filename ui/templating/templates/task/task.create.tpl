@@ -22,7 +22,7 @@
         {/if}
 
         {assign var="project_id" value=$project->getId()}
-        <form method="post" action="{urlFor name="task-create" options="project_id.$project_id"}" class="well">
+        <form method="post" action="{urlFor name="task-create" options="project_id.$project_id"}" class="well" accept-charset="utf-8">
             <table border="0" width="100%">
                 <fieldset>
                     <tr align="center">

@@ -21,7 +21,7 @@
 {include file="handle-flash-messages.tpl"}
 
 {assign var="org_id" value=$org->getId()}
-    <form method='post' action='{urlFor name='org-private-profile' options="org_id.$org_id"}' class='well'>
+    <form method='post' action='{urlFor name='org-private-profile' options="org_id.$org_id"}' class='well' accept-charset="utf-8">
         <table>
             <tr valign="top" align="center"> 
                 <td width="50%">

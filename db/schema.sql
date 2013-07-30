@@ -1541,8 +1541,6 @@ BEGIN
 	if id='' then set id=null;end if;
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select `en-name` as country, code, id from Countries c where 1 ";-- set update
-	if id is not null then 
 	select `en-name` as country, c.code, c.id 
 	from Countries c where 	isNullOrEqual(c.id,id) and isNullOrEqual(c.code,code) and isNullOrEqual(c.`en-name`, name);
 END//

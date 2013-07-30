@@ -6,7 +6,7 @@
     </h1>
 
     {* {assign var="badge_id" value=$badge->getId()} *}
-    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="well">
+    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="well" accept-charset="utf-8">
         <input type="hidden" name="badge_id" value="{$badge->getId()}" />    
         <label for='title'><strong>{Localisation::getTranslation(Strings::ORG_EDIT_BADGE_BADGE_TITLE)}:</strong></label>
         <input type='text' name='title' id='title'

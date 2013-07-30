@@ -38,7 +38,7 @@
     {/if}
     
     <div class="well">
-        <form method="post" enctype="multipart/form-data" action="{urlFor name="task-segmentation" options="task_id.$task_id"}">
+        <form method="post" enctype="multipart/form-data" action="{urlFor name="task-segmentation" options="task_id.$task_id"}" accept-charset="utf-8">
         <input type="hidden" id="totalWordCount" name="totalWordCount" value="{$task->getWordCount()}" />
         <table border="0" width="100%">
             <tbody id="taskSegments">

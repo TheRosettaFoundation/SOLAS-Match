@@ -28,7 +28,7 @@
     </div>
 {/if}
 
-    <form method="post" action="{urlFor name="password-reset" options="uid.$uid"}" class="well">
+    <form method="post" action="{urlFor name="password-reset" options="uid.$uid"}" class="well" accept-charset="utf-8">
         <label for="nPassword">{Localisation::getTranslation(Strings::PASSWORD_RESET_NEW_PASSWORD)}</label>
         <input type="password" name="new_password" />
 

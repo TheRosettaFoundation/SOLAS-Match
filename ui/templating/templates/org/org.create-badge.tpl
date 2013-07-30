@@ -11,7 +11,7 @@
         </div>
     {/if}
 
-    <form method="post" action="{urlFor name="org-create-badge" options="org_id.$org_id"}" class="well">
+    <form method="post" action="{urlFor name="org-create-badge" options="org_id.$org_id"}" class="well" accept-charset="utf-8">
         <label for='title'><strong>{Localisation::getTranslation(Strings::ORG_CREATE_BADGE_BADGE_TITLE)}:</strong></label>
         <input type='text' name='title' id='title' />
         <label for="description"><strong>{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}:</strong></label>

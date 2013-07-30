@@ -5,7 +5,7 @@
 </div>
 
 <div class="well">
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.{$adminUserId}"}">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.{$adminUserId}"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
                 <td colspan="2"> 
@@ -34,7 +34,7 @@
         <hr/>
     {/if}    
     
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}" accept-charset="utf-8">
         <table>
             <tr>
                 <td colspan="3"> 
@@ -81,7 +81,7 @@
         <hr/>
     {/if}  
         
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}" accept-charset="utf-8">
         <table>
             <tr>
                 <td colspan="3"> 
@@ -128,7 +128,7 @@
         <hr/>
     {/if} 
     
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.{$adminUserId}"}">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.{$adminUserId}"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
                 <td colspan="2"> 

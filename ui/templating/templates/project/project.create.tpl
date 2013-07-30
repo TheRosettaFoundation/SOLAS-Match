@@ -21,7 +21,7 @@
     <p style="margin-bottom:20px;"/>
     
     <div class="well">
-        <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}" onsubmit="return checkWordCount()">
+        <form id="createProjectForm" method="post" enctype="multipart/form-data" action="{$url_project_upload}" onsubmit="return checkWordCount()" accept-charset="utf-8">
             <table id="createProjectTable">
                 <tr>
                     <td colspan="2">

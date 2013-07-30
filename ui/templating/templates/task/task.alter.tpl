@@ -23,7 +23,7 @@
         </div>
     {/if}
             
-    <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well">
+    <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
         <table width="100%">
             <tr align="center">
                 <td width="50%">

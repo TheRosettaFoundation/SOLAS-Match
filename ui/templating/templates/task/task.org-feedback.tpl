@@ -112,7 +112,7 @@
     <div class="well">
         <strong>{Localisation::getTranslation(Strings::TASK_ORG_FEEDBACK_USER_FEEDBACK)}</strong><hr/>
         <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" 
-                    action="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
+                    action="{urlFor name="task-org-feedback" options="task_id.$task_id"}" accept-charset="utf-8">
             <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" 
                     placeholder="{Localisation::getTranslation(Strings::TASK_ORG_FEEDBACK_1)}"></textarea>                    
             <p style="margin-bottom:30px;"/> 

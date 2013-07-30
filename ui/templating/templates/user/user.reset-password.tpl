@@ -6,7 +6,7 @@
         <h1>{Localisation::getTranslation(Strings::USER_RESET_PASSWORD_RESET_USER_PASSWORD)}</h1>
     </div>
 
-    <form class="well" action="{urlFor name="password-reset-request"}" method="post">
+    <form class="well" action="{urlFor name="password-reset-request"}" method="post" accept-charset="utf-8">
         <p>
             {Localisation::getTranslation(Strings::USER_RESET_PASSWORD_0)}
         </p>
