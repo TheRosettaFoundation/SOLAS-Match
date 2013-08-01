@@ -6,6 +6,12 @@ class Country
   String code;
   String name;
   
+  Country()
+  {
+    code = "";
+    name = "";
+  }
+  
   dynamic toJson()
   {
     return {

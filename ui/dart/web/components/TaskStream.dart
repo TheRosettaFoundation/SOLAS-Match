@@ -39,7 +39,7 @@ class TaskStream extends WebComponent
   @observable Map<int, Project> projectMap;
   @observable Map<int, Organisation> orgMap;
   @observable List<Language> activeLanguages;
-  @observable Map<int, String> taskTypes;
+  @observable Map<int, SafeHtml> taskTypes;
   @observable List<int> taskTypeIndexes;
   @observable Map<int, List<Tag>> taskTags;
   
@@ -65,18 +65,18 @@ class TaskStream extends WebComponent
       loadActiveLanguages();
       addTasks();
       taskTypeIndexes.add(0);
-      taskTypes[0] = Localisation.getTranslation("index_any");
+      taskTypes[0] = Localisation.getTranslationSafe("index_any");
       taskTypeIndexes.add(1);
-      taskTypes[1] = Localisation.getTranslation("common_segmentation");
+      taskTypes[1] = Localisation.getTranslationSafe("common_segmentation");
       taskOneColour = settings.conf.task_colours.colour_1;
       taskTypeIndexes.add(2);
-      taskTypes[2] = Localisation.getTranslation("common_translation");
+      taskTypes[2] = Localisation.getTranslationSafe("common_translation");
       taskTwoColour = settings.conf.task_colours.colour_2;
       taskTypeIndexes.add(3);
-      taskTypes[3] = Localisation.getTranslation("common_proofreading");
+      taskTypes[3] = Localisation.getTranslationSafe("common_proofreading");
       taskThreeColour = settings.conf.task_colours.colour_3;
       taskTypeIndexes.add(4);
-      taskTypes[4] = Localisation.getTranslation("common_desegmentation");
+      taskTypes[4] = Localisation.getTranslationSafe("common_desegmentation");
       taskFourColour = settings.conf.task_colours.colour_4;
     });
   }
@@ -84,8 +84,9 @@ class TaskStream extends WebComponent
   void loadActiveLanguages()
   {
     Language any = new Language();
-    any.name = Localisation.getTranslation("index_any");
+    any.name = Localisation.getTranslation("index_any").toString();
     any.code = "";
+    
     activeLanguages.add(any);
     LanguageDao.getActiveLanguages().then((List<Language> langs) {
       langs.forEach((Language lang) {

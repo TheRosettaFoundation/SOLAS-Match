@@ -1,7 +1,7 @@
 library bootstrap;
 
 import 'package:web_ui/watcher.dart' as watcher;
-import 'solasmatchdart.dart' as userMain;
+import 'ProjectCreateForm.html.dart' as userMain;
 
 main() {
   watcher.useObservers = true;

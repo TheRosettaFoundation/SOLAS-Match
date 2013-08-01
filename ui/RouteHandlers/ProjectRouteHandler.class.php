@@ -581,6 +581,8 @@ class ProjectRouteHandler
             "url_project_upload" => $app->urlFor("project-create", array("org_id" => $org_id)),
             "languages"         => $language_list,
             "countries"         => $countries,
+            "org_id"            => $org_id,
+            "user_id"           => $user_id,
             "extra_scripts"     => $extra_scripts
         ));
         

@@ -1,6 +1,5 @@
 library SolasMatchDart;
 
-
 import "Tag.dart";
 import "Locale.dart";
 
@@ -19,6 +18,18 @@ class Project
   Locale sourceLocale;
   List<Tag> tag;
   
+  Project()
+  {
+    title = "";
+    description = "";
+    deadline = "";
+    impact = "";
+    reference = "";
+    createdTime = "";
+    status = "";
+    tag = new List<Tag>();
+  }
+  
   dynamic toJson()
   {
     return {
@@ -33,6 +44,7 @@ class Project
       "createdTime" : createdTime,
       "status" : status,
       "sourceLocale" : sourceLocale,
+      "tag" : tag
     };
   }
 }

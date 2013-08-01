@@ -77,4 +77,43 @@ class TaskDao
     });
     return ret;
   }
+  
+  static Future<Task> createTask(Task task)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<Task> ret = client.call("Task", "v0/tasks", "POST", json.stringify(task))
+        .then((String jsonTask) {
+          task = null;
+          if (jsonTask.length > 0) {
+            Map jsonParsed = json.parse(jsonTask);
+            if (jsonParsed.length > 0) {
+              task = ModelFactory.generateTaskFromMap(jsonParsed);
+            }
+          }
+          return task;
+    });
+    return ret;
+  }
+  
+  static Future<bool> addTaskPreReq(int taskId, int preReqId)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<bool> ret = client.call("", "v0/tasks/$taskId/prerequisites/$preReqId", "PUT").then((String response) {
+      return true;
+    });
+  }
+  
+  static Future<bool> trackTask(int taskId, int userId)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<bool> ret = client.call("", "v0/users/$userId/trackedTasks/$taskId", "PUT")
+        .then((String response) {
+          bool success = false;
+          if (response == "1") {
+            success = true;
+          }
+          return success;
+        });
+    return ret;
+  }
 }

@@ -30,7 +30,7 @@ class Task
       "sourceLocale" : sourceLocale,
       "targetLocale" : targetLocale,
       "taskType" : taskType,
-      "taskstatus" : taskStatus,
+      "taskStatus" : taskStatus,
       "published" : published
     };
   }

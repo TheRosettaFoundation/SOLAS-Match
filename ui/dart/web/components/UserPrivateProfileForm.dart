@@ -61,57 +61,59 @@ class UserPrivateProfileForm extends WebComponent
   
   void inserted()
   {
-    Settings settings = new Settings();
-    settings.loadConf().then((e) {
-      List<Future<bool>> dataLoaded = new List<Future<bool>>();
-      UserDao.getUserPersonalInfo(userId).then((UserPersonalInformation info) {
-        userInfo = info;
-      });
-      
-      UserDao.getUserBadges(userId).then((List<Badge> userBadges) {
-        badges = userBadges;
-        badges.forEach((Badge badge) {
-          if (badge.id == 6) {
-            translator = true;
-          } else if(badge.id == 7) {
-            proofreader = true;
-          } else if (badge.id == 8) {
-            interpreter = true;
-          }
-        });
-      });
-      
-      dataLoaded.add(UserDao.getUser(userId).then((User u) {
-        user = u;
-        return true;
-      }));
-      
-      dataLoaded.add(UserDao.getSecondaryLanguages(userId).then((List<Locale> locales) {
-        userSecondaryLanguages.addAll(locales);
-        return true;
-      }));
-      
-      dataLoaded.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
-        Language lang = new Language();
-        lang.name = Localisation.getTranslation("index_any");
-        lang.code = "";
-        languages.add(lang);
-        languages.addAll(langs);
-        print("LanguageCount Is: " + languages.length.toString());
-        return true;
-      }));
-      
-      dataLoaded.add(CountryDao.getAllCountries().then((List<Country> regions) {
-        Country any = new Country();
-        any.name = Localisation.getTranslation("index_any");
-        any.code = "";
-        countries.add(any);
-        countries.addAll(regions);
-        return true;
-      }));
-      
-      Future.wait(dataLoaded).then((List<bool> successList) => setDefaults(successList)); 
+    print("Common Missing Data (text):");
+    print("common missing data is " + Localisation.getTranslation("common_missing_data").toString());
+    print("Common Missing Data (bland):");
+    print("common missing data is " + Localisation.getTranslation("common_missing_data").toString());
+    print("Common Missing Data (Safe):");
+    print("common missing data is " + Localisation.getTranslationSafe("common_missing_data").toString());
+    List<Future<bool>> dataLoaded = new List<Future<bool>>();
+    UserDao.getUserPersonalInfo(userId).then((UserPersonalInformation info) {
+      userInfo = info;
     });
+    
+    UserDao.getUserBadges(userId).then((List<Badge> userBadges) {
+      badges = userBadges;
+      badges.forEach((Badge badge) {
+        if (badge.id == 6) {
+          translator = true;
+        } else if(badge.id == 7) {
+          proofreader = true;
+        } else if (badge.id == 8) {
+          interpreter = true;
+        }
+      });
+    });
+      
+    dataLoaded.add(UserDao.getUser(userId).then((User u) {
+      user = u;
+      return true;
+    }));
+    
+    dataLoaded.add(UserDao.getSecondaryLanguages(userId).then((List<Locale> locales) {
+      userSecondaryLanguages.addAll(locales);
+      return true;
+    }));
+    
+    dataLoaded.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
+      Language lang = new Language();
+      lang.name = Localisation.getTranslation("index_any");
+      lang.code = "";
+      languages.add(lang);
+      languages.addAll(langs);
+      return true;
+    }));
+    
+    dataLoaded.add(CountryDao.getAllCountries().then((List<Country> regions) {
+      Country any = new Country();
+      any.name = Localisation.getTranslation("index_any");
+      any.code = "";
+      countries.add(any);
+      countries.addAll(regions);
+      return true;
+    }));
+    
+    Future.wait(dataLoaded).then((List<bool> successList) => setDefaults(successList)); 
   }
   
   void setDefaults(List<bool> successList)

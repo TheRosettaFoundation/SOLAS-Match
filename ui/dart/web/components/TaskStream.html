@@ -9,12 +9,12 @@
     <element extends="div" name="x-task-stream" constructor="TaskStream">
       <template>
         <template instantiate="if userId > 0">
-          <h3>{{Localisation.getTranslation("index_filter_available_tasks")}}</h3>
+          <h3>{{Localisation.getTranslationSafe("index_filter_available_tasks")}}</h3>
           <table>
             <thead>
-              <th>{{Localisation.getTranslation("common_task_type")}}</th>
-              <th>{{Localisation.getTranslation("common_source_language")}}<span style="color: red">*</span></th>
-              <th>{{Localisation.getTranslation("common_target_language")}}<span style="color: red">*</span></th>
+              <th>{{Localisation.getTranslationSafe("common_task_type")}}</th>
+              <th>{{Localisation.getTranslationSafe("common_source_language")}}<span style="color: red">*</span></th>
+              <th>{{Localisation.getTranslationSafe("common_target_language")}}<span style="color: red">*</span></th>
             </thead>
             <tbody>
               <tr>
@@ -40,7 +40,7 @@
               <tr>
                 <td>
                   <button value="Filter" class="btn btn-primary" on-click="filterStream()">
-                    <i class="icon-refresh icon-white"></i> {{Localisation.getTranslation("index_filter_task_stream")}}
+                    <i class="icon-refresh icon-white"></i> {{Localisation.getTranslationSafe("index_filter_task_stream")}}
                   </button>
                 </td>
               </tr>
@@ -48,8 +48,8 @@
           </table>
           <br />
           <small>
-            <span style="color: red">*</span>{{Localisation.getTranslation("index_2")}}
-            {{Localisation.getTranslation("index_3")}}
+            <span style="color: red">*</span>{{Localisation.getTranslationSafe("index_2")}}
+            {{Localisation.getTranslationSafe("index_3")}}
           </small>
           <hr />
         </template>
@@ -61,25 +61,25 @@
                   {{task.title}}
                 </a>
               </h2>
-              <p>{{Localisation.getTranslation("common_type")}}:
+              <p>{{Localisation.getTranslationSafe("common_type")}}:
                 <template instantiate="if task.taskType == 1">
-                  <span class="label label-info" style="background-color: {{taskOneColour}}">{{Localisation.getTranslation("common_segmentation")}}</span>
+                  <span class="label label-info" style="background-color: {{taskOneColour}}">{{Localisation.getTranslationSafe("common_segmentation")}}</span>
                 </template>
                 <template instantiate="if task.taskType == 2">
-                  <span class="label label-info" style="background-color: {{taskTwoColour}}">{{Localisation.getTranslation("common_translation")}}</span>
+                  <span class="label label-info" style="background-color: {{taskTwoColour}}">{{Localisation.getTranslationSafe("common_translation")}}</span>
                 </template>
                 <template instantiate="if task.taskType == 3">
-                  <span class="label label-info" style="background-color: {{taskThreeColour}}">{{Localisation.getTranslation("common_proofreading")}}</span>
+                  <span class="label label-info" style="background-color: {{taskThreeColour}}">{{Localisation.getTranslationSafe("common_proofreading")}}</span>
                 </template>
                 <template instantiate="if task.taskType == 4">
-                  <span class="label label-info" style="background-color: {{taskFourColour}}">{{Localisation.getTranslation("common_desegmentation")}}</span>              
+                  <span class="label label-info" style="background-color: {{taskFourColour}}">{{Localisation.getTranslationSafe("common_desegmentation")}}</span>              
                 </template>
               </p>
               <p>
-                {{Localisation.getTranslation("common_from")}}: <strong>{{task.sourceLocale.languageName}} - {{task.sourceLocale.countryName}} </strong>
+                {{Localisation.getTranslationSafe("common_from")}}: <strong>{{task.sourceLocale.languageName}} - {{task.sourceLocale.countryName}} </strong>
               </p>
               <p>
-                {{Localisation.getTranslation("common_to")}}: <strong>{{task.targetLocale.languageName}} - {{task.targetLocale.countryName}}</strong>
+                {{Localisation.getTranslationSafe("common_to")}}: <strong>{{task.targetLocale.languageName}} - {{task.targetLocale.countryName}}</strong>
               </p>
               <p>
                 <template instantiate="if taskTags[task.id].length > 0">
@@ -89,22 +89,22 @@
                 </template>
               </p>
               <p>
-                {{Localisation.getTranslation("common_word_count")}}: <strong>{{task.wordCount}}</strong>
+                {{Localisation.getTranslationSafe("common_word_count")}}: <strong>{{task.wordCount}}</strong>
               </p>
               <p class="task_details">
-                {{Localisation.getTranslation("common_added")}}: <strong>{{taskAges[task.id]}}</strong> {{Localisation.getTranslation("common_ago")}}
+                {{Localisation.getTranslationSafe("common_added")}}: <strong>{{taskAges[task.id]}}</strong> {{Localisation.getTranslationSafe("common_ago")}}
               </p>
               <p>
-                {{Localisation.getTranslation("common_due_by")}}: <strong>{{task.deadline}}</strong>
+                {{Localisation.getTranslationSafe("common_due_by")}}: <strong>{{task.deadline}}</strong>
               </p>
               <template instantiate="if projectMap[task.projectId] != null">
                 <template instantiate="if orgMap[projectMap[task.projectId].organisationId] != null">
                   <p>
-                    {{Localisation.getTranslation("common_part_of")}}:
+                    {{Localisation.getTranslationSafe("common_part_of")}}:
                     <a href="{{siteAddress}}project/{{projectMap[task.projectId].id}}/view">
                       {{projectMap[task.projectId].title}}
                     </a>
-                    {{Localisation.getTranslation("common_for")}}
+                    {{Localisation.getTranslationSafe("common_for")}}
                     <a href="{{siteAddress}}org/{{orgMap[projectMap[task.projectId].organisationId].id}}/profile">
                       {{orgMap[projectMap[task.projectId].organisationId].name}}
                     </a>
@@ -115,11 +115,11 @@
             </div>
           </template>
           <template instantiate="if moreTasks">
-            <button on-click="addTasks()">{{Localisation.getTranslation("index_load_more")}}</button>
+            <button on-click="addTasks()">{{Localisation.getTranslationSafe("index_load_more")}}</button>
           </template>
         </template>
         <template instantiate="if !(tasks.length > 0)">
-          <p>{{Localisation.getTranslation("index_no_tasks_available")}}</p>
+          <p>{{Localisation.getTranslationSafe("index_no_tasks_available")}}</p>
         </template>
         <br />
       </template>

@@ -29,8 +29,7 @@ class Tasks {
             
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data,"Task");
-//            $data = $client->cast("Task", $data);
+            $data = $client->deserialize($data, "Task");
             Dispatcher::sendResponce(null, TaskDao::create($data), null, $format);
         }, 'createTask');
         
@@ -44,8 +43,7 @@ class Tasks {
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
-            $data = $client->deserialize($data,"Task");
-//            $data = $client->cast("Task", $data);
+            $data = $client->deserialize($data, "Task");
             Dispatcher::sendResponce(null, TaskDao::save($data), null, $format);
         }, 'updateTask');
         

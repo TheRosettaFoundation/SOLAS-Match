@@ -7,6 +7,12 @@ class Badge
   String description;
   int owner_id;
   
+  Badge()
+  {
+    title = "";
+    description = "";
+  }
+  
   dynamic toJson()
   {
     return {

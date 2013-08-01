@@ -2,29 +2,41 @@ library SolasMatchDart;
 
 import 'dart:html';
 import 'dart:async';
-import 'package:xml/xml.dart';
+import "package:web_ui/web_ui.dart";
 
 import "Settings.dart";
 
 class Localisation
 {
   static final Localisation _instance = new Localisation._internal();
-  static XmlElement root;
+  static Document doc;
   
   factory Localisation()
   {
     return _instance;
   }
   
+  static SafeHtml getTranslationSafe(String key)
+  {
+    SafeHtml data;
+    Element element = doc.query("[name = $key]");
+    if (element != null) {
+      data = new SafeHtml.unsafe("<span>" + element.text + "</span>");
+    } else {
+      data = null;
+    }
+    return data;
+  }
+  
   static String getTranslation(String key)
   {
     String data;
-    var list = root.query({'name':key});
-    if (list != null && list.length > 0) {
-      data = list.elementAt(0).text;
+    Element element = doc.query("[name = $key]");
+    if (element != null) {
+      data = element.text;
     } else {
       print("Unable to find string with name $key");
-      data = "";
+      data = '';
     }
     return data;
   }
@@ -36,7 +48,8 @@ class Localisation
       .then((String data) {
         bool ret;
         if (data != "") {
-          root = XML.parse(data);
+          DomParser parser = new DomParser();
+          doc = parser.parseFromString(data, "text/xml");
           ret = true;
         } else {
           ret = false;
