@@ -7,7 +7,7 @@
                 {assign var="tagId" value=$tag->getId()}
                 <div class="tag">
                     <a class="label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
-                    <a class="label label-close" href="{urlFor name="home"}tag/{$tag_label}/false" 
+                    <a class="label label-close" href="{urlFor name="home"}tag/{$tagId}/false" 
                     title="{Localisation::getTranslation(Strings::TAGS_USER_TAGS_INC_1)}"><strong>| x</strong></a>
                 </div>
             </li>

@@ -66,10 +66,10 @@ class APIHelper
         if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");        
         
         $httpHeaders = array(
-                $this->_serializer->getContentType(),                                                                                
-                'Content-Length:'.$lenght,
-                'X-Custom-Authorization:'.UserSession::getHash());       
-
+                 $this->_serializer->getContentType()
+                ,'Expect:'
+                ,'Content-Length:'.$lenght
+                ,'X-Custom-Authorization:'.UserSession::getHash());       
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
         curl_setopt($re, CURLINFO_HEADER_OUT, true);

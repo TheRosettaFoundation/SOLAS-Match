@@ -71,15 +71,25 @@ Further below in this document, there are also several resources for our work mo
     server.modules += ("mod_rewrite")
 
  * update lighttpd.conf with the following rewite rules
-    url.rewrite-once = ( "resources/css/style.([0-9]+).css$" => "resources/css/style.css","^/?index.php/?$" => ""  )
-    url.rewrite-if-not-file = ( "/?index.php/.*" => "$1" ,"(.*)" => "index.php/$1")
+    where deployDir is the path under the web root where Solas Match is deployed.
+    url.rewrite-once = ( "deployDir/resources/css/style.([0-9]+).css$" => "deployDir/resources/css/style.css","^/?deployDir/index.php/?$" => ""  )
+    url.rewrite-if-not-file = (
+        "/?deployDir/index.php/.*" => "$1"
+        ,"(api/.*)" => "deployDir/api/dispatcher.php/$1"
+        ,"(.*)" => "deployDir/index.php/$1"
+    )
 
  * example vHost 
-   $HTTP["host"] == "php-workspace" {
-      server.document-root = "/home/sean/Dev/Git-Mannaged/SOLAS-Match/"
-      url.rewrite-once = ( "resources/css/style.([0-9]+).css$" => "resources/css/style.css","^/?index.php/?$" => ""  )
-      url.rewrite-if-not-file = ( "/?index.php/.*" => "$1" ,"(.*)" => "index.php/$1")
+  $HTTP["host"] == "127.0.0.1" {
+      server.document-root = "/var/www/"
+      url.rewrite-once = ( "solas-match/resources/css/style.([0-9]+).css$" => "solas-match/resources/css/style.css","^/?solas-match/index.php/?$" => ""  )
+      url.rewrite-if-not-file = (
+        "/?solas-match/index.php/.*" => "$1"
+        ,"(api/.*)" => "solas-match/api/dispatcher.php/$1"
+        ,"(.*)" => "solas-match/index.php/$1"
+        )
    }
+
 
 
 ## Install Solas Match Dependencies
