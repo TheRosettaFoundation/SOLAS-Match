@@ -28,6 +28,7 @@ class Middleware
         // The access token is missing or invalid...
         catch (League\OAuth2\Server\Exception\InvalidAccessTokenException $e)
         {
+//            print_r($response);
             Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, $e->getMessage());
         }
     }   
