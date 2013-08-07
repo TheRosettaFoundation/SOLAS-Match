@@ -2597,7 +2597,7 @@ APIHelper: {"": "Object;format",
     $.setRuntimeTypeInfo(headers, [$.JSString, $.JSString]);
     t2 = $.APIHelper_UserHash;
     if (t2 != null)
-      headers.$indexSet(headers, "Authorization: Bearer", t2);
+      headers.$indexSet(headers, "Authorization", $.JSString_methods.$add("Bearer ", t2));
     t1.url_0 = $.$add$ns($.$add$ns($.$add$ns($.get$Settings__instance()._conf.get$urls().get$SOLASMatch(), t1.url_0), this.format), "/");
     if (queryArgs != null) {
       t1.url_0 = $.$add$ns(t1.url_0, "?");

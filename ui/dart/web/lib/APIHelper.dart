@@ -41,7 +41,7 @@ class APIHelper
   {
     Map<String, String> headers = new Map<String, String>();
     if (UserHash != null) {
-      headers["Authorization: Bearer"] = UserHash;
+      headers["Authorization"] = "Bearer "+UserHash;
     }
     Settings settings = new Settings();
     url = settings.conf.urls.SOLASMatch + url + format + "/";
