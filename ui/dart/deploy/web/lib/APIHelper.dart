@@ -15,7 +15,7 @@ import "models/User.dart";
 class APIHelper
 {
   String format;
-  static var UserObject;
+  static var UserHash;
   static var SolasMatch = null; //JS Proto Context object
   
   APIHelper([String frmt = ".proto"])
@@ -26,11 +26,10 @@ class APIHelper
   static Future<bool> init()
   {
     Settings settings = new Settings();
-    String url = settings.conf.urls.SiteLocation + "static/getUser/";
+    String url = settings.conf.urls.SiteLocation + "static/getUserHash/";
     Future<bool> finished  = HttpRequest.request(url, method: "GET", withCredentials: true).then((HttpRequest response) {
       if (response.responseText != "") {
-        Map jsonMap = json.parse(response.responseText);
-        UserObject = ModelFactory.generateUserFromMap(jsonMap);
+        UserHash = response.responseText;
       }
       return true;
     });
@@ -41,10 +40,8 @@ class APIHelper
                       [String data = '', Map queryArgs = null])
   {
     Map<String, String> headers = new Map<String, String>();
-    if (UserObject != null) {
-      String key = UserObject.email + ":" + UserObject.display_name;
-      key = CryptoUtils.bytesToHex((new MD5()..add(key.codeUnits)).close());
-      headers["X-Custom-Authorization"] = key;
+    if (UserHash != null) {
+      headers["Authorization: Bearer"] = UserHash;
     }
     Settings settings = new Settings();
     url = settings.conf.urls.SOLASMatch + url + format + "/";

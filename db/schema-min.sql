@@ -14,9 +14,9 @@ SET FOREIGN_KEY_CHECKS=0;
 
 CREATE TABLE `oauth_clients` (
   `id` CHAR(40) NOT NULL,
-  `secret` CHAR(40) NOT NULL,
+  `secret` CHAR(128) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `auto_approve` TINYINT(1) NOT NULL DEFAULT '0',
+  `auto_approve` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `u_oacl_clse_clid` (`secret`,`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
@@ -4770,6 +4770,16 @@ CREATE TRIGGER `afterTaskCreate` AFTER INSERT ON `Tasks` FOR EACH ROW BEGIN
 	END LOOP;
 	CLOSE cur1;
 
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
+-- Dumping structure for trigger debug-test3.onDeleteFromRegisteredUsers
+DROP TRIGGER IF EXISTS `onDeleteFromRegisteredUsers`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `onDeleteFromRegisteredUsers` AFTER DELETE ON `RegisteredUsers` FOR EACH ROW BEGIN
+	INSERT INTO oauth_clients (id, secret, name) SELECT id, `password`, `display-name` FROM Users WHERE id = old.user_id;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
