@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "12a4d8862bdd510b81bf71d1c337da1a",
+    "hash": "47581be238eb07ef8c3992e500ca71b7",
     "packages": [
         {
             "name": "drslump/protobuf-php",
@@ -19,64 +19,6 @@
                     "library/DrSlump/Protobuf.php"
                 ]
             }
-        },
-        {
-            "name": "league/oauth2-server",
-            "version": "2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-loep/oauth2-server.git",
-                "reference": "2.1.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-loep/oauth2-server/zipball/2.1.1",
-                "reference": "2.1.1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "replace": {
-                "league/oauth2server": "*",
-                "lncd/oauth2": "*"
-            },
-            "require-dev": {
-                "mockery/mockery": ">=0.7.2"
-            },
-            "suggest": {
-                "zetacomponents/database": "Allows use of the build in PDO storage classes"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "League\\OAuth2\\Server": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alex Bilbie",
-                    "email": "hello@alexbilbie.com",
-                    "homepage": "http://www.alexbilbie.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A lightweight and powerful OAuth 2.0 authorization and resource server library with support for all the core specification grants. This library will allow you to secure your API with OAuth and allow your applications users to approve apps that want to access their data from your API.",
-            "homepage": "https://github.com/php-loep/oauth2-server",
-            "keywords": [
-                "Authentication",
-                "api",
-                "authorization",
-                "oauth",
-                "oauth2",
-                "resource",
-                "server"
-            ],
-            "time": "2013-06-02 12:55:01"
         },
         {
             "name": "slim/slim",
@@ -121,6 +63,66 @@
             "time": "2012-06-17 09:58:20"
         },
         {
+            "name": "solas/oauth2-server",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SeanMooney/oauth2-server.git",
+                "reference": "6da6f94c4238798775fa4355fe6d710d19c8b26b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SeanMooney/oauth2-server/zipball/6da6f94c4238798775fa4355fe6d710d19c8b26b",
+                "reference": "6da6f94c4238798775fa4355fe6d710d19c8b26b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "replace": {
+                "league/oauth2server": "*",
+                "lncd/oauth2": "*"
+            },
+            "require-dev": {
+                "mockery/mockery": ">=0.7.2"
+            },
+            "suggest": {
+                "zetacomponents/database": "Allows use of the build in PDO storage classes"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "League\\OAuth2\\Server": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Bilbie",
+                    "email": "hello@alexbilbie.com",
+                    "homepage": "http://www.alexbilbie.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A lightweight and powerful OAuth 2.0 authorization and resource server library with support for all the core specification grants. This library will allow you to secure your API with OAuth and allow your applications users to approve apps that want to access their data from your API.",
+            "homepage": "https://github.com/SeanMooney/oauth2-server",
+            "keywords": [
+                "api",
+                "authentication",
+                "authorization",
+                "oauth",
+                "oauth2",
+                "resource",
+                "server"
+            ],
+            "support": {
+                "source": "https://github.com/SeanMooney/oauth2-server/tree/master"
+            },
+            "time": "2013-08-07 15:20:58"
+        },
+        {
             "name": "videlalvaro/php-amqplib",
             "version": "dev-master",
             "source": {
@@ -161,75 +163,6 @@
                 "rabbitmq"
             ],
             "time": "2013-08-05 18:45:29"
-        },
-        {
-            "name": "zetacomponents/database",
-            "version": "1.4.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zetacomponents/Database.git",
-                "reference": "1.4.6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/zetacomponents/Database/zipball/1.4.6",
-                "reference": "1.4.6",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "apache2"
-            ],
-            "authors": [
-                {
-                    "name": "Sergey Alexeev"
-                },
-                {
-                    "name": "Sebastian Bergmann"
-                },
-                {
-                    "name": "Jan Borsodi"
-                },
-                {
-                    "name": "Raymond Bosman"
-                },
-                {
-                    "name": "Frederik Holljen"
-                },
-                {
-                    "name": "Kore Nordmann"
-                },
-                {
-                    "name": "Derick Rethans"
-                },
-                {
-                    "name": "Vadym Savchuk"
-                },
-                {
-                    "name": "Tobias Schlitt"
-                },
-                {
-                    "name": "Alexandru Stanoi"
-                },
-                {
-                    "name": "Joel Arvidsson"
-                },
-                {
-                    "name": "Friedel Hill"
-                },
-                {
-                    "name": "Christian Michel"
-                }
-            ],
-            "description": "A lightweight database layer on top of PHP's PDO that allows you to utilize a database without having to take care of differences in SQL dialects.",
-            "homepage": "https://github.com/zetacomponents",
-            "time": "2009-07-27 02:50:02"
         }
     ],
     "packages-dev": [
@@ -653,7 +586,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "videlalvaro/php-amqplib": 20
+        "videlalvaro/php-amqplib": 20,
+        "solas/oauth2-server": 20
     },
     "platform": [
 

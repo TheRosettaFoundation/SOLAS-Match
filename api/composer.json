@@ -3,28 +3,32 @@
     "description": "A translation platform for NGOs",
 
     "repositories": [
-    {
-        "source": {
-            "name": "slim/slim",
-            "url": "https://github.com/codeguy/Slim.git",
-            "type": "git",
-            "reference": "master"
+        {            
+            "type": "vcs",
+            "url":  "git@github.com:SeanMooney/oauth2-server.git"
         },
-        "type": "package",
-        "package": {
-            "name": "drslump/protobuf-php",
-            "version": "0.9.4",
-            "type": "git",
+        {
             "source": {
-                "url": "git://github.com/drslump/Protobuf-PHP.git",
+                "name": "slim/slim",
+                "url": "https://github.com/codeguy/Slim.git",
                 "type": "git",
                 "reference": "master"
             },
-            "autoload": {
-                "files": ["library/DrSlump/Protobuf.php"]
+            "type": "package",
+            "package": {
+                "name": "drslump/protobuf-php",
+                "version": "0.9.4",
+                "type": "git",
+                "source": {
+                    "url": "git://github.com/drslump/Protobuf-PHP.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "files": ["library/DrSlump/Protobuf.php"]
+                }
             }
         }
-    }
     ],
 
     "require-dev": {
@@ -36,7 +40,7 @@
         "slim/slim": "1.6.3",
         "videlalvaro/php-amqplib": "dev-master",
         "drslump/protobuf-php": "*",
-        "league/oauth2-server": "2.*"
+        "solas/oauth2-server": "dev-master"
     },
     "autoload": {
         "classmap": ["vendor/slim/slim/Slim/View.php"]
