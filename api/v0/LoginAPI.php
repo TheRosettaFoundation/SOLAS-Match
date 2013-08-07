@@ -51,8 +51,8 @@ class LoginAPI {
                 
                     $data->setPassword(null);
                     $data->setNonce(null);
-                    UserSession::setSession($data->getId());
-                    UserSession::setHash(md5("{$data->getEmail()}:{$data->getDisplayName()}"));
+//                    UserSession::setSession($data->getId());
+//                    UserSession::setHash(md5("{$data->getEmail()}:{$data->getDisplayName()}"));
                     
 
 

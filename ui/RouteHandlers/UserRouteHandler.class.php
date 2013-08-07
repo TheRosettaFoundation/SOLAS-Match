@@ -188,7 +188,7 @@ class UserRouteHandler
             $post = $app->request()->post();
             $temp =$post['email'].substr(Settings::get("session.site_key"),0,20);
                 UserSession::clearCurrentUserID();
-                UserSession::setHash(md5($temp));
+//                UserSession::setHash(md5($temp));
             if (!TemplateHelper::isValidEmail($post['email'])) {
                 $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_1);
             } elseif (!TemplateHelper::isValidPassword($post['password'])) {
@@ -230,7 +230,7 @@ class UserRouteHandler
             if (isset($post['verify'])) {
                 $userDao->finishRegistration($user->getId());
                 UserSession::setSession($user->getId());
-                UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+//                UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_6));
                 $app->redirect($app->urlFor("home"));
             }
@@ -347,7 +347,7 @@ class UserRouteHandler
                 if (isset($post['login'])) {    
                     if($user = $userDao->login($post['email'], $post['password'])) {
                         UserSession::setSession($user->getId());
-                        UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+//                        UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                     }                   
                     $request = UserSession::getReferer();
                     UserSession::clearReferer();
@@ -393,20 +393,20 @@ class UserRouteHandler
                 $userDao = new UserDao();
                 $temp =$retvals['contact/email'].substr(Settings::get("session.site_key"),0,20);
                 UserSession::clearCurrentUserID();
-                UserSession::setHash(md5($temp));
+//                UserSession::setHash(md5($temp));
                 $user = $userDao->getUserByEmail($retvals['contact/email']);
                 if(is_array($user)) $user = $user[0];                    
                 if(is_null($user)) {
                     $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));
                     if(is_array($user)) $user = $user[0]; 
                     UserSession::setSession($user->getId());
-                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                     return false;
                 }
                 $adminDao = new AdminDao();
                 if(!$adminDao->isUserBanned($user->getId())) {
                     UserSession::setSession($user->getId());
-                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 } else {
                     $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
                     $app->redirect($app->urlFor('home'));

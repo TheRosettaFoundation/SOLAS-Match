@@ -103,7 +103,7 @@ class Dispatcher {
         $response['Content-Type'] = $apiHelper->getContentType();
         $body = $apiHelper->serialize($body);
         $token = $apiHelper->serialize($oauthToken);
-        $response["X-Custom-Token"] = $token;
+        $response["X-Custom-Token"] = base64_encode($token);
         if ($headers != null) {
             foreach ($headers as $key => $val) {
                 $response[$key] = $val;

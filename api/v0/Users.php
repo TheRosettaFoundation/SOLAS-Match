@@ -44,7 +44,7 @@ class Users {
 
            
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUser',"Middleware::isloggedIn");
+        }, 'getUser');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/',
                                                         function ($id, $format = ".json") {
@@ -286,7 +286,7 @@ class Users {
             $dao = new TaskDao();
             $data = $dao->getUserTopTasks($id, $strict, $limit, $offset, $filter);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUserTopTasks',  "Middleware::authUserOwnsResource");
+        }, 'getUserTopTasks',  "Middleware::oAuth");
         
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/archivedTasks(:format)/',

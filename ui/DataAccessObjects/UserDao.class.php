@@ -3,6 +3,7 @@
 
 require_once __DIR__."/../../Common/HttpStatusEnum.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/../../Common/models/OAuthResponce.php";
 require_once __DIR__."/BaseDao.php";
 
 
@@ -350,6 +351,7 @@ class UserDao extends BaseDao
         $login->setPassword($password);
         $request = "{$this->siteApi}v0/login";
         $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $login);
+        
 
         switch($this->client->getResponseCode()) {
             
@@ -367,7 +369,11 @@ class UserDao extends BaseDao
                 $bannedUser = $adminDao->getBannedUser($user->getId());
                 throw new InvalidArgumentException("{$bannedUser->getComment()}");
         }
-        
+        $headers = $this->client->getHeaders();
+        if(isset ($headers["X-Custom-Token"])){
+            $token = $this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce');
+            if($token->hasToken())UserSession::setHash($token->getToken());
+        }
         return $ret;
     }
 
