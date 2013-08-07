@@ -17,6 +17,22 @@ require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 
 class Middleware
 {
+    public static function oAuth($request, $response, $route) {
+//        $server = Dispatcher::getOauthServer();
+        $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
+        // Test for token existance and validity
+        try {
+            $resource->isValid();
+        }
+
+        // The access token is missing or invalid...
+        catch (League\OAuth2\Server\Exception\InvalidAccessTokenException $e)
+        {
+            Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, $e->getMessage());
+        }
+    }   
+    
+    
     public static function isloggedIn ($request, $response, $route){
         $params = $route->getParams();
       
@@ -49,7 +65,10 @@ class Middleware
                   }
 
             }else{
-                 Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, "You must be logged in to view this resource ");  
+                $msg="You must be logged in to view this resource ";
+                $msg.=isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])?"":" hash not set";
+                $msg.=isset($_SESSION['hash'])?"":" cookie not set";
+                 Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, $msg);  
             }
         
     } 

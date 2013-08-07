@@ -366,8 +366,8 @@ class UserDao extends BaseDao
                 $adminDao = new AdminDao();                
                 $bannedUser = $adminDao->getBannedUser($user->getId());
                 throw new InvalidArgumentException("{$bannedUser->getComment()}");
-
         }
+        
         return $ret;
     }
 

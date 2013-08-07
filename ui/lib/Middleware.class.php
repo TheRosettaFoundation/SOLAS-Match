@@ -224,8 +224,8 @@ class Middleware
                     $taskDao = new TaskDao();
                     $task = $taskDao->getTask($taskId);                    
                     $app = Slim::getInstance();
-                    $app->flash('error', sprintf(Localisation::getStrings(Strings::MIDDLEWARE_3), $app->urlFor("task-claimed", array("task_id" => $taskId)), $task->getTitle()));
-                    $app->redirect($app->urlFor('home'));   
+                    $app->flash('error', sprintf(Localisation::getTranslation(Strings::MIDDLEWARE_3), $app->urlFor("task-claimed", array("task_id" => $taskId)), $task->getTitle()));
+                    $app->response()->redirect($app->urlFor('home'));   
                 } else {
                     return true;
                 }                

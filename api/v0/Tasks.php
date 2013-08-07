@@ -23,7 +23,7 @@ class Tasks {
                                                         function ($format = ".json") {
             
             Dispatcher::sendResponce(null, TaskDao::getTask(), null, $format);
-        }, 'getTasks');        
+        }, 'getTasks', "Middleware::oAuth");        
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks(:format)/',
                                                         function ($format = ".json") {

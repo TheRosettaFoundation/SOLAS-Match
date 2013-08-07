@@ -22,7 +22,9 @@ require_once __DIR__."/../Common/HttpStatusEnum.php";
 class Dispatcher {
     
     private static $apiDispatcher = null;
-    
+    private static $oauthServer = null; 
+    private static $oauthRequest = null;
+            
     public static function  getDispatcher()
     {
         if (Dispatcher::$apiDispatcher == null) {
@@ -71,18 +73,37 @@ class Dispatcher {
        $path =$path[1];
        $providerNames = Dispatcher::readProviders("$path/");
        Dispatcher::autoRequire($providerNames,"$path/");
+       self::initOAuth();
        Dispatcher::getDispatcher()->run();  
     }
-        
     
-    public static function sendResponce($headers, $body, $code = 200, $format = ".json")
+    private static function initOAuth() {
+        self::$oauthRequest = new League\OAuth2\Server\Util\Request();
+//        self::$oauthServer = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
+        self::$oauthServer = new League\OAuth2\Server\Authorization(
+        new League\OAuth2\Server\Storage\PDO\Client(),
+    new League\OAuth2\Server\Storage\PDO\Session(),
+    new League\OAuth2\Server\Storage\PDO\Scope()
+    );
+        self::$oauthServer->setAccessTokenTTL(Settings::get('site.oauth_timeout'));
+        self::$oauthServer->addGrantType(new League\OAuth2\Server\Grant\Password(self::$oauthServer));
+
+    }
+    
+    public static function getOauthServer()
+    {
+        return self::$oauthServer;
+    }
+    
+    public static function sendResponce($headers, $body, $code = 200, $format = ".json",$oauthToken=null)
     {
         header('Access-Control-Allow-Origin: *');
         $response = Dispatcher::getDispatcher()->response();
         $apiHelper = new APIHelper($format);
         $response['Content-Type'] = $apiHelper->getContentType();
         $body = $apiHelper->serialize($body);
-
+        $token = $apiHelper->serialize($oauthToken);
+        $response["X-Custom-Token"] = $token;
         if ($headers != null) {
             foreach ($headers as $key => $val) {
                 $response[$key] = $val;

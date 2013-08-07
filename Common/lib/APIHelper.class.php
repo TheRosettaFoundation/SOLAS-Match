@@ -40,6 +40,7 @@ class APIHelper
     public function call($destination,$url, $method = HttpMethodEnum::GET,
              $data = null, $query_args = array(), $file = null)
     {
+
         $url = $url.$this->_serializer->getFormat()."/?";
         if (count($query_args) > 0) {
             $first= true;
@@ -63,8 +64,10 @@ class APIHelper
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
 
+        curl_setopt($re, CURLOPT_COOKIESESSION, true);
         if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");        
         
+        curl_setopt($re, CURLOPT_AUTOREFERER, true);
         $httpHeaders = array(
                  $this->_serializer->getContentType()
                 ,'Expect:'
@@ -72,9 +75,13 @@ class APIHelper
                 ,'X-Custom-Authorization:'.UserSession::getHash());       
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
-        curl_setopt($re, CURLINFO_HEADER_OUT, true);
+        curl_setopt($re, CURLOPT_HEADER, true);
         $res=curl_exec($re);
-        $sentHeaders = curl_getinfo($re);
+        $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+        $header = substr($res, 0, $header_size);
+        $headers= http_parse_headers($header);
+        $res = substr($res, $header_size);
+//        $sentHeaders = curl_getinfo($re);
         $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
