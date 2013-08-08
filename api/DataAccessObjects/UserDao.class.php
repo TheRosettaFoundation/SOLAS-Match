@@ -744,4 +744,15 @@ class UserDao
         return $ret;
     }
     
+    public static function getByOauthToken($token)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNullOrWrapStr($token);
+        $result = PDOWrapper::call('getUserByOAuthToken', $args);
+        if ($result) {
+            $ret = ModelFactory::buildModel("User", $result[0]);
+        }
+        return $ret;  
+    }
+    
 }
