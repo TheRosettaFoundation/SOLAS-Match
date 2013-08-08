@@ -366,7 +366,7 @@ class UserRouteHandler
                 }
             }
             $app->render("user/login.tpl");
-        } catch (InvalidArgumentException $e) {
+        } catch (SolasMatchException $e) {
             $error = sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_15), $app->urlFor("login"), $app->urlFor("register"), $e->getMessage());            
             $app->flash("error", $error);
             $app->redirect($app->urlFor("login"));

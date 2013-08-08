@@ -10,126 +10,7 @@
 /*!40101 SET NAMES utf8 */;
 SET FOREIGN_KEY_CHECKS=0;
 
-/*----------------------------------alter tables---------------------------------------------------*/
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    if (EXISTS (SELECT 1 
-                FROM information_schema.COLUMNS c 
-                WHERE c.TABLE_NAME = "UserTaskStreamNotifications"
-                AND c.TABLE_SCHEMA = database())) then
-        if NOT EXISTS (SELECT *
-                        FROM information_schema.COLUMNS cols
-                        WHERE cols.TABLE_SCHEMA = database()
-                        AND cols.TABLE_NAME = "UserTaskStreamNotifications"
-                        AND cols.COLUMN_NAME = "strict") then
-            ALTER TABLE `UserTaskStreamNotifications`
-                ADD COLUMN `strict` INT(1) NOT NULL DEFAULT 0 AFTER `interval`;
-        end if;
-    end if;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
-
 /*--------------------------------------------------start of tables--------------------------------*/
-
-CREATE TABLE `oauth_clients` (
-  `id` CHAR(40) NOT NULL,
-  `secret` CHAR(128) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  `auto_approve` TINYINT(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `u_oacl_clse_clid` (`secret`,`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `oauth_client_endpoints` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `client_id` char(40) NOT NULL,
-  `redirect_uri` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `i_oaclen_clid` (`client_id`),
-  CONSTRAINT `f_oaclen_clid` FOREIGN KEY (`client_id`) REFERENCES `oauth_clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `oauth_sessions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `client_id` char(40) NOT NULL,
-  `owner_type` enum('user','client') NOT NULL DEFAULT 'user',
-  `owner_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `i_uase_clid_owty_owid` (`client_id`,`owner_type`,`owner_id`),
-  CONSTRAINT `f_oase_clid` FOREIGN KEY (`client_id`) REFERENCES `oauth_clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `oauth_session_access_tokens` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `session_id` int(10) unsigned NOT NULL,
-  `access_token` char(40) NOT NULL,
-  `access_token_expires` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `u_oaseacto_acto_seid` (`access_token`,`session_id`),
-  KEY `f_oaseto_seid` (`session_id`),
-  CONSTRAINT `f_oaseto_seid` FOREIGN KEY (`session_id`) REFERENCES `oauth_sessions` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `oauth_session_authcodes` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `session_id` int(10) unsigned NOT NULL,
-  `auth_code` char(40) NOT NULL,
-  `auth_code_expires` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `session_id` (`session_id`),
-  CONSTRAINT `oauth_session_authcodes_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `oauth_sessions` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `oauth_session_redirects` (
-  `session_id` int(10) unsigned NOT NULL,
-  `redirect_uri` varchar(255) NOT NULL,
-  PRIMARY KEY (`session_id`),
-  CONSTRAINT `f_oasere_seid` FOREIGN KEY (`session_id`) REFERENCES `oauth_sessions` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `oauth_session_refresh_tokens` (
-  `session_access_token_id` int(10) unsigned NOT NULL,
-  `refresh_token` char(40) NOT NULL,
-  `refresh_token_expires` int(10) unsigned NOT NULL,
-  `client_id` char(40) NOT NULL,
-  PRIMARY KEY (`session_access_token_id`),
-  KEY `client_id` (`client_id`),
-  CONSTRAINT `oauth_session_refresh_tokens_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `oauth_clients` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `f_oasetore_setoid` FOREIGN KEY (`session_access_token_id`) REFERENCES `oauth_session_access_tokens` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `oauth_scopes` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `scope` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `u_oasc_sc` (`scope`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `oauth_session_token_scopes` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `session_access_token_id` int(10) unsigned DEFAULT NULL,
-  `scope_id` smallint(5) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `u_setosc_setoid_scid` (`session_access_token_id`,`scope_id`),
-  KEY `f_oasetosc_scid` (`scope_id`),
-  CONSTRAINT `f_oasetosc_scid` FOREIGN KEY (`scope_id`) REFERENCES `oauth_scopes` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `f_oasetosc_setoid` FOREIGN KEY (`session_access_token_id`) REFERENCES `oauth_session_access_tokens` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `oauth_session_authcode_scopes` (
-  `oauth_session_authcode_id` int(10) unsigned NOT NULL,
-  `scope_id` smallint(5) unsigned NOT NULL,
-  KEY `oauth_session_authcode_id` (`oauth_session_authcode_id`),
-  KEY `scope_id` (`scope_id`),
-  CONSTRAINT `oauth_session_authcode_scopes_ibfk_2` FOREIGN KEY (`scope_id`) REFERENCES `oauth_scopes` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `oauth_session_authcode_scopes_ibfk_1` FOREIGN KEY (`oauth_session_authcode_id`) REFERENCES `oauth_session_authcodes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping structure for table Solas-Match-Test.Admins
 CREATE TABLE IF NOT EXISTS `Admins` (
@@ -357,6 +238,123 @@ REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
 	(1, "Daily"),
 	(2, "Weekly"),
 	(3, "Monthly");
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    if EXISTS(select 1 from information_schema.`COLUMNS` i 
+                    where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users') then
+        if NOT EXISTS (select 1 from information_schema.`COLUMNS` i 
+                        where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users'
+                        and i.COLUMN_KEY != '' and i.COLUMN_NAME = 'password' ) then
+                ALTER TABLE `Users` ADD KEY `user_pass` (`password`);
+        end if;
+    end if;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
+
+
+CREATE TABLE IF NOT EXISTS `oauth_clients` (
+  `id` INT unsigned NOT NULL,
+  `secret` char(128) COLLATE utf8_unicode_ci NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `auto_approve` TINYINT(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_oacl_clse_clid` (`secret`,`id`),
+  CONSTRAINT `FK_oauth_clients_Users` FOREIGN KEY (`id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_oauth_clients_Users_2` FOREIGN KEY (`secret`) REFERENCES `Users` (`password`) ON UPDATE CASCADE ON DELETE CASCADE
+
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `oauth_client_endpoints` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `client_id` int UNSIGNED NOT NULL,
+  `redirect_uri` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `i_oaclen_clid` (`client_id`),
+  CONSTRAINT `f_oaclen_clid` FOREIGN KEY (`client_id`) REFERENCES `oauth_clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `oauth_sessions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `client_id` int UNSIGNED NOT NULL,
+  `owner_type` enum('user','client') NOT NULL DEFAULT 'user',
+  `owner_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `i_uase_clid_owty_owid` (`client_id`,`owner_type`,`owner_id`),
+  CONSTRAINT `f_oase_clid` FOREIGN KEY (`client_id`) REFERENCES `oauth_clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `oauth_session_access_tokens` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `session_id` int(10) unsigned NOT NULL,
+  `access_token` char(40) NOT NULL,
+  `access_token_expires` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_oaseacto_acto_seid` (`access_token`,`session_id`),
+  KEY `f_oaseto_seid` (`session_id`),
+  CONSTRAINT `f_oaseto_seid` FOREIGN KEY (`session_id`) REFERENCES `oauth_sessions` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `oauth_session_authcodes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `session_id` int(10) unsigned NOT NULL,
+  `auth_code` char(40) NOT NULL,
+  `auth_code_expires` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `session_id` (`session_id`),
+  CONSTRAINT `oauth_session_authcodes_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `oauth_sessions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `oauth_session_redirects` (
+  `session_id` int(10) unsigned NOT NULL,
+  `redirect_uri` varchar(255) NOT NULL,
+  PRIMARY KEY (`session_id`),
+  CONSTRAINT `f_oasere_seid` FOREIGN KEY (`session_id`) REFERENCES `oauth_sessions` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `oauth_session_refresh_tokens` (
+  `session_access_token_id` int(10) unsigned NOT NULL,
+  `refresh_token` char(40) NOT NULL,
+  `refresh_token_expires` int(10) unsigned NOT NULL,
+  `client_id` int UNSIGNED NOT NULL,
+  PRIMARY KEY (`session_access_token_id`),
+  KEY `client_id` (`client_id`),
+  CONSTRAINT `oauth_session_refresh_tokens_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `oauth_clients` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `f_oasetore_setoid` FOREIGN KEY (`session_access_token_id`) REFERENCES `oauth_session_access_tokens` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `oauth_scopes` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `scope` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_oasc_sc` (`scope`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `oauth_session_token_scopes` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `session_access_token_id` int(10) unsigned DEFAULT NULL,
+  `scope_id` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_setosc_setoid_scid` (`session_access_token_id`,`scope_id`),
+  KEY `f_oasetosc_scid` (`scope_id`),
+  CONSTRAINT `f_oasetosc_scid` FOREIGN KEY (`scope_id`) REFERENCES `oauth_scopes` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `f_oasetosc_setoid` FOREIGN KEY (`session_access_token_id`) REFERENCES `oauth_session_access_tokens` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `oauth_session_authcode_scopes` (
+  `oauth_session_authcode_id` int(10) unsigned NOT NULL,
+  `scope_id` smallint(5) unsigned NOT NULL,
+  KEY `oauth_session_authcode_id` (`oauth_session_authcode_id`),
+  KEY `scope_id` (`scope_id`),
+  CONSTRAINT `oauth_session_authcode_scopes_ibfk_2` FOREIGN KEY (`scope_id`) REFERENCES `oauth_scopes` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `oauth_session_authcode_scopes_ibfk_1` FOREIGN KEY (`oauth_session_authcode_id`) REFERENCES `oauth_session_authcodes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
@@ -735,6 +733,23 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
   CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    if NOT EXISTS (SELECT 1
+                    FROM information_schema.COLUMNS cols
+                    WHERE cols.TABLE_SCHEMA = database()
+                    AND cols.TABLE_NAME = "UserTaskStreamNotifications"
+                    AND cols.COLUMN_NAME = "strict") then
+        ALTER TABLE `UserTaskStreamNotifications`
+            ADD COLUMN `strict` INT(1) NOT NULL DEFAULT 0 AFTER `interval`;
+    end if;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
+
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.UserOrganisationPermissions
@@ -788,12 +803,27 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `created-time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
+  KEY `user_pass` (`password`),
   KEY `FK_user_language` (`language_id`),
   KEY `FK_user_country` (`country_id`),
   CONSTRAINT `FK_user_country` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    if NOT EXISTS (select 1 from information_schema.`COLUMNS` i 
+                    where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users'
+                    and i.COLUMN_KEY != '' and i.COLUMN_NAME = 'password' ) then
+            ALTER TABLE `Users` ADD KEY `user_pass` (`password`);
+    end if;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.UserSecondaryLanguages

@@ -92,7 +92,7 @@
         <string name="task_routehandler_19">The task <a href="%s">%s</a> has been revoked from <a href="%s">%s</a>. This user will be notified by e-mail and provided with your feedback.</string>
         <string name="task_routehandler_20">Unable to revoke the task <a href="%s">%s</a> from <a href="%s">%s</a>. Please try again later.</string>
         <string name="task_routehandler_21">The feedback form cannot be empty.</string>
-        <string name="task_routehandler_22">The task <a href="%s">%s</a> has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback."</string>
+        <string name="task_routehandler_22">The task <a href="%s">%s</a> has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.</string>
         <string name="task_routehandler_23">Unable to unclaim the task <a href="%s">%s</a>. Please try again later.</string>
         <string name="task_routehandler_24">Feedback cannot be empty, please fill in the feedback form before continuing.</string>
         <string name="task_routehandler_25">You have already submitted a review for this file.</string>
@@ -128,7 +128,7 @@
         <string name="task_dao_2">Internal server error. Please contact the administrators.</string>
         
         <string name="user_dao_1">Sorry, the username or password entered is incorrect. Please check the credentials used and try again.</string>
-        <string name="user_dao_2">Sorry, this user account has not been verified. Please check your e-mail."</string>        
+        <string name="user_dao_2">Sorry, this user account has not been verified. Please check your e-mail.</string>
         
         <!-- UI Lib Strings -->
         
@@ -280,7 +280,7 @@
 	<string name="common_strict">strict</string>
 	<string name="common_the_last_email_was_sent_on">the last email was sent on</string>
         <string name="common_no_emails_have_been_sent_yet">No e-mails have been sent yet</string>
-	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails.</string>
+	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails</string>
 	<string name="common_submit">Submit</string>
 	<string name="common_log_in">Log In</string>
 	<string name="common_register">Register</string>

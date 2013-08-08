@@ -350,25 +350,32 @@ class UserDao extends BaseDao
         $login->setEmail($email);
         $login->setPassword($password);
         $request = "{$this->siteApi}v0/login";
-        $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $login);
+        try {        
+            $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $login);
+        } catch(SolasMatchException $e) {
+            switch($e->getCode()) {
+
+                case HttpStatusEnum::NOT_FOUND : 
+                    throw new SolasMatchException(Localisation::getTranslation(Strings::USER_DAO_1));
+
+                case HttpStatusEnum::UNAUTHORIZED : 
+                    throw new SolasMatchException(Localisation::getTranslation(Strings::USER_DAO_2));
+
+                case HttpStatusEnum::FORBIDDEN :
+                    $userDao = new UserDao();
+                    $user = $userDao->getUserByEmail($email);
+
+                    $adminDao = new AdminDao();                
+                    $bannedUser = $adminDao->getBannedUser($user->getId());
+                    throw new SolasMatchException("{$bannedUser->getComment()}");
+                    
+                default :
+                    throw $e;
+            }
+        }
         
 
-        switch($this->client->getResponseCode()) {
-            
-            case HttpStatusEnum::NOT_FOUND : 
-                throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_DAO_1)); 
-                
-            case HttpStatusEnum::UNAUTHORIZED : 
-                throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_DAO_2));              
-                
-            case HttpStatusEnum::FORBIDDEN :
-                $userDao = new UserDao();
-                $user = $userDao->getUserByEmail($email);
-                
-                $adminDao = new AdminDao();                
-                $bannedUser = $adminDao->getBannedUser($user->getId());
-                throw new InvalidArgumentException("{$bannedUser->getComment()}");
-        }
+
         $headers = $this->client->getHeaders();
         if(isset ($headers["X-Custom-Token"])){
             $token = $this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce');

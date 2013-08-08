@@ -48,18 +48,12 @@ class LoginAPI {
                 $oAuthResponce->setExpires($responce['expires']);
                 $oAuthResponce->setExpiresIn($responce['expires_in']);
                 
-                
-                    $data->setPassword(null);
-                    $data->setNonce(null);
-//                    UserSession::setSession($data->getId());
-//                    UserSession::setHash(md5("{$data->getEmail()}:{$data->getDisplayName()}"));
-                    
-
-
+                $data->setPassword(null);
+                $data->setNonce(null);
                 }
                 Dispatcher::sendResponce(null, $data, null, $format, $oAuthResponce);
             } catch(Exception $e) {
-                Dispatcher::sendResponce(null, null, $e->getMessage(), $format);
+                Dispatcher::sendResponce(null, $e->getMessage(), HttpStatusEnum::UNAUTHORIZED, $format);
             }
             
          }, 'login',null);
