@@ -2479,7 +2479,7 @@ DELIMITER ;
 -- Dumping structure for procedure debug-test3.getUserByOAuthToken
 DROP PROCEDURE IF EXISTS `getUserByOAuthToken`;
 DELIMITER //
-CREATE DEFINER=`tester`@`%` PROCEDURE `getUserByOAuthToken`(IN `token` CHAR(40))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserByOAuthToken`(IN `token` CHAR(40))
 BEGIN	
 	IF EXISTS(SELECT 1 FROM oauth_session_access_tokens o WHERE o.access_token = token) THEN
 		set @userId = null;

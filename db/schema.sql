@@ -2531,6 +2531,19 @@ WHERE user_id = id;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure debug-test3.getUserByOAuthToken
+DROP PROCEDURE IF EXISTS `getUserByOAuthToken`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserByOAuthToken`(IN `token` CHAR(40))
+BEGIN	
+	IF EXISTS(SELECT 1 FROM oauth_session_access_tokens o WHERE o.access_token = token) THEN
+		set @userId = null;
+ 		SELECT client_id INTO @userId FROM oauth_sessions os WHERE os.id = (SELECT o.session_id FROM oauth_session_access_tokens o WHERE o.access_token = token);
+		call getUser(@userId,null,null,null,null,null,null,null,null);
+	END IF;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
