@@ -1,12 +1,10 @@
 <?php
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/BaseDao.php";
 
-class OrganisationDao
-{
-    private $client;
-    private $siteApi;
-    
+class OrganisationDao extends BaseDao
+{   
     public function __construct()
     {
         $this->client = new APIHelper(Settings::get("ui.api_format"));

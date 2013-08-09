@@ -186,7 +186,9 @@ class UserRouteHandler
         $warning = null;
         if (isValidPost($app)) {
             $post = $app->request()->post();
-            
+            $temp =$post['email'].substr(Settings::get("session.site_key"),0,20);
+                UserSession::clearCurrentUserID();
+                UserSession::setHash(md5($temp));
             if (!TemplateHelper::isValidEmail($post['email'])) {
                 $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_1);
             } elseif (!TemplateHelper::isValidPassword($post['password'])) {
@@ -389,6 +391,9 @@ class UserRouteHandler
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
                 $userDao = new UserDao();
+                $temp =$retvals['contact/email'].substr(Settings::get("session.site_key"),0,20);
+                UserSession::clearCurrentUserID();
+                UserSession::setHash(md5($temp));
                 $user = $userDao->getUserByEmail($retvals['contact/email']);
                 if(is_array($user)) $user = $user[0];                    
                 if(is_null($user)) {
@@ -403,7 +408,7 @@ class UserRouteHandler
                     UserSession::setSession($user->getId());
                     UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 } else {
-                    $app->flash('error', Localisation::getTranslation(Strings::USER_ROUTEHANDLER_17));
+                    $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
                     $app->redirect($app->urlFor('home'));
                 }
                 
@@ -415,13 +420,14 @@ class UserRouteHandler
     public static function userPrivateProfile($userId)
     {
         $app = Slim::getInstance();
+        CacheHelper::unCache(CacheHelper::GET_USER.$userId);
         
         $userDao = new UserDao();
         $loggedInuser = $userDao->getUser(UserSession::getCurrentUserID());
         $user = $userDao->getUser($userId);
         
         if (!is_object($user)) {
-            $app->flash("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_18));
+            $app->flash("error", Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
             $app->redirect($app->urlFor("login"));
         }
 
@@ -442,8 +448,17 @@ class UserRouteHandler
         $adminDao = new AdminDao();
         
         $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(UserSession::getCurrentUserID()));
+        $user=null;
+        try{
         $user = $userDao->getUser($user_id);
-        $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        }catch (SolasMatchException $e){
+             $app->flash('error', Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
+             $app->redirect($app->urlFor('login'));
+        }
+        $userPersonalInfo=null;
+        try{
+            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        }catch(SolasMatchException $e){}
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             
@@ -485,7 +500,7 @@ class UserRouteHandler
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
 
         $app->view()->appendData(array("badges" => $badges,
-                                    "orgList", $orgList,
+                                    "orgList"=> $orgList,
                                     "user_orgs" => $user_orgs,
                                     "current_page" => "user-profile",
                                     "archivedJobs" => $archivedJobs,

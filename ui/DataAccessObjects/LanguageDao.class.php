@@ -3,11 +3,10 @@
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/lib/CacheHelper.class.php";
 require_once __DIR__."/../../Common/TimeToLiveEnum.php";
+require_once __DIR__."/BaseDao.php";
 
-class LanguageDao
+class LanguageDao extends BaseDao
 {
-    private $client;
-    private $siteApi;
     
     public function __construct()
     {
@@ -36,6 +35,22 @@ class LanguageDao
     {
         $languages = null;
         $request = "{$this->siteApi}v0/languages/getActiveLanguages";
+        $languages = $this->client->call(array('Language'), $request);
+        return $languages;
+    }
+    
+    public function getActiveSourceLanguages()
+    {
+        $languages = null;
+        $request = "{$this->siteApi}v0/languages/getActiveSourceLanguages";
+        $languages = $this->client->call(array('Language'), $request);
+        return $languages;
+    }
+     
+    public function getActiveTargetLanguages()
+    {
+        $languages = null;
+        $request = "{$this->siteApi}v0/languages/getActiveTargetLanguages";
         $languages = $this->client->call(array('Language'), $request);
         return $languages;
     }

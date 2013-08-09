@@ -733,4 +733,15 @@ class UserDao
         PDOWrapper::call("userLoginInsert", $args);
     }
     
+    public static function isBlacklistedForTask($userId, $taskId)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNull($taskId);
+        if($result = PDOWrapper::call("isUserBlacklistedForTask", $args)) {
+            return $result[0]['result'];            
+        }
+        return $ret;
+    }
+    
 }

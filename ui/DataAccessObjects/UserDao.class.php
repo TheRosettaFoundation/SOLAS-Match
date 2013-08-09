@@ -1,21 +1,19 @@
 <?php
 
+
 require_once __DIR__."/../../Common/HttpStatusEnum.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/BaseDao.php";
 
-class UserDao
+
+class UserDao extends BaseDao
 {
-    private $client;
-    private $siteApi;
     
     public function __construct()
     {
         $this->client = new APIHelper(Settings::get("ui.api_format"));
         $this->siteApi = Settings::get("site.api");
-    }
-    
-    
-    
+    } 
     
     public function getUserDart($userId)
     {
@@ -31,7 +29,7 @@ class UserDao
         $ret=CacheHelper::getCached(CacheHelper::GET_USER.$userId, TimeToLiveEnum::MINUTE,
                 function($args){
                     $request = "{$args[2]}v0/users/$args[1]";
-                    return $args[0]->call("User", $request);
+                     return $args[0]->call("User", $request);
                 },
             array($this->client, $userId,$this->siteApi)); 
         return $ret;
@@ -356,11 +354,10 @@ class UserDao
         switch($this->client->getResponseCode()) {
             
             case HttpStatusEnum::NOT_FOUND : 
-                throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
-                                    Please check the credentials used and try again."); 
+                throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_DAO_1)); 
                 
             case HttpStatusEnum::UNAUTHORIZED : 
-                throw new InvalidArgumentException("Sorry, this user account has not been verified. Please check your e-mail.");              
+                throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_DAO_2));              
                 
             case HttpStatusEnum::FORBIDDEN :
                 $userDao = new UserDao();
@@ -471,5 +468,13 @@ class UserDao
     {
         $request = "{$this->siteApi}v0/users/$userId";
         $this->client->call(null, $request, HttpMethodEnum::DELETE);
+    }
+    
+    public function isBlacklistedForTask($userId, $taskId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/isBlacklistedForTask/$userId/$taskId";
+        $ret = $this->client->call(null, $request);
+        return $ret;
     }
 }

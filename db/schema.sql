@@ -1175,6 +1175,21 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure debug-test3.deleteProject
+DROP PROCEDURE IF EXISTS `deleteProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProject`(IN `projectId` INT)
+BEGIN
+	IF EXISTS(SELECT 1 FROM Projects p WHERE p.id = projectId) THEN	
+		DELETE FROM Projects WHERE id = projectId;
+		SELECT 1 AS result;
+	ELSE
+		SELECT 0 AS result;
+	END IF;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure debug-test3.deleteProjectTags
 DROP PROCEDURE IF EXISTS `deleteProjectTags`;
 DELIMITER //
@@ -1301,33 +1316,52 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.getAdmin
-DROP PROCEDURE IF EXISTS `getAdmin`;
+
+-- Dumping structure for procedure Solas-Match-Dev.getActiveSourceLanguages
+DROP PROCEDURE IF EXISTS `getActiveSourceLanguages`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `orgId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveSourceLanguages`()
+ READS SQL DATA
 BEGIN
-
-	IF orgId = '' THEN SET orgId = NULL; END IF;	
-	
-	set @q= "SELECT u.id,u.`display-name`,u.email,u.password,u.biography, (SELECT `en-name` FROM Languages WHERE id =u.`language_id`) AS `languageName`, (SELECT code FROM Languages WHERE id =u.`language_id`) AS `languageCode`, (SELECT `en-name` FROM Countries WHERE id =u.`country_id`) AS `countryName`, (SELECT code FROM Countries WHERE id =u.`country_id`) AS `countryCode`, u.nonce,u.`created-time` FROM Users u JOIN Admins a ON a.user_id = u.id WHERE 1";
-	
-	IF orgId IS NOT NULL THEN	
-		SET @q = CONCAT(@q, " AND a.organisation_id =", orgId);	
-	ELSE
-		SET @q = CONCAT(@q, " AND a.organisation_id IS NULL");
-	END IF;
-
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+    SELECT `en-name` as language, code, id
+        FROM Languages
+        WHERE id IN (SELECT `language_id-source`
+                        FROM Tasks
+                        WHERE published = 1 AND `task-status_id` = 2);
 END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getArchivedProject
+-- Dumping structure for procedure Solas-Match-Dev.getActiveTargetLanguages
+DROP PROCEDURE IF EXISTS `getActiveTargetLanguages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveTargetLanguages`()
+    READS SQL DATA
+BEGIN
+    SELECT `en-name` as language, code, id
+        FROM Languages
+        WHERE id IN (SELECT `language_id-target`
+                        FROM Tasks
+                        WHERE published = 1 AND `task-status_id` = 2);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Dev.getAdmin
+DROP PROCEDURE IF EXISTS `getAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `orgId` INT)
+BEGIN
+	SELECT u.id,u.`display-name`,u.email,u.password,u.biography, (SELECT `en-name` FROM Languages WHERE id =u.`language_id`) AS `languageName`, (SELECT code FROM Languages WHERE id =u.`language_id`) AS `languageCode`, (SELECT `en-name` FROM Countries WHERE id =u.`country_id`) AS `countryName`, (SELECT code FROM Countries WHERE id =u.`country_id`) AS `countryCode`, u.nonce,u.`created-time` 
+	FROM Users u JOIN Admins a ON a.user_id = u.id WHERE (a.organisation_id = orgId or orgId is null);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure trommonsUpdateTest.getArchivedProject
 DROP PROCEDURE IF EXISTS `getArchivedProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT, IN `lCode` VARCHAR(3), IN `cCode` VARCHAR(2))
     READS SQL DATA
 BEGIN
     if projectId='' then set projectId=null;end if;
@@ -1341,54 +1375,17 @@ BEGIN
     if createdTime='' then set createdTime=null;end if;
     if archiveDate='' then set archiveDate=null;end if;
     if archiverId='' then set archiverId=null;end if;
-
-    set @q = "SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, (select code from Languages where id =p.language_id) as language_id, (select code from Countries where id =p.country_id) as country_id, m.`archived-date`, m.`user_id-archived` FROM ArchivedProjects p JOIN ArchivedProjectsMetadata m ON p.id=m.`archivedProject_id` WHERE 1";
-    if projectId is not null then
-        set @q = CONCAT(@q, " and p.id=", projectId);
-    end if;
-    if titleText is not null then
-        set @q = CONCAT(@q, " and title=\"", titleText, "\"");
-    end if;
-    if descr is not null then
-        set @q = CONCAT(@q, " and description=\"", descr, "\"");
-    end if;
-    if imp is not null then
-        set @q = CONCAT(@q, " and impact=\"", imp, "\"");
-    end if;
-    if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and deadline=\"", deadlineTime, "\"");
-    end if;
-    if orgId is not null then
-        set @q = CONCAT(@q, " and organisation_id=", orgId);
-    end if;
-    if ref is not null then
-        set @q = CONCAT(@q, " and reference=\"", ref, "\"");
-    end if;
-    if wordCount is not null then
-        set @q = CONCAT(@q, " and `word-count`=", wordCount);
-    end if;
-    if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and created=\"", createdTime, "\"");
-    end if;
-    if (archiveDate is not null and archiveDate!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and m.`archived-date`=\"", archiveDate, "\"");
-    end if;
-    if archiverId is not null then
-        set @q = CONCAT(@q, " and m.`user_id-archived`=", archiverId);
-    end if;
-
-    PREPARE stmt from @q;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-END//
-DELIMITER ;
-
--- Dumping structure for procedure big-merge.getArchivedProjectMetadata
-DROP PROCEDURE IF EXISTS `getArchivedProjectMetadata`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProjectMetadata`(IN `archivedProjectId` INT)
-BEGIN
-	SELECT p.* FROM ArchivedProjectsMetadata p WHERE p.archivedProject_id=archivedProjectId;
+    if lCode='' then set lCode=null;end if;
+    if cCode='' then set cCode=null;end if;
+    set @lID=null;
+    set @cID=null;
+SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, (select code from Languages where id =p.language_id) as language_id, (select code from Countries where id =p.country_id) as country_id, m.`archived-date`, m.`user_id-archived` 
+FROM ArchivedProjects p JOIN ArchivedProjectsMetadata m ON p.id=m.archivedProject_id 
+WHERE (p.id= projectId or projectId is null) and (p.title=titleText or titleText is null) and (p.description= descr or descr is null) and (p.impact=imp or imp is null)
+and (p.deadline=deadlineTime or deadlineTime is null or deadlineTime='0000-00-00 00:00:00') and (p.organisation_id=orgId or orgId is null) and (p.reference=ref or ref is null)
+and (p.`word-count`=wordCount or wordCount is null) and (p.created = createdTime or createdTime is null) and (p.language_id=@lID or @lID is null) and (p.country_id = @cID or @cID is null)
+and (m.`archived-date`=archiveDate or archiveDate is null or archiveDate='0000-00-00 00:00:00') and (m.`user_id-archived`= archiverId or archiverId is null)
+;
 END//
 DELIMITER ;
 
@@ -1469,17 +1466,8 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure big-merge.getArchivedTaskmetaData
-DROP PROCEDURE IF EXISTS `getArchivedTaskmetaData`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTaskmetaData`(IN `archivedTaskId` INT)
-BEGIN
-	SELECT t.* FROM ArchivedTasksMetadata t WHERE t.archivedTask_id=archivedTaskId;
-END//
-DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.getBadge
+-- Dumping structure for procedure Solas-Match-Dev.getBadge
 DROP PROCEDURE IF EXISTS `getBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBadge`(IN `id` INT, IN `name` VARCHAR(128), IN `des` VARCHAR(512), IN `orgID` INT)
@@ -1489,30 +1477,15 @@ BEGIN
 	if des='' then set des=null;end if;
 	if name='' then set name=null;end if;
 	if orgID='' then set orgID=null;end if;
-	set @q= "SELECT *FROM Badges b where 1 ";-- set update
-	if id is not null then 
-#set paramaters to be updated
-		set @q = CONCAT(@q," and b.id=",id) ;
-	end if;
-	if des is not null then 
-		set @q = CONCAT(@q," and b.description=\"",des,"\"") ;
-	end if;
-	if name is not null then 
-		set @q = CONCAT(@q," and b.title=\"",name,"\"") ;
-	end if;
-	
-	if orgID is not null then 
-		set @q = CONCAT(@q," and b.owner_id=\"",orgID,"\"") ;
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+	SELECT * FROM Badges b 
+	where (b.id=id or id is null) and (b.owner_id=orgID or orgID is null) and (b.title=name or name is null) and (b.description=des or des is null);
+
 END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.getBannedOrg
+
+-- Dumping structure for procedure Solas-Match-Dev.getBannedOrg
 DROP PROCEDURE IF EXISTS `getBannedOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedOrg`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
@@ -1523,34 +1496,16 @@ BEGIN
 	if adminComment='' then set adminComment=null;end if;
 	if bannedDate='' then set bannedDate=null;end if;
 
-	set @q= "SELECT b.org_id, b.`user_id-admin`, (SELECT t.type FROM BannedTypes t WHERE t.id = b.bannedtype_id) AS bannedType, b.`comment`, b.`banned-date` FROM BannedOrganisations b WHERE 1 ";
+   SELECT b.org_id, b.`user_id-admin`, (SELECT t.type FROM BannedTypes t WHERE t.id = b.bannedtype_id) AS bannedType, b.`comment`, b.`banned-date` 
+	FROM BannedOrganisations b 
+	WHERE isNullOrEqual(b.org_id,orgId) and isNullOrEqual(b.`user_id-admin`,userIdAdmin) and isNullOrEqual(b.bannedtype_id,bannedTypeId) 
+	and isNullOrEqual(b.`comment`,adminComment) and isNullOrEqual(b.`banned-date`,bannedDate); 
 
-	if orgId is not null then 
-		set @q = CONCAT(@q," and b.org_id=",orgId);
-	end if;
-	if userIdAdmin is not null then 
-		set @q = CONCAT(@q," and b.`user_id-admin`=",userIdAdmin);
-	end if;
-	if bannedTypeId is not null then 
-		set @q = CONCAT(@q," and b.`bannedtype_id`=",bannedTypeId) ;
-	end if;
-	if adminComment is not null then 
-		set @q = CONCAT(@q," and b.comment=\"",adminComment,"\"");
-	end if;
-	
-	if (bannedDate is not null and bannedDate !='0000-00-00 00:00:00') then
-	  set @q = CONCAT(@q, " and b.`banned-date`=\"", bannedDate, "\"");
-	end if;
-	
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.getBannedUser
+-- Dumping structure for procedure Solas-Match-Dev.getBannedUser
 DROP PROCEDURE IF EXISTS `getBannedUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedUser`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
@@ -1560,29 +1515,10 @@ BEGIN
 	if bannedTypeId='' then set bannedTypeId=null;end if;
 	if adminComment='' then set adminComment=null;end if;
 	if bannedDate='' then set bannedDate=null;end if;
-
-	set @q= "SELECT b.user_id, b.`user_id-admin`, b.bannedtype_id, b.`comment`, b.`banned-date` FROM BannedUsers b WHERE 1 ";
-	if userId is not null then 
-		set @q = CONCAT(@q," and b.user_id=",userId);
-	end if;
-	if userIdAdmin is not null then 
-		set @q = CONCAT(@q," and b.`user_id-admin`=",userIdAdmin);
-	end if;
-	if bannedTypeId is not null then 
-		set @q = CONCAT(@q," and b.`bannedtype_id`=",bannedTypeId) ;
-	end if;
-	if adminComment is not null then 
-		set @q = CONCAT(@q," and b.comment=\"",adminComment,"\"");
-	end if;
-	
-	if (bannedDate is not null and bannedDate !='0000-00-00 00:00:00') then
-	  set @q = CONCAT(@q, " and b.`banned-date`=\"", bannedDate, "\"");
-	end if;
-	
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+	SELECT b.user_id, b.`user_id-admin`, b.bannedtype_id, b.`comment`, b.`banned-date` 
+	FROM BannedUsers b 
+	WHERE isNullOrEqual(b.user_id,userId) and isNullOrEqual(b.`user_id-admin`,userIdAdmin) and isNullOrEqual(b.bannedtype_id,bannedTypeId)
+	and isNullOrEqual(b.`comment`,adminComment) and isNullOrEqual(b.`banned-date`, bannedDate);
 END//
 DELIMITER ;
 
@@ -1597,7 +1533,7 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getCountry
+-- Dumping structure for procedure Solas-Match-Dev.getCountry
 DROP PROCEDURE IF EXISTS `getCountry`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountry`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
@@ -1605,26 +1541,13 @@ BEGIN
 	if id='' then set id=null;end if;
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select `en-name` as country, code, id from Countries c where 1 ";-- set update
-	if id is not null then 
-#set paramaters to be updated
-		set @q = CONCAT(@q," and c.id=",id) ;
-	end if;
-	if code is not null then 
-		set @q = CONCAT(@q," and c.code=\"",code,"\"") ;
-	end if;
-	if name is not null then 
-		set @q = CONCAT(@q," and c.`en-name`=\"",name,"\"") ;
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+	select `en-name` as country, c.code, c.id 
+	from Countries c where 	isNullOrEqual(c.id,id) and isNullOrEqual(c.code,code) and isNullOrEqual(c.`en-name`, name);
 END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getLanguage
+-- Dumping structure for procedure Solas-Match-Dev.getLanguage
 DROP PROCEDURE IF EXISTS `getLanguage`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguage`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
@@ -1632,23 +1555,12 @@ BEGIN
 	if id='' then set id=null;end if;
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
-	set @q= "select `en-name` as language, code, id from Languages l where 1 ";-- set update
-	if id is not null then 
-#set paramaters to be updated
-		set @q = CONCAT(@q," and l.id=",id) ;
-	end if;
-	if code is not null then 
-		set @q = CONCAT(@q," and l.code=\"",code,"\"") ;
-	end if;
-	if name is not null then 
-		set @q = CONCAT(@q," and l.`en-name`=\"",name,"\"") ;
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+	select `en-name` as language, l.code, l.id 
+	from Languages l 
+	where isNullOrEqual(l.id,id) and isNullOrEqual(l.code,code) and isNullOrEqual(l.`en-name`,name);
 END//
 DELIMITER ;
+
 
 
 -- Dumping structure for procedure Solas-Match-Test.getLanguages
@@ -1661,85 +1573,37 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.getLatestAvailableTasks
+-- Dumping structure for procedure Solas-Match-Dev.getLatestAvailableTasks
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT, IN `offset` INT)
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
-        set @q = Concat("select id,project_id,title,`word-count`, 
-                            (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
-                            (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
-                            (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
-                            (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
-                            (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
-                            (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
-                            (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
-                            (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-                            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
-                            FROM Tasks AS t 
-                            WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) 
-                                AND t.published = 1 
-                                AND t.`task-status_id` = 2 
-                            ORDER BY `created-time` 
-                            DESC LIMIT ", offset, ", ",lim);
-    else
-        set @q = "select id,project_id,title,`word-count`, 
-                    (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
-                    (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
-                    (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
-                    (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
-                    (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
-                    (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
-                    (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
-                    (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-                    comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
-                    FROM Tasks AS t 
-                    WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) 
-                        AND t.published = 1 
-                        AND t.`task-status_id` = 2 
-                    ORDER BY `created-time` DESC";
-    end if;
-    PREPARE stmt FROM @q;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
+
+	    select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+		 FROM Tasks AS t 
+		 WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC LIMIT lim;
+        else
+		 select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+		 FROM Tasks AS t 
+    		 WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC;
+        end if;
 END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getLatestFileVersion
+-- Dumping structure for procedure Solas-Match-Dev.getLatestFileVersion
 DROP PROCEDURE IF EXISTS `getLatestFileVersion`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestFileVersion`(IN `id` INT, IN `uID` INT)
 BEGIN
 	if uID='' then set uID=null;end if;
-	set @q= "SELECT max(version_id) as latest_version  FROM TaskFileVersions tfv ";-- set update
-	set @q = CONCAT(@q," where tfv.task_id =",id);
-	if uID is not null then 
-		set @q = CONCAT(@q," and tfv.user_id=",uID);
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+	SELECT max(version_id) as latest_version  
+	FROM TaskFileVersions tfv 
+	where isNullOrEqual(tfv.task_id,id) and isNullOrEqual(tfv.user_id,uID);
 END//
 DELIMITER ;
-
-
--- Dumping structure for procedure Solas-Match-Test.getLCID
-DROP PROCEDURE IF EXISTS `getLCID`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getLCID`(IN `lang` VARCHAR(128), IN `countryName` VARCHAR(128))
-BEGIN
-set @ll = "";
-set @cc = "";
-select c.code into @cc from Countries c where c.`en-name` = countryName;
-select l.code into @ll from Languages l where l.`en-name` = lang;
-select concat(@ll,"-",@cc) as lcid;
-END//
-DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getMembershipRequests
 DROP PROCEDURE IF EXISTS `getMembershipRequests`;
@@ -2855,6 +2719,17 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for function Solas-Match-Dev.isNullOrEqual
+DROP FUNCTION IF EXISTS `isNullOrEqual`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` FUNCTION `isNullOrEqual`(`x` TEXT, `y` teXT) RETURNS int(11)
+BEGIN
+return (x=y or x is null or y is null or '0000-00-00 00:00:00' = x or '0000-00-00 00:00:00'=y);
+END//
+DELIMITER ;
+
+
+
 -- Dumping structure for procedure Solas-Match-Test.isUserVerified
 DROP PROCEDURE IF EXISTS `isUserVerified`;
 DELIMITER //
@@ -2907,6 +2782,20 @@ BEGIN
     else
     	SELECT 0 as result;
     end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure debug-test3.isUserBlacklistedForTask
+DROP PROCEDURE IF EXISTS `isUserBlacklistedForTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBlacklistedForTask`(IN `userId` INT, IN `taskId` INT)
+BEGIN
+	IF EXISTS(SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.task_id = taskId AND t.user_id = userId) THEN
+		SELECT 1 as result;
+	ELSE
+		SELECT 0 as result;
+	END IF;
 END//
 DELIMITER ;
 

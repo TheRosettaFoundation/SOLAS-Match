@@ -14,7 +14,7 @@
         <div class="alert alert-success">{$flash['success']}</div>
     {/if}
 
-    <form class="well" method="post" action="{urlFor name="org-request-queue" options="org_id.$org_id"}">
+    <form class="well" method="post" action="{urlFor name="org-request-queue" options="org_id.$org_id"}" accept-charset="utf-8">
         <label for="email"><strong>{Localisation::getTranslation(Strings::ORG_REQUEST_QUEUE_USERS_EMAIL_ADDRESS)}:</strong></label>
         <input type="text" name="email" />
         <p>

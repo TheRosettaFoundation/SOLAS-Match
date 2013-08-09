@@ -12,7 +12,7 @@
     </small>
 </h1>
 
-    <form method='post' action="{urlFor name="create-org"}" class='well'>
+    <form method='post' action="{urlFor name="create-org"}" class='well' accept-charset="utf-8">
         <table>
             {if isset($nameErr)}
                 <tr>

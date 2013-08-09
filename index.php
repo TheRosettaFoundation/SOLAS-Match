@@ -71,11 +71,10 @@ require_once 'Common/BanTypeEnum.php';
 require_once 'Common/NotificationIntervalEnum.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
 require_once 'Common/lib/BadgeTypes.class.php';
+require_once 'Common/lib/UserSession.class.php';
 
 require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
-require_once 'ui/lib/UserSession.class.php';
-require_once 'ui/lib/URL.class.php';
 require_once 'ui/lib/GraphViewer.class.php';
 require_once 'ui/lib/UIWorkflowBuilder.class.php';
 require_once 'ui/lib/Localisation.php';
@@ -133,8 +132,9 @@ function isValidPost(&$app)
  * 
  * Given that we don't have object factories implemented, we'll initialise them directly here.
  */
-$app->hook('slim.before', function () use ($app)
+$app->hook('slim.before.dispatch', function () use ($app)
 {
+            //apc_clear_cache();
     $userDao = new UserDao();
     if (!is_null(UserSession::getCurrentUserID()) &&
         $current_user = $userDao->getUser(UserSession::getCurrentUserID())) {

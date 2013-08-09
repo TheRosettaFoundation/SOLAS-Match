@@ -13,6 +13,8 @@ class HttpStatusEnum {
     const GONE                      = 410;
     const INTERNAL_SERVER_ERROR     = 500;
     const NOT_IMPLEMENTED           = 501;
+    const CONFLICT                  = 409;
+    const UNSUPPORTED_MEDIA_TYPE    = 415;
 }
 
 ?>

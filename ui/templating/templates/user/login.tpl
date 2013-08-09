@@ -26,7 +26,7 @@
     {/if}
 
     {if isset($openid)&& ($openid==='n'||$openid==='h' )}
-        <form method="post" action="{urlFor name='login'}">
+        <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
             <label for="email"><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}:</strong></label>
             <input type="text" name="email" id="email"/>
             <label for="password"><strong>{Localisation::getTranslation(Strings::COMMON_PASSWORD)}:</strong></label>

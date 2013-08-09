@@ -20,7 +20,6 @@
     </div>  
     <p style="margin-bottom:20px;"/>
 
-
     <div class="well">
         <div is="x-project-create-form" id="ProjectCreateForm" user-id="{$user_id}" org-id="{$org_id}"></div>
 

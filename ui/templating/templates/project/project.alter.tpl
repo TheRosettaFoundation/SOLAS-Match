@@ -12,7 +12,7 @@
             </a>
         </div>
     </h1>
-    <form method="post" action="{urlFor name="project-alter" options="project_id.$project_id"}" class="well">
+    <form method="post" action="{urlFor name="project-alter" options="project_id.$project_id"}" class="well" accept-charset="utf-8">
         <table width="100%">
             <tr align="center">
                 <td>

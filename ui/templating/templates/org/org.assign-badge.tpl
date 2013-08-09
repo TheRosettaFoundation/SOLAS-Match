@@ -10,7 +10,7 @@
 
     {assign var="badge_id" value=$badge->getId()}
     badge id: {$badge_id}<br/>
-    <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="well">
+    <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="well" accept-charset="utf-8">
         <label for="email">{Localisation::getTranslation(Strings::ORG_ASSIGN_BADGE_2)}</label>
         <input type='text' name='email' id='email' />
 

@@ -62,8 +62,8 @@ class APIHelper
             $lenght=strlen($file);
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
-        
-        if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, $_COOKIE['slim_session']);        
+
+        if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");        
         
         $httpHeaders = array(
                 $this->_serializer->getContentType(),                                                                                
@@ -72,11 +72,19 @@ class APIHelper
 
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($re, CURLINFO_HEADER_OUT, true);
         $res=curl_exec($re);
-
+        $sentHeaders = curl_getinfo($re);
+        $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-        $response_data = $this->_serializer->deserialize($res,$destination);
+
+        
         curl_close($re);
+        
+        if(in_array($this->responseCode, $success)){
+            $response_data = $this->_serializer->deserialize($res,$destination);
+        }else throw new SolasMatchException($res, $this->responseCode);
+        
 
         return $response_data;
     }
@@ -152,5 +160,57 @@ class APIHelper
     public function getResponseCode()
     {
         return $this->responseCode;
+    }
+    
+    
+    // http://stackoverflow.com/a/1147952
+    private function system_extension_mime_types() {
+        # Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
+        $out = array();
+        $file = fopen('/etc/mime.types', 'r');
+        while(($line = fgets($file)) !== false) {
+            $line = trim(preg_replace('/#.*/', '', $line));
+            if(!$line)
+                continue;
+            $parts = preg_split('/\s+/', $line);
+            if(count($parts) == 1)
+                continue;
+            $type = array_shift($parts);
+            foreach($parts as $part)
+                $out[$part] = $type;
+        }
+        fclose($file);
+        return $out;
+    }
+
+    private function getMimeTypeFromSystem($ext) {
+   
+        static $types;
+        if(!isset($types))
+            $types = $this->system_extension_mime_types();
+  
+        return isset($types[$ext]) ? $types[$ext] : null;
+    }
+    
+    public function getCanonicalMime($filename)
+    {
+        $mimeMap = array(
+             "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
+            ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
+            ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
+            ,"pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            ,"sldx" => "application/vnd.openxmlformats-officedocument.presentationml.slide"
+            ,"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ,"dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
+            ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
+            ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
+            ,"xlf"  => "application/xliff+xml"
+        );         
+        
+        $extension = explode(".", $filename);
+        $extension =  strtolower($extension[count($extension)-1]);
+
+        return array_key_exists($extension, $mimeMap)? $mimeMap[$extension] : $this->getMimeTypeFromSystem($extension);
     }
 }

@@ -1,5 +1,4 @@
-<form class="well" method="post" action="{$formAction}" 
-        onsubmit="createHiddenFields()" id="TaskReviewForm">
+<form class="well" method="post" action="{$formAction}"  onsubmit="createHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
     {foreach $tasks as $task}
         <h2>{$task->getTitle()}</h2>
         {if $task->getId() != null}

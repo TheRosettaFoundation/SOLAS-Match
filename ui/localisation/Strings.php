@@ -1,6 +1,8 @@
 <?php
 class Strings
 {
+    // Routehandler strings
+    
     const ORG_ROUTEHANDLER_1 = "org_routehandler_1";
     const ORG_ROUTEHANDLER_2 = "org_routehandler_2";
     const ORG_ROUTEHANDLER_3 = "org_routehandler_3";
@@ -101,6 +103,7 @@ class Strings
     const TASK_ROUTEHANDLER_29 = "task_routehandler_29";
     const TASK_ROUTEHANDLER_30 = "task_routehandler_30";
     const TASK_ROUTEHANDLER_31 = "task_routehandler_31";
+    const TASK_ROUTEHANDLER_32 = "task_routehandler_32";
     
     const USER_ROUTEHANDLER_1 = "user_routehandler_1";
     const USER_ROUTEHANDLER_2 = "user_routehandler_2";
@@ -118,10 +121,36 @@ class Strings
     const USER_ROUTEHANDLER_14 = "user_routehandler_14";
     const USER_ROUTEHANDLER_15 = "user_routehandler_15";
     const USER_ROUTEHANDLER_16 = "user_routehandler_16";
-    const USER_ROUTEHANDLER_17 = "user_routehandler_17";
-    const USER_ROUTEHANDLER_18 = "user_routehandler_18";
     const USER_ROUTEHANDLER_19 = "user_routehandler_19";    
+    
+    // UI DAO strings   
+    
+    const TASK_DAO_1 = "task_dao_1";
+    const TASK_DAO_2 = "task_dao_2";
+   
+    const USER_DAO_1 = "user_dao_1";
+    const USER_DAO_2 = "user_dao_2";
+    
+    // UI Lib Strings
+    
+    const MIDDLEWARE_1 = "middleware_1";
+    const MIDDLEWARE_2 = "middleware_2";
+    const MIDDLEWARE_3 = "middleware_3";
+    
+    const TEMPLATEHELPER_1 = "templatehelper_1";
+    const TEMPLATEHELPER_2 = "templatehelper_2";
+    const TEMPLATEHELPER_3 = "templatehelper_3";
+    const TEMPLATEHELPER_4 = "templatehelper_4";
+    const TEMPLATEHELPER_5 = "templatehelper_5";
+    const TEMPLATEHELPER_6 = "templatehelper_6";
+    const TEMPLATEHELPER_7 = "templatehelper_7";
+    const TEMPLATEHELPER_8 = "templatehelper_8";
+    const TEMPLATEHELPER_9 = "templatehelper_9";
+    const TEMPLATEHELPER_10 = "templatehelper_10";
+    
 
+    // Smarty Template Strings
+    const COMMON_FAQ ="common_faq";
     const COMMON_BANNED_BY = 'common_banned_by';
     const COMMON_BAN_DURATION = 'common_ban_duration';
     const COMMON_BAN_REASON = 'common_ban_reason';
@@ -287,6 +316,8 @@ class Strings
     const COMMON_LOADING = 'common_loading';
     const COMMON_SIP = 'common_sip';
     const COMMON_MISSING_DATA = 'common_missing_data';
+    const COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE = "common_login_required_to_access_page";
+    const COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED = "common_this_user_account_has_been_banned";
 
     const ADMIN_BANNED_ORGS_LIST_ALL_BANNED_ORGANISATIONS_OF = 'admin_banned_orgs_list_all_banned_organisations_of';
     const ADMIN_BANNED_ORGS_LIST_0 = 'admin_banned_orgs_list_0';
@@ -644,7 +675,7 @@ class Strings
     const CLAIMED_TASKS_NO_ACTIVE_TASKS_AVAILABLE = 'claimed_tasks_no_active_tasks_available';
     const CLAIMED_TASKS_1 = 'claimed_tasks_1';
 
-    const TASK_DESEGMENTATION_POSTEDITING_TASK_DETAILS = 'task_desegmentation_postediting_task_details';
+    const TASK_DESEGMENTATION_DESEGMENTATION_TASK_DETAILS = 'task_desegmentation_desegmentation_task_details';
     const TASK_DESEGMENTATION_DOWNLOAD = 'task_desegmentation_download';
     const TASK_DESEGMENTATION_0 = 'task_desegmentation_0';
     const TASK_DESEGMENTATION_DOWNLOAD_HERE = 'task_desegmentation_download_here';

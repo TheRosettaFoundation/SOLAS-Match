@@ -15,7 +15,7 @@
     <p>{Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_2)}</p>
 
     {assign var="badge_id" value=$badge->getId()}
-    <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="well">
+    <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="well" accept-charset="utf-8">
         <label for="email">{Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_3)}</label>
         <input type='text' name='email' id='email' />
 
@@ -51,7 +51,7 @@
                             </a>
                         </div>
                         <div class="right">
-                            <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="">
+                            <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" >
                                 <input type="hidden" name="user_id" value="{$user->getId()}" />
                                 <input type="hidden" value="Remove" onClick="return confirmPost()" />
                                 <a href="#" onclick="this.parentNode.submit()" class="pull-right btn btn-inverse">

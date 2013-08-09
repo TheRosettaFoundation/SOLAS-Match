@@ -18,12 +18,23 @@ class Langs {
             $data = Languages::getLanguageList();
             $result = null;
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getLanguages');
+        }, 'getLanguages',null);
         
       Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/getActiveLanguages(:format)/',
             function ($format = '.json') {
                 Dispatcher::sendResponce(null, Languages::getActiveLanguages(), null, $format);
-            }, 'getActiveLanguages');
+            }, 'getActiveLanguages',null);
+                    
+                    
+                     Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/getActiveSourceLanguages(:format)/',
+            function ($format = '.json') {
+                Dispatcher::sendResponce(null, Languages::getActiveSourceLanguages(), null, $format);
+            }, 'getActiveSourceLanguages',null);
+            
+             Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/getActiveTargetLanguages(:format)/',
+            function ($format = '.json') {
+                Dispatcher::sendResponce(null, Languages::getActiveTargetLanguages(), null, $format);
+            }, 'getActiveTargetLanguages',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/:id/', 
                                                         function ($id, $format = ".json") {
@@ -39,7 +50,7 @@ class Langs {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getLanguage');
+        }, 'getLanguage',null);
 
       
       
@@ -56,7 +67,7 @@ class Langs {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getLanguageByCode');      
+        }, 'getLanguageByCode',null);      
         
     }
 }
