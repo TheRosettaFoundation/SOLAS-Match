@@ -257,106 +257,6 @@ CALL alterTable();
 DROP PROCEDURE alterTable;
 
 
-CREATE TABLE IF NOT EXISTS `oauth_clients` (
-  `id` INT unsigned NOT NULL,
-  `secret` char(128) COLLATE utf8_unicode_ci NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  `auto_approve` TINYINT(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `u_oacl_clse_clid` (`secret`,`id`),
-  CONSTRAINT `FK_oauth_clients_Users` FOREIGN KEY (`id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT `FK_oauth_clients_Users_2` FOREIGN KEY (`secret`) REFERENCES `Users` (`password`) ON UPDATE CASCADE ON DELETE CASCADE
-
-) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `oauth_client_endpoints` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `client_id` int UNSIGNED NOT NULL,
-  `redirect_uri` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `i_oaclen_clid` (`client_id`),
-  CONSTRAINT `f_oaclen_clid` FOREIGN KEY (`client_id`) REFERENCES `oauth_clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `oauth_sessions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `client_id` int UNSIGNED NOT NULL,
-  `owner_type` enum('user','client') NOT NULL DEFAULT 'user',
-  `owner_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `i_uase_clid_owty_owid` (`client_id`,`owner_type`,`owner_id`),
-  CONSTRAINT `f_oase_clid` FOREIGN KEY (`client_id`) REFERENCES `oauth_clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `oauth_session_access_tokens` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `session_id` int(10) unsigned NOT NULL,
-  `access_token` char(40) NOT NULL,
-  `access_token_expires` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `u_oaseacto_acto_seid` (`access_token`,`session_id`),
-  KEY `f_oaseto_seid` (`session_id`),
-  CONSTRAINT `f_oaseto_seid` FOREIGN KEY (`session_id`) REFERENCES `oauth_sessions` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `oauth_session_authcodes` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `session_id` int(10) unsigned NOT NULL,
-  `auth_code` char(40) NOT NULL,
-  `auth_code_expires` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `session_id` (`session_id`),
-  CONSTRAINT `oauth_session_authcodes_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `oauth_sessions` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `oauth_session_redirects` (
-  `session_id` int(10) unsigned NOT NULL,
-  `redirect_uri` varchar(255) NOT NULL,
-  PRIMARY KEY (`session_id`),
-  CONSTRAINT `f_oasere_seid` FOREIGN KEY (`session_id`) REFERENCES `oauth_sessions` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `oauth_session_refresh_tokens` (
-  `session_access_token_id` int(10) unsigned NOT NULL,
-  `refresh_token` char(40) NOT NULL,
-  `refresh_token_expires` int(10) unsigned NOT NULL,
-  `client_id` int UNSIGNED NOT NULL,
-  PRIMARY KEY (`session_access_token_id`),
-  KEY `client_id` (`client_id`),
-  CONSTRAINT `oauth_session_refresh_tokens_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `oauth_clients` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `f_oasetore_setoid` FOREIGN KEY (`session_access_token_id`) REFERENCES `oauth_session_access_tokens` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `oauth_scopes` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `scope` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `u_oasc_sc` (`scope`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `oauth_session_token_scopes` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `session_access_token_id` int(10) unsigned DEFAULT NULL,
-  `scope_id` smallint(5) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `u_setosc_setoid_scid` (`session_access_token_id`,`scope_id`),
-  KEY `f_oasetosc_scid` (`scope_id`),
-  CONSTRAINT `f_oasetosc_scid` FOREIGN KEY (`scope_id`) REFERENCES `oauth_scopes` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `f_oasetosc_setoid` FOREIGN KEY (`session_access_token_id`) REFERENCES `oauth_session_access_tokens` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `oauth_session_authcode_scopes` (
-  `oauth_session_authcode_id` int(10) unsigned NOT NULL,
-  `scope_id` smallint(5) unsigned NOT NULL,
-  KEY `oauth_session_authcode_id` (`oauth_session_authcode_id`),
-  KEY `scope_id` (`scope_id`),
-  CONSTRAINT `oauth_session_authcode_scopes_ibfk_2` FOREIGN KEY (`scope_id`) REFERENCES `oauth_scopes` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `oauth_session_authcode_scopes_ibfk_1` FOREIGN KEY (`oauth_session_authcode_id`) REFERENCES `oauth_session_authcodes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   `user_id` int(10) unsigned NOT NULL,
@@ -2530,20 +2430,6 @@ FROM UserBadges ub JOIN Badges b ON ub.badge_id = b.id
 WHERE user_id = id;
 END//
 DELIMITER ;
-
--- Dumping structure for procedure debug-test3.getUserByOAuthToken
-DROP PROCEDURE IF EXISTS `getUserByOAuthToken`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserByOAuthToken`(IN `token` CHAR(40))
-BEGIN	
-	IF EXISTS(SELECT 1 FROM oauth_session_access_tokens o WHERE o.access_token = token) THEN
-		set @userId = null;
- 		SELECT client_id INTO @userId FROM oauth_sessions os WHERE os.id = (SELECT o.session_id FROM oauth_session_access_tokens o WHERE o.access_token = token);
-		call getUser(@userId,null,null,null,null,null,null,null,null);
-	END IF;
-END//
-DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
@@ -4845,16 +4731,6 @@ CREATE TRIGGER `afterTaskCreate` AFTER INSERT ON `Tasks` FOR EACH ROW BEGIN
 	END LOOP;
 	CLOSE cur1;
 
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
-
--- Dumping structure for trigger debug-test3.onDeleteFromRegisteredUsers
-DROP TRIGGER IF EXISTS `onDeleteFromRegisteredUsers`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
-DELIMITER //
-CREATE TRIGGER `onDeleteFromRegisteredUsers` AFTER DELETE ON `RegisteredUsers` FOR EACH ROW BEGIN
-	INSERT INTO oauth_clients (id, secret, name) SELECT id, `password`, `display-name` FROM Users WHERE id = old.user_id;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
