@@ -17,12 +17,16 @@ require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 
 class Middleware
 {
-    public static function oAuth($request, $response, $route) {
-//        $server = Dispatcher::getOauthServer();
-        $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
+   
+    
+    
+    public static function isloggedIn ($request, $response, $route){
+         $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
         // Test for token existance and validity
         try {
             $resource->isValid();
+            $parts =explode(" ",$_SERVER['HTTP_AUTHORIZATION']);
+            return UserDao::getByOauthToken($parts[1]);
         }
 
         // The access token is missing or invalid...
@@ -31,65 +35,50 @@ class Middleware
 //            print_r($response);
             Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, $e->getMessage());
         }
-    }   
-    
-    
-    public static function isloggedIn ($request, $response, $route){
-        $params = $route->getParams();
-      
-        
-       
-            if(isset ($params['email'])&& isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
-                $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
-                $email =$params['email'];
-                 if (!is_numeric($email) && strstr($email, '.')) {
-                    $temp = array();
-                    $temp = explode('.', $email);
-                    $lastIndex = sizeof($temp)-1;
-                    if ($lastIndex > 1) {
-                        $format='.'.$temp[$lastIndex];
-                        $email = $temp[0];
-                        for ($i = 1; $i < $lastIndex; $i++) {
-                            $email = "{$email}.{$temp[$i]}";
-                        }
-                    }
-                }
-                $openidHash = md5($email.substr(Settings::get("session.site_key"),0,20));
-                if ($headerHash!=$openidHash) {
-                    Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
-                } 
-            }elseif(isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])&& isset($_SESSION['hash'])){
-                 $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
-                 $cookieHash = $_SESSION['hash'];
-                  if ($headerHash!=$cookieHash) {
-                        Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
-                  }
-
-            }else{
-                $msg="You must be logged in to view this resource ";
-                $msg.=isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])?"":" hash not set";
-                $msg.=isset($_SESSION['hash'])?"":" cookie not set";
-                 Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, $msg);  
-            }
+//        $params = $route->getParams();
+//      
+//        
+//       
+//            if(isset ($params['email'])&& isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
+//                $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
+//                $email =$params['email'];
+//                 if (!is_numeric($email) && strstr($email, '.')) {
+//                    $temp = array();
+//                    $temp = explode('.', $email);
+//                    $lastIndex = sizeof($temp)-1;
+//                    if ($lastIndex > 1) {
+//                        $format='.'.$temp[$lastIndex];
+//                        $email = $temp[0];
+//                        for ($i = 1; $i < $lastIndex; $i++) {
+//                            $email = "{$email}.{$temp[$i]}";
+//                        }
+//                    }
+//                }
+//                $openidHash = md5($email.substr(Settings::get("session.site_key"),0,20));
+//                if ($headerHash!=$openidHash) {
+//                    Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
+//                } 
+//            }
         
     } 
     
-    public static function authUser($request, $response, $route)
-    {
-        self::isUserBanned();        
-        self::isloggedIn($request, $response, $route);
-    }    
+  
     
     
      public static function authUserOwnsResource($request, $response, $route)
     {
-              if (self::isSiteAdmin()) {
+         $user =self::isloggedIn ($request, $response, $route);
+         if (self::isSiteAdmin($user->getId())) {
             return true;
         }
-        self::authUser($request, $response, $route);
-        $user_id = UserSession::getCurrentUserID();
         $params = $route->getParams();
-        if($params['id']!=$user_id) Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
+        $id=$params['id'];
+        if (!is_numeric($id) && strstr($id, '.')) {
+                $id = explode('.', $id);
+                $format = '.'.$id[1];
+                $id = $id[0];
+            }
+        if($id!=$user->getId()) Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
 
     }    
     
@@ -99,20 +88,10 @@ class Middleware
         Dispatcher::getDispatcher()->redirect(Dispatcher::getDispatcher()->urlFor('getLoginTemplate'));
     }
     
-    public function authenticateSiteAdmin()
+    private static function isSiteAdmin($id)
     {
-        if(!self::isSiteAdmin()) {
-            self::notFound();          
-        }
-        return true;
-    }
-    
-    private static function isSiteAdmin()
-    {
-        self::isUserBanned(); 
-        if(is_null(UserSession::getCurrentUserID())) return false;
-       
-        return AdminDao::isAdmin(UserSession::getCurrentUserID(),null);
+        
+        return AdminDao::isAdmin($id,null);
     }
 
     public static function authenticateUserForTask($request, $response, $route) 
@@ -257,13 +236,7 @@ class Middleware
 //        self::notFound();
 //    }
     
-    public static function isUserBanned()
-    {        
-        if(AdminDao::isUserBanned(UserSession::getCurrentUserID())) {
-            UserSession::destroySession();
-            Dispatcher::getDispatcher()->redirect($app->urlFor('getLoginTemplate'));
-        }       
-    }
+   
     
     
     

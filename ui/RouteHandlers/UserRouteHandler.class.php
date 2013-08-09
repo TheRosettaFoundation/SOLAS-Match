@@ -394,7 +394,7 @@ class UserRouteHandler
                 $temp =$retvals['contact/email'].substr(Settings::get("session.site_key"),0,20);
                 UserSession::clearCurrentUserID();
 //                UserSession::setHash(md5($temp));
-                $user = $userDao->getUserByEmail($retvals['contact/email']);
+                $user = $userDao->openIdLogin($retvals['contact/email'],md5($temp));
                 if(is_array($user)) $user = $user[0];                    
                 if(is_null($user)) {
                     $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));

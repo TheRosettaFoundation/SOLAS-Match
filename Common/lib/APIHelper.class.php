@@ -39,7 +39,7 @@ class APIHelper
     }
 
     public function call($destination,$url, $method = HttpMethodEnum::GET,
-             $data = null, $query_args = array(), $file = null)
+             $data = null, $query_args = array(), $file = null,$headers=null)
     {
 
         $url = $url.$this->_serializer->getFormat()."/?";
@@ -74,6 +74,7 @@ class APIHelper
                 ,'Expect:'
                 ,'Content-Length:'.$lenght
                 ,'Authorization: Bearer '.UserSession::getHash());       
+        if(!is_null($headers)) $httpHeaders=array_merge($httpHeaders, $headers);
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
         curl_setopt($re, CURLOPT_HEADER, true);

@@ -57,6 +57,47 @@ class LoginAPI {
             }
             
          }, 'login',null);
+         
+          Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/login/openidLogin/:email/',
+                                                        function ($email, $format = ".json") {
+            
+           
+            
+             if(isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
+                $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
+                 if (!is_numeric($email) && strstr($email, '.')) {
+                    $temp = array();
+                    $temp = explode('.', $email);
+                    $lastIndex = sizeof($temp)-1;
+                    if ($lastIndex > 1) {
+                        $format='.'.$temp[$lastIndex];
+                        $email = $temp[0];
+                        for ($i = 1; $i < $lastIndex; $i++) {
+                            $email = "{$email}.{$temp[$i]}";
+                        }
+                    }
+                }
+                $openidHash = md5($email.substr(Settings::get("session.site_key"),0,20));
+                if ($headerHash!=$openidHash) {
+                    Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
+                } 
+            }
+            
+            
+            $data = UserDao::getUser(null, $email);
+            if (is_array($data)) {
+                $data = $data[0];
+            }
+            $server = Dispatcher::getOauthServer();       
+            $responce = $server->getGrantType('password')->completeFlow(array("client_id"=>$data->getId(),"client_secret"=>$data->getPassword()));
+            $oAuthResponce = new OAuthResponce();
+            $oAuthResponce->setToken($responce['access_token']);
+            $oAuthResponce->setTokenType($responce['token_type']);
+            $oAuthResponce->setExpires($responce['expires']);
+            $oAuthResponce->setExpiresIn($responce['expires_in']);
+            
+            Dispatcher::sendResponce(null, $data, null, $format,$oAuthResponce);
+        }, 'openidLogin',null);
     }
 }
 LoginAPI::init();

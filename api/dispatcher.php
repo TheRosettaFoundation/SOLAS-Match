@@ -143,7 +143,7 @@ class Dispatcher {
         }
     }
     
-    public static function registerNamed($httpMethod, $url, $function, $name,  $middleware = null)
+    public static function registerNamed($httpMethod, $url, $function, $name,  $middleware = "Middleware::isloggedIn")
     {        
         switch ($httpMethod) {
             

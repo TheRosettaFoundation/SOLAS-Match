@@ -342,7 +342,23 @@ class UserDao extends BaseDao
         $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $ret;
     }
-
+    
+    public function openIdLogin($email,$headerhash){
+    
+        $ret = null;
+        $request = "{$this->siteApi}v0/login/openidLogin/$email";
+        $ret = $this->client->call("User", $request,  HttpMethodEnum::GET,null,null,null,array("X-Custom-Authorization:$headerhash"));
+         $headers = $this->client->getHeaders();
+        if(isset ($headers["X-Custom-Token"])){
+            $token = $this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce');
+            if($token->hasToken())UserSession::setHash($token->getToken());
+        }
+        return $ret;
+        
+    }
+    
+    
+    
     public function login($email, $password)
     {
         $ret = null;

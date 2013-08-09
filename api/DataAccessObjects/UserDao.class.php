@@ -191,7 +191,7 @@ class UserDao
         }
         return $ret;
     }
-    
+       
     public static function openIdLogin($openid,$app)
     {
         if (!$openid->mode) {
