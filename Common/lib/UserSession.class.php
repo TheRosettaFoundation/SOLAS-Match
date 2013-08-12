@@ -59,14 +59,14 @@ class UserSession {
     public static function clearReferer(){
         if (isset($_SESSION['ref']))unset($_SESSION['ref']);
     }
-    
-    public static function setHash($hash) {
-        $_SESSION['hash'] = $hash;
+
+    public static function setAccessToken($token) {
+        $_SESSION['AccessToken'] = $token;
     }
     
-    public static function getHash(){
-        if (isset($_SESSION['hash'])) {
-            return $_SESSION['hash'];
+    public static function getAccessToken(){
+        if (isset($_SESSION['AccessToken'])) {
+            return $_SESSION['AccessToken'];
         } else {
             return null;
         }        
