@@ -123,8 +123,8 @@ class AdminDao
     {
         $args = PDOWrapper::cleanseNull($orgId)
                 .",".PDOWrapper::cleanseNull($userIdAdmin)
-                .",".$args .= PDOWrapper::cleanseNull($bannedTypeId)
-                .",".$args .= PDOWrapper::cleanseNullOrWrapStr($adminComment);
+                .",".PDOWrapper::cleanseNull($bannedTypeId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($adminComment);
         
         PDOWrapper::call("bannedOrgInsert", $args);      
     }

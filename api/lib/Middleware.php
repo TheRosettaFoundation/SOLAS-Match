@@ -24,7 +24,7 @@ class Middleware
          $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
         // Test for token existance and validity
         try {
-            $resource->isValid();
+            $resource->isValid(true);
             $parts =explode(" ",$_SERVER['HTTP_AUTHORIZATION']);
             return UserDao::getByOauthToken($parts[1]);
         }

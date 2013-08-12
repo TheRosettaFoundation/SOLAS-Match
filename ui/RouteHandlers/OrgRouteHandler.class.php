@@ -606,7 +606,7 @@ class OrgRouteHandler
             $post = $app->request()->post();
             
             if (isset($post['search_name']) && $post['search_name'] != '') {                
-                $foundOrgs = $orgDao->searchForOrgByName($post['search_name']);
+                $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
                 if (count($foundOrgs) < 1) {
                     $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_34));
                 }
