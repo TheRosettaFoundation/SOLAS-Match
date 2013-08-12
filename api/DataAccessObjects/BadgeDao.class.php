@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__."/../../Common/models/Badge.php";
-require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class BadgeDao
 {    
@@ -57,6 +57,7 @@ class BadgeDao
                 .",".PDOWrapper::cleanseNull($badgeID);
         
         if (!$validation = self::validateUserBadge($userID, $badgeID)) {
+            Notify::sendUserAssignedBadgeEmail($userID, $badgeID);
             if ($result = PDOWrapper::call("assignBadge", $args)) {
                 return $result[0]["result"];
             }

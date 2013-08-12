@@ -53,15 +53,21 @@
             clonedTarget.find('#segmentation_0')
                         .attr('name', 'segmentation_' + fields)
                         .attr('onchange', 'segmentationEnabled(' + fields + ')')
-                        .attr('id', 'segmentation_' + fields);
+                        .attr('id', 'segmentation_' + fields)
+                        .prop("disabled", false)
+                        .prop("checked", false);                        
             
             clonedTarget.find('#translation_0')
                         .attr('name', 'translation_' + fields)
-                        .attr('id', 'translation_' + fields);
+                        .attr('id', 'translation_' + fields)
+                        .prop("disabled", false)
+                        .prop("checked", true);
                 
             clonedTarget.find('#proofreading_0')
                         .attr('name', 'proofreading_' + fields)
-                        .attr('id', 'proofreading_' + fields);
+                        .attr('id', 'proofreading_' + fields)
+                        .prop("disabled", false)
+                        .prop("checked", true);
             
 
             jQuery('#horizontalLine_' + (fields-1)).after(clonedTarget);            
@@ -126,4 +132,32 @@
             isEnabledArray[index] = false;
         }
     }    
+    
+    function checkFormat()
+    {
+        var inputElement = jQuery("input[type='file']");
+        var filePath = inputElement.val();
+        var pos = filePath.lastIndexOf(".")+1;
+        var extension = filePath.substring(pos);
+        if(extension == 'pdf') {
+            return alert('Please note that (.pdf) documents are difficult to work with in translation because they must first be converted to an editable format. Are you sure want you want to upload a (.pdf)?');
+        }
+    }
+    
+    function checkWordCount()
+    {
+        var segCheckedSize = isEnabledArray.length;
+        var checkedCount = 0;
+        
+        for(var i=0; i < segCheckedSize; i++) {
+            if(isEnabledArray[i]) checkedCount++;
+        }
+        
+        if(checkedCount === segCheckedSize) return;
+        
+        var wordCount = jQuery("#word_count").val();
+        if(wordCount > 3500) {
+            return confirm("Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?");
+        }
+    }
 </script>

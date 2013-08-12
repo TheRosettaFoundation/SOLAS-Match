@@ -1,8 +1,11 @@
 <?php
 
 require_once __DIR__."/../../Common/models/User.php";
-require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/Authentication.class.php";
+require_once __DIR__."/../../Common/HttpStatusEnum.php";
+require_once __DIR__."/../lib/MessagingClient.class.php";
+require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
 
 class UserDao
 {
@@ -40,6 +43,11 @@ class UserDao
             $nativeLocale = $user->getNativeLocale();
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
+            BadgeDao::assignBadge($user->getId(), BadgeTypes::NATIVE_LANGUAGE);
+        }
+
+        if ($user->getBiography() != '') {
+            BadgeDao::assignBadge($user->getId(), BadgeTypes::PROFILE_FILLER);
         }
         
         $args = PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
@@ -98,21 +106,28 @@ class UserDao
             $user = $user[0];
         }
         
-        if (!is_object($user)) {
-            return null;
-        }
-        
+        if (!is_object($user)) {            
+            self::logLoginAttempt(null, $email, 0);
+            throw new Exception(HttpStatusEnum::NOT_FOUND);
+        }        
+                
         if ( !self::isUserVerified($user->getId())) {
-            return null;
+             self::logLoginAttempt($user->getId(), $email, 0);
+             throw new Exception(HttpStatusEnum::UNAUTHORIZED);
         }
 
         if (AdminDao::isUserBanned($user->getId())) {
-            return null;
+            self::logLoginAttempt($user->getId(), $email, 0);
+//            Notify::sendBannedLoginEmail($user->getId());
+            throw new Exception(HttpStatusEnum::FORBIDDEN);
         }
 
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
-            return null;
+            self::logLoginAttempt($user->getId(), $email, 0);
+            throw new Exception(HttpStatusEnum::NOT_FOUND);
         }
+        
+        self::logLoginAttempt($user->getId(), $email, 1);
 
         return $user;
     }
@@ -130,10 +145,8 @@ class UserDao
             $user = self::create($email, $clear_password);
             BadgeDao::assignBadge($user->getId(), BadgeTypes::REGISTERED);
             self::registerUser($user->getId());
+            Notify::sendEmailVerification($user->getId());
         }
-
-        Notify::sendEmailVerification($user->getId());
-
         return $user;
     }
 
@@ -178,7 +191,7 @@ class UserDao
         }
         return $ret;
     }
-    
+       
     public static function openIdLogin($openid,$app)
     {
         if (!$openid->mode) {
@@ -575,6 +588,19 @@ class UserDao
         }
         return null;
     }
+
+    public static function requestReference($userId)
+    {
+        $messagingClient = new MessagingClient();
+        if ($messagingClient->init()) {
+            $request = new UserReferenceEmail();
+            $request->setUserId($userId);
+            $message = $messagingClient->createMessageFromProto($request);
+            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
+                    $messagingClient->UserReferenceRequestTopic);
+        }
+    }
+
     public static function trackProject($projectID,$userID)
     {
         $args = PDOWrapper::cleanse($projectID)
@@ -697,6 +723,36 @@ class UserDao
     {
         $args = PDOWrapper::cleanseNull($userId);
         PDOWrapper::call("deleteUser", $args);
+    }
+    
+    private static function logLoginAttempt($userId, $email, $loginSuccess)
+    {
+        $args = PDOWrapper::cleanseNull($userId)
+            .",".PDOWrapper::cleanseNullOrWrapStr($email)
+            .",".PDOWrapper::cleanseNull($loginSuccess);        
+        PDOWrapper::call("userLoginInsert", $args);
+    }
+    
+    public static function isBlacklistedForTask($userId, $taskId)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNull($userId)
+                .",".PDOWrapper::cleanseNull($taskId);
+        if($result = PDOWrapper::call("isUserBlacklistedForTask", $args)) {
+            return $result[0]['result'];            
+        }
+        return $ret;
+    }
+    
+    public static function getByOauthToken($token)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNullOrWrapStr($token);
+        $result = PDOWrapper::call('getUserByOAuthToken', $args);
+        if ($result) {
+            $ret = ModelFactory::buildModel("User", $result[0]);
+        }
+        return $ret;  
     }
     
 }

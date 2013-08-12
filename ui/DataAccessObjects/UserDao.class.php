@@ -1,16 +1,26 @@
 <?php
 
-require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
-class UserDao
+require_once __DIR__."/../../Common/HttpStatusEnum.php";
+require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/../../Common/models/OAuthResponce.php";
+require_once __DIR__."/BaseDao.php";
+
+
+class UserDao extends BaseDao
 {
-    private $client;
-    private $siteApi;
     
     public function __construct()
     {
         $this->client = new APIHelper(Settings::get("ui.api_format"));
         $this->siteApi = Settings::get("site.api");
+    } 
+    
+    public function getUserDart($userId)
+    {
+        $ret = null;
+        $helper = new APIHelper(FormatEnum::JSON);
+        return $helper->serialize($this->getUser($userId));
     }
     
     public function getUser($userId)
@@ -20,7 +30,7 @@ class UserDao
         $ret=CacheHelper::getCached(CacheHelper::GET_USER.$userId, TimeToLiveEnum::MINUTE,
                 function($args){
                     $request = "{$args[2]}v0/users/$args[1]";
-                    return $args[0]->call("User", $request);
+                     return $args[0]->call("User", $request);
                 },
             array($this->client, $userId,$this->siteApi)); 
         return $ret;
@@ -279,6 +289,12 @@ class UserDao
         return $ret;
     }
 
+    public function requestReferenceEmail($userId)
+    {
+        $request = "{$this->siteApi}v0/users/$userId/requestReference";
+        $this->client->call(null, $request, HttpMethodEnum::PUT);
+    }
+
     public function removeUserTag($userId, $tagId)
     {
         $ret = null;
@@ -326,7 +342,22 @@ class UserDao
         $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $ret;
     }
-
+    
+    public function openIdLogin($email,$headerhash){
+    
+        $ret = null;
+        $request = "{$this->siteApi}v0/login/openidLogin/$email";
+        $ret = $this->client->call("User", $request,  HttpMethodEnum::GET,null,null,null,array("X-Custom-Authorization:$headerhash"));
+         $headers = $this->client->getHeaders();
+        if(isset ($headers["X-Custom-Token"])){
+            UserSession::setAccessToken($this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce'));
+        }
+        return $ret;
+        
+    }
+    
+    
+    
     public function login($email, $password)
     {
         $ret = null;
@@ -334,7 +365,36 @@ class UserDao
         $login->setEmail($email);
         $login->setPassword($password);
         $request = "{$this->siteApi}v0/login";
-        $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $login);
+        try {        
+            $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $login);
+        } catch(SolasMatchException $e) {
+            switch($e->getCode()) {
+
+                case HttpStatusEnum::NOT_FOUND : 
+                    throw new SolasMatchException(Localisation::getTranslation(Strings::USER_DAO_1));
+
+                case HttpStatusEnum::UNAUTHORIZED : 
+                    throw new SolasMatchException(Localisation::getTranslation(Strings::USER_DAO_2));
+
+                case HttpStatusEnum::FORBIDDEN :
+                    $userDao = new UserDao();
+                    $user = $userDao->getUserByEmail($email);
+
+                    $adminDao = new AdminDao();                
+                    $bannedUser = $adminDao->getBannedUser($user->getId());
+                    throw new SolasMatchException("{$bannedUser->getComment()}");
+                    
+                default :
+                    throw $e;
+            }
+        }
+        
+
+
+        $headers = $this->client->getHeaders();
+        if(isset ($headers["X-Custom-Token"])){
+            UserSession::setToken($this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce'));
+        }
         return $ret;
     }
 
@@ -435,5 +495,13 @@ class UserDao
     {
         $request = "{$this->siteApi}v0/users/$userId";
         $this->client->call(null, $request, HttpMethodEnum::DELETE);
+    }
+    
+    public function isBlacklistedForTask($userId, $taskId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/isBlacklistedForTask/$userId/$taskId";
+        $ret = $this->client->call(null, $request);
+        return $ret;
     }
 }

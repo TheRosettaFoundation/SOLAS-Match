@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>TaskSummaryLink</title>
+  </head>
+ 
+  <body>   
+    <element extends="div" name="x-task-stream" constructor="TaskStream">
+      <template>
+        <template instantiate="if userId > 0">
+          <h3>{{Localisation.getTranslation("index_filter_available_tasks")}}</h3>
+          <table>
+            <thead>
+              <th>{{Localisation.getTranslation("common_task_type")}}</th>
+              <th>{{Localisation.getTranslation("common_source_language")}}<span style="color: red">*</span></th>
+              <th>{{Localisation.getTranslation("common_target_language")}}<span style="color: red">*</span></th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <select name="taskTypes" bind-selected-index="selectedTaskTypeFilter" 
+                    template iterate="key in taskTypeIndexes">
+                    <option value="{{key.toString()}}">{{taskTypes[key]}}</option>
+                  </select>
+                </td>
+                <td>
+                  <select name="sourceLanguage" bind-selected-index="selectedSourceFilter" 
+                    template iterate="language in activeLanguages">
+                      <option value="{{language.code}}">{{language.name}}</option>
+                  </select>
+                </td>
+                <td>
+                  <select name="targetLanguage" bind-selected-index="selectedTargetFilter" 
+                    template iterate="language in activeLanguages">
+                    <option value="{{language.code}}">{{language.name}}</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <button value="Filter" class="btn btn-primary" on-click="filterStream()">
+                    <i class="icon-refresh icon-white"></i> {{Localisation.getTranslation("index_filter_task_stream")}}
+                  </button>
+                </td>
+              </tr>
+            </tbody>  
+          </table>
+          <br />
+          <small>
+            <span style="color: red">*</span>{{Localisation.getTranslation("index_2")}}
+            {{Localisation.getTranslation("index_3")}}
+          </small>
+          <hr />
+        </template>
+        <template instantiate="if tasks.length > 0">
+          <template iterate="task in tasks">
+            <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
+              <h2>
+                <a href="{{new Settings().conf.urls.SiteLocation}}task/{{task.id}}/id">
+                  {{task.title}}
+                </a>
+              </h2>
+              <p>{{Localisation.getTranslation("common_type")}}:
+                <template instantiate="if task.taskType == 1">
+                  <span class="label label-info" style="background-color: {{taskOneColour}}">{{Localisation.getTranslation("common_segmentation")}}</span>
+                </template>
+                <template instantiate="if task.taskType == 2">
+                  <span class="label label-info" style="background-color: {{taskTwoColour}}">{{Localisation.getTranslation("common_translation")}}</span>
+                </template>
+                <template instantiate="if task.taskType == 3">
+                  <span class="label label-info" style="background-color: {{taskThreeColour}}">{{Localisation.getTranslation("common_proofreading")}}</span>
+                </template>
+                <template instantiate="if task.taskType == 4">
+                  <span class="label label-info" style="background-color: {{taskFourColour}}">{{Localisation.getTranslation("common_desegmentation")}}</span>              
+                </template>
+              </p>
+              <p>
+                {{Localisation.getTranslation("common_from")}}: <strong>{{task.sourceLocale.languageName}} - {{task.sourceLocale.countryName}} </strong>
+              </p>
+              <p>
+                {{Localisation.getTranslation("common_to")}}: <strong>{{task.targetLocale.languageName}} - {{task.targetLocale.countryName}}</strong>
+              </p>
+              <p>
+                <template instantiate="if taskTags[task.id].length > 0">
+                  <template iterate="tag in taskTags[task.id]">
+                    <a href="{{siteAddress}}tag/{{tag.id}}" class="label"><span class="label">{{tag.label}}</span></a>
+                  </template>
+                </template>
+              </p>
+              <p>
+                {{Localisation.getTranslation("common_word_count")}}: <strong>{{task.wordCount}}</strong>
+              </p>
+              <p class="task_details">
+                {{Localisation.getTranslation("common_added")}}: <strong>{{taskAges[task.id]}}</strong> {{Localisation.getTranslation("common_ago")}}
+              </p>
+              <p>
+                {{Localisation.getTranslation("common_due_by")}}: <strong>{{task.deadline}}</strong>
+              </p>
+              <template instantiate="if projectMap[task.projectId] != null">
+                <template instantiate="if orgMap[projectMap[task.projectId].organisationId] != null">
+                  <p>
+                    {{Localisation.getTranslation("common_part_of")}}:
+                    <a href="{{siteAddress}}project/{{projectMap[task.projectId].id}}/view">
+                      {{projectMap[task.projectId].title}}
+                    </a>
+                    {{Localisation.getTranslation("common_for")}}
+                    <a href="{{siteAddress}}org/{{orgMap[projectMap[task.projectId].organisationId].id}}/profile">
+                      {{orgMap[projectMap[task.projectId].organisationId].name}}
+                    </a>
+                  </p>
+                </template>
+              </template>
+              <br />
+            </div>
+          </template>
+          <template instantiate="if moreTasks">
+            <button on-click="addTasks()">{{Localisation.getTranslation("index_load_more")}}</button>
+          </template>
+        </template>
+        <template instantiate="if !(tasks.length > 0)">
+          <p>{{Localisation.getTranslation("index_no_tasks_available")}}</p>
+        </template>
+        <br />
+      </template>
+      <script type="application/dart" src="TaskStream.dart"></script>
+    </element>
+  </body>
+</html>

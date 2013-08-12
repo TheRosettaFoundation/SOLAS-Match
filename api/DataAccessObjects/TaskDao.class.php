@@ -1,13 +1,14 @@
 <?php
 
 require_once __DIR__."/../../Common/Requests/UserTaskScoreRequest.php";
-require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/models/Task.php";
 require_once __DIR__."/../../api/lib/Upload.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/NotificationTypes.class.php";
 require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
+include_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 
 /**
@@ -17,7 +18,7 @@ require_once __DIR__."/../lib/Upload.class.php";
  * @author eoin.oconchuir@ul.ie
  **/
 
-class TaskDao
+class TaskDao 
 {
 
     public static function create($task)
@@ -348,10 +349,11 @@ class TaskDao
         return $result[0]["result"];
     }
 
-    public static function getLatestAvailableTasks($nb_items = 15)
+    public static function getLatestAvailableTasks($limit = 15, $offset = 0)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNullOrWrapStr($nb_items);
+        $args = PDOWrapper::cleanseNull($limit).', '.
+                PDOWrapper::cleanseNull($offset);
         
         if ($r = PDOWrapper::call("getLatestAvailableTasks", $args)) {
             $ret = array();
@@ -366,7 +368,7 @@ class TaskDao
      * Returns an array of tasks ordered by the highest score related to the user
      */
 
-    public static function getUserTopTasks($user_id, $strict, $limit, $filter=" and 1")
+    public static function getUserTopTasks($user_id, $strict, $limit, $offset = 0, $filter=" and 1")
     {
         $ret = false;
         $args = PDOWrapper::cleanse($user_id).", ";
@@ -376,9 +378,10 @@ class TaskDao
         } else {
             $args .= "0, ";
         }
-        $args .= PDOWrapper::cleanseNullOrWrapStr($limit).", ".
-                "'$filter'";                
-                
+        $args .= PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                PDOWrapper::cleanseNull($offset).', '.
+                "'$filter'";
+
         if ($result = PDOWrapper::call("getUserTopTasks", $args)) {
 
             $ret = array();
@@ -469,7 +472,7 @@ class TaskDao
                 .",".PDOWrapper::cleanseNull($userId);
         
         $result = PDOWrapper::call("archiveTask", $args);
-        self::delete($taskId);
+        if($result[0]['result']) self::delete($taskId);
         return $result[0]['result'];
     }
         
@@ -700,13 +703,16 @@ class TaskDao
     
     public static function uploadFile($task,$convert,&$file,$version,$userId,$filename)
     {
+        $success = null;
         if($convert){
-            Upload::apiSaveFile($task, $userId, FormatConverter::convertFromXliff($file), 
+           $success = Upload::apiSaveFile($task, $userId, FormatConverter::convertFromXliff($file), 
                     $filename,$version);
         }else{
             //touch this and you will die painfully sinisterly sean :)
-            Upload::apiSaveFile($task, $userId, $file, $filename,$version);
+            $success = Upload::apiSaveFile($task, $userId, $file, $filename,$version);
         }
+        
+        if(!$success) throw new SolasMatchException("Failed to write file data.", HttpStatusEnum::INTERNAL_SERVER_ERROR);
     }
     
     public static function uploadOutputFile($task,$convert,&$file,$userId,$filename)

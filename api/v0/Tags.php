@@ -23,7 +23,17 @@ class Tags {
             } else { 
                 Dispatcher::sendResponce(null, TagsDao::getTag(null,null,$limit), null, $format);
             }
-        }, 'getTags');
+        }, 'getTags',null);
+        
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tags(:format)/',
+                                                        function ($format = ".json") {
+            $data = Dispatcher::getDispatcher()->request()->getBody();
+            $client = new APIHelper($format);
+            $data=$client->deserialize($data,"Tag");
+//            $client->cast("Tag", $data);
+            $data->setId(null);
+            Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
+        }, 'createTag');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/getByLabel/:label/',
                                                         function ($label, $format = ".json") {
@@ -45,7 +55,7 @@ class Tags {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getTagByLabel');
+        }, 'getTagByLabel',null);
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/search/:name/',
                 function ($name, $format = '.json') {
@@ -70,7 +80,7 @@ class Tags {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 30);
             $data= TagsDao::getTopTags($limit);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getTopTags');
+        }, 'getTopTags',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:id/', 
                                                         function ($id, $format = ".json") {
@@ -87,15 +97,7 @@ class Tags {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTag');
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tags(:format)/',
-                                                        function ($format = ".json") {
-            $data = Dispatcher::getDispatcher()->request()->getBody();
-            $client = new APIHelper($format);
-            $data=$client->deserialize($data,"Tag");
-//            $client->cast("Tag", $data);
-            $data->setId(null);
-            Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
-        }, 'createTag');
+        
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tags/:id/',
                                                         function ($id, $format = ".json") {

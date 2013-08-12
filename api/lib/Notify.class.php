@@ -1,6 +1,5 @@
 <?php
 
-require_once "HTTP/Request2.php";
 require_once __DIR__."/MessagingClient.class.php";
 require_once __DIR__."/../../Common/Settings.class.php";
 require_once __DIR__."/../vendor/autoload.php";
@@ -18,6 +17,7 @@ require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
 require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
+require_once __DIR__."/../../Common/protobufs/emails/UserBadgeAwardedEmail.php";
 require_once __DIR__."/../../Common/Requests/TaskUploadNotificationRequest.php";
 require_once __DIR__.'/../../Common/Requests/OrgCreatedNotificationRequest.php';
 
@@ -66,6 +66,19 @@ class Notify
             $message = $client->createMessageFromProto($proto);
             $client->sendTopicMessage($message, $client->MainExchange, 
                     $client->OrgCreatedTopic);
+        }
+    }
+
+    public static function sendUserAssignedBadgeEmail($userId, $badgeId)
+    {
+        $client = new MessagingClient();
+        if ($client->init()) {
+            $proto = new UserBadgeAwardedEmail();
+            $proto->setUserId($userId);
+            $proto->setBadgeId($badgeId);
+            $message = $client->createMessageFromProto($proto);
+            $client->sendTopicMessage($message, $client->MainExchange,
+                    $client->UserBadgeAwardedTopic);
         }
     }
 

@@ -1,11 +1,10 @@
 <?php
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/BaseDao.php";
 
-class ProjectDao
-{
-    private $client;
-    private $siteApi;
+class ProjectDao extends BaseDao
+{    
     
     public function __construct()
     {
@@ -68,6 +67,14 @@ class ProjectDao
         $ret = $this->client->call("Project", $request, HttpMethodEnum::POST, $project);
         return $ret;
     }
+    
+    public function deleteProject($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$projectId";
+        $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
+        return $ret;
+    }
 
     public function updateProject($project)
     {
@@ -117,8 +124,20 @@ class ProjectDao
         $ret = null;
         $filename = urlencode($filename);
         $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
-        $ret = $this->client->call(null, $url, HttpMethodEnum::PUT, null, null, $data);       
-        return $ret;
+        $ret = $this->client->call(null, $url, HttpMethodEnum::PUT, null, null, $data);     
+        
+        switch($this->client->getResponseCode()) {
+            
+            default : return $ret;
+                
+            case HttpStatusEnum::BAD_REQUEST :
+                throw new SolasMatchException($ret, $this->client->getResponseCode());                                 
+                break;          
+            
+            case HttpStatusEnum::CONFLICT :
+                throw new SolasMatchException($ret, $this->client->getResponseCode());
+                break;                                
+        }        
     }
     
     public function getProjectFile($project_id)

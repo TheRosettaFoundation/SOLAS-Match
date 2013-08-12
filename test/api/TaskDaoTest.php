@@ -665,7 +665,6 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($translationTask->getTaskType(), $userArchivedTasks[0]->getTaskType());
         $this->assertEquals(3, $userArchivedTasks[0]->getTaskStatus()); // Claimed the task, so status changes
         $this->assertEquals($translationTask->getPublished(), $userArchivedTasks[0]->getPublished());        
-        $this->assertNotNull($userArchivedTasks[0]->getTranslatorId());
         $this->assertNotNull($userArchivedTasks[0]->getArchiveUserId());
         $this->assertNotNull($userArchivedTasks[0]->getArchiveDate());
     }

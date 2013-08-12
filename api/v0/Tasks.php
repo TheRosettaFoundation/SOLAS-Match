@@ -13,6 +13,7 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../lib/IO.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
 require_once __DIR__."/../lib/FormatConverter.php";
+require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class Tasks {
     
@@ -22,7 +23,7 @@ class Tasks {
                                                         function ($format = ".json") {
             
             Dispatcher::sendResponce(null, TaskDao::getTask(), null, $format);
-        }, 'getTasks');        
+        }, 'getTasks', "Middleware::oAuth");        
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks(:format)/',
                                                         function ($format = ".json") {
@@ -100,9 +101,10 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/topTasks(:format)/',
                                                         function ($format = ".json") {
             
-            $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
-            Dispatcher::sendResponce(null, TaskDao::getLatestAvailableTasks($limit), null, $format);
-        }, 'getTopTasks');
+            $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 15);
+            $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
+            Dispatcher::sendResponce(null, TaskDao::getLatestAvailableTasks($limit, $offset), null, $format);
+        }, 'getTopTasks',null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/',
                                                         function ($id, $format = ".json") {
@@ -117,7 +119,7 @@ class Tasks {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getTask');
+        }, 'getTask',null);
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/review(:format)/',
                 function ($id, $format = '.json')
@@ -138,7 +140,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/tags(:format)/',
                                                         function ($id, $format = ".json") {
             Dispatcher::sendResponce(null, TaskDao::getTags($id), null, $format);
-        }, 'getTasksTags');
+        }, 'getTasksTags',null);
 //        
 //        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/tags(:format)/',
 //                                                        function ($id, $format = ".json") {
@@ -185,10 +187,10 @@ class Tasks {
             }else{
                 TaskDao::downloadTask($id, $version);
             }
-        }, 'getTaskFile');
+        }, 'getTaskFile',null);
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/file/:filename/:userId/',
-                                                        function ($id, $filename, $userID, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/saveFile/:id/:userId/',
+                                                        function ($id, $userID, $format = ".json") {
             
             if (!is_numeric($userID) && strstr($userID, '.')) {
                 $userID = explode('.', $userID);
@@ -202,7 +204,16 @@ class Tasks {
             $version = Dispatcher::clenseArgs('version', HttpMethodEnum::GET, null);
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
-            TaskDao::uploadFile($task, $convert,$data,$version,$userID,$filename);
+            $projectFile = ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
+            $filename = $projectFile->getFilename();
+            try {
+                TaskDao::uploadFile($task, $convert,$data,$version,$userID,$filename);
+            } catch(SolasMatchException $e) {
+                Dispatcher::sendResponce(null, $e->getMessage(), $e->getCode());
+                return;
+            }
+            Dispatcher::sendResponce(null, null, HttpStatusEnum::CREATED);
+            
         }, 'saveTaskFile');
         
         

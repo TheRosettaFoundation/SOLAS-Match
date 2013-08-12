@@ -22,6 +22,8 @@ class MessagingClient
     public $BannedLoginTopic                = "email";
     public $UserFeedbackTopic               = "email";
     public $OrgFeedbackTopic                = "email";
+    public $UserReferenceRequestTopic       = "email";
+    public $UserBadgeAwardedTopic           = "email";
 
     private $connection;
 

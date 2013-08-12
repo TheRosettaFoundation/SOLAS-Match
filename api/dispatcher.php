@@ -1,5 +1,10 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers : Content-Type');
+header('Access-Control-Allow-Methods : GET, POST, PUT, DELETE');
+
+
 require __DIR__."/vendor/autoload.php";
 mb_internal_encoding("UTF-8");
 
@@ -9,12 +14,17 @@ require_once __DIR__."/../Common/Settings.class.php";
 require_once __DIR__."/../Common/lib/ModelFactory.class.php";
 require_once __DIR__."/../Common/lib/BadgeTypes.class.php";
 require_once __DIR__."/../Common/lib/APIHelper.class.php";
+require_once __DIR__."/../Common/lib/UserSession.class.php";
 require_once __DIR__."/../Common/HttpMethodEnum.php";
+require_once __DIR__."/../Common/HttpStatusEnum.php";
+
 
 class Dispatcher {
     
     private static $apiDispatcher = null;
-    
+    private static $oauthServer = null; 
+    private static $oauthRequest = null;
+            
     public static function  getDispatcher()
     {
         if (Dispatcher::$apiDispatcher == null) {
@@ -39,6 +49,18 @@ class Dispatcher {
                 ));
             });
             
+            $app->add(new  Slim_Middleware_SessionCookie(array(
+                'expires' => Settings::get('site.cookie_timeout'),
+                'path' => '/',
+                'domain' => null,
+                'secure' => false,
+                'httponly' => false,
+                'name' => 'slim_session',
+                'secret' => Settings::get('session.site_key'),
+                'cipher' => MCRYPT_RIJNDAEL_256,
+                'cipher_mode' => MCRYPT_MODE_CBC
+            )));
+            
         }
         return Dispatcher::$apiDispatcher;
     }
@@ -51,77 +73,98 @@ class Dispatcher {
        $path =$path[1];
        $providerNames = Dispatcher::readProviders("$path/");
        Dispatcher::autoRequire($providerNames,"$path/");
+       self::initOAuth();
        Dispatcher::getDispatcher()->run();  
     }
-        
     
-    public static function sendResponce($headers, $body, $code = 200, $format = ".json")
+    private static function initOAuth() {
+        self::$oauthRequest = new League\OAuth2\Server\Util\Request();
+//        self::$oauthServer = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
+        self::$oauthServer = new League\OAuth2\Server\Authorization(
+        new League\OAuth2\Server\Storage\PDO\Client(),
+    new League\OAuth2\Server\Storage\PDO\Session(),
+    new League\OAuth2\Server\Storage\PDO\Scope()
+    );
+        self::$oauthServer->setAccessTokenTTL(Settings::get('site.oauth_timeout'));
+        self::$oauthServer->addGrantType(new League\OAuth2\Server\Grant\Password(self::$oauthServer));
+
+    }
+    
+    public static function getOauthServer()
+    {
+        return self::$oauthServer;
+    }
+    
+    public static function sendResponce($headers, $body, $code = 200, $format = ".json",$oauthToken=null)
     {
         header('Access-Control-Allow-Origin: *');
         $response = Dispatcher::getDispatcher()->response();
         $apiHelper = new APIHelper($format);
         $response['Content-Type'] = $apiHelper->getContentType();
         $body = $apiHelper->serialize($body);
-
+        $token = $apiHelper->serialize($oauthToken);
+        $response["X-Custom-Token"] = base64_encode($token);
         if ($headers != null) {
             foreach ($headers as $key => $val) {
                 $response[$key] = $val;
             }
         }
-        $response->body($body);
         
         if ($code != null) {
             $response->status($code);
         }
+        
+        $response->body($body);        
     }
     
-    public static function register($httpMethod, $url, $function)
+    public static function register($httpMethod, $url, $function, $middleware = null)
     {        
         switch ($httpMethod) {
             
             case HttpMethodEnum::DELETE: {
-                Dispatcher::getDispatcher()->delete($url, $function);
+                Dispatcher::getDispatcher()->delete($url,$middleware, $function);
                 break;
             }
             
             case HttpMethodEnum::GET: {
-                Dispatcher::getDispatcher()->get($url, $function);
+                Dispatcher::getDispatcher()->get($url,$middleware, $function);
                 break;
             }
             
             case HttpMethodEnum::POST: {
-                Dispatcher::getDispatcher()->post($url, $function);
+                Dispatcher::getDispatcher()->post($url,$middleware, $function);
                 break;
             }
             
             case HttpMethodEnum::PUT: {
-                Dispatcher::getDispatcher()->put($url, $function);
+                Dispatcher::getDispatcher()->put($url,$middleware, $function);
                 break;
             }
         }
     }
     
-    public static function registerNamed($httpMethod, $url, $function, $name)
+    public static function registerNamed($httpMethod, $url, $function, $name,  $middleware = "Middleware::isloggedIn")
     {        
         switch ($httpMethod) {
             
             case HttpMethodEnum::DELETE: {
-                Dispatcher::getDispatcher()->delete($url, $function)->name($name);
+                
+                Dispatcher::getDispatcher()->delete($url, $middleware, $function)->name($name);
                 break;
             }
             
             case HttpMethodEnum::GET: {
-                Dispatcher::getDispatcher()->get($url, $function)->name($name);
+                Dispatcher::getDispatcher()->get($url,  $middleware, $function)->name($name);
                 break;
             }
             
             case HttpMethodEnum::POST: {
-                Dispatcher::getDispatcher()->post($url, $function)->name($name);
+                Dispatcher::getDispatcher()->post($url,  $middleware, $function)->name($name);
                 break;
             }
             
             case HttpMethodEnum::PUT: {
-                Dispatcher::getDispatcher()->put($url, $function)->name($name);
+                Dispatcher::getDispatcher()->put($url,  $middleware, $function)->name($name);
                 break;
             }
         }

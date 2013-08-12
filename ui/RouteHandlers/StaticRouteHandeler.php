@@ -5,11 +5,16 @@ class StaticRouteHandeler
     public function init()
     {
         $app = Slim::getInstance();       
-        
-        $app->get("/static/privacy", array($this, "privacy"))->name("privacy");
-        $app->get("/static/terms", array($this, "terms"))->name("terms");
-        $app->get("/static/videos", array($this, "videos"))->name("videos");
-        $app->notFound(array("Middleware::notFound"));
+        $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");
+        $app->get("/static/terms/", array($this, "terms"))->name("terms");
+        $app->get("/static/faq/", array($this, "faq"))->name("faq");
+        $app->get("/static/videos/", array($this, "videos"))->name("videos");
+        $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST","GET")->name("siteLanguage");
+        $app->get("/static/getStrings/", array($this, "getStrings"))->name("staticGetStrings");
+        $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
+        $app->get("/static/getUserHash/", array($this, "getUserHash"))->name("staticGetUserHash");
+        $app->notFound("Middleware::notFound");
+
     }
 
     public function privacy()
@@ -24,11 +29,48 @@ class StaticRouteHandeler
          $app->render("static/terms.tpl");
     }
     
+    public function faq()
+    {
+         $app = Slim::getInstance();
+         $app->render("static/FAQ.tpl");
+    }
+    
     public function videos()
     {
          $app = Slim::getInstance();
          $app->view()->setData("current_page", "videos");
          $app->render("static/videos.tpl");
+    }
+    
+    public function siteLanguage()
+    {
+        $app = Slim::getInstance();           
+        if($post = $app->request()->post()) {
+            if(isset($post['language'])) {
+                UserSession::setUserLanguage($post['language']);
+            }
+            $app->redirect($app->request()->getReferrer());
+        }else{
+            $app->response()->body(UserSession::getUserLanguage());
+        }
+    }
+    
+    public function getUser(){
+        if(!is_null(UserSession::getCurrentUserID())){
+            $dao = new UserDao();
+            Slim::getInstance()->response()->body($dao->getUserDart(UserSession::getCurrentUserID()));           
+        }
+    }
+    
+    public function getUserHash(){
+        if(!is_null(UserSession::getAccessToken())){
+            $dao = new UserDao();
+            Slim::getInstance()->response()->body(UserSession::getAccessToken()->getToken());           
+        }
+    }
+    
+    public function getStrings(){
+        Slim::getInstance()->response()->body(Localisation::getStrings());
     }
 }
 

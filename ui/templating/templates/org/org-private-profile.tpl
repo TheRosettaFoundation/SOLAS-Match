@@ -5,12 +5,12 @@
     {if $org->getName() != ''}
         {$org->getname()}
     {else}
-        Organisation Profile
+        {Localisation::getTranslation(Strings::COMMON_ORGANISATION_PROFILE)}
     {/if}
-    <small>Alter your organisation's profile here</small>
+    <small>{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_0)}</small>
     {assign var="org_id" value=$org->getId()}
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="pull-right btn btn-primary">
-            <i class="icon-list icon-white"></i> Public Profile
+            <i class="icon-list icon-white"></i> {Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_PUBLIC_PROFILE)}
             </a>
         </h1>
     </div>
@@ -21,32 +21,32 @@
 {include file="handle-flash-messages.tpl"}
 
 {assign var="org_id" value=$org->getId()}
-    <form method='post' action='{urlFor name='org-private-profile' options="org_id.$org_id"}' class='well'>
+    <form method='post' action='{urlFor name='org-private-profile' options="org_id.$org_id"}' class='well' accept-charset="utf-8">
         <table>
             <tr valign="top" align="center"> 
                 <td width="50%">
                     
-                    <label for='displayName'><strong>Public Display Name:</strong></label>
+                    <label for='displayName'><strong>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}:</strong></label>
                     <input type='text' name='displayName' id='displayName' style="width: 80%"
                     {if $org->getName() != ''}
                        value="{$org->getName()}"
                     {else}
-                        placeholder='Your organisation name.' 
+                        placeholder='{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_YOUR_ORGANISATION_NAME)}.' 
                     {/if}
                     />
                     
-                    <label for='address'><strong>Address:</strong></label>
+                    <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}:</strong></label>
                     <textarea name='address' cols='40' rows='7' style="width: 80%"
-                    >{if $org->getAddress() != ''}{$org->getAddress()}{/if}</textarea>
+                    >{if $org->getAddress() != ''} {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())} {/if}</textarea>
                     
-                    <label for='city'><strong>City:</strong></label>
+                    <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}:</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%"
                     {if $org->getCity() != ''}
                          value="{$org->getCity()}"
                     {/if}
                     />
 
-                    <label for='country'><strong>Country:</strong></label>
+                    <label for='country'><strong>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}:</strong></label>
                     <input type='text' name='country' id='country' style="width: 80%"
                     {if $org->getCountry() != ''}
                          value="{$org->getCountry()}"
@@ -56,7 +56,7 @@
                 </td>
                 <td width="50%">
                     
-                    <label for='homepage'><strong>Home Page:</strong></label>
+                    <label for='homepage'><strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}:</strong></label>
                     <input type='text' name='homepage' id='homepage' style="width: 80%"
                     {if $org->getHomePage() != 'http://'}
                         value="{$org->getHomePage()}"
@@ -65,40 +65,40 @@
                     {/if}
                      /> 
                     
-                    <label for='email'><strong>E-Mail:</strong></label>
+                    <label for='email'><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}:</strong></label>
                     <input type='text' name='email' id='email' style="width: 80%"
                     {if $org->getEmail() != ''}
                          value="{$org->getEmail()}"
                     {else}
-                        placeholder='organisation@example.com'
+                        placeholder='{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_ORGANISATIONEXAMPLECOM)}'
                     {/if}
                     />   
                     
-                    <label for='biography'><strong>Biography:</strong></label>
+                    <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong></label>
                     <textarea name='biography' cols='40' rows='10' style="width: 80%" 
                     {if $org->getBiography() == ''}
-                        placeholder="Enter Organisation biography here."
+                        placeholder="{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_ENTER_ORGANISATION_BIOGRAPHY_HERE)}."
                     {/if}
-                    >{if $org->getBiography() != ''}{$org->getBiography()}{/if}</textarea>
+                    >{if $org->getBiography() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}{/if}</textarea>
                     
                 </td>
             </tr>
             <tr>                
                 <td colspan="2" style="font-weight: bold; text-align: center; padding-bottom: 10px">
                     <hr/>
-                    Regional Focus:
+                    {Localisation::getTranslation(Strings::COMMON_REGIONAL_FOCUS)}:
                 </td>
             </tr>  
             <tr align="center">
                 <td colspan="2">
                     <table> 
                         <thead>
-                            <th>Africa</th>
-                            <th>Asia</th>
-                            <th>Australia</th>
-                            <th>Europe</th>
-                            <th>North America</th>
-                            <th>South America</th>                       
+                            <th>{Localisation::getTranslation(Strings::COMMON_AFRICA)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_ASIA)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_AUSTRALIA)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_EUROPE)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_NORTH_AMERICA)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_SOUTH_AMERICA)}</th>                       
                         </thead>
                         <tr align="center">
                             <td style="width: 15%"><input id="africa" name="africa" type="checkbox" {if strstr($org->getRegionalFocus(), "Africa")} checked {/if} /></td>   
@@ -118,12 +118,12 @@
             <tr>
                 <td colspan="2" align="center">
                     <button type='submit' class='btn btn-primary' name='updateOrgDetails'>
-                        <i class="icon-refresh icon-white"></i> Update Organisation Details
+                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_UPDATE_ORGANISATION_DETAILS)}
                     </button>
                     {if isset($orgAdmin)}
                         <button type="submit" class="btn btn-inverse" value="{$org_id}" name="deleteId"
-                                onclick="return confirm('Are you sure you want to delete this organisation?');"> 
-                            <i class="icon-fire icon-white"></i> Delete Organisation
+                                onclick="return confirm('{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_1)}');"> 
+                            <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_DELETE_ORGANISATION)}
                         </button>
                     {/if}
                 </td>

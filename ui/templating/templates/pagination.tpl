@@ -14,7 +14,7 @@
         <a href="{urlFor name="$url_name" options="page_no.$previous"}" title="Previous">&lt;</a>
     </li>
     <li>
-        <a href="">Page {$current_page} of {$last_page}</a>
+        <a href="">{Localisation::getTranslation(Strings::PAGINATION_PAGE)} {$current_page} {Localisation::getTranslation(Strings::PAGINATION_OF)} {$last_page}</a>
     </li>
     {if $current_page < $last_page}
         {assign var="state" value=""}

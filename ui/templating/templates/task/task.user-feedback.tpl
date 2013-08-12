@@ -6,20 +6,20 @@
         {if $task->getTitle() != ''}
             {$task->getTitle()}
         {else}
-            Task {$task->getId()}
+            {Localisation::getTranslation(Strings::COMMON_TASK)} {$task->getId()}
         {/if}
         <small>
             <strong>
                 -
                 {assign var="type_id" value=$task->getTaskType()}
                 {if $type_id == TaskTypeEnum::SEGMENTATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation Task</span>                                    
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_SEGMENTATION_TASK)}</span>
                 {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation(Strings::COMMON_TRANSLATION_TASK)}</span>
                 {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation(Strings::COMMON_PROOFREADING_TASK)}</span>
                 {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation Task
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_DESEGMENTATION_TASK)}</span>
                 {/if}
             </strong>
         </small>  
@@ -29,9 +29,9 @@
 
     <table class="table table-striped" width="100%">
         <thead>
-            <th width="25%">Source</th>
-            <th width="25%">Target</th>
-            <th>Tags</th>        
+            <th width="25%">{Localisation::getTranslation(Strings::COMMON_SOURCE)}</th>
+            <th width="25%">{Localisation::getTranslation(Strings::COMMON_TARGET)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_TAGS)}</th>        
         </thead>
         <tbody>
             <tr>
@@ -45,7 +45,7 @@
                         <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                     {/foreach}
                 {else}
-                    <i>There are no tags associated with this project.</i>                    
+                    <i>{Localisation::getTranslation(Strings::COMMON_THERE_ARE_NO_TAGS_ASSOCIATED_WITH_THIS_PROJECT)}.</i>
                 {/if}
                 </td>
             </tr>
@@ -55,9 +55,9 @@
     <div class="well">
         <table width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
-            <th width="48%" align="left">Task Comment:<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}:<hr/></th>
             <th/>
-            <th width="48%" align="left">Project Description:<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_PROJECT_DESCRIPTION)}:<hr/></th>
             </thead>
             <tbody>
                 <tr>
@@ -66,7 +66,7 @@
                         {if $task->getComment() != ''}
                             {$task->getComment()}
                         {else}
-                           No comment has been added.
+                           {Localisation::getTranslation(Strings::COMMON_NO_COMMENT_HAS_BEEN_LISTED)}.
                         {/if}
                         </i>
                     </td>
@@ -76,7 +76,7 @@
                         {if $project->getDescription() != ''}
                             {$project->getDescription()}
                         {else}
-                            No description has been added.
+                            {Localisation::getTranslation(Strings::COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED)}.
                         {/if}
                         </i>
                     </td>
@@ -88,10 +88,10 @@
     
     <table class="table table-striped" width="100%">
         <thead>
-            <th>Organisation</th>
-            <th>Deadline</th>
-            <th>Claimed Date</th> 
-            <th>Claimed By</th> 
+            <th>{Localisation::getTranslation(Strings::COMMON_ORGANISATION)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_CLAIMED_DATE)}</th> 
+            <th>{Localisation::getTranslation(Strings::COMMON_CLAIMED_BY)}</th> 
         </thead>
         <tbody>            
             <tr>
@@ -111,24 +111,24 @@
     <p style="margin-bottom: 40px"/>  
 
     <div class="well">
-        <strong>Organisation Feedback:</strong><hr/>    
+        <strong>{Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_ORGANISATION_FEEDBACK)}</strong><hr/>    
         <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" 
-                action="{urlFor name="task-user-feedback" options="task_id.{$task->getId()}"}">
-            <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="You can provide direct feedback to the organisation who owns this task here. If you have accidentally claimed this task or are unable to complete it, you can also provide the reasons for this decision in this form."></textarea>                    
+                action="{urlFor name="task-user-feedback" options="task_id.{$task->getId()}"}" accept-charset="utf-8">
+            <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_0)} {Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_1)}."></textarea>
             <p style="margin-bottom:30px;"/> 
 
             <span style="float: left; position: relative;">
                 <button type="submit" value="1" name="revokeTask" class="btn btn-inverse">
-                    <i class="icon-remove icon-white"></i> Unclaim Task & Submit Feedback
+                    <i class="icon-remove icon-white"></i> {Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_2)}
                 </button>
             </span>
             <span style="float: right; position: relative;">
 
                 <button type="submit" value="Submit" name="submit" class="btn btn-success">
-                    <i class="icon-upload icon-white"></i> Submit Feedback
+                    <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_SUBMIT_FEEDBACK)}
                 </button>        
                 <button type="reset" value="Reset" name="reset" class="btn btn-primary">
-                    <i class="icon-repeat icon-white"></i> Reset
+                    <i class="icon-repeat icon-white"></i> {Localisation::getTranslation(Strings::COMMON_RESET)}
                 </button>
             </span>
         </form>

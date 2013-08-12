@@ -99,35 +99,16 @@ class Upload {
 
     public static function apiSaveFile($task, $user_id, $file, $filename, $version=null)
     {
-        $map = array(
-             "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
-            ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
-            ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
-            ,"pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-            ,"sldx" => "application/vnd.openxmlformats-officedocument.presentationml.slide"
-            ,"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ,"dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
-            ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
-            ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
-        );    
+        $taskFileMime = IO::detectMimeType($file, $filename);        
+        $projectFileInfo = ProjectDao::getProjectFileInfo($task->getProjectId());
+        $projectFileMime = $projectFileInfo->getMime();
         
-        $mime = null;
-        $extension = explode(".", $filename);
-        $extension = $extension[count($extension)-1];
-        
-        if(array_key_exists($extension, $map)) {
-            $mime = $map["$extension"];
-        } else {
-            $finfo = new finfo(FILEINFO_MIME_TYPE); 
-            $mime= $finfo->buffer($file);
-        }
-        
-        
+        if($taskFileMime != $projectFileMime) throw new SolasMatchException("Invalid file content.", HttpStatusEnum::BAD_REQUEST);
+       
         if (is_null($version)){
-            $version = TaskDao::recordFileUpload($task->getId(), $filename, $mime, $user_id);
+            $version = TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id);
         } else {
-            $version = TaskDao::recordFileUpload($task->getId(), $filename, $mime, $user_id, $version);
+            $version = TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id, $version);
         }
         $upload_folder     = self::absoluteFolderPathForUpload($task, $version);
         if (!self::folderPathForUploadExists($task, $version)) {

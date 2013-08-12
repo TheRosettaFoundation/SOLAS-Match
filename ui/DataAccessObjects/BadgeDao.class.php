@@ -1,11 +1,10 @@
 <?php
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/BaseDao.php";
 
-class BadgeDao
+class BadgeDao extends BaseDao
 {
-    private $client;
-    private $siteApi;
 
     public function __construct()
     {

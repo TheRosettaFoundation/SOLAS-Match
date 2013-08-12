@@ -1,5 +1,6 @@
 <?php
 
+include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/models/Language.php";
 require_once __DIR__."/../../Common/models/Country.php";
 
@@ -58,6 +59,33 @@ class Languages {
     {
         $languages = null;
         if ($result = PDOWrapper::call("getActiveLanguages", "")) {
+            $languages = array();
+            foreach ($result as $row) {
+                $languages[] = ModelFactory::buildModel("Language", $row);
+            }
+        }
+        return $languages;
+    }
+    
+    
+    
+    
+    public static function getActiveSourceLanguages()
+    {
+        $languages = null;
+        if ($result = PDOWrapper::call("getActiveSourceLanguages", "")) {
+            $languages = array();
+            foreach ($result as $row) {
+                $languages[] = ModelFactory::buildModel("Language", $row);
+            }
+        }
+        return $languages;
+    }
+    
+    public static function getActiveTargetLanguages()
+    {
+        $languages = null;
+        if ($result = PDOWrapper::call("getActiveTargetLanguages", "")) {
             $languages = array();
             foreach ($result as $row) {
                 $languages[] = ModelFactory::buildModel("Language", $row);

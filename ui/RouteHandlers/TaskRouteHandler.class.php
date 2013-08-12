@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__.'/../../api/lib/IO.class.php';
+require_once __DIR__."/../../Common/lib/SolasMatchException.php";
+
 class TaskRouteHandler
 {
     public function init()
@@ -22,7 +25,7 @@ class TaskRouteHandler
         $app->get("/task/:task_id/download-file-user", array($middleware, "authUserIsLoggedIn")
         , array($this, "downloadTask"))->name("download-task");
 
-        $app->get("/task/:task_id/claim", array($middleware, "authUserIsLoggedIn")
+        $app->get("/task/:task_id/claim", array($middleware, "isBlackListed")
         , array($this, "taskClaim"))->via("POST")->name("task-claim-page");
 
         $app->get("/task/:task_id/claimed", array($middleware, "authenticateUserForTask")
@@ -98,7 +101,7 @@ class TaskRouteHandler
             $top = 0;
         } elseif ($top > count($archived_tasks) - 1) {
             $top = count($archived_tasks) - 1; 
-        }   
+        }
         
         if ($bottom < 0) {
             $bottom = 0;
@@ -183,17 +186,6 @@ class TaskRouteHandler
         $taskDao = new TaskDao();
 
         $task = $taskDao->getTask($task_id);
-        if (!is_object($task)) {
-            header("HTTP/1.0 404 Not Found");
-            die;
-        }
-
-        $user_id = UserSession::getCurrentUserID();
-        if (is_null($user_id)) {
-            $app->flash("error", "Login required to access page");
-            $app->redirect($app->urlFor("login"));
-        }   
-        
         $latest_version = $taskDao->getTaskVersion($task_id);
         $this->downloadTaskVersion($task_id, $latest_version);
     }
@@ -208,9 +200,9 @@ class TaskRouteHandler
         
         $taskType = TemplateHelper::getTaskTypeFromId($task->getTaskType());
         if($result = $taskDao->archiveTask($task_id, $user_id)) {
-            $app->flash("success", "You have successfully archived the <b>$taskType Task {$task->getTitle()}</b>.");
+            $app->flash("success", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_1), $taskType, $task->getTitle()));
         } else {
-            $app->flash("error",  "There was an error archiving the <b>$taskType Task {$task->getTitle()}</b>.");
+            $app->flash("error",  sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_2), $taskType, $task->getTitle()));
         }    
              
         $app->redirect($ref = $app->request()->getReferrer());
@@ -349,8 +341,6 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-
             $uploadError = false;
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
@@ -362,11 +352,10 @@ class TaskRouteHandler
             if (!$uploadError) {
                 try {
                     $filedata = file_get_contents($_FILES[$fieldName]['tmp_name']);
-                    $errorMessage = $taskDao->saveTaskFile($taskId, $_FILES[$fieldName]['name'],
-                            $userId, $filedata);
+                    $taskDao->saveTaskFile($taskId, $userId, $filedata);
                 } catch (Exception  $e) {
                     $uploadError = true;
-                    $errorMessage = "File error: " . $e->getMessage();
+                    $errorMessage = $e->getMessage();
                 }
             }
 
@@ -426,15 +415,20 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();///never again cast an array to an object.
+            $post = $app->request()->post();
             try {
                 TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
                 $projectFile = $projectDao->getProjectFileInfo($project->getId());
+                $projectFileMimeType = $projectFile->getMime();
                 $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
+                
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
+                $fileUploadMime = IO::detectMimeType(file_get_contents($_FILES[$fieldName]["tmp_name"]), $_FILES[$fieldName]["name"]);
 
-                if(!strcasecmp($fileUploadType,$projectFileType)===0) {
-                    throw new Exception("The file extension differs from the originally downloaded file. Please upload as .$projectFileType!");
+                if(strcasecmp($fileUploadType,$projectFileType) != 0) {
+                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_3), $projectFileType));
+                } else if($fileUploadMime != $projectFileMimeType) {
+                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_4), $projectFileType, $projectFileType));
                 }
             } catch (Exception $e) {
                 $errorMessage = $e->getMessage();
@@ -442,16 +436,16 @@ class TaskRouteHandler
         
             if (is_null($errorMessage)) {
                 try {
-                    $filedata = file_get_contents($_FILES["fileUpload"]["tmp_name"]);
+                    $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
                     
-                    if ($post->submit == 'XLIFF') {
+                    if ($post['submit'] == 'XLIFF') {
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
-                    } else if ($post->submit == 'submit') {
+                    } else if ($post['submit'] == 'submit') {
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata);
                     }
                 
                 } catch (Exception  $e) {
-                    $errorMessage = "File error: " . $e->getMessage();
+                    $errorMessage = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_5) . $e->getMessage();
                 }
             }
 
@@ -599,9 +593,9 @@ class TaskRouteHandler
                 if (isset($post['word_count']) && ctype_digit($post['word_count'])) {
                     $task->setWordCount($post['word_count']);                
                 } else if (isset($post['word_count']) && $post['word_count'] != "") {
-                    $word_count_err = "Word Count must be numeric";
+                    $word_count_err = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_6);
                 } else {
-                    $word_count_err = "Word Count cannot be blank";
+                    $word_count_err = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_7);
                 }
             }
 
@@ -610,7 +604,7 @@ class TaskRouteHandler
                     $date = date("Y-m-d H:i:s", $validTime);  
                     $task->setDeadline($date);
                 } else {
-                    $deadlineError = "Invalid date/time format!";
+                    $deadlineError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_8);
                 }
             }
             
@@ -667,7 +661,7 @@ class TaskRouteHandler
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
                 } else {
                     //A deadlock occured
-                    $deadlockError = "A deadlock has occured, please check your task prerequisites.";
+                    $deadlockError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_9);
                     //Reset prereqs so as not to crash second run of the graph builder
                     $taskPreReqIds[$task->getId()] = $oldPreReqs;
                 }
@@ -701,8 +695,6 @@ class TaskRouteHandler
                 $currentRow = $previousRow;
                 $previousRow = array();
             }
-        } else {
-            echo "<p>Graph building failed</p>";
         }
 
         $numTaskTypes = Settings::get("ui.task_types");
@@ -762,10 +754,10 @@ class TaskRouteHandler
         
          
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if(isset($post->published)) {
-                if($post->published) {                     
+            if(isset($post['published'])) {
+                if($post['published']) {                     
                     $task->setPublished(1);                    
                 } else {
                     $task->setPublished(0);                    
@@ -774,24 +766,20 @@ class TaskRouteHandler
                 
             }
 
-            if (isset($post->track)) {
-                if ($post->track == "Ignore") {
+            if (isset($post['track'])) {
+                if ($post['track'] == "Ignore") {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", 
-                                "You are now tracking this task and will receive email notifications
-                                when its status changes.");
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_10));
                     } else {
-                        $app->flashNow("error", "Unable to register for notifications for this task.");
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_11));
                     }
                 } else {
                     $response = $userDao->trackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", 
-                                "You are no longer tracking this task and will receive no
-                                further emails.");
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_12));
                     } else {
-                        $app->flashNow("error", "Unable to unregister for this notification.");
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_13));
                     }
                 }
             }
@@ -856,7 +844,7 @@ class TaskRouteHandler
             if(isset($post['title'])) {
                 $task->setTitle($post['title']);
             } else {
-                $titleError = "Title must not be blank";
+                $titleError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_14);
             }
 
             if(isset($post['comment'])) $task->setComment($post['comment']);            
@@ -878,9 +866,9 @@ class TaskRouteHandler
             if(ctype_digit($post['word_count'])) {
                 $task->setWordCount($post['word_count']);
             } else if($post['word_count'] != "") {
-                $wordCountError = "Word Count must be numeric";
+                $wordCountError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_6);
             } else {
-                $wordCountError = "Word Count cannot be blank";
+                $wordCountError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_7);
             }
 
             if(isset($post['deadline'])) {
@@ -888,11 +876,15 @@ class TaskRouteHandler
                     $date = date("Y-m-d H:i:s", $validTime);  
                     $task->setDeadline($date);
                 } else {
-                    $deadlineError = "Invalid date/time format!";
+                    $deadlineError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_8);
                 }
             }
 
-            if(isset($post['published'])) $task->setPublished("1");
+            if(isset($post['published'])) {
+                $task->setPublished(1);
+            } else {
+                $task->setPublished(0);
+            }
 
             if(is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 $newTask = $taskDao->createTask($task);
@@ -900,10 +892,9 @@ class TaskRouteHandler
                 
                 $upload_error = null;                
                 try {
-                    $upload_error = $taskDao->saveTaskFile($newTaskId, $projectDao->getProjectFileInfo($project_id)->getFilename(),
-                            $user_id, $projectDao->getProjectFile($project_id));
+                    $upload_error = $taskDao->saveTaskFile($newTaskId, $user_id, $projectDao->getProjectFile($project_id));
                 } catch (Exception  $e) {
-                    $upload_error = "File error: " . $e->getMessage();
+                    $upload_error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_5) . $e->getMessage();
                 }
                 
                 if(isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
@@ -998,32 +989,42 @@ class TaskRouteHandler
         if ($app->request()->isPost()) {
             $post = $app->request()->post(); 
             
-            $errors = array(); 
+            $fileInfo = $projectDao->getProjectFileInfo($project->getId());            
+            $canonicalExtension = explode(".", $fileInfo->getFileName());
+            $canonicalExtension = strtolower($canonicalExtension[count($canonicalExtension)-1]);    
             
+            $errors = array();             
             $fileNames = array();
             $fileHashes = array();
             foreach($_FILES as $file) {
+                $extension = explode(".", $file["name"]);
+                $extension = strtolower($extension[count($extension)-1]);                
+                if($extension != $canonicalExtension) {
+                    $errors["incorrectExtension"] = "The extension (<strong>.$extension</strong>) of one of your files does not match the original project file extension (<strong>.$canonicalExtension</strong>).";
+                    break;
+                }
+                
                 if($file["error"] != UPLOAD_ERR_OK) {
-                    $errors["missingFile"] = "You have not selected a <b>Segmented File</b> to upload.";
+                    $errors["missingFile"] = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_15);
                     break;
                 }
                 if(!in_array($file["name"],$fileNames)) {
                     $fileNames[] = $file["name"];
                 } else {
-                    $errors["uniqueFileName"] = "Each <b>Segmented File</b> that you upload must have a <b>unique file name.</b>";
+                    $errors["uniqueFileName"] = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_16);
                     break;
                 }
                     
                 if(!in_array(($hash=md5_file($file["tmp_name"])), $fileHashes)) {
                     $fileHashes[] = $hash;
                 } else {
-                    $errors["duplicateFileContent"] = "You have selected <b>one or more</b> files with the exact same <b>file content</b>.";
+                    $errors["duplicateFileContent"] = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_17);
                     break;
                 }
             }          
             
             if(!isset($post["translation_0"]) && !isset($post["proofreading_0"])) {
-                $errors["taskTypeSet"] = "At least one task type such as <b>Translation</b> and/or <b>Proofreading</b> must be set.";
+                $errors["taskTypeSet"] = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_18);
             }
             
             if(empty($errors)) {
@@ -1031,7 +1032,7 @@ class TaskRouteHandler
                 $upload_error = false;      
                 $translationTaskIds = array();
                 $proofreadTaskIds = array();
-                for($i=0; $i < $segmentationValue && !$upload_error; $i++) {                    
+                for($i=0; $i < $segmentationValue; $i++) {                    
                     try {
                         TemplateHelper::validateFileHasBeenSuccessfullyUploaded("segmentationUpload_".$i);
                         $taskModel = new Task();
@@ -1040,71 +1041,80 @@ class TaskRouteHandler
                             $taskModel->setTaskType(TaskTypeEnum::TRANSLATION);
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             $createdTranslation = $taskDao->createTask($taskModel);
+                            $translationTaskIds[] = $createdTranslation->getId();
                             try {                    
                                 $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);                    
-                                $error_message = $taskDao->saveTaskFile($createdTranslation->getId(),
-                                        urlencode($_FILES['segmentationUpload_'.$i]['name']), $user_id, $filedata);
+                                $taskDao->saveTaskFile($createdTranslation->getId(), $user_id, $filedata);                                
                             } catch (Exception  $e) {
                                 $upload_error = true;
-                                $error_message = "File error: {$e->getMessage()}";
+                                $errors["transTask$i"] = "<strong>File #$i:</strong> {$e->getMessage()}";                               
                             }                             
-                            $translationTaskIds[] = $createdTranslation->getId();                            
+                            
                         }
 
                         if(isset($post["proofreading_0"])) {
                             $taskModel->setTaskType(TaskTypeEnum::PROOFREADING);                         
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             $createdProofReading = $taskDao->createTask($taskModel);
+                            $proofreadTaskIds[] = $createdProofReading->getId();
                             try {                    
                                 $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
-                                $error_message = $taskDao->saveTaskFile($createdProofReading->getId(),
-                                        urlencode($_FILES['segmentationUpload_'.$i]['name']), $user_id, $filedata);
+                                $taskDao->saveTaskFile($createdProofReading->getId(), $user_id, $filedata);                                
                             } catch (Exception  $e) {
                                 $upload_error = true;
-                                $error_message = "File error: {$e->getMessage()}";
+                                $errors["proofTask$i"] = "<strong>File #$i:</strong> {$e->getMessage()}";
+                                $taskDao->deleteTask($createdProofReading->getId());
                             }   
-                            $proofreadTaskIds[] = $createdProofReading->getId();                           
+                                             
                         }
                     } catch (Exception $e) {
                         $upload_error = true;
-                        $file_upload_err = $e->getMessage();
+                        $error_message = $e->getMessage();
                     }
-                }            
-
-                $taskModel = new Task();
-                $this->setTaskModelData($taskModel, $project, $task);                       
-                $taskModel->setWordCount($task->getWordCount());
-                $taskModel->setTaskType(TaskTypeEnum::DESEGMENTATION);                         
-                $createdDesegmentation = $taskDao->createTask($taskModel);
-                $createdDesegmentationId = $createdDesegmentation->getId();
-
-                try {                    
-                    $filedata = file_get_contents($_FILES["segmentationUpload_0"]["tmp_name"]);                    
-                    $error_message = $taskDao->saveTaskFile($createdDesegmentation->getId(),
-                                    urlencode($_FILES['segmentationUpload_0']['name']), $user_id, $filedata);
-                } catch (Exception  $e) {
-                    $upload_error = true;
-                    $error_message = "File error: " . $e->getMessage();
                 }  
                 
-                $task->setTaskStatus(TaskStatusEnum::COMPLETE);
-                $taskDao->updateTask($task);
-                for($i=0; $i < $segmentationValue; $i++) {
-                    if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {   
-                        $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
-                        $taskDao->addTaskPreReq($proofreadTaskIds[$i], $translationTaskIds[$i]);
-                        $taskDao->addTaskPreReq($createdDesegmentationId, $proofreadTaskIds[$i]);
+                if(!$upload_error) {
+
+                    $taskModel = new Task();
+                    $this->setTaskModelData($taskModel, $project, $task);
+                    $taskModel->setWordCount($task->getWordCount());
+                    $taskModel->setTaskType(TaskTypeEnum::DESEGMENTATION);                         
+                    $createdDesegmentation = $taskDao->createTask($taskModel);
+                    $createdDesegmentationId = $createdDesegmentation->getId();
+
+                    try {                    
+                        $filedata = file_get_contents($_FILES["segmentationUpload_0"]["tmp_name"]);                    
+                        $error_message = $taskDao->saveTaskFile($createdDesegmentation->getId(), $user_id, $filedata);
+                    } catch (SolasMatchException  $e) {
+                        $upload_error = true;
+                        $error_message = "File error: " . $e->getMessage();
+                    }  
+
+                    $task->setTaskStatus(TaskStatusEnum::COMPLETE);
+                    $taskDao->updateTask($task);
+                    for($i=0; $i < $segmentationValue; $i++) {
+                        if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {   
+                            $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
+                            $taskDao->addTaskPreReq($proofreadTaskIds[$i], $translationTaskIds[$i]);
+                            $taskDao->addTaskPreReq($createdDesegmentationId, $proofreadTaskIds[$i]);
+                        }
+                        if(!isset($post["translation_0"]) && isset($post["proofreading_0"])) {
+                            $taskDao->addTaskPreReq($proofreadTaskIds[$i], $task_id);
+                            $taskDao->addTaskPreReq($createdDesegmentationId, $proofreadTaskIds[$i]);
+                        }
+                        if(isset($post["translation_0"]) && !isset($post["proofreading_0"])) {   
+                            $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
+                            $taskDao->addTaskPreReq($createdDesegmentationId, $translationTaskIds[$i]);
+                        }
                     }
-                    if(!isset($post["translation_0"]) && isset($post["proofreading_0"])) {
-                        $taskDao->addTaskPreReq($proofreadTaskIds[$i], $task_id);
-                        $taskDao->addTaskPreReq($createdDesegmentationId, $proofreadTaskIds[$i]);
-                    }
-                    if(isset($post["translation_0"]) && !isset($post["proofreading_0"])) {   
-                        $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
-                        $taskDao->addTaskPreReq($createdDesegmentationId, $translationTaskIds[$i]);
-                    }
+                    $app->redirect($app->urlFor("task-review", array("task_id" => $task->getId())));
+                } else {                    
+                    if(!empty($translationTaskIds)) foreach($translationTaskIds as $taskId) $taskDao->deleteTask($taskId);
+                    if(!empty($proofreadTaskIds)) foreach($proofreadTaskIds as $taskId) $taskDao->deleteTask($taskId);                    
+                    $app->view()->appendData(array(
+                        "errors" => $errors
+                    )); 
                 }
-                $app->redirect($app->urlFor("task-review", array("task_id" => $task->getId())));
             } else {
                 $app->view()->appendData(array(
                     "errors" => $errors
@@ -1121,7 +1131,7 @@ class TaskRouteHandler
             "maxSegmentation"   => $maxSegments,
             "languages"         => $language_list,
             "countries"         => $countries,
-            "extra_scripts"     => $extraScripts
+            "extra_scripts"     => $extraScripts            
         ));
         
         $app->render("task/task-segmentation.tpl");
@@ -1148,35 +1158,26 @@ class TaskRouteHandler
         }
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-            if(isset($post->feedback)) {
+            $post = $app->request()->post();
+            if(isset($post['feedback'])) {
 
-                if ($post->feedback != "") {
-                    $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post->feedback);
+                if ($post['feedback'] != "") {
+                    $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
     
-                    $app->flashNow("success", "Feedback sent to 
-                            <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
-                            {$claimant->getDisplayName()}</a>.");
-                    if(isset($post->revokeTask) && $post->revokeTask) {
+                    $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_32), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
+                    if(isset($post['revokeTask']) && $post['revokeTask']) {
                         $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                         $taskDao->updateTask($task);
                         $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                         if($taskRevoke) {
-                            $app->flash("taskSuccess", "<b>Success</b> - The task 
-                                <a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>
-                                has been revoked from 
-                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
-                                {$claimant->getDisplayName()}</a>. This user will be notified by e-mail and provided with your feedback.");
+                            $app->flash("taskSuccess", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_19), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle(), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
                             $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
                         } else {
-                            $app->flashNow("error", "<b>Error</b> - Unable to revoke the task ".
-                                "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}\"</a>
-                                from <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $claimant->getId()))}\">
-                                {$claimant->getDisplayName()}</a>. Please try again later.");
+                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_20), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle(), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
                         }
                     }
                 } else {
-                    $app->flashNow("error", "The feedback field cannot be empty.");
+                    $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_21));
                 }
             }
         }
@@ -1210,27 +1211,22 @@ class TaskRouteHandler
         $task_tags = $taskDao->getTaskTags($task_id);
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
 
-            if(isset($post->feedback)) {
-                if ($post->feedback != '') {
-                    $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post->feedback);
-                    if(isset($post->revokeTask) && $post->revokeTask) {
+            if(isset($post['feedback'])) {
+                if ($post['feedback'] != '') {
+                    $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post['feedback']);
+                    if(isset($post['revokeTask']) && $post['revokeTask']) {
                         $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                         if($taskRevoke) {
-                            $app->flash("success", " The task ".
-                                  "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".
-                                  "has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.");
+                            $app->flash("success", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_22), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle()));
                             $app->redirect($app->urlFor("home"));
                         } else {
-                            $app->flashNow("error", " Unable to unclaim the task ".
-                                  "<a href=\"{$app->urlFor("task-view", array("task_id" => $task_id))}\">{$task->getTitle()}</a>".
-                                  ". Please try again later.");
+                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_22), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle()));
                         }
                     }
                 } else {
-                    $app->flashNow('error', 'Feedback cannot be empty, please fill in the feedback '.
-                            'field before continuing.');
+                    $app->flashNow('error', Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_24));
                 }
             }
         }
@@ -1308,7 +1304,7 @@ class TaskRouteHandler
         }
 
         if (count($reviews) > 0) {
-            $app->flashNow("info", "You have already submitted a review for this file.");
+            $app->flashNow("info", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_25));
         }
 
         if ($app->request()->isPost()) {
@@ -1335,7 +1331,7 @@ class TaskRouteHandler
                         if ($value > 0 && $value <= 5) {
                             $review->setCorrections($value);
                         } else {
-                            $error = "Corrections value must be between 1 and 5";
+                            $error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_26);
                         }
                     }
                     if (isset($post["grammar_$id"]) && ctype_digit($post["grammar_$id"])) {
@@ -1343,7 +1339,7 @@ class TaskRouteHandler
                         if ($value > 0 && $value <= 5) {
                             $review->setGrammar($value);
                         } else {
-                            $error = "Grammar value must be between 1 and 5";
+                            $error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_27);
                         }
                     }
                     if (isset($post["spelling_$id"]) && ctype_digit($post["spelling_$id"])) {
@@ -1351,7 +1347,7 @@ class TaskRouteHandler
                         if ($value > 0 && $value <= 5) {
                             $review->setSpelling($value);
                         } else {
-                            $error = "Spelling value must be between 1 and 5";
+                            $error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_28);
                         }
                     }
                     if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
@@ -1359,7 +1355,7 @@ class TaskRouteHandler
                         if ($value > 0 && $value <= 5) {
                             $review->setConsistency($value);
                         } else {
-                            $error = "Consistency value must be between 1 and 5";
+                            $error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_29);
                         }
                     }
                     if (isset($post["comment_$id"]) && $post["comment_$id"] != "") {
@@ -1368,7 +1364,7 @@ class TaskRouteHandler
 
                     if ($review->getProjectId() != null && $review->getUserId() != null && $error == null) {
                         if (!$taskDao->submitReview($review)) {
-                            $error = "Unable to submit review for {$pTask->getTitle()}, please try again later";
+                            $error = sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_30), $pTask->getTitle());
                         }
                     } else {
                         if ($error != null) {
@@ -1377,7 +1373,7 @@ class TaskRouteHandler
                     }
                 }
                 if ($error == null) {
-                    $app->flash("success", "Review of task {$pTask->getTitle()} has been submitted successfully");
+                    $app->flash("success", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_31), $pTask->getTitle()));
                     $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
                 } else {
                     $app->flashNow("error", $error);

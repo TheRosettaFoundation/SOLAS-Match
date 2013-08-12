@@ -1,24 +1,20 @@
 {include file="header.tpl"}
 
 <h1 class="page-header">
-    Email Verification <small>You can complete registration here</small>
+    {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_EMAIL_VERIFICATION)} <small>{Localisation::getTranslation(Strings::EMAIL_VERIFICATION_0)}</small>
 </h1>
 
 <p>
-    Welcome to SOLAS Match. Once you click the button below you will have access to
-    the site. You can log in any time by going to the login page (link on the right
-    of the status bar). Once logged in you can view tasks on the task stream. If
-    there is a task you are interested in you can claim it to start working on it.
+    {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_WELCOME_TO)} {Settings::get('site.title')}. {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_1)}
+    {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_2)} {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_3)} {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_4)}
 </p>
 
 <p>
-    If you are an organisation representative then you can request membership of your
-    organisation by visiting the organisation's public profile. If your organisation
-    does not yet exist on the system you can create it on you public profile.
+    {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_5 EMAIL_VERIFICATION_6)}
 </p>
 
 <form method='post' action="{urlFor name="email-verification" options="uuid.$uuid"}">
-    <input type="submit" name="verify" class="btn btn-success" value="Finish Registration" />
+    <input type="submit" name="verify" class="btn btn-success" value="{Localisation::getTranslation(Strings::EMAIL_VERIFICATION_FINISH_REGISTRATION)}" />
 </form>
 
 {include file="footer.tpl"}

@@ -55,7 +55,7 @@ class UserRouteHandler
         $projectDao = new ProjectDao();
         $orgDao = new OrganisationDao();
         $userDao = new UserDao(); 
-                
+
         $use_statistics = Settings::get("site.stats"); 
         if ($use_statistics == 'y') {
             $statsDao = new StatisticsDao();
@@ -81,80 +81,12 @@ class UserRouteHandler
 
         $current_user_id = UserSession::getCurrentUserID();
         
-        if ($current_user_id == null) {
-            $tasks = $taskDao->getTopTasks(10);
-            for ($i = 0; $i < count($tasks); $i++) {
-                $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
-                $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
-            }
-
-            $app->view()->appendData(array(
-                "tasks" => $tasks
-            ));
-
-        } else {
-            $taskTypes = array();
-            $taskTypes[TaskTypeEnum::SEGMENTATION] = "Segmentation";
-            $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
-            $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
-            $taskTypes[TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
-
-            $languageList = $langDao->getActiveLanguages();
-
-            $filter = array();
-            $selectedType = "";
-            $selectedSource = "";
-            $selectedTarget = "";
-            if ($app->request()->isPost()) {
-                $post = (object) $app->request()->post();
-
-                if (isset($post->taskType) && $post->taskType != '') {
-                    $selectedType = $post->taskType;
-                    $filter['taskType'] = $post->taskType;
-                }
-
-                if (isset($post->sourceLanguage) && $post->sourceLanguage != '') {
-                    $selectedSource = $post->sourceLanguage;
-                    $filter['sourceLanguage'] = $post->sourceLanguage;
-                }
-
-                if (isset($post->targetLanguage) && $post->targetLanguage != '') {
-                    $selectedTarget = $post->targetLanguage;
-                    $filter['targetLanguage'] = $post->targetLanguage;
-                }
-            }
-
-            $tasks = $userDao->getUserTopTasks($current_user_id, false, 10, $filter);
-            for ($i = 0; $i < count($tasks); $i++) {
-                $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
-                $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
-            }
-            
-            $app->view()->appendData(array(
-                "taskTypes" => $taskTypes,
-                "languageList" => $languageList,
-                "selectedType" => $selectedType,
-                "selectedSource" => $selectedSource,
-                "selectedTarget" => $selectedTarget,
-                "tasks" => $tasks
-            ));
-            
+        if ($current_user_id != null) {
             $user_tags = $userDao->getUserTags($current_user_id);
             $app->view()->appendData(array(
                         "user_tags" => $user_tags
             ));
         }
-        
-        $numTaskTypes = Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        
-        for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
-        }  
-        
-        $app->view()->appendData(array(
-                     "taskTypeColours" => $taskTypeColours
-        ));
         
         $app->render("index.tpl");
     }
@@ -185,24 +117,23 @@ class UserRouteHandler
         $error = null;
         $warning = null;
         if (isValidPost($app)) {
-            $post = (object) $app->request()->post();
-            
-            if (!TemplateHelper::isValidEmail($post->email)) {
-                $error = "The email address you entered was not valid. Please cheak for typos and try again.";
-            } elseif (!TemplateHelper::isValidPassword($post->password)) {
-                $error = "You didn\"t enter a password. Please try again.";
-            } elseif ($user = $userDao->getUserByEmail($post->email)) {
+            $post = $app->request()->post();
+            $temp =$post['email'].substr(Settings::get("session.site_key"),0,20);
+                UserSession::clearCurrentUserID();
+//                UserSession::setHash(md5($temp));
+            if (!TemplateHelper::isValidEmail($post['email'])) {
+                $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_1);
+            } elseif (!TemplateHelper::isValidPassword($post['password'])) {
+                $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_2);
+            } elseif ($user = $userDao->getUserByEmail($post['email'])) {
                 if ($return = $userDao->isUserVerified($user->getId())) {
-                    $error = "You are already a verified user. Please "
-                            ."<a href=\"{$app->urlFor("login")}\">log in</a>.";
+                    $error = sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_3), $app->urlFor("login"));
                 }
             }
             
             if (is_null($error)) {
-                $userDao->register($post->email, $post->password);
-                $app->flashNow("success", "A verification email has been sent to the email address you registered with. "
-                            ."Please follow the link in that email to finish registration. Once you have verified your "
-                            ."email address you can log in <a href=\"{$app->urlFor("login")}\">here</a>.");
+                $userDao->register($post['email'], $post['password']);
+                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_4), $app->urlFor("login")));
             }
         }
         if ($error !== null) {
@@ -222,7 +153,7 @@ class UserRouteHandler
         $user = $userDao->getRegisteredUser($uuid);
 
         if (is_null($user)) {
-            $app->flash("error", "Invalid registration id. Please try to register again");
+            $app->flash("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_5));
             $app->redirect($app->urlFor("home"));
         }
 
@@ -231,7 +162,8 @@ class UserRouteHandler
             if (isset($post['verify'])) {
                 $userDao->finishRegistration($user->getId());
                 UserSession::setSession($user->getId());
-                $app->flash("success", "Registration complete");
+//                UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+                $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_6));
                 $app->redirect($app->urlFor("home"));
             }
         }
@@ -248,33 +180,31 @@ class UserRouteHandler
         
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
-            $app->flash("error", "Incorrect Unique ID. Are you sure you copied the URL correctly?");
+            $app->flash("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_7));
             $app->redirect($app->urlFor("home"));
         }
         
         $user_id = $reset_request->getUserId();
         $app->view()->setData("uid", $uid);
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
 
-            if (isset($post->new_password) && TemplateHelper::isValidPassword($post->new_password)) {
-                if (isset($post->confirmation_password) && 
-                        $post->confirmation_password == $post->new_password) {
+            if (isset($post['new_password']) && TemplateHelper::isValidPassword($post['new_password'])) {
+                if (isset($post['confirmation_password']) && 
+                        $post['confirmation_password'] == $post['new_password']) {
 
-                    $response = $userDao->resetPassword($post->new_password, $uid);
+                    $response = $userDao->resetPassword($post['new_password'], $uid);
                     if ($response) {
-                        $app->flash("success", "You have successfully changed your password");
+                        $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_8));
                         $app->redirect($app->urlFor("home"));
                     } else {
-                        $app->flashNow("error", "Unable to change Password");
+                        $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_9));
                     }
                 } else {
-                    $app->flashNow("error", "The passwords entered do not match.
-                                        Please try again.");
+                    $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_10));
                 }
             } else {
-                $app->flashNow("error", "Please check the password provided, and try again.
-                                It was not found to be valid.");
+                $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_11));
             }
         }        
         $app->render("user/password-reset.tpl");
@@ -286,33 +216,30 @@ class UserRouteHandler
         $userDao = new UserDao();
         
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-            if (isset($post->password_reset)) {
-                if (isset($post->email_address) && $post->email_address != '') {
-                    $user = $userDao->getUserByEmail($post->email_address); 
+            $post = $app->request()->post();
+            if (isset($post['password_reset'])) {
+                if (isset($post['email_address']) && $post['email_address'] != '') {
+                    $user = $userDao->getUserByEmail($post['email_address']); 
                     if ($user) {  
                         $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($user->getId());
                         $message = "";
                         if (!$hasUserRequestedPwReset) {
                             //send request
                             $userDao->requestPasswordReset($user->getId());
-                            $app->flash("success", "Password reset request sent. Check your email
-                                                    for further instructions.");
+                            $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_12));
                             $app->redirect($app->urlFor("home"));
                         } else {
                             //get request time
                             $response = $userDao->getPasswordResetRequestTime($user->getId());
-                            $app->flashNow("info", "Password reset request was already sent on $response.
-                                                     Another email has been sent to your contact address.
-                                                     Follow the link in this email to reset your password");
+                            $app->flashNow("info", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_13), $response);
                             //Send request
                             $userDao->requestPasswordReset($user->getId());
                         }
                     } else {
-                        $app->flashNow("error", "Please enter a valid email address");
+                        $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_14));
                     }
                 } else {
-                    $app->flashNow("error", "Please enter a valid email address");
+                    $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_14));
                 }
             }
         }
@@ -350,44 +277,29 @@ class UserRouteHandler
                 $post = $app->request()->post();
 
                 if (isset($post['login'])) {    
-                    $user = null;
-                    if($user = $userDao->getUserByEmail($post['email'])) {
-                        $adminDao = new AdminDao();
-                        $isUserBanned = $adminDao->isUserBanned($user->getId());
-                        
-                        if($isUserBanned) {
-                            throw new InvalidArgumentException("Sorry, this user account has been banned.");
-                        } else {
-                            if($user = $userDao->login($post['email'], $post['password'])) {
-                                UserSession::setSession($user->getId());
-                            } else {
-                                throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
-                                    Please check the credentials used and try again.");
-                            } 
-                        }
-                    } else {
-                        throw new InvalidArgumentException("Sorry, the username or password entered is incorrect.
-                            Please check the credentials used and try again.");
-                    }                    
-                    $app->redirect($app->urlFor("home"));
+                    if($user = $userDao->login($post['email'], $post['password'])) {
+                        UserSession::setSession($user->getId());
+//                        UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+                    }                   
+                    $request = UserSession::getReferer();
+                    UserSession::clearReferer();
+                    $app->redirect(strpos($request, $app->request()->getRootUri()) ? $request : $app->urlFor("home"));   
                     
                 } elseif (isset($post['password_reset'])) {
                     $app->redirect($app->urlFor("password-reset-request"));
                 }
             } elseif ($app->request()->isPost() || $openid->mode) {
                 if($this->openIdLogin($openid, $app)){
-                   $app->redirect($app->urlFor("home"));
+                    $request = UserSession::getReferer();
+                    UserSession::clearReferer();
+                    $app->redirect(strpos($request, $app->request()->getRootUri()) ? $request : $app->urlFor("home"));                    
                 }  else {
                     $app->redirect($app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID())));
                 }
             }
             $app->render("user/login.tpl");
-        } catch (InvalidArgumentException $e) {
-            $error = "<p>Unable to log in. Please check your email and password.";
-            $error .= " <a href=\"{$app->urlFor("login")}\">Try logging in again</a>";
-            $error .= " or <a href=\"{$app->urlFor("register")}\">register</a> for an account.</p>";
-            $error .= "<b>{$e->getMessage()}</b></p>";
-            
+        } catch (SolasMatchException $e) {
+            $error = sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_15), $app->urlFor("login"), $app->urlFor("register"), $e->getMessage());            
             $app->flash("error", $error);
             $app->redirect($app->urlFor("login"));
             echo $error;
@@ -406,24 +318,29 @@ class UserRouteHandler
                 echo $e->getMessage();
             }
         } elseif ($openid->mode == "cancel") {
-            throw new InvalidArgumentException("User has canceled authentication!");
+            throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_16));
         } else {
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
                 $userDao = new UserDao();
-                $user = $userDao->getUserByEmail($retvals['contact/email']);
+                $temp =$retvals['contact/email'].substr(Settings::get("session.site_key"),0,20);
+                UserSession::clearCurrentUserID();
+//                UserSession::setHash(md5($temp));
+                $user = $userDao->openIdLogin($retvals['contact/email'],md5($temp));
                 if(is_array($user)) $user = $user[0];                    
                 if(is_null($user)) {
                     $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));
                     if(is_array($user)) $user = $user[0]; 
                     UserSession::setSession($user->getId());
+//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                     return false;
                 }
                 $adminDao = new AdminDao();
                 if(!$adminDao->isUserBanned($user->getId())) {
                     UserSession::setSession($user->getId());
+//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 } else {
-                    $app->flash('error', "This user account has been banned.");
+                    $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
                     $app->redirect($app->urlFor('home'));
                 }
                 
@@ -435,160 +352,21 @@ class UserRouteHandler
     public static function userPrivateProfile($userId)
     {
         $app = Slim::getInstance();
+        CacheHelper::unCache(CacheHelper::GET_USER.$userId);
         
         $userDao = new UserDao();
         $loggedInuser = $userDao->getUser(UserSession::getCurrentUserID());
         $user = $userDao->getUser($userId);
-        $userPersonalInfo = $userDao->getPersonalInfo($userId);
         
         if (!is_object($user)) {
-            $app->flash("error", "Login required to access page");
+            $app->flash("error", Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
             $app->redirect($app->urlFor("login"));
         }
 
-        $languageDao = new LanguageDao();
-        $countryDao = new CountryDao();
-        $languages=null;
-        $languages=$languageDao->getLanguages();
-
-        $countries =null;
-        $countries=$countryDao->getCountries();
-        
-        $currentUserBadges = $userDao->getUserBadges($userId);                    
-        $badgeIds = array();
-        if($currentUserBadges){
-            foreach($currentUserBadges as $currentBadge) {
-                $badgeIds[] = $currentBadge->getId();
-            }
-        }  
-
-        
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            $personalInfo = new UserPersonalInformation(); 
-            $personalInfo->setUserId($userId);
-            
-            if(isset($post["deleteUser"]) && $post["deleteUser"] != "") {
-                $userDao = new UserDao();
-                $userDao->deleteUser($post["deleteUser"]);
-                UserSession::destroySession();
-                $app->redirect($app->urlFor("home"));
-                
-            } else {
-
-                if(isset($post["displayName"])) $user->setDisplayName($post["displayName"]);
-                if(isset($post["biography"])) $user->setBiography($post["biography"]);
-
-                if(isset($post["firstName"])) $personalInfo->setFirstName($post["firstName"]);
-                if(isset($post["lastName"])) $personalInfo->setLastName($post["lastName"]);
-                if(isset($post["mobileNumber"])) $personalInfo->setMobileNumber($post["mobileNumber"]);
-                if(isset($post["businessNumber"])) $personalInfo->setBusinessNumber($post["businessNumber"]);
-                if(isset($post["sip"])) $personalInfo->setSip($post["sip"]);
-                if(isset($post["jobTitle"])) $personalInfo->setJobTitle($post["jobTitle"]);
-                if(isset($post["address"])) $personalInfo->setAddress($post["address"]);
-                if(isset($post["city"])) $personalInfo->setCity($post["city"]);
-                if(isset($post["country"])) $personalInfo->setCountry($post["country"]);
-
-                $userInfo = $userDao->getPersonalInfo($userId);
-                if($userInfo) {
-                    $personalInfo->setId($userInfo->getId());
-                    $userDao->updatePersonalInfo($userId, $personalInfo);
-                } else {
-                    $userDao->createPersonalInfo($userId, $personalInfo);
-                }
-
-                $nativeLang = $post["nativeLanguage"];
-                $langCountry = $post["nativeCountry"];
-                if (isset($nativeLang) && isset($langCountry)) {
-                    $nativeLocal = new Locale();
-
-                    $nativeLocal->setLanguageCode($nativeLang);
-                    $nativeLocal->setCountryCode($langCountry);
-                    $user->setNativeLocale($nativeLocal);
-
-                    $badge_id = BadgeTypes::NATIVE_LANGUAGE;
-                    $userDao->addUserBadgeById($userId, $badge_id);               
-                }            
-
-                if(isset($post["displayName"]) && isset($post["nativeLanguage"]) && isset($post["nativeCountry"])) {
-                    $badgeId = BadgeTypes::PROFILE_FILLER;
-                    $userDao->addUserBadgeById($userId, $badgeId);               
-                }
-
-                $currentSecondaryLocales = $userDao->getSecondaryLanguages($userId);
-
-                $csl= array();
-                if($currentSecondaryLocales){
-                    foreach($currentSecondaryLocales as $currLocale) {
-                        $csl[$currLocale->getLanguageCode().'-'.$currLocale->getCountryCode()] = $currLocale;
-                    }
-                }
-                $newSecondaryLocales = array();
-
-                for($i=0; $i < $post["secondaryLanguagesArraySize"]; $i++) {               
-                    $key = $post["secondaryLanguage_$i"].'-'.$post["secondaryCountry_$i"];
-
-                    $locale = new Locale();
-                    $locale->setLanguageCode($post["secondaryLanguage_$i"]);
-                    $locale->setCountryCode($post["secondaryCountry_$i"]);
-                    if(!key_exists($key, $csl)) $userDao->createSecondaryLanguage($userId, $locale);
-                    $newSecondaryLocales[$key] = $locale;
-                }
-
-                foreach($csl as $key => $newLocale) {
-                    if(!key_exists($key, $newSecondaryLocales)) {
-                        $userDao->deleteSecondaryLanguage($userId, $newLocale);
-                    }
-                }    
-
-                if(isset($post["translating"])) {
-                    if(!in_array(BadgeTypes::TRANSLATOR, $badgeIds)) {
-                        $userDao->addUserBadgeById($userId, BadgeTypes::TRANSLATOR);
-                    }
-                } else {
-                    if(in_array(BadgeTypes::TRANSLATOR, $badgeIds)) {
-                        $userDao->removeUserBadge($userId, BadgeTypes::TRANSLATOR);
-                    }
-                }
-
-                if(isset($post["proofreading"])) {
-                    if(!in_array(BadgeTypes::PROOFREADER, $badgeIds)) {
-                        $userDao->addUserBadgeById($userId, BadgeTypes::PROOFREADER);
-                    }
-                } else {
-                    if(in_array(BadgeTypes::PROOFREADER, $badgeIds)) {
-                        $userDao->removeUserBadge($userId, BadgeTypes::PROOFREADER);
-                    }
-                }
-
-                if(isset($post["interpreting"])) {
-                    if(!in_array(BadgeTypes::INTERPRETOR, $badgeIds)) {
-                        $userDao->addUserBadgeById($userId, BadgeTypes::INTERPRETOR);
-                    }
-                } else {
-                    if(in_array(BadgeTypes::INTERPRETOR, $badgeIds)) {
-                        $userDao->removeUserBadge($userId, BadgeTypes::INTERPRETOR);
-                    }
-                }
-
-                $userDao->updateUser($user); 
-                $app->redirect($app->urlFor("user-public-profile", array("user_id" => $user->getId())));
-            }  
-        }
-        
-        $extraScripts = file_get_contents(__DIR__."/../js/user-private-profile.js");
-        $secondaryLanguages = $userDao->getSecondaryLanguages($userId);
-        
         $app->view()->appendData(array(
             "user"              => $loggedInuser,
-            "profileUser"              => $user,
+            "profileUser"       => $user,
             "private_access"    => true,
-            "languages"         => $languages,
-            "countries"         => $countries,
-            "extra_scripts"     => $extraScripts,
-            "userPersonalInfo"  => $userPersonalInfo,
-            "secondaryLanguages" => $secondaryLanguages,
-            "userBadgeIds"      => $badgeIds
         ));       
        
         $app->render("user/user-private-profile.tpl");
@@ -602,20 +380,34 @@ class UserRouteHandler
         $adminDao = new AdminDao();
         
         $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(UserSession::getCurrentUserID()));
+        $user=null;
+        try{
         $user = $userDao->getUser($user_id);
-        $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        }catch (SolasMatchException $e){
+             $app->flash('error', Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
+             $app->redirect($app->urlFor('login'));
+        }
+        $userPersonalInfo=null;
+        try{
+            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        }catch(SolasMatchException $e){}
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if (isset($post->revokeBadge) && isset($post->badge_id) && $post->badge_id != ""){
-                $badge_id = $post->badge_id;
+            if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != ""){
+                $badge_id = $post['badge_id'];
                 $userDao->removeUserBadge($user_id, $badge_id);
             }
                 
-            if (isset($post->revoke)) {
-                $org_id = $post->org_id;
+            if (isset($post['revoke'])) {
+                $org_id = $post['org_id'];
                 $userDao->leaveOrganisation($user_id, $org_id); 
             } 
+
+            if (isset($post['referenceRequest'])) {
+                $userDao->requestReferenceEmail($user_id);
+                $app->view()->appendData(array("requestSuccess" => true));
+            }
         }
                     
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 10);
@@ -639,8 +431,8 @@ class UserRouteHandler
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
 
-        $app->view()->setData("orgList", $orgList);
         $app->view()->appendData(array("badges" => $badges,
+                                    "orgList"=> $orgList,
                                     "user_orgs" => $user_orgs,
                                     "current_page" => "user-profile",
                                     "archivedJobs" => $archivedJobs,
@@ -715,7 +507,7 @@ class UserRouteHandler
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
-                $app->flash("success", "Successfully updated user task stream notification subscription");
+                $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_19));
                 $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
             }
         }

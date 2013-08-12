@@ -1,12 +1,13 @@
 <?php
 
 include_once __DIR__."/TagsDao.class.php";
-include_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 include_once __DIR__."/../../Common/lib/ModelFactory.class.php";
 include_once __DIR__."/../../Common/models/Project.php";
 include_once __DIR__."/../../Common/models/ArchivedProject.php";
 include_once __DIR__."/../lib/MessagingClient.class.php";
 include_once __DIR__."/../../Common/Requests/CalculateProjectDeadlinesRequest.php";
+include_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class ProjectDao
 {
@@ -208,7 +209,7 @@ class ProjectDao
         }
     }
     
-    public static function getProjectFileInfo($project_id, $user_id, $filename, $token, $mime)
+    public static function getProjectFileInfo($project_id, $user_id=null, $filename=null, $token=null, $mime=null)
     {        
         $args = PDOWrapper::cleanseNull($project_id)
                 .",".PDOWrapper::cleanseNull($user_id)
@@ -238,11 +239,18 @@ class ProjectDao
     {
         $destination =Settings::get("files.upload_path")."proj-$projectId/";
         if(!file_exists($destination)) mkdir ($destination);
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mime= $finfo->buffer($file);
+        $mime = IO::detectMimeType($file, $filename);
+        $apiHelper = new APIHelper(Settings::get("ui.api_format"));
+        $canonicalMime = $apiHelper->getCanonicalMime($filename);        
+        if(!is_null($canonicalMime) && $mime != $canonicalMime) throw new SolasMatchException("The content type ($mime) of the file you are trying to upload does not match the content type ($canonicalMime) expected from its extension.", HttpStatusEnum::BAD_REQUEST);    
         $token=self::recordProjectFileInfo($projectId,$filename,$userId,$mime);
-        file_put_contents($destination.$token, $file);
-        return $token;        
+        try {
+            file_put_contents($destination.$token, $file);
+        } catch(Exception $e) {
+            throw new SolasMatchException("You cannot upload a project file for project ($projectId), as one already exists.", HttpStatusEnum::CONFLICT);
+        }
+
+        return $token;
     }
     
     public static function recordProjectFileInfo($projectId,$filename,$userId, $mime)
@@ -300,5 +308,16 @@ class ProjectDao
         } else {
             return null;
         }
-    }    
+    }   
+    
+    public static function delete($projectId)
+    {
+        $args = PDOWrapper::cleanseNull($projectId);
+        
+        if($result = PDOWrapper::call("deleteProject", $args)) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
 }

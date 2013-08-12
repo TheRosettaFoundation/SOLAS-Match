@@ -10,6 +10,7 @@ require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/NotificationTypes.class.php";
+require_once __DIR__."/../lib/Middleware.php";
 
 
 class Users {
@@ -21,6 +22,7 @@ class Users {
             
             Dispatcher::sendResponce(null, "display all users", null, $format);
         }, 'getUsers');
+                    
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/',
                                                         function ($id, $format = ".json") {
@@ -30,15 +32,19 @@ class Users {
                 $format = '.'.$id[1];
                 $id = $id[0];
             }
-
             $data = UserDao::getUser($id);
-
             if (is_array($data)) {
                 $data = $data[0];
             }
+            if(!is_null($data)){
+                $data->setPassword(null);
+                $data->setNonce(null);
+            }
+
+
            
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUser');
+        }, 'getUser',  "Middleware::authUserOwnsResource");
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/',
                                                         function ($id, $format = ".json") {
@@ -87,6 +93,13 @@ class Users {
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'userLeaveOrg');        
+
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/requestReference(:format)/',
+                function ($id, $format = ".json")
+                {
+                    UserDao::requestReference($id);
+                    Dispatcher::sendResponce(null, null, null, $format);
+                }, "userRequestReference");
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/getByEmail/:email/',
                                                         function ($email, $format = ".json") {
@@ -132,6 +145,17 @@ class Users {
             }
             Dispatcher::sendResponce(null, UserDao::isSubscribedToProject($id, $projectID), null, $format);
         }, 'userSubscribedToProject');  
+        
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/isBlacklistedForTask/:userId/:taskId/',
+                                                        function ($userId, $taskId, $format = ".json") {
+
+            if (!is_numeric($taskId) && strstr($taskId, '.')) {
+                $taskId = explode('.', $taskId);
+                $format = '.'.$taskId[1];
+                $taskId = $taskId[0];
+            }
+            Dispatcher::sendResponce(null, UserDao::isBlacklistedForTask($userId, $taskId), null, $format);
+        }, 'isBlacklistedForTask');  
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/orgs(:format)/',
                                                         function ($id, $format = ".json") {
@@ -242,6 +266,7 @@ class Users {
                                                         function ($id, $format = ".json") {
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
+            $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
             $filter = Dispatcher::clenseArgs('filter', HttpMethodEnum::GET, '');
             $strict = Dispatcher::clenseArgs('strict', HttpMethodEnum::GET, false);
             $filters = APIHelper::parseFilterString($filter);
@@ -259,9 +284,9 @@ class Users {
             }
 
             $dao = new TaskDao();
-            $data = $dao->getUserTopTasks($id, $strict, $limit, $filter);
+            $data = $dao->getUserTopTasks($id, $strict, $limit, $offset, $filter);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUserTopTasks');
+        }, 'getUserTopTasks',  "Middleware::isloggedIn");
         
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/archivedTasks(:format)/',
@@ -296,13 +321,8 @@ class Users {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'User');
-//            $data = $client->cast('User', $data);
             $data->setId($id);
             $data = UserDao::save($data);
-//            $data = $client->cast("User", $data);
-//            if (is_array($data)) {
-//                $data = $data[0];
-//            }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'updateUser');
         
@@ -446,7 +466,7 @@ class Users {
 
             $data = UserDao::getPersonalInfo(null,$id);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUserPersonalInfo');
+        }, 'getUserPersonalInfo',  "Middleware::authUserOwnsResource");
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/personalInfo(:format)/',
                                                         function ($id, $format = ".json") {

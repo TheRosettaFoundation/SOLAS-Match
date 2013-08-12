@@ -1,33 +1,28 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-        <h1>Thank you for your submission!</h1>
+        <h1>{Localisation::getTranslation(Strings::TASK_UPLOADED_0)}</h1>
     </div>
 
     <div class="alert alert-success">
-        <strong>Success</strong> Your file has been uploaded.
+        <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {Localisation::getTranslation(Strings::TASK_UPLOADED_1)}
     </div>
 
     {include file="handle-flash-messages.tpl"}
 
     <section>
-            <h1>What now? <small>Give the organisation time to review</small></h1>
-            <p>Here's what will now happen:</p>
+            <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)} <small>{Localisation::getTranslation(Strings::TASK_UPLOADED_2)}</small></h1>
+            <p>{Localisation::getTranslation(Strings::COMMON_HERE_IS_WHAT_WILL_NOW_HAPPEN)}</p>
             <ol>
-                <li>Your task <strong>is complete</strong>.</li>
-                <li>The <strong>organisation will receive your uploaded work</strong></li>
-                {if isset($org_name)}
-                    <li>{$org_name}
-                {else}
-                    <li>The Organisation
-                {/if}
-                really appreciates being able to make use of your translation. Thanks so much.</li>
+                <li>{Localisation::getTranslation(Strings::TASK_UPLOADED_YOUR_TASK)} <strong>{Localisation::getTranslation(Strings::TASK_UPLOADED_IS_COMPLETE)}</strong>.</li>
+                <li>{Localisation::getTranslation(Strings::TASK_UPLOADED_3)}</li>
+                <li>{$org_name} {Localisation::getTranslation(Strings::TASK_UPLOADED_4)} {Localisation::getTranslation(Strings::TASK_UPLOADED_THANK_YOU)}</li>
             </ol>
     </section>
     <section>    
         {if isset($tip)}
             <hr>
-                <p><strong>Correct Translations - They Matter!</strong></p>
+                <p><strong>{Localisation::getTranslation(Strings::TASK_UPLOADED_5)}</strong></p>
                 <p>
                     <i>{$tip}</i>
                 </p>
@@ -37,7 +32,7 @@
     <section>
         <p>
             <a href="{urlFor name="home"}" class="btn btn-primary">
-                <i class="icon-search icon-white"></i> Find A New Task
+                <i class="icon-search icon-white"></i> {Localisation::getTranslation(Strings::TASK_UPLOADED_FIND_A_NEW_TASK)}
             </a>
         </p>
     </section>

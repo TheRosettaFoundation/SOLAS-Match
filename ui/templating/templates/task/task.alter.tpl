@@ -3,40 +3,40 @@
 {assign var="task_id" value=$task->getId()}
 {assign var="task_status_id" value=$task->getTaskStatus()}
     <h1 class="page-header">
-        Task {$task->getTitle()}
-        <small>Alter task details here.</small>
+        {Localisation::getTranslation(Strings::COMMON_TASK)} {$task->getTitle()}
+        <small>{Localisation::getTranslation(Strings::TASK_ALTER_ALTER_TASK_DETAILS_HERE)}</small>
         <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-            <i class="icon-list icon-white"></i> View Task Details
+            <i class="icon-list icon-white"></i> {Localisation::getTranslation(Strings::TASK_ALTER_VIEW_TASK_DETAILS)}
         </a>
     </h1>
 
     {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
         <div class="alert alert-info">
             <h3>
-                <p>Note:</p>
+                <p>{Localisation::getTranslation(Strings::COMMON_NOTE)}:</p>
             </h3>            
             {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
-                <p>This task has been completed. You can only edit certain task details.</p>
+                <p>{Localisation::getTranslation(Strings::TASK_ALTER_0)} {Localisation::getTranslation(Strings::TASK_ALTER_1)}</p>
             {else if $task_status_id == TaskStatusEnum::COMPLETE}
-                <p>This task has been claimed and is in progress. You can only edit <strong>Task Comment</strong> and <strong>Deadline</strong>.</p>
+                <p>{Localisation::getTranslation(Strings::TASK_ALTER_2)} {Localisation::getTranslation(Strings::TASK_ALTER_YOU_CAN_ONLY_EDIT)} <strong>{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}</strong> {Localisation::getTranslation(Strings::TASK_ALTER_AND)} <strong>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}</strong>.</p>
             {/if}
         </div>
     {/if}
             
-    <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well">
+    <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
         <table width="100%">
             <tr align="center">
                 <td width="50%">
                     <div style="margin-bottom:20px;">
-                        <label for="title" style="font-size: large"><strong>Title:</strong></label>
+                        <label for="title" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TITLE)}:</strong></label>
                         <textarea wrap="soft" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()}</textarea>
                     </div>
                     <div style="margin-bottom:20px;">
-                        <label for="impact" style="font-size: large"><strong>Task Comment:</strong></label>
+                        <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}:</strong></label>
                         <textarea wrap="soft" cols="1" rows="6" name="impact" style="width: 400px">{$task->getComment()}</textarea>
                     </div>
                     <div style="margin-bottom:20px;">
-                        <label for="deadline" style="font-size: large"><strong>Deadline:</strong></label>
+                        <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}:</strong></label>
                         {if $deadline_error != ''}
                             <div class="alert alert-error">
                                 {$deadline_error}
@@ -50,12 +50,12 @@
                 </td>
                 <td>
                     <div style="margin-bottom:60px;">
-                        <label for="publishtask" style="font-size: large"><strong>Publish Task:</strong></label>
-                        <p class="desc">If checked, this task will appear in the task stream.</p>
+                        <label for="publishtask" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_PUBLISH_TASK)}:</strong></label>
+                        <p class="desc">{Localisation::getTranslation(Strings::COMMON_IF_CHECKED_TASKS_WILL_APPEAR_IN_THE_TASK_STREAM)}.</p>
                         <input type="checkbox" name="publishTask" value="1" checked="true" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
                     </div>
                     <p>
-                        <label for="target" style="font-size: large"><strong>Target Language:</strong></label>
+                        <label for="target" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TARGET_LANGUAGE)}:</strong></label>
                         <select name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
                             {foreach $languages as $language}
                                 {if $task->getTargetLocale()->getLanguageCode() == $language->getCode()}
@@ -88,7 +88,7 @@
                     {/if} 
                     <p style="margin-bottom:40px;"/>
 
-                    <label for="word_count" style="font-size: large"><strong>Word Count:</strong></label>
+                    <label for="word_count" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</strong></label>
                     <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px" />
                 </td>             
             </tr>
@@ -108,19 +108,19 @@
             {/if}
             <tr>
                 <td colspan="2">
-                    <h2>Task Prerequisite(s):</h2>
-                    <p class="desc">Assign prerequisites for this task - if any.</p>
+                    <h2>{Localisation::getTranslation(Strings::COMMON_TASK_PREREQUISITES)}:</h2>
+                    <p class="desc">{Localisation::getTranslation(Strings::COMMON_ASSIGN_PREREQUISITES_FOR_THIS_TASK_IF_ANY)}.</p>
                     <p>
-                        These are tasks that must be completed before the current task becomes available.
+                        {Localisation::getTranslation(Strings::COMMON_THESE_ARE_TASKS_THAT_MUST_BE_COMPLETED_BEFORE_THE_CURRENT_TASK_BECOMES_AVAILABLE)}.
                     </p>
                     <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all;" width="100%" >
                         <thead>
-                            <th>Assign</th>
-                            <th>Title</th>
-                            <th>Source Language</th>
-                            <th>Target Language</th>
-                            <th>Type</th>
-                            <th>Status</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_ASSIGN)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_TITLE)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_TARGET_LANGUAGE)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_TYPE)}</th>
+                            <th>{Localisation::getTranslation(Strings::COMMON_STATUS)}</th>
                         </thead>
                         {assign var="i" value=0}
                         {foreach $projectTasks as $projectTask}                                    
@@ -160,24 +160,24 @@
                                 <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
                                 <td>                                            
                                     {if $type_id == TaskTypeEnum::SEGMENTATION}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation</span>                                    
+                                        <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_SEGMENTATION)}</span>
                                     {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span> 
+                                        <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation(Strings::COMMON_TRANSLATION)}</span> 
                                     {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span> 
+                                        <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation(Strings::COMMON_PROOFREADING)}</span> 
                                     {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation</span> 
+                                        <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_DESEGMENTATION)}</span> 
                                     {/if}
                                 </td>
                                 <td>                                            
                                     {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
-                                        Waiting
+                                        {Localisation::getTranslation(Strings::COMMON_WAITING)}
                                     {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
-                                        Unclaimed
+                                        {Localisation::getTranslation(Strings::COMMON_UNCLAIMED)}
                                     {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                        <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">In Progress</a>
+                                        <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_IN_PROGRESS)}</a>
                                     {elseif $status_id == TaskStatusEnum::COMPLETE}
-                                        <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">Complete</a>
+                                        <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">{Localisation::getTranslation(Strings::COMMON_COMPLETE)}</a>
                                     {/if}
                                 </td>
                             </tr>
@@ -190,7 +190,7 @@
                 <td>
                     <p style="margin-bottom:20px;"/>  
                     <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-danger'>
-                        <i class="icon-ban-circle icon-white"></i> Cancel
+                        <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CANCEL)}
                     </a>
                     <p style="margin-bottom:20px;"/>  
                 </td>
@@ -198,7 +198,7 @@
                     <p style="margin-bottom:20px;"/>
                     <p>
                         <button type="submit" value="Submit" name="submit" class="btn btn-primary">
-                            <i class="icon-refresh icon-white"></i> Update Task Details
+                            <i class="icon-refresh icon-white"></i> {Localisation::getTranslation(Strings::TASK_ALTER_UPDATE_TASK_DETAILS)}
                         </button>
                     </p>    
                     <p style="margin-bottom:20px;"/>

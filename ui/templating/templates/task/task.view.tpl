@@ -5,7 +5,7 @@
             {if $task->getTitle() != ''}
                 {$task->getTitle()}
             {else}
-                Task {$task->getId()}
+                {Localisation::getTranslation(Strings::COMMON_TASK)} {$task->getId()}
             {/if}
 
             <small>
@@ -13,13 +13,13 @@
                      -
                     {assign var="type_id" value=$task->getTaskType()}
                     {if $type_id == TaskTypeEnum::SEGMENTATION}
-                        <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation Task</span>                                    
+                        <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_SEGMENTATION_TASK)}</span>
                     {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                        <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation Task</span> 
+                        <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation(Strings::COMMON_TRANSLATION_TASK)}</span>
                     {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                        <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading Task</span> 
+                        <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation(Strings::COMMON_PROOFREADING_TASK)}</span>
                     {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-                        <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation Task</span> 
+                        <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_DESEGMENTATION_TASK)}</span>
                     {/if}
                 </strong>
             </small>  
@@ -29,12 +29,12 @@
         <div class="pull-right">
             {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
                 <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btn btn-primary">
-                <i class="icon-download icon-white"></i> Download Task</a>
+                <i class="icon-download icon-white"></i> {Localisation::getTranslation(Strings::TASK_VIEW_DOWNLOAD_TASK)}</a>
             {/if}
 
             {if isset($isOrgMember)}
                 <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btn btn-primary'>
-                    <i class="icon-wrench icon-white"></i> Edit Task Details
+                    <i class="icon-wrench icon-white"></i> {Localisation::getTranslation(Strings::TASK_VIEW_EDIT_TASK_DETAILS)}
                 </a>
             {/if}
         </div>
@@ -42,13 +42,13 @@
     
 {if isset($flash['success'])}
     <p class="alert alert-success">
-        <strong>Success:</strong> {$flash['success']}
+        <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}:</strong> {$flash['success']}
     </p>
 {/if}
 
 {if isset($flash['error'])}
     <p class="alert alert-error">
-        <strong>Error:</strong> {$flash['error']}
+        <strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}:</strong> {$flash['error']}
     </p>
 {/if}
 
@@ -57,7 +57,7 @@
     <p style="margin-bottom: 40px"/>        
     <table width="100%">
         <thead>
-            <th>Source Document Preview - {$filename}<hr/></th>
+            <th>{Localisation::getTranslation(Strings::TASK_VIEW_SOURCE_DOCUMENT_PREVIEW)} - {$filename}<hr/></th>
         </thead>
         <tbody>
             <tr>

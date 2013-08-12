@@ -56,7 +56,7 @@ class OrgRouteHandler
             if(isset($post["orgName"]) && $post["orgName"] != '') {
                 $org->setName($post['orgName']); 
             } else {
-                $nameErr = "<strong>Organisation Name</strong> must be set.";
+                $nameErr = Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_1);
             }
             
             if(isset($post["homepage"])) $org->setHomePage($post["homepage"]); 
@@ -75,13 +75,7 @@ class OrgRouteHandler
             if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
             
             if(!empty($regionalFocus)) {
-                $regionalFocusString = "";
-                foreach($regionalFocus as $region) {
-                    $regionalFocusString .= $region.", ";
-                }
-                $lastComma = strrpos($regionalFocusString, ",");
-                $regionalFocusString[$lastComma] = "";
-                $org->setRegionalFocus($regionalFocusString);
+                $org->setRegionalFocus(implode(",", $regionalFocus));
             }
             
             if(is_null($nameErr)) {
@@ -95,15 +89,14 @@ class OrgRouteHandler
                         
                         $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
                         $org_name = $org->getName();
-                        $app->flash("success", "The organisation <strong>$org_name</strong> has been created.");
+                        $app->flash("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_2), $org_name));
                         $app->redirect($app->urlFor("org-dashboard"));
                     } else {
-                        $app->flashNow("error", "Unable to save Organisation.");
+                        $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_3));
                     }
                 } else {
                     $org_name = $org->getName();
-                    $app->flashNow("error", "An Organisation named <strong>$org_name</strong> is already registered
-                                            with SOLAS Match. Please use a different name.");
+                    $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_4), $org_name));
                 }         
             } else {
                 $app->view()->appendData(array(
@@ -132,9 +125,9 @@ class OrgRouteHandler
         $org_projects = array();
         
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
-            if (isset($post->track)) {
-                $project_id = $post->project_id;
+            $post = $app->request()->post();
+            if (isset($post['track'])) {
+                $project_id = $post['project_id'];
                 $project = $projectDao->getProject($project_id);
 
                 $project_title = "";
@@ -143,22 +136,20 @@ class OrgRouteHandler
                 } else {
                     $project_title = "project ".$project->getId();
                 }
-                if ($post->track == "Ignore") {
+                if ($post['track'] == "Ignore") {
                     $success = $userDao->untrackProject($current_user_id, $project_id);                    
                     if ($success) {
-                        $app->flashNow("success", "No longer receiving notifications from $project_title.");
+                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_5), $project_title));
                     } else {
-                        $app->flashNow("error", "Unable to unsubscribe from $project_title 's notifications.");
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_6), $project_title));
                     }                    
-                } elseif ($post->track == "Track") {
+                } elseif ($post['track'] == "Track") {
                     $success = $userDao->trackProject($current_user_id, $project_id);                    
                     if ($success) {
-                        $app->flashNow("success", "You will now receive notifications for $project_title.");
+                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_7), $project_title));
                     } else {
-                        $app->flashNow("error", "Unable to subscribe to $project_title.");
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_8), $project_title));
                     }
-                } else {
-                    $app->flashNow("error", "Invalid POST type");
                 }
             }
         }
@@ -215,13 +206,13 @@ class OrgRouteHandler
         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
             $requestMembership = $orgDao->createMembershipRequest($org_id, $userId);
             if ($requestMembership) {
-                $app->flash("success", "Successfully requested membership.");
+                $app->flash("success", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_9));
             } else {
-                $app->flash("error", "You have already sent a membership request to this Organisation.");
+                $app->flash("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_10));
             }   
         } else {
-            $app->flash("error", "You are already a member of this organisation.");
-        }   
+            $app->flash("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_11));
+        }
         $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
     }
 
@@ -233,11 +224,11 @@ class OrgRouteHandler
 
         $org = $orgDao->getOrganisation($org_id);
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if (isset($post->email)) {
-                if (TemplateHelper::isValidEmail($post->email)) {       
-                    $user = $userDao->getUserByEmail($post->email);
+            if (isset($post['email'])) {
+                if (TemplateHelper::isValidEmail($post['email'])) {       
+                    $user = $userDao->getUserByEmail($post['email']);
                     if (!is_null($user)) {
                         $user_id = $user->getId();
                         $user_orgs = $userDao->getUserOrgs($user_id);
@@ -254,31 +245,28 @@ class OrgRouteHandler
                             } else {
                                 $org_name = "Organisation $org_id";
                             }   
-                            $app->flashNow("success", "Successfully added $user_name as a member of $org_name.");
+                            $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_12), $user_name, $org_name));
                         } else {
-                            $app->flashNow("error", "$user_name is already a member of this organisation.");
+                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_13), $user_name));
                         }   
                     } else {
-                        $email = $post->email;
-                        $app->flashNow("error",
-                            "The email address $email is not registered with this system.
-                            Are you sure you have the right email addess?"
-                        );
+                        $email = $post['email'];
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_14), $email));                        
                     }
                 } else {
-                    $app->flashNow("error", "You did not enter a valid email address.");
+                    $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_15));
                 }
-            } elseif (isset($post->accept)) {
-                if ($user_id = $post->user_id) {
+            } elseif (isset($post['accept'])) {
+                if ($user_id = $post['user_id']) {
                     $orgDao->acceptMembershipRequest($org_id, $user_id);
                 } else {
-                    $app->flashNow("error", "Invalid User ID: $user_id");
+                    $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_16), $user_id));
                 }
-            } elseif (isset($post->refuse)) {
-                if ($user_id = $post->user_id) {
+            } elseif (isset($post['refuse'])) {
+                if ($user_id = $post['user_id']) {
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
                 } else {
-                    $app->flashNow("error", "Invalid User ID: $user_id");
+                    $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_16), $user_id));
                 }
             }
         }
@@ -322,15 +310,8 @@ class OrgRouteHandler
                 if(isset($post["southAmerica"])) $regionalFocus[] .= "South-America"; 
 
                 if(!empty($regionalFocus)) {
-                    $regionalFocusString = "";
-                    foreach($regionalFocus as $region) {
-                        $regionalFocusString .= $region.", ";
-                    }
-                    $lastComma = strrpos($regionalFocusString, ",");
-                    $regionalFocusString[$lastComma] = "";
-                    $org->setRegionalFocus($regionalFocusString);
+                    $org->setRegionalFocus(implode(",", $regionalFocus));
                 }
-
 
                 $orgDao->updateOrg($org); 
                 $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
@@ -341,10 +322,10 @@ class OrgRouteHandler
                 $deleteId = $post["deleteId"];
                 if ($deleteId) {
                     if ($orgDao->deleteOrg($org->getId())) {
-                        $app->flash("success", "Successfully deleted org ".$org->getName());
+                        $app->flash("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_17), $org->getName()));
                         $app->redirect($app->urlFor("home"));
                     } else {
-                        $app->flashNow("error", "Unable to delete organisation. Please try again later.");
+                        $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_18));
                     }
                 }
             }
@@ -370,29 +351,29 @@ class OrgRouteHandler
 
         $org = $orgDao->getOrganisation($org_id);
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
                    
-            if (isset($post->deleteBadge)) {
-                $badgeDao->deleteBadge($post->badge_id);
+            if (isset($post['deleteBadge'])) {
+                $badgeDao->deleteBadge($post['badge_id']);
             } 
             
-            if (isset($post->title) && isset($post->description)) {
-                if ($post->title == "" || $post->description == "") {
-                    $app->flash("error", "All fields must be filled out.");
+            if (isset($post['title']) && isset($post['description'])) {
+                if ($post['title'] == "" || $post['description'] == "") {
+                    $app->flash("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_19)));
                 } else {
                     $badge = new Badge();
-                    $badge->setId($post->badge_id);
-                    $badge->setTitle($post->title);
-                    $badge->setDescription($post->description);
+                    $badge->setId($post['badge_id']);
+                    $badge->setTitle($post['title']);
+                    $badge->setDescription($post['description']);
                     $badge->setOwnerId(null);
                     $badgeDao->updateBadge($badge); 
                     $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
                 }
             }
             
-            if (isset($post->email)) {
-                if (TemplateHelper::isValidEmail($post->email)) {       
-                    $user = $userDao->getUserByEmail($post->email);
+            if (isset($post['email'])) {
+                if (TemplateHelper::isValidEmail($post['email'])) {       
+                    $user = $userDao->getUserByEmail($post['email']);
                 
                     if (!is_null($user)) {
                         $user_orgs = $userDao->getUserOrgs($user->getId());
@@ -408,70 +389,59 @@ class OrgRouteHandler
                             } else {
                                 $org_name = "Organisation $org_id";
                             }   
-                            $app->flashNow("success", "Successfully added $user_name as a member of $org_name");
+                            $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_12), $user_name, $org_name));
                         } else {
-                            $app->flashNow("error", "$user_name is already a member of this organisation.");
+                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_20), $user_name));
                         }   
                     } else {
-                        $email = $post->email;
-                        $app->flashNow("error",
-                            "The email address $email is not registered with this system.
-                            Are you sure you have the right email addess?"
-                        );
+                        $email = $post['email'];
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_21), $email));
                     }
                 } else {
-                    $app->flashNow("error", "You did not enter a valid email address");
+                    $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_22));
                 }
-            } elseif (isset($post->accept)) {
-                if ($user_id = $post->user_id) {
+            } elseif (isset($post['accept'])) {
+                if ($user_id = $post['user_id']) {
                     if ($orgDao->acceptMembershipRequest($org_id, $user_id)){
                         $user = $userDao->getUser($user_id);
                         $user_name = $user->getDisplayName();
-                        $org_name = $org->getName();
-                        $app->flashNow("success", "Successfully added ".
-                                "<a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">".
-                                "$user_name</a> as a member of $org_name");
+                        $org_name = $org->getName();    
+                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_23), $app->urlFor("user-public-profile", array("user_id" => $user_id)) ,$user_name, $org_name));
                     } else {
-                        $app->flashNow("error", "Unable to add user to member list. Please try again later.");
+                        $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_24));
                     }
 
                 } else {
-                    $app->flashNow("error", "Invalid User ID: $user_id");
+                    $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_16), $user_id));
                 }
-            } elseif (isset($post->refuse)) {
-                if ($user_id = $post->user_id) {
+            } elseif (isset($post['refuse'])) {
+                if ($user_id = $post['user_id']) {
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
                     $user = $userDao->getUser($user_id);
                     $user_name = $user->getDisplayName();
-                    $app->flashNow("success", "Successfully rejected 
-                            <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $user_id))}\">
-                            $user_name's</a> membership request.");
+                    $app->flashNow("success", printf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_25), $app->urlFor("user-public-profile", array("user_id" => $user_id)), $user_name));
                 } else {
-                    $app->flashNow("error", "Invalid User ID: $user_id");
+                    $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_16), $user_id));
                 }
-            } elseif (isset($post->revokeUser)) {
-                $userId = $post->revokeUser;
+            } elseif (isset($post['revokeUser'])) {
+                $userId = $post['revokeUser'];
                 $user = $userDao->getUser($userId);
                 if ($user) {
                     $userName = $user->getDisplayName();
                     if ($userDao->leaveOrganisation($userId, $org_id)) {
-                        $app->flashNow("success", "Successfully rvoked membership from user
-                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $userId))}\">
-                                $userName</a>.");
+                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_26), $app->urlFor("user-public-profile", array("user_id" => $userId)), $userName));
                     } else {
-                        $app->flashNow("error", "Unable to revoke membership from user
-                                <a href=\"{$app->urlFor("user-public-profile", array("user_id" => $userId))}\">
-                                $userName</a>.");
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_27), $app->urlFor("user-public-profile", array("user_id" => $userId)), $userName));
                     }
                 } else {
-                    $app->flashNow("error", "Unable to find user in system");
+                    $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_28));
                 }
-            } else if(isset($post->revokeOrgAdmin)) {
-                $userId = $post->revokeOrgAdmin;
+            } else if(isset($post['revokeOrgAdmin'])) {
+                $userId = $post['revokeOrgAdmin'];
                 $adminDao->removeOrgAdmin($userId, $org_id);
                 
-            } else if(isset($post->makeOrgAdmin)) {
-                $userId = $post->makeOrgAdmin;
+            } else if(isset($post['makeOrgAdmin'])) {
+                $userId = $post['makeOrgAdmin'];
                 $adminDao->createOrgAdmin($userId, $org_id);
             }
         }       
@@ -513,6 +483,7 @@ class OrgRouteHandler
             $adminAccess = true;
         }
 
+        $siteName = Settings::get("site.name");
         $app->view()->setData("current_page", "org-public-profile");
         $app->view()->appendData(array(
                 "org" => $org,
@@ -520,7 +491,8 @@ class OrgRouteHandler
                 'orgMembers' => $orgMemberList,
                 'adminAccess' => $adminAccess,
                 "org_badges" => $org_badges,
-                "user_list" => $user_list
+                "siteName" => $siteName,
+                "membershipRequestUsers" => $user_list
         ));
         
         $app->render("org/org-public-profile.tpl");
@@ -542,11 +514,11 @@ class OrgRouteHandler
         ));
 
         if ($app->request()->isPost()) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if (isset($post->email) && $post->email != "") {
-                if (TemplateHelper::isValidEmail($post->email)) {
-                    $user = $userDao->getUserByEmail($post->email);
+            if (isset($post['email']) && $post['email'] != "") {
+                if (TemplateHelper::isValidEmail($post['email'])) {
+                    $user = $userDao->getUserByEmail($post['email']);
                     if ($user) {
                         $user_badges = $userDao->getUserBadges($user->getId());
                         $badge_ids = array();
@@ -565,22 +537,18 @@ class OrgRouteHandler
                                 $user_name = $user->getEmail();
                             }
                             
-                            $app->flashNow("success", "Successfully Assigned Badge 
-                                            {$badge->getTitle()} to user $user_name");
+                            $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_29), $badge->getTitle(), $user_name));
                         } else {
-                            $app->flashNow("error", "The user $post->email already has that badge.");
+                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_30), $post['email']));
                         }
                     } else {
-                        $app->flashNow("error",
-                            "The email address $post->email is not registered on the system. 
-                            Are you using the correct email address?"
-                        );
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_31), $post['email']));
                     }
                 } else {
-                    $app->flashNow("error", "You did not enter a valid email address.");
+                    $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_22));
                 }
-            } elseif (isset($post->user_id) && $post->user_id != "") {
-                $user_id = $post->user_id;
+            } elseif (isset($post['user_id']) && $post['user_id'] != "") {
+                $user_id = $post['user_id'];
                 $user = $userDao->getUser($user_id);
                 $userDao->removeUserBadge($user_id, $badge_id);
                 $user_name = "";
@@ -589,9 +557,7 @@ class OrgRouteHandler
                 } else {
                     $user_name = $user->getEmail();
                 }
-                $app->flashNow("success", "Successfully removed badge form user $user_name.");
-            } else {
-                $app->flashNow("error", "Incorrect POST data.");
+                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_32), $user_name));
             }
         }
     
@@ -610,18 +576,18 @@ class OrgRouteHandler
         $badgeDao = new BadgeDao();
 
         if (isValidPost($app)) {
-            $post = (object) $app->request()->post();
+            $post = $app->request()->post();
             
-            if ($post->title == "" || $post->description == "") {
-                $app->flashNow("error", "All fields must be filled out.");
+            if ($post['title'] == "" || $post['description'] == "") {
+                $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_19));
             } else {
                 $badge = new Badge();
-                $badge->setTitle($post->title);
-                $badge->setDescription($post->description);
+                $badge->setTitle($post['title']);
+                $badge->setDescription($post['description']);
                 $badge->setOwnerId($org_id);
                 $badgeDao->createBadge($badge);                
                 
-                $app->flash("success", "Successfully created new Organisation Badge.");
+                $app->flash("success", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_33));
                 $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
             }
         }
@@ -640,9 +606,9 @@ class OrgRouteHandler
             $post = $app->request()->post();
             
             if (isset($post['search_name']) && $post['search_name'] != '') {                
-                $foundOrgs = $orgDao->searchForOrgByName($post['search_name']);
+                $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
                 if (count($foundOrgs) < 1) {
-                    $app->flashNow("error", "No Organisations found.");
+                    $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_34));
                 }
                 $app->view()->appendData(array('searchedText' => $post['search_name']));
             }
@@ -700,7 +666,7 @@ class OrgRouteHandler
                     if ($value > 0 && $value <= 5) {
                         $review->setCorrections($value);
                     } else {
-                        $error = "Corrections value must be between 1 and 5";
+                        $error = Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_35);
                     }
                 }
                 if (isset($post["grammar_$id"]) && ctype_digit($post["grammar_$id"])) {
@@ -708,7 +674,7 @@ class OrgRouteHandler
                     if ($value > 0 && $value <= 5) {
                         $review->setGrammar($value);
                     } else {
-                        $error = "Grammar value must be between 1 and 5";
+                        $error = Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_36);
                     }
                 }
                 if (isset($post["spelling_$id"]) && ctype_digit($post["spelling_$id"])) {
@@ -716,7 +682,7 @@ class OrgRouteHandler
                     if ($value > 0 && $value <= 5) {
                         $review->setSpelling($value);
                     } else {
-                        $error = "Spelling value must be between 1 and 5";
+                        $error = Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_37);
                     }
                 }
                 if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
@@ -724,7 +690,7 @@ class OrgRouteHandler
                     if ($value > 0 && $value <= 5) {
                         $review->setConsistency($value);
                     } else {
-                        $error = "Consistency value must be between 1 and 5";
+                        $error = Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_38);
                     }
                 }
                 if (isset($post["comment_$id"]) && $post["comment_$id"] != "") {
@@ -733,14 +699,14 @@ class OrgRouteHandler
                 
                 if ($review->getProjectId() != null && $review->getUserId() != null && $error == '') {
                     if (!$taskDao->submitReview($review)) {
-                        $error = "Unable to submit review for {$task->getTitle()}, please try again later";
+                        $error = sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_39), $task->getTitle());
                     }
                 }
 
                 if ($error != '') {
                     $app->flashNow("error", $error);
                 } else {
-                    $app->flash("success", "Review of task {$task->getTitle()} has been submitted successfully");
+                    $app->flash("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_40), $task->getTitle()));
                     $app->redirect($app->urlFor('project-view', array("project_id" => $task->getProjectId())));
                 }
             }
@@ -757,7 +723,7 @@ class OrgRouteHandler
         }
 
         if (count($reviews) > 0) {
-            $app->flashNow("info", "You have already submitted a review for this task.");
+            $app->flashNow("info", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_41));
         }
 
         $translator = $taskDao->getUserClaimedTask($taskId);

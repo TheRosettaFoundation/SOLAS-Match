@@ -1,11 +1,10 @@
 <?php
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/BaseDao.php";
 
-class AdminDao
+class AdminDao extends BaseDao
 {
-    private $client;
-    private $siteApi;
 
     public function __construct()
     {
@@ -72,10 +71,24 @@ class AdminDao
         return $response;
     }    
     
+    public function getBannedUser($userId)
+    {
+        $request = "{$this->siteApi}v0/admins/getBannedUser/$userId";
+        $response = $this->client->call("BannedUser", $request);
+        return $response;
+    }    
+    
     public function getBannedOrgs()
     {
         $request = "{$this->siteApi}v0/admins/getBannedOrgs";
         $response = $this->client->call(array("BannedOrganisation"), $request);
+        return $response;
+    }
+    
+    public function getBannedOrg($orgId)
+    {
+        $request = "{$this->siteApi}v0/admins/getBannedOrg/$orgId";
+        $response = $this->client->call("BannedOrganisation", $request);
         return $response;
     }
     

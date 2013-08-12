@@ -1,12 +1,12 @@
 <table class="table table-striped">
     <thead>
-        <th style="text-align: left"><strong>Project</strong></th>
-        <th>Source Language</th>
-        <th>Target Language</th>
-        <th>Created</th>
-        <th>Task Deadline</th>
-        <th>Word Count</th>
-        {if isset($isOrgMember)}<th>Status</th>{/if}
+        <th style="text-align: left"><strong>{Localisation::getTranslation(Strings::COMMON_PROJECT)}</strong></th>
+        <th>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)}</th>
+        <th>{Localisation::getTranslation(Strings::COMMON_TARGET_LANGUAGE)}</th>
+        <th>{Localisation::getTranslation(Strings::COMMON_CREATED)}</th>
+        <th>{Localisation::getTranslation(Strings::COMMON_TASK_DEADLINE)}</th>
+        <th>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}</th>
+        {if isset($isOrgMember)}<th>{Localisation::getTranslation(Strings::COMMON_STATUS)}</th>{/if}
     </thead>
     <tbody>
         <tr>
@@ -42,13 +42,13 @@
                 <td>
                     {assign var="status_id" value=$task->getTaskStatus()}
                     {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
-                        Waiting
+                        {Localisation::getTranslation(Strings::COMMON_WAITING)}
                     {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
-                        Unclaimed
+                        {Localisation::getTranslation(Strings::COMMON_UNCLAIMED)}
                     {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                        <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">In Progress</a>
+                        <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_IN_PROGRESS)}</a>
                     {elseif $status_id == TaskStatusEnum::COMPLETE}
-                        <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">Complete</a>
+                        <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">{Localisation::getTranslation(Strings::COMMON_COMPLETE)}</a>
                     {/if}
                 </td>
             {/if}
@@ -59,9 +59,9 @@
 <div class="well">
     <table width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>
-            <th width="48%" align="left">Task Comment:<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}:<hr/></th>
             <th></th>
-            <th width="48%" align="left">Project Description:<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_PROJECT_DESCRIPTION)}:<hr/></th>
         </thead>
         <tbody>
             <tr style="overflow-wrap: break-word;" valign="top">
@@ -70,7 +70,7 @@
                         {if $task->getComment() != ''}
                             {$task->getComment()}
                         {else}
-                            No comment has been added.
+                            {Localisation::getTranslation(Strings::COMMON_NO_COMMENT_HAS_BEEN_LISTED)}
                         {/if}
                     </i>
                 </td>
@@ -80,7 +80,7 @@
                         {if $project->getDescription() != ''}
                             {$project->getDescription()}
                         {else}
-                            No description has been added.
+                            {Localisation::getTranslation(Strings::COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED)}
                         {/if}
                     </i>
                 </td>
@@ -90,11 +90,11 @@
             </tr>
             <tr>
                 <td>
-                    <strong>Project Impact:</strong><hr/>
+                    <strong>{Localisation::getTranslation(Strings::TASK_DETAILS_PROJECT_IMPACT)}</strong><hr/>
                 </td>
                 <td></td>
                 <td>
-                    <strong>Project Tags:</strong><hr/>
+                    <strong>{Localisation::getTranslation(Strings::TASK_DETAILS_PROJECT_TAGS)}</strong><hr/>
                 </td>
             </tr>
             <tr valign="top">                
@@ -103,7 +103,7 @@
                     {if $project->getImpact() != ''}
                         {$project->getImpact()}
                     {else}
-                        No impact has been added.
+                        {Localisation::getTranslation(Strings::COMMON_NO_IMPACT_HAS_BEEN_LISTED)}
                     {/if}  
                     </i> 
                 </td>    
@@ -121,8 +121,8 @@
 {if isset($isOrgMember)}
     <table width="100%" class="table table-striped">
         <thead>
-            <th>Publish Task</th>
-            <th>Tracking</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_PUBLISH_TASK)}</th>
+            <th>{Localisation::getTranslation(Strings::COMMON_TRACKING)}</th>
         </thead>
         <tr align="center">
             <td>
@@ -132,12 +132,12 @@
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                            <i class="icon-remove-circle icon-white"></i> Unpublish
+                            <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation(Strings::COMMON_UNPUBLISH)}
                         </a>
                     {else}
                         <input type="hidden" name="published" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                            <i class="icon-check icon-black"></i> Publish
+                            <i class="icon-check icon-black"></i> {Localisation::getTranslation(Strings::COMMON_PUBLISH)}
                         </a>
                     {/if}
                 </form>
@@ -148,12 +148,12 @@
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                            <i class="icon-inbox icon-white"></i> Untrack Task
+                            <i class="icon-inbox icon-white"></i> {Localisation::getTranslation(Strings::COMMON_UNTRACK_TASK)}
                         </a>
                     {else}
                         <input type="hidden" name="track" value="Track" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                            <i class="icon-envelope icon-black"></i> Track Task
+                            <i class="icon-envelope icon-black"></i> {Localisation::getTranslation(Strings::COMMON_TRACK_TASK)}
                         </a>
                     {/if}
                 </form>

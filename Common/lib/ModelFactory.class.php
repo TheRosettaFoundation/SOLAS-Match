@@ -197,12 +197,7 @@ class ModelFactory
         if (isset($modelData['published'])) {
             $ret->setPublished($modelData['published']);
         }
-        if (isset($modelData['user_id-claimed'])) {
-            $ret->setTranslatorId($modelData['user_id-claimed']);
-        }
-        if (isset($modelData['user_id-archived'])) {
-            $ret->setArchiveUserId($modelData['user_id-archived']);
-        }
+        
         if (isset($modelData['archive-date'])) {
             $ret->setArchiveDate($modelData['archive-date']);
         }
@@ -702,11 +697,7 @@ class ModelFactory
             $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
         }
         
-        $ret->setSourceLocale($sourceLocale);
-
-        if(isset($modelData['user_id-archived'])) {
-            $ret->setTranslatorId($modelData['user_id-archived']);
-        }        
+        $ret->setSourceLocale($sourceLocale);     
        
         if (isset($modelData['user_id-archived'])) {
             $ret->setUserIdArchived($modelData['user_id-archived']);

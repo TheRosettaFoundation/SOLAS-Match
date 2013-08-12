@@ -2,36 +2,36 @@
 
     <section>
         <div class="page-header">
-            <h1>{$task->getTitle()} <small>Post Editing task</small></h1>
+            <h1>{$task->getTitle()} <small>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_DESEGMENTATION_TASK)}</small></h1>
         </div>
     </section>
 
     <section>
-        <h2>Do you want to merge files related to this task? <small>After downloading</small></h2>
+        <h2>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_0)} <small>{Localisation::getTranslation(Strings::COMMON_AFTER_DOWNLOADING)}</small></h2>
         <hr />
-        <h3>Review this checklist before you claim <small>Will you be able to merge these files?</small></h3>
+        <h3>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_1)} <small>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_2)}</small></h3>
         <p style="margin-bottom:20px;"></p>
         <ol>
             {if $taskMetadata->getContentType() != ''}
-                <li>Can you open files of type <strong>{$taskMetadata->getContentType()}</strong> on your computer?</li>
+                <li>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_3)} <strong>{$taskMetadata->getContentType()}</strong> {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_ON_YOUR_COMPUTER)}</li>
             {/if}
-            <li><strong>Will you have enough time to merge</strong> these files? Check how long the file is.</li>
-            <li>Do you think you're capable of merging files in <strong>{$targetLanguage->getName()}</strong>?</li>
+            <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_4)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_5)}</li>
+            <li>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_6)} <strong>{$targetLanguage->getName()}</strong>?</li>
         </ol>
     </section>
 
     <section>
-        <h3>It&rsquo;s time to decide</h3>
+        <h3>{Localisation::getTranslation(Strings::COMMON_IT_IS_TIME_TO_DECIDE)}</h3>
         <p> 
-            Do you want to merge these files? The files you need to merge can be downloaded after claiming.
+            {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_7)} {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_8)}
         </p>
         <p> 
             <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                 <button type="submit" class="btn btn-primary">
-                    <i class="icon-ok-circle icon-white"></i> Yes, I promise I will merge these files
+                    <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_9)}
                 </button>
                 <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn">
-                    <i class="icon-ban-circle icon-black"></i> No, just bring me back to the task page
+                    <i class="icon-ban-circle icon-black"></i> {Localisation::getTranslation(Strings::COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE)}
                 </a>
             </form>
         </p>

@@ -10,6 +10,8 @@ require_once __DIR__."/ProtobufSerializer.class.php";
 class APIHelper
 {
     private $_serializer;
+    private $responseCode;
+    private $outputHeaders;
 
     public function __construct($format)
     {
@@ -37,8 +39,9 @@ class APIHelper
     }
 
     public function call($destination,$url, $method = HttpMethodEnum::GET,
-             $data = null, $query_args = array(), $file = null)
+             $data = null, $query_args = array(), $file = null,$headers=null)
     {
+
         $url = $url.$this->_serializer->getFormat()."/?";
         if (count($query_args) > 0) {
             $first= true;
@@ -61,14 +64,38 @@ class APIHelper
             $lenght=strlen($file);
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
+
+        curl_setopt($re, CURLOPT_COOKIESESSION, true);
+        if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");        
         
-        curl_setopt($re, CURLOPT_HTTPHEADER, array(                                                                          
-            $this->_serializer->getContentType(),                                                                                
-            'Content-Length: ' . $lenght)                                                                       
-        );
+        curl_setopt($re, CURLOPT_AUTOREFERER, true);
+        $token=UserSession::getAccessToken();
+        $httpHeaders = array(
+                 $this->_serializer->getContentType()
+                ,'Expect:'
+                ,'Content-Length:'.$lenght
+                );
+        if(!is_null($token=UserSession::getAccessToken())) $httpHeaders[]= 'Authorization: Bearer '.$token->getToken();
+        if(!is_null($headers)) $httpHeaders=array_merge($httpHeaders, $headers);
+        curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($re, CURLOPT_HEADER, true);
         $res=curl_exec($re);
-        $response_data = $this->_serializer->deserialize($res,$destination);
+        $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+        $header = substr($res, 0, $header_size);
+        $this->outputHeaders= http_parse_headers($header);
+        $res = substr($res, $header_size);
+//        $sentHeaders = curl_getinfo($re);
+        $success = array(200,201,202,203,204,301,303);
+        $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+        
+        curl_close($re);
+        
+        if(in_array($this->responseCode, $success)){
+            $response_data = $this->_serializer->deserialize($res,$destination);
+        }else throw new SolasMatchException($res, $this->responseCode);
+        
 
         return $response_data;
     }
@@ -140,4 +167,85 @@ class APIHelper
         }
         return $ret;
     }
+    
+    public function getResponseCode()
+    {
+        return $this->responseCode;
+    }
+    
+    public function getHeaders()
+    {
+        return $this->outputHeaders;
+    }
+    
+    
+    // http://stackoverflow.com/a/1147952
+    private function system_extension_mime_types() {
+        # Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
+        $out = array();
+        $file = fopen('/etc/mime.types', 'r');
+        while(($line = fgets($file)) !== false) {
+            $line = trim(preg_replace('/#.*/', '', $line));
+            if(!$line)
+                continue;
+            $parts = preg_split('/\s+/', $line);
+            if(count($parts) == 1)
+                continue;
+            $type = array_shift($parts);
+            foreach($parts as $part)
+                $out[$part] = $type;
+        }
+        fclose($file);
+        return $out;
+    }
+
+    private function getMimeTypeFromSystem($ext) {
+   
+        static $types;
+        if(!isset($types))
+            $types = $this->system_extension_mime_types();
+  
+        return isset($types[$ext]) ? $types[$ext] : null;
+    }
+    
+    public function getCanonicalMime($filename)
+    {
+        $mimeMap = array(
+             "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
+            ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
+            ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
+            ,"pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            ,"sldx" => "application/vnd.openxmlformats-officedocument.presentationml.slide"
+            ,"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ,"dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
+            ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
+            ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
+            ,"xlf"  => "application/xliff+xml"
+        );         
+        
+        $extension = explode(".", $filename);
+        $extension =  strtolower($extension[count($extension)-1]);
+
+        return array_key_exists($extension, $mimeMap)? $mimeMap[$extension] : $this->getMimeTypeFromSystem($extension);
+    }
+}
+
+ if( !function_exists( 'http_parse_headers' ) ) {
+     function http_parse_headers( $header )
+     {
+         $retVal = array();
+         $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', $header));
+         foreach( $fields as $field ) {
+             if( preg_match('/([^:]+): (.+)/m', $field, $match) ) {
+                 $match[1] = preg_replace('/(?<=^|[\x09\x20\x2D])./e', 'strtoupper("\0")', strtolower(trim($match[1])));
+                 if( isset($retVal[$match[1]]) ) {
+                     $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
+                 } else {
+                     $retVal[$match[1]] = trim($match[2]);
+                 }
+             }
+         }
+         return $retVal;
+     }
 }

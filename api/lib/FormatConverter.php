@@ -11,8 +11,6 @@
  * @author sean
  */
 
-require_once 'HTTP/Request2.php';
-
 class FormatConverter {
     public static function convertToXliff($doc,$jobid, $filename){
         $url = Settings::get("converter.supported_formats");

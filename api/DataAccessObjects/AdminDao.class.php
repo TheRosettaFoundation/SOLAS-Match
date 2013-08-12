@@ -1,7 +1,7 @@
 <?php
 
 include_once __DIR__."/OrganisationDao.class.php";
-require_once __DIR__."/../../Common/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class AdminDao
 { 
@@ -123,8 +123,8 @@ class AdminDao
     {
         $args = PDOWrapper::cleanseNull($orgId)
                 .",".PDOWrapper::cleanseNull($userIdAdmin)
-                .",".$args .= PDOWrapper::cleanseNull($bannedTypeId)
-                .",".$args .= PDOWrapper::cleanseNullOrWrapStr($adminComment);
+                .",".PDOWrapper::cleanseNull($bannedTypeId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($adminComment);
         
         PDOWrapper::call("bannedOrgInsert", $args);      
     }

@@ -7,40 +7,40 @@
             {$task->getTitle()}
         </h2>
         {if $type_id == TaskTypeEnum::SEGMENTATION}
-            <p>Type: 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">Segmentation</span> 
+            <p>{Localisation::getTranslation(Strings::COMMON_TYPE)}: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_SEGMENTATION)}</span> 
         {elseif $type_id == TaskTypeEnum::TRANSLATION}
-            <p>Type: 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">Translation</span>
+            <p>{Localisation::getTranslation(Strings::COMMON_TYPE)}: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation(Strings::COMMON_TRANSLATION)}</span>
         {elseif $type_id == TaskTypeEnum::PROOFREADING}
-            <p>Type: 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">Proofreading</span>
+            <p>{Localisation::getTranslation(Strings::COMMON_TYPE)}: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation(Strings::COMMON_PROOFREADING)}</span>
         {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-            <p>Type: 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">Desegmentation</span>
+            <p>{Localisation::getTranslation(Strings::COMMON_TYPE)}: 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_DESEGMENTATION)}</span>
         {/if}                
     </p>
 
     <p>
-        From: <strong>{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}</strong>
+        {Localisation::getTranslation(Strings::COMMON_FROM)}: <strong>{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}</strong>
     </p>   
 
     <p>
-        To: <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
+        {Localisation::getTranslation(Strings::COMMON_TO)}: <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
     </p>
     
     {if $task->getWordCount()}
-        <p>Word Count: <strong>{$task->getWordCount()|number_format}</strong></p>
+        <p>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}: <strong>{$task->getWordCount()|number_format}</strong></p>
     {/if}      
 	<p class="task_details">
-        Added: <strong>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</strong> ago
+        {Localisation::getTranslation(Strings::COMMON_ADDED)}: <strong>{TemplateHelper::timeSinceSqlTime($task->getCreatedTime())}</strong> {Localisation::getTranslation(Strings::COMMON_AGO)}
 	</p>
         
     <p>
-        Archived: <strong>{TemplateHelper::timeSinceSqlTime($task->getArchivedDate())}</strong> ago
+        {Localisation::getTranslation(Strings::TASK_PROFILE_DISPLAY_ARCHIVED)}: <strong>{TemplateHelper::timeSinceSqlTime($task->getArchivedDate())}</strong> {Localisation::getTranslation(Strings::COMMON_AGO)}
     </p>
     <p>
-        Due by: <strong>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</strong>
+        {Localisation::getTranslation(Strings::COMMON_DUE_BY)}: <strong>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</strong>
     </p>
 
     <p style="margin-bottom:40px;"/>        
