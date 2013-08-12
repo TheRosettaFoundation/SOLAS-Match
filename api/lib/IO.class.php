@@ -169,7 +169,7 @@ class IO {
         $extension = explode(".", $filename);
         $extension = $extension[count($extension)-1];
         
-        if(($mime == "application/zip" || ($extension == "xlf" && ($mime == "text/html" || $mime=="application/xml"))) && array_key_exists($extension, $mimeMap)) {
+        if(($mime == "application/zip" || ($extension == "xlf")) && array_key_exists($extension, $mimeMap)) {
             $result = $mimeMap[$extension];
         } else {
             $result = $mime;
