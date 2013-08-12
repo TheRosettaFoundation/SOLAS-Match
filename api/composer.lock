@@ -68,12 +68,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SeanMooney/oauth2-server.git",
-                "reference": "1d96b2c12c77121e73b5d87f9aa99bed4c396db3"
+                "reference": "9c3337250e2b723f2c183cf9300ebe48e34b1f97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SeanMooney/oauth2-server/zipball/1d96b2c12c77121e73b5d87f9aa99bed4c396db3",
-                "reference": "1d96b2c12c77121e73b5d87f9aa99bed4c396db3",
+                "url": "https://api.github.com/repos/SeanMooney/oauth2-server/zipball/9c3337250e2b723f2c183cf9300ebe48e34b1f97",
+                "reference": "9c3337250e2b723f2c183cf9300ebe48e34b1f97",
                 "shasum": ""
             },
             "require": {
@@ -120,7 +120,7 @@
             "support": {
                 "source": "https://github.com/SeanMooney/oauth2-server/tree/master"
             },
-            "time": "2013-08-09 16:44:48"
+            "time": "2013-08-09 18:17:59"
         },
         {
             "name": "videlalvaro/php-amqplib",
@@ -128,12 +128,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/videlalvaro/php-amqplib.git",
-                "reference": "f88b97837ce43dbb9e697ec7f8795d6d20b28f57"
+                "reference": "436baa0e0c350275f8ebd2f2c9f53753ecc7b7d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/f88b97837ce43dbb9e697ec7f8795d6d20b28f57",
-                "reference": "f88b97837ce43dbb9e697ec7f8795d6d20b28f57",
+                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/436baa0e0c350275f8ebd2f2c9f53753ecc7b7d8",
+                "reference": "436baa0e0c350275f8ebd2f2c9f53753ecc7b7d8",
                 "shasum": ""
             },
             "require": {
@@ -162,7 +162,7 @@
                 "queue",
                 "rabbitmq"
             ],
-            "time": "2013-08-05 18:45:29"
+            "time": "2013-08-09 20:00:04"
         }
     ],
     "packages-dev": [

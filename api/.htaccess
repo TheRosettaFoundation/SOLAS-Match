@@ -11,6 +11,10 @@ RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_URI} !(.*/users/.*)  [NC]
 RewriteRule ^(.*)$ dispatcher.php [QSA,L]
 
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
+
 # Disable listing of directory contents
 IndexIgnore *
 
