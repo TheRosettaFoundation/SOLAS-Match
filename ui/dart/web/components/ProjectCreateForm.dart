@@ -28,6 +28,7 @@ class ProjectCreateForm extends WebComponent
   // Bound Attributes
   int userId;
   int orgId;
+  int maxFileSize;
   
   // Other
   int maxTargetLanguages;
@@ -43,7 +44,6 @@ class ProjectCreateForm extends WebComponent
   @observable Project project;
   @observable List<Language> languages;
   @observable List<Country> countries;
-  @observable int maxFileSize;
   @observable int targetCount;
   @observable SafeHtml maxTargetsReached;
   
@@ -119,11 +119,9 @@ class ProjectCreateForm extends WebComponent
     }
     
     DivElement sourceLanguageDiv = query("#sourceLanguageDiv");
-    print("Creating header");
     HeadingElement sourceTitle = new HeadingElement.h2()
     ..innerHtml = Localisation.getTranslation("common_source_language") + 
                             ": <span style=\"color: red\">*</span>";
-    print("after header");
     SelectElement sourceLanguageSelect = langSelect.clone(true);
     sourceLanguageSelect.id = "sourceLanguageSelect";
     SelectElement sourceCountrySelect = countrySelect.clone(true);
@@ -258,19 +256,21 @@ class ProjectCreateForm extends WebComponent
         });
       }
 
-      print("Project: " + json.stringify(project).toString());
       ProjectDao.createProject(project).then((Project pro) {
         if (pro == null || pro.id == null || pro.id < 1) {
-          print("Failed to create project error");
           createProjectError = new SafeHtml.unsafe("<span>Failed to create project</span>");
         } else {
-          project = pro;
-          print("Project Id is " + project.id.toString());
-          print("Project View: http://127.0.0.1/Solas-Match/project/" + project.id.toString() + "/view/");
-          
+          project = pro;          
           List<Future<bool>> successList = new List<Future<bool>>();
-          successList.add(uploadProjectFile());
-          successList.add(createProjectTasks());
+          successList.add(uploadProjectFile().then((bool fileUploaded) {
+            Future<bool> ret;
+            if (fileUploaded) {
+              ret = createProjectTasks();
+            } else {
+              ret = new Future.value(false);
+            }
+            return ret;
+          }));
           
           if (trackProject) {
             successList.add(ProjectDao.trackProject(project.id, userId));
@@ -280,7 +280,6 @@ class ProjectCreateForm extends WebComponent
             bool ret = true;
             successes.forEach((bool created) {
               if (!created) {
-                print("Something failed");
                 ret = false;
               }
             });
@@ -293,10 +292,13 @@ class ProjectCreateForm extends WebComponent
             if (!created) {
               print("some data failed, deleting project");
               ProjectDao.deleteProject(project.id);
+              project.id = null;
             } else {
-              Settings settings = new Settings();
-              window.location.assign(settings.conf.urls.SiteLocation + "project/" 
-                                      + project.id.toString() + "/view");
+              ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
+                Settings settings = new Settings();
+                window.location.assign(settings.conf.urls.SiteLocation + "project/" 
+                    + project.id.toString() + "/view");
+              });
             }
           }).catchError((error) {
             print("An error occured: " + error.toString());
@@ -315,6 +317,13 @@ class ProjectCreateForm extends WebComponent
     List<Country> targetCountries = new List<Country>();
     List<Task> createdTasks = new List<Task>();
     List<Future<bool>> successList = new List<Future<bool>>();
+    File projectFile = this.getProjectFile();
+    FileReader reader = new FileReader();
+    String fileText;
+    reader.onLoadEnd.listen((e) {
+      fileText = reader.result;
+    });
+    reader.readAsText(projectFile);
     Task templateTask = new Task();
     templateTask.title = project.title;
     templateTask.projectId = project.id;
@@ -332,9 +341,8 @@ class ProjectCreateForm extends WebComponent
       SelectElement targetCountrySelect = query("#target_country_$i");
       Language targetLang = languages[targetLanguageSelect.selectedIndex];
       Country targetCountry = countries[targetCountrySelect.selectedIndex];
-      print("Processing Target " + targetLang.name);
       if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
-        createProjectError = new SafeHtml.unsafe("<span>Target row $i is a duplicate.</span>");
+        createProjectError = Localisation.getTranslationSafe("project_routehandler_17");
         success = new Future.value(false);
       } else {
         Locale targetLocale = new Locale();
@@ -350,19 +358,18 @@ class ProjectCreateForm extends WebComponent
         CheckboxInputElement proofreadingCheckbox = query("#proofreading_$i");
         bool proofreadingRequired = proofreadingCheckbox.checked;
         if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
-          createProjectError = new SafeHtml.unsafe("<span>No task types selected for target pair " + 
-              targetLang.name + "-" + targetCountry.name + ".</span>");
+          createProjectError = Localisation.getTranslationSafe("project_routehandler_18");
           successList.add(new Future.value(false));
         } else if (segmentationRequired) {
           templateTask.taskType = TaskTypeEnum.SEGMENTATION.value;
           successList.add(TaskDao.createTask(templateTask).then((Task segTask) {
             bool ret;
             if (segTask == null || segTask.id == null || segTask.id < 1) {
-              createProjectError = new SafeHtml.unsafe("<span>Failed to create segmentation task for target " + 
-                  targetLang.name + "-" + targetCountry.name + ".</span>");
+              createProjectError = Localisation.getTranslationSafe("project_create_13");
               ret = false;
             } else {
               createdTasks.add(segTask);
+              TaskDao.saveTaskFile(segTask.id, userId, fileText);
               if (trackProject) {
                 TaskDao.trackTask(segTask.id, userId);
               }
@@ -376,9 +383,11 @@ class ProjectCreateForm extends WebComponent
             successList.add(TaskDao.createTask(templateTask).then((Task transTask) {
               Future<bool> ret;
               if (transTask == null || transTask.id == null || transTask.id < 1) {
+                createProjectError = Localisation.getTranslationSafe("project_create_14");
                 ret = new Future.value(false);
               } else {
                 createdTasks.add(transTask);
+                TaskDao.saveTaskFile(transTask.id, userId, fileText);
                 if (trackProject) {
                   TaskDao.trackTask(transTask.id, userId);
                 }
@@ -389,15 +398,14 @@ class ProjectCreateForm extends WebComponent
                   ret = new Future.sync(() => TaskDao.createTask(templateTask).then((Task proofTask) {
                     Future<bool> ret;
                     if (proofTask == null || proofTask.id == null || proofTask.id < 1) {
-                      createProjectError = new SafeHtml.unsafe("<span>Failed to create proofreading task for target " + 
-                          transTask.targetLocale.languageName + "-" + transTask.targetLocale.countryName + ".</span>");
+                      createProjectError = Localisation.getTranslationSafe("project_create_15"); 
                       ret = new Future.value(false);
                     } else {
                       createdTasks.add(proofTask);
+                      TaskDao.saveTaskFile(proofTask.id, userId, fileText);
                       if (trackProject) {
                         TaskDao.trackTask(proofTask.id, userId);
                       }
-                      print("Adding prereq for task " + proofTask.id.toString() + ", " + transTask.id.toString());
                       ret = new Future.sync(() => TaskDao.addTaskPreReq(proofTask.id, transTask.id)); 
                     }
                     return ret;
@@ -413,15 +421,17 @@ class ProjectCreateForm extends WebComponent
             successList.add(TaskDao.createTask(templateTask).then((Task proofTask) {
               bool ret;
               if (proofTask == null || proofTask.id == null || proofTask.id < 1) {
-                createProjectError = new SafeHtml.unsafe("<span>Failed to create proofreading task.</span>");
+                createProjectError = Localisation.getTranslationSafe("project_create_15");
                 ret = false;
               } else {
                 createdTasks.add(proofTask);
+                TaskDao.saveTaskFile(proofTask.id, userId, fileText);
                 if (trackProject) {
                   TaskDao.trackTask(proofTask.id, userId);
                 }
                 ret = true;
               }
+              return ret;
             }));
           }
         }
@@ -432,6 +442,7 @@ class ProjectCreateForm extends WebComponent
       bool ret = true;
       createdList.forEach((bool created) {
         if (!created) {
+          print("Something failed while creating project tasks");
           ret = false;
         }
       });
@@ -443,13 +454,9 @@ class ProjectCreateForm extends WebComponent
   Future<bool> uploadProjectFile()
   {
     Future<bool> ret;
-    File projectFile =  null;
-    InputElement fileInput = query("#projectFile");
-    FileList files = fileInput.files;
-    if (files.isEmpty) {
-      createProjectError = new SafeHtml.unsafe("<span>No project file uploaded.</span>");
-    } else {
-      projectFile = files[0];
+    File projectFile = this.getProjectFile();
+    if (projectFile == null) {
+      createProjectError = Localisation.getTranslationSafe("project_create_16");
     }
     
     if (projectFile != null) {
@@ -459,47 +466,42 @@ class ProjectCreateForm extends WebComponent
         String fileText;
         reader.onLoadEnd.listen((e) {
           fileText = reader.result;
-          ret = ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, fileText);
+          ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, fileText);
         });
         reader.readAsText(projectFile);
       } else {
-        createProjectError = new SafeHtml.unsafe("<span>The file you uploaded is empty.</span>");
+        createProjectError = Localisation.getTranslationSafe("project_create_17");
         ret = new Future.value(false);
       }
     } else {
       ret = new Future.value(false);
     }
+    
     return ret;
   }
   
   bool validateInput()
   {
     bool ret = true;
-    print("Project title is " + project.title.toString());
     if (project.title == '') {
       titleError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_12") + "</span>");
-      print("Title error is $titleError");
       ret = false;
     }
     if (project.description == '') {
-      print("Project description is empty");
       descriptionError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_14") + "</span>");
       ret = false;
     }
     if (project.impact == '') {
-      print("Project impact is empty");
       impactError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_15") + "</span>");
       ret = false;
     }
     if (wordCountInput != null && wordCountInput != '') {
       project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
-        print("Word count is not a valid number");
         wordCountError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_16") + "</span>");
         ret = false;
         return 0;
       });
     } else {
-      print("Project word count is empty");
       wordCountError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_16") + "</span>");
       ret = false;
     }
@@ -631,5 +633,16 @@ class ProjectCreateForm extends WebComponent
       transCheckbox.disabled = false;
       proofCheckbox.disabled = false;
     }
+  }
+  
+  File getProjectFile()
+  {
+    File projectFile = null;
+    InputElement fileInput = query("#projectFile");
+    FileList files = fileInput.files;
+    if (!files.isEmpty) {
+      projectFile = files[0];
+    }
+    return projectFile;
   }
 }

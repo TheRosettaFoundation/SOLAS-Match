@@ -41,9 +41,9 @@ class TestCase {
    */
   String get result => _result;
 
-  String _stackTrace;
+  Trace _stackTrace;
   /** Stack trace associated with this test, or [null] if it succeeded. */
-  String get stackTrace => _stackTrace;
+  Trace get stackTrace => _stackTrace;
 
   /** The group (or groups) under which this test is running. */
   final String currentGroup;
@@ -69,7 +69,6 @@ class TestCase {
 
   Function _errorHandler(String stage) => (e) {
     var stack = getAttachedStackTrace(e);
-    stack = (stack == null) ? '' : '$stack';
     if (result == null || result == PASS) {
       if (e is TestFailure) {
         fail("$e", stack);
@@ -91,8 +90,10 @@ class TestCase {
     _result = _stackTrace = null;
     _message = '';
 
-    var f = (setUp == null) ? new Future.value() : new Future(setUp);
-    return f.catchError(_errorHandler('Setup'))
+    // Avoid calling [new Future] to avoid issue 11911.
+    return new Future.value().then((_) {
+      if (setUp != null) return setUp();
+    }).catchError(_errorHandler('Setup'))
         .then((_) {
           // Skip the test if setup failed.
           if (result != null) return new Future.value();
@@ -122,9 +123,9 @@ class TestCase {
 
   // Set the results, notify the config, and return true if this
   // is the first time the result is being set.
-  void _setResult(String testResult, String messageText, String stack) {
+  void _setResult(String testResult, String messageText, stack) {
     _message = messageText;
-    _stackTrace = _formatStack(stack);
+    _stackTrace = _getTrace(stack);
     if (result == null) {
       _result = testResult;
       _config.onTestResult(this);
@@ -134,9 +135,7 @@ class TestCase {
     }
   }
 
-  void _complete(String testResult,
-                [String messageText = '',
-                 String stack = '']) {
+  void _complete(String testResult, [String messageText = '', stack]) {
     if (runningTime == null) {
       // The startTime can be `null` if an error happened during setup. In this
       // case we simply report a running time of 0.
@@ -158,8 +157,7 @@ class TestCase {
     _complete(PASS);
   }
 
-  void fail(String messageText, [String stack = '']) {
-    assert(stack != null);
+  void fail(String messageText, [stack]) {
     if (result != null) {
       String newMessage = (result == PASS)
           ? 'Test failed after initially passing: $messageText'
@@ -171,8 +169,7 @@ class TestCase {
     }
   }
 
-  void error(String messageText, [String stack = '']) {
-    assert(stack != null);
+  void error(String messageText, [stack]) {
     _complete(ERROR, messageText, stack);
   }
 

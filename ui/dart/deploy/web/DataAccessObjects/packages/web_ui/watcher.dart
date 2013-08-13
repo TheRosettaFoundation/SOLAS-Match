@@ -50,6 +50,7 @@ import 'dart:async';
 import 'dart:collection' hide LinkedList, LinkedListEntry;
 import 'observe.dart';
 import 'src/linked_list.dart';
+import 'package:logging/logging.dart';
 
 /**
  * True to use the [observe] library instead of watchers.
@@ -63,6 +64,47 @@ import 'src/linked_list.dart';
  * Currently this flag is experimental, but it may be the default in the future.
  */
 bool useObservers = false;
+
+/**
+ * True to enable more verbose debugging messages. This is useful for tracing
+ * down errors that produce loops in the watcher evaluation order, for example
+ * when you see an error message of the form "_Possible loop in watchers
+ * propagation, stopped dispatch_".
+ */
+bool verboseDebugMessages = false;
+
+
+/**
+ * Function used to record the current stack trace when [verboseDebugMessages]
+ * is true. This can be replaced if you prefer to format strack traces
+ * differently or filter frames of the stack traces. For
+ * example using <http://pub.dartlang.org/packages/stack_trace>, you can do:
+ *
+ *       import 'package:watcher/watcher.dart';
+ *       import 'package:stack_trace/stack_trace.dart';
+ *       main() {
+ *         verboseDebugMessages = true;
+ *         readCurrentStackTrace = () {
+ *           try { throw "" ; } catch (e, trace) {
+ *             return new Trace.from(trace).terse.toString();
+ *           }
+ *         };
+ *         ...
+ *       }
+ */
+Function readCurrentStackTrace = () {
+  try {
+    throw "";
+  } catch (e, trace) {
+    return trace.toString();
+  }
+};
+
+/**
+ * Log for messages produced at runtime by this library. Logging can be
+ * configured by accessing Logger.root from the logging library.
+ */
+final Logger _logger = new Logger('watcher');
 
 /**
  * Watch for changes in [target].  The [callback] function will be called when
@@ -92,11 +134,13 @@ bool useObservers = false;
  *   This is syntactic sugar for using the getter portion of a [Handle].
  *         watch(handle, ...)  // equivalent to `watch(handle._getter, ...)`
  */
-ChangeUnobserver watch(target, ChangeObserver callback, [String debugName]) {
+ChangeUnobserver watch(target, ChangeObserver callback,
+    [String debugName, String location]) {
   if (useObservers) return observe(target, callback);
 
   if (callback == null) return () {}; // no use in passing null as a callback.
   if (_watchers == null) _watchers = new LinkedList<_Watcher>();
+  debugName = debugName == null ? '<unnamed>' : debugName;
   Function exp;
   _WatcherType watcherType = _WatcherType.OTHER;
   if (target is Handle) {
@@ -116,10 +160,7 @@ ChangeUnobserver watch(target, ChangeObserver callback, [String debugName]) {
         watcherType = _WatcherType.HASH_MAP;
       }
     } catch (e, trace) { // in case target() throws some error
-      // TODO(sigmund): use logging instead of print when logger is in the SDK
-      // and available via pub (see dartbug.com/4363)
-      print('error: evaluating ${debugName != null ? debugName : "<unnamed>"} '
-            'watcher threw error ($e, $trace)');
+      _logger.warning('evaluating $debugName watcher threw error ($e, $trace)');
     }
   } else if (target is List) {
     exp = () => target;
@@ -135,7 +176,12 @@ ChangeUnobserver watch(target, ChangeObserver callback, [String debugName]) {
     watcherType = _WatcherType.HASH_MAP;
   }
 
-  var watcher = _createWatcher(watcherType, exp, callback, debugName);
+  if (verboseDebugMessages && location == null
+      && readCurrentStackTrace != null) {
+    location = readCurrentStackTrace();
+  }
+
+  var watcher = _createWatcher(watcherType, exp, callback, debugName, location);
   var node = _watchers.add(watcher);
   return node.remove;
 }
@@ -145,16 +191,16 @@ ChangeUnobserver watch(target, ChangeObserver callback, [String debugName]) {
  * [debugName].
  */
 _Watcher _createWatcher(_WatcherType type, Function exp,
-                        ChangeObserver callback, String debugName) {
+    ChangeObserver callback, String debugName, String location) {
   switch(type) {
     case _WatcherType.LIST:
-      return new _ListWatcher(exp, callback, debugName);
+      return new _ListWatcher(exp, callback, debugName, location);
     case _WatcherType.ORDERED_MAP:
-      return new _OrderDependantMapWatcher(exp, callback, debugName);
+      return new _OrderDependantMapWatcher(exp, callback, debugName, location);
     case _WatcherType.HASH_MAP:
-      return new _HashMapWatcher(exp, callback, debugName);
+      return new _HashMapWatcher(exp, callback, debugName, location);
     default:
-      return new _Watcher(exp, callback, debugName);
+      return new _Watcher(exp, callback, debugName, location);
   }
 }
 
@@ -163,8 +209,9 @@ _Watcher _createWatcher(_WatcherType type, Function exp,
  * passed to [callback] will have `null` as the old value, and the current
  * evaluation of [exp] as the new value.
  */
-ChangeUnobserver watchAndInvoke(exp, callback, [debugName]) {
-  var res = watch(exp, callback, debugName);
+ChangeUnobserver watchAndInvoke(exp, ChangeObserver callback,
+    [String debugName, String location]) {
+  var res = watch(exp, callback, debugName, location);
   // TODO(jmesserly): this should be "is Getter" once dart2js bug is fixed.
 
   var value = exp;
@@ -192,6 +239,13 @@ class _Watcher {
   /** Name used to debug. */
   final String debugName;
 
+  /** Location where the watcher was first installed (for debugging). */
+  String location;
+
+  /** Unique id used for debugging purposes. */
+  final int _uniqueId;
+  static int _nextId = 0;
+
   /** Function that retrieves the value being watched. */
   final Getter _getter;
 
@@ -201,11 +255,12 @@ class _Watcher {
   /** Last value observed on the matched expression. */
   var _lastValue;
 
-  _Watcher(this._getter, this._callback, this.debugName) {
+  _Watcher(this._getter, this._callback, this.debugName, this.location)
+    : _uniqueId = _nextId++ {
     _lastValue = _getter();
   }
 
-  String toString() => debugName == null ? '<unnamed>' : debugName;
+  String toString() => '$debugName (id: #$_uniqueId)';
 
   /** Detect if any changes occurred and if so invoke [_callback]. */
   bool compareAndNotify() {
@@ -222,6 +277,14 @@ class _Watcher {
   bool _compare(currentValue) => _lastValue != currentValue;
 
   void _update(currentValue) {
+    if (verboseDebugMessages) {
+      if (location != null) {
+        _logger.info('watcher updated: $this, defined at:\n$location');
+        location = null;
+      } else {
+        _logger.info('watcher updated: $this');
+      }
+    }
     _lastValue = currentValue;
   }
 
@@ -230,14 +293,14 @@ class _Watcher {
     try {
       return _getter();
     } catch (e, trace) {
-      print('error: evaluating $this watcher threw an exception ($e, $trace)');
+      _logger.warning('$this watcher threw an exception: $e, $trace');
     }
     return _lastValue;
   }
 }
 
 /** Bound for the [dispatch] algorithm. */
-final int _maxIter = 10;
+final int maxNumIterations = 10;
 
 /**
  * Scan all registered watchers and invoke their callbacks if the watched value
@@ -257,9 +320,9 @@ void dispatch() {
         dirty = true;
       }
     }
-  } while (dirty && ++total < _maxIter);
-  if (total == _maxIter) {
-    print('Possible loop in watchers propagation, stopped dispatch.');
+  } while (dirty && ++total < maxNumIterations);
+  if (total == maxNumIterations) {
+    _logger.warning('Possible loop in watchers propagation, stopped dispatch.');
   }
 }
 
@@ -321,8 +384,9 @@ class Handle<T> {
  */
 class _ListWatcher<T> extends _Watcher {
 
-  _ListWatcher(getter, ChangeObserver callback, String debugName)
-      : super(getter, callback, debugName) {
+  _ListWatcher(getter, ChangeObserver callback, String debugName,
+      String location)
+      : super(getter, callback, debugName, location) {
     _update(_safeRead());
   }
 
@@ -342,8 +406,9 @@ class _ListWatcher<T> extends _Watcher {
  */
 class _HashMapWatcher<K, V> extends _Watcher {
 
-  _HashMapWatcher(getter, ChangeObserver callback, String debugName)
-      : super(getter, callback, debugName) {
+  _HashMapWatcher(getter, ChangeObserver callback, String debugName,
+      String location)
+      : super(getter, callback, debugName, location) {
     _update(_safeRead());
   }
 
@@ -371,8 +436,9 @@ class _HashMapWatcher<K, V> extends _Watcher {
  */
 class _OrderDependantMapWatcher<K, V> extends _Watcher {
 
-  _OrderDependantMapWatcher(getter, ChangeObserver callback, String debugName)
-      : super(getter, callback, debugName) {
+  _OrderDependantMapWatcher(getter, ChangeObserver callback, String debugName,
+      String location)
+      : super(getter, callback, debugName, location) {
     _update(_safeRead());
   }
 

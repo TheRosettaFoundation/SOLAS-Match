@@ -10,29 +10,6 @@
 /*!40101 SET NAMES utf8 */;
 SET FOREIGN_KEY_CHECKS=0;
 
-/*----------------------------------alter tables---------------------------------------------------*/
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    if (EXISTS (SELECT 1 
-                FROM information_schema.COLUMNS c 
-                WHERE c.TABLE_NAME = "UserTaskStreamNotifications"
-                AND c.TABLE_SCHEMA = database())) then
-        if NOT EXISTS (SELECT *
-                        FROM information_schema.COLUMNS cols
-                        WHERE cols.TABLE_SCHEMA = database()
-                        AND cols.TABLE_NAME = "UserTaskStreamNotifications"
-                        AND cols.COLUMN_NAME = "strict") then
-            ALTER TABLE `UserTaskStreamNotifications`
-                ADD COLUMN `strict` INT(1) NOT NULL DEFAULT 0 AFTER `interval`;
-        end if;
-    end if;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
-
 /*--------------------------------------------------start of tables--------------------------------*/
 
 -- Dumping structure for table Solas-Match-Test.Admins
@@ -261,6 +238,23 @@ REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
 	(1, "Daily"),
 	(2, "Weekly"),
 	(3, "Monthly");
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    if EXISTS(select 1 from information_schema.`COLUMNS` i 
+                    where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users') then
+        if NOT EXISTS (select 1 from information_schema.`COLUMNS` i 
+                        where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users'
+                        and i.COLUMN_KEY != '' and i.COLUMN_NAME = 'password' ) then
+                ALTER TABLE `Users` ADD KEY `user_pass` (`password`);
+        end if;
+    end if;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
 
 
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
@@ -639,6 +633,23 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
   CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    if NOT EXISTS (SELECT 1
+                    FROM information_schema.COLUMNS cols
+                    WHERE cols.TABLE_SCHEMA = database()
+                    AND cols.TABLE_NAME = "UserTaskStreamNotifications"
+                    AND cols.COLUMN_NAME = "strict") then
+        ALTER TABLE `UserTaskStreamNotifications`
+            ADD COLUMN `strict` INT(1) NOT NULL DEFAULT 0 AFTER `interval`;
+    end if;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
+
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.UserOrganisationPermissions
@@ -692,12 +703,27 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `created-time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
+  KEY `user_pass` (`password`),
   KEY `FK_user_language` (`language_id`),
   KEY `FK_user_country` (`country_id`),
   CONSTRAINT `FK_user_country` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    if NOT EXISTS (select 1 from information_schema.`COLUMNS` i 
+                    where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users'
+                    and i.COLUMN_KEY != '' and i.COLUMN_NAME = 'password' ) then
+            ALTER TABLE `Users` ADD KEY `user_pass` (`password`);
+    end if;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.UserSecondaryLanguages
@@ -2404,7 +2430,6 @@ FROM UserBadges ub JOIN Badges b ON ub.badge_id = b.id
 WHERE user_id = id;
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;

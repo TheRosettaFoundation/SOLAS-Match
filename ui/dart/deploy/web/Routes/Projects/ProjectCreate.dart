@@ -36,7 +36,9 @@ void init()
   __t.oneWayBind(() => int.parse(__e0.xtag.attributes['user-id']), 
       (e) { if (__e0.xtag.userId != e) __e0.xtag.userId = e; }, false, false);
   __t.oneWayBind(() => int.parse(__e0.xtag.attributes['org-id']), 
-      (e) { if (__e0.xtag.userId != e) __e0.xtag.orgId = e; }, false, false);
+      (e) { if (__e0.xtag.orgId != e) __e0.xtag.orgId = e; }, false, false);
+  __t.oneWayBind(() => int.parse(__e0.xtag.attributes['max-file-size']), 
+      (e) { if (__e0.xtag.maxFileSize != e) __e0.xtag.maxFileSize = e; }, false, false);
   form.host = __e0;
   __t.component(form);
   __t.create();

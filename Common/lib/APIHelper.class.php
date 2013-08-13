@@ -11,6 +11,7 @@ class APIHelper
 {
     private $_serializer;
     private $responseCode;
+    private $outputHeaders;
 
     public function __construct($format)
     {
@@ -38,8 +39,9 @@ class APIHelper
     }
 
     public function call($destination,$url, $method = HttpMethodEnum::GET,
-             $data = null, $query_args = array(), $file = null)
+             $data = null, $query_args = array(), $file = null,$headers=null)
     {
+
         $url = $url.$this->_serializer->getFormat()."/?";
         if (count($query_args) > 0) {
             $first= true;
@@ -63,18 +65,25 @@ class APIHelper
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
 
+        curl_setopt($re, CURLOPT_COOKIESESSION, true);
         if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");        
         
+        curl_setopt($re, CURLOPT_AUTOREFERER, true);
         $httpHeaders = array(
-                $this->_serializer->getContentType(),                                                                                
-                'Content-Length:'.$lenght,
-                'X-Custom-Authorization:'.UserSession::getHash());       
-
+                 $this->_serializer->getContentType()
+                ,'Expect:'
+                ,'Content-Length:'.$lenght
+                ,'Authorization: Bearer '.UserSession::getHash());       
+        if(!is_null($headers)) $httpHeaders=array_merge($httpHeaders, $headers);
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
-        curl_setopt($re, CURLINFO_HEADER_OUT, true);
+        curl_setopt($re, CURLOPT_HEADER, true);
         $res=curl_exec($re);
-        $sentHeaders = curl_getinfo($re);
+        $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+        $header = substr($res, 0, $header_size);
+        $this->outputHeaders= http_parse_headers($header);
+        $res = substr($res, $header_size);
+//        $sentHeaders = curl_getinfo($re);
         $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
@@ -162,6 +171,11 @@ class APIHelper
         return $this->responseCode;
     }
     
+    public function getHeaders()
+    {
+        return $this->outputHeaders;
+    }
+    
     
     // http://stackoverflow.com/a/1147952
     private function system_extension_mime_types() {
@@ -213,4 +227,23 @@ class APIHelper
 
         return array_key_exists($extension, $mimeMap)? $mimeMap[$extension] : $this->getMimeTypeFromSystem($extension);
     }
+}
+
+ if( !function_exists( 'http_parse_headers' ) ) {
+     function http_parse_headers( $header )
+     {
+         $retVal = array();
+         $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', $header));
+         foreach( $fields as $field ) {
+             if( preg_match('/([^:]+): (.+)/m', $field, $match) ) {
+                 $match[1] = preg_replace('/(?<=^|[\x09\x20\x2D])./e', 'strtoupper("\0")', strtolower(trim($match[1])));
+                 if( isset($retVal[$match[1]]) ) {
+                     $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
+                 } else {
+                     $retVal[$match[1]] = trim($match[2]);
+                 }
+             }
+         }
+         return $retVal;
+     }
 }

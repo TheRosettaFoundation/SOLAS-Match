@@ -20,7 +20,8 @@ void renderTests(String baseDir, String inputDir, String expectedDir,
   if (arguments == null) arguments = new Options().arguments;
   if (script == null) script = new Options().script;
 
-  var filePattern = new RegExp(pattern != null ? pattern : '.');
+  var filePattern = new RegExp(pattern != null ? pattern
+      : (arguments.length > 0 ? arguments.removeAt(0) : '.'));
 
   var scriptDir = path.absolute(path.dirname(script));
   baseDir = path.join(scriptDir, baseDir);

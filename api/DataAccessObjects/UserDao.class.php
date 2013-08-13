@@ -191,7 +191,7 @@ class UserDao
         }
         return $ret;
     }
-    
+       
     public static function openIdLogin($openid,$app)
     {
         if (!$openid->mode) {
@@ -742,6 +742,17 @@ class UserDao
             return $result[0]['result'];            
         }
         return $ret;
+    }
+    
+    public static function getByOauthToken($token)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNullOrWrapStr($token);
+        $result = PDOWrapper::call('getUserByOAuthToken', $args);
+        if ($result) {
+            $ret = ModelFactory::buildModel("User", $result[0]);
+        }
+        return $ret;  
     }
     
 }

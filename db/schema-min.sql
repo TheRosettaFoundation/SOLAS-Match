@@ -239,7 +239,6 @@ REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
 	(2, "Weekly"),
 	(3, "Monthly");
 
-
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   `user_id` int(10) unsigned NOT NULL,
@@ -667,6 +666,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `created-time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
+  KEY `user_pass` (`password`),
   KEY `FK_user_language` (`language_id`),
   KEY `FK_user_country` (`country_id`),
   CONSTRAINT `FK_user_country` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -684,8 +684,7 @@ CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `user_id` (`user_id`, `language_id`, `country_id`),
 	CONSTRAINT `FK_UserSecondaryLanguages_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserSecondaryLanguages_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+	CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE	
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -4676,7 +4675,6 @@ CREATE TRIGGER `afterTaskCreate` AFTER INSERT ON `Tasks` FOR EACH ROW BEGIN
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
-
 
 
 /*---------------------------------------end of triggers-------------------------------------------*/

@@ -81,80 +81,12 @@ class UserRouteHandler
 
         $current_user_id = UserSession::getCurrentUserID();
         
-        if ($current_user_id == null) {
-            $tasks = $taskDao->getTopTasks(10);
-            for ($i = 0; $i < count($tasks); $i++) {
-                $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
-                $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
-            }
-
-            $app->view()->appendData(array(
-                "tasks" => $tasks
-            ));
-
-        } else {
-            $taskTypes = array();
-            $taskTypes[TaskTypeEnum::SEGMENTATION] = "Segmentation";
-            $taskTypes[TaskTypeEnum::TRANSLATION] = "Translation";
-            $taskTypes[TaskTypeEnum::PROOFREADING] = "Proofreading";
-            $taskTypes[TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
-
-            $languageList = $langDao->getActiveLanguages();
-
-            $filter = array();
-            $selectedType = "";
-            $selectedSource = "";
-            $selectedTarget = "";
-            if ($app->request()->isPost()) {
-                $post = $app->request()->post();
-
-                if (isset($post['taskType']) && $post['taskType'] != '') {
-                    $selectedType = $post['taskType'];
-                    $filter['taskType'] = $post['taskType'];
-                }
-
-                if (isset($post['sourceLanguage']) && $post['sourceLanguage'] != '') {
-                    $selectedSource = $post['sourceLanguage'];
-                    $filter['sourceLanguage'] = $post['sourceLanguage'];
-                }
-
-                if (isset($post['targetLanguage']) && $post['targetLanguage'] != '') {
-                    $selectedTarget = $post['targetLanguage'];
-                    $filter['targetLanguage'] = $post['targetLanguage'];
-                }
-            }
-
-            $tasks = $userDao->getUserTopTasks($current_user_id, false, 10, $filter);
-            for ($i = 0; $i < count($tasks); $i++) {
-                $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
-                $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
-            }
-
-            $app->view()->appendData(array(
-                "taskTypes" => $taskTypes,
-                "languageList" => $languageList,
-                "selectedType" => $selectedType,
-                "selectedSource" => $selectedSource,
-                "selectedTarget" => $selectedTarget,
-                "tasks" => $tasks
-            ));
-            
+        if ($current_user_id != null) {
             $user_tags = $userDao->getUserTags($current_user_id);
             $app->view()->appendData(array(
                         "user_tags" => $user_tags
             ));
         }
-        
-        $numTaskTypes = Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        
-        for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
-        }  
-        
-        $app->view()->appendData(array(
-                     "taskTypeColours" => $taskTypeColours
-        ));
         
         $app->render("index.tpl");
     }
@@ -188,7 +120,7 @@ class UserRouteHandler
             $post = $app->request()->post();
             $temp =$post['email'].substr(Settings::get("session.site_key"),0,20);
                 UserSession::clearCurrentUserID();
-                UserSession::setHash(md5($temp));
+//                UserSession::setHash(md5($temp));
             if (!TemplateHelper::isValidEmail($post['email'])) {
                 $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_1);
             } elseif (!TemplateHelper::isValidPassword($post['password'])) {
@@ -230,7 +162,7 @@ class UserRouteHandler
             if (isset($post['verify'])) {
                 $userDao->finishRegistration($user->getId());
                 UserSession::setSession($user->getId());
-                UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+//                UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_6));
                 $app->redirect($app->urlFor("home"));
             }
@@ -347,7 +279,7 @@ class UserRouteHandler
                 if (isset($post['login'])) {    
                     if($user = $userDao->login($post['email'], $post['password'])) {
                         UserSession::setSession($user->getId());
-                        UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+//                        UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                     }                   
                     $request = UserSession::getReferer();
                     UserSession::clearReferer();
@@ -366,7 +298,7 @@ class UserRouteHandler
                 }
             }
             $app->render("user/login.tpl");
-        } catch (InvalidArgumentException $e) {
+        } catch (SolasMatchException $e) {
             $error = sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_15), $app->urlFor("login"), $app->urlFor("register"), $e->getMessage());            
             $app->flash("error", $error);
             $app->redirect($app->urlFor("login"));
@@ -393,20 +325,20 @@ class UserRouteHandler
                 $userDao = new UserDao();
                 $temp =$retvals['contact/email'].substr(Settings::get("session.site_key"),0,20);
                 UserSession::clearCurrentUserID();
-                UserSession::setHash(md5($temp));
-                $user = $userDao->getUserByEmail($retvals['contact/email']);
+//                UserSession::setHash(md5($temp));
+                $user = $userDao->openIdLogin($retvals['contact/email'],md5($temp));
                 if(is_array($user)) $user = $user[0];                    
                 if(is_null($user)) {
                     $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));
                     if(is_array($user)) $user = $user[0]; 
                     UserSession::setSession($user->getId());
-                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                     return false;
                 }
                 $adminDao = new AdminDao();
                 if(!$adminDao->isUserBanned($user->getId())) {
                     UserSession::setSession($user->getId());
-                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
+//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 } else {
                     $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
                     $app->redirect($app->urlFor('home'));

@@ -11,21 +11,15 @@
                 </small>
             </h1>
         </div>           
-
-        {if isset($error)}
-            <div class="alert alert-error">
-                    {$error}
-            </div>
-        {/if}
     </div>  
     <p style="margin-bottom:20px;"/>
 
     <div class="well">
-        <div is="x-project-create-form" id="ProjectCreateForm" user-id="{$user_id}" org-id="{$org_id}"></div>
+        <div is="x-project-create-form" id="ProjectCreateForm" user-id="{$user_id}" org-id="{$org_id}" max-file-size="{$maxFileSize}"></div>
 
         <script src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/dart.js"></script>
         <script src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/interop.js"></script>
-        <script type="application/dart" src="{urlFor name="home"}ui/dart/web/Routes/Projects/ProjectCreate.dart"></script>
+        <script type="application/dart" src="{urlFor name="home"}ui/dart/deploy/web/Routes/Projects/ProjectCreate.dart"></script>
     </div>
     <p style="margin-bottom:20px;"></p>
     

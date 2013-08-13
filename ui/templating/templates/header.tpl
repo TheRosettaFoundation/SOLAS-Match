@@ -1,4 +1,4 @@
-<!--<!DOCTYPE html>-->
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
@@ -22,7 +22,6 @@
         <!-- javascript -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/google-translate.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/Long.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/ByteBuffer.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/ProtoBuf.min.js">var ProtoBuf = dcodeIO.ProtoBuf;</script>

@@ -67,7 +67,7 @@
                   <p class="desc">
                     {{Localisation.getTranslationSafe("project_create_6")}}.
                     {{Localisation.getTranslationSafe("common_maximum_file_size_is")}}
-                    <strong>{{maxFileSize}}MB</strong>.
+                    <strong>{{maxFileSize / 1024 / 1024}}MB</strong>.
                   </p>
                   <input type="file" id="projectFile" />
                 </div>

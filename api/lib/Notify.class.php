@@ -1,6 +1,5 @@
 <?php
 
-require_once "HTTP/Request2.php";
 require_once __DIR__."/MessagingClient.class.php";
 require_once __DIR__."/../../Common/Settings.class.php";
 require_once __DIR__."/../vendor/autoload.php";

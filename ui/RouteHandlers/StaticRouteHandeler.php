@@ -12,6 +12,7 @@ class StaticRouteHandeler
         $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST","GET")->name("siteLanguage");
         $app->get("/static/getStrings/", array($this, "getStrings"))->name("staticGetStrings");
         $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
+        $app->get("/static/getUserHash/", array($this, "getUserHash"))->name("staticGetUserHash");
         $app->notFound("Middleware::notFound");
 
     }
@@ -58,6 +59,13 @@ class StaticRouteHandeler
         if(!is_null(UserSession::getCurrentUserID())){
             $dao = new UserDao();
             Slim::getInstance()->response()->body($dao->getUserDart(UserSession::getCurrentUserID()));           
+        }
+    }
+    
+    public function getUserHash(){
+        if(!is_null(UserSession::getHash())){
+            $dao = new UserDao();
+            Slim::getInstance()->response()->body(UserSession::getHash());           
         }
     }
     

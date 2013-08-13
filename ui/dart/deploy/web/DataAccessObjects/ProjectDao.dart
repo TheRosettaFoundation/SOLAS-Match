@@ -30,6 +30,15 @@ class ProjectDao
     return project;
   }
   
+  static Future<bool> calculateProjectDeadlines(int projectId)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<bool> ret = client.call("", "v0/projects/$projectId/calculateDeadlines", "POST").then((String response) {
+      return true;
+    });
+    return ret;
+  }
+  
   static Future<Project> createProject(Project project)
   {
     APIHelper client = new APIHelper(".json");
@@ -60,8 +69,10 @@ class ProjectDao
     APIHelper client = new APIHelper(".json");
     Future<bool> ret = client.call("", "v0/projects/$projectId/file/$filename/$userId", "PUT", data)
         .then((String data) {
+          print("Upload Project File Returned $data");
           return true;
         });
+    return ret;
   }
   
   static Future<bool> trackProject(int projectId, int userId)

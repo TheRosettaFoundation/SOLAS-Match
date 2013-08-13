@@ -77,6 +77,7 @@ class _Analyzer extends TreeVisitor {
   Iterator<int> _uniqueIds;
   Map<String, String> _pseudoElements;
   Messages _messages;
+  bool _inHead = false;
 
   /**
    * Whether to keep indentation spaces. Break lines and indentation spaces
@@ -181,12 +182,18 @@ class _Analyzer extends TreeVisitor {
       _keepIndentationSpaces = value != 'remove';
     }
 
+    var savedInHead = _inHead;
+    if (node.tagName == 'head') {
+      _inHead = true;
+    }
+
     // Invoke super to visit children.
     super.visitElement(node);
 
     _keepIndentationSpaces = keepSpaces;
     _currentInfo = lastInfo;
     _parent = savedParent;
+    _inHead = savedInHead;
 
     if (_needsIdentifier(info)) {
       _ensureParentHasVariable(info);
@@ -434,6 +441,10 @@ class _Analyzer extends TreeVisitor {
 
     if (attrInfo != null) {
       info.attributes[name] = attrInfo;
+      if (_inHead) {
+        _messages.error('Attribute bindings are not supported under the <head>'
+            'element', info.node.attributeSpans[name]);
+      }
     }
 
     // Any component's custom pseudo-element(s) defined?
@@ -693,6 +704,10 @@ class _Analyzer extends TreeVisitor {
     }
 
     _parent.childrenCreatedInCode = true;
+    if (_inHead) {
+      _messages.error('Bindings are not supported under the <head> element',
+          text.sourceSpan);
+    }
 
     // We split [text] so that each binding has its own text node.
     var node = text.parent;

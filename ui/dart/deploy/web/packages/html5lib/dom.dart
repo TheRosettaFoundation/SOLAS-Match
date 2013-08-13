@@ -5,7 +5,6 @@
 library dom;
 
 import 'dart:collection';
-import 'package:meta/meta.dart';
 import 'package:source_maps/span.dart' show FileSpan;
 
 import 'src/constants.dart';

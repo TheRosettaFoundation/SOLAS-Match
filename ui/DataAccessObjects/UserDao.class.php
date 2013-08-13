@@ -3,6 +3,7 @@
 
 require_once __DIR__."/../../Common/HttpStatusEnum.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/../../Common/models/OAuthResponce.php";
 require_once __DIR__."/BaseDao.php";
 
 
@@ -341,7 +342,23 @@ class UserDao extends BaseDao
         $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $ret;
     }
-
+    
+    public function openIdLogin($email,$headerhash){
+    
+        $ret = null;
+        $request = "{$this->siteApi}v0/login/openidLogin/$email";
+        $ret = $this->client->call("User", $request,  HttpMethodEnum::GET,null,null,null,array("X-Custom-Authorization:$headerhash"));
+         $headers = $this->client->getHeaders();
+        if(isset ($headers["X-Custom-Token"])){
+            $token = $this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce');
+            if($token->hasToken())UserSession::setHash($token->getToken());
+        }
+        return $ret;
+        
+    }
+    
+    
+    
     public function login($email, $password)
     {
         $ret = null;
@@ -349,24 +366,36 @@ class UserDao extends BaseDao
         $login->setEmail($email);
         $login->setPassword($password);
         $request = "{$this->siteApi}v0/login";
-        $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $login);
+        try {        
+            $ret = $this->client->call("User", $request, HttpMethodEnum::POST, $login);
+        } catch(SolasMatchException $e) {
+            switch($e->getCode()) {
 
-        switch($this->client->getResponseCode()) {
-            
-            case HttpStatusEnum::NOT_FOUND : 
-                throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_DAO_1)); 
-                
-            case HttpStatusEnum::UNAUTHORIZED : 
-                throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_DAO_2));              
-                
-            case HttpStatusEnum::FORBIDDEN :
-                $userDao = new UserDao();
-                $user = $userDao->getUserByEmail($email);
-                
-                $adminDao = new AdminDao();                
-                $bannedUser = $adminDao->getBannedUser($user->getId());
-                throw new InvalidArgumentException("{$bannedUser->getComment()}");
+                case HttpStatusEnum::NOT_FOUND : 
+                    throw new SolasMatchException(Localisation::getTranslation(Strings::USER_DAO_1));
 
+                case HttpStatusEnum::UNAUTHORIZED : 
+                    throw new SolasMatchException(Localisation::getTranslation(Strings::USER_DAO_2));
+
+                case HttpStatusEnum::FORBIDDEN :
+                    $userDao = new UserDao();
+                    $user = $userDao->getUserByEmail($email);
+
+                    $adminDao = new AdminDao();                
+                    $bannedUser = $adminDao->getBannedUser($user->getId());
+                    throw new SolasMatchException("{$bannedUser->getComment()}");
+                    
+                default :
+                    throw $e;
+            }
+        }
+        
+
+
+        $headers = $this->client->getHeaders();
+        if(isset ($headers["X-Custom-Token"])){
+            $token = $this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce');
+            if($token->hasToken())UserSession::setHash($token->getToken());
         }
         return $ret;
     }

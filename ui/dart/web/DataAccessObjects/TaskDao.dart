@@ -83,6 +83,7 @@ class TaskDao
     APIHelper client = new APIHelper(".json");
     Future<Task> ret = client.call("Task", "v0/tasks", "POST", json.stringify(task))
         .then((String jsonTask) {
+          print("JSON Task: " + jsonTask);
           task = null;
           if (jsonTask.length > 0) {
             Map jsonParsed = json.parse(jsonTask);
@@ -101,6 +102,16 @@ class TaskDao
     Future<bool> ret = client.call("", "v0/tasks/$taskId/prerequisites/$preReqId", "PUT").then((String response) {
       return true;
     });
+    return ret;
+  }
+  
+  static Future<bool> saveTaskFile(int taskId, int userId, String fileData)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<bool> ret = client.call("", "v0/tasks/saveFile/$taskId/$userId", "PUT", fileData).then((String response) {
+      return true;
+    });
+    return ret;
   }
   
   static Future<bool> trackTask(int taskId, int userId)

@@ -57,6 +57,11 @@ class PDOWrapper {
         }
     }
 
+    public function getConnection()
+    {
+        return is_null($this->connection) ? $this->openConnection() : $this->connection;
+    }
+    
     /*
      * Connect to the database itself.
      */

@@ -2915,7 +2915,7 @@ class InSelectInTablePhase extends Phase {
 
 class InForeignContentPhase extends Phase {
   // TODO(jmesserly): this is sorted so we could binary search.
-  const breakoutElements = const [
+  static const breakoutElements = const [
     'b', 'big', 'blockquote', 'body', 'br','center', 'code', 'dd', 'div', 'dl',
     'dt', 'em', 'embed', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'i',
     'img', 'li', 'listing', 'menu', 'meta', 'nobr', 'ol', 'p', 'pre', 'ruby',
