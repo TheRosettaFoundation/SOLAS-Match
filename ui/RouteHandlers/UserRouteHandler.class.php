@@ -292,7 +292,9 @@ class UserRouteHandler
                 if($this->openIdLogin($openid, $app)){
                     $request = UserSession::getReferer();
                     UserSession::clearReferer();
-                    $app->redirect(strpos($request, $app->request()->getRootUri()) ? $request : $app->urlFor("home"));                    
+                    if($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                        $app->redirect( $request);
+                    } else $app->redirect($app->urlFor("home"));                    
                 }  else {
                     $app->redirect($app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID())));
                 }
