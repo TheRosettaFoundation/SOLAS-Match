@@ -393,7 +393,7 @@ class UserDao extends BaseDao
 
         $headers = $this->client->getHeaders();
         if(isset ($headers["X-Custom-Token"])){
-            UserSession::setToken($this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce'));
+            UserSession::setAccessToken($this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce'));
         }
         return $ret;
     }
