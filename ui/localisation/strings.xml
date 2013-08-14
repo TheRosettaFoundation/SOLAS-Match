@@ -66,7 +66,7 @@
         <string name="project_routehandler_20">There was an error archiving the project <strong>%s</strong>.</string>
         <string name="project_routehandler_21">File Error:</string>
         
-        <string name="tag_routehandler_1">Successfully added tag, %s, to subscription list</string>
+        <string name="tag_routehandler_1">Successfully added tag %s, to subscription list</string>
         <string name="tag_routehandler_2">Unable to save tag, %s, for user %s.</string>
         <string name="tag_routehandler_3">Successfully removed tag %s for user %s</string>
         <string name="tag_routehandler_4">Unable to remove tag %s for user %s</string>
