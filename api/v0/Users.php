@@ -121,7 +121,7 @@ class Users {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUserByEmail');
+        }, 'getUserByEmail',  "Middleware::Registervalidation");
 
        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/subscribedToTask/:id/:taskID/',
