@@ -88,15 +88,19 @@ class LoginAPI {
             if (is_array($data)) {
                 $data = $data[0];
             }
-            $server = Dispatcher::getOauthServer();       
-            $responce = $server->getGrantType('password')->completeFlow(array("client_id"=>$data->getId(),"client_secret"=>$data->getPassword()));
-            $oAuthResponce = new OAuthResponce();
-            $oAuthResponce->setToken($responce['access_token']);
-            $oAuthResponce->setTokenType($responce['token_type']);
-            $oAuthResponce->setExpires($responce['expires']);
-            $oAuthResponce->setExpiresIn($responce['expires_in']);
             
-            Dispatcher::sendResponce(null, $data, null, $format,$oAuthResponce);
+            $oAuthResponce = null;
+            if(!is_null($data)) {
+                $server = Dispatcher::getOauthServer();       
+                $responce = $server->getGrantType('password')->completeFlow(array("client_id"=>$data->getId(),"client_secret"=>$data->getPassword()));
+                $oAuthResponce = new OAuthResponce();
+                $oAuthResponce->setToken($responce['access_token']);
+                $oAuthResponce->setTokenType($responce['token_type']);
+                $oAuthResponce->setExpires($responce['expires']);
+                $oAuthResponce->setExpiresIn($responce['expires_in']);
+            }
+            
+            Dispatcher::sendResponce(null, $data, null, $format, $oAuthResponce);
         }, 'openidLogin',null);
     }
 }
