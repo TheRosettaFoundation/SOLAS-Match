@@ -4747,6 +4747,18 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
+-- Dumping structure for trigger debug-test3.afterDeleteTaskClaim
+DROP TRIGGER IF EXISTS `afterDeleteTaskClaim`;
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `afterDeleteTaskClaim` AFTER DELETE ON `TaskClaims` FOR EACH ROW BEGIN
+	IF EXISTS (SELECT 1 FROM Tasks t WHERE t.id = old.task_id AND t.`task-status_id` = 3) THEN
+		UPDATE Tasks SET `task-status_id` = 2 WHERE id = old.task_id;
+	END IF;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
 
 /*---------------------------------------end of triggers-------------------------------------------*/
 SET FOREIGN_KEY_CHECKS=1;
