@@ -63,9 +63,9 @@ class StaticRouteHandeler
     }
     
     public function getUserHash(){
-        if(!is_null(UserSession::getHash())){
+        if(!is_null(UserSession::getAccessToken())){
             $dao = new UserDao();
-            Slim::getInstance()->response()->body(UserSession::getHash());           
+            Slim::getInstance()->response()->body(UserSession::getAccessToken()->getToken());           
         }
     }
     
