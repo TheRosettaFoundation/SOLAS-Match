@@ -36,11 +36,11 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function getUserByEmail($email)
+    public function getUserByEmail($email, $headerHash=null)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/getByEmail/$email"; 
-        $ret = $this->client->call("User", $request);
+        $ret = $this->client->call("User", $request,  HttpMethodEnum::GET,null,null,null,array("X-Custom-Authorization:$headerHash"));
         return $ret;
     }
 

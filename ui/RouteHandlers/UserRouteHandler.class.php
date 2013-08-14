@@ -125,7 +125,7 @@ class UserRouteHandler
                 $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_1);
             } elseif (!TemplateHelper::isValidPassword($post['password'])) {
                 $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_2);
-            } elseif ($user = $userDao->getUserByEmail($post['email'])) {
+            } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
                 if ($return = $userDao->isUserVerified($user->getId())) {
                     $error = sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_3), $app->urlFor("login"));
                 }
