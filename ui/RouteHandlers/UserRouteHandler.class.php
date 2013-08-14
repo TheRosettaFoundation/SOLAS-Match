@@ -118,8 +118,8 @@ class UserRouteHandler
         $warning = null;
         if (isValidPost($app)) {
             $post = $app->request()->post();
-            $temp =$post['email'].substr(Settings::get("session.site_key"),0,20);
-                UserSession::clearCurrentUserID();
+            $temp = md5($post['email'].substr(Settings::get("session.site_key"),0,20))
+;                UserSession::clearCurrentUserID();
 //                UserSession::setHash(md5($temp));
             if (!TemplateHelper::isValidEmail($post['email'])) {
                 $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_1);
