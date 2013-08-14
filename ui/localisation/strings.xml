@@ -115,7 +115,7 @@
         <string name="user_routehandler_8">You have successfully changed your password.</string>
         <string name="user_routehandler_9">Unable to change password.</string>
         <string name="user_routehandler_10">The passwords entered do not match. Please try again.</string>
-        <string name="user_routehandler_11">Please check the password provided, and try again. It was not found to be valid.</string>
+        <string name="user_routehandler_11">Please check the password provided and try again.</string>
         <string name="user_routehandler_12">Password reset request sent. Check your email for further instructions.</string>
         <string name="user_routehandler_13">Password reset request was already sent to %s. Another email has been sent to your contact address. Follow the link in this email to reset your password.</string>
         <string name="user_routehandler_14">Please enter a valid email address.</string>
