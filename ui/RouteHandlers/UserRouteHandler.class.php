@@ -329,20 +329,11 @@ class UserRouteHandler
                 $userDao = new UserDao();
                 $temp =$retvals['contact/email'].substr(Settings::get("session.site_key"),0,20);
                 UserSession::clearCurrentUserID();
-//                UserSession::setHash(md5($temp));
                 $user = $userDao->openIdLogin($retvals['contact/email'],md5($temp));
-                if(is_array($user)) $user = $user[0];                    
-                if(is_null($user)) {
-                    $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));
-                    if(is_array($user)) $user = $user[0]; 
-                    UserSession::setSession($user->getId());
-//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
-                    return false;
-                }
+                if(is_array($user)) $user = $user[0];
                 $adminDao = new AdminDao();
                 if(!$adminDao->isUserBanned($user->getId())) {
                     UserSession::setSession($user->getId());
-//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 } else {
                     $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
                     $app->redirect($app->urlFor('home'));

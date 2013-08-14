@@ -90,7 +90,13 @@ class LoginAPI {
             }
             
             $oAuthResponce = null;
-            if(!is_null($data)) {
+            if(is_null($data)) {
+                $data = UserDao::apiRegister($email, md5($email));
+                if (is_array($data) && isset($data[0])) {
+                    $data=$data[0];
+                }
+                UserDao::finishRegistration($data->getId());
+            }
                 $server = Dispatcher::getOauthServer();       
                 $responce = $server->getGrantType('password')->completeFlow(array("client_id"=>$data->getId(),"client_secret"=>$data->getPassword()));
                 $oAuthResponce = new OAuthResponce();
@@ -98,7 +104,6 @@ class LoginAPI {
                 $oAuthResponce->setTokenType($responce['token_type']);
                 $oAuthResponce->setExpires($responce['expires']);
                 $oAuthResponce->setExpiresIn($responce['expires_in']);
-            }
             
             Dispatcher::sendResponce(null, $data, null, $format, $oAuthResponce);
         }, 'openidLogin',null);
