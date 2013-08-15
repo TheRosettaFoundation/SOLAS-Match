@@ -1325,8 +1325,20 @@ DROP PROCEDURE IF EXISTS `getAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `orgId` INT)
 BEGIN
-	SELECT u.id,u.`display-name`,u.email,u.password,u.biography, (SELECT `en-name` FROM Languages WHERE id =u.`language_id`) AS `languageName`, (SELECT code FROM Languages WHERE id =u.`language_id`) AS `languageCode`, (SELECT `en-name` FROM Countries WHERE id =u.`country_id`) AS `countryName`, (SELECT code FROM Countries WHERE id =u.`country_id`) AS `countryCode`, u.nonce,u.`created-time` 
-	FROM Users u JOIN Admins a ON a.user_id = u.id WHERE (a.organisation_id = orgId or orgId is null);
+
+	IF orgId = '' THEN SET orgId = NULL; END IF;	
+	
+	set @q= "SELECT u.id,u.`display-name`,u.email,u.password,u.biography, (SELECT `en-name` FROM Languages WHERE id =u.`language_id`) AS `languageName`, (SELECT code FROM Languages WHERE id =u.`language_id`) AS `languageCode`, (SELECT `en-name` FROM Countries WHERE id =u.`country_id`) AS `countryName`, (SELECT code FROM Countries WHERE id =u.`country_id`) AS `countryCode`, u.nonce,u.`created-time` FROM Users u JOIN Admins a ON a.user_id = u.id WHERE 1";
+	
+	IF orgId IS NOT NULL THEN	
+		SET @q = CONCAT(@q, " AND a.organisation_id =", orgId);	
+	ELSE
+		SET @q = CONCAT(@q, " AND a.organisation_id IS NULL");
+	END IF;
+
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -4675,6 +4687,18 @@ CREATE TRIGGER `afterTaskCreate` AFTER INSERT ON `Tasks` FOR EACH ROW BEGIN
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
+
+-- Dumping structure for trigger debug-test3.afterDeleteTaskClaim
+DROP TRIGGER IF EXISTS `afterDeleteTaskClaim`;
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `afterDeleteTaskClaim` AFTER DELETE ON `TaskClaims` FOR EACH ROW BEGIN
+	IF EXISTS (SELECT 1 FROM Tasks t WHERE t.id = old.task_id AND t.`task-status_id` = 3) THEN
+		UPDATE Tasks SET `task-status_id` = 2 WHERE id = old.task_id;
+	END IF;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
 
 
 /*---------------------------------------end of triggers-------------------------------------------*/

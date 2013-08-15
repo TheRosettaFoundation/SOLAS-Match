@@ -69,11 +69,13 @@ class APIHelper
         if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");        
         
         curl_setopt($re, CURLOPT_AUTOREFERER, true);
+        $token=UserSession::getAccessToken();
         $httpHeaders = array(
                  $this->_serializer->getContentType()
                 ,'Expect:'
                 ,'Content-Length:'.$lenght
-                ,'Authorization: Bearer '.UserSession::getHash());       
+                );
+        if(!is_null($token=UserSession::getAccessToken())) $httpHeaders[]= 'Authorization: Bearer '.$token->getToken();
         if(!is_null($headers)) $httpHeaders=array_merge($httpHeaders, $headers);
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 

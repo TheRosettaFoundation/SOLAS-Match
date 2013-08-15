@@ -134,8 +134,9 @@ function isValidPost(&$app)
  */
 $app->hook('slim.before.dispatch', function () use ($app)
 {
-            //apc_clear_cache();
+    if(!is_null($token =UserSession::getAccessToken()) && $token->getExpires() <  time())        UserSession::clearCurrentUserID();
     $userDao = new UserDao();
+
     if (!is_null(UserSession::getCurrentUserID()) &&
         $current_user = $userDao->getUser(UserSession::getCurrentUserID())) {
         $app->view()->appendData(array('user' => $current_user));

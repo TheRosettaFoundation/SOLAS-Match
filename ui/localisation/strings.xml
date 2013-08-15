@@ -66,7 +66,7 @@
         <string name="project_routehandler_20">There was an error archiving the project <strong>%s</strong>.</string>
         <string name="project_routehandler_21">File Error:</string>
         
-        <string name="tag_routehandler_1">Successfully added tag, %s, to subscription list</string>
+        <string name="tag_routehandler_1">Successfully added tag %s, to subscription list</string>
         <string name="tag_routehandler_2">Unable to save tag, %s, for user %s.</string>
         <string name="tag_routehandler_3">Successfully removed tag %s for user %s</string>
         <string name="tag_routehandler_4">Unable to remove tag %s for user %s</string>
@@ -103,6 +103,7 @@
         <string name="task_routehandler_30">Unable to submit review for %s, please try again later.</string>
         <string name="task_routehandler_31">Review of task %s has been submitted successfully.</string>
         <string name="task_routehandler_32">Feedback sent to <a href="%s">%s</a>.</string>
+        <string name="task_routehandler_33">Task <strong>%s</strong> not found.</string>
        
         <string name="user_routehandler_1">The email address you entered was not valid. Please try again.</string>
         <string name="user_routehandler_2">You did not enter a password. Please try again.</string>
@@ -114,7 +115,7 @@
         <string name="user_routehandler_8">You have successfully changed your password.</string>
         <string name="user_routehandler_9">Unable to change password.</string>
         <string name="user_routehandler_10">The passwords entered do not match. Please try again.</string>
-        <string name="user_routehandler_11">Please check the password provided, and try again. It was not found to be valid.</string>
+        <string name="user_routehandler_11">Please check the password provided and try again.</string>
         <string name="user_routehandler_12">Password reset request sent. Check your email for further instructions.</string>
         <string name="user_routehandler_13">Password reset request was already sent to %s. Another email has been sent to your contact address. Follow the link in this email to reset your password.</string>
         <string name="user_routehandler_14">Please enter a valid email address.</string>

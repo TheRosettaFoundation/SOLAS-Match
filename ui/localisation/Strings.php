@@ -104,6 +104,7 @@ class Strings
     const TASK_ROUTEHANDLER_30 = "task_routehandler_30";
     const TASK_ROUTEHANDLER_31 = "task_routehandler_31";
     const TASK_ROUTEHANDLER_32 = "task_routehandler_32";
+    const TASK_ROUTEHANDLER_33 = "task_routehandler_33";
     
     const USER_ROUTEHANDLER_1 = "user_routehandler_1";
     const USER_ROUTEHANDLER_2 = "user_routehandler_2";

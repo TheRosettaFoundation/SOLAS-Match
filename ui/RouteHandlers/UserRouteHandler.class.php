@@ -118,14 +118,14 @@ class UserRouteHandler
         $warning = null;
         if (isValidPost($app)) {
             $post = $app->request()->post();
-            $temp =$post['email'].substr(Settings::get("session.site_key"),0,20);
-                UserSession::clearCurrentUserID();
+            $temp = md5($post['email'].substr(Settings::get("session.site_key"),0,20))
+;                UserSession::clearCurrentUserID();
 //                UserSession::setHash(md5($temp));
             if (!TemplateHelper::isValidEmail($post['email'])) {
                 $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_1);
             } elseif (!TemplateHelper::isValidPassword($post['password'])) {
                 $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_2);
-            } elseif ($user = $userDao->getUserByEmail($post['email'])) {
+            } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
                 if ($return = $userDao->isUserVerified($user->getId())) {
                     $error = sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_3), $app->urlFor("login"));
                 }
@@ -283,7 +283,9 @@ class UserRouteHandler
                     }                   
                     $request = UserSession::getReferer();
                     UserSession::clearReferer();
-                    $app->redirect(strpos($request, $app->request()->getRootUri()) ? $request : $app->urlFor("home"));   
+                    if($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                        $app->redirect( $request);
+                    } else $app->redirect($app->urlFor("home"));     
                     
                 } elseif (isset($post['password_reset'])) {
                     $app->redirect($app->urlFor("password-reset-request"));
@@ -292,7 +294,9 @@ class UserRouteHandler
                 if($this->openIdLogin($openid, $app)){
                     $request = UserSession::getReferer();
                     UserSession::clearReferer();
-                    $app->redirect(strpos($request, $app->request()->getRootUri()) ? $request : $app->urlFor("home"));                    
+                    if($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                        $app->redirect( $request);
+                    } else $app->redirect($app->urlFor("home"));                    
                 }  else {
                     $app->redirect($app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID())));
                 }
@@ -325,20 +329,11 @@ class UserRouteHandler
                 $userDao = new UserDao();
                 $temp =$retvals['contact/email'].substr(Settings::get("session.site_key"),0,20);
                 UserSession::clearCurrentUserID();
-//                UserSession::setHash(md5($temp));
                 $user = $userDao->openIdLogin($retvals['contact/email'],md5($temp));
-                if(is_array($user)) $user = $user[0];                    
-                if(is_null($user)) {
-                    $user = $userDao->register($retvals["contact/email"], md5($retvals["contact/email"]));
-                    if(is_array($user)) $user = $user[0]; 
-                    UserSession::setSession($user->getId());
-//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
-                    return false;
-                }
+                if(is_array($user)) $user = $user[0];
                 $adminDao = new AdminDao();
                 if(!$adminDao->isUserBanned($user->getId())) {
                     UserSession::setSession($user->getId());
-//                    UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 } else {
                     $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
                     $app->redirect($app->urlFor('home'));

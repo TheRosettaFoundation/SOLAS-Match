@@ -24,7 +24,7 @@ class Middleware
          $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
         // Test for token existance and validity
         try {
-            $resource->isValid();
+            $resource->isValid(true);
             $parts =explode(" ",$_SERVER['HTTP_AUTHORIZATION']);
             return UserDao::getByOauthToken($parts[1]);
         }
@@ -62,6 +62,31 @@ class Middleware
         
     } 
     
+    
+    public static function Registervalidation ($request, $response, $route) {
+            $params = $route->getParams();
+            if(isset ($params['email'])&& isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
+                $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
+                $email =$params['email'];
+                 if (!is_numeric($email) && strstr($email, '.')) {
+                    $temp = array();
+                    $temp = explode('.', $email);
+                    $lastIndex = sizeof($temp)-1;
+                    if ($lastIndex > 1) {
+                        $format='.'.$temp[$lastIndex];
+                        $email = $temp[0];
+                        for ($i = 1; $i < $lastIndex; $i++) {
+                            $email = "{$email}.{$temp[$i]}";
+                        }
+                    }
+                }
+                $openidHash = md5($email.substr(Settings::get("session.site_key"),0,20));
+                if ($headerHash!=$openidHash) {
+                    
+                    Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
+                } 
+            }else self::authUserOwnsResource ($request, $response, $route);
+    }
   
     
     

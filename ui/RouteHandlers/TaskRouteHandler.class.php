@@ -282,6 +282,10 @@ class TaskRouteHandler
 
         $user_id = UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
+        if(is_null($task)) {
+            $app->flash("error", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_33), $task_id));
+            $app->redirect($app->urlFor("home"));
+        }
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
 
         if ($taskClaimed) {
@@ -299,8 +303,7 @@ class TaskRouteHandler
             }
         }else{
      
-            $user_id = UserSession::getCurrentUserID();
-            $task = $taskDao->getTask( $task_id);
+            $user_id = UserSession::getCurrentUserID();  
             $project = $projectDao->getProject($task->getProjectId());
             $numTaskTypes = Settings::get("ui.task_types");
 
@@ -1170,7 +1173,7 @@ class TaskRouteHandler
                         $taskDao->updateTask($task);
                         $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                         if($taskRevoke) {
-                            $app->flash("taskSuccess", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_19), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle(), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId()), $claimant->getDisplayName())));
+                            $app->flash("taskSuccess", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_19), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle(), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
                             $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
                         } else {
                             $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_20), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle(), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
