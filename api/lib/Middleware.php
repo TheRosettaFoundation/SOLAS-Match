@@ -85,7 +85,7 @@ class Middleware
                     
                     Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
                 } 
-            }else self::isloggedIn ($request, $response, $route);
+            }else self::authUserOwnsResource ($request, $response, $route);
     }
   
     
