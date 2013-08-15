@@ -1110,6 +1110,7 @@ class TaskRouteHandler
                             $taskDao->addTaskPreReq($createdDesegmentationId, $translationTaskIds[$i]);
                         }
                     }
+                    $projectDao->calculateProjectDeadlines($project->getId());
                     $app->redirect($app->urlFor("task-review", array("task_id" => $task->getId())));
                 } else {                    
                     if(!empty($translationTaskIds)) foreach($translationTaskIds as $taskId) $taskDao->deleteTask($taskId);
