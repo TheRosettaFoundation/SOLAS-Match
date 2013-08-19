@@ -41,15 +41,16 @@ class Middleware
         return $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
     }
 
-    public function authenticateUserForTask($request, $response, $route) 
+    public function authenticateUserForTask() 
     {
         if ($this->isSiteAdmin()) {
             return true;
         }
 
         $app = Slim::getInstance();
+        
         $taskDao = new TaskDao();
-        $params = $route->getParams(); 
+        $params = $app->request()->params(); 
 
         $this->authUserIsLoggedIn();
         $user_id = UserSession::getCurrentUserID();
@@ -67,7 +68,7 @@ class Middleware
         }
     }
 
-    public function authUserForOrg($request, $response, $route) 
+    public function authUserForOrg() 
     {
         if ($this->isSiteAdmin()) {
             return true;
@@ -77,7 +78,8 @@ class Middleware
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
-        $params = $route->getParams();
+        $app = Slim::getInstance();
+        $params = $app->request()->params(); 
         if ($params !== null) {
             $org_id = $params['org_id'];
             if ($user_id) {
@@ -108,8 +110,8 @@ class Middleware
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $userDao = new UserDao();
-
-        $params= $route->getParams();
+        $app = Slim::getInstance();
+        $params = $app->request()->params(); 
         if ($params != null) {
             $task_id = $params['task_id'];
             $task = $taskDao->getTask($task_id);
@@ -133,13 +135,14 @@ class Middleware
         self::notFound();
     } 
     
-    public function authUserForOrgProject($request, $response, $route) 
+    public function authUserForOrgProject() 
     {                        
         if ($this->isSiteAdmin()) {
             return true;
         }
 
-        $params = $route->getParams();
+        $app = Slim::getInstance();
+        $params = $app->request()->params(); 
         $userDao = new UserDao();
         $projectDao = new ProjectDao();
         
@@ -162,7 +165,7 @@ class Middleware
         self::notFound();
     }    
 
-    public function authUserForTaskDownload($request, $response, $route)
+    public function authUserForTaskDownload()
     {
         if ($this->isSiteAdmin()) {
             return true;
@@ -172,7 +175,8 @@ class Middleware
         $projectDao = new ProjectDao();
         $userDao = new UserDao();
 
-        $params= $route->getParams();
+        $app = Slim::getInstance();
+        $params = $app->request()->params(); 
         if ($params != null) {
             $task_id = $params['task_id'];
             $task = $taskDao->getTask($task_id);
@@ -210,11 +214,12 @@ class Middleware
         }       
     }
     
-    public function isBlacklisted($request, $response, $route)
+    public function isBlacklisted()
     {
         $isLoggedIn = $this->authUserIsLoggedIn();
         if($isLoggedIn) {            
-            $params = $route->getParams();
+            $app = Slim::getInstance();
+            $params = $app->request()->params(); 
             if(!is_null($params)) {
                 $taskId = $params['task_id'];
                 $userDao = new UserDao();
