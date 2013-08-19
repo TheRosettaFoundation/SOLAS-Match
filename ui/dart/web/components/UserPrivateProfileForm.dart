@@ -61,12 +61,6 @@ class UserPrivateProfileForm extends WebComponent
   
   void inserted()
   {
-    print("Common Missing Data (text):");
-    print("common missing data is " + Localisation.getTranslation("common_missing_data").toString());
-    print("Common Missing Data (bland):");
-    print("common missing data is " + Localisation.getTranslation("common_missing_data").toString());
-    print("Common Missing Data (Safe):");
-    print("common missing data is " + Localisation.getTranslationSafe("common_missing_data").toString());
     List<Future<bool>> dataLoaded = new List<Future<bool>>();
     UserDao.getUserPersonalInfo(userId).then((UserPersonalInformation info) {
       userInfo = info;

@@ -28,10 +28,48 @@ $$.Bound_remove_CustomElement = {"": "BoundClosure;_self,_target,_receiver",
   $is_void_: true
 };
 
+$$.Bound__onPause__BroadcastSubscription = {"": "BoundClosure;_self,_target,_receiver",
+  call$0: function() {
+    return this._self[this._target]();
+  },
+  $is_void_: true
+};
+
+$$.Bound__onResume__BroadcastSubscription = {"": "BoundClosure;_self,_target,_receiver",
+  call$0: function() {
+    return this._self[this._target]();
+  },
+  $is_void_: true
+};
+
+$$.Bound_addError__BroadcastStreamController = {"": "BoundClosure;_self,_target,_receiver",
+  call$2: function(p0, p1) {
+    return this._self[this._target](p0, p1);
+  },
+  call$1: function(error) {
+    return this.call$2(error, null);
+  },
+  "+call:1:0": 0
+};
+
 $$.BoundClosure$1 = {"": "BoundClosure;_self,_target,_receiver",
   call$1: function(p0) {
     return this._self[this._target](p0);
   }
+};
+
+$$.Bound__onPause__ControllerSubscription = {"": "BoundClosure;_self,_target,_receiver",
+  call$0: function() {
+    return this._self[this._target]();
+  },
+  $is_void_: true
+};
+
+$$.Bound__onResume__ControllerSubscription = {"": "BoundClosure;_self,_target,_receiver",
+  call$0: function() {
+    return this._self[this._target]();
+  },
+  $is_void_: true
 };
 
 $$.Bound__onPause__BufferingStreamSubscription = {"": "BoundClosure;_self,_target,_receiver",
@@ -72,6 +110,13 @@ $$.Bound__handleDone__ForwardingStreamSubscription = {"": "BoundClosure;_self,_t
 $$.Bound__run__ZoneTimer = {"": "BoundClosure;_self,_target,_receiver",
   call$0: function() {
     return this._self[this._target]();
+  },
+  $is_void_: true
+};
+
+$$.Bound_close__StreamPool = {"": "BoundClosure;_self,_target,_receiver",
+  call$0: function() {
+    return this._self[this._target](this._receiver);
   },
   $is_void_: true
 };
@@ -189,7 +234,7 @@ $$.Closure$deliverChangesSync = {"": "Closure;call$0,$name", $is_void_: true};
 
 $$.Closure$defaultObserveUnhandledError = {"": "Closure;call$4,$name"};
 
-init.mangledNames = {$$dom_removeChild$1: "$dom_removeChild:1:0", $$dom_replaceChild$2: "$dom_replaceChild:2:0", $add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", $index: "[]:1:0", $indexSet: "[]=:2:0", $le: "<=:1:0", $lt: "<:1:0", $mul: "*:1:0", $or: "|:1:0", $shl: "<<:1:0", $shr: ">>:1:0", $sub: "-:1:0", $xor: "^:1:0", _addError$1: "_addError:1:0", _addListener$1: "_addListener:1:0", _addNewRoot$2: "_addNewRoot:2:0", _callback$2: "_callback:2:0", _checkReplyTo$1: "_checkReplyTo:1:0", _createShadowRoot$0: "_createShadowRoot:0:0", _deliver$0: "_deliver:0:0", _dispatch$1: "_dispatch:1:0", _distributeNodes$2: "_distributeNodes:2:0", _extractElements$1: "_extractElements:1:0", _findLeftMostDescendent$1: "_findLeftMostDescendent:1:0", _inSameErrorZone$1: "_inSameErrorZone:1:0", _liblib10$_add$1: "_add:1:0", _liblib10$_onData$1: "_onData:1:0", _onError$1: "_onError:1:0", _publish$1: "_publish:1:0", _rebuildWorkList$1: "_rebuildWorkList:1:0", _remove$1: "_remove:1:0", _runCallback$1: "_runCallback:1:0", _sendError$1: "_sendError:1:0", _sendValue$1: "_sendValue:1:0", _setErrorUnchecked$1: "_setErrorUnchecked:1:0", _setValueUnchecked$1: "_setValueUnchecked:1:0", _splay$1: "_splay:1:0", _subscribeTo$1: "_subscribeTo:1:0", _zonedSendError$1: "_zonedSendError:1:0", _zonedSendValue$1: "_zonedSendValue:1:0", abs$0: "abs:0:0", add$1: "add:1:0", addAll$1: "addAll:1:0", addSecondaryLanguage$0: "addSecondaryLanguage:0:0", allMatches$1: "allMatches:1:0", assign$1: "assign:1:0", bodySetup$1: "bodySetup:1:0", call$0: "call:0:0", call$1: "call:1:0", call$1$growable: "call:1:0:growable", call$2: "call:2:0", call$2$onError: "call:2:0:onError", call$2$orElse: "call:2:0:orElse", call$3: "call:3:0", call$3$async: "call:3:0:async", call$3$onDone$onError: "call:3:0:onDone:onError", call$4: "call:4:0", call$4$cancelOnError$onDone$onError: "call:4:0:cancelOnError:onDone:onError", cancel$0: "cancel:0:0", catchError$1: "catchError:1:0", clear$0: "clear:0:0", clone$1: "clone:1:0", codeUnitAt$1: "codeUnitAt:1:0", compareAndNotify$0: "compareAndNotify:0:0", compareTo$1: "compareTo:1:0", complete$1: "complete:1:0", composeChildren$0: "composeChildren:0:0", conditional$3: "conditional:3:0", contains$1: "contains:1:0", containsKey$1: "containsKey:1:0", contentBind$2: "contentBind:2:0", create$0: "create:0:0", createShadowRoot$0: "createShadowRoot:0:0", createShadowRoot$1: "createShadowRoot:1:0", created$0: "created:0:0", deleteUser$0: "deleteUser:0:0", deserializeCloseToken$1: "deserializeCloseToken:1:0", deserializeIsolateSink$1: "deserializeIsolateSink:1:0", deserializeSendPort$1: "deserializeSendPort:1:0", eval$1: "eval:1:0", firstWhere$2$orElse: "firstWhere:2:0:orElse", fold$2: "fold:2:0", forEach$1: "forEach:1:0", get$$$_changes: "$_changes", get$$$_observers: "$_observers", get$$$dom_namespaceUri: "$dom_namespaceUri", get$SOLASMatch: "SOLASMatch", get$SiteLocation: "SiteLocation", get$_callback: "_callback", get$_chainSource: "_chainSource", get$_contents: "_contents", get$_duration: "_duration", get$_errorZone: "_errorZone", get$_handle: "_handle", get$_head: "_head", get$_id: "_id", get$_isChained: "_isChained", get$_isolateId: "_isolateId", get$_key: "_key", get$_liblib0$_length: "_length", get$_liblib1$_element: "_element", get$_liblib1$_next: "_next", get$_liblib1$_previous: "_previous", get$_liblib6$_id: "_id", get$_list: "_list", get$_name: "_name", get$_next: "_next", get$_nextListener: "_nextListener", get$_previous: "_previous", get$_receivePort: "_receivePort", get$_resultOrListeners: "_resultOrListeners", get$_scheduled: "_scheduled", get$_state: "_state", get$_tail: "_tail", get$_value: "_value", get$_workerId: "_workerId", get$_zone: "_zone", get$address: "address", get$alert: "alert", get$attributes: "attributes", get$badges: "badges", get$biography: "biography", get$businessNumber: "businessNumber", get$caption: "caption", get$cells: "cells", get$checked: "checked", get$children: "children", get$city: "city", get$className: "className", get$classes: "classes", get$code: "code", get$countries: "countries", get$country: "country", get$countryCode: "countryCode", get$current: "current", get$disabled: "disabled", get$display_name: "display_name", get$firstName: "firstName", get$fullName: "fullName", get$head: "head", get$host: "host", get$id: "id", get$inMilliseconds: "inMilliseconds", get$innerHtml: "innerHtml", get$interpreter: "interpreter", get$isAccessor: "isAccessor", get$isEmpty: "isEmpty", get$isGetter: "isGetter", get$isLoaded: "isLoaded", get$isNotEmpty: "isNotEmpty", get$isSetter: "isSetter", get$isUrl: "isUrl", get$isVisible: "isVisible", get$isolateStatics: "isolateStatics", get$iterator: "iterator", get$jobTitle: "jobTitle", get$key: "key", get$keys: "keys", get$languageCode: "languageCode", get$languages: "languages", get$lastName: "lastName", get$left: "left", get$length: "length", get$level: "level", get$memberName: "memberName", get$millisecondsSinceEpoch: "millisecondsSinceEpoch", get$mobileNumber: "mobileNumber", get$name: "name", get$namedArguments: "namedArguments", get$nativeLocale: "nativeLocale", get$newValue: "newValue", get$next: "next", get$nextNode: "nextNode", get$nodes: "nodes", get$onChange: "onChange", get$onClick: "onClick", get$onInput: "onInput", get$parent: "parent", get$parentNode: "parentNode", get$positionalArguments: "positionalArguments", get$proofreader: "proofreader", get$remove: "remove", get$responseText: "responseText", get$right: "right", get$rows: "rows", get$secondaryLanguageArray: "secondaryLanguageArray", get$secondaryLanguageCount: "secondaryLanguageCount", get$selectedIndex: "selectedIndex", get$sink: "sink", get$sip: "sip", get$style: "style", get$tBodies: "tBodies", get$tFoot: "tFoot", get$tHead: "tHead", get$tagName: "tagName", get$text: "text", get$translator: "translator", get$type: "type", get$urls: "urls", get$user: "user", get$userId: "userId", get$userInfo: "userInfo", get$userSecondaryLanguages: "userSecondaryLanguages", get$value: "value", get$values: "values", get$width: "width", get$xtag: "xtag", getPropertyValue$1: "getPropertyValue:1:0", handleNext$1: "handleNext:1:0", handleUncaughtError$1: "handleUncaughtError:1:0", info$1: "info:1:0", insert$0: "insert:0:0", insertAllBefore$2: "insertAllBefore:2:0", insertBefore$2: "insertBefore:2:0", join$1: "join:1:0", lastIndexOf$1: "lastIndexOf:1:0", listen$1: "listen:1:0", listen$2: "listen:2:0", lookup$1: "lookup:1:0", map$1: "map:1:0", matchAsPrefix$2: "matchAsPrefix:2:0", matches$1: "matches:1:0", modify$1: "modify:1:0", moveNext$0: "moveNext:0:0", oneWayBind$4: "oneWayBind:4:0", perform$1: "perform:1:0", process$0: "process:0:0", query$1: "query:1:0", queryAll$1: "queryAll:1:0", readClasses$0: "readClasses:0:0", remove$0: "remove:0:0", remove$1: "remove:1:0", removeSecondaryLanguage$0: "removeSecondaryLanguage:0:0", removed$0: "removed:0:0", replaceAll$2: "replaceAll:2:0", replaceWith$1: "replaceWith:1:0", runAsync$2: "runAsync:2:0", runIteration$0: "runIteration:0:0", schedule$1: "schedule:1:0", send$2: "send:2:0", setDefaults$1: "setDefaults:1:0", setProperty$3: "setProperty:3:0", setRange$4: "setRange:4:0", setter$1: "setter:1:0", split$1: "split:1:0", startsWith$1: "startsWith:1:0", stringifyValue$1: "stringifyValue:1:0", submitForm$0: "submitForm:0:0", substring$1: "substring:1:0", substring$2: "substring:2:0", then$1: "then:1:0", then$2$onError: "then:2:0:onError", toJson$0: "toJson:0:0", toList$0: "toList:0:0", toList$1$growable: "toList:1:0:growable", toLowerCase$0: "toLowerCase:0:0", toSet$0: "toSet:0:0", toUpperCase$0: "toUpperCase:0:0", trim$0: "trim:0:0", visitCloseToken$1: "visitCloseToken:1:0", visitIsolateSink$1: "visitIsolateSink:1:0", visitList$1: "visitList:1:0", visitMap$1: "visitMap:1:0", visitPrimitive$1: "visitPrimitive:1:0", visitSendPort$1: "visitSendPort:1:0", warning$1: "warning:1:0", where$1: "where:1:0", write$1: "write:1:0", writeAll$2: "writeAll:2:0"};
+init.mangledNames = {$$dom_addEventListener$3: "$dom_addEventListener:3:0", $$dom_removeChild$1: "$dom_removeChild:1:0", $$dom_removeEventListener$3: "$dom_removeEventListener:3:0", $$dom_replaceChild$2: "$dom_replaceChild:2:0", $add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", $index: "[]:1:0", $indexSet: "[]=:2:0", $le: "<=:1:0", $lt: "<:1:0", $mul: "*:1:0", $or: "|:1:0", $shl: "<<:1:0", $shr: ">>:1:0", $sub: "-:1:0", $xor: "^:1:0", _addError$1: "_addError:1:0", _addEventError$0: "_addEventError:0:0", _addListener$1: "_addListener:1:0", _addNewRoot$2: "_addNewRoot:2:0", _addPending$1: "_addPending:1:0", _callOnCancel$0: "_callOnCancel:0:0", _callback$2: "_callback:2:0", _checkReplyTo$1: "_checkReplyTo:1:0", _close$0: "_close:0:0", _createShadowRoot$0: "_createShadowRoot:0:0", _deliver$0: "_deliver:0:0", _dispatch$1: "_dispatch:1:0", _distributeNodes$2: "_distributeNodes:2:0", _ensureDoneFuture$0: "_ensureDoneFuture:0:0", _expectsEvent$1: "_expectsEvent:1:0", _extractElements$1: "_extractElements:1:0", _findLeftMostDescendent$1: "_findLeftMostDescendent:1:0", _forEachListener$1: "_forEachListener:1:0", _inSameErrorZone$1: "_inSameErrorZone:1:0", _liblib10$_add$1: "_add:1:0", _liblib10$_onData$1: "_onData:1:0", _onError$1: "_onError:1:0", _publish$1: "_publish:1:0", _rebuildWorkList$1: "_rebuildWorkList:1:0", _recordCancel$1: "_recordCancel:1:0", _remove$1: "_remove:1:0", _removeListener$1: "_removeListener:1:0", _runCallback$1: "_runCallback:1:0", _sendError$1: "_sendError:1:0", _sendValue$1: "_sendValue:1:0", _setErrorUnchecked$1: "_setErrorUnchecked:1:0", _setRemoveAfterFiring$0: "_setRemoveAfterFiring:0:0", _setValueUnchecked$1: "_setValueUnchecked:1:0", _splay$1: "_splay:1:0", _subscribe$4: "_subscribe:4:0", _subscribeTo$1: "_subscribeTo:1:0", _toggleEventId$0: "_toggleEventId:0:0", _zonedSendError$1: "_zonedSendError:1:0", _zonedSendValue$1: "_zonedSendValue:1:0", abs$0: "abs:0:0", add$1: "add:1:0", addAll$1: "addAll:1:0", addSecondaryLanguage$0: "addSecondaryLanguage:0:0", allMatches$1: "allMatches:1:0", assign$1: "assign:1:0", bodySetup$1: "bodySetup:1:0", call$0: "call:0:0", call$1: "call:1:0", call$1$growable: "call:1:0:growable", call$2: "call:2:0", call$2$onError: "call:2:0:onError", call$2$orElse: "call:2:0:orElse", call$3: "call:3:0", call$3$async: "call:3:0:async", call$3$onDone$onError: "call:3:0:onDone:onError", call$4: "call:4:0", call$4$cancelOnError$onDone$onError: "call:4:0:cancelOnError:onDone:onError", cancel$0: "cancel:0:0", catchError$1: "catchError:1:0", clear$0: "clear:0:0", clone$1: "clone:1:0", close$0: "close:0:0", codeUnitAt$1: "codeUnitAt:1:0", compareAndNotify$0: "compareAndNotify:0:0", compareTo$1: "compareTo:1:0", complete$0: "complete:0:0", complete$1: "complete:1:0", composeChildren$0: "composeChildren:0:0", conditional$3: "conditional:3:0", contains$1: "contains:1:0", containsKey$1: "containsKey:1:0", contentBind$2: "contentBind:2:0", create$0: "create:0:0", createShadowRoot$0: "createShadowRoot:0:0", createShadowRoot$1: "createShadowRoot:1:0", created$0: "created:0:0", deleteUser$0: "deleteUser:0:0", deserializeCloseToken$1: "deserializeCloseToken:1:0", deserializeIsolateSink$1: "deserializeIsolateSink:1:0", deserializeSendPort$1: "deserializeSendPort:1:0", eval$1: "eval:1:0", firstWhere$2$orElse: "firstWhere:2:0:orElse", fold$2: "fold:2:0", forEach$1: "forEach:1:0", get$$$_changes: "$_changes", get$$$_observers: "$_observers", get$$$dom_namespaceUri: "$dom_namespaceUri", get$SOLASMatch: "SOLASMatch", get$SiteLocation: "SiteLocation", get$_callback: "_callback", get$_chainSource: "_chainSource", get$_contents: "_contents", get$_duration: "_duration", get$_errorZone: "_errorZone", get$_eventState: "_eventState", get$_handle: "_handle", get$_head: "_head", get$_id: "_id", get$_isChained: "_isChained", get$_isFiring: "_isFiring", get$_isolateId: "_isolateId", get$_key: "_key", get$_liblib0$_length: "_length", get$_liblib1$_element: "_element", get$_liblib1$_next: "_next", get$_liblib1$_previous: "_previous", get$_liblib10$_next: "_next", get$_liblib10$_previous: "_previous", get$_liblib6$_id: "_id", get$_list: "_list", get$_name: "_name", get$_next: "_next", get$_nextListener: "_nextListener", get$_previous: "_previous", get$_receivePort: "_receivePort", get$_removeAfterFiring: "_removeAfterFiring", get$_resultOrListeners: "_resultOrListeners", get$_scheduled: "_scheduled", get$_state: "_state", get$_tail: "_tail", get$_value: "_value", get$_workerId: "_workerId", get$_zone: "_zone", get$address: "address", get$alert: "alert", get$attributes: "attributes", get$badges: "badges", get$biography: "biography", get$businessNumber: "businessNumber", get$caption: "caption", get$cells: "cells", get$checked: "checked", get$children: "children", get$city: "city", get$className: "className", get$classes: "classes", get$code: "code", get$countries: "countries", get$country: "country", get$countryCode: "countryCode", get$current: "current", get$disabled: "disabled", get$display_name: "display_name", get$firstName: "firstName", get$fullName: "fullName", get$head: "head", get$host: "host", get$id: "id", get$inMilliseconds: "inMilliseconds", get$innerHtml: "innerHtml", get$interpreter: "interpreter", get$isAccessor: "isAccessor", get$isEmpty: "isEmpty", get$isGetter: "isGetter", get$isLoaded: "isLoaded", get$isNotEmpty: "isNotEmpty", get$isSetter: "isSetter", get$isUrl: "isUrl", get$isVisible: "isVisible", get$isolateStatics: "isolateStatics", get$iterator: "iterator", get$jobTitle: "jobTitle", get$key: "key", get$keys: "keys", get$languageCode: "languageCode", get$languages: "languages", get$lastName: "lastName", get$left: "left", get$length: "length", get$level: "level", get$matches: "matches", get$memberName: "memberName", get$millisecondsSinceEpoch: "millisecondsSinceEpoch", get$mobileNumber: "mobileNumber", get$name: "name", get$namedArguments: "namedArguments", get$nativeLocale: "nativeLocale", get$newValue: "newValue", get$next: "next", get$nextNode: "nextNode", get$nodes: "nodes", get$onChange: "onChange", get$onClick: "onClick", get$onInput: "onInput", get$parent: "parent", get$parentNode: "parentNode", get$positionalArguments: "positionalArguments", get$proofreader: "proofreader", get$remove: "remove", get$responseText: "responseText", get$right: "right", get$rows: "rows", get$secondaryLanguageArray: "secondaryLanguageArray", get$secondaryLanguageCount: "secondaryLanguageCount", get$selectedIndex: "selectedIndex", get$sink: "sink", get$sip: "sip", get$style: "style", get$tBodies: "tBodies", get$tFoot: "tFoot", get$tHead: "tHead", get$tagName: "tagName", get$target: "target", get$text: "text", get$translator: "translator", get$type: "type", get$urls: "urls", get$user: "user", get$userId: "userId", get$userInfo: "userInfo", get$userSecondaryLanguages: "userSecondaryLanguages", get$value: "value", get$values: "values", get$width: "width", get$xtag: "xtag", getPropertyValue$1: "getPropertyValue:1:0", handleNext$1: "handleNext:1:0", handleUncaughtError$1: "handleUncaughtError:1:0", info$1: "info:1:0", insert$0: "insert:0:0", insertAllBefore$2: "insertAllBefore:2:0", insertBefore$2: "insertBefore:2:0", join$1: "join:1:0", lastIndexOf$1: "lastIndexOf:1:0", listen$1: "listen:1:0", listen$2: "listen:2:0", listen$3$onDone$onError: "listen:3:0:onDone:onError", listen$4$cancelOnError$onDone$onError: "listen:4:0:cancelOnError:onDone:onError", lookup$1: "lookup:1:0", map$1: "map:1:0", matchAsPrefix$2: "matchAsPrefix:2:0", matches$1: "matches:1:0", matchesWithAncestors$1: "matchesWithAncestors:1:0", modify$1: "modify:1:0", moveNext$0: "moveNext:0:0", oneWayBind$4: "oneWayBind:4:0", perform$1: "perform:1:0", process$0: "process:0:0", query$1: "query:1:0", queryAll$1: "queryAll:1:0", readClasses$0: "readClasses:0:0", remove$0: "remove:0:0", remove$1: "remove:1:0", removeSecondaryLanguage$0: "removeSecondaryLanguage:0:0", removed$0: "removed:0:0", replaceAll$2: "replaceAll:2:0", replaceWith$1: "replaceWith:1:0", runAsync$2: "runAsync:2:0", runIteration$0: "runIteration:0:0", schedule$1: "schedule:1:0", send$2: "send:2:0", setDefaults$1: "setDefaults:1:0", setProperty$3: "setProperty:3:0", setRange$4: "setRange:4:0", setter$1: "setter:1:0", split$1: "split:1:0", startsWith$1: "startsWith:1:0", stringifyValue$1: "stringifyValue:1:0", submitForm$0: "submitForm:0:0", substring$1: "substring:1:0", substring$2: "substring:2:0", then$1: "then:1:0", then$2$onError: "then:2:0:onError", toJson$0: "toJson:0:0", toList$0: "toList:0:0", toList$1$growable: "toList:1:0:growable", toLowerCase$0: "toLowerCase:0:0", toSet$0: "toSet:0:0", toUpperCase$0: "toUpperCase:0:0", trim$0: "trim:0:0", visitCloseToken$1: "visitCloseToken:1:0", visitIsolateSink$1: "visitIsolateSink:1:0", visitList$1: "visitList:1:0", visitMap$1: "visitMap:1:0", visitPrimitive$1: "visitPrimitive:1:0", visitSendPort$1: "visitSendPort:1:0", warning$1: "warning:1:0", where$1: "where:1:0", write$1: "write:1:0", writeAll$2: "writeAll:2:0"};
 (function (reflectionData) {
   if (!init.libraries) init.libraries = [];
   if (!init.mangledNames) init.mangledNames = {};
@@ -864,12 +909,6 @@ UserPrivateProfileForm: {"": "WebComponent_Observable;_css,__e59,__t,userId@,__$
     this.__$alert = value;
   },
   inserted$0: function() {
-    $.Primitives_printString("Common Missing Data (text):");
-    $.Primitives_printString($.JSString_methods.$add("common missing data is ", $.toString$0($.Localisation_getTranslation("common_missing_data"))));
-    $.Primitives_printString("Common Missing Data (bland):");
-    $.Primitives_printString($.JSString_methods.$add("common missing data is ", $.toString$0($.Localisation_getTranslation("common_missing_data"))));
-    $.Primitives_printString("Common Missing Data (Safe):");
-    $.Primitives_printString($.JSString_methods.$add("common missing data is ", $.toString$0($.Localisation_getTranslationSafe("common_missing_data"))));
     var dataLoaded = $.List_List(null, [$.Future, $.JSBool]);
     $.setRuntimeTypeInfo(dataLoaded, [[$.Future, $.JSBool]]);
     $.UserDao_getUserPersonalInfo(this.userId).then$1(new $.UserPrivateProfileForm_inserted_closure(this));
@@ -1380,6 +1419,10 @@ UserPrivateProfileForm: {"": "WebComponent_Observable;_css,__e59,__t,userId@,__$
     this.set$interpreter(false);
     this.set$alert(this, "");
   },
+  $asObservable: null,
+  $asElement: null,
+  $asNode: null,
+  $asEventTarget: null,
   static: {
 "": "UserPrivateProfileForm___html1,UserPrivateProfileForm___html2,UserPrivateProfileForm___html3,UserPrivateProfileForm___html4,UserPrivateProfileForm___html5,UserPrivateProfileForm___html6,UserPrivateProfileForm___html7,UserPrivateProfileForm___shadowTemplate",
 UserPrivateProfileForm$: function() {
@@ -3595,7 +3638,7 @@ JSString: {"": "String/Interceptor;",
       if (startIndex >= endIndex)
         $.throwExpression(new $.RangeError("value " + startIndex));
       codeUnit = receiver.charCodeAt(startIndex);
-      if (codeUnit === 32 || codeUnit === 13 || $.JSString__isWhitespace(codeUnit))
+      if (codeUnit === 32 || codeUnit === 13 || $.JSString__isWhitespace(codeUnit) === true)
         ++startIndex;
       else
         break;
@@ -3609,7 +3652,7 @@ JSString: {"": "String/Interceptor;",
       if (endIndex1 >= endIndex)
         $.throwExpression(new $.RangeError("value " + endIndex1));
       codeUnit = receiver.charCodeAt(endIndex1);
-      if (codeUnit === 32 || codeUnit === 13 || $.JSString__isWhitespace(codeUnit))
+      if (codeUnit === 32 || codeUnit === 13 || $.JSString__isWhitespace(codeUnit) === true)
         ;
       else
         break;
@@ -6934,10 +6977,18 @@ CustomElement: {"": "Object;_liblib2$_host,_liblib2$_shadowRoots,_liblib2$_gener
     return $.get$$$dom_namespaceUri$x(this.get$host(this));
   },
   "+$dom_namespaceUri": 0,
+  $$dom_addEventListener$3: function(_, type, listener, useCapture) {
+    $.$$dom_addEventListener$3$x(this.get$host(this), type, listener, useCapture);
+  },
+  "+$dom_addEventListener:2:1": 0,
   $$dom_removeChild$1: function(_, oldChild) {
     return $.$$dom_removeChild$1$x(this.get$host(this), oldChild);
   },
   "+$dom_removeChild:1:0": 0,
+  $$dom_removeEventListener$3: function(_, type, listener, useCapture) {
+    $.$$dom_removeEventListener$3$x(this.get$host(this), type, listener, useCapture);
+  },
+  "+$dom_removeEventListener:2:1": 0,
   $$dom_replaceChild$2: function(_, newChild, oldChild) {
     return $.$$dom_replaceChild$2$x(this.get$host(this), newChild, oldChild);
   },
@@ -6964,7 +7015,9 @@ CustomElement: {"": "Object;_liblib2$_host,_liblib2$_shadowRoots,_liblib2$_gener
   $isElement: true,
   $asElement: null,
   $isNode: true,
-  $asNode: null
+  $asNode: null,
+  $isEventTarget: true,
+  $asEventTarget: null
 },
 
 "+CustomElement": 0}],
@@ -7181,10 +7234,8 @@ ListIterable: {"": "IterableBase;",
   "+firstWhere:1:1": 0,
   join$1: function(_, separator) {
     var $length, t1, first, buffer, i, str;
-    if (typeof separator !== "string")
-      return this.join$1$bailout1(1, separator);
     $length = this.get$length(this);
-    if (!$.JSString_methods.get$isEmpty(separator)) {
+    if (separator.length !== 0) {
       t1 = $.getInterceptor($length);
       if (t1.$eq($length, 0))
         return "";
@@ -7220,46 +7271,6 @@ ListIterable: {"": "IterableBase;",
     }
   },
   "+join:0:1": 0,
-  join$1$bailout1: function(state0, separator) {
-    var $length, t1, first, buffer, i, str;
-    $length = this.get$length(this);
-    if ($.get$isEmpty$asx(separator) !== true) {
-      t1 = $.getInterceptor($length);
-      if (t1.$eq($length, 0))
-        return "";
-      first = $.S(this.elementAt$1(this, 0));
-      if (!t1.$eq($length, this.get$length(this)))
-        throw $.wrapException(new $.ConcurrentModificationError(this));
-      buffer = $.StringBuffer$(first);
-      if (typeof $length !== "number")
-        throw $.iae($length);
-      t1 = typeof separator === "string";
-      i = 1;
-      for (; i < $length; ++i) {
-        str = t1 ? separator : $.S(separator);
-        buffer._contents = buffer._contents + str;
-        str = this.elementAt$1(this, i);
-        str = typeof str === "string" ? str : $.S(str);
-        buffer._contents = buffer._contents + str;
-        if ($length !== this.get$length(this))
-          throw $.wrapException(new $.ConcurrentModificationError(this));
-      }
-      return buffer._contents;
-    } else {
-      buffer = $.StringBuffer$("");
-      if (typeof $length !== "number")
-        throw $.iae($length);
-      i = 0;
-      for (; i < $length; ++i) {
-        str = this.elementAt$1(this, i);
-        str = typeof str === "string" ? str : $.S(str);
-        buffer._contents = buffer._contents + str;
-        if ($length !== this.get$length(this))
-          throw $.wrapException(new $.ConcurrentModificationError(this));
-      }
-      return buffer._contents;
-    }
-  },
   where$1: function(_, test) {
     return $.IterableBase.prototype.where$1.call(this, this, test);
   },
@@ -7841,6 +7852,41 @@ runAsync: function(callback) {
 
 "+runAsync:1:0": 0,
 
+StreamController_StreamController$broadcast: function(onCancel, onListen, sync, T) {
+  var t1;
+  if (sync) {
+    t1 = new $._SyncBroadcastStreamController(onListen, onCancel, 0, null, null, null, null);
+    $.setRuntimeTypeInfo(t1, [T]);
+    t1._liblib10$_previous = t1;
+    t1._liblib10$_next = t1;
+  } else {
+    t1 = new $._AsyncBroadcastStreamController(onListen, onCancel, 0, null, null, null, null);
+    $.setRuntimeTypeInfo(t1, [T]);
+    t1._liblib10$_previous = t1;
+    t1._liblib10$_next = t1;
+  }
+  return t1;
+},
+
+"+new StreamController$broadcast:0:3": 0,
+
+_runGuarded: function(notificationHandler) {
+  var e, s, exception, t1;
+  if (notificationHandler == null)
+    return;
+  try {
+    notificationHandler.call$0();
+  } catch (exception) {
+    t1 = $.unwrapException(exception);
+    e = t1;
+    s = $.getTraceFromException(exception);
+    $.get$_Zone__current().handleUncaughtError$1($._asyncError(e, s));
+  }
+
+},
+
+"+_runGuarded:1:0": 0,
+
 _nullDataHandler: function(value) {
 },
 
@@ -7895,6 +7941,331 @@ _createTimer: function(duration, callback) {
 },
 
 "+_createTimer:2:0": 0,
+
+_BroadcastStream: {"": "_ControllerStream;_liblib10$_controller", $as_ControllerStream: null, $asStream: null},
+
+"+_BroadcastStream": 0,
+
+_BroadcastSubscription: {"": "_ControllerSubscription;_eventState@,_liblib10$_next@,_liblib10$_previous@,_liblib10$_controller,_liblib10$_onData,_onError,_onDone,_zone,_state,_pending",
+  get$_liblib10$_controller: function() {
+    return this._liblib10$_controller;
+  },
+  "+_controller": 0,
+  _expectsEvent$1: function(eventId) {
+    var t1 = this._eventState;
+    if (t1 == null)
+      return this._expectsEvent$1$bailout(1, eventId, t1);
+    return (t1 & 1) === eventId;
+  },
+  "+_expectsEvent:1:0": 0,
+  _expectsEvent$1$bailout: function(state0, eventId, t1) {
+    if (t1 == null)
+      throw t1.$and();
+    return (t1 & 1) === eventId;
+  },
+  _toggleEventId$0: function() {
+    var t1 = this._eventState;
+    if (t1 == null)
+      return this._toggleEventId$0$bailout(1, t1);
+    this._eventState = (t1 ^ 1) >>> 0;
+  },
+  "+_toggleEventId:0:0": 0,
+  _toggleEventId$0$bailout: function(state0, t1) {
+    if (t1 == null)
+      throw t1.$xor();
+    this._eventState = (t1 ^ 1) >>> 0;
+  },
+  get$_isFiring: function() {
+    var t1 = this._eventState;
+    if (t1 == null)
+      throw t1.$and();
+    return (t1 & 2) !== 0;
+  },
+  "+_isFiring": 0,
+  _setRemoveAfterFiring$0: function() {
+    var t1 = this._eventState;
+    if (t1 == null)
+      throw t1.$or();
+    this._eventState = (t1 | 4) >>> 0;
+  },
+  "+_setRemoveAfterFiring:0:0": 0,
+  get$_removeAfterFiring: function() {
+    var t1 = this._eventState;
+    if (t1 == null)
+      return this.get$_removeAfterFiring$bailout(1, t1);
+    return (t1 & 4) !== 0;
+  },
+  "+_removeAfterFiring": 0,
+  get$_removeAfterFiring$bailout: function(state0, t1) {
+    if (t1 == null)
+      throw t1.$and();
+    return (t1 & 4) !== 0;
+  },
+  _onPause$0: function() {
+  },
+  "+_onPause:0:0": 0,
+  get$_onPause: function() {
+    return new $.Bound__onPause__BroadcastSubscription(this, "_onPause$0", null);
+  },
+  _onResume$0: function() {
+  },
+  "+_onResume:0:0": 0,
+  get$_onResume: function() {
+    return new $.Bound__onResume__BroadcastSubscription(this, "_onResume$0", null);
+  },
+  $as_ControllerSubscription: null,
+  $asStreamSubscription: null,
+  static: {
+"": "_BroadcastSubscription__STATE_EVENT_ID,_BroadcastSubscription__STATE_FIRING,_BroadcastSubscription__STATE_REMOVE_AFTER_FIRING",
+}
+
+},
+
+"+_BroadcastSubscription": 0,
+
+_BroadcastStreamController: {"": "Object;_state@,_liblib10$_next@,_liblib10$_previous@",
+  get$sink: function() {
+    return new $._StreamSinkWrapper(this);
+  },
+  "+sink": 0,
+  _ensureDoneFuture$0: function() {
+    var t1 = this._doneFuture;
+    if (t1 != null)
+      return t1;
+    t1 = new $._FutureImpl(0, $.get$_Zone__current(), null);
+    $.setRuntimeTypeInfo(t1, [null]);
+    this._doneFuture = t1;
+    return t1;
+  },
+  "+_ensureDoneFuture:0:0": 0,
+  _addListener$1: function(subscription) {
+    subscription.set$_liblib10$_previous(this._liblib10$_previous);
+    subscription.set$_liblib10$_next(this);
+    this._liblib10$_previous.set$_liblib10$_next(subscription);
+    this._liblib10$_previous = subscription;
+    subscription.set$_eventState(this._state & 1);
+  },
+  "+_addListener:1:0": 0,
+  _removeListener$1: function(subscription) {
+    var previous, next;
+    previous = subscription.get$_liblib10$_previous();
+    next = subscription.get$_liblib10$_next();
+    previous.set$_liblib10$_next(next);
+    next.set$_liblib10$_previous(previous);
+    subscription.set$_liblib10$_previous(subscription);
+    subscription.set$_liblib10$_next(subscription);
+  },
+  "+_removeListener:1:0": 0,
+  _subscribe$4: function(onData, onError, onDone, cancelOnError) {
+    var t1, t2, t3, subscription;
+    if ((this._state & 4) !== 0)
+      throw $.wrapException(new $.StateError("Subscribing to closed stream"));
+    t1 = $.getRuntimeTypeArgument(this, "_BroadcastStreamController", 0);
+    t2 = $.get$_Zone__current();
+    t3 = cancelOnError ? 1 : 0;
+    subscription = new $._BroadcastSubscription(null, null, null, this, onData, onError, onDone, t2, t3, null);
+    $.setRuntimeTypeInfo(subscription, [t1]);
+    subscription._BufferingStreamSubscription$4(onData, onError, onDone, cancelOnError, t1);
+    subscription._liblib10$_previous = subscription;
+    subscription._liblib10$_next = subscription;
+    this._addListener$1(subscription);
+    t1 = this._liblib10$_next;
+    t2 = this._liblib10$_previous;
+    if (t1 == null ? t2 == null : t1 === t2)
+      $._runGuarded(this._onListen);
+    return subscription;
+  },
+  "+_subscribe:4:0": 0,
+  _recordCancel$1: function(subscription) {
+    if (subscription.get$_liblib10$_next() === subscription)
+      return;
+    if (subscription.get$_isFiring())
+      subscription._setRemoveAfterFiring$0();
+    else {
+      this._removeListener$1(subscription);
+      if ((this._state & 2) === 0 && this._liblib10$_next === this)
+        this._callOnCancel$0();
+    }
+  },
+  "+_recordCancel:1:0": 0,
+  _addEventError$0: function() {
+    if ((this._state & 4) !== 0)
+      return new $.StateError("Cannot add new events after calling close");
+    return new $.StateError("Cannot add new events while doing an addStream");
+  },
+  "+_addEventError:0:0": 0,
+  add$1: function(_, data) {
+    if (this._state >= 4)
+      throw $.wrapException(this._addEventError$0());
+    this._sendData$1(data);
+  },
+  "+add:1:0": 0,
+  get$add: function(_receiver) {
+    return new $.BoundClosure$i1(this, "add$1", _receiver);
+  },
+  addError$2: function(error, stackTrace) {
+    if (this._state >= 4)
+      throw $.wrapException(this._addEventError$0());
+    if (stackTrace != null)
+      $._attachStackTrace(error, stackTrace);
+    this._sendError$1(error);
+  },
+  "+addError:1:1": 0,
+  get$addError: function() {
+    return new $.Bound_addError__BroadcastStreamController(this, "addError$2", null);
+  },
+  close$0: function(_) {
+    var t1, doneFuture;
+    t1 = this._state;
+    if ((t1 & 4) !== 0)
+      return this._doneFuture;
+    if (t1 >= 4)
+      throw $.wrapException(this._addEventError$0());
+    this._state = (t1 | 4) >>> 0;
+    doneFuture = this._ensureDoneFuture$0();
+    this._sendDone$0();
+    return doneFuture;
+  },
+  "+close:0:0": 0,
+  _liblib10$_add$1: function(data) {
+    this._sendData$1(data);
+  },
+  "+_add:1:0": 0,
+  _addError$1: function(error) {
+    this._sendError$1(error);
+  },
+  "+_addError:1:0": 0,
+  _close$0: function() {
+    var addState = this._addStreamState;
+    this._addStreamState = null;
+    this._state = (this._state & 4294967287) >>> 0;
+    $.JSNull_methods.complete$0(addState);
+  },
+  "+_close:0:0": 0,
+  _forEachListener$1: function(action) {
+    var t1, id, link, link0;
+    t1 = this._state;
+    if ((t1 & 2) !== 0)
+      throw $.wrapException(new $.StateError("Cannot fire new event. Controller is already firing an event"));
+    if (this._liblib10$_next === this)
+      return;
+    id = t1 & 1;
+    this._state = (t1 ^ 3) >>> 0;
+    link = this._liblib10$_next;
+    for (; link !== this;)
+      if (link._expectsEvent$1(id) === true) {
+        link.set$_eventState($.$or$n(link.get$_eventState(), 2));
+        action.call$1(link);
+        link._toggleEventId$0();
+        link0 = link.get$_liblib10$_next();
+        if (link.get$_removeAfterFiring() === true)
+          this._removeListener$1(link);
+        link.set$_eventState($.$and$n(link.get$_eventState(), 4294967293));
+        link = link0;
+      } else
+        link = link.get$_liblib10$_next();
+    this._state = (this._state & 4294967293) >>> 0;
+    if (this._liblib10$_next === this)
+      this._callOnCancel$0();
+  },
+  "+_forEachListener:1:0": 0,
+  _callOnCancel$0: function() {
+    if ((this._state & 4) !== 0) {
+      var t1 = this._doneFuture;
+      t1.get$_mayComplete;
+      t1 = t1._state === 0;
+    } else
+      t1 = false;
+    if (t1)
+      this._doneFuture._asyncSetValue$1(null);
+    $._runGuarded(this._onCancel);
+  },
+  "+_callOnCancel:0:0": 0
+},
+
+"+_BroadcastStreamController": 0,
+
+_SyncBroadcastStreamController: {"": "_BroadcastStreamController;_onListen,_onCancel,_state,_liblib10$_next,_liblib10$_previous,_addStreamState,_doneFuture",
+  _sendData$1: function(data) {
+    if (this._liblib10$_next === this)
+      return;
+    this._forEachListener$1(new $._SyncBroadcastStreamController__sendData_closure(this, data));
+  },
+  "+_sendData:1:0": 0,
+  _sendError$1: function(error) {
+    if (this._liblib10$_next === this)
+      return;
+    this._forEachListener$1(new $._SyncBroadcastStreamController__sendError_closure(this, error));
+  },
+  "+_sendError:1:0": 0,
+  _sendDone$0: function() {
+    if (this._liblib10$_next !== this)
+      this._forEachListener$1(new $._SyncBroadcastStreamController__sendDone_closure(this));
+    else
+      this._doneFuture._asyncSetValue$1(null);
+  },
+  "+_sendDone:0:0": 0,
+  $as_BroadcastStreamController: null
+},
+
+"+_SyncBroadcastStreamController": 0,
+
+_SyncBroadcastStreamController__sendData_closure: {"": "Closure;this_0,data_1",
+  call$1: function(subscription) {
+    subscription._liblib10$_add$1(this.data_1);
+  },
+  "+call:1:0": 0,
+  $isFunction: true
+},
+
+"+_SyncBroadcastStreamController__sendData_closure": 0,
+
+_SyncBroadcastStreamController__sendError_closure: {"": "Closure;this_0,error_1",
+  call$1: function(subscription) {
+    subscription._addError$1(this.error_1);
+  },
+  "+call:1:0": 0,
+  $isFunction: true
+},
+
+"+_SyncBroadcastStreamController__sendError_closure": 0,
+
+_SyncBroadcastStreamController__sendDone_closure: {"": "Closure;this_0",
+  call$1: function(subscription) {
+    subscription._close$0();
+  },
+  "+call:1:0": 0,
+  $isFunction: true
+},
+
+"+_SyncBroadcastStreamController__sendDone_closure": 0,
+
+_AsyncBroadcastStreamController: {"": "_BroadcastStreamController;_onListen,_onCancel,_state,_liblib10$_next,_liblib10$_previous,_addStreamState,_doneFuture",
+  _sendData$1: function(data) {
+    var link;
+    for (link = this._liblib10$_next; link !== this; link = link.get$_liblib10$_next())
+      link._addPending$1(new $._DelayedData(data, null));
+  },
+  "+_sendData:1:0": 0,
+  _sendError$1: function(error) {
+    var link;
+    for (link = this._liblib10$_next; link !== this; link = link.get$_liblib10$_next())
+      link._addPending$1(new $._DelayedError(error, null));
+  },
+  "+_sendError:1:0": 0,
+  _sendDone$0: function() {
+    var link = this._liblib10$_next;
+    if (link !== this)
+      for (; link !== this; link = link.get$_liblib10$_next())
+        link._addPending$1($.C__DelayedDone);
+    else
+      this._doneFuture._asyncSetValue$1(null);
+  },
+  "+_sendDone:0:0": 0,
+  $as_BroadcastStreamController: null
+},
+
+"+_AsyncBroadcastStreamController": 0,
 
 Future: {"": "Object;", $isFuture: true},
 
@@ -8674,7 +9045,8 @@ Stream: {"": "Object;",
     this.listen$4$cancelOnError$onDone$onError(new $.Stream_toSet_closure(this, result), true, new $.Stream_toSet_closure0(result, future), future.get$_setError());
     return future;
   },
-  "+toSet:0:0": 0
+  "+toSet:0:0": 0,
+  $isStream: true
 },
 
 "+Stream": 0,
@@ -8940,13 +9312,76 @@ Stream_toSet_closure0: {"": "Closure;result_2,future_3",
 
 "+Stream_toSet_closure": 0,
 
-StreamSubscription: {"": "Object;"},
+StreamSubscription: {"": "Object;", $isStreamSubscription: true},
 
 "+StreamSubscription": 0,
 
 EventSink: {"": "Object;"},
 
 "+EventSink": 0,
+
+_ControllerStream: {"": "_StreamImpl;_liblib10$_controller",
+  _createSubscription$4: function(onData, onError, onDone, cancelOnError) {
+    return this._liblib10$_controller._subscribe$4(onData, onError, onDone, cancelOnError);
+  },
+  "+_createSubscription:4:0": 0,
+  get$hashCode: function(_) {
+    return ($.Primitives_objectHashCode(this._liblib10$_controller) ^ 892482866) >>> 0;
+  },
+  "+hashCode": 0,
+  $eq: function(_, other) {
+    if (other == null)
+      return false;
+    if (this === other)
+      return true;
+    if (typeof other !== "object" || other === null || !$.getInterceptor(other).$is_ControllerStream)
+      return false;
+    return other._liblib10$_controller === this._liblib10$_controller;
+  },
+  "+==:1:0": 0,
+  $is_ControllerStream: true,
+  $as_StreamImpl: null,
+  $asStream: null
+},
+
+"+_ControllerStream": 0,
+
+_ControllerSubscription: {"": "_BufferingStreamSubscription;_liblib10$_controller<,_liblib10$_onData,_onError,_onDone,_zone,_state,_pending",
+  _onCancel$0: function() {
+    this.get$_liblib10$_controller()._recordCancel$1(this);
+  },
+  "+_onCancel:0:0": 0,
+  _onPause$0: function() {
+    this.get$_liblib10$_controller();
+  },
+  "+_onPause:0:0": 0,
+  get$_onPause: function() {
+    return new $.Bound__onPause__ControllerSubscription(this, "_onPause$0", null);
+  },
+  _onResume$0: function() {
+    this.get$_liblib10$_controller();
+  },
+  "+_onResume:0:0": 0,
+  get$_onResume: function() {
+    return new $.Bound__onResume__ControllerSubscription(this, "_onResume$0", null);
+  },
+  $as_BufferingStreamSubscription: null,
+  $asStreamSubscription: null
+},
+
+"+_ControllerSubscription": 0,
+
+_StreamSinkWrapper: {"": "Object;_liblib10$_target",
+  add$1: function(_, data) {
+    var t1 = this._liblib10$_target;
+    if (t1._state >= 4)
+      $.throwExpression(t1._addEventError$0());
+    t1._sendData$1(data);
+  },
+  "+add:1:0": 0
+},
+
+"+_StreamSinkWrapper": 0,
 
 _EventSink: {"": "Object;"},
 
@@ -9004,17 +9439,84 @@ _BufferingStreamSubscription: {"": "Object;_liblib10$_onData,_onError,_onDone,_z
   },
   "+resume:0:0": 0,
   cancel$0: function() {
-    if (!$.$eq($.$and$n(this._state, 8), 0))
+    var t1 = this._state;
+    if (typeof t1 !== "number")
+      return this.cancel$0$bailout(1, t1);
+    if ((t1 & 8) !== 0)
       return;
-    this._cancel$0();
-    if ($.$eq($.$and$n(this._state, 16), 0)) {
-      this._state = $.$or$n(this._state, 16);
+    this._state = (t1 | 8) >>> 0;
+    t1 = this._zone;
+    t1._openCallbacks = t1._openCallbacks - 1;
+    if (!t1._isExecutingCallback && t1._openCallbacks === 0 && t1._children.length === 0)
+      ;
+    t1 = this._state;
+    if (typeof t1 !== "number")
+      return this.cancel$0$bailout(3, t1);
+    if ((t1 & 32) !== 0) {
+      t1 = this._pending;
+      t1.cancelSchedule$0;
+      if (t1._state === 1)
+        t1._state = 3;
+    }
+    t1 = this._state;
+    if (typeof t1 !== "number")
+      return this.cancel$0$bailout(4, t1);
+    if ((t1 & 16) === 0) {
+      this._state = (t1 | 16) >>> 0;
       this._onCancel$0();
       this._pending = null;
-      this._state = $.$and$n(this._state, 4294967279);
+      t1 = this._state;
+      if (typeof t1 !== "number")
+        return this.cancel$0$bailout(6, t1);
+      this._state = (t1 & 4294967279) >>> 0;
     }
   },
   "+cancel:0:0": 0,
+  cancel$0$bailout: function(state0, t1) {
+    switch (state0) {
+      case 0:
+        t1 = this._state;
+      case 1:
+        state0 = 0;
+        if (!$.$eq($.$and$n(t1, 8), 0))
+          return;
+        t1 = this._state;
+      case 2:
+        state0 = 0;
+        this._state = $.$or$n(t1, 8);
+        t1 = this._zone;
+        t1._openCallbacks = t1._openCallbacks - 1;
+        if (!t1._isExecutingCallback && t1._openCallbacks === 0 && t1._children.length === 0)
+          ;
+        t1 = this._state;
+      case 3:
+        state0 = 0;
+        if (!$.$eq($.$and$n(t1, 32), 0)) {
+          t1 = this._pending;
+          t1.cancelSchedule$0;
+          if (t1._state === 1)
+            t1._state = 3;
+        }
+        t1 = this._state;
+      case 4:
+        state0 = 0;
+      default:
+        if (state0 === 6 || state0 === 5 || state0 === 0 && $.$eq($.$and$n(t1, 16), 0))
+          switch (state0) {
+            case 0:
+              t1 = this._state;
+            case 5:
+              state0 = 0;
+              this._state = $.$or$n(t1, 16);
+              this._onCancel$0();
+              this._pending = null;
+              t1 = this._state;
+            case 6:
+              state0 = 0;
+              this._state = $.$and$n(t1, 4294967279);
+          }
+    }
+  },
   get$_mayResumeInput: function() {
     if ($.$ge$n(this._state, 64) !== true) {
       var t1 = this._pending;
@@ -9085,19 +9587,71 @@ _BufferingStreamSubscription: {"": "Object;_liblib10$_onData,_onError,_onDone,_z
   },
   "+_onCancel:0:0": 0,
   _addPending$1: function($event) {
-    var pending = this._pending;
+    var pending, t1;
+    pending = this._pending;
     if (pending == null) {
       pending = new $._StreamImplEvents(null, null, 0);
       this._pending = pending;
     }
-    pending.add$1(pending, $event);
-    if ($.$eq($.$and$n(this._state, 32), 0)) {
-      this._state = $.$or$n(this._state, 32);
-      if ($.$ge$n(this._state, 64) !== true)
+    pending.add$1;
+    t1 = pending.lastPendingEvent;
+    if (t1 == null) {
+      pending.lastPendingEvent = $event;
+      pending.firstPendingEvent = $event;
+    } else {
+      t1.set$next($event);
+      pending.lastPendingEvent = $event;
+    }
+    t1 = this._state;
+    if (typeof t1 !== "number")
+      return this._addPending$1$bailout(1, t1);
+    if ((t1 & 32) === 0) {
+      this._state = (t1 | 32) >>> 0;
+      t1 = this._state;
+      if (typeof t1 !== "number")
+        return this._addPending$1$bailout(3, t1);
+      if (!(t1 >= 64))
         this._pending.schedule$1(this);
     }
   },
   "+_addPending:1:0": 0,
+  _addPending$1$bailout: function(state0, t1) {
+    switch (state0) {
+      case 0:
+        pending = this._pending;
+        if (pending == null) {
+          pending = new $._StreamImplEvents(null, null, 0);
+          this._pending = pending;
+        }
+        pending.add$1;
+        t1 = pending.lastPendingEvent;
+        if (t1 == null) {
+          pending.lastPendingEvent = $event;
+          pending.firstPendingEvent = $event;
+        } else {
+          t1.set$next($event);
+          pending.lastPendingEvent = $event;
+        }
+        t1 = this._state;
+      case 1:
+        state0 = 0;
+      default:
+        var pending;
+        if (state0 === 3 || state0 === 2 || state0 === 0 && $.$eq($.$and$n(t1, 32), 0))
+          switch (state0) {
+            case 0:
+              t1 = this._state;
+            case 2:
+              state0 = 0;
+              this._state = $.$or$n(t1, 32);
+              t1 = this._state;
+            case 3:
+              state0 = 0;
+              if ($.$ge$n(t1, 64) !== true)
+                this._pending.schedule$1(this);
+          }
+    }
+  },
   _sendData$1: function(data) {
     var t1 = $.$eq($.$and$n(this._state, 4), 0);
     this._state = $.$or$n(this._state, 16);
@@ -9172,13 +9726,24 @@ _BufferingStreamSubscription: {"": "Object;_liblib10$_onData,_onError,_onDone,_z
       this._pending.schedule$1(this);
   },
   "+_checkState:1:0": 0,
-  _BufferingStreamSubscription$4: function(_onData, _onError, _onDone, cancelOnError) {
+  _BufferingStreamSubscription$4: function(_onData, _onError, _onDone, cancelOnError, T) {
     var t1 = this._zone;
     t1._openCallbacks = t1._openCallbacks + 1;
   },
+  $isStreamSubscription: true,
   static: {
 "": "_BufferingStreamSubscription__STATE_CANCEL_ON_ERROR,_BufferingStreamSubscription__STATE_CLOSED,_BufferingStreamSubscription__STATE_INPUT_PAUSED,_BufferingStreamSubscription__STATE_CANCELED,_BufferingStreamSubscription__STATE_IN_CALLBACK,_BufferingStreamSubscription__STATE_HAS_PENDING,_BufferingStreamSubscription__STATE_PAUSE_COUNT,_BufferingStreamSubscription__STATE_PAUSE_COUNT_SHIFT",
-}
+_BufferingStreamSubscription$: function(_onData, _onError, _onDone, cancelOnError, T) {
+  var t1, t2;
+  t1 = $.get$_Zone__current();
+  t2 = cancelOnError ? 1 : 0;
+  t2 = new $._BufferingStreamSubscription(_onData, _onError, _onDone, t1, t2, null);
+  $.setRuntimeTypeInfo(t2, [T]);
+  t2._BufferingStreamSubscription$4(_onData, _onError, _onDone, cancelOnError, T);
+  return t2;
+},
+
+"+new _BufferingStreamSubscription:4:0": 0}
 
 },
 
@@ -9205,6 +9770,32 @@ _BufferingStreamSubscription__sendError_closure: {"": "Closure;this_0,error_1",
 },
 
 "+_BufferingStreamSubscription__sendError_closure": 0,
+
+_StreamImpl: {"": "Stream;",
+  listen$4$cancelOnError$onDone$onError: function(onData, cancelOnError, onDone, onError) {
+    if (onError == null)
+      onError = $._nullErrorHandler$closure;
+    if (onDone == null)
+      onDone = $._nullDoneHandler$closure;
+    return this._createSubscription$4(onData, onError, onDone, true === cancelOnError);
+  },
+  "+listen:1:3": 0,
+  listen$1: function(onData) {
+    return this.listen$4$cancelOnError$onDone$onError(onData, null, null, null);
+  },
+  "+listen:1:0": 0,
+  listen$3$onDone$onError: function(onData, onDone, onError) {
+    return this.listen$4$cancelOnError$onDone$onError(onData, null, onDone, onError);
+  },
+  "+listen:3:0:onDone:onError": 0,
+  _createSubscription$4: function(onData, onError, onDone, cancelOnError) {
+    return $._BufferingStreamSubscription$(onData, onError, onDone, cancelOnError, $.getRuntimeTypeArgument(this, "_StreamImpl", 0));
+  },
+  "+_createSubscription:4:0": 0,
+  $asStream: null
+},
+
+"+_StreamImpl": 0,
 
 _DelayedEvent: {"": "Object;next@"},
 
@@ -9429,6 +10020,9 @@ _ForwardingStreamSubscription: {"": "_BufferingStreamSubscription;_stream,_subsc
   $as_BufferingStreamSubscription: function(S, T) {
     return [T];
   },
+  $asStreamSubscription: function(S, T) {
+    return [T];
+  },
   static: {
 _ForwardingStreamSubscription$: function(_stream, onData, onError, onDone, cancelOnError, S, T) {
   var t1, t2;
@@ -9436,7 +10030,7 @@ _ForwardingStreamSubscription$: function(_stream, onData, onError, onDone, cance
   t2 = cancelOnError ? 1 : 0;
   t2 = new $._ForwardingStreamSubscription(_stream, null, onData, onError, onDone, t1, t2, null);
   $.setRuntimeTypeInfo(t2, [S, T]);
-  t2._BufferingStreamSubscription$4(onData, onError, onDone, cancelOnError);
+  t2._BufferingStreamSubscription$4(onData, onError, onDone, cancelOnError, T);
   t2._ForwardingStreamSubscription$5(_stream, onData, onError, onDone, cancelOnError, S, T);
   return t2;
 },
@@ -9470,7 +10064,8 @@ _WhereStream: {"": "_ForwardingStream;_test,_liblib10$_source",
   "+_handleData:2:0": 0,
   $as_ForwardingStream: function(T) {
     return [T, T];
-  }
+  },
+  $asStream: null
 },
 
 "+_WhereStream": 0,
@@ -9495,7 +10090,10 @@ _MapStream: {"": "_ForwardingStream;_transform,_liblib10$_source",
     sink._liblib10$_add$1(outputEvent);
   },
   "+_handleData:2:0": 0,
-  $as_ForwardingStream: null
+  $as_ForwardingStream: null,
+  $asStream: function(S, T) {
+    return [T];
+  }
 },
 
 "+_MapStream": 0,
@@ -9512,7 +10110,8 @@ _TakeStream: {"": "_ForwardingStream;_remaining,_liblib10$_source",
   "+_handleData:2:0": 0,
   $as_ForwardingStream: function(T) {
     return [T, T];
-  }
+  },
+  $asStream: null
 },
 
 "+_TakeStream": 0,
@@ -9528,7 +10127,8 @@ _SkipStream: {"": "_ForwardingStream;_remaining,_liblib10$_source",
   "+_handleData:2:0": 0,
   $as_ForwardingStream: function(T) {
     return [T, T];
-  }
+  },
+  $asStream: null
 },
 
 "+_SkipStream": 0,
@@ -9653,7 +10253,8 @@ _ZoneTimer: {"": "Object;_zone<,_liblib10$_callback,_timer",
     if (t1._handle != null) {
       t1 = this._zone;
       t1._openCallbacks = t1._openCallbacks - 1;
-      t1._checkIfDone$0();
+      if (!t1._isExecutingCallback && t1._openCallbacks === 0 && t1._children.length === 0)
+        ;
     }
     this._timer.cancel$0();
   },
@@ -10450,8 +11051,6 @@ IterableBase: {"": "Object;",
   "+forEach:1:0": 0,
   join$1: function(_, separator) {
     var iterator, buffer, t1;
-    if (typeof separator !== "string")
-      return this.join$1$bailout(1, separator);
     iterator = this.get$iterator(this);
     if (iterator.moveNext$0() !== true)
       return "";
@@ -10472,28 +11071,6 @@ IterableBase: {"": "Object;",
     return buffer._contents;
   },
   "+join:0:1": 0,
-  join$1$bailout: function(state0, separator) {
-    var iterator, buffer, t1, str, t2;
-    iterator = this.get$iterator(this);
-    if (iterator.moveNext$0() !== true)
-      return "";
-    buffer = $.StringBuffer$("");
-    if (separator == null || $.$eq(separator, ""))
-      do {
-        t1 = $.S(iterator.get$current());
-        buffer._contents = buffer._contents + t1;
-      } while (iterator.moveNext$0() === true);
-    else {
-      buffer.write$1($.S(iterator.get$current()));
-      for (t1 = typeof separator === "string"; iterator.moveNext$0() === true;) {
-        str = t1 ? separator : $.S(separator);
-        buffer._contents = buffer._contents + str;
-        t2 = $.S(iterator.get$current());
-        buffer._contents = buffer._contents + t2;
-      }
-    }
-    return buffer._contents;
-  },
   toList$1$growable: function(_, growable) {
     return $.List_List$from(this, growable, $.getRuntimeTypeArgument(this, "IterableBase", 0));
   },
@@ -11142,10 +11719,8 @@ ListMixin: {"": "Object;",
     var $length, first, buffer, i, str;
     if (typeof receiver !== "string" && (typeof receiver !== "object" || receiver === null || receiver.constructor !== Array && !$.isJsIndexable(receiver, receiver[$.dispatchPropertyName])))
       return this.join$1$bailout(1, separator, receiver);
-    if (typeof separator !== "string")
-      return this.join$1$bailout(1, separator, receiver);
     $length = receiver.length;
-    if (!$.JSString_methods.get$isEmpty(separator)) {
+    if (separator.length !== 0) {
       if ($length === 0)
         return "";
       if (0 >= $length)
@@ -11183,7 +11758,7 @@ ListMixin: {"": "Object;",
   join$1$bailout: function(state0, separator, receiver) {
     var $length, t1, first, buffer, i, str;
     $length = this.get$length(receiver);
-    if ($.get$isEmpty$asx(separator) !== true) {
+    if (separator.length !== 0) {
       t1 = $.getInterceptor($length);
       if (t1.$eq($length, 0))
         return "";
@@ -11193,11 +11768,9 @@ ListMixin: {"": "Object;",
       buffer = $.StringBuffer$(first);
       if (typeof $length !== "number")
         throw $.iae($length);
-      t1 = typeof separator === "string";
       i = 1;
       for (; i < $length; ++i) {
-        str = t1 ? separator : $.S(separator);
-        buffer._contents = buffer._contents + str;
+        buffer._contents = buffer._contents + separator;
         str = this.$index(receiver, i);
         str = typeof str === "string" ? str : $.S(str);
         buffer._contents = buffer._contents + str;
@@ -11311,10 +11884,16 @@ ListMixin: {"": "Object;",
   },
   add$1: function(receiver, element) {
     var t1 = this.get$length(receiver);
-    this.set$length(receiver, $.$add$ns(t1, 1));
+    if (typeof t1 !== "number")
+      return this.add$1$bailout(1, element, receiver, t1);
+    this.set$length(receiver, t1 + 1);
     this.$indexSet(receiver, t1, element);
   },
   "+add:1:0": 0,
+  add$1$bailout: function(state0, element, receiver, t1) {
+    this.set$length(receiver, $.$add$ns(t1, 1));
+    this.$indexSet(receiver, t1, element);
+  },
   addAll$1: function(receiver, iterable) {
     var t1, element, t2;
     for (t1 = $.get$iterator$ax(iterable); t1.moveNext$0() === true;) {
@@ -12657,14 +13236,40 @@ DateTime: {"": "Object;millisecondsSinceEpoch<,isUtc",
   },
   "+toString:0:0": 0,
   add$1: function(_, duration) {
-    return $.DateTime$fromMillisecondsSinceEpoch($.$add$ns(this.millisecondsSinceEpoch, duration.get$inMilliseconds()), this.isUtc);
+    var ms, t1, t2;
+    ms = this.millisecondsSinceEpoch;
+    if (typeof ms !== "number")
+      return this.add$1$bailout(1, duration, ms);
+    t1 = duration.get$inMilliseconds();
+    if (typeof t1 !== "number")
+      return this.add$1$bailout(2, 0, ms, t1);
+    t1 = ms + t1;
+    t2 = this.isUtc;
+    if ($.JSNumber_methods.abs$0(t1) > 8640000000000000)
+      $.throwExpression(new $.ArgumentError(t1));
+    if (t2 == null)
+      $.throwExpression(new $.ArgumentError(t2));
+    return new $.DateTime(t1, t2);
   },
   "+add:1:0": 0,
-  DateTime$fromMillisecondsSinceEpoch$2$isUtc: function(millisecondsSinceEpoch, isUtc) {
-    if ($.$gt$n($.abs$0$n(millisecondsSinceEpoch), 8640000000000000) === true)
-      throw $.wrapException(new $.ArgumentError(millisecondsSinceEpoch));
-    if (isUtc == null)
-      throw $.wrapException(new $.ArgumentError(isUtc));
+  add$1$bailout: function(state0, duration, ms, t1) {
+    switch (state0) {
+      case 0:
+        ms = this.millisecondsSinceEpoch;
+      case 1:
+        state0 = 0;
+        t1 = duration.get$inMilliseconds();
+      case 2:
+        var t2;
+        state0 = 0;
+        t1 = $.$add$ns(ms, t1);
+        t2 = this.isUtc;
+        if ($.$gt$n($.abs$0$n(t1), 8640000000000000) === true)
+          $.throwExpression(new $.ArgumentError(t1));
+        if (t2 == null)
+          $.throwExpression(new $.ArgumentError(t2));
+        return new $.DateTime(t1, t2);
+    }
   },
   DateTime$_now$0: function() {
     $.Primitives_lazyAsJsDate(this);
@@ -12672,14 +13277,6 @@ DateTime: {"": "Object;millisecondsSinceEpoch<,isUtc",
   $isDateTime: true,
   static: {
 "": "DateTime_MONDAY,DateTime_TUESDAY,DateTime_WEDNESDAY,DateTime_THURSDAY,DateTime_FRIDAY,DateTime_SATURDAY,DateTime_SUNDAY,DateTime_DAYS_PER_WEEK,DateTime_JANUARY,DateTime_FEBRUARY,DateTime_MARCH,DateTime_APRIL,DateTime_MAY,DateTime_JUNE,DateTime_JULY,DateTime_AUGUST,DateTime_SEPTEMBER,DateTime_OCTOBER,DateTime_NOVEMBER,DateTime_DECEMBER,DateTime_MONTHS_PER_YEAR,DateTime__MAX_MILLISECONDS_SINCE_EPOCH",
-DateTime$fromMillisecondsSinceEpoch: function(millisecondsSinceEpoch, isUtc) {
-  var t1 = new $.DateTime(millisecondsSinceEpoch, isUtc);
-  t1.DateTime$fromMillisecondsSinceEpoch$2$isUtc(millisecondsSinceEpoch, isUtc);
-  return t1;
-},
-
-"+new DateTime$fromMillisecondsSinceEpoch:1:1": 0,
-
 DateTime$_now: function() {
   var t1 = new $.DateTime(Date.now(), false);
   t1.DateTime$_now$0();
@@ -12993,7 +13590,8 @@ UnsupportedError: {"": "Error;message",
 
 UnimplementedError: {"": "Error;message",
   toString$0: function(_) {
-    return "UnimplementedError";
+    var t1 = this.message;
+    return t1 != null ? "UnimplementedError: " + t1 : "UnimplementedError";
   },
   "+toString:0:0": 0
 },
@@ -13140,8 +13738,14 @@ Object: {"": ";",
     throw $.wrapException(new $.NoSuchMethodError(this, invocation.get$memberName().get$_name(), invocation.get$positionalArguments(), $._symbolMapToStringMap(invocation.get$namedArguments()), null));
   },
   "+noSuchMethod:1:0": 0,
+  $$dom_addEventListener$3: function($receiver, $0, $1, $2) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("$dom_addEventListener", "$$dom_addEventListener$3", 0, [$0, $1, $2], []));
+  },
   $$dom_removeChild$1: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("$dom_removeChild", "$$dom_removeChild$1", 0, [$0], []));
+  },
+  $$dom_removeEventListener$3: function($receiver, $0, $1, $2) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("$dom_removeEventListener", "$$dom_removeEventListener$3", 0, [$0, $1, $2], []));
   },
   $$dom_replaceChild$2: function($receiver, $0, $1) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("$dom_replaceChild", "$$dom_replaceChild$2", 0, [$0, $1], []));
@@ -13227,11 +13831,17 @@ Object: {"": ";",
   clone$1: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("clone", "clone$1", 0, [$0], []));
   },
+  close$0: function($receiver) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("close", "close$0", 0, [], []));
+  },
   codeUnitAt$1: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("codeUnitAt", "codeUnitAt$1", 0, [$0], []));
   },
   compareTo$1: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("compareTo", "compareTo$1", 0, [$0], []));
+  },
+  complete$0: function($receiver) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("complete", "complete$0", 0, [], []));
   },
   complete$1: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("complete", "complete$1", 0, [$0], []));
@@ -13368,6 +13978,9 @@ Object: {"": ";",
   get$tagName: function($receiver) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("tagName", "get$tagName", 1, [], []));
   },
+  get$target: function($receiver) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("target", "get$target", 1, [], []));
+  },
   get$text: function($receiver) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("text", "get$text", 1, [], []));
   },
@@ -13401,6 +14014,12 @@ Object: {"": ";",
   lastIndexOf$1: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("lastIndexOf", "lastIndexOf$1", 0, [$0], []));
   },
+  listen$3$onDone$onError: function($0, $1, $2) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("listen", "listen$3$onDone$onError", 0, [$0, $1, $2], ["onDone", "onError"]));
+  },
+  listen$4$cancelOnError$onDone$onError: function($0, $1, $2, $3) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("listen", "listen$4$cancelOnError$onDone$onError", 0, [$0, $1, $2, $3], ["cancelOnError", "onDone", "onError"]));
+  },
   map$1: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("map", "map$1", 0, [$0], []));
   },
@@ -13409,6 +14028,9 @@ Object: {"": ";",
   },
   matches$1: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("matches", "matches$1", 0, [$0], []));
+  },
+  matchesWithAncestors$1: function($receiver, $0) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("matchesWithAncestors", "matchesWithAncestors$1", 0, [$0], []));
   },
   query$1: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("query", "query$1", 0, [$0], []));
@@ -13454,6 +14076,9 @@ Object: {"": ";",
   },
   set$length: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("length=", "set$length", 2, [$0], []));
+  },
+  set$matches: function($receiver, $0) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("matches=", "set$matches", 2, [$0], []));
   },
   set$right: function($receiver, $0) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("right=", "set$right", 2, [$0], []));
@@ -13564,12 +14189,10 @@ StringBuffer: {"": "Object;_contents<",
   },
   writeAll$2: function(objects, separator) {
     var iterator, str;
-    if (typeof separator !== "string")
-      return this.writeAll$2$bailout(1, objects, separator);
     iterator = $.get$iterator$ax(objects);
     if (iterator.moveNext$0() !== true)
       return;
-    if ($.JSString_methods.get$isEmpty(separator))
+    if (separator.length === 0)
       do {
         str = iterator.get$current();
         str = typeof str === "string" ? str : $.S(str);
@@ -13586,28 +14209,6 @@ StringBuffer: {"": "Object;_contents<",
     }
   },
   "+writeAll:1:1": 0,
-  writeAll$2$bailout: function(state0, objects, separator) {
-    var iterator, str, t1;
-    iterator = $.get$iterator$ax(objects);
-    if (iterator.moveNext$0() !== true)
-      return;
-    if ($.get$isEmpty$asx(separator) === true)
-      do {
-        str = iterator.get$current();
-        str = typeof str === "string" ? str : $.S(str);
-        this._contents = this._contents + str;
-      } while (iterator.moveNext$0() === true);
-    else {
-      this.write$1(iterator.get$current());
-      for (t1 = typeof separator === "string"; iterator.moveNext$0() === true;) {
-        str = t1 ? separator : $.S(separator);
-        this._contents = this._contents + str;
-        str = iterator.get$current();
-        str = typeof str === "string" ? str : $.S(str);
-        this._contents = this._contents + str;
-      }
-    }
-  },
   clear$0: function(_) {
     this._contents = "";
   },
@@ -13739,7 +14340,7 @@ Uri: {"": "Object;_liblib5$_port,_path,scheme,userInfo<,host,query,fragment,_pat
   },
   $isUri: true,
   static: {
-"": "Uri__splitRe,Uri__COMPONENT_SCHEME,Uri__COMPONENT_USER_INFO,Uri__COMPONENT_HOST,Uri__COMPONENT_HOST_IPV6,Uri__COMPONENT_PORT,Uri__COMPONENT_PATH,Uri__COMPONENT_QUERY_DATA,Uri__COMPONENT_FRAGMENT,Uri__PERCENT,Uri__PLUS,Uri__SLASH,Uri__ZERO,Uri__NINE,Uri__COLON,Uri__AT_SIGN,Uri__UPPER_CASE_A,Uri__UPPER_CASE_F,Uri__LOWER_CASE_A,Uri__LOWER_CASE_F,Uri__unreservedTable,Uri__unreserved2396Table,Uri__encodeFullTable,Uri__schemeTable,Uri__schemeLowerTable,Uri__subDelimitersTable,Uri__pathCharTable,Uri__queryCharTable",
+"": "Uri__splitRe,Uri__COMPONENT_SCHEME,Uri__COMPONENT_USER_INFO,Uri__COMPONENT_HOST,Uri__COMPONENT_HOST_IPV6,Uri__COMPONENT_PORT,Uri__COMPONENT_PATH,Uri__COMPONENT_QUERY_DATA,Uri__COMPONENT_FRAGMENT,Uri__DOUBLE_QUOTE,Uri__PERCENT,Uri__ASTERISK,Uri__PLUS,Uri__SLASH,Uri__ZERO,Uri__NINE,Uri__COLON,Uri__LESS,Uri__GREATER,Uri__QUESTION,Uri__AT_SIGN,Uri__UPPER_CASE_A,Uri__UPPER_CASE_F,Uri__UPPER_CASE_Z,Uri__BACKSLASH,Uri__LOWER_CASE_A,Uri__LOWER_CASE_F,Uri__LOWER_CASE_Z,Uri__BAR,Uri__unreservedTable,Uri__unreserved2396Table,Uri__encodeFullTable,Uri__schemeTable,Uri__schemeLowerTable,Uri__subDelimitersTable,Uri__pathCharTable,Uri__queryCharTable",
 Uri$_fromMatch: function(m) {
   var t1, t2, t3, t4, t5, t6, t7, t8;
   m.$index;
@@ -14453,6 +15054,21 @@ _convertNativeToDart_Window: function(win) {
 
 "+_convertNativeToDart_Window:1:0": 0,
 
+_convertNativeToDart_EventTarget: function(e) {
+  var $window;
+  if (e == null)
+    return;
+  if ("setInterval" in e) {
+    $window = $._DOMWindowCrossFrame__createSafe(e);
+    if (typeof $window === "object" && $window !== null && !!$.getInterceptor($window).$isEventTarget)
+      return $window;
+    return;
+  } else
+    return e;
+},
+
+"+_convertNativeToDart_EventTarget:1:0": 0,
+
 Interceptor_CssStyleDeclarationBase: {"": "Interceptor+CssStyleDeclarationBase;"},
 
 "+Interceptor_CssStyleDeclarationBase": 0,
@@ -14646,6 +15262,21 @@ _FrozenElementList: {"": "ListBase;_nodeList,_elementList",
     return $._CssStyleDeclarationSet$(this._elementList);
   },
   "+style": 0,
+  get$onChange: function(_) {
+    $.EventStreamProvider_change._forElementList$2$useCapture;
+    return $._ElementListEventStreamImpl$(this, $.EventStreamProvider_change._eventType, false, null);
+  },
+  "+onChange": 0,
+  get$onClick: function(_) {
+    $.EventStreamProvider_click._forElementList$2$useCapture;
+    return $._ElementListEventStreamImpl$(this, $.EventStreamProvider_click._eventType, false, null);
+  },
+  "+onClick": 0,
+  get$onInput: function(_) {
+    $.EventStreamProvider_input._forElementList$2$useCapture;
+    return $._ElementListEventStreamImpl$(this, $.EventStreamProvider_input._eventType, false, null);
+  },
+  "+onInput": 0,
   _FrozenElementList$_wrap$1: function(_nodeList, T) {
     var t1 = $.NodeList_methods.where$1(this._nodeList, new $._FrozenElementList$_wrap_closure());
     this._elementList = $.List_List$from(t1, true, $.getRuntimeTypeArgument(t1, "IterableBase", 0));
@@ -14689,27 +15320,11 @@ _ElementFactoryProvider__getColgroup_closure: {"": "Closure;",
 
 "+_ElementFactoryProvider__getColgroup_closure": 0,
 
-Interceptor_ListMixin: {"": "Interceptor+ListMixin;", $isList: true,
-  $asList: function(E) {
-    return [$.Node];
-  },
-  $isIterable: true,
-  $asIterable: function(E) {
-    return [$.Node];
-  }
-},
+Interceptor_ListMixin: {"": "Interceptor+ListMixin;", $isList: true, $asList: null, $isIterable: true, $asIterable: null},
 
 "+Interceptor_ListMixin": 0,
 
-Interceptor_ListMixin_ImmutableListMixin: {"": "Interceptor_ListMixin+ImmutableListMixin;", $isList: true,
-  $asList: function(E) {
-    return [$.Node];
-  },
-  $isIterable: true,
-  $asIterable: function(E) {
-    return [$.Node];
-  }
-},
+Interceptor_ListMixin_ImmutableListMixin: {"": "Interceptor_ListMixin+ImmutableListMixin;", $asList: null, $asIterable: null, $isList: true, $isIterable: true},
 
 "+Interceptor_ListMixin_ImmutableListMixin": 0,
 
@@ -14842,51 +15457,19 @@ _ChildNodeListLazy: {"": "ListBase;_this",
 
 "+_ChildNodeListLazy": 0,
 
-Interceptor_ListMixin0: {"": "Interceptor+ListMixin;", $isList: true,
-  $asList: function(E) {
-    return [$.Node];
-  },
-  $isIterable: true,
-  $asIterable: function(E) {
-    return [$.Node];
-  }
-},
+Interceptor_ListMixin0: {"": "Interceptor+ListMixin;", $isList: true, $asList: null, $isIterable: true, $asIterable: null},
 
 "+Interceptor_ListMixin": 0,
 
-Interceptor_ListMixin_ImmutableListMixin0: {"": "Interceptor_ListMixin0+ImmutableListMixin;", $isList: true,
-  $asList: function(E) {
-    return [$.Node];
-  },
-  $isIterable: true,
-  $asIterable: function(E) {
-    return [$.Node];
-  }
-},
+Interceptor_ListMixin_ImmutableListMixin0: {"": "Interceptor_ListMixin0+ImmutableListMixin;", $asList: null, $asIterable: null, $isList: true, $isIterable: true},
 
 "+Interceptor_ListMixin_ImmutableListMixin": 0,
 
-Interceptor_ListMixin1: {"": "Interceptor+ListMixin;", $isList: true,
-  $asList: function(E) {
-    return [$.Node];
-  },
-  $isIterable: true,
-  $asIterable: function(E) {
-    return [$.Node];
-  }
-},
+Interceptor_ListMixin1: {"": "Interceptor+ListMixin;", $isList: true, $asList: null, $isIterable: true, $asIterable: null},
 
 "+Interceptor_ListMixin": 0,
 
-Interceptor_ListMixin_ImmutableListMixin1: {"": "Interceptor_ListMixin1+ImmutableListMixin;", $isList: true,
-  $asList: function(E) {
-    return [$.Node];
-  },
-  $isIterable: true,
-  $asIterable: function(E) {
-    return [$.Node];
-  }
-},
+Interceptor_ListMixin_ImmutableListMixin1: {"": "Interceptor_ListMixin1+ImmutableListMixin;", $asList: null, $asIterable: null, $isList: true, $isIterable: true},
 
 "+Interceptor_ListMixin_ImmutableListMixin": 0,
 
@@ -15137,11 +15720,160 @@ _EventStream: {"": "Stream;_liblib4$_target,_eventType,_useCapture",
 
 "+_EventStream": 0,
 
+_ElementEventStreamImpl: {"": "_EventStream;_liblib4$_target,_eventType,_useCapture",
+  matches$1: function(_, selector) {
+    var t1 = new $._WhereStream(new $._ElementEventStreamImpl_matches_closure(selector), this);
+    $.setRuntimeTypeInfo(t1, [$.getRuntimeTypeArgument(this, "Stream", 0)]);
+    return t1;
+  },
+  "+matches:1:0": 0,
+  $as_EventStream: null,
+  $asStream: null,
+  $isStream: true
+},
+
+"+_ElementEventStreamImpl": 0,
+
+_ElementEventStreamImpl_matches_closure: {"": "Closure;selector_0",
+  call$1: function($event) {
+    return $.matchesWithAncestors$1$x($.get$target$x($event), this.selector_0);
+  },
+  "+call:1:0": 0,
+  $isFunction: true
+},
+
+"+_ElementEventStreamImpl_matches_closure": 0,
+
+_ElementListEventStreamImpl: {"": "Stream;_pool,_liblib4$_stream",
+  matches$1: function(_, selector) {
+    var t1 = new $._WhereStream(new $._ElementListEventStreamImpl_matches_closure(selector), this);
+    $.setRuntimeTypeInfo(t1, [$.getRuntimeTypeArgument(this, "Stream", 0)]);
+    return t1;
+  },
+  "+matches:1:0": 0,
+  listen$4$cancelOnError$onDone$onError: function(onData, cancelOnError, onDone, onError) {
+    return this._liblib4$_stream.listen$4$cancelOnError$onDone$onError(onData, cancelOnError, onDone, onError);
+  },
+  "+listen:1:3": 0,
+  listen$1: function(onData) {
+    return this.listen$4$cancelOnError$onDone$onError(onData, null, null, null);
+  },
+  "+listen:1:0": 0,
+  listen$3$onDone$onError: function(onData, onDone, onError) {
+    return this.listen$4$cancelOnError$onDone$onError(onData, null, onDone, onError);
+  },
+  "+listen:3:0:onDone:onError": 0,
+  _ElementListEventStreamImpl$3: function(targetList, eventType, useCapture, T) {
+    var t1, t2, stream;
+    for (t1 = targetList.get$iterator(targetList), t2 = this._pool; t1.moveNext$0();) {
+      stream = new $._EventStream(t1._liblib$_current, eventType, useCapture);
+      stream.$builtinTypeInfo = [null];
+      t2.add$1(t2, stream);
+    }
+    t1 = t2._controller;
+    t1.get$stream;
+    t2 = new $._BroadcastStream(t1);
+    $.setRuntimeTypeInfo(t2, [$.getRuntimeTypeArgument(t1, "_BroadcastStreamController", 0)]);
+    this._liblib4$_stream = t2;
+  },
+  $asStream: null,
+  $isStream: true,
+  static: {
+_ElementListEventStreamImpl$: function(targetList, eventType, useCapture, T) {
+  var t1 = new $._ElementListEventStreamImpl($._StreamPool$broadcast(null), null);
+  $.setRuntimeTypeInfo(t1, [T]);
+  t1._ElementListEventStreamImpl$3(targetList, eventType, useCapture, T);
+  return t1;
+},
+
+"+new _ElementListEventStreamImpl:3:0": 0}
+
+},
+
+"+_ElementListEventStreamImpl": 0,
+
+_ElementListEventStreamImpl_matches_closure: {"": "Closure;selector_0",
+  call$1: function($event) {
+    return $.matchesWithAncestors$1$x($.get$target$x($event), this.selector_0);
+  },
+  "+call:1:0": 0,
+  $isFunction: true
+},
+
+"+_ElementListEventStreamImpl_matches_closure": 0,
+
+_StreamPool: {"": "Object;_controller,_subscriptions",
+  add$1: function(_, stream) {
+    var t1, t2;
+    t1 = this._subscriptions;
+    if (t1.containsKey$1(stream))
+      return;
+    t2 = this._controller;
+    t1.$indexSet(t1, stream, stream.listen$3$onDone$onError(t2.get$add(t2), new $._StreamPool_add_closure(this, stream), t2.get$addError()));
+  },
+  "+add:1:0": 0,
+  remove$1: function(_, stream) {
+    var t1, subscription;
+    t1 = this._subscriptions;
+    subscription = t1.remove$1(t1, stream);
+    if (subscription != null)
+      subscription.cancel$0();
+  },
+  "+remove:1:0": 0,
+  get$remove: function(_receiver) {
+    return new $.BoundClosure$i1(this, "remove$1", _receiver);
+  },
+  close$0: function(_) {
+    var t1, t2, t3;
+    for (t1 = this._subscriptions, t2 = t1.get$values(t1), t3 = t2._iterable, t3 = t3.get$iterator(t3), t3 = new $.MappedIterator(null, t3, t2._f), $.setRuntimeTypeInfo(t3, [$.getRuntimeTypeArgument(t2, "MappedIterable", 0), $.getRuntimeTypeArgument(t2, "MappedIterable", 1)]); t3.moveNext$0();)
+      t3._liblib$_current.cancel$0();
+    t1.clear$0(t1);
+    t1 = this._controller;
+    t1.close$0(t1);
+  },
+  "+close:0:0": 0,
+  get$close: function(_receiver) {
+    return new $.Bound_close__StreamPool(this, "close$0", _receiver);
+  },
+  _StreamPool$broadcast$0: function(T) {
+    this._controller = $.StreamController_StreamController$broadcast(this.get$close(this), null, true, T);
+  },
+  static: {
+_StreamPool$broadcast: function(T) {
+  var t1 = new $.HashMap(0, null, null, null, null);
+  $.setRuntimeTypeInfo(t1, [[$.Stream, T], [$.StreamSubscription, T]]);
+  t1 = new $._StreamPool(null, t1);
+  $.setRuntimeTypeInfo(t1, [T]);
+  t1._StreamPool$broadcast$0(T);
+  return t1;
+},
+
+"+new _StreamPool$broadcast:0:0": 0}
+
+},
+
+"+_StreamPool": 0,
+
+_StreamPool_add_closure: {"": "Closure;this_0,stream_1",
+  call$0: function() {
+    return $.remove$1$ax(this.this_0, this.stream_1);
+  },
+  "+call:0:0": 0,
+  $isFunction: true,
+  $is_void_: true
+},
+
+"+_StreamPool_add_closure": 0,
+
 _EventStreamSubscription: {"": "StreamSubscription;_pauseCount,_liblib4$_target,_eventType,_onData,_useCapture",
   cancel$0: function() {
-    if (this._liblib4$_target == null)
+    var t1, t2;
+    t1 = this._liblib4$_target;
+    if (t1 == null)
       return;
-    this._unlisten$0();
+    t2 = this._onData;
+    if (t2 != null)
+      $.$$dom_removeEventListener$3$x(t1, this._eventType, t2, this._useCapture);
     this._liblib4$_target = null;
     this._onData = null;
   },
@@ -15387,7 +16119,7 @@ _HTMLElement: {"": "Element;"},
 
 "+_HTMLElement": 0,
 
-AnchorElement: {"": "_HTMLElement;name=,type=",
+AnchorElement: {"": "_HTMLElement;name=,target=,type=",
   toString$0: function(receiver) {
     return receiver.toString();
   },
@@ -15395,6 +16127,14 @@ AnchorElement: {"": "_HTMLElement;name=,type=",
 },
 
 "+AnchorElement": 0,
+
+AreaElement: {"": "_HTMLElement;target="},
+
+"+AreaElement": 0,
+
+BaseElement: {"": "_HTMLElement;target="},
+
+"+BaseElement": 0,
 
 ButtonElement: {"": "_HTMLElement;disabled%,name=,type=,value%"},
 
@@ -15557,45 +16297,61 @@ Element: {"": "Node;id%,innerHtml:innerHTML},className%,style=,tagName=,$$dom_ch
   },
   "+toString:0:0": 0,
   matches$1: function(receiver, selectors) {
+    var t1;
     if (!!receiver.matches)
       return receiver.matches(selectors);
     else if (!!receiver.webkitMatchesSelector)
       return receiver.webkitMatchesSelector(selectors);
     else if (!!receiver.mozMatchesSelector)
       return receiver.mozMatchesSelector(selectors);
-    else if (!!receiver.msMatchesSelector)
-      return receiver.msMatchesSelector(selectors);
-    throw $.wrapException(new $.UnsupportedError("Not supported on this platform"));
+    else if (!!receiver.msMatchesSelector) {
+      t1 = receiver.msMatchesSelector(selectors);
+      this.set$matches(receiver, t1);
+      return t1;
+    } else
+      throw $.wrapException(new $.UnsupportedError("Not supported on this platform"));
   },
   "+matches:1:0": 0,
+  matchesWithAncestors$1: function(receiver, selectors) {
+    var elem, t1;
+    elem = receiver;
+    do {
+      t1 = $.getInterceptor$x(elem);
+      if (t1.matches$1(elem, selectors) === true)
+        return true;
+      elem = t1.get$parent(elem);
+    } while (elem != null);
+    return false;
+  },
+  "+matchesWithAncestors:1:0": 0,
+  createShadowRoot$0: function(receiver) {
+    return (receiver.createShadowRoot || receiver.webkitCreateShadowRoot).call(receiver);
+  },
+  "+createShadowRoot:0:0": 0,
   query$1: function(receiver, selectors) {
     return receiver.querySelector(selectors);
   },
   "+query:1:0": 0,
-  createShadowRoot$0: function(receiver) {
-    return receiver.webkitCreateShadowRoot();
-  },
-  "+createShadowRoot:0:0": 0,
   get$onChange: function(receiver) {
     var t1;
-    $.EventStreamProvider_change.forTarget$2$useCapture;
-    t1 = new $._EventStream(receiver, $.EventStreamProvider_change._eventType, false);
+    $.EventStreamProvider_change.forElement$2$useCapture;
+    t1 = new $._ElementEventStreamImpl(receiver, $.EventStreamProvider_change._eventType, false);
     $.setRuntimeTypeInfo(t1, [null]);
     return t1;
   },
   "+onChange": 0,
   get$onClick: function(receiver) {
     var t1;
-    $.EventStreamProvider_click.forTarget$2$useCapture;
-    t1 = new $._EventStream(receiver, $.EventStreamProvider_click._eventType, false);
+    $.EventStreamProvider_click.forElement$2$useCapture;
+    t1 = new $._ElementEventStreamImpl(receiver, $.EventStreamProvider_click._eventType, false);
     $.setRuntimeTypeInfo(t1, [null]);
     return t1;
   },
   "+onClick": 0,
   get$onInput: function(receiver) {
     var t1;
-    $.EventStreamProvider_input.forTarget$2$useCapture;
-    t1 = new $._EventStream(receiver, $.EventStreamProvider_input._eventType, false);
+    $.EventStreamProvider_input.forElement$2$useCapture;
+    t1 = new $._ElementEventStreamImpl(receiver, $.EventStreamProvider_input._eventType, false);
     $.setRuntimeTypeInfo(t1, [null]);
     return t1;
   },
@@ -15610,11 +16366,29 @@ EmbedElement: {"": "_HTMLElement;name=,type=,width}"},
 
 "+EmbedElement": 0,
 
-Event: {"": "Interceptor;type=", $isEvent: true, $asEvent: null},
+Event: {"": "Interceptor;type=",
+  get$target: function(receiver) {
+    return $._convertNativeToDart_EventTarget(receiver.target);
+  },
+  "+target": 0,
+  $isEvent: true,
+  $asEvent: null
+},
 
 "+Event": 0,
 
-EventTarget: {"": "Interceptor;"},
+EventTarget: {"": "Interceptor;",
+  $$dom_addEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.addEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_addEventListener:2:1": 0,
+  $$dom_removeEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.removeEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_removeEventListener:2:1": 0,
+  $isEventTarget: true,
+  $asEventTarget: null
+},
 
 "+EventTarget": 0,
 
@@ -15626,16 +16400,7 @@ FileError: {"": "Interceptor;code="},
 
 "+FileError": 0,
 
-FileException: {"": "Interceptor;code=,name=",
-  toString$0: function(receiver) {
-    return receiver.toString();
-  },
-  "+toString:0:0": 0
-},
-
-"+FileException": 0,
-
-FormElement: {"": "_HTMLElement;length=,name="},
+FormElement: {"": "_HTMLElement;length=,name=,target="},
 
 "+FormElement": 0,
 
@@ -15664,16 +16429,16 @@ HtmlCollection: {"": "Interceptor_ListMixin_ImmutableListMixin;",
     return receiver[index];
   },
   "+elementAt:1:0": 0,
-  $isList: true,
   $asList: function() {
     return [$.Node];
   },
-  $isIterable: true,
+  $asJavaScriptIndexingBehavior: null,
   $asIterable: function() {
     return [$.Node];
   },
-  $isJavaScriptIndexingBehavior: true,
-  $asJavaScriptIndexingBehavior: null
+  $isList: true,
+  $isIterable: true,
+  $isJavaScriptIndexingBehavior: true
 },
 
 "+HtmlCollection": 0,
@@ -15688,10 +16453,6 @@ HtmlDocument: {"": "Document;",
 "+HtmlDocument": 0,
 
 HttpRequest: {"": "EventTarget;responseText=",
-  $$dom_addEventListener$3: function(receiver, type, listener, useCapture) {
-    return receiver.addEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
-  },
-  "+$dom_addEventListener:2:1": 0,
   open$5$async$password$user: function(receiver, method, url, async, password, user) {
     return receiver.open(method, url, async, user, password);
   },
@@ -15700,6 +16461,10 @@ HttpRequest: {"": "EventTarget;responseText=",
     return $receiver.open(method, url, async);
   },
   "+open:3:0:async": 0,
+  $$dom_addEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.addEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_addEventListener:2:1": 0,
   $$dom_removeEventListener$3: function(receiver, type, listener, useCapture) {
     return receiver.removeEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
   },
@@ -15718,7 +16483,7 @@ ImageElement: {"": "_HTMLElement;width}"},
 
 "+ImageElement": 0,
 
-InputElement: {"": "_HTMLElement;checked%,disabled%,name=,type=,value%,width}", $isElement: true, $asElement: null, $isNode: true, $asNode: null},
+InputElement: {"": "_HTMLElement;checked%,disabled%,name=,type=,value%,width}", $isElement: true, $asElement: null, $isNode: true, $asNode: null, $isEventTarget: true, $asEventTarget: null},
 
 "+InputElement": 0,
 
@@ -15765,6 +16530,19 @@ MediaKeyError: {"": "Interceptor;code="},
 
 "+MediaKeyError": 0,
 
+MediaStream: {"": "EventTarget;id=",
+  $$dom_addEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.addEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_addEventListener:2:1": 0,
+  $$dom_removeEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.removeEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_removeEventListener:2:1": 0
+},
+
+"+MediaStream": 0,
+
 MetaElement: {"": "_HTMLElement;name="},
 
 "+MetaElement": 0,
@@ -15782,7 +16560,16 @@ MidiOutput: {"": "MidiPort;",
 
 "+MidiOutput": 0,
 
-MidiPort: {"": "EventTarget;id=,name=,type="},
+MidiPort: {"": "EventTarget;id=,name=,type=",
+  $$dom_addEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.addEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_addEventListener:2:1": 0,
+  $$dom_removeEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.removeEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_removeEventListener:2:1": 0
+},
 
 "+MidiPort": 0,
 
@@ -15842,10 +16629,6 @@ Node: {"": "EventTarget;$$dom_namespaceUri:namespaceURI=,nextNode:nextSibling=,p
     return t1 == null ? $.Interceptor.prototype.toString$0.call(this, receiver) : t1;
   },
   "+toString:0:0": 0,
-  $$dom_addEventListener$3: function(receiver, type, listener, useCapture) {
-    return receiver.addEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
-  },
-  "+$dom_addEventListener:2:1": 0,
   clone$1: function(receiver, deep) {
     return receiver.cloneNode(deep);
   },
@@ -15862,14 +16645,18 @@ Node: {"": "EventTarget;$$dom_namespaceUri:namespaceURI=,nextNode:nextSibling=,p
     return receiver.removeChild(oldChild);
   },
   "+$dom_removeChild:1:0": 0,
-  $$dom_removeEventListener$3: function(receiver, type, listener, useCapture) {
-    return receiver.removeEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
-  },
-  "+$dom_removeEventListener:2:1": 0,
   $$dom_replaceChild$2: function(receiver, newChild, oldChild) {
     return receiver.replaceChild(newChild, oldChild);
   },
   "+$dom_replaceChild:2:0": 0,
+  $$dom_addEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.addEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_addEventListener:2:1": 0,
+  $$dom_removeEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.removeEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_removeEventListener:2:1": 0,
   $isNode: true,
   $asNode: null
 },
@@ -15901,16 +16688,16 @@ NodeList: {"": "Interceptor_ListMixin_ImmutableListMixin0;",
     return receiver[index];
   },
   "+elementAt:1:0": 0,
-  $isList: true,
   $asList: function() {
     return [$.Node];
   },
-  $isIterable: true,
+  $asJavaScriptIndexingBehavior: null,
   $asIterable: function() {
     return [$.Node];
   },
-  $isJavaScriptIndexingBehavior: true,
-  $asJavaScriptIndexingBehavior: null
+  $isList: true,
+  $isIterable: true,
+  $isJavaScriptIndexingBehavior: true
 },
 
 "+NodeList": 0,
@@ -15942,6 +16729,10 @@ ParamElement: {"": "_HTMLElement;name=,value%"},
 PositionError: {"": "Interceptor;code="},
 
 "+PositionError": 0,
+
+ProcessingInstruction: {"": "Node;target="},
+
+"+ProcessingInstruction": 0,
 
 ProgressElement: {"": "_HTMLElement;value%"},
 
@@ -16061,10 +16852,6 @@ Window: {"": "EventTarget;name=",
     return $._convertNativeToDart_Window(receiver.parent);
   },
   "+parent": 0,
-  $$dom_addEventListener$3: function(receiver, type, listener, useCapture) {
-    return receiver.addEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
-  },
-  "+$dom_addEventListener:2:1": 0,
   alert$1: function(receiver, message) {
     return receiver.alert(message);
   },
@@ -16072,14 +16859,18 @@ Window: {"": "EventTarget;name=",
   get$alert: function(_receiver) {
     return new $.BoundClosure$i1(this, "alert$1", _receiver);
   },
-  $$dom_removeEventListener$3: function(receiver, type, listener, useCapture) {
-    return receiver.removeEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
-  },
-  "+$dom_removeEventListener:2:1": 0,
   toString$0: function(receiver) {
     return receiver.toString();
   },
   "+toString:0:0": 0,
+  $$dom_addEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.addEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_addEventListener:2:1": 0,
+  $$dom_removeEventListener$3: function(receiver, type, listener, useCapture) {
+    return receiver.removeEventListener(type, $.convertDartClosureToJS(listener, 1), useCapture);
+  },
+  "+$dom_removeEventListener:2:1": 0,
   get$onChange: function(receiver) {
     var t1;
     $.EventStreamProvider_change.forTarget$2$useCapture;
@@ -16137,16 +16928,16 @@ _NamedNodeMap: {"": "Interceptor_ListMixin_ImmutableListMixin1;",
     return receiver[index];
   },
   "+elementAt:1:0": 0,
-  $isList: true,
   $asList: function() {
     return [$.Node];
   },
-  $isIterable: true,
+  $asJavaScriptIndexingBehavior: null,
   $asIterable: function() {
     return [$.Node];
   },
-  $isJavaScriptIndexingBehavior: true,
-  $asJavaScriptIndexingBehavior: null
+  $isList: true,
+  $isIterable: true,
+  $isJavaScriptIndexingBehavior: true
 },
 
 "+_NamedNodeMap": 0}],
@@ -16175,6 +16966,10 @@ _AttributeClassSet: {"": "CssClassSetImpl;_liblib11$_element",
 
 "+_AttributeClassSet": 0,
 
+AElement: {"": "GraphicsElement;target="},
+
+"+AElement": 0,
+
 FEColorMatrixElement: {"": "StyledElement;type=,values="},
 
 "+FEColorMatrixElement": 0,
@@ -16182,6 +16977,10 @@ FEColorMatrixElement: {"": "StyledElement;type=,values="},
 FETurbulenceElement: {"": "StyledElement;type="},
 
 "+FETurbulenceElement": 0,
+
+GraphicsElement: {"": "StyledElement;"},
+
+"+GraphicsElement": 0,
 
 ScriptElement0: {"": "SvgElement;type="},
 
@@ -16238,11 +17037,7 @@ SvgElement: {"": "Element;",
 ["dart.dom.web_sql", "dart:web_sql", , {
 SqlError: {"": "Interceptor;code="},
 
-"+SqlError": 0,
-
-SqlException: {"": "Interceptor;code="},
-
-"+SqlException": 0}],
+"+SqlError": 0}],
 ["dart.isolate", "dart:isolate", , {
 _Isolate_port: function() {
   if ($.lazyPort == null)
@@ -16655,19 +17450,11 @@ _JsonStringifier_stringifyJsonValue_closure: {"": "Closure;box_0,this_1",
 
 "+_JsonStringifier_stringifyJsonValue_closure": 0}],
 ["dart.typed_data", "dart:typed_data", , {
-TypedData_ListMixin: {"": "TypedData+ListMixin;", $isList: true,
-  $asList: function(E) {
-    return [$.JSInt];
-  },
-  $isIterable: true,
-  $asIterable: function(E) {
-    return [$.JSInt];
-  }
-},
+TypedData_ListMixin: {"": "TypedData+ListMixin;", $isList: true, $asList: null, $isIterable: true, $asIterable: null},
 
 "+TypedData_ListMixin": 0,
 
-TypedData_ListMixin_FixedLengthListMixin: {"": "TypedData_ListMixin+FixedLengthListMixin;"},
+TypedData_ListMixin_FixedLengthListMixin: {"": "TypedData_ListMixin+FixedLengthListMixin;", $asList: null, $asIterable: null},
 
 "+TypedData_ListMixin_FixedLengthListMixin": 0,
 
@@ -16758,16 +17545,16 @@ Uint8List: {"": "TypedData_ListMixin_FixedLengthListMixin;",
       this._invalidIndex$2(receiver, index, t1);
     receiver[index] = value;
   },
-  $isList: true,
   $asList: function() {
     return [$.JSInt];
   },
-  $isIterable: true,
+  $asJavaScriptIndexingBehavior: null,
   $asIterable: function() {
     return [$.JSInt];
   },
-  $isJavaScriptIndexingBehavior: true,
-  $asJavaScriptIndexingBehavior: null
+  $isList: true,
+  $isIterable: true,
+  $isJavaScriptIndexingBehavior: true
 },
 
 "+Uint8List": 0}],
@@ -18119,9 +18906,9 @@ JsonObject__extractElements_closure: {"": "Closure;this_0,data_1",
 
 "+JsonObject__extractElements_closure": 0,
 
-JsonObjectException: {"": "Object;_liblib13$_message",
+JsonObjectException: {"": "Object;_liblib12$_message",
   toString$0: function(_) {
-    return "JsonObjectException: " + this._liblib13$_message;
+    return "JsonObjectException: " + this._liblib12$_message;
   },
   "+toString:0:0": 0,
   $isException: true
@@ -18142,16 +18929,6 @@ LinkedListNode: {"": "Object;_previous?,_next?,_list<,_liblib0$_value",
     this._liblib0$_value = e;
     return e;
   },
-  _link$2: function(p, n) {
-    this._next = n;
-    this._previous = p;
-    if (p != null)
-      p.set$_next(this);
-    if (n != null)
-      n.set$_previous(this);
-    return this;
-  },
-  "+_link:2:0": 0,
   remove$0: function(_) {
     var t1, t2;
     t1 = this._list;
@@ -18193,23 +18970,66 @@ LinkedList: {"": "IterableBase;_head?,_tail?,_liblib0$_length@",
   },
   "+head": 0,
   add$1: function(_, e) {
-    var node, t1;
+    var $arguments, t1, node, t2;
+    $arguments = $.substitute(this.$asLinkedList, $.getRuntimeTypeInfo(this));
+    t1 = $arguments == null ? null : $arguments[0];
     node = new $.LinkedListNode(null, null, this, e);
-    $.setRuntimeTypeInfo(node, [$.getRuntimeTypeArgument(this, "LinkedList", 0)]);
+    node.$builtinTypeInfo = [t1];
     t1 = node._list;
-    if (t1 != null)
-      t1.set$_liblib0$_length($.$add$ns(t1.get$_liblib0$_length(), 1));
+    if (t1 != null) {
+      t2 = t1.get$_liblib0$_length();
+      if (typeof t2 !== "number")
+        return this.add$1$bailout(1, node, t1, t2);
+      t1.set$_liblib0$_length(t2 + 1);
+    }
     t1 = this._tail;
-    if (t1 == null) {
+    t2 = t1 == null;
+    if (t2) {
       this._tail = node;
       this._head = node;
       return node;
     }
-    t1 = node._link$2(t1, null);
-    this._tail = t1;
-    return t1;
+    node._next = null;
+    node._previous = t1;
+    if (!t2)
+      t1.set$_next(node);
+    this._tail = node;
+    return node;
   },
   "+add:1:0": 0,
+  add$1$bailout: function(state0, node, t1, t2) {
+    switch (state0) {
+      case 0:
+        $arguments = $.substitute(this.$asLinkedList, $.getRuntimeTypeInfo(this));
+        t1 = $arguments == null ? null : $arguments[0];
+        node = new $.LinkedListNode(null, null, this, e);
+        node.$builtinTypeInfo = [t1];
+        t1 = node._list;
+      case 1:
+        var $arguments;
+        if (state0 === 1 || state0 === 0 && t1 != null)
+          switch (state0) {
+            case 0:
+              t2 = t1.get$_liblib0$_length();
+            case 1:
+              state0 = 0;
+              t1.set$_liblib0$_length($.$add$ns(t2, 1));
+          }
+        t1 = this._tail;
+        t2 = t1 == null;
+        if (t2) {
+          this._tail = node;
+          this._head = node;
+          return node;
+        }
+        node._next = null;
+        node._previous = t1;
+        if (!t2)
+          t1.set$_next(node);
+        this._tail = node;
+        return node;
+    }
+  },
   get$add: function(_receiver) {
     return new $.BoundClosure$i1(this, "add$1", _receiver);
   },
@@ -18332,7 +19152,7 @@ LinkedListIterator$: function(_list) {
 
 "+LinkedListIterator": 0}],
 ["logging", "package:logging/logging.dart", , {
-Logger: {"": "Object;name>,parent>,_level,children>,_controller,_liblib16$_stream",
+Logger: {"": "Object;name>,parent>,_level,children>,_liblib16$_controller,_liblib16$_stream",
   get$fullName: function() {
     var t1, t2, t3;
     t1 = this.parent;
@@ -19749,9 +20569,9 @@ ObservableList$: function($length, E) {
 
 "+ObservableList": 0}],
 ["web_ui.observe.map", "package:web_ui/observe/map.dart", , {
-ObservableMap: {"": "Observable;_liblib12$_map,_liblib12$_keys,_values,$$_observers,$$_changes,hashCode",
+ObservableMap: {"": "Observable;_liblib13$_map,_liblib13$_keys,_values,$$_observers,$$_changes,hashCode",
   get$keys: function() {
-    return this._liblib12$_keys;
+    return this._liblib13$_keys;
   },
   "+keys": 0,
   get$values: function(_) {
@@ -19762,14 +20582,14 @@ ObservableMap: {"": "Observable;_liblib12$_map,_liblib12$_keys,_values,$$_observ
     var t1 = $._activeObserver;
     if (t1 != null)
       t1._addRead$3(this, 1, "length");
-    return $.get$length$asx(this._liblib12$_map);
+    return $.get$length$asx(this._liblib13$_map);
   },
   "+length": 0,
   get$isEmpty: function(_) {
     var t1 = $._activeObserver;
     if (t1 != null)
       t1._addRead$3(this, 1, "length");
-    t1 = $.get$length$asx(this._liblib12$_map);
+    t1 = $.get$length$asx(this._liblib13$_map);
     if (typeof t1 !== "number")
       return this.get$isEmpty$bailout(1, t1);
     return t1 === 0;
@@ -19793,14 +20613,14 @@ ObservableMap: {"": "Observable;_liblib12$_map,_liblib12$_keys,_values,$$_observ
     var t1 = $._activeObserver;
     if (t1 != null)
       t1._addRead$3(this, 2, key);
-    return this._liblib12$_map.containsKey$1(key);
+    return this._liblib13$_map.containsKey$1(key);
   },
   "+containsKey:1:0": 0,
   $index: function(_, key) {
     var t1 = $._activeObserver;
     if (t1 != null)
       t1._addRead$3(this, 2, key);
-    t1 = this._liblib12$_map;
+    t1 = this._liblib13$_map;
     if (typeof t1 !== "string" && (typeof t1 !== "object" || t1 === null || t1.constructor !== Array && !$.isJsIndexable(t1, t1[$.dispatchPropertyName])))
       return this.$$index$bailout(1, t1, key);
     if (key >>> 0 !== key || key >= t1.length)
@@ -19813,7 +20633,7 @@ ObservableMap: {"": "Observable;_liblib12$_map,_liblib12$_keys,_values,$$_observ
   },
   $indexSet: function(_, key, value) {
     var t1, len, oldValue;
-    t1 = this._liblib12$_map;
+    t1 = this._liblib13$_map;
     if (typeof t1 !== "object" || t1 === null || (t1.constructor !== Array || !!t1.immutable$list) && !$.isJsIndexable(t1, t1[$.dispatchPropertyName]))
       return this.$$indexSet$bailout(1, key, value, t1);
     len = t1.length;
@@ -19859,7 +20679,7 @@ ObservableMap: {"": "Observable;_liblib12$_map,_liblib12$_keys,_values,$$_observ
     t1 = $._activeObserver;
     if (t1 != null)
       t1._addRead$3(this, 2, key);
-    t1 = this._liblib12$_map;
+    t1 = this._liblib13$_map;
     t2 = $.getInterceptor$asx(t1);
     len = t2.get$length(t1);
     result = t2.remove$1(t1, key);
@@ -19885,7 +20705,7 @@ ObservableMap: {"": "Observable;_liblib12$_map,_liblib12$_keys,_values,$$_observ
   "+addAll:1:0": 0,
   clear$0: function(_) {
     var t1, t2, len, t3;
-    t1 = this._liblib12$_map;
+    t1 = this._liblib13$_map;
     t2 = $.getInterceptor$asx(t1);
     len = t2.get$length(t1);
     t3 = this.$$_observers;
@@ -19905,9 +20725,9 @@ ObservableMap: {"": "Observable;_liblib12$_map,_liblib12$_keys,_values,$$_observ
     var t1 = $._activeObserver;
     if (t1 != null) {
       t1._addRead$3(this, 1, "length");
-      $.forEach$1$ax(this._liblib12$_map.get$keys(), this.get$_notifyReadKey());
+      $.forEach$1$ax(this._liblib13$_map.get$keys(), this.get$_notifyReadKey());
     }
-    $.forEach$1$ax(this._liblib12$_map, f);
+    $.forEach$1$ax(this._liblib13$_map, f);
   },
   "+forEach:1:0": 0,
   toString$0: function(_) {
@@ -19941,10 +20761,10 @@ ObservableMap_clear_closure: {"": "Closure;this_0",
 
 "+ObservableMap_clear_closure": 0,
 
-_ObservableMapKeyIterable: {"": "IterableBase;_liblib12$_map",
+_ObservableMapKeyIterable: {"": "IterableBase;_liblib13$_map",
   get$iterator: function(_) {
-    var t1 = this._liblib12$_map;
-    return new $._ObservableMapKeyIterator(t1, $.get$iterator$ax(t1._liblib12$_map.get$keys()), false);
+    var t1 = this._liblib13$_map;
+    return new $._ObservableMapKeyIterator(t1, $.get$iterator$ax(t1._liblib13$_map.get$keys()), false);
   },
   "+iterator": 0,
   $asIterableBase: function(K, V) {
@@ -19957,22 +20777,22 @@ _ObservableMapKeyIterable: {"": "IterableBase;_liblib12$_map",
 
 "+_ObservableMapKeyIterable": 0,
 
-_ObservableMapKeyIterator: {"": "Object;_liblib12$_map,_liblib12$_keys,_hasNext",
+_ObservableMapKeyIterator: {"": "Object;_liblib13$_map,_liblib13$_keys,_hasNext",
   moveNext$0: function() {
     var t1 = $._activeObserver;
     if (t1 != null)
-      t1._addRead$3(this._liblib12$_map, 1, "length");
-    t1 = this._liblib12$_keys.moveNext$0();
+      t1._addRead$3(this._liblib13$_map, 1, "length");
+    t1 = this._liblib13$_keys.moveNext$0();
     this._hasNext = t1;
     return t1;
   },
   "+moveNext:0:0": 0,
   get$current: function() {
     var key, t1;
-    key = this._liblib12$_keys.get$current();
+    key = this._liblib13$_keys.get$current();
     t1 = $._activeObserver;
     if (t1 != null && this._hasNext === true)
-      t1._addRead$3(this._liblib12$_map, 2, key);
+      t1._addRead$3(this._liblib13$_map, 2, key);
     return key;
   },
   "+current": 0
@@ -19980,11 +20800,11 @@ _ObservableMapKeyIterator: {"": "Object;_liblib12$_map,_liblib12$_keys,_hasNext"
 
 "+_ObservableMapKeyIterator": 0,
 
-_ObservableMapValueIterable: {"": "IterableBase;_liblib12$_map",
+_ObservableMapValueIterable: {"": "IterableBase;_liblib13$_map",
   get$iterator: function(_) {
     var t1, t2;
-    t1 = this._liblib12$_map;
-    t2 = t1._liblib12$_map;
+    t1 = this._liblib13$_map;
+    t2 = t1._liblib13$_map;
     return new $._ObservableMapValueIterator(t1, $.get$iterator$ax(t2.get$keys()), $.get$iterator$ax($.get$values$x(t2)), null);
   },
   "+iterator": 0,
@@ -19998,13 +20818,13 @@ _ObservableMapValueIterable: {"": "IterableBase;_liblib12$_map",
 
 "+_ObservableMapValueIterable": 0,
 
-_ObservableMapValueIterator: {"": "Object;_liblib12$_map,_liblib12$_keys,_values,_hasNext",
+_ObservableMapValueIterator: {"": "Object;_liblib13$_map,_liblib13$_keys,_values,_hasNext",
   moveNext$0: function() {
     var t1, moreKeys, moreValues;
     t1 = $._activeObserver;
     if (t1 != null)
-      t1._addRead$3(this._liblib12$_map, 1, "length");
-    moreKeys = this._liblib12$_keys.moveNext$0();
+      t1._addRead$3(this._liblib13$_map, 1, "length");
+    moreKeys = this._liblib13$_keys.moveNext$0();
     moreValues = this._values.moveNext$0();
     if (!$.$eq(moreKeys, moreValues))
       throw $.wrapException(new $.StateError("keys and values should be the same length"));
@@ -20014,8 +20834,8 @@ _ObservableMapValueIterator: {"": "Object;_liblib12$_map,_liblib12$_keys,_values
   "+moveNext:0:0": 0,
   get$current: function() {
     if ($._activeObserver != null && this._hasNext === true) {
-      var t1 = this._liblib12$_keys.get$current();
-      $._activeObserver._addRead$3(this._liblib12$_map, 2, t1);
+      var t1 = this._liblib13$_keys.get$current();
+      $._activeObserver._addRead$3(this._liblib13$_map, 2, t1);
     }
     return this._values.get$current();
   },
@@ -20624,8 +21444,22 @@ ObservableSet: {"": "IterableWorkaround_Observable;_liblib14$_map,_createMap,$$_
   },
   "+contains:1:0": 0,
   add$1: function(_, value) {
-    var t1, t2, len;
+    var t1, len;
     t1 = this._liblib14$_map;
+    if (typeof t1 !== "object" || t1 === null || (t1.constructor !== Array || !!t1.immutable$list) && !$.isJsIndexable(t1, t1[$.dispatchPropertyName]))
+      return this.add$1$bailout(1, value, t1);
+    len = t1.length;
+    if (value >>> 0 !== value || value >= len)
+      throw $.ioore(value);
+    t1[value] = $.C_Object;
+    if (len !== len) {
+      $.notifyChange(this, 1, "length", len, len);
+      $.notifyChange(this, 6, value, null, value);
+    }
+  },
+  "+add:1:0": 0,
+  add$1$bailout: function(state0, value, t1) {
+    var t2, len;
     t2 = $.getInterceptor$asx(t1);
     len = t2.get$length(t1);
     t2.$indexSet(t1, value, $.C_Object);
@@ -20634,7 +21468,6 @@ ObservableSet: {"": "IterableWorkaround_Observable;_liblib14$_map,_createMap,$$_
       $.notifyChange(this, 6, value, null, value);
     }
   },
-  "+add:1:0": 0,
   get$add: function(_receiver) {
     return new $.BoundClosure$i1(this, "add$1", _receiver);
   },
@@ -20827,41 +21660,55 @@ $.Comparable_compare$closure = new $.Closure$compare($.Comparable_compare, "Comp
 $._doNothing$closure = new $.Closure$_doNothing($._doNothing, "_doNothing$closure");
 $.deliverChangesSync$closure = new $.Closure$deliverChangesSync($.deliverChangesSync, "deliverChangesSync$closure");
 $.defaultObserveUnhandledError$closure = new $.Closure$defaultObserveUnhandledError($.defaultObserveUnhandledError, "defaultObserveUnhandledError$closure");
+$._SplayTreeNode.$isObject = true;
+$.Logger.$isObject = true;
 $.Map.$isMap = true;
 $.Map.$isObject = true;
+$.Level.$isComparable = true;
+$.Level.$asComparable = [$.Level];
+$.Level.$isObject = true;
 $.Object.$isObject = true;
-$.TableRowElement.$isObject = true;
+$.TableCellElement.$isObject = true;
 $.Match.$isObject = true;
+$.Set.$isObject = true;
 $._EventSink.$is_EventSink = true;
 $._EventSink.$isObject = true;
-$.ProgressEvent.$isObject = true;
+$.TableSectionElement.$isObject = true;
+$.TableRowElement.$isObject = true;
 $.ReceivePort.$isObject = true;
-$.Set.$isObject = true;
+$._BufferingStreamSubscription.$is_BufferingStreamSubscription = true;
+$._BufferingStreamSubscription.$is_EventSink = true;
+$._BufferingStreamSubscription.$isObject = true;
+$.ProgressEvent.$isObject = true;
 $.Symbol0.$isSymbol0 = true;
 $.Symbol0.$isObject = true;
-$.HttpRequest.$isObject = true;
+$._BroadcastSubscription.$is_EventSink = true;
+$._BroadcastSubscription.$isObject = true;
+$._BroadcastSubscription.$is_BroadcastSubscription = true;
+$._BroadcastSubscription.$is_BufferingStreamSubscription = true;
 $.HttpRequest.$isHttpRequest = true;
-$.Language.$isLanguage = true;
-$.Language.$isObject = true;
-$.MouseEvent.$isObject = true;
+$.HttpRequest.$isObject = true;
 $.Comparable.$isComparable = true;
 $.Comparable.$isObject = true;
+$.DateTime.$isDateTime = true;
+$.DateTime.$isComparable = true;
+$.DateTime.$asComparable = [null];
+$.DateTime.$isObject = true;
 $.Future.$isFuture = true;
 $.Future.$isObject = true;
-$.Duration.$isObject = true;
+$.Duration.$isDuration = true;
 $.Duration.$isComparable = true;
 $.Duration.$asComparable = [$.Duration];
+$.Duration.$isObject = true;
 $.JSBool.$isbool = true;
 $.JSBool.$isObject = true;
+$.MouseEvent.$isObject = true;
+$.Language.$isLanguage = true;
+$.Language.$isObject = true;
 $._Watcher.$isObject = true;
-$.Node.$isObject = true;
-$.Country.$isCountry = true;
-$.Country.$isObject = true;
 $.JSArray.$isList = true;
 $.JSArray.$isObject = true;
-$.Element.$isObject = true;
-$.Locale.$isLocale = true;
-$.Locale.$isObject = true;
+$.Stream.$isObject = true;
 $.JSNumber.$isObject = true;
 $.JSNumber.$isComparable = true;
 $.JSNumber.$asComparable = [$.JSNumber];
@@ -20873,31 +21720,32 @@ $.JSInt.$asComparable = [$.JSNumber];
 $.JSInt.$isComparable = true;
 $.JSInt.$asComparable = [$.JSNumber];
 $.JSInt.$isObject = true;
-$.UserPersonalInformation.$isUserPersonalInformation = true;
-$.UserPersonalInformation.$isObject = true;
-$.JSString.$isString = true;
+$.Node.$isObject = true;
 $.JSString.$isComparable = true;
 $.JSString.$asComparable = [$.JSString];
 $.JSString.$isObject = true;
-$.Badge.$isBadge = true;
-$.Badge.$isObject = true;
-$.Event.$isObject = true;
-$._IsolateContext.$isObject = true;
-$.User.$isUser = true;
-$.User.$isObject = true;
-$._IsolateEvent.$isObject = true;
+$.JSString.$isString = true;
+$.Element.$isObject = true;
 $.Observable.$isObservable = true;
 $.Observable.$isObject = true;
-$.LinkedListNode.$isObject = true;
-$.Logger.$isObject = true;
-$.Level.$isComparable = true;
-$.Level.$asComparable = [$.Level];
-$.Level.$isObject = true;
+$.StreamSubscription.$isObject = true;
+$._IsolateEvent.$isObject = true;
+$._IsolateContext.$isObject = true;
+$.Event.$isObject = true;
+$.User.$isUser = true;
+$.User.$isObject = true;
 $.Function.$isFunction = true;
 $.Function.$isObject = true;
-$.TableCellElement.$isObject = true;
-$._SplayTreeNode.$isObject = true;
-$.TableSectionElement.$isObject = true;
+$.Badge.$isBadge = true;
+$.Badge.$isObject = true;
+$.Country.$isCountry = true;
+$.Country.$isObject = true;
+$.Locale.$isLocale = true;
+$.Locale.$isObject = true;
+$.UserPersonalInformation.$isUserPersonalInformation = true;
+$.UserPersonalInformation.$isObject = true;
+$.LinkedListNode.$isLinkedListNode = true;
+$.LinkedListNode.$isObject = true;
 $.getInterceptor = function(receiver) {
   if (typeof receiver == "number") {
     if (Math.floor(receiver) == receiver)
@@ -21295,6 +22143,9 @@ $.get$tHead$x = function(receiver) {
 $.get$tagName$x = function(receiver) {
   return $.getInterceptor$x(receiver).get$tagName(receiver);
 };
+$.get$target$x = function(receiver) {
+  return $.getInterceptor$x(receiver).get$target(receiver);
+};
 $.get$text$x = function(receiver) {
   return $.getInterceptor$x(receiver).get$text(receiver);
 };
@@ -21333,6 +22184,9 @@ $.matchAsPrefix$2$s = function(receiver, a0, a1) {
 };
 $.matches$1$x = function(receiver, a0) {
   return $.getInterceptor$x(receiver).matches$1(receiver, a0);
+};
+$.matchesWithAncestors$1$x = function(receiver, a0) {
+  return $.getInterceptor$x(receiver).matchesWithAncestors$1(receiver, a0);
 };
 $.query$1$x = function(receiver, a0) {
   return $.getInterceptor$x(receiver).query$1(receiver, a0);
@@ -21539,13 +22393,17 @@ Isolate.$lazy($, "onCircularNotifyLimit", "onCircularNotifyLimit", "get$onCircul
   return new $.closure();
 });
 // Native classes
-$.defineNativeMethods("DOMParser|Navigator|SVGAnimatedEnumeration|SVGAnimatedNumberList", $.Interceptor);
+$.defineNativeMethods("DOMParser|Navigator|SVGAnimatedEnumeration|SVGAnimatedNumberList|SVGAnimatedString", $.Interceptor);
 
-$.defineNativeMethods("HTMLAreaElement|HTMLBRElement|HTMLBaseElement|HTMLBodyElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDivElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLLabelElement|HTMLLegendElement|HTMLMenuElement|HTMLModElement|HTMLParagraphElement|HTMLPreElement|HTMLQuoteElement|HTMLShadowElement|HTMLSpanElement|HTMLTableCaptionElement|HTMLTableColElement|HTMLTemplateElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement", $._HTMLElement);
+$.defineNativeMethods("HTMLBRElement|HTMLBodyElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDivElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLLabelElement|HTMLLegendElement|HTMLMenuElement|HTMLModElement|HTMLParagraphElement|HTMLPreElement|HTMLQuoteElement|HTMLShadowElement|HTMLSpanElement|HTMLTableCaptionElement|HTMLTableColElement|HTMLTemplateElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement", $._HTMLElement);
 
 $.defineNativeMethodsNonleaf("HTMLElement", $._HTMLElement);
 
 $.defineNativeMethods("HTMLAnchorElement", $.AnchorElement);
+
+$.defineNativeMethods("HTMLAreaElement", $.AreaElement);
+
+$.defineNativeMethods("HTMLBaseElement", $.BaseElement);
 
 $.defineNativeMethods("HTMLButtonElement", $.ButtonElement);
 
@@ -21583,8 +22441,6 @@ $.defineNativeMethods("HTMLFieldSetElement", $.FieldSetElement);
 
 $.defineNativeMethods("FileError", $.FileError);
 
-$.defineNativeMethods("FileException", $.FileException);
-
 $.defineNativeMethods("HTMLFormElement", $.FormElement);
 
 $.defineNativeMethods("HTMLCollection|HTMLFormControlsCollection|HTMLOptionsCollection", $.HtmlCollection);
@@ -21617,6 +22473,8 @@ $.defineNativeMethods("MediaError", $.MediaError);
 
 $.defineNativeMethods("MediaKeyError", $.MediaKeyError);
 
+$.defineNativeMethods("MediaStream", $.MediaStream);
+
 $.defineNativeMethods("HTMLMetaElement", $.MetaElement);
 
 $.defineNativeMethods("HTMLMeterElement", $.MeterElement);
@@ -21633,7 +22491,7 @@ $.defineNativeMethods("MutationEvent", $.MutationEvent);
 
 $.defineNativeMethods("NavigatorUserMediaError", $.NavigatorUserMediaError);
 
-$.defineNativeMethods("DocumentType|Entity|Notation|ProcessingInstruction", $.Node);
+$.defineNativeMethods("DocumentType|Entity|Notation", $.Node);
 
 $.defineNativeMethodsNonleaf("Node", $.Node);
 
@@ -21652,6 +22510,8 @@ $.defineNativeMethods("HTMLOutputElement", $.OutputElement);
 $.defineNativeMethods("HTMLParamElement", $.ParamElement);
 
 $.defineNativeMethods("PositionError", $.PositionError);
+
+$.defineNativeMethods("ProcessingInstruction", $.ProcessingInstruction);
 
 $.defineNativeMethods("HTMLProgressElement", $.ProgressElement);
 
@@ -21695,15 +22555,21 @@ $.defineNativeMethods("Attr", $._Attr);
 
 $.defineNativeMethods("MozNamedAttrMap|NamedNodeMap", $._NamedNodeMap);
 
+$.defineNativeMethods("SVGAElement", $.AElement);
+
 $.defineNativeMethods("SVGFEColorMatrixElement", $.FEColorMatrixElement);
 
 $.defineNativeMethods("SVGFETurbulenceElement", $.FETurbulenceElement);
+
+$.defineNativeMethods("SVGAltGlyphElement|SVGCircleElement|SVGClipPathElement|SVGDefsElement|SVGEllipseElement|SVGForeignObjectElement|SVGGElement|SVGImageElement|SVGLineElement|SVGPathElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSVGElement|SVGSwitchElement|SVGTSpanElement|SVGTextContentElement|SVGTextElement|SVGTextPathElement|SVGTextPositioningElement|SVGUseElement", $.GraphicsElement);
+
+$.defineNativeMethodsNonleaf("SVGGraphicsElement", $.GraphicsElement);
 
 $.defineNativeMethods("SVGScriptElement", $.ScriptElement0);
 
 $.defineNativeMethods("SVGStyleElement", $.StyleElement0);
 
-$.defineNativeMethods("SVGAElement|SVGAltGlyphElement|SVGCircleElement|SVGClipPathElement|SVGDefsElement|SVGDescElement|SVGEllipseElement|SVGFEBlendElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFESpecularLightingElement|SVGFETileElement|SVGFilterElement|SVGForeignObjectElement|SVGGElement|SVGGradientElement|SVGImageElement|SVGLineElement|SVGLinearGradientElement|SVGMarkerElement|SVGMaskElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRadialGradientElement|SVGRectElement|SVGSVGElement|SVGStopElement|SVGSwitchElement|SVGSymbolElement|SVGTSpanElement|SVGTextContentElement|SVGTextElement|SVGTextPathElement|SVGTextPositioningElement|SVGTitleElement|SVGUseElement", $.StyledElement);
+$.defineNativeMethods("SVGDescElement|SVGFEBlendElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFESpecularLightingElement|SVGFETileElement|SVGFilterElement|SVGGradientElement|SVGLinearGradientElement|SVGMarkerElement|SVGMaskElement|SVGPatternElement|SVGRadialGradientElement|SVGStopElement|SVGSymbolElement|SVGTitleElement", $.StyledElement);
 
 $.defineNativeMethodsNonleaf("SVGStyledElement", $.StyledElement);
 
@@ -21712,8 +22578,6 @@ $.defineNativeMethods("SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTrans
 $.defineNativeMethodsNonleaf("SVGElement", $.SvgElement);
 
 $.defineNativeMethods("SQLError", $.SqlError);
-
-$.defineNativeMethods("SQLException", $.SqlException);
 
 $.defineNativeMethodsNonleaf("ArrayBufferView", $.TypedData);
 
@@ -21880,7 +22744,7 @@ function init() {
         }
       }
     }
-    var objectClassObject = collectedClasses.Object, shortNames = "call$0,call$1,call$2,call$3,call$4,eval$1,info$1,then$1,get$_id,get$sip,set$sip,write$1,_splay$1,cancel$0,create$0,get$_key,get$city,get$keys,get$next,get$sink,get$urls,get$user,listen$1,listen$2,lookup$1,modify$1,set$city,set$next,set$user,toJson$0,_remove$1,created$0,get$_list,get$_name,get$_zone,get$isUrl,get$level,perform$1,process$0,removed$0,set$_head,set$_next,set$_tail,warning$1,_deliver$0,_onError$1,_publish$1,get$_state,get$_value,get$badges,get$userId,moveNext$0,runAsync$2,set$_state,set$_value,set$badges,set$userId,visitMap$1,writeAll$2,_addError$1,_callback$2,_dispatch$1,bodySetup$1,get$address,get$country,get$current,set$_handle,set$address,set$country,visitList$1,_sendError$1,_sendValue$1,catchError$1,deleteUser$0,get$fullName,get$isGetter,get$isLoaded,get$isSetter,get$jobTitle,get$lastName,get$userInfo,handleNext$1,oneWayBind$4,set$jobTitle,set$lastName,set$userInfo,_addNewRoot$2,conditional$3,containsKey$1,contentBind$2,get$_callback,get$_contents,get$_duration,get$_workerId,get$biography,get$countries,get$firstName,get$isVisible,get$languages,readClasses$0,set$_previous,set$biography,set$firstName,set$isVisible,_addListener$1,_runCallback$1,_subscribeTo$1,get$$$_changes,get$SOLASMatch,get$_errorZone,get$_isChained,get$_isolateId,get$_scheduled,get$isAccessor,get$memberName,get$translator,runIteration$0,set$$$_changes,set$_scheduled,set$translator,_checkReplyTo$1,get$countryCode,get$interpreter,get$proofreader,set$countryCode,set$interpreter,set$proofreader,visitSendPort$1,_liblib10$_add$1,get$$$_observers,get$SiteLocation,get$_chainSource,get$_liblib6$_id,get$_receivePort,get$display_name,get$languageCode,get$mobileNumber,get$nativeLocale,set$$$_observers,set$display_name,set$languageCode,set$mobileNumber,visitPrimitive$1,_zonedSendError$1,_zonedSendValue$1,composeChildren$0,get$_nextListener,set$_nextListener,visitCloseToken$1,_distributeNodes$2,_extractElements$1,_inSameErrorZone$1,_rebuildWorkList$1,compareAndNotify$0,get$_liblib1$_next,get$businessNumber,get$inMilliseconds,get$isolateStatics,get$namedArguments,set$_liblib1$_next,set$businessNumber,visitIsolateSink$1,_createShadowRoot$0,_liblib10$_onData$1,_setErrorUnchecked$1,_setValueUnchecked$1,get$_liblib0$_length,set$_liblib0$_length,deserializeSendPort$1,get$_liblib1$_element,handleUncaughtError$1,addSecondaryLanguage$0,get$_liblib1$_previous,get$_resultOrListeners,set$_liblib1$_previous,deserializeCloseToken$1,get$positionalArguments,deserializeIsolateSink$1,_findLeftMostDescendent$1,removeSecondaryLanguage$0,get$millisecondsSinceEpoch,get$userSecondaryLanguages".split(","), longNames = "call,call,call,call,call,eval,info,then,_id,sip,sip=,write,_splay,cancel,create,_key,city,keys,next,sink,urls,user,listen,listen,lookup,modify,city=,next=,user=,toJson,_remove,created,_list,_name,_zone,isUrl,level,perform,process,removed,_head=,_next=,_tail=,warning,_deliver,_onError,_publish,_state,_value,badges,userId,moveNext,runAsync,_state=,_value=,badges=,userId=,visitMap,writeAll,_addError,_callback,_dispatch,bodySetup,address,country,current,_handle=,address=,country=,visitList,_sendError,_sendValue,catchError,deleteUser,fullName,isGetter,isLoaded,isSetter,jobTitle,lastName,userInfo,handleNext,oneWayBind,jobTitle=,lastName=,userInfo=,_addNewRoot,conditional,containsKey,contentBind,_callback,_contents,_duration,_workerId,biography,countries,firstName,isVisible,languages,readClasses,_previous=,biography=,firstName=,isVisible=,_addListener,_runCallback,_subscribeTo,$_changes,SOLASMatch,_errorZone,_isChained,_isolateId,_scheduled,isAccessor,memberName,translator,runIteration,$_changes=,_scheduled=,translator=,_checkReplyTo,countryCode,interpreter,proofreader,countryCode=,interpreter=,proofreader=,visitSendPort,_add,$_observers,SiteLocation,_chainSource,_id,_receivePort,display_name,languageCode,mobileNumber,nativeLocale,$_observers=,display_name=,languageCode=,mobileNumber=,visitPrimitive,_zonedSendError,_zonedSendValue,composeChildren,_nextListener,_nextListener=,visitCloseToken,_distributeNodes,_extractElements,_inSameErrorZone,_rebuildWorkList,compareAndNotify,_next,businessNumber,inMilliseconds,isolateStatics,namedArguments,_next=,businessNumber=,visitIsolateSink,_createShadowRoot,_onData,_setErrorUnchecked,_setValueUnchecked,_length,_length=,deserializeSendPort,_element,handleUncaughtError,addSecondaryLanguage,_previous,_resultOrListeners,_previous=,deserializeCloseToken,positionalArguments,deserializeIsolateSink,_findLeftMostDescendent,removeSecondaryLanguage,millisecondsSinceEpoch,userSecondaryLanguages".split(",");
+    var objectClassObject = collectedClasses.Object, shortNames = "call$0,call$1,call$2,call$3,call$4,eval$1,info$1,then$1,get$_id,get$sip,set$sip,write$1,_close$0,_splay$1,cancel$0,create$0,get$_key,get$city,get$keys,get$next,get$sink,get$urls,get$user,listen$1,listen$2,lookup$1,modify$1,set$city,set$next,set$user,toJson$0,_remove$1,created$0,get$_list,get$_name,get$_zone,get$isUrl,get$level,perform$1,process$0,removed$0,set$_head,set$_next,set$_tail,warning$1,_deliver$0,_onError$1,_publish$1,get$_state,get$_value,get$badges,get$userId,moveNext$0,runAsync$2,set$_state,set$_value,set$badges,set$userId,visitMap$1,writeAll$2,_addError$1,_callback$2,_dispatch$1,bodySetup$1,get$address,get$country,get$current,set$_handle,set$address,set$country,visitList$1,_sendError$1,_sendValue$1,_subscribe$4,catchError$1,deleteUser$0,get$fullName,get$isGetter,get$isLoaded,get$isSetter,get$jobTitle,get$lastName,get$userInfo,handleNext$1,oneWayBind$4,set$jobTitle,set$lastName,set$userInfo,_addNewRoot$2,_addPending$1,conditional$3,containsKey$1,contentBind$2,get$_callback,get$_contents,get$_duration,get$_isFiring,get$_workerId,get$biography,get$countries,get$firstName,get$isVisible,get$languages,readClasses$0,set$_previous,set$biography,set$firstName,set$isVisible,_addListener$1,_runCallback$1,_subscribeTo$1,get$$$_changes,get$SOLASMatch,get$_errorZone,get$_isChained,get$_isolateId,get$_scheduled,get$isAccessor,get$memberName,get$translator,runIteration$0,set$$$_changes,set$_scheduled,set$translator,_callOnCancel$0,_checkReplyTo$1,_expectsEvent$1,_recordCancel$1,get$_eventState,get$countryCode,get$interpreter,get$proofreader,set$_eventState,set$countryCode,set$interpreter,set$proofreader,visitSendPort$1,_addEventError$0,_liblib10$_add$1,_toggleEventId$0,get$$$_observers,get$SiteLocation,get$_chainSource,get$_liblib6$_id,get$_receivePort,get$display_name,get$languageCode,get$mobileNumber,get$nativeLocale,set$$$_observers,set$display_name,set$languageCode,set$mobileNumber,visitPrimitive$1,_removeListener$1,_zonedSendError$1,_zonedSendValue$1,composeChildren$0,get$_nextListener,set$_nextListener,visitCloseToken$1,_distributeNodes$2,_extractElements$1,_forEachListener$1,_inSameErrorZone$1,_rebuildWorkList$1,compareAndNotify$0,get$_liblib1$_next,get$businessNumber,get$inMilliseconds,get$isolateStatics,get$namedArguments,set$_liblib1$_next,set$businessNumber,visitIsolateSink$1,_createShadowRoot$0,_ensureDoneFuture$0,_liblib10$_onData$1,get$_liblib10$_next,set$_liblib10$_next,_setErrorUnchecked$1,_setValueUnchecked$1,get$_liblib0$_length,set$_liblib0$_length,deserializeSendPort$1,get$_liblib1$_element,handleUncaughtError$1,addSecondaryLanguage$0,get$_liblib1$_previous,get$_removeAfterFiring,get$_resultOrListeners,set$_liblib1$_previous,_setRemoveAfterFiring$0,deserializeCloseToken$1,get$_liblib10$_previous,get$positionalArguments,set$_liblib10$_previous,deserializeIsolateSink$1,_findLeftMostDescendent$1,removeSecondaryLanguage$0,get$millisecondsSinceEpoch,get$userSecondaryLanguages".split(","), longNames = "call,call,call,call,call,eval,info,then,_id,sip,sip=,write,_close,_splay,cancel,create,_key,city,keys,next,sink,urls,user,listen,listen,lookup,modify,city=,next=,user=,toJson,_remove,created,_list,_name,_zone,isUrl,level,perform,process,removed,_head=,_next=,_tail=,warning,_deliver,_onError,_publish,_state,_value,badges,userId,moveNext,runAsync,_state=,_value=,badges=,userId=,visitMap,writeAll,_addError,_callback,_dispatch,bodySetup,address,country,current,_handle=,address=,country=,visitList,_sendError,_sendValue,_subscribe,catchError,deleteUser,fullName,isGetter,isLoaded,isSetter,jobTitle,lastName,userInfo,handleNext,oneWayBind,jobTitle=,lastName=,userInfo=,_addNewRoot,_addPending,conditional,containsKey,contentBind,_callback,_contents,_duration,_isFiring,_workerId,biography,countries,firstName,isVisible,languages,readClasses,_previous=,biography=,firstName=,isVisible=,_addListener,_runCallback,_subscribeTo,$_changes,SOLASMatch,_errorZone,_isChained,_isolateId,_scheduled,isAccessor,memberName,translator,runIteration,$_changes=,_scheduled=,translator=,_callOnCancel,_checkReplyTo,_expectsEvent,_recordCancel,_eventState,countryCode,interpreter,proofreader,_eventState=,countryCode=,interpreter=,proofreader=,visitSendPort,_addEventError,_add,_toggleEventId,$_observers,SiteLocation,_chainSource,_id,_receivePort,display_name,languageCode,mobileNumber,nativeLocale,$_observers=,display_name=,languageCode=,mobileNumber=,visitPrimitive,_removeListener,_zonedSendError,_zonedSendValue,composeChildren,_nextListener,_nextListener=,visitCloseToken,_distributeNodes,_extractElements,_forEachListener,_inSameErrorZone,_rebuildWorkList,compareAndNotify,_next,businessNumber,inMilliseconds,isolateStatics,namedArguments,_next=,businessNumber=,visitIsolateSink,_createShadowRoot,_ensureDoneFuture,_onData,_next,_next=,_setErrorUnchecked,_setValueUnchecked,_length,_length=,deserializeSendPort,_element,handleUncaughtError,addSecondaryLanguage,_previous,_removeAfterFiring,_resultOrListeners,_previous=,_setRemoveAfterFiring,deserializeCloseToken,_previous,positionalArguments,_previous=,deserializeIsolateSink,_findLeftMostDescendent,removeSecondaryLanguage,millisecondsSinceEpoch,userSecondaryLanguages".split(",");
     for (var j = 0; j < shortNames.length; j++) {
       var type = 0;
       var short = shortNames[j];
