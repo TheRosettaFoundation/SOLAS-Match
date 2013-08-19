@@ -4,7 +4,18 @@
 
     "repositories": [
     {
-
+        "source": {
+            "name": "slim/slim",
+            "url": "https://github.com/codeguy/Slim.git",
+            "type": "git",
+            "reference": "master"
+        },
+        "source": {
+            "name": "slim/extras",
+            "url": "git://github.com/codeguy/Slim-Extras.git",
+            "type": "git",
+            "reference": "master"
+        },
         "type": "package",
         "package": {
             "name": "drslump/protobuf-php",
@@ -19,11 +30,7 @@
                 "files": ["library/DrSlump/Protobuf.php"]
             }
         }
-    },
-        {
-            "type": "vcs",
-            "url": "git@github.com:SeanMooney/Slim.git"
-        }
+    }
     ],
 
    "require-dev": {
@@ -32,7 +39,7 @@
 
     "require": {
         "fp/lightopenid" : "dev-master",
-        "slim/slim": "dev-DecryptPaddingFix598#8797d7b3ac163f62a282780d0a82f978de7a551d",
+        "slim/slim": "1.6.3",
         "slim/extras": "1.0.*",
         "smarty/smarty": "3.1.*",
         "drslump/protobuf-php": "*"
