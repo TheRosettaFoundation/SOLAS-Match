@@ -82,7 +82,7 @@ class TaskStream extends WebComponent with Observable
       __e13 = __e19.nodes[3].nodes[1].nodes[3].nodes[1];
       __t.listen(__e13.onChange, ($event) { selectedSourceFilter = __e13.selectedIndex; });
       __t.oneWayBind(() => selectedSourceFilter, (e) { if (__e13.selectedIndex != e) __e13.selectedIndex = e; }, false, false);
-      __t.loopIterateAttr(__e13, () => activeLanguages, ($list, $index, __t) {
+      __t.loopIterateAttr(__e13, () => activeSourceLanguages, ($list, $index, __t) {
         var language = $list[$index];
         var __e12;
         __e12 = __html8.clone(true);
@@ -96,7 +96,7 @@ class TaskStream extends WebComponent with Observable
       __e16 = __e19.nodes[3].nodes[1].nodes[5].nodes[1];
       __t.listen(__e16.onChange, ($event) { selectedTargetFilter = __e16.selectedIndex; });
       __t.oneWayBind(() => selectedTargetFilter, (e) { if (__e16.selectedIndex != e) __e16.selectedIndex = e; }, false, false);
-      __t.loopIterateAttr(__e16, () => activeLanguages, ($list, $index, __t) {
+      __t.loopIterateAttr(__e16, () => activeTargetLanguages, ($list, $index, __t) {
         var language = $list[$index];
         var __e15;
         __e15 = __html9.clone(true);
@@ -516,19 +516,33 @@ class TaskStream extends WebComponent with Observable
     }
     __$orgMap = value;
   }
-  List<Language> __$activeLanguages;
-  List<Language> get activeLanguages {
+  List<Language> __$activeSourceLanguages;
+  List<Language> get activeSourceLanguages {
     if (__observe.observeReads) {
-      __observe.notifyRead(this, __observe.ChangeRecord.FIELD, 'activeLanguages');
+      __observe.notifyRead(this, __observe.ChangeRecord.FIELD, 'activeSourceLanguages');
     }
-    return __$activeLanguages;
+    return __$activeSourceLanguages;
   }
-  set activeLanguages(List<Language> value) {
+  set activeSourceLanguages(List<Language> value) {
     if (__observe.hasObservers(this)) {
-      __observe.notifyChange(this, __observe.ChangeRecord.FIELD, 'activeLanguages',
-          __$activeLanguages, value);
+      __observe.notifyChange(this, __observe.ChangeRecord.FIELD, 'activeSourceLanguages',
+          __$activeSourceLanguages, value);
     }
-    __$activeLanguages = value;
+    __$activeSourceLanguages = value;
+  }
+  List<Language> __$activeTargetLanguages;
+  List<Language> get activeTargetLanguages {
+    if (__observe.observeReads) {
+      __observe.notifyRead(this, __observe.ChangeRecord.FIELD, 'activeTargetLanguages');
+    }
+    return __$activeTargetLanguages;
+  }
+  set activeTargetLanguages(List<Language> value) {
+    if (__observe.hasObservers(this)) {
+      __observe.notifyChange(this, __observe.ChangeRecord.FIELD, 'activeTargetLanguages',
+          __$activeTargetLanguages, value);
+    }
+    __$activeTargetLanguages = value;
   }
   Map<int, SafeHtml> __$taskTypes;
   Map<int, SafeHtml> get taskTypes {
@@ -582,7 +596,8 @@ class TaskStream extends WebComponent with Observable
     taskAges = toObservable(new Map<int, String>());
     projectMap = toObservable(new Map<int, Project>());    
     orgMap = toObservable(new Map<int, Organisation>());
-    activeLanguages = toObservable(new List<Language>());
+    activeSourceLanguages = toObservable(new List<Language>());
+    activeTargetLanguages = toObservable(new List<Language>());
     taskTypes = toObservable(new Map<int, String>());
     taskTypeIndexes = toObservable(new List<int>());
     taskTags = toObservable(new Map<int, List<Tag>>());
@@ -617,11 +632,13 @@ class TaskStream extends WebComponent with Observable
     any.name = Localisation.getTranslation("index_any").toString();
     any.code = "";
     
-    activeLanguages.add(any);
-    LanguageDao.getActiveLanguages().then((List<Language> langs) {
-      langs.forEach((Language lang) {
-        activeLanguages.add(lang);
-      });
+    activeSourceLanguages.add(any);
+    activeTargetLanguages.add(any);
+    LanguageDao.getActiveSourceLanguages().then((List<Language> langs) {
+      activeSourceLanguages.addAll(langs);
+    });
+    LanguageDao.getActiveTargetLanguages().then((List<Language> langs) {
+      activeTargetLanguages.addAll(langs);
     });
   }
   
@@ -689,10 +706,10 @@ class TaskStream extends WebComponent with Observable
       filter += "taskType:" + selectedTaskTypeFilter.toString() + ";";                
     }
     if (selectedSourceFilter > 0) {
-      filter += "sourceLanguage:" + activeLanguages.elementAt(selectedSourceFilter).code + ";";
+      filter += "sourceLanguage:" + activeSourceLanguages.elementAt(selectedSourceFilter).code + ";";
     }
     if (selectedTargetFilter > 0) {
-      filter += "targetLanguage:" + activeLanguages.elementAt(selectedTargetFilter).code + ";";
+      filter += "targetLanguage:" + activeTargetLanguages.elementAt(selectedTargetFilter).code + ";";
     }
     tasks.clear();
     taskCount = 0;

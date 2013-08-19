@@ -26,13 +26,13 @@
                 </td>
                 <td>
                   <select name="sourceLanguage" bind-selected-index="selectedSourceFilter" 
-                    template iterate="language in activeLanguages">
+                    template iterate="language in activeSourceLanguages">
                       <option value="{{language.code}}">{{language.name}}</option>
                   </select>
                 </td>
                 <td>
                   <select name="targetLanguage" bind-selected-index="selectedTargetFilter" 
-                    template iterate="language in activeLanguages">
+                    template iterate="language in activeTargetLanguages">
                     <option value="{{language.code}}">{{language.name}}</option>
                   </select>
                 </td>

@@ -38,7 +38,8 @@ class TaskStream extends WebComponent
   @observable Map<int, String> taskAges;
   @observable Map<int, Project> projectMap;
   @observable Map<int, Organisation> orgMap;
-  @observable List<Language> activeLanguages;
+  @observable List<Language> activeSourceLanguages;
+  @observable List<Language> activeTargetLanguages;
   @observable Map<int, SafeHtml> taskTypes;
   @observable List<int> taskTypeIndexes;
   @observable Map<int, List<Tag>> taskTags;
@@ -52,7 +53,8 @@ class TaskStream extends WebComponent
     taskAges = toObservable(new Map<int, String>());
     projectMap = toObservable(new Map<int, Project>());    
     orgMap = toObservable(new Map<int, Organisation>());
-    activeLanguages = toObservable(new List<Language>());
+    activeSourceLanguages = toObservable(new List<Language>());
+    activeTargetLanguages = toObservable(new List<Language>());
     taskTypes = toObservable(new Map<int, String>());
     taskTypeIndexes = toObservable(new List<int>());
     taskTags = toObservable(new Map<int, List<Tag>>());
@@ -87,11 +89,13 @@ class TaskStream extends WebComponent
     any.name = Localisation.getTranslation("index_any").toString();
     any.code = "";
     
-    activeLanguages.add(any);
-    LanguageDao.getActiveLanguages().then((List<Language> langs) {
-      langs.forEach((Language lang) {
-        activeLanguages.add(lang);
-      });
+    activeSourceLanguages.add(any);
+    activeTargetLanguages.add(any);
+    LanguageDao.getActiveSourceLanguages().then((List<Language> langs) {
+      activeSourceLanguages.addAll(langs);
+    });
+    LanguageDao.getActiveTargetLanguages().then((List<Language> langs) {
+      activeTargetLanguages.addAll(langs);
     });
   }
   
@@ -159,10 +163,10 @@ class TaskStream extends WebComponent
       filter += "taskType:" + selectedTaskTypeFilter.toString() + ";";                
     }
     if (selectedSourceFilter > 0) {
-      filter += "sourceLanguage:" + activeLanguages.elementAt(selectedSourceFilter).code + ";";
+      filter += "sourceLanguage:" + activeSourceLanguages.elementAt(selectedSourceFilter).code + ";";
     }
     if (selectedTargetFilter > 0) {
-      filter += "targetLanguage:" + activeLanguages.elementAt(selectedTargetFilter).code + ";";
+      filter += "targetLanguage:" + activeTargetLanguages.elementAt(selectedTargetFilter).code + ";";
     }
     tasks.clear();
     taskCount = 0;

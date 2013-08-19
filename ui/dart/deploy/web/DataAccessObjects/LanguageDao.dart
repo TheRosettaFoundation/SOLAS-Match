@@ -61,6 +61,42 @@ class LanguageDao
     return languages;
   }
   
+  static Future<List<Language>> getActiveSourceLanguages()
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<List<Language>> languages = client.call("Language", "v0/languages/getActiveSourceLanguages", "GET")
+        .then((String jsonData) {
+          List<Language> ret = new List<Language>();
+          Map jsonParsed = json.parse(jsonData);
+          if (jsonParsed.length > 0) {
+            jsonParsed['item'].forEach((String data) {
+              Map lang = json.parse(data);
+              ret.add(ModelFactory.generateLanguageFromMap(lang));
+            });
+          }
+          return ret;
+        });
+    return languages;
+  }
+  
+  static Future<List<Language>> getActiveTargetLanguages()
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<List<Language>> languages = client.call("Language", "v0/languages/getActiveTargetLanguages", "GET")
+        .then((String jsonData) {
+          List<Language> ret = new List<Language>();
+          Map jsonParsed = json.parse(jsonData);
+          if (jsonParsed.length > 0) {
+            jsonParsed['item'].forEach((String data) {
+              Map lang = json.parse(data);
+              ret.add(ModelFactory.generateLanguageFromMap(lang));
+            });
+          }
+          return ret;
+        });
+    return languages;
+  }
+  
   // This works
   /*static Future<dynamic> getLanguage(int id)
   {
