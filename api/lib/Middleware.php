@@ -20,7 +20,7 @@ class Middleware
    
     
     
-    public static function isloggedIn ($request, $response, $route){
+    public static function isloggedIn (){
          $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
         // Test for token existance and validity
         try {
@@ -35,36 +35,14 @@ class Middleware
 //            print_r($response);
             Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, $e->getMessage());
         }
-//        $params = $route->getParams();
-//      
-//        
-//       
-//            if(isset ($params['email'])&& isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
-//                $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
-//                $email =$params['email'];
-//                 if (!is_numeric($email) && strstr($email, '.')) {
-//                    $temp = array();
-//                    $temp = explode('.', $email);
-//                    $lastIndex = sizeof($temp)-1;
-//                    if ($lastIndex > 1) {
-//                        $format='.'.$temp[$lastIndex];
-//                        $email = $temp[0];
-//                        for ($i = 1; $i < $lastIndex; $i++) {
-//                            $email = "{$email}.{$temp[$i]}";
-//                        }
-//                    }
-//                }
-//                $openidHash = md5($email.substr(Settings::get("session.site_key"),0,20));
-//                if ($headerHash!=$openidHash) {
-//                    Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
-//                } 
-//            }
+
         
     } 
     
     
-    public static function Registervalidation ($request, $response, $route) {
-            $params = $route->getParams();
+    public static function Registervalidation () {
+            $app = Slim::getInstance();
+            $params = $app->request()->params(); 
             if(isset ($params['email'])&& isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
                 $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
                 $email =$params['email'];
@@ -90,13 +68,14 @@ class Middleware
   
     
     
-     public static function authUserOwnsResource($request, $response, $route)
+     public static function authUserOwnsResource()
     {
-         $user =self::isloggedIn ($request, $response, $route);
+         $user =self::isloggedIn ();
          if (self::isSiteAdmin($user->getId())) {
             return true;
         }
-        $params = $route->getParams();
+        $app = Slim::getInstance();
+        $params = $app->request()->params(); 
         $id=$params['id'];
         if (!is_numeric($id) && strstr($id, '.')) {
                 $id = explode('.', $id);
@@ -119,7 +98,7 @@ class Middleware
         return AdminDao::isAdmin($id,null);
     }
 
-    public static function authenticateUserForTask($request, $response, $route) 
+    public static function authenticateUserForTask() 
     {
         if (self::isSiteAdmin()) {
             return true;
@@ -127,7 +106,8 @@ class Middleware
 
         
         
-        $params = $route->getParams(); 
+        $app = Slim::getInstance();
+        $params = $app->request()->params();  
 
         self::authUserIsLoggedIn();
         $user_id = UserSession::getCurrentUserID();
@@ -139,7 +119,7 @@ class Middleware
         return !$claimant || $user_id == $claimant->getId();
     }
 
-    public static function authUserForOrg($request, $response, $route) 
+    public static function authUserForOrg() 
     {
         if (self::isSiteAdmin()) {
             return true;
@@ -148,7 +128,8 @@ class Middleware
        
 
         $user_id = UserSession::getCurrentUserID();
-        $params = $route->getParams();
+        $app = Slim::getInstance();
+        $params = $app->request()->params(); 
         if ($params !== null) {
             $org_id = $params['org_id'];
             if ($user_id) {
@@ -170,14 +151,15 @@ class Middleware
      *  Middleware for ensuring the current user belongs to the Org that uploaded the associated Task
      *  Used for altering task details
      */
-    public static function authUserForOrgTask($request, $response, $route) 
+    public static function authUserForOrgTask() 
     {
         if (self::isSiteAdmin()) {
             return true;
         }
 
         
-        $params= $route->getParams();
+        $app = Slim::getInstance();
+        $params = $app->request()->params(); 
         if ($params != null) {
             $task_id = $params['task_id'];
             $task = TaskDao::getTask($task_id);
@@ -194,75 +176,6 @@ class Middleware
        
         self::notFound();
     } 
-//    
-//    public static function authUserForOrgProject($request, $response, $route) 
-//    {                        
-//        if ($this->isSiteAdmin()) {
-//            return true;
-//        }
-//
-//        $params = $route->getParams();
-//        $userDao = new UserDao();
-//        $projectDao = new ProjectDao();
-//        
-//        if ($params != null) {
-//            $user_id = UserSession::getCurrentUserID();
-//            $project_id = $params['project_id'];   
-//            $userOrgs = $userDao->getUserOrgs($user_id);
-//            $project = $projectDao->getProject($project_id); 
-//            $project_orgid = $project->getOrganisationId();
-//
-//            if($userOrgs) {
-//                foreach($userOrgs as $org)
-//                {                
-//                    if($org->getId() == $project_orgid) {
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
-//        self::notFound();
-//    }    
-//
-//    public static function authUserForTaskDownload($request, $response, $route)
-//    {
-//        if ($this->isSiteAdmin()) {
-//            return true;
-//        }
-//
-//        $taskDao = new TaskDao();
-//        $projectDao = new ProjectDao();
-//        $userDao = new UserDao();
-//
-//        $params= $route->getParams();
-//        if ($params != null) {
-//            $task_id = $params['task_id'];
-//            $task = $taskDao->getTask($task_id);
-////            if($taskDao->getUserClaimedTask($task_id) && $task->getStatus() != TaskStatusEnum::COMPLETE) return true;
-//            if($taskDao->getUserClaimedTask($task_id)) return true;
-//
-//            $project = $projectDao->getProject($task->getProjectId());
-//            
-//            $org_id = $project->getOrganisationId();
-//            $user_id = UserSession::getCurrentUserID();
-//
-//            if ($user_id) {
-//                $user_orgs = $userDao->getUserOrgs($user_id);
-//                if (!is_null($user_orgs)) {
-//                    foreach ($user_orgs as $orgObject) {
-//                        if ($orgObject->getId() == $org_id) {
-//                            return true;
-//                        }
-//                    }
-//                }                
-//            }
-//        }
-//       
-//        self::notFound();
-//    }
-    
-   
-    
     
     
 }
