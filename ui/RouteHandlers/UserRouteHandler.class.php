@@ -160,9 +160,8 @@ class UserRouteHandler
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             if (isset($post['verify'])) {
-                $userDao->finishRegistration($user->getId());
+                $userDao->finishRegistration($uuid);
                 UserSession::setSession($user->getId());
-//                UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
                 $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_6));
                 $app->redirect($app->urlFor("home"));
             }

@@ -356,8 +356,6 @@ class UserDao extends BaseDao
         
     }
     
-    
-    
     public function login($email, $password)
     {
         $ret = null;
@@ -389,8 +387,6 @@ class UserDao extends BaseDao
             }
         }
         
-
-
         $headers = $this->client->getHeaders();
         if(isset ($headers["X-Custom-Token"])){
             UserSession::setAccessToken($this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce'));
@@ -428,11 +424,14 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function finishRegistration($userId)
+    public function finishRegistration($uuid)
     {
-        $request = "{$this->siteApi}v0/users/$userId/finishRegistration";
-        echo "<p>Calling $request</p>";
+        $request = "{$this->siteApi}v0/users/$uuid/finishRegistration";
         $resp = $this->client->call(null, $request, HttpMethodEnum::POST);
+        $headers = $this->client->getHeaders();
+        if(isset ($headers["X-Custom-Token"])){
+            UserSession::setAccessToken($this->client->deserialize(base64_decode($headers["X-Custom-Token"]),'OAuthResponce'));
+        }
     }
 
     public function getRegisteredUser($registrationId)

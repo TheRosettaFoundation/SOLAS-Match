@@ -66,12 +66,26 @@ class Users {
                     Dispatcher::sendResponce(null, $user, null, $format);
                 }, 'getRegisteredUser', null);
 
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:userId/finishRegistration(:format)/',
-                function ($userId, $format = '.json')
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:uuid/finishRegistration(:format)/',
+                function ($uuid, $format = '.json')
                 {
-                    $ret = UserDao::finishRegistration($userId);
-                    Dispatcher::sendResponce(null, $ret, null, $format);
-                }, 'finishRegistration');
+                    $user = UserDao::getRegisteredUser($uuid);
+                    if ($user != null) {
+                        $ret = UserDao::finishRegistration($user->getId());
+                        $server = Dispatcher::getOauthServer();
+                        $response = $server->getGrantType('password')->completeFlow(array("client_id"=>$user->getId(),"client_secret"=>$user->getPassword()));
+                        
+                        $oAuthResponse = new OAuthResponce();
+                        $oAuthResponse->setToken($response['access_token']);
+                        $oAuthResponse->setTokenType($response['token_type']);
+                        $oAuthResponse->setExpires($response['expires']);
+                        $oAuthResponse->setExpiresIn($response['expires_in']);
+                        
+                        Dispatcher::sendResponce(null, $ret, null, $format, $oAuthResponse);
+                    } else {
+                        Dispatcher::sendResponce(null, "Invalid UUID", HttpStatusEnum::UNAUTHORIZED, $format);
+                    }
+                }, 'finishRegistration', null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/verified(:format)/',
                 function ($userId, $format = '.json')
