@@ -499,7 +499,6 @@ TaskDao_trackTask: function(taskId, userId) {
 TaskDao_createTask_closure: {"": "Closure;box_0",
   call$1: function(jsonTask) {
     var t1, jsonParsed;
-    $.Primitives_printString($.JSString_methods.$add("JSON Task: ", jsonTask));
     t1 = this.box_0;
     t1.task_0 = null;
     if ($.$gt$n($.get$length$asx(jsonTask), 0) === true) {

@@ -26,11 +26,11 @@ class UserDao extends BaseDao
     public function getUser($userId)
     {
         $ret = null;
-         
+        
         $ret=CacheHelper::getCached(CacheHelper::GET_USER.$userId, TimeToLiveEnum::MINUTE,
                 function($args){
                     $request = "{$args[2]}v0/users/$args[1]";
-                     return $args[0]->call("User", $request);
+                    return $args[0]->call("User", $request);
                 },
             array($this->client, $userId,$this->siteApi)); 
         return $ret;

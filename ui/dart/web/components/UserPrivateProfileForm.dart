@@ -367,10 +367,11 @@ class UserPrivateProfileForm extends WebComponent
         updatesSuccessful.forEach((bool success) {
           if (!success) {
             print("Failed to save some data");
+          } else {
+            Settings settings = new Settings();
+            window.location.assign(settings.conf.urls.SiteLocation + "$userId/profile");
           }
         });
-        Settings settings = new Settings();
-        window.location.assign(settings.conf.urls.SiteLocation + "$userId/profile");
       });
     }
   }

@@ -404,6 +404,7 @@ UserDao_getUserBadges: function(userId) {
 UserDao_saveUserDetails: function(user) {
   var client = new $.APIHelper(null);
   client.format = ".json";
+  $.Primitives_printString($.JSString_methods.$add("Saving User: ", $._JsonStringifier_stringify(user)));
   return client.call$4("User", $.JSString_methods.$add("v0/users/", $.toString$0($.get$id$x(user))), "PUT", $._JsonStringifier_stringify(user)).then$1(new $.UserDao_saveUserDetails_closure());
 },
 
@@ -2578,10 +2579,7 @@ UserPrivateProfileForm_submitForm_closure2: {"": "Closure;box_0",
 
 UserPrivateProfileForm_submitForm_closure3: {"": "Closure;this_16",
   call$1: function(updatesSuccessful) {
-    var settings;
-    $.forEach$1$ax(updatesSuccessful, new $.UserPrivateProfileForm_submitForm__closure());
-    settings = $.get$Settings__instance();
-    $.assign$1$x($.Window_methods.get$location(window), $.$add$ns(settings._conf.get$urls().get$SiteLocation(), $.S(this.this_16.get$userId()) + "/profile"));
+    $.forEach$1$ax(updatesSuccessful, new $.UserPrivateProfileForm_submitForm__closure(this.this_16));
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -2589,10 +2587,15 @@ UserPrivateProfileForm_submitForm_closure3: {"": "Closure;this_16",
 
 "+UserPrivateProfileForm_submitForm_closure": 0,
 
-UserPrivateProfileForm_submitForm__closure: {"": "Closure;",
+UserPrivateProfileForm_submitForm__closure: {"": "Closure;this_17",
   call$1: function(success) {
+    var settings;
     if (success !== true)
       $.Primitives_printString("Failed to save some data");
+    else {
+      settings = $.get$Settings__instance();
+      $.assign$1$x($.Window_methods.get$location(window), $.$add$ns(settings._conf.get$urls().get$SiteLocation(), $.S(this.this_17.get$userId()) + "/profile"));
+    }
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -2951,7 +2954,7 @@ Locale: {"": "Object;languageName,languageCode@,countryName,countryCode@",
 ["SolasMatchDart", "../../lib/models/User.dart", , {
 User: {"": "Object;id*,display_name@,email,password,biography@,nonce,created_time,nativeLocale<",
   toJson$0: function() {
-    return $.makeLiteralMap(["id", this.id, "display_name", this.display_name, "email", this.email, "password", this.password, "biography", this.biography, "nonce", this.nonce, "created_time", this.created_time, "nativeLocale", this.nativeLocale]);
+    return $.makeLiteralMap(["id", this.id, "display_name", this.display_name, "email", this.email, "biography", this.biography, "created_time", this.created_time, "nativeLocale", this.nativeLocale]);
   },
   "+toJson:0:0": 0
 },

@@ -83,7 +83,6 @@ class TaskDao
     APIHelper client = new APIHelper(".json");
     Future<Task> ret = client.call("Task", "v0/tasks", "POST", json.stringify(task))
         .then((String jsonTask) {
-          print("JSON Task: " + jsonTask);
           task = null;
           if (jsonTask.length > 0) {
             Map jsonParsed = json.parse(jsonTask);

@@ -19,9 +19,7 @@ class User
       "id" : id, 
       "display_name" : display_name,
       "email" : email,
-      "password" : password,
       "biography" : biography,
-      "nonce" : nonce,
       "created_time" : created_time,
       "nativeLocale" : nativeLocale
     };

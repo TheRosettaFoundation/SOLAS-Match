@@ -49,9 +49,9 @@ class UserDao
         if ($user->getBiography() != '') {
             BadgeDao::assignBadge($user->getId(), BadgeTypes::PROFILE_FILLER);
         }
-        
+
         $args = PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
-                .",".PDOWrapper::cleanseNullOrWrapStr($user->getNonce())
+                .",".PDOWrapper::cleanseNull($user->getNonce())
                 .",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword())
                 .",".PDOWrapper::cleanseNullOrWrapStr($user->getBiography())
                 .",".PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName())

@@ -347,7 +347,6 @@ class UserRouteHandler
     public static function userPrivateProfile($userId)
     {
         $app = Slim::getInstance();
-        CacheHelper::unCache(CacheHelper::GET_USER.$userId);
         
         $userDao = new UserDao();
         $loggedInuser = $userDao->getUser(UserSession::getCurrentUserID());
@@ -357,6 +356,8 @@ class UserRouteHandler
             $app->flash("error", Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
             $app->redirect($app->urlFor("login"));
         }
+
+        CacheHelper::unCache(CacheHelper::GET_USER.$userId);
 
         $app->view()->appendData(array(
             "user"              => $loggedInuser,
