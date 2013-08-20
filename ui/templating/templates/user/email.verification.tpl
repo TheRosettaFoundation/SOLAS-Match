@@ -10,7 +10,7 @@
 </p>
 
 <p>
-    {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_5 EMAIL_VERIFICATION_6)}
+    {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_5)} {Localisation::getTranslation(Strings::EMAIL_VERIFICATION_6)}
 </p>
 
 <form method='post' action="{urlFor name="email-verification" options="uuid.$uuid"}">

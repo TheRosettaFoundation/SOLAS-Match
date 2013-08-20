@@ -64,7 +64,7 @@ class Users {
                 {
                     $user = UserDao::getRegisteredUser($uuid);
                     Dispatcher::sendResponce(null, $user, null, $format);
-                }, 'getRegisteredUser');
+                }, 'getRegisteredUser', null);
 
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:userId/finishRegistration(:format)/',
                 function ($userId, $format = '.json')
