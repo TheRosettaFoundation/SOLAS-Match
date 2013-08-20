@@ -91,7 +91,6 @@ class UserDao
   static Future<bool> saveUserDetails(User user)
   {
     APIHelper client = new APIHelper(".json");
-    print("Saving User: " + json.stringify(user).toString());
     return client.call("User", "v0/users/" + user.id.toString(), "PUT", json.stringify(user))
       .then((String data) {
         return true;

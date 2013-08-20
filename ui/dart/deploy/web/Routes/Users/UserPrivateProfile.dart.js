@@ -404,7 +404,6 @@ UserDao_getUserBadges: function(userId) {
 UserDao_saveUserDetails: function(user) {
   var client = new $.APIHelper(null);
   client.format = ".json";
-  $.Primitives_printString($.JSString_methods.$add("Saving User: ", $._JsonStringifier_stringify(user)));
   return client.call$4("User", $.JSString_methods.$add("v0/users/", $.toString$0($.get$id$x(user))), "PUT", $._JsonStringifier_stringify(user)).then$1(new $.UserDao_saveUserDetails_closure());
 },
 
