@@ -1768,16 +1768,18 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getPasswordResetRequests
 DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `userId` INT(11))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `email` VARCHAR(128))
 BEGIN
 	if unique_id='' then set unique_id=null;end if;
-    if userId='' then set userId=null;end if;
+    if email='' then set email=null;end if;
     set @q= "SELECT * FROM PasswordResetRequests p WHERE 1 ";
     if unique_id is not null then
         set @q= CONCAT(@q," and p.uid=\"",unique_id,"\"");
     end if;
-    if userId is not null then
-        set @q= CONCAT(@q, " and p.user_id=", userId);
+    if email is not null then
+        set @q= CONCAT(@q, " and p.user_id IN (SELECT id 
+                                                    FROM Users
+                                                    WHERE email = \"", email, "\")");
     end if;
 
 	PREPARE stmt FROM @q;

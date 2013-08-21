@@ -110,7 +110,7 @@ class Notify
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
             $message_type = new PasswordResetEmail();
-            $message_type->user_id = $user_id;
+            $message_type->setUserId($user_id);
             $message = $messagingClient->createMessageFromProto($message_type);
             $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
                     $messagingClient->PasswordResetTopic);

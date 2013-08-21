@@ -184,18 +184,18 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function hasUserRequestedPasswordReset($userId)
+    public function hasUserRequestedPasswordReset($email)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/passwordResetRequest";
+        $request = "{$this->siteApi}v0/users/email/$email/passwordResetRequest";
         $ret = $this->client->call(null, $request);
         return $ret;
     }
 
-    public function getPasswordResetRequestTime($userId)
+    public function getPasswordResetRequestTime($email)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/passwordResetRequest/time";
+        $request = "{$this->siteApi}v0/users/email/$email/passwordResetRequest/time";
         $ret = $this->client->call(null, $request);
         return $ret;
     }
@@ -319,10 +319,10 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function requestPasswordReset($userId)
+    public function requestPasswordReset($email)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/passwordResetRequest";
+        $request = "{$this->siteApi}v0/users/email/$email/passwordResetRequest";
         $ret = $this->client->call(null, $request, HttpMethodEnum::POST);
         return $ret;
     }

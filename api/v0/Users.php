@@ -422,23 +422,30 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'deleteUserTrackedTasksById');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/passwordResetRequest(:format)/',
-                                                        function ($id, $format = ".json") {
-            $data = UserDao::hasRequestedPasswordReset($id) ? 1 : 0;
-            Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'hasUserRequestedPasswordReset');
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/email/:email/passwordResetRequest(:format)/',
+                                                        function ($email, $format = ".json") {
+            $data = UserDao::hasRequestedPasswordReset($email) ? 1 : 0;
 
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/passwordResetRequest/time(:format)/',
-                                                        function ($id, $format = ".json"){
-            $resetRequest = UserDao::getPasswordResetRequests($id);
+            Dispatcher::sendResponce(null, $data, null, $format);
+        }, 'hasUserRequestedPasswordReset', null);
+
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/email/:email/passwordResetRequest/time(:format)/',
+                                                        function ($email, $format = ".json"){
+            $resetRequest = UserDao::getPasswordResetRequests($email);
             Dispatcher::sendResponce(null, $resetRequest->getRequestTime(), null, $format);
-        }, "PasswordResetRequestTime");
+        }, "PasswordResetRequestTime", null);
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/passwordResetRequest(:format)/',
-                                                        function ($id, $format=".json"){
-            Dispatcher::sendResponce(null, UserDao::createPasswordReset($id), null, $format);
-            Notify::sendPasswordResetEmail($id);
-        }, 'createPasswordResetRequest');   
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/email/:email/passwordResetRequest(:format)/',
+                                                        function ($email, $format=".json"){
+            $user = UserDao::getUser(null, $email);
+            $user = $user[0];
+            if ($user) {
+                Dispatcher::sendResponce(null, UserDao::createPasswordReset($user), null, $format);
+                Notify::sendPasswordResetEmail($user->getId());
+            } else {
+                Dispatcher::sendResponce(null, null, null, $format);
+            }
+        }, 'createPasswordResetRequest', null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/projects(:format)/',
                                                         function ($id, $format=".json"){

@@ -39,7 +39,7 @@ class PasswordResetAPI {
             }        
             $data = UserDao::getPasswordResetRequests(null, $key);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getResetRequest');
+        }, 'getResetRequest', null);
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/passwordReset(:format)/',
                                                         function ($format = ".json") {
@@ -47,10 +47,9 @@ class PasswordResetAPI {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'PasswordReset');
-//            $data = $client->cast('PasswordReset', $data);
             $result = UserDao::passwordReset($data->getPassword(), $data->getKey());
             Dispatcher::sendResponce(null, $result, null, $format);
-         }, 'resetPassword');         
+         }, 'resetPassword', null);
     }
 }
 

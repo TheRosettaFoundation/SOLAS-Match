@@ -218,25 +218,28 @@ class UserRouteHandler
             $post = $app->request()->post();
             if (isset($post['password_reset'])) {
                 if (isset($post['email_address']) && $post['email_address'] != '') {
-                    $user = $userDao->getUserByEmail($post['email_address']); 
-                    if ($user) {  
-                        $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($user->getId());
-                        $message = "";
-                        if (!$hasUserRequestedPwReset) {
-                            //send request
-                            $userDao->requestPasswordReset($user->getId());
+                    $email = $post['email_address'];
+                    $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($email);
+                    $message = "";
+                    if (!$hasUserRequestedPwReset) {
+                        //send request
+                        if ($userDao->requestPasswordReset($email)) {
                             $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_12));
                             $app->redirect($app->urlFor("home"));
                         } else {
-                            //get request time
-                            $response = $userDao->getPasswordResetRequestTime($user->getId());
-                            $app->flashNow("info", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_13), $response);
-                            //Send request
-                            $userDao->requestPasswordReset($user->getId());
+                            $app->flashNow("error", "Failed to request password reset, are you sure you entered your email ".
+                                        "address correctly?");
                         }
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_14));
+                        //get request time
+                        $response = $userDao->getPasswordResetRequestTime($email);
+                        if ($response != null) {
+                            $app->flashNow("info", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_13), $response);
+                            //Send request
+                            $userDao->requestPasswordReset($email);
+                        }
                     }
+                //        $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_14));
                 } else {
                     $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_14));
                 }

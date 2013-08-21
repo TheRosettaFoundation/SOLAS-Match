@@ -496,17 +496,14 @@ class UserDao
         return $ret;
     }
 
-    public static function createPasswordReset($user_id)
+    public static function createPasswordReset($user)
     {
-        $uid = null;
-        if(!self::hasRequestedPasswordReset($user_id)) {            
+        $ret = null;
+        if(!self::hasRequestedPasswordReset($user->getEmail())) { 
             $uid = md5(uniqid(rand()));
-            self::addPasswordResetRequest($uid, $user_id);
-        } else {
-            $request = self::getPasswordResetRequests($user_id);
-            $uid = $request->getKey();
+            $ret = self::addPasswordResetRequest($uid, $user->getId());
         }
-
+        return $ret;
     }    
     
     /*
@@ -541,9 +538,9 @@ class UserDao
     /*
         Check if a user has requested a password reset
     */    
-    public static function hasRequestedPasswordReset($user_id)
+    public static function hasRequestedPasswordReset($email)
     {
-        if(self::getPasswordResetRequests($user_id)) {
+        if(self::getPasswordResetRequests($email)) {
             return true;
         } else {
             return false;
@@ -553,10 +550,10 @@ class UserDao
     /*
         Get Password Reset Requests
     */
-    public static function getPasswordResetRequests($userId, $uniqueId=null)
+    public static function getPasswordResetRequests($email, $uniqueId=null)
     {
         $args = PDOWrapper::cleanseNullOrWrapStr($uniqueId)
-                .",".PDOWrapper::cleanseNull($userId);
+                .",".PDOWrapper::cleanseNullOrWrapStr($email);
         
         if($result = PDOWrapper::call("getPasswordResetRequests", $args)) {
             return ModelFactory::buildModel("PasswordResetRequest", $result[0]);            
