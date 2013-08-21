@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "47581be238eb07ef8c3992e500ca71b7",
+    "hash": "5318b8f4a536b01a18ab6972d694c36e",
     "packages": [
         {
             "name": "drslump/protobuf-php",
@@ -22,16 +22,16 @@
         },
         {
             "name": "slim/slim",
-            "version": "1.6.3",
+            "version": "dev-1.6.3Fix",
             "source": {
                 "type": "git",
-                "url": "https://github.com/codeguy/Slim",
-                "reference": "1.6.3"
+                "url": "https://github.com/SeanMooney/Slim.git",
+                "reference": "23b5d9098c90f1e976602ccdf683ed63b8ace7ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/codeguy/Slim/zipball/1.6.3",
-                "reference": "1.6.3",
+                "url": "https://api.github.com/repos/SeanMooney/Slim/zipball/23b5d9098c90f1e976602ccdf683ed63b8ace7ff",
+                "reference": "23b5d9098c90f1e976602ccdf683ed63b8ace7ff",
                 "shasum": ""
             },
             "require": {
@@ -60,7 +60,10 @@
                 "rest",
                 "router"
             ],
-            "time": "2012-06-17 09:58:20"
+            "support": {
+                "source": "https://github.com/SeanMooney/Slim/tree/1.6.3Fix"
+            },
+            "time": "2013-08-19 17:01:27"
         },
         {
             "name": "solas/oauth2-server",
@@ -128,12 +131,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/videlalvaro/php-amqplib.git",
-                "reference": "436baa0e0c350275f8ebd2f2c9f53753ecc7b7d8"
+                "reference": "ae91bc69fe59f288f9ed4fe52ef9e3e9a027250c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/436baa0e0c350275f8ebd2f2c9f53753ecc7b7d8",
-                "reference": "436baa0e0c350275f8ebd2f2c9f53753ecc7b7d8",
+                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/ae91bc69fe59f288f9ed4fe52ef9e3e9a027250c",
+                "reference": "ae91bc69fe59f288f9ed4fe52ef9e3e9a027250c",
                 "shasum": ""
             },
             "require": {
@@ -162,7 +165,7 @@
                 "queue",
                 "rabbitmq"
             ],
-            "time": "2013-08-09 20:00:04"
+            "time": "2013-08-15 12:13:40"
         }
     ],
     "packages-dev": [
@@ -586,6 +589,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "slim/slim": 20,
         "videlalvaro/php-amqplib": 20,
         "solas/oauth2-server": 20
     },

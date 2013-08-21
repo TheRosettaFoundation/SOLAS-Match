@@ -28,7 +28,11 @@
                     "files": ["library/DrSlump/Protobuf.php"]
                 }
             }
-        }
+        },
+        {  
+            "type": "vcs",  
+            "url": "git@github.com:SeanMooney/Slim.git"  
+        }  
     ],
 
     "require-dev": {
@@ -37,7 +41,7 @@
 
 
     "require": {
-        "slim/slim": "1.6.3",
+        "slim/slim": "dev-1.6.3Fix",
         "videlalvaro/php-amqplib": "dev-master",
         "drslump/protobuf-php": "*",
         "solas/oauth2-server": "dev-master"
