@@ -9,8 +9,7 @@ class UserSession {
 
     public static function destroySession() 
     {
-        $_SESSION = array();
-        session_destroy();
+        unset($_SESSION['user_id']);
     }
 
     public static function getCurrentUserID() 

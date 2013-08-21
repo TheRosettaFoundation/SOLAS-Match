@@ -566,10 +566,12 @@ class UserDao
     {
         $reset_request = self::getPasswordResetRequests(null, $key);
         if(is_null($reset_request->getUserId())) {
-            return array("result" => 0, "message" => "Incorrect Unique ID. Are you sure you copied the URL correctly?");
+            return 0;
         } elseif (self::changePassword($reset_request->getUserId(), $password)) {
             self::removePasswordResetRequest($reset_request->getUserId());
-            return array("result" => 1, "message" => "You have successfully changed your password");
+            return 1;
+        } else {
+            return 0;
         }
     }
     
