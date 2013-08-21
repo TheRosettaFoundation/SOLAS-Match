@@ -92,7 +92,7 @@ class Users {
                 {
                     $ret = UserDao::isUserVerified($userId);
                     Dispatcher::sendResponce(null, $ret, null, $format);
-                }, 'isUserVerified');
+                }, 'isUserVerified', null);
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/leaveOrg/:id/:org/',
                                                            function ($id, $org, $format = ".json") {

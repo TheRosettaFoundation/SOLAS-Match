@@ -42,7 +42,6 @@ class UserRouteHandler
 
         $app->get("/:user_id/notification/stream", array($middleware, "authUserIsLoggedIn"),
         array($this, "editTaskStreamNotification"))->via("POST")->name("stream-notification-edit");
-        
   
     }
     
