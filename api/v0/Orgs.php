@@ -79,7 +79,6 @@ class Orgs {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/getByName/:name/',
                                                         function ($name, $format = ".json") {
-            
             if (!is_numeric($name) && strstr($name, '.')) {
                 $temp = array();
                 $temp = explode('.', $name);
@@ -92,7 +91,7 @@ class Orgs {
                     }
                 }
             }
-            $data= OrganisationDao::getOrg(null, $name);
+            $data= OrganisationDao::getOrg(null, urldecode($name));
             $data = $data[0];
 //            if (!is_array($data) && !is_null($data)) {
 //                $data = array($data);

@@ -22,6 +22,7 @@ class OrganisationDao extends BaseDao
     public function getOrganisationByName($name)
     {
         $ret = null;
+        $name = urlencode($name);
         $request = "{$this->siteApi}v0/orgs/getByName/$name";
         $ret = $this->client->call("Organisation", $request);
         return $ret;       
