@@ -15,9 +15,6 @@
             <span style="color: red">*</span>
             {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}
         </small>
-        <button class='btn btn-inverse pull-right' id="deleteUserButton">
-            <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_DELETE_PROFILE)}
-        </button>
         </h1>
     </div>
 {/if}
