@@ -56,7 +56,7 @@ runJUnitTest(testInstance, Function testFunction) {
  */
 Matcher notSame(expected) => new _IsNotSameAs(expected);
 
-class _IsNotSameAs extends Matcher {
+class _IsNotSameAs extends BaseMatcher {
   final _expected;
   const _IsNotSameAs(this._expected);
   bool matches(item, Map matchState) => !identical(item, _expected);
@@ -65,7 +65,7 @@ class _IsNotSameAs extends Matcher {
 }
 
 Matcher equalsMsg(String msg, expected) => new _EqualsWithMessage(msg, expected);
-class _EqualsWithMessage extends Matcher {
+class _EqualsWithMessage extends BaseMatcher {
   final String msg;
   final expectedValue;
   const _EqualsWithMessage(this.msg, this.expectedValue);
@@ -82,7 +82,7 @@ class _EqualsWithMessage extends Matcher {
 }
 
 Matcher isTrueMsg(String msg) => new _IsTrueWithMessage(msg);
-class _IsTrueWithMessage extends Matcher {
+class _IsTrueWithMessage extends BaseMatcher {
   final String msg;
   const _IsTrueWithMessage(this.msg);
   bool matches(item, Map matchState) {
@@ -98,7 +98,7 @@ class _IsTrueWithMessage extends Matcher {
 }
 
 Matcher isFalseMsg(String msg) => new _IsFalseWithMessage(msg);
-class _IsFalseWithMessage extends Matcher {
+class _IsFalseWithMessage extends BaseMatcher {
   final String msg;
   const _IsFalseWithMessage(this.msg);
   bool matches(item, Map matchState) {
@@ -114,7 +114,7 @@ class _IsFalseWithMessage extends Matcher {
 }
 
 Matcher isNotNullMsg(String msg) => new _IsNotNullWithMessage(msg);
-class _IsNotNullWithMessage extends Matcher {
+class _IsNotNullWithMessage extends BaseMatcher {
   final String msg;
   const _IsNotNullWithMessage(this.msg);
   bool matches(item, Map matchState) {

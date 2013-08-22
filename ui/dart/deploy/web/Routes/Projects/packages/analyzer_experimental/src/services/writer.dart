@@ -78,14 +78,13 @@ class NewlineToken extends LineToken {
 class SourceWriter {
 
   final StringBuffer buffer = new StringBuffer();
-  Line currentLine;
+  Line currentLine = new Line();
 
   final String lineSeparator;
   int indentCount = 0;
 
-  SourceWriter({this.indentCount: 0, this.lineSeparator: '\n'}) {
-    currentLine = new Line(indent: indentCount);
-  }
+  SourceWriter({int initialIndent: 0, this.lineSeparator: '\n'}) :
+    indentCount = initialIndent;
 
   indent() {
     ++indentCount;

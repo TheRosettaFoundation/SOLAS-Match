@@ -10,7 +10,7 @@ part of matcher;
  */
 const Matcher isEmpty = const _Empty();
 
-class _Empty extends Matcher {
+class _Empty extends BaseMatcher {
   const _Empty();
   bool matches(item, Map matchState) {
     if (item is Map || item is Iterable) {
@@ -31,14 +31,14 @@ const Matcher isNull = const _IsNull();
 /** A matcher that matches any non-null value. */
 const Matcher isNotNull = const _IsNotNull();
 
-class _IsNull extends Matcher {
+class _IsNull extends BaseMatcher {
   const _IsNull();
   bool matches(item, Map matchState) => item == null;
   Description describe(Description description) =>
       description.add('null');
 }
 
-class _IsNotNull extends Matcher {
+class _IsNotNull extends BaseMatcher {
   const _IsNotNull();
   bool matches(item, Map matchState) => item != null;
   Description describe(Description description) =>
@@ -51,14 +51,14 @@ const Matcher isTrue = const _IsTrue();
 /** A matcher that matches anything except the Boolean value true. */
 const Matcher isFalse = const _IsFalse();
 
-class _IsTrue extends Matcher {
+class _IsTrue extends BaseMatcher {
   const _IsTrue();
   bool matches(item, Map matchState) => item == true;
   Description describe(Description description) =>
       description.add('true');
 }
 
-class _IsFalse extends Matcher {
+class _IsFalse extends BaseMatcher {
   const _IsFalse();
   bool matches(item, Map matchState) => item == false;
   Description describe(Description description) =>
@@ -71,7 +71,7 @@ class _IsFalse extends Matcher {
  */
 Matcher same(expected) => new _IsSameAs(expected);
 
-class _IsSameAs extends Matcher {
+class _IsSameAs extends BaseMatcher {
   final _expected;
   const _IsSameAs(this._expected);
   bool matches(item, Map matchState) => identical(item, _expected);
@@ -90,7 +90,7 @@ Matcher equals(expected, [limit=100]) =>
         ? new _StringEqualsMatcher(expected)
         : new _DeepMatcher(expected, limit);
 
-class _DeepMatcher extends Matcher {
+class _DeepMatcher extends BaseMatcher {
   final _expected;
   final int _limit;
   var count;
@@ -130,15 +130,7 @@ class _DeepMatcher extends Matcher {
     String reason = null;
     // If _limit is 1 we can only recurse one level into object.
     bool canRecurse = depth == 0 || _limit > 1;
-    bool equal;
-    try {
-      equal = (expected == actual);
-    } catch (e,s) {
-      // TODO(gram): Add a test for this case.
-      reason = '== threw "$e"';
-      return [reason, location];
-    }
-    if (equal) {
+    if (expected == actual) {
       // Do nothing.
     } else if (depth > _limit) {
       reason = 'recursion depth limit exceeded';
@@ -242,7 +234,7 @@ class _DeepMatcher extends Matcher {
 }
 
 /** A special equality matcher for strings. */
-class _StringEqualsMatcher extends Matcher {
+class _StringEqualsMatcher extends BaseMatcher {
   final String _value;
 
   _StringEqualsMatcher(this._value);
@@ -322,7 +314,7 @@ class _StringEqualsMatcher extends Matcher {
 /** A matcher that matches any value. */
 const Matcher anything = const _IsAnything();
 
-class _IsAnything extends Matcher {
+class _IsAnything extends BaseMatcher {
   const _IsAnything();
   bool matches(item, Map matchState) => true;
   Description describe(Description description) =>
@@ -351,7 +343,7 @@ class _IsAnything extends Matcher {
  * fail. This is because dart2js currently ignores template type
  * parameters.
  */
-class isInstanceOf<T> extends Matcher {
+class isInstanceOf<T> extends BaseMatcher {
   final String _name;
   const isInstanceOf([name = 'specified type']) : this._name = name;
   bool matches(obj, Map matchState) => obj is T;
@@ -403,7 +395,7 @@ Matcher throwsA(matcher) => new Throws(wrapMatcher(matcher));
  */
 const Matcher returnsNormally = const _ReturnsNormally();
 
-class Throws extends Matcher {
+class Throws extends BaseMatcher {
   final Matcher _matcher;
 
   const Throws([Matcher matcher]) :
@@ -474,7 +466,7 @@ class Throws extends Matcher {
   }
 }
 
-class _ReturnsNormally extends Matcher {
+class _ReturnsNormally extends BaseMatcher {
   const _ReturnsNormally();
 
   bool matches(f, Map matchState) {
@@ -522,7 +514,7 @@ class _ReturnsNormally extends Matcher {
  * for each exception type.
  */
 
-abstract class TypeMatcher extends Matcher {
+abstract class TypeMatcher extends BaseMatcher {
   final String _name;
   const TypeMatcher(this._name);
   Description describe(Description description) =>
@@ -624,67 +616,6 @@ class _StateError extends TypeMatcher {
   bool matches(item, Map matchState) => item is StateError;
 }
 
-/** A matcher for FallThroughError. */
-const isFallThroughError = const _FallThroughError();
-
-/** A matcher for functions that throw FallThroughError. */
-const Matcher throwsFallThroughError =
-    const Throws(isFallThroughError);
-
-class _FallThroughError extends TypeMatcher {
-  const _FallThroughError() : super("FallThroughError");
-  bool matches(item, Map matchState) => item is FallThroughError;
-}
-
-/** A matcher for NullThrownError. */
-const isNullThrownError = const _NullThrownError();
-
-/** A matcher for functions that throw NullThrownError. */
-const Matcher throwsNullThrownError =
-    const Throws(isNullThrownError);
-
-class _NullThrownError extends TypeMatcher {
-  const _NullThrownError() : super("NullThrownError");
-  bool matches(item, Map matchState) => item is NullThrownError;
-}
-
-/** A matcher for ConcurrentModificationError. */
-const isConcurrentModificationError = const _ConcurrentModificationError();
-
-/** A matcher for functions that throw ConcurrentModificationError. */
-const Matcher throwsConcurrentModificationError =
-    const Throws(isConcurrentModificationError);
-
-class _ConcurrentModificationError extends TypeMatcher {
-  const _ConcurrentModificationError() : super("ConcurrentModificationError");
-  bool matches(item, Map matchState) => item is ConcurrentModificationError;
-}
-
-/** A matcher for AbstractClassInstantiationError. */
-const isAbstractClassInstantiationError =
-    const _AbstractClassInstantiationError();
-
-/** A matcher for functions that throw AbstractClassInstantiationError. */
-const Matcher throwsAbstractClassInstantiationError =
-    const Throws(isAbstractClassInstantiationError);
-
-class _AbstractClassInstantiationError extends TypeMatcher {
-  const _AbstractClassInstantiationError() :
-  super("AbstractClassInstantiationError");
-  bool matches(item, Map matchState) => item is AbstractClassInstantiationError;
-}
-
-/** A matcher for CyclicInitializationError. */
-const isCyclicInitializationError = const _CyclicInitializationError();
-
-/** A matcher for functions that throw CyclicInitializationError. */
-const Matcher throwsCyclicInitializationError =
-    const Throws(isCyclicInitializationError);
-
-class _CyclicInitializationError extends TypeMatcher {
-  const _CyclicInitializationError() : super("CyclicInitializationError");
-  bool matches(item, Map matchState) => item is CyclicInitializationError;
-}
 
 /** A matcher for Map types. */
 const isMap = const _IsMap();
@@ -709,7 +640,7 @@ class _IsList extends TypeMatcher {
 Matcher hasLength(matcher) =>
     new _HasLength(wrapMatcher(matcher));
 
-class _HasLength extends Matcher {
+class _HasLength extends BaseMatcher {
   final Matcher _matcher;
   const _HasLength([Matcher matcher = null]) : this._matcher = matcher;
 
@@ -754,7 +685,7 @@ class _HasLength extends Matcher {
  */
 Matcher contains(expected) => new _Contains(expected);
 
-class _Contains extends Matcher {
+class _Contains extends BaseMatcher {
 
   final _expected;
 
@@ -795,7 +726,7 @@ class _Contains extends Matcher {
  */
 Matcher isIn(expected) => new _In(expected);
 
-class _In extends Matcher {
+class _In extends BaseMatcher {
 
   final _expected;
 
@@ -825,7 +756,7 @@ class _In extends Matcher {
 Matcher predicate(Function f, [description ='satisfies function']) =>
     new _Predicate(f, description);
 
-class _Predicate extends Matcher {
+class _Predicate extends BaseMatcher {
 
   final Function _matcher;
   final String _description;
@@ -847,9 +778,9 @@ class _Predicate extends Matcher {
  * The feature description will typically describe the item and the feature,
  * while the feature name will just name the feature. For example, we may
  * have a Widget class where each Widget has a price; we could make a
- * [CustomMatcher] that can make assertions about prices with:
+ * FeatureMatcher that can make assertions about prices with:
  *
- *     class HasPrice extends CustomMatcher {
+ *     class HasPrice extends FeatureMatcher {
  *       const HasPrice(matcher) :
  *           super("Widget with price that is", "price", matcher);
  *       featureValueOf(actual) => actual.price;
@@ -859,7 +790,7 @@ class _Predicate extends Matcher {
  *
  *      expect(inventoryItem, new HasPrice(greaterThan(0)));
  */
-class CustomMatcher extends Matcher {
+class CustomMatcher extends BaseMatcher {
   final String _featureDescription;
   final String _featureName;
   final Matcher _matcher;
@@ -893,3 +824,4 @@ class CustomMatcher extends Matcher {
     return mismatchDescription;
   }
 }
+

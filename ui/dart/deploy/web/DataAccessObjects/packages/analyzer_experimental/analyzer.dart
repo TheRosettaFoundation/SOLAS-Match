@@ -6,7 +6,7 @@ library analyzer;
 
 import 'dart:io';
 
-import 'package:path/path.dart' as pathos;
+import 'package:pathos/path.dart' as pathos;
 
 import 'src/error.dart';
 import 'src/generated/ast.dart';
@@ -26,16 +26,7 @@ CompilationUnit parseDartFile(String path) {
   var contents = new File(path).readAsStringSync();
   var errorCollector = new _ErrorCollector();
   var sourceFactory = new SourceFactory.con2([new FileUriResolver()]);
-
-  var absolutePath = pathos.absolute(path);
-  var source = sourceFactory.forUri(pathos.toUri(absolutePath).toString());
-  if (source == null) {
-    throw new ArgumentError("Can't get source for path $path");
-  }
-  if (!source.exists()) {
-    throw new ArgumentError("Source $source doesn't exist");
-  }
-
+  var source = sourceFactory.forUri(pathos.toUri(path).toString());
   var scanner = new StringScanner(source, contents, errorCollector);
   var token = scanner.tokenize();
   var parser = new Parser(source, errorCollector);

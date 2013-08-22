@@ -9,7 +9,7 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:math' as Math;
 
-import 'package:path/path.dart' as path;
+import 'package:pathos/path.dart' as Path;
 import 'package:source_maps/span.dart' show SourceFile;
 
 import 'parser.dart';
@@ -30,14 +30,14 @@ void main() {
 }
 
 void _compile(String inputPath, bool verbose) {
-  var ext = path.extension(inputPath);
+  var ext = Path.extension(inputPath);
   if (ext != '.css' && ext != '.scss') {
     messages.error("Please provide a CSS/Sass file", null);
     return;
   }
   try {
     // Read the file.
-    var filename = path.basename(inputPath);
+    var filename = Path.basename(inputPath);
     var contents = new File(inputPath).readAsStringSync();
     var file = new SourceFile.text(inputPath, contents);
 
@@ -54,7 +54,7 @@ void _compile(String inputPath, bool verbose) {
         () => emitter.visitTree(tree, pretty: true), verbose);
 
     // Write the contents to a file.
-    var outPath = path.join(path.dirname(inputPath), '_$filename');
+    var outPath = Path.join(Path.dirname(inputPath), '_$filename');
     new File(outPath).writeAsStringSync(emitter.toString());
   } catch (e) {
     messages.error('error processing $inputPath. Original message:\n $e', null);

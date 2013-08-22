@@ -5,6 +5,7 @@
 library list_proxy;
 
 import 'dart:collection';
+import 'package:meta/meta.dart';
 
 // TOOD(jmesserly): this needs to be removed, but fixing NodeList is tricky.
 class ListProxy<E> extends IterableBase<E> implements List<E> {

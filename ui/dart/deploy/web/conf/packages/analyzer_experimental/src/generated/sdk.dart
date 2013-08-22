@@ -332,8 +332,9 @@ abstract class DartSdk {
    * Return the source representing the library with the given `dart:` URI, or `null` if
    * the given URI does not denote a library in this SDK.
    *
+   * @param contentCache the content cache used to access the contents of the mapped source
    * @param dartUri the URI of the library to be returned
    * @return the source representing the specified library
    */
-  Source mapDartUri(String dartUri);
+  Source mapDartUri(ContentCache contentCache, String dartUri);
 }

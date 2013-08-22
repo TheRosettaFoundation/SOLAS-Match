@@ -1,7 +1,6 @@
 library java.io;
 
 import "dart:io";
-import 'package:path/path.dart' as pathos;
 
 class JavaSystemIO {
   static Map<String, String> _properties = new Map();
@@ -34,14 +33,14 @@ class JavaSystemIO {
         String sdkPath;
         // may be "xcodebuild/ReleaseIA32/dart" with "dart-sdk" sibling
         {
-          sdkPath = pathos.join(pathos.dirname(exec), "dart-sdk");
+          sdkPath = new Path(exec).directoryPath.append("dart-sdk").toNativePath();
           if (new Directory(sdkPath).existsSync()) {
             _properties[name] = sdkPath;
             return sdkPath;
           }
         }
         // probably be "dart-sdk/bin/dart"
-        sdkPath = pathos.dirname(pathos.dirname(exec));
+        sdkPath = new Path(exec).directoryPath.directoryPath.toString();
         _properties[name] = sdkPath;
         return sdkPath;
       }
@@ -59,27 +58,26 @@ class JavaSystemIO {
 class JavaFile {
   static final String separator = Platform.pathSeparator;
   static final int separatorChar = Platform.pathSeparator.codeUnitAt(0);
-  String _path;
+  Path _path;
   JavaFile(String path) {
-    _path = pathos.normalize(path);
+    this._path = new Path(path);
   }
   JavaFile.relative(JavaFile base, String child) {
     if (child.isEmpty) {
       this._path = base._path;
     } else {
-      this._path = pathos.join(base._path, child);
+      this._path = base._path.join(new Path(child));
     }
   }
-  JavaFile.fromUri(Uri uri) : this(pathos.fromUri(uri));
-  String toString() => _path.toString();
+  JavaFile.fromUri(Uri uri) : this(uri.path);
   int get hashCode => _path.hashCode;
   bool operator ==(other) {
-    return other is JavaFile && other._path == _path;
+    return other is JavaFile && other._path.toNativePath() == _path.toNativePath();
   }
-  String getPath() => _path;
-  String getName() => pathos.basename(_path);
+  String getPath() => _path.toNativePath();
+  String getName() => _path.filename;
   String getParent() {
-    var result = pathos.dirname(_path);
+    var result = _path.directoryPath.toNativePath();
     // "." or  "/" or  "C:\"
     if (result.length < 4) return null;
     return result;
@@ -89,8 +87,8 @@ class JavaFile {
     if (parent == null) return null;
     return new JavaFile(parent);
   }
-  String getAbsolutePath() => pathos.absolute(_path);
-  String getCanonicalPath() => _newFile().fullPathSync();
+  String getAbsolutePath() => _path.canonicalize().toNativePath();
+  String getCanonicalPath() => _path.canonicalize().toNativePath();
   JavaFile getAbsoluteFile() => new JavaFile(getAbsolutePath());
   JavaFile getCanonicalFile() => new JavaFile(getCanonicalPath());
   bool exists() {
@@ -105,7 +103,7 @@ class JavaFile {
   bool isDirectory() {
     return _newDirectory().existsSync();
   }
-  Uri toURI() => pathos.toUri(_path);
+  Uri toURI() => new Uri(path: _path.toString());
   String readAsStringSync() => _newFile().readAsStringSync();
   int lastModified() {
     if (!_newFile().existsSync()) return 0;
@@ -113,13 +111,13 @@ class JavaFile {
 
   }
   List<JavaFile> listFiles() {
-    var files = <JavaFile>[];
-    var entities = _newDirectory().listSync();
+    List<JavaFile> files = [];
+    List<FileSystemEntity> entities = _newDirectory().listSync();
     for (FileSystemEntity entity in entities) {
       files.add(new JavaFile(entity.path));
     }
     return files;
   }
-  File _newFile() => new File(_path);
-  Directory _newDirectory() => new Directory(_path);
+  File _newFile() => new File.fromPath(_path);
+  Directory _newDirectory() => new Directory.fromPath(_path);
 }

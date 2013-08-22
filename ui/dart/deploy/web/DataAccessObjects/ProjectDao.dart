@@ -67,6 +67,7 @@ class ProjectDao
   static Future<bool> uploadProjectFile(int projectId, int userId, String filename, String data)
   {
     APIHelper client = new APIHelper(".json");
+    filename= Uri.encodeComponent(filename);
     Future<bool> ret = client.call("", "v0/projects/$projectId/file/$filename/$userId", "PUT", data)
         .then((String data) {
           print("Upload Project File Returned $data");

@@ -43,10 +43,9 @@ class ObservableMap<K, V> extends Observable implements Map<K, V> {
   /**
    * Creates an observable map that contains all key value pairs of [other].
    */
-  factory ObservableMap.from(Map/*<K, V>*/ other,
-        {MapFactory/*<K, V>*/ createMap}) {
-    var result = new ObservableMap/*<K, V>*/(createMap: createMap);
-    other.forEach((/*K*/ key, /*V*/value) { result[key] = value; });
+  factory ObservableMap.from(Map<K, V> other, {MapFactory<K, V> createMap}) {
+    var result = new ObservableMap<K, V>(createMap: createMap);
+    other.forEach((K key, V value) { result[key] = value; });
     return result;
   }
 
