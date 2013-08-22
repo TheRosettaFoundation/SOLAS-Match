@@ -352,13 +352,12 @@ class UserRouteHandler
         $userDao = new UserDao();
         $loggedInuser = $userDao->getUser(UserSession::getCurrentUserID());
         $user = $userDao->getUser($userId);
+        CacheHelper::unCache(CacheHelper::GET_USER.$userId);
         
         if (!is_object($user)) {
             $app->flash("error", Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
             $app->redirect($app->urlFor("login"));
         }
-
-        CacheHelper::unCache(CacheHelper::GET_USER.$userId);
 
         $app->view()->appendData(array(
             "user"              => $loggedInuser,
@@ -379,7 +378,8 @@ class UserRouteHandler
         $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(UserSession::getCurrentUserID()));
         $user=null;
         try{
-        $user = $userDao->getUser($user_id);
+            CacheHelper::unCache(CacheHelper::GET_USER.$user_id);
+            $user = $userDao->getUser($user_id);
         }catch (SolasMatchException $e){
              $app->flash('error', Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
              $app->redirect($app->urlFor('login'));
