@@ -296,10 +296,8 @@ class ProjectCreateForm extends WebComponent
             } else {
               ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
                 Settings settings = new Settings();
-                print("Redirect: " + settings.conf.urls.SiteLocation + "project/" 
-                      + project.id.toString() + "/view");
-                //window.location.assign(settings.conf.urls.SiteLocation + "project/" 
-                  //  + project.id.toString() + "/view");
+                window.location.assign(settings.conf.urls.SiteLocation + "project/" 
+                    + project.id.toString() + "/view");
               });
             }
           }).catchError((error) {
