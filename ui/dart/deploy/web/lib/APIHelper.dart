@@ -37,8 +37,9 @@ class APIHelper
   }
   
   Future<String> call(String objectType, String url, String method, 
-                      [String data = '', Map queryArgs = null])
+                      [dynamic data = '', Map queryArgs = null])
   {
+    Completer complete = new Completer();
     Map<String, String> headers = new Map<String, String>();
     if (UserHash != null) {
       headers["Authorization"] = "Bearer "+UserHash;
@@ -52,13 +53,17 @@ class APIHelper
         url += key + "=" + queryArgs[key] + "&";
       });
     }
-    
-    Future<HttpRequest> response = HttpRequest.request(url, method: method, sendData: data, requestHeaders: headers);
-    Future<String> ret = response.then((HttpRequest resp) {
-      return resp.responseText;
+    HttpRequest request = new HttpRequest();
+    request.open(method, url);
+    if (UserHash != null) {
+      request.setRequestHeader("Authorization", "Bearer " + UserHash);
+    }
+    request.onLoadEnd.listen((e) {
+      complete.complete(request.response);
     });
+    request.send(data);
     
-    return ret;
+    return complete.future;
   }
   
   dynamic getJSProtoContext()

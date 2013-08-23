@@ -296,8 +296,10 @@ class ProjectCreateForm extends WebComponent
             } else {
               ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
                 Settings settings = new Settings();
-                window.location.assign(settings.conf.urls.SiteLocation + "project/" 
-                    + project.id.toString() + "/view");
+                print("Redirect: " + settings.conf.urls.SiteLocation + "project/" 
+                      + project.id.toString() + "/view");
+                //window.location.assign(settings.conf.urls.SiteLocation + "project/" 
+                  //  + project.id.toString() + "/view");
               });
             }
           }).catchError((error) {
@@ -323,7 +325,7 @@ class ProjectCreateForm extends WebComponent
     reader.onLoadEnd.listen((e) {
       fileText = reader.result;
     });
-    reader.readAsText(projectFile);
+    reader.readAsArrayBuffer(projectFile);
     Task templateTask = new Task();
     templateTask.title = project.title;
     templateTask.projectId = project.id;
@@ -463,12 +465,12 @@ class ProjectCreateForm extends WebComponent
       if (projectFile.size > 0) {
         ret = new Future.value(true);
         FileReader reader = new FileReader();
-        String fileText;
         reader.onLoadEnd.listen((e) {
-          fileText = reader.result;
-          ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, fileText);
+          //String fileText = e.target.result;
+          //print("File data is: $fileText");
+          ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, e.target.result);
         });
-        reader.readAsText(projectFile);
+        reader.readAsArrayBuffer(projectFile);
       } else {
         createProjectError = Localisation.getTranslationSafe("project_create_17");
         ret = new Future.value(false);
