@@ -1615,20 +1615,28 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
     if (!t1) {
       t1 = $.getInterceptor$x(projectFile);
       if ($.$gt$n(t1.get$size(projectFile), 0) === true)
-        if ($.$lt$n(t1.get$size(projectFile), this.maxFileSize) === true) {
-          ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
-          $.setRuntimeTypeInfo(ret, [null]);
-          ret._state = 8;
-          ret._resultOrListeners = true;
-          reader = new FileReader();
-          C.EventStreamProvider_loadend.forTarget$2$useCapture;
-          t1 = new $._EventStream(reader, C.EventStreamProvider_loadend._eventType, false);
-          $.setRuntimeTypeInfo(t1, [null]);
-          t2 = new $._EventStreamSubscription(0, t1._liblib4$_target, t1._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(this, projectFile), t1._useCapture);
-          $.setRuntimeTypeInfo(t2, [$.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
-          t2._tryResume$0();
-          reader.readAsArrayBuffer(projectFile);
-        } else {
+        if ($.$lt$n(t1.get$size(projectFile), this.maxFileSize) === true)
+          if ($.$ge$n($.lastIndexOf$1$asx(t1.get$name(projectFile), "."), 0) === true) {
+            ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
+            $.setRuntimeTypeInfo(ret, [null]);
+            ret._state = 8;
+            ret._resultOrListeners = true;
+            reader = new FileReader();
+            C.EventStreamProvider_loadend.forTarget$2$useCapture;
+            t1 = new $._EventStream(reader, C.EventStreamProvider_loadend._eventType, false);
+            $.setRuntimeTypeInfo(t1, [null]);
+            t2 = new $._EventStreamSubscription(0, t1._liblib4$_target, t1._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(this, projectFile), t1._useCapture);
+            $.setRuntimeTypeInfo(t2, [$.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
+            t2._tryResume$0();
+            reader.readAsArrayBuffer(projectFile);
+          } else {
+            this.set$createProjectError(new $.SafeHtml("<span>Please upload a file with an extension.</span>"));
+            ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
+            $.setRuntimeTypeInfo(ret, [null]);
+            ret._state = 8;
+            ret._resultOrListeners = false;
+          }
+        else {
           this.set$createProjectError(new $.SafeHtml(C.JSString_methods.$add(C.JSString_methods.$add("<span>File is too large to upload, max file size is ", $.toString$0($.$div$n($.$div$n(this.maxFileSize, 1024), 1024))), "MB</span>")));
           ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
           $.setRuntimeTypeInfo(ret, [null]);
@@ -23747,13 +23755,13 @@ $._deserialize$closure = new $.Closure$_deserialize($._deserialize, "_deserializ
 $._doNothing$closure = new $.Closure$_doNothing($._doNothing, "_doNothing$closure");
 $.deliverChangesSync$closure = new $.Closure$deliverChangesSync($.deliverChangesSync, "deliverChangesSync$closure");
 $.defaultObserveUnhandledError$closure = new $.Closure$defaultObserveUnhandledError($.defaultObserveUnhandledError, "defaultObserveUnhandledError$closure");
-$.Language.$isLanguage = true;
-$.Language.$isObject = true;
+$.LinkedListNode.$isLinkedListNode = true;
+$.LinkedListNode.$isObject = true;
 $._SplayTreeNode.$isObject = true;
 $.Map.$isMap = true;
 $.Map.$isObject = true;
-$.LinkedListNode.$isLinkedListNode = true;
-$.LinkedListNode.$isObject = true;
+$.Language.$isLanguage = true;
+$.Language.$isObject = true;
 $.Level.$isComparable = true;
 $.Level.$asComparable = [$.Level];
 $.Level.$isObject = true;
@@ -24318,6 +24326,9 @@ $.insertBefore$2$x = function(receiver, a0, a1) {
 };
 $.join$1$ax = function(receiver, a0) {
   return $.getInterceptor$ax(receiver).join$1(receiver, a0);
+};
+$.lastIndexOf$1$asx = function(receiver, a0) {
+  return $.getInterceptor$asx(receiver).lastIndexOf$1(receiver, a0);
 };
 $.lastIndexOf$2$asx = function(receiver, a0, a1) {
   return $.getInterceptor$asx(receiver).lastIndexOf$2(receiver, a0, a1);

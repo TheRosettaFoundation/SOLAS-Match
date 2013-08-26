@@ -1191,12 +1191,18 @@ class ProjectCreateForm extends WebComponent with Observable
     if (projectFile != null) {
       if (projectFile.size > 0) {
         if (projectFile.size < maxFileSize) {
-          ret = new Future.value(true);
-          FileReader reader = new FileReader();
-          reader.onLoadEnd.listen((e) {
-            ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, e.target.result);
-          });
-          reader.readAsArrayBuffer(projectFile);
+          int extensionStartIndex = projectFile.name.lastIndexOf(".");
+          if (extensionStartIndex >= 0) {
+            ret = new Future.value(true);
+            FileReader reader = new FileReader();
+            reader.onLoadEnd.listen((e) {
+              ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, e.target.result);
+            });
+            reader.readAsArrayBuffer(projectFile);
+          } else {
+            createProjectError = new SafeHtml.unsafe("<span>Please upload a file with an extension.</span>");
+            ret = new Future.value(false);
+          }
         } else {
           createProjectError = new SafeHtml.unsafe("<span>File is too large to upload, max file size is " 
                                                 + (maxFileSize / 1024 / 1024).toString() + "MB</span>");
