@@ -1472,13 +1472,11 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
       this.get$project().set$organisationId(this.orgId);
       projectTags = $.List_List(null, $.JSString);
       $.setRuntimeTypeInfo(projectTags, [$.JSString]);
-      $.Primitives_printString("Tag List is " + $.S(this.tagList));
       if ($.$gt$n($.get$length$asx(this.tagList), 0) === true)
         projectTags = $.split$1$s(this.tagList, " ");
       t1 = $.getInterceptor$asx(projectTags);
       if ($.$gt$n(t1.get$length(projectTags), 0) === true)
         t1.forEach$1(projectTags, new $.ProjectCreateForm_submitForm_closure(this));
-      $.Primitives_printString(C.JSString_methods.$add("Saving project ", $._JsonStringifier_stringify(this.get$project())));
       $.ProjectDao_createProject(this.get$project()).then$1(new $.ProjectCreateForm_submitForm_closure0(this));
     } else
       $.Primitives_printString("Invalid form input");
@@ -1614,28 +1612,37 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
     t1 = projectFile == null;
     if (t1)
       this.set$createProjectError($.Localisation_getTranslationSafe("project_create_16"));
-    if (!t1)
-      if ($.$gt$n($.get$size$x(projectFile), 0) === true) {
-        ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
-        $.setRuntimeTypeInfo(ret, [null]);
-        ret._state = 8;
-        ret._resultOrListeners = true;
-        reader = new FileReader();
-        C.EventStreamProvider_loadend.forTarget$2$useCapture;
-        t1 = new $._EventStream(reader, C.EventStreamProvider_loadend._eventType, false);
-        $.setRuntimeTypeInfo(t1, [null]);
-        t2 = new $._EventStreamSubscription(0, t1._liblib4$_target, t1._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(this, projectFile), t1._useCapture);
-        $.setRuntimeTypeInfo(t2, [$.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
-        t2._tryResume$0();
-        reader.readAsArrayBuffer(projectFile);
-      } else {
+    if (!t1) {
+      t1 = $.getInterceptor$x(projectFile);
+      if ($.$gt$n(t1.get$size(projectFile), 0) === true)
+        if ($.$lt$n(t1.get$size(projectFile), this.maxFileSize) === true) {
+          ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
+          $.setRuntimeTypeInfo(ret, [null]);
+          ret._state = 8;
+          ret._resultOrListeners = true;
+          reader = new FileReader();
+          C.EventStreamProvider_loadend.forTarget$2$useCapture;
+          t1 = new $._EventStream(reader, C.EventStreamProvider_loadend._eventType, false);
+          $.setRuntimeTypeInfo(t1, [null]);
+          t2 = new $._EventStreamSubscription(0, t1._liblib4$_target, t1._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(this, projectFile), t1._useCapture);
+          $.setRuntimeTypeInfo(t2, [$.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
+          t2._tryResume$0();
+          reader.readAsArrayBuffer(projectFile);
+        } else {
+          this.set$createProjectError(new $.SafeHtml(C.JSString_methods.$add(C.JSString_methods.$add("<span>File is too large to upload, max file size is ", $.toString$0($.$div$n($.$div$n(this.maxFileSize, 1024), 1024))), "MB</span>")));
+          ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
+          $.setRuntimeTypeInfo(ret, [null]);
+          ret._state = 8;
+          ret._resultOrListeners = false;
+        }
+      else {
         this.set$createProjectError($.Localisation_getTranslationSafe("project_create_17"));
         ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
         $.setRuntimeTypeInfo(ret, [null]);
         ret._state = 8;
         ret._resultOrListeners = false;
       }
-    else {
+    } else {
       ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
       $.setRuntimeTypeInfo(ret, [null]);
       ret._state = 8;
@@ -3131,9 +3138,7 @@ ProjectCreateForm_addMoreTargetLanguages_closure: {"": "Closure;this_0",
 
 ProjectCreateForm_submitForm_closure: {"": "Closure;this_1",
   call$1: function(tagName) {
-    var tag;
-    $.Primitives_printString("Adding tag " + $.S(tagName) + " to project");
-    tag = new $.Tag(null, null);
+    var tag = new $.Tag(null, null);
     tag.label = tagName;
     $.add$1$ax($.get$tag$x(this.this_1.get$project()), tag);
   },
@@ -24250,9 +24255,6 @@ $.get$rows$x = function(receiver) {
 };
 $.get$selectedIndex$x = function(receiver) {
   return $.getInterceptor$x(receiver).get$selectedIndex(receiver);
-};
-$.get$size$x = function(receiver) {
-  return $.getInterceptor$x(receiver).get$size(receiver);
 };
 $.get$style$x = function(receiver) {
   return $.getInterceptor$x(receiver).get$style(receiver);

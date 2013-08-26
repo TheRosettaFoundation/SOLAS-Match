@@ -1200,6 +1200,7 @@ class ProjectCreateForm extends WebComponent with Observable
         } else {
           createProjectError = new SafeHtml.unsafe("<span>File is too large to upload, max file size is " 
                                                 + (maxFileSize / 1024 / 1024).toString() + "MB</span>");
+          ret = new Future.value(false);
         }
       } else {
         createProjectError = Localisation.getTranslationSafe("project_create_17");
