@@ -47,7 +47,6 @@ class Projects
                 $data=Dispatcher::getDispatcher()->request()->getBody();
                 $client = new APIHelper($format);
                 $data = $client->deserialize($data,'Project');
-//                $data = $client->cast('Project', $data);
                 Dispatcher::sendResponce(null, ProjectDao::createUpdate($data), null, $format);
             }, 'createProject');
 

@@ -53,6 +53,7 @@ class APIHelper
         url += key + "=" + queryArgs[key] + "&";
       });
     }
+    
     HttpRequest request = new HttpRequest();
     request.open(method, url);
     if (UserHash != null) {

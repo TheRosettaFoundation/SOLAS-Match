@@ -19,7 +19,7 @@ class ProjectDao
     }
     
     private static function save(&$project)
-    {       
+    {
         $sourceLocale = $project->getSourceLocale();
         $args =PDOWrapper::cleanseNull($project->getId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getTitle())
