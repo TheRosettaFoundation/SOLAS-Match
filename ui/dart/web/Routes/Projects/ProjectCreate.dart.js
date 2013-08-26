@@ -1607,27 +1607,38 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
   },
   "+createProjectTasks:0:0": 0,
   uploadProjectFile$0: function() {
-    var projectFile, t1, ret, reader, t2;
+    var t1, projectFile, t2, extensionStartIndex, t3, extension, t4, ret, reader;
+    t1 = {};
     projectFile = this.getProjectFile$0();
-    t1 = projectFile == null;
-    if (t1)
+    t2 = projectFile == null;
+    if (t2)
       this.set$createProjectError($.Localisation_getTranslationSafe("project_create_16"));
-    if (!t1) {
-      t1 = $.getInterceptor$x(projectFile);
-      if ($.$gt$n(t1.get$size(projectFile), 0) === true)
-        if ($.$lt$n(t1.get$size(projectFile), this.maxFileSize) === true)
-          if ($.$ge$n($.lastIndexOf$1$asx(t1.get$name(projectFile), "."), 0) === true) {
+    if (!t2) {
+      t2 = $.getInterceptor$x(projectFile);
+      if ($.$gt$n(t2.get$size(projectFile), 0) === true)
+        if ($.$lt$n(t2.get$size(projectFile), this.maxFileSize) === true) {
+          extensionStartIndex = $.lastIndexOf$1$asx(t2.get$name(projectFile), ".");
+          t3 = $.getInterceptor$n(extensionStartIndex);
+          if (t3.$ge(extensionStartIndex, 0) === true) {
+            t1.filename_0 = t2.get$name(projectFile);
+            extension = $.substring$1$s(t2.get$name(projectFile), t3.$add(extensionStartIndex, 1));
+            t4 = $.getInterceptor$s(extension);
+            if (!t4.$eq(extension, t4.toLowerCase$0(extension))) {
+              extension = t4.toLowerCase$0(extension);
+              t1.filename_0 = $.$add$ns($.substring$2$s(t2.get$name(projectFile), 0, t3.$add(extensionStartIndex, 1)), extension);
+              window.alert("The file extension has been changed to lower case.");
+            }
             ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
             $.setRuntimeTypeInfo(ret, [null]);
             ret._state = 8;
             ret._resultOrListeners = true;
             reader = new FileReader();
             C.EventStreamProvider_loadend.forTarget$2$useCapture;
-            t1 = new $._EventStream(reader, C.EventStreamProvider_loadend._eventType, false);
-            $.setRuntimeTypeInfo(t1, [null]);
-            t2 = new $._EventStreamSubscription(0, t1._liblib4$_target, t1._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(this, projectFile), t1._useCapture);
-            $.setRuntimeTypeInfo(t2, [$.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
-            t2._tryResume$0();
+            t2 = new $._EventStream(reader, C.EventStreamProvider_loadend._eventType, false);
+            $.setRuntimeTypeInfo(t2, [null]);
+            t1 = new $._EventStreamSubscription(0, t2._liblib4$_target, t2._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(t1, this), t2._useCapture);
+            $.setRuntimeTypeInfo(t1, [$.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
+            t1._tryResume$0();
             reader.readAsArrayBuffer(projectFile);
           } else {
             this.set$createProjectError(new $.SafeHtml("<span>Please upload a file with an extension.</span>"));
@@ -1636,7 +1647,7 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
             ret._state = 8;
             ret._resultOrListeners = false;
           }
-        else {
+        } else {
           this.set$createProjectError(new $.SafeHtml(C.JSString_methods.$add(C.JSString_methods.$add("<span>File is too large to upload, max file size is ", $.toString$0($.$div$n($.$div$n(this.maxFileSize, 1024), 1024))), "MB</span>")));
           ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
           $.setRuntimeTypeInfo(ret, [null]);
@@ -3475,10 +3486,10 @@ ProjectCreateForm_createProjectTasks__closure: {"": "Closure;box_0",
 
 "+ProjectCreateForm_createProjectTasks__closure": [],
 
-ProjectCreateForm_uploadProjectFile_closure: {"": "Closure;this_0,projectFile_1",
+ProjectCreateForm_uploadProjectFile_closure: {"": "Closure;box_0,this_1",
   call$1: function(e) {
-    var t1 = this.this_0;
-    $.ProjectDao_uploadProjectFile($.get$id$x(t1.get$project()), t1.get$userId(), $.get$name$x(this.projectFile_1), $.get$result$x($.get$target$x(e)));
+    var t1 = this.this_1;
+    $.ProjectDao_uploadProjectFile($.get$id$x(t1.get$project()), t1.get$userId(), this.box_0.filename_0, $.get$result$x($.get$target$x(e)));
   },
   "+call:1:0": 0,
   $isFunction: true

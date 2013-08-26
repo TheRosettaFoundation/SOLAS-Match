@@ -1193,10 +1193,17 @@ class ProjectCreateForm extends WebComponent with Observable
         if (projectFile.size < maxFileSize) {
           int extensionStartIndex = projectFile.name.lastIndexOf(".");
           if (extensionStartIndex >= 0) {
+            String filename = projectFile.name;
+            String extension = projectFile.name.substring(extensionStartIndex + 1);
+            if (extension != extension.toLowerCase()) {
+              extension = extension.toLowerCase();
+              filename = projectFile.name.substring(0, extensionStartIndex + 1) + extension;
+              window.alert("The file extension has been changed to lower case.");
+            }
             ret = new Future.value(true);
             FileReader reader = new FileReader();
             reader.onLoadEnd.listen((e) {
-              ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, e.target.result);
+              ProjectDao.uploadProjectFile(project.id, userId, filename, e.target.result);
             });
             reader.readAsArrayBuffer(projectFile);
           } else {
