@@ -461,12 +461,17 @@ class ProjectCreateForm extends WebComponent
     
     if (projectFile != null) {
       if (projectFile.size > 0) {
-        ret = new Future.value(true);
-        FileReader reader = new FileReader();
-        reader.onLoadEnd.listen((e) {
-          ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, e.target.result);
-        });
-        reader.readAsArrayBuffer(projectFile);
+        if (projectFile.size < maxFileSize) {
+          ret = new Future.value(true);
+          FileReader reader = new FileReader();
+          reader.onLoadEnd.listen((e) {
+            ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, e.target.result);
+          });
+          reader.readAsArrayBuffer(projectFile);
+        } else {
+          createProjectError = new SafeHtml.unsafe("<span>File is too large to upload, max file size is " 
+                                                + (maxFileSize / 1024 / 1024).toString() + "MB</span>");
+        }
       } else {
         createProjectError = Localisation.getTranslationSafe("project_create_17");
         ret = new Future.value(false);

@@ -974,20 +974,17 @@ class ProjectCreateForm extends WebComponent with Observable
       project.organisationId = orgId;
       
       List<String> projectTags = new List<String>();
-      print("Tag List is $tagList");
       if (tagList.length > 0) {
         projectTags = separateTags(tagList);
       }
       if (projectTags.length > 0) {
         projectTags.forEach((String tagName) {
-          print("Adding tag $tagName to project");
           Tag tag = new Tag();
           tag.label = tagName;
           project.tag.add(tag);
         });
       }
 
-      print("Saving project " + json.stringify(project));
       ProjectDao.createProject(project).then((Project pro) {
         if (pro == null || pro.id == null || pro.id < 1) {
           createProjectError = new SafeHtml.unsafe("<span>Failed to create project</span>");
@@ -1193,12 +1190,17 @@ class ProjectCreateForm extends WebComponent with Observable
     
     if (projectFile != null) {
       if (projectFile.size > 0) {
-        ret = new Future.value(true);
-        FileReader reader = new FileReader();
-        reader.onLoadEnd.listen((e) {
-          ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, e.target.result);
-        });
-        reader.readAsArrayBuffer(projectFile);
+        if (projectFile.size < maxFileSize) {
+          ret = new Future.value(true);
+          FileReader reader = new FileReader();
+          reader.onLoadEnd.listen((e) {
+            ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, e.target.result);
+          });
+          reader.readAsArrayBuffer(projectFile);
+        } else {
+          createProjectError = new SafeHtml.unsafe("<span>File is too large to upload, max file size is " 
+                                                + (maxFileSize / 1024 / 1024).toString() + "MB</span>");
+        }
       } else {
         createProjectError = Localisation.getTranslationSafe("project_create_17");
         ret = new Future.value(false);
