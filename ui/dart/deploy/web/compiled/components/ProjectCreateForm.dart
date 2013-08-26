@@ -1200,12 +1200,23 @@ class ProjectCreateForm extends WebComponent with Observable
               filename = projectFile.name.substring(0, extensionStartIndex + 1) + extension;
               window.alert("The file extension has been changed to lower case.");
             }
-            ret = new Future.value(true);
-            FileReader reader = new FileReader();
-            reader.onLoadEnd.listen((e) {
-              ProjectDao.uploadProjectFile(project.id, userId, filename, e.target.result);
-            });
-            reader.readAsArrayBuffer(projectFile);
+            bool finished = false;
+            if (extension == "pdf") {
+              if (!window.confirm("The file you uploaded is in PDF format. PDF files are difficult " +
+                                  "to translate, are you sure you want to upload a PDF?")) {
+                finished = true;
+                ret = new Future.value(false);
+              }
+            }
+            
+            if (!finished) {
+              ret = new Future.value(true);
+              FileReader reader = new FileReader();
+              reader.onLoadEnd.listen((e) {
+                ProjectDao.uploadProjectFile(project.id, userId, filename, e.target.result);
+              });
+              reader.readAsArrayBuffer(projectFile);
+            }
           } else {
             createProjectError = new SafeHtml.unsafe("<span>Please upload a file with an extension.</span>");
             ret = new Future.value(false);

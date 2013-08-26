@@ -1607,7 +1607,7 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
   },
   "+createProjectTasks:0:0": 0,
   uploadProjectFile$0: function() {
-    var t1, projectFile, t2, extensionStartIndex, t3, extension, t4, ret, reader;
+    var t1, projectFile, t2, extensionStartIndex, t3, extension, t4, ret, finished, reader;
     t1 = {};
     projectFile = this.getProjectFile$0();
     t2 = projectFile == null;
@@ -1628,18 +1628,35 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
               t1.filename_0 = $.$add$ns($.substring$2$s(t2.get$name(projectFile), 0, t3.$add(extensionStartIndex, 1)), extension);
               window.alert("The file extension has been changed to lower case.");
             }
-            ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
-            $.setRuntimeTypeInfo(ret, [null]);
-            ret._state = 8;
-            ret._resultOrListeners = true;
-            reader = new FileReader();
-            C.EventStreamProvider_loadend.forTarget$2$useCapture;
-            t2 = new $._EventStream(reader, C.EventStreamProvider_loadend._eventType, false);
-            $.setRuntimeTypeInfo(t2, [null]);
-            t1 = new $._EventStreamSubscription(0, t2._liblib4$_target, t2._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(t1, this), t2._useCapture);
-            $.setRuntimeTypeInfo(t1, [$.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
-            t1._tryResume$0();
-            reader.readAsArrayBuffer(projectFile);
+            if ($.$eq(extension, "pdf"))
+              if (window.confirm(C.JSString_methods.$add("The file you uploaded is in PDF format. PDF files are difficult ", "to translate, are you sure you want to upload a PDF?")) !== true) {
+                ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
+                $.setRuntimeTypeInfo(ret, [null]);
+                ret._state = 8;
+                ret._resultOrListeners = false;
+                finished = true;
+              } else {
+                ret = null;
+                finished = false;
+              }
+            else {
+              ret = null;
+              finished = false;
+            }
+            if (!finished) {
+              ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
+              $.setRuntimeTypeInfo(ret, [null]);
+              ret._state = 8;
+              ret._resultOrListeners = true;
+              reader = new FileReader();
+              C.EventStreamProvider_loadend.forTarget$2$useCapture;
+              t2 = new $._EventStream(reader, C.EventStreamProvider_loadend._eventType, false);
+              $.setRuntimeTypeInfo(t2, [null]);
+              t1 = new $._EventStreamSubscription(0, t2._liblib4$_target, t2._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(t1, this), t2._useCapture);
+              $.setRuntimeTypeInfo(t1, [$.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
+              t1._tryResume$0();
+              reader.readAsArrayBuffer(projectFile);
+            }
           } else {
             this.set$createProjectError(new $.SafeHtml("<span>Please upload a file with an extension.</span>"));
             ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
@@ -23766,13 +23783,13 @@ $._deserialize$closure = new $.Closure$_deserialize($._deserialize, "_deserializ
 $._doNothing$closure = new $.Closure$_doNothing($._doNothing, "_doNothing$closure");
 $.deliverChangesSync$closure = new $.Closure$deliverChangesSync($.deliverChangesSync, "deliverChangesSync$closure");
 $.defaultObserveUnhandledError$closure = new $.Closure$defaultObserveUnhandledError($.defaultObserveUnhandledError, "defaultObserveUnhandledError$closure");
-$.LinkedListNode.$isLinkedListNode = true;
-$.LinkedListNode.$isObject = true;
+$.Language.$isLanguage = true;
+$.Language.$isObject = true;
 $._SplayTreeNode.$isObject = true;
 $.Map.$isMap = true;
 $.Map.$isObject = true;
-$.Language.$isLanguage = true;
-$.Language.$isObject = true;
+$.LinkedListNode.$isLinkedListNode = true;
+$.LinkedListNode.$isObject = true;
 $.Level.$isComparable = true;
 $.Level.$asComparable = [$.Level];
 $.Level.$isObject = true;
