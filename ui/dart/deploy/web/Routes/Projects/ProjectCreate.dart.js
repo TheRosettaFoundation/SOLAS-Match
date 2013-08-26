@@ -1668,9 +1668,12 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
       t1.ret_0 = false;
     }
     t2 = this.wordCountInput;
-    if (t2 != null && !$.$eq(t2, ""))
+    if (t2 != null && !$.$eq(t2, "")) {
       this.get$project().set$wordCount($.Primitives_parseInt(this.wordCountInput, null, new $.ProjectCreateForm_validateInput_closure(t1, this)));
-    else {
+      if ($.$gt$n(this.get$project().get$wordCount(), 5000) === true)
+        if (window.confirm(C.JSString_methods.$add(C.JSString_methods.$add("Please note that the word count of your file is excessively high - the ", "recommended limit is 3000 words. We suggest you create a segmentation "), "task instead. Are you sure you want to continue?")) !== true)
+          t1.ret_0 = false;
+    } else {
       this.set$wordCountError(new $.SafeHtml(C.JSString_methods.$add(C.JSString_methods.$add("<span>", $.Localisation_getTranslation("project_routehandler_16")), "</span>")));
       t1.ret_0 = false;
     }

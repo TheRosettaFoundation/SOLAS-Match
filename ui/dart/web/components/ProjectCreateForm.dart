@@ -505,6 +505,13 @@ class ProjectCreateForm extends WebComponent
         ret = false;
         return 0;
       });
+      if (project.wordCount > 5000) {
+        if (!window.confirm("Please note that the word count of your file is excessively high - the " +
+                            "recommended limit is 3000 words. We suggest you create a segmentation " +
+                            "task instead. Are you sure you want to continue?")) {
+          ret = false;
+        }
+      }
     } else {
       wordCountError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_16") + "</span>");
       ret = false;
