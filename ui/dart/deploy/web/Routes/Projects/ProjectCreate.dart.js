@@ -236,7 +236,7 @@ $$.Closure$deliverChangesSync = {"": "Closure;call$0,$name", $is_void_: true};
 
 $$.Closure$defaultObserveUnhandledError = {"": "Closure;call$4,$name"};
 
-init.mangledNames = {$$dom_addEventListener$3: "$dom_addEventListener:3:0", $$dom_initCustomEvent$4: "$dom_initCustomEvent:4:0", $$dom_removeChild$1: "$dom_removeChild:1:0", $$dom_removeEventListener$3: "$dom_removeEventListener:3:0", $$dom_replaceChild$2: "$dom_replaceChild:2:0", $add: "+:1:0", $and: "&:1:0", $div: "/:1:0", $ge: ">=:1:0", $gt: ">:1:0", $index: "[]:1:0", $indexSet: "[]=:2:0", $le: "<=:1:0", $lt: "<:1:0", $mul: "*:1:0", $or: "|:1:0", $shl: "<<:1:0", $shr: ">>:1:0", $sub: "-:1:0", $xor: "^:1:0", _addError$1: "_addError:1:0", _addEventError$0: "_addEventError:0:0", _addListener$1: "_addListener:1:0", _addNewRoot$2: "_addNewRoot:2:0", _addPending$1: "_addPending:1:0", _callOnCancel$0: "_callOnCancel:0:0", _callback$2: "_callback:2:0", _checkReplyTo$1: "_checkReplyTo:1:0", _close$0: "_close:0:0", _createShadowRoot$0: "_createShadowRoot:0:0", _deliver$0: "_deliver:0:0", _dispatch$1: "_dispatch:1:0", _distributeNodes$2: "_distributeNodes:2:0", _ensureDoneFuture$0: "_ensureDoneFuture:0:0", _expectsEvent$1: "_expectsEvent:1:0", _extractElements$1: "_extractElements:1:0", _findLeftMostDescendent$1: "_findLeftMostDescendent:1:0", _forEachListener$1: "_forEachListener:1:0", _inSameErrorZone$1: "_inSameErrorZone:1:0", _insertAdjacentNode$2: "_insertAdjacentNode:2:0", _liblib11$_add$1: "_add:1:0", _liblib11$_onData$1: "_onData:1:0", _liblib4$_callback$1: "_callback:1:0", _liblib4$_deserializeHelper$1: "_deserializeHelper:1:0", _liblib4$_deserializeList$1: "_deserializeList:1:0", _liblib4$_deserializeMap$1: "_deserializeMap:1:0", _liblib4$_dispatch$1: "_dispatch:1:0", _liblib4$_serializeList$1: "_serializeList:1:0", _onError$1: "_onError:1:0", _publish$1: "_publish:1:0", _rebuildWorkList$1: "_rebuildWorkList:1:0", _recordCancel$1: "_recordCancel:1:0", _remove$1: "_remove:1:0", _removeListener$1: "_removeListener:1:0", _runCallback$1: "_runCallback:1:0", _sendError$1: "_sendError:1:0", _sendValue$1: "_sendValue:1:0", _setErrorUnchecked$1: "_setErrorUnchecked:1:0", _setRemoveAfterFiring$0: "_setRemoveAfterFiring:0:0", _setValueUnchecked$1: "_setValueUnchecked:1:0", _splay$1: "_splay:1:0", _subscribe$4: "_subscribe:4:0", _toggleEventId$0: "_toggleEventId:0:0", _zonedSendError$1: "_zonedSendError:1:0", _zonedSendValue$1: "_zonedSendValue:1:0", abs$0: "abs:0:0", add$1: "add:1:0", addAll$1: "addAll:1:0", addMoreTargetLanguages$0: "addMoreTargetLanguages:0:0", allMatches$1: "allMatches:1:0", assign$1: "assign:1:0", bodySetup$1: "bodySetup:1:0", call$0: "call:0:0", call$1: "call:1:0", call$1$growable: "call:1:0:growable", call$2: "call:2:0", call$2$onError: "call:2:0:onError", call$3: "call:3:0", call$3$async: "call:3:0:async", call$3$onDone$onError: "call:3:0:onDone:onError", call$4: "call:4:0", call$4$cancelOnError$onDone$onError: "call:4:0:cancelOnError:onDone:onError", callSync$1: "callSync:1:0", cancel$0: "cancel:0:0", catchError$1: "catchError:1:0", clear$0: "clear:0:0", clone$1: "clone:1:0", close$0: "close:0:0", codeUnitAt$1: "codeUnitAt:1:0", compareAndNotify$0: "compareAndNotify:0:0", compareTo$1: "compareTo:1:0", complete$0: "complete:0:0", complete$1: "complete:1:0", composeChildren$0: "composeChildren:0:0", conditional$3: "conditional:3:0", constructDynamicElements$0: "constructDynamicElements:0:0", contains$1: "contains:1:0", containsKey$1: "containsKey:1:0", contentBind$2: "contentBind:2:0", create$0: "create:0:0", createProjectTasks$0: "createProjectTasks:0:0", createShadowRoot$0: "createShadowRoot:0:0", createShadowRoot$1: "createShadowRoot:1:0", deserialize$1: "deserialize:1:0", deserializeCloseToken$1: "deserializeCloseToken:1:0", deserializeIsolateSink$1: "deserializeIsolateSink:1:0", deserializeObject$1: "deserializeObject:1:0", deserializeSendPort$1: "deserializeSendPort:1:0", endsWith$1: "endsWith:1:0", eval$1: "eval:1:0", forEach$1: "forEach:1:0", get$$$_changes: "$_changes", get$$$_observers: "$_observers", get$$$dom_namespaceUri: "$dom_namespaceUri", get$SOLASMatch: "SOLASMatch", get$SiteLocation: "SiteLocation", get$__e116: "__e116", get$__e34: "__e34", get$__e39: "__e39", get$__e45: "__e45", get$__e50: "__e50", get$__e62: "__e62", get$__e73: "__e73", get$__e78: "__e78", get$__e83: "__e83", get$_callback: "_callback", get$_chainSource: "_chainSource", get$_contents: "_contents", get$_duration: "_duration", get$_errorZone: "_errorZone", get$_eventState: "_eventState", get$_handle: "_handle", get$_head: "_head", get$_id: "_id", get$_isChained: "_isChained", get$_isFiring: "_isFiring", get$_isolateId: "_isolateId", get$_key: "_key", get$_liblib0$_length: "_length", get$_liblib1$_next: "_next", get$_liblib1$_previous: "_previous", get$_liblib11$_next: "_next", get$_liblib11$_previous: "_previous", get$_liblib6$_id: "_id", get$_list: "_list", get$_name: "_name", get$_next: "_next", get$_nextListener: "_nextListener", get$_previous: "_previous", get$_receivePort: "_receivePort", get$_registry: "_registry", get$_removeAfterFiring: "_removeAfterFiring", get$_resultOrListeners: "_resultOrListeners", get$_scheduled: "_scheduled", get$_state: "_state", get$_tail: "_tail", get$_value: "_value", get$_workerId: "_workerId", get$_zone: "_zone", get$attributes: "attributes", get$caption: "caption", get$cells: "cells", get$checked: "checked", get$children: "children", get$code: "code", get$countries: "countries", get$createProjectError: "createProjectError", get$current: "current", get$deadline: "deadline", get$deadlineError: "deadlineError", get$description: "description", get$descriptionError: "descriptionError", get$detail: "detail", get$disabled: "disabled", get$document: "document", get$fileUploadError: "fileUploadError", get$files: "files", get$fullName: "fullName", get$head: "head", get$host: "host", get$href: "href", get$id: "id", get$impact: "impact", get$impactError: "impactError", get$inMilliseconds: "inMilliseconds", get$innerHtml: "innerHtml", get$isAccessor: "isAccessor", get$isEmpty: "isEmpty", get$isGetter: "isGetter", get$isNotEmpty: "isNotEmpty", get$isSetter: "isSetter", get$isUrl: "isUrl", get$isVisible: "isVisible", get$isolateStatics: "isolateStatics", get$iterator: "iterator", get$key: "key", get$keys: "keys", get$languages: "languages", get$left: "left", get$length: "length", get$level: "level", get$loaded: "loaded", get$maxFileSize: "maxFileSize", get$maxTargetsReached: "maxTargetsReached", get$memberName: "memberName", get$millisecondsSinceEpoch: "millisecondsSinceEpoch", get$name: "name", get$namedArguments: "namedArguments", get$newValue: "newValue", get$next: "next", get$nextNode: "nextNode", get$nodes: "nodes", get$onChange: "onChange", get$onClick: "onClick", get$onInput: "onInput", get$orgDashboardLink: "orgDashboardLink", get$orgId: "orgId", get$organisationId: "organisationId", get$parent: "parent", get$parentNode: "parentNode", get$positionalArguments: "positionalArguments", get$project: "project", get$publish: "publish", get$reference: "reference", get$remove: "remove", get$responseText: "responseText", get$result: "result", get$right: "right", get$rows: "rows", get$selectedIndex: "selectedIndex", get$sink: "sink", get$size: "size", get$sourceLocale: "sourceLocale", get$style: "style", get$tBodies: "tBodies", get$tFoot: "tFoot", get$tHead: "tHead", get$tag: "tag", get$tagList: "tagList", get$tagName: "tagName", get$target: "target", get$targetCount: "targetCount", get$targetLanguageError: "targetLanguageError", get$targetLocale: "targetLocale", get$text: "text", get$title: "title", get$titleError: "titleError", get$trackProject: "trackProject", get$type: "type", get$uniqueLanguageCountryError: "uniqueLanguageCountryError", get$urls: "urls", get$userId: "userId", get$value: "value", get$values: "values", get$width: "width", get$wordCount: "wordCount", get$wordCountError: "wordCountError", get$wordCountInput: "wordCountInput", get$xtag: "xtag", getPropertyValue$1: "getPropertyValue:1:0", handleNext$1: "handleNext:1:0", handleUncaughtError$1: "handleUncaughtError:1:0", indexOf$1: "indexOf:1:0", indexOf$2: "indexOf:2:0", info$1: "info:1:0", initDeadlinePicker$0: "initDeadlinePicker:0:0", insert$0: "insert:0:0", insertAdjacentElement$2: "insertAdjacentElement:2:0", insertAllBefore$2: "insertAllBefore:2:0", insertBefore$2: "insertBefore:2:0", isError$0: "isError:0:0", join$1: "join:1:0", lastIndexOf$1: "lastIndexOf:1:0", listen$1: "listen:1:0", listen$3$onDone$onError: "listen:3:0:onDone:onError", listen$4$cancelOnError$onDone$onError: "listen:4:0:cancelOnError:onDone:onError", lookup$1: "lookup:1:0", map$1: "map:1:0", matchAsPrefix$2: "matchAsPrefix:2:0", matches$1: "matches:1:0", matchesWithAncestors$1: "matchesWithAncestors:1:0", moveNext$0: "moveNext:0:0", perform$1: "perform:1:0", process$0: "process:0:0", query$1: "query:1:0", queryAll$1: "queryAll:1:0", remove$0: "remove:0:0", remove$1: "remove:1:0", removeTargetLanguage$0: "removeTargetLanguage:0:0", replaceAll$2: "replaceAll:2:0", replaceWith$1: "replaceWith:1:0", runAsync$2: "runAsync:2:0", runIteration$0: "runIteration:0:0", schedule$1: "schedule:1:0", segmentationClicked$1: "segmentationClicked:1:0", send$2: "send:2:0", setProperty$3: "setProperty:3:0", setter$1: "setter:1:0", split$1: "split:1:0", startsWith$1: "startsWith:1:0", stringifyValue$1: "stringifyValue:1:0", submitForm$0: "submitForm:0:0", substring$1: "substring:1:0", substring$2: "substring:2:0", then$1: "then:1:0", then$2$onError: "then:2:0:onError", toJson$0: "toJson:0:0", toList$0: "toList:0:0", toList$1$growable: "toList:1:0:growable", toLowerCase$0: "toLowerCase:0:0", toSendPort$0: "toSendPort:0:0", toSet$0: "toSet:0:0", toUpperCase$0: "toUpperCase:0:0", traverse$1: "traverse:1:0", uploadProjectFile$0: "uploadProjectFile:0:0", visitCloseToken$1: "visitCloseToken:1:0", visitIsolateSink$1: "visitIsolateSink:1:0", visitList$1: "visitList:1:0", visitMap$1: "visitMap:1:0", visitObject$1: "visitObject:1:0", visitPrimitive$1: "visitPrimitive:1:0", visitSendPort$1: "visitSendPort:1:0", visitSendPortSync$1: "visitSendPortSync:1:0", warning$1: "warning:1:0", where$1: "where:1:0", write$1: "write:1:0", writeAll$2: "writeAll:2:0"};
+init.mangledNames = {$$dom_addEventListener$3: "$dom_addEventListener:3:0", $$dom_initCustomEvent$4: "$dom_initCustomEvent:4:0", $$dom_removeChild$1: "$dom_removeChild:1:0", $$dom_removeEventListener$3: "$dom_removeEventListener:3:0", $$dom_replaceChild$2: "$dom_replaceChild:2:0", $add: "+:1:0", $and: "&:1:0", $div: "/:1:0", $ge: ">=:1:0", $gt: ">:1:0", $index: "[]:1:0", $indexSet: "[]=:2:0", $le: "<=:1:0", $lt: "<:1:0", $mul: "*:1:0", $or: "|:1:0", $shl: "<<:1:0", $shr: ">>:1:0", $sub: "-:1:0", $xor: "^:1:0", _addError$1: "_addError:1:0", _addEventError$0: "_addEventError:0:0", _addListener$1: "_addListener:1:0", _addNewRoot$2: "_addNewRoot:2:0", _addPending$1: "_addPending:1:0", _callOnCancel$0: "_callOnCancel:0:0", _callback$2: "_callback:2:0", _checkReplyTo$1: "_checkReplyTo:1:0", _close$0: "_close:0:0", _createShadowRoot$0: "_createShadowRoot:0:0", _deliver$0: "_deliver:0:0", _dispatch$1: "_dispatch:1:0", _distributeNodes$2: "_distributeNodes:2:0", _ensureDoneFuture$0: "_ensureDoneFuture:0:0", _expectsEvent$1: "_expectsEvent:1:0", _extractElements$1: "_extractElements:1:0", _findLeftMostDescendent$1: "_findLeftMostDescendent:1:0", _forEachListener$1: "_forEachListener:1:0", _inSameErrorZone$1: "_inSameErrorZone:1:0", _insertAdjacentNode$2: "_insertAdjacentNode:2:0", _liblib11$_add$1: "_add:1:0", _liblib11$_onData$1: "_onData:1:0", _liblib4$_callback$1: "_callback:1:0", _liblib4$_deserializeHelper$1: "_deserializeHelper:1:0", _liblib4$_deserializeList$1: "_deserializeList:1:0", _liblib4$_deserializeMap$1: "_deserializeMap:1:0", _liblib4$_dispatch$1: "_dispatch:1:0", _liblib4$_serializeList$1: "_serializeList:1:0", _onError$1: "_onError:1:0", _publish$1: "_publish:1:0", _rebuildWorkList$1: "_rebuildWorkList:1:0", _recordCancel$1: "_recordCancel:1:0", _remove$1: "_remove:1:0", _removeListener$1: "_removeListener:1:0", _runCallback$1: "_runCallback:1:0", _sendError$1: "_sendError:1:0", _sendValue$1: "_sendValue:1:0", _setErrorUnchecked$1: "_setErrorUnchecked:1:0", _setRemoveAfterFiring$0: "_setRemoveAfterFiring:0:0", _setValueUnchecked$1: "_setValueUnchecked:1:0", _splay$1: "_splay:1:0", _subscribe$4: "_subscribe:4:0", _toggleEventId$0: "_toggleEventId:0:0", _zonedSendError$1: "_zonedSendError:1:0", _zonedSendValue$1: "_zonedSendValue:1:0", abs$0: "abs:0:0", add$1: "add:1:0", addAll$1: "addAll:1:0", addMoreTargetLanguages$0: "addMoreTargetLanguages:0:0", allMatches$1: "allMatches:1:0", assign$1: "assign:1:0", bodySetup$1: "bodySetup:1:0", call$0: "call:0:0", call$1: "call:1:0", call$1$growable: "call:1:0:growable", call$2: "call:2:0", call$2$onError: "call:2:0:onError", call$3: "call:3:0", call$3$async: "call:3:0:async", call$3$onDone$onError: "call:3:0:onDone:onError", call$4: "call:4:0", call$4$cancelOnError$onDone$onError: "call:4:0:cancelOnError:onDone:onError", callSync$1: "callSync:1:0", cancel$0: "cancel:0:0", catchError$1: "catchError:1:0", clear$0: "clear:0:0", clone$1: "clone:1:0", close$0: "close:0:0", codeUnitAt$1: "codeUnitAt:1:0", compareAndNotify$0: "compareAndNotify:0:0", compareTo$1: "compareTo:1:0", complete$0: "complete:0:0", complete$1: "complete:1:0", composeChildren$0: "composeChildren:0:0", conditional$3: "conditional:3:0", constructDynamicElements$0: "constructDynamicElements:0:0", contains$1: "contains:1:0", containsKey$1: "containsKey:1:0", contentBind$2: "contentBind:2:0", create$0: "create:0:0", createProjectTasks$0: "createProjectTasks:0:0", createShadowRoot$0: "createShadowRoot:0:0", createShadowRoot$1: "createShadowRoot:1:0", deserialize$1: "deserialize:1:0", deserializeCloseToken$1: "deserializeCloseToken:1:0", deserializeIsolateSink$1: "deserializeIsolateSink:1:0", deserializeObject$1: "deserializeObject:1:0", deserializeSendPort$1: "deserializeSendPort:1:0", endsWith$1: "endsWith:1:0", eval$1: "eval:1:0", forEach$1: "forEach:1:0", get$$$_changes: "$_changes", get$$$_observers: "$_observers", get$$$dom_namespaceUri: "$dom_namespaceUri", get$SOLASMatch: "SOLASMatch", get$SiteLocation: "SiteLocation", get$__e116: "__e116", get$__e34: "__e34", get$__e39: "__e39", get$__e45: "__e45", get$__e50: "__e50", get$__e62: "__e62", get$__e73: "__e73", get$__e78: "__e78", get$__e83: "__e83", get$_callback: "_callback", get$_chainSource: "_chainSource", get$_contents: "_contents", get$_duration: "_duration", get$_errorZone: "_errorZone", get$_eventState: "_eventState", get$_handle: "_handle", get$_head: "_head", get$_id: "_id", get$_isChained: "_isChained", get$_isFiring: "_isFiring", get$_isolateId: "_isolateId", get$_key: "_key", get$_liblib0$_length: "_length", get$_liblib1$_next: "_next", get$_liblib1$_previous: "_previous", get$_liblib11$_next: "_next", get$_liblib11$_previous: "_previous", get$_liblib6$_id: "_id", get$_list: "_list", get$_name: "_name", get$_next: "_next", get$_nextListener: "_nextListener", get$_previous: "_previous", get$_receivePort: "_receivePort", get$_registry: "_registry", get$_removeAfterFiring: "_removeAfterFiring", get$_resultOrListeners: "_resultOrListeners", get$_scheduled: "_scheduled", get$_state: "_state", get$_tail: "_tail", get$_value: "_value", get$_workerId: "_workerId", get$_zone: "_zone", get$attributes: "attributes", get$caption: "caption", get$cells: "cells", get$checked: "checked", get$children: "children", get$code: "code", get$countries: "countries", get$createProjectError: "createProjectError", get$current: "current", get$deadline: "deadline", get$deadlineError: "deadlineError", get$description: "description", get$descriptionError: "descriptionError", get$detail: "detail", get$disabled: "disabled", get$document: "document", get$fileUploadError: "fileUploadError", get$files: "files", get$fullName: "fullName", get$head: "head", get$host: "host", get$href: "href", get$id: "id", get$impact: "impact", get$impactError: "impactError", get$inMilliseconds: "inMilliseconds", get$innerHtml: "innerHtml", get$isAccessor: "isAccessor", get$isEmpty: "isEmpty", get$isGetter: "isGetter", get$isNotEmpty: "isNotEmpty", get$isSetter: "isSetter", get$isUrl: "isUrl", get$isVisible: "isVisible", get$isolateStatics: "isolateStatics", get$iterator: "iterator", get$key: "key", get$keys: "keys", get$languages: "languages", get$left: "left", get$length: "length", get$level: "level", get$loaded: "loaded", get$maxFileSize: "maxFileSize", get$maxTargetsReached: "maxTargetsReached", get$memberName: "memberName", get$millisecondsSinceEpoch: "millisecondsSinceEpoch", get$name: "name", get$namedArguments: "namedArguments", get$newValue: "newValue", get$next: "next", get$nextNode: "nextNode", get$nodes: "nodes", get$onChange: "onChange", get$onClick: "onClick", get$onInput: "onInput", get$orgDashboardLink: "orgDashboardLink", get$orgId: "orgId", get$organisationId: "organisationId", get$parent: "parent", get$parentNode: "parentNode", get$positionalArguments: "positionalArguments", get$project: "project", get$publish: "publish", get$reference: "reference", get$remove: "remove", get$responseText: "responseText", get$result: "result", get$right: "right", get$rows: "rows", get$selectedIndex: "selectedIndex", get$sink: "sink", get$size: "size", get$sourceLocale: "sourceLocale", get$status: "status", get$style: "style", get$tBodies: "tBodies", get$tFoot: "tFoot", get$tHead: "tHead", get$tag: "tag", get$tagList: "tagList", get$tagName: "tagName", get$target: "target", get$targetCount: "targetCount", get$targetLanguageError: "targetLanguageError", get$targetLocale: "targetLocale", get$text: "text", get$title: "title", get$titleError: "titleError", get$trackProject: "trackProject", get$type: "type", get$uniqueLanguageCountryError: "uniqueLanguageCountryError", get$urls: "urls", get$userId: "userId", get$value: "value", get$values: "values", get$width: "width", get$wordCount: "wordCount", get$wordCountError: "wordCountError", get$wordCountInput: "wordCountInput", get$xtag: "xtag", getPropertyValue$1: "getPropertyValue:1:0", handleNext$1: "handleNext:1:0", handleUncaughtError$1: "handleUncaughtError:1:0", indexOf$1: "indexOf:1:0", indexOf$2: "indexOf:2:0", info$1: "info:1:0", initDeadlinePicker$0: "initDeadlinePicker:0:0", insert$0: "insert:0:0", insertAdjacentElement$2: "insertAdjacentElement:2:0", insertAllBefore$2: "insertAllBefore:2:0", insertBefore$2: "insertBefore:2:0", isError$0: "isError:0:0", join$1: "join:1:0", lastIndexOf$1: "lastIndexOf:1:0", listen$1: "listen:1:0", listen$3$onDone$onError: "listen:3:0:onDone:onError", listen$4$cancelOnError$onDone$onError: "listen:4:0:cancelOnError:onDone:onError", lookup$1: "lookup:1:0", map$1: "map:1:0", matchAsPrefix$2: "matchAsPrefix:2:0", matches$1: "matches:1:0", matchesWithAncestors$1: "matchesWithAncestors:1:0", moveNext$0: "moveNext:0:0", perform$1: "perform:1:0", process$0: "process:0:0", query$1: "query:1:0", queryAll$1: "queryAll:1:0", remove$0: "remove:0:0", remove$1: "remove:1:0", removeTargetLanguage$0: "removeTargetLanguage:0:0", replaceAll$2: "replaceAll:2:0", replaceWith$1: "replaceWith:1:0", runAsync$2: "runAsync:2:0", runIteration$0: "runIteration:0:0", schedule$1: "schedule:1:0", segmentationClicked$1: "segmentationClicked:1:0", send$2: "send:2:0", setProperty$3: "setProperty:3:0", setter$1: "setter:1:0", split$1: "split:1:0", startsWith$1: "startsWith:1:0", stringifyValue$1: "stringifyValue:1:0", submitForm$0: "submitForm:0:0", substring$1: "substring:1:0", substring$2: "substring:2:0", then$1: "then:1:0", then$2$onError: "then:2:0:onError", toJson$0: "toJson:0:0", toList$0: "toList:0:0", toList$1$growable: "toList:1:0:growable", toLowerCase$0: "toLowerCase:0:0", toSendPort$0: "toSendPort:0:0", toSet$0: "toSet:0:0", toUpperCase$0: "toUpperCase:0:0", traverse$1: "traverse:1:0", uploadProjectFile$0: "uploadProjectFile:0:0", visitCloseToken$1: "visitCloseToken:1:0", visitIsolateSink$1: "visitIsolateSink:1:0", visitList$1: "visitList:1:0", visitMap$1: "visitMap:1:0", visitObject$1: "visitObject:1:0", visitPrimitive$1: "visitPrimitive:1:0", visitSendPort$1: "visitSendPort:1:0", visitSendPortSync$1: "visitSendPortSync:1:0", warning$1: "warning:1:0", where$1: "where:1:0", write$1: "write:1:0", writeAll$2: "writeAll:2:0"};
 (function (reflectionData) {
   function map(x){x={x:x};delete x.x;return x}
   if (!init.libraries) init.libraries = [];
@@ -445,7 +445,12 @@ ProjectDao_deleteProject_closure: {"": "Closure;",
 
 ProjectDao_uploadProjectFile_closure: {"": "Closure;",
   call$1: function(response) {
-    return true;
+    var t1 = $.getInterceptor$x(response);
+    $.Primitives_printString(C.JSString_methods.$add("Response status: ", $.toString$0(t1.get$status(response))));
+    if ($.$eq(t1.get$status(response), 201))
+      return true;
+    else
+      return false;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -1613,8 +1618,15 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
   },
   "+createProjectTasks:0:0": 0,
   uploadProjectFile$0: function() {
-    var t1, projectFile, t2, extensionStartIndex, t3, extension, t4, ret, finished, reader;
+    var t1, t2, t3, t4, completer, projectFile, extensionStartIndex, extension, finished, reader;
     t1 = {};
+    t2 = $.JSBool;
+    t3 = t2;
+    t4 = new $._FutureImpl(0, $.get$_Zone__current(), null);
+    $.setRuntimeTypeInfo(t4, [t3]);
+    completer = new $._AsyncCompleter(t4, false);
+    $.setRuntimeTypeInfo(completer, [t2]);
+    completer._Completer$0(t3);
     projectFile = this.getProjectFile$0();
     t2 = projectFile == null;
     if (t2)
@@ -1636,61 +1648,37 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
             }
             if ($.$eq(extension, "pdf"))
               if (window.confirm($.Localisation_getTranslation("project_create_19")) !== true) {
-                ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
-                $.setRuntimeTypeInfo(ret, [null]);
-                ret._state = 8;
-                ret._resultOrListeners = false;
+                completer.complete$1(completer, false);
                 finished = true;
-              } else {
-                ret = null;
+              } else
                 finished = false;
-              }
-            else {
-              ret = null;
+            else
               finished = false;
-            }
             if (!finished) {
-              ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
-              $.setRuntimeTypeInfo(ret, [null]);
-              ret._state = 8;
-              ret._resultOrListeners = true;
               reader = new FileReader();
               C.EventStreamProvider_loadend.forTarget$2$useCapture;
               t2 = new $._EventStream(reader, C.EventStreamProvider_loadend._eventType, false);
               $.setRuntimeTypeInfo(t2, [null]);
-              t1 = new $._EventStreamSubscription(0, t2._liblib4$_target, t2._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(t1, this), t2._useCapture);
+              t1 = new $._EventStreamSubscription(0, t2._liblib4$_target, t2._eventType, new $.ProjectCreateForm_uploadProjectFile_closure(t1, this, completer), t2._useCapture);
               $.setRuntimeTypeInfo(t1, [$.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
               t1._tryResume$0();
               reader.readAsArrayBuffer(projectFile);
             }
           } else {
             this.set$createProjectError($.Localisation_getTranslationSafe("project_create_20"));
-            ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
-            $.setRuntimeTypeInfo(ret, [null]);
-            ret._state = 8;
-            ret._resultOrListeners = false;
+            completer.complete$1(completer, false);
           }
         } else {
           this.set$createProjectError($.Localisation_getTranslationSafe("project_create_21"));
-          ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
-          $.setRuntimeTypeInfo(ret, [null]);
-          ret._state = 8;
-          ret._resultOrListeners = false;
+          completer.complete$1(completer, false);
         }
       else {
         this.set$createProjectError($.Localisation_getTranslationSafe("project_create_17"));
-        ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
-        $.setRuntimeTypeInfo(ret, [null]);
-        ret._state = 8;
-        ret._resultOrListeners = false;
+        completer.complete$1(completer, false);
       }
-    } else {
-      ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
-      $.setRuntimeTypeInfo(ret, [null]);
-      ret._state = 8;
-      ret._resultOrListeners = false;
-    }
-    return ret;
+    } else
+      completer.complete$1(completer, false);
+    return completer.future;
   },
   "+uploadProjectFile:0:0": 0,
   validateInput$0: function() {
@@ -3509,16 +3497,27 @@ ProjectCreateForm_createProjectTasks__closure: {"": "Closure;box_0",
 
 "+ProjectCreateForm_createProjectTasks__closure": [],
 
-ProjectCreateForm_uploadProjectFile_closure: {"": "Closure;box_0,this_1",
+ProjectCreateForm_uploadProjectFile_closure: {"": "Closure;box_0,this_1,completer_2",
   call$1: function(e) {
     var t1 = this.this_1;
-    $.ProjectDao_uploadProjectFile($.get$id$x(t1.get$project()), t1.get$userId(), this.box_0.filename_0, $.get$result$x($.get$target$x(e)));
+    $.ProjectDao_uploadProjectFile($.get$id$x(t1.get$project()), t1.get$userId(), this.box_0.filename_0, $.get$result$x($.get$target$x(e))).then$1(new $.ProjectCreateForm_uploadProjectFile__closure(this.completer_2));
   },
   "+call:1:0": 0,
   $isFunction: true
 },
 
 "+ProjectCreateForm_uploadProjectFile_closure": [],
+
+ProjectCreateForm_uploadProjectFile__closure: {"": "Closure;completer_3",
+  call$1: function(success) {
+    var t1 = this.completer_3;
+    t1.complete$1(t1, success);
+  },
+  "+call:1:0": 0,
+  $isFunction: true
+},
+
+"+ProjectCreateForm_uploadProjectFile__closure": [],
 
 ProjectCreateForm_validateInput_closure: {"": "Closure;box_0,this_1",
   call$1: function(wordCountString) {
@@ -3881,7 +3880,7 @@ Locale: {"": "Object;languageName,languageCode,countryName,countryCode",
 
 "+Locale": []}],
 ["SolasMatchDart", "../../lib/models/Project.dart", , {
-Project: {"": "Object;id*,title*,description@,deadline@,organisationId?,impact@,reference@,wordCount@,createdTime,status,sourceLocale@,tag*",
+Project: {"": "Object;id*,title*,description@,deadline@,organisationId?,impact@,reference@,wordCount@,createdTime,status>,sourceLocale@,tag*",
   toJson$0: function() {
     var ret = $.makeLiteralMap(["id", this.id, "title", this.title, "description", this.description, "deadline", this.deadline, "organisationId", this.organisationId, "impact", this.impact, "reference", this.reference, "wordCount", this.wordCount, "createdTime", this.createdTime, "status", this.status, "sourceLocale", this.sourceLocale]);
     if (this.tag.length > 0)
@@ -14763,6 +14762,9 @@ Object: {"": ";",
   get$size: function($receiver) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("size", "get$size", 1, [], []));
   },
+  get$status: function($receiver) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("status", "get$status", 1, [], []));
+  },
   get$style: function($receiver) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("style", "get$style", 1, [], []));
   },
@@ -17779,7 +17781,7 @@ HtmlDocument: {"": "Document;",
 
 "+HtmlDocument": [],
 
-HttpRequest: {"": "EventTarget;responseText=",
+HttpRequest: {"": "EventTarget;responseText=,status=",
   open$5$async$password$user: function(receiver, method, url, async, password, user) {
     return receiver.open(method, url, async, user, password);
   },
@@ -18135,7 +18137,7 @@ VideoElement: {"": "MediaElement;width}"},
 
 "+VideoElement": [76],
 
-Window: {"": "EventTarget;name=",
+Window: {"": "EventTarget;name=,status=",
   lookupPort$1: function(receiver, $name) {
     var portStr = $.$index$asx($.get$attributes$x(receiver.document.documentElement), "dart-port:" + $name);
     if (portStr == null)

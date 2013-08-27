@@ -453,7 +453,7 @@ class ProjectCreateForm extends WebComponent
   
   Future<bool> uploadProjectFile()
   {
-    Future<bool> ret;
+    Completer<bool> completer = new Completer<bool>();
     File projectFile = this.getProjectFile();
     if (projectFile == null) {
       createProjectError = Localisation.getTranslationSafe("project_create_16");
@@ -475,35 +475,37 @@ class ProjectCreateForm extends WebComponent
             if (extension == "pdf") {
               if (!window.confirm(Localisation.getTranslation("project_create_19"))) {
                 finished = true;
-                ret = new Future.value(false);
+                completer.complete(false);
               }
             }
             
             if (!finished) {
-              ret = new Future.value(true);
               FileReader reader = new FileReader();
               reader.onLoadEnd.listen((e) {
-                ProjectDao.uploadProjectFile(project.id, userId, filename, e.target.result);
+                ProjectDao.uploadProjectFile(project.id, userId, filename, e.target.result)
+                  .then((bool success) {
+                    completer.complete(success);
+                  });
               });
               reader.readAsArrayBuffer(projectFile);
             }
           } else {
             createProjectError = Localisation.getTranslationSafe("project_create_20");
-            ret = new Future.value(false);
+            completer.complete(false);
           }
         } else {
           createProjectError = Localisation.getTranslationSafe("project_create_21");
-          ret = new Future.value(false);
+          completer.complete(false);
         }
       } else {
         createProjectError = Localisation.getTranslationSafe("project_create_17");
-        ret = new Future.value(false);
+        completer.complete(false);
       }
     } else {
-      ret = new Future.value(false);
+      completer.complete(false);
     }
     
-    return ret;
+    return completer.future;
   }
   
   bool validateInput()
