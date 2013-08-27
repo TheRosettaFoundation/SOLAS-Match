@@ -71,7 +71,6 @@ class ProjectDao
     APIHelper client = new APIHelper(".json");
     Future<bool> ret = client.call("", "v0/projects/$projectId/file/$filename/$userId", "PUT", data)
         .then((HttpRequest response) {
-          print("Response status: " + response.status.toString());
           if (response.status == 201) {
             return true;
           } else {

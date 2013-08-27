@@ -1281,7 +1281,7 @@ UserPrivateProfileForm: {"": "WebComponent_Observable;_css,__e59,__t,userId@,__$
   "+addSecondaryLanguage:0:0": 0,
   removeSecondaryLanguage$0: function() {
     var t1, button;
-    if ($.$gt$n(this.get$secondaryLanguageCount(), 1) === true) {
+    if ($.$gt$n(this.get$secondaryLanguageCount(), 0) === true) {
       this.set$secondaryLanguageCount($.$sub$n(this.get$secondaryLanguageCount(), 1));
       t1 = "#secondary_locale_" + $.S(this.get$secondaryLanguageCount());
       $.remove$0$ax(document.querySelector(t1));

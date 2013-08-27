@@ -445,9 +445,7 @@ ProjectDao_deleteProject_closure: {"": "Closure;",
 
 ProjectDao_uploadProjectFile_closure: {"": "Closure;",
   call$1: function(response) {
-    var t1 = $.getInterceptor$x(response);
-    $.Primitives_printString(C.JSString_methods.$add("Response status: ", $.toString$0(t1.get$status(response))));
-    if ($.$eq(t1.get$status(response), 201))
+    if ($.$eq($.get$status$x(response), 201))
       return true;
     else
       return false;
@@ -24302,6 +24300,9 @@ $.get$rows$x = function(receiver) {
 };
 $.get$selectedIndex$x = function(receiver) {
   return $.getInterceptor$x(receiver).get$selectedIndex(receiver);
+};
+$.get$status$x = function(receiver) {
+  return $.getInterceptor$x(receiver).get$status(receiver);
 };
 $.get$style$x = function(receiver) {
   return $.getInterceptor$x(receiver).get$style(receiver);

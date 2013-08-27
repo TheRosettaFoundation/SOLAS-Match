@@ -270,7 +270,7 @@ class UserPrivateProfileForm extends WebComponent
   
   void removeSecondaryLanguage()
   {
-    if (secondaryLanguageCount > 1) {
+    if (secondaryLanguageCount > 0) {
       secondaryLanguageCount--;
       var element = query("#secondary_locale_$secondaryLanguageCount");
       element.remove();
