@@ -351,6 +351,8 @@ class Strings
     const SITE_ADMIN_DASHBOARD_PERMANENTLY = 'site_admin_dashboard_permanently';
     const SITE_ADMIN_DASHBOARD_DELETE_A_USER_FROM = 'site_admin_dashboard_delete_a_user_from';
     const SITE_ADMIN_DASHBOARD_5 = 'site_admin_dashboard_5';
+    const SITE_ADMIN_DASHBOARD_SUCCESSFULLY_DELETED_USER = "site_admin_dashboard_successfully_deleted_user";
+    const SITE_ADMIN_DASHBOARD_6 = "site_admin_dashboard_6";
 
     const BADGE_LIST_BADGE_LIST = 'badge_list_badge_list';
     const BADGE_LIST_ALL_AVAILABLE_BADGES_OF = 'badge_list_all_available_badges_of';

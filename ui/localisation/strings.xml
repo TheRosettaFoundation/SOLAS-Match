@@ -351,6 +351,8 @@
 	<string name="site_admin_dashboard_permanently">Permanently</string>
 	<string name="site_admin_dashboard_delete_a_user_from">delete a user from</string>
 	<string name="site_admin_dashboard_5">Are you sure you want to permanently delete this user? You will not be able to reverse this action</string>
+    <string name="site_admin_dashboard_successfully_deleted_user">Successfully deleted user.</string>
+    <string name="site_admin_dashboard_6">User not found, the provided email address does not correspond to an account on our system</string>
 
 	<string name="badge_list_badge_list">Badge List</string>
 	<string name="badge_list_all_available_badges_of">All available badges of</string>

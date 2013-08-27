@@ -60,7 +60,13 @@ class AdminRouteHandler
             } 
             if(isset($post['deleteUser']) && $post['userEmail'] != '') {
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
-                $userDao->deleteUser($user->getId());
+                if (!is_null($user)) {
+                    $userDao->deleteUser($user->getId());
+                    $app->flashNow("deleteSuccess", 
+                            Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_SUCCESSFULLY_DELETED_USER));
+                } else {
+                    $app->flashNow("deleteError", Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_6));
+                }
             }
             
             

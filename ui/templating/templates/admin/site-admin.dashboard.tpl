@@ -135,6 +135,20 @@
                     <label for="deleteUser"><h2>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_DELETE_USER)}:</h2></label>
                 </td>
             </tr>
+            {if isset($flash['deleteError'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-error">{$flash['deleteError']}</p>
+                    </td>
+                </tr>
+            {/if}
+            {if isset($flash['deleteSuccess'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-success">{$flash['deleteSuccess']}</p>
+                    </td>
+                </tr>
+            {/if}
             <tr>
                 <td colspan="2">
                     <strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_PERMANENTLY)}</strong> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_DELETE_A_USER_FROM)} <strong>{$siteName}</strong>.
