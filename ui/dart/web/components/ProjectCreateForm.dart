@@ -202,6 +202,13 @@ class ProjectCreateForm extends WebComponent
       if (targetCount >= maxTargetLanguages) {
         maxTargetsReached = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_create_11") + "</span>");
       }
+      if (targetCount > 1) {
+        ButtonElement removeButton = query("#removeBottomTargetBtn");
+        removeButton.disabled = false;
+      } else {
+        ButtonElement removeButton = query("#removeBottomTargetBtn");
+        removeButton.disabled = true;
+      }
     }
   }
   
@@ -214,6 +221,10 @@ class ProjectCreateForm extends WebComponent
       targetLanguageRow.remove();
       hrElement.remove();
       maxTargetsReached = null;
+      if (targetCount == 1) {
+        ButtonElement removeButton = query("#removeBottomTargetBtn");
+        removeButton.disabled = true;
+      }
     }
   }
   

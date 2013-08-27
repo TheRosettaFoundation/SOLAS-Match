@@ -1435,6 +1435,10 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
       this.set$targetCount($.$add$ns(this.get$targetCount(), 1));
       if ($.$ge$n(this.get$targetCount(), this.maxTargetLanguages) === true)
         this.set$maxTargetsReached(new $.SafeHtml(C.JSString_methods.$add(C.JSString_methods.$add("<span>", $.Localisation_getTranslation("project_create_11")), "</span>")));
+      if ($.$gt$n(this.get$targetCount(), 1) === true)
+        $.set$disabled$x(document.querySelector("#removeBottomTargetBtn"), false);
+      else
+        $.set$disabled$x(document.querySelector("#removeBottomTargetBtn"), true);
     }
   },
   "+addMoreTargetLanguages:0:0": 0,
@@ -1449,6 +1453,8 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
       $.remove$0$ax(targetLanguageRow);
       $.remove$0$ax(hrElement);
       this.set$maxTargetsReached(null);
+      if ($.$eq(this.get$targetCount(), 1))
+        $.set$disabled$x(document.querySelector("#removeBottomTargetBtn"), true);
     }
   },
   "+removeTargetLanguage:0:0": 0,
@@ -24405,6 +24411,9 @@ $.send$2$x = function(receiver, a0, a1) {
 };
 $.set$checked$x = function(receiver, value) {
   return $.getInterceptor$x(receiver).set$checked(receiver, value);
+};
+$.set$disabled$x = function(receiver, value) {
+  return $.getInterceptor$x(receiver).set$disabled(receiver, value);
 };
 $.set$href$x = function(receiver, value) {
   return $.getInterceptor$x(receiver).set$href(receiver, value);
