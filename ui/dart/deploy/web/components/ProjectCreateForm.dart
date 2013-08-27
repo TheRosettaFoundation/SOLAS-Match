@@ -469,12 +469,11 @@ class ProjectCreateForm extends WebComponent
             if (extension != extension.toLowerCase()) {
               extension = extension.toLowerCase();
               filename = projectFile.name.substring(0, extensionStartIndex + 1) + extension;
-              window.alert("The file extension has been changed to lower case.");
+              window.alert(Localisation.getTranslation("project_create_18"));
             }
             bool finished = false;
             if (extension == "pdf") {
-              if (!window.confirm("The file you uploaded is in PDF format. PDF files are difficult " +
-                                  "to translate, are you sure you want to upload a PDF?")) {
+              if (!window.confirm(Localisation.getTranslation("project_create_19"))) {
                 finished = true;
                 ret = new Future.value(false);
               }
@@ -489,12 +488,11 @@ class ProjectCreateForm extends WebComponent
               reader.readAsArrayBuffer(projectFile);
             }
           } else {
-            createProjectError = new SafeHtml.unsafe("<span>Please upload a file with an extension.</span>");
+            createProjectError = Localisation.getTranslationSafe("project_create_20");
             ret = new Future.value(false);
           }
         } else {
-          createProjectError = new SafeHtml.unsafe("<span>File is too large to upload, max file size is " 
-                                                + (maxFileSize / 1024 / 1024).toString() + "MB</span>");
+          createProjectError = Localisation.getTranslationSafe("project_create_21");
           ret = new Future.value(false);
         }
       } else {
@@ -530,9 +528,7 @@ class ProjectCreateForm extends WebComponent
         return 0;
       });
       if (project.wordCount > 5000) {
-        if (!window.confirm("Please note that the word count of your file is excessively high - the " +
-                            "recommended limit is 3000 words. We suggest you create a segmentation " +
-                            "task instead. Are you sure you want to continue?")) {
+        if (!window.confirm(Localisation.getTranslation("project_create_22"))) {
           ret = false;
         }
       }

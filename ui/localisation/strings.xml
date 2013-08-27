@@ -494,6 +494,11 @@
     <string name="project_create_16">No project file uploaded</string>
     <string name="project_create_17">The project file you uploaded is empty</string>
     <string name="project_create_failed_to_create_project">Failed to create project</string>
+    <string name="project_create_18">The file extension has been changed to lower case.</string>
+    <string name="project_create_19">The file you uploaded is in PDF format. PDF files are difficult to translate, are you sure you want to upload a PDF?</string>
+    <string name="project_create_20">Please upload a file with an extension.</string>
+    <string name="project_create_21">The file you uploaded is too large, please check the maximum file upload size under the Source Text header.</string>
+    <string name="project_create_22">Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?</string>
 
 	<string name="project_created_project_is_now_live">Project is now live</string>
 	<string name="project_created_success">Success</string>

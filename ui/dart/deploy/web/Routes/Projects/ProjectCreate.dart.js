@@ -1626,10 +1626,10 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
             if (!t4.$eq(extension, t4.toLowerCase$0(extension))) {
               extension = t4.toLowerCase$0(extension);
               t1.filename_0 = $.$add$ns($.substring$2$s(t2.get$name(projectFile), 0, t3.$add(extensionStartIndex, 1)), extension);
-              window.alert("The file extension has been changed to lower case.");
+              window.alert($.Localisation_getTranslation("project_create_18"));
             }
             if ($.$eq(extension, "pdf"))
-              if (window.confirm(C.JSString_methods.$add("The file you uploaded is in PDF format. PDF files are difficult ", "to translate, are you sure you want to upload a PDF?")) !== true) {
+              if (window.confirm($.Localisation_getTranslation("project_create_19")) !== true) {
                 ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
                 $.setRuntimeTypeInfo(ret, [null]);
                 ret._state = 8;
@@ -1658,14 +1658,14 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
               reader.readAsArrayBuffer(projectFile);
             }
           } else {
-            this.set$createProjectError(new $.SafeHtml("<span>Please upload a file with an extension.</span>"));
+            this.set$createProjectError($.Localisation_getTranslationSafe("project_create_20"));
             ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
             $.setRuntimeTypeInfo(ret, [null]);
             ret._state = 8;
             ret._resultOrListeners = false;
           }
         } else {
-          this.set$createProjectError(new $.SafeHtml(C.JSString_methods.$add(C.JSString_methods.$add("<span>File is too large to upload, max file size is ", $.toString$0($.$div$n($.$div$n(this.maxFileSize, 1024), 1024))), "MB</span>")));
+          this.set$createProjectError($.Localisation_getTranslationSafe("project_create_21"));
           ret = new $._FutureImpl(0, $.get$_Zone__current(), null);
           $.setRuntimeTypeInfo(ret, [null]);
           ret._state = 8;
@@ -1707,7 +1707,7 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
     if (t2 != null && !$.$eq(t2, "")) {
       this.get$project().set$wordCount($.Primitives_parseInt(this.wordCountInput, null, new $.ProjectCreateForm_validateInput_closure(t1, this)));
       if ($.$gt$n(this.get$project().get$wordCount(), 5000) === true)
-        if (window.confirm(C.JSString_methods.$add(C.JSString_methods.$add("Please note that the word count of your file is excessively high - the ", "recommended limit is 3000 words. We suggest you create a segmentation "), "task instead. Are you sure you want to continue?")) !== true)
+        if (window.confirm($.Localisation_getTranslation("project_create_22")) !== true)
           t1.ret_0 = false;
     } else {
       this.set$wordCountError(new $.SafeHtml(C.JSString_methods.$add(C.JSString_methods.$add("<span>", $.Localisation_getTranslation("project_routehandler_16")), "</span>")));
