@@ -1,6 +1,7 @@
 library SolasMatchDart;
 
 import "dart:async";
+import "dart:html";
 import "dart:json" as json;
 
 import "../lib/models/Org.dart";
@@ -12,12 +13,11 @@ class OrgDao
   static Future<Organisation> getOrg(int id)
   {
     APIHelper client = new APIHelper(".json");
-    Future<String> jsonData = client.call("Organisation", 
-        "v0/orgs/" + id.toString(), "GET", "", new Map());
-    Future<Organisation> organisation = jsonData.then((String jsonText) {
+    Future<Organisation> organisation = client.call("Organisation", "v0/orgs/" + id.toString(), "GET", "", new Map())
+          .then((HttpRequest response) {
       Organisation org = new Organisation();
-      if (jsonText != '') {
-        Map jsonParsed = json.parse(jsonText);
+      if (response.responseText != '') {
+        Map jsonParsed = json.parse(response.responseText);
         org = ModelFactory.generateOrgFromMap(jsonParsed);
       }
       return org;

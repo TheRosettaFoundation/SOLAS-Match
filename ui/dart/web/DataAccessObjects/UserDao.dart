@@ -2,6 +2,7 @@ library SolasMatchDart;
 
 import "dart:json" as json;
 import "dart:async";
+import "dart:html";
 
 import "../lib/APIHelper.dart";
 import "../lib/ModelFactory.dart";
@@ -16,10 +17,10 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     Future<User> ret = client.call("User", "v0/users/$id", "GET")
-        .then((String jsonText) {
+        .then((HttpRequest response) {
           User user = new User();
-          if (jsonText.length > 0) {
-            Map jsonParsed = json.parse(jsonText);
+          if (response.responseText.length > 0) {
+            Map jsonParsed = json.parse(response.responseText);
             user = ModelFactory.generateUserFromMap(jsonParsed);
           }
           return user;
@@ -31,7 +32,7 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/$userId", "DELETE")
-        .then((String data) {
+        .then((HttpRequest response) {
           return true;
         });
   }
@@ -40,11 +41,11 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     Future<UserPersonalInformation> ret = client.call("UserPersonalInformation", "v0/users/$userId/personalInfo", "GET")
-        .then((String jsonText) {
+        .then((HttpRequest response) {
           UserPersonalInformation userInfo = new UserPersonalInformation();
           userInfo.userId = userId;
-          if (jsonText != '') {
-            Map jsonParsed = json.parse(jsonText);
+          if (response.responseText != '') {
+            Map jsonParsed = json.parse(response.responseText);
             userInfo = ModelFactory.generateUserInfoFromMap(jsonParsed);
           }
           return userInfo;
@@ -56,10 +57,10 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     Future<List<Locale>> ret = client.call("Locale", "v0/users/$userId/secondaryLanguages", "GET")
-        .then((String jsonText) {
+        .then((HttpRequest response) {
           List<Locale> locales = new List<Locale>();
-          if (jsonText.length > 0) {
-            Map parsed = json.parse(jsonText);
+          if (response.responseText.length > 0) {
+            Map parsed = json.parse(response.responseText);
             parsed['item'].forEach((String data) {
               Map localeData = json.parse(data);
               locales.add(ModelFactory.generateLocaleFromMap(localeData));
@@ -74,10 +75,10 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     Future<List<Badge>> ret = client.call("Badge", "v0/users/$userId/badges", "GET")
-        .then((String jsonText) {
+        .then((HttpRequest response) {
           List<Badge> badges = new List<Badge>();
-          if (jsonText.length > 0) {
-            Map parsed = json.parse(jsonText);
+          if (response.responseText.length > 0) {
+            Map parsed = json.parse(response.responseText);
             parsed['item'].forEach((String data) {
               Map badgeData = json.parse(data);
               badges.add(ModelFactory.generateBadgeFromMap(badgeData));
@@ -92,7 +93,7 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     return client.call("User", "v0/users/" + user.id.toString(), "PUT", json.stringify(user))
-      .then((String data) {
+      .then((HttpRequest response) {
         return true;
       });
   }
@@ -101,7 +102,7 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/" + userInfo.userId.toString() + "/personalInfo", "PUT", json.stringify(userInfo))
-      .then((String data) {
+      .then((HttpRequest response) {
         return true;
       });
   }
@@ -110,7 +111,7 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/$userId/badges/$badgeId", "PUT")
-      .then((String data) {
+      .then((HttpRequest response) {
         return true;
       });
   }
@@ -119,7 +120,7 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/$userId/badges/$badgeId", "DELETE")
-        .then((String data) {
+        .then((HttpRequest response) {
           return true;
         });
   }
@@ -128,7 +129,7 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/$userId/secondaryLanguages", "POST", json.stringify(locale))
-      .then((String data) {
+      .then((HttpRequest response) {
         return true;
       });
   }
@@ -137,7 +138,7 @@ class UserDao
   {
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/removeSecondaryLanguage/$userId/$languageCode/$countryCode", "DELETE")
-        .then((String data) {
+        .then((HttpRequest response) {
           return true;
         });
   }

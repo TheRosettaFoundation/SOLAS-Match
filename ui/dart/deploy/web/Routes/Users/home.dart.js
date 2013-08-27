@@ -329,14 +329,17 @@ LanguageDao_getActiveTargetLanguages: function() {
 "+getActiveTargetLanguages:0:0": 0,
 
 LanguageDao_getActiveSourceLanguages_closure: {"": "Closure;",
-  call$1: function(jsonData) {
-    var ret, jsonParsed, t1;
+  call$1: function(response) {
+    var ret, t1, jsonParsed;
     ret = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(ret, [$.Language]);
-    jsonParsed = $.parse(jsonData, null);
-    t1 = $.getInterceptor$asx(jsonParsed);
-    if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
-      $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveSourceLanguages__closure(ret));
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), "")) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
+      t1 = $.getInterceptor$asx(jsonParsed);
+      if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
+        $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveSourceLanguages__closure(ret));
+    }
     return ret;
   },
   "+call:1:0": 0,
@@ -356,14 +359,17 @@ LanguageDao_getActiveSourceLanguages__closure: {"": "Closure;ret_0",
 "+LanguageDao_getActiveSourceLanguages__closure": [],
 
 LanguageDao_getActiveTargetLanguages_closure: {"": "Closure;",
-  call$1: function(jsonData) {
-    var ret, jsonParsed, t1;
+  call$1: function(response) {
+    var ret, t1, jsonParsed;
     ret = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(ret, [$.Language]);
-    jsonParsed = $.parse(jsonData, null);
-    t1 = $.getInterceptor$asx(jsonParsed);
-    if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
-      $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveTargetLanguages__closure(ret));
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), "")) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
+      t1 = $.getInterceptor$asx(jsonParsed);
+      if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
+        $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveTargetLanguages__closure(ret));
+    }
     return ret;
   },
   "+call:1:0": 0,
@@ -395,9 +401,11 @@ OrgDao_getOrg: function(id) {
 "+getOrg:1:0": 0,
 
 OrgDao_getOrg_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var org = new $.Organisation(null, null, null, null, null, null, null, null, null);
-    return !$.$eq(jsonText, "") ? $.ModelFactory_generateOrgFromMap($.parse(jsonText, null)) : org;
+  call$1: function(response) {
+    var org, t1;
+    org = new $.Organisation(null, null, null, null, null, null, null, null, null);
+    t1 = $.getInterceptor$x(response);
+    return !$.$eq(t1.get$responseText(response), "") ? $.ModelFactory_generateOrgFromMap($.parse(t1.get$responseText(response), null)) : org;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -418,9 +426,11 @@ ProjectDao_getProject: function(id) {
 "+getProject:1:0": 0,
 
 ProjectDao_getProject_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var pro = $.Project$();
-    return !$.$eq(jsonText, "") ? $.ModelFactory_generateProjectFromMap($.parse(jsonText, null)) : pro;
+  call$1: function(response) {
+    var pro, t1;
+    pro = $.Project$();
+    t1 = $.getInterceptor$x(response);
+    return !$.$eq(t1.get$responseText(response), "") ? $.ModelFactory_generateProjectFromMap($.parse(t1.get$responseText(response), null)) : pro;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -465,12 +475,13 @@ TaskDao_getLatestAvailableTasks: function(offset, limit) {
 "+getLatestAvailableTasks:0:2": 0,
 
 TaskDao_getTaskTags_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var tags, jsonParsed, t1;
+  call$1: function(response) {
+    var tags, t1, jsonParsed;
     tags = $.List_List(null, $.Tag);
     $.setRuntimeTypeInfo(tags, [$.Tag]);
-    if (!$.$eq(jsonText, "")) {
-      jsonParsed = $.parse(jsonText, null);
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), "")) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
       t1 = $.getInterceptor$asx(jsonParsed);
       if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
         $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.TaskDao_getTaskTags__closure(tags));
@@ -494,12 +505,13 @@ TaskDao_getTaskTags__closure: {"": "Closure;tags_0",
 "+TaskDao_getTaskTags__closure": [],
 
 TaskDao_getUserTopTasks_closure: {"": "Closure;",
-  call$1: function(text) {
-    var userTasks, jsonParsed, t1;
+  call$1: function(response) {
+    var userTasks, t1, jsonParsed;
     userTasks = $.List_List(null, $.Task);
     $.setRuntimeTypeInfo(userTasks, [$.Task]);
-    if ($.$gt$n($.get$length$asx(text), 0) === true) {
-      jsonParsed = $.parse(text, null);
+    t1 = $.getInterceptor$x(response);
+    if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
       t1 = $.getInterceptor$asx(jsonParsed);
       if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
         $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.TaskDao_getUserTopTasks__closure(userTasks));
@@ -523,12 +535,13 @@ TaskDao_getUserTopTasks__closure: {"": "Closure;userTasks_0",
 "+TaskDao_getUserTopTasks__closure": [],
 
 TaskDao_getLatestAvailableTasks_closure: {"": "Closure;",
-  call$1: function(text) {
-    var tasks, jsonParsed, t1;
+  call$1: function(response) {
+    var tasks, t1, jsonParsed;
     tasks = $.List_List(null, $.Task);
     $.setRuntimeTypeInfo(tasks, [$.Task]);
-    if ($.$gt$n($.get$length$asx(text), 0) === true) {
-      jsonParsed = $.parse(text, null);
+    t1 = $.getInterceptor$x(response);
+    if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
       t1 = $.getInterceptor$asx(jsonParsed);
       if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
         $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.TaskDao_getLatestAvailableTasks__closure(tasks));
@@ -2449,7 +2462,7 @@ APIHelper: {"": "Object;format",
     var t1, t2, t3, t4, complete, headers, request;
     t1 = {};
     t1.url_0 = url;
-    t2 = null;
+    t2 = $.HttpRequest;
     t3 = t2;
     t4 = new $._FutureImpl(0, $.get$_Zone__current(), null);
     $.setRuntimeTypeInfo(t4, [t3]);
@@ -2529,7 +2542,7 @@ APIHelper_call_closure: {"": "Closure;box_0,queryArgs_1",
 APIHelper_call_closure0: {"": "Closure;complete_2,request_3",
   call$1: function(e) {
     var t1 = this.complete_2;
-    t1.complete$1(t1, this.request_3.response);
+    t1.complete$1(t1, this.request_3);
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -15555,10 +15568,6 @@ BaseElement: {"": "HtmlElement;href},target="},
 
 "+BaseElement": [],
 
-Blob: {"": "Interceptor;type="},
-
-"+Blob": [],
-
 ButtonElement: {"": "HtmlElement;name=,type=,value%"},
 
 "+ButtonElement": [],
@@ -15767,10 +15776,6 @@ EventTarget: {"": "Interceptor;",
 FieldSetElement: {"": "HtmlElement;name=,type="},
 
 "+FieldSetElement": [],
-
-File: {"": "Blob;name="},
-
-"+File": [],
 
 FileError: {"": "Interceptor;code="},
 
@@ -20985,16 +20990,16 @@ $.TableRowElement.$isObject = true;
 $._EventSink.$is_EventSink = true;
 $._EventSink.$isObject = true;
 $.TableSectionElement.$isObject = true;
+$.Set.$isObject = true;
+$.ReceivePort.$isObject = true;
 $._BufferingStreamSubscription.$is_BufferingStreamSubscription = true;
 $._BufferingStreamSubscription.$is_EventSink = true;
 $._BufferingStreamSubscription.$isObject = true;
-$.ReceivePort.$isObject = true;
-$.Set.$isObject = true;
-$.Task.$isTask = true;
-$.Task.$isObject = true;
-$.ProgressEvent.$isObject = true;
 $.Symbol.$isSymbol = true;
 $.Symbol.$isObject = true;
+$.ProgressEvent.$isObject = true;
+$.Language.$isObject = true;
+$.Language.$isLanguage = true;
 $._BroadcastSubscription.$is_BroadcastSubscription = true;
 $._BroadcastSubscription.$is_BufferingStreamSubscription = true;
 $._BroadcastSubscription.$is_EventSink = true;
@@ -21040,20 +21045,20 @@ $.JSDouble.$asComparable = [$.JSNumber];
 $.JSDouble.$isObject = true;
 $.StreamSubscription.$isObject = true;
 $._IsolateEvent.$isObject = true;
-$.Tag.$isTag = true;
-$.Tag.$isObject = true;
+$.Observable.$isObservable = true;
+$.Observable.$isObject = true;
 $.Project.$isProject = true;
 $.Project.$isObject = true;
 $.Event.$isObject = true;
 $._IsolateContext.$isObject = true;
-$.Observable.$isObject = true;
-$.Observable.$isObservable = true;
-$.Language.$isObject = true;
-$.Language.$isLanguage = true;
-$.Organisation.$isOrganisation = true;
-$.Organisation.$isObject = true;
 $.Function.$isFunction = true;
 $.Function.$isObject = true;
+$.Tag.$isTag = true;
+$.Tag.$isObject = true;
+$.Organisation.$isOrganisation = true;
+$.Organisation.$isObject = true;
+$.Task.$isTask = true;
+$.Task.$isObject = true;
 $.getInterceptor = function(receiver) {
   if (typeof receiver == "number") {
     if (Math.floor(receiver) == receiver)
@@ -21746,7 +21751,7 @@ Isolate.$lazy($, "onCircularNotifyLimit", "onCircularNotifyLimit", "get$onCircul
   return new $.closure();
 });
 // Native classes
-$.defineNativeMethods("ArrayBuffer|DOMParser|Navigator|SVGAnimatedEnumeration|SVGAnimatedNumberList|SVGAnimatedString", $.Interceptor);
+$.defineNativeMethods("DOMParser|Navigator|SVGAnimatedEnumeration|SVGAnimatedNumberList|SVGAnimatedString", $.Interceptor);
 
 $.defineNativeMethods("HTMLBRElement|HTMLBodyElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDivElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLImageElement|HTMLLabelElement|HTMLLegendElement|HTMLMenuElement|HTMLModElement|HTMLParagraphElement|HTMLPreElement|HTMLQuoteElement|HTMLShadowElement|HTMLSpanElement|HTMLTableCaptionElement|HTMLTableColElement|HTMLTemplateElement|HTMLTitleElement|HTMLUListElement|HTMLUnknownElement", $.HtmlElement);
 
@@ -21757,8 +21762,6 @@ $.defineNativeMethods("HTMLAnchorElement", $.AnchorElement);
 $.defineNativeMethods("HTMLAreaElement", $.AreaElement);
 
 $.defineNativeMethods("HTMLBaseElement", $.BaseElement);
-
-$.defineNativeMethodsNonleaf("Blob", $.Blob);
 
 $.defineNativeMethods("HTMLButtonElement", $.ButtonElement);
 
@@ -21789,8 +21792,6 @@ $.defineNativeMethodsNonleaf("Event", $.Event);
 $.defineNativeMethodsNonleaf("EventTarget", $.EventTarget);
 
 $.defineNativeMethods("HTMLFieldSetElement", $.FieldSetElement);
-
-$.defineNativeMethods("File", $.File);
 
 $.defineNativeMethods("FileError", $.FileError);
 

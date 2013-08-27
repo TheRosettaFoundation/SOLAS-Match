@@ -311,11 +311,13 @@ CountryDao_getAllCountries: function() {
 "+getAllCountries:0:0": 0,
 
 CountryDao_getAllCountries_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var countries = $.List_List(null, $.Country);
+  call$1: function(response) {
+    var countries, t1;
+    countries = $.List_List(null, $.Country);
     $.setRuntimeTypeInfo(countries, [$.Country]);
-    if (!$.$eq(jsonText, ""))
-      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.CountryDao_getAllCountries__closure(countries));
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), ""))
+      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.CountryDao_getAllCountries__closure(countries));
     return countries;
   },
   "+call:1:0": 0,
@@ -343,11 +345,13 @@ LanguageDao_getAllLanguages: function() {
 "+getAllLanguages:0:0": 0,
 
 LanguageDao_getAllLanguages_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var languages = $.List_List(null, $.Language);
+  call$1: function(response) {
+    var languages, t1;
+    languages = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(languages, [$.Language]);
-    if (!$.$eq(jsonText, ""))
-      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), ""))
+      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
     return languages;
   },
   "+call:1:0": 0,
@@ -417,9 +421,11 @@ ProjectDao_calculateProjectDeadlines_closure: {"": "Closure;",
 "+ProjectDao_calculateProjectDeadlines_closure": [],
 
 ProjectDao_createProject_closure: {"": "Closure;",
-  call$1: function(jsonData) {
-    var pro = $.Project$();
-    return !$.$eq(jsonData, "") ? $.ModelFactory_generateProjectFromMap($.parse(jsonData, null)) : pro;
+  call$1: function(response) {
+    var pro, t1;
+    pro = $.Project$();
+    t1 = $.getInterceptor$x(response);
+    return !$.$eq(t1.get$responseText(response), "") ? $.ModelFactory_generateProjectFromMap($.parse(t1.get$responseText(response), null)) : pro;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -438,8 +444,7 @@ ProjectDao_deleteProject_closure: {"": "Closure;",
 "+ProjectDao_deleteProject_closure": [],
 
 ProjectDao_uploadProjectFile_closure: {"": "Closure;",
-  call$1: function(data) {
-    $.Primitives_printString("Upload Project File Returned " + $.S(data));
+  call$1: function(response) {
     return true;
   },
   "+call:1:0": 0,
@@ -498,12 +503,13 @@ TaskDao_trackTask: function(taskId, userId) {
 "+trackTask:2:0": 0,
 
 TaskDao_createTask_closure: {"": "Closure;box_0",
-  call$1: function(jsonTask) {
-    var t1, jsonParsed;
+  call$1: function(response) {
+    var t1, t2, jsonParsed;
     t1 = this.box_0;
     t1.task_0 = null;
-    if ($.$gt$n($.get$length$asx(jsonTask), 0) === true) {
-      jsonParsed = $.parse(jsonTask, null);
+    t2 = $.getInterceptor$x(response);
+    if ($.$gt$n($.get$length$asx(t2.get$responseText(response)), 0) === true) {
+      jsonParsed = $.parse(t2.get$responseText(response), null);
       if ($.$gt$n($.get$length$asx(jsonParsed), 0) === true)
         t1.task_0 = $.ModelFactory_generateTaskFromMap(jsonParsed);
     }
@@ -537,7 +543,7 @@ TaskDao_saveTaskFile_closure: {"": "Closure;",
 
 TaskDao_trackTask_closure: {"": "Closure;",
   call$1: function(response) {
-    return $.$eq(response, "1") && true;
+    return $.$eq($.get$responseText$x(response), "1") && true;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -3531,7 +3537,7 @@ APIHelper: {"": "Object;format",
     var t1, t2, t3, t4, complete, headers, request;
     t1 = {};
     t1.url_0 = url;
-    t2 = null;
+    t2 = $.HttpRequest;
     t3 = t2;
     t4 = new $._FutureImpl(0, $.get$_Zone__current(), null);
     $.setRuntimeTypeInfo(t4, [t3]);
@@ -3611,7 +3617,7 @@ APIHelper_call_closure: {"": "Closure;box_0,queryArgs_1",
 APIHelper_call_closure0: {"": "Closure;complete_2,request_3",
   call$1: function(e) {
     var t1 = this.complete_2;
-    t1.complete$1(t1, this.request_3.response);
+    t1.complete$1(t1, this.request_3);
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -23807,10 +23813,10 @@ $.ReceivePort.$isObject = true;
 $.File.$isObject = true;
 $.Set.$isObject = true;
 $.TableSectionElement.$isObject = true;
-$.Symbol.$isSymbol = true;
-$.Symbol.$isObject = true;
 $.ProgressEvent.$isEvent = true;
 $.ProgressEvent.$isObject = true;
+$.Symbol.$isSymbol = true;
+$.Symbol.$isObject = true;
 $.ReceivePortSync.$isObject = true;
 $._BroadcastSubscription.$is_EventSink = true;
 $._BroadcastSubscription.$isObject = true;

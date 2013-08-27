@@ -36,10 +36,10 @@ class APIHelper
     return finished;
   }
   
-  Future<String> call(String objectType, String url, String method, 
+  Future<HttpRequest> call(String objectType, String url, String method, 
                       [dynamic data = '', Map queryArgs = null])
   {
-    Completer complete = new Completer();
+    Completer<HttpRequest> complete = new Completer<HttpRequest>();
     Map<String, String> headers = new Map<String, String>();
     if (UserHash != null) {
       headers["Authorization"] = "Bearer "+UserHash;
@@ -60,7 +60,7 @@ class APIHelper
       request.setRequestHeader("Authorization", "Bearer " + UserHash);
     }
     request.onLoadEnd.listen((e) {
-      complete.complete(request.response);
+      complete.complete(request);
     });
     request.send(data);
     

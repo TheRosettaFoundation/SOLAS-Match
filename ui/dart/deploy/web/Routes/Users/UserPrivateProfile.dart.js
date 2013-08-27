@@ -307,11 +307,13 @@ CountryDao_getAllCountries: function() {
 "+getAllCountries:0:0": 0,
 
 CountryDao_getAllCountries_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var countries = $.List_List(null, $.Country);
+  call$1: function(response) {
+    var countries, t1;
+    countries = $.List_List(null, $.Country);
     $.setRuntimeTypeInfo(countries, [$.Country]);
-    if (!$.$eq(jsonText, ""))
-      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.CountryDao_getAllCountries__closure(countries));
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), ""))
+      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.CountryDao_getAllCountries__closure(countries));
     return countries;
   },
   "+call:1:0": 0,
@@ -339,11 +341,13 @@ LanguageDao_getAllLanguages: function() {
 "+getAllLanguages:0:0": 0,
 
 LanguageDao_getAllLanguages_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var languages = $.List_List(null, $.Language);
+  call$1: function(response) {
+    var languages, t1;
+    languages = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(languages, [$.Language]);
-    if (!$.$eq(jsonText, ""))
-      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), ""))
+      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
     return languages;
   },
   "+call:1:0": 0,
@@ -451,9 +455,11 @@ UserDao_removeSecondaryLanguage: function(userId, languageCode, countryCode) {
 "+removeSecondaryLanguage:3:0": 0,
 
 UserDao_getUser_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var user = new $.User(null, null, null, null, null, null, null, null);
-    return $.$gt$n($.get$length$asx(jsonText), 0) === true ? $.ModelFactory_generateUserFromMap($.parse(jsonText, null)) : user;
+  call$1: function(response) {
+    var user, t1;
+    user = new $.User(null, null, null, null, null, null, null, null);
+    t1 = $.getInterceptor$x(response);
+    return $.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true ? $.ModelFactory_generateUserFromMap($.parse(t1.get$responseText(response), null)) : user;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -462,7 +468,7 @@ UserDao_getUser_closure: {"": "Closure;",
 "+UserDao_getUser_closure": [],
 
 UserDao_deleteUser_closure: {"": "Closure;",
-  call$1: function(data) {
+  call$1: function(response) {
     return true;
   },
   "+call:1:0": 0,
@@ -472,10 +478,12 @@ UserDao_deleteUser_closure: {"": "Closure;",
 "+UserDao_deleteUser_closure": [],
 
 UserDao_getUserPersonalInfo_closure: {"": "Closure;userId_0",
-  call$1: function(jsonText) {
-    var userInfo = new $.UserPersonalInformation(null, null, null, null, null, null, null, null, null, null, null);
+  call$1: function(response) {
+    var userInfo, t1;
+    userInfo = new $.UserPersonalInformation(null, null, null, null, null, null, null, null, null, null, null);
     userInfo.userId = this.userId_0;
-    return !$.$eq(jsonText, "") ? $.ModelFactory_generateUserInfoFromMap($.parse(jsonText, null)) : userInfo;
+    t1 = $.getInterceptor$x(response);
+    return !$.$eq(t1.get$responseText(response), "") ? $.ModelFactory_generateUserInfoFromMap($.parse(t1.get$responseText(response), null)) : userInfo;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -484,11 +492,13 @@ UserDao_getUserPersonalInfo_closure: {"": "Closure;userId_0",
 "+UserDao_getUserPersonalInfo_closure": [],
 
 UserDao_getSecondaryLanguages_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var locales = $.List_List(null, $.Locale);
+  call$1: function(response) {
+    var locales, t1;
+    locales = $.List_List(null, $.Locale);
     $.setRuntimeTypeInfo(locales, [$.Locale]);
-    if ($.$gt$n($.get$length$asx(jsonText), 0) === true)
-      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getSecondaryLanguages__closure(locales));
+    t1 = $.getInterceptor$x(response);
+    if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true)
+      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.UserDao_getSecondaryLanguages__closure(locales));
     return locales;
   },
   "+call:1:0": 0,
@@ -508,11 +518,13 @@ UserDao_getSecondaryLanguages__closure: {"": "Closure;locales_0",
 "+UserDao_getSecondaryLanguages__closure": [],
 
 UserDao_getUserBadges_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var badges = $.List_List(null, $.Badge);
+  call$1: function(response) {
+    var badges, t1;
+    badges = $.List_List(null, $.Badge);
     $.setRuntimeTypeInfo(badges, [$.Badge]);
-    if ($.$gt$n($.get$length$asx(jsonText), 0) === true)
-      $.forEach$1$ax($.$index$asx($.parse(jsonText, null), "item"), new $.UserDao_getUserBadges__closure(badges));
+    t1 = $.getInterceptor$x(response);
+    if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true)
+      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.UserDao_getUserBadges__closure(badges));
     return badges;
   },
   "+call:1:0": 0,
@@ -532,7 +544,7 @@ UserDao_getUserBadges__closure: {"": "Closure;badges_0",
 "+UserDao_getUserBadges__closure": [],
 
 UserDao_saveUserDetails_closure: {"": "Closure;",
-  call$1: function(data) {
+  call$1: function(response) {
     return true;
   },
   "+call:1:0": 0,
@@ -542,7 +554,7 @@ UserDao_saveUserDetails_closure: {"": "Closure;",
 "+UserDao_saveUserDetails_closure": [],
 
 UserDao_saveUserInfo_closure: {"": "Closure;",
-  call$1: function(data) {
+  call$1: function(response) {
     return true;
   },
   "+call:1:0": 0,
@@ -552,7 +564,7 @@ UserDao_saveUserInfo_closure: {"": "Closure;",
 "+UserDao_saveUserInfo_closure": [],
 
 UserDao_addUserBadge_closure: {"": "Closure;",
-  call$1: function(data) {
+  call$1: function(response) {
     return true;
   },
   "+call:1:0": 0,
@@ -562,7 +574,7 @@ UserDao_addUserBadge_closure: {"": "Closure;",
 "+UserDao_addUserBadge_closure": [],
 
 UserDao_removeUserBadge_closure: {"": "Closure;",
-  call$1: function(data) {
+  call$1: function(response) {
     return true;
   },
   "+call:1:0": 0,
@@ -572,7 +584,7 @@ UserDao_removeUserBadge_closure: {"": "Closure;",
 "+UserDao_removeUserBadge_closure": [],
 
 UserDao_addSecondaryLanguage_closure: {"": "Closure;",
-  call$1: function(data) {
+  call$1: function(response) {
     return true;
   },
   "+call:1:0": 0,
@@ -582,7 +594,7 @@ UserDao_addSecondaryLanguage_closure: {"": "Closure;",
 "+UserDao_addSecondaryLanguage_closure": [],
 
 UserDao_removeSecondaryLanguage_closure: {"": "Closure;",
-  call$1: function(data) {
+  call$1: function(response) {
     return true;
   },
   "+call:1:0": 0,
@@ -2596,7 +2608,7 @@ APIHelper: {"": "Object;format",
     var t1, t2, t3, t4, complete, headers, request;
     t1 = {};
     t1.url_0 = url;
-    t2 = null;
+    t2 = $.HttpRequest;
     t3 = t2;
     t4 = new $._FutureImpl(0, $.get$_Zone__current(), null);
     $.setRuntimeTypeInfo(t4, [t3]);
@@ -2676,7 +2688,7 @@ APIHelper_call_closure: {"": "Closure;box_0,queryArgs_1",
 APIHelper_call_closure0: {"": "Closure;complete_2,request_3",
   call$1: function(e) {
     var t1 = this.complete_2;
-    t1.complete$1(t1, this.request_3.response);
+    t1.complete$1(t1, this.request_3);
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -13566,7 +13578,10 @@ StateError: {"": "Error;message",
 
 ConcurrentModificationError: {"": "Error;modifiedObject",
   toString$0: function(_) {
-    return "Concurrent modification during iteration: " + $.Error_safeToString(this.modifiedObject) + ".";
+    var t1 = this.modifiedObject;
+    if (t1 == null)
+      return "Concurrent modification during iteration.";
+    return "Concurrent modification during iteration: " + $.Error_safeToString(t1) + ".";
   },
   "+toString:0:0": 0
 },
@@ -16091,10 +16106,6 @@ BaseElement: {"": "HtmlElement;target="},
 
 "+BaseElement": [],
 
-Blob: {"": "Interceptor;type="},
-
-"+Blob": [],
-
 ButtonElement: {"": "HtmlElement;disabled%,name=,type=,value%"},
 
 "+ButtonElement": [],
@@ -16351,10 +16362,6 @@ EventTarget: {"": "Interceptor;",
 FieldSetElement: {"": "HtmlElement;disabled%,name=,type="},
 
 "+FieldSetElement": [],
-
-File: {"": "Blob;name="},
-
-"+File": [],
 
 FileError: {"": "Interceptor;code="},
 
@@ -21587,9 +21594,9 @@ $._BufferingStreamSubscription.$is_EventSink = true;
 $._BufferingStreamSubscription.$isObject = true;
 $.ReceivePort.$isObject = true;
 $.TableRowElement.$isObject = true;
-$.ProgressEvent.$isObject = true;
 $.Symbol0.$isSymbol0 = true;
 $.Symbol0.$isObject = true;
+$.ProgressEvent.$isObject = true;
 $._BroadcastSubscription.$is_BroadcastSubscription = true;
 $._BroadcastSubscription.$is_BufferingStreamSubscription = true;
 $._BroadcastSubscription.$is_EventSink = true;
@@ -22305,7 +22312,7 @@ Isolate.$lazy($, "onCircularNotifyLimit", "onCircularNotifyLimit", "get$onCircul
   return new $.closure();
 });
 // Native classes
-$.defineNativeMethods("ArrayBuffer|DOMParser|Navigator|SVGAnimatedEnumeration|SVGAnimatedNumberList|SVGAnimatedString", $.Interceptor);
+$.defineNativeMethods("DOMParser|Navigator|SVGAnimatedEnumeration|SVGAnimatedNumberList|SVGAnimatedString", $.Interceptor);
 
 $.defineNativeMethods("HTMLBRElement|HTMLBodyElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDivElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLLabelElement|HTMLLegendElement|HTMLMenuElement|HTMLModElement|HTMLParagraphElement|HTMLPreElement|HTMLQuoteElement|HTMLShadowElement|HTMLSpanElement|HTMLTableCaptionElement|HTMLTableColElement|HTMLTemplateElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement", $.HtmlElement);
 
@@ -22316,8 +22323,6 @@ $.defineNativeMethods("HTMLAnchorElement", $.AnchorElement);
 $.defineNativeMethods("HTMLAreaElement", $.AreaElement);
 
 $.defineNativeMethods("HTMLBaseElement", $.BaseElement);
-
-$.defineNativeMethodsNonleaf("Blob", $.Blob);
 
 $.defineNativeMethods("HTMLButtonElement", $.ButtonElement);
 
@@ -22352,8 +22357,6 @@ $.defineNativeMethodsNonleaf("Event", $.Event);
 $.defineNativeMethodsNonleaf("EventTarget", $.EventTarget);
 
 $.defineNativeMethods("HTMLFieldSetElement", $.FieldSetElement);
-
-$.defineNativeMethods("File", $.File);
 
 $.defineNativeMethods("FileError", $.FileError);
 
