@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>{Localisation::getTranslation(Strings::TAG_LIST_TAG_LIST)} <small> {Localisation::getTranslation(Strings::TAG_LIST_ALL_TAGS_IN)} SOLAS Match</small></h1>
+    <h1>{Localisation::getTranslation(Strings::TAG_LIST_TAG_LIST)} <small> {Localisation::getTranslation(Strings::TAG_LIST_ALL_TAGS_IN)} {Settings::get('site.name')}</small></h1>
 </div>
 
 {if isset($user_tags)}
