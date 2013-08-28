@@ -63,9 +63,9 @@ class LoginAPI {
             
            
             
-             if(isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
+            if(isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
                 $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
-                 if (!is_numeric($email) && strstr($email, '.')) {
+                if (!is_numeric($email) && strstr($email, '.')) {
                     $temp = array();
                     $temp = explode('.', $email);
                     $lastIndex = sizeof($temp)-1;
@@ -97,13 +97,13 @@ class LoginAPI {
                 }
                 UserDao::finishRegistration($data->getId());
             }
-                $server = Dispatcher::getOauthServer();       
-                $responce = $server->getGrantType('password')->completeFlow(array("client_id"=>$data->getId(),"client_secret"=>$data->getPassword()));
-                $oAuthResponce = new OAuthResponce();
-                $oAuthResponce->setToken($responce['access_token']);
-                $oAuthResponce->setTokenType($responce['token_type']);
-                $oAuthResponce->setExpires($responce['expires']);
-                $oAuthResponce->setExpiresIn($responce['expires_in']);
+            $server = Dispatcher::getOauthServer();       
+            $responce = $server->getGrantType('password')->completeFlow(array("client_id"=>$data->getId(),"client_secret"=>$data->getPassword()));
+            $oAuthResponce = new OAuthResponce();
+            $oAuthResponce->setToken($responce['access_token']);
+            $oAuthResponce->setTokenType($responce['token_type']);
+            $oAuthResponce->setExpires($responce['expires']);
+            $oAuthResponce->setExpiresIn($responce['expires_in']);
             
             Dispatcher::sendResponce(null, $data, null, $format, $oAuthResponce);
         }, 'openidLogin',null);
