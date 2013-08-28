@@ -132,9 +132,8 @@ class UserDao
         return $user;
     }
 
-    public static function apiRegister($email, $clear_password)
+    public static function apiRegister($email, $clear_password, $verificationRequired = true)
     {
-        $ret = null;
         $user = self::getUser(null, $email);
         
         if(is_array($user)) {
@@ -143,9 +142,10 @@ class UserDao
 
         if (!is_object($user) && $clear_password != "") {
             $user = self::create($email, $clear_password);
-            BadgeDao::assignBadge($user->getId(), BadgeTypes::REGISTERED);
-            self::registerUser($user->getId());
-            Notify::sendEmailVerification($user->getId());
+            if ($verificationRequired) {
+                self::registerUser($user->getId());
+                Notify::sendEmailVerification($user->getId());
+            }
         }
         return $user;
     }
@@ -168,6 +168,7 @@ class UserDao
     {
         $args = PDOWrapper::cleanseNull($userId);
         $response = PDOWrapper::call('finishRegistration', $args);
+        BadgeDao::assignBadge($userId, BadgeTypes::REGISTERED);
         return $response[0]['result'];
     }
 
@@ -213,7 +214,6 @@ class UserDao
                 if(is_array($user)) $user = $user[0];
                 if (!is_object($user)) {
                     $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
-                    BadgeDao::assignBadge($user->getId(),  BadgeTypes::REGISTERED);
                 }
                 UserSession::setSession($user->getId());
             }
