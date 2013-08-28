@@ -1686,7 +1686,7 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
   },
   "+uploadProjectFile:0:0": 0,
   validateInput$0: function() {
-    var t1, t2, deadlineInput, projectDeadline, monthAsString, dayAsString, hourAsString, minuteAsString;
+    var t1, t2, i, segmentationMissing, deadlineInput, projectDeadline, monthAsString, dayAsString, hourAsString, minuteAsString;
     t1 = {};
     t1.ret_0 = true;
     if ($.$eq($.get$title$x(this.get$project()), "")) {
@@ -1704,9 +1704,26 @@ ProjectCreateForm: {"": "WebComponent_Observable;_css,__e116<,__e108,__e110,__e1
     t2 = this.wordCountInput;
     if (t2 != null && !$.$eq(t2, "")) {
       this.get$project().set$wordCount($.Primitives_parseInt(this.wordCountInput, null, new $.ProjectCreateForm_validateInput_closure(t1, this)));
-      if ($.$gt$n(this.get$project().get$wordCount(), 5000) === true)
-        if (window.confirm($.Localisation_getTranslation("project_create_22")) !== true)
+      if ($.$gt$n(this.get$project().get$wordCount(), 5000) === true) {
+        i = 0;
+        segmentationMissing = false;
+        while (true) {
+          t2 = $._activeObserver;
+          if (t2 != null)
+            t2._addRead$3(this, 1, "targetCount");
+          t2 = this.__$targetCount;
+          if (typeof t2 !== "number")
+            throw $.iae(t2);
+          if (!(i < t2 && !segmentationMissing))
+            break;
+          t2 = "#segmentation_" + i;
+          if ($.get$checked$x(document.querySelector(t2)) !== true)
+            segmentationMissing = true;
+          ++i;
+        }
+        if (segmentationMissing && window.confirm($.Localisation_getTranslation("project_create_22")) !== true)
           t1.ret_0 = false;
+      }
     } else {
       this.set$wordCountError(new $.SafeHtml(C.JSString_methods.$add(C.JSString_methods.$add("<span>", $.Localisation_getTranslation("project_routehandler_16")), "</span>")));
       t1.ret_0 = false;

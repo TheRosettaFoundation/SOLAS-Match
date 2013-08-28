@@ -541,7 +541,17 @@ class ProjectCreateForm extends WebComponent
         return 0;
       });
       if (project.wordCount > 5000) {
-        if (!window.confirm(Localisation.getTranslation("project_create_22"))) {
+        int i = 0;
+        bool segmentationMissing = false;
+        CheckboxInputElement segmentationCheckbox; 
+        while (i < targetCount && !segmentationMissing) {
+          segmentationCheckbox = query("#segmentation_$i");
+          if (!segmentationCheckbox.checked) {
+            segmentationMissing = true;
+          }
+          i++;
+        }
+        if (segmentationMissing && !window.confirm(Localisation.getTranslation("project_create_22"))) {
           ret = false;
         }
       }
