@@ -44,7 +44,7 @@
                         {/if}
                         <p>
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}{/if}" style="width: 400px" />
+                            <input class="hasDatePicker"  type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}{/if}" style="width: 400px" />
                         </p>
                     </div>
                 </td>
@@ -206,5 +206,7 @@
             </tr>        
         </table>
     </form>
+                        
+<script>initDeadlinePicker();</script>
 
 {include file="footer.tpl"}
