@@ -1,6 +1,7 @@
 library SolasMatchDart;
 
 import "dart:async";
+import "dart:html";
 import "dart:json" as json;
 
 import "../lib/models/Project.dart";
@@ -17,12 +18,12 @@ class ProjectDao
   static Future<Project> getProject(int id)
   {
     APIHelper client = new APIHelper(".json");
-    Future<String> jsonData = client.call("Project", 
-        "v0/projects/" + id.toString(), "GET", "", new Map());
-    Future<Project> project = jsonData.then((String jsonText) {
+    Future<Project> project = client.call("Project", 
+        "v0/projects/" + id.toString(), "GET", "", new Map())
+          .then((HttpRequest response) {
       Project pro = new Project();
-      if (jsonText != '') {
-        Map jsonParsed = json.parse(jsonText);
+      if (response.responseText != '') {
+        Map jsonParsed = json.parse(response.responseText);
         pro = ModelFactory.generateProjectFromMap(jsonParsed);
       }
       return pro;
@@ -33,7 +34,8 @@ class ProjectDao
   static Future<bool> calculateProjectDeadlines(int projectId)
   {
     APIHelper client = new APIHelper(".json");
-    Future<bool> ret = client.call("", "v0/projects/$projectId/calculateDeadlines", "POST").then((String response) {
+    Future<bool> ret = client.call("", "v0/projects/$projectId/calculateDeadlines", "POST")
+        .then((HttpRequest response) {
       return true;
     });
     return ret;
@@ -43,10 +45,10 @@ class ProjectDao
   {
     APIHelper client = new APIHelper(".json");
     Future<Project> ret = client.call("Project", "v0/projects", "POST", json.stringify(project))
-        .then((String jsonData) {
+        .then((HttpRequest response) {
           Project pro = new Project();
-          if (jsonData != '') {
-            Map jsonParsed = json.parse(jsonData);
+          if (response.responseText != '') {
+            Map jsonParsed = json.parse(response.responseText);
             pro = ModelFactory.generateProjectFromMap(jsonParsed);
           }
           return pro;
@@ -58,7 +60,7 @@ class ProjectDao
   {
     APIHelper client = new APIHelper(".json");
     Future<bool> ret = client.call("", "v0/projects/" + projectId.toString(), "DELETE")
-        .then((String response) {
+        .then((HttpRequest response) {
           return true;
         });
     return ret;
@@ -69,9 +71,12 @@ class ProjectDao
     APIHelper client = new APIHelper(".json");
     filename= Uri.encodeComponent(filename);
     Future<bool> ret = client.call("", "v0/projects/$projectId/file/$filename/$userId", "PUT", data)
-        .then((String data) {
-          print("Upload Project File Returned $data");
-          return true;
+        .then((HttpRequest response) {
+          if (response.status == 201) {
+            return true;
+          } else {
+            return false;
+          }
         });
     return ret;
   }
@@ -80,7 +85,7 @@ class ProjectDao
   {
     APIHelper client = new APIHelper(".json");
     Future<bool> ret = client.call("", "v0/users/$userId/projects/$projectId", "PUT")
-        .then((String response) {
+        .then((HttpRequest response) {
           return true;
         });
     return ret;

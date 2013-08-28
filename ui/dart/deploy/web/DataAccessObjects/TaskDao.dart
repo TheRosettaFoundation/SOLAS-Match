@@ -1,6 +1,7 @@
 library SolasMatchDart;
 import "dart:json" as json;
 import "dart:async";
+import "dart:html";
 
 import "../lib/APIHelper.dart";
 import "../lib/ModelFactory.dart";
@@ -12,10 +13,11 @@ class TaskDao
   static Future<List<Tag>> getTaskTags(int taskId)
   {
     APIHelper client = new APIHelper('.json');
-    Future<List<Tag>> ret = client.call("Tag", 'v0/tasks/$taskId/tags', 'GET').then((String jsonText) {
+    Future<List<Tag>> ret = client.call("Tag", 'v0/tasks/$taskId/tags', 'GET')
+        .then((HttpRequest response) {
       List<Tag> tags = new List<Tag>();
-      if (jsonText != '') {
-        Map jsonParsed = json.parse(jsonText);
+      if (response.responseText != '') {
+        Map jsonParsed = json.parse(response.responseText);
         if (jsonParsed.length > 0) {
           jsonParsed['item'].forEach((String data) {            
             Map tag = json.parse(data);
@@ -37,12 +39,11 @@ class TaskDao
     queryArgs['strict'] = strict ? '1' : '0';
     queryArgs['filter'] = filter;
     APIHelper client = new APIHelper(".json");
-    Future<String> ret = client.call("Task", "v0/users/$userId/topTasks", "GET", "", queryArgs);
-    Future<List<Task>> tasks;
-    tasks = ret.then((String text) {
+    Future<List<Task>> tasks = client.call("Task", "v0/users/$userId/topTasks", "GET", "", queryArgs)
+        .then((HttpRequest response) {
       List<Task> userTasks = new List<Task>();
-      if (text.length > 0) {
-        Map jsonParsed = json.parse(text);
+      if (response.responseText.length > 0) {
+        Map jsonParsed = json.parse(response.responseText);
         if (jsonParsed.length > 0) {
           jsonParsed['item'].forEach((String data) {
             Map task = json.parse(data);
@@ -62,10 +63,10 @@ class TaskDao
     queryArgs['limit'] = limit.toString();
     APIHelper client = new APIHelper('.json');
     Future<List<Task>> ret = client.call("Task", "v0/tasks/topTasks", "GET", "", queryArgs)
-        .then((String text) {
+        .then((HttpRequest response) {
       List<Task> tasks = new List<Task>();
-      if (text.length > 0) {
-        Map jsonParsed = json.parse(text);
+      if (response.responseText.length > 0) {
+        Map jsonParsed = json.parse(response.responseText);
         if (jsonParsed.length > 0) {
           jsonParsed['item'].forEach((String data) {
             Map task = json.parse(data);
@@ -82,10 +83,10 @@ class TaskDao
   {
     APIHelper client = new APIHelper(".json");
     Future<Task> ret = client.call("Task", "v0/tasks", "POST", json.stringify(task))
-        .then((String jsonTask) {
+        .then((HttpRequest response) {
           task = null;
-          if (jsonTask.length > 0) {
-            Map jsonParsed = json.parse(jsonTask);
+          if (response.responseText.length > 0) {
+            Map jsonParsed = json.parse(response.responseText);
             if (jsonParsed.length > 0) {
               task = ModelFactory.generateTaskFromMap(jsonParsed);
             }
@@ -98,7 +99,8 @@ class TaskDao
   static Future<bool> addTaskPreReq(int taskId, int preReqId)
   {
     APIHelper client = new APIHelper(".json");
-    Future<bool> ret = client.call("", "v0/tasks/$taskId/prerequisites/$preReqId", "PUT").then((String response) {
+    Future<bool> ret = client.call("", "v0/tasks/$taskId/prerequisites/$preReqId", "PUT")
+        .then((HttpRequest response) {
       return true;
     });
     return ret;
@@ -107,7 +109,8 @@ class TaskDao
   static Future<bool> saveTaskFile(int taskId, int userId, String fileData)
   {
     APIHelper client = new APIHelper(".json");
-    Future<bool> ret = client.call("", "v0/tasks/saveFile/$taskId/$userId", "PUT", fileData).then((String response) {
+    Future<bool> ret = client.call("", "v0/tasks/saveFile/$taskId/$userId", "PUT", fileData)
+        .then((HttpRequest response) {
       return true;
     });
     return ret;
@@ -117,9 +120,9 @@ class TaskDao
   {
     APIHelper client = new APIHelper(".json");
     Future<bool> ret = client.call("", "v0/users/$userId/trackedTasks/$taskId", "PUT")
-        .then((String response) {
+        .then((HttpRequest response) {
           bool success = false;
-          if (response == "1") {
+          if (response.responseText == "1") {
             success = true;
           }
           return success;

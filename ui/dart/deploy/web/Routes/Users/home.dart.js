@@ -329,14 +329,17 @@ LanguageDao_getActiveTargetLanguages: function() {
 "+getActiveTargetLanguages:0:0": 0,
 
 LanguageDao_getActiveSourceLanguages_closure: {"": "Closure;",
-  call$1: function(jsonData) {
-    var ret, jsonParsed, t1;
+  call$1: function(response) {
+    var ret, t1, jsonParsed;
     ret = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(ret, [$.Language]);
-    jsonParsed = $.parse(jsonData, null);
-    t1 = $.getInterceptor$asx(jsonParsed);
-    if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
-      $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveSourceLanguages__closure(ret));
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), "")) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
+      t1 = $.getInterceptor$asx(jsonParsed);
+      if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
+        $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveSourceLanguages__closure(ret));
+    }
     return ret;
   },
   "+call:1:0": 0,
@@ -356,14 +359,17 @@ LanguageDao_getActiveSourceLanguages__closure: {"": "Closure;ret_0",
 "+LanguageDao_getActiveSourceLanguages__closure": [],
 
 LanguageDao_getActiveTargetLanguages_closure: {"": "Closure;",
-  call$1: function(jsonData) {
-    var ret, jsonParsed, t1;
+  call$1: function(response) {
+    var ret, t1, jsonParsed;
     ret = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(ret, [$.Language]);
-    jsonParsed = $.parse(jsonData, null);
-    t1 = $.getInterceptor$asx(jsonParsed);
-    if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
-      $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveTargetLanguages__closure(ret));
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), "")) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
+      t1 = $.getInterceptor$asx(jsonParsed);
+      if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
+        $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.LanguageDao_getActiveTargetLanguages__closure(ret));
+    }
     return ret;
   },
   "+call:1:0": 0,
@@ -395,9 +401,11 @@ OrgDao_getOrg: function(id) {
 "+getOrg:1:0": 0,
 
 OrgDao_getOrg_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var org = new $.Organisation(null, null, null, null, null, null, null, null, null);
-    return !$.$eq(jsonText, "") ? $.ModelFactory_generateOrgFromMap($.parse(jsonText, null)) : org;
+  call$1: function(response) {
+    var org, t1;
+    org = new $.Organisation(null, null, null, null, null, null, null, null, null);
+    t1 = $.getInterceptor$x(response);
+    return !$.$eq(t1.get$responseText(response), "") ? $.ModelFactory_generateOrgFromMap($.parse(t1.get$responseText(response), null)) : org;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -418,9 +426,11 @@ ProjectDao_getProject: function(id) {
 "+getProject:1:0": 0,
 
 ProjectDao_getProject_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var pro = $.Project$();
-    return !$.$eq(jsonText, "") ? $.ModelFactory_generateProjectFromMap($.parse(jsonText, null)) : pro;
+  call$1: function(response) {
+    var pro, t1;
+    pro = $.Project$();
+    t1 = $.getInterceptor$x(response);
+    return !$.$eq(t1.get$responseText(response), "") ? $.ModelFactory_generateProjectFromMap($.parse(t1.get$responseText(response), null)) : pro;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -465,12 +475,13 @@ TaskDao_getLatestAvailableTasks: function(offset, limit) {
 "+getLatestAvailableTasks:0:2": 0,
 
 TaskDao_getTaskTags_closure: {"": "Closure;",
-  call$1: function(jsonText) {
-    var tags, jsonParsed, t1;
+  call$1: function(response) {
+    var tags, t1, jsonParsed;
     tags = $.List_List(null, $.Tag);
     $.setRuntimeTypeInfo(tags, [$.Tag]);
-    if (!$.$eq(jsonText, "")) {
-      jsonParsed = $.parse(jsonText, null);
+    t1 = $.getInterceptor$x(response);
+    if (!$.$eq(t1.get$responseText(response), "")) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
       t1 = $.getInterceptor$asx(jsonParsed);
       if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
         $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.TaskDao_getTaskTags__closure(tags));
@@ -494,12 +505,13 @@ TaskDao_getTaskTags__closure: {"": "Closure;tags_0",
 "+TaskDao_getTaskTags__closure": [],
 
 TaskDao_getUserTopTasks_closure: {"": "Closure;",
-  call$1: function(text) {
-    var userTasks, jsonParsed, t1;
+  call$1: function(response) {
+    var userTasks, t1, jsonParsed;
     userTasks = $.List_List(null, $.Task);
     $.setRuntimeTypeInfo(userTasks, [$.Task]);
-    if ($.$gt$n($.get$length$asx(text), 0) === true) {
-      jsonParsed = $.parse(text, null);
+    t1 = $.getInterceptor$x(response);
+    if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
       t1 = $.getInterceptor$asx(jsonParsed);
       if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
         $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.TaskDao_getUserTopTasks__closure(userTasks));
@@ -523,12 +535,13 @@ TaskDao_getUserTopTasks__closure: {"": "Closure;userTasks_0",
 "+TaskDao_getUserTopTasks__closure": [],
 
 TaskDao_getLatestAvailableTasks_closure: {"": "Closure;",
-  call$1: function(text) {
-    var tasks, jsonParsed, t1;
+  call$1: function(response) {
+    var tasks, t1, jsonParsed;
     tasks = $.List_List(null, $.Task);
     $.setRuntimeTypeInfo(tasks, [$.Task]);
-    if ($.$gt$n($.get$length$asx(text), 0) === true) {
-      jsonParsed = $.parse(text, null);
+    t1 = $.getInterceptor$x(response);
+    if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true) {
+      jsonParsed = $.parse(t1.get$responseText(response), null);
       t1 = $.getInterceptor$asx(jsonParsed);
       if ($.$gt$n(t1.get$length(jsonParsed), 0) === true)
         $.forEach$1$ax(t1.$index(jsonParsed, "item"), new $.TaskDao_getLatestAvailableTasks__closure(tasks));
@@ -2445,9 +2458,16 @@ TaskStream_filterStream_closure: {"": "Closure;this_0",
 ["SolasMatchDart", "../../lib/APIHelper.dart", , {
 APIHelper: {"": "Object;format",
   call$5: function(objectType, url, method, data, queryArgs) {
-    var t1, headers, t2;
+    var t1, t2, t3, t4, complete, headers, request;
     t1 = {};
     t1.url_0 = url;
+    t2 = $.HttpRequest;
+    t3 = t2;
+    t4 = new $._FutureImpl(0, $.get$_Zone__current(), null);
+    $.setRuntimeTypeInfo(t4, [t3]);
+    complete = new $._AsyncCompleter(t4, false);
+    $.setRuntimeTypeInfo(complete, [t2]);
+    complete._Completer$0(t3);
     headers = new $.HashMap(0, null, null, null, null);
     $.setRuntimeTypeInfo(headers, [$.JSString, $.JSString]);
     t2 = $.APIHelper_UserHash;
@@ -2458,7 +2478,19 @@ APIHelper: {"": "Object;format",
       t1.url_0 = $.$add$ns(t1.url_0, "?");
       $.forEach$1$ax(queryArgs.get$keys(), new $.APIHelper_call_closure(t1, queryArgs));
     }
-    return $.HttpRequest_request(t1.url_0, method, null, null, headers, null, data, null).then$1(new $.APIHelper_call_closure0());
+    request = new XMLHttpRequest();
+    C.HttpRequest_methods.open$2(request, method, t1.url_0);
+    t1 = $.APIHelper_UserHash;
+    if (t1 != null)
+      request.setRequestHeader("Authorization", C.JSString_methods.$add("Bearer ", t1));
+    C.EventStreamProvider_loadend.forTarget$2$useCapture;
+    t1 = new $._EventStream(request, C.EventStreamProvider_loadend._eventType, false);
+    $.setRuntimeTypeInfo(t1, [null]);
+    t2 = new $._EventStreamSubscription(0, t1._liblib3$_target, t1._eventType, new $.APIHelper_call_closure0(complete, request), t1._useCapture);
+    $.setRuntimeTypeInfo(t2, [$.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
+    t2._tryResume$0();
+    request.send(data);
+    return complete.future;
   },
   "+call:3:2": 0,
   call$3: function(objectType, url, method) {
@@ -2506,9 +2538,10 @@ APIHelper_call_closure: {"": "Closure;box_0,queryArgs_1",
 
 "+APIHelper_call_closure": [],
 
-APIHelper_call_closure0: {"": "Closure;",
-  call$1: function(resp) {
-    return $.get$responseText$x(resp);
+APIHelper_call_closure0: {"": "Closure;complete_2,request_3",
+  call$1: function(e) {
+    var t1 = this.complete_2;
+    t1.complete$1(t1, this.request_3);
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -2775,7 +2808,10 @@ Organisation: {"": "Object;id>,name>,biography,homepage,email,address,city,count
 ["SolasMatchDart", "../../lib/models/Project.dart", , {
 Project: {"": "Object;id>,title>,description,deadline<,organisationId<,impact,reference,wordCount<,createdTime<,status,sourceLocale<,tag",
   toJson$0: function() {
-    return $.makeLiteralMap(["id", this.id, "title", this.title, "description", this.description, "deadline", this.deadline, "organisationId", this.organisationId, "impact", this.impact, "reference", this.reference, "wordCount", this.wordCount, "createdTime", this.createdTime, "status", this.status, "sourceLocale", this.sourceLocale, "tag", this.tag]);
+    var ret = $.makeLiteralMap(["id", this.id, "title", this.title, "description", this.description, "deadline", this.deadline, "organisationId", this.organisationId, "impact", this.impact, "reference", this.reference, "wordCount", this.wordCount, "createdTime", this.createdTime, "status", this.status, "sourceLocale", this.sourceLocale]);
+    if (this.tag.length > 0)
+      ret.$indexSet(ret, "tag", this.tag);
+    return ret;
   },
   "+toJson:0:0": 0,
   Project$0: function() {
@@ -14452,24 +14488,19 @@ HttpRequest_request: function(url, method, mimeType, onProgress, requestHeaders,
   C.HttpRequest_methods.open$3$async(xhr, method == null ? "GET" : method, url, true);
   if (withCredentials != null)
     xhr.withCredentials = withCredentials;
-  if (requestHeaders != null)
-    requestHeaders.forEach$1(requestHeaders, new $.HttpRequest_request_closure(xhr));
   C.EventStreamProvider_load.forTarget$2$useCapture;
   t1 = new $._EventStream(xhr, C.EventStreamProvider_load._eventType, false);
   $.setRuntimeTypeInfo(t1, [null]);
-  t2 = new $._EventStreamSubscription(0, t1._liblib3$_target, t1._eventType, new $.HttpRequest_request_closure0(completer, xhr), t1._useCapture);
+  t2 = new $._EventStreamSubscription(0, t1._liblib3$_target, t1._eventType, new $.HttpRequest_request_closure(completer, xhr), t1._useCapture);
   $.setRuntimeTypeInfo(t2, [$.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
   t2._tryResume$0();
   C.EventStreamProvider_error.forTarget$2$useCapture;
   t2 = new $._EventStream(xhr, C.EventStreamProvider_error._eventType, false);
   $.setRuntimeTypeInfo(t2, [null]);
-  t1 = new $._EventStreamSubscription(0, t2._liblib3$_target, t2._eventType, new $.HttpRequest_request_closure1(completer), t2._useCapture);
+  t1 = new $._EventStreamSubscription(0, t2._liblib3$_target, t2._eventType, new $.HttpRequest_request_closure0(completer), t2._useCapture);
   $.setRuntimeTypeInfo(t1, [$.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
   t1._tryResume$0();
-  if (sendData != null)
-    xhr.send(sendData);
-  else
-    xhr.send();
+  xhr.send();
   return completer.future;
 },
 
@@ -14658,7 +14689,7 @@ HttpRequest_getString_closure: {"": "Closure;",
 
 "+HttpRequest_getString_closure": [],
 
-HttpRequest_request_closure: {"": "Closure;xhr_0",
+HttpRequest_request_closure1: {"": "Closure;xhr_0",
   call$2: function(header, value) {
     this.xhr_0.setRequestHeader(header, value);
   },
@@ -14668,7 +14699,7 @@ HttpRequest_request_closure: {"": "Closure;xhr_0",
 
 "+HttpRequest_request_closure": [],
 
-HttpRequest_request_closure0: {"": "Closure;completer_1,xhr_2",
+HttpRequest_request_closure: {"": "Closure;completer_1,xhr_2",
   call$1: function(e) {
     var t1, t2, t3;
     t1 = this.xhr_2;
@@ -14688,7 +14719,7 @@ HttpRequest_request_closure0: {"": "Closure;completer_1,xhr_2",
 
 "+HttpRequest_request_closure": [],
 
-HttpRequest_request_closure1: {"": "Closure;completer_3",
+HttpRequest_request_closure0: {"": "Closure;completer_3",
   call$1: function(e) {
     this.completer_3.completeError$1(e);
   },
@@ -15560,6 +15591,10 @@ HttpRequest: {"": "EventTarget;responseText=",
     return receiver.open(method, url, async, user, password);
   },
   "+open:2:3": 0,
+  open$2: function($receiver, method, url) {
+    return $receiver.open(method, url);
+  },
+  "+open:2:0": 0,
   open$3$async: function($receiver, method, url, async) {
     return $receiver.open(method, url, async);
   },
@@ -20915,14 +20950,14 @@ $.TableRowElement.$isObject = true;
 $._EventSink.$is_EventSink = true;
 $._EventSink.$isObject = true;
 $.TableSectionElement.$isObject = true;
-$.Set.$isObject = true;
-$.ReceivePort.$isObject = true;
 $._BufferingStreamSubscription.$is_BufferingStreamSubscription = true;
 $._BufferingStreamSubscription.$is_EventSink = true;
 $._BufferingStreamSubscription.$isObject = true;
-$.ProgressEvent.$isObject = true;
+$.ReceivePort.$isObject = true;
+$.Set.$isObject = true;
 $.Symbol.$isSymbol = true;
 $.Symbol.$isObject = true;
+$.ProgressEvent.$isObject = true;
 $._BroadcastSubscription.$is_BroadcastSubscription = true;
 $._BroadcastSubscription.$is_BufferingStreamSubscription = true;
 $._BroadcastSubscription.$is_EventSink = true;
@@ -21076,6 +21111,7 @@ C.EventStreamProvider_change = new $.EventStreamProvider("change");
 C.EventStreamProvider_click = new $.EventStreamProvider("click");
 C.EventStreamProvider_error = new $.EventStreamProvider("error");
 C.EventStreamProvider_load = new $.EventStreamProvider("load");
+C.EventStreamProvider_loadend = new $.EventStreamProvider("loadend");
 C.EventStreamProvider_progress = new $.EventStreamProvider("progress");
 C.HttpRequest_methods = $.HttpRequest.prototype;
 C.JSArray_methods = $.JSArray.prototype;

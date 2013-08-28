@@ -2,6 +2,7 @@ library SolasMatchDart;
 
 import "Tag.dart";
 import "Locale.dart";
+import "dart:json" as json;
 
 class Project
 {
@@ -32,9 +33,9 @@ class Project
   
   dynamic toJson()
   {
-    return {
-      "id" : id,
-      "title" : title,
+    dynamic ret = {
+      "id":id,
+      "title":title,
       "description" : description,
       "deadline" : deadline,
       "organisationId" : organisationId,
@@ -43,8 +44,11 @@ class Project
       "wordCount" : wordCount,
       "createdTime" : createdTime,
       "status" : status,
-      "sourceLocale" : sourceLocale,
-      "tag" : tag
+      "sourceLocale" : sourceLocale
     };
+    if (tag != null && tag.length > 0) {
+      ret["tag"] = tag;
+    }
+    return ret;
   }
 }

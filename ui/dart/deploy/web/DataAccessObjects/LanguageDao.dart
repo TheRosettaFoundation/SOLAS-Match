@@ -2,6 +2,7 @@ library SolasMatchDart;
 
 import "dart:async";
 import "dart:json" as json;
+import "dart:html";
 //import 'package:js/js.dart' as js;
 
 import "../lib/models/Language.dart";
@@ -14,10 +15,10 @@ class LanguageDao
   {
     APIHelper client = new APIHelper(".json");
     Future<List<Language>> ret = client.call("Language", "v0/languages", "GET")
-        .then((String jsonText) {
+        .then((HttpRequest response) {
           List<Language> languages = new List<Language>();
-          if (jsonText != "") {
-            Map jsonParsed = json.parse(jsonText);
+          if (response.responseText != "") {
+            Map jsonParsed = json.parse(response.responseText);
             jsonParsed['item'].forEach((String data) {
               Map lang = json.parse(data);
               languages.add(ModelFactory.generateLanguageFromMap(lang));
@@ -45,10 +46,10 @@ class LanguageDao
       protoList.forEach((String protoLang) {
         activeLangs.add(SolasMatch.Language.decode(protoLang));
       });*/
-      .then((String jsonText) {
+      .then((HttpRequest response) {
       List<Language> activeLangs = new List<Language>();
-      if (jsonText != '') {
-        Map jsonParsed = json.parse(jsonText);
+      if (response.responseText != '') {
+        Map jsonParsed = json.parse(response.responseText);
         if (jsonParsed.length > 0) {
           jsonParsed['item'].forEach((String data) {
             Map lang = json.parse(data);
@@ -65,14 +66,16 @@ class LanguageDao
   {
     APIHelper client = new APIHelper(".json");
     Future<List<Language>> languages = client.call("Language", "v0/languages/getActiveSourceLanguages", "GET")
-        .then((String jsonData) {
+        .then((HttpRequest response) {
           List<Language> ret = new List<Language>();
-          Map jsonParsed = json.parse(jsonData);
-          if (jsonParsed.length > 0) {
-            jsonParsed['item'].forEach((String data) {
-              Map lang = json.parse(data);
-              ret.add(ModelFactory.generateLanguageFromMap(lang));
-            });
+          if (response.responseText != '') {
+            Map jsonParsed = json.parse(response.responseText);
+            if (jsonParsed.length > 0) {
+              jsonParsed['item'].forEach((String data) {
+                Map lang = json.parse(data);
+                ret.add(ModelFactory.generateLanguageFromMap(lang));
+              });
+            }
           }
           return ret;
         });
@@ -83,14 +86,16 @@ class LanguageDao
   {
     APIHelper client = new APIHelper(".json");
     Future<List<Language>> languages = client.call("Language", "v0/languages/getActiveTargetLanguages", "GET")
-        .then((String jsonData) {
+        .then((HttpRequest response) {
           List<Language> ret = new List<Language>();
-          Map jsonParsed = json.parse(jsonData);
-          if (jsonParsed.length > 0) {
-            jsonParsed['item'].forEach((String data) {
-              Map lang = json.parse(data);
-              ret.add(ModelFactory.generateLanguageFromMap(lang));
-            });
+          if (response.responseText != '') {
+            Map jsonParsed = json.parse(response.responseText);
+            if (jsonParsed.length > 0) {
+              jsonParsed['item'].forEach((String data) {
+                Map lang = json.parse(data);
+                ret.add(ModelFactory.generateLanguageFromMap(lang));
+              });
+            }
           }
           return ret;
         });

@@ -7,7 +7,7 @@ class BadgeRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
         
-        $app->get("/badge/list", array($middleware, "authUserIsLoggedIn")
+        $app->get("/badge/list/", array($middleware, "authUserIsLoggedIn")
         , array($this, "badgeList"))->name("badge-list");
     }
 

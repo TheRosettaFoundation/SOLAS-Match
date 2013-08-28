@@ -21,7 +21,7 @@ class Middleware
     
     
     public static function isloggedIn ($request, $response, $route){
-         $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
+        $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
         // Test for token existance and validity
         try {
             $resource->isValid(true);

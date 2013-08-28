@@ -7,13 +7,13 @@ class TagRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
 
-        $app->get("/all/tags", array($middleware, "authUserIsLoggedIn")
+        $app->get("/all/tags/", array($middleware, "authUserIsLoggedIn")
         , array($this, "tagsList"))->via("POST")->name("tags-list");
 
-        $app->get("/tag/:id/:subscribe", array($middleware, "authUserIsLoggedIn")
+        $app->get("/tag/:id/:subscribe/", array($middleware, "authUserIsLoggedIn")
         , array($this, "tagSubscribe"))->via("POST")->name("tag-subscribe");
         
-        $app->get("/tag/:id", array($middleware, "authUserIsLoggedIn")
+        $app->get("/tag/:id/", array($middleware, "authUserIsLoggedIn")
         , array($this, "tagDetails"))->via("POST")->name("tag-details");
     }
 

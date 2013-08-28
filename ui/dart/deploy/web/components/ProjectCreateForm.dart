@@ -202,6 +202,13 @@ class ProjectCreateForm extends WebComponent
       if (targetCount >= maxTargetLanguages) {
         maxTargetsReached = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_create_11") + "</span>");
       }
+      if (targetCount > 1) {
+        ButtonElement removeButton = query("#removeBottomTargetBtn");
+        removeButton.disabled = false;
+      } else {
+        ButtonElement removeButton = query("#removeBottomTargetBtn");
+        removeButton.disabled = true;
+      }
     }
   }
   
@@ -214,6 +221,10 @@ class ProjectCreateForm extends WebComponent
       targetLanguageRow.remove();
       hrElement.remove();
       maxTargetsReached = null;
+      if (targetCount == 1) {
+        ButtonElement removeButton = query("#removeBottomTargetBtn");
+        removeButton.disabled = true;
+      }
     }
   }
   
@@ -323,7 +334,7 @@ class ProjectCreateForm extends WebComponent
     reader.onLoadEnd.listen((e) {
       fileText = reader.result;
     });
-    reader.readAsText(projectFile);
+    reader.readAsArrayBuffer(projectFile);
     Task templateTask = new Task();
     templateTask.title = project.title;
     templateTask.projectId = project.id;
@@ -453,7 +464,7 @@ class ProjectCreateForm extends WebComponent
   
   Future<bool> uploadProjectFile()
   {
-    Future<bool> ret;
+    Completer<bool> completer = new Completer<bool>();
     File projectFile = this.getProjectFile();
     if (projectFile == null) {
       createProjectError = Localisation.getTranslationSafe("project_create_16");
@@ -461,23 +472,51 @@ class ProjectCreateForm extends WebComponent
     
     if (projectFile != null) {
       if (projectFile.size > 0) {
-        ret = new Future.value(true);
-        FileReader reader = new FileReader();
-        String fileText;
-        reader.onLoadEnd.listen((e) {
-          fileText = reader.result;
-          ProjectDao.uploadProjectFile(project.id, userId, projectFile.name, fileText);
-        });
-        reader.readAsText(projectFile);
+        if (projectFile.size < maxFileSize) {
+          int extensionStartIndex = projectFile.name.lastIndexOf(".");
+          if (extensionStartIndex >= 0) {
+            String filename = projectFile.name;
+            String extension = projectFile.name.substring(extensionStartIndex + 1);
+            if (extension != extension.toLowerCase()) {
+              extension = extension.toLowerCase();
+              filename = projectFile.name.substring(0, extensionStartIndex + 1) + extension;
+              window.alert(Localisation.getTranslation("project_create_18"));
+            }
+            bool finished = false;
+            if (extension == "pdf") {
+              if (!window.confirm(Localisation.getTranslation("project_create_19"))) {
+                finished = true;
+                completer.complete(false);
+              }
+            }
+            
+            if (!finished) {
+              FileReader reader = new FileReader();
+              reader.onLoadEnd.listen((e) {
+                ProjectDao.uploadProjectFile(project.id, userId, filename, e.target.result)
+                  .then((bool success) {
+                    completer.complete(success);
+                  });
+              });
+              reader.readAsArrayBuffer(projectFile);
+            }
+          } else {
+            createProjectError = Localisation.getTranslationSafe("project_create_20");
+            completer.complete(false);
+          }
+        } else {
+          createProjectError = Localisation.getTranslationSafe("project_create_21");
+          completer.complete(false);
+        }
       } else {
         createProjectError = Localisation.getTranslationSafe("project_create_17");
-        ret = new Future.value(false);
+        completer.complete(false);
       }
     } else {
-      ret = new Future.value(false);
+      completer.complete(false);
     }
     
-    return ret;
+    return completer.future;
   }
   
   bool validateInput()
@@ -501,6 +540,21 @@ class ProjectCreateForm extends WebComponent
         ret = false;
         return 0;
       });
+      if (project.wordCount > 5000) {
+        int i = 0;
+        bool segmentationMissing = false;
+        CheckboxInputElement segmentationCheckbox; 
+        while (i < targetCount && !segmentationMissing) {
+          segmentationCheckbox = query("#segmentation_$i");
+          if (!segmentationCheckbox.checked) {
+            segmentationMissing = true;
+          }
+          i++;
+        }
+        if (segmentationMissing && !window.confirm(Localisation.getTranslation("project_create_22"))) {
+          ret = false;
+        }
+      }
     } else {
       wordCountError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_16") + "</span>");
       ret = false;
