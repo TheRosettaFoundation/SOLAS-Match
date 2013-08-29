@@ -136,29 +136,33 @@ $app->hook('slim.before.dispatch', function () use ($app)
 {
     if(!is_null($token =UserSession::getAccessToken()) && $token->getExpires() <  time())        UserSession::clearCurrentUserID();
     $userDao = new UserDao();
+    if (!is_null(UserSession::getCurrentUserID())) {
+        $current_user = $userDao->getUser(UserSession::getCurrentUserID());
+        if (!is_null($current_user)) {
+            $app->view()->appendData(array('user' => $current_user));
+            $org_array = $userDao->getUserOrgs(UserSession::getCurrentUserID());
+            if ($org_array && count($org_array) > 0) {
+                $app->view()->appendData(array(
+                    'user_is_organisation_member' => true
+                ));
+            }
 
-    if (!is_null(UserSession::getCurrentUserID()) &&
-        $current_user = $userDao->getUser(UserSession::getCurrentUserID())) {
-        $app->view()->appendData(array('user' => $current_user));
-        $org_array = $userDao->getUserOrgs(UserSession::getCurrentUserID());
-        if ($org_array && count($org_array) > 0) {
-            $app->view()->appendData(array(
-                'user_is_organisation_member' => true
-            ));
-        }
-
-        $tasks = $userDao->getUserTasks(UserSession::getCurrentUserID());
-        if($tasks && count($tasks) > 0) {
-            $app->view()->appendData(array(
-                "user_has_active_tasks" => true
-            ));
-        }
-        $adminDao = new AdminDao();
-        $isAdmin = $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
-        if ($isAdmin) {
-            $app->view()->appendData(array(
-                'site_admin' => true
-            ));
+            $tasks = $userDao->getUserTasks(UserSession::getCurrentUserID());
+            if($tasks && count($tasks) > 0) {
+                $app->view()->appendData(array(
+                    "user_has_active_tasks" => true
+                ));
+            }
+            $adminDao = new AdminDao();
+            $isAdmin = $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
+            if ($isAdmin) {
+                $app->view()->appendData(array(
+                    'site_admin' => true
+                ));
+            }
+        } else {
+            UserSession::clearCurrentUserID();
+            UserSession::clearAccessToken();
         }
     }
     $app->view()->appendData(array(

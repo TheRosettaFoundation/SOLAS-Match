@@ -743,6 +743,7 @@ class UserPrivateProfileForm extends WebComponent with Observable
   {
     if (window.confirm(Localisation.getTranslation("user_private_profile_6"))) {
       UserDao.deleteUser(userId).then((bool success) {
+        UserDao.destroyUserSession();
         Settings settings = new Settings();
         window.location.assign(settings.conf.urls.SiteLocation);
       });

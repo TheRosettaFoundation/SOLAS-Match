@@ -142,4 +142,14 @@ class UserDao
           return true;
         });
   }
+  
+  static void destroyUserSession()
+  {
+    String name = "slim_session";
+    String value = "";
+    String expires;
+    DateTime then = new DateTime.now();
+    expires = '; expires=' + then.toString();
+    document.cookie = name + '=' + value + expires + '; path=/';
+  }
 }

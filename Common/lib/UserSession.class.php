@@ -59,15 +59,24 @@ class UserSession {
         if (isset($_SESSION['ref']))unset($_SESSION['ref']);
     }
 
-    public static function setAccessToken($token) {
+    public static function setAccessToken($token) 
+    {
         $_SESSION['AccessToken'] = $token;
     }
     
-    public static function getAccessToken(){
+    public static function getAccessToken()
+    {
         if (isset($_SESSION['AccessToken'])) {
             return $_SESSION['AccessToken'];
         } else {
             return null;
         }        
+    }
+
+    public static function clearAccessToken()
+    {
+        if (isset($_SESSION['AccessToken'])) {
+            unset($_SESSION['AccessToken']);
+        }
     }
 }

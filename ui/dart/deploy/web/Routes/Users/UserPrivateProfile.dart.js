@@ -454,6 +454,15 @@ UserDao_removeSecondaryLanguage: function(userId, languageCode, countryCode) {
 
 "+removeSecondaryLanguage:3:0": 0,
 
+UserDao_destroyUserSession: function() {
+  var then, expires;
+  then = $.DateTime$_now();
+  expires = C.JSString_methods.$add("; expires=", then.toString$0(then));
+  document.cookie = C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("slim_session", "="), ""), expires), "; path=/");
+},
+
+"+destroyUserSession:0:0": 0,
+
 UserDao_getUser_closure: {"": "Closure;",
   call$1: function(response) {
     var user, t1;
@@ -2594,7 +2603,9 @@ UserPrivateProfileForm_submitForm__closure: {"": "Closure;this_17",
 
 UserPrivateProfileForm_deleteUser_closure: {"": "Closure;",
   call$1: function(success) {
-    var settings = $.get$Settings__instance();
+    var settings;
+    $.UserDao_destroyUserSession();
+    settings = $.get$Settings__instance();
     $.assign$1$x(C.Window_methods.get$location(window), settings._conf.get$urls().get$SiteLocation());
   },
   "+call:1:0": 0,
