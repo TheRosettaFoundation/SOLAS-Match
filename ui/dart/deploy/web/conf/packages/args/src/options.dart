@@ -1,7 +1,5 @@
 library options;
 
-import 'package:unmodifiable_collection/unmodifiable_collection.dart';
-
 /**
  * A command-line option. Includes both flags and options which take a value.
  */
@@ -17,13 +15,9 @@ class Option {
   final bool negatable;
   final bool allowMultiple;
 
-  Option(this.name, this.abbreviation, this.help, List<String> allowed,
-      Map<String, String> allowedHelp, this.defaultValue, this.callback,
-      {this.isFlag, this.negatable, this.allowMultiple: false}) :
-        this.allowed = allowed == null ?
-            null : new UnmodifiableListView(allowed),
-        this.allowedHelp = allowedHelp == null ?
-            null : new UnmodifiableMapView(allowedHelp) {
+  Option(this.name, this.abbreviation, this.help, this.allowed,
+      this.allowedHelp, this.defaultValue, this.callback, {this.isFlag,
+      this.negatable, this.allowMultiple: false}) {
 
     if (name.isEmpty) {
       throw new ArgumentError('Name cannot be empty.');

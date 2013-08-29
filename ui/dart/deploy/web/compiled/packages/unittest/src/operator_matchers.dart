@@ -9,7 +9,7 @@ part of matcher;
  */
 Matcher isNot(matcher) => new _IsNot(wrapMatcher(matcher));
 
-class _IsNot extends Matcher {
+class _IsNot extends BaseMatcher {
   final Matcher _matcher;
 
   const _IsNot(Matcher this._matcher);
@@ -73,7 +73,7 @@ Matcher allOf(arg0,
   }
 }
 
-class _AllOf extends Matcher {
+class _AllOf extends BaseMatcher {
   final Iterable<Matcher> _matchers;
 
   const _AllOf(this._matchers);
@@ -157,7 +157,7 @@ Matcher anyOf(arg0,
   }
 }
 
-class _AnyOf extends Matcher {
+class _AnyOf extends BaseMatcher {
   final Iterable<Matcher> _matchers;
 
   const _AnyOf(this._matchers);

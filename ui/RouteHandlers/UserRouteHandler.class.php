@@ -17,30 +17,30 @@ class UserRouteHandler
 
         $app->get("/", array($this, "home"))->via("POST")->name("home");
 
-        $app->get("/register", array($this, "register")
+        $app->get("/register/", array($this, "register")
         )->via("GET", "POST")->name("register");
 
-        $app->get("/user/:uuid/verification", array($this, 'emailVerification')
+        $app->get("/user/:uuid/verification/", array($this, 'emailVerification')
         )->via('POST')->name('email-verification');
 
-        $app->get("/:uid/password/reset", array($this, "passwordReset")
+        $app->get("/:uid/password/reset/", array($this, "passwordReset")
         )->via("POST")->name("password-reset");
 
-        $app->get("/password/reset", array($this, "passResetRequest")
+        $app->get("/password/reset/", array($this, "passResetRequest")
         )->via("POST")->name("password-reset-request");
         
-        $app->get("/logout", array($this, "logout"))->name("logout");
+        $app->get("/logout/", array($this, "logout"))->name("logout");
         
-        $app->get("/login", array($this, "login")
+        $app->get("/login/", array($this, "login")
         )->via("GET", "POST")->name("login");
 
-        $app->get("/:user_id/profile", array($this, "userPublicProfile")
+        $app->get("/:user_id/profile/", array($this, "userPublicProfile")
         )->via("POST")->name("user-public-profile");
 
-        $app->get("/:user_id/privateProfile", array($middleware, "authUserIsLoggedIn"), 
+        $app->get("/:user_id/privateProfile/", array($middleware, "authUserIsLoggedIn"), 
         array($this, "userPrivateProfile"))->via("POST")->name("user-private-profile");
 
-        $app->get("/:user_id/notification/stream", array($middleware, "authUserIsLoggedIn"),
+        $app->get("/:user_id/notification/stream/", array($middleware, "authUserIsLoggedIn"),
         array($this, "editTaskStreamNotification"))->via("POST")->name("stream-notification-edit");
   
     }

@@ -66,12 +66,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeguy/Slim-Extras.git",
-                "reference": "1.0.2"
+                "reference": "e9e0ca18b4b92cee4e6d35eadd986ec9f783a34c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeguy/Slim-Extras/zipball/1.0.2",
-                "reference": "1.0.2",
+                "url": "https://api.github.com/repos/codeguy/Slim-Extras/zipball/e9e0ca18b4b92cee4e6d35eadd986ec9f783a34c",
+                "reference": "e9e0ca18b4b92cee4e6d35eadd986ec9f783a34c",
                 "shasum": ""
             },
             "require": {
@@ -91,7 +91,7 @@
                 {
                     "name": "Andrew Smith",
                     "email": "a.smith@silentworks.co.uk",
-                    "homepage": "http://www.silentworks.co.uk/"
+                    "homepage": "http://thoughts.silentworks.co.uk/"
                 },
                 {
                     "name": "Josh Lockhart",

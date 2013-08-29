@@ -30,7 +30,7 @@ final Matcher completes = const _Completes(null, '');
 Matcher completion(matcher, [String id = '']) =>
     new _Completes(wrapMatcher(matcher), id);
 
-class _Completes extends Matcher {
+class _Completes extends BaseMatcher {
   final Matcher _matcher;
   final String _id;
 

@@ -41,7 +41,7 @@ class Parser {
   final rest = <String>[];
 
   /** The accumulated parsed options. */
-  final Map<String, dynamic> results = <String, dynamic>{};
+  final Map results = {};
 
   Parser(this.commandName, this.grammar, this.args, this.parent, rest,
       {this.allowTrailingOptions: false}) {
@@ -277,12 +277,12 @@ class Parser {
    * Called during parsing to validate the arguments. Throws a
    * [FormatException] if [condition] is `false`.
    */
-  void validate(bool condition, String message) {
+  validate(bool condition, String message) {
     if (!condition) throw new FormatException(message);
   }
 
   /** Validates and stores [value] as the value for [option]. */
-  void setOption(Map results, Option option, value) {
+  setOption(Map results, Option option, value) {
     // See if it's one of the allowed values.
     if (option.allowed != null) {
       validate(option.allowed.any((allow) => allow == value),

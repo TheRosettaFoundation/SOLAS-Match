@@ -10,36 +10,26 @@
  */
 library compact_vm_config;
 
-import 'dart:async';
 import 'dart:io';
-import 'dart:isolate';
-
 import 'unittest.dart';
-import 'src/utils.dart';
 import 'vm_config.dart';
 
 const String _GREEN = '\u001b[32m';
 const String _RED = '\u001b[31m';
 const String _NONE = '\u001b[0m';
-
 const int MAX_LINE = 80;
 
 class CompactVMConfiguration extends VMConfiguration {
-  // The VM won't shut down if a receive port is open. Use this to make sure
-  // we correctly wait for asynchronous tests.
-  ReceivePort _receivePort;
-
   DateTime _start;
   int _pass = 0;
   int _fail = 0;
 
   void onInit() {
-    _receivePort = new ReceivePort();
-    // Override and don't call the superclass onInit() to avoid printing the
-    // "unittest-suite-..." boilerplate.
+    super.onInit();
   }
 
   void onStart() {
+    super.onStart();
     _start = new DateTime.now();
   }
 
@@ -58,22 +48,17 @@ class CompactVMConfiguration extends VMConfiguration {
       _progressLine(_start, _pass, _fail, test.description);
       print('');
       if (test.message != '') {
-        print(indent(test.message));
+        print(_indent(test.message));
       }
 
-      if (test.stackTrace != null) {
-        print(indent(test.stackTrace.toString()));
+      if (test.stackTrace != null && test.stackTrace != '') {
+        print(_indent(test.stackTrace));
       }
     }
   }
 
-  void onDone(bool success) {
-    // Override and don't call the superclass onDone() to avoid printing the
-    // "unittest-suite-..." boilerplate.
-    Future.wait([stdout.close(), stderr.close()]).then((_) {
-      _receivePort.close();
-      exit(success ? 0 : 1);
-    });
+  String _indent(String str) {
+    return str.split("\n").map((line) => "  $line").join("\n");
   }
 
   void onSummary(int passed, int failed, int errors, List<TestCase> results,
@@ -82,11 +67,11 @@ class CompactVMConfiguration extends VMConfiguration {
     if (passed == 0 && failed == 0 && errors == 0 && uncaughtError == null) {
       print('\nNo tests ran.');
     } else if (failed == 0 && errors == 0 && uncaughtError == null) {
-      _progressLine(_start, _pass, _fail, 'All tests passed!', _NONE);
-      print('');
+      _progressLine(_start, _pass, _fail, 'All tests pass', _GREEN);
+      print('\nAll $passed tests passed.');
       success = true;
     } else {
-      _progressLine(_start, _pass, _fail, 'Some tests failed.', _RED);
+      _progressLine(_start, _pass, _fail, 'Some tests fail', _RED);
       print('');
       if (uncaughtError != null) {
         print('Top-level uncaught error: $uncaughtError');
@@ -109,12 +94,10 @@ class CompactVMConfiguration extends VMConfiguration {
     buffer.write('+');
     buffer.write(passed);
     buffer.write(_NONE);
-    if (failed != 0) {
-      buffer.write(_RED);
-      buffer.write(' -');
-      buffer.write(failed);
-      buffer.write(_NONE);
-    }
+    if (failed != 0) buffer.write(_RED);
+    buffer.write(' -');
+    buffer.write(failed);
+    if (failed != 0) buffer.write(_NONE);
     buffer.write(': ');
     buffer.write(color);
 
@@ -188,12 +171,6 @@ class CompactVMConfiguration extends VMConfiguration {
 }
 
 void useCompactVMConfiguration() {
-  // If the test is running on the Dart buildbots, we don't want to use this
-  // config since it's output may not be what the bots expect.
-  if (Platform.environment.containsKey('BUILDBOT_BUILDERNAME')) {
-    return;
-  }
-
   unittestConfiguration = _singleton;
 }
 
