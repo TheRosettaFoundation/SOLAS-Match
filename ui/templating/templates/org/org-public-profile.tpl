@@ -341,7 +341,6 @@
                             <td>
                                 <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{$member->getDisplayName()}</a>
                             </td>
-                        </td>
                         {if $adminAccess}
                             <td>
                                 <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse" 
@@ -363,6 +362,7 @@
                                 {/if}
                             </td>
                         {/if}
+                      </tr>
                     {/foreach}
                 </tbody>
             </table>

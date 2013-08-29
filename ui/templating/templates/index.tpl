@@ -74,7 +74,7 @@
             {if !isset($user)}
                 <div class="alert">
                     <p>{Localisation::getTranslation(Strings::INDEX_6)}</p>
-                    <p><a href={urlFor name="register"}>{Localisation::getTranslation(Strings::INDEX_REGISTER_NOW)}</a> {Localisation::getTranslation(Strings::INDEX_7)}</p>
+                    <p><a href="{urlFor name='register'}">{Localisation::getTranslation(Strings::INDEX_REGISTER_NOW)}</a> {Localisation::getTranslation(Strings::INDEX_7)}</p>
                 </div>
             {/if}      
         </div>

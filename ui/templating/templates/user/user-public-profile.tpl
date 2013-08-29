@@ -136,19 +136,19 @@
             <td style="width: 48%">            
                 <div>
                     <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                        <tbody align="left" width="48%">
                         {if $userPersonalInfo->getFirstName() != null}
-                            <thead>                
-                                <th align="left" width="48%"><h3>{Localisation::getTranslation(Strings::COMMON_FIRST_NAME)}:</h3></th>
-                            </thead>
-                            <tbody>
-                               <tr>
-                                    <td>
-                                        {$userPersonalInfo->getFirstName()}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 10px"/>
-                                </tr>
+                            <tr>                                  
+                                <td ><h3>{Localisation::getTranslation(Strings::COMMON_FIRST_NAME)}:</h3></td>
+                            </tr>
+                            <tr>
+                                 <td>
+                                     {$userPersonalInfo->getFirstName()}
+                                 </td>
+                             </tr>
+                             <tr>
+                                 <td style="padding-bottom: 10px"/>
+                             </tr>
                         {/if}
                         {if $userPersonalInfo->getLastName() != null}
                             <tr>
