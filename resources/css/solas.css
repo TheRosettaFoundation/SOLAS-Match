@@ -129,3 +129,30 @@ table{
     position: relative;
     top: 5px;
 }
+
+.hero-unit {
+    margin-top: 20px;
+   background-color: rgba(99,99,99,0.2);
+ 
+
+}
+
+.well{
+    background-color: rgba(99,99,99,0.1);
+}
+
+.table-striped tbody tr:nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) th {
+  background-color: rgba(99,99,99,0.1);
+}
+
+.table tbody tr:hover td,
+.table tbody tr:hover th {
+  background-color: rgba(99,99,99,0.3);
+}
+
+.navbar .nav .active > a, 
+.navbar .nav  a:hover, 
+.navbar .nav .active > a:hover {
+    background-color: rgb(0,116,204);
+}

@@ -39,7 +39,7 @@
         {/if}
     </head>
 
-    <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
+        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} style="background-image:  url({urlFor name="home"}ui/img/bg.png); background-repeat: repeat">
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
@@ -66,7 +66,7 @@
                         {/if}
                         {if isset($site_admin)}
                             {assign var="user_id" value=$user->getId()}
-                            <li {if isset($current_page) && $current_page == 'admin-dashboard'}class="active" {/if}>
+                            <li {if isset($current_page) && $current_page == 'site-admin-dashboard'}class="active" {/if}>
                                 <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation(Strings::HEADER_ADMIN)}</a>
                             </li>
                         {/if}
