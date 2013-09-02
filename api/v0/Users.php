@@ -267,6 +267,7 @@ class Users {
                  $tID = $tID[0];
             }
             Dispatcher::sendResponce(null, TaskDao::unClaimTask($tID,$id), null, $format);
+            Notify::sendTaskRevokedNotifications($tID, $id);
         }, 'userUnClaimTask');
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:user_id/tasks/:task_id/review(:format)/',

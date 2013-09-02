@@ -20,6 +20,7 @@ require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
 require_once __DIR__."/../../Common/protobufs/emails/UserBadgeAwardedEmail.php";
 require_once __DIR__."/../../Common/Requests/TaskUploadNotificationRequest.php";
 require_once __DIR__.'/../../Common/Requests/OrgCreatedNotificationRequest.php';
+require_once __DIR__.'/../../Common/protobufs/notifications/TaskRevokedNotification.php';
 
 class Notify 
 {
@@ -195,6 +196,19 @@ class Notify
                         $messagingClient->TaskArchivedTopic);
                 }
             } 
+        }
+    }
+
+    public static function sendTaskRevokedNotifications($taskId, $claimantId)
+    {
+        $client = new MessagingClient();
+        if ($client->init()) {
+            $messageProto = new TaskRevokedNotification();
+            $messageProto->setTaskId($taskId);
+            $messageProto->setClaimantId($claimantId);
+            $message = $client->createMessageFromProto($messageProto);
+            $client->sendTopicMessage($message, $client->MainExchange,
+                    $client->TaskRevokedTopic);
         }
     }
 }

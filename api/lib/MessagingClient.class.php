@@ -9,6 +9,7 @@ class MessagingClient
     public $AlertsExchange  = "ALERTS";
 
     public $OrgCreatedTopic                 = "users";
+    public $TaskRevokedTopic                = "users";
     public $TaskScoreTopic                  = "tasks";
     public $TaskUploadNotificationTopic     = "tasks";
     public $CalculateProjectDeadlinesTopic  = "projects";
