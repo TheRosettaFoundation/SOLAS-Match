@@ -19,12 +19,16 @@ class ProjectDao
   {
     APIHelper client = new APIHelper(".json");
     Future<Project> project = client.call("Project", 
-        "v0/projects/" + id.toString(), "GET", "", new Map())
+        "v0/projects/" + id.toString(), "GET")
           .then((HttpRequest response) {
-      Project pro = new Project();
-      if (response.responseText != '') {
-        Map jsonParsed = json.parse(response.responseText);
-        pro = ModelFactory.generateProjectFromMap(jsonParsed);
+      Project pro = null;
+      if (response.status < 400) {
+        if (response.responseText != '') {
+          Map jsonParsed = json.parse(response.responseText);
+          pro = ModelFactory.generateProjectFromMap(jsonParsed);
+        }
+      } else {
+        print("Error: getProject returned " + response.status.toString() + " " + response.statusText);
       }
       return pro;
     });
@@ -36,7 +40,13 @@ class ProjectDao
     APIHelper client = new APIHelper(".json");
     Future<bool> ret = client.call("", "v0/projects/$projectId/calculateDeadlines", "POST")
         .then((HttpRequest response) {
-      return true;
+          if (response.status < 400) {
+            return true;
+          } else {
+            print("Error: calculateProjectDeadlines returned " + 
+                response.status.toString() + " " + response.statusText);
+            return false;
+          }
     });
     return ret;
   }
@@ -46,10 +56,14 @@ class ProjectDao
     APIHelper client = new APIHelper(".json");
     Future<Project> ret = client.call("Project", "v0/projects", "POST", json.stringify(project))
         .then((HttpRequest response) {
-          Project pro = new Project();
-          if (response.responseText != '') {
-            Map jsonParsed = json.parse(response.responseText);
-            pro = ModelFactory.generateProjectFromMap(jsonParsed);
+          Project pro = null;
+          if (response.status < 400) {
+            if (response.responseText != '') {
+              Map jsonParsed = json.parse(response.responseText);
+              pro = ModelFactory.generateProjectFromMap(jsonParsed);
+            }
+          } else {
+            print("Error: createProject returned " + response.status.toString() + " " + response.statusText);
           }
           return pro;
         });
@@ -61,7 +75,12 @@ class ProjectDao
     APIHelper client = new APIHelper(".json");
     Future<bool> ret = client.call("", "v0/projects/" + projectId.toString(), "DELETE")
         .then((HttpRequest response) {
-          return true;
+          if (response.status < 400) {
+            return true;
+          } else {
+            print("Error: deleteProject returned " + response.status.toString() + " " + response.statusText);
+            return false;
+          }
         });
     return ret;
   }
@@ -72,9 +91,10 @@ class ProjectDao
     filename= Uri.encodeComponent(filename);
     Future<bool> ret = client.call("", "v0/projects/$projectId/file/$filename/$userId", "PUT", data)
         .then((HttpRequest response) {
-          if (response.status == 201) {
+          if (response.status < 400) {
             return true;
           } else {
+            print("Error: uploadProjectFile returned " + response.status.toString() + " " + response.statusText);
             return false;
           }
         });
@@ -86,7 +106,12 @@ class ProjectDao
     APIHelper client = new APIHelper(".json");
     Future<bool> ret = client.call("", "v0/users/$userId/projects/$projectId", "PUT")
         .then((HttpRequest response) {
-          return true;
+          if (response.status < 400) {
+            return true;
+          } else {
+            print("Error: trackProject returned " + response.status.toString() + " " + response.statusText);
+            return false;
+          }
         });
     return ret;
   }

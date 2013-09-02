@@ -232,7 +232,7 @@ $$.Closure$deliverChangesSync = {"": "Closure;call$0,$name", $is_void_: true};
 
 $$.Closure$defaultObserveUnhandledError = {"": "Closure;call$4,$name"};
 
-init.mangledNames = {$$dom_addEventListener$3: "$dom_addEventListener:3:0", $$dom_removeEventListener$3: "$dom_removeEventListener:3:0", $$dom_replaceChild$2: "$dom_replaceChild:2:0", $add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", $index: "[]:1:0", $indexSet: "[]=:2:0", $le: "<=:1:0", $lt: "<:1:0", $mul: "*:1:0", $or: "|:1:0", $shl: "<<:1:0", $shr: ">>:1:0", $sub: "-:1:0", $xor: "^:1:0", _addError$1: "_addError:1:0", _addEventError$0: "_addEventError:0:0", _addListener$1: "_addListener:1:0", _addNewRoot$2: "_addNewRoot:2:0", _addPending$1: "_addPending:1:0", _callOnCancel$0: "_callOnCancel:0:0", _callback$2: "_callback:2:0", _checkReplyTo$1: "_checkReplyTo:1:0", _close$0: "_close:0:0", _createShadowRoot$0: "_createShadowRoot:0:0", _deliver$0: "_deliver:0:0", _dispatch$1: "_dispatch:1:0", _distributeNodes$2: "_distributeNodes:2:0", _ensureDoneFuture$0: "_ensureDoneFuture:0:0", _expectsEvent$1: "_expectsEvent:1:0", _extractElements$1: "_extractElements:1:0", _findLeftMostDescendent$1: "_findLeftMostDescendent:1:0", _forEachListener$1: "_forEachListener:1:0", _inSameErrorZone$1: "_inSameErrorZone:1:0", _liblib9$_add$1: "_add:1:0", _liblib9$_onData$1: "_onData:1:0", _onError$1: "_onError:1:0", _publish$1: "_publish:1:0", _rebuildWorkList$1: "_rebuildWorkList:1:0", _recordCancel$1: "_recordCancel:1:0", _remove$1: "_remove:1:0", _removeListener$1: "_removeListener:1:0", _runCallback$1: "_runCallback:1:0", _sendError$1: "_sendError:1:0", _sendValue$1: "_sendValue:1:0", _setErrorUnchecked$1: "_setErrorUnchecked:1:0", _setRemoveAfterFiring$0: "_setRemoveAfterFiring:0:0", _setValueUnchecked$1: "_setValueUnchecked:1:0", _splay$1: "_splay:1:0", _subscribe$4: "_subscribe:4:0", _toggleEventId$0: "_toggleEventId:0:0", _zonedSendError$1: "_zonedSendError:1:0", _zonedSendValue$1: "_zonedSendValue:1:0", abs$0: "abs:0:0", add$1: "add:1:0", addAll$1: "addAll:1:0", addSecondaryLanguage$0: "addSecondaryLanguage:0:0", allMatches$1: "allMatches:1:0", assign$1: "assign:1:0", bodySetup$1: "bodySetup:1:0", call$0: "call:0:0", call$1: "call:1:0", call$1$growable: "call:1:0:growable", call$2: "call:2:0", call$2$onError: "call:2:0:onError", call$2$orElse: "call:2:0:orElse", call$3: "call:3:0", call$3$async: "call:3:0:async", call$3$onDone$onError: "call:3:0:onDone:onError", call$4: "call:4:0", call$4$cancelOnError$onDone$onError: "call:4:0:cancelOnError:onDone:onError", cancel$0: "cancel:0:0", catchError$1: "catchError:1:0", clear$0: "clear:0:0", clone$1: "clone:1:0", close$0: "close:0:0", codeUnitAt$1: "codeUnitAt:1:0", compareAndNotify$0: "compareAndNotify:0:0", compareTo$1: "compareTo:1:0", complete$0: "complete:0:0", complete$1: "complete:1:0", composeChildren$0: "composeChildren:0:0", conditional$3: "conditional:3:0", contains$1: "contains:1:0", containsKey$1: "containsKey:1:0", contentBind$2: "contentBind:2:0", create$0: "create:0:0", createShadowRoot$1: "createShadowRoot:1:0", deleteUser$0: "deleteUser:0:0", deserializeCloseToken$1: "deserializeCloseToken:1:0", deserializeIsolateSink$1: "deserializeIsolateSink:1:0", deserializeSendPort$1: "deserializeSendPort:1:0", eval$1: "eval:1:0", firstWhere$2$orElse: "firstWhere:2:0:orElse", fold$2: "fold:2:0", forEach$1: "forEach:1:0", get$$$_changes: "$_changes", get$$$_observers: "$_observers", get$SOLASMatch: "SOLASMatch", get$SiteLocation: "SiteLocation", get$_callback: "_callback", get$_chainSource: "_chainSource", get$_contents: "_contents", get$_duration: "_duration", get$_errorZone: "_errorZone", get$_eventState: "_eventState", get$_handle: "_handle", get$_head: "_head", get$_id: "_id", get$_isChained: "_isChained", get$_isFiring: "_isFiring", get$_isolateId: "_isolateId", get$_key: "_key", get$_liblib0$_length: "_length", get$_liblib1$_element: "_element", get$_liblib1$_next: "_next", get$_liblib1$_previous: "_previous", get$_liblib5$_id: "_id", get$_liblib9$_next: "_next", get$_liblib9$_previous: "_previous", get$_list: "_list", get$_name: "_name", get$_next: "_next", get$_nextListener: "_nextListener", get$_previous: "_previous", get$_receivePort: "_receivePort", get$_removeAfterFiring: "_removeAfterFiring", get$_resultOrListeners: "_resultOrListeners", get$_scheduled: "_scheduled", get$_state: "_state", get$_tail: "_tail", get$_value: "_value", get$_workerId: "_workerId", get$_zone: "_zone", get$address: "address", get$alert: "alert", get$attributes: "attributes", get$badges: "badges", get$biography: "biography", get$businessNumber: "businessNumber", get$caption: "caption", get$cells: "cells", get$checked: "checked", get$children: "children", get$city: "city", get$className: "className", get$code: "code", get$countries: "countries", get$country: "country", get$countryCode: "countryCode", get$current: "current", get$disabled: "disabled", get$display_name: "display_name", get$firstName: "firstName", get$fullName: "fullName", get$head: "head", get$host: "host", get$id: "id", get$inMilliseconds: "inMilliseconds", get$innerHtml: "innerHtml", get$interpreter: "interpreter", get$isAccessor: "isAccessor", get$isEmpty: "isEmpty", get$isGetter: "isGetter", get$isLoaded: "isLoaded", get$isNotEmpty: "isNotEmpty", get$isSetter: "isSetter", get$isUrl: "isUrl", get$isVisible: "isVisible", get$isolateStatics: "isolateStatics", get$iterator: "iterator", get$jobTitle: "jobTitle", get$key: "key", get$keys: "keys", get$languageCode: "languageCode", get$languages: "languages", get$lastName: "lastName", get$left: "left", get$length: "length", get$level: "level", get$memberName: "memberName", get$millisecondsSinceEpoch: "millisecondsSinceEpoch", get$mobileNumber: "mobileNumber", get$name: "name", get$namedArguments: "namedArguments", get$nativeLocale: "nativeLocale", get$newValue: "newValue", get$next: "next", get$nextNode: "nextNode", get$nodes: "nodes", get$onChange: "onChange", get$onClick: "onClick", get$onInput: "onInput", get$parent: "parent", get$parentNode: "parentNode", get$positionalArguments: "positionalArguments", get$proofreader: "proofreader", get$remove: "remove", get$responseText: "responseText", get$right: "right", get$rows: "rows", get$secondaryLanguageArray: "secondaryLanguageArray", get$secondaryLanguageCount: "secondaryLanguageCount", get$selectedIndex: "selectedIndex", get$sink: "sink", get$sip: "sip", get$tBodies: "tBodies", get$tFoot: "tFoot", get$tHead: "tHead", get$tagName: "tagName", get$text: "text", get$translator: "translator", get$type: "type", get$urls: "urls", get$user: "user", get$userId: "userId", get$userInfo: "userInfo", get$userSecondaryLanguages: "userSecondaryLanguages", get$value: "value", get$values: "values", get$width: "width", get$xtag: "xtag", getPropertyValue$1: "getPropertyValue:1:0", handleNext$1: "handleNext:1:0", handleUncaughtError$1: "handleUncaughtError:1:0", info$1: "info:1:0", insert$0: "insert:0:0", insertAllBefore$2: "insertAllBefore:2:0", insertBefore$2: "insertBefore:2:0", join$1: "join:1:0", lastIndexOf$1: "lastIndexOf:1:0", listen$1: "listen:1:0", listen$2: "listen:2:0", listen$3$onDone$onError: "listen:3:0:onDone:onError", listen$4$cancelOnError$onDone$onError: "listen:4:0:cancelOnError:onDone:onError", lookup$1: "lookup:1:0", map$1: "map:1:0", matchAsPrefix$2: "matchAsPrefix:2:0", modify$1: "modify:1:0", moveNext$0: "moveNext:0:0", oneWayBind$4: "oneWayBind:4:0", perform$1: "perform:1:0", process$0: "process:0:0", query$1: "query:1:0", queryAll$1: "queryAll:1:0", readClasses$0: "readClasses:0:0", remove$0: "remove:0:0", remove$1: "remove:1:0", removeSecondaryLanguage$0: "removeSecondaryLanguage:0:0", replaceAll$2: "replaceAll:2:0", replaceWith$1: "replaceWith:1:0", runAsync$2: "runAsync:2:0", runIteration$0: "runIteration:0:0", schedule$1: "schedule:1:0", send$2: "send:2:0", setDefaults$1: "setDefaults:1:0", setProperty$3: "setProperty:3:0", setter$1: "setter:1:0", split$1: "split:1:0", startsWith$1: "startsWith:1:0", stringifyValue$1: "stringifyValue:1:0", submitForm$0: "submitForm:0:0", substring$1: "substring:1:0", substring$2: "substring:2:0", then$1: "then:1:0", then$2$onError: "then:2:0:onError", toJson$0: "toJson:0:0", toList$0: "toList:0:0", toList$1$growable: "toList:1:0:growable", toLowerCase$0: "toLowerCase:0:0", toSet$0: "toSet:0:0", toUpperCase$0: "toUpperCase:0:0", trim$0: "trim:0:0", visitCloseToken$1: "visitCloseToken:1:0", visitIsolateSink$1: "visitIsolateSink:1:0", visitList$1: "visitList:1:0", visitMap$1: "visitMap:1:0", visitPrimitive$1: "visitPrimitive:1:0", visitSendPort$1: "visitSendPort:1:0", warning$1: "warning:1:0", where$1: "where:1:0", write$1: "write:1:0", writeAll$2: "writeAll:2:0"};
+init.mangledNames = {$$dom_addEventListener$3: "$dom_addEventListener:3:0", $$dom_removeEventListener$3: "$dom_removeEventListener:3:0", $$dom_replaceChild$2: "$dom_replaceChild:2:0", $add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", $index: "[]:1:0", $indexSet: "[]=:2:0", $le: "<=:1:0", $lt: "<:1:0", $mul: "*:1:0", $or: "|:1:0", $shl: "<<:1:0", $shr: ">>:1:0", $sub: "-:1:0", $xor: "^:1:0", _addError$1: "_addError:1:0", _addEventError$0: "_addEventError:0:0", _addListener$1: "_addListener:1:0", _addNewRoot$2: "_addNewRoot:2:0", _addPending$1: "_addPending:1:0", _callOnCancel$0: "_callOnCancel:0:0", _callback$2: "_callback:2:0", _checkReplyTo$1: "_checkReplyTo:1:0", _close$0: "_close:0:0", _createShadowRoot$0: "_createShadowRoot:0:0", _deliver$0: "_deliver:0:0", _dispatch$1: "_dispatch:1:0", _distributeNodes$2: "_distributeNodes:2:0", _ensureDoneFuture$0: "_ensureDoneFuture:0:0", _expectsEvent$1: "_expectsEvent:1:0", _extractElements$1: "_extractElements:1:0", _findLeftMostDescendent$1: "_findLeftMostDescendent:1:0", _forEachListener$1: "_forEachListener:1:0", _inSameErrorZone$1: "_inSameErrorZone:1:0", _liblib9$_add$1: "_add:1:0", _liblib9$_onData$1: "_onData:1:0", _onError$1: "_onError:1:0", _publish$1: "_publish:1:0", _rebuildWorkList$1: "_rebuildWorkList:1:0", _recordCancel$1: "_recordCancel:1:0", _remove$1: "_remove:1:0", _removeListener$1: "_removeListener:1:0", _runCallback$1: "_runCallback:1:0", _sendError$1: "_sendError:1:0", _sendValue$1: "_sendValue:1:0", _setErrorUnchecked$1: "_setErrorUnchecked:1:0", _setRemoveAfterFiring$0: "_setRemoveAfterFiring:0:0", _setValueUnchecked$1: "_setValueUnchecked:1:0", _splay$1: "_splay:1:0", _subscribe$4: "_subscribe:4:0", _toggleEventId$0: "_toggleEventId:0:0", _zonedSendError$1: "_zonedSendError:1:0", _zonedSendValue$1: "_zonedSendValue:1:0", abs$0: "abs:0:0", add$1: "add:1:0", addAll$1: "addAll:1:0", addSecondaryLanguage$0: "addSecondaryLanguage:0:0", allMatches$1: "allMatches:1:0", assign$1: "assign:1:0", bodySetup$1: "bodySetup:1:0", call$0: "call:0:0", call$1: "call:1:0", call$1$growable: "call:1:0:growable", call$2: "call:2:0", call$2$onError: "call:2:0:onError", call$2$orElse: "call:2:0:orElse", call$3: "call:3:0", call$3$async: "call:3:0:async", call$3$onDone$onError: "call:3:0:onDone:onError", call$4: "call:4:0", call$4$cancelOnError$onDone$onError: "call:4:0:cancelOnError:onDone:onError", cancel$0: "cancel:0:0", catchError$1: "catchError:1:0", clear$0: "clear:0:0", clone$1: "clone:1:0", close$0: "close:0:0", codeUnitAt$1: "codeUnitAt:1:0", compareAndNotify$0: "compareAndNotify:0:0", compareTo$1: "compareTo:1:0", complete$0: "complete:0:0", complete$1: "complete:1:0", composeChildren$0: "composeChildren:0:0", conditional$3: "conditional:3:0", contains$1: "contains:1:0", containsKey$1: "containsKey:1:0", contentBind$2: "contentBind:2:0", create$0: "create:0:0", createShadowRoot$1: "createShadowRoot:1:0", deleteUser$0: "deleteUser:0:0", deserializeCloseToken$1: "deserializeCloseToken:1:0", deserializeIsolateSink$1: "deserializeIsolateSink:1:0", deserializeSendPort$1: "deserializeSendPort:1:0", eval$1: "eval:1:0", firstWhere$2$orElse: "firstWhere:2:0:orElse", fold$2: "fold:2:0", forEach$1: "forEach:1:0", get$$$_changes: "$_changes", get$$$_observers: "$_observers", get$SOLASMatch: "SOLASMatch", get$SiteLocation: "SiteLocation", get$_callback: "_callback", get$_chainSource: "_chainSource", get$_contents: "_contents", get$_duration: "_duration", get$_errorZone: "_errorZone", get$_eventState: "_eventState", get$_handle: "_handle", get$_head: "_head", get$_id: "_id", get$_isChained: "_isChained", get$_isFiring: "_isFiring", get$_isolateId: "_isolateId", get$_key: "_key", get$_liblib0$_length: "_length", get$_liblib1$_element: "_element", get$_liblib1$_next: "_next", get$_liblib1$_previous: "_previous", get$_liblib5$_id: "_id", get$_liblib9$_next: "_next", get$_liblib9$_previous: "_previous", get$_list: "_list", get$_name: "_name", get$_next: "_next", get$_nextListener: "_nextListener", get$_previous: "_previous", get$_receivePort: "_receivePort", get$_removeAfterFiring: "_removeAfterFiring", get$_resultOrListeners: "_resultOrListeners", get$_scheduled: "_scheduled", get$_state: "_state", get$_tail: "_tail", get$_value: "_value", get$_workerId: "_workerId", get$_zone: "_zone", get$address: "address", get$alert: "alert", get$attributes: "attributes", get$badges: "badges", get$biography: "biography", get$businessNumber: "businessNumber", get$caption: "caption", get$cells: "cells", get$checked: "checked", get$children: "children", get$city: "city", get$className: "className", get$code: "code", get$countries: "countries", get$country: "country", get$countryCode: "countryCode", get$current: "current", get$disabled: "disabled", get$display_name: "display_name", get$firstName: "firstName", get$fullName: "fullName", get$head: "head", get$host: "host", get$id: "id", get$inMilliseconds: "inMilliseconds", get$innerHtml: "innerHtml", get$interpreter: "interpreter", get$isAccessor: "isAccessor", get$isEmpty: "isEmpty", get$isGetter: "isGetter", get$isLoaded: "isLoaded", get$isNotEmpty: "isNotEmpty", get$isSetter: "isSetter", get$isUrl: "isUrl", get$isVisible: "isVisible", get$isolateStatics: "isolateStatics", get$iterator: "iterator", get$jobTitle: "jobTitle", get$key: "key", get$keys: "keys", get$languageCode: "languageCode", get$languages: "languages", get$lastName: "lastName", get$left: "left", get$length: "length", get$level: "level", get$memberName: "memberName", get$millisecondsSinceEpoch: "millisecondsSinceEpoch", get$mobileNumber: "mobileNumber", get$name: "name", get$namedArguments: "namedArguments", get$nativeLocale: "nativeLocale", get$newValue: "newValue", get$next: "next", get$nextNode: "nextNode", get$nodes: "nodes", get$onChange: "onChange", get$onClick: "onClick", get$onInput: "onInput", get$parent: "parent", get$parentNode: "parentNode", get$positionalArguments: "positionalArguments", get$proofreader: "proofreader", get$remove: "remove", get$responseText: "responseText", get$right: "right", get$rows: "rows", get$secondaryLanguageArray: "secondaryLanguageArray", get$secondaryLanguageCount: "secondaryLanguageCount", get$selectedIndex: "selectedIndex", get$sink: "sink", get$sip: "sip", get$status: "status", get$statusText: "statusText", get$tBodies: "tBodies", get$tFoot: "tFoot", get$tHead: "tHead", get$tagName: "tagName", get$text: "text", get$translator: "translator", get$type: "type", get$urls: "urls", get$user: "user", get$userId: "userId", get$userInfo: "userInfo", get$userSecondaryLanguages: "userSecondaryLanguages", get$value: "value", get$values: "values", get$width: "width", get$xtag: "xtag", getPropertyValue$1: "getPropertyValue:1:0", handleNext$1: "handleNext:1:0", handleUncaughtError$1: "handleUncaughtError:1:0", info$1: "info:1:0", insert$0: "insert:0:0", insertAllBefore$2: "insertAllBefore:2:0", insertBefore$2: "insertBefore:2:0", join$1: "join:1:0", lastIndexOf$1: "lastIndexOf:1:0", listen$1: "listen:1:0", listen$2: "listen:2:0", listen$3$onDone$onError: "listen:3:0:onDone:onError", listen$4$cancelOnError$onDone$onError: "listen:4:0:cancelOnError:onDone:onError", lookup$1: "lookup:1:0", map$1: "map:1:0", matchAsPrefix$2: "matchAsPrefix:2:0", modify$1: "modify:1:0", moveNext$0: "moveNext:0:0", oneWayBind$4: "oneWayBind:4:0", perform$1: "perform:1:0", process$0: "process:0:0", query$1: "query:1:0", queryAll$1: "queryAll:1:0", readClasses$0: "readClasses:0:0", remove$0: "remove:0:0", remove$1: "remove:1:0", removeSecondaryLanguage$0: "removeSecondaryLanguage:0:0", replaceAll$2: "replaceAll:2:0", replaceWith$1: "replaceWith:1:0", runAsync$2: "runAsync:2:0", runIteration$0: "runIteration:0:0", schedule$1: "schedule:1:0", send$2: "send:2:0", setDefaults$1: "setDefaults:1:0", setProperty$3: "setProperty:3:0", setter$1: "setter:1:0", split$1: "split:1:0", startsWith$1: "startsWith:1:0", stringifyValue$1: "stringifyValue:1:0", submitForm$0: "submitForm:0:0", substring$1: "substring:1:0", substring$2: "substring:2:0", then$1: "then:1:0", then$2$onError: "then:2:0:onError", toJson$0: "toJson:0:0", toList$0: "toList:0:0", toList$1$growable: "toList:1:0:growable", toLowerCase$0: "toLowerCase:0:0", toSet$0: "toSet:0:0", toUpperCase$0: "toUpperCase:0:0", trim$0: "trim:0:0", visitCloseToken$1: "visitCloseToken:1:0", visitIsolateSink$1: "visitIsolateSink:1:0", visitList$1: "visitList:1:0", visitMap$1: "visitMap:1:0", visitPrimitive$1: "visitPrimitive:1:0", visitSendPort$1: "visitSendPort:1:0", warning$1: "warning:1:0", where$1: "where:1:0", write$1: "write:1:0", writeAll$2: "writeAll:2:0"};
 (function (reflectionData) {
   function map(x){x={x:x};delete x.x;return x}
   if (!init.libraries) init.libraries = [];
@@ -312,8 +312,11 @@ CountryDao_getAllCountries_closure: {"": "Closure;",
     countries = $.List_List(null, $.Country);
     $.setRuntimeTypeInfo(countries, [$.Country]);
     t1 = $.getInterceptor$x(response);
-    if (!$.$eq(t1.get$responseText(response), ""))
-      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.CountryDao_getAllCountries__closure(countries));
+    if ($.$lt$n(t1.get$status(response), 400) === true) {
+      if (!$.$eq(t1.get$responseText(response), ""))
+        $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.CountryDao_getAllCountries__closure(countries));
+    } else
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: getAllCountries returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
     return countries;
   },
   "+call:1:0": 0,
@@ -346,8 +349,11 @@ LanguageDao_getAllLanguages_closure: {"": "Closure;",
     languages = $.List_List(null, $.Language);
     $.setRuntimeTypeInfo(languages, [$.Language]);
     t1 = $.getInterceptor$x(response);
-    if (!$.$eq(t1.get$responseText(response), ""))
-      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
+    if ($.$lt$n(t1.get$status(response), 400) === true) {
+      if (!$.$eq(t1.get$responseText(response), ""))
+        $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.LanguageDao_getAllLanguages__closure(languages));
+    } else
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: getAllLanguages returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
     return languages;
   },
   "+call:1:0": 0,
@@ -465,10 +471,15 @@ UserDao_destroyUserSession: function() {
 
 UserDao_getUser_closure: {"": "Closure;",
   call$1: function(response) {
-    var user, t1;
-    user = new $.User(null, null, null, null, null, null, null, null);
+    var t1, user;
     t1 = $.getInterceptor$x(response);
-    return $.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true ? $.ModelFactory_generateUserFromMap($.parse(t1.get$responseText(response), null)) : user;
+    if ($.$lt$n(t1.get$status(response), 400) === true)
+      user = $.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true ? $.ModelFactory_generateUserFromMap($.parse(t1.get$responseText(response), null)) : null;
+    else {
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: getUser returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
+      user = null;
+    }
+    return user;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -478,7 +489,13 @@ UserDao_getUser_closure: {"": "Closure;",
 
 UserDao_deleteUser_closure: {"": "Closure;",
   call$1: function(response) {
-    return true;
+    var t1 = $.getInterceptor$x(response);
+    if ($.$lt$n(t1.get$status(response), 400) === true)
+      return true;
+    else {
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: deleteUser returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
+      return false;
+    }
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -492,7 +509,12 @@ UserDao_getUserPersonalInfo_closure: {"": "Closure;userId_0",
     userInfo = new $.UserPersonalInformation(null, null, null, null, null, null, null, null, null, null, null);
     userInfo.userId = this.userId_0;
     t1 = $.getInterceptor$x(response);
-    return !$.$eq(t1.get$responseText(response), "") ? $.ModelFactory_generateUserInfoFromMap($.parse(t1.get$responseText(response), null)) : userInfo;
+    if ($.$lt$n(t1.get$status(response), 400) === true) {
+      if (!$.$eq(t1.get$responseText(response), ""))
+        userInfo = $.ModelFactory_generateUserInfoFromMap($.parse(t1.get$responseText(response), null));
+    } else
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: getUserPersonalInfo returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
+    return userInfo;
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -506,8 +528,11 @@ UserDao_getSecondaryLanguages_closure: {"": "Closure;",
     locales = $.List_List(null, $.Locale);
     $.setRuntimeTypeInfo(locales, [$.Locale]);
     t1 = $.getInterceptor$x(response);
-    if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true)
-      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.UserDao_getSecondaryLanguages__closure(locales));
+    if ($.$lt$n(t1.get$status(response), 400) === true) {
+      if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true)
+        $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.UserDao_getSecondaryLanguages__closure(locales));
+    } else
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: getSecondaryLanguages returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
     return locales;
   },
   "+call:1:0": 0,
@@ -532,8 +557,11 @@ UserDao_getUserBadges_closure: {"": "Closure;",
     badges = $.List_List(null, $.Badge);
     $.setRuntimeTypeInfo(badges, [$.Badge]);
     t1 = $.getInterceptor$x(response);
-    if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true)
-      $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.UserDao_getUserBadges__closure(badges));
+    if ($.$lt$n(t1.get$status(response), 400) === true) {
+      if ($.$gt$n($.get$length$asx(t1.get$responseText(response)), 0) === true)
+        $.forEach$1$ax($.$index$asx($.parse(t1.get$responseText(response), null), "item"), new $.UserDao_getUserBadges__closure(badges));
+    } else
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: getUserBadges returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
     return badges;
   },
   "+call:1:0": 0,
@@ -554,7 +582,13 @@ UserDao_getUserBadges__closure: {"": "Closure;badges_0",
 
 UserDao_saveUserDetails_closure: {"": "Closure;",
   call$1: function(response) {
-    return true;
+    var t1 = $.getInterceptor$x(response);
+    if ($.$lt$n(t1.get$status(response), 400) === true)
+      return true;
+    else {
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: saveUserDetails returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
+      return false;
+    }
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -564,7 +598,13 @@ UserDao_saveUserDetails_closure: {"": "Closure;",
 
 UserDao_saveUserInfo_closure: {"": "Closure;",
   call$1: function(response) {
-    return true;
+    var t1 = $.getInterceptor$x(response);
+    if ($.$lt$n(t1.get$status(response), 400) === true)
+      return true;
+    else {
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: saveUserInfo returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
+      return false;
+    }
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -574,7 +614,13 @@ UserDao_saveUserInfo_closure: {"": "Closure;",
 
 UserDao_addUserBadge_closure: {"": "Closure;",
   call$1: function(response) {
-    return true;
+    var t1 = $.getInterceptor$x(response);
+    if ($.$lt$n(t1.get$status(response), 400) === true)
+      return true;
+    else {
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: addUserBadge returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
+      return false;
+    }
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -584,7 +630,13 @@ UserDao_addUserBadge_closure: {"": "Closure;",
 
 UserDao_removeUserBadge_closure: {"": "Closure;",
   call$1: function(response) {
-    return true;
+    var t1 = $.getInterceptor$x(response);
+    if ($.$lt$n(t1.get$status(response), 400) === true)
+      return true;
+    else {
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: removeUserBadge returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
+      return false;
+    }
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -594,7 +646,13 @@ UserDao_removeUserBadge_closure: {"": "Closure;",
 
 UserDao_addSecondaryLanguage_closure: {"": "Closure;",
   call$1: function(response) {
-    return true;
+    var t1 = $.getInterceptor$x(response);
+    if ($.$lt$n(t1.get$status(response), 400) === true)
+      return true;
+    else {
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: addSecondaryLanguage returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
+      return false;
+    }
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -604,7 +662,13 @@ UserDao_addSecondaryLanguage_closure: {"": "Closure;",
 
 UserDao_removeSecondaryLanguage_closure: {"": "Closure;",
   call$1: function(response) {
-    return true;
+    var t1 = $.getInterceptor$x(response);
+    if ($.$lt$n(t1.get$status(response), 400) === true)
+      return true;
+    else {
+      $.Primitives_printString(C.JSString_methods.$add(C.JSString_methods.$add(C.JSString_methods.$add("Error: removeSecondaryLanguage returned ", $.toString$0(t1.get$status(response))), " "), t1.get$statusText(response)));
+      return false;
+    }
   },
   "+call:1:0": 0,
   $isFunction: true
@@ -14099,6 +14163,12 @@ Object: {"": ";",
   get$selectedIndex: function($receiver) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("selectedIndex", "get$selectedIndex", 1, [], []));
   },
+  get$status: function($receiver) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("status", "get$status", 1, [], []));
+  },
+  get$statusText: function($receiver) {
+    return this.noSuchMethod$1(this, $.createInvocationMirror("statusText", "get$statusText", 1, [], []));
+  },
   get$tBodies: function($receiver) {
     return this.noSuchMethod$1(this, $.createInvocationMirror("tBodies", "get$tBodies", 1, [], []));
   },
@@ -16459,7 +16529,7 @@ HtmlDocument: {"": "Document;",
 
 "+HtmlDocument": [],
 
-HttpRequest: {"": "EventTarget;responseText=",
+HttpRequest: {"": "EventTarget;responseText=,status=,statusText=",
   open$5$async$password$user: function(receiver, method, url, async, password, user) {
     return receiver.open(method, url, async, user, password);
   },
@@ -16811,7 +16881,7 @@ VideoElement: {"": "MediaElement;width}"},
 
 "+VideoElement": [71],
 
-Window: {"": "EventTarget;name=",
+Window: {"": "EventTarget;name=,status=",
   get$location: function(receiver) {
     var result = receiver.location;
     if ($.Window__isDartLocation(result) === true)

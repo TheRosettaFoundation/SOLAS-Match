@@ -18,10 +18,14 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     Future<User> ret = client.call("User", "v0/users/$id", "GET")
         .then((HttpRequest response) {
-          User user = new User();
-          if (response.responseText.length > 0) {
-            Map jsonParsed = json.parse(response.responseText);
-            user = ModelFactory.generateUserFromMap(jsonParsed);
+          User user = null;
+          if (response.status < 400) {
+            if (response.responseText.length > 0) {
+              Map jsonParsed = json.parse(response.responseText);
+              user = ModelFactory.generateUserFromMap(jsonParsed);
+            }
+          } else {
+            print("Error: getUser returned " + response.status.toString() + " " + response.statusText);
           }
           return user;
         });
@@ -33,7 +37,12 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/$userId", "DELETE")
         .then((HttpRequest response) {
-          return true;
+          if (response.status < 400) {
+            return true;
+          } else {
+            print("Error: deleteUser returned " + response.status.toString() + " " + response.statusText);
+            return false;
+          }
         });
   }
   
@@ -44,9 +53,14 @@ class UserDao
         .then((HttpRequest response) {
           UserPersonalInformation userInfo = new UserPersonalInformation();
           userInfo.userId = userId;
-          if (response.responseText != '') {
-            Map jsonParsed = json.parse(response.responseText);
-            userInfo = ModelFactory.generateUserInfoFromMap(jsonParsed);
+          if (response.status < 400) {
+            if (response.responseText != '') {
+              Map jsonParsed = json.parse(response.responseText);
+              userInfo = ModelFactory.generateUserInfoFromMap(jsonParsed);
+            }
+          } else {
+            print("Error: getUserPersonalInfo returned " + 
+                response.status.toString() + " " + response.statusText);
           }
           return userInfo;
         });
@@ -59,12 +73,16 @@ class UserDao
     Future<List<Locale>> ret = client.call("Locale", "v0/users/$userId/secondaryLanguages", "GET")
         .then((HttpRequest response) {
           List<Locale> locales = new List<Locale>();
-          if (response.responseText.length > 0) {
-            Map parsed = json.parse(response.responseText);
-            parsed['item'].forEach((String data) {
-              Map localeData = json.parse(data);
-              locales.add(ModelFactory.generateLocaleFromMap(localeData));
-            });
+          if (response.status < 400) {
+            if (response.responseText.length > 0) {
+              Map parsed = json.parse(response.responseText);
+              parsed['item'].forEach((String data) {
+                Map localeData = json.parse(data);
+                locales.add(ModelFactory.generateLocaleFromMap(localeData));
+              });
+            }
+          } else {
+            print("Error: getSecondaryLanguages returned " + response.status.toString() + " " + response.statusText);
           }
           return locales;
         });
@@ -77,12 +95,16 @@ class UserDao
     Future<List<Badge>> ret = client.call("Badge", "v0/users/$userId/badges", "GET")
         .then((HttpRequest response) {
           List<Badge> badges = new List<Badge>();
-          if (response.responseText.length > 0) {
-            Map parsed = json.parse(response.responseText);
-            parsed['item'].forEach((String data) {
-              Map badgeData = json.parse(data);
-              badges.add(ModelFactory.generateBadgeFromMap(badgeData));
-            });
+          if (response.status < 400) {
+            if (response.responseText.length > 0) {
+              Map parsed = json.parse(response.responseText);
+              parsed['item'].forEach((String data) {
+                Map badgeData = json.parse(data);
+                badges.add(ModelFactory.generateBadgeFromMap(badgeData));
+              });
+            }
+          } else {
+            print("Error: getUserBadges returned " + response.status.toString() + " " + response.statusText);
           }
           return badges;
         });
@@ -94,7 +116,12 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     return client.call("User", "v0/users/" + user.id.toString(), "PUT", json.stringify(user))
       .then((HttpRequest response) {
-        return true;
+        if (response.status < 400) {
+          return true;
+        } else {
+          print("Error: saveUserDetails returned " + response.status.toString() + " " + response.statusText);
+          return false;
+        }
       });
   }
   
@@ -103,7 +130,12 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/" + userInfo.userId.toString() + "/personalInfo", "PUT", json.stringify(userInfo))
       .then((HttpRequest response) {
-        return true;
+        if (response.status < 400) {
+          return true;
+        } else {
+          print("Error: saveUserInfo returned " + response.status.toString() + " " + response.statusText);
+          return false;
+        }
       });
   }
   
@@ -112,7 +144,12 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/$userId/badges/$badgeId", "PUT")
       .then((HttpRequest response) {
-        return true;
+        if (response.status < 400) {
+          return true;
+        } else {
+          print("Error: addUserBadge returned " + response.status.toString() + " " + response.statusText);
+          return false;
+        }
       });
   }
   
@@ -121,7 +158,12 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/$userId/badges/$badgeId", "DELETE")
         .then((HttpRequest response) {
-          return true;
+          if (response.status < 400) {
+            return true;
+          } else {
+            print("Error: removeUserBadge returned " + response.status.toString() + " " + response.statusText);
+            return false;
+          }
         });
   }
   
@@ -130,7 +172,12 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/$userId/secondaryLanguages", "POST", json.stringify(locale))
       .then((HttpRequest response) {
-        return true;
+        if (response.status < 400) {
+          return true;
+        } else {
+          print("Error: addSecondaryLanguage returned " + response.status.toString() + " " + response.statusText);
+          return false;
+        }
       });
   }
   
@@ -139,7 +186,12 @@ class UserDao
     APIHelper client = new APIHelper(".json");
     return client.call("", "v0/users/removeSecondaryLanguage/$userId/$languageCode/$countryCode", "DELETE")
         .then((HttpRequest response) {
-          return true;
+          if (response.status < 400) {
+            return true;
+          } else {
+            print("Error: removeSecondaryLanguage returned " + response.status.toString() + " " + response.statusText);
+            return false;
+          }
         });
   }
   

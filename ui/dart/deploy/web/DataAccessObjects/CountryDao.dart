@@ -16,12 +16,16 @@ class CountryDao
     Future<List<Country>> ret = client.call("Country", "v0/countries", "GET")
         .then((HttpRequest response) {
           List<Country> countries = new List<Country>();
-          if (response.responseText != '') {
-            Map parsed = json.parse(response.responseText);
-            parsed['item'].forEach((String data) {
-              Map countryMap = json.parse(data);
-              countries.add(ModelFactory.generateCountryFromMap(countryMap));
-            });
+          if (response.status < 400) {
+            if (response.responseText != '') {
+              Map parsed = json.parse(response.responseText);
+              parsed['item'].forEach((String data) {
+                Map countryMap = json.parse(data);
+                countries.add(ModelFactory.generateCountryFromMap(countryMap));
+              });
+            }
+          } else {
+            print("Error: getAllCountries returned " + response.status.toString() + " " + response.statusText);
           }
           return countries;
         });

@@ -17,12 +17,16 @@ class LanguageDao
     Future<List<Language>> ret = client.call("Language", "v0/languages", "GET")
         .then((HttpRequest response) {
           List<Language> languages = new List<Language>();
-          if (response.responseText != "") {
-            Map jsonParsed = json.parse(response.responseText);
-            jsonParsed['item'].forEach((String data) {
-              Map lang = json.parse(data);
-              languages.add(ModelFactory.generateLanguageFromMap(lang));
-            });
+          if (response.status < 400) {
+            if (response.responseText != "") {
+              Map jsonParsed = json.parse(response.responseText);
+              jsonParsed['item'].forEach((String data) {
+                Map lang = json.parse(data);
+                languages.add(ModelFactory.generateLanguageFromMap(lang));
+              });
+            }
+          } else {
+            print("Error: getAllLanguages returned " + response.status.toString() + " " + response.statusText);
           }
           return languages;
         });
@@ -48,14 +52,18 @@ class LanguageDao
       });*/
       .then((HttpRequest response) {
       List<Language> activeLangs = new List<Language>();
-      if (response.responseText != '') {
-        Map jsonParsed = json.parse(response.responseText);
-        if (jsonParsed.length > 0) {
-          jsonParsed['item'].forEach((String data) {
-            Map lang = json.parse(data);
-            activeLangs.add(ModelFactory.generateLanguageFromMap(lang));
-          });
+      if (response.status < 400) {
+        if (response.responseText != '') {
+          Map jsonParsed = json.parse(response.responseText);
+          if (jsonParsed.length > 0) {
+            jsonParsed['item'].forEach((String data) {
+              Map lang = json.parse(data);
+              activeLangs.add(ModelFactory.generateLanguageFromMap(lang));
+            });
+          }
         }
+      } else {
+        print("Error: getActiveLanguages returned " + response.status.toString() + " " + response.statusText);
       }
       return activeLangs;
     });
@@ -68,14 +76,19 @@ class LanguageDao
     Future<List<Language>> languages = client.call("Language", "v0/languages/getActiveSourceLanguages", "GET")
         .then((HttpRequest response) {
           List<Language> ret = new List<Language>();
-          if (response.responseText != '') {
-            Map jsonParsed = json.parse(response.responseText);
-            if (jsonParsed.length > 0) {
-              jsonParsed['item'].forEach((String data) {
-                Map lang = json.parse(data);
-                ret.add(ModelFactory.generateLanguageFromMap(lang));
-              });
+          if (response.status < 400) {
+            if (response.responseText != '') {
+              Map jsonParsed = json.parse(response.responseText);
+              if (jsonParsed.length > 0) {
+                jsonParsed['item'].forEach((String data) {
+                  Map lang = json.parse(data);
+                  ret.add(ModelFactory.generateLanguageFromMap(lang));
+                });
+              }
             }
+          } else {
+            print("Error: getActiveSourceLanguages returned " + 
+                response.status.toString() + " " + response.statusText);
           }
           return ret;
         });
@@ -88,14 +101,19 @@ class LanguageDao
     Future<List<Language>> languages = client.call("Language", "v0/languages/getActiveTargetLanguages", "GET")
         .then((HttpRequest response) {
           List<Language> ret = new List<Language>();
-          if (response.responseText != '') {
-            Map jsonParsed = json.parse(response.responseText);
-            if (jsonParsed.length > 0) {
-              jsonParsed['item'].forEach((String data) {
-                Map lang = json.parse(data);
-                ret.add(ModelFactory.generateLanguageFromMap(lang));
-              });
+          if (response.status < 400) {
+            if (response.responseText != '') {
+              Map jsonParsed = json.parse(response.responseText);
+              if (jsonParsed.length > 0) {
+                jsonParsed['item'].forEach((String data) {
+                  Map lang = json.parse(data);
+                  ret.add(ModelFactory.generateLanguageFromMap(lang));
+                });
+              }
             }
+          } else {
+            print("Error: getActiveTargetLanguages returned " + 
+                response.status.toString() + " " + response.statusText);
           }
           return ret;
         });
