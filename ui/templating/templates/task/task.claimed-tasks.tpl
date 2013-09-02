@@ -11,7 +11,6 @@
             <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_SEGMENTATION)}</span> 
         </p>
     {elseif $type_id == TaskTypeEnum::TRANSLATION}
-        </h2>
         <p>{Localisation::getTranslation(Strings::COMMON_TYPE)}: 
             <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation(Strings::COMMON_TRANSLATION)}</span>
         </p>

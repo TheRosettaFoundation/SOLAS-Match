@@ -18,7 +18,7 @@
 {/if}
 
 {if isset($openid)&& ($openid==='n'||$openid==='h' )}
-    <form method="post" action="{urlFor name="register"}" class="well" accept-charset="utf-8" accept-charset="utf-8">
+    <form method="post" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
             <label for="email"><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}:</strong></label>
             <input type="text" name="email" id="email" placeholder="{Localisation::getTranslation(Strings::REGISTER_YOUR_EMAIL)}"/>
             <label for="password"><strong>{Localisation::getTranslation(Strings::COMMON_PASSWORD)}:</strong></label>

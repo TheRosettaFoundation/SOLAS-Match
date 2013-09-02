@@ -33,6 +33,7 @@ class StaticRouteHandeler
     public function faq()
     {
          $app = Slim::getInstance();
+         $app->view()->appendData(array('current_page' => 'faq'));
          $app->render("static/FAQ.tpl");
     }
     

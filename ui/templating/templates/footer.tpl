@@ -18,11 +18,11 @@
                                         {Localisation::getTranslation(Strings::COMMON_YOUR)} <a href="https://docs.google.com/a/ul.ie/spreadsheet/viewform?formkey=dER4VFJZQVpNY0g2anpLb2dJSGJEbFE6MQ#gid=0">{Localisation::getTranslation(Strings::FOOTER_FEEDBACK)}</a> {Localisation::getTranslation(Strings::FOOTER_IS_APPRECIATED)}.
                                     </p>
                                 
-                             <td>
+                             </td>
                              <td width="31%" style="text-align: center">
                                  <img alt="Creative Commons Licence" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" /><br /> {Localisation::getTranslation(Strings::FOOTER_POWERED_BY)} <a href="https://github.com/TheRosettaFoundation/SOLAS-Match">Solas</a>
                              </td>
-                        <tr>
+                        </tr>
                     </table>
                 </footer>    
             </div>
