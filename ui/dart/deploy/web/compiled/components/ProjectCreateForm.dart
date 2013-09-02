@@ -540,7 +540,7 @@ class ProjectCreateForm extends WebComponent with Observable
   
   // Other
   int maxTargetLanguages;
-  File fileName;
+  String filename;
   String tagList;
   String wordCountInput;
   String orgDashboardLink;
@@ -970,91 +970,91 @@ class ProjectCreateForm extends WebComponent with Observable
     fileUploadError = null;
     maxTargetsReached = null;
     
-    if (validateInput()) {
-      project.organisationId = orgId;
-      SelectElement sourceLangSelect = query("#sourceLanguageSelect");
-      SelectElement sourceCountrySelect = query("#sourceCountrySelect");
-      Language sourceLang = languages[sourceLangSelect.selectedIndex];
-      Country sourceCountry = countries[sourceCountrySelect.selectedIndex];
-      Locale sourceLocale = new Locale();
-      sourceLocale.languageName = sourceLang.name;
-      sourceLocale.languageCode = sourceLang.code;
-      sourceLocale.countryName = sourceCountry.name;
-      sourceLocale.countryCode = sourceCountry.code;
-      project.sourceLocale = sourceLocale;
-      project.organisationId = orgId;
-      
-      List<String> projectTags = new List<String>();
-      if (tagList.length > 0) {
-        projectTags = separateTags(tagList);
-      }
-      if (projectTags.length > 0) {
-        projectTags.forEach((String tagName) {
-          Tag tag = new Tag();
-          tag.label = tagName;
-          project.tag.add(tag);
-        });
-      }
-
-      ProjectDao.createProject(project).then((Project pro) {
-        if (pro == null || pro.id == null || pro.id < 1) {
-          createProjectError = new SafeHtml.unsafe("<span>Failed to create project</span>");
-        } else {
-          project = pro;          
-          List<Future<bool>> successList = new List<Future<bool>>();
-          successList.add(uploadProjectFile().then((bool fileUploaded) {
-            Future<bool> ret;
-            if (fileUploaded) {
-              ret = createProjectTasks();
-            } else {
-              ret = new Future.value(false);
-            }
-            return ret;
-          }));
-          
-          if (trackProject) {
-            successList.add(ProjectDao.trackProject(project.id, userId));
-          }
-          
-          Future<bool> success = Future.wait(successList).then((List<bool> successes) {
-            bool ret = true;
-            successes.forEach((bool created) {
-              if (!created) {
-                ret = false;
-              }
-            });
-            return ret;
-          }).catchError((error) {
-            print("An error occurred when evaluating project create success list: " + error.toString());
-          });
-          
-          success.then((bool created) {
-            if (!created) {
-              print("some data failed, deleting project");
-              ProjectDao.deleteProject(project.id);
-              project.id = null;
-            } else {
-              ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
-                Settings settings = new Settings();
-                window.location.assign(settings.conf.urls.SiteLocation + "project/" 
-                    + project.id.toString() + "/view");
-              });
-            }
-          }).catchError((error) {
-            print("An error occured: " + error.toString());
+    validateInput().then((bool success) {
+      if (success) {
+        project.organisationId = orgId;
+        SelectElement sourceLangSelect = query("#sourceLanguageSelect");
+        SelectElement sourceCountrySelect = query("#sourceCountrySelect");
+        Language sourceLang = languages[sourceLangSelect.selectedIndex];
+        Country sourceCountry = countries[sourceCountrySelect.selectedIndex];
+        Locale sourceLocale = new Locale();
+        sourceLocale.languageName = sourceLang.name;
+        sourceLocale.languageCode = sourceLang.code;
+        sourceLocale.countryName = sourceCountry.name;
+        sourceLocale.countryCode = sourceCountry.code;
+        project.sourceLocale = sourceLocale;
+        project.organisationId = orgId;
+        
+        List<String> projectTags = new List<String>();
+        if (tagList.length > 0) {
+          projectTags = separateTags(tagList);
+        }
+        if (projectTags.length > 0) {
+          projectTags.forEach((String tagName) {
+            Tag tag = new Tag();
+            tag.label = tagName;
+            project.tag.add(tag);
           });
         }
-      });
-    } else {
-      print("Invalid form input");
-    }
+  
+        ProjectDao.createProject(project).then((Project pro) {
+          if (pro == null || pro.id == null || pro.id < 1) {
+            createProjectError = new SafeHtml.unsafe("<span>Failed to create project</span>");
+          } else {
+            project = pro;          
+            List<Future<bool>> successList = new List<Future<bool>>();
+            successList.add(uploadProjectFile().then((bool fileUploaded) {
+              Future<bool> ret;
+              if (fileUploaded) {
+                ret = createProjectTasks();
+              } else {
+                ret = new Future.value(false);
+              }
+              return ret;
+            }));
+            
+            if (trackProject) {
+              successList.add(ProjectDao.trackProject(project.id, userId));
+            }
+            
+            Future<bool> success = Future.wait(successList).then((List<bool> successes) {
+              bool ret = true;
+              successes.forEach((bool created) {
+                if (!created) {
+                  ret = false;
+                }
+              });
+              return ret;
+            }).catchError((error) {
+              print("An error occurred when evaluating project create success list: " + error.toString());
+            });
+            
+            success.then((bool created) {
+              if (!created) {
+                print("some data failed, deleting project");
+                ProjectDao.deleteProject(project.id);
+                project.id = null;
+              } else {
+                ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
+                  Settings settings = new Settings();
+                  window.location.assign(settings.conf.urls.SiteLocation + "project/" 
+                      + project.id.toString() + "/view");
+                });
+              }
+            }).catchError((error) {
+              print("An error occured: " + error.toString());
+            });
+          }
+        });
+      } else {
+        print("Invalid form input");
+      }
+    });
   }
   
   Future<bool> createProjectTasks()
   {
     Future<bool> success;
-    List<Language> targetLanguages = new List<Language>();
-    List<Country> targetCountries = new List<Country>();
     List<Task> createdTasks = new List<Task>();
     List<Future<bool>> successList = new List<Future<bool>>();
     File projectFile = this.getProjectFile();
@@ -1081,99 +1081,91 @@ class ProjectCreateForm extends WebComponent with Observable
       SelectElement targetCountrySelect = query("#target_country_$i");
       Language targetLang = languages[targetLanguageSelect.selectedIndex];
       Country targetCountry = countries[targetCountrySelect.selectedIndex];
-      if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
-        createProjectError = Localisation.getTranslationSafe("project_routehandler_17");
-        success = new Future.value(false);
+      Locale targetLocale = new Locale();
+      targetLocale.languageName = targetLang.name;
+      targetLocale.languageCode = targetLang.code;
+      targetLocale.countryName = targetCountry.name;
+      targetLocale.countryCode = targetCountry.code;
+      templateTask.targetLocale = targetLocale;
+      CheckboxInputElement segmentationCheckbox = query("#segmentation_$i");
+      bool segmentationRequired = segmentationCheckbox.checked;
+      CheckboxInputElement translationCheckbox = query("#translation_$i");
+      bool translationRequired = translationCheckbox.checked;
+      CheckboxInputElement proofreadingCheckbox = query("#proofreading_$i");
+      bool proofreadingRequired = proofreadingCheckbox.checked;
+      if (segmentationRequired) {
+        templateTask.taskType = TaskTypeEnum.SEGMENTATION.value;
+        successList.add(TaskDao.createTask(templateTask).then((Task segTask) {
+          bool ret;
+          if (segTask == null || segTask.id == null || segTask.id < 1) {
+            createProjectError = Localisation.getTranslationSafe("project_create_13");
+            ret = false;
+          } else {
+            createdTasks.add(segTask);
+            TaskDao.saveTaskFile(segTask.id, userId, fileText);
+            if (trackProject) {
+              TaskDao.trackTask(segTask.id, userId);
+            }
+            ret = true;
+          }
+          return ret;
+        }));
       } else {
-        Locale targetLocale = new Locale();
-        targetLocale.languageName = targetLang.name;
-        targetLocale.languageCode = targetLang.code;
-        targetLocale.countryName = targetCountry.name;
-        targetLocale.countryCode = targetCountry.code;
-        templateTask.targetLocale = targetLocale;
-        CheckboxInputElement segmentationCheckbox = query("#segmentation_$i");
-        bool segmentationRequired = segmentationCheckbox.checked;
-        CheckboxInputElement translationCheckbox = query("#translation_$i");
-        bool translationRequired = translationCheckbox.checked;
-        CheckboxInputElement proofreadingCheckbox = query("#proofreading_$i");
-        bool proofreadingRequired = proofreadingCheckbox.checked;
-        if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
-          createProjectError = Localisation.getTranslationSafe("project_routehandler_18");
-          successList.add(new Future.value(false));
-        } else if (segmentationRequired) {
-          templateTask.taskType = TaskTypeEnum.SEGMENTATION.value;
-          successList.add(TaskDao.createTask(templateTask).then((Task segTask) {
+        if (translationRequired) {
+          templateTask.taskType = TaskTypeEnum.TRANSLATION.value;
+          successList.add(TaskDao.createTask(templateTask).then((Task transTask) {
+            Future<bool> ret;
+            if (transTask == null || transTask.id == null || transTask.id < 1) {
+              createProjectError = Localisation.getTranslationSafe("project_create_14");
+              ret = new Future.value(false);
+            } else {
+              createdTasks.add(transTask);
+              TaskDao.saveTaskFile(transTask.id, userId, fileText);
+              if (trackProject) {
+                TaskDao.trackTask(transTask.id, userId);
+              }
+              
+              if (proofreadingRequired) {
+                templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
+                templateTask.targetLocale = transTask.targetLocale;
+                ret = new Future.sync(() => TaskDao.createTask(templateTask).then((Task proofTask) {
+                  Future<bool> ret;
+                  if (proofTask == null || proofTask.id == null || proofTask.id < 1) {
+                    createProjectError = Localisation.getTranslationSafe("project_create_15"); 
+                    ret = new Future.value(false);
+                  } else {
+                    createdTasks.add(proofTask);
+                    TaskDao.saveTaskFile(proofTask.id, userId, fileText);
+                    if (trackProject) {
+                      TaskDao.trackTask(proofTask.id, userId);
+                    }
+                    ret = new Future.sync(() => TaskDao.addTaskPreReq(proofTask.id, transTask.id)); 
+                  }
+                  return ret;
+                }));
+              } else {
+                ret = new Future.value(true);
+              }
+            }
+            return ret;
+          }));
+        } else if (!translationRequired && proofreadingRequired) {
+          templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
+          successList.add(TaskDao.createTask(templateTask).then((Task proofTask) {
             bool ret;
-            if (segTask == null || segTask.id == null || segTask.id < 1) {
-              createProjectError = Localisation.getTranslationSafe("project_create_13");
+            if (proofTask == null || proofTask.id == null || proofTask.id < 1) {
+              createProjectError = Localisation.getTranslationSafe("project_create_15");
               ret = false;
             } else {
-              createdTasks.add(segTask);
-              TaskDao.saveTaskFile(segTask.id, userId, fileText);
+              createdTasks.add(proofTask);
+              TaskDao.saveTaskFile(proofTask.id, userId, fileText);
               if (trackProject) {
-                TaskDao.trackTask(segTask.id, userId);
+                TaskDao.trackTask(proofTask.id, userId);
               }
               ret = true;
             }
             return ret;
           }));
-        } else {
-          if (translationRequired) {
-            templateTask.taskType = TaskTypeEnum.TRANSLATION.value;
-            successList.add(TaskDao.createTask(templateTask).then((Task transTask) {
-              Future<bool> ret;
-              if (transTask == null || transTask.id == null || transTask.id < 1) {
-                createProjectError = Localisation.getTranslationSafe("project_create_14");
-                ret = new Future.value(false);
-              } else {
-                createdTasks.add(transTask);
-                TaskDao.saveTaskFile(transTask.id, userId, fileText);
-                if (trackProject) {
-                  TaskDao.trackTask(transTask.id, userId);
-                }
-                
-                if (proofreadingRequired) {
-                  templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
-                  templateTask.targetLocale = transTask.targetLocale;
-                  ret = new Future.sync(() => TaskDao.createTask(templateTask).then((Task proofTask) {
-                    Future<bool> ret;
-                    if (proofTask == null || proofTask.id == null || proofTask.id < 1) {
-                      createProjectError = Localisation.getTranslationSafe("project_create_15"); 
-                      ret = new Future.value(false);
-                    } else {
-                      createdTasks.add(proofTask);
-                      TaskDao.saveTaskFile(proofTask.id, userId, fileText);
-                      if (trackProject) {
-                        TaskDao.trackTask(proofTask.id, userId);
-                      }
-                      ret = new Future.sync(() => TaskDao.addTaskPreReq(proofTask.id, transTask.id)); 
-                    }
-                    return ret;
-                  }));
-                } else {
-                  ret = new Future.value(true);
-                }
-              }
-              return ret;
-            }));
-          } else if (!translationRequired && proofreadingRequired) {
-            templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
-            successList.add(TaskDao.createTask(templateTask).then((Task proofTask) {
-              bool ret;
-              if (proofTask == null || proofTask.id == null || proofTask.id < 1) {
-                createProjectError = Localisation.getTranslationSafe("project_create_15");
-                ret = false;
-              } else {
-                createdTasks.add(proofTask);
-                TaskDao.saveTaskFile(proofTask.id, userId, fileText);
-                if (trackProject) {
-                  TaskDao.trackTask(proofTask.id, userId);
-                }
-                ret = true;
-              }
-              return ret;
-            }));
-          }
         }
       }
     }
@@ -1195,78 +1187,38 @@ class ProjectCreateForm extends WebComponent with Observable
   {
     Completer<bool> completer = new Completer<bool>();
     File projectFile = this.getProjectFile();
-    if (projectFile == null) {
-      createProjectError = Localisation.getTranslationSafe("project_create_16");
-    }
-    
-    if (projectFile != null) {
-      if (projectFile.size > 0) {
-        if (projectFile.size < maxFileSize) {
-          int extensionStartIndex = projectFile.name.lastIndexOf(".");
-          if (extensionStartIndex >= 0) {
-            String filename = projectFile.name;
-            String extension = projectFile.name.substring(extensionStartIndex + 1);
-            if (extension != extension.toLowerCase()) {
-              extension = extension.toLowerCase();
-              filename = projectFile.name.substring(0, extensionStartIndex + 1) + extension;
-              window.alert(Localisation.getTranslation("project_create_18"));
-            }
-            bool finished = false;
-            if (extension == "pdf") {
-              if (!window.confirm(Localisation.getTranslation("project_create_19"))) {
-                finished = true;
-                completer.complete(false);
-              }
-            }
-            
-            if (!finished) {
-              FileReader reader = new FileReader();
-              reader.onLoadEnd.listen((e) {
-                ProjectDao.uploadProjectFile(project.id, userId, filename, e.target.result)
-                  .then((bool success) {
-                    completer.complete(success);
-                  });
-              });
-              reader.readAsArrayBuffer(projectFile);
-            }
-          } else {
-            createProjectError = Localisation.getTranslationSafe("project_create_20");
-            completer.complete(false);
-          }
-        } else {
-          createProjectError = Localisation.getTranslationSafe("project_create_21");
-          completer.complete(false);
-        }
-      } else {
-        createProjectError = Localisation.getTranslationSafe("project_create_17");
-        completer.complete(false);
-      }
-    } else {
-      completer.complete(false);
-    }
-    
+    FileReader reader = new FileReader();
+    reader.onLoadEnd.listen((e) {
+      ProjectDao.uploadProjectFile(project.id, userId, filename, e.target.result)
+        .then((bool success) {
+          completer.complete(success);
+        });
+    });
+    reader.readAsArrayBuffer(projectFile);
     return completer.future;
   }
   
-  bool validateInput()
+  Future<bool> validateInput()
   {
-    bool ret = true;
+    Future<bool> ret;
+    bool success = true;
+    //Validate Text Inputs
     if (project.title == '') {
       titleError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_12") + "</span>");
-      ret = false;
+      success = false;
     }
     if (project.description == '') {
       descriptionError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_14") + "</span>");
-      ret = false;
+      success = false;
     }
     if (project.impact == '') {
       impactError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_15") + "</span>");
-      ret = false;
+      success = false;
     }
     if (wordCountInput != null && wordCountInput != '') {
       project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
         wordCountError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_16") + "</span>");
-        ret = false;
+        success = false;
         return 0;
       });
       if (project.wordCount > 5000) {
@@ -1281,12 +1233,12 @@ class ProjectCreateForm extends WebComponent with Observable
           i++;
         }
         if (segmentationMissing && !window.confirm(Localisation.getTranslation("project_create_22"))) {
-          ret = false;
+          success = false;
         }
       }
     } else {
       wordCountError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_16") + "</span>");
-      ret = false;
+      success = false;
     }
     InputElement deadlineInput = query("#deadline");
     if (deadlineInput.value != '') {
@@ -1304,13 +1256,96 @@ class ProjectCreateForm extends WebComponent with Observable
             + " " + hourAsString + ":" + minuteAsString + ":00";
       } else {
         deadlineError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_13") + "</span>");
-        ret = false;
+        success = false;
       }
     } else {
       deadlineError = new SafeHtml.unsafe("<span>" + Localisation.getTranslation("project_routehandler_13") + "<span>");
-      ret = false;
+      success = false;
     }
+    //Validate targets
+    List<Language> targetLanguages = new List<Language>();
+    List<Country> targetCountries = new List<Country>();
+    for (int i = 0; i < targetCount; i++) {
+      CheckboxInputElement segmentationCheckbox = query("#segmentation_$i");
+      bool segmentationRequired = segmentationCheckbox.checked;
+      CheckboxInputElement translationCheckbox = query("#translation_$i");
+      bool translationRequired = translationCheckbox.checked;
+      CheckboxInputElement proofreadingCheckbox = query("#proofreading_$i");
+      bool proofreadingRequired = proofreadingCheckbox.checked;
+      if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
+        createProjectError = Localisation.getTranslationSafe("project_routehandler_17");
+        success = false;
+      }
+      
+      SelectElement targetLanguageSelect = query("#target_language_$i");
+      SelectElement targetCountrySelect = query("#target_country_$i");
+      Language targetLang = languages[targetLanguageSelect.selectedIndex];
+      Country targetCountry = countries[targetCountrySelect.selectedIndex];
+      if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
+        createProjectError = Localisation.getTranslationSafe("project_routehandler_17");
+        success = false;
+      } else {
+        targetLanguages.add(targetLang);
+        targetCountries.add(targetCountry);
+      }
+    }
+    //Validate file input
+    ret = new Future.sync(validateFileInput).then((bool valid) {
+      return success && valid;
+    });
+    
     return ret;
+  }
+  
+  Future<bool> validateFileInput()
+  {
+    Completer<bool> completer = new Completer<bool>();
+    File projectFile = this.getProjectFile();
+    if (projectFile == null) {
+      createProjectError = Localisation.getTranslationSafe("project_create_16");
+    }
+    
+    if (projectFile != null) {
+      if (projectFile.size > 0) {
+        if (projectFile.size < maxFileSize) {
+          int extensionStartIndex = projectFile.name.lastIndexOf(".");
+          if (extensionStartIndex >= 0) {
+            filename = projectFile.name;
+            String extension = filename.substring(extensionStartIndex + 1);
+            if (extension != extension.toLowerCase()) {
+              extension = extension.toLowerCase();
+              filename = filename.substring(0, extensionStartIndex + 1) + extension;
+              window.alert(Localisation.getTranslation("project_create_18"));
+            }
+            bool finished = false;
+            if (extension == "pdf") {
+              if (!window.confirm(Localisation.getTranslation("project_create_19"))) {
+                finished = true;
+                completer.complete(false);
+              }
+            }
+            
+            if (!finished) {
+              completer.complete(true);
+            }
+          } else {
+            createProjectError = Localisation.getTranslationSafe("project_create_20");
+            completer.complete(false);
+          }
+        } else {
+          createProjectError = Localisation.getTranslationSafe("project_create_21");
+          completer.complete(false);
+        }
+      } else {
+        createProjectError = Localisation.getTranslationSafe("project_create_17");
+        completer.complete(false);
+      }
+    } else {
+      createProjectError = new SafeHtml.unsafe("<span>No file uploaded</span>");
+      completer.complete(false);
+    }
+    
+    return completer.future;
   }
   
   DateTime parseDeadline(String deadlineText)
