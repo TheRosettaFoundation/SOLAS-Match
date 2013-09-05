@@ -13,26 +13,26 @@ class Projects
 {
     public static function init()
     {
-        Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/test/:projectId',
-            function ($projectId) 
-            {
-                $time = microtime();
-                $time = explode(" ", $time);
-                $time = $time[1] + $time[0];
-                $time1 = $time; 
-
-                $builder = new APIWorkflowBuilder();
-                $graph = $builder->buildProjectGraph($projectId);
-                $builder->printGraph($graph);
-
-                $time = microtime();
-                $time = explode(" ", $time);
-                $time = $time[1] + $time[0];
-                $time2 = $time;
-
-                $totaltime = ($time2 - $time1);
-                echo '<BR>Running Time: ' .$totaltime. ' seconds.'; 
-            }, 'test');
+//        Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/test/:projectId',
+//            function ($projectId) 
+//            {
+//                $time = microtime();
+//                $time = explode(" ", $time);
+//                $time = $time[1] + $time[0];
+//                $time1 = $time; 
+//
+//                $builder = new APIWorkflowBuilder();
+//                $graph = $builder->buildProjectGraph($projectId);
+//                $builder->printGraph($graph);
+//
+//                $time = microtime();
+//                $time = explode(" ", $time);
+//                $time = $time[1] + $time[0];
+//                $time2 = $time;
+//
+//                $totaltime = ($time2 - $time1);
+//                echo '<BR>Running Time: ' .$totaltime. ' seconds.'; 
+//            }, 'test');
 
         
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects(:format)/',
@@ -176,7 +176,7 @@ class Projects
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:id/file(:format)/',
                                                         function ($id, $format = ".json") {
             Dispatcher::sendResponce(null,ProjectDao::getProjectFile($id), null, $format);
-        }, 'getProjectFile');
+        }, 'getProjectFile',null);
         
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/projects/:id/file/:filename/:userId/',
                                                         function ($id, $filename, $userID, $format = ".json") {
