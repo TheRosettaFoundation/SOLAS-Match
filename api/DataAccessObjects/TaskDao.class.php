@@ -511,10 +511,11 @@ class TaskDao
         return $result[0]['result'];
     }
     
-    public static function getUserTasks($user_id, $limit = null)
+    public static function getUserTasks($user_id, $limit = null, $offset = 0)
     {
-        $args = PDOWrapper::cleanse($user_id)
-                .",".PDOWrapper::cleanseNull($limit);
+        $args = PDOWrapper::cleanse($user_id).
+                ', '.PDOWrapper::cleanseNull($limit).
+                ', '.PDOWrapper::cleanseNull($offset);
         
         $result = PDOWrapper::call("getUserTasks", $args);
         if($result) { 
@@ -526,6 +527,13 @@ class TaskDao
         } else {
             return null;
         }
+    }
+
+    public static function getUserTasksCount($userId)
+    {
+        $args = PDOWrapper::cleanse($userId);
+        $result = PDOWrapper::call("getUserTasksCount", $args);
+        return $result[0]['result'];
     }
     
     public static function getUserArchivedTasks($user_id, $limit = 10)

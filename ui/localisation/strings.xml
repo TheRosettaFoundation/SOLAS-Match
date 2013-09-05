@@ -684,6 +684,7 @@
 	<string name="archived_tasks_0">A list of tasks you have worked on in the past</string>
 
 	<string name="claimed_tasks_claimed_tasks">Claimed Tasks</string>
+    <string name="claimed_tasks_task_reviews">Task Reviews</string>
 	<string name="claimed_tasks_0">A list of tasks you are currently working on</string>
 	<string name="claimed_tasks_no_active_tasks_available">No Active Tasks available!</string>
 	<string name="claimed_tasks_1">You can claim tasks from the 'Task Stream' on the home page</string>
@@ -966,6 +967,12 @@
 	<string name="user_reset_password_0">To reset your password enter the email address you registered with below.</string>
 	<string name="user_reset_password_1">When you click the button below you will receive an email to that email address with a link to a page where you can reset your password.</string>
 	<string name="user_reset_password_send_request">Send Request</string>
+
+    <string name="user_task_reviews_0">All reviews provided for this task</string>
+    <string name="user_task_reviews_1">Reviews are provided by organisation members and other volunteers.</string>
+    <string name="user_task_reviews_2">A review represents the quality of your work for this task.</string>
+    <string name="user_task_reviews_3">We use any reviews provided to help match the best volunteer for each task.</string>
+    <string name="user_task_reviews_4">There are currently no reviews available for this task.</string>
 
 	<string name="user_task_stream_notification_edit_0">Select how often you want to receive task stream e-mails.</string>
 	<string name="user_task_stream_notification_edit_1">This notification will periodically send you a list of the tasks that are most suited to your skills and areas of interest.</string>

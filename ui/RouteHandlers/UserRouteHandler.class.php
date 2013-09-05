@@ -43,6 +43,8 @@ class UserRouteHandler
         $app->get("/:user_id/notification/stream/", array($middleware, "authUserIsLoggedIn"),
         array($this, "editTaskStreamNotification"))->via("POST")->name("stream-notification-edit");
   
+        $app->get("/user/task/:task_id/reviews/", array($middleware, "authenticateUserForTask"),
+        array($this, "userTaskReviews"))->name("user-task-reviews");
     }
     
     public function home()
@@ -548,6 +550,27 @@ class UserRouteHandler
         ));
 
         $app->render("user/user.task-stream-notification-edit.tpl");
+    }
+
+    public function userTaskReviews($taskId)
+    {
+        $app = Slim::getInstance();
+        $taskDao = new TaskDao();
+
+        $task = $taskDao->getTask($taskId);
+        $reviews = $taskDao->getTaskReviews($taskId);
+
+        $extra_scripts = "";
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
+
+        $app->view()->appendData(array(
+                    'task'          => $task,
+                    'reviews'       => $reviews,
+                    'extra_scripts' => $extra_scripts
+        ));
+
+        $app->render("user/user.task-reviews.tpl");
     }
 
     public static function isLoggedIn()

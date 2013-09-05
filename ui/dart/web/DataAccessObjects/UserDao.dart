@@ -7,6 +7,7 @@ import "dart:html";
 import "../lib/APIHelper.dart";
 import "../lib/ModelFactory.dart";
 import "../lib/models/Badge.dart";
+import "../lib/models/Task.dart";
 import "../lib/models/User.dart";
 import "../lib/models/UserPersonalInformation.dart";
 import "../lib/models/Locale.dart";
@@ -109,6 +110,45 @@ class UserDao
           return badges;
         });
     return ret;
+  }
+  
+  static Future<int> getUserClaimedTasksCount(int userId)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<int> ret = client.call("", "v0/users/getClaimedTasksCount/$userId", "GET")
+        .then((HttpRequest response) {
+          int count = 0;
+          if (response.status < 400) {
+            count = int.parse(response.responseText, onError: (String responseText) {
+              print("Failed to parse claimed tasks count, $responseText");
+              return 0;
+            });
+          }
+          return count;
+        });
+    return ret;
+  }
+  
+  static Future<List<Task>> getUserTasks(int userId, [int offset = 0, int limit = 0])
+  {
+    APIHelper client = new APIHelper(".json");
+    Map<String, String> queryArgs = new Map<String, String>();
+    queryArgs['offset'] = offset.toString();
+    queryArgs['limit'] = limit.toString();
+    return client.call("", "v0/users/$userId/tasks", "GET", null, queryArgs)
+        .then((HttpRequest response) {
+          List<Task> tasks = new List<Task>();
+          if (response.status < 400 && response.responseText != '') {
+            Map jsonParsed = json.parse(response.responseText);
+            if (jsonParsed.length > 0) {
+              jsonParsed['item'].forEach((String data) {
+                Map task = json.parse(data);
+                tasks.add(ModelFactory.generateTaskFromMap(task));
+              });
+            }
+          }
+          return tasks;
+        });
   }
   
   static Future<bool> saveUserDetails(User user)

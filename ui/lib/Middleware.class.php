@@ -63,7 +63,6 @@ class Middleware
                 $app->flash('error', Localisation::getTranslation(Strings::MIDDLEWARE_2));
                 $app->redirect($app->urlFor('home'));
             }
-
         }
     }
 

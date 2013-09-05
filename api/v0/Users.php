@@ -137,6 +137,18 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserByEmail',  "Middleware::Registervalidation");
 
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/getClaimedTasksCount/:userId/',
+                function ($userId, $format = '.json')
+                {
+                    if (!is_numeric($userId) && strstr($userId, '.')) {
+                        $userId = explode('.', $userId);
+                        $format = '.'.$userId[1];
+                        $userId = $userId[0];
+                    }
+                    $data = TaskDao::getUserTasksCount($userId);
+                    Dispatcher::sendResponce(null, $data, null, $format);
+                }, 'getUserClaimedTasksCount');
+
        
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/subscribedToTask/:id/:taskID/',
                                                         function ($id, $taskID, $format = ".json") {
@@ -244,7 +256,9 @@ class Users {
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:id/tasks(:format)/',
                                                         function ($id, $format = ".json") {
-            Dispatcher::sendResponce(null, TaskDao::getUserTasks($id), null, $format);
+            $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 10);
+            $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
+            Dispatcher::sendResponce(null, TaskDao::getUserTasks($id, $limit, $offset), null, $format);
         }, 'getUsertasks');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:id/tasks(:format)/',
