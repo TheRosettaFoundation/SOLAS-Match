@@ -1,7 +1,7 @@
 {
   "urls" : {
-    "SOLASMatch" : "http://127.0.0.1/Solas-Match/api/",
-    "SiteLocation" : "http://127.0.0.1/Solas-Match/"
+    "SOLASMatch" : "http://127.0.0.1/solas-match/api/",
+    "SiteLocation" : "http://127.0.0.1/solas-match/"
   },
   "task_colours" : {
     "colour_1" : "#B02323",

@@ -652,8 +652,7 @@ class UserPrivateProfileForm extends WebComponent with Observable
   
   void submitForm()
   {
-    this.
-    alert = "";
+    this.alert = "";
     if (user.display_name == "") {
       alert = Localisation.getTranslation("user_private_profile_2");
     } else {
