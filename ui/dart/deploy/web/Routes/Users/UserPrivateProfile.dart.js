@@ -2488,7 +2488,7 @@ UserPrivateProfileForm_inserted_closure3: {"": "Closure;this_5",
   call$1: function(langs) {
     var lang, t1;
     lang = new $.Language(null, null, null);
-    lang.name = $.Localisation_getTranslation("index_any");
+    lang.name = "";
     lang.code = "";
     t1 = this.this_5;
     $.add$1$ax(t1.get$languages(), lang);
@@ -2507,7 +2507,7 @@ UserPrivateProfileForm_inserted_closure4: {"": "Closure;this_6",
     any = new $.Country(null, null, null);
     any.code = "";
     any.name = "";
-    any.name = $.Localisation_getTranslation("index_any");
+    any.name = "";
     any.code = "";
     t1 = this.this_6;
     $.add$1$ax(t1.get$countries(), any);

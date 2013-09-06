@@ -91,7 +91,7 @@ class UserPrivateProfileForm extends WebComponent
     
     dataLoaded.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
       Language lang = new Language();
-      lang.name = Localisation.getTranslation("index_any");
+      lang.name = "";
       lang.code = "";
       languages.add(lang);
       languages.addAll(langs);
@@ -100,7 +100,7 @@ class UserPrivateProfileForm extends WebComponent
     
     dataLoaded.add(CountryDao.getAllCountries().then((List<Country> regions) {
       Country any = new Country();
-      any.name = Localisation.getTranslation("index_any");
+      any.name = "";
       any.code = "";
       countries.add(any);
       countries.addAll(regions);
