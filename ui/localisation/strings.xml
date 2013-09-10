@@ -614,7 +614,7 @@
 	<string name="task_desegmentation_upload">Upload</string>
 	<string name="task_desegmentation_2">%s will be able to use it for their benefit.</string>
 	<string name="task_desegmentation_3">Uploading a new version of the file will overwrite the old one.</string>
-        <string name="task_desegmentation_4">Download %s <a href="%s">here></a></string>   
+        <string name="task_desegmentation_4">Download <strong>%s</strong> <a href="%s">here</a>.</string>   
         <string name="task_desegmentation_5">This organisation will be able to use it for their benefit.</string>     
 
 	<string name="task_segmentation_0">Uploading a new version of the file will overwrite the old one.</string>
@@ -667,7 +667,7 @@
 	<string name="task_claim_desegmentation_0">Do you want to merge files related to this task?</string>
 	<string name="task_claim_desegmentation_1">Review this checklist before you claim the task</string>
 	<string name="task_claim_desegmentation_2">Will you be able to merge these files?</string>
-	<string name="task_claim_desegmentation_3">Can you open and work with files of type %s?</string>
+        <string name="task_claim_desegmentation_3">Can you open and work with files of type <strong>%s</strong>?</string>
         <string name="task_claim_desegmentation_4">Will you have enough time to merge these files? <strong>Check how long the files are</strong>.</string>
         <string name="task_claim_desegmentation_6">Do you think you are capable of merging files in <strong>%s</strong>?</string>
 	<string name="task_claim_desegmentation_7">Do you want to merge these files?</string>
@@ -677,7 +677,7 @@
 	<string name="task_claim_proofreading_0">Do you want to proofread this file?</string>
 	<string name="task_claim_proofreading_1">Will you be able to proofread this file?</string>
 	<string name="task_claim_proofreading_2">Will you have enough time to proofread this file? Check how long the file is.</string>
-	<string name="task_claim_proofreading_3">Do you think you are capable of proofreading a file in %s?</string>
+        <string name="task_claim_proofreading_3">Do you think you are capable of proofreading a file in <strong>%s?</strong></string>
 	<string name="task_claim_proofreading_4">When you are finished proofreading the file, you will need to upload it again.</string>
 	<string name="task_claim_proofreading_5">Yes, I promise I will proofread this file.</string>
 
@@ -698,7 +698,7 @@
 	<string name="task_claimed_desegmentation_desegmentation_task_claimed">Desegmentation task claimed</string>
 	<string name="task_claimed_desegmentation_0">Please merge the relevent files!</string>
         <string name="task_claimed_desegmentation_1">You have claimed the desegmentation task <strong>%s</strong></string>
-        <string name="task_claimed_desegmentation_2">Click <a href="%s">here</a>to download each of the segments of the total file.</string>
+        <string name="task_claimed_desegmentation_2">Click <a href="%s">here</a> to download each of the segments of the total file.</string>
         <string name="task_claimed_desegmentation_3"><strong>Merge the files back together</strong> and upload the merged file.</string>
 	<string name="task_claimed_desegmentation_want_to_get_started">Want to get started?</string>
 	<string name="task_claimed_desegmentation_merge_files">Merge Files</string>
@@ -743,12 +743,11 @@
 	
 	<string name="task_created_task_is_now_live">Task is now live!</string>
 	<string name="task_created_0">You have created a new task.</string>
-	<string name="task_created_1">It is now listed on your</string>
-	<string name="task_created_task_view">task view</string>
+        <string name="task_created_1">It is now listed on the <a href="%s">Project View</a> page.</string>
 	<string name="task_created_2">Volunteer translators will see the new Task.</string>
 	<string name="task_created_3">If a volunteer translator is interested, they will claim the task, download it and upload their work.</string>
 	<string name="task_created_4">This may take several days or weeks, depending on the tasks.</string>
-        <string name="task_created_5">You can view the task details on the</string>
+        <string name="task_created_5">You can view the task details on the <a href="%s">Task View</a> page.</string>
 
 	<string name="task_details_project_impact">Project Impact:</string>
 	<string name="task_details_project_tags">Project Tags:</string>

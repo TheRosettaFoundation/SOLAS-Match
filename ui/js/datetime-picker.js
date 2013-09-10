@@ -7,4 +7,8 @@ function initDeadlinePicker() {
         stepMinute: 10
     });
 }
+
+$(document).ready(function() {
+    initDeadlinePicker();
+})
 </script>

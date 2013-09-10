@@ -9,10 +9,10 @@
             <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> - {Localisation::getTranslation(Strings::TASK_CREATED_0)}
         </p>
         <p>
-            {Localisation::getTranslation(Strings::TASK_CREATED_1)} <a href="{urlFor name="project-view" options="project_id.$project_id"}">{Localisation::getTranslation(Strings::COMMON_PROJECT_VIEW)}</a>.
+            {sprintf(Localisation::getTranslation(Strings::TASK_CREATED_1), {urlFor name="project-view" options="project_id.$project_id"})}
         </p>
         <p>
-            {Localisation::getTranslation(Strings::TASK_CREATED_5)} <a href="{urlFor name="task-view" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::TASK_CREATED_TASK_VIEW)}</a>
+            {sprintf(Localisation::getTranslation(Strings::TASK_CREATED_5), {urlFor name="task-view" options="task_id.$task_id"})}
         <p>        
     </div>
 

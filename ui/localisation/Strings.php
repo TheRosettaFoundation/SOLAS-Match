@@ -736,7 +736,6 @@ class Strings
     const TASK_CREATED_TASK_IS_NOW_LIVE = 'task_created_task_is_now_live';
     const TASK_CREATED_0 = 'task_created_0';
     const TASK_CREATED_1 = 'task_created_1';
-    const TASK_CREATED_TASK_VIEW = 'task_created_task_view';
     const TASK_CREATED_2 = 'task_created_2';
     const TASK_CREATED_3 = 'task_created_3';
     const TASK_CREATED_4 = 'task_created_4';
