@@ -1,6 +1,6 @@
 
 <div id="accordionAdmins">
-    <h3>{Localisation::getTranslation(Strings::ADMIN_SITE_ADMINS_LIST_ALL_CURRENT_ADMINISTRATORS_OF)} {$siteName}.</h3>
+    <h3>{sprintf(Localisation::getTranslation(Strings::ADMIN_SITE_ADMINS_LIST_ALL_CURRENT_ADMINISTRATORS_OF), Settings::get("site.name"))}</h3>
     <div name="adminList">
         <table class="table table-striped">
             <thead>

@@ -2,11 +2,9 @@
     <div class="grid_8">
         <div class="page-header">
             <h1>
-                {Localisation::getTranslation(Strings::COMMON_CREATE_NEW_TASK)} <small>{Localisation::getTranslation(Strings::TASK_CREATE_FOR_PROJECT)} <strong>{$project->getTitle()}</strong></small><br>   
+                {Localisation::getTranslation(Strings::COMMON_CREATE_NEW_TASK)} <small>{sprintf(Localisation::getTranslation(Strings::TASK_CREATE_FOR_PROJECT), {$project->getTitle()})}</small><br>   
                 <small>
-                    {Localisation::getTranslation(Strings::COMMON_NOTE)}:
-                    <span style="color: red">*</span>
-                    {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}.
+                    {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}
                 </small>
             </h1>
         </div>           
@@ -28,7 +26,7 @@
                     <tr align="center">
                         <td width="50%">
                             <label for="content">
-                                <h2>{Localisation::getTranslation(Strings::COMMON_TITLE)}: <span style="color: red">*</span></h2>
+                                <h2>{Localisation::getTranslation(Strings::COMMON_TITLE)} <span style="color: red">*</span></h2>
                                 <p class="desc">{Localisation::getTranslation(Strings::TASK_CREATE_0)}</p>
                                 {if !is_null($titleError)}
                                     <div class="alert alert-error" style="width:131px">
@@ -39,13 +37,13 @@
                             <textarea wrap="soft" cols="1" rows="3" name="title" style="width: 400px">{$task->getTitle()}</textarea>				
                             <p style="margin-bottom:20px;"/>
 
-                            <label for="comment"><h2>{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}:</h2></label>
+                            <label for="comment"><h2>{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}</h2></label>
                             <p>{Localisation::getTranslation(Strings::TASK_CREATE_1)}</p>
                             <textarea wrap="soft" cols="1" rows="4" name="comment" style="width: 400px">{$task->getComment()}</textarea>
                             <p style="margin-bottom:20px;"/>
 
                             <p>
-                                <h2>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)}:</h2><br>
+                                <h2>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)}</h2><br>
                                 <p>
                                     {TemplateHelper::getLanguage($project->getSourceLocale())}
                                     - {TemplateHelper::getCountry($project->getSourceLocale())}
@@ -53,7 +51,7 @@
                             </p>
                             <p style="margin-bottom:20px;"/>
                             <p>
-                                <h2>{Localisation::getTranslation(Strings::COMMON_TARGET_LANGUAGE)}: <span style="color: red">*</span></h2><br>
+                                <h2>{Localisation::getTranslation(Strings::COMMON_TARGET_LANGUAGE)} <span style="color: red">*</span></h2><br>
                                 <select name="targetLanguage" id="targetLanguage" style="width: 400px">
                                     {if $task->hasTargetLocale()}
                                         {assign var="languageCode" value=$task->getTargetLocale()->getLanguageCode()}
@@ -87,7 +85,7 @@
                             </p>
                         </td>
                         <td>                            
-                            <h2>{Localisation::getTranslation(Strings::COMMON_TASK_TYPE)}: <span style="color: red">*</span></h2>
+                            <h2>{Localisation::getTranslation(Strings::COMMON_TASK_TYPE)} <span style="color: red">*</span></h2>
                             <p class="desc">{Localisation::getTranslation(Strings::TASK_CREATE_2)}</p>
                             <select name="taskType" style="width: 400px">
                                 {assign var="taskTypeCount" value=count($taskTypes)}
@@ -98,7 +96,7 @@
                             <p style="margin-bottom:40px;"/>
                             <p>
                                 <label for="word_count">
-                                <h2>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}: <span style="color: red">*</span></h2>
+                                <h2>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)} <span style="color: red">*</span></h2>
                                 <p class="desc">{Localisation::getTranslation(Strings::COMMON_APPROXIMATE_OR_USE_A_WEBSITE_SUCH_AS)} <a href="http://wordcounttool.net/" target="_blank">{Localisation::getTranslation(Strings::TASK_CREATE_WORD_COUNT_TOOL)}</a>.</p>
                                 {if !is_null($wordCountError)}
                                     <div class="alert alert-error" style="width:144px">
@@ -110,7 +108,7 @@
                             </p>
                             <p style="margin-bottom:40px;"/>
 
-                            <h2>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}: <span style="color: red">*</span></h2>
+                            <h2>{Localisation::getTranslation(Strings::COMMON_DEADLINE)} <span style="color: red">*</span></h2>
                             <p class="desc">{Localisation::getTranslation(Strings::TASK_CREATE_3)}</p>
                             {if $deadlineError != ''}
                                 <div class="alert alert-error">
@@ -139,7 +137,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <h2>{Localisation::getTranslation(Strings::COMMON_TASK_PREREQUISITES)}:</h2>
+                                <h2>{Localisation::getTranslation(Strings::COMMON_TASK_PREREQUISITES)}</h2>
                                 <p class="desc">{Localisation::getTranslation(Strings::COMMON_ASSIGN_PREREQUISITES_FOR_THIS_TASK_IF_ANY)}</p>
                                 <p>
                                     {Localisation::getTranslation(Strings::COMMON_THESE_ARE_TASKS_THAT_MUST_BE_COMPLETED_BEFORE_THE_CURRENT_TASK_BECOMES_AVAILABLE)}

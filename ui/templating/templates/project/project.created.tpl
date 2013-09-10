@@ -1,29 +1,29 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1>{Localisation::getTranslation(Strings::PROJECT_CREATED_PROJECT_IS_NOW_LIVE)}!</h1>
+            <h1>{Localisation::getTranslation(Strings::PROJECT_CREATED_PROJECT_IS_NOW_LIVE)}</h1>
     </div>
 
     <div class="alert alert-success">
         <p>
-            <strong>{Localisation::getTranslation(Strings::PROJECT_CREATED_SUCCESS)}</strong> - {Localisation::getTranslation(Strings::PROJECT_CREATED_0)}.
+            {Localisation::getTranslation(Strings::PROJECT_CREATED_SUCCESS)}
         </p>
         <p>
-            {Localisation::getTranslation(Strings::PROJECT_CREATED_1)} <a href="{urlFor name="org-dashboard" options="org_id.$org_id"}">{Localisation::getTranslation(Strings::PROJECT_CREATED_DASHBOARD)}</a>.
+            {sprintf(Localisation::getTranslation(Strings::PROJECT_CREATED_1), {urlFor name="org-dashboard" options="org_id.$org_id"})}
         </p>
         <p>
-            {Localisation::getTranslation(Strings::PROJECT_CREATED_2)} <a href="{urlFor name="project-view" options="project_id.$project_id"}">{Localisation::getTranslation(Strings::COMMON_PROJECT_VIEW)}.</a>
+            {sprintf(Localisation::getTranslation(Strings::PROJECT_CREATED_2), {urlFor name="project-view" options="project_id.$project_id"})}
         <p>        
     </div>
 
-    <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}? <small>{Localisation::getTranslation(Strings::COMMON_WAIT_FOR_TRANSLATORS)}.</small></h1>
+    <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)} <small>{Localisation::getTranslation(Strings::COMMON_WAIT_FOR_TRANSLATORS)}</small></h1>
 
-    <p>{Localisation::getTranslation(Strings::COMMON_HERE_IS_WHAT_WILL_NOW_HAPPEN)}:</p>
+    <p>{Localisation::getTranslation(Strings::COMMON_HERE_IS_WHAT_WILL_NOW_HAPPEN)}</p>
     <p style="margin-bottom:20px;"/>
     <ol>
-        <li>{Localisation::getTranslation(Strings::PROJECT_CREATED_4)}.</li>
-        <li>{Localisation::getTranslation(Strings::PROJECT_CREATED_5)}.</li>
-        <li>{Localisation::getTranslation(Strings::PROJECT_CREATED_6)}.</li>
+        <li>{Localisation::getTranslation(Strings::PROJECT_CREATED_4)}</li>
+        <li>{Localisation::getTranslation(Strings::PROJECT_CREATED_5)}</li>
+        <li>{Localisation::getTranslation(Strings::PROJECT_CREATED_6)}</li>
     </ol>
     <p style="margin-bottom:20px;"/>
 

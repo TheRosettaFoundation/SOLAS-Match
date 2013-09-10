@@ -120,18 +120,18 @@ class UserRouteHandler
             $temp = md5($post['email'].substr(Settings::get("session.site_key"),0,20));
             UserSession::clearCurrentUserID();
             if (!TemplateHelper::isValidEmail($post['email'])) {
-                $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_1);
+                $error = Localisation::getTranslation(Strings::REGISTER_1);
             } elseif (!TemplateHelper::isValidPassword($post['password'])) {
-                $error = Localisation::getTranslation(Strings::USER_ROUTEHANDLER_2);
+                $error = Localisation::getTranslation(Strings::REGISTER_2);
             } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
                 if ($return = $userDao->isUserVerified($user->getId())) {
-                    $error = sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_3), $app->urlFor("login"));
+                    $error = sprintf(Localisation::getTranslation(Strings::REGISTER_3), $app->urlFor("login"));
                 }
             }
             
             if (is_null($error)) {
                 $userDao->register($post['email'], $post['password']);
-                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_4), $app->urlFor("login")));
+                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::REGISTER_4), $app->urlFor("login")));
             }
         }
         if ($error !== null) {
@@ -151,7 +151,7 @@ class UserRouteHandler
         $user = $userDao->getRegisteredUser($uuid);
 
         if (is_null($user)) {
-            $app->flash("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_5));
+            $app->flash("error", Localisation::getTranslation(Strings::EMAIL_VERIFICATION_7));
             $app->redirect($app->urlFor("home"));
         }
 
@@ -160,7 +160,7 @@ class UserRouteHandler
             if (isset($post['verify'])) {
                 $userDao->finishRegistration($uuid);
                 UserSession::setSession($user->getId());
-                $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_6));
+                $app->flash("success", Localisation::getTranslation(Strings::EMAIL_VERIFICATION_8));
                 $app->redirect($app->urlFor("home"));
             }
         }
@@ -177,7 +177,7 @@ class UserRouteHandler
         
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
-            $app->flash("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_7));
+            $app->flash("error", Localisation::getTranslation(Strings::PASSWORD_RESET_1));
             $app->redirect($app->urlFor("home"));
         }
         
@@ -192,16 +192,16 @@ class UserRouteHandler
 
                     $response = $userDao->resetPassword($post['new_password'], $uid);
                     if ($response) {
-                        $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_8));
+                        $app->flash("success", Localisation::getTranslation(Strings::PASSWORD_RESET_2));
                         $app->redirect($app->urlFor("home"));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_9));
+                        $app->flashNow("error", Localisation::getTranslation(Strings::PASSWORD_RESET_3));
                     }
                 } else {
-                    $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_10));
+                    $app->flashNow("error", Localisation::getTranslation(Strings::PASSWORD_RESET_4));
                 }
             } else {
-                $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_11));
+                $app->flashNow("error", Localisation::getTranslation(Strings::PASSWORD_RESET_5));
             }
         }        
         $app->render("user/password-reset.tpl");
@@ -222,7 +222,7 @@ class UserRouteHandler
                     if (!$hasUserRequestedPwReset) {
                         //send request
                         if ($userDao->requestPasswordReset($email)) {
-                            $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_12));
+                            $app->flash("success", Localisation::getTranslation(Strings::USER_RESET_PASSWORD_2));
                             $app->redirect($app->urlFor("home"));
                         } else {
                             $app->flashNow("error", "Failed to request password reset, are you sure you entered your email ".
@@ -232,14 +232,14 @@ class UserRouteHandler
                         //get request time
                         $response = $userDao->getPasswordResetRequestTime($email);
                         if ($response != null) {
-                            $app->flashNow("info", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_13), $response);
+                            $app->flashNow("info", Localisation::getTranslation(Strings::USER_RESET_PASSWORD_3), $response);
                             //Send request
                             $userDao->requestPasswordReset($email);
                         }
                     }
-                //        $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_14));
+
                 } else {
-                    $app->flashNow("error", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_14));
+                    $app->flashNow("error", Localisation::getTranslation(Strings::USER_RESET_PASSWORD_4));
                 }
             }
         }
@@ -303,7 +303,7 @@ class UserRouteHandler
             }
             $app->render("user/login.tpl");
         } catch (SolasMatchException $e) {
-            $error = sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_15), $app->urlFor("login"), $app->urlFor("register"), $e->getMessage());            
+            $error = sprintf(Localisation::getTranslation(Strings::LOGIN_1), $app->urlFor("login"), $app->urlFor("register"), $e->getMessage());            
             $app->flash("error", $error);
             $app->redirect($app->urlFor("login"));
             echo $error;
@@ -322,7 +322,7 @@ class UserRouteHandler
                 echo $e->getMessage();
             }
         } elseif ($openid->mode == "cancel") {
-            throw new InvalidArgumentException(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_16));
+            throw new InvalidArgumentException(Localisation::getTranslation(Strings::LOGIN_2));
         } else {
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
@@ -503,7 +503,7 @@ class UserRouteHandler
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
-                $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_19));
+                $app->flash("success", Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_17));
                 $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
             }
         }

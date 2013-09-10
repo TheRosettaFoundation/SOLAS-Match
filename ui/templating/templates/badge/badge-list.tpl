@@ -1,7 +1,7 @@
 {include file='header.tpl'}
 
 <div class='page-header'>
-    <h1>{Localisation::getTranslation(Strings::BADGE_LIST_BADGE_LIST)}<small> {Localisation::getTranslation(Strings::BADGE_LIST_ALL_AVAILABLE_BADGES_OF)} {$siteName}.</small></h1>
+    <h1>{Localisation::getTranslation(Strings::BADGE_LIST_BADGE_LIST)} <small>{sprintf(Localisation::getTranslation(Strings::BADGE_LIST_ALL_AVAILABLE_BADGES_OF), Settings::get("site.name"))}</small></h1>
 </div>
 
 {if isset($badgeList)}
@@ -14,7 +14,7 @@
                 </a>: {$badgeEntry->getTitle()}
             </h3>
         {else}
-            <h3>{$siteName} {Localisation::getTranslation(Strings::BADGE_LIST_BADGE)}: {$badgeEntry->getTitle()}</h3>
+            <h3>{sprintf(Localisation::getTranslation(Strings::BADGE_LIST_BADGE), Settings::get("site.name"))} {$badgeEntry->getTitle()}</h3>
         {/if}
         <p>{$badgeEntry->getDescription()}</p>
         <p style="margin-bottom:20px;"></p>

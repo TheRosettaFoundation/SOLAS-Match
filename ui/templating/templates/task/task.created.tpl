@@ -16,9 +16,9 @@
         <p>        
     </div>
 
-    <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}? <small>{Localisation::getTranslation(Strings::COMMON_WAIT_FOR_TRANSLATORS)}.</small></h1>
+    <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)} <small>{Localisation::getTranslation(Strings::COMMON_WAIT_FOR_TRANSLATORS)}</small></h1>
 
-    <p>{Localisation::getTranslation(Strings::COMMON_HERE_IS_WHAT_WILL_NOW_HAPPEN)}:</p>
+    <p>{Localisation::getTranslation(Strings::COMMON_HERE_IS_WHAT_WILL_NOW_HAPPEN)}</p>
     <p style="margin-bottom:20px;"/>
     <ol>
             <li>{Localisation::getTranslation(Strings::TASK_CREATED_2)}</li>

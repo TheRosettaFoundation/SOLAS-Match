@@ -21,7 +21,7 @@ class Middleware
     public static function notFound()
     {
         $app = Slim::getInstance();
-        $app->flash('error', Localisation::getTranslation(Strings::MIDDLEWARE_1));
+        $app->flash('error', Localisation::getTranslation(Strings::COMMON_ERROR_NOT_EXIST));
         $app->redirect($app->urlFor('home'));
     }
     
@@ -60,7 +60,7 @@ class Middleware
         }
         if ($claimant) {
             if ($user_id != $claimant->getId()) {
-                $app->flash('error', Localisation::getTranslation(Strings::MIDDLEWARE_2));
+                $app->flash('error', Localisation::getTranslation(Strings::COMMON_ERROR_ALREADY_CLAIMED));
                 $app->redirect($app->urlFor('home'));
             }
 
@@ -224,7 +224,7 @@ class Middleware
                     $taskDao = new TaskDao();
                     $task = $taskDao->getTask($taskId);                    
                     $app = Slim::getInstance();
-                    $app->flash('error', sprintf(Localisation::getTranslation(Strings::MIDDLEWARE_3), $app->urlFor("task-claimed", array("task_id" => $taskId)), $task->getTitle()));
+                    $app->flash('error', sprintf(Localisation::getTranslation(Strings::COMMON_ERROR_CANNOT_RECLAIM), $app->urlFor("task-claimed", array("task_id" => $taskId)), $task->getTitle()));
                     $app->response()->redirect($app->urlFor('home'));   
                 } else {
                     return true;

@@ -4,14 +4,13 @@
     <h1>
         {if isset($user)}
             {if $user->getDisplayName() != ''}
-                {$user->getDisplayName()}'s
+                {sprintf(Localisation::getTranslation(Strings::CLAIMED_TASKS_CLAIMED_TASKS_2), {$user->getDisplayName()})}
             {else}
-                {Localisation::getTranslation(Strings::COMMON_YOUR)}
+                {Localisation::getTranslation(Strings::CLAIMED_TASKS_CLAIMED_TASKS)}
             {/if}
         {else}
-            {Localisation::getTranslation(Strings::COMMON_YOUR)}
+            {Localisation::getTranslation(Strings::CLAIMED_TASKS_CLAIMED_TASKS)}
         {/if}
-        {Localisation::getTranslation(Strings::CLAIMED_TASKS_CLAIMED_TASKS)}
         <small>{Localisation::getTranslation(Strings::CLAIMED_TASKS_0)}</small>
     </h1>
 </div>

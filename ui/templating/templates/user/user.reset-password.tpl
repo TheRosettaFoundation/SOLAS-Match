@@ -15,7 +15,7 @@
         </p>
         <label for="email">
             <h2>
-                {Localisation::getTranslation(Strings::COMMON_EMAIL)}:
+                {Localisation::getTranslation(Strings::COMMON_EMAIL)}
             </h2>
         </label>
         <p><input type="text" name="email_address" id="email_address" /></p>

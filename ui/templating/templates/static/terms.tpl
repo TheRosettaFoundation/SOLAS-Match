@@ -1,229 +1,122 @@
 {include file="header.tpl"}
+
 <div class="page-header" style="text-align: center">
     <h1>{Localisation::getTranslation(Strings::TERMS_TERMS_AND_CONDITIONS)}</h1>
 </div>  
+
 <div>
-<h3>
+    <p><h3>{Localisation::getTranslation(Strings::TERMS_TERMS)}</h3></p>
+    <p>{Localisation::getTranslation(Strings::TERMS_0)}</p>
 
-   1. {Localisation::getTranslation(Strings::TERMS_TERMS)}
+    <p><h3>{sprintf(Localisation::getTranslation(Strings::TERMS_ORGANISATION_USE_OF), Settings::get("site.name"))}</h3></p>
+    <p>{Localisation::getTranslation(Strings::TERMS_3)}</p>
 
-</h3>
-
-<p>
-
-   {Localisation::getTranslation(Strings::TERMS_0)} {Localisation::getTranslation(Strings::TERMS_1)} {Localisation::getTranslation(Strings::TERMS_2)}
-
-</p>
-
-<h3>
-
-   2. {Localisation::getTranslation(Strings::TERMS_ORGANISATION_USE_OF)} Trommons.org
-
-</h3>
-
-<p>{Localisation::getTranslation(Strings::TERMS_3)}</p>
-
-<h4>
-  2.1 {Localisation::getTranslation(Strings::TERMS_ORGANISATION_USE_LICENSE)}
-</h4>
-
-<ol type="a">
-
-   <li>
-        {Localisation::getTranslation(Strings::TERMS_4)}
-       <ol type="i">
-
-           <li>{Localisation::getTranslation(Strings::TERMS_5)}</li>
-
-           <li>{Localisation::getTranslation(Strings::TERMS_6)}</li>
-
-           <li>{Localisation::getTranslation(Strings::TERMS_7)}</li>
-
-       </ol>
-
-   </li>
-   <li>
-       {Localisation::getTranslation(Strings::TERMS_8)}:
-       <ol>
+    <p><h4>{Localisation::getTranslation(Strings::TERMS_ORGANISATION_USE_LICENSE)}</h4></p>
+    <p>
+        <ol type="a">
+            <li>
+                {Localisation::getTranslation(Strings::TERMS_4)}
+                <ol type="i">
+                    <li>{sprintf(Localisation::getTranslation(Strings::TERMS_5), Settings::get("site.name"))}</li>
+                    <li>{sprintf(Localisation::getTranslation(Strings::TERMS_6), Settings::get("site.name"))}</li>
+                    <li>{Localisation::getTranslation(Strings::TERMS_7)}</li>
+               </ol>
+            </li>
+            <li>
+                {Localisation::getTranslation(Strings::TERMS_8)}
+                <ol>
+                    <li>
+                       {Localisation::getTranslation(Strings::TERMS_9)}
+                   </li>    
+                   <li>{Localisation::getTranslation(Strings::TERMS_13)}</li>
+                   <li>{sprintf(Localisation::getTranslation(Strings::TERMS_14), Settings::get("site.name"))}</li>
+               </ol>
+           </li>
            <li>
-               {Localisation::getTranslation(Strings::TERMS_9)}
-               <br/>{Localisation::getTranslation(Strings::TERMS_10)}
-               <br/>{Localisation::getTranslation(Strings::TERMS_11)}
-               <br/>{Localisation::getTranslation(Strings::TERMS_12)}
-           </li>    
-           <li>{Localisation::getTranslation(Strings::TERMS_13)}</li>
-           <li>{Localisation::getTranslation(Strings::TERMS_14)}</li>
-       </ol>
+               {sprintf(Localisation::getTranslation(Strings::TERMS_15), Settings::get("site.name"))}
+           </li>
+        </ol>
+    </p>       
        
-   </li>
-   <li>
-       {Localisation::getTranslation(Strings::TERMS_15)} {Localisation::getTranslation(Strings::TERMS_16)}
-   </li>
-   
-
-</ol>
-<h4> 2.2 {Localisation::getTranslation(Strings::TERMS_OFFENSIVE_CONTENT)}</h4>
-
-    {Localisation::getTranslation(Strings::TERMS_17)}
-<ol>
-   <li>{Localisation::getTranslation(Strings::TERMS_CONSTITUTES_CHILD_PORNOGRAPHY)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_CONSTITUTES_PORNOGRAPHY)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_18)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_19)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_20)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_21)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_22)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_23)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_24)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_25)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_26)}</li>
-   <li>{Localisation::getTranslation(Strings::TERMS_27)}</li>
-</ol>
-
-
-
-
-<h3>
-
-   3. {Localisation::getTranslation(Strings::TERMS_VOLUNTEER_USE_LICENSE)}
-
-</h3>
-
-<ol type="a">
-
-   <li>
-
-       {Localisation::getTranslation(Strings::TERMS_28)} {Localisation::getTranslation(Strings::TERMS_29)}
-
+    <p><h4>{Localisation::getTranslation(Strings::TERMS_OFFENSIVE_CONTENT)}</h4></p>
+    <p>{sprintf(Localisation::getTranslation(Strings::TERMS_17), Settings::get("site.name"))}</p>
+    <p>
+        <ol>
+           <li>{Localisation::getTranslation(Strings::TERMS_CONSTITUTES_CHILD_PORNOGRAPHY)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_CONSTITUTES_PORNOGRAPHY)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_18)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_19)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_20)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_21)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_22)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_23)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_24)}</li>
+           <li>{Localisation::getTranslation(Strings::TERMS_25)}</li>
+           <li>{sprintf(Localisation::getTranslation(Strings::TERMS_26), Settings::get("site.name"))}</li>
+           <li>{sprintf(Localisation::getTranslation(Strings::TERMS_27), Settings::get("site.name"))}</li>
+        </ol>
+    </p>
+    
+    <p><h3>{Localisation::getTranslation(Strings::TERMS_VOLUNTEER_USE_LICENSE)}</h3></p>
+    <p>
+        <ol type="a">
+           <li>
+               {sprintf(Localisation::getTranslation(Strings::TERMS_28), Settings::get("site.name"))}
+               <ol type="i">
+                   <li>{Localisation::getTranslation(Strings::TERMS_30)}</li>
+                   <li>{sprintf(Localisation::getTranslation(Strings::TERMS_31), Settings::get("site.name"))}</li>
+                   <li>{Localisation::getTranslation(Strings::TERMS_32)}</li>
+                   <li>{Localisation::getTranslation(Strings::TERMS_33)}</li>
+               </ol>
+           </li>
+           <li>
+               {sprintf(Localisation::getTranslation(Strings::TERMS_34), Settings::get("site.name"))}
+           </li>
+           <li>
+               {sprintf(Localisation::getTranslation(Strings::TERMS_36), "http://creativecommons.org/licenses/by/3.0/ie/", "Creative Commons Attribution 3.0 Ireland License")} 
+           </li>
+        </ol>
+    </p>
        
+    <p><h3>{Localisation::getTranslation(Strings::TERMS_DISCLAIMER)}</h3></p>
+    <p>
+       {sprintf(Localisation::getTranslation(Strings::TERMS_39), {Settings::get("site.name")|upper})}
+    </p>
 
-       <ol type="i">
+    <p><h3>{Localisation::getTranslation(Strings::TERMS_LIMITATIONS)}</h3></p>
+    <p>
+       {Localisation::getTranslation(Strings::TERMS_42)}
+    </p>
 
-           <li>{Localisation::getTranslation(Strings::TERMS_30)}</li>
+    <p><h3>{Localisation::getTranslation(Strings::TERMS_REVISIONS_AND_ERRATA)}</h3></p>
+    <p>
+       {sprintf(Localisation::getTranslation(Strings::TERMS_44), Settings::get("site.name"), Settings::get("site.name"), Settings::get("site.name"), Settings::get("site.name"))}
+    </p>
 
-           <li>{Localisation::getTranslation(Strings::TERMS_31)}</li>
+    <p><h3>{Localisation::getTranslation(Strings::TERMS_LINKS)}</h3></p>
+    <p>
+       {sprintf(Localisation::getTranslation(Strings::TERMS_47), Settings::get("site.name"), Settings::get("site.name"))}
+    </p>
 
-           <li>{Localisation::getTranslation(Strings::TERMS_32)}</li>
+    <p><h3>{Localisation::getTranslation(Strings::TERMS_49)}</h3></p>
+    <p>
+       {Localisation::getTranslation(Strings::TERMS_50)}
+    </p>
 
-           <li>{Localisation::getTranslation(Strings::TERMS_33)}</li>
+    <p><h3>{Localisation::getTranslation(Strings::TERMS_GOVERNING_LAW)}</h3></p>
+    <p>
+       {Localisation::getTranslation(Strings::TERMS_52)}
+    </p>
+    <p>
+       {Localisation::getTranslation(Strings::TERMS_53)}
+    </p>
 
-       </ol>
-
-   </li>
-
-   <li>
-
-       {Localisation::getTranslation(Strings::TERMS_34)} {Localisation::getTranslation(Strings::TERMS_35)}
-
-   </li>
-   <li>
-
-       {Localisation::getTranslation(Strings::TERMS_36)} 
-       {Localisation::getTranslation(Strings::TERMS_37)}
-       <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/">Creative Commons Attribution 3.0 Ireland License </a>.
-       {Localisation::getTranslation(Strings::TERMS_38)}
-   </li>
-
-</ol>
-
-<h3>
-
-   4. {Localisation::getTranslation(Strings::TERMS_DISCLAIMER)}
-
-</h3>
-<p>
-   {Localisation::getTranslation(Strings::TERMS_39)}
-   {Localisation::getTranslation(Strings::TERMS_40)} 
-   {Localisation::getTranslation(Strings::TERMS_41)}
-</p>
-
-<h3>
-
-   5. {Localisation::getTranslation(Strings::TERMS_LIMITATIONS)}
-
-</h3>
-
-<p>
-
-   {Localisation::getTranslation(Strings::TERMS_42)}
-   {Localisation::getTranslation(Strings::TERMS_43)}
-
-</p>
-
-           
-
-<h3>
-
-   6. {Localisation::getTranslation(Strings::TERMS_REVISIONS_AND_ERRATA)}
-
-</h3>
-
-<p>
-
-   {Localisation::getTranslation(Strings::TERMS_44)} {Localisation::getTranslation(Strings::TERMS_45)} {Localisation::getTranslation(Strings::TERMS_46)}
-
-</p>
-
-<h3>
-
-   7. {Localisation::getTranslation(Strings::TERMS_LINKS)}
-
-</h3>
-
-<p>
-
-   {Localisation::getTranslation(Strings::TERMS_47)} {Localisation::getTranslation(Strings::TERMS_48)}
-
-</p>
-
-<h3>
-
-   8. {Localisation::getTranslation(Strings::TERMS_49)}
-
-</h3>
-
-<p>
-
-   {Localisation::getTranslation(Strings::TERMS_50)} {Localisation::getTranslation(Strings::TERMS_51)}
-
-</p>
-
-<h3>
-
-   9. {Localisation::getTranslation(Strings::TERMS_GOVERNING_LAW)}
-
-</h3>
-
-<p>
-
-   {Localisation::getTranslation(Strings::TERMS_52)}
-
-</p>
-
-<p>
-
-   {Localisation::getTranslation(Strings::TERMS_53)}
-
-</p>
-
-
-
-<h2>
-
-  10. {Localisation::getTranslation(Strings::TERMS_PRIVACY_POLICY)}
-
-</h2>
-
-<p>
-
-   {Localisation::getTranslation(Strings::TERMS_54)} {Localisation::getTranslation(Strings::TERMS_55)} {Localisation::getTranslation(Strings::TERMS_THE_FOLLOWING_OUTLINES_OUR)} <a href="{urlFor name='privacy'}">{Localisation::getTranslation(Strings::TERMS_PRIVACY_POLICY)}</a>.
-
-</p>
-
-<p>
-
-   {Localisation::getTranslation(Strings::TERMS_56)}
-
-</p>        
+    <p><h3>{Localisation::getTranslation(Strings::TERMS_PRIVACY_POLICY)}</h3></p>
+    <p>
+        {sprintf(Localisation::getTranslation(Strings::TERMS_54), {urlFor name='privacy'})}
+    </p>
+    <p>
+       {Localisation::getTranslation(Strings::TERMS_56)}
+    </p>        
 </div>
 {include file="footer.tpl"}

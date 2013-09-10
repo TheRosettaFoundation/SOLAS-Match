@@ -59,9 +59,9 @@
 <div class="well">
     <table width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>
-            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}:<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}<hr/></th>
             <th></th>
-            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_PROJECT_DESCRIPTION)}:<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_PROJECT_DESCRIPTION)}<hr/></th>
         </thead>
         <tbody>
             <tr style="overflow-wrap: break-word;" valign="top">

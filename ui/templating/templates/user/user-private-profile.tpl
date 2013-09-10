@@ -11,8 +11,6 @@
         {/if}
         <small>{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_0)}</small><br>
         <small>
-            {Localisation::getTranslation(Strings::COMMON_NOTE)}:
-            <span style="color: red">*</span>
             {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}
         </small>
         </h1>

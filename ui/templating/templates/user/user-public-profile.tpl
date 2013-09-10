@@ -50,7 +50,7 @@
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <thead>                
-                    <th align="left"><h3>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}:</h3></th>
+                    <th align="left"><h3>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}</h3></th>
                     </thead>
                     <tbody>
                         <tr>
@@ -64,7 +64,7 @@
                             </tr> 
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_EMAIL)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_EMAIL)}</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -78,7 +78,7 @@
                         </tr> 
                         <tr>
                             <td>
-                                <h3>{Localisation::getTranslation(Strings::COMMON_NATIVE_LANGUAGE)}:</h3>
+                                <h3>{Localisation::getTranslation(Strings::COMMON_NATIVE_LANGUAGE)}</h3>
                             </td>
                         </tr>
                         <tr>
@@ -96,7 +96,7 @@
                         {if isset($secondaryLanguages)}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_SECONDARY_LANGUAGES)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_SECONDARY_LANGUAGES)}</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -114,7 +114,7 @@
                         {if isset($bio)}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -139,7 +139,7 @@
                         <tbody align="left" width="48%">
                         {if $userPersonalInfo->getFirstName() != null}
                             <tr>                                  
-                                <td ><h3>{Localisation::getTranslation(Strings::COMMON_FIRST_NAME)}:</h3></td>
+                                <td ><h3>{Localisation::getTranslation(Strings::COMMON_FIRST_NAME)}</h3></td>
                             </tr>
                             <tr>
                                  <td>
@@ -153,7 +153,7 @@
                         {if $userPersonalInfo->getLastName() != null}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_LAST_NAME)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_LAST_NAME)}</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -168,7 +168,7 @@
                         {if $userPersonalInfo->getMobileNumber() != null}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_MOBILE_NUMBER)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_MOBILE_NUMBER)}</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -183,7 +183,7 @@
                          {if $userPersonalInfo->getBusinessNumber() != null}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_BUSINESS_NUMBER)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_BUSINESS_NUMBER)}</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -213,7 +213,7 @@
                         {if $userPersonalInfo->getJobTitle() != null}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_JOB_TITLE)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_JOB_TITLE)}</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -228,7 +228,7 @@
                         {if $userPersonalInfo->getAddress() != null}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}</h3>
                                 </td>
                             </tr>  
                             <tr>
@@ -245,7 +245,7 @@
                         {if $userPersonalInfo->getCity() != null}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_CITY)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_CITY)}</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -260,7 +260,7 @@
                         {if $userPersonalInfo->getCountry() != null}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}:</h3>
+                                    <h3>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -323,11 +323,11 @@
                 {assign var="org_id" value=$badge->getOwnerId()}
                 <h3>
                     <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                        {$orgList[$org_id]->getName()}</a>: {$badge->getTitle()}           
+                        {$orgList[$org_id]->getName()}</a> - {$badge->getTitle()}           
                 </h3>
                 <p>{$badge->getDescription()}</p>    
             {else}
-                <h3>{Settings::get('site.title')} {Localisation::getTranslation(Strings::COMMON_BADGE)}: {$badge->getTitle()}</h3>            
+                <h3>{Settings::get('site.name')} - {$badge->getTitle()}</h3>            
                 <p>{$badge->getDescription()}</p>                
             {/if}
             <p style="margin-bottom:20px;"/>
@@ -351,14 +351,14 @@
             {if $strict}
                 <strong>{Localisation::getTranslation(Strings::COMMON_STRICT)}</strong>
             {/if}
-            <strong>{$interval}</strong> {Localisation::getTranslation(Strings::COMMON_EMAILS)}.
+            <strong>{$interval}</strong> {Localisation::getTranslation(Strings::COMMON_EMAILS)}
             {if $lastSent != null}
-                {Localisation::getTranslation(Strings::COMMON_THE_LAST_EMAIL_WAS_SENT_ON)} {$lastSent}.
+                {sprintf(Localisation::getTranslation(Strings::COMMON_THE_LAST_EMAIL_WAS_SENT_ON), {$lastSent})}
             {else}
-                {Localisation::getTranslation(Strings::COMMON_NO_EMAILS_HAVE_BEEN_SENT_YET)}.
+                {Localisation::getTranslation(Strings::COMMON_NO_EMAILS_HAVE_BEEN_SENT_YET)}
             {/if}
         {else}
-            {Localisation::getTranslation(Strings::COMMON_YOU_ARE_NOT_CURRENTLY_RECEIVING_TASK_STREAM_NOTIFICATION_EMAILS)}.
+            {Localisation::getTranslation(Strings::COMMON_YOU_ARE_NOT_CURRENTLY_RECEIVING_TASK_STREAM_NOTIFICATION_EMAILS)}
         {/if}
     </p>
     <p style="margin-bottom:50px;"/>
@@ -422,7 +422,7 @@
                 </div>
                 <div class="span8">
                     <p>
-                        <strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong><br/>
+                        <strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</strong><br/>
                         
                         {if $org->getBiography() == ''}
                             {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}
@@ -431,7 +431,7 @@
                         {/if}
                     </p>
                     <p>
-                    <strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}:</strong><br/>
+                    <strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}</strong><br/>
                     {if $org->getHomePage() != "http://"}
                         <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
                     {else}

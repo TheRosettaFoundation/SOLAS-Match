@@ -25,14 +25,11 @@ class BadgeRouteHandler
                 $org_list[$badge->getOwnerId()] = $org;
             }
         }
-        
-        $siteName = Settings::get("site.name");
 
         $app->view()->setData("current_page", "badge-list");
         $app->view()->appendData(array(
                 "badgeList" => $badgeList,
-                "org_list"  => $org_list,
-                "siteName"  => $siteName
+                "org_list"  => $org_list
         ));
         
         $app->render("badge/badge-list.tpl");

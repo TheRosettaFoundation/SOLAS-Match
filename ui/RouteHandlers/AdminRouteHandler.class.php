@@ -67,12 +67,8 @@ class AdminRouteHandler
                 } else {
                     $app->flashNow("deleteError", Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_6));
                 }
-            }
-            
-            
-        }               
-        
-        $siteName = Settings::get("site.name");
+            } 
+        }
         
         $adminDao = new AdminDao();
         $userDao = new UserDao();
@@ -101,7 +97,6 @@ class AdminRouteHandler
 
         $app->view()->appendData(array(
                     "adminUserId"   => $userId,
-                    "siteName"      => $siteName,
                     "adminList"     => $adminList,
                     "bannedOrgList" => $bannedOrgList,
                     "bannedUserList"=> $bannedUserList,

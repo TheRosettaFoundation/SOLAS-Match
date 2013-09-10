@@ -42,13 +42,13 @@
     
 {if isset($flash['success'])}
     <p class="alert alert-success">
-        <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}:</strong> {$flash['success']}
+        <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {$flash['success']}
     </p>
 {/if}
 
 {if isset($flash['error'])}
     <p class="alert alert-error">
-        <strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}:</strong> {$flash['error']}
+        <strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}</strong> {$flash['error']}
     </p>
 {/if}
 

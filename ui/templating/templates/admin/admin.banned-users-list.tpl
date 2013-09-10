@@ -1,6 +1,6 @@
 
 <div id="accordionBannedUsers">
-    <h3>{Localisation::getTranslation(Strings::ADMIN_BANNED_USERS_LIST_ALL_BANNED_USERS_OF)} {$siteName}.</h3>
+    <h3>{sprintf(Localisation::getTranslation(Strings::ADMIN_BANNED_USERS_LIST_ALL_BANNED_USERS_OF), Settings::get("site.name"))}</h3>
     <div name="bannedOrgList">
         <table class="table table-striped">
             <thead>

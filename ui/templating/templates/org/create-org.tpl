@@ -6,9 +6,7 @@
         {Localisation::getTranslation(Strings::CREATE_ORG_CREATE_YOUR_OWN_ORGANISATION)}
     </small><br/>
     <small>
-        {Localisation::getTranslation(Strings::COMMON_NOTE)}:
-        <span style="color: red">*</span>
-        {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}.
+        {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}
     </small>
 </h1>
 
@@ -18,7 +16,7 @@
                 <tr>
                     <td colspan="2">
                         <div class="alert alert-error">
-                            <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}:</h3>
+                            <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}</h3>
                             <ol>
                                 <li>{$nameErr}</li>
                             </ol>
@@ -29,28 +27,28 @@
             <tr valign="top" align="center"> 
                 <td width="50%">
                     
-                    <label for='orgName'><strong>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}: <span style="color: red">*</span></strong></label>
+                    <label for='orgName'><strong>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)} <span style="color: red">*</span></strong></label>
                     <input type='text' name='orgName' id='orgName' style="width: 80%" {if isset($org)} value="{$org->getName()}" {/if}/>
                     
-                    <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}:</strong></label>
+                    <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}</strong></label>
                     <textarea name='address' cols='40' rows='7' style="width: 80%">{if isset($org)} {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())} {/if}</textarea>
                     
-                    <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}:</strong></label>
+                    <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%" {if isset($org)} value="{$org->getCity()}" {/if}/>
 
-                    <label for='country'><strong>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}:</strong></label>
+                    <label for='country'><strong>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}</strong></label>
                     <input type='text' name='country' id='country' style="width: 80%" {if isset($org)} value="{$org->getCountry()}" {/if}/>
                     
                 </td>
                 <td width="50%">
                     
-                    <label for='homepage'><strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}:</strong></label>
+                    <label for='homepage'><strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}</strong></label>
                     <input type='text' name='homepage' id='homepage' style="width: 80%" {if isset($org)} value="{$org->getHomePage()}" {/if}/> 
                     
-                    <label for='email'><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}:</strong></label>
+                    <label for='email'><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}</strong></label>
                     <input type='text' name='email' id='email' style="width: 80%"{if isset($org)} value="{$org->getEmail()}" {/if}/>   
                     
-                    <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong></label>
+                    <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</strong></label>
                     <textarea name='biography' cols='40' rows='10' style="width: 80%">{if isset($org)} {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())} {/if}</textarea>
                     
                 </td>
@@ -58,7 +56,7 @@
             <tr>                
                 <td colspan="2" style="font-weight: bold; text-align: center; padding-bottom: 10px">
                     <hr/>
-                    {Localisation::getTranslation(Strings::COMMON_REGIONAL_FOCUS)}:
+                    {Localisation::getTranslation(Strings::COMMON_REGIONAL_FOCUS)}
                 </td>
             </tr>  
             <tr align="center">

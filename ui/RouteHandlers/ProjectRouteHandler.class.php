@@ -107,16 +107,16 @@ class ProjectRouteHandler
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
                     if ($userTrackProject) {
-                        $app->flashNow("success", Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_1));
+                        $app->flashNow("success", Localisation::getTranslation(Strings::PROJECT_VIEW_7));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_2));
+                        $app->flashNow("error", Localisation::getTranslation(Strings::PROJECT_VIEW_8));
                     }   
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
                     if ($userUntrackProject) {
-                        $app->flashNow("success", Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_3));
+                        $app->flashNow("success", Localisation::getTranslation(Strings::PROJECT_VIEW_9));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_4));
+                        $app->flashNow("error", Localisation::getTranslation(Strings::PROJECT_VIEW_10));
                     }   
                 }
             } elseif(isset($post['trackTask'])) {
@@ -129,28 +129,28 @@ class ProjectRouteHandler
                 if(!$post['trackTask']) {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_5), $task_title));
+                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_11), $task_title));
                     } else {
-                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_6), $task_title));
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_12), $task_title));
                     }
                 } else {
                     $response = $userDao->trackTask($user_id, $post['task_id']);
                     if ($response) {
-                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_7), $task_title));
+                        $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_13), $task_title));
                     } else {
-                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_8), $task_title));
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_14), $task_title));
                     }
                 }
             }
 
             if (isset($post['deleteTask'])) {
                 $taskDao->deleteTask($post['task_id']);
-                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_9), $task->getTitle()));
+                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_15), $task->getTitle()));
             }
 
             if (isset($post['archiveTask'])) {
                 $taskDao->archiveTask($post['task_id'], $user_id);
-                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_10), $task->getTitle()));
+                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_16), $task->getTitle()));
             }
         }   
 
@@ -247,7 +247,7 @@ class ProjectRouteHandler
                     $date = date("Y-m-d H:i:s", $validTime);  
                     $project->setDeadline($date);
                 } else {
-                    $deadlineError = Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_11);
+                    $deadlineError = Localisation::getTranslation(Strings::PROJECT_ALTER_11);
                 }
             }
             
@@ -360,9 +360,9 @@ class ProjectRouteHandler
         $archivedProject = $projectDao->archiveProject($project_id, $user_id);     
         
         if($archivedProject) {            
-            $app->flash("success", sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_19), $project->getTitle()));
+            $app->flash("success", sprintf(Localisation::getTranslation(Strings::ORG_DASHBOARD_9), $project->getTitle()));
         } else {
-            $app->flash("error",  sprintf(Localisation::getTranslation(Strings::PROJECT_ROUTEHANDLER_20), $project->getTitle()));
+            $app->flash("error",  sprintf(Localisation::getTranslation(Strings::ORG_DASHBOARD_10), $project->getTitle()));
         }       
         
         $app->redirect($ref = $app->request()->getReferrer());

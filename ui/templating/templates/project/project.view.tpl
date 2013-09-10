@@ -3,7 +3,7 @@
     <h1 class="page-header">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
             {$project->getTitle()}
-            <small>{Localisation::getTranslation(Strings::PROJECT_VIEW_OVERVIEW_OF_PROJECT_DETAILS)}.</small>
+            <small>{Localisation::getTranslation(Strings::PROJECT_VIEW_OVERVIEW_OF_PROJECT_DETAILS)}</small>
         </span>
         {assign var="project_id" value=$project->getId()}
 
@@ -103,9 +103,9 @@
     <div class="well">
         <table border="0" width="100%" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
             <thead>
-            <th align="left" width="48%">{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}:<hr/></th>
+            <th align="left" width="48%">{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}<hr/></th>
             <th></th>
-            <th align="left" width="48%">{Localisation::getTranslation(Strings::COMMON_IMPACT)}:<hr/></th>
+            <th align="left" width="48%">{Localisation::getTranslation(Strings::COMMON_IMPACT)}<hr/></th>
             </thead>
             <tbody>
                 <tr valign="top">
@@ -114,7 +114,7 @@
                         {if $project->getDescription() != ''}
                             {$project->getDescription()}
                         {else}
-                            {Localisation::getTranslation(Strings::COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED)}.
+                            {Localisation::getTranslation(Strings::COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED)}
                         {/if}  
                         </i>
                     </td>
@@ -124,7 +124,7 @@
                         {if $project->getImpact() != ''}
                             {$project->getImpact()}
                         {else}
-                            {Localisation::getTranslation(Strings::COMMON_NO_IMPACT_HAS_BEEN_LISTED)}.
+                            {Localisation::getTranslation(Strings::COMMON_NO_IMPACT_HAS_BEEN_LISTED)}
                         {/if}  
                         </i>               
                     </td>
@@ -134,7 +134,7 @@
                 </tr>
                 <tr valign="top">
                     <td colspan="3">
-                        <strong>{Localisation::getTranslation(Strings::COMMON_TAGS)}:</strong><hr/>
+                        <strong>{Localisation::getTranslation(Strings::COMMON_TAGS)}</strong><hr/>
                     </td>
                 </tr>
                 <tr>                
@@ -146,7 +146,7 @@
                             <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                         {/foreach}
                     {else}
-                        <i>{Localisation::getTranslation(Strings::COMMON_THERE_ARE_NO_TAGS_ASSOCIATED_WITH_THIS_PROJECT)}.</i>                    
+                        <i>{Localisation::getTranslation(Strings::COMMON_THERE_ARE_NO_TAGS_ASSOCIATED_WITH_THIS_PROJECT)}</i>                    
                     {/if}
                     </td>                
                 </tr>
@@ -160,7 +160,7 @@
     <hr />    
     <h1 class="page-header" style="margin-bottom: 60px">
         {Localisation::getTranslation(Strings::PROJECT_VIEW_TASKS)}
-        <small>{Localisation::getTranslation(Strings::PROJECT_VIEW_0)}.</small>
+        <small>{Localisation::getTranslation(Strings::PROJECT_VIEW_0)}</small>
 
         <a class="pull-right btn btn-success" href="{urlFor name="task-create" options="project_id.$project_id"}">
             <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CREATE_TASK)}
@@ -310,7 +310,7 @@
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                                 <button class="btn btn-small btn-inverse" disabled>
-                                                    <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::PROJECT_VIEW_2)}.
+                                                    <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::PROJECT_VIEW_2)}
                                                 </button>  
                                             {else}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
@@ -329,8 +329,8 @@
                 {/foreach}
             {else}
                 <div class="alert alert-warning">
-                    <strong>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}?</strong> {Localisation::getTranslation(Strings::PROJECT_VIEW_4)}.
-                    {Localisation::getTranslation(Strings::PROJECT_VIEW_5)}.
+                    <strong>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}?</strong> {Localisation::getTranslation(Strings::PROJECT_VIEW_4)}
+                    {Localisation::getTranslation(Strings::PROJECT_VIEW_5)}
                 </div>
             {/if}
         </div>
@@ -342,7 +342,7 @@
 {else}
     {if isset($projectTasks)}
     <p class="alert alert-info">
-        {Localisation::getTranslation(Strings::PROJECT_VIEW_6)}.
+        {Localisation::getTranslation(Strings::PROJECT_VIEW_6)}
     </p>
     {/if}
 {/if}

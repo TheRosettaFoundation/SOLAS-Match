@@ -17,7 +17,10 @@
 {assign var="user_id" value=$user->getId()}
 <form method="post" action="{urlFor name="stream-notification-edit" options="user_id.$user_id"}">
     <p>
-        {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_1)} {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_2)}
+        {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_1)}
+    </p>
+    <p>
+        {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_2)}
     </p>
     {if isset($interval)}
         <p>
@@ -27,13 +30,16 @@
             {/if}
             {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_NOTIFICATIONS)} <strong>{$interval}</strong>.
             {if $lastSent != null}
-                {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_4)} {$lastSent}.
+                {sprintf(Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_4), {$lastSent})}
             {/if}
         </p>
     {else}
         <p style="font-weight: bold">{Localisation::getTranslation(Strings::COMMON_YOU_ARE_NOT_CURRENTLY_RECEIVING_TASK_STREAM_NOTIFICATION_EMAILS)}</p>
     {/if}
-    <p>{Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_3)}
+    <p>
+        {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_5)}
+    </p>
+    <p>
         <select name="strictMode">
             <option value="disabled" {if (!$strict)}selected="true"{/if}>
                 {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_ALL)}
@@ -42,7 +48,11 @@
                 {Localisation::getTranslation(Strings::COMMON_STRICT)}
             </option>
         </select>
-        {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_NOTIFICATIONS)}
+    </p>
+    <p>
+        {Localisation::getTranslation(Strings::USER_TASK_STREAM_NOTIFICATION_EDIT_6)}
+    </p>
+    <p>
         <select name="interval">
             <option value="0"
                 {if !isset($intervalId)}

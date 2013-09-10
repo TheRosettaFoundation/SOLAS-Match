@@ -200,9 +200,9 @@ class TaskRouteHandler
         
         $taskType = TemplateHelper::getTaskTypeFromId($task->getTaskType());
         if($result = $taskDao->archiveTask($task_id, $user_id)) {
-            $app->flash("success", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_1), $taskType, $task->getTitle()));
+            $app->flash("success", sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_17), $taskType, $task->getTitle()));
         } else {
-            $app->flash("error",  sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_2), $taskType, $task->getTitle()));
+            $app->flash("error",  sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_18), $taskType, $task->getTitle()));
         }    
              
         $app->redirect($ref = $app->request()->getReferrer());
@@ -283,7 +283,7 @@ class TaskRouteHandler
         $user_id = UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
         if(is_null($task)) {
-            $app->flash("error", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_33), $task_id));
+            $app->flash("error", sprintf(Localisation::getTranslation(Strings::INDEX_8), $task_id));
             $app->redirect($app->urlFor("home"));
         }
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
@@ -429,9 +429,9 @@ class TaskRouteHandler
                 $fileUploadMime = IO::detectMimeType(file_get_contents($_FILES[$fieldName]["tmp_name"]), $_FILES[$fieldName]["name"]);
 
                 if(strcasecmp($fileUploadType,$projectFileType) != 0) {
-                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_3), $projectFileType));
+                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_5), $projectFileType));
                 } else if($fileUploadMime != $projectFileMimeType) {
-                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_4), $projectFileType, $projectFileType));
+                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_6), $projectFileType, $projectFileType));
                 }
             } catch (Exception $e) {
                 $errorMessage = $e->getMessage();
@@ -448,7 +448,7 @@ class TaskRouteHandler
                     }
                 
                 } catch (Exception  $e) {
-                    $errorMessage = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_5) . $e->getMessage();
+                    $errorMessage = Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_7) . $e->getMessage();
                 }
             }
 
@@ -596,9 +596,9 @@ class TaskRouteHandler
                 if (isset($post['word_count']) && ctype_digit($post['word_count'])) {
                     $task->setWordCount($post['word_count']);                
                 } else if (isset($post['word_count']) && $post['word_count'] != "") {
-                    $word_count_err = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_6);
+                    $word_count_err = Localisation::getTranslation(Strings::TASK_ALTER_6);
                 } else {
-                    $word_count_err = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_7);
+                    $word_count_err = Localisation::getTranslation(Strings::TASK_ALTER_7);
                 }
             }
 
@@ -607,7 +607,7 @@ class TaskRouteHandler
                     $date = date("Y-m-d H:i:s", $validTime);  
                     $task->setDeadline($date);
                 } else {
-                    $deadlineError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_8);
+                    $deadlineError = Localisation::getTranslation(Strings::TASK_ALTER_8);
                 }
             }
             
@@ -664,7 +664,7 @@ class TaskRouteHandler
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
                 } else {
                     //A deadlock occured
-                    $deadlockError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_9);
+                    $deadlockError = Localisation::getTranslation(Strings::TASK_ALTER_9);
                     //Reset prereqs so as not to crash second run of the graph builder
                     $taskPreReqIds[$task->getId()] = $oldPreReqs;
                 }
@@ -773,16 +773,16 @@ class TaskRouteHandler
                 if ($post['track'] == "Ignore") {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_10));
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_VIEW_10));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_11));
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_VIEW_11));
                     }
                 } else {
                     $response = $userDao->trackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_12));
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_VIEW_12));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_13));
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_VIEW_13));
                     }
                 }
             }
@@ -847,7 +847,7 @@ class TaskRouteHandler
             if(isset($post['title'])) {
                 $task->setTitle($post['title']);
             } else {
-                $titleError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_14);
+                $titleError = Localisation::getTranslation(Strings::TASK_CREATE_5);
             }
 
             if(isset($post['comment'])) $task->setComment($post['comment']);            
@@ -1008,26 +1008,26 @@ class TaskRouteHandler
                 }
                 
                 if($file["error"] != UPLOAD_ERR_OK) {
-                    $errors["missingFile"] = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_15);
+                    $errors["missingFile"] = Localisation::getTranslation(Strings::TASK_SEGMENTATION_15);
                     break;
                 }
                 if(!in_array($file["name"],$fileNames)) {
                     $fileNames[] = $file["name"];
                 } else {
-                    $errors["uniqueFileName"] = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_16);
+                    $errors["uniqueFileName"] = Localisation::getTranslation(Strings::TASK_SEGMENTATION_16);
                     break;
                 }
                     
                 if(!in_array(($hash=md5_file($file["tmp_name"])), $fileHashes)) {
                     $fileHashes[] = $hash;
                 } else {
-                    $errors["duplicateFileContent"] = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_17);
+                    $errors["duplicateFileContent"] = Localisation::getTranslation(Strings::TASK_SEGMENTATION_17);
                     break;
                 }
             }          
             
             if(!isset($post["translation_0"]) && !isset($post["proofreading_0"])) {
-                $errors["taskTypeSet"] = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_18);
+                $errors["taskTypeSet"] = Localisation::getTranslation(Strings::TASK_SEGMENTATION_18);
             }
             
             if(empty($errors)) {
@@ -1168,20 +1168,20 @@ class TaskRouteHandler
                 if ($post['feedback'] != "") {
                     $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
     
-                    $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_32), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
+                    $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::TASK_ORG_FEEDBACK_6), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
                     if(isset($post['revokeTask']) && $post['revokeTask']) {
                         $task->setTaskStatus(TaskStatusEnum::PENDING_CLAIM);
                         $taskDao->updateTask($task);
                         $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                         if($taskRevoke) {
-                            $app->flash("taskSuccess", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_19), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle(), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
+                            $app->flash("taskSuccess", sprintf(Localisation::getTranslation(Strings::TASK_ORG_FEEDBACK_3), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle(), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
                             $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
                         } else {
-                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_20), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle(), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
+                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_ORG_FEEDBACK_4), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle(), $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())), $claimant->getDisplayName()));
                         }
                     }
                 } else {
-                    $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_21));
+                    $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ORG_FEEDBACK_5));
                 }
             }
         }
@@ -1223,14 +1223,14 @@ class TaskRouteHandler
                     if(isset($post['revokeTask']) && $post['revokeTask']) {
                         $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                         if($taskRevoke) {
-                            $app->flash("success", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_22), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle()));
+                            $app->flash("success", sprintf(Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_3), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle()));
                             $app->redirect($app->urlFor("home"));
                         } else {
-                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_22), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle()));
+                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_4), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle()));
                         }
                     }
                 } else {
-                    $app->flashNow('error', Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_24));
+                    $app->flashNow('error', Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_5));
                 }
             }
         }
@@ -1308,7 +1308,7 @@ class TaskRouteHandler
         }
 
         if (count($reviews) > 0) {
-            $app->flashNow("info", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_25));
+            $app->flashNow("info", Localisation::getTranslation(Strings::TASK_REVIEW_4));
         }
 
         if ($app->request()->isPost()) {
@@ -1335,7 +1335,7 @@ class TaskRouteHandler
                         if ($value > 0 && $value <= 5) {
                             $review->setCorrections($value);
                         } else {
-                            $error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_26);
+                            $error = Localisation::getTranslation(Strings::TASK_REVIEW_5);
                         }
                     }
                     if (isset($post["grammar_$id"]) && ctype_digit($post["grammar_$id"])) {
@@ -1343,7 +1343,7 @@ class TaskRouteHandler
                         if ($value > 0 && $value <= 5) {
                             $review->setGrammar($value);
                         } else {
-                            $error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_27);
+                            $error = Localisation::getTranslation(Strings::TASK_REVIEW_6);
                         }
                     }
                     if (isset($post["spelling_$id"]) && ctype_digit($post["spelling_$id"])) {
@@ -1351,7 +1351,7 @@ class TaskRouteHandler
                         if ($value > 0 && $value <= 5) {
                             $review->setSpelling($value);
                         } else {
-                            $error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_28);
+                            $error = Localisation::getTranslation(Strings::TASK_REVIEW_7);
                         }
                     }
                     if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
@@ -1359,7 +1359,7 @@ class TaskRouteHandler
                         if ($value > 0 && $value <= 5) {
                             $review->setConsistency($value);
                         } else {
-                            $error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_29);
+                            $error = Localisation::getTranslation(Strings::TASK_REVIEW_8);
                         }
                     }
                     if (isset($post["comment_$id"]) && $post["comment_$id"] != "") {
@@ -1368,7 +1368,7 @@ class TaskRouteHandler
 
                     if ($review->getProjectId() != null && $review->getUserId() != null && $error == null) {
                         if (!$taskDao->submitReview($review)) {
-                            $error = sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_30), $pTask->getTitle());
+                            $error = sprintf(Localisation::getTranslation(Strings::TASK_REVIEW_9), $pTask->getTitle());
                         }
                     } else {
                         if ($error != null) {
@@ -1377,7 +1377,7 @@ class TaskRouteHandler
                     }
                 }
                 if ($error == null) {
-                    $app->flash("success", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_31), $pTask->getTitle()));
+                    $app->flash("success", sprintf(Localisation::getTranslation(Strings::TASK_REVIEW_10), $pTask->getTitle()));
                     $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
                 } else {
                     $app->flashNow("error", $error);

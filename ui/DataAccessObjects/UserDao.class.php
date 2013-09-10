@@ -369,10 +369,10 @@ class UserDao extends BaseDao
             switch($e->getCode()) {
 
                 case HttpStatusEnum::NOT_FOUND : 
-                    throw new SolasMatchException(Localisation::getTranslation(Strings::USER_DAO_1));
+                    throw new SolasMatchException(Localisation::getTranslation(Strings::COMMON_ERROR_LOGIN_1));
 
                 case HttpStatusEnum::UNAUTHORIZED : 
-                    throw new SolasMatchException(Localisation::getTranslation(Strings::USER_DAO_2));
+                    throw new SolasMatchException(Localisation::getTranslation(Strings::COMMON_ERROR_LOGIN_2));
 
                 case HttpStatusEnum::FORBIDDEN :
                     $userDao = new UserDao();

@@ -26,27 +26,27 @@
             <tr valign="top" align="center"> 
                 <td width="50%">
                     
-                    <label for='displayName'><strong>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}:</strong></label>
+                    <label for='displayName'><strong>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}</strong></label>
                     <input type='text' name='displayName' id='displayName' style="width: 80%"
                     {if $org->getName() != ''}
                        value="{$org->getName()}"
                     {else}
-                        placeholder='{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_YOUR_ORGANISATION_NAME)}.' 
+                        placeholder='{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_YOUR_ORGANISATION_NAME)}' 
                     {/if}
                     />
                     
-                    <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}:</strong></label>
+                    <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}</strong></label>
                     <textarea name='address' cols='40' rows='7' style="width: 80%"
                     >{if $org->getAddress() != ''} {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())} {/if}</textarea>
                     
-                    <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}:</strong></label>
+                    <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%"
                     {if $org->getCity() != ''}
                          value="{$org->getCity()}"
                     {/if}
                     />
 
-                    <label for='country'><strong>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}:</strong></label>
+                    <label for='country'><strong>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}</strong></label>
                     <input type='text' name='country' id='country' style="width: 80%"
                     {if $org->getCountry() != ''}
                          value="{$org->getCountry()}"
@@ -56,7 +56,7 @@
                 </td>
                 <td width="50%">
                     
-                    <label for='homepage'><strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}:</strong></label>
+                    <label for='homepage'><strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}</strong></label>
                     <input type='text' name='homepage' id='homepage' style="width: 80%"
                     {if $org->getHomePage() != 'http://'}
                         value="{$org->getHomePage()}"
@@ -65,7 +65,7 @@
                     {/if}
                      /> 
                     
-                    <label for='email'><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}:</strong></label>
+                    <label for='email'><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}</strong></label>
                     <input type='text' name='email' id='email' style="width: 80%"
                     {if $org->getEmail() != ''}
                          value="{$org->getEmail()}"
@@ -74,10 +74,10 @@
                     {/if}
                     />   
                     
-                    <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong></label>
+                    <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</strong></label>
                     <textarea name='biography' cols='40' rows='10' style="width: 80%" 
                     {if $org->getBiography() == ''}
-                        placeholder="{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_ENTER_ORGANISATION_BIOGRAPHY_HERE)}."
+                        placeholder="{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_ENTER_ORGANISATION_BIOGRAPHY_HERE)}"
                     {/if}
                     >{if $org->getBiography() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}{/if}</textarea>
                     
@@ -86,7 +86,7 @@
             <tr>                
                 <td colspan="2" style="font-weight: bold; text-align: center; padding-bottom: 10px">
                     <hr/>
-                    {Localisation::getTranslation(Strings::COMMON_REGIONAL_FOCUS)}:
+                    {Localisation::getTranslation(Strings::COMMON_REGIONAL_FOCUS)}
                 </td>
             </tr>  
             <tr align="center">

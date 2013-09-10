@@ -14,9 +14,9 @@
             <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)} <small>{Localisation::getTranslation(Strings::TASK_UPLOADED_2)}</small></h1>
             <p>{Localisation::getTranslation(Strings::COMMON_HERE_IS_WHAT_WILL_NOW_HAPPEN)}</p>
             <ol>
-                <li>{Localisation::getTranslation(Strings::TASK_UPLOADED_YOUR_TASK)} <strong>{Localisation::getTranslation(Strings::TASK_UPLOADED_IS_COMPLETE)}</strong>.</li>
+                <li>{Localisation::getTranslation(Strings::TASK_UPLOADED_IS_COMPLETE)}</li>
                 <li>{Localisation::getTranslation(Strings::TASK_UPLOADED_3)}</li>
-                <li>{$org_name} {Localisation::getTranslation(Strings::TASK_UPLOADED_4)} {Localisation::getTranslation(Strings::TASK_UPLOADED_THANK_YOU)}</li>
+                <li>{sprintf(Localisation::getTranslation(Strings::TASK_UPLOADED_4), {$org_name})}</li>
             </ol>
     </section>
     <section>    

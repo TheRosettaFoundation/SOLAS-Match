@@ -28,7 +28,7 @@
 
     {if isset($errors)}
         <div class="alert alert-error">
-            <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}:</h3>
+            <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}</h3>
             <ol>
                 {foreach from=$errors item=error}
                         <li>{$error}</li>
@@ -46,7 +46,7 @@
                 <tr>
                     <td colspan="4">
                         <label for="title">
-                            <h2>{Localisation::getTranslation(Strings::COMMON_SEGMENTATION)}:
+                            <h2>{Localisation::getTranslation(Strings::COMMON_SEGMENTATION)}
                                 <a href="{urlFor name="task-user-feedback" options="task_id.$task_id"}" style="float: right" class="btn btn-success">
                                     <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_PROVIDE_FEEDBACK)}
                                 </a>
@@ -90,18 +90,18 @@
                 </tr>
                 <tr id="taskUploadTemplate_0" valign="top">
                     <td colspan="4">
-                        <p class="desc"><strong>File #0:</strong> {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 8 MB.</p>
+                        <p class="desc"><strong>File #0:</strong> {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {sprintf(Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS), "8")}</p>
                         <input type="file" name="segmentationUpload_0" id="segmentationUpload_0"/>
-                        <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</label>
+                        <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}</label>
                         <input type="text" name="wordCount_0" id="wordCount_0" />
                         <hr/>
                     </td>                
                 </tr>
                 <tr id="taskUploadTemplate_1" valign="top">
                     <td colspan="4"> 
-                        <p class="desc"><strong>File #1: </strong> {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 8 MB.</p>
+                        <p class="desc"><strong>File #1: </strong> {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {sprintf(Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS), "8")}</p>
                         <input type="file" name="segmentationUpload_1" id="segmentationUpload_1"/>
-                        <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</label>
+                        <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}</label>
                         <input type="text" name="wordCount_1" id="wordCount_1" />
                         <hr/>
                     </td>                
