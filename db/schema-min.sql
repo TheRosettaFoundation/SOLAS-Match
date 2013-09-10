@@ -2540,10 +2540,10 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getUserTasks
 DROP PROCEDURE IF EXISTS `getUserTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT, IN `offset` INT)
 BEGIN
     if lim = '' then set lim = null; end if;
-
+    if offset = '' then set offset = 0; end if;
     set @q= " SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
                 t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`, 
                  comment,
@@ -2552,7 +2552,7 @@ BEGIN
                 WHERE user_id = ?
                 ORDER BY `created-time` DESC";
 if lim IS NOT NULL then
-    set @q=CONCAT(@q, " limit ", lim);
+    set @q=CONCAT(@q, " limit ", offset, ', ', lim);
 end if;
         PREPARE stmt FROM @q;
         set@uID = uID;
