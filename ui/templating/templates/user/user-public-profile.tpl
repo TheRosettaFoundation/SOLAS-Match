@@ -347,16 +347,23 @@
     </div>
     <p>
         {if isset($interval)}
-            {Localisation::getTranslation(Strings::COMMON_YOU_ARE_CURRENTLY_RECEIVING)}
-            {if $strict}
-                <strong>{Localisation::getTranslation(Strings::COMMON_STRICT)}</strong>
-            {/if}
-            <strong>{$interval}</strong> {Localisation::getTranslation(Strings::COMMON_EMAILS)}
-            {if $lastSent != null}
-                {sprintf(Localisation::getTranslation(Strings::COMMON_THE_LAST_EMAIL_WAS_SENT_ON), {$lastSent})}
-            {else}
-                {Localisation::getTranslation(Strings::COMMON_NO_EMAILS_HAVE_BEEN_SENT_YET)}
-            {/if}
+            <p>
+                {Localisation::getTranslation(Strings::COMMON_WHAT_TYPE_OF_EMAILS)}
+                {if $strict}
+                    <strong>{Localisation::getTranslation(Strings::COMMON_STRICT)}</strong>
+                {/if}            
+            </p>
+            <p>
+                {Localisation::getTranslation(Strings::COMMON_HOW_OFTEN_RECEIVING_EMAILS)}
+                <strong>{$interval}</strong>
+            </p>
+            <p>
+                {if $lastSent != null}
+                    {sprintf(Localisation::getTranslation(Strings::COMMON_THE_LAST_EMAIL_WAS_SENT_ON), {$lastSent})}
+                {else}
+                    {Localisation::getTranslation(Strings::COMMON_NO_EMAILS_HAVE_BEEN_SENT_YET)}
+                {/if}
+            </p>
         {else}
             {Localisation::getTranslation(Strings::COMMON_YOU_ARE_NOT_CURRENTLY_RECEIVING_TASK_STREAM_NOTIFICATION_EMAILS)}
         {/if}

@@ -187,6 +187,8 @@ class Strings
     const COMMON_ERROR_FILE_INVALID_EMPTY = 'common_error_file_invalid_empty';
     const COMMON_CAN_YOU_OPEN_FILE = 'common_can_you_open_file';
     const COMMON_PART_OF_FOR = 'common_part_of_for';    
+    const COMMON_WHAT_TYPE_OF_EMAILS = 'common_what_type_of_emails';    
+    const COMMON_HOW_OFTEN_RECEIVING_EMAILS = 'common_how_often_receiving_emails';    
     
     const ADMIN_BANNED_ORGS_LIST_ALL_BANNED_ORGANISATIONS_OF = 'admin_banned_orgs_list_all_banned_organisations_of';
     const ADMIN_BANNED_ORGS_LIST_0 = 'admin_banned_orgs_list_0';
@@ -803,8 +805,7 @@ class Strings
 
     const TASK_VIEW_DOWNLOAD_TASK = 'task_view_download_task';
     const TASK_VIEW_EDIT_TASK_DETAILS = 'task_view_edit_task_details';
-    const TASK_VIEW_SOURCE_DOCUMENT_PREVIEW = 'task_view_source_document_preview';
-    const EMAIL_VERIFICATION_EMAIL_VERIFICATION = 'email_verification_email_verification';
+    const TASK_VIEW_SOURCE_DOCUMENT_PREVIEW = 'task_view_source_document_preview';   
     const TASK_VIEW_10 = 'task_view_10';
     const TASK_VIEW_11 = 'task_view_11';
     const TASK_VIEW_12 = 'task_view_12';
@@ -821,6 +822,7 @@ class Strings
     const EMAIL_VERIFICATION_FINISH_REGISTRATION = 'email_verification_finish_registration';
     const EMAIL_VERIFICATION_7 = 'email_verification_7';
     const EMAIL_VERIFICATION_8 = 'email_verification_8';
+    const EMAIL_VERIFICATION_EMAIL_VERIFICATION = 'email_verification_email_verification';
 
     const LOGIN_LOG_IN_TO = 'login_log_in_to';
     const LOGIN_RESET_PASSWORD = 'login_reset_password';

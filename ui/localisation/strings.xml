@@ -185,7 +185,9 @@
         <string name="common_error_file_stopped_by_extension">File upload stopped by extension.</string>
         <string name="common_error_file_invalid_empty">Please make sure the file you are trying to upload is valid and not empty.</string>
         <string name="common_can_you_open_file">Can you open the file on your computer?</string>
-        <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string>        
+        <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string> 
+        <string name="common_what_type_of_emails">What type of e-mails am I receiving?</string>
+        <string name="common_how_often_receiving_emails">How often am I receiving these e-mails?</string>        
               
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of %s.</string>
 	<string name="admin_banned_orgs_list_0">Are you sure you want to unban this Organisation and its members?</string>
@@ -903,7 +905,7 @@
         <string name="user_public_profile_15">To request a reference e-mail summarising your completed work on Trommons, click the button on the right.</string>
         <string name="user_public_profile_16">Request an email outlining your work.</string>
         <string name="user_public_profile_reference_request_success">Your request was sent successfully, you will receive the email shortly.</string>
-        <string name="user_public_profile_17">Successfully updated user task stream notification subscription</string>
+        <string name="user_public_profile_17">Successfully updated user task stream notification subscription.</string>    
 
 	<string name="user_reset_password_reset_user_password">Reset User Password</string>
 	<string name="user_reset_password_0">To reset your password enter the email address you registered with below.</string>
