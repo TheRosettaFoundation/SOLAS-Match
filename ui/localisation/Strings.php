@@ -592,6 +592,7 @@ class Strings
 
     const CLAIMED_TASKS_CLAIMED_TASKS = 'claimed_tasks_claimed_tasks';
     const CLAIMED_TASKS_CLAIMED_TASKS_2 = 'claimed_tasks_claimed_tasks_2';
+    const CLAIMED_TASKS_TASK_REVIEWS = 'claimed_tasks_task_reviews';
     const CLAIMED_TASKS_0 = 'claimed_tasks_0';
     const CLAIMED_TASKS_NO_ACTIVE_TASKS_AVAILABLE = 'claimed_tasks_no_active_tasks_available';
     const CLAIMED_TASKS_1 = 'claimed_tasks_1';
@@ -905,6 +906,12 @@ class Strings
     const USER_RESET_PASSWORD_2 = 'user_reset_password_2';
     const USER_RESET_PASSWORD_3 = 'user_reset_password_3';
     const USER_RESET_PASSWORD_4 = 'user_reset_password_4';
+
+    const USER_TASK_REVIEWS_0 = 'user_task_reviews_0';
+    const USER_TASK_REVIEWS_1 = 'user_task_reviews_1';
+    const USER_TASK_REVIEWS_2 = 'user_task_reviews_2';
+    const USER_TASK_REVIEWS_3 = 'user_task_reviews_3';
+    const USER_TASK_REVIEWS_4 = 'user_task_reviews_4';
 
     const USER_TASK_STREAM_NOTIFICATION_EDIT_0 = 'user_task_stream_notification_edit_0';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_1 = 'user_task_stream_notification_edit_1';

@@ -8,5 +8,5 @@ main() {
   args.addAll(['--', '--basedir', 'web/', '--out', 'web/compiled']);
   // Uncomment to build web components
   //build(args, ['web/components/TaskStream.html', 'web/components/UserPrivateProfileForm.html']);
-  //build(args, ['web/components/ProjectCreateForm.html']);
+  //build(args, ['web/components/ProjectCreateForm.html', 'web/components/ClaimedTasksStream.html']);
 }

@@ -454,7 +454,7 @@ class UserPrivateProfileForm extends WebComponent with Observable
     
     dataLoaded.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
       Language lang = new Language();
-      lang.name = Localisation.getTranslation("index_any");
+      lang.name = "";
       lang.code = "";
       languages.add(lang);
       languages.addAll(langs);
@@ -463,7 +463,7 @@ class UserPrivateProfileForm extends WebComponent with Observable
     
     dataLoaded.add(CountryDao.getAllCountries().then((List<Country> regions) {
       Country any = new Country();
-      any.name = Localisation.getTranslation("index_any");
+      any.name = "";
       any.code = "";
       countries.add(any);
       countries.addAll(regions);
@@ -652,8 +652,7 @@ class UserPrivateProfileForm extends WebComponent with Observable
   
   void submitForm()
   {
-    this.
-    alert = "";
+    this.alert = "";
     if (user.display_name == "") {
       alert = Localisation.getTranslation("user_private_profile_2");
     } else {

@@ -63,7 +63,6 @@ class Middleware
                 $app->flash('error', Localisation::getTranslation(Strings::COMMON_ERROR_ALREADY_CLAIMED));
                 $app->redirect($app->urlFor('home'));
             }
-
         }
     }
 
