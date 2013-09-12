@@ -13,7 +13,7 @@ class TaskRouteHandler
         $app->get("/tasks/archive/p/:page_no/", array($middleware, "authUserIsLoggedIn")
         , array($this, "archivedTasks"))->name("archived-tasks");
 
-        $app->get("/tasks/claimed/p/:page_no/", array($middleware, "authUserIsLoggedIn")
+        $app->get("/user/:user_id/claimed/tasks/", array($middleware, "authUserIsLoggedIn")
         , array($this, "claimedTasks"))->name("claimed-tasks");        
 
         $app->get("/task/:task_id/download-task-latest-file/", array($middleware, "authUserForTaskDownload")
@@ -119,64 +119,23 @@ class TaskRouteHandler
         $app->render("task/archived-tasks.tpl");
     }
 
-    public function claimedTasks($page_no)
+    public function claimedTasks($userId)
     {
         $app = Slim::getInstance();
         $userDao = new UserDao();
-        $projectDao = new ProjectDao();
-        $orgDao = new OrganisationDao();
+        $user = $userDao->getUser($userId);
 
-        $user_id = UserSession::getCurrentUserID();
-
-        $activeTasks = $userDao->getUserTasks($user_id);
-        if ($activeTasks) {
-            for ($i = 0; $i < count($activeTasks); $i++) {
-                $activeTasks[$i]['Project'] = $projectDao->getProject($activeTasks[$i]->getProjectId());
-                $activeTasks[$i]['Org'] = $orgDao->getOrganisation($activeTasks[$i]['Project']->getOrganisationId());
+        $loggedInUserId = UserSession::getCurrentUserID();
+        if ($loggedInUserId != $userId) {
+            $adminDao = new AdminDao();
+            if (!$adminDao->isSiteAdmin($loggedInUserId)) {
+                $app->flash('error', "You are not authorized to view this page");
+                $app->redirect($app->urlFor('home'));
             }
         }
-        
-        $tasks_per_page = 10;
-        $total_pages = ceil(count($activeTasks) / $tasks_per_page);
-        
-        if ($page_no < 1) {
-            $page_no = 1;
-        } elseif ($page_no > $total_pages) {
-            $page_no = $total_pages;
-        }   
-        
-        $top = (($page_no - 1) * $tasks_per_page);
-        $bottom = $top + $tasks_per_page - 1;
-        
-        if ($top < 0) {
-            $top = 0;
-        } elseif ($top > count($activeTasks) - 1) {
-            $top = count($activeTasks) - 1; 
-        }   
-        
-        if ($bottom < 0) {
-            $bottom = 0;
-        } elseif ($bottom > count($activeTasks) - 1) {
-            $bottom = count($activeTasks) - 1;
-        }
-        
-        $numTaskTypes = Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        
-        for($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
-        }    
-        
-        $app->view()->setData("active_tasks", $activeTasks);
-        $app->view()->appendData(array(
-                        "page_no" => $page_no,
-                        "last" => $total_pages,
-                        "top" => $top,
-                        "bottom" => $bottom,
-                        "current_page" => "claimed-tasks",
-                        "taskTypeColours" => $taskTypeColours
-        ));
-        
+
+        $viewData = array('thisUser' => $user);
+        $app->view()->appendData($viewData);
         $app->render("task/claimed-tasks.tpl");
     }
 
