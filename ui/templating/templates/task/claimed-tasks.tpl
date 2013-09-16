@@ -2,9 +2,9 @@
 
 <div class="page-header">
     <h1>
-        {if isset($user)}
-            {if $user->getDisplayName() != ''}
-                {sprintf(Localisation::getTranslation(Strings::CLAIMED_TASKS_CLAIMED_TASKS_2), {$user->getDisplayName()})}
+        {if isset($thisUser)}
+            {if $thisUser->getDisplayName() != ''}
+                {sprintf(Localisation::getTranslation(Strings::CLAIMED_TASKS_CLAIMED_TASKS_2), {$thisUser->getDisplayName()})}
             {else}
                 {Localisation::getTranslation(Strings::CLAIMED_TASKS_CLAIMED_TASKS)}
             {/if}
@@ -15,7 +15,7 @@
     </h1>
 </div>
 
-<div class="task" is="x-claimed-tasks-stream" user-id="{$user->getId()}" tasks-per-page="10" id="claimedTasksStream"></div>
+<div class="task" is="x-claimed-tasks-stream" user-id="{$thisUser->getId()}" tasks-per-page="10" id="claimedTasksStream"></div>
 
 <script type="text/javascript" src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/interop.js"></script>
 <script type="text/javascript" src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/dart.js"></script>

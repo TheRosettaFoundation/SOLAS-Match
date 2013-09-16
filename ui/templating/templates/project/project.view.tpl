@@ -228,7 +228,7 @@
                                             </a>
                                         {elseif $status_id == TaskStatusEnum::COMPLETE}
                                             {assign var="org_id" value=$project->getOrganisationId()}
-                                            <a href="{urlFor name="org-task-review" options="task_id.$task_id|org_id.$org_id"}">
+                                            <a href="{urlFor name="org-task-complete" options="task_id.$task_id|org_id.$org_id"}">
                                                 {Localisation::getTranslation(Strings::COMMON_COMPLETE)}
                                             </a>
                                         {/if}

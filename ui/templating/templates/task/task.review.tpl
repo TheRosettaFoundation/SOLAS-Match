@@ -11,6 +11,14 @@
     {$action} {Localisation::getTranslation(Strings::TASK_REVIEW_3)}
 </p>
 
-{include file="task/task.review-form.tpl"}
+{foreach $tasks as $task}
+    {assign var="reviewedTask" value=$task}
+    {if isset($reviews[$task->getId()])}
+        {assign var="review" value=$reviews[$task->getId()]}
+    {else}
+        {assign var="review" value=null}
+    {/if}
+    {include file="task/task.review-form.tpl"}
+{/foreach}
 
 {include file="footer.tpl"}

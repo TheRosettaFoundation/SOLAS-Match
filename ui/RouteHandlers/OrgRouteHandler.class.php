@@ -40,8 +40,14 @@ class OrgRouteHandler
         $app->get("/org/:org_id/edit/:badge_id/", array($middleware, "authUserForOrg")
         , array($this, "orgEditBadge"))->via("POST")->name("org-edit-badge");         
 
-        $app->get("/org/:org_id/task/:task_id/review/", array($middleware, "authUserForOrg")
-        , array($this, "orgTaskReview"))->via("POST")->name("org-task-review");
+        $app->get("/org/:org_id/task/:task_id/complete/", array($middleware, "authUserForOrg")
+        , array($this, "orgTaskComplete"))->name("org-task-complete");
+
+        $app->get("/org/:org_id/task/:task_id/review/", array($middleware, "authUserForOrg"),
+        array($this, "orgTaskReview"))->via("POST")->name("org-task-review");
+
+        $app->get("/org/:org_id/task/:task_id/reviews/", array($middleware, "authUserForOrg"),
+        array($this, "orgTaskReviews"))->name("org-task-reviews");
     }
 
     public function createOrg()
@@ -635,6 +641,21 @@ class OrgRouteHandler
         $app->render("org/org.edit-badge.tpl");        
     }    
 
+    public function orgTaskComplete($orgId, $taskId)
+    {
+        $app = Slim::getInstance();
+        $taskDao = new TaskDao();
+
+        $task = $taskDao->getTask($taskId);
+        $viewData = array(
+                "task" => $task,
+                "orgId" => $orgId
+        );
+
+        $app->view()->appendData($viewData);
+        $app->render("org/org.task-complete.tpl");
+    }
+
     public function orgTaskReview($orgId, $taskId)
     {
         $app = Slim::getInstance();
@@ -642,10 +663,7 @@ class OrgRouteHandler
         $userDao = new UserDao();
 
         $userId = UserSession::getCurrentUserID();
-
         $task = $taskDao->getTask($taskId);
-        $tasks = array();
-        $tasks[] = $task;
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -715,12 +733,8 @@ class OrgRouteHandler
             }
         }
 
-        $reviews = array();
-        if ($taskReview = $userDao->getUserTaskReviews($userId, $taskId)) {
-            $reviews[$taskId] = $taskReview;
-        }
-
-        if (count($reviews) > 0) {
+        $taskReview = $userDao->getUserTaskReviews($userId, $taskId);
+        if (!is_null($taskReview)) {
             $app->flashNow("info", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_41));
         }
 
@@ -744,13 +758,69 @@ class OrgRouteHandler
         $app->view()->appendData(array(
                     'extra_scripts' => $extra_scripts,
                     'task'      => $task,
-                    'tasks'     => $tasks,
-                    'reviews'   => $reviews,
+                    'review'    => $taskReview,
                     'translator'=> $translator,
                     'formAction'=> $formAction
         ));
 
         $app->render("org/org.task-review.tpl");
+    }
+
+    public function orgTaskReviews($orgId, $taskId)
+    {
+        $app = Slim::getInstance();
+        $viewData = array();
+        $taskDao = new TaskDao();
+        $task = $taskDao->getTask($taskId);
+        $preReqTasks = array();
+        $preReqs = $taskDao->getTaskPreReqs($taskId);
+        $reviews = array();
+        if (!is_null($preReqs) && count($preReqs) > 0) {
+            foreach ($preReqs as $preReq) {
+                $taskReviews = $taskDao->getTaskReviews($preReq->getId());
+                if (!is_null($taskReviews) && count($taskReviews) > 0) {
+                    $preReqTasks[] = $preReq;
+                    $reviews[$preReq->getId()] = $taskReviews;
+                }
+            }
+            $viewData['preReqTasks'] = $preReqTasks;
+        } else {
+            $projectDao= new ProjectDao();
+            $project = $projectDao->getProject($task->getProjectId());
+            
+            $allProjectReviews = $projectDao->getProjectReviews($task->getProjectId());
+            if (!is_null($allProjectReviews) && count($allProjectReviews) > 0) {
+                $validReviews = array();
+                foreach ($allProjectReviews as $projectReview) {
+                    if ($projectReview->getTaskId() == null) {
+                        $validReviews[] = $projectReview;
+                    }
+                }
+                if (count($validReviews) > 0) {
+                    $viewData['projectReviews'] = $validReviews;
+                }
+            }
+            
+            $dummyTask = new Task();        //Create a dummy task to hold the project info
+            $dummyTask->setProjectId($task->getProjectId());
+            $dummyTask->setTitle($project->getTitle());
+            $viewData['projectData'] = $dummyTask;
+        }
+
+        $taskReviews = $taskDao->getTaskReviews($taskId);
+        if (!is_null($taskReviews) && count($taskReviews) > 0) {
+            $reviews[$taskId] = $taskReviews;
+        }
+
+        $extra_scripts = "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
+
+        $viewData['task'] = $task;
+        $viewData['reviews'] = $reviews;
+        $viewData['extra_scripts'] = $extra_scripts;
+
+        $app->view()->appendData($viewData);
+        $app->render('org/org.task-reviews.tpl');
     }
 }
 
