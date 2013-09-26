@@ -35,7 +35,7 @@
 
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
-            {$extra_scripts}
+            {$extra_scripts nofilter}
         {/if}
     </head>
 

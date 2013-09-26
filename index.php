@@ -14,6 +14,7 @@ SmartyView::$smartyExtensions = array(
     'ui/vendor/slim/extras/Views/Extension/Smarty'
 );
 
+
 \DrSlump\Protobuf::autoload();
 
 // Can we get away from the app's old system?
@@ -27,6 +28,7 @@ $app = new Slim(array(
     'view' => new SmartyView(),
     'mode' => 'development' // default is development.
 ));
+SmartyView::getInstance()->escape_html=true;
 
 $app->configureMode('production', function () use ($app) {
     $app->config(array(
@@ -134,6 +136,7 @@ function isValidPost(&$app)
  */
 $app->hook('slim.before.dispatch', function () use ($app)
 {
+    SmartyView::getInstance()->escape_html=true;
     if(!is_null($token =UserSession::getAccessToken()) && $token->getExpires() <  time())        UserSession::clearCurrentUserID();
     $userDao = new UserDao();
 

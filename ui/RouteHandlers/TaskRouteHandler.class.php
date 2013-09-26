@@ -1091,10 +1091,9 @@ class TaskRouteHandler
                     } catch (SolasMatchException  $e) {
                         $upload_error = true;
                         $error_message = "File error: " . $e->getMessage();
-                    }  
-
-                    $task->setTaskStatus(TaskStatusEnum::COMPLETE);
-                    $taskDao->updateTask($task);
+                    }
+                    
+                    
                     for($i=0; $i < $segmentationValue; $i++) {
                         if(isset($post["translation_0"]) && isset($post["proofreading_0"])) {   
                             $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
@@ -1110,6 +1109,8 @@ class TaskRouteHandler
                             $taskDao->addTaskPreReq($createdDesegmentationId, $translationTaskIds[$i]);
                         }
                     }
+                    $task->setTaskStatus(TaskStatusEnum::COMPLETE); //must be done last after the prerequsites
+                    $taskDao->updateTask($task);
                     $projectDao->calculateProjectDeadlines($project->getId());
                     $app->redirect($app->urlFor("task-review", array("task_id" => $task->getId())));
                 } else {                    
