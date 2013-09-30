@@ -938,7 +938,7 @@
 	<string name="user_public_profile_1">By creating an organisation, you confirm that its activities are not in conflict with the general terms and conditions for the use of this site.</string>
 	<string name="user_public_profile_edit_profile_details">Edit Profile Details</string>
 	<string name="user_public_profile_2">Overview of your account details.</string>
-	<string name="user_public_profile_3">Please select a native language!</string>
+	<string name="user_public_profile_3">Please select a native language by editing your profile.</string>
 	<string name="user_public_profile_4">A list of badges you have earned.</string>
 	<string name="user_public_profile_list_all_badges">List All Badges</string>
 	<string name="user_public_profile_remove_badge">Remove Badge</string>
