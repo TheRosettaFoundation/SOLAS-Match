@@ -163,7 +163,7 @@ class UserRouteHandler
                 $userDao->finishRegistration($uuid);
                 UserSession::setSession($user->getId());
                 $app->flash("success", Localisation::getTranslation(Strings::USER_ROUTEHANDLER_6));
-                $app->redirect($app->urlFor("home"));
+                $app->redirect($app->urlFor("user-public-profile", array('user_id' => $user->getId())));
             }
         }
 
