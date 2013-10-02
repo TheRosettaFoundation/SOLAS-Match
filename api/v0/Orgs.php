@@ -191,6 +191,23 @@ class Orgs {
             Notify::notifyUserOrgMembershipRequest($uid, $id, true);
 
         }, 'acceptMembershipRequests');
+
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/addMember/:email/:orgId/',
+                function ($email, $orgId, $format = ".json")
+                {
+                    if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                        $orgId = explode('.', $orgId);
+                        $format = '.'.$orgId[1];
+                        $orgId = $orgId[0];
+                    }
+                    $ret = false;
+                    $user = UserDao::getUser(null, $email);
+                    if (count($user) > 0) {
+                        $user = $user[0];
+                        $ret = OrganisationDao::acceptMemRequest($orgId, $user->getId());
+                    }
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, 'addMember', null);      // Add middleware to authenticate the logged in user for the org
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:id/requests/:uid/',
                                                         function ($id, $uid, $format = ".json") {

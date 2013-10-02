@@ -234,31 +234,13 @@ class OrgRouteHandler
             
             if (isset($post['email'])) {
                 if (TemplateHelper::isValidEmail($post['email'])) {       
-                    $user = $userDao->getUserByEmail($post['email']);
-                    if (!is_null($user)) {
-                        $user_id = $user->getId();
-                        $user_orgs = $userDao->getUserOrgs($user_id);
-                    
-                        if ($user->getDisplayName() != "") {
-                            $user_name = $user->getDisplayName();
-                        } else {
-                            $user_name = $user->getEmail();
-                        }   
-                        if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
-                            $orgDao->acceptMembershipRequest($org_id, $user_id);
-                            if ($org->getName() != "") {
-                                $org_name = $org->getName();
-                            } else {
-                                $org_name = "Organisation $org_id";
-                            }   
-                            $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_12), $user_name, $org_name));
-                        } else {
-                            $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_13), $user_name));
-                        }   
+                    $success = $orgDao->addMember($post['email'], $org_id);
+                    if ($success) {
+                        $app->flashNow("success", 
+                                sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_12), $post['email'], $org->getName()));
                     } else {
-                        $email = $post['email'];
-                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_14), $email));                        
-                    }
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_13), $post['email']));
+                    }   
                 } else {
                     $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_15));
                 }

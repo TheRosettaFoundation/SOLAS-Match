@@ -14,7 +14,7 @@
         <string name="org_routehandler_10">You have already sent a membership request to this organisation.</string>        
         <string name="org_routehandler_11">You are already a member of this organisation.</string>        
         <string name="org_routehandler_12">Successfully added %s as a member of %s.</string>        
-        <string name="org_routehandler_13">%s is already a member of this organisation.</string>        
+        <string name="org_routehandler_13">%s is already a member of this organisation or user does not exist.</string>        
         <string name="org_routehandler_14">The email address %s is not registered with this system. Are you sure you have the right email addess?</string>      
         <string name="org_routehandler_15">You did not enter a valid email address.</string>
         <string name="org_routehandler_16">Invalid User ID: %s</string>        
