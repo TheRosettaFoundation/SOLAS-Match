@@ -248,6 +248,7 @@ class TaskRouteHandler
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
 
         if ($taskClaimed) {
+            $app->flashKeep();
             switch ($task->getTaskType()) {
                 case TaskTypeEnum::DESEGMENTATION:
                     $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $task_id)));
@@ -1187,6 +1188,13 @@ class TaskRouteHandler
                         } else {
                             $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_22), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle()));
                         }
+                    } else {
+                        $orgProfile = $app->urlFor("org-public-profile", array('org_id' => $organisation->getId()));
+                        $app->flash("success", sprintf(
+                                    Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_32), 
+                                    $orgProfile, $organisation->getName()
+                        ));
+                        $app->redirect($app->urlFor("task", array("task_id" => $task_id)));
                     }
                 } else {
                     $app->flashNow('error', Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_24));
