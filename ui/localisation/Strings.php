@@ -698,6 +698,7 @@ class Strings
     const TASK_SEGMENTATION_6 = 'task_segmentation_6';
     const TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE = 'task_segmentation_upload_your_segmented_file';
     const TASK_SEGMENTATION_SUBMIT_SEGMENTED_TASKS = 'task_segmentation_submit_segmented_tasks';
+    const TASK_SEGMENTATION_7 = 'task_segmentation_7';
 
     const TASK_SIMPLE_UPLOAD_FINISHED_PROCESSING = 'task_simple_upload_finished_processing';
     const TASK_SIMPLE_UPLOAD_PROVIDE_FEEDBACK = 'task_simple_upload_provide_feedback';

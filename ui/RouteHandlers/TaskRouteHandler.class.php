@@ -949,7 +949,7 @@ class TaskRouteHandler
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
         
-        if ($app->request()->isPost()) {
+        if ($app->request()->isPost() && $task->getTaskStatus() != TaskStatusEnum::COMPLETE) {
             $post = $app->request()->post(); 
             
             $fileInfo = $projectDao->getProjectFileInfo($project->getId());            

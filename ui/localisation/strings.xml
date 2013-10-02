@@ -708,6 +708,7 @@
         <string name="task_segmentation_6">If you would like to re-download the original project file, click</string>
 	<string name="task_segmentation_upload_your_segmented_file">Upload your segmented file.</string>
 	<string name="task_segmentation_submit_segmented_tasks">Submit Segmented Tasks</string>
+    <string name="task_segmentation_7">This task has already been segmented, you cannot resegment this task.</string>
 
 	<string name="task_simple_upload_finished_processing">Finished processing?</string>
 	<string name="task_simple_upload_provide_feedback">Provide Feedback</string>
