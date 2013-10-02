@@ -833,6 +833,10 @@ class Strings
 
     const TASK_PROFILE_DISPLAY_ARCHIVED = 'task_profile_display_archived';
 
+    const TASK_REVIEW_SEGMENTED = 'task_review_segmented';
+    const TASK_REVIEW_TRANSLATED = 'task_review_translated';
+    const TASK_REVIEW_PROOFREAD = 'task_review_proofread';
+    const TASK_REVIEW_MERGED = 'task_review_merged';
     const TASK_REVIEW_FORM_0 = 'task_review_form_0';
     const TASK_REVIEW_FORM_1 = 'task_review_form_1';
     const TASK_REVIEW_FORM_CORRECTIONS = 'task_review_form_corrections';

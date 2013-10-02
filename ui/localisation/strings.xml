@@ -847,6 +847,10 @@
 
 	<string name="task_profile_display_archived">Archived</string>
 
+    <string name="task_review_segmented">segmented</string>
+    <string name="task_review_translated">translated</string>
+    <string name="task_review_proofread">proofread</string>
+    <string name="task_review_merged">merged</string>
 	<string name="task_review_form_0">You can redownload this source file</string>
 	<string name="task_review_form_1">You can download the project file</string>
 	<string name="task_review_form_corrections">Corrections</string>

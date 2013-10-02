@@ -1232,16 +1232,16 @@ class TaskRouteHandler
         $action = "";
         switch ($task->getTaskType()) {
             case TaskTypeEnum::SEGMENTATION:
-                $action = "segmented";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_SEGMENTED);
                 break;
             case TaskTypeEnum::TRANSLATION:
-                $action = "translated";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_TRANSLATED);
                 break;
             case TaskTypeEnum::PROOFREADING:
-                $action = "proofread";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_PROOFREAD);
                 break;
             case TaskTypeEnum::DESEGMENTATION:
-                $action = "merged";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_MERGED);
                 break;
         }
 
