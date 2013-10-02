@@ -31,7 +31,7 @@
         <string name="org_routehandler_27">Unable to revoke membership from user <a href="%s">%s</a>.</string>        
         <string name="org_routehandler_28">Unable to find the user in the system.</string>        
         <string name="org_routehandler_29">Successfully assigned badge %s to user %s.</string>
-        <string name="org_routehandler_30">The user %s already has that badge.</string>        
+        <string name="org_routehandler_30">The user %s already has that badge or that user does not exist.</string>        
         <string name="org_routehandler_31">The email address %s is not registered on the system. Are you using the correct email address?</string>        
         <string name="org_routehandler_32">Successfully removed badge from user %s.</string>
         <string name="org_routehandler_33">Successfully created new Organisation Badge.</string>        

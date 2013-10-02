@@ -202,6 +202,23 @@ class Users {
 //            $data = $client->cast('Badge', $data);
             Dispatcher::sendResponce(null, BadgeDao::assignBadge($id, $data->getId()), null, $format);
         }, 'addUserbadges');
+
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/assignBadge/:email/:badgeId/',
+                function ($email, $badgeId, $format = ".json")
+                {
+                    if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
+                        $badgeId = explode('.', $badgeId);
+                        $format = '.'.$badgeId[1];
+                        $badgeId = $badgeId[0];
+                    }
+                    $ret = false;
+                    $user = UserDao::getUser(null, $email);
+                    if (count($user) > 0) {
+                        $user = $user[0];
+                        $ret = BadgeDao::assignBadge($user->getId(), $badgeId);
+                    }
+                    Dispatcher::sendResponce(null, $ret, null, $format);
+                }, "assignBadge", null);
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:id/badges/:badge/',
                                                         function ($id, $badge, $format = ".json") {
