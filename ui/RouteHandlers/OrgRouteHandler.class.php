@@ -434,30 +434,9 @@ class OrgRouteHandler
             }
         }       
         
-        $requests = $orgDao->getMembershipRequests($org_id);
-        $user_list = array();
-        if (count($requests) > 0) {
-            foreach ($requests as $memRequest) {
-                $user = $userDao->getUser($memRequest->getUserId());
-                $user_list[] = $user;
-            }
-        }
-
         $currentUser = $userDao->getUser(UserSession::getCurrentUserId());
-
-        $org_badges = $orgDao->getOrgBadges($org_id);
-        $orgMemberList = $orgDao->getOrgMembers($org_id);
-        
-        if($orgMemberList) {
-            foreach($orgMemberList as $orgMember) {
-                if($adminDao->isOrgAdmin($org_id, $orgMember->getId())) {
-                    $orgMember['orgAdmin'] = true;
-                }
-            }
-        }
-        
-        
         $isMember = false;
+        $orgMemberList = $orgDao->getOrgMembers($org_id);
         if (count($orgMemberList) > 0) {
             foreach ($orgMemberList as $member) {
                 if ($currentUser->getId() ==  $member->getId()) {
@@ -469,6 +448,29 @@ class OrgRouteHandler
         $adminAccess = false;
         if ($adminDao->isSiteAdmin($currentUser->getId()) == 1 || $adminDao->isOrgAdmin($org->getId(), $currentUser->getId()) == 1) {
             $adminAccess = true;
+        }
+
+        $org_badges = array();
+        $user_list = array();
+
+        if ($isMember || $adminAccess) {
+            $requests = $orgDao->getMembershipRequests($org_id);
+            if (count($requests) > 0) {
+                foreach ($requests as $memRequest) {
+                    $user = $userDao->getUser($memRequest->getUserId());
+                    $user_list[] = $user;
+                }
+            }
+
+            $org_badges = $orgDao->getOrgBadges($org_id);
+        
+            if($orgMemberList) {
+                foreach($orgMemberList as $orgMember) {
+                    if($adminDao->isOrgAdmin($org_id, $orgMember->getId())) {
+                        $orgMember['orgAdmin'] = true;
+                    }
+                }
+            }
         }
 
         $siteName = Settings::get("site.name");
