@@ -698,6 +698,7 @@ class Strings
     const TASK_SEGMENTATION_6 = 'task_segmentation_6';
     const TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE = 'task_segmentation_upload_your_segmented_file';
     const TASK_SEGMENTATION_SUBMIT_SEGMENTED_TASKS = 'task_segmentation_submit_segmented_tasks';
+    const TASK_SEGMENTATION_7 = 'task_segmentation_7';
 
     const TASK_SIMPLE_UPLOAD_FINISHED_PROCESSING = 'task_simple_upload_finished_processing';
     const TASK_SIMPLE_UPLOAD_PROVIDE_FEEDBACK = 'task_simple_upload_provide_feedback';
@@ -832,6 +833,10 @@ class Strings
 
     const TASK_PROFILE_DISPLAY_ARCHIVED = 'task_profile_display_archived';
 
+    const TASK_REVIEW_SEGMENTED = 'task_review_segmented';
+    const TASK_REVIEW_TRANSLATED = 'task_review_translated';
+    const TASK_REVIEW_PROOFREAD = 'task_review_proofread';
+    const TASK_REVIEW_MERGED = 'task_review_merged';
     const TASK_REVIEW_FORM_0 = 'task_review_form_0';
     const TASK_REVIEW_FORM_1 = 'task_review_form_1';
     const TASK_REVIEW_FORM_CORRECTIONS = 'task_review_form_corrections';

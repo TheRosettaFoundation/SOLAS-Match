@@ -135,6 +135,14 @@ class OrganisationDao extends BaseDao
         return $ret;
     }
 
+    public function addMember($email, $orgId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/orgs/addMember/".urlencode($email)."/$orgId";
+        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
+        return $ret;
+    }
+
     public function rejectMembershipRequest($orgId, $userId)
     {
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";

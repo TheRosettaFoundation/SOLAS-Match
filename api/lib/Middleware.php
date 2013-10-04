@@ -104,9 +104,12 @@ class Middleware
                 $id = explode('.', $id);
                 $format = '.'.$id[1];
                 $id = $id[0];
-            }
-        if($id!=$user->getId()) Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, "The Autherization header does not match the current user or the user does not have permission to acess the current resource");
-
+        }
+        if ($id!=$user->getId()) {
+            Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+                    "The Autherization header does not match the current user or the user does not 
+                    have permission to acess the current resource");
+        }
     }    
     
     

@@ -248,6 +248,7 @@ class TaskRouteHandler
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
 
         if ($taskClaimed) {
+            $app->flashKeep();
             switch ($task->getTaskType()) {
                 case TaskTypeEnum::DESEGMENTATION:
                     $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $task_id)));
@@ -948,7 +949,7 @@ class TaskRouteHandler
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
         
-        if ($app->request()->isPost()) {
+        if ($app->request()->isPost() && $task->getTaskStatus() != TaskStatusEnum::COMPLETE) {
             $post = $app->request()->post(); 
             
             $fileInfo = $projectDao->getProjectFileInfo($project->getId());            
@@ -1187,6 +1188,13 @@ class TaskRouteHandler
                         } else {
                             $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_22), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle()));
                         }
+                    } else {
+                        $orgProfile = $app->urlFor("org-public-profile", array('org_id' => $organisation->getId()));
+                        $app->flash("success", sprintf(
+                                    Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_32), 
+                                    $orgProfile, $organisation->getName()
+                        ));
+                        $app->redirect($app->urlFor("task", array("task_id" => $task_id)));
                     }
                 } else {
                     $app->flashNow('error', Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_24));
@@ -1224,16 +1232,16 @@ class TaskRouteHandler
         $action = "";
         switch ($task->getTaskType()) {
             case TaskTypeEnum::SEGMENTATION:
-                $action = "segmented";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_SEGMENTED);
                 break;
             case TaskTypeEnum::TRANSLATION:
-                $action = "translated";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_TRANSLATED);
                 break;
             case TaskTypeEnum::PROOFREADING:
-                $action = "proofread";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_PROOFREAD);
                 break;
             case TaskTypeEnum::DESEGMENTATION:
-                $action = "merged";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_MERGED);
                 break;
         }
 
