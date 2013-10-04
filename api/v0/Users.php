@@ -40,11 +40,9 @@ class Users {
                 $data->setPassword(null);
                 $data->setNonce(null);
             }
-
-
            
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUser',  "Middleware::authUserOwnsResource");
+        }, 'getUser');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:id/',
                                                         function ($id, $format = ".json") {
