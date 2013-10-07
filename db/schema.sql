@@ -633,25 +633,6 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
   CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    if NOT EXISTS (SELECT 1
-                    FROM information_schema.COLUMNS cols
-                    WHERE cols.TABLE_SCHEMA = database()
-                    AND cols.TABLE_NAME = "UserTaskStreamNotifications"
-                    AND cols.COLUMN_NAME = "strict") then
-        ALTER TABLE `UserTaskStreamNotifications`
-            ADD COLUMN `strict` INT(1) NOT NULL DEFAULT 0 AFTER `interval`;
-    end if;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
-
--- Data exporting was unselected.
-
 -- Dumping structure for table Solas-Match-Test.UserOrganisationPermissions
 CREATE TABLE IF NOT EXISTS `UserOrganisationPermissions` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
