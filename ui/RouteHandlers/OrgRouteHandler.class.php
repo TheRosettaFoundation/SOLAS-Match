@@ -321,7 +321,7 @@ class OrgRouteHandler
         
 
         $adminDao = new AdminDao();
-        if ($adminDao->isOrgAdmin($userId, $org->getId()) || $adminDao->isSiteAdmin($userId)) {
+        if ($adminDao->isOrgAdmin($org->getId(), $userId) || $adminDao->isSiteAdmin($userId)) {
             $app->view()->appendData(array('orgAdmin' => true));
         }
         
