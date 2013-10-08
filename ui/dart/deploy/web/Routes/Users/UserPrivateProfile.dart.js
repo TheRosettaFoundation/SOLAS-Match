@@ -7226,10 +7226,8 @@ ListIterable: {"": "IterableBase;",
   "+contains:1:0": 0,
   join$1: function(_, separator) {
     var $length, t1, first, buffer, i, str;
-    if (typeof separator !== "string")
-      return this.join$1$bailout1(1, separator);
     $length = this.get$length(this);
-    if (!C.JSString_methods.get$isEmpty(separator)) {
+    if (separator.length !== 0) {
       t1 = $.getInterceptor($length);
       if (t1.$eq($length, 0))
         return "";
@@ -7265,46 +7263,6 @@ ListIterable: {"": "IterableBase;",
     }
   },
   "+join:0:1": 0,
-  join$1$bailout1: function(state0, separator) {
-    var $length, t1, first, buffer, i, str;
-    $length = this.get$length(this);
-    if ($.get$isEmpty$asx(separator) !== true) {
-      t1 = $.getInterceptor($length);
-      if (t1.$eq($length, 0))
-        return "";
-      first = $.S(this.elementAt$1(this, 0));
-      if (!t1.$eq($length, this.get$length(this)))
-        throw $.wrapException(new $.ConcurrentModificationError(this));
-      buffer = $.StringBuffer$(first);
-      if (typeof $length !== "number")
-        throw $.iae($length);
-      t1 = typeof separator === "string";
-      i = 1;
-      for (; i < $length; ++i) {
-        str = t1 ? separator : $.S(separator);
-        buffer._contents = buffer._contents + str;
-        str = this.elementAt$1(this, i);
-        str = typeof str === "string" ? str : $.S(str);
-        buffer._contents = buffer._contents + str;
-        if ($length !== this.get$length(this))
-          throw $.wrapException(new $.ConcurrentModificationError(this));
-      }
-      return buffer._contents;
-    } else {
-      buffer = $.StringBuffer$("");
-      if (typeof $length !== "number")
-        throw $.iae($length);
-      i = 0;
-      for (; i < $length; ++i) {
-        str = this.elementAt$1(this, i);
-        str = typeof str === "string" ? str : $.S(str);
-        buffer._contents = buffer._contents + str;
-        if ($length !== this.get$length(this))
-          throw $.wrapException(new $.ConcurrentModificationError(this));
-      }
-      return buffer._contents;
-    }
-  },
   where$1: function(_, test) {
     return $.IterableBase.prototype.where$1.call(this, this, test);
   },
@@ -11087,8 +11045,6 @@ IterableBase: {"": "Object;",
   "+forEach:1:0": 0,
   join$1: function(_, separator) {
     var iterator, buffer, t1;
-    if (typeof separator !== "string")
-      return this.join$1$bailout(1, separator);
     iterator = this.get$iterator(this);
     if (iterator.moveNext$0() !== true)
       return "";
@@ -11109,28 +11065,6 @@ IterableBase: {"": "Object;",
     return buffer._contents;
   },
   "+join:0:1": 0,
-  join$1$bailout: function(state0, separator) {
-    var iterator, buffer, t1, str, t2;
-    iterator = this.get$iterator(this);
-    if (iterator.moveNext$0() !== true)
-      return "";
-    buffer = $.StringBuffer$("");
-    if (separator == null || $.$eq(separator, ""))
-      do {
-        t1 = $.S(iterator.get$current());
-        buffer._contents = buffer._contents + t1;
-      } while (iterator.moveNext$0() === true);
-    else {
-      buffer.write$1($.S(iterator.get$current()));
-      for (t1 = typeof separator === "string"; iterator.moveNext$0() === true;) {
-        str = t1 ? separator : $.S(separator);
-        buffer._contents = buffer._contents + str;
-        t2 = $.S(iterator.get$current());
-        buffer._contents = buffer._contents + t2;
-      }
-    }
-    return buffer._contents;
-  },
   toList$1$growable: function(_, growable) {
     return $.List_List$from(this, growable, $.getRuntimeTypeArgument(this, "IterableBase", 0));
   },
@@ -14368,12 +14302,10 @@ StringBuffer: {"": "Object;_contents<",
   },
   writeAll$2: function(objects, separator) {
     var iterator, str;
-    if (typeof separator !== "string")
-      return this.writeAll$2$bailout(1, objects, separator);
     iterator = $.get$iterator$ax(objects);
     if (iterator.moveNext$0() !== true)
       return;
-    if (C.JSString_methods.get$isEmpty(separator))
+    if (separator.length === 0)
       do {
         str = iterator.get$current();
         str = typeof str === "string" ? str : $.S(str);
@@ -14390,28 +14322,6 @@ StringBuffer: {"": "Object;_contents<",
     }
   },
   "+writeAll:1:1": 0,
-  writeAll$2$bailout: function(state0, objects, separator) {
-    var iterator, str, t1;
-    iterator = $.get$iterator$ax(objects);
-    if (iterator.moveNext$0() !== true)
-      return;
-    if ($.get$isEmpty$asx(separator) === true)
-      do {
-        str = iterator.get$current();
-        str = typeof str === "string" ? str : $.S(str);
-        this._contents = this._contents + str;
-      } while (iterator.moveNext$0() === true);
-    else {
-      this.write$1(iterator.get$current());
-      for (t1 = typeof separator === "string"; iterator.moveNext$0() === true;) {
-        str = t1 ? separator : $.S(separator);
-        this._contents = this._contents + str;
-        str = iterator.get$current();
-        str = typeof str === "string" ? str : $.S(str);
-        this._contents = this._contents + str;
-      }
-    }
-  },
   clear$0: function(_) {
     this._contents = "";
   },
