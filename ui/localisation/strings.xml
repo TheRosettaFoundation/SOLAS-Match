@@ -892,6 +892,7 @@
 	<string name="task_view_download_task">Download Task</string>
 	<string name="task_view_edit_task_details">Edit Task Details</string>
 	<string name="task_view_source_document_preview">Source Document Preview</string>
+    <string name="task_view_0">Note: This task has already been claimed by another user.</string>
 
 	<string name="email_verification_email_verification">Email Verification</string>
 	<string name="email_verification_0">You can complete registration here</string>
