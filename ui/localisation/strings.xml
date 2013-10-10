@@ -462,6 +462,7 @@
 	<string name="org_task_review_1">Helps us match volunteers and tasks</string>
 	<string name="org_task_review_the_volunteer">The volunteer</string>
 	<string name="org_task_review_2">has completed work on this task. Please provide a review of this task to help improve the system</string>
+    <string name="org_task_review_3"><a href="%s">%s</a> has completed this task.</string>
 
 	<string name="archived_projects_archived_projects">Archived Projects</string>
 	<string name="archived_projects_0">A list of projects you have worked on in the past</string>

@@ -612,11 +612,15 @@ class OrgRouteHandler
     {
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
+        $claimant = $taskDao->getUserClaimedTask($taskId);
+        $claimantProfile = $app->urlFor("user-public-profile", array('user_id' => $claimant->getId()));
 
         $task = $taskDao->getTask($taskId);
         $viewData = array(
-                "task" => $task,
-                "orgId" => $orgId
+                "task"              => $task,
+                'claimant'          => $claimant,
+                'claimantProfile'   => $claimantProfile,
+                "orgId"             => $orgId
         );
 
         $app->view()->appendData($viewData);
