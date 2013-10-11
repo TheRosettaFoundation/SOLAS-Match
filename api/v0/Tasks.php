@@ -119,14 +119,14 @@ class Tasks {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTask',null);
 
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/review(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:id/reviews(:format)/',
                 function ($id, $format = '.json')
                 {
                     $review = TaskDao::getTaskReviews(null,$id);
                     Dispatcher::sendResponce(null, $review, null, $format);
                 }, 'getTaskReview');
 
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/review(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/reviews(:format)/',
                 function ($format = '.json')
                 {
                     $data=Dispatcher::getDispatcher()->request()->getBody();

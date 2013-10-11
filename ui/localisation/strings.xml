@@ -135,7 +135,7 @@
         
         <string name="middleware_1">You do not have sufficient privileges to access this page or the page does not exist.</string>
         <string name="middleware_2">This task has been claimed by another user.</string>
-        <string name="middleware_3">You cannot claim the task <a href="%s">%s</a>, because you have worked on it previously.</string>
+        <string name="middleware_3">You are currently blacklisted for Task <a href="%s">%s</a>, because you have previouly unclaimed it or have completed a task it depends on.</string>
         
         <string name="templatehelper_1">Unknown task type.</string>
         <string name="templatehelper_2">A valid language code was expected.</string>
@@ -462,6 +462,7 @@
 	<string name="org_task_review_1">Helps us match volunteers and tasks</string>
 	<string name="org_task_review_the_volunteer">The volunteer</string>
 	<string name="org_task_review_2">has completed work on this task. Please provide a review of this task to help improve the system</string>
+    <string name="org_task_review_3"><a href="%s">%s</a> has completed this task.</string>
 
 	<string name="archived_projects_archived_projects">Archived Projects</string>
 	<string name="archived_projects_0">A list of projects you have worked on in the past</string>
@@ -892,6 +893,7 @@
 	<string name="task_view_download_task">Download Task</string>
 	<string name="task_view_edit_task_details">Edit Task Details</string>
 	<string name="task_view_source_document_preview">Source Document Preview</string>
+    <string name="task_view_0">Note: This task has already been claimed by another user.</string>
 
 	<string name="email_verification_email_verification">Email Verification</string>
 	<string name="email_verification_0">You can complete registration here</string>
@@ -1026,7 +1028,9 @@
 	<string name="index_register_now">Register now</string>
 	<string name="index_7">to find the translation tasks best suited to you.</string>
         <string name="index_load_more">Load More</string>
-
+	<string name="index_8">Internet Explorer is not a supported browser. Please use a supported browser, for example Firefox or Chrome.</string>
+	<string name="index_9">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
+	
 	<string name="pagination_page">Page</string>
 	<string name="pagination_of">of</string>
 
