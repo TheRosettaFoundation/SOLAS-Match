@@ -1013,6 +1013,8 @@ class Strings
     const INDEX_6 = 'index_6';
     const INDEX_REGISTER_NOW = 'index_register_now';
     const INDEX_7 = 'index_7';
+	const INDEX_8 = 'index_8';
+	const INDEX_9 = "index_9";
 
     const PAGINATION_PAGE = 'pagination_page';
     const PAGINATION_OF = 'pagination_of';
