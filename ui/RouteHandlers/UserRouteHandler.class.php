@@ -88,8 +88,7 @@ class UserRouteHandler
                         "user_tags" => $user_tags
             ));
         }
-        
-        $app->render("index.tpl");
+		$app->render("index.tpl");
     }
 
     public function videos()

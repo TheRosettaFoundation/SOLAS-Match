@@ -1026,7 +1026,9 @@
 	<string name="index_register_now">Register now</string>
 	<string name="index_7">to find the translation tasks best suited to you.</string>
         <string name="index_load_more">Load More</string>
-
+	<string name="index_8">Internet Explorer is not a supported browser. Please use a supported browser, for example Firefox or Chrome.</string>
+	<string name="index_9">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
+	
 	<string name="pagination_page">Page</string>
 	<string name="pagination_of">of</string>
 
