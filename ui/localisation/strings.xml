@@ -462,6 +462,7 @@
 	<string name="org_task_review_1">Helps us match volunteers and tasks</string>
 	<string name="org_task_review_the_volunteer">The volunteer</string>
 	<string name="org_task_review_2">has completed work on this task. Please provide a review of this task to help improve the system</string>
+    <string name="org_task_review_3"><a href="%s">%s</a> has completed this task.</string>
 
 	<string name="archived_projects_archived_projects">Archived Projects</string>
 	<string name="archived_projects_0">A list of projects you have worked on in the past</string>
@@ -892,6 +893,7 @@
 	<string name="task_view_download_task">Download Task</string>
 	<string name="task_view_edit_task_details">Edit Task Details</string>
 	<string name="task_view_source_document_preview">Source Document Preview</string>
+    <string name="task_view_0">Note: This task has already been claimed by another user.</string>
 
 	<string name="email_verification_email_verification">Email Verification</string>
 	<string name="email_verification_0">You can complete registration here</string>

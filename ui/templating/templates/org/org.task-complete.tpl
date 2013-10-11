@@ -5,7 +5,10 @@
     <h1>{$task->getTitle()} <small>{Localisation::getTranslation(Strings::ORG_TASK_REVIEW_REVIEW_THIS_COMPLETED_TASK)}</small></h1>
 </div>
 
-<p>{Localisation::getTranslation(Strings::ORG_TASK_REVIEW_0)}</p>
+<p>
+    {sprintf(Localisation::getTranslation(Strings::ORG_TASK_REVIEW_3), $claimantProfile, $claimant->getDisplayName())}
+    {Localisation::getTranslation(Strings::ORG_TASK_REVIEW_0)}
+</p>
 <p>
     <a class="btn btn-primary" href="{urlFor name="download-task-latest-version" options="task_id.$taskId"}">
         <i class="icon-download icon-white"></i> {Localisation::getTranslation(Strings::ORG_TASK_REVIEW_DOWNLOAD_OUTPUT_FILE)}

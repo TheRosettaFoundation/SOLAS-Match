@@ -164,7 +164,7 @@ class TaskDao extends BaseDao
 
     public function submitReview($review)
     {
-        $request = "{$this->siteApi}v0/tasks/review";
+        $request = "{$this->siteApi}v0/tasks/reviews";
         $response = $this->client->call(null, $request, HttpMethodEnum::POST, $review);
         return $response;
     }
