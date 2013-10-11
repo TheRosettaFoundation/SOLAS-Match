@@ -686,7 +686,10 @@ class UserDao
         
         if ($result = PDOWrapper::call("userSecondaryLanguageInsert", $args)) {
             $ret = ModelFactory::buildModel("Locale", $result[0]);
-            
+        }
+
+        if (count(self::getSecondaryLanguages($userId)) > 1) {
+            BadgeDao::assignBadge($userId, BadgeTypes::POLYGLOT);
         }
         return $ret;
     }
