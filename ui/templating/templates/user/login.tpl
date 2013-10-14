@@ -3,21 +3,6 @@
     <div class="page-header">
             <h1>{Localisation::getTranslation(Strings::LOGIN_LOG_IN_TO)} {Settings::get('site.title')}.</h1>
     </div>
-    
-	<div class="ie-alert">
-		<!--[if lte IE 8]>
-		    <div class="alert alert-info">
-		        <p><strong>{Localisation::getTranslation(Strings::INDEX_8)} </strong>
-		        <strong>{Localisation::getTranslation(Strings::INDEX_9)} </strong></p>
-		    </div>
-	    <![endif]-->
-	    <!--[if gt IE 8]>
-		    <div class="alert alert-info">
-		        <p><strong>{Localisation::getTranslation(Strings::INDEX_8)} </strong>
-		        <strong>{Localisation::getTranslation(Strings::INDEX_9)} </strong></p>
-		    </div>
-	    <![endif]-->
-	</div>
 
     {if isset($flash['error'])}
         <div class="alert alert-error">

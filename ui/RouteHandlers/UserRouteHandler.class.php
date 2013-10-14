@@ -88,6 +88,19 @@ class UserRouteHandler
                         "user_tags" => $user_tags
             ));
         }
+		
+		// Added check to display info message to users on IE borwsers
+		$browserData = get_browser(null, true);
+		if (!is_null($browserData) && isset($browserData['browser'])) {
+			$browser = $browserData['browser'];
+			
+			if ($browser == 'IE') {
+                $app->flashNow("info", Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9));
+        	}
+			
+		}
+
+		
 		$app->render("index.tpl");
     }
 
@@ -302,6 +315,18 @@ class UserRouteHandler
                     $app->redirect($app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID())));
                 }
             }
+			
+			// Added check to display info message to users on IE borwsers
+			$browserData = get_browser(null, true);
+			if (!is_null($browserData) && isset($browserData['browser'])) {
+				$browser = $browserData['browser'];
+			
+				if ($browser == 'IE') {
+	                $app->flashNow("info", Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9));
+	        	}
+			
+			}
+			
             $app->render("user/login.tpl");
         } catch (SolasMatchException $e) {
             $error = sprintf(Localisation::getTranslation(Strings::USER_ROUTEHANDLER_15), $app->urlFor("login"), $app->urlFor("register"), $e->getMessage());            
