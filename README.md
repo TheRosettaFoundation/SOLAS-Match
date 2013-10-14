@@ -181,11 +181,11 @@ Configure PHP
  * In php.ini set appropriate values for upload_max_filesize and post_max_size (such as 20M each).
    php.ini is often found under /etc/php5/apache2/php.ini
  * Download the php_browscap.ini file from http://tempdownloads.browserscap.com/ and save it locally.
-   Suggested save location: /etc/php5/apache2/conf.d/php_browscap.ini
+   Suggested save location: /etc/php5/apache2/php_browscap.ini
  * Update your php.ini file to point to the browscap conf file. In php.ini uncomment browscap and update its value.
  e.g. <pre><code>
     [browscap]
-    browscap = conf.d/php_browscap.ini
+    browscap = /etc/php5/apache2/php_browscap.ini
  </code></pre>
  * Make sure the following are also installed
   1. sudo apt-get install php5-cli
