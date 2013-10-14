@@ -15,21 +15,6 @@
     </div>
 {/if}
 
-	<div class="ie-alert">
-		<!--[if lte IE 8]>
-		    <div class="alert alert-info">
-		        <p><strong>{Localisation::getTranslation(Strings::INDEX_8)} </strong>
-		        <strong>{Localisation::getTranslation(Strings::INDEX_9)} </strong></p>
-		    </div>
-	    <![endif]-->
-	    <!--[if gt IE 8]>
-		    <div class="alert alert-info">
-		        <p><strong>{Localisation::getTranslation(Strings::INDEX_8)} </strong>
-		        <strong>{Localisation::getTranslation(Strings::INDEX_9)} </strong></p>
-		    </div>
-	    <![endif]-->
-	</div>
-
 {if isset($flash['error'])}
     <div class="alert alert-error">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
