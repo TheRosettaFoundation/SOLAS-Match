@@ -9,4 +9,5 @@ class BadgeTypes
     const TRANSLATOR        = 6;
     const PROOFREADER       = 7;
     const INTERPRETOR       = 8;
+    const POLYGLOT          = 9;
 }

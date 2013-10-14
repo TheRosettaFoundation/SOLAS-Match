@@ -135,7 +135,7 @@
         
         <string name="middleware_1">You do not have sufficient privileges to access this page or the page does not exist.</string>
         <string name="middleware_2">This task has been claimed by another user.</string>
-        <string name="middleware_3">You cannot claim the task <a href="%s">%s</a>, because you have worked on it previously.</string>
+        <string name="middleware_3">You are currently blacklisted for Task <a href="%s">%s</a>, because you have previouly unclaimed it or have completed a task it depends on.</string>
         
         <string name="templatehelper_1">Unknown task type.</string>
         <string name="templatehelper_2">A valid language code was expected.</string>
