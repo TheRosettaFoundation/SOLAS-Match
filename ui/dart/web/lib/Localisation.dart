@@ -15,7 +15,7 @@ class Localisation
     return _instance;
   }
   
-  static String getTranslation(String key)
+  String getTranslation(String key)
   {
     String data;
     Element element = doc.query("[name = $key]");

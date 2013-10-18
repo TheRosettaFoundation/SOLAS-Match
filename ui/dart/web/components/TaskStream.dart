@@ -1,9 +1,7 @@
 library SolasMatchDart;
 
-import "dart:async";
 import "package:polymer/polymer.dart";
-import "dart:html";
-
+import "dart:async";
 
 import '../DataAccessObjects/TaskDao.dart';
 import '../DataAccessObjects/ProjectDao.dart';
