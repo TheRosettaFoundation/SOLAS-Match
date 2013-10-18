@@ -25,9 +25,6 @@ class TaskStream extends PolymerElement with ObservableMixin
   String siteAddress;
   int taskCount = 0;
   String filter = '';
-  int selectedTaskTypeFilter = 0;
-  int selectedSourceFilter = 0;
-  int selectedTargetFilter = 0;
   DateTime currentDateTime;
   @observable int userid = 0;
   @observable bool loaded = false;
@@ -37,6 +34,9 @@ class TaskStream extends PolymerElement with ObservableMixin
   @observable Map<int, String> taskAges;
   @observable Map<int, Project> projectMap;
   @observable Map<int, Organisation> orgMap;
+  @observable int selectedTaskTypeFilter = 0;
+  @observable int selectedSourceFilter = 0;
+  @observable int selectedTargetFilter = 0;
   @observable List<Language> activeSourceLanguages;
   @observable List<Language> activeTargetLanguages;
   @observable Map<int, String> taskTypes;

@@ -4,7 +4,7 @@
       <p>Loading</p>
     </template>
     <template if="{{loaded}}">
-      <template if="{{userId > 0}}">
+      <template if="{{userid > 0}}">
         <h3>{{localisation.getTranslation("index_filter_available_tasks")}}</h3>
         <table>
           <thead>
@@ -15,27 +15,30 @@
           <tbody>
             <tr>
               <td>
-                <select name="taskTypes" bind-selected-index="selectedTaskTypeFilter" 
-                  template repeat="{{key in taskTypeIndexes}}">
-                  <option value="{{key.toString()}}">{{taskTypes[key]}}</option>
+                <select name="taskTypes" selectedIndex="{{selectedTaskTypeFilter}}"> 
+                  <option template repeat="{{key in taskTypeIndexes}}" value="{{key.toString()}}">
+                    {{taskTypes[key]}}
+                  </option>
                 </select>
               </td>
               <td>
-                <select name="sourceLanguage" bind-selected-index="selectedSourceFilter" 
-                  template repeat="{{language in activeSourceLanguages}}">
-                    <option value="{{language.code}}">{{language.name}}</option>
+                <select name="sourceLanguage" selectedIndex="{{selectedSourceFilter}}">
+                    <option template repeat="{{language in activeSourceLanguages}}" value="{{language.code}}">
+                      {{language.name}}
+                    </option>
                 </select>
               </td>
               <td>
-                <select name="targetLanguage" bind-selected-index="selectedTargetFilter" 
-                  template repeat="{{language in activeTargetLanguages}}">
-                  <option value="{{language.code}}">{{language.name}}</option>
+                <select name="targetLanguage" selectedIndex="{{selectedTargetFilter}}">
+                  <option template repeat="{{language in activeTargetLanguages}}" value="{{language.code}}">
+                    {{language.name}}
+                  </option>
                 </select>
               </td>
             </tr>
             <tr>
               <td>
-                <button value="Filter" class="btn btn-primary" on-click="filterStream()">
+                <button value="Filter" class="btn btn-primary" on-click="filterStream">
                   <i class="icon-refresh icon-white"></i> {{localisation.getTranslation("index_filter_task_stream")}}
                 </button>
               </td>
