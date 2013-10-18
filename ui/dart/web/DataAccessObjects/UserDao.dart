@@ -1,6 +1,6 @@
 library SolasMatchDart;
 
-import "dart:json" as json;
+import "dart:convert";
 import "dart:async";
 import "dart:html";
 
@@ -22,7 +22,7 @@ class UserDao
           User user = null;
           if (response.status < 400) {
             if (response.responseText.length > 0) {
-              Map jsonParsed = json.parse(response.responseText);
+              Map jsonParsed = JSON.decode(response.responseText);
               user = ModelFactory.generateUserFromMap(jsonParsed);
             }
           } else {
@@ -56,7 +56,7 @@ class UserDao
           userInfo.userId = userId;
           if (response.status < 400) {
             if (response.responseText != '') {
-              Map jsonParsed = json.parse(response.responseText);
+              Map jsonParsed = JSON.decode(response.responseText);
               userInfo = ModelFactory.generateUserInfoFromMap(jsonParsed);
             }
           } else {
@@ -76,9 +76,9 @@ class UserDao
           List<Locale> locales = new List<Locale>();
           if (response.status < 400) {
             if (response.responseText.length > 0) {
-              Map parsed = json.parse(response.responseText);
+              Map parsed = JSON.decode(response.responseText);
               parsed['item'].forEach((String data) {
-                Map localeData = json.parse(data);
+                Map localeData = JSON.decode(data);
                 locales.add(ModelFactory.generateLocaleFromMap(localeData));
               });
             }
@@ -98,9 +98,9 @@ class UserDao
           List<Badge> badges = new List<Badge>();
           if (response.status < 400) {
             if (response.responseText.length > 0) {
-              Map parsed = json.parse(response.responseText);
+              Map parsed = JSON.decode(response.responseText);
               parsed['item'].forEach((String data) {
-                Map badgeData = json.parse(data);
+                Map badgeData = JSON.decode(data);
                 badges.add(ModelFactory.generateBadgeFromMap(badgeData));
               });
             }
@@ -139,10 +139,10 @@ class UserDao
         .then((HttpRequest response) {
           List<Task> tasks = new List<Task>();
           if (response.status < 400 && response.responseText != '') {
-            Map jsonParsed = json.parse(response.responseText);
+            Map jsonParsed = JSON.decode(response.responseText);
             if (jsonParsed.length > 0) {
               jsonParsed['item'].forEach((String data) {
-                Map task = json.parse(data);
+                Map task = JSON.decode(data);
                 tasks.add(ModelFactory.generateTaskFromMap(task));
               });
             }
@@ -154,7 +154,7 @@ class UserDao
   static Future<bool> saveUserDetails(User user)
   {
     APIHelper client = new APIHelper(".json");
-    return client.call("User", "v0/users/" + user.id.toString(), "PUT", json.stringify(user))
+    return client.call("User", "v0/users/" + user.id.toString(), "PUT", JSON.encode(user))
       .then((HttpRequest response) {
         if (response.status < 400) {
           return true;
@@ -168,7 +168,7 @@ class UserDao
   static Future<bool> saveUserInfo(UserPersonalInformation userInfo)
   {
     APIHelper client = new APIHelper(".json");
-    return client.call("", "v0/users/" + userInfo.userId.toString() + "/personalInfo", "PUT", json.stringify(userInfo))
+    return client.call("", "v0/users/" + userInfo.userId.toString() + "/personalInfo", "PUT", JSON.encode(userInfo))
       .then((HttpRequest response) {
         if (response.status < 400) {
           return true;
@@ -210,7 +210,7 @@ class UserDao
   static Future<bool> addSecondaryLanguage(int userId, Locale locale)
   {
     APIHelper client = new APIHelper(".json");
-    return client.call("", "v0/users/$userId/secondaryLanguages", "POST", json.stringify(locale))
+    return client.call("", "v0/users/$userId/secondaryLanguages", "POST", JSON.encode(locale))
       .then((HttpRequest response) {
         if (response.status < 400) {
           return true;

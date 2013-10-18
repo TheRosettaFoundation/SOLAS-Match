@@ -1,7 +1,7 @@
 library SolasMatchDart;
 
 import "dart:async";
-import "dart:json" as json;
+import "dart:convert";
 import "dart:html";
 //import 'package:js/js.dart' as js;
 
@@ -19,9 +19,9 @@ class LanguageDao
           List<Language> languages = new List<Language>();
           if (response.status < 400) {
             if (response.responseText != "") {
-              Map jsonParsed = json.parse(response.responseText);
+              Map jsonParsed = JSON.decode(response.responseText);
               jsonParsed['item'].forEach((String data) {
-                Map lang = json.parse(data);
+                Map lang = JSON.decode(data);
                 languages.add(ModelFactory.generateLanguageFromMap(lang));
               });
             }
@@ -54,10 +54,10 @@ class LanguageDao
       List<Language> activeLangs = new List<Language>();
       if (response.status < 400) {
         if (response.responseText != '') {
-          Map jsonParsed = json.parse(response.responseText);
+          Map jsonParsed = JSON.decode(response.responseText);
           if (jsonParsed.length > 0) {
             jsonParsed['item'].forEach((String data) {
-              Map lang = json.parse(data);
+              Map lang = JSON.decode(data);
               activeLangs.add(ModelFactory.generateLanguageFromMap(lang));
             });
           }
@@ -78,10 +78,10 @@ class LanguageDao
           List<Language> ret = new List<Language>();
           if (response.status < 400) {
             if (response.responseText != '') {
-              Map jsonParsed = json.parse(response.responseText);
+              Map jsonParsed = JSON.decode(response.responseText);
               if (jsonParsed.length > 0) {
                 jsonParsed['item'].forEach((String data) {
-                  Map lang = json.parse(data);
+                  Map lang = JSON.decode(data);
                   ret.add(ModelFactory.generateLanguageFromMap(lang));
                 });
               }
@@ -103,10 +103,10 @@ class LanguageDao
           List<Language> ret = new List<Language>();
           if (response.status < 400) {
             if (response.responseText != '') {
-              Map jsonParsed = json.parse(response.responseText);
+              Map jsonParsed = JSON.decode(response.responseText);
               if (jsonParsed.length > 0) {
                 jsonParsed['item'].forEach((String data) {
-                  Map lang = json.parse(data);
+                  Map lang = JSON.decode(data);
                   ret.add(ModelFactory.generateLanguageFromMap(lang));
                 });
               }

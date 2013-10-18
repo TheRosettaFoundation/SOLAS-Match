@@ -6,5 +6,5 @@ dependencies:
   crypto: any
   js: any
   json_object: any
-  web_ui: any
+  polymer: any
   xml: any

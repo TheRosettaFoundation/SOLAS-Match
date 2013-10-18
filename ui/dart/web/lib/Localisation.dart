@@ -2,7 +2,6 @@ library SolasMatchDart;
 
 import 'dart:html';
 import 'dart:async';
-import "package:web_ui/web_ui.dart";
 
 import "Settings.dart";
 
@@ -14,18 +13,6 @@ class Localisation
   factory Localisation()
   {
     return _instance;
-  }
-  
-  static SafeHtml getTranslationSafe(String key)
-  {
-    SafeHtml data;
-    Element element = doc.query("[name = $key]");
-    if (element != null) {
-      data = new SafeHtml.unsafe("<span>" + element.text + "</span>");
-    } else {
-      data = null;
-    }
-    return data;
   }
   
   static String getTranslation(String key)

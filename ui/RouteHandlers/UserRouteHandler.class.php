@@ -50,6 +50,7 @@ class UserRouteHandler
     public function home()
     {
         $app = Slim::getInstance();
+        $viewData = array();
         $langDao = new LanguageDao();
         $tagDao = new TagDao();
         $taskDao = new TaskDao();
@@ -68,25 +69,18 @@ class UserRouteHandler
                     $statsArray[$stat->getName()] = $stat;
                 }
             }
-
-            $app->view()->appendData(array(
-                "statsArray" => $statsArray
-            ));
+            $viewData["statsArray"] = $statsArray;
         }
         
         $top_tags = $tagDao->getTopTags(10);        
-        $app->view()->appendData(array(
-            "top_tags" => $top_tags,
-            "current_page" => "home",
-        ));
+        $viewData["top_tags"] = $top_tags;
+        $viewData["current_page"] = "home";
 
         $current_user_id = UserSession::getCurrentUserID();
         
         if ($current_user_id != null) {
             $user_tags = $userDao->getUserTags($current_user_id);
-            $app->view()->appendData(array(
-                        "user_tags" => $user_tags
-            ));
+            $viewData["user_tags"] = $user_tags;
         }
 		
 		// Added check to display info message to users on IE borwsers
@@ -97,10 +91,14 @@ class UserRouteHandler
 			if ($browser == 'IE') {
                 $app->flashNow("info", Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9));
         	}
-			
 		}
 
-		
+        $extra_scripts = "
+        <script src=\"{$app->urlFor("home")}ui/dart/web/packages/polymer/boot.js\"></script>
+        <link rel=\"import\" href=\"{$app->urlFor("home")}ui/dart/web/components/TaskStream.html\" />";
+        $viewData['extra_scripts'] = $extra_scripts;
+
+		$app->view()->appendData($viewData);
 		$app->render("index.tpl");
     }
 

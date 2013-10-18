@@ -1,16 +1,9 @@
 library SolasMatchDart;
 
-//import 'dart:typed_data';
-import "package:crypto/crypto.dart";
 import 'dart:async';
 import 'dart:html';
-import 'dart:json' as json;
-//import 'dart:core';
-//import 'package:js/js.dart' as js;
 
-import "ModelFactory.dart";
 import "Settings.dart";
-import "models/User.dart";
 
 class APIHelper
 {

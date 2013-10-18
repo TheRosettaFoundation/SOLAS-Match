@@ -2,7 +2,7 @@ library SolasMatchDart;
 
 import "dart:async";
 import "dart:html";
-import "dart:json" as json;
+import "dart:convert";
 
 import "../lib/models/Org.dart";
 import "../lib/ModelFactory.dart";
@@ -18,7 +18,7 @@ class OrgDao
       Organisation org = null;
       if (response.status < 400) {
         if (response.responseText != '') {
-          Map jsonParsed = json.parse(response.responseText);
+          Map jsonParsed = JSON.decode(response.responseText);
           org = ModelFactory.generateOrgFromMap(jsonParsed);
         }
       } else {

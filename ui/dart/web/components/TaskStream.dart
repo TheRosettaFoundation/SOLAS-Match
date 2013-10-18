@@ -1,8 +1,9 @@
 library SolasMatchDart;
 
-import "package:web_ui/web_ui.dart";
 import "dart:async";
-import "dart:json";
+import "package:polymer/polymer.dart";
+import "dart:html";
+
 
 import '../DataAccessObjects/TaskDao.dart';
 import '../DataAccessObjects/ProjectDao.dart';
@@ -16,23 +17,23 @@ import '../lib/models/Org.dart';
 import '../lib/models/Language.dart';
 import '../lib/Settings.dart';
 import '../lib/Localisation.dart';
+import '../lib/Loader.dart';
 
-class TaskStream extends WebComponent
+@CustomTag("task-stream")
+class TaskStream extends PolymerElement with ObservableMixin
 {
   static const int limit = 10;
   
   String siteAddress;
   int taskCount = 0;
   String filter = '';
-  int userId = 0;
   int selectedTaskTypeFilter = 0;
   int selectedSourceFilter = 0;
   int selectedTargetFilter = 0;
   DateTime currentDateTime;
-  @observable String taskOneColour;
-  @observable String taskTwoColour;
-  @observable String taskThreeColour;
-  @observable String taskFourColour;
+  @observable int userid = 0;
+  @observable bool loaded = false;
+  @observable Localisation localisation;
   @observable bool moreTasks = true;
   @observable List<Task> tasks;
   @observable Map<int, String> taskAges;
@@ -40,14 +41,22 @@ class TaskStream extends WebComponent
   @observable Map<int, Organisation> orgMap;
   @observable List<Language> activeSourceLanguages;
   @observable List<Language> activeTargetLanguages;
-  @observable Map<int, SafeHtml> taskTypes;
+  @observable Map<int, String> taskTypes;
+  @observable Map<int, String> taskColours;
   @observable List<int> taskTypeIndexes;
   @observable Map<int, List<Tag>> taskTags;
   
   TaskStream()
   {
-    Settings settings = new Settings();
-    siteAddress = settings.conf.urls.SiteLocation;
+  }
+  
+  void created()
+  {
+    super.created();
+    
+    var root = getShadowRoot("task-stream");
+    root.applyAuthorStyles = true;
+    
     currentDateTime = new DateTime.now();
     tasks = toObservable(new List<Task>());
     taskAges = toObservable(new Map<int, String>());
@@ -56,37 +65,43 @@ class TaskStream extends WebComponent
     activeSourceLanguages = toObservable(new List<Language>());
     activeTargetLanguages = toObservable(new List<Language>());
     taskTypes = toObservable(new Map<int, String>());
+    taskColours = toObservable(new Map<int, String>());
     taskTypeIndexes = toObservable(new List<int>());
     taskTags = toObservable(new Map<int, List<Tag>>());
   }
   
   void inserted()
   {
-    Settings settings = new Settings();
-    settings.loadConf().then((e) {
+    super.inserted();
+    
+    Loader.load().then((e) {
+      localisation = new Localisation();
+      loaded = true;
       loadActiveLanguages();
       addTasks();
+      Settings settings = new Settings();
+      siteAddress = settings.conf.urls.SiteLocation;
       taskTypeIndexes.add(0);
-      taskTypes[0] = Localisation.getTranslationSafe("index_any");
+      taskTypes[0] = localisation.getTranslation("index_any");
       taskTypeIndexes.add(1);
-      taskTypes[1] = Localisation.getTranslationSafe("common_segmentation");
-      taskOneColour = settings.conf.task_colours.colour_1;
+      taskTypes[1] = localisation.getTranslation("common_segmentation");
+      taskColours[1] = settings.conf.task_colours.colour_1;
       taskTypeIndexes.add(2);
-      taskTypes[2] = Localisation.getTranslationSafe("common_translation");
-      taskTwoColour = settings.conf.task_colours.colour_2;
+      taskTypes[2] = localisation.getTranslation("common_translation");
+      taskColours[2] = settings.conf.task_colours.colour_2;
       taskTypeIndexes.add(3);
-      taskTypes[3] = Localisation.getTranslationSafe("common_proofreading");
-      taskThreeColour = settings.conf.task_colours.colour_3;
+      taskTypes[3] = localisation.getTranslation("common_proofreading");
+      taskColours[3] = settings.conf.task_colours.colour_3;
       taskTypeIndexes.add(4);
-      taskTypes[4] = Localisation.getTranslationSafe("common_desegmentation");
-      taskFourColour = settings.conf.task_colours.colour_4;
+      taskTypes[4] = localisation.getTranslation("common_desegmentation");
+      taskColours[4] = settings.conf.task_colours.colour_4;
     });
   }
   
   void loadActiveLanguages()
   {
     Language any = new Language();
-    any.name = Localisation.getTranslation("index_any").toString();
+    any.name = localisation.getTranslation("index_any").toString();
     any.code = "";
     
     activeSourceLanguages.add(any);
@@ -102,8 +117,8 @@ class TaskStream extends WebComponent
   void addTasks()
   {
     int offset = taskCount;
-    if (userId > 0) {
-      TaskDao.getUserTopTasks(userId, offset, limit, filter)
+    if (userid > 0) {
+      TaskDao.getUserTopTasks(userid, offset, limit, filter)
               .then((List<Task> userTasks) => processTaskList(userTasks));
     } else {
       TaskDao.getLatestAvailableTasks(offset, limit)
@@ -171,7 +186,7 @@ class TaskStream extends WebComponent
     tasks.clear();
     taskCount = 0;
     moreTasks = true;
-    TaskDao.getUserTopTasks(userId, taskCount, limit, filter)
+    TaskDao.getUserTopTasks(userid, taskCount, limit, filter)
             .then((List<Task> userTasks) => processTaskList(userTasks));
   }
 }
