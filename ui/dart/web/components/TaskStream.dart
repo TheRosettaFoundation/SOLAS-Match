@@ -74,7 +74,6 @@ class TaskStream extends PolymerElement with ObservableMixin
     
     Loader.load().then((e) {
       localisation = new Localisation();
-      loaded = true;
       loadActiveLanguages();
       addTasks();
       Settings settings = new Settings();
@@ -93,6 +92,7 @@ class TaskStream extends PolymerElement with ObservableMixin
       taskTypeIndexes.add(4);
       taskTypes[4] = localisation.getTranslation("common_desegmentation");
       taskColours[4] = settings.conf.task_colours.colour_4;
+      loaded = true;
     });
   }
   

@@ -67,10 +67,8 @@
               {{localisation.getTranslation("common_to")}}: <strong>{{task.targetLocale.languageName}} - {{task.targetLocale.countryName}}</strong>
             </p>
             <p>
-              <template if="{{taskTags[task.id].length > 0}}">
-                <template repeat="{{tag in taskTags[task.id]}}">
-                  <a href="{{siteAddress}}tag/{{tag.id}}" class="label"><span class="label">{{tag.label}}</span></a>
-                </template>
+              <template repeat="{{tag in taskTags[task.id]}}">
+                <a href="{{siteAddress}}tag/{{tag.id}}" class="label"><span class="label">{{tag.label}}</span></a>
               </template>
             </p>
             <p>
@@ -82,20 +80,16 @@
             <p>
               {{localisation.getTranslation("common_due_by")}}: <strong>{{task.deadline}}</strong>
             </p>
-            <template if="{{projectMap[task.projectId] != null}}">
-              <template if="{{orgMap[projectMap[task.projectId].organisationId] != null}}">
-                <p>
-                  {{localisation.getTranslation("common_part_of")}}:
-                  <a href="{{siteAddress}}project/{{projectMap[task.projectId].id}}/view">
-                    {{projectMap[task.projectId].title}}
-                  </a>
-                  {{localisation.getTranslation("common_for")}}
-                  <a href="{{siteAddress}}org/{{orgMap[projectMap[task.projectId].organisationId].id}}/profile">
-                    {{orgMap[projectMap[task.projectId].organisationId].name}}
-                  </a>
-                </p>
-              </template>
-            </template>
+            <p>
+              {{localisation.getTranslation("common_part_of")}}:
+              <a href="{{siteAddress}}project/{{task.projectId}}/view">
+                {{projectMap[task.projectId].title}}
+              </a>
+              {{localisation.getTranslation("common_for")}}
+              <a href="{{siteAddress}}org/{{orgMap[projectMap[task.projectId].organisationId].id}}/profile">
+                {{orgMap[projectMap[task.projectId].organisationId].name}}
+              </a>
+            </p>
             <br />
           </div>
         </template>
