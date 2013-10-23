@@ -852,7 +852,7 @@
     <string name="task_review_translated">translated</string>
     <string name="task_review_proofread">proofread</string>
     <string name="task_review_merged">merged</string>
-	<string name="task_review_form_0">You can redownload this source file</string>
+	<string name="task_review_form_0">You can redownload this file</string>
 	<string name="task_review_form_1">You can download the project file</string>
 	<string name="task_review_form_corrections">Corrections</string>
 	<string name="task_review_form_2">Were there many mistakes in the source file?</string>
