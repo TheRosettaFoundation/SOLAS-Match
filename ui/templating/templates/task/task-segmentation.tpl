@@ -97,7 +97,7 @@
                     </tr>
                     <tr id="taskUploadTemplate_0" valign="top">
                         <td colspan="4">
-                            <p class="desc"><strong>File #0:</strong> {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 8 MB.</p>
+                            <p class="desc"><strong>File #1:</strong> {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 8 MB.</p>
                             <input type="file" name="segmentationUpload_0" id="segmentationUpload_0"/>
                             <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</label>
                             <input type="text" name="wordCount_0" id="wordCount_0" />
@@ -106,7 +106,7 @@
                     </tr>
                     <tr id="taskUploadTemplate_1" valign="top">
                         <td colspan="4"> 
-                            <p class="desc"><strong>File #1: </strong> {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 8 MB.</p>
+                            <p class="desc"><strong>File #2: </strong> {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)} {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 8 MB.</p>
                             <input type="file" name="segmentationUpload_1" id="segmentationUpload_1"/>
                             <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</label>
                             <input type="text" name="wordCount_1" id="wordCount_1" />
