@@ -205,8 +205,11 @@ class TaskRouteHandler
         $sourceLanguage = $languageDao->getLanguageByCode($sourcelocale->getLanguageCode());
         $targetLanguage = $languageDao->getLanguageByCode($targetLocale->getLanguageCode());
         $taskMetaData = $taskDao->getTaskInfo($taskId);
+
+        $projectFileDownload = $app->urlFor("home")."api/v0/projects/".$task->getProjectId()."/file";    // Used in proofreading page
         
         $app->view()->appendData(array(
+                    "projectFileDownload" => $projectFileDownload,
                     "task"          => $task,
                     "sourceLanguage"=> $sourceLanguage,
                     "targetLanguage"=> $targetLanguage,

@@ -748,6 +748,7 @@ class Strings
     const TASK_CLAIM_PROOFREADING_3 = 'task_claim_proofreading_3';
     const TASK_CLAIM_PROOFREADING_4 = 'task_claim_proofreading_4';
     const TASK_CLAIM_PROOFREADING_5 = 'task_claim_proofreading_5';
+    const TASK_CLAIM_PROOFREADING_6 = 'task_claim_proofreading_6';
 
     const TASK_CLAIM_SEGMENTATION_0 = 'task_claim_segmentation_0';
     const TASK_CLAIM_SEGMENTATION_1 = 'task_claim_segmentation_1';
