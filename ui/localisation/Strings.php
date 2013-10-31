@@ -1110,5 +1110,12 @@ class Strings
     const FAQ_73 = 'faq_73';
     const FAQ_74 = 'faq_74';
     
+    const SLIM_ERROR_OOPS_THERE_HAS = 'slim_error_Oops_there_has';
+    const SLIM_ERROR_1 = 'slim_error_1';
+    const SLIM_ERROR_2 = 'slim_error_2';
+    const SLIM_ERROR_3 = 'slim_error_3';
+    const SLIM_ERROR_4 = 'slim_error_4';
+    const SLIM_ERROR_5 = 'slim_error_5';
+    
 }
 

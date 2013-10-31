@@ -7,6 +7,7 @@ mb_internal_encoding("UTF-8");
 
 header("Content-Type:application/xhtml+xml;charset=UTF-8");
 
+
 SmartyView::$smartyDirectory = 'ui/vendor/smarty/smarty/distribution/libs';
 SmartyView::$smartyCompileDirectory = 'ui/templating/templates_compiled';
 SmartyView::$smartyTemplatesDirectory = 'ui/templating/templates';
@@ -23,7 +24,7 @@ SmartyView::$smartyExtensions = array(
  * Initiate the app. must be done before routes are required
  */
 $app = new Slim(array(
-    'debug' => true,
+    'debug' => false,
     'view' => new SmartyView(),
     'mode' => 'development' // default is development.
 ));
@@ -43,7 +44,7 @@ $app->configureMode('production', function () use ($app) {
 $app->configureMode('development', function () use ($app) {
     $app->config(array(
         'log.enable' => false,
-        'debug' => true,
+        'debug' => false,
         'cookies.lifetime' => Settings::get('site.cookie_timeout'),
         'cookies.secret_key' => Settings::get('session.site_key'),
         'cookies.cipher' => MCRYPT_RIJNDAEL_256,
@@ -120,6 +121,20 @@ require_once 'Common/protobufs/emails/OrgFeedback.php';
  * Start the session
  */
 
+//Custom Slim Errors
+ $app->error(function (\Exception $e) use ($app) 
+{
+    $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/slimError.showHide.js\"></script>";
+    $trace = str_replace("#","<br>",$e->getTraceAsString());
+    $app->view()->appendData(array(
+			  "exception" => $e,
+			  "trace" => $trace,
+			  "extra_scripts" => $extra_scripts,
+			  "req" => $app->request()
+    ));
+    
+    $app->render('SlimError.tpl');
+});
 
 function isValidPost(&$app)
 {
