@@ -1051,6 +1051,7 @@
 	<string name="faq_quicklinks">QuickLinks</string>
 	<string name="faq_volunteers">Volunteers</string>
 	<string name="faq_organisations">Organisations</string>
+        <string name="faq_terms">Terms</string>
 	<string name="faq_volunteer_questions">Volunteer Questions</string>
 	<string name="faq_1">How do I download the original file?</string>
 	<string name="faq_2">The original file can be downloaded from the upload page.</string>
@@ -1127,7 +1128,37 @@
 	<string name="faq_72">You will be brought to a page where you can claim this task (download task button in right hand corner).</string>
 	<string name="faq_73">Once, you have claimed the task, you can then upload your segments with their words counts.</string>
 	<string name="faq_74">After this, volunteers can claim any of the segments you have uploaded!</string>
-	
+        <string name="faq_75">I have finished proofreading the translation. Do I upload a clean file or one with track changes?</string>
+        <string name="faq_76">Once you have finished proofreading the translated text, you can upload a clean file on Trommons.</string>
+	<string name="faq_77">To make suggestions/comments, please use the ‘provide a review’ function on the project upload page.</string>
+        <string name="faq_terms_list">Solas Match Terminology</string>
+        <string name="faq_task">Task:</string>
+        <string name="faq_78">A task is a piece of work to be carried out within a project.</string>
+        <string name="faq_79">There can be a number of tasks within the one project i.e. segmentation, translation, proofreading, desegmentation.</string>
+        <string name="faq_task_stream">Task Stream:</string>
+        <string name="faq_80">The task stream is visible on the Trommons home page. Here, you can view a list of the suggested tasks corresponding to your language combinations.</string>
+        <string name="faq_81">This will effectively work for you if you have your language combinations set on your profile. You can also filter available tasks by task type, source language and target language.</string>
+        <string name="faq_segmentation">Segmentation:</string>
+        <string name="faq_82">When a project file has a large word count (i.e. anything over 5,000 words), the file has to be segmented.</string>
+        <string name="faq_83">Segmentation appears on the project page the same way as translation and proofreading tasks.</string>
+        <string name="faq_84">You claim the task, download the file and split it up into more manageable units for translation and proofreading.</string>
+        <string name="faq_85">Once this is done, the segments are uploaded and ready to be translated. Once all segments have been translated and proofread, the files are merged back together in a process called desegmentation.</string>
+        <string name="faq_86">The final output is one merged file to be downloaded by the organisation.</string>
+        <string name="faq_Tags">Tags:</string>
+        <string name="faq_87">Key words that help describe the contents of a project.</string>
+        <string name="faq_badges">Badges:</string>
+        <string name="faq_88">Badges are assigned to volunteers based on their activity on Trommons.</string>
+        <string name="faq_89">Additionally, organisations can create and assign badges to volunteers, so that only these volunteers can work on their projects.</string>
+        <string name="faq_project_impact">Project Impact:</string>
+        <string name="faq_90">The project impact section on the project details explains what the translation will be used for.</string>
+        <string name="faq_91">What is a task?</string>
+        <string name="faq_92">What is the task stream?</string>
+        <string name="faq_93">What is segmentation?</string>
+        <string name="faq_94">What are tags?</string>
+        <string name="faq_95">What are Badges?</string>
+        <string name="faq_96">What does project impact mean?</string>
+        
+
 	<string name="slim_error_Oops_there_has">Oops! there has been a technical problem.</string>
 	<string name="slim_error_1">You can report this problem by E-Mailing us at <a>info@trommons.org</a></string>
 	<string name="slim_error_2">with details of how you encountered the error, along with the technical details listed below.</string>
