@@ -1129,7 +1129,7 @@
 	<string name="faq_74">After this, volunteers can claim any of the segments you have uploaded!</string>
 	
 	<string name="slim_error_Oops_there_has">Oops! there has been a technical problem.</string>
-	<string name="slim_error_1">You can report this problem by E-Mailing us at <a>trommons@therosettafoundation.org</a></string>
+	<string name="slim_error_1">You can report this problem by E-Mailing us at <a>info@trommons.org</a></string>
 	<string name="slim_error_2">with details of how you encountered the error, along with the technical details listed below.</string>
 	<string name="slim_error_3">Go </string>
 	<string name="slim_error_4">Back.</string>

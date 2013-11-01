@@ -130,7 +130,7 @@ require_once 'Common/protobufs/emails/OrgFeedback.php';
 			  "exception" => $e,
 			  "trace" => $trace,
 			  "extra_scripts" => $extra_scripts,
-			  "req" => $app->request()
+			  "referrer" => $app->request()->getReferrer()
     ));
     
     $app->render('SlimError.tpl');
