@@ -442,9 +442,18 @@ CREATE TABLE IF NOT EXISTS `Tags` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `label` (`label`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 -- Data exporting was unselected.
 
+-- Dumping structure for table Solas-Match-Test.TaskBadgeRestrictions
+CREATE TABLE IF NOT EXISTS `TaskBadgeRestrictions` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `task_id` bigint(20) unsigned NOT NULL,
+    `badge_id` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `TaskBadges` (`task_id`, `badge_id`),
+    CONSTRAINT `FK_task_restrictions_badge` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_task_restrictions_task` FOREIGN KEY (`badge_id`) REFERENCES `Badges` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLlATE=utf8_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.TaskClaims
 CREATE TABLE IF NOT EXISTS `TaskClaims` (
@@ -888,6 +897,27 @@ if not exists (select 1 from ProjectTags where project_id=projectID and tag_id =
 else
 	select 0 as result;
 end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.addTaskBadgeRestriction
+DROP PROCEDURE IF EXISTS `addTaskBadgeRestriction`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addTaskBadgeRestriction`(IN `taskId` INT, IN `badgeId` INT)
+    MODIFIES SQL DATA
+BEGIN
+    IF NOT EXISTS (SELECT 1
+                    FROM TaskBadgeRestrictions
+                    WHERE task_id = taskId
+                    AND badge_id = badgeId)
+    THEN
+        INSERT INTO TaskBadgeRestrictions (task_id, badge_id)
+            VALUES (taskId, badgeId);
+        SELECT 1 as result;
+    ELSE
+        SELECT 0 as result;
+    END IF;
 END//
 DELIMITER ;
 
@@ -3184,6 +3214,28 @@ if exists (select 1 from ProjectTags where project_id=projectID and tag_id =tagI
 else
 	select 0 as result;
 end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.removeTaskBadgeRestriction
+DROP PROCEDURE IF EXISTS `removeTaskBadgeRestriction`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskBadgeRestriction`(IN `taskId` INT, IN `badgeId` INT)
+    MODIFIES SQL DATA
+BEGIN
+    IF EXISTS (SELECT 1
+                FROM TaskBadgeRestrictions
+                WHERE task_id = taskId
+                AND badge_id = badgeId)
+    THEN
+        DELETE FROM TaskBadgeRestrictions
+            WHERE task_id = taskId
+            AND badge_id = badgeId;
+        SELECT 1 as result;
+    ELSE
+        SELECT 0 as result;
+    END IF;
 END//
 DELIMITER ;
 
