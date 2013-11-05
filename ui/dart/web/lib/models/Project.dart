@@ -2,7 +2,6 @@ library SolasMatchDart;
 
 import "Tag.dart";
 import "Locale.dart";
-import "dart:json" as json;
 
 class Project
 {

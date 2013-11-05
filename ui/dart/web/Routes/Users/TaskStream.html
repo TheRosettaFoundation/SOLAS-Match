@@ -1,4 +1,4 @@
-<polymer-element name="task-stream" attributes="userid">
+<polymer-element name="task-stream">
   <template>
     <template if="{{!loaded}}">
       <p>Loading</p>
@@ -8,9 +8,11 @@
         <h3>{{localisation.getTranslation("index_filter_available_tasks")}}</h3>
         <table>
           <thead>
-            <th>{{localisation.getTranslation("common_task_type")}}</th>
-            <th>{{localisation.getTranslation("common_source_language")}}<span style="color: red">*</span></th>
-            <th>{{localisation.getTranslation("common_target_language")}}<span style="color: red">*</span></th>
+            <tr>
+              <th>{{localisation.getTranslation("common_task_type")}}</th>
+              <th>{{localisation.getTranslation("common_source_language")}}<span style="color: red">*</span></th>
+              <th>{{localisation.getTranslation("common_target_language")}}<span style="color: red">*</span></th>
+            </tr>
           </thead>
           <tbody>
             <tr>
@@ -38,7 +40,7 @@
             </tr>
             <tr>
               <td>
-                <button value="Filter" class="btn btn-primary" on-click="filterStream">
+                <button value="Filter" class="btn btn-primary" on-click="{{filterStream}}">
                   <i class="icon-refresh icon-white"></i> {{localisation.getTranslation("index_filter_task_stream")}}
                 </button>
               </td>
@@ -51,7 +53,7 @@
         <template repeat="{{task in tasks}}">
           <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
             <h2>
-              <a href="{{new Settings().conf.urls.SiteLocation}}task/{{task.id}}/id">
+              <a id="task-{{task.id}}" href="{{siteAddress}}task/{{task.id}}/id">
                 {{task.title}}
               </a>
             </h2>
@@ -86,7 +88,7 @@
                 {{projectMap[task.projectId].title}}
               </a>
               {{localisation.getTranslation("common_for")}}
-              <a href="{{siteAddress}}org/{{orgMap[projectMap[task.projectId].organisationId].id}}/profile">
+              <a id="org-{{task.id}}">
                 {{orgMap[projectMap[task.projectId].organisationId].name}}
               </a>
             </p>
@@ -94,7 +96,7 @@
           </div>
         </template>
         <template if="{{moreTasks}}">
-          <button on-click="addTasks">{{localisation.getTranslation("index_load_more")}}</button>
+          <button on-click="{{addTasks}}">{{localisation.getTranslation("index_load_more")}}</button>
         </template>
       </template>
       <template if="{{!(tasks.length > 0)}}">

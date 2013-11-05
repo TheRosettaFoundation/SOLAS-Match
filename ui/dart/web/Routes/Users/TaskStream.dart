@@ -2,23 +2,24 @@ library SolasMatchDart;
 
 import "package:polymer/polymer.dart";
 import "dart:async";
+import "dart:html";
 
-import '../DataAccessObjects/TaskDao.dart';
-import '../DataAccessObjects/ProjectDao.dart';
-import '../DataAccessObjects/OrgDao.dart';
-import '../DataAccessObjects/LanguageDao.dart';
+import '../../DataAccessObjects/TaskDao.dart';
+import '../../DataAccessObjects/ProjectDao.dart';
+import '../../DataAccessObjects/OrgDao.dart';
+import '../../DataAccessObjects/LanguageDao.dart';
 
-import '../lib/models/Task.dart';
-import '../lib/models/Tag.dart';
-import '../lib/models/Project.dart';
-import '../lib/models/Org.dart';
-import '../lib/models/Language.dart';
-import '../lib/Settings.dart';
-import '../lib/Localisation.dart';
-import '../lib/Loader.dart';
+import '../../lib/models/Task.dart';
+import '../../lib/models/Tag.dart';
+import '../../lib/models/Project.dart';
+import '../../lib/models/Org.dart';
+import '../../lib/models/Language.dart';
+import '../../lib/Settings.dart';
+import '../../lib/Localisation.dart';
+import '../../lib/Loader.dart';
 
 @CustomTag("task-stream")
-class TaskStream extends PolymerElement with ObservableMixin
+class TaskStream extends PolymerElement
 {
   static const int limit = 10;
   
@@ -26,7 +27,7 @@ class TaskStream extends PolymerElement with ObservableMixin
   int taskCount = 0;
   String filter = '';
   DateTime currentDateTime;
-  @observable int userid = 0;
+  @published int userid = 0;
   @observable bool loaded = false;
   @observable Localisation localisation;
   @observable bool moreTasks = true;
@@ -44,14 +45,8 @@ class TaskStream extends PolymerElement with ObservableMixin
   @observable List<int> taskTypeIndexes;
   @observable Map<int, List<Tag>> taskTags;
   
-  TaskStream()
+  TaskStream.created() : super.created()
   {
-  }
-  
-  void created()
-  {
-    super.created();
-    
     var root = getShadowRoot("task-stream");
     root.applyAuthorStyles = true;
     
@@ -68,10 +63,8 @@ class TaskStream extends PolymerElement with ObservableMixin
     taskTags = toObservable(new Map<int, List<Tag>>());
   }
   
-  void inserted()
+  void enteredView()
   {
-    super.inserted();
-    
     Loader.load().then((e) {
       localisation = new Localisation();
       loadActiveLanguages();
@@ -164,6 +157,12 @@ class TaskStream extends PolymerElement with ObservableMixin
         projectMap[proj.id] = proj;
         OrgDao.getOrg(proj.organisationId).then((Organisation org) {
           orgMap[org.id] = org;
+          AnchorElement orgPage = this.shadowRoot.query("#org-" + task.id.toString());
+          if (orgPage != null) {
+            orgPage.href = siteAddress + "org/" + org.id.toString() + "/profile";
+          } else {
+            print("Org page is null");
+          }
         });
       });
     }

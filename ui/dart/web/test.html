@@ -3,14 +3,21 @@
 <html>
   <head>
     <title>test</title>
-  </head>
- 
-  <body>   
-    <p id="text"></p>
-    <div id="ProjectCreateForm" is="x-project-create-form"></div>
     
-    <script type="application/dart" src="Routes/Projects/ProjectCreate.dart"></script>
-    <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
+    <link rel="import" href="Routes/Users/TaskStream.html" />
+    <script type="application/dart">
+    	import 'package:polymer/polymer.dart';
+    	
+    	main()
+    	{
+    	  initPolymer();
+    	}
+    </script>
     <script src="packages/browser/dart.js"></script>
+  </head>
+  <body>   
+    <input type="hidden" id="ConfFileLocation" value="../../deploy/web/conf/conf.json" />
+    <p id="text"></p>
+    <task-stream userid="0" tasksperpage="10"></task-stream>
   </body>
 </html>
