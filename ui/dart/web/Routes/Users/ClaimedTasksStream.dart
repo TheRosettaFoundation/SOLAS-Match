@@ -1,28 +1,27 @@
 library SolasMatchDart;
 
-import "package:web_ui/web_ui.dart";
+import "package:polymer/polymer.dart";
 import "dart:async";
 import "dart:html";
-import "dart:json";
 
-import '../DataAccessObjects/UserDao.dart';
-import '../DataAccessObjects/TaskDao.dart';
-import '../DataAccessObjects/ProjectDao.dart';
-import '../DataAccessObjects/OrgDao.dart';
-import '../DataAccessObjects/LanguageDao.dart';
+import '../../DataAccessObjects/UserDao.dart';
+import '../../DataAccessObjects/TaskDao.dart';
+import '../../DataAccessObjects/ProjectDao.dart';
+import '../../DataAccessObjects/OrgDao.dart';
+import '../../DataAccessObjects/LanguageDao.dart';
 
-import '../lib/models/Task.dart';
-import '../lib/models/Tag.dart';
-import '../lib/models/Project.dart';
-import '../lib/models/Org.dart';
-import '../lib/models/Language.dart';
-import '../lib/Settings.dart';
-import '../lib/Localisation.dart';
+import '../../lib/models/Task.dart';
+import '../../lib/models/Tag.dart';
+import '../../lib/models/Project.dart';
+import '../../lib/models/Org.dart';
+import '../../lib/models/Language.dart';
+import '../../lib/Settings.dart';
+import '../../lib/Localisation.dart';
+import '../../lib/Loader.dart';
 
-class ClaimedTasksStream extends WebComponent
+@CustomTag("claimed-tasks-stream")
+class ClaimedTasksStream extends PolymerElement
 {
-  int userId = 0;
-  int tasksPerPage = 10;
   int taskTypeCount = 4;
   DateTime currentDateTime;
   String siteAddress;
@@ -30,41 +29,54 @@ class ClaimedTasksStream extends WebComponent
   String taskTwoColour;
   String taskThreeColour;
   String taskFourColour;
-  List<Task> allTasks;
+  
+  @published int userid = 0;
+  @published int tasksperpage = 10;
+  
   @observable List<Task> tasks;
   @observable Map<int, String> taskAges;
   @observable Map<int, Project> projectMap;
   @observable Map<int, Organisation> orgMap;
   @observable Map<int, List<Tag>> taskTags;
+  @observable Map<int, String> taskColours;
+  @observable Map<int, String> taskTypes;
+  @observable Localisation localisation;
   @observable int currentPage = 0;
   @observable int lastPage = 0;
 
-  ClaimedTasksStream()
+  ClaimedTasksStream.created() : super.created()
   {
-    Settings settings = new Settings();
     currentDateTime = new DateTime.now();
-    siteAddress = settings.conf.urls.SiteLocation;
-    taskOneColour = settings.conf.task_colours.colour_1;
-    taskTwoColour = settings.conf.task_colours.colour_2;
-    taskThreeColour = settings.conf.task_colours.colour_3;
-    taskFourColour = settings.conf.task_colours.colour_4;
     tasks = toObservable(new List<Task>());
     taskAges = toObservable(new Map<int, String>());
     projectMap = toObservable(new Map<int, Project>());
     orgMap = toObservable(new Map<int, Organisation>());
     taskTags = toObservable(new Map<int, List<Tag>>());
+    taskColours = toObservable(new Map<int, String>());
+    taskTypes = toObservable(new Map<int, String>());
   }
   
-  void inserted()
+  void enteredView()
   {
+    localisation = new Localisation();
+    Settings settings = new Settings();
+    siteAddress = settings.conf.urls.SiteLocation;
+    taskColours[1] = settings.conf.task_colours.colour_1;
+    taskColours[2] = settings.conf.task_colours.colour_2;
+    taskColours[3] = settings.conf.task_colours.colour_3;
+    taskColours[4] = settings.conf.task_colours.colour_4;
+    taskTypes[1] = localisation.getTranslation("common_segmentation");
+    taskTypes[2] = localisation.getTranslation("common_translation");
+    taskTypes[3] = localisation.getTranslation("common_proofreading");
+    taskTypes[4] = localisation.getTranslation("common_desegmentation");
     List<Future<bool>> successList = new List<Future<bool>>();
     currentPage = 0;
-    if (tasksPerPage > 0) {
-      successList.add(UserDao.getUserClaimedTasksCount(userId)
+    if (tasksperpage > 0) {
+      successList.add(UserDao.getUserClaimedTasksCount(userid)
       .then((int count) {
         bool success = false;
         if (count > 0) {
-          num tmp = count / tasksPerPage;
+          num tmp = count / tasksperpage;
           lastPage = tmp.ceil();
           success = true;
         }
@@ -83,22 +95,22 @@ class ClaimedTasksStream extends WebComponent
         if (!finished) {
           print("Something failed");
         }
+        AnchorElement button;
+        button = this.shadowRoot.querySelector("#firstPage");
+        button.onClick.listen((e) => this.goToFirstPage());
+        button = this.shadowRoot.querySelector("#previousPage");
+        button.onClick.listen((e) => this.goToPreviousPage());
+        button = this.shadowRoot.querySelector("#nextPage");
+        button.onClick.listen((e) => this.goToNextPage());
+        button = this.shadowRoot.querySelector("#lastPage");
+        button.onClick.listen((e) => this.goToLastPage());
       });
-    AnchorElement button;
-    button = query("#firstPage");
-    button.onClick.listen((e) => this.goToFirstPage());
-    button = query("#previousPage");
-    button.onClick.listen((e) => this.goToPreviousPage());
-    button = query("#nextPage");
-    button.onClick.listen((e) => this.goToNextPage());
-    button = query("#lastPage");
-    button.onClick.listen((e) => this.goToLastPage());
   }
   
   Future<bool> getClaimedTasks()
   {
     Future<bool> ret;
-    if (userId > 0) {
+    if (userid > 0) {
       ret = this.addTasks();
     } else {
       ret = new Future.value(false);
@@ -108,8 +120,8 @@ class ClaimedTasksStream extends WebComponent
   
   Future<bool> addTasks()
   {
-    int offset = currentPage * tasksPerPage;
-    return UserDao.getUserTasks(userId, offset, tasksPerPage)
+    int offset = currentPage * tasksperpage;
+    Future<bool> ret = UserDao.getUserTasks(userid, offset, tasksperpage)
       .then((List<Task> userTasks) {
         tasks.clear();
         projectMap.clear();
@@ -124,6 +136,7 @@ class ClaimedTasksStream extends WebComponent
         this.updatePagination();
         return true;
       });
+    return ret;
   }
   
   void addTask(Task task)
@@ -158,36 +171,35 @@ class ClaimedTasksStream extends WebComponent
   {
     if (currentPage < 1) {
       AnchorElement button;
-      button = query("#firstPage");
+      button = this.shadowRoot.querySelector("#firstPage");
       button.parent.classes.add("disabled");
-      button = query("#previousPage");
+      button = this.shadowRoot.querySelector("#previousPage");
       button.parent.classes.add("disabled");
     } else {
       AnchorElement button;
-      button = query("#firstPage");
+      button = this.shadowRoot.querySelector("#firstPage");
       button.parent.classes.remove("disabled");
-      button = query("#previousPage");
+      button = this.shadowRoot.querySelector("#previousPage");
       button.parent.classes.remove("disabled");
     }
     
     if (currentPage >= lastPage - 1) {
       AnchorElement button;
-      button = query("#nextPage");
+      button = this.shadowRoot.querySelector("#nextPage");
       button.parent.classes.add("disabled");
-      button = query("#lastPage");
+      button = this.shadowRoot.querySelector("#lastPage");
       button.parent.classes.add("disabled");
     } else {
       AnchorElement button;
-      button = query("#nextPage");
+      button = this.shadowRoot.querySelector("#nextPage");
       button.parent.classes.remove("disabled");
-      button = query("#lastPage");
+      button = this.shadowRoot.querySelector("#lastPage");
       button.parent.classes.remove("disabled");
     }
   }
   
   void goToFirstPage()
   {
-    print("Going to first page");
     if (currentPage != 0) {
       currentPage = 0;
       this.addTasks();
@@ -196,7 +208,6 @@ class ClaimedTasksStream extends WebComponent
   
   void goToPreviousPage()
   {
-    print("Going to previous page");
     if (currentPage > 0) {
       currentPage--;
       this.addTasks();
@@ -205,7 +216,6 @@ class ClaimedTasksStream extends WebComponent
   
   void goToNextPage()
   {
-    print("Going to next page");
     if (currentPage < lastPage - 1) {
       currentPage++;
       this.addTasks();
@@ -214,7 +224,6 @@ class ClaimedTasksStream extends WebComponent
   
   void goToLastPage()
   {
-    print("Going to last page");
     if (currentPage < lastPage - 1) {
       currentPage = lastPage - 1;
       this.addTasks();

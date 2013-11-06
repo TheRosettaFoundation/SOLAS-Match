@@ -16,7 +16,6 @@ import '../../lib/models/Org.dart';
 import '../../lib/models/Language.dart';
 import '../../lib/Settings.dart';
 import '../../lib/Localisation.dart';
-import '../../lib/Loader.dart';
 
 @CustomTag("task-stream")
 class TaskStream extends PolymerElement
@@ -65,28 +64,25 @@ class TaskStream extends PolymerElement
   
   void enteredView()
   {
-    Loader.load().then((e) {
-      localisation = new Localisation();
-      loadActiveLanguages();
-      addTasks();
-      Settings settings = new Settings();
-      siteAddress = settings.conf.urls.SiteLocation;
-      taskTypeIndexes.add(0);
-      taskTypes[0] = localisation.getTranslation("index_any");
-      taskTypeIndexes.add(1);
-      taskTypes[1] = localisation.getTranslation("common_segmentation");
-      taskColours[1] = settings.conf.task_colours.colour_1;
-      taskTypeIndexes.add(2);
-      taskTypes[2] = localisation.getTranslation("common_translation");
-      taskColours[2] = settings.conf.task_colours.colour_2;
-      taskTypeIndexes.add(3);
-      taskTypes[3] = localisation.getTranslation("common_proofreading");
-      taskColours[3] = settings.conf.task_colours.colour_3;
-      taskTypeIndexes.add(4);
-      taskTypes[4] = localisation.getTranslation("common_desegmentation");
-      taskColours[4] = settings.conf.task_colours.colour_4;
-      loaded = true;
-    });
+    localisation = new Localisation();
+    loadActiveLanguages();
+    addTasks();
+    Settings settings = new Settings();
+    siteAddress = settings.conf.urls.SiteLocation;
+    taskTypeIndexes.add(0);
+    taskTypes[0] = localisation.getTranslation("index_any");
+    taskTypeIndexes.add(1);
+    taskTypes[1] = localisation.getTranslation("common_segmentation");
+    taskColours[1] = settings.conf.task_colours.colour_1;
+    taskTypeIndexes.add(2);
+    taskTypes[2] = localisation.getTranslation("common_translation");
+    taskColours[2] = settings.conf.task_colours.colour_2;
+    taskTypeIndexes.add(3);
+    taskTypes[3] = localisation.getTranslation("common_proofreading");
+    taskColours[3] = settings.conf.task_colours.colour_3;
+    taskTypeIndexes.add(4);
+    taskTypes[4] = localisation.getTranslation("common_desegmentation");
+    taskColours[4] = settings.conf.task_colours.colour_4;
   }
   
   void loadActiveLanguages()
@@ -131,6 +127,7 @@ class TaskStream extends PolymerElement
     } else {
       moreTasks = false;
     }
+    loaded = true;
   }
   
   void addTask(Task task)
@@ -157,7 +154,7 @@ class TaskStream extends PolymerElement
         projectMap[proj.id] = proj;
         OrgDao.getOrg(proj.organisationId).then((Organisation org) {
           orgMap[org.id] = org;
-          AnchorElement orgPage = this.shadowRoot.query("#org-" + task.id.toString());
+          AnchorElement orgPage = this.shadowRoot.querySelector("#org-" + task.id.toString());
           if (orgPage != null) {
             orgPage.href = siteAddress + "org/" + org.id.toString() + "/profile";
           } else {

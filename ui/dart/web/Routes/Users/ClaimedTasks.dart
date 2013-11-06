@@ -3,11 +3,11 @@ library app_bootstrap;
 import 'package:polymer/polymer.dart';
 import "../../lib/Loader.dart";
 
-import 'TaskStream.dart' as i0;
+import 'ClaimedTasksStream.dart' as i0;
 
 void main() {
   configureForDeployment([
-      'TaskStream.dart',
+      'ClaimedTasksStream.dart',
       ]);
   Loader.load().then((_) => initPolymer());
 }

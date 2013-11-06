@@ -20,11 +20,11 @@ compileToJs(_) {
     Process.run(dart2js, ['--suppress-warnings', '--suppress-hints', '--minify',
         '-o', 'out/web/Routes/Users/home.dart.js',
         'out/web/Routes/Users/home.dart'], runInShell: true));
-  /*print("Compiling ClaimedTasks.dart");
+  print("Compiling ClaimedTasks.dart");
   results.add(
     Process.run(dart2js, ['--suppress-warnings', '--suppress-hints', '--minify',
         '-o', 'out/web/Routes/Users/ClaimedTasks.dart.js',
-        'out/web/Routes/Users/ClaimedTasks.dart'], runInShell: true));*/
+        'out/web/Routes/Users/ClaimedTasks.dart'], runInShell: true));
   /*print("Compiling test");
   results.add(
     Process.run(dart2js, ['--suppress-warnings', '--suppress-hints', '--minify',
