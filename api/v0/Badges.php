@@ -28,54 +28,54 @@ class Badges {
             $data->setId(null);            
             Dispatcher::sendResponce(null, BadgeDao::insertAndUpdateBadge($data), null, $format);
 
-        }, 'createBadge');
+        }, 'createBadge', 'Middleware::authenticateUserMembership');
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/badges/:id/',
-                                                        function ($id, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/badges/:badgeId/',
+                                                        function ($badgeId, $format = ".json") {
             
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+            if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
+                $badgeId = explode('.', $badgeId);
+                $format = '.'.$badgeId[1];
+                $badgeId = $badgeId[0];
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Badge");
 //            $data = $client->cast("Badge", $data);
             Dispatcher::sendResponce(null, BadgeDao::insertAndUpdateBadge($data), null, $format);
-        }, 'updateBadge');
+        }, 'updateBadge', 'Middleware::authenticateUserForOrgBadge');
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/badges/:id/',
-                                                        function ($id, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/badges/:badgeId/',
+                                                        function ($badgeId, $format = ".json") {
             
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+            if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
+                $badgeId = explode('.', $badgeId);
+                $format = '.'.$badgeId[1];
+                $badgeId = $badgeId[0];
             }
-            Dispatcher::sendResponce(null, BadgeDao::deleteBadge($id), null, $format);
-        }, 'deleteBadge');
+            Dispatcher::sendResponce(null, BadgeDao::deleteBadge($badgeId), null, $format);
+        }, 'deleteBadge', 'Middleware::authenticateUserForOrgBadge');
         
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges/:id/', 
-                                                        function ($id, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges/:badgeId/', 
+                                                        function ($badgeId, $format = ".json") {
             
-            if (!is_numeric($id)&& strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+            if (!is_numeric($badgeId)&& strstr($badgeId, '.')) {
+                $badgeId = explode('.', $badgeId);
+                $format = '.'.$badgeId[1];
+                $badgeId = $badgeId[0];
             }
-            $data = BadgeDao::getBadge($id,null,null,null);
+            $data = BadgeDao::getBadge($badgeId,null,null,null);
             if (is_array($data)) {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getBadge');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges/:id/users(:format)/', 
-                                                        function ($id, $format=".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/badges/:badgeId/users(:format)/', 
+                                                        function ($badgeId, $format=".json") {
             
-            $data = UserDao::getUsersWithBadge($id);
+            $data = UserDao::getUsersWithBadge($badgeId);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUsersWithBadge');        
     }
