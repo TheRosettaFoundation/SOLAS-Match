@@ -24,7 +24,7 @@ class Admins {
         }, 'getOrgAdmins'); 
         
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/admins/:user_id/',
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/admins/:userId/',
                                                         function ($userId, $format = '.json') {            
             if (!is_numeric($userId) && strstr($userId, '.')) {
                  $userId = explode('.', $userId);
@@ -33,10 +33,10 @@ class Admins {
             }
             AdminDao::addSiteAdmin($userId);
             Dispatcher::sendResponce(null, null, null, $format);
-        }, 'createSiteAdmin');
+        }, 'createSiteAdmin', 'Middleware::authenticateSiteAdmin');
         
                
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/admins/:user_id/',
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/admins/:userId/',
                                                         function ($userId, $format = '.json') {
             if (!is_numeric($userId) && strstr($userId, '.')) {
                  $userId = explode('.', $userId);
@@ -45,7 +45,7 @@ class Admins {
             }
             AdminDao::removeAdmin($userId);
             Dispatcher::sendResponce(null, null, null, $format);
-        }, 'deleteSiteAdmin');
+        }, 'deleteSiteAdmin', 'Middleware::authenticateSiteAdmin');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/admins/createOrgAdmin/:orgId/:userId/',
                                                         function ($orgId, $userId, $format = '.json') {            
@@ -56,7 +56,7 @@ class Admins {
             }
             AdminDao::addOrgAdmin($userId, $orgId);
             Dispatcher::sendResponce(null, null, null, $format);
-        }, 'createOrgAdmin');
+        }, 'createOrgAdmin', 'Middleware::authenticateOrgAdmin');
         
                
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/admins/removeOrgAdmin/:orgId/:userId/',
@@ -68,7 +68,7 @@ class Admins {
             }
             AdminDao::removeOrgAdmin($userId, $orgId);
             Dispatcher::sendResponce(null, null, null, $format);
-        }, 'deleteOrgAdmin');
+        }, 'deleteOrgAdmin', 'Middleware::authenticateOrgAdmin');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/isSiteAdmin/:userId/',
                                                         function ($userId, $format = '.json') {
@@ -138,7 +138,7 @@ class Admins {
             AdminDao::saveBannedUser($data);
             Dispatcher::sendResponce(null, null, null, $format);
             Notify::sendBannedLoginEmail($data->getUserId());
-        }, 'banUser');
+        }, 'banUser', 'Middleware::authenticateSiteAdmin');
         
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/admins/banOrg(:format)/',
                                                         function ($format = '.json') {            
@@ -147,7 +147,7 @@ class Admins {
             $data = $client->deserialize($data,'BannedOrganisation');
             AdminDao::saveBannedOrg($data);
             Dispatcher::sendResponce(null, null, null, $format);
-        }, 'banOrg');
+        }, 'banOrg', 'Middleware::authenticateSiteAdmin');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/admins/unBanUser/:userId/',
                                                         function ($userId, $format = '.json') {            
@@ -158,7 +158,7 @@ class Admins {
             }
             AdminDao::unBanUser($userId);
             Dispatcher::sendResponce(null, null, null, $format);
-        }, 'unBanUser');
+        }, 'unBanUser', 'Middleware::authenticateSiteAdmin');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/admins/unBanOrg/:orgId/',
                                                         function ($orgId, $format = '.json') {            
@@ -169,7 +169,7 @@ class Admins {
             }
             AdminDao::unBanOrg($orgId);
             Dispatcher::sendResponce(null, null, null, $format);
-        }, 'unBanOrg');        
+        }, 'unBanOrg', 'Middleware::authenticateSiteAdmin');        
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/admins/isUserBanned/:userId/',
                                                         function ($userId, $format = ".json") {           

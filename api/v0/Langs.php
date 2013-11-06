@@ -35,15 +35,15 @@ class Langs {
                 Dispatcher::sendResponce(null, Languages::getActiveTargetLanguages(), null, $format);
             }, 'getActiveTargetLanguages',null);
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/:id/', 
-                                                        function ($id, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/languages/:languageId/', 
+                                                        function ($languageId, $format = ".json") {
             
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+            if (!is_numeric($languageId) && strstr($languageId, '.')) {
+                $languageId = explode('.', $languageId);
+                $format = '.'.$languageId[1];
+                $languageId = $languageId[0];
             }
-            $data = Languages::getLanguage($id, null, null);
+            $data = Languages::getLanguage($languageId, null, null);
 
             if (is_array($data)) {
                 $data = $data[0];

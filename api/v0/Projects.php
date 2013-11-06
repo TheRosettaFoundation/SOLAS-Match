@@ -34,13 +34,14 @@ class Projects
 //                echo '<BR>Running Time: ' .$totaltime. ' seconds.'; 
 //            }, 'test');
 
-        
+        //
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects(:format)/',
             function ($format = '.json') 
             {
                 Dispatcher::sendResponce(null, ProjectDao::getProject(), null, $format);
             }, 'getProjects');
-
+		
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::POST, '/v0/projects(:format)/',
             function ($format = '.json') 
             {
@@ -48,8 +49,9 @@ class Projects
                 $client = new APIHelper($format);
                 $data = $client->deserialize($data,'Project');
                 Dispatcher::sendResponce(null, ProjectDao::createUpdate($data), null, $format);
-            }, 'createProject');
-
+            }, 'createProject', 'Middleware::authenticateUserMembership');
+		
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:projectId/',
             function ($projectId, $format = '.json') 
             {
@@ -63,8 +65,9 @@ class Projects
                 $data = $client->deserialize($data,'Project');
 //                $data = $client->cast('Project', $data);
                 Dispatcher::sendResponce(null, ProjectDao::createUpdate($data), null, $format);
-            }, 'updateProject');
-
+            }, 'updateProject', 'Middleware::authenticateUserForOrgProject');
+		
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:projectId/',
             function ($projectId, $format = '.json') 
             {
@@ -81,7 +84,8 @@ class Projects
                 Dispatcher::sendResponce(null, $data, null, $format);
 
              }, 'getProject',null);
-            
+		
+		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/projects/:projectId/',
                                                             function ($projectId, $format = ".json") {
             
@@ -91,9 +95,9 @@ class Projects
                 $projectId = $projectId[0];
             }
             Dispatcher::sendResponce(null, ProjectDao::delete($projectId), null, $format);
-        }, 'deleteProject');
+        }, 'deleteProject', 'Middleware::authenticateUserForOrgProject');
 
-
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::POST, '/v0/projects/:projectId/calculateDeadlines(:format)/',
                 function ($projectId, $format = '.json')
                 {
@@ -101,21 +105,24 @@ class Projects
                     $ret = ProjectDao::calculateProjectDeadlines($projectId);
                     Dispatcher::sendResponce(null, $ret, null, $format);
                 }, 'calculateProjectDeadlines');
-
+		
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:projectId/reviews(:format)/',
                 function ($projectId, $format = '.json')
                 {
                     $reviews = TaskDao::getTaskReviews($projectId);
                     Dispatcher::sendResponce(null, $reviews, null, $format);
                 }, 'getProjectTaskReviews');
-
+		
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:projectId/tasks(:format)/',
             function ($projectId, $format = '.json')
             {
                 $data = ProjectDao::getProjectTasks($projectId);
                 Dispatcher::sendResponce(null, $data, null, $format);
-            }, 'getProjectTasks');
-
+            }, 'getProjectTasks', 'Middleware::authenticateUserForOrgProject');
+		
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/archiveProject/:projectId/user/:userId/',
                                                         function ($projectId, $userId, $format = ".json") {
             if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -125,14 +132,16 @@ class Projects
             }
              Dispatcher::sendResponce(null, ProjectDao::archiveProject($projectId, $userId), null, $format);               
 
-            }, 'archiveProject'); 
-
+            }, 'archiveProject', 'Middleware::authenticateUserForOrgProject'); 
+		
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects(:format)/',
             function ($format = '.json') 
             {
                 Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(), null, $format);
-            }, 'getArchivedProjects');
-
+            }, 'getArchivedProjects', 'Middleware::authenticateSiteAdmin');
+		
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/archivedProjects/:projectId/',
             function ($projectId, $format = '.json') 
             {
@@ -147,8 +156,9 @@ class Projects
                     $data = $data[0];
                 }
                 Dispatcher::sendResponce(null, $data, null, $format);
-            }, 'getArchivedProject');
-
+            }, 'getArchivedProject', 'Middleware::authenticateUserForOrgProject');
+		
+		//
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/buildGraph/:projectId/',
                 function ($projectId, $format = '.json')
                 {
@@ -162,23 +172,27 @@ class Projects
                     $graph = $builder->buildProjectGraph($projectId);
                     Dispatcher::sendResponce(null, $graph, null, $format);
                 }, 'getProjectGraph');
-
+		
+		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:projectId/tags(:format)/',
                                                         function ($projectId, $format = ".json") {
             Dispatcher::sendResponce(null, ProjectDao::getTags($projectId), null, $format);
         }, 'getProjectTags',null);
         
+		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:projectId/info(:format)/',
                                                         function ($projectId, $format = ".json") {
             Dispatcher::sendResponce(null,ProjectDao::getProjectFileInfo($projectId, null, null, null, null), null, $format);
         }, 'getProjectFileInfo');
         
+		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:projectId/file(:format)/',
                                                         function ($projectId, $format = ".json") {
             Dispatcher::sendResponce(null,ProjectDao::getProjectFile($projectId), null, $format);
         }, 'getProjectFile',null);
         
-         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/projects/:projectId/file/:filename/:userId/',
+		//
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/projects/:projectId/file/:filename/:userId/',
                                                         function ($projectId, $filename, $userId, $format = ".json") {
                      
             if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -194,17 +208,19 @@ class Projects
                 Dispatcher::sendResponce(null, $e->getMessage(), $e->getCode());
             }
            
-        }, 'saveProjectFile');
+        }, 'saveProjectFile', 'Middleware::authenticateUserForOrgProject');
         
+		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/projects/:projectId/archivedTasks(:format)/',
                                                         function ($projectId, $format = ".json") {
             Dispatcher::sendResponce(null, ProjectDao::getArchivedTask($projectId), null, $format);
-        }, 'getArchivedProjectTasks');
+        }, 'getArchivedProjectTasks', 'Middleware::authenticateUserForOrgProject');
         
+		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/projects/:projectId/deleteTags(:format)/',
                                                         function ($projectId, $format = ".json") {
             Dispatcher::sendResponce(null,ProjectDao::deleteProjectTags($projectId), null, $format);
-        }, 'deleteProjectTags');
+        }, 'deleteProjectTags', 'Middleware::authenticateUserForOrgProject');
     }
 }
 Projects::init();

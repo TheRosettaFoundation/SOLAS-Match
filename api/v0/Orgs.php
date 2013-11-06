@@ -30,7 +30,7 @@ class Orgs
             if ($org->getId() > 0) {
                 Notify::sendOrgCreatedNotifications($org->getId());
             }
-        }, 'createOrg');
+        }, 'createOrg', 'Middleware::isloggedIn');
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:orgId/', function ($orgId, $format = ".json") {
             if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -44,7 +44,7 @@ class Orgs
             $data->setId($orgId);
 //            $data = $client->cast("Organisation", $data);
             Dispatcher::sendResponce(null, OrganisationDao::insertAndUpdate($data), null, $format);
-        }, 'updateOrg');
+        }, 'updateOrg', 'Middleware::authenticateOrgAdmin');
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:orgId/', function ($orgId, $format = ".json"){
             if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -53,7 +53,7 @@ class Orgs
                 $orgId = $orgId[0];
             }
             Dispatcher::sendResponce(null, OrganisationDao::delete($orgId), null, $format);
-        }, 'deleteOrg');
+        }, 'deleteOrg', 'Middleware::authenticateOrgAdmin');
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:orgId/', function ($orgId, $format = ".json"){
             if (!is_numeric($orgId)&& strstr($orgId, '.')) {
@@ -66,9 +66,9 @@ class Orgs
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getOrg',null);
+        }, 'getOrg');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/isMember/:orgId/:userId /', function ($orgId,$userId , $format = ".json"){
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/isMember/:orgId/:userId/', function ($orgId,$userId , $format = ".json"){
             if (!is_numeric($userId)&& strstr($userId, '.')) {
                 $userId = explode('.', $userId);
                 $format = '.'.$userId[1];
@@ -189,7 +189,7 @@ class Orgs
             
             Dispatcher::sendResponce(null, OrganisationDao::acceptMemRequest($orgId, $uid), null, $format);
 			Notify::notifyUserOrgMembershipRequest($uid, $orgId, true);
-        }, 'acceptMembershipRequests');
+        }, 'acceptMembershipRequests', 'Middleware::authenticateOrgMember');
 
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/addMember/:email/:orgId/',
                 function ($email, $orgId, $format = ".json")
@@ -206,7 +206,7 @@ class Orgs
                         $ret = OrganisationDao::acceptMemRequest($orgId, $user->getId());
                     }
                     Dispatcher::sendResponce(null, $ret, null, $format);
-                }, 'addMember', null);      // Add middleware to authenticate the logged in user for the org
+                }, 'addMember', 'Middleware::authenticateOrgMember');      // Add middleware to authenticate the logged in user for the org
         
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:orgId/requests/:uid/',
                                                         function ($orgId, $uid, $format = ".json") {
@@ -219,7 +219,7 @@ class Orgs
 //            Notify::notifyUserOrgMembershipRequest($uid, $id, false); always put after failure to send notification should not break the site.
             Dispatcher::sendResponce(null, OrganisationDao::refuseMemRequest($orgId, $uid), null, $format);
             Notify::notifyUserOrgMembershipRequest($uid, $orgId, false);
-        }, 'rejectMembershipRequests');
+        }, 'rejectMembershipRequests', 'Middleware::authenticateOrgMember');
        
     }
 }
