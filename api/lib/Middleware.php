@@ -117,40 +117,18 @@ class Middleware
         
         return AdminDao::isAdmin($userId,null);
     }
+
+//	private static function getOrgIdFromProjectId($projectId)
+//	{		
+//		$orgId = null;
+//		if ($projectId != null) {
+//			$projects = ProjectDao::getProject($projectId);
+//			$project = $projects[0];
+//			$orgId = $project->getOrganisationId();
+//		}
+//		return $orgId;
+//	}
 	
-	
-	private static function getOrgIdFromTaskId($taskId)
-	{
-		$projectId = null;
-		if($taskId != null) {
-			$tasks = TaskDao::getTask($taskId);
-			$task = $tasks[0];
-			$projectId = $task->getProjectId();
-		}
-		return self::getOrgIdFromProjectId($projectId);	
-	}
-	
-	private static function getOrgIdFromProjectId($projectId)
-	{		
-		$orgId = null;
-		if ($projectId != null) {
-			$projects = ProjectDao::getProject($projectId);
-			$project = $projects[0];
-			$orgId = $project->getOrganisationId();
-		}
-		return $orgId;
-	}
-	
-	private static function getOrgIdFromBadgeId($badgeId)
-	{
-		$orgId = null;
-		if ($badgeId != null) {
-			$badges = BadgeDao::getBadge($badgeId);
-			$badge = $badges[0];
-			$orgId = $badge->getOwnerId();
-		}
-		return $orgId;
-	}
 	
 	// Is the user a site admin
 	public static function authenticateSiteAdmin($request, $response, $route)
@@ -178,7 +156,7 @@ class Middleware
 	        	return true;
 	        }
 			$userId = $user->getId();
-			$userOrgList = UserDao::findOrganisationsUserBelongsTo($user_id);
+			$userOrgList = UserDao::findOrganisationsUserBelongsTo($userId);
 			if($userOrgList != null && count($userOrgList) > 0) {
 				return true;				
 			}
@@ -270,8 +248,13 @@ class Middleware
 	                $projectId = $projectId[0];
 	            }			
 			}
+			$project = null;
+			if ($projectId != null) {
+				$projects = ProjectDao::getProject($projectId);
+				$project = $projects[0];
+			}
 			
-			$orgId = self::getOrgIdFromProjectId($projectId);
+			$orgId = $project->getOrganisationId();
 			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
 				return true;
 			}
@@ -280,6 +263,42 @@ class Middleware
 	                    "The user does not have permission to acess the current resource");
 			}
 		}	
+	}
+
+	// Is the user a member of the organisation that is creating the task
+	public static function authenticateUserCreateOrgTask($request, $response, $route)
+	{
+		if(self::isloggedIn($request, $response, $route))
+		{
+	        $user = UserDao::getLoggedInUser();
+	        if (self::isSiteAdmin($user->getId())) {
+	        	return true;
+	        }
+	        $userId = $user->getId();
+			$params = $route->getParams();
+			
+			$task = $request->getBody();
+			$format = $params['format'];
+            $client = new APIHelper($format);			
+            $task = $client->deserialize($task, "Task");
+			
+			$projectId = $task->getProjectId();
+			$project = null;
+			if ($projectId != null) {
+				$projects = ProjectDao::getProject($projectId);
+				$project = $projects[0];
+			}
+			
+			$orgId = $project->getOrganisationId();
+			
+			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+				return true;
+			}
+			else {
+				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+	                    "The user does not have permission to acess the current resource");
+			}
+		}
 	}
 	
 	//Is the user a member of the Organisation who created the Task in question
@@ -302,9 +321,22 @@ class Middleware
 	                $format = '.'.$taskId[1];
 	                $taskId = $taskId[0];
 	            }			
-			}			
+			}
 			
-			$orgId = self::getOrgIdFromTaskId($taskId);
+			$task = null;
+			if($taskId != null) {
+				$tasks = TaskDao::getTask($taskId);
+				$task = $tasks[0];
+			}
+			$projectId = $task->getProjectId();
+			$project = null;
+			if ($projectId != null) {
+				$projects = ProjectDao::getProject($projectId);
+				$project = $projects[0];
+			}
+			
+			$orgId = $project->getOrganisationId();
+			
 			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
 				return true;
 			}
@@ -339,7 +371,20 @@ class Middleware
 	                $format = '.'.$taskId[1];
 	                $taskId = $taskId[0];
 	        }
-			$orgId = self::getOrgIdFromTaskId($taskId);
+			
+			$task = null;
+			if($taskId != null) {
+				$tasks = TaskDao::getTask($taskId);
+				$task = $tasks[0];
+			}
+			$projectId = $task->getProjectId();
+			$project = null;
+			if ($projectId != null) {
+				$projects = ProjectDao::getProject($projectId);
+				$project = $projects[0];
+			}
+			
+			$orgId = $project->getOrganisationId();
 			
 			if($userId == $user->getId()) {
 				return true;
@@ -374,9 +419,15 @@ class Middleware
 	                $format = '.'.$badgeId[1];
 	                $badgeId = $badgeId[0];
 	            }			
-			}			
+			}
 			
-			$orgId = self::getOrgIdFromBadgeId($badgeId);
+			$badge = null;
+			if ($badgeId != null) {
+			$badges = BadgeDao::getBadge($badgeId);
+			$badge = $badges[0];
+			}
+			
+			$orgId = $badge->getOwnerId();
 					
 			// currently this checks if the orgId is not Null
 			// cases where the orgId is null signify a system badge
@@ -419,7 +470,14 @@ class Middleware
 	            }			
 			}			
 			
-			$orgId = self::getOrgIdFromBadgeId($badgeId);		
+			$badge = null;
+			if ($badgeId != null) {
+			$badges = BadgeDao::getBadge($badgeId);
+			$badge = $badges[0];
+			}
+			
+			$orgId = $badge->getOwnerId();
+					
 			if($userId == $user->getId()) {
 				return true;
 			}

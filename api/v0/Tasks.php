@@ -35,7 +35,7 @@ class Tasks {
             $client = new APIHelper($format);
             $data = $client->deserialize($data, "Task");
             Dispatcher::sendResponce(null, TaskDao::create($data), null, $format);
-        }, 'createTask', 'Middleware::authenticateUserForOrgTask');
+        }, 'createTask', 'Middleware::authenticateUserCreateOrgTask');
         
         //
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/',
