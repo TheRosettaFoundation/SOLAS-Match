@@ -19,18 +19,56 @@ class Orgs
             Dispatcher::sendResponce(null, OrganisationDao::getOrg(), null, $format);
         }, 'getOrgs');        
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs(:format)/', function ($format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs(:format)/', 
+        function ($format = ".json") 
+        {
 
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Organisation");
             $data->setId(null);
             $org = OrganisationDao::insertAndUpdate($data);
+			$user = UserDao::getLoggedInUser();
+//			if(is_null($org) || $org->getId() <= 0)
+//			{
+//				if(!is_numeric($org->getId()))
+//				{
+//					OrganisationDao::delete($org->getId());
+//				}
+//			}
+			if (!is_null($org) && $org->getId() > 0) 
+			{
+				OrganisationDao::acceptMemRequest($org->getId(), $user->getId());
+                AdminDao::addOrgAdmin($user->getId(), $org->getId());
+                if(!AdminDao::isAdmin($user->getId(), $org->getId()))
+                {
+                	OrganisationDao::delete($org->getId());
+                }	
+            }					
             Dispatcher::sendResponce(null, $org, null, $format);
-            if ($org->getId() > 0) {
+            if (!is_null($org) && $org->getId() > 0) {
                 Notify::sendOrgCreatedNotifications($org->getId());
             }
-        }, 'createOrg', 'Middleware::isloggedIn');
+        }
+        , 'createOrg', 'Middleware::isloggedIn');
+        
+        
+        /*
+		 * 
+		 * 	Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/admins/createOrgAdmin/:orgId/:userId/',
+                                                        function ($orgId, $userId, $format = '.json') {            
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                 $userId = explode('.', $userId);
+                 $format = '.'.$userId[1];
+                 $userId = $userId[0];
+            }
+            AdminDao::addOrgAdmin($userId, $orgId);
+            Dispatcher::sendResponce(null, null, null, $format);
+        }, 'createOrgAdmin', 'Middleware::authenticateOrgAdmin');
+		 * 
+		 * 
+		 * 
+		 */
         
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:orgId/', function ($orgId, $format = ".json") {
             if (!is_numeric($orgId) && strstr($orgId, '.')) {

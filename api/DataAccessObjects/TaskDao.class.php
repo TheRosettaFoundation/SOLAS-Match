@@ -330,6 +330,20 @@ class TaskDao
         }
         return $ret;
     }
+    
+	public static function getTasksFromPreReq($taskId)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNull($taskId);
+        
+        if ($result = PDOWrapper::call("getTasksFromPreReq", $args)) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Task", $row);
+            }
+        }
+        return $ret;
+    }
 
     public static function addTaskPreReq($taskId, $preReqId)
     {

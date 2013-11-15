@@ -68,7 +68,7 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/prerequisites(:format)/',
             function ($taskId, $format = ".json") {
                 Dispatcher::sendResponce(null, TaskDao::getTaskPreReqs($taskId), null, $format);
-        }, 'getTaskPreReqs', 'Middleware::authenticateUserForOrgTask');
+        }, 'getTaskPreReqs', 'Middleware::authUserOrOrgForClaimedTask');
 		
 		//
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/prerequisites/:preReqId/',
@@ -131,11 +131,11 @@ class Tasks {
         }, 'getTask',null);
 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/reviews(:format)/',
-                function ($id, $format = '.json')
+                function ($taskId, $format = '.json')
                 {
                     $review = TaskDao::getTaskReviews(null,$taskId);
                     Dispatcher::sendResponce(null, $review, null, $format);
-                }, 'getTaskReview');
+                }, 'getTaskReview', 'Middleware::authUserOrOrgForClaimedTask');
 
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/reviews(:format)/',
                 function ($format = '.json')
@@ -144,7 +144,7 @@ class Tasks {
                     $client = new APIHelper($format);
                     $review = $client->deserialize($data,"TaskReview");
                     Dispatcher::sendResponce(null, TaskDao::submitReview($review), null, $format);
-                }, 'submitReview');
+                }, 'submitReview', 'Middleware::authenticateUserToSubmitReview');
         
 		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/tags(:format)/',
@@ -168,9 +168,9 @@ class Tasks {
                                                         function ($taskId, $format=".json") {
             
             Dispatcher::sendResponce(null, array("status message" => TaskDao::getTaskStatus($taskId)), null, $format);
-        }, 'getTaskStatus');
+        }, 'getTaskStatus', 'Middleware::authUserOrOrgForClaimedTask');
 		
-		//
+		// Org Feedback, feedback sent from the organisation to the user who claimed the task
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/orgFeedback(:format)/',
                 function ($taskId, $format = ".json") {
                     $data = Dispatcher::getDispatcher()->request()->getBody();
@@ -178,9 +178,9 @@ class Tasks {
                     $feedbackData = $client->deserialize($data,"OrgFeedback");
                     Notify::sendOrgFeedback($feedbackData);
                     Dispatcher::sendResponce(null, null, null, $format);
-        }, 'sendOrgFeedback');
+        }, 'sendOrgFeedback', 'Middleware::authenticateUserForOrgTask');
         
-		//
+		// User Feedback, feedback sent from the user who claimed the task to the organisation
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/userFeedback(:format)/',
                 function ($taskId, $format = ".json") {
                     $data = Dispatcher::getDispatcher()->request()->getBody();
@@ -188,7 +188,7 @@ class Tasks {
                     $feedbackData = $client->deserialize($data,"UserFeedback");
                     Notify::sendUserFeedback($feedbackData);
                     Dispatcher::sendResponce(null, null, null, $format);
-        }, 'sendUserFeedback');
+        }, 'sendUserFeedback', 'Middleware::authUserForClaimedTask');
 		
 		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/file(:format)/',
@@ -229,7 +229,7 @@ class Tasks {
             }
             Dispatcher::sendResponce(null, null, HttpStatusEnum::CREATED);
             
-        }, 'saveTaskFile');
+        }, 'saveTaskFile', 'Middleware::authUserOrOrgForClaimedTask');
         
         //
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/uploadOutputFile/:taskId/:userId/',
@@ -250,7 +250,7 @@ class Tasks {
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
             TaskDao::uploadOutputFile($task, $convert,$data,$userId,$filename);
-        }, 'uploadOutputFile');
+        }, 'uploadOutputFile', 'Middleware::authUserOrOrgForClaimedTask');
         
 		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/version(:format)/',

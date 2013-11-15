@@ -16,7 +16,7 @@ require_once __DIR__."/../lib/Middleware.php";
 class Users {
     
     public static function init()
-    {
+    {		
     	//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users(:format)/',
                                                         function ($format = ".json") {
@@ -57,6 +57,15 @@ class Users {
             UserDao::deleteUser($userId);           
             Dispatcher::sendResponce(null, null, null, $format);
         }, 'deleteUser', 'Middleware::authUserOwnsResource');
+		
+		//returns the currently logged in user
+    	Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/getCurrentUser(:format)/',
+		function ($format = ".json") 
+		{
+			$user = UserDao::getLoggedInUser();
+			Dispatcher::sendResponce(null, $user, null, $format);
+			
+		}, 'getCurrentUser', null);
 		
 		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:uuid/registered(:format)/',
@@ -191,17 +200,17 @@ class Users {
             Dispatcher::sendResponce(null, UserDao::isBlacklistedForTask($userId, $taskId), null, $format);
         }, 'isBlacklistedForTask');  
         
-		// TEST
+		// TEST 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/orgs(:format)/',
                                                         function ($userId, $format = ".json") {
             Dispatcher::sendResponce(null, UserDao::findOrganisationsUserBelongsTo($userId), null, $format);
-        }, 'getUserOrgs', 'Middleware::authUserOwnsResource');
+        }, 'getUserOrgs');
 		
 		// TEST
 		Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/badges(:format)/',
                                                         function ($userId, $format = ".json") {
             Dispatcher::sendResponce(null, UserDao::getUserBadges($userId), null, $format);
-        }, 'getUserbadges', 'Middleware::authUserOwnsResource');
+        }, 'getUserbadges');
         
 		// TEST adding a badge to a user 
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:userId/badges(:format)/',
@@ -364,7 +373,7 @@ class Users {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
             $data = TaskDao::getUserArchivedTasks($userId, $limit);
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUserArchivedTasks', 'Middleware::authUserOwnsResource');
+        }, 'getUserArchivedTasks');
         
 		// TEST
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/archivedTasks/:taskId/archiveMetaData(:format)/',
@@ -552,7 +561,6 @@ class Users {
                 $format = '.'.$userId[1];
                 $userId = $userId[0];
             }
-
             $data = UserDao::getPersonalInfo(null,$userId);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserPersonalInfo', 'Middleware::authUserOwnsResource');

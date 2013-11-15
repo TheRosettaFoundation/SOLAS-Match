@@ -104,7 +104,7 @@ class Projects
                     $ret = null;
                     $ret = ProjectDao::calculateProjectDeadlines($projectId);
                     Dispatcher::sendResponce(null, $ret, null, $format);
-                }, 'calculateProjectDeadlines');
+                }, 'calculateProjectDeadlines', 'Middleware::authenticateUserForOrgProject');
 		
 		//
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:projectId/reviews(:format)/',
@@ -112,7 +112,7 @@ class Projects
                 {
                     $reviews = TaskDao::getTaskReviews($projectId);
                     Dispatcher::sendResponce(null, $reviews, null, $format);
-                }, 'getProjectTaskReviews');
+                }, 'getProjectTaskReviews', 'Middleware::authenticateUserOrOrgForProjectTask');
 		
 		//
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:projectId/tasks(:format)/',
@@ -120,7 +120,7 @@ class Projects
             {
                 $data = ProjectDao::getProjectTasks($projectId);
                 Dispatcher::sendResponce(null, $data, null, $format);
-            }, 'getProjectTasks', 'Middleware::authenticateUserForOrgProject');
+            }, 'getProjectTasks');
 		
 		//
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/archiveProject/:projectId/user/:userId/',
