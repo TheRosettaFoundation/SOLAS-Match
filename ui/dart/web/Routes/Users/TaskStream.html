@@ -88,7 +88,7 @@
                 {{projectMap[task.projectId].title}}
               </a>
               {{localisation.getTranslation("common_for")}}
-              <a id="org-{{task.id}}">
+              <a id="org-{{task.id}}" href="{{siteAddress}}org/{{orgMap[projectMap[task.projectId].organisationId].id}}/profile"">
                 {{orgMap[projectMap[task.projectId].organisationId].name}}
               </a>
             </p>

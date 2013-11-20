@@ -46,9 +46,6 @@ class TaskStream extends PolymerElement
   
   TaskStream.created() : super.created()
   {
-    var root = getShadowRoot("task-stream");
-    root.applyAuthorStyles = true;
-    
     currentDateTime = new DateTime.now();
     tasks = toObservable(new List<Task>());
     taskAges = toObservable(new Map<int, String>());
@@ -154,12 +151,6 @@ class TaskStream extends PolymerElement
         projectMap[proj.id] = proj;
         OrgDao.getOrg(proj.organisationId).then((Organisation org) {
           orgMap[org.id] = org;
-          AnchorElement orgPage = this.shadowRoot.querySelector("#org-" + task.id.toString());
-          if (orgPage != null) {
-            orgPage.href = siteAddress + "org/" + org.id.toString() + "/profile";
-          } else {
-            print("Org page is null");
-          }
         });
       });
     }

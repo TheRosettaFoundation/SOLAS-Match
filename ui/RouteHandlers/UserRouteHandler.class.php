@@ -386,11 +386,19 @@ class UserRouteHandler
             $app->redirect($app->urlFor("login"));
         }
 
+        $extraScripts = "
+            <script src=\"{$app->urlFor("home")}ui/dart/web/packages/custom_element/custom-elements.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/web/packages/browser/interop.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/out/web/Routes/Users/UserPrivateProfile.dart.js\"></script>
+            ";
+        $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
+
         $app->view()->appendData(array(
             "user"              => $loggedInuser,
             "profileUser"       => $user,
             "private_access"    => true,
-        ));       
+            'extra_scripts'     => $extraScripts
+        ));
        
         $app->render("user/user-private-profile.tpl");
     }

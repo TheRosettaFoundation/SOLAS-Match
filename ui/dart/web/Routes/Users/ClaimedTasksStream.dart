@@ -96,13 +96,13 @@ class ClaimedTasksStream extends PolymerElement
           print("Something failed");
         }
         AnchorElement button;
-        button = this.shadowRoot.querySelector("#firstPage");
+        button = querySelector("#firstPage");
         button.onClick.listen((e) => this.goToFirstPage());
-        button = this.shadowRoot.querySelector("#previousPage");
+        button = querySelector("#previousPage");
         button.onClick.listen((e) => this.goToPreviousPage());
-        button = this.shadowRoot.querySelector("#nextPage");
+        button = querySelector("#nextPage");
         button.onClick.listen((e) => this.goToNextPage());
-        button = this.shadowRoot.querySelector("#lastPage");
+        button = querySelector("#lastPage");
         button.onClick.listen((e) => this.goToLastPage());
       });
   }
@@ -171,29 +171,29 @@ class ClaimedTasksStream extends PolymerElement
   {
     if (currentPage < 1) {
       AnchorElement button;
-      button = this.shadowRoot.querySelector("#firstPage");
+      button = querySelector("#firstPage");
       button.parent.classes.add("disabled");
-      button = this.shadowRoot.querySelector("#previousPage");
+      button = querySelector("#previousPage");
       button.parent.classes.add("disabled");
     } else {
       AnchorElement button;
-      button = this.shadowRoot.querySelector("#firstPage");
+      button = querySelector("#firstPage");
       button.parent.classes.remove("disabled");
-      button = this.shadowRoot.querySelector("#previousPage");
+      button = querySelector("#previousPage");
       button.parent.classes.remove("disabled");
     }
     
     if (currentPage >= lastPage - 1) {
       AnchorElement button;
-      button = this.shadowRoot.querySelector("#nextPage");
+      button = querySelector("#nextPage");
       button.parent.classes.add("disabled");
-      button = this.shadowRoot.querySelector("#lastPage");
+      button = querySelector("#lastPage");
       button.parent.classes.add("disabled");
     } else {
       AnchorElement button;
-      button = this.shadowRoot.querySelector("#nextPage");
+      button = querySelector("#nextPage");
       button.parent.classes.remove("disabled");
-      button = this.shadowRoot.querySelector("#lastPage");
+      button = querySelector("#lastPage");
       button.parent.classes.remove("disabled");
     }
   }

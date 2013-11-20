@@ -1,27 +1,27 @@
 library SolasMatchDart;
 
-import "package:web_ui/web_ui.dart";
+import "package:polymer/polymer.dart";
 import "dart:async";
-import "dart:json";
 import "dart:html";
 
-import '../DataAccessObjects/LanguageDao.dart';
-import '../DataAccessObjects/CountryDao.dart';
-import '../DataAccessObjects/UserDao.dart';
+import '../../DataAccessObjects/LanguageDao.dart';
+import '../../DataAccessObjects/CountryDao.dart';
+import '../../DataAccessObjects/UserDao.dart';
 
-import '../lib/models/Badge.dart';
-import '../lib/models/User.dart';
-import '../lib/models/UserPersonalInformation.dart';
-import '../lib/models/Locale.dart';
-import '../lib/models/Language.dart';
-import '../lib/models/Country.dart';
-import '../lib/Settings.dart';
-import '../lib/Localisation.dart';
+import '../../lib/models/Badge.dart';
+import '../../lib/models/User.dart';
+import '../../lib/models/UserPersonalInformation.dart';
+import '../../lib/models/Locale.dart';
+import '../../lib/models/Language.dart';
+import '../../lib/models/Country.dart';
+import '../../lib/Settings.dart';
+import '../../lib/Localisation.dart';
 
-class UserPrivateProfileForm extends WebComponent
+@CustomTag('user-private-profile-form')
+class UserPrivateProfileForm extends PolymerElement
 {
-  // xtag attribute
-  int userId;
+  // attributes
+  @published int userid;
   
   // bound variables
   @observable bool translator;
@@ -38,15 +38,18 @@ class UserPrivateProfileForm extends WebComponent
   @observable List<Language> languages;
   @observable List<Country> countries;
   @observable String alert;
+  @observable Localisation localisation;
   
   // misc
+  int secondaryLanguageLimit;
   List<String> randomWords;
   List<Badge> badges;
   SelectElement langSelect;
   SelectElement countrySelect;
   
-  UserPrivateProfileForm()
+  UserPrivateProfileForm.created() : super.created()
   {
+    secondaryLanguageLimit = 10;
     userSecondaryLanguages = toObservable(new List<Locale>());
     languages = toObservable(new List<Language>());
     countries = toObservable(new List<Country>());
@@ -59,14 +62,15 @@ class UserPrivateProfileForm extends WebComponent
     alert = "";
   }
   
-  void inserted()
+  void enteredView()
   {
+    localisation = new Localisation();
     List<Future<bool>> dataLoaded = new List<Future<bool>>();
-    UserDao.getUserPersonalInfo(userId).then((UserPersonalInformation info) {
+    UserDao.getUserPersonalInfo(userid).then((UserPersonalInformation info) {
       userInfo = info;
     });
     
-    UserDao.getUserBadges(userId).then((List<Badge> userBadges) {
+    UserDao.getUserBadges(userid).then((List<Badge> userBadges) {
       badges = userBadges;
       badges.forEach((Badge badge) {
         if (badge.id == 6) {
@@ -79,12 +83,12 @@ class UserPrivateProfileForm extends WebComponent
       });
     });
       
-    dataLoaded.add(UserDao.getUser(userId).then((User u) {
+    dataLoaded.add(UserDao.getUser(userid).then((User u) {
       user = u;
       return true;
     }));
     
-    dataLoaded.add(UserDao.getSecondaryLanguages(userId).then((List<Locale> locales) {
+    dataLoaded.add(UserDao.getSecondaryLanguages(userid).then((List<Locale> locales) {
       userSecondaryLanguages.addAll(locales);
       return true;
     }));
@@ -106,8 +110,11 @@ class UserPrivateProfileForm extends WebComponent
       countries.addAll(regions);
       return true;
     }));
-    
-    Future.wait(dataLoaded).then((List<bool> successList) => setDefaults(successList)); 
+   
+    Future.wait(dataLoaded).then((List<bool> successList) {
+      setDefaults(successList);
+    });
+    isLoaded = true;
   }
   
   void setDefaults(List<bool> successList)
@@ -117,6 +124,13 @@ class UserPrivateProfileForm extends WebComponent
         print("Some data failed to load!");
       }
     });
+    
+    //  Bind button click events
+    ButtonElement mButton;
+    mButton = querySelector("#updateBtn");
+    mButton.onClick.listen((event) => submitForm());
+    mButton = querySelector("#deleteBtn");
+    mButton.onClick.listen((event) => deleteUser());
     
     int secLangLength = userSecondaryLanguages.length > 0 ? userSecondaryLanguages.length : 1;
     
@@ -128,9 +142,11 @@ class UserPrivateProfileForm extends WebComponent
     langSelect = new SelectElement();
     langSelect.style.width = "82%";
     for (int i = 0; i < languages.length; i++) {
-      var option = new OptionElement()
-          ..value = languages[i].code
-          ..text = languages[i].name;
+      OptionElement option = new OptionElement();
+      Language language = languages[i];
+      option.value = language.code;
+      option.text = language.name;
+      
       langSelect.children.add(option);
       
       if (user.nativeLocale != null) {
@@ -182,7 +198,7 @@ class UserPrivateProfileForm extends WebComponent
     var nativeLanguageDiv = new DivElement()
         ..id = "nativeLanguageDiv";
     var label = new LabelElement()
-        ..innerHtml = "<strong>" + Localisation.getTranslation("common_native_language") + ":</strong>";
+        ..innerHtml = "<strong>" + localisation.getTranslation("common_native_language") + ":</strong>";
     var nativeLanguageSelect = langSelect.clone(true);
     nativeLanguageSelect.id = "nativeLanguageSelect";
     nativeLanguageSelect.selectedIndex = nativeLanguageIndex;
@@ -196,12 +212,12 @@ class UserPrivateProfileForm extends WebComponent
     var secondaryLanguageDiv = new DivElement()
         ..id = "secondaryLanguageDiv";
     label = new LabelElement()
-        ..innerHtml = "<strong>" + Localisation.getTranslation("common_secondary_languages") + ":</strong>";
+        ..innerHtml = "<strong>" + localisation.getTranslation("common_secondary_languages") + ":</strong>";
     secondaryLanguageDiv.children.add(label);
     
     ButtonElement button = new ButtonElement()
         ..id = "addLanguageButton"
-        ..innerHtml = "<i class='icon-upload icon-white'></i> " +  Localisation.getTranslation("user_private_profile_add_secondary_language") 
+        ..innerHtml = "<i class='icon-upload icon-white'></i> " +  localisation.getTranslation("user_private_profile_add_secondary_language") 
         ..classes.add("btn")
         ..classes.add("btn-success")
         ..onClick.listen((event) => addSecondaryLanguage());
@@ -212,7 +228,7 @@ class UserPrivateProfileForm extends WebComponent
     
     button = new ButtonElement()
         ..id = "removeLanguageButton"
-        ..innerHtml = "<i class='icon-fire icon-white'></i> " + Localisation.getTranslation("common_remove")
+        ..innerHtml = "<i class='icon-fire icon-white'></i> " + localisation.getTranslation("common_remove")
         ..classes.add("btn")
         ..classes.add("btn-inverse")
         ..onClick.listen((event) => removeSecondaryLanguage());
@@ -221,7 +237,7 @@ class UserPrivateProfileForm extends WebComponent
     }
     secondaryLanguageDiv.children.add(button);
     
-    DivElement div = query("#language_area");
+    DivElement div = querySelector("#language_area");
     div.children.add(nativeLanguageDiv);
     div.children.add(secondaryLanguageDiv);
     
@@ -232,13 +248,13 @@ class UserPrivateProfileForm extends WebComponent
     } else {
       this.addSecondaryLanguage(0, 0);
     }
-    isLoaded = true;
   }
   
   void addSecondaryLanguage([int languageSelected = 0, int countrySelected = 0])
   {
-    if (secondaryLanguageCount < 5) {
-      DivElement secondaryLanguageDiv = query("#secondaryLanguageDiv");
+    print("Secondary Language Limit: $secondaryLanguageLimit");
+    if (secondaryLanguageCount < secondaryLanguageLimit) {
+      DivElement secondaryLanguageDiv = querySelector("#secondaryLanguageDiv");
       DivElement locale = new DivElement()
           ..id = "secondary_locale_$secondaryLanguageCount";
       SelectElement languageBox = langSelect.clone(true);
@@ -252,16 +268,16 @@ class UserPrivateProfileForm extends WebComponent
       HRElement hr = new HRElement();
       hr.style.width = "60%";
       locale.children.add(hr);
-      ButtonElement button = query("#addLanguageButton");
+      ButtonElement button = querySelector("#addLanguageButton");
       secondaryLanguageDiv.insertBefore(locale, button);
       secondaryLanguageCount++;
       
-      if (secondaryLanguageCount > 4) {
-        button = query("#addLanguageButton");
+      if (secondaryLanguageCount >= secondaryLanguageLimit) {
+        button = querySelector("#addLanguageButton");
         button.disabled = true;
       }
       
-      button = query("#removeLanguageButton");
+      button = querySelector("#removeLanguageButton");
       if (button.disabled) {
         button.disabled = false;
       }
@@ -272,16 +288,16 @@ class UserPrivateProfileForm extends WebComponent
   {
     if (secondaryLanguageCount > 0) {
       secondaryLanguageCount--;
-      var element = query("#secondary_locale_$secondaryLanguageCount");
+      var element = querySelector("#secondary_locale_$secondaryLanguageCount");
       element.remove();
       
-      ButtonElement button = query("#addLanguageButton");
+      ButtonElement button = querySelector("#addLanguageButton");
       if (button.disabled) {
         button.disabled = false; 
       }
       
       if (secondaryLanguageCount < 2) {
-        button = query("#removeLanguageButton");
+        button = querySelector("#removeLanguageButton");
         button.disabled = true;
       }
     }
@@ -291,11 +307,11 @@ class UserPrivateProfileForm extends WebComponent
   {
     this.alert = "";
     if (user.display_name == "") {
-      alert = Localisation.getTranslation("user_private_profile_2");
+      alert = localisation.getTranslation("user_private_profile_2");
     } else {
       List<Future<bool>> updated = new List<Future<bool>>();
-      SelectElement nativeLanguageSelect = query("#nativeLanguageSelect");
-      SelectElement nativeCountrySelect = query("#nativeCountrySelect");
+      SelectElement nativeLanguageSelect = querySelector("#nativeLanguageSelect");
+      SelectElement nativeCountrySelect = querySelector("#nativeCountrySelect");
       if (nativeLanguageSelect.selectedIndex > 0 && nativeCountrySelect.selectedIndex > 0) {
         user.nativeLocale.countryCode = countries[nativeCountrySelect.selectedIndex].code;
         user.nativeLocale.languageCode = languages[nativeLanguageSelect.selectedIndex].code;
@@ -305,8 +321,8 @@ class UserPrivateProfileForm extends WebComponent
       
       List<Locale> currentSecondaryLocales = new List<Locale>();
       for (int i = 0; i < secondaryLanguageCount; i++) {
-        SelectElement secondaryLanguageSelect = query("#secondary_language_$i");
-        SelectElement secondaryCountrySelect = query("#secondary_country_$i");
+        SelectElement secondaryLanguageSelect = querySelector("#secondary_language_$i");
+        SelectElement secondaryCountrySelect = querySelector("#secondary_country_$i");
         if (secondaryLanguageSelect.selectedIndex > 0 && secondaryCountrySelect.selectedIndex > 0) {
           Locale found = userSecondaryLanguages.firstWhere((Locale l) {
             return (l.languageCode == languages[secondaryLanguageSelect.selectedIndex].code
@@ -316,11 +332,13 @@ class UserPrivateProfileForm extends WebComponent
             locale.countryCode = countries[secondaryCountrySelect.selectedIndex].code;
             locale.languageCode = languages[secondaryLanguageSelect.selectedIndex].code;
             currentSecondaryLocales.add(locale);
-            updated.add(UserDao.addSecondaryLanguage(userId, locale));
+            updated.add(UserDao.addSecondaryLanguage(userid, locale));
           });
           if (found != null) {
             currentSecondaryLocales.add(found);
           }
+        } else {
+          alert = "Failed to save some data. Please make sure that your secondary languages have both a language and country selected, any blank entries will be ignored.";
         }
       }
       
@@ -328,7 +346,7 @@ class UserPrivateProfileForm extends WebComponent
         currentSecondaryLocales.firstWhere((Locale l) {
           return (l.languageCode == locale.languageCode && l.countryCode == locale.countryCode);
         }, orElse: () {
-          updated.add(UserDao.removeSecondaryLanguage(userId, locale.languageCode, locale.countryCode));
+          updated.add(UserDao.removeSecondaryLanguage(userid, locale.languageCode, locale.countryCode));
         });
       });
       
@@ -346,39 +364,47 @@ class UserPrivateProfileForm extends WebComponent
           }
         });
         if (currentlyTranslator && !translator) {
-          updated.add(UserDao.removeUserBadge(userId, 6));
+          updated.add(UserDao.removeUserBadge(userid, 6));
         } else if (!currentlyTranslator && translator) {
-          updated.add(UserDao.addUserBadge(userId, 6));
+          updated.add(UserDao.addUserBadge(userid, 6));
         }
         if (currentlyProofreader && !proofreader) {
-          updated.add(UserDao.removeUserBadge(userId, 7));
+          updated.add(UserDao.removeUserBadge(userid, 7));
         } else if (!currentlyProofreader && proofreader) {
-          updated.add(UserDao.addUserBadge(userId, 7));
+          updated.add(UserDao.addUserBadge(userid, 7));
         }
         if (currentlyInterpreter && !interpreter) {
-          updated.add(UserDao.removeUserBadge(userId, 8));
+          updated.add(UserDao.removeUserBadge(userid, 8));
         } else if (!currentlyInterpreter && interpreter) {
-          updated.add(UserDao.addUserBadge(userId, 8));
+          updated.add(UserDao.addUserBadge(userid, 8));
         }
       }
       
       Future.wait(updated).then((List<bool> updatesSuccessful) {
+        bool failure = false;
         updatesSuccessful.forEach((bool success) {
           if (!success) {
             print("Failed to save some data");
-          } else {
-            Settings settings = new Settings();
-            window.location.assign(settings.conf.urls.SiteLocation + "$userId/profile");
+            failure = true;
           }
         });
+        
+        if (!failure && alert == "") {
+          Settings settings = new Settings();
+          window.location.assign(settings.conf.urls.SiteLocation + "$userid/profile");
+        } else {
+          if (alert == "") {
+            alert = "Failed to save some data";
+          }
+        }
       });
     }
   }
   
   void deleteUser()
   {
-    if (window.confirm(Localisation.getTranslation("user_private_profile_6"))) {
-      UserDao.deleteUser(userId).then((bool success) {
+    if (window.confirm(localisation.getTranslation("user_private_profile_6"))) {
+      UserDao.deleteUser(userid).then((bool success) {
         UserDao.destroyUserSession();
         Settings settings = new Settings();
         window.location.assign(settings.conf.urls.SiteLocation);
