@@ -342,6 +342,7 @@ class Users {
 		// 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/topTasks(:format)/',
                                                         function ($userId, $format = ".json") {
+                    
             
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
             $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
@@ -349,20 +350,23 @@ class Users {
             $strict = Dispatcher::clenseArgs('strict', HttpMethodEnum::GET, false);
             $filters = APIHelper::parseFilterString($filter);
             $filter = "";
+            
+            $taskType = '';
+            $sourceLanguage = '';
+            $targetLanguage = '';
+                    
             if (isset($filters['taskType']) && $filters['taskType'] != '') {
-                $filter .= " AND t.`task-type_id`=".$filters['taskType'];
+                $taskType = $filters['taskType'];
             }
             if (isset($filters['sourceLanguage']) && $filters['sourceLanguage'] != '') {
-                $filter .= " AND t.`language_id-source`= (SELECT id FROM Languages WHERE code=\'".
-                            $filters['sourceLanguage']."\')";
+                $sourceLanguage = $filters['sourceLanguage'];
             }
             if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
-                $filter .= " AND t.`language_id-target`= (SELECT id FROM Languages WHERE code=\'".
-                            $filters['targetLanguage']."\')";
+                $targetLanguage = $filters['targetLanguage'];
             }
-
+            
             $dao = new TaskDao();
-            $data = $dao->getUserTopTasks($userId, $strict, $limit, $offset, $filter);
+            $data = $dao->getUserTopTasks($userId, $strict, $limit, $offset, $taskType, $sourceLanguage, $targetLanguage);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTopTasks',  "Middleware::isloggedIn");
         
@@ -595,6 +599,8 @@ class Users {
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'UserPersonalInformation');
             $data = UserDao::updatePersonalInfo($data);
+            
+            error_log('>>'.$data);
 
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'updateUserPersonalInfo', 'Middleware::authUserOwnsResource');
