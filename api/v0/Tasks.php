@@ -35,7 +35,7 @@ class Tasks {
             $client = new APIHelper($format);
             $data = $client->deserialize($data, "Task");
             Dispatcher::sendResponce(null, TaskDao::create($data), null, $format);
-        }, 'createTask', 'Middleware::authenticateUserCreateOrgTask');
+        }, 'createTask');
         
         //
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/',
@@ -50,7 +50,7 @@ class Tasks {
             $client = new APIHelper($format);
             $data = $client->deserialize($data, "Task");
             Dispatcher::sendResponce(null, TaskDao::save($data), null, $format);
-        }, 'updateTask', 'Middleware::authenticateUserForOrgTask');
+        }, 'updateTask');
         
 		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:taskId/',
@@ -62,7 +62,7 @@ class Tasks {
                 $taskId = $taskId[0];
             }
             Dispatcher::sendResponce(null, TaskDao::delete($taskId), null, $format);
-        }, 'deleteTask', 'Middleware::authenticateUserForOrgTask');
+        }, 'deleteTask');
 		
 		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/prerequisites(:format)/',
@@ -80,7 +80,7 @@ class Tasks {
             }
             
             Dispatcher::sendResponce(null, Upload::addTaskPreReq($taskId, $preReqId), null, $format);
-        }, 'addTaskPreReq', 'Middleware::authenticateUserForOrgTask');
+        }, 'addTaskPreReq');
 		
 		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:taskId/prerequisites/:preReqId/',
@@ -103,7 +103,7 @@ class Tasks {
                 $userId = $userId[0];
             }
             Dispatcher::sendResponce(null, TaskDao::moveToArchiveByID($taskId, $userId), null, $format);
-        }, 'archiveTask', 'Middleware::authenticateUserForOrgTask');
+        }, 'archiveTask');
         
 		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/topTasks(:format)/',
@@ -229,7 +229,7 @@ class Tasks {
             }
             Dispatcher::sendResponce(null, null, HttpStatusEnum::CREATED);
             
-        }, 'saveTaskFile', 'Middleware::authUserOrOrgForClaimedTask');
+        }, 'saveTaskFile');
         
         //
          Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/uploadOutputFile/:taskId/:userId/',
@@ -250,7 +250,7 @@ class Tasks {
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
             TaskDao::uploadOutputFile($task, $convert,$data,$userId,$filename);
-        }, 'uploadOutputFile', 'Middleware::authUserOrOrgForClaimedTask');
+        }, 'uploadOutputFile');
         
 		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/version(:format)/',

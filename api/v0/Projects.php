@@ -104,7 +104,7 @@ class Projects
                     $ret = null;
                     $ret = ProjectDao::calculateProjectDeadlines($projectId);
                     Dispatcher::sendResponce(null, $ret, null, $format);
-                }, 'calculateProjectDeadlines', 'Middleware::authenticateUserForOrgProject');
+                }, 'calculateProjectDeadlines');
 		
 		//
         Dispatcher::registerNamed(HTTPMethodEnum::GET, '/v0/projects/:projectId/reviews(:format)/',
