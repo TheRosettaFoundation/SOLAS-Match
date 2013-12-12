@@ -8,6 +8,8 @@
             <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_0)} &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
         </div>
     </section>
+
+    {include file="handle-flash-messages.tpl"}
         
     <section>
             <h1>What now? <small>{Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_WE_NEED_YOUR_TRANSLATION)}</small></h1>
@@ -24,26 +26,19 @@
     </section>
     
     <!--Added to test Pootle connection SIMPLESTRINGS-->
-    <section>
-    	<form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
-    	<p>
-    		<h3>You can also translate this file using a third party tool</h3>
-		</p>
-		<p>
-        	<input type="hidden" name="task_id" value="{$task->getId()}"/>
-            <!--<a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary"> 
-		<i class="icon-share-alt icon-white"></i> Translate via Pootle 
-		</a>-->
-            <button type="submit" value="pootleBtn" name="submit" class="btn btn-primary">
-            	<i class="icon-share-alt icon-white"></i> Translate via Pootle
-            </button>
-    	</p>
+    <div class="well">
+    	<form method="post" action="{urlFor name="task-claimed" options="task_id.$task_id"}" enctype="multipart/form-data">
+            <h3>You can also translate this file using a third party tool</h3>
+            <br />
+    		<p>
+                <button type="submit" value="pootleBtn" name="submit" class="btn btn-primary">
+            	    <i class="icon-share-alt icon-white"></i> Translate via Pootle
+                </button>
+        	</p>
     	</form>
-    </section>
 
-    <section>
         <h3>{Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_4)}</h3>
-        <p></p>
+        <br />
         <p>
             <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_UPLOAD_TRANSLATED_TASK)}
@@ -52,7 +47,7 @@
                 <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation(Strings::COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE)}
             </a>            
         </p>
-    </section>
+    </div>
 
     <p>
         <small>

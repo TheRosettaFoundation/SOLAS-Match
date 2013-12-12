@@ -29,7 +29,7 @@ class TaskRouteHandler
         , array($this, "taskClaim"))->via("POST")->name("task-claim-page");
 
         $app->get("/task/:task_id/claimed/", array($middleware, "authenticateUserForTask")
-        , array($this, "taskClaimed"))->name("task-claimed");
+        , array($this, "taskClaimed"))->via("POST")->name("task-claimed");
 
         $app->get("/task/:task_id/download-file/v/:version/", array($middleware, "authUserForTaskDownload")
         , array($middleware, "authUserForTaskDownload")
@@ -221,12 +221,25 @@ class TaskRouteHandler
         $app->render("task/task.claim.tpl");
     }
 
-    public function taskClaimed($task_id)
+    public function taskClaimed($taskId)
     {
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
 
-        $task = $taskDao->getTask($task_id);
+        $userId = UserSession::getCurrentUserID();
+
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            if ($post['submit'] = 'pootleBtn') {
+                $backlink = $app->urlFor("task", array('task_id' => $taskId));
+                $taskDao->createPootleProject($taskId, $userId, $backlink);
+                $app->flashNow("success", "Successfully created project on pootle. You will receive an email shortly with ".
+                                            "a link to the pootle project");
+
+            }
+        }
+
+        $task = $taskDao->getTask($taskId);
         $app->view()->setData("task", $task);
         $app->render("task/task.claimed.tpl");
     }
@@ -384,49 +397,50 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            try {
-                TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
-                $projectFile = $projectDao->getProjectFileInfo($project->getId());
-                $projectFileMimeType = $projectFile->getMime();
-                $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
-                
-                $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
-                $fileUploadMime = IO::detectMimeType(file_get_contents($_FILES[$fieldName]["tmp_name"]), $_FILES[$fieldName]["name"]);
-
-                if(strcasecmp($fileUploadType,$projectFileType) != 0) {
-                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_3), $projectFileType));
-                } else if($fileUploadMime != $projectFileMimeType) {
-                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_4), $projectFileType, $projectFileType));
-                }
-            } catch (Exception $e) {
-                $errorMessage = $e->getMessage();
-            }
-        
-            if (is_null($errorMessage)) {
-                try {
-                    $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
-                    
-                    if ($post['submit'] == 'XLIFF') {
-                        $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
-                    } else if ($post['submit'] == 'submit') {
-                        $taskDao->uploadOutputFile($taskId, $userId, $filedata);
-                    }
-					/*
-					 * Early test for pootle intergration
-					 */ 
-                    else if ($post['submit'] == 'pootleBtn') {
-                    	$taskDao->pootleTranslate($taskId, $userId);
-                    }
-                
-                } catch (Exception  $e) {
-                    $errorMessage = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_5) . $e->getMessage();
-                }
-            }
-
-            if (is_null($errorMessage)) {
-                $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
+            if ($post['submit'] == 'pootleBtn') {
+                $backlink = $app->urlFor("task", array('task_id' => $taskId));
+                $taskDao->createPootleProject($taskId, $userId, $backlink);
+                $app->flashNow("success", "Successfully created project on pootle. You will receive an email shortly with ".
+                                            "a link to the pootle project");
             } else {
-                $app->flashNow("error", $errorMessage);
+                try {
+                    TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
+                    $projectFile = $projectDao->getProjectFileInfo($project->getId());
+                    $projectFileMimeType = $projectFile->getMime();
+                    $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
+                
+                    $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
+                    $fileUploadMime = IO::detectMimeType(file_get_contents($_FILES[$fieldName]["tmp_name"]), $_FILES[$fieldName]["name"]);
+
+                    if(strcasecmp($fileUploadType,$projectFileType) != 0) {
+                        throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_3), $projectFileType));
+                    } else if($fileUploadMime != $projectFileMimeType) {
+                        throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_4), $projectFileType, $projectFileType));
+                    }
+                } catch (Exception $e) {
+                    $errorMessage = $e->getMessage();
+                }
+        
+                if (is_null($errorMessage)) {
+                    try {
+                        $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
+                    
+                        if ($post['submit'] == 'XLIFF') {
+                            $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
+                        } else if ($post['submit'] == 'submit') {
+                            $taskDao->uploadOutputFile($taskId, $userId, $filedata);
+                        }
+                
+                    } catch (Exception  $e) {
+                        $errorMessage = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_5) . $e->getMessage();
+                    }
+                }
+
+                if (is_null($errorMessage)) {
+                    $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
+                } else {
+                    $app->flashNow("error", $errorMessage);
+                }
             }
         }
 

@@ -227,13 +227,11 @@ class TaskDao extends BaseDao
 	/*
 	 * Early test for Pootle intergration
 	 */
-	public function pootleTranslate($taskId, $userId)
+	public function createPootleProject($taskId, $userId, $backlink)
 	{
-		//$ret = null;
-		$request = "{$this->siteApi}v0/tasks/$taskId/$userId/pootleTranslate";
-		$app = Slim::getInstance();
-		$args = array('backlink' => $url = $app->urlFor("task-simple-upload", array("task_id" => $task_id)));
-		$response = $this->client->call(null, $request, HttpMethodEnum::POST, $args);
+		$request = "{$this->siteApi}v0/tasks/pootleTranslate/$taskId/$userId";
+		$args = array('backlink' => $backlink);
+		$response = $this->client->call(null, $request, HttpMethodEnum::POST, null, $args);
         return $response;
 	}
 }

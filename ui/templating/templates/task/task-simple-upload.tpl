@@ -47,19 +47,13 @@
         {if $type_id == TaskTypeEnum::TRANSLATION}
         
 	        <!--Added to test Pootle connection SIMPLESTRINGS-->
-	        <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
-	        <p>
-	        	<h3>You can also translate this file using a third party tool</h3>
-	        </p>
-	        <p>
-	        <input type="hidden" name="task_id" value="{$task->getId()}"/>
-	            <!--<a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
-	                <i class="icon-share-alt icon-white"></i> Translate via Pootle
-	            </a>-->
-	            <button type="submit" value="pootleBtn" name="submit" class="btn btn-primary">
-	            	<i class="icon-share-alt icon-white"></i> Translate via Pootle
-	            </button>
-	    	</p>
+	        <form method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
+    	        <h3>You can also translate this file using a third party tool</h3>
+	            <p>
+	                <button type="submit" value="pootleBtn" name="submit" class="btn btn-primary">
+	                	<i class="icon-share-alt icon-white"></i> Translate via Pootle
+	                </button>
+    	    	</p>
 	        </form>
         
             <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0)} {$filename}</h3>
