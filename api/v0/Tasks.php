@@ -313,9 +313,69 @@ class Tasks {
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/timeClaimed(:format)/',
                                                         function ($taskId, $format = ".json") {
             
-            $data = TaskDao::getClaimedTime($taskId);
+            $data = TaskDao::getClaimedTime($taskId);			
+			
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getClaimedTime');
+        }, 'getClaimedTime', null);
+		
+		Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/:userId/pootleTranslate(:format)/',
+                                                        function ($taskId, $userId, $format = ".json") {
+            $settings = new Settings();
+			$filedumpLocation = $settings->get("pootlefiles.pootle_directory");
+			
+			$baseUrl = Dispatcher::clenseArgs('backlink', HttpMethodEnum::GET, null);
+			
+			$user = UserDao::getUser($userId);	
+            $tasks = TaskDao::getTask($taskId);
+			$sourceLocale = $tasks[0]->getSourceLocale();
+        	$targetLocale = $tasks[0]->getTargetLocale();
+			$projects = ProjectDao::getProject($tasks[0]->getProjectId());
+			$fileVersion = TaskDao::getLatestFileVersion($taskId);
+			
+			$task_file_info = TaskDao::getTaskFileInfo($taskId);
+			$fileInfo = Upload::absoluteFilePathForUpload($tasks[0], $fileVersion, $task_file_info['filename']);
+			
+			$targetCode = $targetLocale->getLanguageCode().'_'.$targetLocale->getCountryCode();
+			$targetName = $targetLocale->getLanguageName().' ('.$targetLocale->getCountryName().')';
+			
+			$sourceCode = $sourceLocale->getLanguageCode().'_'.$sourceLocale->getCountryCode();
+			$sourceName = $sourceLocale->getLanguageName().' ('.$sourceLocale->getCountryName().')';
+			
+			
+			//FileLocation /home/redray/workspace/solas-match/uploads/proj-{Project Id}/task-{Task Id}/v-{Version Number}/<Filename>
+			$result[] = array(	'title' => $tasks[0]->getTitle(), 
+								'target_code' => $targetCode, 
+								'target_name' => $targetName, 
+								'source_code' => $sourceCode, 
+								'source_name' => $sourceName, 
+								'assignee_id' => $user[0]->getEmail(), 
+								//'backlink' => "something/something/something/task/$taskId/simple-upload",
+								'backlink' => $baseUrl,
+								//'fileInfo' => $fileInfo,
+								'description' => $projects[0]->getDescription(), 
+								'task_id' => $taskId,
+								'translation_filename' => $task_file_info['filename']);
+			
+			$json_String = json_encode($result);
+			
+			$old_path = getcwd();
+			
+			//chdir($filedumpLocation);
+			$cmd = "mkdir -m 777 -p {$filedumpLocation}Pootle/task-{$taskId}/";
+			$output = shell_exec($cmd);
+			
+			//chdir("{$filedumpLocation}Pootle/task-{$taskId}");
+			$cmd = "cp $fileInfo {$filedumpLocation}Pootle/task-{$taskId}";
+			$output = shell_exec($cmd);
+			//$filename = 'task'.$taskId.'.json';
+			$filename = 'meta.json';
+			$fp = fopen("{$filedumpLocation}Pootle/task-{$taskId}/".$filename, 'w+');
+			fwrite($fp, $json_String);
+			fclose($fp);
+			//chdir($old_path);
+			
+            Dispatcher::sendResponce(null, $json_String, null, $format);
+        }, 'pootleTranslate', null);
     }
 }
 Tasks::init();

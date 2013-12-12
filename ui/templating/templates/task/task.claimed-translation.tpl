@@ -22,6 +22,24 @@
             <p>{Localisation::getTranslation(Strings::COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO)} <strong>{$user->getEmail()}</strong>.</p>
         {/if}
     </section>
+    
+    <!--Added to test Pootle connection SIMPLESTRINGS-->
+    <section>
+    	<form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
+    	<p>
+    		<h3>You can also translate this file using a third party tool</h3>
+		</p>
+		<p>
+        	<input type="hidden" name="task_id" value="{$task->getId()}"/>
+            <!--<a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary"> 
+		<i class="icon-share-alt icon-white"></i> Translate via Pootle 
+		</a>-->
+            <button type="submit" value="pootleBtn" name="submit" class="btn btn-primary">
+            	<i class="icon-share-alt icon-white"></i> Translate via Pootle
+            </button>
+    	</p>
+    	</form>
+    </section>
 
     <section>
         <h3>{Localisation::getTranslation(Strings::TASK_CLAIMED_TRANSLATION_4)}</h3>
@@ -32,7 +50,7 @@
             </a>
             <a href="{urlFor name="home"}" class="btn">
                 <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation(Strings::COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE)}
-            </a>
+            </a>            
         </p>
     </section>
 

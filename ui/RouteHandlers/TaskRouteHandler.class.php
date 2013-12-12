@@ -76,6 +76,8 @@ class TaskRouteHandler
         
         $app->get(Settings::get("site.api"), array($middleware, "authUserForOrgTask"))->name("api");
     }
+    
+	
 
     public function archivedTasks($page_no)
     {
@@ -408,6 +410,12 @@ class TaskRouteHandler
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
                     } else if ($post['submit'] == 'submit') {
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata);
+                    }
+					/*
+					 * Early test for pootle intergration
+					 */ 
+                    else if ($post['submit'] == 'pootleBtn') {
+                    	$taskDao->pootleTranslate($taskId, $userId);
                     }
                 
                 } catch (Exception  $e) {

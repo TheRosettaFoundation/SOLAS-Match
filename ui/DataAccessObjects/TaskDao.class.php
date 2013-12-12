@@ -222,4 +222,18 @@ class TaskDao extends BaseDao
         $ret = $this->client->call(null, $request);
         return $ret;
     }
+	
+	
+	/*
+	 * Early test for Pootle intergration
+	 */
+	public function pootleTranslate($taskId, $userId)
+	{
+		//$ret = null;
+		$request = "{$this->siteApi}v0/tasks/$taskId/$userId/pootleTranslate";
+		$app = Slim::getInstance();
+		$args = array('backlink' => $url = $app->urlFor("task-simple-upload", array("task_id" => $task_id)));
+		$response = $this->client->call(null, $request, HttpMethodEnum::POST, $args);
+        return $response;
+	}
 }
