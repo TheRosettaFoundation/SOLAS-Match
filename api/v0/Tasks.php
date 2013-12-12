@@ -318,22 +318,32 @@ class Tasks {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getClaimedTime', null);
 		
-		Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/:userId/pootleTranslate(:format)/',
+		Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/pootleTranslate/:taskId/:userId(:format)/',
                                                         function ($taskId, $userId, $format = ".json") {
+                                                        	
+			if (!is_numeric($userId) && strstr($userId, '.')) {
+                $userId = explode('.', $userId);
+                $format = '.'.$userId[1];
+                $userId = $userId[0];
+            }
             $settings = new Settings();
-			$filedumpLocation = $settings->get("pootlefiles.pootle_directory");
+			$pootleLocation = $settings->get("pootlefiles.pootle_directory");
+			$tempLocation = $settings->get("pootlefiles.temp_directory");
 			
 			$baseUrl = Dispatcher::clenseArgs('backlink', HttpMethodEnum::GET, null);
 			
-			$user = UserDao::getUser($userId);	
+			$users = UserDao::getUser($userId);	
+			$user = $users[0];
             $tasks = TaskDao::getTask($taskId);
-			$sourceLocale = $tasks[0]->getSourceLocale();
-        	$targetLocale = $tasks[0]->getTargetLocale();
-			$projects = ProjectDao::getProject($tasks[0]->getProjectId());
+			$task = $tasks[0];
+			$sourceLocale = $task->getSourceLocale();
+        	$targetLocale = $task->getTargetLocale();
+			$projects = ProjectDao::getProject($task->getProjectId());
+			$project = $projects[0];
 			$fileVersion = TaskDao::getLatestFileVersion($taskId);
 			
 			$task_file_info = TaskDao::getTaskFileInfo($taskId);
-			$fileInfo = Upload::absoluteFilePathForUpload($tasks[0], $fileVersion, $task_file_info['filename']);
+			$fileInfo = Upload::absoluteFilePathForUpload($task, $fileVersion, $task_file_info['filename']);
 			
 			$targetCode = $targetLocale->getLanguageCode().'_'.$targetLocale->getCountryCode();
 			$targetName = $targetLocale->getLanguageName().' ('.$targetLocale->getCountryName().')';
@@ -343,16 +353,16 @@ class Tasks {
 			
 			
 			//FileLocation /home/redray/workspace/solas-match/uploads/proj-{Project Id}/task-{Task Id}/v-{Version Number}/<Filename>
-			$result[] = array(	'title' => $tasks[0]->getTitle(), 
+			$result[] = array(	'title' => $task->getTitle(), 
 								'target_code' => $targetCode, 
 								'target_name' => $targetName, 
 								'source_code' => $sourceCode, 
 								'source_name' => $sourceName, 
-								'assignee_id' => $user[0]->getEmail(), 
+								'assignee_id' => $user->getEmail(), 
 								//'backlink' => "something/something/something/task/$taskId/simple-upload",
 								'backlink' => $baseUrl,
 								//'fileInfo' => $fileInfo,
-								'description' => $projects[0]->getDescription(), 
+								'description' => $project->getDescription(), 
 								'task_id' => $taskId,
 								'translation_filename' => $task_file_info['filename']);
 			
@@ -361,18 +371,21 @@ class Tasks {
 			$old_path = getcwd();
 			
 			//chdir($filedumpLocation);
-			$cmd = "mkdir -m 777 -p {$filedumpLocation}Pootle/task-{$taskId}/";
+			$cmd = "mkdir -m 777 -p {$tempLocation}/task-{$taskId}/";
 			$output = shell_exec($cmd);
 			
 			//chdir("{$filedumpLocation}Pootle/task-{$taskId}");
-			$cmd = "cp $fileInfo {$filedumpLocation}Pootle/task-{$taskId}";
+			$cmd = "cp $fileInfo {$tempLocation}/task-{$taskId}";
 			$output = shell_exec($cmd);
 			//$filename = 'task'.$taskId.'.json';
 			$filename = 'meta.json';
-			$fp = fopen("{$filedumpLocation}Pootle/task-{$taskId}/".$filename, 'w+');
+			$fp = fopen("{$tempLocation}/task-{$taskId}/".$filename, 'w+');
 			fwrite($fp, $json_String);
 			fclose($fp);
 			//chdir($old_path);
+			
+			$cmd = "mv {$tempLocation}/task-{$taskId} {$pootleLocation}";
+			$output = shell_exec($cmd);
 			
             Dispatcher::sendResponce(null, $json_String, null, $format);
         }, 'pootleTranslate', null);
