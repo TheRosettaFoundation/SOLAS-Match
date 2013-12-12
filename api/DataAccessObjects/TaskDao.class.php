@@ -331,6 +331,30 @@ class TaskDao
         return $ret;
     }
 
+    public static function addTaskBadgeRestriction($taskId, $badgeId)
+    {
+        $args = PDOWrapper::cleanseNull($taskId).", ".
+                PDOWrapper::cleanseNull($badgeId);
+
+        $ret = null;
+        if ($result = PDOWrapper::call('addTaskBadgeRestriction', $args)) {
+            $ret = $result[0]['result'];
+        }
+        return $ret;
+    }
+
+    public static function removeTaskBadgeRestriction($taskId, $badgeId)
+    {
+        $args = PDOWrapper::cleanseNull($taskId).', '.
+                PDOWrapper::cleanseNull($badgeId);
+
+        $ret = null;
+        if ($result = PDOWrapper:call('removeTaskBadgeRestriction', $args)) {
+            $ret = $result[0]['result'];
+        }
+        return $ret;
+    }
+
     public static function addTaskPreReq($taskId, $preReqId)
     {
         $args = PDOWrapper::cleanseNull($taskId)

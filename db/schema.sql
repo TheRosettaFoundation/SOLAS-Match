@@ -2158,6 +2158,19 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure debug-test3.getTaskBadgeRestrictions
+DROP PROCEDURE IF EXISTS `getTaskBadgeRestrictions`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskBadgeRestrictions`(IN `taskId` INT)
+BEGIN
+    SELECT b.id, b.owner_id, b.title, b.description
+        FROM Badges b JOIN TaskBadgeRestrictions r
+        ON b.id = r.badge_id
+        WHERE r.task_id = taskId;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure debug-test3.getTaskClaimedTime
 DROP PROCEDURE IF EXISTS `getTaskClaimedTime`;
 DELIMITER //
@@ -2336,6 +2349,23 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Test.getTaskWithBadgeRestriction
+DROP PROCEDURE IF EXISTS `getTaskWithBadgeRestriction`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskWithBadgeRestriction`(IN badgeId INT)
+BEGIN
+    SELECT t.id, t.project_id, t.title, t.`word-count`,
+        (SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-source`) as `language_id-source`,
+        (SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-target`) as `language_id-target`,
+        (SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-source`) as `country_id-source`,
+        (SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-target`)as `country_id-target`,
+        t.`created-time`, t.deadline, t.`comment`, t.`task-type_id`, t.`task-status_id`, t.published
+        WHERE t.id = (SELECT task_id
+                        FROM TaskBadgeRestrictions
+                        WHERE badge_id = badgeId);
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getTopTags
 DROP PROCEDURE IF EXISTS `getTopTags`;
