@@ -310,7 +310,7 @@ class Tasks {
         }, 'getUserClaimedTask');
         
 		//
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/timeClaimed(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/:taskId/timeClaimed(:format)/',
                                                         function ($taskId, $format = ".json") {
             
             $data = TaskDao::getClaimedTime($taskId);			
