@@ -371,20 +371,23 @@ class Tasks {
 			$old_path = getcwd();
 			
 			//chdir($filedumpLocation);
-			$cmd = "mkdir -m 777 -p {$tempLocation}/task-{$taskId}/";
+			$cmd = "mkdir -m 777 -p {$tempLocation}task-{$taskId}/";
+			$cmd = escapeshellcmd($cmd);
 			$output = shell_exec($cmd);
 			
 			//chdir("{$filedumpLocation}Pootle/task-{$taskId}");
-			$cmd = "cp $fileInfo {$tempLocation}/task-{$taskId}";
+			$cmd = "cp $fileInfo {$tempLocation}task-{$taskId}";
+			$cmd = escapeshellcmd($cmd);
 			$output = shell_exec($cmd);
 			//$filename = 'task'.$taskId.'.json';
 			$filename = 'meta.json';
-			$fp = fopen("{$tempLocation}/task-{$taskId}/".$filename, 'w+');
+			$fp = fopen(escapeshellcmd("{$tempLocation}task-{$taskId}/$filename"), 'w+');
 			fwrite($fp, $json_String);
 			fclose($fp);
 			//chdir($old_path);
 			
-			$cmd = "mv {$tempLocation}/task-{$taskId} {$pootleLocation}";
+			$cmd = "mv {$tempLocation}task-{$taskId} {$pootleLocation}";
+			$cmd = escapeshellcmd($cmd);
 			$output = shell_exec($cmd);
 			
             Dispatcher::sendResponce(null, $json_String, null, $format);
