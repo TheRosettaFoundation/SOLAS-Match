@@ -310,7 +310,7 @@ class Tasks {
         }, 'getUserClaimedTask');
         
 		//
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/:taskId/timeClaimed(:format)/',
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/timeClaimed(:format)/',
                                                         function ($taskId, $format = ".json") {
             
             $data = TaskDao::getClaimedTime($taskId);			
@@ -318,7 +318,7 @@ class Tasks {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getClaimedTime', null);
 		
-		Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/pootleTranslate/:taskId/:userId(:format)/',
+		Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks/pootleTranslate/:taskId/:userId(:format)/',
                                                         function ($taskId, $userId, $format = ".json") {
                                                         	
 			if (!is_numeric($userId) && strstr($userId, '.')) {
