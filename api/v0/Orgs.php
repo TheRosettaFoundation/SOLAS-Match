@@ -10,7 +10,8 @@ require_once __DIR__."/../DataAccessObjects/OrganisationDao.class.php";
 require_once __DIR__."/../DataAccessObjects/BadgeDao.class.php";
 require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 
-class Orgs {
+class Orgs 
+{
     
     public static function init()
     {
@@ -18,62 +19,100 @@ class Orgs {
             Dispatcher::sendResponce(null, OrganisationDao::getOrg(), null, $format);
         }, 'getOrgs');        
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs(:format)/', function ($format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs(:format)/', 
+        function ($format = ".json") 
+        {
 
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Organisation");
             $data->setId(null);
             $org = OrganisationDao::insertAndUpdate($data);
+			$user = UserDao::getLoggedInUser();
+//			if(is_null($org) || $org->getId() <= 0)
+//			{
+//				if(!is_numeric($org->getId()))
+//				{
+//					OrganisationDao::delete($org->getId());
+//				}
+//			}
+			if (!is_null($org) && $org->getId() > 0) 
+			{
+				OrganisationDao::acceptMemRequest($org->getId(), $user->getId());
+                AdminDao::addOrgAdmin($user->getId(), $org->getId());
+                if(!AdminDao::isAdmin($user->getId(), $org->getId()))
+                {
+                	OrganisationDao::delete($org->getId());
+                }	
+            }					
             Dispatcher::sendResponce(null, $org, null, $format);
-            if ($org->getId() > 0) {
+            if (!is_null($org) && $org->getId() > 0) {
                 Notify::sendOrgCreatedNotifications($org->getId());
             }
-        }, 'createOrg');
+        }
+        , 'createOrg', 'Middleware::isloggedIn');
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/', function ($id, $format = ".json") {
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+        
+        /*
+		 * 
+		 * 	Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/admins/createOrgAdmin/:orgId/:userId/',
+                                                        function ($orgId, $userId, $format = '.json') {            
+            if (!is_numeric($userId) && strstr($userId, '.')) {
+                 $userId = explode('.', $userId);
+                 $format = '.'.$userId[1];
+                 $userId = $userId[0];
+            }
+            AdminDao::addOrgAdmin($userId, $orgId);
+            Dispatcher::sendResponce(null, null, null, $format);
+        }, 'createOrgAdmin', 'Middleware::authenticateOrgAdmin');
+		 * 
+		 * 
+		 * 
+		 */
+        
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:orgId/', function ($orgId, $format = ".json") {
+            if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                $orgId = explode('.', $orgId);
+                $format = '.'.$orgId[1];
+                $orgId = $orgId[0];
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Organisation");
-            $data->setId($id);
+            $data->setId($orgId);
 //            $data = $client->cast("Organisation", $data);
             Dispatcher::sendResponce(null, OrganisationDao::insertAndUpdate($data), null, $format);
-        }, 'updateOrg');
+        }, 'updateOrg', 'Middleware::authenticateOrgAdmin');
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:id/', function ($id, $format = ".json"){
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:orgId/', function ($orgId, $format = ".json"){
+            if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                $orgId = explode('.', $orgId);
+                $format = '.'.$orgId[1];
+                $orgId = $orgId[0];
             }
-            Dispatcher::sendResponce(null, OrganisationDao::delete($id), null, $format);
-        }, 'deleteOrg');
+            Dispatcher::sendResponce(null, OrganisationDao::delete($orgId), null, $format);
+        }, 'deleteOrg', 'Middleware::authenticateOrgAdmin');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/', function ($id, $format = ".json"){
-            if (!is_numeric($id)&& strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:orgId/', function ($orgId, $format = ".json"){
+            if (!is_numeric($orgId)&& strstr($orgId, '.')) {
+                $orgId = explode('.', $orgId);
+                $format = '.'.$orgId[1];
+                $orgId = $orgId[0];
             }
-            $data = OrganisationDao::getOrg($id);
+            $data = OrganisationDao::getOrg($orgId);
             if (is_array($data)) {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getOrg',null);
+        }, 'getOrg');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/isMember/:orgID/:id/', function ($orgID,$id, $format = ".json"){
-            if (!is_numeric($id)&& strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/isMember/:orgId/:userId/', function ($orgId,$userId , $format = ".json"){
+            if (!is_numeric($userId)&& strstr($userId, '.')) {
+                $userId = explode('.', $userId);
+                $format = '.'.$userId[1];
+                $userId = $userId[0];
             }
-            $data = OrganisationDao::isMember($orgID, $id);
+            $data = OrganisationDao::isMember($orgId, $userId);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'isMember');
         
@@ -121,76 +160,74 @@ class Orgs {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'searchByName');
 
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/projects(:format)/',
-            function ($id, $format = '.json'){
-                Dispatcher::sendResponce(null, ProjectDao::getProject(null,null,null,null,null,$id), null, $format);
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:orgId/projects(:format)/',
+            function ($orgId, $format = '.json'){
+                Dispatcher::sendResponce(null, ProjectDao::getProject(null,null,null,null,null,$orgId), null, $format);
             }, 'getOrgProjects');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects(:format)/',
-            function ($id, $format = '.json'){
-                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(null,$id), null, $format);
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:orgId/archivedProjects(:format)/',
+            function ($orgId, $format = '.json'){
+                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(null,$orgId), null, $format);
             }, 'getOrgArchivedProjects');
             
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects/:projectID/',
-            function ($id,$projectID, $format = '.json'){
-                if (!is_numeric($projectID) && strstr($projectID, '.')) {
-                    $projectID = explode('.', $projectID);
-                    $format = '.'.$projectID[1];
-                    $projectID = $projectID[0];
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:orgId/archivedProjects/:projectId/',
+            function ($orgId,$projectId, $format = '.json'){
+                if (!is_numeric($projectId) && strstr($projectId, '.')) {
+                    $projectId = explode('.', $projectId);
+                    $format = '.'.$projectId[1];
+                    $projectId = $projectId[0];
                 }
-                $data=ProjectDao::getArchivedProject($projectID,$id);
+                $data=ProjectDao::getArchivedProject($projectId,$orgId);
                 Dispatcher::sendResponce(null,$data[0] , null, $format);
             }, 'getOrgArchivedProject');
             
             
-         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/archivedProjects/:projectID/tasks(:format)/',
-            function ($id,$projectID, $format = '.json'){
+         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:orgId/archivedProjects/:projectId/tasks(:format)/',
+            function ($orgId,$projectId, $format = '.json'){
                 Dispatcher::sendResponce(null,ProjectDao::getArchivedTask($projectId), null, $format);
             }, 'getOrgArchivedProjectTasks');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/badges(:format)/',
-                                                        function ($id, $format= ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:orgId/badges(:format)/',
+                                                        function ($orgId, $format= ".json") {
             
-            Dispatcher::sendResponce(null, BadgeDao::getOrgBadges($id), null, $format);
+            Dispatcher::sendResponce(null, BadgeDao::getOrgBadges($orgId), null, $format);
         }, 'getOrgBadges');    
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/members(:format)/',
-                                                        function ($id, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:orgId/members(:format)/',
+                                                        function ($orgId, $format = ".json") {
             
-            Dispatcher::sendResponce(null, OrganisationDao::getOrgMembers($id), null, $format);
+            Dispatcher::sendResponce(null, OrganisationDao::getOrgMembers($orgId), null, $format);
         }, 'getOrgMembers');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:id/requests(:format)/',
-                                                        function ($id, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/:orgId/requests(:format)/',
+                                                        function ($orgId, $format = ".json") {
             
-            Dispatcher::sendResponce(null, OrganisationDao::getMembershipRequests($id), null, $format);
+            Dispatcher::sendResponce(null, OrganisationDao::getMembershipRequests($orgId), null, $format);
         }, 'getMembershipRequests');
         
-        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs/:id/requests/:uid/',
-                                                        function ($id, $uid, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/orgs/:orgId/requests/:uid/',
+                                                        function ($orgId, $uid, $format = ".json") {
             
             if (!is_numeric($uid) && strstr($uid, '.')) {
                 $uid = explode('.', $uid);
                 $format = '.'.$uid[1];
                 $uid = $uid[0];
             }
-            Dispatcher::sendResponce(null, OrganisationDao::requestMembership($uid, $id), null, $format);
+            Dispatcher::sendResponce(null, OrganisationDao::requestMembership($uid, $orgId), null, $format);
         }, 'createMembershipRequests');
         
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:id/requests/:uid/',
-                                                        function ($id, $uid, $format = ".json") {
-            
-            if (!is_numeric($uid)&& strstr($uid, '.')) {
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:orgId/requests/:uid/',
+                                                        function ($orgId, $uid, $format = ".json") {
+ 	            	
+ 	        if (!is_numeric($uid)&& strstr($uid, '.')) {
                 $uid = explode('.', $uid);
                 $format = '.'.$uid[1];
                 $uid = $uid[0];
             }
             
-            Dispatcher::sendResponce(null, OrganisationDao::acceptMemRequest($id, $uid), null, $format);
-            
-            Notify::notifyUserOrgMembershipRequest($uid, $id, true);
-
-        }, 'acceptMembershipRequests');
+            Dispatcher::sendResponce(null, OrganisationDao::acceptMemRequest($orgId, $uid), null, $format);
+			Notify::notifyUserOrgMembershipRequest($uid, $orgId, true);
+        }, 'acceptMembershipRequests', 'Middleware::authenticateOrgMember');
 
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/addMember/:email/:orgId/',
                 function ($email, $orgId, $format = ".json")
@@ -207,10 +244,10 @@ class Orgs {
                         $ret = OrganisationDao::acceptMemRequest($orgId, $user->getId());
                     }
                     Dispatcher::sendResponce(null, $ret, null, $format);
-                }, 'addMember', null);      // Add middleware to authenticate the logged in user for the org
+                }, 'addMember', 'Middleware::authenticateOrgMember');      // Add middleware to authenticate the logged in user for the org
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:id/requests/:uid/',
-                                                        function ($id, $uid, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/orgs/:orgId/requests/:uid/',
+                                                        function ($orgId, $uid, $format = ".json") {
             
             if (!is_numeric($uid) && strstr($uid, '.')) {
                 $uid = explode('.', $uid);
@@ -218,12 +255,12 @@ class Orgs {
                 $uid = $uid[0];
             }
 //            Notify::notifyUserOrgMembershipRequest($uid, $id, false); always put after failure to send notification should not break the site.
-            Dispatcher::sendResponce(null, OrganisationDao::refuseMemRequest($id, $uid), null, $format);
-            Notify::notifyUserOrgMembershipRequest($uid, $id, false);
-        }, 'rejectMembershipRequests');
+            Dispatcher::sendResponce(null, OrganisationDao::refuseMemRequest($orgId, $uid), null, $format);
+            Notify::notifyUserOrgMembershipRequest($uid, $orgId, false);
+        }, 'rejectMembershipRequests', 'Middleware::authenticateOrgMember');
        
-   
     }
 }
+
 Orgs::init();
 

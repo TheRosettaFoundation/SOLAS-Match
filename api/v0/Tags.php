@@ -12,6 +12,7 @@ class Tags {
     
     public static function init()
     {
+    	//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags(:format)/',
                                                         function ($format = ".json") {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 20);
@@ -25,6 +26,7 @@ class Tags {
             }
         }, 'getTags',null);
         
+		//
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tags(:format)/',
                                                         function ($format = ".json") {
             $data = Dispatcher::getDispatcher()->request()->getBody();
@@ -33,20 +35,21 @@ class Tags {
 //            $client->cast("Tag", $data);
             $data->setId(null);
             Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
-        }, 'createTag');
+        }, 'createTag', 'Middleware::authenticateUserForOrgTask');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/getByLabel/:label/',
-                                                        function ($label, $format = ".json") {
+		//
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/getByLabel/:tagLabel/',
+                                                        function ($tagLabel, $format = ".json") {
             
-            if (!is_numeric($label) && strstr($label, '.')) {
+            if (!is_numeric($tagLabel) && strstr($tagLabel, '.')) {
                 $temp = array();
-                $temp = explode('.', $label);
+                $temp = explode('.', $tagLabel);
                 $lastIndex = sizeof($temp)-1;
                 if ($lastIndex > 0) {
                     $format = '.'.$temp[$lastIndex];
-                    $label = $temp[0];
+                    $tagLabel = $temp[0];
                     for ($i = 1; $i < $lastIndex; $i++) {
-                        $label = "{$label}.{$temp[$i]}";
+                        $tagLabel = "{$tagLabel}.{$temp[$i]}";
                     }
                 }
             }
@@ -56,25 +59,27 @@ class Tags {
             }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTagByLabel',null);
-
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/search/:name/',
-                function ($name, $format = '.json') {
-                    if (!is_numeric($name) && strstr($name, '.')) {
+		
+		//
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/search/:tagName/',
+                function ($tagName, $format = '.json') {
+                    if (!is_numeric($tagName) && strstr($tagName, '.')) {
                         $temp = array();
-                        $temp = explode('.', $name);
+                        $temp = explode('.', $tagName);
                         $lastIndex = sizeof($temp)-1;
                         if ($lastIndex > 0) {
                             $format = '.'.$temp[$lastIndex];
-                            $name = $temp[0];
+                            $tagName = $temp[0];
                             for ($i = 1; $i < $lastIndex; $i++) {
-                                $name = "{$name}.{$temp[$i]}";
+                                $tagName = "{$tagName}.{$temp[$i]}";
                             }
                         }
                     }
-                    $ret = TagsDao::searchForTag($name);
+                    $ret = TagsDao::searchForTag($tagName);
                     Dispatcher::sendResponce(null, $ret, null, $format);
-                }, 'searchForTag');
+                }, 'searchForTag', null);
         
+		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/topTags(:format)/',
                                                         function ($format = ".json") {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 30);
@@ -82,29 +87,29 @@ class Tags {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getTopTags',null);
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:id/', 
-                                                        function ($id, $format = ".json") {
+		//
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:tagId/', 
+                                                        function ($tagId, $format = ".json") {
             
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+            if (!is_numeric($tagId) && strstr($tagId, '.')) {
+                $tagId = explode('.', $tagId);
+                $format = '.'.$tagId[1];
+                $tagId = $tagId[0];
             }
-            $data = TagsDao::getTag($id);
+            $data = TagsDao::getTag($tagId);
             if (is_array($data)) {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getTag');
+        }, 'getTag', null);
         
-        
-        
-        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tags/:id/',
-                                                        function ($id, $format = ".json") {
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+        //
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tags/:tagId/',
+                                                        function ($tagId, $format = ".json") {
+            if (!is_numeric($tagId) && strstr($tagId, '.')) {
+                $tagId = explode('.', $tagId);
+                $format = '.'.$tagId[1];
+                $tagId = $tagId[0];
             }
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
@@ -113,20 +118,22 @@ class Tags {
             Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
         }, 'updateTag');
         
-        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tags/:id/',
-                                                            function ($id, $format = ".json") {
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+		//
+        Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tags/:tagId/',
+                                                            function ($tagId, $format = ".json") {
+            if (!is_numeric($tagId) && strstr($tagId, '.')) {
+                $tagId = explode('.', $tagId);
+                $format = '.'.$tagId[1];
+                $tagId = $tagId[0];
             }
-            Dispatcher::sendResponce(null, TagsDao::delete($id), null, $format);
-        }, 'deleteTag');
+            Dispatcher::sendResponce(null, TagsDao::delete($tagId), null, $format);
+        }, 'deleteTag', 'Middleware::authenticateSiteAdmin');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:id/tasks(:format)/',
-                                                        function ($id, $format=".json") {
+		//
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tags/:tagId/tasks(:format)/',
+                                                        function ($tagId, $format=".json") {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
-            Dispatcher::sendResponce(null, TaskDao::getTasksWithTag($id, $limit), null, $format);
+            Dispatcher::sendResponce(null, TaskDao::getTasksWithTag($tagId, $limit), null, $format);
         }, 'getTaskForTag');
     }
 }

@@ -18,15 +18,15 @@ class Countries {
             Dispatcher::sendResponce(null, Languages::getCountryList(), null, $format);
         }, 'getCountries');
         
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/countries/:id/',
-                                                        function ($id, $format = ".json") {
+        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/countries/:countryId/',
+                                                        function ($countryId, $format = ".json") {
             
-            if (!is_numeric($id) && strstr($id, '.')) {
-                $id = explode('.', $id);
-                $format = '.'.$id[1];
-                $id = $id[0];
+            if (!is_numeric($countryId) && strstr($countryId, '.')) {
+                $countryId = explode('.', $countryId);
+                $format = '.'.$countryId[1];
+                $countryId = $countryId[0];
             }
-            $data = Languages::getCountry($id, null, null);
+            $data = Languages::getCountry($countryId, null, null);
             if (is_array($data) && is_array($data[0])) {
                 $data = $data[0];
             }

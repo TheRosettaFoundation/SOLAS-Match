@@ -1362,18 +1362,17 @@ BEGIN
 
 	IF orgId = '' THEN SET orgId = NULL; END IF;	
 	
-	set @q= "SELECT u.id,u.`display-name`,u.email,u.password,u.biography, (SELECT `en-name` FROM Languages WHERE id =u.`language_id`) AS `languageName`, (SELECT code FROM Languages WHERE id =u.`language_id`) AS `languageCode`, (SELECT `en-name` FROM Countries WHERE id =u.`country_id`) AS `countryName`, (SELECT code FROM Countries WHERE id =u.`country_id`) AS `countryCode`, u.nonce,u.`created-time` FROM Users u JOIN Admins a ON a.user_id = u.id WHERE 1";
-	
-	IF orgId IS NOT NULL THEN	
-		SET @q = CONCAT(@q, " AND a.organisation_id =", orgId);	
-	ELSE
-		SET @q = CONCAT(@q, " AND a.organisation_id IS NULL");
-	END IF;
+	SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+            (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
+            (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
+            (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
+            (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
+            u.nonce,u.`created-time` 
 
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
-END//
+        FROM Users u JOIN Admins a ON a.user_id = u.id 
+        
+        WHERE (a.organisation_id is null or a.organisation_id = orgId);
+END //
 DELIMITER ;
 
 
@@ -1398,13 +1397,25 @@ BEGIN
     if cCode='' then set cCode=null;end if;
     set @lID=null;
     set @cID=null;
-SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, (select code from Languages where id =p.language_id) as language_id, (select code from Countries where id =p.country_id) as country_id, m.`archived-date`, m.`user_id-archived` 
-FROM ArchivedProjects p JOIN ArchivedProjectsMetadata m ON p.id=m.archivedProject_id 
-WHERE (p.id= projectId or projectId is null) and (p.title=titleText or titleText is null) and (p.description= descr or descr is null) and (p.impact=imp or imp is null)
-and (p.deadline=deadlineTime or deadlineTime is null or deadlineTime='0000-00-00 00:00:00') and (p.organisation_id=orgId or orgId is null) and (p.reference=ref or ref is null)
-and (p.`word-count`=wordCount or wordCount is null) and (p.created = createdTime or createdTime is null) and (p.language_id=@lID or @lID is null) and (p.country_id = @cID or @cID is null)
-and (m.`archived-date`=archiveDate or archiveDate is null or archiveDate='0000-00-00 00:00:00') and (m.`user_id-archived`= archiverId or archiverId is null)
-;
+
+    SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, 
+        (select code from Languages l where l.id = p.language_id) as language_id, 
+        (select code from Countries c where c.id = p.country_id) as country_id, 
+        m.`archived-date`, m.`user_id-archived` 
+
+    FROM ArchivedProjects p JOIN ArchivedProjectsMetadata m ON p.id = m.archivedProject_id 
+
+    WHERE (p.id= projectId or projectId is null) 
+        and (p.title=titleText or titleText is null) 
+        and (p.description= descr or descr is null) 
+        and (p.impact=imp or imp is null)
+        and (p.deadline=deadlineTime or deadlineTime is null or deadlineTime='0000-00-00 00:00:00') 
+        and (p.organisation_id=orgId or orgId is null) and (p.reference=ref or ref is null)
+        and (p.`word-count`=wordCount or wordCount is null) and (p.created = createdTime or createdTime is null) 
+        and (p.language_id=@lID or @lID is null) and (p.country_id = @cID or @cID is null)
+        and (m.`archived-date`=archiveDate or archiveDate is null or archiveDate='0000-00-00 00:00:00') 
+        and (m.`user_id-archived`= archiverId or archiverId is null);
+
 END//
 DELIMITER ;
 
@@ -1430,56 +1441,33 @@ BEGIN
 	if taskStatusId='' then set taskStatusId=null; end if;
 	if published='' then set published=null; end if;
 
-	set @q="SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, t.`taskType_id`, t.`taskStatus_id`, t.published, tm.version,tm.filename,tm.`content-type`,tm.`upload-time`,tm.`user_id-claimed`, tm.`user_id-archived`,tm.prerequisites,tm.`user_id-taskCreator`,tm.`archived-date` FROM ArchivedTasks t
-	 JOIN ArchivedTasksMetadata tm ON t.id = tm.archivedTask_id WHERE 1";  
-	          
-	if archiveId is not null then
-	  set @q = CONCAT(@q, " and t.id=", archiveId);
-	end if;                 
-	if projectId is not null then
-	  set @q = CONCAT(@q, " and t.project_id=", projectId);
-	end if;                 
-	if title is not null then
-	  set @q = CONCAT(@q, " and t.title=\"", title, "\"");
-	end if;                 
-	if `comment` is not null then
-	  set @q = CONCAT(@q, " and t.`comment`=\"", `comment`, "\"");
-	end if;                 
-	if (deadline is not null and deadline !='0000-00-00 00:00:00') then
-	  set @q = CONCAT(@q, " and t.deadline=\"", deadline, "\"");
-	end if;                 
-	if wordCount is not null then
-	  set @q = CONCAT(@q, " and t.`word-count`=", wordCount);
-	end if;       
-	if (createdTime is not null and createdTime !='0000-00-00 00:00:00') then
-	  set @q = CONCAT(@q, " and t.`created-time`=\"", createdTime, "\"");
-	end if;
-	if sourceLanguageId is not null then
-	  set @q = CONCAT(@q, " and t.`language_id-source`=", sourceLanguageId);
-	end if; 	
-	if targetLanguageId is not null then
-	  set @q = CONCAT(@q, " and t.`language_id-target`=", targetLanguageId);
-	end if; 	
-	if sourceCountryId is not null then
-	  set @q = CONCAT(@q, " and t.`country_id-source`=", sourceCountryId);
-	end if; 	
-	if targetCountryId is not null then
-	  set @q = CONCAT(@q, " and t.`country_id-target`=", targetCountryId);
-	end if;  	
-	if taskTypeId is not null then
-	  set @q = CONCAT(@q, " and t.`taskType_id`=", taskTypeId);
-	end if;	
-	if taskStatusId is not null then
-	  set @q = CONCAT(@q, " and t.`taskStatus_id`=", taskStatusId);
-	end if;	
-	if published is not null then
-	  set @q = CONCAT(@q, " and t.`published`=", published);
-	end if;
-                         
-	                         
-	PREPARE stmt FROM @q; 
-	EXECUTE stmt;           
-	DEALLOCATE PREPARE stmt;
+	SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`, 
+            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
+        t.`taskType_id`, t.`taskStatus_id`, t.published, tm.version, tm.filename, tm.`content-type`, tm.`upload-time`, tm.`user_id-claimed`, tm.`user_id-archived`, tm.prerequisites, tm.`user_id-taskCreator`, tm.`archived-date` 
+
+        FROM ArchivedTasks t JOIN ArchivedTasksMetadata tm ON t.id = tm.archivedTask_id 
+
+        WHERE (archiveId is null or t.id = archiveId)
+            and (projectId is null or t.project_id = projectId)
+            and (title is null or t.title = title)
+            and (`comment` is null or t.`comment` = `comment`)
+            and (deadline is null or deadline = '0000-00-00 00:00:00' or t.deadline = deadline)
+            and (wordCount is null or t.`word-count` = wordCount)
+            and (createdTime is null or createdTime = '0000-00-00 00:00:00' or t.`created-time` = createdTime)
+            and (sourceLanguageId is null or t.`language_id-source` = sourceLanguageId) 
+            and (targetLanguageId is null or t.`language_id-target` = targetLanguageId)
+            and (sourceCountryId is null or t.`country_id-source` = sourceCountryId)
+	    and (targetCountryId is null or t.`country_id-target` = targetCountryId)
+            and (taskTypeId is null or t.`taskType_id` = taskTypeId)
+            and (taskStatusId is null or t.`taskStatus_id` = taskStatusId)
+            and (published is null or t.`published` = published);
 
 END//
 DELIMITER ;
@@ -1652,40 +1640,19 @@ BEGIN
 	if country='' then set country=null;end if;
 	if regionalFocus='' then set regionalFocus=null;end if;
 	
-	set @q= "select * from Organisations o where 1 ";
-	if id is not null then 
-		set @q = CONCAT(@q," and o.id=",id) ;
-	end if;
-	if name is not null then 
-		set @q = CONCAT(@q," and o.name=\"",name,"\"") ;
-	end if;
-	if url is not null then 
-		set @q = CONCAT(@q," and o.`home-page`=\"",url,"\"") ;
-	end if;
-	if bio is not null then 
-		set @q = CONCAT(@q," and o.biography=\"",bio,"\"") ;
-	end if;	
-	if email is not null then 
-		set @q = CONCAT(@q," and o.`e-mail`=\"",email,"\"") ;
-	end if;
-	if address is not null then 
-		set @q = CONCAT(@q," and o.address=\"",address,"\"") ;
-	end if;
-	if city is not null then 
-		set @q = CONCAT(@q," and o.city=\"",city,"\"") ;
-	end if;
-	if country is not null then 
-		set @q = CONCAT(@q," and o.country=\"",country,"\"") ;
-	end if;
-	if regionalFocus is not null then 
-		set @q = CONCAT(@q," and o.`regional-focus`=\"",regionalFocus,"\"") ;
-	end if;
-
-	set @q = CONCAT(@q, " GROUP BY o.name");
+	select * from Organisations o 
+        where (id is null or o.id = id)
+            and (name is null or o.name = name)
+            and (url is null or o.`home-page` = url)
+            and (bio is null or o.biography = bio)
+            and (email is null or o.`e-mail` = email)
+            and (address is null or o.address = address) 
+            and (city is null or o.city = city)
+            and (country is null or o.country = country) 
+            and (regionalFocus is null or o.`regional-focus` = regionalFocus)
+	GROUP BY o.name;
 	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+
 END//
 DELIMITER ;
 
@@ -1729,14 +1696,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOverdueTasks`()
 BEGIN
     select id, project_id, title, `word-count`, 
-    (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`,
-    (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`,
-    (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`,
-    (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`,
-    (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`,
-    (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`,
-    (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
-    (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
+        (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`,
+        (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`,
+        (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`,
+        (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`,
+        (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`,
+        (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`,
+        (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
+        (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
     comment,  `task-type_id`, `task-status_id`, published, deadline 
     FROM Tasks t 
     where deadline < NOW()
@@ -1751,21 +1718,16 @@ DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `email` VARCHAR(128))
 BEGIN
-	if unique_id='' then set unique_id=null;end if;
+    if unique_id='' then set unique_id=null;end if;
     if email='' then set email=null;end if;
-    set @q= "SELECT * FROM PasswordResetRequests p WHERE 1 ";
-    if unique_id is not null then
-        set @q= CONCAT(@q," and p.uid=\"",unique_id,"\"");
-    end if;
-    if email is not null then
-        set @q= CONCAT(@q, " and p.user_id IN (SELECT id 
-                                                    FROM Users
-                                                    WHERE email = \"", email, "\")");
-    end if;
+    
 
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+    SELECT * FROM PasswordResetRequests p 
+    WHERE (unique_id is null or p.uid = unique_id)
+    and (email is null or p.user_id IN
+
+        (SELECT id FROM Users u WHERE email = u.email));
+
 END//
 DELIMITER ;
 
@@ -1773,13 +1735,13 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getProject
 DROP PROCEDURE IF EXISTS `getProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impact` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
     READS SQL DATA
 BEGIN
     if projectId='' then set projectId=null;end if;
     if titleText='' then set titleText=null;end if;
     if descr='' then set descr=null;end if;
-    if impact='' then set impact=null;end if;
+    if impactText='' then set impactText=null;end if;
     if deadlineTime='' then set deadlineTime=null;end if;
     if orgId='' then set orgId=null;end if;
     if ref='' then set ref=null;end if;
@@ -1788,49 +1750,33 @@ BEGIN
     if sCC="" then set sCC=null; end if;
     if sCode="" then set sCode=null; end if;
 
-    set @q="SELECT id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,(select `en-name` from Languages where id =p.`language_id`) as `sourceLanguageName`, (select code from Languages where id =p.`language_id`) as `sourceLanguageCode`, (select `en-name` from Languages where id =p.`language_id`) as `targetLanguageName`, (select code from Languages where id =p.`language_id`) as `targetLanguageCode`, (select `en-name` from Countries where id =p.`country_id`) as `sourceCountryName`, (select code from Countries where id =p.`country_id`) as `sourceCountryCode`, (select `en-name` from Countries where id =p.`country_id`) as `targetCountryName`, (select code from Countries where id =p.`country_id`) as `targetCountryCode`, (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) from Tasks tsk where tsk.project_id=p.id)as 'status'  FROM Projects p WHERE 1";
-    if projectId is not null then
-        set @q = CONCAT(@q, " and p.id=", projectId);
-    end if;
-    if titleText is not null then
-        set @q = CONCAT(@q, " and p.title=\"", titleText, "\"");
-    end if;
-    if descr is not null then
-        set @q = CONCAT(@q, " and p.description=\"", descr, "\"");
-    end if;
-    if impact is not null then
-        set @q = CONCAT(@q, " and p.impact=\"", impact, "\"");
-    end if;
-    if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and p.deadline=\"", deadlineTime, "\"");
-    end if;
-    if orgId is not null then
-        set @q = CONCAT(@q, " and p.organisation_id=", orgId);
-    end if;
-    if ref is not null then
-        set @q = CONCAT(@q, " and p.reference=\"", ref, "\"");
-    end if;
-    if wordCount is not null then
-        set @q = CONCAT(@q, " and p.`word-count`=", wordCount);
-    end if;
-    if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
-        set @q = CONCAT(@q, " and p.created=\"", createdTime, "\"");
-    end if;
-    if sCC is not null then
-    	set @scID=false;
-		select c.id into @scID from Countries c where c.code=sCC;
- 		
-    	set @q = CONCAT(@q, " and p.country_id=",@scID);
-    end if;
-    if sCode is not null then
-      set @sID=false;
-		select l.id into @sID from Languages l where l.code=sCode;
-    	set @q = CONCAT(@q, " and p.language_id=", @sID);
-    end if;
+    SELECT id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,
 
-    PREPARE stmt FROM @q;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
+        (select `en-name` from Languages l where l.id = p.`language_id`) as `sourceLanguageName`, 
+        (select code from Languages l where l.id = p.`language_id`) as `sourceLanguageCode`, 
+        (select `en-name` from Languages l where l.id = p.`language_id`) as `targetLanguageName`, 
+        (select code from Languages l where l.id = p.`language_id`) as `targetLanguageCode`, 
+        (select `en-name` from Countries c where c.id = p.`country_id`) as `sourceCountryName`, 
+        (select code from Countries c where c.id = p.`country_id`) as `sourceCountryCode`, 
+        (select `en-name` from Countries c where c.id = p.`country_id`) as `targetCountryName`, 
+        (select code from Countries c where c.id = p.`country_id`) as `targetCountryCode`, 
+        (select sum(tsk.`task-status_id`) / (count(tsk.`task-status_id`) *4) 
+
+    from Tasks tsk where tsk.project_id = p.id) as 'status'  FROM Projects p 
+    
+    WHERE (projectId is null or p.id = projectId)
+        AND (titleText is null or p.title = titleText)
+        AND (descr is null or p.description = descr)
+        AND (impactText is null or p.impact = impactText)
+        AND (deadlineTime is null or deadlineTime = '0000-00-00 00:00:00' or  p.deadline = deadlineTime)
+        AND (orgId is null or p.organisation_id = orgId)
+        AND (ref is null or p.reference = ref)
+        AND (wordCount is null or p.`word-count`= wordCount)
+        AND (createdTime is null or createdTime = '0000-00-00 00:00:00' or p.created = createdTime)
+        AND (sCC is null or p.country_id = (select c.id from Countries c where c.code = sCC))
+        AND (sCode is null or p.language_id=(select l.id from Languages l where l.code = sCode));
+   
+
 END//
 DELIMITER ;
 
@@ -1861,30 +1807,15 @@ BEGIN
     if mime='' then set mime=null;end if;
    
 
-    set @q="SELECT * FROM ProjectFiles p WHERE 1";
-    
-	 if pID is not null then
-        set @q = CONCAT(@q, " and p.project_id=", pID);
-    end if;
-  	 if uID is not null then
-        set @q = CONCAT(@q, " and p.user_id=", uID);
-    end if;
-  	 if fName is not null then
-        set @q = CONCAT(@q, " and p.filename=\"", fName, "\"");
-    end if;
- 	 if token is not null then
-        set @q = CONCAT(@q, " and p.`file-token`=\"",  token, "\"");
-    end if;
- 	 if mime is not null then
-        set @q = CONCAT(@q, " and p.`mime-type`=\"",  mime, "\"");
-    end if;
+    SELECT * 
+    FROM ProjectFiles p 
 
-    
-    
+    WHERE (pID is null or p.project_id = pID)
+        and (uID is null or p.user_id = uID)
+        and (fName is null or p.filename = fName)
+        and (token is null or p.`file-token` =  token)
+        and (mime is null or p.`mime-type` =  mime);
 
-    PREPARE stmt FROM @q;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -1938,15 +1869,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatistics`(IN `statName` VARCHA
 BEGIN
 	IF statName = '' THEN SET statName = NULL; END IF;
 	
-	set @q = "SELECT * FROM Statistics st where 1";
-	
-	if statName is not null then 
-		set @q = CONCAT(@q," and st.name=\"", statName,"\"");
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+	SELECT * 
+        FROM Statistics st 
+        where (statName is null or st.name = statName);
+
 END//
 DELIMITER ;
 
@@ -1995,28 +1921,16 @@ DROP PROCEDURE IF EXISTS `getTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTag`(IN `id` INT, IN `name` VARCHAR(50), IN `lim` INT)
 BEGIN
-	if id='' then set id=null;end if;
+     -- if limit is null, set to maxBigInt unsigned
+        if lim = '' then set lim = ~0; end if;
+        if id='' then set id=null;end if;
 	if name='' then set name=null;end if;
-	if lim='' then set lim=null;end if;
-	
-	set @q= "select t.id , t.label from Tags t where 1 ";-- set update
-	
-	if id is not null then 
-#set paramaters to be updated
-		set @q = CONCAT(@q," and t.id=",id) ;
-	end if;
-	
-	if name is not null then 
-		set @q = CONCAT(@q," and t.label=\"",name,"\"") ;
-	end if;
-	
-	if lim is not null then 
-		set @q = CONCAT(@q," LIMIT ",lim);
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+
+            
+        select t.id , t.label from Tags t 
+            where (id is null or t.id = id) and (name is null or t.label = name)
+            LIMIT lim;
+
 END//
 DELIMITER ;
 
@@ -2027,21 +1941,31 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `lim` INT)
     READS SQL DATA
 BEGIN
-	set @q = Concat("SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`,t.comment,  t.`task-type_id`, t.`task-status_id`, t.published, t.deadline  
-                         FROM Tasks t join ProjectTags pt on pt.project_id=t.project_id
-                         WHERE pt.tag_id=? AND NOT  exists (
-							  	SELECT 1		
-								FROM TaskClaims
-								WHERE task_id = t.id
-							)
-                         AND t.published = 1
-                         AND t.`task-status_id` = 2 
-                         ORDER BY t.`created-time` DESC
-                         LIMIT ",lim);
-        PREPARE stmt FROM @q;
-        set @tID=tID;
-        EXECUTE stmt using @tID;
-        DEALLOCATE PREPARE stmt;
+     -- if limit is null, set to maxBigInt unsigned
+        if lim = '' then set lim = ~0; end if;
+  
+            SELECT t.id, t.project_id, t.title, t.`word-count`,
+                (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,     
+                (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+                (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+                (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+                (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+                (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+                (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+                (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`created-time`, 
+                (select code from Countries c where c.id = t.`country_id-source`) as `country_id-source`,
+                t.comment,  t.`task-type_id`, t.`task-status_id`, t.published, t.deadline  
+
+            FROM Tasks t join ProjectTags pt on pt.project_id = t.project_id
+
+            WHERE pt.tag_id = `tID`
+
+            AND NOT  exists (SELECT 1 FROM TaskClaims WHERE task_id = t.id)
+            AND t.published = 1
+            AND t.`task-status_id` = 2 
+            ORDER BY t.`created-time` DESC
+            LIMIT lim;
+
 END//
 DELIMITER ;
 
@@ -2068,62 +1992,33 @@ BEGIN
 	if dLine='' then set dLine=null;end if;
 	
 	
-	set @q= "select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` from Tasks t where 1";-- set update
-	if id is not null then 
-#set paramaters to be updated
-		set @q = CONCAT(@q," and t.id=",id) ;
-	end if;
-	if projectID is not null then 
-		set @q = CONCAT(@q," and t.project_id=",projectID) ;
-	end if;
-	if name is not null then 
-		set @q = CONCAT(@q," and t.title=\"",name,"\"") ;
-	end if;
-	if sCode is not null then 
-		set @sID=null;
-		select l.id into @sID from Languages l where l.code=sCode;
-		set @q = CONCAT(@q," and t.`language_id-source`=",@sID) ;
-	end if;
-	if tCode is not null then 
-		set @tID=null;
-		select l.id into @tID from Languages l where l.code=tCode;
-		set @q = CONCAT(@q," and t.`language_id-target`=",@tID) ;
-	end if;
-	if sCC is not null then 
-		set @scid=null;
-			select c.id into @scid from Countries c where c.code=sCC;
-		set @q = CONCAT(@q," and t.`country_id-source`=",@scid) ;
-	end if;
-	if tCC is not null then 
-		set @tcid=null;
-			select c.id into @tcid from Countries c where c.code=tCC;
-		set @q = CONCAT(@q," and t.`country_id-target`=",@tcid) ;
-	end if;
-	if wordCount is not null then 
-		set @q = CONCAT(@q," and t.`word-count`=",wordCount) ;
-	end if;
-	if (created is not null  and created!='0000-00-00 00:00:00') then 
-		set @q = CONCAT(@q," and t.`created-time`=\"",created,"\"") ;
-	end if;
-	if taskComment is not null then 
-		set @q = CONCAT(@q," and t.`comment`=\"",taskComment,"\"") ;
-	end if;
-	if tStatus is not null then 
-		set @q = CONCAT(@q," and t.`task-status_id`=",tStatus) ;
-	end if;
-	if tType is not null then 
-		set @q = CONCAT(@q," and t.`task-type_id`=",tType) ;
-	end if;
-	if pub is not null then 
-		set @q = CONCAT(@q," and t.`published`=",pub) ;
-	end if;
-	if dLine is not null and dLine!='0000-00-00 00:00:00' then 
-		set @q = CONCAT(@q," and t.`deadline`=\"",dLine,"\"") ;
-	end if;
+	select t.id, t.project_id, t.title, `word-count`, 
+            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` 
 
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+        from Tasks t 
+
+        where (id is null or t.id = id)
+            and (projectID is null or t.project_id = projectID)
+            and (name is null or t.title = name)
+            and (sCode is null or t.`language_id-source` = (select l.id from Languages l where l.code = sCode))
+            and (tCode is null or t.`language_id-target` = (select l.id from Languages l where l.code = tCode))
+            and (sCC is null or t.`country_id-source` = (select c.id from Countries c where c.code = sCC))
+            and (tCC is null or t.`country_id-target` = (select c.id from Countries c where c.code = tCC))
+            and (wordCount is null or t.`word-count` = wordCount)
+            and (created is null or created = '0000-00-00 00:00:00' or t.`created-time` = created)
+            and (taskComment is null or t.`comment`= taskComment)
+            and (tStatus is null or t.`task-status_id` = tStatus)
+            and (tType is null or t.`task-type_id` = tType)
+            and (pub is null or t.`published` = pub)
+            and (dLine is null or dLine = '0000-00-00 00:00:00' or t.`deadline` = dLine);
+
 END//
 DELIMITER ;
 
@@ -2154,28 +2049,16 @@ BEGIN
 	if content='' then set content=null;end if;
 	if uID='' then set uID=null;end if;
 	if uTime='' then set uTime=null;end if;
-		set @q= "select task_id, version_id, filename, `content-type`, user_id, `upload-time` from TaskFileVersions t where 1 ";
-	if tID is not null then 
-		set @q = CONCAT(@q," and t.task_id=",tID) ;
-	end if;
-	if vID is not null then 
-		set @q = CONCAT(@q," and t.version_id=",vID) ;
-	end if;
-	if name is not null then 
-		set @q = CONCAT(@q," and t.filename='",name,"'") ;
-	end if;
-	if content is not null then 
-		set @q = CONCAT(@q," and t.`content-type`=\"",content,"\"") ;
-	end if;
-	if uID is not null then 
-		set @q = CONCAT(@q," and t.user_id=",uID) ;
-	end if;
-	if (uTime is not null  and uTime!='0000-00-00 00:00:00')then 
-		set @q = CONCAT(@q," and t.`upload-time`=\"",uTime,"\"") ;
-	end if;
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+	
+        select task_id, version_id, filename, `content-type`, user_id, `upload-time` 
+        from TaskFileVersions t 
+        
+        where (tID is null or t.task_id = tID)
+            and (vID is null or t.version_id = vID)
+            and (name is null or t.filename = name)
+            and (content is null or t.`content-type` = content)
+            and (uID is null or t.user_id = uID)
+            and (uTime is null or uTime = '0000-00-00 00:00:00' or t.`upload-time` = uTime);
 	
 END//
 DELIMITER ;
@@ -2187,6 +2070,9 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskPreReqs`(IN `taskId` INT)
     READS SQL DATA
 BEGIN
+
+	if taskId='' then set taskId=null;end if;
+	
 	SELECT t.id, t.project_id, t.title, t.`word-count`,
 	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-source`) as `language_id-source`,
 	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-target`) as `language_id-target`,
@@ -2195,7 +2081,28 @@ BEGIN
 	t.`created-time`, t.deadline, t.`comment`, t.`task-type_id`, t.`task-status_id`, t.published
 		
 	FROM Tasks t JOIN TaskPrerequisites tp ON tp.`task_id-prerequisite`=t.id
-	WHERE tp.task_id=taskId;	
+	WHERE (tp.task_id=taskId or tp.task_id is null);	
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure Solas-Match-Test.getTasksFromPreReq
+DROP PROCEDURE IF EXISTS `getTasksFromPreReq`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksFromPreReq`(IN `preReqId` INT)
+    READS SQL DATA
+BEGIN
+
+	if preReqId='' then set preReqId=null;end if;
+	
+	SELECT t.id, t.project_id, t.title, t.`word-count`,
+	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-source`) as `language_id-source`,
+	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-target`) as `language_id-target`,
+	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-source`) as `country_id-source`,
+	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-target`)as `country_id-target`,
+	t.`created-time`, t.deadline, t.`comment`, t.`task-type_id`, t.`task-status_id`, t.published
+		
+	FROM Tasks t JOIN TaskPrerequisites tp ON tp.`task_id-prerequisite`=t.id
+	WHERE (tp.`task_id-prerequisite`=preReqId or tp.`task_id-prerequisite` is null);	
 END//
 DELIMITER ;
 
@@ -2204,8 +2111,11 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `getTaskReviews`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskReviews`(IN `projectId` INT, IN `taskId` INT, IN `userId` INT, IN `correction` INT, IN `gram` INT, IN `spell` INT, IN `consis` INT, IN `comm` VARCHAR(2048))
+    
     READS SQL DATA
+
 BEGIN
+
     if projectId = '' then set projectId = NULL; end if;
     if taskId = '' then set taskId = NULL; end if;
     if userId = '' then set userId = NULL; end if;
@@ -2214,59 +2124,19 @@ BEGIN
     if spell = '' then set spell = NULL; end if;
     if consis = '' then set consis = NULL; end if;
     if comm = '' then set comm = NULL; end if;
-    set @q= "SELECT project_id, task_id, user_id, corrections, grammar, spelling, consistency, comment FROM TaskReviews WHERE 1";
-    if projectId IS NOT NULL then
-        set @q = CONCAT(@q, " AND project_id = ", projectId);
-    end if;
-    if taskId IS NOT NULL then
-        set @q = CONCAT(@q, " AND task_id = ", taskId);
-    end if;
-    if userId IS NOT NULL then
-        set @q = CONCAT(@q, " AND user_id = ", userId);
-    end if;
-    if correction IS NOT NULL then
-        set @q = CONCAT(@q, " AND corrections = ", correction);
-    end if;
-    if gram IS NOT NULL then
-        set @q = CONCAT(@q, " AND grammar = ", grammar);
-    end if;
-    if spell IS NOT NULL then
-        set @q = CONCAT(@q, " AND spelling = ", spell);
-    end if;
-    if consis IS NOT NULL then
-        set @q = CONCAT(@q, " AND consistency = ", consis);
-    end if;
-    if comm IS NOT NULL then
-        set @q = CONCAT(@q, " AND comment = \"", comm, "\"");
-    end if;
 
-    PREPARE stmt FROM @q;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-END//
-DELIMITER ;
+    SELECT project_id, task_id, user_id, corrections, grammar, spelling, consistency, comment 
+    FROM TaskReviews tr
 
+    WHERE (projectId is null or tr.project_id = projectId) 
+        and (taskId is null or tr.task_id = taskId)
+        and (userId is null or tr.user_id = userId)
+        and (correction is null or tr.corrections = correction)
+        and (gram is null or tr.grammar = grammar)
+        and (spell is null or tr.spelling = spell)
+        and (consis is null or tr.consistency = consis)
+        and (comm is null or tr.comment = comm);
 
--- Dumping structure for procedure Solas-Match-Test.getTasksByOrgIDs
-DROP PROCEDURE IF EXISTS `getTasksByOrgIDs`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksByOrgIDs`(IN `orgIDs` VARCHAR(1028), IN `orderby` VARCHAR(256))
-    READS SQL DATA
-BEGIN
-	if orgIDs='' then set orgIDs=null;end if;
-	if orderby='' then set orderby=null;end if;
-	set @q= "SELECT id,organisation_id,title,`word-count`,source_id,target_id,`created-time`, `country_id-source`, `country_id-target` FROM Tasks WHERE 1 ";-- set update
-	if orgIDs is not null then 
-		set @q = CONCAT(@q," and organisation_id IN (",orgIDs,")") ;
-	end if;
-
-	if orderby is not null then 
-		set @q = CONCAT(@q," order by ",orderby) ;
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -2275,22 +2145,15 @@ DROP PROCEDURE IF EXISTS `getTaskTagIds`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTagIds`(IN `lim` INT, IN `offs` INT)
 BEGIN
-	if lim='' then set lim=null;end if;
-	if offs ='' then set offs=null;end if;	
-	
-	set @q = ("select t.id as task_id , pt.tag_id from ProjectTags pt join Tasks t on t.project_id = pt.project_id order by t.id ");
-	
-	if not lim is null then
-		set @q = Concat(@q, " LIMIT ", lim);	
-	end if;
-	
-	if not offs is null then
-		set @q = Concat(@q, " OFFSET ", offs);	
-	end if;
+	if lim='' then set lim=18446744073709551615; end if; 
+	if offs ='' then set offs=0; end if;	
 
-   PREPARE stmt FROM @q;
-   EXECUTE stmt;
-   DEALLOCATE PREPARE stmt;
+            (select t.id as task_id , pt.tag_id 
+            from ProjectTags pt join Tasks t on t.project_id = pt.project_id 
+            order by t.id 
+            LIMIT lim 
+            OFFSET offs);
+
 END//
 DELIMITER ;
 
@@ -2312,26 +2175,19 @@ DROP PROCEDURE IF EXISTS `getTopTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
     READS SQL DATA
+
 BEGIN
-	if lim='' then set lim=null;end if;
-	if not lim is null then
-		set @q = Concat("   SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
-		                    FROM ProjectTags AS pt 
-		                    join Tags AS t on pt.tag_id = t.id
-		                    GROUP BY pt.tag_id
-		                    ORDER BY frequency DESC, t.label
-		                    LIMIT ",lim);
-	else
-		set @q = "   SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
-		                    FROM ProjectTags AS pt 
-		                    join Tags AS t on pt.tag_id = t.id
-		                    GROUP BY pt.tag_id
-		                    ORDER BY frequency DESC, t.label";
-		
-	end if;
-   PREPARE stmt FROM @q;
-   EXECUTE stmt;
-   DEALLOCATE PREPARE stmt;
+	
+-- if limit is null, set to maxBigInt unsigned
+    if lim = '' then set lim = ~0; end if;
+
+    SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
+    FROM ProjectTags AS pt 
+    join Tags AS t on pt.tag_id = t.id
+    GROUP BY pt.tag_id
+    ORDER BY frequency DESC, t.label
+    LIMIT lim;
+
 END//
 DELIMITER ;
 
@@ -2363,42 +2219,27 @@ BEGIN
 	if lang_id='' then set lang_id=null;end if;
 	if region_id='' then set region_id=null;end if;
 	
-	set @q= "select id,`display-name`,email,password,biography, (select `en-name` from Languages where id =u.`language_id`) as `languageName`, (select code from Languages where id =u.`language_id`) as `languageCode`, (select `en-name` from Countries where id =u.`country_id`) as `countryName`, (select code from Countries where id =u.`country_id`) as `countryCode`, nonce,`created-time` from Users u where 1 ";-- set update
-	if id is not null then 
-#set paramaters to be updated
-		set @q = CONCAT(@q," and u.id=",id) ;
-	end if;
-	if name is not null then 
-		set @q = CONCAT(@q," and u.`display-name`=\"",name,"\"") ;
-	end if;
-	if mail is not null then 
-		set @q = CONCAT(@q," and LOWER(u.email)=\"",LOWER(mail),"\"") ;
-	end if;
-	if pass is not null then 
-		set @q = CONCAT(@q," and u.password=\"",pass,"\"") ;
-	end if;
-	if bio is not null then 
-		set @q = CONCAT(@q," and u.biography=\"",bio,"\"") ;
-	end if;
-	if nonce is not null then 
-		set @q = CONCAT(@q," and u.nonce=",nonce) ;
-	end if;
-	if (created is not null  and created!='0000-00-00 00:00:00') then 
-		set @q = CONCAT(@q," and u.`created-time`=\"",created,"\"") ;
-	end if;
-	if lang_id is not null then 
-		set @q = CONCAT(@q," and u.language_id=",lang_id) ;
-	end if;
-	if region_id is not null then 
-		set @q = CONCAT(@q," and u.country_id=",region_id) ;
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+	select u.id,u.`display-name`, u.email, u.password, u.biography, 
+            (select `en-name` from Languages l where l.id = u.`language_id`) as `languageName`, 
+            (select code from Languages l where l.id = u.`language_id`) as `languageCode`, 
+            (select `en-name` from Countries c where c.id = u.`country_id`) as `countryName`, 
+            (select code from Countries c where c.id = u.`country_id`) as `countryCode`, 
+            u.nonce, u.`created-time` 
+        
+        from Users u  
+
+        where   (id is null or u.id = id)
+            and (name is null or u.`display-name` = name)
+            and (mail is null or (LOWER(u.email) = LOWER(mail)))
+            and (pass is null or u.password = pass)
+            and (bio is null or u.biography = bio)
+            and (nonce is null or u.nonce = nonce)
+            and (created is null or created = '0000-00-00 00:00:00' or u.`created-time` = created)
+            and (lang_id is null or u.language_id = lang_id)
+            and (region_id is null or u.country_id = region_id);
+
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure debug-test.getUserArchivedTasks
 DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
@@ -2460,22 +2301,21 @@ DROP PROCEDURE IF EXISTS `getUserLCCodes`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserLCCodes`(IN `lim` INT, IN `offs` INT)
 BEGIN
-	if lim='' then set lim=null;end if;
-	if offs ='' then set offs=null;end if;
-	
-	set @q = Concat("select s.user_id, (select lg.code from Languages lg where lg.id = s.language_id) as languageCode, (select c.code from Countries c where c.id = s.country_id) as countryCode FROM UserSecondaryLanguages s order by s.user_id ");
-	
-	if not lim is null then
-		set @q = Concat(@q, " LIMIT ", lim);	
-	end if;
-	
-	if not offs is null then
-		set @q = Concat(@q, " OFFSET ", offs);	
-	end if;
 
-   PREPARE stmt FROM @q;
-   EXECUTE stmt;
-   DEALLOCATE PREPARE stmt;
+     -- if limit is null, set to maxBigInt unsigned
+        if lim = '' then set lim = ~0; end if;
+	if offs ='' then set offs=0;end if;
+	
+	select s.user_id, 
+            (select lg.code from Languages lg where lg.id = s.language_id) as languageCode, 
+            (select c.code from Countries c where c.id = s.country_id) as countryCode 
+
+        FROM UserSecondaryLanguages s 
+        
+        order by s.user_id
+	LIMIT lim	
+	OFFSET offs;
+
 END//
 DELIMITER ;
 
@@ -2484,22 +2324,14 @@ DROP PROCEDURE IF EXISTS `getUserNativeLCCodes`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserNativeLCCodes`(IN `lim` INT, IN `offs` INT)
 BEGIN
-	if lim='' then set lim=null;end if;
-	if offs ='' then set offs=null;end if;
+	-- if limit is null, set to maxBigInt unsigned
+        if lim = '' then set lim = ~0; end if;
+	if offs ='' then set offs=0;end if;
 	
-	set @q = ("select u.id, (select l.code from Languages l where l.id = u.language_id) as languageCode, (select c.code from Countries c where c.id = u.country_id) as countryCode from Users u ");
+	select u.id, (select l.code from Languages l where l.id = u.language_id) as languageCode, (select c.code from Countries c where c.id = u.country_id) as countryCode from Users u
+        LIMIT lim	
+        OFFSET offs;	
 
-	if not lim is null then
-		set @q = Concat(@q, " LIMIT ", lim);	
-	end if;
-	
-	if not offs is null then
-		set @q = Concat(@q, " OFFSET ", offs);	
-	end if;
-
-   PREPARE stmt FROM @q;
-   EXECUTE stmt;
-   DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -2533,22 +2365,16 @@ DROP PROCEDURE IF EXISTS `getUserTagIds`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTagIds`(IN `lim` INT, IN `offs` INT)
 BEGIN
-	if lim='' then set lim=null;end if;
-	if offs ='' then set offs=null;end if;
+	-- if limit is null, set to maxBigInt unsigned
+        if lim = '' then set lim = ~0;  end if;
+	if offs ='' then set offs= 0;   end if;
 	
-	set @q = ("select ut.user_id, ut.tag_id from UserTags ut order by ut.user_id ");
+	select ut.user_id, ut.tag_id 
+        from UserTags ut 
+        order by ut.user_id
+        LIMIT lim	
+        OFFSET offs;
 
-	if not lim is null then
-		set @q = Concat(@q, " LIMIT ", lim);	
-	end if;
-	
-	if not offs is null then
-		set @q = Concat(@q, " OFFSET ", offs);	
-	end if;
-
-   PREPARE stmt FROM @q;
-   EXECUTE stmt;
-   DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -2558,16 +2384,12 @@ DROP PROCEDURE IF EXISTS `getUserTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT, IN `lim` INT)
 BEGIN
-	 if (lim= '') then set lim=null; end if;
-	 if(lim is not null) then
-    set @q = Concat("SELECT t.*	FROM UserTags	JOIN Tags t ON UserTags.tag_id = t.id	WHERE user_id = ? LIMIT ",lim);
-    else
-    set @q = "SELECT t.*	FROM UserTags	JOIN Tags t ON UserTags.tag_id = t.id	WHERE user_id =  ?";
-    end if;
-    PREPARE stmt FROM @q;
-    set @id=id;
-    EXECUTE stmt using @id;
-    DEALLOCATE PREPARE stmt;
+	-- if limit is null, set to maxBigInt unsigned
+        if lim = '' then set lim = ~0;  end if;
+
+    SELECT t.*	FROM UserTags JOIN Tags t ON UserTags.tag_id = t.id	
+    WHERE user_id = id LIMIT lim;
+    
 END//
 DELIMITER ;
 
@@ -2575,24 +2397,33 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getUserTasks
 DROP PROCEDURE IF EXISTS `getUserTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT, IN `offset` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT, IN `offs` INT)
 BEGIN
-    if lim = '' then set lim = null; end if;
-    if offset = '' then set offset = 0; end if;
-    set @q= " SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-                t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`, 
-                 comment,
-                `task-type_id`, `task-status_id`, published, deadline
-                FROM Tasks t JOIN TaskClaims tc ON tc.task_id = t.id
-                WHERE user_id = ?
-                ORDER BY `created-time` DESC";
-if lim IS NOT NULL then
-    set @q=CONCAT(@q, " limit ", offset, ', ', lim);
-end if;
-        PREPARE stmt FROM @q;
-        set@uID = uID;
-	EXECUTE stmt using @uID;
-	DEALLOCATE PREPARE stmt;
+
+    -- if limit is null, set to maxBigInt unsigned
+    if lim = '' then set lim = ~0; end if;
+    if offs = '' then set offs = 0; end if;
+
+    SELECT t.id, t.project_id, t.title, t.`word-count`,
+        (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
+        (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+        (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+        (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+        (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+        (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+        (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+        (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
+        t.`created-time`, 
+        (select code from Countries c where c.id = t.`country_id-source`) as `country_id-source`, 
+        comment, `task-type_id`, `task-status_id`, published, deadline
+                
+    FROM Tasks t JOIN TaskClaims tc ON tc.task_id = t.id
+    
+    WHERE tc.user_id = uID
+    ORDER BY `created-time` DESC
+    LIMIT lim
+    OFFSET offs;
+
 END//
 DELIMITER ;
 
@@ -2626,17 +2457,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskScore`(IN `uID` INT, IN 
 BEGIN
 
 	if uID='' then set uID=null;end if;
-    if tID='' then set tID=null;end if;
-	set @q= "select * from UserTaskScores where 1 ";
-	if uID is not null then 
-		set @q = CONCAT(@q," and user_id=",uID) ;
-	end if;
-	if tID is not null then 
-		set @q = CONCAT(@q," and task_id=",tID) ;
-	end if;
-    PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+        if tID='' then set tID=null;end if;
+
+	select * from UserTaskScores 
+        where (uID is null or user_id = uID)
+            and (tID is null or task_id = tID);
+
 END//
 DELIMITER ;
 
@@ -2644,64 +2470,86 @@ DELIMITER ;
 -- Dumping structure for procedure debug-test3.getUserTopTasks
 DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, IN `offset` INT, IN `filter` TEXT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, 
+IN `offset` INT, IN `taskType` INT, IN `sourceLanguage` INT, IN `targetLanguage` INT)
+
     READS SQL DATA
-    COMMENT 'relpace with more effient code later'
+
 BEGIN
-    if lim='' then set lim=null; end if;
-    if offset='' then set offset=0; end if;
-    set @q = Concat("SELECT id,project_id,title,`word-count`, 
-                        (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
-                        (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
-                        (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
-                        (SELECT code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
-                        (SELECT `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
-                        (SELECT code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
-                        (SELECT `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
-                        (SELECT code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-                        comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
-                        FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = ? ) AS uts 
-                        ON t.id = uts.task_id 
-                        WHERE t.id NOT IN (
-                            SELECT task_id 
-                            FROM TaskClaims)
-                        AND t.published = 1 
-                        AND t.`task-status_id` = 2 
-                        AND not exists(
-                            SELECT 1 
-                            FROM TaskTranslatorBlacklist 
-                            WHERE user_id = ? 
-                            AND task_id=t.id) ", 
-                        filter);
+            -- if limit is null, set to maxBigInt unsigned
+            if lim = '' then set lim = ~0; end if;
+            if offset='' then set offset = 0; end if;
+
+            if taskType = ''       then set taskType = null; end if;
+            if sourceLanguage = '' then set sourceLanguage = null; end if;
+            if targetLanguage = '' then set targetLanguage = null; end if;
 
     if (strict = 1) then
-        set @q = Concat(@q, "AND (t.`language_id-source` IN (
-                                    SELECT language_id
-                                    FROM Users
-                                    WHERE user_id = ", uID, ")
-                                OR t.`language_id-source` IN (
-                                    SELECT language_id
-                                    FROM UserSecondaryLanguages
-                                    WHERE user_id = ", uID, "))
-                            AND (t.`language_id-target` IN (
-                                    SELECT language_id
-                                    FROM Users
-                                    WHERE user_id = ", uID, ")
-                                OR t.`language_id-target` IN (
-                                    SELECT language_id
-                                    FROM UserSecondaryLanguages
-                                    WHERE user_id = ", uID, "))");
-    end if;
 
-    set @q = Concat(@q, " ORDER BY uts.score 
-                        DESC");
-    if lim is not null then
-        set @q = Concat(@q, " limit ",offset,", ",lim);
+             (SELECT id,project_id,title,`word-count`, 
+                (SELECT `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
+                (SELECT code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+                (SELECT `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+                (SELECT code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+                (SELECT `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+                (SELECT code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+                (SELECT `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+                (SELECT code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
+                comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+
+            FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores u WHERE u.user_id = uID ) AS uts 
+                ON t.id = uts.task_id 
+
+            WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
+                AND t.published = 1 
+                AND t.`task-status_id` = 2 
+                AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
+
+                AND (taskType is null or t.`task-type_id` = taskType)
+                AND (sourceLanguage is null or t.`language_id-source` = sourceLanguage)
+                AND (targetLanguage is null or t.`language_id-target` = targetLanguage)
+
+                    AND (t.`language_id-source` IN 
+                        (SELECT language_id FROM Users WHERE user_id =  uID)
+
+                        OR t.`language_id-source` IN 
+                            (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = ", uID, "))
+
+
+                    AND (t.`language_id-target` IN 
+                        (SELECT language_id FROM Users WHERE user_id = uID)
+
+                        OR t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))
+
+             ORDER BY uts.score DESC limit offset , lim);
+
+    else 
+
+            (SELECT id,project_id,title,`word-count`, 
+                (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
+                (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
+                (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
+                (SELECT code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
+                (SELECT `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
+                (SELECT code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
+                (SELECT `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
+                (SELECT code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
+                comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+
+            FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = uID ) AS uts 
+                ON t.id = uts.task_id 
+
+            WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)
+                AND t.published = 1 
+                AND t.`task-status_id` = 2 
+                AND not exists(SELECT 1 FROM TaskTranslatorBlacklist WHERE user_id = uID AND task_id=t.id)
+
+                AND (taskType is null or t.`task-type_id` = taskType)
+                AND (sourceLanguage is null or t.`language_id-source` = sourceLanguage)
+                AND (targetLanguage is null or t.`language_id-target` = targetLanguage));
+
     end if;
-    PREPARE stmt FROM @q;
-    set @uID=uID;
-    EXECUTE stmt using @uID,@uID;
-    DEALLOCATE PREPARE stmt;
+    
 END//
 DELIMITER ;
 
@@ -2841,6 +2689,7 @@ END//
 DELIMITER ;
 
 
+
 -- Dumping structure for procedure Solas-Match-Test.organisationInsertAndUpdate
 DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
 DELIMITER //
@@ -2856,45 +2705,70 @@ BEGIN
 	if country='' then set country=null;end if;
 	if regionalFocus='' then set regionalFocus=null;end if;
 	
-	IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name=companyName) THEN
-		INSERT INTO Organisations (name,biography,`home-page`,`e-mail`,address,city,country,`regional-focus`) values (companyName,bio,url,email,address,city,country,regionalFocus);
+	IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name = companyName) THEN
+		INSERT INTO Organisations ( name, biography, `home-page`, `e-mail`, address, city, country, `regional-focus`) 
+                values ( companyName, bio, url, email, address, city, country, regionalFocus);
+
 		CALL getOrg(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 	ELSE
-		set @q= "update Organisations o set ";
-
-		if companyName is not null then 
-			set @q = CONCAT(@q," o.name=\"",companyName,"\"") ;
-		end if;
-		if url is not null then 
-			set @q = CONCAT(@q," , o.`home-page`=\"",url,"\"") ;
-		end if;
-		if bio is not null then 
-			set @q = CONCAT(@q," , o.biography=\"",bio,"\"") ;
-		end if;	
-		if email is not null then 
-			set @q = CONCAT(@q," , o.`e-mail`=\"",email,"\"") ;
-		end if;
-		if address is not null then 
-			set @q = CONCAT(@q," , o.address=\"",address,"\"") ;
-		end if;
-		if city is not null then 
-			set @q = CONCAT(@q," , o.city=\"",city,"\"") ;
-		end if;
-		if country is not null then 
-			set @q = CONCAT(@q," , o.country=\"",country,"\"") ;
-		end if;
-		if regionalFocus is not null then 
-			set @q = CONCAT(@q," , o.`regional-focus`=\"",regionalFocus,"\"") ;
-		end if;
-
-		set @q = CONCAT(@q," WHERE o.id=",id) ;
 		
-	   PREPARE stmt FROM @q;
-	   EXECUTE stmt;
-	   DEALLOCATE PREPARE stmt;
-	   CALL getOrg(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+                if companyName is not null 
+                and companyName != (select o.name from Organisations o  WHERE o.id = id)
+                or (select o.name from Organisations o  WHERE o.id = id) is null
+                    then update Organisations org set org.name = companyName WHERE org.id = id;
+		end if;
 
-	end if;		
+                if url is not null 
+                and url != (select o.`home-page` from Organisations o WHERE o.id = id) 
+                or (select o.`home-page` from Organisations o WHERE o.id = id) is null
+                    then update Organisations org set  org.`home-page` = url WHERE org.id = id;
+		end if;
+
+                if bio is not null 
+                and bio != (select o.biography from Organisations o WHERE o.id = id) 
+                or (select o.biography from Organisations o WHERE o.id = id) is null
+                    then 
+                        # set bio = REPLACE(bio, '\\n', '');
+                        # set bio = REPLACE(bio, '\\r', '\n');
+                        update Organisations org set  org.biography = bio WHERE org.id = id;
+		end if;
+
+		if email is not null 
+                and email != (select o.`e-mail` from Organisations o WHERE o.id = id) 
+                or (select o.`e-mail` from Organisations o WHERE o.id = id) is null
+                    then update Organisations org set org.`e-mail` = email WHERE org.id = id;
+		end if;
+
+                if address is not null 
+                and address != (select o.address from Organisations o WHERE o.id = id) 
+                or (select o.address from Organisations o WHERE o.id = id) is null
+                    then 
+                        # set address = REPLACE(address, '\\n', '');
+                        # set address = REPLACE(address, '\\r', '\n');
+                        update Organisations org set org.address = address WHERE org.id = id;
+		end if;
+
+                if city is not null 
+                and city != (select o.city from Organisations o WHERE o.id = id) 
+                or (select o.city from Organisations o WHERE o.id = id) is null
+                    then update Organisations org set org.city = city WHERE org.id = id;
+		end if;
+
+                if country is not null 
+                and country != (select o.country from Organisations o  WHERE o.id = id) 
+                or (select o.country from Organisations o  WHERE o.id = id) is null
+                    then update Organisations org set org.country = country WHERE org.id = id;
+		end if;
+
+                if regionalFocus is not null 
+                and regionalFocus != (select o.`regional-focus` from Organisations o WHERE o.id = id) 
+                or (select o.`regional-focus` from Organisations o WHERE o.id = id) is null
+                    then update Organisations org set org.`regional-focus` = regionalFocus WHERE org.id = id;
+		end if;
+		
+                CALL getOrg(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
+	END IF;		
 END//
 DELIMITER ;
 
@@ -2912,126 +2786,122 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impact` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
 BEGIN
+
     if projectId="" then set projectId=null; end if;
-    if titleText="" then set titleText=null; end if;
-    if descr="" then set descr=null; end if;
-    if impact="" then set impact=null; end if;
     if deadlineTime="" then set deadlineTime=null; end if;
     if orgId="" then set orgId=null; end if;
-    if ref="" then set ref=null; end if;
     if wordCount="" then set wordCount=null; end if;
     if createdTime="" then set createdTime=null; end if;
     if sCC="" then set sCC=null; end if;
     if sCode="" then set sCode=null; end if;
+    if titleText="" then set titleText=null; end if;
+    if descr="" then set descr=null; end if;
+    if impactText="" then set impactText=null; end if;
+    if ref="" then set ref=null; end if;
+
 
     if projectId is null then
-        if deadlineTime is null or deadlineTime='0000-00-00 00:00:00' then set deadlineTime=DATE_ADD(now(),INTERVAL 14 DAY); end if;
+
+        if deadlineTime is null or deadlineTime = '0000-00-00 00:00:00' 
+        then set deadlineTime = DATE_ADD(now(),INTERVAL 14 DAY); end if;
+
         	set @scID=null;
 			select c.id into @scID from Countries c where c.code=sCC;
 			set @sID=null;
 			select l.id into @sID from Languages l where l.code=sCode;
 	
-        INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id) VALUES (titleText, descr, impact, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID);
-        #select (projectId, titleText, descr, deadlineTime, orgId, ref, wordCount, createdTime,sCC,sCode);
+        INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id) 
+        VALUES (titleText, descr, impactText, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID);
+
+#        select (projectId, titleText, descr, deadlineTime, orgId, ref, wordCount, createdTime,sCC,sCode);
 #        call getProject(projectId, title, descr, deadlineTime, orgId, ref, wordCount, createdTime,sCC,sCode);
          call getProject(LAST_INSERT_ID(), NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL,NULL,NULL);
-    elseif EXISTS (select 1 FROM Projects p WHERE p.id=projectId) then
-        set @first = true;
-        set @q = "UPDATE Projects p set";
 
-        if titleText is not null then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @q = CONCAT(@q, " p.title=\"", titleText, "\"");
+        elseif EXISTS (select 1 FROM Projects p WHERE p.id = projectId) then
+
+        if titleText is not null 
+        and titleText != (select p.title from Projects p WHERE p.id = projectId)
+        or (select p.title from Projects p WHERE p.id = projectId) is null
+
+            then 
+                    update Projects p set p.title = titleText WHERE p.id = projectId;
         end if;
-        if descr is not null then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @q = CONCAT(@q, " p.description=\"", descr, "\"");
+
+        if descr is not null 
+        and descr != (select p.description from Projects p WHERE p.id = projectId)
+        or (select p.description from Projects p WHERE p.id = projectId) is null
+
+            then 
+                    update Projects p set p.description = descr WHERE p.id = projectId;
         end if;
-        if impact is not null then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @q = CONCAT(@q, " p.impact=\"", impact, "\"");
+
+
+        if impactText is not null 
+        and impactText != (select p.impact from Projects p WHERE p.id = projectId)
+        or (select p.impact from Projects p WHERE p.id = projectId) is null
+
+            then 
+                    update Projects p set p.impact = impactText WHERE p.id = projectId;
         end if;
-        if (deadlineTime is not null and deadlineTime!='0000-00-00 00:00:00') then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @q = CONCAT(@q, " p.deadline=\"", deadlineTime, "\"");
+
+        if deadlineTime is not null 
+        and deadlineTime != '0000-00-00 00:00:00'
+        and deadlineTime != (select p.deadline from Projects p WHERE p.id = projectId)
+        or (select p.deadline from Projects p WHERE p.id = projectId) is null
+
+            then update Projects p set p.deadline = deadlineTime WHERE p.id = projectId;
         end if;
-        if orgId is not null then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @q = CONCAT(@q, " p.organisation_id=", orgId);
+
+        if orgId is not null 
+        and orgId != (select p.organisation_id from Projects p WHERE p.id = projectId)
+        or (select p.organisation_id from Projects p WHERE p.id = projectId) is null
+
+            then update Projects p set p.organisation_id = orgId WHERE p.id = projectId;
         end if;
-        if ref is not null then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @q = CONCAT(@q, " p.reference=\"", ref, "\"");
+
+        if ref is not null 
+        and ref != (select p.reference from Projects p WHERE p.id = projectId)
+        or (select p.reference from Projects p WHERE p.id = projectId) is null
+
+            then update Projects p set p.reference = ref WHERE p.id = projectId;
         end if;
-        if wordCount is not null then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @q = CONCAT(@q, " p.`word-count`=", wordCount);
+
+        if wordCount is not null 
+        and wordCount != (select p.`word-count` from Projects p WHERE p.id = projectId)
+        or (select p.`word-count` from Projects p WHERE p.id = projectId) is null
+
+            then update Projects p set p.`word-count` = wordCount WHERE p.id = projectId;
         end if;
-        if sCC is not null then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @scID=null;
-				select c.id into @scID from Countries c where c.code=sCC;
-            set @q = CONCAT(@q, " p.`country_id`=", @scID);
+
+        if sCC is not null 
+        and ((select c.id from Countries c where c.code = sCC) != (select p.`country_id` from Projects p WHERE p.id = projectId))
+        or (select p.`country_id` from Projects p WHERE p.id = projectId) is null
+
+            then update Projects p set p.`country_id` = (select c.id from Countries c where c.code = sCC) WHERE p.id = projectId;
         end if;
-        if sCode is not null then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @sID=null;
-				select l.id into @sID from Languages l where l.code=sCode;
-            set @q = CONCAT(@q, " p.`language_id`=", @sID);
+
+        if sCode is not null 
+        and ((select l.id from Languages l where l.code=sCode) != (select p.`language_id` from Projects p WHERE p.id = projectId))
+        or (select p.`language_id` from Projects p WHERE p.id = projectId) is null
+
+            then update Projects p set p.`language_id` = (select l.id from Languages l where l.code=sCode) WHERE p.id = projectId;
         end if;
         
-        if (createdTime is not null and createdTime!='0000-00-00 00:00:00') then
-            if (@first = false) then
-                set @q = CONCAT(@q, ",");
-            else
-                set @first = false;
-            end if;
-            set @q = CONCAT(@q, " p.created=\"", createdTime, "\"");
+        if createdTime is not null 
+        and createdTime != '0000-00-00 00:00:00'
+        and createdTime != (select p.created from Projects p WHERE p.id = projectId)
+        or (select p.created from Projects p WHERE p.id = projectId) is null
+
+            then update Projects p set p.created = createdTime WHERE p.id = projectId;
         end if;
-        set @q = CONCAT(@q, " WHERE p.id=", projectId);
-        PREPARE stmt FROM @q;
-        EXECUTE stmt;
-        DEALLOCATE PREPARE stmt;
+
+
         call getProject(projectId, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
     end if;
+
 END//
 DELIMITER ;
 
@@ -3105,19 +2975,13 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeAdmin`(IN `userId` INT, IN `orgId` INT)
 BEGIN
 	IF orgId='' THEN SET orgId=NULL; END IF;
-
-	SET @q= "DELETE FROM Admins WHERE user_id=";
-	SET @q = CONCAT(@q, userId);
 	
 	IF orgId IS NOT NULL THEN	
-		SET @q = CONCAT(@q, " AND organisation_id =", orgId);	
+		DELETE a FROM Admins a WHERE a.user_id = userId AND a.organisation_id = orgId;
 	ELSE
-		SET @q = CONCAT(@q, " AND organisation_id IS NULL");
+		DELETE a FROM Admins a WHERE a.user_id = userId AND a.organisation_id IS NULL;
 	END IF;
 
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -3579,292 +3443,127 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT
 BEGIN
 
 	if id='' then set id=null;end if;
-
 	if projectID='' then set projectID=null;end if;
-
-	if name='' then set name=null;end if;
-
+        if name='' then set name=null; end if;
 	if sCode='' then set sCode=null;end if;
-
 	if tCode='' then set tCode=null;end if;
-
 	if wordCount='' then set wordCount=null;end if;
-
-	if taskComment='' then set taskComment=null;end if;
-
+        if taskComment is null then set taskComment=""; end if;
 	if sCode='' then set sCode=null;end if;
-
 	if tCode='' then set tCode=null;end if;
-
 	if dLine='' then set dLine=null;end if;
-
 	if taskType='' then set taskType=null;end if;
-
 	if tStatus='' then set tStatus=null;end if;
-
 	if pub='' then set pub=null;end if;
-
-	
-
 	if id is null then
+        if taskComment is null then set taskComment="";end if;
+        if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
 
-		if taskComment is null then set taskComment="";end if;
+        set @scid=null;
+                select c.id into @scid from Countries c where c.code=sCC;
 
-		if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
+        set @tcid=null;
+                select c.id into @tcid from Countries c where c.code=tCC;
 
-		set @scid=null;
+        set @sID=null;
+                select l.id into @sID from Languages l where l.code=sCode;
 
-			select c.id into @scid from Countries c where c.code=sCC;
+        set @tID=null;
+                select l.id into @tID from Languages l where l.code=tCode;
 
-		set @tcid=null;
-
-			select c.id into @tcid from Countries c where c.code=tCC;
-
-		set @sID=null;
-
-			select l.id into @sID from Languages l where l.code=sCode;
-
-		set @tID=null;
-
-			select l.id into @tID from Languages l where l.code=tCode;
-
-			if pub is null then set pub=1;end if;	
+                if pub is null then set pub=1;end if;	
 
 			
 
 		insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`task-type_id`,`task-status_id`,`published`)
-
 		 values (projectID,name,wordCount,@sID,@tID,now(),taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
-		 
 		 call getTask(LAST_INSERT_ID(),null,null,null,null,null,null,null,null,null,null,null,null,null);
 
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 
+		if projectID is not null 
+                and projectID != (SELECT t.project_id FROM Tasks t WHERE  t.id = id)
+                or (select t.project_id from Tasks t WHERE t.id = id) is null
+
+                    then update Tasks t SET t.project_id = projectID WHERE t.id = id;
+		end if;
+
+                if name is not null 
+                and name != (SELECT t.title FROM Tasks t WHERE  t.id = id)
+                or (select t.title from Tasks t WHERE t.id = id) is null
+
+                    then update Tasks t SET t.title = name WHERE t.id = id;
+		end if;
+
+                if sCode is not null 
+                and (select l.id from Languages l where l.code = sCode) != (SELECT t.`language_id-source` FROM Tasks t WHERE  t.id = id)
+                or (select t.`language_id-source` from Tasks t WHERE t.id = id) is null
+
+                    then update Tasks t SET t.`language_id-source` = (select l.id from Languages l where l.code = sCode) WHERE t.id = id;
+		end if;
+
+                if tCode is not null 
+                and (select l.id from Languages l where l.code = tCode) != (SELECT t.`language_id-target` FROM Tasks t WHERE  t.id = id)
+                or (select t.`language_id-target` from Tasks t WHERE t.id = id) is null
+
+                    then update Tasks t SET t.`language_id-target` = (select l.id from Languages l where l.code = tCode) WHERE t.id = id;
+		end if;
+                
+                if sCC is not null 
+                and (select c.id from Countries c where c.code = sCC) != (SELECT t.`country_id-source` FROM Tasks t WHERE  t.id = id)
+                or (select t.`country_id-source` from Tasks t WHERE t.id = id) is null
+
+                    then update Tasks t SET t.`country_id-source` = (select c.id from Countries c where c.code = sCC) WHERE t.id = id;
+		end if;
+                
+                if tCC is not null 
+                and (select c.id from Countries c where c.code = tCC) != (SELECT t.`country_id-target` FROM Tasks t WHERE  t.id = id)
+                or (select t.`country_id-target` from Tasks t WHERE t.id = id) is null
+
+                    then update Tasks t SET t.`country_id-target` = (select c.id from Countries c where c.code = tCC) WHERE t.id = id;
+                end if;
+
+                if wordCount is not null 
+                and wordCount != (SELECT t.`word-count` FROM Tasks t WHERE  t.id = id)
+                or (select t.`word-count` from Tasks t WHERE t.id = id) is null
+
+                    then update Tasks t SET t.`word-count` = wordCount WHERE t.id = id;
+		end if;
 		
+                if taskComment is not null 
+                and taskComment != (SELECT t.comment FROM Tasks t WHERE  t.id = id)
+                or (select t.comment from Tasks t WHERE t.id = id) is null
 
-		set @first = true;
+                    then update Tasks t SET t.comment = taskComment WHERE t.id = id;
+		end if;
+                
+                if dLine is not null and dLine != '0000-00-00 00:00:00'
+                and dLine != (SELECT t.`deadline` FROM Tasks t WHERE  t.id = id)
+                or (select t.`deadline` from Tasks t WHERE t.id = id) is null
 
-		set @q= "update Tasks t set";-- set update
-
-		if projectID is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @q = CONCAT(@q," t.project_id=",projectID) ;
-
+                    then update Tasks t SET t.`deadline` = dLine WHERE t.id = id;
 		end if;
 
-		if name is not null then 
+                if taskType is not null 
+                and taskType != (SELECT t.`task-type_id` FROM Tasks t WHERE  t.id = id)
+                or (select t.`task-type_id` from Tasks t WHERE t.id = id) is null
 
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @q = CONCAT(@q," t.title=\"",name,"\"") ;
-
+                    then update Tasks t SET t.`task-type_id` = taskType WHERE t.id = id;
 		end if;
+                
+                if tStatus is not null 
+                and tStatus != (SELECT t.`task-status_id` FROM Tasks t WHERE  t.id = id)
+                or (select t.`task-status_id` from Tasks t WHERE t.id = id) is null
 
-		if sCode is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @sID=null;
-
-			select l.id into @sID from Languages l where l.code=sCode;
-
-			set @q = CONCAT(@q," t.`language_id-source`=",@sID) ;
-
+                    then update Tasks t SET t.`task-status_id` = tStatus WHERE t.id = id;
 		end if;
+                
+                if pub is not null 
+                and pub != (SELECT t.`published` FROM Tasks t WHERE  t.id = id)
+                or (select t.`published` from Tasks t WHERE t.id = id) is null
 
-		if tCode is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @tID=null;
-
-			select l.id into @tID from Languages l where l.code=tCode;
-
-			set @q = CONCAT(@q," t.`language_id-target`=",@tID) ;
-
+                    then update Tasks t SET t.`published` = pub WHERE t.id = id;
 		end if;
-
-		
-
-		if sCC is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @scid=null;
-
-			select c.id into @scid from Countries c where c.code=sCC;
-
-			set @q = CONCAT(@q," t.`country_id-source`=",@scid) ;
-
-		end if;
-
-		if tCC is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @tcid=null;
-
-			select c.id into @tcid from Countries c where c.code=tCC;
-
-			set @q = CONCAT(@q," t.`country_id-target`=",@tcid) ;
-
-		end if;
-
-		
-
-		if wordCount is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @q = CONCAT(@q," t.`word-count`=",wordCount) ;
-
-		end if;
-
-		if taskComment is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @q = CONCAT(@q," t.comment=\"",taskComment,"\"");
-
-		end if;
-
-		if (dLine is not null  and dLine!='0000-00-00 00:00:00') then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @q = CONCAT(@q," t.`deadline`=\"",dLine,"\"") ;
-
-		end if;
-
-		if taskType is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @q = CONCAT(@q," t.`task-type_id`=",taskType) ;
-
-		end if;
-
-		if tStatus is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @q = CONCAT(@q," t.`task-status_id`=",tStatus) ;
-
-		end if;
-
-		if pub is not null then 
-
-			if (@first = false) then 
-
-				set @q = CONCAT(@q,",");
-
-			else
-
-				set @first = false;
-
-			end if;
-
-			set @q = CONCAT(@q," t.`published`=",pub) ;
-
-		end if;
-
-		set @q = CONCAT(@q," where  t.id= ",id);
-
-		PREPARE stmt FROM @q;
-
-		EXECUTE stmt;
-
-		DEALLOCATE PREPARE stmt;
 		
 		call getTask(id,null,null,null,null,null,null,null,null,null,null,null,null,null);
 
@@ -3945,100 +3644,116 @@ BEGIN
 	if name='' then set name=null;end if;
 	if email='' then set email=null;end if;
 	if lang='' then set lang=null;end if;
-    if region='' then set region=null;end if;
+        if region='' then set region=null;end if;
 	
+        -- if new user
 	if id is null and not exists(select * from Users u where u.email= email)then
 	-- set insert
 	set @countryID=null;
 	select c.id into @countryID from Countries c where c.code=region;
 	set @langID=null;
 	select l.id into @langID from Languages l where l.code=lang;
+        
 	
 	insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
               values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
             call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
-	else 
-		set @first = true;
-		set @q= "update Users u set ";-- set update
-		if bio is not null then 
-#set paramaters to be updated
-			set @q = CONCAT(@q," u.biography=\"",bio,"\"") ;
-			set @first = false;
-		end if;
-		if lang is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-
-			set @langID=null;
-			select l.id into @langID from Languages l where l.code=lang;
-			set @q = CONCAT(@q," u.language_id=",@langID) ;
-		end if;
-		if region is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @countryID=null;
-			select c.id into @countryID from Countries c where c.code=region;
-			set @q = CONCAT(@q," u.country_id=",@countryID) ;
-		end if;
-		if name is not null then 
-				if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," u.`display-name`=\"",name,"\"");
-		
-		end if;
-		
-		if email is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," u.email=\"",email,"\"");
-		
-		end if;
-		if nonce is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," u.nonce=",nonce) ;
-		
-		end if;
-		
-		if pass is not null then 
-			if (@first = false) then 
-				set @q = CONCAT(@q,",");
-			else
-				set @first = false;
-			end if;
-			set @q = CONCAT(@q," u.password=\"",pass,"\"");
-		
-		end if;
-#		set where
 	
-		if id is not null then 
-			set @q = CONCAT(@q," where  u.id= ",id);
-#    	allows email to be changed but not user id
-		
-		elseif email is not null then 
-			set @q = CONCAT(@q," where  u.email= \"",email,"\"");-- allows anything but email and user_id to change
-		else
-			set @q = CONCAT(@q," where  u.email= null AND u.id=null");-- will always fail to update anyting
+        else 
+
+                if bio is not null 
+                and bio != (SELECT u.biography FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
+                
+                or (SELECT u.biography FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
+
+                    then 
+                    update Users u set u.biography = bio
+                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
+
 		end if;
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
+                
+
+		if lang is not null 
+                and (select l.id from Languages l where l.code=lang) != (SELECT u.language_id FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
+                
+                or (SELECT u.language_id FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
+
+                    then update Users u set u.language_id = (select l.id from Languages l where l.code=lang)
+                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
+
+		end if;
+
+
+                if region is not null 
+                and (select c.id from Countries c where c.code = region) != (SELECT u.country_id FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
+                
+                or (SELECT u.country_id FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
+
+                    then update Users u set u.country_id = (select c.id from Countries c where c.code = region)
+                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
+
+		end if;
+
+
+                if name is not null 
+                and name != (SELECT u.`display-name` FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
+                
+                or (SELECT u.`display-name` FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
+
+                    then update Users u set u.`display-name` = name
+                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
+
+		end if;
+
+
+                if email is not null 
+                and email != (SELECT u.email FROM Users u 
+                WHERE (id is null or u.id = id))
+                
+                or (SELECT u.email FROM Users u 
+                WHERE (id is null or u.id = id)) is null
+
+                    then update Users u set u.email = email
+                    WHERE (id is null or u.id = id);
+
+		end if;
+
+
+                if nonce is not null 
+                and nonce != (SELECT u.nonce FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
+                
+                or (SELECT u.nonce FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
+
+                    then update Users u set u.nonce = nonce
+                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
+
+		end if;
+
+		
+                if pass is not null 
+                and pass != (SELECT u.password FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
+                
+                or (SELECT u.password FROM Users u 
+                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
+
+                    then update Users u set u.password = pass
+                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
+
+                end if;
+
    	call getUser(id,null,null,null,null,null,null,null,null);
+
 	end if;
 END//
 DELIMITER ;
@@ -4293,47 +4008,76 @@ BEGIN
 		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,sip,jobTitle,address,city,country);
 		CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 	ELSE
-		set @q= "UPDATE UserPersonalInformation p SET ";
-
-		if userId is not null then 
-			set @q = CONCAT(@q," p.`user_id`=",userId) ;
-		end if;
-		if firstName is not null then 
-			set @q = CONCAT(@q," , p.`first-name`=\"",firstName,"\"") ;
-		end if;
-		if lastName is not null then 
-			set @q = CONCAT(@q," , p.`last-name`=\"",lastName,"\"") ;
-		end if;	
-		if mobileNumber is not null then 
-			set @q = CONCAT(@q," , p.`mobile-number`=\"",mobileNumber,"\"") ;
-		end if;
-		if businessNumber is not null then 
-			set @q = CONCAT(@q," , p.`business-number`=\"",businessNumber,"\"") ;
-		end if;
-		if sip is not null then 
-			set @q = CONCAT(@q," , p.sip=\"",sip,"\"") ;
-		end if;
-		if jobTitle is not null then 
-			set @q = CONCAT(@q," , p.`job-title`=\"",jobTitle,"\"") ;
-		end if;
-		if address is not null then 
-			set @q = CONCAT(@q," , p.address=\"",address,"\"") ;
-		end if;
-		if city is not null then 
-			set @q = CONCAT(@q," , p.city=\"",city,"\"") ;
-		end if;
-		if country is not null then 
-			set @q = CONCAT(@q," , p.country=\"",country,"\"") ;
+                if userId is not null 
+                and userId != (select p.`user_id` from UserPersonalInformation p WHERE p.id = id)
+                or (select p.`user_id` from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.`user_id` = userId WHERE p.id = id;
 		end if;
 
-		set @q = CONCAT(@q," WHERE p.id=",id) ; 
-		
-	   PREPARE stmt FROM @q;
-	   EXECUTE stmt;
-	   DEALLOCATE PREPARE stmt;
+                if firstName is not null 
+                and firstName != (select p.`first-name` from UserPersonalInformation p WHERE p.id = id)
+                or (select p.`first-name` from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.`first-name` = firstName WHERE p.id = id;
+		end if;
+
+                if lastName is not null 
+                and lastName != (select p.`last-name` from UserPersonalInformation p WHERE p.id = id)
+                or (select p.`last-name` from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.`last-name` = lastName WHERE p.id = id;
+		end if;
+
+                if mobileNumber is not null 
+                and mobileNumber != (select p.`mobile-number` from UserPersonalInformation p WHERE p.id = id)
+                or (select p.`mobile-number` from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.`mobile-number` = mobileNumber WHERE p.id = id;
+		end if;
+
+                if businessNumber is not null 
+                and businessNumber != (select p.`business-number` from UserPersonalInformation p WHERE p.id = id)
+                or (select p.`business-number` from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.`business-number` = businessNumber WHERE p.id = id;
+		end if;
+
+                if sip is not null 
+                and sip != (select p.sip from UserPersonalInformation p WHERE p.id = id)
+                or (select p.sip from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.sip = sip WHERE p.id = id;
+		end if;
+                
+                if jobTitle is not null 
+                and jobTitle != (select p.`job-title` from UserPersonalInformation p WHERE p.id = id)
+                or (select p.`job-title` from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.`job-title` = jobTitle WHERE p.id = id;
+		end if;
+                
+                if address is not null 
+                and address != (select p.address from UserPersonalInformation p WHERE p.id = id)
+                or (select p.address from UserPersonalInformation p WHERE p.id = id) is null
+                    then 
+                            UPDATE UserPersonalInformation p SET p.address = address WHERE p.id = id;
+		end if;
+
+                if city is not null 
+                and city != (select p.city from UserPersonalInformation p WHERE p.id = id)
+                or (select p.city from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.city = city WHERE p.id = id;
+		end if;
+                
+                if country is not null 
+                and country != (select p.country from UserPersonalInformation p WHERE p.id = id)
+                or (select p.country from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.country = country WHERE p.id = id;
+		end if;
+
+                if country is not null 
+                and country != (select p.country from UserPersonalInformation p WHERE p.id = id)
+                or (select p.country from UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.country = country WHERE p.id = id;
+		end if;
+
 		CALL getUserPersonalInfo(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
-	end if;		
+	end if;
 END//
 DELIMITER ;
 
@@ -4354,55 +4098,20 @@ BEGIN
 	if city='' then set city=null;end if;
 	if country='' then set country=null;end if;
 	
-	set @q= "select * from UserPersonalInformation p where 1 ";
+	select * from UserPersonalInformation p 
+        
+        where (id is null or p.id = id)
+            and (userId is null or p.user_id = userId)
+            and (firstName is null or p.`first-name` = firstName)
+            and (lastName is null or p.`last-name` = lastName)
+            and (mobileNumber is null or p.`mobile-number` = mobileNumber)
+            and (businessNumber is null or p.`business-number` = businessNumber)
+            and (sip is null or p.sip = sip)
+            and (jobTitle is null or p.`job-title` = jobTitle) 
+            and (address is null or p.address = address) 
+            and (city is null or p.city = city) 
+            and (country is null or p.country = country);
 	
-	if id is not null then 
-		set @q = CONCAT(@q," and p.id='",id,"'") ;
-	end if;
-	
-	if userId is not null then 
-		set @q = CONCAT(@q," and p.`user_id`=",userId) ;
-	end if;
-	
-	if firstName is not null then 
-		set @q = CONCAT(@q," and p.`first-name`=\"",firstName,"\"") ;
-	end if;
-	
-	if lastName is not null then 
-		set @q = CONCAT(@q," and p.`last-name`=\"",lastName,"\"") ;
-	end if;
-	
-	if mobileNumber is not null then 
-		set @q = CONCAT(@q," and p.`mobile-number`=\"",mobileNumber,"\"") ;
-	end if;
-	
-	if businessNumber is not null then 
-		set @q = CONCAT(@q," and p.`business-number`=\"",businessNumber,"\"") ;
-	end if;
-	
-	if sip is not null then 
-		set @q = CONCAT(@q," and p.sip=\"",sip,"\"") ;
-	end if;
-	
-	if jobTitle is not null then 
-		set @q = CONCAT(@q," and p.`job-title`=\"",jobTitle,"\"") ;
-	end if;
-	
-	if address is not null then 
-		set @q = CONCAT(@q," and p.address=\"",address,"\"") ;
-	end if;
-	
-	if city is not null then 
-		set @q = CONCAT(@q," and p.city=\"",city,"\"") ;
-	end if;
-	
-	if country is not null then 
-		set @q = CONCAT(@q," and p.country=\"",country,"\"") ;
-	end if;
-	
-	PREPARE stmt FROM @q;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 

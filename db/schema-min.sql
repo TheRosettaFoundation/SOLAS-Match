@@ -157,10 +157,10 @@ CREATE TABLE IF NOT EXISTS `BannedTypes` (
 
 REPLACE INTO `BannedTypes` (`id`, `type`) VALUES
 	(1, 'Day'),
+    (2, 'Week'),
 	(3, 'Month'),
 	(4, 'Permanent'),
-	(2, 'Week'),
-        (5, 'Hour');
+    (5, 'Hour');
 
 -- Dumping structure for table debug-test3.BannedUsers
 CREATE TABLE IF NOT EXISTS `BannedUsers` (
@@ -588,6 +588,8 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
   CONSTRAINT `FK_user_badges_users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Data exporting was unselected.
+
 
 -- Dumping structure for table debug-test3.UserLogins
 CREATE TABLE IF NOT EXISTS `UserLogins` (
@@ -598,7 +600,7 @@ CREATE TABLE IF NOT EXISTS `UserLogins` (
   KEY `FK_UserLogins_Users` (`user_id`),
   CONSTRAINT `FK_UserLogins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
+ 
 
 -- Dumping structure for table Solas-Match-Test.UserNotifications
 CREATE TABLE IF NOT EXISTS `UserNotifications` (
@@ -612,8 +614,6 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
   CONSTRAINT `FK_user_notifications_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.UserOrganisationPermissions
 CREATE TABLE IF NOT EXISTS `UserOrganisationPermissions` (
@@ -673,8 +673,6 @@ CREATE TABLE IF NOT EXISTS `Users` (
   CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
-
 -- Dumping structure for table Solas-Match-Test.UserSecondaryLanguages
 CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -684,7 +682,8 @@ CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `user_id` (`user_id`, `language_id`, `country_id`),
 	CONSTRAINT `FK_UserSecondaryLanguages_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE	
+	CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_UserSecondaryLanguages_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -1320,6 +1319,7 @@ BEGIN
 END//
 DELIMITER ;
 
+
 -- Dumping structure for procedure Solas-Match-Dev.getAdmin
 DROP PROCEDURE IF EXISTS `getAdmin`;
 DELIMITER //
@@ -1373,8 +1373,6 @@ and (m.`archived-date`=archiveDate or archiveDate is null or archiveDate='0000-0
 ;
 END//
 DELIMITER ;
-
-
 
 
 -- Dumping structure for procedure debug-test.getArchivedTask
@@ -1454,7 +1452,6 @@ DELIMITER ;
 
 
 
-
 -- Dumping structure for procedure Solas-Match-Dev.getBadge
 DROP PROCEDURE IF EXISTS `getBadge`;
 DELIMITER //
@@ -1464,11 +1461,12 @@ BEGIN
 	if id='' then set id=null;end if;
 	if des='' then set des=null;end if;
 	if name='' then set name=null;end if;
-	if orgID='' then set orgID=null;end if;	
+	if orgID='' then set orgID=null;end if;
 	SELECT * FROM Badges b 
 	where (b.id=id or id is null) and (b.owner_id=orgID or orgID is null) and (b.title=name or name is null) and (b.description=des or des is null);
-DELIMITER ;
 
+END//
+DELIMITER ;
 
 
 
@@ -1487,6 +1485,7 @@ BEGIN
 	FROM BannedOrganisations b 
 	WHERE isNullOrEqual(b.org_id,orgId) and isNullOrEqual(b.`user_id-admin`,userIdAdmin) and isNullOrEqual(b.bannedtype_id,bannedTypeId) 
 	and isNullOrEqual(b.`comment`,adminComment) and isNullOrEqual(b.`banned-date`,bannedDate); 
+
 END//
 DELIMITER ;
 
@@ -1501,13 +1500,13 @@ BEGIN
 	if bannedTypeId='' then set bannedTypeId=null;end if;
 	if adminComment='' then set adminComment=null;end if;
 	if bannedDate='' then set bannedDate=null;end if;
-
-        SELECT b.user_id, b.`user_id-admin`, b.bannedtype_id, b.`comment`, b.`banned-date` 
+	SELECT b.user_id, b.`user_id-admin`, b.bannedtype_id, b.`comment`, b.`banned-date` 
 	FROM BannedUsers b 
 	WHERE isNullOrEqual(b.user_id,userId) and isNullOrEqual(b.`user_id-admin`,userIdAdmin) and isNullOrEqual(b.bannedtype_id,bannedTypeId)
 	and isNullOrEqual(b.`comment`,adminComment) and isNullOrEqual(b.`banned-date`, bannedDate);
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getCountries
 DROP PROCEDURE IF EXISTS `getCountries`;
@@ -1558,6 +1557,7 @@ SELECT  `en-name` as language, code, id FROM Languages order by `en-name`;
 END//
 DELIMITER ;
 
+
 -- Dumping structure for procedure Solas-Match-Dev.getLatestAvailableTasks
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
@@ -1565,16 +1565,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` I
 BEGIN
 	 if (lim= '') then set lim=null; end if;
 	 if(lim is not null) then
+
 	    select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` 
 		 FROM Tasks AS t 
 		 WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC LIMIT lim;
-         else
+        else
 		 select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` 
 		 FROM Tasks AS t 
-		 WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC;
-         end if;
+    		 WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC;
+        end if;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Dev.getLatestFileVersion
 DROP PROCEDURE IF EXISTS `getLatestFileVersion`;
@@ -1587,7 +1589,6 @@ BEGIN
 	where isNullOrEqual(tfv.task_id,id) and isNullOrEqual(tfv.user_id,uID);
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getMembershipRequests
 DROP PROCEDURE IF EXISTS `getMembershipRequests`;
@@ -1714,16 +1715,18 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getPasswordResetRequests
 DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `userId` INT(11))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `email` VARCHAR(128))
 BEGIN
 	if unique_id='' then set unique_id=null;end if;
-    if userId='' then set userId=null;end if;
+    if email='' then set email=null;end if;
     set @q= "SELECT * FROM PasswordResetRequests p WHERE 1 ";
     if unique_id is not null then
         set @q= CONCAT(@q," and p.uid=\"",unique_id,"\"");
     end if;
-    if userId is not null then
-        set @q= CONCAT(@q, " and p.user_id=", userId);
+    if email is not null then
+        set @q= CONCAT(@q, " and p.user_id IN (SELECT id 
+                                                    FROM Users
+                                                    WHERE email = \"", email, "\")");
     end if;
 
 	PREPARE stmt FROM @q;
@@ -2389,7 +2392,6 @@ WHERE user_id = id;
 END//
 DELIMITER ;
 
-
 -- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
@@ -2402,7 +2404,6 @@ BEGIN
 	END IF;
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getUserIdsPendingTaskStreamNotification
 DROP PROCEDURE IF EXISTS `getUserIdsPendingTaskStreamNotification`;
@@ -2540,10 +2541,10 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getUserTasks
 DROP PROCEDURE IF EXISTS `getUserTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT, IN `offset` INT)
 BEGIN
     if lim = '' then set lim = null; end if;
-
+    if offset = '' then set offset = 0; end if;
     set @q= " SELECT t.id, t.project_id, t.title, t.`word-count`,(select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
                 t.`created-time`, (select code from Countries c where c.id =t.`country_id-source`) as `country_id-source`, 
                  comment,
@@ -2552,7 +2553,7 @@ BEGIN
                 WHERE user_id = ?
                 ORDER BY `created-time` DESC";
 if lim IS NOT NULL then
-    set @q=CONCAT(@q, " limit ", lim);
+    set @q=CONCAT(@q, " limit ", offset, ', ', lim);
 end if;
         PREPARE stmt FROM @q;
         set@uID = uID;
@@ -2561,6 +2562,16 @@ end if;
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getUserTasksCount
+DROP PROCEDURE IF EXISTS `getUserTasksCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasksCount`(IN `uID` INT)
+BEGIN
+    SELECT COUNT(1) as result
+        FROM TaskClaims
+        WHERE user_id = uID;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTaskStreamNotification
 DROP PROCEDURE IF EXISTS `getUserTaskStreamNotification`;
@@ -2702,6 +2713,7 @@ BEGIN
 END//
 DELIMITER ;
 
+
 -- Dumping structure for function Solas-Match-Dev.isNullOrEqual
 DROP FUNCTION IF EXISTS `isNullOrEqual`;
 DELIMITER //
@@ -2710,6 +2722,8 @@ BEGIN
 return (x=y or x is null or y is null or '0000-00-00 00:00:00' = x or '0000-00-00 00:00:00'=y);
 END//
 DELIMITER ;
+
+
 
 -- Dumping structure for procedure Solas-Match-Test.isUserVerified
 DROP PROCEDURE IF EXISTS `isUserVerified`;
@@ -2766,6 +2780,7 @@ BEGIN
 END//
 DELIMITER ;
 
+
 -- Dumping structure for procedure debug-test3.isUserBlacklistedForTask
 DROP PROCEDURE IF EXISTS `isUserBlacklistedForTask`;
 DELIMITER //
@@ -2778,6 +2793,7 @@ BEGIN
 	END IF;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.logFileDownload
 DROP PROCEDURE IF EXISTS `logFileDownload`;
@@ -4371,7 +4387,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
@@ -4388,6 +4403,25 @@ end if;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
+
+-- Dumping structure for trigger debug-test3.beforeUserLoginInsert
+DROP TRIGGER IF EXISTS `beforeUserLoginInsert`;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `beforeUserLoginInsert` BEFORE INSERT ON `UserLogins` FOR EACH ROW BEGIN
+
+set @loginAttempts = null;
+ 
+	SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVAL 1 MINUTE); 
+	
+	IF @loginAttempts = 4 THEN
+		INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW());
+	END IF;
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLD_SQL_MODE;
+
 
 -- Dumping structure for trigger Solas-Match-Test.defaultUserName
 DROP TRIGGER IF EXISTS `defaultUserName`;
@@ -4627,6 +4661,7 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
+
 -- Dumping structure for trigger Solas-Match.onUserUpdate
 DROP TRIGGER IF EXISTS `onUserUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
@@ -4640,24 +4675,6 @@ CREATE TRIGGER `onUserUpdate` BEFORE UPDATE ON `Users` FOR EACH ROW BEGIN
 		INSERT INTO UserBadges VALUES(OLD.id, 3);
 		
 	END IF;	
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
-
--- Dumping structure for trigger debug-test3.beforeUserLoginInsert
-DROP TRIGGER IF EXISTS `beforeUserLoginInsert`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
-DELIMITER //
-CREATE TRIGGER `beforeUserLoginInsert` BEFORE INSERT ON `UserLogins` FOR EACH ROW BEGIN
-
-set @loginAttempts = null;
- 
-	SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVAL 1 MINUTE); 
-	
-	IF @loginAttempts = 4 THEN
-		INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW());
-	END IF;
-
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;

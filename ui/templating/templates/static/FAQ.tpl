@@ -8,7 +8,7 @@
     
     <div id="quicklinks" style="margin-top: 20px;text-align: center"   >
         <h2>{Localisation::getTranslation(Strings::FAQ_QUICKLINKS)}</h2>
-        <h3 ><a href="#volunteerQuestions">{Localisation::getTranslation(Strings::FAQ_VOLUNTEERS)}</a><span style="white-space: pre">      |    </span><a href="#orgQuestions">{Localisation::getTranslation(Strings::COMMON_ORGANISATION)}</a></h3>
+        <h3 ><a href="#volunteerQuestions">{Localisation::getTranslation(Strings::FAQ_VOLUNTEERS)}</a><span style="white-space: pre">      |    </span><a href="#orgQuestions">{Localisation::getTranslation(Strings::COMMON_ORGANISATION)}</a><span style="white-space: pre">      |    </span><a href="#faqQuestions">{Localisation::getTranslation(Strings::FAQ_TERMS)}</a></h3>
     </div>
     
     <div style="margin-top: 25px;text-align: justify" class="well">
@@ -27,7 +27,9 @@
             <p><a href="#vol7">{Localisation::getTranslation(Strings::FAQ_20)}</a></p>
             <p><a href="#vol8">{Localisation::getTranslation(Strings::FAQ_27)}</a></p> 
             <p><a href="#vol9">{Localisation::getTranslation(Strings::FAQ_31)}</a></p> 
-            <p><a href="#vol10">{Localisation::getTranslation(Strings::FAQ_33)}</a></p> 
+            <p><a href="#vol10">{Localisation::getTranslation(Strings::FAQ_33)}</a></p>
+            <p><a href="#vol11">{Localisation::getTranslation(Strings::FAQ_75)}</a></p>
+            
             <hr />
         </div>
 
@@ -103,9 +105,17 @@
             {Localisation::getTranslation(Strings::FAQ_35)} 
             {Localisation::getTranslation(Strings::FAQ_36)}
             </p>
+            
+            <h3 id="vol11">{Localisation::getTranslation(Strings::FAQ_75)}</h3>
+            <p>
+            {Localisation::getTranslation(Strings::FAQ_76)} 
+            {Localisation::getTranslation(Strings::FAQ_77)} 
+            </p>
 
         </div>
     </div>   
+            
+            
  <div style="margin-top: 20px;text-align: justify" class="well">
     <div id="orgQuestions">
         <h2>{Localisation::getTranslation(Strings::FAQ_ORGANISATION_QUESTIONS)}</h2>
@@ -182,4 +192,63 @@
         
     </div>
 </div>
+        
+<div style="margin-top: 25px;text-align: justify" class="well">
+
+    <div id="faqQuestions">
+
+        <h2>{Localisation::getTranslation(Strings::FAQ_TERMS_LIST)}</h2>
+        <hr />
+
+        <p><a href="#terms1">{Localisation::getTranslation(Strings::FAQ_91)}</a></p>
+        <p><a href="#terms2">{Localisation::getTranslation(Strings::FAQ_92)}</a></p>
+        <p><a href="#terms3">{Localisation::getTranslation(Strings::FAQ_93)}</a></p>
+        <p><a href="#terms4">{Localisation::getTranslation(Strings::FAQ_94)}</a></p>
+        <p><a href="#terms5">{Localisation::getTranslation(Strings::FAQ_95)}</a></p>
+        <p><a href="#terms6">{Localisation::getTranslation(Strings::FAQ_96)}</a></p>
+
+        <hr />
+    </div>
+
+    <div id="faqAnswers">
+        <h3 id="terms1">{Localisation::getTranslation(Strings::FAQ_TASK)}</h3>
+        <p>
+        {Localisation::getTranslation(Strings::FAQ_78)} 
+        {Localisation::getTranslation(Strings::FAQ_79)}
+        </p>
+
+        <h3 id="terms2">{Localisation::getTranslation(Strings::FAQ_TASK_STREAM)}</h3>
+        <p>
+        {Localisation::getTranslation(Strings::FAQ_80)} 
+        {Localisation::getTranslation(Strings::FAQ_81)} 
+        </p>
+
+        <h3 id="terms3">{Localisation::getTranslation(Strings::FAQ_SEGMENTATION)}</h3>
+        <p>
+        {Localisation::getTranslation(Strings::FAQ_82)} 
+        {Localisation::getTranslation(Strings::FAQ_83)}
+        {Localisation::getTranslation(Strings::FAQ_84)}
+        {Localisation::getTranslation(Strings::FAQ_85)}
+        {Localisation::getTranslation(Strings::FAQ_86)}
+        </p>
+
+        <h3 id="terms4">{Localisation::getTranslation(Strings::FAQ_TAGS)}</h3>
+        <p>
+        {Localisation::getTranslation(Strings::FAQ_87)} 
+        </p>
+
+        <h3 id="terms5">{Localisation::getTranslation(Strings::FAQ_BADGES)}</h3>
+        <p>
+        {Localisation::getTranslation(Strings::FAQ_88)}
+        {Localisation::getTranslation(Strings::FAQ_89)}
+        </p>
+
+        <h3 id="terms6">{Localisation::getTranslation(Strings::FAQ_PROJECT_IMPACT)}</h3>
+        <p>
+        {Localisation::getTranslation(Strings::FAQ_90)}
+        </p>
+
+    </div>
+</div>
+            
 {include file="footer.tpl"}

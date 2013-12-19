@@ -1034,6 +1034,7 @@ class Strings
     const FAQ_QUICKLINKS = 'faq_quicklinks';
     const FAQ_VOLUNTEERS= 'faq_volunteers';
     const FAQ_VOLUNTEER_QUESTIONS = 'faq_volunteer_questions';
+    const FAQ_TERMS = "faq_terms";
     const FAQ_1 = 'faq_1';
     const FAQ_2 = 'faq_2';
     const FAQ_3 = 'faq_3';
@@ -1109,6 +1110,36 @@ class Strings
     const FAQ_72 = 'faq_72';
     const FAQ_73 = 'faq_73';
     const FAQ_74 = 'faq_74';
+    const FAQ_75 = 'faq_75';
+    const FAQ_76 = 'faq_76';
+    const FAQ_77 = 'faq_77';
+    const FAQ_TERMS_LIST = 'faq_terms_list';
+    const FAQ_TASK = 'faq_task';
+    const FAQ_78 = 'faq_78';
+    const FAQ_79 = 'faq_79';
+    const FAQ_TASK_STREAM = 'faq_task_stream';
+    const FAQ_80 = 'faq_80';
+    const FAQ_81 = 'faq_81';
+    const FAQ_SEGMENTATION = 'faq_segmentation';
+    const FAQ_82 = 'faq_82';
+    const FAQ_83 = 'faq_83';
+    const FAQ_84 = 'faq_84';
+    const FAQ_85 = 'faq_85';
+    const FAQ_86 = 'faq_86';
+    const FAQ_TAGS = 'faq_Tags';
+    const FAQ_87 = 'faq_87';
+    const FAQ_BADGES = 'faq_badges';
+    const FAQ_88 = 'faq_88';
+    const FAQ_89 = 'faq_89';
+    const FAQ_PROJECT_IMPACT = 'faq_project_impact';
+    const FAQ_90 = 'faq_90';
+    const FAQ_91 = 'faq_91';
+    const FAQ_92 = 'faq_92';
+    const FAQ_93 = 'faq_93';
+    const FAQ_94 = 'faq_94';
+    const FAQ_95 = 'faq_95';
+    const FAQ_96 = 'faq_96';
+    
     
     const SLIM_ERROR_OOPS_THERE_HAS = 'slim_error_Oops_there_has';
     const SLIM_ERROR_1 = 'slim_error_1';
