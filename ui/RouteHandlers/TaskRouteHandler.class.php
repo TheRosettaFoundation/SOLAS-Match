@@ -135,9 +135,9 @@ class TaskRouteHandler
         }
 
         $extra_scripts = "
-            <script src=\"{$app->urlFor("home")}ui/dart/web/packages/custom_element/custom-elements.debug.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/web/packages/browser/interop.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/out/web/Routes/Users/ClaimedTasks.dart.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/ClaimedTasks.dart.js\"></script>
             ";
 
         $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/ClaimedTasksStream.html");
@@ -497,8 +497,8 @@ class TaskRouteHandler
         $deadlineError = "";
 
         $extra_scripts = "
-        <script type=\"text/javascript\">".file_get_contents(__DIR__."/../js/lib/jquery-ui-timepicker-addon.js")."</script>"
-        .file_get_contents(__DIR__."/../js/datetime-picker.js");
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
 
         $task = $taskDao->getTask($task_id);
 
@@ -903,8 +903,8 @@ class TaskRouteHandler
         }
 
         $extra_scripts = "
-            <script type=\"text/javascript\">".file_get_contents(__DIR__."/../js/lib/jquery-ui-timepicker-addon.js")."</script>"
-            .file_get_contents(__DIR__."/../js/datetime-picker.js");
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
 
         $app->view()->appendData(array(
                 "project"       => $project,

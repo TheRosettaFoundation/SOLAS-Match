@@ -298,8 +298,8 @@ class ProjectRouteHandler
         $tagList .= "]";
 
         $extra_scripts = "
-            <script type=\"text/javascript\">".file_get_contents(__DIR__."/../js/lib/jquery-ui-timepicker-addon.js")."</script>"
-            .file_get_contents(__DIR__."/../js/datetime-picker.js")."
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js></script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
             <script type=\"text/javascript\">
                 var tagList = $tagList;
             </script>"
@@ -322,9 +322,15 @@ class ProjectRouteHandler
         $app = Slim::getInstance();
         $user_id = UserSession::getCurrentUserID(); 
 
-        $extraScripts = "<script type=\"text/javascript\">".file_get_contents(__DIR__.
-                        "/../js/lib/jquery-ui-timepicker-addon.js")."</script>".
-                        file_get_contents(__DIR__."/../js/datetime-picker.js");
+        $extraScripts = "
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Projects/ProjectCreate.dart.js\"></script>
+            ";
+        $extraScripts .= file_get_contents("ui/dart/web/Routes/Projects/ProjectCreateForm.html");
 
         $app->view()->appendData(array(
             "maxFileSize"   => TemplateHelper::maxFileSizeBytes(),

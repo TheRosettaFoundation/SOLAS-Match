@@ -8,3 +8,10 @@ dependencies:
   json_object: any
   polymer: any
   xml: any
+transformers:
+- polymer:
+    entry_points:
+    - web/Routes/Users/home.dart
+    - web/Routes/Users/UserPrivateProfile.dart
+    - web/Routes/Users/ClaimedTasks.dart
+    - web/Routes/Projects/ProjectCreate.dart
