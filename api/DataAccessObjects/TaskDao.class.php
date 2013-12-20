@@ -292,6 +292,34 @@ class TaskDao
         return $ret;
     }
 
+    public static function getTasksWithBadgeRestriction($badgeId)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNull($badgeId);
+
+        if ($result = PDOWrapper::call("getTaskWithBadgeRestriction", $args)) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Task", $row);
+            }
+        }
+        return $ret;
+    }
+
+    public static function getTaskBadgeRestrictions($taskId)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNull($taskId);
+
+        if ($result = PDOWrapper::call("getTaskBadgeRestrictions", $args)) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Badge", $row);
+            }
+        }
+        return $ret;
+    }
+
     public static function addTaskBadgeRestriction($taskId, $badgeId)
     {
         $args = PDOWrapper::cleanseNull($taskId).", ".
