@@ -775,7 +775,9 @@ class TaskRouteHandler
         }
         
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
-        if($isOrgMember) {     
+        $adminDao = new AdminDao();
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+        if ($isOrgMember || $isSiteAdmin) {     
             $app->view()->appendData(array("isOrgMember" => $isOrgMember));
         }
 
