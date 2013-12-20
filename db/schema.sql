@@ -1615,18 +1615,33 @@ DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT, IN `offset` INT)
 BEGIN
-	 if (lim= '') then set lim=null; end if;
-     if (offset='') then set offset=0; end if;
-	 if(lim is not null) then
+    -- if limit is null, set to maxBigInt unsigned
+	if (lim= '') then set lim=~0; end if;
+    if (offset='') then set offset=0; end if;
 
-	    select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` 
-		 FROM Tasks AS t 
-		 WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC LIMIT offset, lim;
-        else
-		 select id,project_id,title,`word-count`, (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, (select code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, (select `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` 
-		 FROM Tasks AS t 
-    		 WHERE NOT exists (SELECT 1 FROM TaskClaims where TaskClaims.task_id = t.id) AND t.published = 1 AND t.`task-status_id` = 2 ORDER BY `created-time` DESC;
-        end if;
+	SELECT id, project_id, title, `word-count`, 
+        (SELECT `en-name` FROM Languages WHERE id =t.`language_id-source`) as `sourceLanguageName`, 
+        (SELECT code FROM Languages WHERE id =t.`language_id-source`) as `sourceLanguageCode`, 
+        (SELECT `en-name` FROM Languages WHERE id =t.`language_id-target`) as `targetLanguageName`, 
+        (SELECT code FROM Languages WHERE id =t.`language_id-target`) as `targetLanguageCode`, 
+        (SELECT `en-name` FROM Countries WHERE id =t.`country_id-source`) as `sourceCountryName`, 
+        (SELECT code FROM Countries WHERE id =t.`country_id-source`) as `sourceCountryCode`, 
+        (SELECT `en-name` FROM Countries WHERE id =t.`country_id-target`) as `targetCountryName`, 
+        (SELECT code FROM Countries WHERE id =t.`country_id-target`) as `targetCountryCode`, 
+        comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+	FROM Tasks t 
+	WHERE NOT EXISTS (
+        SELECT 1 
+        FROM TaskClaims 
+        WHERE TaskClaims.task_id = t.id) 
+    AND NOT EXISTS (
+        SELECT 1
+        FROM TaskBadgeRestrictions
+        WHERE TaskBadgeRestrictions.task_id = t.id)
+    AND t.published = 1 
+    AND t.`task-status_id` = 2 
+    ORDER BY `created-time` DESC 
+    LIMIT offset, lim;
 END//
 DELIMITER ;
 
@@ -1969,33 +1984,41 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTaggedTasks
 DROP PROCEDURE IF EXISTS `getTaggedTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `lim` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tagId` INT, IN `userId` INT, IN `lim` INT)
     READS SQL DATA
 BEGIN
-     -- if limit is null, set to maxBigInt unsigned
-        if lim = '' then set lim = ~0; end if;
+    -- if limit is null, set to maxBigInt unsigned
+    if lim = '' then set lim = ~0; end if;
   
-            SELECT t.id, t.project_id, t.title, t.`word-count`,
-                (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,     
-                (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
-                (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
-                (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
-                (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
-                (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
-                (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
-                (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`created-time`, 
-                (select code from Countries c where c.id = t.`country_id-source`) as `country_id-source`,
-                t.comment,  t.`task-type_id`, t.`task-status_id`, t.published, t.deadline  
+    SELECT t.id, t.project_id, t.title, t.`word-count`,
+        (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,     
+        (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+        (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+        (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+        (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+        (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+        (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+        (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`created-time`, 
+        (select code from Countries c where c.id = t.`country_id-source`) as `country_id-source`,
+        t.comment,  t.`task-type_id`, t.`task-status_id`, t.published, t.deadline  
 
-            FROM Tasks t join ProjectTags pt on pt.project_id = t.project_id
-
-            WHERE pt.tag_id = `tID`
-
-            AND NOT  exists (SELECT 1 FROM TaskClaims WHERE task_id = t.id)
-            AND t.published = 1
-            AND t.`task-status_id` = 2 
-            ORDER BY t.`created-time` DESC
-            LIMIT lim;
+    FROM Tasks t 
+    JOIN ProjectTags pt 
+        ON pt.project_id = t.project_id
+    LEFT JOIN (SELECT * FROM UserTaskScores u WHERE u.user_id = userId ) AS uts
+        ON t.id = uts.task_id
+    WHERE pt.tag_id = `tagId`
+    AND NOT EXISTS (SELECT 1 FROM TaskClaims WHERE task_id = t.id)
+    AND NOT EXISTS (SELECT 1 
+                        FROM TaskBadgeRestrictions tbr
+                        WHERE tbr.task_id = t.id
+                        AND tbr.badge_id NOT IN (SELECT badge_id
+                                                    FROM UserBadges
+                                                    WHERE user_id = userId))
+    AND t.published = 1
+    AND t.`task-status_id` = 2 
+    ORDER BY uts.score DESC
+    LIMIT lim;
 
 END//
 DELIMITER ;
@@ -2225,9 +2248,10 @@ BEGIN
         (SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-source`) as `country_id-source`,
         (SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-target`)as `country_id-target`,
         t.`created-time`, t.deadline, t.`comment`, t.`task-type_id`, t.`task-status_id`, t.published
-        WHERE t.id = (SELECT task_id
-                        FROM TaskBadgeRestrictions
-                        WHERE badge_id = badgeId);
+        FROM Tasks t
+        WHERE t.id = (SELECT tbr.task_id
+                        FROM TaskBadgeRestrictions tbr
+                        WHERE tbr.badge_id = badgeId);
 END//
 DELIMITER ;
 
@@ -2537,81 +2561,50 @@ IN `offset` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLa
     READS SQL DATA
 
 BEGIN
-            -- if limit is null, set to maxBigInt unsigned
-            if lim = '' then set lim = ~0; end if;
-            if offset='' then set offset = 0; end if;
+    -- if limit is null, set to maxBigInt unsigned
+    if lim = '' then set lim = ~0; end if;
+    if offset='' then set offset = 0; end if;
 
-            if taskType = ''       then set taskType = null; end if;
-            if sourceLanguage = '' then set sourceLanguage = null; end if;
-            if targetLanguage = '' then set targetLanguage = null; end if;
+    if taskType = ''       then set taskType = null; end if;
+    if sourceLanguage = '' then set sourceLanguage = null; end if;
+    if targetLanguage = '' then set targetLanguage = null; end if;
 
-    if (strict = 1) then
+    (SELECT id,project_id,title,`word-count`, 
+        (SELECT `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
+        (SELECT code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+        (SELECT `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+        (SELECT code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+        (SELECT `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+        (SELECT code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+        (SELECT `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+        (SELECT code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
+        comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
 
-             (SELECT id,project_id,title,`word-count`, 
-                (SELECT `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
-                (SELECT code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
-                (SELECT `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
-                (SELECT code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
-                (SELECT `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
-                (SELECT code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
-                (SELECT `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
-                (SELECT code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
-                comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+    FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores u WHERE u.user_id = uID ) AS uts 
+    ON t.id = uts.task_id 
 
-            FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores u WHERE u.user_id = uID ) AS uts 
-                ON t.id = uts.task_id 
+    WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
+    AND t.published = 1 
+    AND t.`task-status_id` = 2 
+    AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
 
-            WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
-                AND t.published = 1 
-                AND t.`task-status_id` = 2 
-                AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
+    AND (taskType is null or t.`task-type_id` = taskType)
+    AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
+    AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
 
-                AND (taskType is null or t.`task-type_id` = taskType)
-                AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
-                AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
-
-                    AND (t.`language_id-source` IN 
-                        (SELECT language_id FROM Users WHERE user_id =  uID)
-
-                        OR t.`language_id-source` IN 
-                            (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = ", uID, "))
-
-
-                    AND (t.`language_id-target` IN 
-                        (SELECT language_id FROM Users WHERE user_id = uID)
-
-                        OR t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))
-
-             ORDER BY uts.score DESC limit offset, lim);
-
-    else 
-
-            (SELECT id,project_id,title,`word-count`, 
-                (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
-                (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
-                (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
-                (SELECT code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
-                (SELECT `en-name` from Countries where id =t.`country_id-source`) as `sourceCountryName`, 
-                (SELECT code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
-                (SELECT `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
-                (SELECT code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-                comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
-
-            FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores WHERE user_id = uID ) AS uts 
-                ON t.id = uts.task_id 
-
-            WHERE t.id NOT IN (SELECT task_id FROM TaskClaims)
-                AND t.published = 1 
-                AND t.`task-status_id` = 2 
-                AND not exists(SELECT 1 FROM TaskTranslatorBlacklist WHERE user_id = uID AND task_id=t.id)
-
-                AND (taskType is null or t.`task-type_id` = taskType)
-                AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
-                AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
-            ORDER BY uts.score DESC limit offset, lim);
-
-    end if;
-    
+    AND (strict = 0
+        OR (
+            (t.`language_id-source` IN 
+                (SELECT language_id FROM Users WHERE user_id = uID)
+            OR t.`language_id-source` IN 
+                (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))
+            AND (t.`language_id-target` IN 
+                (SELECT language_id FROM Users WHERE user_id = uID)
+            OR t.`language_id-target` IN 
+                (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))
+            )
+        )
+    ORDER BY uts.score DESC limit offset, lim);
 END//
 DELIMITER ;
 

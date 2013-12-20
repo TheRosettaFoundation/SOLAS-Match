@@ -338,7 +338,7 @@ class TaskDao
                 PDOWrapper::cleanseNull($badgeId);
 
         $ret = null;
-        if ($result = PDOWrapper:call('removeTaskBadgeRestriction', $args)) {
+        if ($result = PDOWrapper::call('removeTaskBadgeRestriction', $args)) {
             $ret = $result[0]['result'];
         }
         return $ret;
