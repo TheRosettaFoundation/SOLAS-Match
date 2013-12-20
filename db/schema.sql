@@ -2584,6 +2584,12 @@ BEGIN
     ON t.id = uts.task_id 
 
     WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
+    AND NOT EXISTS (SELECT 1
+        FROM TaskBadgeRestrictions tbr
+        WHERE tbr.task_id = t.id
+        AND tbr.badge_id NOT IN (SELECT badge_id
+            FROM UserBadges
+            WHERE user_id = uID))
     AND t.published = 1 
     AND t.`task-status_id` = 2 
     AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
