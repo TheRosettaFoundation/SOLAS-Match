@@ -728,24 +728,35 @@ class TaskRouteHandler
                 } else {
                     $task->setPublished(0);                    
                 }
-                $taskDao->updateTask($task);                 
-                
+                if ($taskDao->updateTask($task)) {
+                    if ($post['published']) {
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_VIEW_1));
+                    } else {
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_VIEW_2));
+                    }
+                } else {
+                    if ($post['published']) {
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_VIEW_3));
+                    } else {
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_VIEW_4));
+                    }
+                }
             }
 
             if (isset($post['track'])) {
                 if ($post['track'] == "Ignore") {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_10));
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_12));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_11));
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_13));
                     }
                 } else {
                     $response = $userDao->trackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_12));
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_10));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_13));
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_11));
                     }
                 }
             }
