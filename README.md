@@ -32,7 +32,7 @@ Contact
 * Eoin Ó Conchúir   <eoin.oconchuir@ul.ie>
 * David O Carroll   <david.ocarroll@ul.ie>
 * Sean Mooney       <Sean.Mooney@ul.ie>
-* Manuel Honegger   <Manuel.Honegger@ul.ie>	
+* Manuel Honegger   <Manuel.Honegger@ul.ie>
 
 Technical Requirements
 ======================
@@ -157,7 +157,7 @@ SHOW GRANTS FOR 'tester'@'localhost';
 Configuration file
 ------------------
     
-1.  Copy ./app/includes/conf.template.ini to ./app/includes/conf.ini
+1.  Copy /Common/conf/conf.template.ini to /Common/conf/conf.ini
 2.  Edit conf.ini with your configurations.
 3.  Under database, enter your MySQL connection settings.
 4.  Under the site section, enter the URL of the installation.
@@ -167,7 +167,7 @@ Configuration file
 	    - setting openid='h' will enable hybrid login.(both login options will be avaiable to the user).
        2. for more reliable openid support install php5-curl. sudo apt-get install php5-curl(fixes issue with google/yahoo connection reset).
 5.  Under user session control, enter a long random string.
-6.  Under Files changes upload_path to 'unploads/'
+6.  Under Files changes upload_path to 'uploads/'
 
 Git Pre-Commit Hook
 -------------------

@@ -92,8 +92,6 @@ class OrgRouteHandler
                 if (!$organisation) {
                     $new_org = $orgDao->createOrg($org, $user_id);
                     if ($new_org) {
-                        
-                        $orgDao->acceptMembershipRequest($new_org->getId(), $user_id);
                         $org_name = $org->getName();
                         $app->flash("success", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_2), $org_name));
                         $app->redirect($app->urlFor("org-dashboard"));
