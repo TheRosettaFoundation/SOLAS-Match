@@ -32,7 +32,7 @@ Contact
 * Eoin Ó Conchúir   <eoin.oconchuir@ul.ie>
 * David O Carroll   <david.ocarroll@ul.ie>
 * Sean Mooney       <Sean.Mooney@ul.ie>
-* Manuel Honegger   <Manuel.Honegger@ul.ie>	
+* Manuel Honegger   <Manuel.Honegger@ul.ie>
 
 Technical Requirements
 ======================
@@ -157,7 +157,7 @@ SHOW GRANTS FOR 'tester'@'localhost';
 Configuration file
 ------------------
     
-1.  Copy ./app/includes/conf.template.ini to ./Common/conf/conf.ini
+1.  Copy /Common/conf/conf.template.ini to /Common/conf/conf.ini
 2.  Edit conf.ini with your configurations.
 3.  Under database, enter your MySQL connection settings.
 4.  Under the site section, enter the URL of the installation.

@@ -34,10 +34,16 @@ class TaskDao extends BaseDao
         return $response;
     }
 
-    public function getTopTasks($limit = null)
+    public function getTopTasks($limit = null, $offset = null)
     {
         $request = "{$this->siteApi}v0/tasks/topTasks";
-        $args=$limit ? array("limit" => $limit) : null;
+        $args = array();
+        if ($limit != null) {
+            $args['limit'] = $limit;
+        }
+        if ($offset != null) {
+            $args['offset'] = $offset;
+        }
         $response =$this->client->call(array("Task"), $request,HttpMethodEnum::GET, null, $args);
         return $response;
     }

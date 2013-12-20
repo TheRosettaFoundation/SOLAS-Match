@@ -26,59 +26,6 @@ class TaskDao
         self::save($task);
         return $task;
     }
-
-    public static function findTasksByOrg($params, $sort_column = null, $sort_direction = null)
-    {
-        $permitted_params = array(
-                'organisation_ids'
-        );
-
-        if (!is_array($params)) {
-            throw new InvalidArgumentException('Can\'t find a task if an array isn\'t provided.');
-        }
-
-        foreach ($params as $key => $value) {
-            if (!in_array($key, $permitted_params)) {
-                throw new InvalidArgumentException('Cannot search for a task with the provided paramter ' . $key . '.');
-            }
-        }
-
-        $tasks = null;
-        $organisation_ids = $params['organisation_ids'];
-        
-        // We're assuming that organisation_ids is always being provided.
-        if (count($organisation_ids) > 1) {
-            $organisation_ids = implode(',', $organisation_ids);
-        }
-        
-        $args = PDOWrapper::cleanse($organisation_ids);
-        $args .= empty($sort_column) ? ",null" : PDOWrapper::cleanse($sort_column);
-        $args .= (!empty($sort_column) && empty($sort_direction)) ? " " : PDOWrapper::cleanse($sort_direction);
-        if ($result = PDOWrapper::call("getTasksByOrgIDs", $args)) {
-            $tasks = array();
-            foreach ($result as $row) {
-                $task_data = array();
-                foreach ($row as $col_name => $col_value) {
-                    if ($col_name == 'id') {
-                        $task_data['id'] = $col_value;
-                    } else if (!is_numeric($col_name) && !is_null($col_value)) {
-                        $task_data[$col_name] = $col_value;
-                    }
-                }
-
-                if ($tags = self::getTags($row['id'])) {
-                    $task_data['tags'] = $tags;
-                }
-
-                $task = ModelFactory::buildModel("Task", $task_data);
-                if (is_object($task)) {
-                    $tasks[] = $task;
-                }
-            }
-        }
-
-        return $tasks;
-    }
         
     public static function getTask($id=null, $projectId=null, $title=null, $wordCount=null, $sourceLanguageCode=null,
             $targetLanguageCode=null, $createdTime=null, $sourceCountryCode=null, $targetCountryCode=null, $comment=null,
@@ -330,6 +277,20 @@ class TaskDao
         }
         return $ret;
     }
+    
+	public static function getTasksFromPreReq($taskId)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNull($taskId);
+        
+        if ($result = PDOWrapper::call("getTasksFromPreReq", $args)) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Task", $row);
+            }
+        }
+        return $ret;
+    }
 
     public static function addTaskBadgeRestriction($taskId, $badgeId)
     {
@@ -392,7 +353,7 @@ class TaskDao
      * Returns an array of tasks ordered by the highest score related to the user
      */
 
-    public static function getUserTopTasks($user_id, $strict, $limit, $offset = 0, $filter=" and 1")
+   public static function getUserTopTasks($user_id, $strict, $limit, $offset = 0, $taskType, $sourceLanguageCode, $targetLanguageCode)
     {
         $ret = false;
         $args = PDOWrapper::cleanse($user_id).", ";
@@ -402,9 +363,13 @@ class TaskDao
         } else {
             $args .= "0, ";
         }
+        
         $args .= PDOWrapper::cleanseNullOrWrapStr($limit).', '.
-                PDOWrapper::cleanseNull($offset).', '.
-                "'$filter'";
+                PDOWrapper::cleanseNull($offset).', ';
+        
+        $args .=  PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
 
         if ($result = PDOWrapper::call("getUserTopTasks", $args)) {
 

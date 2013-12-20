@@ -881,6 +881,10 @@ class Strings
     const TASK_VIEW_EDIT_TASK_DETAILS = 'task_view_edit_task_details';
     const TASK_VIEW_SOURCE_DOCUMENT_PREVIEW = 'task_view_source_document_preview';
     const TASK_VIEW_0 = 'task_view_0';
+    const TASK_VIEW_1 = 'task_view_1';
+    const TASK_VIEW_2 = 'task_view_2';
+    const TASK_VIEW_3 = 'task_view_3';
+    const TASK_VIEW_4 = 'task_view_4';
 
     const EMAIL_VERIFICATION_EMAIL_VERIFICATION = 'email_verification_email_verification';
     const EMAIL_VERIFICATION_0 = 'email_verification_0';
