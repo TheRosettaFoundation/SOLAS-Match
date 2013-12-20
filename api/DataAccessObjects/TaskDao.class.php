@@ -329,7 +329,7 @@ class TaskDao
      * Returns an array of tasks ordered by the highest score related to the user
      */
 
-   public static function getUserTopTasks($user_id, $strict, $limit, $offset = 0, $taskType, $sourceLanguage, $targetLanguage)
+   public static function getUserTopTasks($user_id, $strict, $limit, $offset = 0, $taskType, $sourceLanguageCode, $targetLanguageCode)
     {
         $ret = false;
         $args = PDOWrapper::cleanse($user_id).", ";
@@ -344,8 +344,8 @@ class TaskDao
                 PDOWrapper::cleanseNull($offset).', ';
         
         $args .=  PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
-        $args .=  PDOWrapper::cleanseNullOrWrapStr($sourceLanguage).', ';
-        $args .=  PDOWrapper::cleanseNullOrWrapStr($targetLanguage);
+        $args .=  PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
 
         if ($result = PDOWrapper::call("getUserTopTasks", $args)) {
 

@@ -352,21 +352,21 @@ class Users {
             $filter = "";
             
             $taskType = '';
-            $sourceLanguage = '';
-            $targetLanguage = '';
+            $sourceLanguageCode = '';
+            $targetLanguageCode = '';
                     
             if (isset($filters['taskType']) && $filters['taskType'] != '') {
                 $taskType = $filters['taskType'];
             }
             if (isset($filters['sourceLanguage']) && $filters['sourceLanguage'] != '') {
-                $sourceLanguage = $filters['sourceLanguage'];
+                $sourceLanguageCode = $filters['sourceLanguage'];
             }
             if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
-                $targetLanguage = $filters['targetLanguage'];
+                $targetLanguageCode = $filters['targetLanguage'];
             }
             
             $dao = new TaskDao();
-            $data = $dao->getUserTopTasks($userId, $strict, $limit, $offset, $taskType, $sourceLanguage, $targetLanguage);
+            $data = $dao->getUserTopTasks($userId, $strict, $limit, $offset, $taskType, $sourceLanguageCode, $targetLanguageCode);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTopTasks',  "Middleware::isloggedIn");
         
