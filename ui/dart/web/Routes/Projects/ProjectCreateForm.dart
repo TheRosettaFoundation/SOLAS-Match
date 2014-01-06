@@ -519,6 +519,10 @@ class ProjectCreateForm extends PolymerElement
       titleError = localisation.getTranslation("project_routehandler_12");
       success = false;
     }
+    if (project.title.length > 110) {
+      titleError = localisation.getTranslation("project_create_23");
+      success = false;
+    }
     if (project.description == '') {
       descriptionError = localisation.getTranslation("project_routehandler_14");
       success = false;

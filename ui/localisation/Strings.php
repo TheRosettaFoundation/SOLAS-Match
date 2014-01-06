@@ -491,6 +491,8 @@ class Strings
     const PROJECT_CREATE_12 = 'project_create_12';
     const PROJECT_CREATE_TARGET_LANGUAGES = 'project_create_target_languages';
     const PROJECT_CREATE_ADD_MORE_TARGET_LANGUAGES = 'project_create_add_more_target_languages';
+    const PROJECT_CREATE_23 = 'project_create_23';
+
     const PROJECT_CREATED_PROJECT_IS_NOW_LIVE = 'project_created_project_is_now_live';
     const PROJECT_CREATED_SUCCESS = 'project_created_success';
     const PROJECT_CREATED_0 = 'project_created_0';

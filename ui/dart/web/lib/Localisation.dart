@@ -18,7 +18,7 @@ class Localisation
   String getTranslation(String key)
   {
     String data;
-    Element element = doc.query("[name = $key]");
+    Element element = doc.querySelector("[name = $key]");
     if (element != null) {
       data = element.text;
     } else {
