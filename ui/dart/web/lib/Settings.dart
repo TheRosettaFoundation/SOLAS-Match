@@ -1,8 +1,4 @@
-library SolasMatchDart;
-
-import 'dart:html';
-import 'dart:async';
-import "package:json_object/json_object.dart";
+part of SolasMatchDart;
 
 class Settings
 {

@@ -1,9 +1,4 @@
-library SolasMatchDart;
-
-import 'dart:async';
-import 'dart:html';
-
-import "Settings.dart";
+part of SolasMatchDart;
 
 class APIHelper
 {

@@ -1,16 +1,4 @@
-library SolasMatchDart;
-
-import "dart:convert";
-import "dart:async";
-import "dart:html";
-
-import "../lib/APIHelper.dart";
-import "../lib/ModelFactory.dart";
-import "../lib/models/Badge.dart";
-import "../lib/models/Task.dart";
-import "../lib/models/User.dart";
-import "../lib/models/UserPersonalInformation.dart";
-import "../lib/models/Locale.dart";
+part of SolasMatchDart;
 
 class UserDao
 {

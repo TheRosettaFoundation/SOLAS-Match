@@ -600,8 +600,6 @@ class Users {
             $data = $client->deserialize($data,'UserPersonalInformation');
             $data = UserDao::updatePersonalInfo($data);
             
-            error_log('>>'.$data);
-
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'updateUserPersonalInfo', 'Middleware::authUserOwnsResource');
         

@@ -1,12 +1,4 @@
-library SolasMatchDart;
-
-import "dart:convert";
-import "dart:async";
-import "dart:html";
-
-import "../lib/models/Country.dart";
-import "../lib/APIHelper.dart";
-import "../lib/ModelFactory.dart";
+part of SolasMatchDart;
 
 class CountryDao
 {

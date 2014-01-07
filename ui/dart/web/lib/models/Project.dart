@@ -1,7 +1,4 @@
-library SolasMatchDart;
-
-import "Tag.dart";
-import "Locale.dart";
+part of SolasMatchDart;
 
 class Project
 {

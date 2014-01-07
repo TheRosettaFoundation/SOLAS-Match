@@ -1,21 +1,5 @@
-library SolasMatchDart;
-
 import "package:polymer/polymer.dart";
-import "dart:async";
-import "dart:html";
-
-import '../../DataAccessObjects/TaskDao.dart';
-import '../../DataAccessObjects/ProjectDao.dart';
-import '../../DataAccessObjects/OrgDao.dart';
-import '../../DataAccessObjects/LanguageDao.dart';
-
-import '../../lib/models/Task.dart';
-import '../../lib/models/Tag.dart';
-import '../../lib/models/Project.dart';
-import '../../lib/models/Org.dart';
-import '../../lib/models/Language.dart';
-import '../../lib/Settings.dart';
-import '../../lib/Localisation.dart';
+import '../../lib/SolasMatchDart.dart';
 
 @CustomTag("task-stream")
 class TaskStream extends PolymerElement

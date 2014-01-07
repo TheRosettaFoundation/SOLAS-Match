@@ -1,9 +1,4 @@
-library SolasMatchDart;
-
-import 'dart:html';
-import 'dart:async';
-
-import "Settings.dart";
+part of SolasMatchDart;
 
 class Localisation
 {

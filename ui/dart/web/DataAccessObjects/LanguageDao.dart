@@ -1,13 +1,4 @@
-library SolasMatchDart;
-
-import "dart:async";
-import "dart:convert";
-import "dart:html";
-//import 'package:js/js.dart' as js;
-
-import "../lib/models/Language.dart";
-import "../lib/APIHelper.dart";
-import "../lib/ModelFactory.dart";
+part of SolasMatchDart;
 
 class LanguageDao
 {

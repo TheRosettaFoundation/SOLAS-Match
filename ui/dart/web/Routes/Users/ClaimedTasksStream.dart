@@ -1,23 +1,8 @@
-library SolasMatchDart;
-
 import "package:polymer/polymer.dart";
 import "dart:async";
 import "dart:html";
 
-import '../../DataAccessObjects/UserDao.dart';
-import '../../DataAccessObjects/TaskDao.dart';
-import '../../DataAccessObjects/ProjectDao.dart';
-import '../../DataAccessObjects/OrgDao.dart';
-import '../../DataAccessObjects/LanguageDao.dart';
-
-import '../../lib/models/Task.dart';
-import '../../lib/models/Tag.dart';
-import '../../lib/models/Project.dart';
-import '../../lib/models/Org.dart';
-import '../../lib/models/Language.dart';
-import '../../lib/Settings.dart';
-import '../../lib/Localisation.dart';
-import '../../lib/Loader.dart';
+import '../../lib/SolasMatchDart.dart';
 
 @CustomTag("claimed-tasks-stream")
 class ClaimedTasksStream extends PolymerElement

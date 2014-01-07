@@ -104,7 +104,7 @@ class Orgs
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getOrg');
+        }, 'getOrg', null);
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/orgs/isMember/:orgId/:userId/', function ($orgId,$userId , $format = ".json"){
             if (!is_numeric($userId)&& strstr($userId, '.')) {

@@ -503,6 +503,8 @@
     <string name="project_create_21">The file you uploaded is too large, please check the maximum file upload size under the Source Text header.</string>
     <string name="project_create_22">Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?</string>
     <string name="project_create_23">Project title is too long, please use one hundred characters or less.</string>
+    <string name="project_create_24">Please make sure the date specified is in the format 31 July 2013 10:50</string>
+    <string name="project_create_25">Deadline must be some date in the future.</string>
 
 	<string name="project_created_project_is_now_live">Project is now live</string>
 	<string name="project_created_success">Success</string>

@@ -1,13 +1,4 @@
-library SolasMatchDart;
-
-import "dart:convert";
-import "dart:async";
-import "dart:html";
-
-import "../lib/APIHelper.dart";
-import "../lib/ModelFactory.dart";
-import "../lib/models/Task.dart";
-import "../lib/models/Tag.dart";
+part of SolasMatchDart;
 
 class TaskDao
 {

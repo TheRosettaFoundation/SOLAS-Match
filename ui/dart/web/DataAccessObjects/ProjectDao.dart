@@ -1,12 +1,4 @@
-library SolasMatchDart;
-
-import "dart:async";
-import "dart:html";
-import "dart:convert";
-
-import "../lib/models/Project.dart";
-import "../lib/ModelFactory.dart";
-import "../lib/APIHelper.dart";
+part of SolasMatchDart;
 
 class ProjectDao
 {

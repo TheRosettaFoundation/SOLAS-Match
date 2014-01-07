@@ -323,8 +323,6 @@ class ProjectRouteHandler
         $user_id = UserSession::getCurrentUserID(); 
 
         $extraScripts = "
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
             <script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
             <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
             <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>

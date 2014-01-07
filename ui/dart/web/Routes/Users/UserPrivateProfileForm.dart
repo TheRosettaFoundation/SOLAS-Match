@@ -1,21 +1,8 @@
-library SolasMatchDart;
-
 import "package:polymer/polymer.dart";
 import "dart:async";
 import "dart:html";
 
-import '../../DataAccessObjects/LanguageDao.dart';
-import '../../DataAccessObjects/CountryDao.dart';
-import '../../DataAccessObjects/UserDao.dart';
-
-import '../../lib/models/Badge.dart';
-import '../../lib/models/User.dart';
-import '../../lib/models/UserPersonalInformation.dart';
-import '../../lib/models/Locale.dart';
-import '../../lib/models/Language.dart';
-import '../../lib/models/Country.dart';
-import '../../lib/Settings.dart';
-import '../../lib/Localisation.dart';
+import '../../lib/SolasMatchDart.dart';
 
 @CustomTag('user-private-profile-form')
 class UserPrivateProfileForm extends PolymerElement
@@ -252,7 +239,6 @@ class UserPrivateProfileForm extends PolymerElement
   
   void addSecondaryLanguage([int languageSelected = 0, int countrySelected = 0])
   {
-    print("Secondary Language Limit: $secondaryLanguageLimit");
     if (secondaryLanguageCount < secondaryLanguageLimit) {
       DivElement secondaryLanguageDiv = querySelector("#secondaryLanguageDiv");
       DivElement locale = new DivElement()

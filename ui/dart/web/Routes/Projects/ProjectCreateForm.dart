@@ -1,28 +1,8 @@
-library SolasMatchDart;
-
 import "package:polymer/polymer.dart";
 import "dart:async";
 import "dart:html";
-import "dart:js";
 
-import '../../DataAccessObjects/TaskDao.dart';
-import '../../DataAccessObjects/ProjectDao.dart';
-import '../../DataAccessObjects/LanguageDao.dart';
-import '../../DataAccessObjects/CountryDao.dart';
-
-import '../../lib/models/Task.dart';
-import '../../lib/models/Tag.dart';
-import '../../lib/models/Project.dart';
-import '../../lib/models/Org.dart';
-import '../../lib/models/Language.dart';
-import '../../lib/models/Locale.dart';
-import '../../lib/models/Country.dart';
-import '../../lib/Settings.dart';
-import '../../lib/Localisation.dart';
-import '../../lib/TaskTypeEnum.dart';
-import '../../lib/TaskStatusEnum.dart';
-import '../../lib/NullTreeSanitizer.dart';
-import '../../lib/Loader.dart';
+import "../../lib/SolasMatchDart.dart";
 
 @CustomTag('project-create-form')
 class ProjectCreateForm extends PolymerElement
@@ -149,7 +129,6 @@ class ProjectCreateForm extends PolymerElement
     sourceLanguageDiv.children.add(sourceCountrySelect);
     
     addMoreTargetLanguages();
-    //context.callMethod("initDeadlinePicker");     // Uncomment to activate datetime picker
     loaded = true;
   }
   
@@ -560,16 +539,21 @@ class ProjectCreateForm extends PolymerElement
     if (deadlineInput.value != '') {
       DateTime projectDeadline = parseDeadline(deadlineInput.value);
       if (projectDeadline != null) {
-        String monthAsString = projectDeadline.month.toString();
-        monthAsString = monthAsString.length == 1 ? "0$monthAsString" : monthAsString;
-        String dayAsString = projectDeadline.day.toString();
-        dayAsString = dayAsString.length == 1 ? "0$dayAsString" : dayAsString;
-        String hourAsString = projectDeadline.hour.toString();
-        hourAsString = hourAsString.length > 2 ? "0$hourAsString" : hourAsString;
-        String minuteAsString = projectDeadline.minute.toString();
-        minuteAsString = minuteAsString.length < 2 ? "0$minuteAsString" : minuteAsString;
-        project.deadline = projectDeadline.year.toString() + "-" + monthAsString + "-" + dayAsString
-            + " " + hourAsString + ":" + minuteAsString + ":00";
+        if (projectDeadline.isAfter(new DateTime.now())) {
+          String monthAsString = projectDeadline.month.toString();
+          monthAsString = monthAsString.length == 1 ? "0$monthAsString" : monthAsString;
+          String dayAsString = projectDeadline.day.toString();
+          dayAsString = dayAsString.length == 1 ? "0$dayAsString" : dayAsString;
+          String hourAsString = projectDeadline.hour.toString();
+          hourAsString = hourAsString.length > 2 ? "0$hourAsString" : hourAsString;
+          String minuteAsString = projectDeadline.minute.toString();
+          minuteAsString = minuteAsString.length < 2 ? "0$minuteAsString" : minuteAsString;
+          project.deadline = projectDeadline.year.toString() + "-" + monthAsString + "-" + dayAsString
+              + " " + hourAsString + ":" + minuteAsString + ":00";
+        } else {
+          deadlineError = localisation.getTranslation("project_create_25");
+          success = false;
+        }
       } else {
         deadlineError = localisation.getTranslation("project_routehandler_13");
         success = false;
@@ -671,7 +655,7 @@ class ProjectCreateForm extends PolymerElement
   
   DateTime parseDeadline(String deadlineText)
   {
-    //Assumes deadline is in a format like "31 July 2013 10:50 UTC"
+    //Assumes deadline is in a format like "31 July 2013 10:50"
     DateTime ret;
     try {
       int startIndex = 0;
@@ -688,7 +672,7 @@ class ProjectCreateForm extends PolymerElement
       String hour = deadlineText.substring(startIndex, endIndex);
       startIndex = endIndex + 1;
       endIndex = deadlineText.indexOf(" ", startIndex);
-      String minute = deadlineText.substring(startIndex, endIndex);
+      String minute = deadlineText.substring(startIndex, deadlineText.length);
       
       int monthNum = 0;
       month = month.toLowerCase();
