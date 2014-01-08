@@ -900,6 +900,10 @@
 	<string name="task_view_edit_task_details">Edit Task Details</string>
 	<string name="task_view_source_document_preview">Source Document Preview</string>
     <string name="task_view_0">Note: This task has already been claimed by another user.</string>
+    <string name="task_view_1"><b>Success:</b> The task is now published and will appear on users' task streams.</string>
+    <string name="task_view_2"><b>Success:</b> The task is no longer published and will not appear on users' task streams.</string>
+    <string name="task_view_3"><b>Error:</b> Failed to publish the task, please try again later.</string>
+    <string name="task_view_4"><b>Error:</b> Failed to unpublish the task, please try again later.</string>
 
 	<string name="email_verification_email_verification">Email Verification</string>
 	<string name="email_verification_0">You can complete registration here</string>

@@ -158,21 +158,17 @@ class OrgRouteHandler
             }
         }
         
-        $orgs = array();
         if($my_organisations){
+            $orgs = array();
+            $templateData = array();
             foreach ($my_organisations as $org) {
                 $my_org_projects = $orgDao->getOrgProjects($org->getId());
                 $org_projects[$org->getId()] = $my_org_projects;
                 $orgs[$org->getId()] = $org;
-            }
-        }
-        
-        if (count($org_projects) > 0) {
-            $templateData = array();
-            foreach ($org_projects as $org => $projectArray) {
+
                 $taskData = array();
-                if ($projectArray) {
-                    foreach ($projectArray as $project) {
+                if ($my_org_projects) {
+                    foreach ($my_org_projects as $project) {
                         $temp = array();
                         $temp['project'] = $project;
                         $temp['userSubscribedToProject'] = $userDao->isSubscribedToProject(
@@ -182,9 +178,9 @@ class OrgRouteHandler
                 } else {
                     $taskData = null;
                 }
-                $templateData[$org] = $taskData;
+                $templateData[$org->getId()] = $taskData;
             }
-            
+
             $app->view()->appendData(array(
                 "orgs" => $orgs,
                 "templateData" => $templateData
