@@ -1,4 +1,149 @@
 <resources>
+        <!-- Routehandler Strings -->
+        
+        <string name="org_routehandler_1"><strong>Organisation name</strong> must be set.</string>
+        <string name="org_routehandler_2">The organisation <strong>%s</strong> has been created.</string>
+        <string name="org_routehandler_3">Unable to create Organisation.</string>
+        <string name="org_routehandler_4">An organisation named <strong>%s</strong> is already registered. Please use a different name.</string>
+        <string name="org_routehandler_5">No longer receiving notifications from %s.</string>
+        <string name="org_routehandler_6">Unable to unsubscribe from %s's notifications.</string>
+        <string name="org_routehandler_7">You will now receive notifications for %s.</string>
+        <string name="org_routehandler_8">Unable to subscribe to %s.</string>
+        <string name="org_routehandler_9">Successfully requested membership.</string>
+        <string name="org_routehandler_10">You have already sent a membership request to this organisation.</string>        
+        <string name="org_routehandler_11">You are already a member of this organisation.</string>        
+        <string name="org_routehandler_12">Successfully added %s as a member of %s.</string>        
+        <string name="org_routehandler_13">%s is already a member of this organisation or user does not exist.</string>        
+        <string name="org_routehandler_14">The email address %s is not registered with this system. Are you sure you have the right email addess?</string>      
+        <string name="org_routehandler_15">You did not enter a valid email address.</string>
+        <string name="org_routehandler_16">Invalid User ID: %s</string>        
+        <string name="org_routehandler_17">Successfully deleted the organisation %s</string>        
+        <string name="org_routehandler_18">Unable to delete organisation. Please try again later.</string>        
+        <string name="org_routehandler_19">All fields must be filled out.</string> 
+        <string name="org_routehandler_20">%s is already a member of this organisation.</string>        
+        <string name="org_routehandler_21">The email address %s is not registered with this system. Are you sure you have the right email addess?</string>        
+        <string name="org_routehandler_22">You did not enter a valid email address.</string>        
+        <string name="org_routehandler_23">Successfully added <a href="%s">%s</a> as a member of %s</string>
+        <string name="org_routehandler_24">Unable to add user to member list. Please try again later.</string>        
+        <string name="org_routehandler_25">Successfully rejected <a href="%s"> %s's</a> membership request.</string>        
+        <string name="org_routehandler_26">Successfully revoked membership from user <a href="%s">%s</a>.</string>        
+        <string name="org_routehandler_27">Unable to revoke membership from user <a href="%s">%s</a>.</string>        
+        <string name="org_routehandler_28">Unable to find the user in the system.</string>        
+        <string name="org_routehandler_29">Successfully assigned badge %s to user %s.</string>
+        <string name="org_routehandler_30">The user %s already has that badge or that user does not exist.</string>        
+        <string name="org_routehandler_31">The email address %s is not registered on the system. Are you using the correct email address?</string>        
+        <string name="org_routehandler_32">Successfully removed badge from user %s.</string>
+        <string name="org_routehandler_33">Successfully created new Organisation Badge.</string>        
+        <string name="org_routehandler_34">No organisations found.</string>
+        <string name="org_routehandler_35">Corrections value must be between 1 and 5</string>
+        <string name="org_routehandler_36">Grammar value must be between 1 and 5</string>
+        <string name="org_routehandler_37">Spelling value must be between 1 and 5</string>
+        <string name="org_routehandler_38">Consistency value must be between 1 and 5</string>
+        <string name="org_routehandler_39">Unable to submit review for %s, please try again later.</string>
+        <string name="org_routehandler_40">Review of task %s has been submitted successfully.</string>
+        <string name="org_routehandler_41">You have already submitted a review for this task.</string>
+        
+        <string name="project_routehandler_1">You are now tracking this Project and will receive email notifications when its status changes.</string>
+        <string name="project_routehandler_2">Unable to register for notifications for this Project.</string>
+        <string name="project_routehandler_3">You are no longer tracking this Project and will receive no further emails.</string>
+        <string name="project_routehandler_4">Unable to unregister for this notification.</string>
+        <string name="project_routehandler_5">No longer receiving notifications from %s.</string>
+        <string name="project_routehandler_6">Unable to unsubscribe from %s's notifications</string>
+        <string name="project_routehandler_7">You will now receive notifications for %s.</string>
+        <string name="project_routehandler_8">Unable to subscribe to %s.</string>
+        <string name="project_routehandler_9">The task %s has been deleted.</string>
+        <string name="project_routehandler_10">The task %s has been archived.</string>
+        <string name="project_routehandler_11">Invalid date/time format!</string>
+        <string name="project_routehandler_12">Project <strong>Title</strong> must be set.</string>
+        <string name="project_routehandler_13">Project <strong>Deadline</strong> must be set.</string>
+        <string name="project_routehandler_14">Project <strong>Description</strong> must be set.</string>
+        <string name="project_routehandler_15">Project <strong>Impact</strong> must be set.</string>
+        <string name="project_routehandler_16">Project <strong>Word Count</strong> must be set and be a valid <strong>natural</strong> number.</string>
+        <string name="project_routehandler_18">At least one <strong>Task Type</strong> must be set for each <strong>Target Language</strong>.</string>
+        <string name="project_routehandler_19">You have successfully archived the project <strong>%s</strong>.</string>
+        <string name="project_routehandler_20">There was an error archiving the project <strong>%s</strong>.</string>
+        <string name="project_routehandler_21">File Error:</string>
+        
+        <string name="tag_routehandler_1">Successfully added tag %s, to subscription list</string>
+        <string name="tag_routehandler_2">Unable to save tag, %s, for user %s.</string>
+        <string name="tag_routehandler_3">Successfully removed tag %s for user %s</string>
+        <string name="tag_routehandler_4">Unable to remove tag %s for user %s</string>
+
+        <string name="task_routehandler_1">You have successfully archived the <strong>%s %s</strong>.</string>
+        <string name="task_routehandler_2">There was an error archiving the <strong>%s %s</strong>.</string>
+        <string name="task_routehandler_3">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
+        <string name="task_routehandler_4">The <strong>contents</strong> of the file you are uploading is not a valid <strong>(.%s)</strong> If you are having problems opening and working in <strong>(.%s) format</strong>, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
+        <string name="task_routehandler_5">File error:</string>
+        <string name="task_routehandler_6">Word Count must be numeric.</string>
+        <string name="task_routehandler_7">Word Count cannot be empty.</string>
+        <string name="task_routehandler_8">Invalid date/time format!</string>
+        <string name="task_routehandler_9">A deadlock has occured, please check your task prerequisites.</string>
+        <string name="task_routehandler_10">You are now tracking this task and will receive email notifications when its status changes.</string>
+        <string name="task_routehandler_11">Unable to register for notifications for this task.</string>
+        <string name="task_routehandler_12">You are no longer tracking this task and will receive no further emails.</string>
+        <string name="task_routehandler_13">Unable to unregister for this notification.</string>
+        <string name="task_routehandler_14">Title must not be empty.</string>
+        <string name="task_routehandler_15">You have not selected a <strong>Segmented File</strong> to upload.</string>
+        <string name="task_routehandler_16">Each <strong>Segmented File</strong> that you upload must have a <strong>unique file name.</strong></string>
+        <string name="task_routehandler_17">You have selected <strong>one or more</strong> files with the exact same <strong>file content</strong>.</string>
+        <string name="task_routehandler_18">At least one task type such as <strong>Translation</strong> and/or <strong>Proofreading</strong> must be set.</string>
+        <string name="task_routehandler_19">The task <a href="%s">%s</a> has been revoked from <a href="%s">%s</a>. This user will be notified by e-mail and provided with your feedback.</string>
+        <string name="task_routehandler_20">Unable to revoke the task <a href="%s">%s</a> from <a href="%s">%s</a>. Please try again later.</string>
+        <string name="task_routehandler_21">The feedback form cannot be empty.</string>
+        <string name="task_routehandler_22">The task <a href="%s">%s</a> has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.</string>
+        <string name="task_routehandler_23">Unable to unclaim the task <a href="%s">%s</a>. Please try again later.</string>
+        <string name="task_routehandler_24">Feedback cannot be empty, please fill in the feedback form before continuing.</string>
+        <string name="task_routehandler_25">You have already submitted a review for this file.</string>
+        <string name="task_routehandler_26">Corrections value must be between 1 and 5</string>
+        <string name="task_routehandler_27">Grammar value must be between 1 and 5</string>
+        <string name="task_routehandler_28">Spelling value must be between 1 and 5</string>
+        <string name="task_routehandler_29">Consistency value must be between 1 and 5</string>
+        <string name="task_routehandler_30">Unable to submit review for %s, please try again later.</string>
+        <string name="task_routehandler_31">Review of task %s has been submitted successfully.</string>
+        <string name="task_routehandler_32">Feedback sent to <a href="%s">%s</a>.</string>
+        <string name="task_routehandler_33">Task <strong>%s</strong> not found.</string>
+       
+        <string name="user_routehandler_1">The email address you entered was not valid. Please try again.</string>
+        <string name="user_routehandler_2">You did not enter a password. Please try again.</string>
+        <string name="user_routehandler_3">You are already a verified user. Please <a href="%s">log in</a>.</string>
+        <string name="user_routehandler_4">A verification email has been sent to the email address you registered with. Please follow the link in that email to finish registration. Once you have verified your email address you can log in <a href="%s">here</a>.</string>
+        <string name="user_routehandler_5">Invalid registration id. Please try to register again.</string>
+        <string name="user_routehandler_7">Incorrect Unique ID. Are you sure you copied the URL correctly?</string>
+        <string name="user_routehandler_8">You have successfully changed your password.</string>
+        <string name="user_routehandler_9">Unable to change password.</string>
+        <string name="user_routehandler_10">The passwords entered do not match. Please try again.</string>
+        <string name="user_routehandler_11">Please check the password provided and try again.</string>
+        <string name="user_routehandler_12">Password reset request sent. Check your email for further instructions.</string>
+        <string name="user_routehandler_13">Password reset request was already sent to %s. Another email has been sent to your contact address. Follow the link in this email to reset your password.</string>
+        <string name="user_routehandler_14">Please enter a valid email address.</string>
+        <string name="user_routehandler_15"><p>Unable to log in. Please check your email and password. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
+        <string name="user_routehandler_16">User has cancelled authentication!</string>       
+        <string name="user_routehandler_19">Successfully updated user task stream notification subscription</string>
+        
+        <!-- UI DAO Strings -->
+        
+        <string name="task_dao_1">The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.%s</strong>) file with a valid content type of (<strong>%s</strong>).</string>
+        <string name="task_dao_2">Internal server error. Please contact the administrators.</string>
+        
+        <string name="user_dao_1">Sorry, the username or password entered is incorrect. Please check the credentials used and try again.</string>
+        <string name="user_dao_2">Sorry, this user account has not been verified. Please check your e-mail.</string>
+        
+        <!-- UI Lib Strings -->
+        
+        <string name="middleware_1">You do not have sufficient privileges to access this page or the page does not exist.</string>
+        <string name="middleware_2">This task has been claimed by another user.</string>
+        <string name="middleware_3">You are currently blacklisted for Task <a href="%s">%s</a>, because you have previouly unclaimed it or have completed a task it depends on.</string>
+        
+        <string name="templatehelper_1">Unknown task type.</string>
+        <string name="templatehelper_2">A valid language code was expected.</string>
+        <string name="templatehelper_3">Sorry, we were not able to upload your file. %s</string>
+        <string name="templatehelper_4">The file you tried uploading is too large. The max file size is <strong>{$max_file_size}MB</strong>.</string>
+        <string name="templatehelper_5">The uploaded file was only partially uploaded. Please try again.</string>
+        <string name="templatehelper_6">You did not select a file to upload. Please try again.</string>
+        <string name="templatehelper_7">Server is missing a temporary folder.</string>
+        <string name="templatehelper_8">Server failed to write the file to disk.</string>
+        <string name="templatehelper_9">File upload stopped by extension.</string>
+        <string name="templatehelper_10">Please make sure the file you are trying to upload is valid and not empty.</string>
 
         <!-- Smarty Template Strings -->
         <string name="common_faq">FAQ</string>
@@ -66,19 +211,19 @@
 	<string name="common_delete">Delete</string>
 	<string name="common_your">Your</string>
 	<string name="common_task">Task</string>
-        <string name="common_project">Project</string>
+    <string name="common_project">Project</string>
 	<string name="common_segmentation_task">Segmentation Task</string>
 	<string name="common_translation_task">Translation Task</string>
 	<string name="common_proofreading_task">Proofreading Task</string>
 	<string name="common_desegmentation_task">Desegmentation Task</string>
-	<string name="common_please_fill_in_all_required_fields">Please fill in all required fields.</string>
+	<string name="common_please_fill_in_all_required_fields">Please fill in all required fields</string>
 	<string name="common_provide_feedback">Provide Feedback</string>
 	<string name="common_click">click</string>
 	<string name="common_here">here</string>
 	<string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Create a translation task for volunteer translators to pick up.</string>
 	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Create a proofreading task for evaluating the translation provided by a volunteer.</string>
 	<string name="common_thanks_for_providing_your_translation_for_this_task">Thanks for providing your translation for this task.</string>
-	<string name="common_maximum_file_size_is">Maximum file size is %sMB</string>
+	<string name="common_maximum_file_size_is">Maximum file size is <strong>%sMB</strong></string>
 	<string name="common_this_organisation">This organisation</string>
 	<string name="common_assign">Assign</string>
 	<string name="common_it_is_time_to_decide">It is time to decide</string>
@@ -89,10 +234,10 @@
 	<string name="common_this_this_what_you_need_to_do_as_soon_as_possible">This this what you need to do (as soon as possible)</string>
         <string name="common_we_have_also_emailed_you_these_instructions_to">We have also emailed you these instructions to <strong>%s</strong>.</string>
 	<string name="common_cant_find_the_file_on_your_desktop">Cannot find the file on your desktop?</string>
-        <string name="common_download_the_file">Download the <a href="%s">file</a> and save it to your desktop.</string>
+    <string name="common_download_the_file">Download the <a href="%s">file</a> and save it to your desktop.</string>
 	<string name="common_from">From</string>
 	<string name="common_to">To</string>
-        <string name="common_added">Added <strong>%s</strong> ago</string>
+    <string name="common_added">Added <strong>%s</strong> ago</string>
 	<string name="common_approximate_or_use_a_website_such_as">Approximate or use a website such as</string>
 	<string name="common_publish_task">Publish Task</string>
 	<string name="common_task_prerequisites">Task Prerequisite(s)</string>
@@ -108,7 +253,7 @@
 	<string name="common_project_view">project view</string>
 	<string name="common_no_comment_has_been_listed">No comment has been listed.</string>
 	<string name="common_no_description_has_been_listed">No description has been listed.</string>
-        <string name="common_no_impact_has_been_listed">No impact has been listed.</string>
+    <string name="common_no_impact_has_been_listed">No impact has been listed.</string>
 	<string name="common_signin_or_create_new_account">Sign-in or Create New Account</string>
 	<string name="common_please_click_your_account_provider">Please click your account provider:</string>
 	<string name="common_openid_is_service_that_allows_you_to_logon_to_many_different_websites_using_a_single_indentity">OpenID is service that allows you to log-on to many different websites using a single indentity.</string>
@@ -350,13 +495,13 @@
 	<string name="org_task_review_review_this_file">Review this file</string>
 	<string name="org_task_review_1">Helps us match volunteers and tasks.</string>
 	<string name="org_task_review_the_volunteer">The volunteer <a href="%s">%s</a> has completed this task. Please provide a review of this task to help improve the system.</string>
-        <string name="org_task_review_35">Corrections value must be between 1 and 5</string>
-        <string name="org_task_review_36">Grammar value must be between 1 and 5</string>
-        <string name="org_task_review_37">Spelling value must be between 1 and 5</string>
-        <string name="org_task_review_38">Consistency value must be between 1 and 5</string>
-        <string name="org_task_review_39">Unable to submit review for %s, please try again later.</string>
-        <string name="org_task_review_40">Review of task %s has been submitted successfully.</string>
-        <string name="org_task_review_41">You have already submitted a review for this task.</string>
+    <string name="org_task_review_35">Corrections value must be between 1 and 5</string>
+    <string name="org_task_review_36">Grammar value must be between 1 and 5</string>
+    <string name="org_task_review_37">Spelling value must be between 1 and 5</string>
+    <string name="org_task_review_38">Consistency value must be between 1 and 5</string>
+    <string name="org_task_review_39">Unable to submit review for %s, please try again later.</string>
+    <string name="org_task_review_40">Review of task %s has been submitted successfully.</string>
+    <string name="org_task_review_41">You have already submitted a review for this task.</string>
 
 	<string name="archived_projects_archived_projects">Archived Projects</string>
 	<string name="archived_projects_0">A list of projects you have worked on in the past.</string>
@@ -364,7 +509,7 @@
 	<string name="project_alter_alter_project_details_here">Alter project details here.</string>
 	<string name="project_alter_view_project_details">View Project Details</string>
 	<string name="project_alter_update_project_details">Update Project Details</string>
-        <string name="project_alter_11">Invalid date/time format!</string>
+    <string name="project_alter_11">Invalid date/time format!</string>
 
 	<string name="project_create_create_a_project">Create A Project</string>
 	<string name="project_create_0">Provide as much information as possible.</string>
@@ -382,34 +527,35 @@
 	<string name="project_create_publish_tasks">Publish Tasks</string>
 	<string name="project_create_9">Specify which task types you require for your workflow.</string>
 	<string name="project_create_target_languages">Target Language(s)</string>
-	<string name="project_create_10">Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less.</string>
-	<string name="project_create_11">You have reached the maximum number of target translation fields allowed.</string>
-        <string name="project_create_12">If checked, you will automatically track this project and receive e-mail notifications.</string>
-        <string name="project_create_add_more_target_languages">Add More Target Languages</string>
-        <string name="project_create_13">Failed to create a segmentation task.</string>
-        <string name="project_create_14">Failed to create a translation task.</string>
-        <string name="project_create_15">Failed to create a proofreading task.</string>
-        <string name="project_create_16">No project file was uploaded.</string>
-        <string name="project_create_17">The project file you uploaded is empty.</string>
-        <string name="project_create_failed_to_create_project">Failed to create the project.</string>
-        <string name="project_create_18">The file extension has been changed to lower case.</string>
-        <string name="project_create_19">The file you uploaded is in PDF format. PDF files are difficult to work with, are you sure you want to upload a PDF?</string>
-        <string name="project_create_20">Please upload a file with an extension.</string>
-        <string name="project_create_21">The file you uploaded is too large, please check the maximum file upload size under the Source Text header.</string>
-        <string name="project_create_22">Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?</string>        
-        <string name="project_create_23">Project <strong>Title</strong> must be set.</string>
-        <string name="project_create_24">Project <strong>Deadline</strong> must be set.</string>
-        <string name="project_create_25">Project <strong>Description</strong> must be set.</string>
-        <string name="project_create_26">Project <strong>Impact</strong> must be set.</string>
-        <string name="project_create_27">Project <strong>Word Count</strong> must be set and be a valid <strong>natural</strong> number.</string>
-        <string name="project_create_28">Each new <strong>Target Language pair</strong> added must be a <strong>unique pair</strong>.</string>
-        <string name="project_create_29">At least one <strong>Task Type</strong> must be set for each <strong>Target Language</strong>.</string>
-        <string name="project_create_30">File Error:</string>
+    <string name="project_create_19">The file you uploaded is in PDF format. PDF files are difficult to work with, are you sure you want to upload a PDF?</string>
+    <string name="project_create_26">Project <strong>Impact</strong> must be set.</string>
+    <string name="project_create_27">Project <strong>Word Count</strong> must be set and be a valid <strong>natural</strong> number.</string>
+    <string name="project_create_28">Each new <strong>Target Language pair</strong> added must be a <strong>unique pair</strong>.</string>
+    <string name="project_create_29">At least one <strong>Task Type</strong> must be set for each <strong>Target Language</strong>.</string>
+    <string name="project_create_30">File Error:</string>
+	<string name="project_create_10">Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less</string>
+	<string name="project_create_11">You have reached the maximum number of target translation fields allowed</string>
+    <string name="project_create_12">If checked, you will automatically track this project and receive e-mail notifications.</string>
+    <string name="project_create_add_more_target_languages">Add More Target Languages</string>
+    <string name="project_create_13">Failed to create segmentation task</string>
+    <string name="project_create_14">Failed to create translation task</string>
+    <string name="project_create_15">Failed to create proofreading task</string>
+    <string name="project_create_16">No project file uploaded</string>
+    <string name="project_create_17">The project file you uploaded is empty</string>
+    <string name="project_create_failed_to_create_project">Failed to create project</string>
+    <string name="project_create_18">The file extension has been changed to lower case.</string>
+    <string name="project_create_20">Please upload a file with an extension.</string>
+    <string name="project_create_21">The file you uploaded is too large, please check the maximum file upload size under the Source Text header.</string>
+    <string name="project_create_22">Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?</string>
+    <string name="project_create_23">Project title is too long, please use one hundred characters or less.</string>
+    <string name="project_create_24">Please make sure the date specified is in the format 31 July 2013 10:50</string>
+    <string name="project_create_25"><strong>Deadline</strong> must be some date in the future.</string>
+    <string name="project_create_26">You must select at least one <strong>task</strong> type (e.g. segmentation, proofreading or translation) for <strong>each</strong> target language.</string>
 
 	<string name="project_created_project_is_now_live">Project is now live!</string>
-        <string name="project_created_success"><strong>Success</strong> - Your project has been uploaded.</string>
-        <string name="project_created_1">It is now listed on your organisations <a href="%s">Dashboard</a>.</string>
-        <string name="project_created_2">You can view the project details and its associated tasks on the <a href="%s">Project View</a>.</string>
+    <string name="project_created_success"><strong>Success</strong> - Your project has been uploaded.</string>
+    <string name="project_created_1">It is now listed on your organisations <a href="%s">Dashboard</a>.</string>
+    <string name="project_created_2">You can view the project details and its associated tasks on the <a href="%s">Project View</a>.</string>
 	<string name="project_created_4">Volunteer translators will see the new Tasks associated with your project.</string>
 	<string name="project_created_5">If a volunteer translator is interested, they will claim a task, download it and upload their work.</string>
 	<string name="project_created_6">This may take several days or weeks, depending on the tasks.</string>
@@ -616,8 +762,8 @@
 	<string name="task_desegmentation_upload">Upload</string>
 	<string name="task_desegmentation_2">%s will be able to use it for their benefit.</string>
 	<string name="task_desegmentation_3">Uploading a new version of the file will overwrite the old one.</string>
-        <string name="task_desegmentation_4">Download <strong>%s</strong> <a href="%s">here</a>.</string>   
-        <string name="task_desegmentation_5">This organisation will be able to use it for their benefit.</string>     
+    <string name="task_desegmentation_4">Download <strong>%s</strong> <a href="%s">here</a>.</string>   
+    <string name="task_desegmentation_5">This organisation will be able to use it for their benefit.</string>     
 
 	<string name="task_segmentation_0">Uploading a new version of the file will overwrite the old one.</string>
 	<string name="task_segmentation_1">Divide large source files into smaller and more managable tasks.</string>
@@ -626,32 +772,33 @@
 	<string name="task_segmentation_4">Divide large source files into smaller and more managable tasks.</string>
 	<string name="task_segmentation_number_of_segments">Number of segments:</string>
 	<string name="task_segmentation_5">Create a desegmentation task for merging together task segments created by a segmentation task.</string>
-        <string name="task_segmentation_6">If you would like to re-download the original project file, click</string>
+    <string name="task_segmentation_6">If you would like to re-download the original project file, click</string>
 	<string name="task_segmentation_upload_your_segmented_file">Upload your segmented file.</string>
 	<string name="task_segmentation_submit_segmented_tasks">Submit Segmented Tasks</string>
-        <string name="task_segmentation_15">You have not selected a <strong>Segmented File</strong> to upload.</string>
-        <string name="task_segmentation_16">Each <strong>Segmented File</strong> that you upload must have a <strong>unique file name.</strong></string>
-        <string name="task_segmentation_17">You have selected <strong>one or more</strong> files with the exact same <strong>file content</strong>.</string>
-        <string name="task_segmentation_18">At least one task type such as <strong>Translation</strong> and/or <strong>Proofreading</strong> must be set.</string>
+    <string name="task_segmentation_15">You have not selected a <strong>Segmented File</strong> to upload.</string>
+    <string name="task_segmentation_16">Each <strong>Segmented File</strong> that you upload must have a <strong>unique file name.</strong></string>
+    <string name="task_segmentation_17">You have selected <strong>one or more</strong> files with the exact same <strong>file content</strong>.</string>
+    <string name="task_segmentation_18">At least one task type such as <strong>Translation</strong> and/or <strong>Proofreading</strong> must be set.</string>
+    <string name="task_segmentation_7">This task has already been segmented, you cannot resegment this task.</string>
 
 	<string name="task_simple_upload_finished_processing">Finished processing?</string>
 	<string name="task_simple_upload_provide_feedback">Provide Feedback</string>
 	<string name="task_simple_upload_upload_error">Upload error</string>
 	<string name="task_simple_upload_0">Upload your translated version of %s</string>
-        <string name="task_simple_upload_0_proofreading">Upload your proofread version of %s</string>
+    <string name="task_simple_upload_0_proofreading">Upload your proofread version of %s</string>
 	<string name="task_simple_upload_upload">Upload</string>
 	<string name="task_simple_upload_1">%s will be able to use it for their benefit.</string>
 	<string name="task_simple_upload_2">Uploading a new version of the file will overwrite the old one.</string>
 	<string name="task_simple_upload_3">Cannot find the task file?</string>
 	<string name="task_simple_upload_4">Misplaced the original file or the latest uploaded file?</string>
-        <string name="task_simple_upload_original_task_file">Click <a href="%s">here</a> to download the <strong>original task file</strong>.</string>
-        <string name="task_simple_upload_original_project_file">Click <a href="%s">here</a> to download the <strong>original project file</strong>.</string>
+    <string name="task_simple_upload_original_task_file">Click <a href="%s">here</a> to download the <strong>original task file</strong>.</string>
+    <string name="task_simple_upload_original_project_file">Click <a href="%s">here</a> to download the <strong>original project file</strong>.</string>
 	<string name="task_simple_upload_latest_uploaded_file">Click <a href="%s">here</a> to download the <strong>latest uploaded file</strong>.</string>
 	<string name="task_simple_upload_as_xliff">(XLIFF .xlf format)</string>
-        <string name="task_simple_upload_5">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
-        <string name="task_simple_upload_6">The <strong>contents</strong> of the file you are uploading is not a valid <strong>(.%s)</strong> If you are having problems opening and working in <strong>(.%s) format</strong>, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
-        <string name="task_simple_upload_7">File error:</string>
-        <string name="task_simple_upload_8">This organisation will be able to use it for their benefit.</string>
+    <string name="task_simple_upload_5">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
+    <string name="task_simple_upload_6">The <strong>contents</strong> of the file you are uploading is not a valid <strong>(.%s)</strong> If you are having problems opening and working in <strong>(.%s) format</strong>, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
+    <string name="task_simple_upload_7">File error:</string>
+    <string name="task_simple_upload_8">This organisation will be able to use it for their benefit.</string>
 
 	<string name="task_alter_alter_task_details_here">Alter task details here.</string>
 	<string name="task_alter_view_task_details">View Task Details</string>
@@ -660,18 +807,18 @@
 	<string name="task_alter_2">This task has been claimed and is in progress.</string>
         <string name="task_alter_you_can_only_edit">You can only edit the <strong>task comment</strong> and <strong>task deadline</strong>.</string>
 	<string name="task_alter_update_task_details">Update Task Details</string>
-        <string name="task_alter_6">Word Count must be numeric.</string>
-        <string name="task_alter_7">Word Count cannot be empty.</string>
-        <string name="task_alter_8">Invalid date/time format!</string>
-        <string name="task_alter_9">A deadlock has occured, please check your task prerequisites.</string>
+    <string name="task_alter_6">Word Count must be numeric.</string>
+    <string name="task_alter_7">Word Count cannot be empty.</string>
+    <string name="task_alter_8">Invalid date/time format!</string>
+    <string name="task_alter_9">A deadlock has occured, please check your task prerequisites.</string>
 
 	<string name="task_claim_desegmentation_desegmentation_task">Desegmentation task</string>
 	<string name="task_claim_desegmentation_0">Do you want to merge files related to this task?</string>
 	<string name="task_claim_desegmentation_1">Review this checklist before you claim the task</string>
 	<string name="task_claim_desegmentation_2">Will you be able to merge these files?</string>
-        <string name="task_claim_desegmentation_3">Can you open and work with files of type <strong>%s</strong>?</string>
-        <string name="task_claim_desegmentation_4">Will you have enough time to merge these files? <strong>Check how long the files are</strong>.</string>
-        <string name="task_claim_desegmentation_6">Do you think you are capable of merging files in <strong>%s</strong>?</string>
+    <string name="task_claim_desegmentation_3">Can you open and work with files of type <strong>%s</strong>?</string>
+    <string name="task_claim_desegmentation_4">Will you have enough time to merge these files? <strong>Check how long the files are</strong>.</string>
+    <string name="task_claim_desegmentation_6">Do you think you are capable of merging files in <strong>%s</strong>?</string>
 	<string name="task_claim_desegmentation_7">Do you want to merge these files?</string>
 	<string name="task_claim_desegmentation_8">The files you need to merge can be downloaded after claiming.</string>
 	<string name="task_claim_desegmentation_9">Yes, I promise I will merge these files</string>
@@ -679,38 +826,41 @@
 	<string name="task_claim_proofreading_0">Do you want to proofread this file?</string>
 	<string name="task_claim_proofreading_1">Will you be able to proofread this file?</string>
 	<string name="task_claim_proofreading_2">Will you have enough time to proofread this file? Check how long the file is.</string>
-        <string name="task_claim_proofreading_3">Do you think you are capable of proofreading a file in <strong>%s?</strong></string>
+    <string name="task_claim_proofreading_3">Do you think you are capable of proofreading a file in <strong>%s?</strong></string>
 	<string name="task_claim_proofreading_4">When you are finished proofreading the file, you will need to upload it again.</string>
-	<string name="task_claim_proofreading_5">Yes, I promise I will proofread this file.</string>
+	<string name="task_claim_proofreading_5">Yes, I promise I will proofread this file</string>
+    <string name="task_claim_proofreading_6">
+        If you would like to view the <strong>original file</strong> in its source language you can download it <a href="%s">here</a>
+    </string>
 
 	<string name="task_claim_segmentation_0">Do you want to segment this file?</string>
 	<string name="task_claim_segmentation_1">Will you be able to segment this file?</string>
 	<string name="task_claim_segmentation_2">Do you want to segment this file?</string>
 	<string name="task_claim_segmentation_3">When you are finished segmenting the file, you will need to upload a file for each segment.</string>
 	<string name="task_claim_segmentation_4">Yes, I promise I will segment this file</string>
-        <string name="task_claim_segmentation_5">Will you have enough time to segment this file? <strong>Check how long the file is</strong>.</string>
+    <string name="task_claim_segmentation_5">Will you have enough time to segment this file? <strong>Check how long the file is</strong>.</string>
 
 	<string name="task_claim_translation_0">Do you want to translate this file?</string>
 	<string name="task_claim_translation_1">Will you be able to translate this file?</string>
-        <string name="task_claim_translation_2">Will you have enough time to translate this file? <strong>Check how long the file is</strong>.</string>
-        <string name="task_claim_translation_3">Do you think you are capable of translating this file to <strong>%s</strong>?</string>
+    <string name="task_claim_translation_2">Will you have enough time to translate this file? <strong>Check how long the file is</strong>.</string>
+    <string name="task_claim_translation_3">Do you think you are capable of translating this file to <strong>%s</strong>?</string>
 	<string name="task_claim_translation_4">When you are finished translating the file, you will need to upload it again.</string>
 	<string name="task_claim_translation_5">Yes, I promise I will translate this file</string>
 
 	<string name="task_claimed_desegmentation_desegmentation_task_claimed">Desegmentation task claimed</string>
 	<string name="task_claimed_desegmentation_0">Please merge the relevent files!</string>
-        <string name="task_claimed_desegmentation_1">You have claimed the desegmentation task <strong>%s</strong></string>
-        <string name="task_claimed_desegmentation_2">Click <a href="%s">here</a> to download each of the segments of the total file.</string>
-        <string name="task_claimed_desegmentation_3"><strong>Merge the files back together</strong> and upload the merged file.</string>
+    <string name="task_claimed_desegmentation_1">You have claimed the desegmentation task <strong>%s</strong></string>
+    <string name="task_claimed_desegmentation_2">Click <a href="%s">here</a> to download each of the segments of the total file.</string>
+    <string name="task_claimed_desegmentation_3"><strong>Merge the files back together</strong> and upload the merged file.</string>
 	<string name="task_claimed_desegmentation_want_to_get_started">Want to get started?</string>
 	<string name="task_claimed_desegmentation_merge_files">Merge Files</string>
 	<string name="task_claimed_desegmentation_5">Go back to Home page</string>
 
 	<string name="task_claimed_proofreading_proofreading_task_claimed">Proofreading task claimed</string>
 	<string name="task_claimed_proofreading_please_proofread_it">Please proofread it!</string>
-        <string name="task_claimed_proofreading_0">You have claimed the proofreading task <strong>%s</strong>.</string>
+    <string name="task_claimed_proofreading_0">You have claimed the proofreading task <strong>%s</strong>.</string>
 	<string name="task_claimed_proofreading_1">Open the file that you have already saved to your computer.</string>
-        <string name="task_claimed_proofreading_proofread_the_file_in">Proofread the file in <strong>%s</strong> to ensure spelling and grammatical correctness.</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Proofread the file in <strong>%s</strong> to ensure spelling and grammatical correctness.</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the proofread file to the task upload page.</string>
 	<string name="task_claimed_proofreading_4">When you have finished proofreading the file you downloaded:</string>
 	<string name="task_claimed_proofreading_upload_proofread_task">Upload Proofread Task</string>
@@ -718,11 +868,11 @@
 	<string name="task_claimed_segmentation_segmentation_task_claimed">Segmentation task claimed</string>
 	<string name="task_claimed_segmentation_please_segment_it">Please segment it!</string>
 	<string name="task_claimed_segmentation_0">You have claimed the Segmentation task</string>
-        <string name="task_claimed_segmentation_segment_the_file"><strong>Segment the file</strong> to appropriately sized individual segments (e.g 2000 words each or less).</string>
-        <string name="task_claimed_segmentation_2"><strong>Upload your finished segmented files</strong> to the task segmentation page.</string>
+    <string name="task_claimed_segmentation_segment_the_file"><strong>Segment the file</strong> to appropriately sized individual segments (e.g 2000 words each or less).</string>
+    <string name="task_claimed_segmentation_2"><strong>Upload your finished segmented files</strong> to the task segmentation page.</string>
 	<string name="task_claimed_segmentation_4">When you have finished segmenting the file you downloaded:</string>
 	<string name="task_claimed_segmentation_upload_task_segments">Upload Task Segments</string>
-        <string name="task_claimed_segmentation_5"><strong>Open the file</strong> that you have already saved to your computer.</string>
+    <string name="task_claimed_segmentation_5"><strong>Open the file</strong> that you have already saved to your computer.</string>
 
 	<string name="task_claimed_translation_translation_task_claimed">Translation task claimed</string>
 	<string name="task_claimed_translation_please_translate_it">Please translate it!</string>
@@ -730,26 +880,26 @@
 	<string name="task_claimed_translation_we_need_your_translation">We need your translation.</string>
 	<string name="task_claimed_translation_translate_the_file_to">Translate the file to %s using your favourite translation software.</string>
 	<string name="task_claimed_translation_4">When you have finished translating the file you downloaded:</string>
-        <string name="task_claimed_translation_5">Upload your finished translated file to the task page.</string>
+    <string name="task_claimed_translation_5">Upload your finished translated file to the task page.</string>
 	<string name="task_claimed_translation_upload_translated_task">Upload Translated Task</string>
 
 	<string name="task_create_create_new_task">Create New Task</string>
-        <string name="task_create_for_project">For Project <strong>%s</strong>.</string>
+    <string name="task_create_for_project">For Project <strong>%s</strong>.</string>
 	<string name="task_create_0">Provide a meaningful title for the task.</string>
 	<string name="task_create_1">Who and what will be affected by the translation of this task.</string>
 	<string name="task_create_2">Provide the type of the task.</string>
 	<string name="task_create_word_count_tool">Word Count Tool</string>
 	<string name="task_create_3">Provide a deadline by which the task must be completed.</string>
 	<string name="task_create_4">Do you want the task to be published on the live task stream?</string>
-        <string name="task_create_5">Title must not be empty.</string>
+    <string name="task_create_5">Title must not be empty.</string>
 	
 	<string name="task_created_task_is_now_live">Task is now live!</string>
 	<string name="task_created_0">You have created a new task.</string>
-        <string name="task_created_1">It is now listed on the <a href="%s">Project View</a> page.</string>
+    <string name="task_created_1">It is now listed on the <a href="%s">Project View</a> page.</string>
 	<string name="task_created_2">Volunteer translators will see the new Task.</string>
 	<string name="task_created_3">If a volunteer translator is interested, they will claim the task, download it and upload their work.</string>
 	<string name="task_created_4">This may take several days or weeks, depending on the tasks.</string>
-        <string name="task_created_5">You can view the task details on the <a href="%s">Task View</a> page.</string>
+    <string name="task_created_5">You can view the task details on the <a href="%s">Task View</a> page.</string>
 
 	<string name="task_details_project_impact">Project Impact:</string>
 	<string name="task_details_project_tags">Project Tags:</string>
@@ -766,7 +916,11 @@
 
 	<string name="task_review_form_0">You can redownload the source file <a href="%s">here</a>.</string>
 	<string name="task_review_form_1">You can download the project file <a href="%s">here</a>.</string>
-        <string name="task_review_form_rating">Star rating of 1-5, where 1 = "Many Errors" and 5 = "Few Errors"</string>
+    <string name="task_review_form_rating">Star rating of 1-5, where 1 = "Many Errors" and 5 = "Few Errors"</string>
+    <string name="task_review_segmented">segmented</string>
+    <string name="task_review_translated">translated</string>
+    <string name="task_review_proofread">proofread</string>
+    <string name="task_review_merged">merged</string>
 	<string name="task_review_form_corrections">Corrections</string>
 	<string name="task_review_form_2">Were there many mistakes in the source file?</string>
 	<string name="task_review_form_3">How was the use of grammar in the source file?</string>
@@ -813,10 +967,15 @@
 	<string name="task_view_download_task">Download Task</string>
 	<string name="task_view_edit_task_details">Edit Task Details</string>
 	<string name="task_view_source_document_preview">Source Document Preview</string>
-        <string name="task_view_10">You are now tracking this task and will receive email notifications when its status changes.</string>
-        <string name="task_view_11">Unable to register for notifications for this task.</string>
-        <string name="task_view_12">You are no longer tracking this task and will receive no further emails.</string>
-        <string name="task_view_13">Unable to unregister for this notification.</string>
+    <string name="task_view_10">You are now tracking this task and will receive email notifications when its status changes.</string>
+    <string name="task_view_11">Unable to register for notifications for this task.</string>
+    <string name="task_view_12">You are no longer tracking this task and will receive no further emails.</string>
+    <string name="task_view_13">Unable to unregister for this notification.</string>
+    <string name="task_view_0">Note: This task has already been claimed by another user.</string>
+    <string name="task_view_1"><b>Success:</b> The task is now published and will appear on users' task streams.</string>
+    <string name="task_view_2"><b>Success:</b> The task is no longer published and will not appear on users' task streams.</string>
+    <string name="task_view_3"><b>Error:</b> Failed to publish the task, please try again later.</string>
+    <string name="task_view_4"><b>Error:</b> Failed to unpublish the task, please try again later.</string>
 
 	<string name="email_verification_email_verification">Email Verification</string>
 	<string name="email_verification_0">You can complete registration here</string>
@@ -833,12 +992,10 @@
 
 	<string name="login_log_in_to">Log In To</string>
 	<string name="login_reset_password">Reset Password</string>
-	<string name="login_find_out">Find out</string>
-	<string name="login_more_about_openid">more about OpenID</string>
-	<string name="login_0">how to get an OpenID enabled account</string>
+	<string name="login_0">Find out <a href='%s'>more about OpenID</a> and <a href='%s'>how to get an OpenID enabled account</a>.</string>
 	<string name="login_signin">Sign-In</string>
-        <string name="login_1"><p>Unable to log in. Please check your email and password. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
-        <string name="login_2">User has cancelled authentication!</string>
+    <string name="login_1"><p>Unable to log in. Please check your email and password. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
+    <string name="login_2">User has cancelled authentication!</string>
 
 	<string name="password_reset_password_reset">Password Reset</string>
 	<string name="password_reset_reset_your_password_here">Reset your password here</string>
@@ -881,7 +1038,7 @@
 	<string name="user_public_profile_1">By creating an organisation, you confirm that its activities are not in conflict with the general terms and conditions for the use of this site.</string>
 	<string name="user_public_profile_edit_profile_details">Edit Profile Details</string>
 	<string name="user_public_profile_2">Overview of your account details.</string>
-	<string name="user_public_profile_3">Please select a native language!</string>
+	<string name="user_public_profile_3">Please select a native language by editing your profile.</string>
 	<string name="user_public_profile_4">A list of badges you have earned.</string>
 	<string name="user_public_profile_list_all_badges">List All Badges</string>
 	<string name="user_public_profile_remove_badge">Remove Badge</string>
@@ -955,9 +1112,9 @@
 	<string name="index_translation_tasks">Translation tasks</string>
 	<string name="index_1">Claim a task, translate it, upload it.</string>
 	<string name="index_any_task_type">Any Task Type</string>
-        <string name="index_any_source_language">Any Source Language</string>
-        <string name="index_any_target_langauge">Any Target Language</string>
-        <string name="index_filter_available_tasks">Filter Available Tasks:</string>
+    <string name="index_any_source_language">Any Source Language</string>
+    <string name="index_any_target_language">Any Target Language</string>
+    <string name="index_filter_available_tasks">Filter Available Tasks:</string>
 	<string name="index_filter_task_stream">Filter Task Stream</string>
 	<string name="index_2">Only languages that are active in the system are listed in the filter boxes.</string>
 	<string name="index_3">If your language is not present then please check back again later.</string>
@@ -967,10 +1124,12 @@
 	<string name="index_5">Please wait for organisations to upload more translation tasks.</string>
 	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
 	<string name="index_register_now"><a href="%s">Register now</a> to find the translation tasks best suited to you.</string>
-        <string name="index_load_more">Load More</string>
-        <string name="index_8">Task <strong>%s</strong> not found.</string>
+    <string name="index_load_more">Load More</string>
+    <string name="index_8">Task <strong>%s</strong> not found.</string>
 
 	<string name="pagination_page_of">Page %s of %s</string>
+	<string name="index_f_8">Internet Explorer is not a supported browser. Please use a supported browser, for example Firefox or Chrome.</string>
+	<string name="index_9">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
 
 	<string name="statistics_statistics">Statistics:</string>
 	<string name="statistics_users">Users:</string>
@@ -981,4 +1140,124 @@
 	<string name="statistics_tasks_unclaimed">Tasks Unclaimed:</string>
 	<string name="statistics_tasks_with_prerequisites">Tasks with Prerequisites:</string>
 	<string name="statistics_tasks_archived">Tasks Archived:</string>
+	
+	<string name="faq_frequently_asked_questions">FAQ - Frequently Asked Questions</string>
+	<string name="faq_quicklinks">QuickLinks</string>
+	<string name="faq_volunteers">Volunteers</string>
+	<string name="faq_organisations">Organisations</string>
+        <string name="faq_terms">Terms</string>
+	<string name="faq_volunteer_questions">Volunteer Questions</string>
+	<string name="faq_1">How do I download the original file?</string>
+	<string name="faq_2">The original file can be downloaded from the upload page.</string>
+	<string name="faq_3">At the bottom of this page you will find 3 different options: download the original project file, the original task file or the latest uploaded file.</string>
+	<string name="faq_4">Who do I contact with queries? Who’s the PM?</string>
+	<string name="faq_5">If you have any queries, please contact info@trommons.org.</string>
+	<string name="faq_6">The aim of Trommons is to reduce intervention levels.</string>
+	<string name="faq_7">Therefore, there are no PMs assigned to projects.</string>
+	<string name="faq_8">Any queries can be submitted to the email previously mentioned.</string>
+	<string name="faq_9">What if I need more time?</string> 
+	<string name="faq_10">If you find that you need more time on a task, please contact info@trommons.org.</string>
+	<string name="faq_11">They will be able to tell you whether the deadline is strict or not.</string>
+	<string name="faq_12">How do I unclaim a task?</string> 
+	<string name="faq_13">To unclaim a task, please consult the relevant task page.</string> 
+	<string name="faq_14">At the bottom of the page you will see a box for user feedback.</string> 
+	<string name="faq_15">In this box you should give your reason for unclaiming the task and then click the 'Revoke Task and Submit Feedback’ button.</string> 
+	<string name="faq_16">I am having trouble downloading the file. What do I do?</string>
+	<string name="faq_17">If you experience problems when downloading a file, please contact info@trommons.org.</string>
+	<string name="faq_18">Why does my language not appear on Trommons?</string>
+	<string name="faq_19">If your language is not listed as a source or target language on the Trommons homepage, this means that there are currently no available tasks that match your language combination(s).</string>
+	<string name="faq_20">There are no tasks for my language pair(s).</string>
+	<string name="faq_21">You can set notification emails if there are no tasks available for your set language pair(s).</string>
+	<string name="faq_22">This can be done via your profile.</string>
+	<string name="faq_23">There are 2 types of notification emails offered:</string>
+	<string name="faq_24"><strong>All</strong> - this email will list all of the tasks available on Trommons;</string>
+	<string name="faq_25"><strong>Strict</strong> - this email will only list tasks that match your set languages.</string>
+	<string name="faq_26">Additionally, you can choose whether you want notification emails on a daily, weekly or monthly basis.</string>
+	<string name="faq_27">How do I view my task reviews?</string>
+	<string name="faq_28">Volunteers can access their task reviews via their claimed tasks page.</string>
+	<string name="faq_29">There is a task review button under each claimed task.</string>
+	<string name="faq_30">By clicking on this button, volunteers can view any feedback given on their claimed tasks.</string>
+	<string name="faq_31">How do I request a reference email?</string>
+	<string name="faq_32">A reference email summarising your completed work on Trommons can be requested on your profile page.</string>
+	<string name="faq_33">How do I create an avatar on my profile page?</string>
+	<string name="faq_34">You can create your own avatar on Trommons via <a href="www.gravatar.com">www.gravatar.com</a>.</string>
+	<string name="faq_35">On this site you can upload your own avatar.</string>
+	<string name="faq_36">You must use the email address you registered on Trommons with in order for your avatar to sync with Trommons.</string>
+	<string name="faq_organisation_questions">Organisation Questions</string>
+	<string name="faq_37">How do I create an organisation?</string>
+	<string name="faq_38">To create an organisation, go to your profile.</string>
+	<string name="faq_39">In the top right-hand corner of the screen you will see a ‘Create Organisation’ button.</string>
+	<string name="faq_40">When you click on this button you will be brought to a page where you can enter all of the organisation’s details.</string>
+	<string name="faq_41">How do I download my translation?</string>
+	<string name="faq_42">To download your translation start by finding the relevant project on your dashboard.</string>
+	<string name="faq_43">Click on the project and hit the ‘Complete’ button next to the proofreading task.</string>
+	<string name="faq_44">This will bring you to a page which has a button at the top saying ‘Download Output file’.</string>
+	<string name="faq_45">Click on this and you will have downloaded the finalised text.</string>
+	<string name="faq_46">How do I know its been finished?</string>
+	<string name="faq_47">All projects have a status.</string>
+	<string name="faq_48">When the status is at 100% the project is complete.</string>
+	<string name="faq_49">Additionally, when you create a project you automatically track the project.</string>
+	<string name="faq_50">This means that you will receive notification emails every time the status of your project changes.</string>
+	<string name="faq_51">How do I add more members to my organisation?</string>
+	<string name="faq_52">Firstly, anyone who wishes to become a member of an organisation must be a registered user on Trommons.</string>
+	<string name="faq_53">You can add members to your organisation via the ‘Add User’ button on the profile page.</string>
+	<string name="faq_54">Additionally, users can request membership to the organisation which you can accept or refuse.</string>
+	<string name="faq_55">How do I give feedback?</string>
+	<string name="faq_56">You can find a box for feedback at the bottom of the download page.</string>
+	<string name="faq_57">There are 4 categories for feedback each ranked from 1 to 5: corrections, grammar, spelling and consistency.</string>
+	<string name="faq_58">There is also a box where any additional comments can be added.</string>
+	<string name="faq_59">How do I view task reviews on my projects?</string>
+	<string name="faq_60">Organisations can access task reviews via the project page.</string>
+	<string name="faq_61">Feedback can be given by both the translator and proofreader.</string>
+	<string name="faq_62">Therefore, organisation members can view feedback from the translator by clicking on the 'Complete' button beside the translation task.</string>
+	<string name="faq_63">This will bring you to a page where you can 'View Reviews'.</string>
+	<string name="faq_64">The same process can be done for reviews on the proofreading task.</string>
+	<string name="faq_65">My project file is quite large. What do I do?</string>	
+	<string name="faq_66">If your source file is over a certain word count i.e. 5,000 words, you can segment the project.</string>
+	<string name="faq_67">Segmentation is a task that enables you to split your source file into a number of manageable tasks all within the one project.</string>
+	<string name="faq_68">To create a segmentation task, go to the create project page. From here, you fill in all of the details as normal.</string>
+	<string name="faq_69">At the bottom of the page, instead of clicking on translation and proofreading, please click on segmentation and then create your project.</string>
+	<string name="faq_70">This will bring you to the project page where you will see one task- the segmentation task.</string>
+	<string name="faq_71">The next step is to click on the segmentation task title.</string>
+	<string name="faq_72">You will be brought to a page where you can claim this task (download task button in right hand corner).</string>
+	<string name="faq_73">Once, you have claimed the task, you can then upload your segments with their words counts.</string>
+	<string name="faq_74">After this, volunteers can claim any of the segments you have uploaded!</string>
+        <string name="faq_75">I have finished proofreading the translation. Do I upload a clean file or one with track changes?</string>
+        <string name="faq_76">Once you have finished proofreading the translated text, you can upload a clean file on Trommons.</string>
+	<string name="faq_77">To make suggestions/comments, please use the ‘provide a review’ function on the project upload page.</string>
+        <string name="faq_terms_list">Solas Match Terminology</string>
+        <string name="faq_task">Task:</string>
+        <string name="faq_78">A task is a piece of work to be carried out within a project.</string>
+        <string name="faq_79">There can be a number of tasks within the one project i.e. segmentation, translation, proofreading, desegmentation.</string>
+        <string name="faq_task_stream">Task Stream:</string>
+        <string name="faq_80">The task stream is visible on the Trommons home page. Here, you can view a list of the suggested tasks corresponding to your language combinations.</string>
+        <string name="faq_81">This will effectively work for you if you have your language combinations set on your profile. You can also filter available tasks by task type, source language and target language.</string>
+        <string name="faq_segmentation">Segmentation:</string>
+        <string name="faq_82">When a project file has a large word count (i.e. anything over 5,000 words), the file has to be segmented.</string>
+        <string name="faq_83">Segmentation appears on the project page the same way as translation and proofreading tasks.</string>
+        <string name="faq_84">You claim the task, download the file and split it up into more manageable units for translation and proofreading.</string>
+        <string name="faq_85">Once this is done, the segments are uploaded and ready to be translated. Once all segments have been translated and proofread, the files are merged back together in a process called desegmentation.</string>
+        <string name="faq_86">The final output is one merged file to be downloaded by the organisation.</string>
+        <string name="faq_Tags">Tags:</string>
+        <string name="faq_87">Key words that help describe the contents of a project.</string>
+        <string name="faq_badges">Badges:</string>
+        <string name="faq_88">Badges are assigned to volunteers based on their activity on Trommons.</string>
+        <string name="faq_89">Additionally, organisations can create and assign badges to volunteers, so that only these volunteers can work on their projects.</string>
+        <string name="faq_project_impact">Project Impact:</string>
+        <string name="faq_90">The project impact section on the project details explains what the translation will be used for.</string>
+        <string name="faq_91">What is a task?</string>
+        <string name="faq_92">What is the task stream?</string>
+        <string name="faq_93">What is segmentation?</string>
+        <string name="faq_94">What are tags?</string>
+        <string name="faq_95">What are Badges?</string>
+        <string name="faq_96">What does project impact mean?</string>
+        
+
+	<string name="slim_error_Oops_there_has">Oops! there has been a technical problem.</string>
+	<string name="slim_error_1">You can report this problem by E-Mailing us at <a>info@trommons.org</a></string>
+	<string name="slim_error_2">with details of how you encountered the error, along with the technical details listed below.</string>
+	<string name="slim_error_3">Go </string>
+	<string name="slim_error_4">Back.</string>
+	<string name="slim_error_5">Show Details.</string>
+	
 </resources>

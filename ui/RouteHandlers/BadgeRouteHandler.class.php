@@ -26,10 +26,13 @@ class BadgeRouteHandler
             }
         }
 
-        $app->view()->setData("current_page", "badge-list");
+        $siteName = Settings::get('site.name');
+
         $app->view()->appendData(array(
-                "badgeList" => $badgeList,
-                "org_list"  => $org_list
+                "current_page"  => "badge-list",
+                "badgeList"     => $badgeList,
+                'siteName'      => $siteName,
+                "org_list"      => $org_list
         ));
         
         $app->render("badge/badge-list.tpl");

@@ -370,6 +370,7 @@ class Strings
 
     const PROJECT_CREATE_CREATE_A_PROJECT = 'project_create_create_a_project';
     const PROJECT_CREATE_SOURCE_TEXT = 'project_create_source_text';
+    const PROJECT_CREATE_0 = 'project_create_0';
     const PROJECT_CREATE_1 = 'project_create_1';
     const PROJECT_CREATE_2 = 'project_create_2';
     const PROJECT_CREATE_3 = 'project_create_3';
@@ -443,10 +444,6 @@ class Strings
     
     
     const FAQ_FAQ = 'faq_faq';
-    const FAQ_QUICKLINKS = 'faq_quicklinks';
-    const FAQ_VOLUNTEERS = 'faq_volunteers';
-    const FAQ_VOLUNTEER_QUESTIONS = 'faq_volunteer_questions';
-    const FAQ_ORGANISATION_QUESTIONS = 'faq_organisation_questions';    
     const FAQ_V_Q1 = 'faq_v_q1';
     const FAQ_V_Q2 = 'faq_v_q2';
     const FAQ_V_Q3 = 'faq_v_q3';
@@ -624,6 +621,7 @@ class Strings
     const TASK_SEGMENTATION_16 = 'task_segmentation_16';
     const TASK_SEGMENTATION_17 = 'task_segmentation_17';
     const TASK_SEGMENTATION_18 = 'task_segmentation_18';
+    const TASK_SEGMENTATION_7 = 'task_segmentation_7';
 
     const TASK_SIMPLE_UPLOAD_FINISHED_PROCESSING = 'task_simple_upload_finished_processing';
     const TASK_SIMPLE_UPLOAD_PROVIDE_FEEDBACK = 'task_simple_upload_provide_feedback';
@@ -674,6 +672,7 @@ class Strings
     const TASK_CLAIM_PROOFREADING_3 = 'task_claim_proofreading_3';
     const TASK_CLAIM_PROOFREADING_4 = 'task_claim_proofreading_4';
     const TASK_CLAIM_PROOFREADING_5 = 'task_claim_proofreading_5';
+    const TASK_CLAIM_PROOFREADING_6 = 'task_claim_proofreading_6';
 
     const TASK_CLAIM_SEGMENTATION_0 = 'task_claim_segmentation_0';
     const TASK_CLAIM_SEGMENTATION_1 = 'task_claim_segmentation_1';
@@ -756,6 +755,10 @@ class Strings
 
     const TASK_PROFILE_DISPLAY_ARCHIVED = 'task_profile_display_archived';
 
+    const TASK_REVIEW_SEGMENTED = 'task_review_segmented';
+    const TASK_REVIEW_TRANSLATED = 'task_review_translated';
+    const TASK_REVIEW_PROOFREAD = 'task_review_proofread';
+    const TASK_REVIEW_MERGED = 'task_review_merged';
     const TASK_REVIEW_FORM_0 = 'task_review_form_0';
     const TASK_REVIEW_FORM_1 = 'task_review_form_1';
     const TASK_REVIEW_FORM_RATING = 'task_review_form_rating';
@@ -810,7 +813,13 @@ class Strings
     const TASK_VIEW_11 = 'task_view_11';
     const TASK_VIEW_12 = 'task_view_12';
     const TASK_VIEW_13 = 'task_view_13';
+    const TASK_VIEW_0 = 'task_view_0';
+    const TASK_VIEW_1 = 'task_view_1';
+    const TASK_VIEW_2 = 'task_view_2';
+    const TASK_VIEW_3 = 'task_view_3';
+    const TASK_VIEW_4 = 'task_view_4';
 
+    const EMAIL_VERIFICATION_EMAIL_VERIFICATION = 'email_verification_email_verification';
     const EMAIL_VERIFICATION_0 = 'email_verification_0';
     const EMAIL_VERIFICATION_WELCOME_TO = 'email_verification_welcome_to';
     const EMAIL_VERIFICATION_1 = 'email_verification_1';
@@ -822,7 +831,6 @@ class Strings
     const EMAIL_VERIFICATION_FINISH_REGISTRATION = 'email_verification_finish_registration';
     const EMAIL_VERIFICATION_7 = 'email_verification_7';
     const EMAIL_VERIFICATION_8 = 'email_verification_8';
-    const EMAIL_VERIFICATION_EMAIL_VERIFICATION = 'email_verification_email_verification';
 
     const LOGIN_LOG_IN_TO = 'login_log_in_to';
     const LOGIN_RESET_PASSWORD = 'login_reset_password';
@@ -975,5 +983,124 @@ class Strings
     const STATISTICS_TASKS_UNCLAIMED = 'statistics_tasks_unclaimed';
     const STATISTICS_TASKS_WITH_PREREQUISITES = 'statistics_tasks_with_prerequisites';
     const STATISTICS_TASKS_ARCHIVED = 'statistics_tasks_archived';
+    
+    const FAQ_FREQUENTLY_ASKED_QUESTIONS = 'faq_frequently_asked_questions';
+    const FAQ_QUICKLINKS = 'faq_quicklinks';
+    const FAQ_VOLUNTEERS= 'faq_volunteers';
+    const FAQ_VOLUNTEER_QUESTIONS = 'faq_volunteer_questions';
+    const FAQ_TERMS = "faq_terms";
+    const FAQ_1 = 'faq_1';
+    const FAQ_2 = 'faq_2';
+    const FAQ_3 = 'faq_3';
+    const FAQ_4 = 'faq_4';
+    const FAQ_5 = 'faq_5';
+    const FAQ_6 = 'faq_6';
+    const FAQ_7 = 'faq_7';
+    const FAQ_8 = 'faq_8';
+    const FAQ_9 = 'faq_9';
+    const FAQ_10 = 'faq_10';
+    const FAQ_11 = 'faq_11';
+    const FAQ_12 = 'faq_12';
+    const FAQ_13 = 'faq_13';
+    const FAQ_14 = 'faq_14';
+    const FAQ_15 = 'faq_15';
+    const FAQ_16 = 'faq_16';
+    const FAQ_17 = 'faq_17';
+    const FAQ_18 = 'faq_18';
+    const FAQ_19 = 'faq_19';
+    const FAQ_20 = 'faq_20';
+    const FAQ_21 = 'faq_21';
+    const FAQ_22 = 'faq_22';
+    const FAQ_23 = 'faq_23';
+    const FAQ_24 = 'faq_24';
+    const FAQ_25 = 'faq_25';
+    const FAQ_26 = 'faq_26';
+    const FAQ_27 = 'faq_27';
+    const FAQ_28 = 'faq_28';
+    const FAQ_29 = 'faq_29';
+    const FAQ_30 = 'faq_30';
+    const FAQ_31 = 'faq_31';
+    const FAQ_32 = 'faq_32';
+    const FAQ_33 = 'faq_33';
+    const FAQ_34 = 'faq_34';
+    const FAQ_35 = 'faq_35';
+    const FAQ_36 = 'faq_36';
+    const FAQ_ORGANISATION_QUESTIONS = 'faq_organisation_questions';
+    const FAQ_37 = 'faq_37';
+    const FAQ_38 = 'faq_38';
+    const FAQ_39 = 'faq_39';
+    const FAQ_40 = 'faq_40';
+    const FAQ_41 = 'faq_41';
+    const FAQ_42 = 'faq_42';
+    const FAQ_43 = 'faq_43';
+    const FAQ_44 = 'faq_44';
+    const FAQ_45 = 'faq_45';
+    const FAQ_46 = 'faq_46';
+    const FAQ_47 = 'faq_47';
+    const FAQ_48 = 'faq_48';
+    const FAQ_49 = 'faq_49';
+    const FAQ_50 = 'faq_50';
+    const FAQ_51 = 'faq_51';
+    const FAQ_52 = 'faq_52';
+    const FAQ_53 = 'faq_53';
+    const FAQ_54 = 'faq_54';
+    const FAQ_55 = 'faq_55';
+    const FAQ_56 = 'faq_56';
+    const FAQ_57 = 'faq_57';
+    const FAQ_58 = 'faq_58';
+    const FAQ_59 = 'faq_59';
+    const FAQ_60 = 'faq_60';
+    const FAQ_61 = 'faq_61';
+    const FAQ_62 = 'faq_62';
+    const FAQ_63 = 'faq_63';
+    const FAQ_64 = 'faq_64';
+    const FAQ_65 = 'faq_65';
+    const FAQ_66 = 'faq_66';
+    const FAQ_67 = 'faq_67';
+    const FAQ_68 = 'faq_68';
+    const FAQ_69 = 'faq_69';
+    const FAQ_70 = 'faq_70';
+    const FAQ_71 = 'faq_71';
+    const FAQ_72 = 'faq_72';
+    const FAQ_73 = 'faq_73';
+    const FAQ_74 = 'faq_74';
+    const FAQ_75 = 'faq_75';
+    const FAQ_76 = 'faq_76';
+    const FAQ_77 = 'faq_77';
+    const FAQ_TERMS_LIST = 'faq_terms_list';
+    const FAQ_TASK = 'faq_task';
+    const FAQ_78 = 'faq_78';
+    const FAQ_79 = 'faq_79';
+    const FAQ_TASK_STREAM = 'faq_task_stream';
+    const FAQ_80 = 'faq_80';
+    const FAQ_81 = 'faq_81';
+    const FAQ_SEGMENTATION = 'faq_segmentation';
+    const FAQ_82 = 'faq_82';
+    const FAQ_83 = 'faq_83';
+    const FAQ_84 = 'faq_84';
+    const FAQ_85 = 'faq_85';
+    const FAQ_86 = 'faq_86';
+    const FAQ_TAGS = 'faq_Tags';
+    const FAQ_87 = 'faq_87';
+    const FAQ_BADGES = 'faq_badges';
+    const FAQ_88 = 'faq_88';
+    const FAQ_89 = 'faq_89';
+    const FAQ_PROJECT_IMPACT = 'faq_project_impact';
+    const FAQ_90 = 'faq_90';
+    const FAQ_91 = 'faq_91';
+    const FAQ_92 = 'faq_92';
+    const FAQ_93 = 'faq_93';
+    const FAQ_94 = 'faq_94';
+    const FAQ_95 = 'faq_95';
+    const FAQ_96 = 'faq_96';
+    
+    
+    const SLIM_ERROR_OOPS_THERE_HAS = 'slim_error_Oops_there_has';
+    const SLIM_ERROR_1 = 'slim_error_1';
+    const SLIM_ERROR_2 = 'slim_error_2';
+    const SLIM_ERROR_3 = 'slim_error_3';
+    const SLIM_ERROR_4 = 'slim_error_4';
+    const SLIM_ERROR_5 = 'slim_error_5';
+    
 }
 

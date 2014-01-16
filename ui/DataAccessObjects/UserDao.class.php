@@ -224,6 +224,14 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function assignBadge($email, $badgeId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/assignBadge/".urlencode($email)."/$badgeId";
+        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
+        return $ret;
+    }
+
     public function removeTaskStreamNotification($userId)
     {
         $ret = null;

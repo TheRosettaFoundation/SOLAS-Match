@@ -1,11 +1,16 @@
 {include file='header.tpl'}
 
 <div class="page-header">
-    <h1>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADMINISTRATION_DASHBOARD)} <small>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_THE_SITE_ADMINISTRATORS_DASHBOARD)}</small></h1>
+    <h1>
+        {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADMINISTRATION_DASHBOARD)}
+        <small>
+            {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_THE_SITE_ADMINISTRATORS_DASHBOARD)}
+        </small>
+     </h1>
 </div>
 
 <div class="well">
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.{$adminUserId}"}" accept-charset="utf-8">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
                 <td colspan="2"> 
@@ -14,7 +19,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <p>{sprintf(Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_0), Settings::get("site.name"))}</p>
+                    <p>{sprintf(Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_0), $siteName)}</p>
                     <p><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_7)}</strong></p>
                 </td>
             </tr>
@@ -23,7 +28,10 @@
                     <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}" style="width: 95%"/>
                 </td>
                 <td valign="top">
-                    <button class="btn btn-success" type="submit" name="addAdmin" value="1"><i class="icon-star icon-white"></i> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADD_ADMIN)}</button>
+                    <button class="btn btn-success" type="submit" name="addAdmin" value="1">
+                        <i class="icon-star icon-white"></i>
+                        {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADD_ADMIN)}
+                    </button>
                 </td>
             </tr>
         </table> 
@@ -35,7 +43,7 @@
         <hr/>
     {/if}    
     
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}" accept-charset="utf-8">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table>
             <tr>
                 <td colspan="3"> 
@@ -83,7 +91,7 @@
         <hr/>
     {/if}  
         
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}" accept-charset="utf-8">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table>
             <tr>
                 <td colspan="3"> 
@@ -130,7 +138,7 @@
         <hr/>
     {/if} 
     
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.{$adminUserId}"}" accept-charset="utf-8">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
                 <td colspan="2"> 
@@ -153,7 +161,7 @@
             {/if}
             <tr>
                 <td colspan="2">
-                    {sprintf(Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_PERMANENTLY), Settings::get("site.name"))}
+                    {sprintf(Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_PERMANENTLY), $siteName)}
                 </td>
             </tr>
             <tr>

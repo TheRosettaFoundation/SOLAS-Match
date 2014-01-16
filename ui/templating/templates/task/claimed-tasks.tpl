@@ -15,10 +15,6 @@
     </h1>
 </div>
 
-<div class="task" is="x-claimed-tasks-stream" user-id="{$thisUser->getId()}" tasks-per-page="10" id="claimedTasksStream"></div>
-
-<script type="text/javascript" src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/interop.js"></script>
-<script type="text/javascript" src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/dart.js"></script>
-<script type="application/dart" src="{urlFor name="home"}ui/dart/deploy/web/Routes/Tasks/ClaimedTasks.dart"></script>
+<claimed-tasks-stream userid="{$thisUser->getId()}" tasksperpage="10"></claimed-tasks-stream>
 
 {include file='footer.tpl'}

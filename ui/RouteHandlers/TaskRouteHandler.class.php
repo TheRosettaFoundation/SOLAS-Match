@@ -134,7 +134,17 @@ class TaskRouteHandler
             }
         }
 
+        $extra_scripts = "
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/ClaimedTasks.dart.js\"></script>
+            ";
+
+        $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/ClaimedTasksStream.html");
+
         $viewData = array('thisUser' => $user);
+        $viewData['extra_scripts'] = $extra_scripts;
+
         $app->view()->appendData($viewData);
         $app->render("task/claimed-tasks.tpl");
     }
@@ -205,8 +215,11 @@ class TaskRouteHandler
         $sourceLanguage = $languageDao->getLanguageByCode($sourcelocale->getLanguageCode());
         $targetLanguage = $languageDao->getLanguageByCode($targetLocale->getLanguageCode());
         $taskMetaData = $taskDao->getTaskInfo($taskId);
+
+        $projectFileDownload = $app->urlFor("home")."api/v0/projects/".$task->getProjectId()."/file";    // Used in proofreading page
         
         $app->view()->appendData(array(
+                    "projectFileDownload" => $projectFileDownload,
                     "task"          => $task,
                     "sourceLanguage"=> $sourceLanguage,
                     "targetLanguage"=> $targetLanguage,
@@ -248,6 +261,7 @@ class TaskRouteHandler
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
 
         if ($taskClaimed) {
+            $app->flashKeep();
             switch ($task->getTaskType()) {
                 case TaskTypeEnum::DESEGMENTATION:
                     $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $task_id)));
@@ -486,8 +500,8 @@ class TaskRouteHandler
         $deadlineError = "";
 
         $extra_scripts = "
-        <script type=\"text/javascript\">".file_get_contents(__DIR__."/../js/lib/jquery-ui-timepicker-addon.js")."</script>"
-        .file_get_contents(__DIR__."/../js/datetime-picker.js");
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
 
         $task = $taskDao->getTask($task_id);
 
@@ -724,8 +738,19 @@ class TaskRouteHandler
                 } else {
                     $task->setPublished(0);                    
                 }
-                $taskDao->updateTask($task);                 
-                
+                if ($taskDao->updateTask($task)) {
+                    if ($post['published']) {
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_VIEW_1));
+                    } else {
+                        $app->flashNow("success", Localisation::getTranslation(Strings::TASK_VIEW_2));
+                    }
+                } else {
+                    if ($post['published']) {
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_VIEW_3));
+                    } else {
+                        $app->flashNow("error", Localisation::getTranslation(Strings::TASK_VIEW_4));
+                    }
+                }
             }
 
             if (isset($post['track'])) {
@@ -771,7 +796,9 @@ class TaskRouteHandler
         }
         
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
-        if($isOrgMember) {     
+        $adminDao = new AdminDao();
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+        if ($isOrgMember || $isSiteAdmin) {     
             $app->view()->appendData(array("isOrgMember" => $isOrgMember));
         }
 
@@ -892,8 +919,8 @@ class TaskRouteHandler
         }
 
         $extra_scripts = "
-            <script type=\"text/javascript\">".file_get_contents(__DIR__."/../js/lib/jquery-ui-timepicker-addon.js")."</script>"
-            .file_get_contents(__DIR__."/../js/datetime-picker.js");
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
 
         $app->view()->appendData(array(
                 "project"       => $project,
@@ -948,7 +975,7 @@ class TaskRouteHandler
         $language_list = TemplateHelper::getLanguageList();
         $countries = TemplateHelper::getCountryList();
         
-        if ($app->request()->isPost()) {
+        if ($app->request()->isPost() && $task->getTaskStatus() != TaskStatusEnum::COMPLETE) {
             $post = $app->request()->post(); 
             
             $fileInfo = $projectDao->getProjectFileInfo($project->getId());            
@@ -1187,6 +1214,13 @@ class TaskRouteHandler
                         } else {
                             $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_4), $app->urlFor("task-view", array("task_id" => $task_id)), $task->getTitle()));
                         }
+                    } else {
+                        $orgProfile = $app->urlFor("org-public-profile", array('org_id' => $organisation->getId()));
+                        $app->flash("success", sprintf(
+                                    Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_32), 
+                                    $orgProfile, $organisation->getName()
+                        ));
+                        $app->redirect($app->urlFor("task", array("task_id" => $task_id)));
                     }
                 } else {
                     $app->flashNow('error', Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_5));
@@ -1224,16 +1258,16 @@ class TaskRouteHandler
         $action = "";
         switch ($task->getTaskType()) {
             case TaskTypeEnum::SEGMENTATION:
-                $action = "segmented";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_SEGMENTED);
                 break;
             case TaskTypeEnum::TRANSLATION:
-                $action = "translated";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_TRANSLATED);
                 break;
             case TaskTypeEnum::PROOFREADING:
-                $action = "proofread";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_PROOFREAD);
                 break;
             case TaskTypeEnum::DESEGMENTATION:
-                $action = "merged";
+                $action = Localisation::getTranslation(Strings::TASK_REVIEW_MERGED);
                 break;
         }
 

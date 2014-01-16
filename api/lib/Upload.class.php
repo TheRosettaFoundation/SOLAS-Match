@@ -243,7 +243,8 @@ class Upload {
                     foreach($currentTaskNode->getPreviousList() as $nodeId) {
                         $preReq = $taskDao->getTask($nodeId);
                         $preReq = $preReq[0];      
-                        if($preReq->getTaskStatus() == TaskStatusEnum::COMPLETE) {
+                        if ($preReq->getTaskStatus() == TaskStatusEnum::COMPLETE 
+                                && $preReq->getTaskType() != TaskTypeEnum::SEGMENTATION) {
                             Upload::copyOutputFile($id, $preReqId);
                         } 
                     }

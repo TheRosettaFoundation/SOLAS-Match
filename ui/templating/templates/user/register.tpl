@@ -46,8 +46,10 @@
                     <input id="openid_submit" type="submit" class="btn btn-primary" value="{Localisation::getTranslation(Strings::LOGIN_SIGNIN)}"/>
             </div>
             <noscript>
-                    <p>{Localisation::getTranslation(Strings::COMMON_OPENID_IS_SERVICE_THAT_ALLOWS_YOU_TO_LOGON_TO_MANY_DIFFERENT_WEBSITES_USING_A_SINGLE_INDENTITY)}
-                    {Localisation::getTranslation(Strings::LOGIN_FIND_OUT)} <a href="http://openid.net/what/">{Localisation::getTranslation(Strings::LOGIN_MORE_ABOUT_OPENID)}</a> {Localisation::getTranslation(Strings::TASK_ALTER_AND)} <a href="http://openid.net/get/">{Localisation::getTranslation(Strings::LOGIN_0)}</a>.</p>
+                 <p>
+                    {Localisation::getTranslation(Strings::COMMON_OPENID_IS_SERVICE_THAT_ALLOWS_YOU_TO_LOGON_TO_MANY_DIFFERENT_WEBSITES_USING_A_SINGLE_INDENTITY)}
+                    {sprintf(Localisation::getTranslation(Strings::LOGIN_0), "http://openid.net/what/", "http://openid.net/get/")} 
+                </p>
             </noscript>
         </fieldset>
     </form>

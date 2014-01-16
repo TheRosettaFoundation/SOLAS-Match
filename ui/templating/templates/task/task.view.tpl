@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <h1 class="page-header" style="height: auto">
-        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
+        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
             {if $task->getTitle() != ''}
                 {$task->getTitle()}
             {else}
@@ -39,20 +39,26 @@
             {/if}
         </div>
     </h1>
+
+    {if $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
+        <p class="alert alert-info">
+            {Localisation::getTranslation(Strings::TASK_VIEW_0)}
+        </p>
+    {/if}
     
-{if isset($flash['success'])}
-    <p class="alert alert-success">
-        <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {$flash['success']}
-    </p>
-{/if}
+    {if isset($flash['success'])}
+        <p class="alert alert-success">
+            <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}:</strong> {$flash['success']}
+        </p>
+    {/if}
 
-{if isset($flash['error'])}
-    <p class="alert alert-error">
-        <strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}</strong> {$flash['error']}
-    </p>
-{/if}
+    {if isset($flash['error'])}
+        <p class="alert alert-error">
+            <strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}:</strong> {$flash['error']}
+        </p>
+    {/if}
 
-{include file="task/task.details.tpl"} 
+    {include file="task/task.details.tpl"} 
 
     <p style="margin-bottom: 40px"/>        
     <table width="100%">

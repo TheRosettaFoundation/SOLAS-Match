@@ -1,12 +1,4 @@
-library SolasMatchDart;
-import "dart:json" as json;
-import "dart:async";
-import "dart:html";
-
-import "../lib/APIHelper.dart";
-import "../lib/ModelFactory.dart";
-import "../lib/models/Task.dart";
-import "../lib/models/Tag.dart";
+part of SolasMatchDart;
 
 class TaskDao
 {
@@ -18,10 +10,10 @@ class TaskDao
       List<Tag> tags = new List<Tag>();
       if (response.status < 400) {
         if (response.responseText != '') {
-          Map jsonParsed = json.parse(response.responseText);
+          Map jsonParsed = JSON.decode(response.responseText);
           if (jsonParsed.length > 0) {
             jsonParsed['item'].forEach((String data) {            
-              Map tag = json.parse(data);
+              Map tag = JSON.decode(data);
               tags.add(ModelFactory.generateTagFromMap(tag));
             });
           }
@@ -48,10 +40,10 @@ class TaskDao
       List<Task> userTasks = new List<Task>();
       if (response.status < 400) {
         if (response.responseText.length > 0) {
-          Map jsonParsed = json.parse(response.responseText);
+          Map jsonParsed = JSON.decode(response.responseText);
           if (jsonParsed.length > 0) {
             jsonParsed['item'].forEach((String data) {
-              Map task = json.parse(data);
+              Map task = JSON.decode(data);
               userTasks.add(ModelFactory.generateTaskFromMap(task));
             });
           }
@@ -75,10 +67,10 @@ class TaskDao
       List<Task> tasks = new List<Task>();
       if (response.status < 400) {
         if (response.responseText.length > 0) {
-          Map jsonParsed = json.parse(response.responseText);
+          Map jsonParsed = JSON.decode(response.responseText);
           if (jsonParsed.length > 0) {
             jsonParsed['item'].forEach((String data) {
-              Map task = json.parse(data);
+              Map task = JSON.decode(data);
               tasks.add(ModelFactory.generateTaskFromMap(task));
             });
           }
@@ -95,12 +87,12 @@ class TaskDao
   static Future<Task> createTask(Task task)
   {
     APIHelper client = new APIHelper(".json");
-    Future<Task> ret = client.call("Task", "v0/tasks", "POST", json.stringify(task))
+    Future<Task> ret = client.call("Task", "v0/tasks", "POST", JSON.encode(task))
         .then((HttpRequest response) {
           Task task = null;
           if (response.status < 400) {
             if (response.responseText.length > 0) {
-              Map jsonParsed = json.parse(response.responseText);
+              Map jsonParsed = JSON.decode(response.responseText);
               if (jsonParsed.length > 0) {
                 task = ModelFactory.generateTaskFromMap(jsonParsed);
               }

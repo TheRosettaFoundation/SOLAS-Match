@@ -91,6 +91,8 @@ class AdminRouteHandler
                 $bannedUser['adminUser'] = $userDao->getUser($bannedUser->getUserIdAdmin());
             }
         }
+
+        $siteName = Settings::get("site.name");
      
         $extra_scripts = "";
         $extra_scripts .= file_get_contents(__DIR__."/../js/site-admin.dashboard.js");
@@ -101,6 +103,7 @@ class AdminRouteHandler
                     "bannedOrgList" => $bannedOrgList,
                     "bannedUserList"=> $bannedUserList,
                     "current_page"  => 'site-admin-dashboard',
+                    "siteName"      => $siteName,
                     "extra_scripts" => $extra_scripts
         ));
 

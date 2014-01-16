@@ -146,6 +146,12 @@ table{
   background-color: rgba(99,99,99,0.1);
 }
 
+.table-striped-left tbody tr:nth-child(odd) td,
+.table-striped-left tbody tr:nth-child(odd) th {
+  background-color: rgba(99,99,99,0.1);
+  text-align: left;
+}
+
 .table tbody tr:hover td,
 .table tbody tr:hover th {
   background-color: rgba(99,99,99,0.3);

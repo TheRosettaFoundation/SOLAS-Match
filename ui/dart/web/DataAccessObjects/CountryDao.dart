@@ -1,12 +1,4 @@
-library SolasMatchDart;
-
-import "dart:json" as json;
-import "dart:async";
-import "dart:html";
-
-import "../lib/models/Country.dart";
-import "../lib/APIHelper.dart";
-import "../lib/ModelFactory.dart";
+part of SolasMatchDart;
 
 class CountryDao
 {
@@ -18,9 +10,9 @@ class CountryDao
           List<Country> countries = new List<Country>();
           if (response.status < 400) {
             if (response.responseText != '') {
-              Map parsed = json.parse(response.responseText);
+              Map parsed = JSON.decode(response.responseText);
               parsed['item'].forEach((String data) {
-                Map countryMap = json.parse(data);
+                Map countryMap = JSON.decode(data);
                 countries.add(ModelFactory.generateCountryFromMap(countryMap));
               });
             }

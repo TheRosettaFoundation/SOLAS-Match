@@ -1,4 +1,3 @@
-<script type="text/javascript">
 function initDeadlinePicker() {
     $('#deadline').datetimepicker({
         timeFormat: "HH:mm 'UTC'",
@@ -7,8 +6,3 @@ function initDeadlinePicker() {
         stepMinute: 10
     });
 }
-
-$(document).ready(function() {
-    initDeadlinePicker();
-})
-</script>

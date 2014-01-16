@@ -1,9 +1,4 @@
-library SolasMatchDart;
-
-import 'dart:html';
-import 'dart:async';
-import "package:json_object/json_object.dart";
-import 'dart:json' as json;
+part of SolasMatchDart;
 
 class Settings
 {
@@ -20,7 +15,7 @@ class Settings
   Future<bool> loadConf()
   {
     //Future<bool> ret = HttpRequest.getString("../conf/conf.json")
-    Future<bool> ret = HttpRequest.getString(query("#ConfFileLocation").attributes['value'])
+    Future<bool> ret = HttpRequest.getString(querySelector("#ConfFileLocation").attributes['value'])
                .then((String data) {
                  _instance._conf = new JsonObject.fromJsonString(data);
                  return true;

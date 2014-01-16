@@ -14,7 +14,12 @@
         <ol>
             <li>{Localisation::getTranslation(Strings::COMMON_CAN_YOU_OPEN_FILE)}</li>
             <li>{Localisation::getTranslation(Strings::TASK_CLAIM_PROOFREADING_2)}</li>
-            <li>{sprintf(Localisation::getTranslation(Strings::TASK_CLAIM_PROOFREADING_3), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
+            <li>
+                {sprintf(Localisation::getTranslation(Strings::TASK_CLAIM_PROOFREADING_3), {TemplateHelper::getLanguage($task->getTargetLocale())})}
+            </li>
+            <li>
+                {sprintf(Localisation::getTranslation(Strings::TASK_CLAIM_PROOFREADING_6), $projectFileDownload)}
+            </li>
         </ol>
     </section>
 

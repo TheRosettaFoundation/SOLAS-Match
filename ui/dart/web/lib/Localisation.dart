@@ -1,10 +1,4 @@
-library SolasMatchDart;
-
-import 'dart:html';
-import 'dart:async';
-import "package:web_ui/web_ui.dart";
-
-import "Settings.dart";
+part of SolasMatchDart;
 
 class Localisation
 {
@@ -16,24 +10,12 @@ class Localisation
     return _instance;
   }
   
-  static SafeHtml getTranslationSafe(String key)
-  {
-    SafeHtml data;
-    Element element = doc.query("[name = $key]");
-    if (element != null) {
-      data = new SafeHtml.unsafe("<span>" + element.text + "</span>");
-    } else {
-      data = null;
-    }
-    return data;
-  }
-  
-  static String getTranslation(String key)
+  String getTranslation(String key)
   {
     String data;
-    Element element = doc.query("[name = $key]");
+    Element element = doc.querySelector("[name = $key]");
     if (element != null) {
-      data = element.text;
+      data = element.innerHtml;
     } else {
       print("Unable to find string with name $key");
       data = '';

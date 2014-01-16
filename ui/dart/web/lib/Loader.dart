@@ -1,10 +1,4 @@
-library SolasMatchDart;
-
-import "dart:async";
-
-import "APIHelper.dart";
-import "Localisation.dart";
-import "Settings.dart";
+part of SolasMatchDart;
 
 class Loader
 {

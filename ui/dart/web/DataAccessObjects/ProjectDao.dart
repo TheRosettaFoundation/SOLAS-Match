@@ -1,12 +1,4 @@
-library SolasMatchDart;
-
-import "dart:async";
-import "dart:html";
-import "dart:json" as json;
-
-import "../lib/models/Project.dart";
-import "../lib/ModelFactory.dart";
-import "../lib/APIHelper.dart";
+part of SolasMatchDart;
 
 class ProjectDao
 {
@@ -24,7 +16,7 @@ class ProjectDao
       Project pro = null;
       if (response.status < 400) {
         if (response.responseText != '') {
-          Map jsonParsed = json.parse(response.responseText);
+          Map jsonParsed = JSON.decode(response.responseText);
           pro = ModelFactory.generateProjectFromMap(jsonParsed);
         }
       } else {
@@ -54,12 +46,12 @@ class ProjectDao
   static Future<Project> createProject(Project project)
   {
     APIHelper client = new APIHelper(".json");
-    Future<Project> ret = client.call("Project", "v0/projects", "POST", json.stringify(project))
+    Future<Project> ret = client.call("Project", "v0/projects", "POST", JSON.encode(project))
         .then((HttpRequest response) {
           Project pro = null;
           if (response.status < 400) {
             if (response.responseText != '') {
-              Map jsonParsed = json.parse(response.responseText);
+              Map jsonParsed = JSON.decode(response.responseText);
               pro = ModelFactory.generateProjectFromMap(jsonParsed);
             }
           } else {
@@ -88,7 +80,7 @@ class ProjectDao
   static Future<bool> uploadProjectFile(int projectId, int userId, String filename, String data)
   {
     APIHelper client = new APIHelper(".json");
-    filename= Uri.encodeComponent(filename);
+    filename = Uri.encodeComponent(filename);
     Future<bool> ret = client.call("", "v0/projects/$projectId/file/$filename/$userId", "PUT", data)
         .then((HttpRequest response) {
           if (response.status < 400) {

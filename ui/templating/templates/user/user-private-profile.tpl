@@ -22,10 +22,6 @@
     <p>{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_3)} {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_4)}</p>
 </div>
     
-<div class="well" is="x-user-private-profile-form" user-id="{$profileUser->getId()}" id="PrivateProfileForm"></div>
+<user-private-profile-form userid="{$profileUser->getId()}"></user-private-profile-form>
 
-<script type="text/javascript" src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/interop.js"></script>
-<script type="text/javascript" src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/dart.js"></script>
-<script type="application/dart" src="{urlFor name="home"}ui/dart/deploy/web/Routes/Users/UserPrivateProfile.dart"></script>
- 
 {include file='footer.tpl'}

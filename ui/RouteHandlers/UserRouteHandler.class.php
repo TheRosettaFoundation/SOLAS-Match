@@ -50,6 +50,7 @@ class UserRouteHandler
     public function home()
     {
         $app = Slim::getInstance();
+        $viewData = array();
         $langDao = new LanguageDao();
         $tagDao = new TagDao();
         $taskDao = new TaskDao();
@@ -68,28 +69,42 @@ class UserRouteHandler
                     $statsArray[$stat->getName()] = $stat;
                 }
             }
-
-            $app->view()->appendData(array(
-                "statsArray" => $statsArray
-            ));
+            $viewData["statsArray"] = $statsArray;
         }
         
         $top_tags = $tagDao->getTopTags(10);        
-        $app->view()->appendData(array(
-            "top_tags" => $top_tags,
-            "current_page" => "home",
-        ));
+        $viewData["top_tags"] = $top_tags;
+        $viewData["current_page"] = "home";
 
         $current_user_id = UserSession::getCurrentUserID();
         
         if ($current_user_id != null) {
             $user_tags = $userDao->getUserTags($current_user_id);
-            $app->view()->appendData(array(
-                        "user_tags" => $user_tags
-            ));
+            $viewData["user_tags"] = $user_tags;
         }
-        
-        $app->render("index.tpl");
+		
+		// Added check to display info message to users on IE borwsers
+		$browserData = get_browser(null, true);
+		if (!is_null($browserData) && isset($browserData['browser'])) {
+			$browser = $browserData['browser'];
+			
+			if ($browser == 'IE') {
+                $app->flashNow("info", Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9));
+        	}
+		}
+
+        $extra_scripts = "
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/home.dart.js\"></script>
+            ";
+        $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
+
+        $viewData['extra_scripts'] = $extra_scripts;
+
+		$app->view()->appendData($viewData);
+		$app->render("index.tpl");
     }
 
     public function videos()
@@ -303,6 +318,18 @@ class UserRouteHandler
                     $app->redirect($app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID())));
                 }
             }
+			
+			// Added check to display info message to users on IE borwsers
+			$browserData = get_browser(null, true);
+			if (!is_null($browserData) && isset($browserData['browser'])) {
+				$browser = $browserData['browser'];
+			
+				if ($browser == 'IE') {
+	                $app->flashNow("info", Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9));
+	        	}
+			
+			}
+			
             $app->render("user/login.tpl");
         } catch (SolasMatchException $e) {
             $error = sprintf(Localisation::getTranslation(Strings::LOGIN_1), $app->urlFor("login"), $app->urlFor("register"), $e->getMessage());            
@@ -360,11 +387,19 @@ class UserRouteHandler
             $app->redirect($app->urlFor("login"));
         }
 
+        $extraScripts = "
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/UserPrivateProfile.dart.js\"></script>
+            ";
+        $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
+
         $app->view()->appendData(array(
             "user"              => $loggedInuser,
             "profileUser"       => $user,
             "private_access"    => true,
-        ));       
+            'extra_scripts'     => $extraScripts
+        ));
        
         $app->render("user/user-private-profile.tpl");
     }

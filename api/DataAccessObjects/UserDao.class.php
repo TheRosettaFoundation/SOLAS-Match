@@ -9,6 +9,25 @@ require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
 
 class UserDao
 {
+	
+	public static function getLoggedInUser()
+    {
+		$resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
+        // Test for token existance and validity
+        try {
+            $resource->isValid(true);
+            $parts =explode(" ",$_SERVER['HTTP_AUTHORIZATION']);
+            return UserDao::getByOauthToken($parts[1]);
+        }
+        // The access token is missing or invalid...
+        catch (League\OAuth2\Server\Exception\InvalidAccessTokenException $e)
+        {
+			// print_r($response);
+            //Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, $e->getMessage());
+            return null;
+        }
+    } 
+    
     public static function create($email, $clear_password)
     {
         $nonce = Authentication::generateNonce();
@@ -686,7 +705,10 @@ class UserDao
         
         if ($result = PDOWrapper::call("userSecondaryLanguageInsert", $args)) {
             $ret = ModelFactory::buildModel("Locale", $result[0]);
-            
+        }
+
+        if (count(self::getSecondaryLanguages($userId)) > 1) {
+            BadgeDao::assignBadge($userId, BadgeTypes::POLYGLOT);
         }
         return $ret;
     }
