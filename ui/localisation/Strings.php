@@ -20,7 +20,6 @@ class Strings
     const COMMON_COUNTRY = 'common_country';
     const COMMON_HOME_PAGE = 'common_home_page';
     const COMMON_EMAIL = 'common_email';
-    const COMMON_EMAILS = 'common_emails';
     const COMMON_BIOGRAPHY = 'common_biography';
     const COMMON_REGIONAL_FOCUS = 'common_regional_focus';
     const COMMON_AFRICA = 'common_africa';
@@ -33,7 +32,6 @@ class Strings
     const COMMON_NAME = 'common_name';
     const COMMON_ORGANISATION_NAME = 'common_organisation_name';
     const COMMON_WARNING = 'common_warning';
-    const COMMON_CONGRATULATIONS = 'common_congratulations';
     const COMMON_DESCRIPTION = 'common_description';
     const COMMON_TITLE = 'common_title';
     const COMMON_DEADLINE = 'common_deadline';
@@ -44,7 +42,6 @@ class Strings
     const COMMON_ARCHIVE = 'common_archive';
     const COMMON_ADD_USER = 'common_add_user';
     const COMMON_IMPACT = 'common_impact';
-    const COMMON_TAG = 'common_tag';
     const COMMON_TAGS = 'common_tags';
     const COMMON_SOURCE_LANGUAGE = 'common_source_language';
     const COMMON_TARGET_LANGUAGE = 'common_target_language';
@@ -73,18 +70,15 @@ class Strings
     const COMMON_DESEGMENTATION_TASK = 'common_desegmentation_task';
     const COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS = 'common_please_fill_in_all_required_fields';
     const COMMON_PROVIDE_FEEDBACK = 'common_provide_feedback';
-    const COMMON_CLICK = 'common_click';
     const COMMON_HERE = 'common_here';
     const COMMON_CREATE_A_TRANSLATION_TASK_FOR_VOLUNTEER_TRANSLATORS_TO_PICK_UP = 'common_create_a_translation_task_for_volunteer_translators_to_pick_up';
     const COMMON_CREATE_A_PROOFREADING_TASK_FOR_EVALUATING_THE_TRANSLATION_PROVIDED_BY_A_VOLUNTEER = 'common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer';
     const COMMON_THANKS_FOR_PROVIDING_YOUR_TRANSLATION_FOR_THIS_TASK = 'common_thanks_for_providing_your_translation_for_this_task';
     const COMMON_MAXIMUM_FILE_SIZE_IS = 'common_maximum_file_size_is';
-    const COMMON_THIS_ORGANISATION = 'common_this_organisation';
     const COMMON_ASSIGN = 'common_assign';
     const COMMON_IT_IS_TIME_TO_DECIDE = 'common_it_is_time_to_decide';
     const COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE = 'common_no_just_bring_me_back_to_the_task_page';
     const COMMON_REVIEW_THIS_CHECKLIST_FOR_YOUR_DOWNLOADED_FILE = 'common_review_this_checklist_for_your_downloaded_file';
-    const COMMON_CHECK_HOW_LONG_THE_FILE_IS = 'common_check_how_long_the_file_is';
     const COMMON_AFTER_DOWNLOADING = 'common_after_downloading';
     const COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE = 'common_this_this_what_you_need_to_do_as_soon_as_possible';
     const COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO = 'common_we_have_also_emailed_you_these_instructions_to';
@@ -105,7 +99,6 @@ class Strings
     const COMMON_TRACKING = 'common_tracking';
     const COMMON_UNPUBLISH = 'common_unpublish';
     const COMMON_PUBLISH = 'common_publish';
-    const COMMON_PROJECT_VIEW = 'common_project_view';
     const COMMON_NO_COMMENT_HAS_BEEN_LISTED = 'common_no_comment_has_been_listed';
     const COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED = 'common_no_description_has_been_listed';
     const COMMON_NO_IMPACT_HAS_BEEN_LISTED = 'No impact has been listed';
@@ -122,9 +115,7 @@ class Strings
     const COMMON_MOBILE_NUMBER = 'common_mobile_number';
     const COMMON_BUSINESS_NUMBER = 'common_business_number';
     const COMMON_JOB_TITLE = 'common_job_title';
-    const COMMON_BADGE = 'common_badge';
     const COMMON_BADGES = 'common_badges';
-    const COMMON_YOU_ARE_CURRENTLY_RECEIVING = 'common_you_are_currently_receiving';
     const COMMON_STRICT = 'common_strict';
     const COMMON_THE_LAST_EMAIL_WAS_SENT_ON = 'common_the_last_email_was_sent_on';
     const COMMON_NO_EMAILS_HAVE_BEEN_SENT_YET = 'common_no_emails_have_been_sent_yet';
@@ -160,7 +151,6 @@ class Strings
     const COMMON_ERROR = 'common_error';
     const COMMON_LOADING = 'common_loading';
     const COMMON_SIP = 'common_sip';
-    const COMMON_MISSING_DATA = 'common_missing_data';
     const COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE = "common_login_required_to_access_page";
     const COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED = "common_this_user_account_has_been_banned";
     const COMMON_ASSIGN_BADGE = "common_assign_badge";
@@ -211,7 +201,6 @@ class Strings
     const SITE_ADMIN_DASHBOARD_2 = 'site_admin_dashboard_2';
     const SITE_ADMIN_DASHBOARD_3 = 'site_admin_dashboard_3';
     const SITE_ADMIN_DASHBOARD_ORGANISATION_NAME_GOES_HERE = 'site_admin_dashboard_organisation_name_goes_here';
-    const SITE_ADMIN_DASHBOARD_PERMANENT = 'site_admin_dashboard_permanent';
     const SITE_ADMIN_DASHBOARD_BAN_REASON = 'site_admin_dashboard_ban_reason';
     const SITE_ADMIN_DASHBOARD_BAN_USER = 'site_admin_dashboard_ban_user';
     const SITE_ADMIN_DASHBOARD_4 = 'site_admin_dashboard_4';
@@ -258,7 +247,6 @@ class Strings
     const ORG_PUBLIC_PROFILE_NO_REGIONAL_FOCUS_LISTED = 'org_public_profile_no_regional_focus_listed';
     const ORG_PUBLIC_PROFILE_0 = 'org_public_profile_0';
     const ORG_PUBLIC_PROFILE_CREATE_BADGE = 'org_public_profile_create_badge';
-    const ORG_PUBLIC_PROFILE_EDIT = 'org_public_profile_edit';
     const ORG_PUBLIC_PROFILE_EDIT_BADGE = 'org_public_profile_edit_badge';
     const ORG_PUBLIC_PROFILE_DELETE_BADGE = 'org_public_profile_delete_badge';
     const ORG_PUBLIC_PROFILE_1 = 'org_public_profile_1';
@@ -312,12 +300,11 @@ class Strings
     const ORG_DASHBOARD_EDIT_ORGANISATION = 'org_dashboard_edit_organisation';
     const ORG_DASHBOARD_1 = 'org_dashboard_1';
     const ORG_DASHBOARD_ARCHIVE_PROJECT = 'org_dashboard_archive_project';
-    const ORG_DASHBOARD_2 = 'org_dashboard_2';
     const ORG_DASHBOARD_3 = 'org_dashboard_3';
-    const ORG_DASHBOARD_5 = 'org_routehandler_5';
-    const ORG_DASHBOARD_6 = 'org_routehandler_6';
-    const ORG_DASHBOARD_7 = 'org_routehandler_7';
-    const ORG_DASHBOARD_8 = 'org_routehandler_8';   
+    const ORG_DASHBOARD_5 = 'org_dashboard_5';
+    const ORG_DASHBOARD_6 = 'org_dashboard_6';
+    const ORG_DASHBOARD_7 = 'org_dashboard_7';
+    const ORG_DASHBOARD_8 = 'org_dashboard_8';   
     const ORG_DASHBOARD_9 = 'org_dashboard_9';
     const ORG_DASHBOARD_10 = 'org_dashboard_10';
 
@@ -336,14 +323,11 @@ class Strings
     const ORG_MANAGE_BADGE_5 = 'org_manage_badge_5';
     const ORG_MANAGE_BADGE_29 = 'org_manage_badge_29';
     const ORG_MANAGE_BADGE_30 = 'org_manage_badge_30';
-    const ORG_MANAGE_BADGE_31 = 'org_manage_badge_31';
     const ORG_MANAGE_BADGE_32 = 'org_manage_badge_32';
 
     
     const ORG_REQUEST_QUEUE_0 = 'org_request_queue_0';
     const ORG_REQUEST_QUEUE_2 = 'org_request_queue_2';
-    const ORG_REQUEST_QUEUE_4 = 'org_request_queue_4';
-    const ORG_REQUEST_QUEUE_5 = 'org_request_queue_5';
     const ORG_REQUEST_QUEUE_7 = 'org_request_queue_7';
 
     const ORG_TASK_REVIEW_REVIEW_THIS_COMPLETED_TASK = 'org_task_review_review_this_completed_task';
@@ -395,7 +379,6 @@ class Strings
     const PROJECT_CREATE_27 = 'project_create_27';
     const PROJECT_CREATE_28 = 'project_create_28';
     const PROJECT_CREATE_29 = 'project_create_29';
-    const PROJECT_CREATE_30 = 'project_create_30';
     
     const PROJECT_CREATED_PROJECT_IS_NOW_LIVE = 'project_created_project_is_now_live';
     const PROJECT_CREATED_SUCCESS = 'project_created_success';
@@ -411,17 +394,13 @@ class Strings
     const PROJECT_PROFILE_DISPLAY_WORDS = 'project_profile_display_words';
 
     const PROJECT_VIEW_OVERVIEW_OF_PROJECT_DETAILS = 'project_view_overview_of_project_details';
-    const PROJECT_VIEW_CREATED = 'project_view_created';
     const PROJECT_VIEW_PROJECT_DEADLINE = 'project_view_project_deadline';
     const PROJECT_VIEW_UNTRACK_PROJECT = 'project_view_untrack_project';
     const PROJECT_VIEW_TASKS = 'project_view_tasks';
     const PROJECT_VIEW_0 = 'project_view_0';
     const PROJECT_VIEW_LIST_VIEW = 'project_view_list_view';
     const PROJECT_VIEW_GRAPH_VIEW = 'project_view_graph_view';
-    const PROJECT_VIEW_PUBLISH = 'project_view_publish';
     const PROJECT_VIEW_ARCHIVE_DELETE = 'project_view_archive_delete';
-    const PROJECT_VIEW_UNTRACK = 'project_view_untrack';
-    const PROJECT_VIEW_TRACK = 'project_view_track';
     const PROJECT_VIEW_EDIT_TASK = 'project_view_edit_task';
     const PROJECT_VIEW_1 = 'project_view_1';
     const PROJECT_VIEW_2 = 'project_view_2';
@@ -594,21 +573,17 @@ class Strings
     const CLAIMED_TASKS_TASK_REVIEWS = 'claimed_tasks_task_reviews';
     const CLAIMED_TASKS_0 = 'claimed_tasks_0';
     const CLAIMED_TASKS_NO_ACTIVE_TASKS_AVAILABLE = 'claimed_tasks_no_active_tasks_available';
-    const CLAIMED_TASKS_1 = 'claimed_tasks_1';
 
     const TASK_DESEGMENTATION_DESEGMENTATION_TASK_DETAILS = 'task_desegmentation_desegmentation_task_details';
     const TASK_DESEGMENTATION_DOWNLOAD = 'task_desegmentation_download';
     const TASK_DESEGMENTATION_0 = 'task_desegmentation_0';
-    const TASK_DESEGMENTATION_DOWNLOAD_HERE = 'task_desegmentation_download_here';
     const TASK_DESEGMENTATION_1 = 'task_desegmentation_1';
     const TASK_DESEGMENTATION_UPLOAD = 'task_desegmentation_upload';
     const TASK_DESEGMENTATION_2 = 'task_desegmentation_2';
-    const TASK_DESEGMENTATION_3 = 'task_desegmentation_3';
     const TASK_DESEGMENTATION_4 = 'task_desegmentation_4';    
     const TASK_DESEGMENTATION_5 = 'task_desegmentation_5';    
 
     const TASK_SEGMENTATION_0 = 'task_segmentation_0';
-    const TASK_SEGMENTATION_1 = 'task_segmentation_1';
     const TASK_SEGMENTATION_2 = 'task_segmentation_2';
     const TASK_SEGMENTATION_3 = 'task_segmentation_3';
     const TASK_SEGMENTATION_4 = 'task_segmentation_4';
@@ -862,13 +837,10 @@ class Strings
 
     const USER_PRIVATE_PROFILE_PRIVATE_PROFILE = 'user_private_profile_private_profile';
     const USER_PRIVATE_PROFILE_0 = 'user_private_profile_0';
-    const USER_PRIVATE_PROFILE_1 = 'user_private_profile_1';
-    const USER_PRIVATE_PROFILE_DELETE_PROFILE = 'user_private_profile_delete_profile';
     const USER_PRIVATE_PROFILE_2 = 'user_private_profile_2';
     const USER_PRIVATE_PROFILE_PLEASE_NOTE = 'user_private_profile_please_note';
     const USER_PRIVATE_PROFILE_3 = 'user_private_profile_3';
     const USER_PRIVATE_PROFILE_4 = 'user_private_profile_4';
-    const USER_PRIVATE_PROFILE_5 = 'user_private_profile_5';
     const USER_PRIVATE_PROFILE_ADD_SECONDARY_LANGUAGE = 'user_private_profile_add_secondary_language';
     const USER_PRIVATE_PROFILE_TASK_TYPE_PREFERENCES = 'user_private_profile_task_type_preferences';
     const USER_PRIVATE_PROFILE_TRANSLATING = 'user_private_profile_translating';
@@ -897,8 +869,6 @@ class Strings
     const USER_PUBLIC_PROFILE_10 = 'user_public_profile_10';
     const USER_PUBLIC_PROFILE_LEAVE_ORGANISATION = 'user_public_profile_leave_organisation';
     const USER_PUBLIC_PROFILE_11 = 'user_public_profile_11';
-    const USER_PUBLIC_PROFILE_12 = 'user_public_profile_12';
-    const USER_PUBLIC_PROFILE_13 = 'user_public_profile_13';
     const USER_PUBLIC_PROFILE_14 = 'user_public_profile_14';
     const USER_PUBLIC_PROFILE_LIST_ALL_ARCHIVED_TASKS = 'user_public_profile_list_all_archived_tasks';
     const USER_PUBLIC_PROFILE_REFERENCE_EMAIL = 'user_public_profile_reference_email';
@@ -925,11 +895,9 @@ class Strings
     const USER_TASK_STREAM_NOTIFICATION_EDIT_0 = 'user_task_stream_notification_edit_0';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_1 = 'user_task_stream_notification_edit_1';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_2 = 'user_task_stream_notification_edit_2';
-    const USER_TASK_STREAM_NOTIFICATION_EDIT_4 = 'user_task_stream_notification_edit_4';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_5 = 'user_task_stream_notification_edit_5';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_6 = 'user_task_stream_notification_edit_6';    
     const USER_TASK_STREAM_NOTIFICATION_EDIT_ALL = 'user_task_stream_notification_edit_all';
-    const USER_TASK_STREAM_NOTIFICATION_EDIT_NOTIFICATIONS = 'user_task_stream_notification_edit_notifications';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_NEVER = 'user_task_stream_notification_edit_never';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_DAILY = 'user_task_stream_notification_edit_daily';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_WEEKLY = 'user_task_stream_notification_edit_weekly';
@@ -959,12 +927,7 @@ class Strings
     const INDEX_ANY = 'index_any';
     const INDEX_FILTER_AVAILABLE_TASKS = 'index_filter_available_tasks';
     const INDEX_FILTER_TASK_STREAM = 'index_filter_task_stream';
-    const INDEX_2 = 'index_2';
-    const INDEX_3 = 'index_3';
-    const INDEX_NO_OPEN_TASKS = 'index_no_open_tasks';
-    const INDEX_4 = 'index_4';
     const INDEX_NO_TASKS_AVAILABLE = 'index_no_tasks_available';
-    const INDEX_5 = 'index_5';
     const INDEX_6 = 'index_6';
     const INDEX_REGISTER_NOW = 'index_register_now';
     const INDEX_8 = 'index_8';
@@ -984,37 +947,10 @@ class Strings
     const STATISTICS_TASKS_WITH_PREREQUISITES = 'statistics_tasks_with_prerequisites';
     const STATISTICS_TASKS_ARCHIVED = 'statistics_tasks_archived';
     
-    const FAQ_FREQUENTLY_ASKED_QUESTIONS = 'faq_frequently_asked_questions';
     const FAQ_QUICKLINKS = 'faq_quicklinks';
     const FAQ_VOLUNTEERS= 'faq_volunteers';
     const FAQ_VOLUNTEER_QUESTIONS = 'faq_volunteer_questions';
     const FAQ_TERMS = "faq_terms";
-    const FAQ_1 = 'faq_1';
-    const FAQ_2 = 'faq_2';
-    const FAQ_3 = 'faq_3';
-    const FAQ_4 = 'faq_4';
-    const FAQ_5 = 'faq_5';
-    const FAQ_6 = 'faq_6';
-    const FAQ_7 = 'faq_7';
-    const FAQ_8 = 'faq_8';
-    const FAQ_9 = 'faq_9';
-    const FAQ_10 = 'faq_10';
-    const FAQ_11 = 'faq_11';
-    const FAQ_12 = 'faq_12';
-    const FAQ_13 = 'faq_13';
-    const FAQ_14 = 'faq_14';
-    const FAQ_15 = 'faq_15';
-    const FAQ_16 = 'faq_16';
-    const FAQ_17 = 'faq_17';
-    const FAQ_18 = 'faq_18';
-    const FAQ_19 = 'faq_19';
-    const FAQ_20 = 'faq_20';
-    const FAQ_21 = 'faq_21';
-    const FAQ_22 = 'faq_22';
-    const FAQ_23 = 'faq_23';
-    const FAQ_24 = 'faq_24';
-    const FAQ_25 = 'faq_25';
-    const FAQ_26 = 'faq_26';
     const FAQ_27 = 'faq_27';
     const FAQ_28 = 'faq_28';
     const FAQ_29 = 'faq_29';
@@ -1026,28 +962,6 @@ class Strings
     const FAQ_35 = 'faq_35';
     const FAQ_36 = 'faq_36';
     const FAQ_ORGANISATION_QUESTIONS = 'faq_organisation_questions';
-    const FAQ_37 = 'faq_37';
-    const FAQ_38 = 'faq_38';
-    const FAQ_39 = 'faq_39';
-    const FAQ_40 = 'faq_40';
-    const FAQ_41 = 'faq_41';
-    const FAQ_42 = 'faq_42';
-    const FAQ_43 = 'faq_43';
-    const FAQ_44 = 'faq_44';
-    const FAQ_45 = 'faq_45';
-    const FAQ_46 = 'faq_46';
-    const FAQ_47 = 'faq_47';
-    const FAQ_48 = 'faq_48';
-    const FAQ_49 = 'faq_49';
-    const FAQ_50 = 'faq_50';
-    const FAQ_51 = 'faq_51';
-    const FAQ_52 = 'faq_52';
-    const FAQ_53 = 'faq_53';
-    const FAQ_54 = 'faq_54';
-    const FAQ_55 = 'faq_55';
-    const FAQ_56 = 'faq_56';
-    const FAQ_57 = 'faq_57';
-    const FAQ_58 = 'faq_58';
     const FAQ_59 = 'faq_59';
     const FAQ_60 = 'faq_60';
     const FAQ_61 = 'faq_61';

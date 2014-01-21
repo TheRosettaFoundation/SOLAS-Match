@@ -231,9 +231,10 @@ class OrgRouteHandler
                     $success = $orgDao->addMember($post['email'], $org_id);
                     if ($success) {
                         $app->flashNow("success", 
-                                sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_12), $post['email'], $org->getName()));
+                                sprintf(Localisation::getTranslation(Strings::COMMON_SUCCESSFULLY_ADDED_MEMBER), 
+                                            $post['email'], $org->getName()));
                     } else {
-                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_13), $post['email']));
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_20), $post['email']));
                     }   
                 } else {
                     $app->flashNow("error", Localisation::getTranslation(Strings::COMMON_NO_VALID_EMAIL));
@@ -505,12 +506,12 @@ class OrgRouteHandler
                     $success = $userDao->assignBadge($post['email'], $badge->getId());
                     if ($success) {
                         $app->flashNow("success", 
-                            sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_29), $badge->getTitle(), $post['email']));
+                            sprintf(Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_29), $badge->getTitle(), $post['email']));
                     } else {
-                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_30), $post['email']));
+                        $app->flashNow("error", sprintf(Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_30), $post['email']));
                     }
                 } else {
-                    $app->flashNow("error", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_22));
+                    $app->flashNow("error", Localisation::getTranslation(Strings::COMMON_NO_VALID_EMAIL));
                 }
             } elseif (isset($post['user_id']) && $post['user_id'] != "") {
                 $user_id = $post['user_id'];
@@ -700,7 +701,7 @@ class OrgRouteHandler
 
         $taskReview = $userDao->getUserTaskReviews($userId, $taskId);
         if (!is_null($taskReview)) {
-            $app->flashNow("info", Localisation::getTranslation(Strings::ORG_ROUTEHANDLER_41));
+            $app->flashNow("info", Localisation::getTranslation(Strings::ORG_TASK_REVIEW_41));
         }
 
         $translator = $taskDao->getUserClaimedTask($taskId);

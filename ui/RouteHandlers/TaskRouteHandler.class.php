@@ -855,9 +855,9 @@ class TaskRouteHandler
             if(ctype_digit($post['word_count'])) {
                 $task->setWordCount($post['word_count']);
             } else if($post['word_count'] != "") {
-                $wordCountError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_6);
+                $wordCountError = Localisation::getTranslation(Strings::TASK_ALTER_6);
             } else {
-                $wordCountError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_7);
+                $wordCountError = Localisation::getTranslation(Strings::TASK_ALTER_7);
             }
 
             if(isset($post['deadline'])) {
@@ -865,7 +865,7 @@ class TaskRouteHandler
                     $date = date("Y-m-d H:i:s", $validTime);  
                     $task->setDeadline($date);
                 } else {
-                    $deadlineError = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_8);
+                    $deadlineError = Localisation::getTranslation(Strings::TASK_ALTER_8);
                 }
             }
 
@@ -883,7 +883,7 @@ class TaskRouteHandler
                 try {
                     $upload_error = $taskDao->saveTaskFile($newTaskId, $user_id, $projectDao->getProjectFile($project_id));
                 } catch (Exception  $e) {
-                    $upload_error = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_5) . $e->getMessage();
+                    $upload_error = Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_7) . $e->getMessage();
                 }
                 
                 if(isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
@@ -1217,7 +1217,7 @@ class TaskRouteHandler
                     } else {
                         $orgProfile = $app->urlFor("org-public-profile", array('org_id' => $organisation->getId()));
                         $app->flash("success", sprintf(
-                                    Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_32), 
+                                    Localisation::getTranslation(Strings::TASK_ORG_FEEDBACK_6), 
                                     $orgProfile, $organisation->getName()
                         ));
                         $app->redirect($app->urlFor("task", array("task_id" => $task_id)));

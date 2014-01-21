@@ -512,7 +512,7 @@ class ProjectCreateForm extends PolymerElement
     bool success = true;
     //Validate Text Inputs
     if (project.title == '') {
-      titleError = localisation.getTranslation("project_routehandler_12");
+      titleError = localisation.getTranslation("project_create_31");
       
       Timer.run(() {
         LIElement li;
@@ -542,7 +542,7 @@ class ProjectCreateForm extends PolymerElement
       success = false;
     }
     if (project.description == '') {
-      descriptionError = localisation.getTranslation("project_routehandler_14");
+      descriptionError = localisation.getTranslation("project_create_33");
 
       Timer.run(() {
         LIElement li;
@@ -557,7 +557,7 @@ class ProjectCreateForm extends PolymerElement
       success = false;
     }
     if (project.impact == '') {
-      impactError = localisation.getTranslation("project_routehandler_15");
+      impactError = localisation.getTranslation("project_create_26");
 
       Timer.run(() {
         LIElement li;
@@ -573,7 +573,7 @@ class ProjectCreateForm extends PolymerElement
     }
     if (wordCountInput != null && wordCountInput != '') {
       project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
-        wordCountError = localisation.getTranslation("project_routehandler_16");
+        wordCountError = localisation.getTranslation("project_create_27");
 
         Timer.run(() {
           LIElement li;
@@ -604,7 +604,7 @@ class ProjectCreateForm extends PolymerElement
         }
       }
     } else {
-      wordCountError = localisation.getTranslation("project_routehandler_16");
+      wordCountError = localisation.getTranslation("project_create_27");
 
       Timer.run(() {
         LIElement li;
@@ -664,7 +664,7 @@ class ProjectCreateForm extends PolymerElement
         success = false;
       }
     } else {
-      deadlineError = localisation.getTranslation("project_routehandler_13");
+      deadlineError = localisation.getTranslation("project_create_32");
 
       Timer.run(() {
         LIElement li;
@@ -836,7 +836,7 @@ class ProjectCreateForm extends PolymerElement
       ret = new DateTime(int.parse(year), monthNum, int.parse(day), 
           int.parse(hour), int.parse(minute));
     } catch(e) {
-      deadlineError = localisation.getTranslation("project_routehandler_13");
+      deadlineError = localisation.getTranslation("project_create_32");
     }
     return ret;
   }

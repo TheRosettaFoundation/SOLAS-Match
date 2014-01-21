@@ -18,10 +18,9 @@
         </li>
     {/foreach}
     </ul>
+    <p style="margin-bottom:40px;"/>
+    <hr />
 {/if}
-
-<p style="margin-bottom:40px;"/>
-<hr />
 
 <h2>{Localisation::getTranslation(Strings::TAG_LIST_TAG_SEARCH)} <small>{Localisation::getTranslation(Strings::TAG_LIST_1)}</small></h2>
 <form method="post" action="{urlFor name="tags-list"}" class="well" accept-charset="utf-8">
