@@ -27,7 +27,7 @@
         {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_CORRECTIONS)} 
         <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_2)}</small>
     </h3>
-    <p><i>(1 - 5) 5 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_FEW_ERRORS)}" | 1 = "{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_A_LOT_OF_ERRORS)}"</i></p>
+    <p><i>{Localisation::getTranslation("task_review_form_rating")}</i></p>
     <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
             data-rateit-resetable=false id="rateit_corrections_{$id}" {$readonly}>
     </div>

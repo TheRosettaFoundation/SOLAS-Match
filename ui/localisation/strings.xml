@@ -336,6 +336,7 @@
 	<string name="org_task_review_review_this_file">Review this file</string>
 	<string name="org_task_review_1">Helps us match volunteers and tasks.</string>
 	<string name="org_task_review_the_volunteer">The volunteer <a href="%s">%s</a> has completed this task. Please provide a review of this task to help improve the system.</string>
+    <string name="org_task_review_3"><a href="%s">%s</a> has completed this task.</string>
     <string name="org_task_review_35">Corrections value must be between 1 and 5</string>
     <string name="org_task_review_36">Grammar value must be between 1 and 5</string>
     <string name="org_task_review_37">Spelling value must be between 1 and 5</string>
@@ -343,6 +344,7 @@
     <string name="org_task_review_39">Unable to submit review for %s, please try again later.</string>
     <string name="org_task_review_40">Review of task %s has been submitted successfully.</string>
     <string name="org_task_review_41">You have already submitted a review for this task.</string>
+    <string name="org_task_review_claimant_unavailable">The user that claimed this task is not longer available.</string>
 
 	<string name="archived_projects_archived_projects">Archived Projects</string>
 	<string name="archived_projects_0">A list of projects you have worked on in the past.</string>
