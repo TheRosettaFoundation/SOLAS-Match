@@ -2,7 +2,10 @@
   <template>
     <template if="{{isLoaded}}">
       <template if="{{alert != ''}}">
-        <div class="alert alert-error">{{alert}}</div>
+        <p class="alert alert-error">
+          <strong>{{localisation.getTranslation("common_error")}}:</strong>
+          {{alert}}
+        </p>
       </template>
       <div class="well">
         <table>
@@ -98,7 +101,10 @@
             <td colspan="2" style="padding-bottom: 20px">
               <hr/>
               <template if="{{alert != ''}}">
-                <p class="alert alert-error">{{alert}}</p>
+                <p class="alert alert-error">
+                  <strong>{{localisation.getTranslation("common_error")}}:</strong>
+                  {{alert}}
+                </p>
               </template>
             </td>
           </tr>
