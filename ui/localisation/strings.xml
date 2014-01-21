@@ -6,9 +6,12 @@
 	<string name="common_ban_reason">Ban Reason</string>
 	<string name="common_banned_date">Banned Date</string>
 	<string name="common_restore">Restore</string>
+    <string name="common_minute">Minute</string>
+    <string name="common_hour">Hour</string>
 	<string name="common_day">Day</string>
 	<string name="common_week">Week</string>
 	<string name="common_month">Month</string>
+    <string name="common_year">Year</string>
 	<string name="common_permanent">Permanent</string>
 	<string name="common_ban_organisation">Ban Organisation</string>
 	<string name="common_note">Note</string>
@@ -381,7 +384,6 @@
     <string name="project_create_21">The file you uploaded is too large, please check the maximum file upload size under the Source Text header.</string>
     <string name="project_create_22">Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?</string>
     <string name="project_create_23">Project title is too long, please use one hundred characters or less.</string>
-    <string name="project_create_24">Please make sure the date specified is in the format 31 July 2013 10:50</string>
     <string name="project_create_25"><strong>Deadline</strong> must be some date in the future.</string>
     <string name="project_create_26">Project <strong>Impact</strong> must be set.</string>
     <string name="project_create_27">Project <strong>Word Count</strong> must be set and be a valid <strong>natural</strong> number.</string>

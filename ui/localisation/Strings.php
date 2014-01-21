@@ -373,7 +373,6 @@ class Strings
     const PROJECT_CREATE_TARGET_LANGUAGES = 'project_create_target_languages';
     const PROJECT_CREATE_ADD_MORE_TARGET_LANGUAGES = 'project_create_add_more_target_languages';
     const PROJECT_CREATE_23 = 'project_create_23';
-    const PROJECT_CREATE_24 = 'project_create_24';
     const PROJECT_CREATE_25 = 'project_create_25';
     const PROJECT_CREATE_26 = 'project_create_26';
     const PROJECT_CREATE_27 = 'project_create_27';
