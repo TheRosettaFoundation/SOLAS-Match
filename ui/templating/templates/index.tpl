@@ -24,7 +24,6 @@
 
 {if isset($flash['info'])}
     <div class="alert alert-info">
-        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
         <p><strong>{Localisation::getTranslation(Strings::COMMON_NOTE)} </strong>{$flash['info']}</p>
     </div>
 {/if}

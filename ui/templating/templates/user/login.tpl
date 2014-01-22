@@ -7,21 +7,21 @@
     {if isset($flash['error'])}
         <div class="alert alert-error">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-            <p><strong>Warning! </strong>{$flash['error']}</p>
+            <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{$flash['error']}</p>
         </div>
     {/if}
 
     {if isset($flash['info'])}
         <div class="alert alert-info">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-            <p><strong>NOTE: </strong>{$flash['info']}</p>
+            <p><strong>{Localisation::getTranslation(Strings::COMMON_NOTE)}: </strong>{$flash['info']}</p>
         </div>
     {/if}
 
     {if isset($flash['success'])}
         <div class="alert alert-success">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-            <p><strong>NOTE: </strong>{$flash['success']}</p>
+            <p><strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}! </strong>{$flash['success']}</p>
         </div>
     {/if}
 

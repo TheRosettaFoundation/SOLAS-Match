@@ -83,15 +83,9 @@ class UserRouteHandler
             $viewData["user_tags"] = $user_tags;
         }
 		
-		// Added check to display info message to users on IE borwsers
-		$browserData = get_browser(null, true);
-		if (!is_null($browserData) && isset($browserData['browser'])) {
-			$browser = $browserData['browser'];
-			
-			if ($browser == 'IE') {
-                $app->flashNow("info", Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9));
-        	}
-		}
+        if ($current_user_id == null) {
+            $app->flashNow('info', Localisation::getTranslation('index_dont_use_ie'));
+        }
 
         $extra_scripts = "
             <script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
@@ -157,6 +151,17 @@ class UserRouteHandler
         if ($warning !== null) {
             $app->view()->appendData(array("warning" => $warning));
         }
+
+        // Added check to display info message to users on IE borwsers
+        $browserData = get_browser(null, true);
+        if (!is_null($browserData) && isset($browserData['browser'])) {
+            $browser = $browserData['browser'];
+            
+            if ($browser == 'IE') {
+                $app->flashNow("info", Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9));
+            }
+        }
+
         $app->render("user/register.tpl");
     }
 

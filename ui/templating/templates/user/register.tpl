@@ -7,13 +7,19 @@
 {include file="handle-flash-messages.tpl"}
 {if isset($error)}
     <div class="alert alert-error">
-            <strong>Error</strong> {$error}
+        <strong>{Localisation::getTranslation('common_error')}:</strong> {$error}
     </div>
 {/if}
 
 {if isset($warning)}
     <div class="alert">
-            <strong>Warning</strong> {$warning}
+        <strong>{Localisation::getTranslation("common_warning")}:</strong> {$warning}
+    </div>
+{/if}
+
+{if isset($flash['info'])}
+    <div class='alert alert-info'>
+        <strong>{Localisation::getTranslation('common_note')}:</strong> {$flash['info']}
     </div>
 {/if}
 
