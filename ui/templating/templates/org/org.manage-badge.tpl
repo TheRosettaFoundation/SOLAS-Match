@@ -1,18 +1,16 @@
 {include file="header.tpl"}
 
     <h1 class="page-header">
-        {Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_MANAGE_BADGE)} {$badge->getTitle()}
+        {sprintf(Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_MANAGE_BADGE), $badge->getTitle())}
         <small>{Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_0)}</small>
     </h1>
 
     {if isset($flash['success'])}
         <div class="alert alert-success">
-            <strong>{Localisation::getTranslation(Strings::COMMON_NOTE)}:</strong> {$flash['success']}
+            <strong>{Localisation::getTranslation(Strings::COMMON_NOTE)}</strong> {$flash['success']}
         </div>
     {/if}
 
-    <h3>{Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_1)}</h3>
-    <p>{Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_2)}</p>
 
     {assign var="badge_id" value=$badge->getId()}
     <form method="post" action="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class="well" accept-charset="utf-8">
@@ -21,18 +19,18 @@
 
         {if isset($flash['error'])}
             <div class="alert alert-error">
-                <strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}!</strong> {$flash['error']}
+                <strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}</strong> {$flash['error']}
             </div>
         {/if}
         <p>
             <button type='submit' class='btn btn-primary' name='submit'>
-                <i class="icon-plus-sign icon-white"></i> {Localisation::getTranslation(Strings::COMMON_ASSIGN)}
+                <i class="icon-plus-sign icon-white"></i> {Localisation::getTranslation(Strings::COMMON_ASSIGN_BADGE)}
             </button>
         </p>
     </form>
 
     <h3>{Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_USERS_WITH_THIS_BADGE)}</h3>
-    <p>{Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_4)}:</p>
+    <p>{Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_4)}</p>
     {if isset($user_list) && count($user_list) > 0}
         <ul class="unstyled">
             {foreach $user_list as $user}
@@ -45,7 +43,7 @@
                     {assign var="user_id" value=$user->getId()}
                     <li>
                         <div class="span8">
-                            <h4>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}:</h4>
+                            <h4>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}</h4>
                             <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                 {$displayName}
                             </a>
@@ -66,7 +64,7 @@
         </ul>
     {else}
         <p class="alert alert-info">
-            {Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_5)}. {Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_6)}.
+            {Localisation::getTranslation(Strings::ORG_MANAGE_BADGE_5)}
         </p>
     {/if}
 

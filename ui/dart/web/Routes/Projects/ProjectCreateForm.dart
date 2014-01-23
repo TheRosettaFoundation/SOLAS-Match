@@ -2,6 +2,7 @@ import "package:polymer/polymer.dart";
 import "dart:async";
 import "dart:html";
 
+import "package:sprintf/sprintf.dart";
 import "../../lib/SolasMatchDart.dart";
 
 @CustomTag('project-create-form')
@@ -20,6 +21,17 @@ class ProjectCreateForm extends PolymerElement
   SelectElement langSelect;
   SelectElement countrySelect;
   String projectFileText;
+  List<int> monthLengths;
+  @observable List<int> years;
+  @observable List<String> months;
+  @observable List<int> days;
+  @observable List<int> hours;
+  @observable List<int> minutes;
+  @observable int selectedYear = 0;
+  @observable int selectedMonth = 0;
+  @observable int selectedDay = 0;
+  @observable int selectedHour = 0;
+  @observable int selectedMinute = 0;
   @observable String orgDashboardLink;
   @observable bool publish;
   @observable bool trackProject;
@@ -37,9 +49,6 @@ class ProjectCreateForm extends PolymerElement
   @observable String wordCountError;
   @observable String deadlineError;
   @observable String impactError;
-  @observable String targetLanguageError;
-  @observable String uniqueLanguageCountryError;
-  @observable String fileUploadError;
   @observable String createProjectError;
   
   ProjectCreateForm.created() : super.created() 
@@ -49,6 +58,31 @@ class ProjectCreateForm extends PolymerElement
     projectFileText = "";
     languages = toObservable(new List<Language>());
     countries = toObservable(new List<Country>());
+    DateTime currentDate = new DateTime.now();
+    years = toObservable(new List<int>.generate(10, (int index) => index + currentDate.year, growable: false));
+    months = toObservable(["January", "February", "March", "April", "May", "June", "July", "August",
+                           "September", "October", "November", "December"]);
+    selectedMonth = currentDate.month - 1;
+    monthLengths = new List<int>(12);
+    monthLengths[0] = 31;
+    monthLengths[1] = 28;
+    monthLengths[2] = 31;
+    monthLengths[3] = 30;
+    monthLengths[4] = 31;
+    monthLengths[5] = 30;
+    monthLengths[6] = 31;
+    monthLengths[7] = 31;
+    monthLengths[8] = 30;
+    monthLengths[9] = 31;
+    monthLengths[10] = 30;
+    monthLengths[11] = 31;
+    days = toObservable(new List<int>.generate(monthLengths[selectedMonth], (int index) => index + 1));
+    hours = toObservable(new List<int>.generate(24, (int index) => index , growable: false));
+    minutes = toObservable(new List<int>.generate(60, (int index) => index, growable: false));
+    
+    //account for leap years
+    this.selectedYearChanged(0);
+    
     loaded = false;
     publish = true;
     trackProject = true;
@@ -64,6 +98,12 @@ class ProjectCreateForm extends PolymerElement
       Settings settings = new Settings();
       orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
       localisation = new Localisation();
+      
+      ParagraphElement p = this.shadowRoot.querySelector("#source_text_desc");
+      p.children.clear();
+      p.appendHtml(localisation.getTranslation("project_create_6") + " " +
+          sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
+      
       List<Future<bool>> loadedList = new List<Future<bool>>();
       
       loadedList.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
@@ -246,9 +286,6 @@ class ProjectCreateForm extends PolymerElement
     wordCountError = null;
     deadlineError = null;
     impactError = null;
-    targetLanguageError = null;
-    uniqueLanguageCountryError = null;
-    fileUploadError = null;
     maxTargetsReached = null;
     
     validateInput().then((bool success) {
@@ -313,6 +350,15 @@ class ProjectCreateForm extends PolymerElement
             success.then((bool created) {
               if (!created) {
                 print("some data failed, deleting project");
+                
+                if (createProjectError != null) {
+                  Timer.run(() {
+                    SpanElement span = this.shadowRoot.querySelector("#project_create_error");
+                    span.children.clear();
+                    span.appendHtml(createProjectError);
+                  });
+                }
+                
                 ProjectDao.deleteProject(project.id);
                 project.id = null;
               } else {
@@ -329,6 +375,13 @@ class ProjectCreateForm extends PolymerElement
         });
       } else {
         print("Invalid form input");
+        if (createProjectError != null) {
+          Timer.run(() {
+            SpanElement span = this.shadowRoot.querySelector("#project_create_error");
+            span.children.clear();
+            span.appendHtml(createProjectError);
+          });
+        }
       }
     });
   }
@@ -495,24 +548,79 @@ class ProjectCreateForm extends PolymerElement
     bool success = true;
     //Validate Text Inputs
     if (project.title == '') {
-      titleError = localisation.getTranslation("project_routehandler_12");
+      titleError = localisation.getTranslation("project_create_31");
+      
+      Timer.run(() {
+        LIElement li;
+        li = this.shadowRoot.querySelector("#title_error_top");
+        li.children.clear();
+        li.appendHtml(titleError);
+        li = this.shadowRoot.querySelector("#title_error_btm");
+        li.children.clear();
+        li.appendHtml(titleError);
+      });
+      
       success = false;
     }
     if (project.title.length > 110) {
       titleError = localisation.getTranslation("project_create_23");
+      
+      Timer.run(() {
+        LIElement li;
+        li = this.shadowRoot.querySelector("#title_error_top");
+        li.children.clear();
+        li.appendHtml(titleError);
+        li = this.shadowRoot.querySelector("#title_error_btm");
+        li.children.clear();
+        li.appendHtml(titleError);
+      });
+      
       success = false;
     }
     if (project.description == '') {
-      descriptionError = localisation.getTranslation("project_routehandler_14");
+      descriptionError = localisation.getTranslation("project_create_33");
+
+      Timer.run(() {
+        LIElement li;
+        li = this.shadowRoot.querySelector("#description_error_top");
+        li.children.clear();
+        li.appendHtml(descriptionError);
+        li = this.shadowRoot.querySelector("#description_error_btm");
+        li.children.clear();
+        li.appendHtml(descriptionError);
+      });
+      
       success = false;
     }
     if (project.impact == '') {
-      impactError = localisation.getTranslation("project_routehandler_15");
+      impactError = localisation.getTranslation("project_create_26");
+
+      Timer.run(() {
+        LIElement li;
+        li = this.shadowRoot.querySelector("#impact_error_top");
+        li.children.clear();
+        li.appendHtml(impactError);
+        li = this.shadowRoot.querySelector("#impact_error_btm");
+        li.children.clear();
+        li.appendHtml(impactError);
+      });
+      
       success = false;
     }
     if (wordCountInput != null && wordCountInput != '') {
       project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
-        wordCountError = localisation.getTranslation("project_routehandler_16");
+        wordCountError = localisation.getTranslation("project_create_27");
+
+        Timer.run(() {
+          LIElement li;
+          li = this.shadowRoot.querySelector("#word_count_error_top");
+          li.children.clear();
+          li.appendHtml(wordCountError);
+          li = this.shadowRoot.querySelector("#word_count_error_btm");
+          li.children.clear();
+          li.appendHtml(wordCountError);
+        });
+        
         success = false;
         return 0;
       });
@@ -532,36 +640,65 @@ class ProjectCreateForm extends PolymerElement
         }
       }
     } else {
-      wordCountError = localisation.getTranslation("project_routehandler_16");
+      wordCountError = localisation.getTranslation("project_create_27");
+
+      Timer.run(() {
+        LIElement li;
+        li = this.shadowRoot.querySelector("#word_count_error_top");
+        li.children.clear();
+        li.appendHtml(wordCountError);
+        li = this.shadowRoot.querySelector("#word_count_error_btm");
+        li.children.clear();
+        li.appendHtml(wordCountError);
+      });
+      
       success = false;
     }
-    InputElement deadlineInput = this.shadowRoot.querySelector("#deadline");
-    if (deadlineInput.value != '') {
-      DateTime projectDeadline = parseDeadline(deadlineInput.value);
-      if (projectDeadline != null) {
-        if (projectDeadline.isAfter(new DateTime.now())) {
-          String monthAsString = projectDeadline.month.toString();
-          monthAsString = monthAsString.length == 1 ? "0$monthAsString" : monthAsString;
-          String dayAsString = projectDeadline.day.toString();
-          dayAsString = dayAsString.length == 1 ? "0$dayAsString" : dayAsString;
-          String hourAsString = projectDeadline.hour.toString();
-          hourAsString = hourAsString.length > 2 ? "0$hourAsString" : hourAsString;
-          String minuteAsString = projectDeadline.minute.toString();
-          minuteAsString = minuteAsString.length < 2 ? "0$minuteAsString" : minuteAsString;
-          project.deadline = projectDeadline.year.toString() + "-" + monthAsString + "-" + dayAsString
-              + " " + hourAsString + ":" + minuteAsString + ":00";
-        } else {
-          deadlineError = localisation.getTranslation("project_create_25");
-          success = false;
-        }
+    
+    DateTime projectDeadline = parseDeadline();
+    if (projectDeadline != null) {
+      if (projectDeadline.isAfter(new DateTime.now())) {
+        String monthAsString = projectDeadline.month.toString();
+        monthAsString = monthAsString.length == 1 ? "0$monthAsString" : monthAsString;
+        String dayAsString = projectDeadline.day.toString();
+        dayAsString = dayAsString.length == 1 ? "0$dayAsString" : dayAsString;
+        String hourAsString = projectDeadline.hour.toString();
+        hourAsString = hourAsString.length > 2 ? "0$hourAsString" : hourAsString;
+        String minuteAsString = projectDeadline.minute.toString();
+        minuteAsString = minuteAsString.length < 2 ? "0$minuteAsString" : minuteAsString;
+        project.deadline = projectDeadline.year.toString() + "-" + monthAsString + "-" + dayAsString
+            + " " + hourAsString + ":" + minuteAsString + ":00";
       } else {
-        deadlineError = localisation.getTranslation("project_routehandler_13");
+        deadlineError = localisation.getTranslation("project_create_25");
+
+        Timer.run(() {
+          LIElement li;
+          li = this.shadowRoot.querySelector("#deadline_error_top");
+          li.children.clear();
+          li.appendHtml(deadlineError);
+          li = this.shadowRoot.querySelector("#deadline_error_btm");
+          li.children.clear();
+          li.appendHtml(deadlineError);
+        });
+        
         success = false;
       }
     } else {
-      deadlineError = localisation.getTranslation("project_routehandler_13");
+      deadlineError = localisation.getTranslation("project_create_32");
+
+      Timer.run(() {
+        LIElement li;
+        li = this.shadowRoot.querySelector("#deadline_error_top");
+        li.children.clear();
+        li.appendHtml(deadlineError);
+        li = this.shadowRoot.querySelector("#deadline_error_btm");
+        li.children.clear();
+        li.appendHtml(deadlineError);
+      });
+      
       success = false;
     }
+    
     //Validate targets
     List<Language> targetLanguages = new List<Language>();
     List<Country> targetCountries = new List<Country>();
@@ -573,7 +710,7 @@ class ProjectCreateForm extends PolymerElement
       CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
       bool proofreadingRequired = proofreadingCheckbox.checked;
       if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
-        createProjectError = localisation.getTranslation("project_routehandler_17");
+        createProjectError = localisation.getTranslation("project_create_29");
         success = false;
       }
       
@@ -582,7 +719,7 @@ class ProjectCreateForm extends PolymerElement
       Language targetLang = languages[targetLanguageSelect.selectedIndex];
       Country targetCountry = countries[targetCountrySelect.selectedIndex];
       if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
-        createProjectError = localisation.getTranslation("project_routehandler_17");
+        createProjectError = localisation.getTranslation("project_create_28");
         success = false;
       } else {
         targetLanguages.add(targetLang);
@@ -653,74 +790,9 @@ class ProjectCreateForm extends PolymerElement
     return completer.future;
   }
   
-  DateTime parseDeadline(String deadlineText)
+  DateTime parseDeadline()
   {
-    //Assumes deadline is in a format like "31 July 2013 10:50"
-    DateTime ret;
-    try {
-      int startIndex = 0;
-      int endIndex = deadlineText.indexOf(" ");
-      String day = deadlineText.substring(startIndex, endIndex).toString();
-      startIndex = endIndex + 1;
-      endIndex = deadlineText.indexOf(" ", startIndex);
-      String month = deadlineText.substring(startIndex, endIndex);
-      startIndex = endIndex + 1;
-      endIndex = deadlineText.indexOf(" ", startIndex);
-      String year = deadlineText.substring(startIndex, endIndex);
-      startIndex = endIndex + 1;
-      endIndex = deadlineText.indexOf(":", startIndex);
-      String hour = deadlineText.substring(startIndex, endIndex);
-      startIndex = endIndex + 1;
-      endIndex = deadlineText.indexOf(" ", startIndex);
-      String minute = deadlineText.substring(startIndex, deadlineText.length);
-      
-      int monthNum = 0;
-      month = month.toLowerCase();
-      switch (month) {
-        case "january":
-          monthNum = 1;
-          break;
-        case "february":
-          monthNum = 2;
-          break;
-        case "march":
-          monthNum = 3;
-          break;
-        case "april": 
-          monthNum = 4;
-          break;
-        case "may":
-          monthNum = 5;
-          break;
-        case "june":
-          monthNum = 6;
-          break;
-        case "july":
-          monthNum = 7;
-          break;
-        case "august":
-          monthNum = 8;
-          break;
-        case "september":
-          monthNum = 9;
-          break;
-        case "october":
-          monthNum = 10;
-          break;
-        case "november":
-          monthNum = 11;
-          break;
-        case "december":
-          monthNum = 12;
-          break;
-        default:
-          monthNum = 0;
-      }
-      ret = new DateTime(int.parse(year), monthNum, int.parse(day), 
-          int.parse(hour), int.parse(minute));
-    } catch(e) {
-      deadlineError = localisation.getTranslation("project_routehandler_13");
-    }
+    DateTime ret = new DateTime(years[selectedYear], selectedMonth + 1, selectedDay + 1, selectedHour, selectedMinute);
     return ret;
   }
   
@@ -743,5 +815,43 @@ class ProjectCreateForm extends PolymerElement
       transCheckbox.disabled = false;
       proofCheckbox.disabled = false;
     }
+  }
+  
+  /*
+   * Automatically bound to changes on selectedYear
+   */
+  void selectedYearChanged(int oldValue)
+  {
+    if (this.isLeapYear(years[selectedYear])) {
+      monthLengths[1] = 29;
+    } else {
+      monthLengths[1] = 28;
+    }
+    
+    if (selectedMonth == 1) {
+      // in case leap year status changed
+      this.selectedMonthChanged(selectedMonth);
+    }
+  }
+  
+  /*
+   * Automatically bound to changes on selectedMonth
+   */
+  void selectedMonthChanged(int oldValue)
+  {
+    days = new List<int>.generate(monthLengths[selectedMonth], (int index) => index + 1);
+  }
+  
+  bool isLeapYear(int year)
+  {
+    bool ret = true;
+    if (year % 4 != 0) {
+      ret = false;
+    } else {
+      if (year % 100 == 0 && year % 400 != 0) {
+        ret = false;
+      }
+    }
+    return ret;
   }
 }

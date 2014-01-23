@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>{Localisation::getTranslation(Strings::TAG_LIST_TAG_LIST)} <small> {Localisation::getTranslation(Strings::TAG_LIST_ALL_TAGS_IN)} {Settings::get('site.name')}</small></h1>
+    <h1>{Localisation::getTranslation(Strings::TAG_LIST_TAG_LIST)} <small>{sprintf(Localisation::getTranslation(Strings::TAG_LIST_ALL_TAGS_IN), {Settings::get('site.name')})}</small></h1>
 </div>
 
 {if isset($user_tags)}
@@ -18,10 +18,9 @@
         </li>
     {/foreach}
     </ul>
+    <p style="margin-bottom:40px;"/>
+    <hr />
 {/if}
-
-<p style="margin-bottom:40px;"/>
-<hr />
 
 <h2>{Localisation::getTranslation(Strings::TAG_LIST_TAG_SEARCH)} <small>{Localisation::getTranslation(Strings::TAG_LIST_1)}</small></h2>
 <form method="post" action="{urlFor name="tags-list"}" class="well" accept-charset="utf-8">
@@ -38,7 +37,7 @@
 <p style="margin-bottom:10px;"/>
 {if isset($foundTags)}
     {if count($foundTags) > 0}
-        <h3>{Localisation::getTranslation(Strings::TAG_LIST_SUCCESSFULLY_FOUND)} {count($foundTags)} {Localisation::getTranslation(Strings::COMMON_TAGS)}</h3>
+        <h3>{sprintf(Localisation::getTranslation(Strings::TAG_LIST_SUCCESSFULLY_FOUND), {count($foundTags)})}</h3>
         <ul class="nav nav-list unstyled">
         {foreach $foundTags as $tag}
             <li>
@@ -51,7 +50,7 @@
         {/foreach}
         </ul>
     {else}
-        <p class="alert alert-error">{Localisation::getTranslation(Strings::TAG_LIST_3)} <b>{$searchedText}</b>.</p>
+        <p class="alert alert-error">{sprintf(Localisation::getTranslation(Strings::TAG_LIST_3), {$searchedText})}</p>
     {/if}
 {/if}
 

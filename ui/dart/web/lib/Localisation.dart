@@ -15,7 +15,7 @@ class Localisation
     String data;
     Element element = doc.querySelector("[name = $key]");
     if (element != null) {
-      data = element.text;
+      data = element.innerHtml;
     } else {
       print("Unable to find string with name $key");
       data = '';

@@ -7,6 +7,7 @@ dependencies:
   js: any
   json_object: any
   polymer: any
+  sprintf: any
   xml: any
 transformers:
 - polymer:

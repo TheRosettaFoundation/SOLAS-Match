@@ -34,7 +34,7 @@
 
     {if isset($errors)}
         <div class="alert alert-error">
-            <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}:</h3>
+            <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}</h3>
             <ol>
                 {foreach from=$errors item=error}
                         <li>{$error}</li>
@@ -98,10 +98,9 @@
                     <tr id="taskUploadTemplate_0" valign="top">
                         <td colspan="4">
                             <p class="desc">
-                                <strong>File #1:</strong> 
+                                <strong id="label_0">File #1:</strong> 
                                 {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)}
-                                {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 
-                                {TemplateHelper::maxFileSizeMB()} MB.
+                                {sprintf(Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS), TemplateHelper::maxFileSizeMB())} 
                             </p>
                             <input type="file" name="segmentationUpload_0" id="segmentationUpload_0"/>
                             <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</label>
@@ -114,8 +113,7 @@
                             <p class="desc">
                                 <strong>File #2: </strong> 
                                 {Localisation::getTranslation(Strings::TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE)}
-                                {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} 
-                                {TemplateHelper::maxFileSizeMB()} MB.
+                                {sprintf(Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS), TemplateHelper::maxFileSizeMB())} 
                             </p>
                             <input type="file" name="segmentationUpload_1" id="segmentationUpload_1"/>
                             <label>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</label>
@@ -135,8 +133,8 @@
                     </td>
                 </tr>                        
             </table>
-            </form>
-        </div>
-    {/if}
+        </form>
+    </div>
+{/if}
         
 {include file="footer.tpl"}

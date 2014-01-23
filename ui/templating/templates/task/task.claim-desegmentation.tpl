@@ -13,10 +13,10 @@
         <p style="margin-bottom:20px;"></p>
         <ol>
             {if $taskMetadata->getContentType() != ''}
-                <li>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_3)} <strong>{$taskMetadata->getContentType()}</strong> {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_ON_YOUR_COMPUTER)}</li>
+                <li>{sprintf(Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_3), {$taskMetadata->getContentType()})}</li>
             {/if}
-            <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_4)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_5)}</li>
-            <li>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_6)} <strong>{$targetLanguage->getName()}</strong>?</li>
+            <li>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_4)}</li>
+            <li>{sprintf(Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_6), {$targetLanguage->getName()})}</li>
         </ol>
     </section>
 

@@ -1,8 +1,9 @@
-import "package:polymer/polymer.dart";
 import "dart:async";
 import "dart:html";
 
 import '../../lib/SolasMatchDart.dart';
+import "package:sprintf/sprintf.dart";
+import "package:polymer/polymer.dart";
 
 @CustomTag("claimed-tasks-stream")
 class ClaimedTasksStream extends PolymerElement
@@ -65,6 +66,13 @@ class ClaimedTasksStream extends PolymerElement
           lastPage = tmp.ceil();
           success = true;
         }
+        
+        Timer.run(() {
+          AnchorElement a = querySelector("#pagination_pages");
+          a.children.clear();
+          a.appendHtml(sprintf(localisation.getTranslation("pagination_page_of"), ["${currentPage + 1}", "$lastPage"]));
+        });
+        
         return success;
       }));
     }
@@ -121,6 +129,11 @@ class ClaimedTasksStream extends PolymerElement
         this.updatePagination();
         return true;
       });
+    
+    AnchorElement a = querySelector("#pagination_pages");
+    a.children.clear();
+    a.appendHtml(sprintf(localisation.getTranslation("pagination_page_of"), ["${currentPage + 1}", "$lastPage"]));
+    
     return ret;
   }
   
@@ -130,13 +143,13 @@ class ClaimedTasksStream extends PolymerElement
     DateTime taskTime = DateTime.parse(task.createdTime);
     Duration dur = currentDateTime.difference(taskTime);
     if (dur.inDays > 0) {
-      taskAges[task.id] = dur.inDays.toString() + " day(s)";
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inDays.toString() + " day(s)"]);
     } else if (dur.inHours > 0) {
-      taskAges[task.id] = dur.inHours.toString() + " hour(s)";
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inHours.toString() + " hour(s)"]);
     } else if (dur.inMinutes > 0) {
-      taskAges[task.id] = dur.inMinutes.toString() + " minutes(s)";
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inMinutes.toString() + " minutes(s)"]);
     } else {
-      taskAges[task.id] = dur.inSeconds.toString() + " second(s)";
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inSeconds.toString() + " second(s)"]);
     }
     taskTags[task.id] = new List<Tag>();
     TaskDao.getTaskTags(task.id).then((List<Tag> tags) {
@@ -147,9 +160,40 @@ class ClaimedTasksStream extends PolymerElement
         projectMap[proj.id] = proj;
         OrgDao.getOrg(proj.organisationId).then((Organisation org) {
           orgMap[org.id] = org;
+          Timer.run(() {
+            ParagraphElement p;
+            p = querySelector("#parent_" + task.id.toString());
+            p.children.clear();
+            p.appendHtml(sprintf(localisation.getTranslation("common_part_of_for"), 
+                                 ["${siteAddress}project/${task.projectId}/view",
+                                  projectMap[task.projectId].title,
+                                  "${siteAddress}org/${orgMap[projectMap[task.projectId].organisationId].id}/profile",
+                                  orgMap[projectMap[task.projectId].organisationId].name]));
+          });
         });
       });
+    } else {
+      Timer.run(() {
+        ParagraphElement p;
+        p = querySelector("#parent_" + task.id.toString());
+        p.children.clear();
+        p.appendHtml(sprintf(localisation.getTranslation("common_part_of_for"), 
+                             ["${siteAddress}project/${task.projectId}/view",
+                              projectMap[task.projectId].title,
+                              "${siteAddress}org/${orgMap[projectMap[task.projectId].organisationId].id}/profile",
+                              orgMap[projectMap[task.projectId].organisationId].name]));
+      });
     }
+    
+    Timer.run(() {
+      ParagraphElement p;
+      p = querySelector("#task_age_" + task.id.toString());
+      p.children.clear();
+      p.appendHtml(taskAges[task.id]);
+      p = querySelector("#deadline_" + task.id.toString());
+      p.children.clear();
+      p.appendHtml(sprintf(localisation.getTranslation("common_due_by"), [task.deadline]));
+    });
   }
   
   void updatePagination()

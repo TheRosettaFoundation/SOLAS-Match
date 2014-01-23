@@ -1,5 +1,9 @@
-import "package:polymer/polymer.dart";
 import '../../lib/SolasMatchDart.dart';
+
+import "dart:async";
+import "dart:html";
+import "package:polymer/polymer.dart";
+import "package:sprintf/sprintf.dart";
 
 @CustomTag("task-stream")
 class TaskStream extends PolymerElement
@@ -10,14 +14,14 @@ class TaskStream extends PolymerElement
   int taskCount = 0;
   String filter = '';
   DateTime currentDateTime;
+  Map<int, String> taskAges;
+  Map<int, Project> projectMap;
+  Map<int, Organisation> orgMap;
   @published int userid = 0;
   @observable bool loaded = false;
   @observable Localisation localisation;
   @observable bool moreTasks = true;
   @observable List<Task> tasks;
-  @observable Map<int, String> taskAges;
-  @observable Map<int, Project> projectMap;
-  @observable Map<int, Organisation> orgMap;
   @observable int selectedTaskTypeFilter = 0;
   @observable int selectedSourceFilter = 0;
   @observable int selectedTargetFilter = 0;
@@ -31,10 +35,10 @@ class TaskStream extends PolymerElement
   TaskStream.created() : super.created()
   {
     currentDateTime = new DateTime.now();
+    taskAges = new Map<int, String>();
+    projectMap = new Map<int, Project>();    
+    orgMap = new Map<int, Organisation>();
     tasks = toObservable(new List<Task>());
-    taskAges = toObservable(new Map<int, String>());
-    projectMap = toObservable(new Map<int, Project>());    
-    orgMap = toObservable(new Map<int, Organisation>());
     activeSourceLanguages = toObservable(new List<Language>());
     activeTargetLanguages = toObservable(new List<Language>());
     taskTypes = toObservable(new Map<int, String>());
@@ -51,7 +55,7 @@ class TaskStream extends PolymerElement
     Settings settings = new Settings();
     siteAddress = settings.conf.urls.SiteLocation;
     taskTypeIndexes.add(0);
-    taskTypes[0] = localisation.getTranslation("index_any");
+    taskTypes[0] = localisation.getTranslation("index_any_task_type");
     taskTypeIndexes.add(1);
     taskTypes[1] = localisation.getTranslation("common_segmentation");
     taskColours[1] = settings.conf.task_colours.colour_1;
@@ -68,12 +72,16 @@ class TaskStream extends PolymerElement
   
   void loadActiveLanguages()
   {
-    Language any = new Language();
-    any.name = localisation.getTranslation("index_any").toString();
-    any.code = "";
+    Language anySource = new Language();
+    anySource.name = localisation.getTranslation("index_any_source_language");
+    anySource.code = "";
+    activeSourceLanguages.add(anySource);
     
-    activeSourceLanguages.add(any);
-    activeTargetLanguages.add(any);
+    Language anyTarget = new Language();
+    anyTarget.name = localisation.getTranslation("index_any_target_language");
+    anyTarget.code = "";
+    activeTargetLanguages.add(anyTarget);
+    
     LanguageDao.getActiveSourceLanguages().then((List<Language> langs) {
       activeSourceLanguages.addAll(langs);
     });
@@ -94,14 +102,14 @@ class TaskStream extends PolymerElement
     }
   }
   
-  void processTaskList(List<Task> tasks)
+  void processTaskList(List<Task> newTasks)
   {
-    if (tasks.length > 0) {
-      if (tasks.length < limit) {
+    if (newTasks.length > 0) {
+      if (newTasks.length < limit) {
         moreTasks = false;
       }
-      if (tasks.length > 0) {
-        tasks.forEach((Task task) {
+      if (newTasks.length > 0) {
+        newTasks.forEach((Task task) {
           addTask(task);
         });
       }
@@ -109,6 +117,28 @@ class TaskStream extends PolymerElement
       moreTasks = false;
     }
     loaded = true;
+    
+    Timer.run(() {
+      tasks.forEach((Task task) {
+        ParagraphElement p;
+        p = this.shadowRoot.querySelector("#task_age_" + task.id.toString());
+        p.children.clear();
+        p.appendHtml(taskAges[task.id]);
+        p = this.shadowRoot.querySelector("#deadline_" + task.id.toString());
+        p.children.clear();
+        p.appendHtml(sprintf(localisation.getTranslation("common_due_by"), [task.deadline]));
+        if (projectMap.containsKey(task.projectId)){
+          ParagraphElement p;
+          p = this.shadowRoot.querySelector("#parents_" + task.id.toString());
+          p.children.clear();
+          p.appendHtml(sprintf(localisation.getTranslation("common_part_of_for"), 
+                               ["${siteAddress}project/${task.projectId}/view",
+                                projectMap[task.projectId].title,
+                                "${siteAddress}org/${orgMap[projectMap[task.projectId].organisationId].id}/profile",
+                                orgMap[projectMap[task.projectId].organisationId].name]));
+        }
+      });
+    });
   }
   
   void addTask(Task task)
@@ -117,13 +147,13 @@ class TaskStream extends PolymerElement
     DateTime taskTime = DateTime.parse(task.createdTime);
     Duration dur = currentDateTime.difference(taskTime);
     if (dur.inDays > 0) {
-      taskAges[task.id] = dur.inDays.toString() + " day(s)";
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inDays.toString() + " day(s)"]);
     } else if (dur.inHours > 0) {
-      taskAges[task.id] = dur.inHours.toString() + " hour(s)";
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inHours.toString() + " hour(s)"]);
     } else if (dur.inMinutes > 0) {
-      taskAges[task.id] = dur.inMinutes.toString() + " minutes(s)";
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inMinutes.toString() + " minutes(s)"]);
     } else {
-      taskAges[task.id] = dur.inSeconds.toString() + " second(s)";
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inSeconds.toString() + " second(s)"]);
     }
     taskTags[task.id] = new List<Tag>();
     TaskDao.getTaskTags(task.id).then((List<Tag> tags) {
@@ -135,9 +165,19 @@ class TaskStream extends PolymerElement
         projectMap[proj.id] = proj;
         OrgDao.getOrg(proj.organisationId).then((Organisation org) {
           orgMap[org.id] = org;
+          Timer.run(() {
+            ParagraphElement p;
+            p = this.shadowRoot.querySelector("#parents_" + task.id.toString());
+            p.children.clear();
+            p.appendHtml(sprintf(localisation.getTranslation("common_part_of_for"), 
+                             ["${siteAddress}project/${task.projectId}/view",
+                              projectMap[task.projectId].title,
+                              "${siteAddress}org/${orgMap[projectMap[task.projectId].organisationId].id}/profile",
+                              orgMap[projectMap[task.projectId].organisationId].name]));
+          });
         });
       });
-    }
+    } 
   }
   
   void filterStream()

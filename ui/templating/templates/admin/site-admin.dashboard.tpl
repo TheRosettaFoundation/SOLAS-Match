@@ -1,28 +1,37 @@
 {include file='header.tpl'}
 
 <div class="page-header">
-    <h1>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADMINISTRATION_DASHBOARD)} <small>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_THE_SITE_ADMINISTRATORS_DASHBOARD)}.</small></h1>
+    <h1>
+        {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADMINISTRATION_DASHBOARD)}
+        <small>
+            {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_THE_SITE_ADMINISTRATORS_DASHBOARD)}
+        </small>
+     </h1>
 </div>
 
 <div class="well">
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.{$adminUserId}"}" accept-charset="utf-8">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
                 <td colspan="2"> 
-                    <label for="addAdmin"><h2>{Localisation::getTranslation(Strings::COMMON_CREATE_ADMINISTRATOR)}:</h2></label>
+                    <label for="addAdmin"><h2>{Localisation::getTranslation(Strings::COMMON_CREATE_ADMINISTRATOR)}</h2></label>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_0)} <strong>{$siteName}</strong>. <br/><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}:</strong> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ONLY_ADD_TRUSTED_USERS)}.
+                    <p>{sprintf(Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_0), $siteName)}</p>
+                    <p><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_7)}</strong></p>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}." style="width: 95%"/>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}" style="width: 95%"/>
                 </td>
                 <td valign="top">
-                    <button class="btn btn-success" type="submit" name="addAdmin" value="1"><i class="icon-star icon-white"></i> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADD_ADMIN)}</button>
+                    <button class="btn btn-success" type="submit" name="addAdmin" value="1">
+                        <i class="icon-star icon-white"></i>
+                        {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADD_ADMIN)}
+                    </button>
                 </td>
             </tr>
         </table> 
@@ -34,25 +43,26 @@
         <hr/>
     {/if}    
     
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}" accept-charset="utf-8">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table>
             <tr>
                 <td colspan="3"> 
-                    <label for="banOrganisation"><h2>{Localisation::getTranslation(Strings::COMMON_BAN_ORGANISATION)}:</h2></label>
+                    <label for="banOrganisation"><h2>{Localisation::getTranslation(Strings::COMMON_BAN_ORGANISATION)}</h2></label>
                 </td>
             </tr>
             <tr>
                 <td colspan="3" style="padding-bottom: 20px">
-                    {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_2)}. <br/><strong>{Localisation::getTranslation(Strings::COMMON_NOTE)}:</strong> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_3)}.
+                    <p>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_2)}</p>
+                    <p><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_3)}</strong></p>
                 </td>
             </tr>
             <tr style="font-weight: bold">
-                <td>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}:</td>
-                <td colspan="2"> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_DURATION)}:</td>                
+                <td>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}</td>
+                <td colspan="2"> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_DURATION)}</td>                
             </tr>
             <tr>
                 <td width="40%">
-                    <input type="text" name="orgName" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ORGANISATION_NAME_GOES_HERE)}." style="width: 96%"/>
+                    <input type="text" name="orgName" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ORGANISATION_NAME_GOES_HERE)}" style="width: 96%"/>
                 </td>
                 <td width="25%">
                     <select name="banTypeOrg" style="width: 96%">
@@ -68,7 +78,7 @@
             </tr>
             <tr>
                 <td colspan="3">                    
-                    <label for='banReasonOrg'><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_REASON)}:</strong></label>
+                    <label for='banReasonOrg'><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_REASON)}</strong></label>
                     <textarea name='banReasonOrg' cols='40' rows='7' style="width: 99%"></textarea>
                 </td>
             </tr>
@@ -81,11 +91,11 @@
         <hr/>
     {/if}  
         
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}" accept-charset="utf-8">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table>
             <tr>
                 <td colspan="3"> 
-                    <label for="banUser"><h2>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_USER)}:</h2></label>
+                    <label for="banUser"><h2>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_USER)}</h2></label>
                 </td>
             </tr>
             <tr>
@@ -94,12 +104,12 @@
                 </td>
             </tr>
             <tr style="font-weight: bold">
-                <td >{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_USER_EMAIL_ADDRESS)}:</td>
-                <td colspan="2"> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_DURATION)}:</td>                
+                <td >{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_USER_EMAIL_ADDRESS)}</td>
+                <td colspan="2"> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_DURATION)}</td>                
             </tr>
             <tr>
                 <td width="40%">
-                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}." style="width: 96%"/>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}" style="width: 96%"/>
                 </td>
                 <td width="25%">
                     <select name="banTypeUser" style="width: 96%">
@@ -115,7 +125,7 @@
             </tr>
             <tr>
                 <td colspan="3">                    
-                    <label for='banReasonUser'><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_REASON)}:</strong></label>
+                    <label for='banReasonUser'><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_REASON)}</strong></label>
                     <textarea name='banReasonUser' cols='40' rows='7' style="width: 99%"></textarea>
                 </td>
             </tr>
@@ -128,11 +138,11 @@
         <hr/>
     {/if} 
     
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.{$adminUserId}"}" accept-charset="utf-8">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
                 <td colspan="2"> 
-                    <label for="deleteUser"><h2>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_DELETE_USER)}:</h2></label>
+                    <label for="deleteUser"><h2>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_DELETE_USER)}</h2></label>
                 </td>
             </tr>
             {if isset($flash['deleteError'])}
@@ -151,15 +161,15 @@
             {/if}
             <tr>
                 <td colspan="2">
-                    <strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_PERMANENTLY)}</strong> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_DELETE_A_USER_FROM)} <strong>{$siteName}</strong>.
+                    {sprintf(Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_PERMANENTLY), $siteName)}
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}." style="width: 95%"/>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}" style="width: 95%"/>
                 </td>
                 <td valign="top">
-                    <button class="btn btn-inverse" type="submit" name="deleteUser" value="1" onclick="return confirm('{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_5)}.')"/>
+                    <button class="btn btn-inverse" type="submit" name="deleteUser" value="1" onclick="return confirm('{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_5)}')"/>
                         <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_DELETE_USER)}
                     </button>
                 </td>

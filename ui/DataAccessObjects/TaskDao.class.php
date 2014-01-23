@@ -200,11 +200,11 @@ class TaskDao extends BaseDao
                 $projectFileExtension = explode(".", $projectFileName);
                 $projectFileExtension = $projectFileExtension[count($projectFileExtension)-1];                                        
                 $projectMime = $projectFile->getMime();
-                throw new SolasMatchException(sprintf(Localisation::getTranslation(Strings::TASK_DAO_1), $projectFileExtension, $projectMime), $this->client->getResponseCode());                                 
+                throw new SolasMatchException(sprintf(Localisation::getTranslation(Strings::COMMON_ERROR_UPLOAD_1), $projectFileExtension, $projectMime), $this->client->getResponseCode());                                 
                 break;
             }
             case HttpStatusEnum::INTERNAL_SERVER_ERROR :
-                throw new SolasMatchException(Localisation::getTranslation(Strings::TASK_DAO_2), $this->client->getResponseCode());
+                throw new SolasMatchException(Localisation::getTranslation(Strings::COMMON_ERROR_UPLOAD_2), $this->client->getResponseCode());
                 break;                                
         }
     }

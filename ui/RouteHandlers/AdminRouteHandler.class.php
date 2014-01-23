@@ -67,12 +67,8 @@ class AdminRouteHandler
                 } else {
                     $app->flashNow("deleteError", Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_6));
                 }
-            }
-            
-            
-        }               
-        
-        $siteName = Settings::get("site.name");
+            } 
+        }
         
         $adminDao = new AdminDao();
         $userDao = new UserDao();
@@ -95,17 +91,19 @@ class AdminRouteHandler
                 $bannedUser['adminUser'] = $userDao->getUser($bannedUser->getUserIdAdmin());
             }
         }
+
+        $siteName = Settings::get("site.name");
      
         $extra_scripts = "";
         $extra_scripts .= file_get_contents(__DIR__."/../js/site-admin.dashboard.js");
 
         $app->view()->appendData(array(
                     "adminUserId"   => $userId,
-                    "siteName"      => $siteName,
                     "adminList"     => $adminList,
                     "bannedOrgList" => $bannedOrgList,
                     "bannedUserList"=> $bannedUserList,
                     "current_page"  => 'site-admin-dashboard',
+                    "siteName"      => $siteName,
                     "extra_scripts" => $extra_scripts
         ));
 

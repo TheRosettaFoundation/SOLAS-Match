@@ -7,7 +7,7 @@ import 'ProjectCreateForm.dart' as i0;
 
 void main() {
   configureForDeployment([
-      'ProjectCreateForm.dart',
+      'ProjectCreateForm.dart'
       ]);
   Loader.load().then((_) => initPolymer());
 }

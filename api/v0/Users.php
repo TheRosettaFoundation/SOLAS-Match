@@ -219,7 +219,6 @@ class Users {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'Badge');
-//            $data = $client->cast('Badge', $data);
             Dispatcher::sendResponce(null, BadgeDao::assignBadge($userId, $data->getId()), null, $format);
         }, 'addUserbadges');
 		

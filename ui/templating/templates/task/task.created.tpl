@@ -9,16 +9,16 @@
             <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> - {Localisation::getTranslation(Strings::TASK_CREATED_0)}
         </p>
         <p>
-            {Localisation::getTranslation(Strings::TASK_CREATED_1)} <a href="{urlFor name="project-view" options="project_id.$project_id"}">{Localisation::getTranslation(Strings::COMMON_PROJECT_VIEW)}</a>.
+            {sprintf(Localisation::getTranslation(Strings::TASK_CREATED_1), {urlFor name="project-view" options="project_id.$project_id"})}
         </p>
         <p>
-            {Localisation::getTranslation(Strings::TASK_CREATED_5)} <a href="{urlFor name="task-view" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::TASK_CREATED_TASK_VIEW)}</a>
+            {sprintf(Localisation::getTranslation(Strings::TASK_CREATED_5), {urlFor name="task-view" options="task_id.$task_id"})}
         <p>        
     </div>
 
-    <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}? <small>{Localisation::getTranslation(Strings::COMMON_WAIT_FOR_TRANSLATORS)}.</small></h1>
+    <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)} <small>{Localisation::getTranslation(Strings::COMMON_WAIT_FOR_TRANSLATORS)}</small></h1>
 
-    <p>{Localisation::getTranslation(Strings::COMMON_HERE_IS_WHAT_WILL_NOW_HAPPEN)}:</p>
+    <p>{Localisation::getTranslation(Strings::COMMON_HERE_IS_WHAT_WILL_NOW_HAPPEN)}</p>
     <p style="margin-bottom:20px;"/>
     <ol>
             <li>{Localisation::getTranslation(Strings::TASK_CREATED_2)}</li>

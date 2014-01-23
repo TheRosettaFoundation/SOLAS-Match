@@ -613,20 +613,20 @@ class Middleware
 			
 			$badge = null;
 			if ($badgeId != null) {
-			$badges = BadgeDao::getBadge($badgeId);
-			$badge = $badges[0];
+    			$badges = BadgeDao::getBadge($badgeId);
+	    		$badge = $badges[0];
 			}
 			
 			$orgId = $badge->getOwnerId();
-			/*
-			 * currently this checks if the orgId is not Null
-			 * cases where the orgId is null signify a system badge
-			 * using this middleware function will lead to errors unless those are accounted for
-			 */	
+
+					
+			// cases where the orgId is null signify a system badge
+			// badge ids 6, 7 and 8 refer to the user controlled system badges
 			if($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
-			}
-			else {
+			} elseif ($orgId == null && in_array($badgeId, array(6, 7, 8))) {
+                return true;
+            } else {
 	            Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
 	                    "The user does not have permission to acess the current resource");
 	        }

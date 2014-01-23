@@ -41,6 +41,7 @@ class Localisation {
         self::$xPath = new DOMXPath(self::$doc);
         $stringElement = self::$xPath->query("/resources/string[@name='$stringId']");
         if($stringElement->length == 0) {
+            error_log("Could not find/load: $stringId");
             return "Could not find/load: $stringId";
         }
         $foundNode = self::$doc->saveXML($stringElement->item(0));

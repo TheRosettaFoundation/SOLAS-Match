@@ -7,7 +7,7 @@ import 'TaskStream.dart' as i0;
 
 void main() {
   configureForDeployment([
-      'TaskStream.dart',
+      'TaskStream.dart'
       ]);
   Loader.load().then((_) => initPolymer());
 }

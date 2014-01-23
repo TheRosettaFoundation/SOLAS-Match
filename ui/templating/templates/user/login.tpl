@@ -1,35 +1,35 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1>{Localisation::getTranslation(Strings::LOGIN_LOG_IN_TO)} {Settings::get('site.title')}.</h1>
+            <h1>{Localisation::getTranslation(Strings::LOGIN_LOG_IN_TO)} {Settings::get('site.name')}</h1>
     </div>
 
     {if isset($flash['error'])}
         <div class="alert alert-error">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-            <p><strong>Warning! </strong>{$flash['error']}</p>
+            <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{$flash['error']}</p>
         </div>
     {/if}
 
     {if isset($flash['info'])}
         <div class="alert alert-info">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-            <p><strong>NOTE: </strong>{$flash['info']}</p>
+            <p><strong>{Localisation::getTranslation(Strings::COMMON_NOTE)}: </strong>{$flash['info']}</p>
         </div>
     {/if}
 
     {if isset($flash['success'])}
         <div class="alert alert-success">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-            <p><strong>NOTE: </strong>{$flash['success']}</p>
+            <p><strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}! </strong>{$flash['success']}</p>
         </div>
     {/if}
 
     {if isset($openid)&& ($openid==='n'||$openid==='h' )}
         <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
-            <label for="email"><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}:</strong></label>
+            <label for="email"><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}</strong></label>
             <input type="text" name="email" id="email"/>
-            <label for="password"><strong>{Localisation::getTranslation(Strings::COMMON_PASSWORD)}:</strong></label>
+            <label for="password"><strong>{Localisation::getTranslation(Strings::COMMON_PASSWORD)}</strong></label>
             <input type="password" name="password" id="password"/>
             <p>
                 <input type="submit" class="btn btn-primary" name="login" value="   {Localisation::getTranslation(Strings::COMMON_LOG_IN)}" />
@@ -55,8 +55,10 @@
                     <input id="openid_submit" type="submit" class="btn btn-primary" value="{Localisation::getTranslation(Strings::LOGIN_SIGNIN)}"/>
                 </div>
                 <noscript>
-                    <p>{Localisation::getTranslation(Strings::COMMON_OPENID_IS_SERVICE_THAT_ALLOWS_YOU_TO_LOGON_TO_MANY_DIFFERENT_WEBSITES_USING_A_SINGLE_INDENTITY)}
-                    {Localisation::getTranslation(Strings::LOGIN_FIND_OUT)} <a href="http://openid.net/what/">{Localisation::getTranslation(Strings::LOGIN_MORE_ABOUT_OPENID)}</a> and <a href="http://openid.net/get/">{Localisation::getTranslation(Strings::LOGIN_0)}</a>.</p>
+                    <p>
+                        {Localisation::getTranslation(Strings::COMMON_OPENID_IS_SERVICE_THAT_ALLOWS_YOU_TO_LOGON_TO_MANY_DIFFERENT_WEBSITES_USING_A_SINGLE_INDENTITY)}
+                        {sprintf(Localisation::getTranslation(Strings::LOGIN_0), "http://openid.net/what/", "http://openid.net/get/")}
+                    </p>
                 </noscript>
             </fieldset>
         </form>

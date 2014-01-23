@@ -6,7 +6,11 @@
 </div>
 
 <p>
-    {sprintf(Localisation::getTranslation(Strings::ORG_TASK_REVIEW_3), $claimantProfile, $claimant->getDisplayName())}
+    {if $claimant != NULL}
+        {sprintf(Localisation::getTranslation("org_task_review_3"), $claimantProfile, $claimant->getDisplayName())}
+    {else}
+        {Localisation::getTranslation("org_task_review_claimant_unavailable")}
+    {/if}
     {Localisation::getTranslation(Strings::ORG_TASK_REVIEW_0)}
 </p>
 <p>

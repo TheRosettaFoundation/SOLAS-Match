@@ -29,23 +29,9 @@
           <p>
             {{localisation.getTranslation("common_word_count")}}: <strong>{{task.wordCount}}</strong>
           </p>
-          <p class="task_details">
-            {{localisation.getTranslation("common_added")}}: <strong>{{taskAges[task.id]}}</strong> 
-            {{localisation.getTranslation("common_ago")}}
-          </p>
-          <p>
-            {{localisation.getTranslation("common_due_by")}}: <strong>{{task.deadline}}</strong>
-          </p>
-          <p>
-            {{localisation.getTranslation("common_part_of")}}:
-            <a href="{{siteAddress}}project/{{projectMap[task.projectId].id}}/view">
-              {{projectMap[task.projectId].title}}
-            </a>
-            {{localisation.getTranslation("common_for")}}
-            <a href="{{siteAddress}}org/{{orgMap[projectMap[task.projectId].organisationId].id}}/profile">
-              {{orgMap[projectMap[task.projectId].organisationId].name}}
-            </a>
-          </p>
+          <p id="task_age_{{task.id}}"></p>
+          <p id="deadline_{{task.id}}"></p>
+          <p id="parent_{{task.id}}"></p>
           <p>
             <a href="{{siteAddress}}user/task/{{task.id}}/reviews" class="btn btn-small btn-primary">
               {{localisation.getTranslation("claimed_tasks_task_reviews")}}
@@ -67,10 +53,7 @@
           <a id="previousPage" title="Previous">&lt;</a>
         </li>
         <li>
-          <a>
-            {{localisation.getTranslation("pagination_page")}} {{currentPage + 1}} 
-            {{localisation.getTranslation("pagination_of")}} {{lastPage}}
-          </a>
+          <a id="pagination_pages"></a>
         </li>
         <li>
           <a id="nextPage" title="Next">&gt;</a>

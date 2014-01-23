@@ -12,15 +12,15 @@
 
     <section>
             <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}</h1>
-            <p>{Localisation::getTranslation(Strings::COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE)}:</p>
+            <p>{Localisation::getTranslation(Strings::COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE)}</p>
             <ol>
-                <li><strong>{Localisation::getTranslation(Strings::COMMON_OPEN_THE_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_5)}</li>
-                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_SEGMENT_THE_FILE)}</strong> to <strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_1)}</strong>.</li>
-                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_2)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_3)}</li>
+                <li>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_5)}</li>
+                <li>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_SEGMENT_THE_FILE)}</li>
+                <li>{Localisation::getTranslation(Strings::TASK_CLAIMED_SEGMENTATION_2)}</li>
             </ol>
 
         {if isset($user)}
-            <p>{Localisation::getTranslation(Strings::COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO)} <strong>{$user->getEmail()}</strong>.</p>
+            <p>{sprintf(Localisation::getTranslation(Strings::COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO), {$user->getEmail()})}</p>
         {/if}
     </section>
 
@@ -39,8 +39,7 @@
 
     <p>
         <small>({Localisation::getTranslation(Strings::COMMON_CANT_FIND_THE_FILE_ON_YOUR_DESKTOP)}
-        <a href="{urlFor name="download-task" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_DOWNLOAD_THE_FILE)}</a>
-        {Localisation::getTranslation(Strings::COMMON_AND_SAVE_IT_TO_YOUR_DESKTOP)})
+            {sprintf(Localisation::getTranslation(Strings::COMMON_DOWNLOAD_THE_FILE), {urlFor name="download-task" options="task_id.$task_id"})})
         </small>
     </p>
 

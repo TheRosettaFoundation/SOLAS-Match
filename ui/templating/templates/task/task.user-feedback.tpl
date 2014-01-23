@@ -45,7 +45,7 @@
                         <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                     {/foreach}
                 {else}
-                    <i>{Localisation::getTranslation(Strings::COMMON_THERE_ARE_NO_TAGS_ASSOCIATED_WITH_THIS_PROJECT)}.</i>
+                    <i>{Localisation::getTranslation(Strings::COMMON_THERE_ARE_NO_TAGS_ASSOCIATED_WITH_THIS_PROJECT)}</i>
                 {/if}
                 </td>
             </tr>
@@ -55,9 +55,9 @@
     <div class="well">
         <table width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
-            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}:<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}<hr/></th>
             <th/>
-            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_PROJECT_DESCRIPTION)}:<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_PROJECT_DESCRIPTION)}<hr/></th>
             </thead>
             <tbody>
                 <tr>
@@ -66,7 +66,7 @@
                         {if $task->getComment() != ''}
                             {$task->getComment()}
                         {else}
-                           {Localisation::getTranslation(Strings::COMMON_NO_COMMENT_HAS_BEEN_LISTED)}.
+                           {Localisation::getTranslation(Strings::COMMON_NO_COMMENT_HAS_BEEN_LISTED)}
                         {/if}
                         </i>
                     </td>
@@ -76,7 +76,7 @@
                         {if $project->getDescription() != ''}
                             {$project->getDescription()}
                         {else}
-                            {Localisation::getTranslation(Strings::COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED)}.
+                            {Localisation::getTranslation(Strings::COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED)}
                         {/if}
                         </i>
                     </td>

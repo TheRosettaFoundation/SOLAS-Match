@@ -2,7 +2,7 @@
 
     <div class="page-header" style="margin-bottom: 50px">
         <h1>
-            {Localisation::getTranslation(Strings::ORG_DASHBOARD_ORGANISATION_DASHBOARD)} <small>{Localisation::getTranslation(Strings::ORG_DASHBOARD_0)}.</small>
+            {Localisation::getTranslation(Strings::ORG_DASHBOARD_ORGANISATION_DASHBOARD)} <small>{Localisation::getTranslation(Strings::ORG_DASHBOARD_0)}</small>
         </h1>
     </div>
 
@@ -112,7 +112,7 @@
 
 {else}
     <div class="alert alert-warning">
-    <strong>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}?</strong> {Localisation::getTranslation(Strings::ORG_DASHBOARD_3)}.
+    <strong>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}?</strong> {Localisation::getTranslation(Strings::ORG_DASHBOARD_3)}
     </div>
 {/if}
 <p style="margin-bottom:60px;"/>

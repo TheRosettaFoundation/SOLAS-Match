@@ -12,8 +12,8 @@
         <h3>{Localisation::getTranslation(Strings::COMMON_REVIEW_THIS_CHECKLIST_FOR_YOUR_DOWNLOADED_FILE)} <small>{Localisation::getTranslation(Strings::TASK_CLAIM_SEGMENTATION_1)}</small></h3>
         <p style="margin-bottom:20px;"></p>
         <ol>
-            <li>{Localisation::getTranslation(Strings::COMMON_CAN_YOU)} <strong>{Localisation::getTranslation(Strings::COMMON_OPEN_THE_FILE)}</strong> {Localisation::getTranslation(Strings::COMMON_ON_YOUR_COMPUTER)}</li>
-            <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIM_SEGMENTATION_5)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIM_PROOFREADING_THIS_FILE)} {Localisation::getTranslation(Strings::COMMON_CHECK_HOW_LONG_THE_FILE_IS)}.</li>
+            <li>{Localisation::getTranslation(Strings::COMMON_CAN_YOU_OPEN_FILE)}</li>
+            <li>{Localisation::getTranslation(Strings::TASK_CLAIM_SEGMENTATION_5)}</li>
         </ol>
     </section>
 

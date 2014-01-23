@@ -5,20 +5,20 @@
             <h1>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_PROOFREADING_TASK_CLAIMED)} <small>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_PLEASE_PROOFREAD_IT)}</small></h1>
         </div>
         <div class="alert alert-success">
-            <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_0)} &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
+            <strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}</strong> {sprintf(Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_0), {$task->getTitle()})}
         </div>
     </section>
 
     <section>
         <h1>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}</h1>
-        <p>{Localisation::getTranslation(Strings::COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE)}:</p>
+        <p>{Localisation::getTranslation(Strings::COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE)}</p>
         <ol>
-                <li><strong>{Localisation::getTranslation(Strings::COMMON_OPEN_THE_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_1)}</li>
-                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_PROOFREAD_THE_FILE_IN)}</strong> <strong>{TemplateHelper::getLanguage($task->getTargetLocale())}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_2)}</li>
-                <li><strong>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_UPLOAD_THE_PROOFREAD_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_3)}</li>
+                <li>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_1)}</li>
+                <li>{sprintf(Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_PROOFREAD_THE_FILE_IN), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
+                <li>{Localisation::getTranslation(Strings::TASK_CLAIMED_PROOFREADING_UPLOAD_THE_PROOFREAD_FILE)}</li>
         </ol>
         {if isset($user)}
-            <p>{Localisation::getTranslation(Strings::COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO)} <strong>{$user->getEmail()}</strong>.</p>
+            <p>{sprintf(Localisation::getTranslation(Strings::COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO), {$user->getEmail()})}</p>
         {/if}
     </section>
 
@@ -37,7 +37,7 @@
 
     <p>
         <small>({Localisation::getTranslation(Strings::COMMON_CANT_FIND_THE_FILE_ON_YOUR_DESKTOP)}
-            <a href="{urlFor name="download-task" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_DOWNLOAD_THE_FILE)}</a> {Localisation::getTranslation(Strings::COMMON_AND_SAVE_IT_TO_YOUR_DESKTOP)})
+            {sprintf(Localisation::getTranslation(Strings::COMMON_DOWNLOAD_THE_FILE), {urlFor name="download-task" options="task_id.$task_id"})})
         </small>
     </p>
 

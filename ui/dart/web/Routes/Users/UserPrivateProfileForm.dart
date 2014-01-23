@@ -292,18 +292,22 @@ class UserPrivateProfileForm extends PolymerElement
   void submitForm()
   {
     this.alert = "";
-    if (user.display_name == "") {
-      alert = localisation.getTranslation("user_private_profile_2");
-    } else {
-      List<Future<bool>> updated = new List<Future<bool>>();
+    
+    try {
+      if (user.display_name == "") {
+        throw new ArgumentError(localisation.getTranslation("user_private_profile_2"));
+      }
       SelectElement nativeLanguageSelect = querySelector("#nativeLanguageSelect");
       SelectElement nativeCountrySelect = querySelector("#nativeCountrySelect");
       if (nativeLanguageSelect.selectedIndex > 0 && nativeCountrySelect.selectedIndex > 0) {
         user.nativeLocale.countryCode = countries[nativeCountrySelect.selectedIndex].code;
         user.nativeLocale.languageCode = languages[nativeLanguageSelect.selectedIndex].code;
+      } else if((nativeLanguageSelect.selectedIndex > 0 && nativeCountrySelect.selectedIndex == 0) ||
+                (nativeLanguageSelect.selectedIndex == 0 && nativeCountrySelect.selectedIndex > 0)) {
+        throw new ArgumentError(localisation.getTranslation("user_private_profile_native_language_blanks"));
       }
-      updated.add(UserDao.saveUserDetails(user));
-      updated.add(UserDao.saveUserInfo(userInfo));
+      
+      List<Future<bool>> updated = new List<Future<bool>>();
       
       List<Locale> currentSecondaryLocales = new List<Locale>();
       for (int i = 0; i < secondaryLanguageCount; i++) {
@@ -324,9 +328,12 @@ class UserPrivateProfileForm extends PolymerElement
             currentSecondaryLocales.add(found);
           }
         } else {
-          alert = "Failed to save some data. Please make sure that your secondary languages have both a language and country selected, any blank entries will be ignored.";
+          throw new ArgumentError(localisation.getTranslation("user_private_profile_secondary_languages_failed"));
         }
       }
+      
+      updated.add(UserDao.saveUserDetails(user));
+      updated.add(UserDao.saveUserInfo(userInfo));
       
       userSecondaryLanguages.forEach((Locale locale) {
         currentSecondaryLocales.firstWhere((Locale l) {
@@ -380,10 +387,12 @@ class UserPrivateProfileForm extends PolymerElement
           window.location.assign(settings.conf.urls.SiteLocation + "$userid/profile");
         } else {
           if (alert == "") {
-            alert = "Failed to save some data";
+            throw new ArgumentError("Failed to save some data");
           }
         }
       });
+    } catch (e) {
+      alert = e.message;
     }
   }
   
