@@ -298,7 +298,7 @@ class ProjectRouteHandler
         $tagList .= "]";
 
         $extra_scripts = "
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js></script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
             <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
             <script type=\"text/javascript\">
                 var tagList = $tagList;

@@ -6,3 +6,5 @@ function initDeadlinePicker() {
         stepMinute: 10
     });
 }
+
+window.onload = initDeadlinePicker;
