@@ -53,7 +53,11 @@
                         inputs.item(j).setAttribute('name', inputs.item(j).getAttribute('id'));
                     }
                     taskSegments.appendChild(clonedNode);
-                    jQuery("#taskUploadTemplate_" + i).find("strong").text("File #" + (i + 1) +":");
+                    var label = jQuery("#taskUploadTemplate_" + i).find("#label_0");
+                    if (label != null) {
+                        label.text("File #" + (i + 1) +":");
+                        label.attr("id", label.attr("id").replace("0", i));
+                    }
                 }
 
                 jQuery('#wordCount_' + i).val(defaultWordCount);
