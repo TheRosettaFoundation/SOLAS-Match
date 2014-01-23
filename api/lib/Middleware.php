@@ -217,7 +217,7 @@ class Middleware
 	                $orgId = $orgId[0];
 	            }			
 			}
-			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -255,7 +255,7 @@ class Middleware
 			}
 			
 			$orgId = $project->getOrganisationId();
-			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -291,7 +291,7 @@ class Middleware
 			
 			$orgId = $project->getOrganisationId();
 			
-			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -337,7 +337,7 @@ class Middleware
 			
 			$orgId = $project->getOrganisationId();
 			
-			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -389,7 +389,7 @@ class Middleware
 			if($userId == $user->getId()) {
 				return true;
 			}
-			else if($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			else if($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -464,7 +464,7 @@ class Middleware
 			
     		$hasTask = TaskDao::hasUserClaimedTask($userId, $taskId);
 			
-			if($hasTask || OrganisationDao::isMember($orgId, $userId)) {
+			if($hasTask || OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
 			 	return true;
 			}
 			else {
@@ -474,7 +474,7 @@ class Middleware
 		}
 	}
 	
-	//Test if the User is a member of the Organisation that created the task or has worked on one of the tasks with this as a prerequisite
+	//Test if the User is a member of the Organisation that created the task or has worked on one of the tasks of which this is a prerequisite
 	public static function authenticateUserToSubmitReview($request, $response, $route)
 	{
 		if(self::isloggedIn($request, $response, $route))
@@ -491,30 +491,37 @@ class Middleware
 			$format = $params['format'];
             $client = new APIHelper($format);			
             $review = $client->deserialize($review, "TaskReview");
-			$taskId = $review->getTaskId();			
-			if (!is_numeric($taskId) && strstr($taskId, '.')) {
-	                $taskId = explode('.', $taskId);
-	                $format = '.'.$taskId[1];
-	                $taskId = $taskId[0];
-	        }
-			$previousTasks = TaskDao::getTasksFromPreReq($taskId);
-			$hasTaskPreReq = FALSE;		
+			$taskId = $review->getTaskId();
+			$projectId = $review->getProjectId();			
 			
-			if (!is_null($previousTasks)) {
-                foreach ($previousTasks as $taskObject) {
-                    if (TaskDao::hasUserClaimedTask($userId, $taskObject->getId())) {
-                        $hasTaskPreReq = TRUE;
+			$hasFollowupTask = FALSE;
+			/*
+			 * If the taskId is null this indicates the user is not reviewing a task but the project file itself
+			 * all users who have claimed a task on the project can review it esentialy but it may not be accessable through the UI for all cases 
+			 */
+			if(!is_null($taskId)) {
+				$nextTasks = TaskDao::getTasksFromPreReq($taskId, $projectId);
+				$nextTask = $nextTasks[0];
+				
+				if (!is_null($nextTask)) {
+					if (TaskDao::hasUserClaimedTask($userId, $nextTask->getId())) {
+						$hasFollowupTask = TRUE;
 					}
 				}
 			}
-			
-			$task = null;
-			if($taskId != null) {
-				$tasks = TaskDao::getTask($taskId);
-				$task = $tasks[0];
+			else 
+			{
+				$userTasks = TaskDao::getUserTasks($userId);
+				
+				foreach($userTasks as $task) {
+					$testProjectId = $task->getProjectId();
+					if($testProjectId == $projectId) {
+						$hasFollowupTask = TRUE;
+					}
+					
+				}
 			}
-			$projectId = $task->getProjectId();
-			$project = null;
+			
 			if ($projectId != null) {
 				$projects = ProjectDao::getProject($projectId);
 				$project = $projects[0];
@@ -522,7 +529,8 @@ class Middleware
 			
 			$orgId = $project->getOrganisationId();
 			
-			if($hasTaskPreReq || OrganisationDao::isMember($orgId, $userId)) {
+			if($hasFollowupTask || OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
+			 	error_log("print sucess");
 			 	return true;
 			}
 			else {
@@ -571,7 +579,7 @@ class Middleware
 			}
 			
 			$orgId = $project->getOrganisationId();
-			if ($hasTask || ($orgId != null && OrganisationDao::isMember($orgId, $userId))) {
+			if ($hasTask || ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)))) {
 				return true;
 			}
 			else {
@@ -610,11 +618,12 @@ class Middleware
 			}
 			
 			$orgId = $badge->getOwnerId();
-					
-			// currently this checks if the orgId is not Null
-			// cases where the orgId is null signify a system badge
-			// using this middleware function will lead to errors unless those are accounted for	
-			if($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			/*
+			 * currently this checks if the orgId is not Null
+			 * cases where the orgId is null signify a system badge
+			 * using this middleware function will lead to errors unless those are accounted for
+			 */	
+			if($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -663,10 +672,13 @@ class Middleware
 			if($userId == $user->getId()) {
 				return true;
 			}
-			// currently this checks if the orgId is not Null
-			// cases where the orgId is null signify a system badge
-			// using this middleware function will lead to errors unless those are accounted for	
-			else if($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			
+   			/*
+    		 * currently this checks if the orgId is not Null
+    		 * cases where the orgId is null signify a system badge
+    		 * using this middleware function will lead to errors unless those are accounted for
+    		 */
+			else if($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -848,7 +860,6 @@ class Middleware
 //        self::notFound();
 //    }
     
-   
     
     
     

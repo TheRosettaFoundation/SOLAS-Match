@@ -278,10 +278,10 @@ class TaskDao
         return $ret;
     }
     
-	public static function getTasksFromPreReq($taskId)
+	public static function getTasksFromPreReq($taskId, $projectId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($taskId);
+        $args = PDOWrapper::cleanseNull($taskId).",".PDOWrapper::cleanseNull($projectId);
         
         if ($result = PDOWrapper::call("getTasksFromPreReq", $args)) {
             $ret = array();
@@ -289,8 +289,9 @@ class TaskDao
                 $ret[] = ModelFactory::buildModel("Task", $row);
             }
         }
+		
         return $ret;
-    }
+    }	
 
     public static function addTaskPreReq($taskId, $preReqId)
     {
@@ -481,9 +482,8 @@ class TaskDao
         $args = PDOWrapper::cleanse($user_id).
                 ', '.PDOWrapper::cleanseNull($limit).
                 ', '.PDOWrapper::cleanseNull($offset);
-        
         $result = PDOWrapper::call("getUserTasks", $args);
-        if($result) { 
+        if($result) {
             $tasks = array();
             foreach($result as $taskData) {
                 $tasks[] = ModelFactory::buildModel("Task", $taskData);
