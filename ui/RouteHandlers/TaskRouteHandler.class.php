@@ -255,7 +255,7 @@ class TaskRouteHandler
         $user_id = UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
         if(is_null($task)) {
-            $app->flash("error", sprintf(Localisation::getTranslation(Strings::INDEX_8), $task_id));
+            $app->flash("error", sprintf(Localisation::getTranslation(Strings::TASK_VIEW_5), $task_id));
             $app->redirect($app->urlFor("home"));
         }
         $taskClaimed = $taskDao->isTaskClaimed($task_id);

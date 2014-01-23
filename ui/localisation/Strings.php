@@ -792,6 +792,7 @@ class Strings
     const TASK_VIEW_2 = 'task_view_2';
     const TASK_VIEW_3 = 'task_view_3';
     const TASK_VIEW_4 = 'task_view_4';
+    const TASK_VIEW_5 = 'task_view_5';
 
     const EMAIL_VERIFICATION_EMAIL_VERIFICATION = 'email_verification_email_verification';
     const EMAIL_VERIFICATION_0 = 'email_verification_0';
@@ -930,6 +931,7 @@ class Strings
     const INDEX_6 = 'index_6';
     const INDEX_REGISTER_NOW = 'index_register_now';
     const INDEX_8 = 'index_8';
+    const INDEX_9 = 'index_9';
     const INDEX_ANY_TASK_TYPE = 'index_any_task_type';
     const INDEX_ANY_SOURCE_LANGUAGE = 'index_any_source_language';
     const INDEX_ANY_TARGET_LANGUAGE = 'index_any_target_langauge';

@@ -811,6 +811,7 @@
     <string name="task_view_2"><b>Success:</b> The task is no longer published and will not appear on users' task streams.</string>
     <string name="task_view_3"><b>Error:</b> Failed to publish the task, please try again later.</string>
     <string name="task_view_4"><b>Error:</b> Failed to unpublish the task, please try again later.</string>
+    <string name="task_view_5">Task <strong>%s</strong> not found.</string>
 
 	<string name="email_verification_email_verification">Email Verification</string>
 	<string name="email_verification_0">You can complete registration here</string>
@@ -950,7 +951,7 @@
 	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
 	<string name="index_register_now"><a href="%s">Register now</a> to find the translation tasks best suited to you.</string>
     <string name="index_load_more">Load More</string>
-    <string name="index_8">Task <strong>%s</strong> not found.</string>
+    <string name="index_8">Internet Explorer is not a supported browser. Please use a supported browser, for example Firefox or Chrome.</string>
     <string name="index_dont_use_ie">Internet Explorer is not a supported browser, please use Firefox or Google Chrome.</string>
 
 	<string name="pagination_page_of">Page %s of %s</string>

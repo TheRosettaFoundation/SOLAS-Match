@@ -17,12 +17,6 @@
     </div>
 {/if}
 
-{if isset($flash['info'])}
-    <div class='alert alert-info'>
-        <strong>{Localisation::getTranslation('common_note')}:</strong> {$flash['info']}
-    </div>
-{/if}
-
 {if isset($openid)&& ($openid==='n'||$openid==='h' )}
     <form method="post" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
             <label for="email"><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}</strong></label>
