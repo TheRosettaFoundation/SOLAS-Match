@@ -615,7 +615,7 @@ class Middleware
 			// badge ids 6, 7 and 8 refer to the user controlled system badges
 			if($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
 				return true;
-			} elseif ($orgId == null && in_array($badgeId, [6, 7, 8])) {
+			} elseif ($orgId == null && in_array($badgeId, array(6, 7, 8))) {
                 return true;
             } else {
 	            Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
