@@ -107,6 +107,42 @@ class Middleware
         }
     } 
     
+    /*
+	 * Does the user Id match the Id of the resources owner
+	 * Or is it matching the Id of the organisations admin
+	 */
+	public static function authUserOrAdminForOrg($request, $response, $route)
+    {
+    	if(self::isloggedIn($request, $response, $route))
+		{
+	        $user = UserDao::getLoggedInUser();
+	        if (self::isSiteAdmin($user->getId())) {
+	        	return true;
+	        }
+	        $params = $route->getParams();
+	        $userId=$params['userId'];
+	        if (!is_numeric($userId) && strstr($userId, '.')) {
+	                $userId = explode('.', $userId);
+	                $format = '.'.$userId[1];
+	                $userId = $userId[0];
+	        }
+			
+			$orgId=$params['orgId'];
+			if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                $orgId = explode('.', $orgId);
+                $format = '.'.$orgId[1];
+                $orgId = $orgId[0];
+            }
+			
+	        if ($userId=$user->getId() || AdminDao::isAdmin($userId, $orgId)) {
+	            return true;
+	        }else{
+	        	Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+	                    "The user does not have permission to acess the current resource");
+	        }
+        }
+    } 
+    
     public static function notFound()
     {
         Dispatcher::getDispatcher()->redirect(Dispatcher::getDispatcher()->urlFor('getLoginTemplate'));

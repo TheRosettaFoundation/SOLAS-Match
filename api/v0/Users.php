@@ -118,7 +118,7 @@ class Users {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'userLeaveOrg', 'Middleware::authUserOwnsResource');        
+        }, 'userLeaveOrg', 'Middleware::authUserOrAdminForOrg');        
 
 		
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:userId/requestReference(:format)/',
