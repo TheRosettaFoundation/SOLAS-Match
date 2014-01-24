@@ -2444,6 +2444,7 @@ BEGIN
 
     -- if limit is null, set to maxBigInt unsigned
     if lim = '' then set lim = 18446744073709551615; end if;
+    if lim = null then set lim = 18446744073709551615; end if;
     if offs = '' then set offs = 0; end if;
 
     SELECT t.id, t.project_id, t.title, t.`word-count`,
