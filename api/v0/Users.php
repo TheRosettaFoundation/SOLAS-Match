@@ -219,6 +219,7 @@ class Users {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'Badge');
+//            $data = $client->cast('Badge', $data);
             Dispatcher::sendResponce(null, BadgeDao::assignBadge($userId, $data->getId()), null, $format);
         }, 'addUserbadges');
 		
@@ -315,7 +316,7 @@ class Users {
             Dispatcher::sendResponce(null, TaskDao::claimTask($data->getId(), $userId), null, $format);
             Notify::notifyUserClaimedTask($userId, $data->getId());
             Notify::notifyOrgClaimedTask($userId, $data->getId());
-        }, 'userClaimTask', 'Middleware::authUserOwnsResource');
+        }, 'userClaimTask', 'Middleware::authenticateTaskNotClaimed');
 		
 		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:userId/tasks/:taskId/',

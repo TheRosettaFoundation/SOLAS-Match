@@ -720,6 +720,44 @@ class Middleware
 		}
 	}
 	
+	/*
+	 * Test if the task the user is trying to claim has already been claimed
+	 * Prevents two claiments on the same task, admins will still be able to claim a task in all cases 
+	 */	
+	public static function authenticateTaskNotClaimed($request, $response, $route)
+	{
+		if(self::isloggedIn($request, $response, $route))
+		{
+	        $user = UserDao::getLoggedInUser();
+	        if (self::isSiteAdmin($user->getId())) {
+	        	return true;
+	        }
+			$params = $route->getParams();
+			
+			$task = $request->getBody();
+			$format = $params['format'];
+            $client = new APIHelper($format);			
+            $task = $client->deserialize($task, "Task");			
+			
+			$taskId = $task->getId();
+			
+			
+			$TaskIsUnclaimed = FALSE;
+			$possibleUser = TaskDao::getUserClaimedTask($taskId);
+			if(is_null($possibleUser)) {
+				$TaskIsUnclaimed = TRUE;
+			}
+						
+			if ($TaskIsUnclaimed) {
+				return true;
+			}
+			else {
+				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+	                    "Unable to claim task. This Task has been claimed by another user");
+			}
+		}
+	}
+	
 
 
 	
