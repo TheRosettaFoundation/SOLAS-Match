@@ -231,7 +231,6 @@ class ProjectDao
         $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
         $source = Settings::get("files.upload_path")."proj-$projectId/$filename";
-        //return file_get_contents($source);
         IO::downloadFile($source, $projectFileInfo->getMime());
     }
     
@@ -242,12 +241,17 @@ class ProjectDao
         $mime = IO::detectMimeType($file, $filename);
         $apiHelper = new APIHelper(Settings::get("ui.api_format"));
         $canonicalMime = $apiHelper->getCanonicalMime($filename);        
-        if(!is_null($canonicalMime) && $mime != $canonicalMime) throw new SolasMatchException("The content type ($mime) of the file you are trying to upload does not match the content type ($canonicalMime) expected from its extension.", HttpStatusEnum::BAD_REQUEST);    
+        if (!is_null($canonicalMime) && $mime != $canonicalMime) {
+            $message = "The content type ($mime) of the file you are trying to upload does not";
+            $message .= " match the content type ($canonicalMime) expected from its extension.";
+            throw new SolasMatchException($message, HttpStatusEnum::BAD_REQUEST);
+        }
         $token=self::recordProjectFileInfo($projectId,$filename,$userId,$mime);
         try {
             file_put_contents($destination.$token, $file);
         } catch(Exception $e) {
-            throw new SolasMatchException("You cannot upload a project file for project ($projectId), as one already exists.", HttpStatusEnum::CONFLICT);
+            $message = "You cannot upload a project file for project ($projectId), as one already exists.";
+            throw new SolasMatchException($message, HttpStatusEnum::CONFLICT);
         }
 
         return $token;
