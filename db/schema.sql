@@ -2427,7 +2427,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT, IN `lim` INT)
 BEGIN
 	-- if limit is null, set to maxBigInt unsigned
-        if lim = '' then set lim = ~0;  end if;
+    if lim = '' or lim is null then set lim = ~0;  end if;
 
     SELECT t.*	FROM UserTags JOIN Tags t ON UserTags.tag_id = t.id	
     WHERE user_id = id LIMIT lim;
