@@ -66,12 +66,11 @@ class Dispatcher {
     
     private static function initOAuth() {
         self::$oauthRequest = new League\OAuth2\Server\Util\Request();
-//        self::$oauthServer = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
         self::$oauthServer = new League\OAuth2\Server\Authorization(
-        new League\OAuth2\Server\Storage\PDO\Client(),
-    new League\OAuth2\Server\Storage\PDO\Session(),
-    new League\OAuth2\Server\Storage\PDO\Scope()
-    );
+            new League\OAuth2\Server\Storage\PDO\Client(),
+            new League\OAuth2\Server\Storage\PDO\Session(),
+            new League\OAuth2\Server\Storage\PDO\Scope()
+        );
         self::$oauthServer->setAccessTokenTTL(Settings::get('site.oauth_timeout'));
         self::$oauthServer->addGrantType(new League\OAuth2\Server\Grant\Password(self::$oauthServer));
 
