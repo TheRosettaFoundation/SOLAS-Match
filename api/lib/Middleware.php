@@ -546,9 +546,12 @@ class Middleware
 				}
 			}
 			else 
-			{
-				$userTasks = TaskDao::getUserTasks($userId);
-				
+			{				
+				/*
+				 * 18446744073709551615 is the MaxBigInt in SQL this has give trouble in the past
+				 */
+				$userTasks = TaskDao::getUserTasks($userId, 18446744073709551615, 0);
+
 				foreach($userTasks as $task) {
 					$testProjectId = $task->getProjectId();
 					if($testProjectId == $projectId) {
@@ -566,7 +569,6 @@ class Middleware
 			$orgId = $project->getOrganisationId();
 			
 			if($hasFollowupTask || OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
-			 	error_log("print sucess");
 			 	return true;
 			}
 			else {
