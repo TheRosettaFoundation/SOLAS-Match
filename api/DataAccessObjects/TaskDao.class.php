@@ -20,13 +20,6 @@ include_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class TaskDao 
 {
-
-    public static function create($task)
-    {
-        self::save($task);
-        return $task;
-    }
-        
     public static function getTask($taskId=null, $projectId=null, $title=null, $wordCount=null, $sourceLanguageCode=null,
             $targetLanguageCode=null, $createdTime=null, $sourceCountryCode=null, $targetCountryCode=null, $comment=null,
             $taskTypeId=null, $taskStatusId=null, $published=null, $deadline=null)
@@ -63,18 +56,18 @@ class TaskDao
     }
     
     /**
-     * Save task object to database (either insert of update)
+     * Save task object to database (either insert or update)
      *
-     * @return void
+     * @return Task
      * @author 
      **/
     public static function save(&$task)
     {
         if (is_null($task->getId())) {
             self::insert($task);
+            self::calculateTaskScore($task->getId());
         } else {
             self::update($task);
-            //Only calc scores for tasks with MetaData
             self::calculateTaskScore($task->getId());
         }
         
@@ -329,7 +322,6 @@ class TaskDao
     /*
      * Returns an array of tasks ordered by the highest score related to the user
      */
-
    public static function getUserTopTasks($userId, $strict, $limit, $offset = 0, $taskType, $sourceLanguageCode, $targetLanguageCode)
     {
         $ret = false;
@@ -543,15 +535,6 @@ class TaskDao
         return self::checkTaskFileVersion($taskId, $userId);
     }
 
-    public static function getTaskStatus($taskId)
-    {
-        if (self::checkTaskFileVersion($taskId)) {
-            return "Your translation is under review";
-        } else {
-            return "Awaiting your translation";
-        }
-    }
- 
     public static function downloadTask($taskId, $version = 0)
     {
         $task = self::getTask($taskId);
@@ -570,7 +553,6 @@ class TaskDao
 
         $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
         $file_content_type = $task_file_info['content-type'];
-        //self::logFileDownload($task, $version);
         IO::downloadFile($absolute_file_path, $file_content_type);
     }
     

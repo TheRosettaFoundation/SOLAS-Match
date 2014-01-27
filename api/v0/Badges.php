@@ -41,7 +41,6 @@ class Badges {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Badge");
-//            $data = $client->cast("Badge", $data);
             Dispatcher::sendResponce(null, BadgeDao::insertAndUpdateBadge($data), null, $format);
         }, 'updateBadge', 'Middleware::authenticateUserForOrgBadge');
         

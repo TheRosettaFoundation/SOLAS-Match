@@ -29,13 +29,6 @@ class Orgs
             $data->setId(null);
             $org = OrganisationDao::insertAndUpdate($data);
 			$user = UserDao::getLoggedInUser();
-//			if(is_null($org) || $org->getId() <= 0)
-//			{
-//				if(!is_numeric($org->getId()))
-//				{
-//					OrganisationDao::delete($org->getId());
-//				}
-//			}
 			if (!is_null($org) && $org->getId() > 0) 
 			{
 				OrganisationDao::acceptMemRequest($org->getId(), $user->getId());
@@ -52,24 +45,6 @@ class Orgs
         }
         , 'createOrg', 'Middleware::isloggedIn');
         
-        
-        /*
-		 * 
-		 * 	Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/admins/createOrgAdmin/:orgId/:userId/',
-                                                        function ($orgId, $userId, $format = '.json') {            
-            if (!is_numeric($userId) && strstr($userId, '.')) {
-                 $userId = explode('.', $userId);
-                 $format = '.'.$userId[1];
-                 $userId = $userId[0];
-            }
-            AdminDao::addOrgAdmin($userId, $orgId);
-            Dispatcher::sendResponce(null, null, null, $format);
-        }, 'createOrgAdmin', 'Middleware::authenticateOrgAdmin');
-		 * 
-		 * 
-		 * 
-		 */
-        
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/orgs/:orgId/', function ($orgId, $format = ".json") {
             if (!is_numeric($orgId) && strstr($orgId, '.')) {
                 $orgId = explode('.', $orgId);
@@ -80,7 +55,6 @@ class Orgs
             $client = new APIHelper($format);
             $data = $client->deserialize($data,"Organisation");
             $data->setId($orgId);
-//            $data = $client->cast("Organisation", $data);
             Dispatcher::sendResponce(null, OrganisationDao::insertAndUpdate($data), null, $format);
         }, 'updateOrg', 'Middleware::authenticateOrgAdmin');
         
@@ -132,9 +106,6 @@ class Orgs
             }
             $data= OrganisationDao::getOrg(null, urldecode($name));
             $data = $data[0];
-//            if (!is_array($data) && !is_null($data)) {
-//                $data = array($data);
-//            }
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getOrgByName');
         
@@ -254,7 +225,6 @@ class Orgs
                 $format = '.'.$uid[1];
                 $uid = $uid[0];
             }
-//            Notify::notifyUserOrgMembershipRequest($uid, $id, false); always put after failure to send notification should not break the site.
             Dispatcher::sendResponce(null, OrganisationDao::refuseMemRequest($orgId, $uid), null, $format);
             Notify::notifyUserOrgMembershipRequest($uid, $orgId, false);
         }, 'rejectMembershipRequests', 'Middleware::authenticateOrgMember');

@@ -30,7 +30,7 @@ class MessagingClient
 
     public function messagingClient()
     {
-
+        // Default ctor
     }
 
     public function init()
@@ -47,15 +47,17 @@ class MessagingClient
         $ret = false;
 
         try {
-            if ($this->connection = new AMQPConnection(Settings::get('messaging.host'), Settings::get('messaging.port'), settings::get('messaging.username'), Settings::get('messaging.password'))) {
+            $this->connection = new AMQPConnection(
+                                    Settings::get('messaging.host'), 
+                                    Settings::get('messaging.port'), 
+                                    settings::get('messaging.username'), 
+                                    Settings::get('messaging.password'));
+            if ($this->connection) {
                 $ret = true;
             }
         } catch (Exception $e) {
-            //echo "ERROR: ".$e->getMessage(); //do not echo any exception ever, it will break the api clients. 
-            //log it to a file if needed.
+            error_log("ERROR: ".$e->getMessage());
         }
-
-       
 
         return $ret;
     }

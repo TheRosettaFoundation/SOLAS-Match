@@ -319,7 +319,7 @@ class ProjectCreateForm extends PolymerElement
           if (pro == null || pro.id == null || pro.id < 1) {
             createProjectError = "Failed to create project";
           } else {
-            project = pro;          
+            project.id = pro.id;          
             List<Future<bool>> successList = new List<Future<bool>>();
             successList.add(uploadProjectFile().then((bool fileUploaded) {
               Future<bool> ret;

@@ -67,9 +67,6 @@ class Languages {
         return $languages;
     }
     
-    
-    
-    
     public static function getActiveSourceLanguages()
     {
         $languages = null;
