@@ -2119,21 +2119,31 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTasksFromPreReq
 DROP PROCEDURE IF EXISTS `getTasksFromPreReq`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksFromPreReq`(IN `preReqId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksFromPreReq`(IN `preReqId` INT, IN `projectId` INT)
     READS SQL DATA
 BEGIN
 
-	if preReqId='' then set preReqId=null;end if;
+	if preReqId='' then set preReqId=NULL;end if;
+	if projectId='' then set projectId=NULL;end if;
+	
+	if preReqId is not null then set projectId=(select p.project_id from Tasks p where p.id = preReqId);end if;
 	
 	SELECT t.id, t.project_id, t.title, t.`word-count`,
-	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-source`) as `language_id-source`,
-	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-target`) as `language_id-target`,
-	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-source`) as `country_id-source`,
-	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-target`)as `country_id-target`,
-	t.`created-time`, t.deadline, t.`comment`, t.`task-type_id`, t.`task-status_id`, t.published
-		
-	FROM Tasks t JOIN TaskPrerequisites tp ON tp.`task_id-prerequisite`=t.id
-	WHERE (tp.`task_id-prerequisite`=preReqId or tp.`task_id-prerequisite` is null);	
+		(select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,     
+        (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+        (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+        (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+        (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+        (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+        (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+        (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
+        (select code from Countries c where c.id = t.`country_id-source`) as `country_id-source`, 
+		t.`created-time`, t.deadline, t.`comment`, t.`task-type_id`, t.`task-status_id`, t.published
+	
+	FROM Tasks t LEFT JOIN TaskPrerequisites tp ON tp.task_id=t.id
+    
+	WHERE (tp.`task_id-prerequisite`=preReqId or tp.`task_id-prerequisite` is null)	
+	and (t.project_id = projectId or projectId is null);
 END//
 DELIMITER ;
 
@@ -2298,6 +2308,7 @@ WHERE user_id = id;
 END//
 DELIMITER ;
 
+
 -- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
@@ -2432,7 +2443,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim
 BEGIN
 
     -- if limit is null, set to maxBigInt unsigned
-    if lim = '' then set lim = ~0; end if;
+    if lim = '' then set lim = 18446744073709551615; end if;
+    if lim = null then set lim = 18446744073709551615; end if;
     if offs = '' then set offs = 0; end if;
 
     SELECT t.id, t.project_id, t.title, t.`word-count`,

@@ -777,5 +777,6 @@ class UserDao
         }
         return $ret;  
     }
+	
     
 }
