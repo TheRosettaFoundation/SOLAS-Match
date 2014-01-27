@@ -107,6 +107,169 @@ class Middleware
         }
     } 
     
+    
+    
+    /*
+	 * Check for authorising users to create tasks. This function should be available to
+	 * orgainisation members, admins, and general users who have claimed a segmentation task on that project
+	 *  
+	 */
+    public static function authUserOrOrgForTaskCreation($request, $response, $route)
+    {
+    	if(self::isloggedIn($request, $response, $route))
+		{
+	        $user = UserDao::getLoggedInUser();
+	        if (self::isSiteAdmin($user->getId())) {
+	        	return true;
+	        }
+			
+			$userId = $user->getId();
+			$params = $route->getParams();
+			
+			$task = $request->getBody();
+			$format = $params['format'];
+            $client = new APIHelper($format);			
+            $task = $client->deserialize($task, "Task");
+			
+			$projectId = $task->getProjectId();
+			
+			
+			$project = null;
+			if ($projectId != null) {
+				$projects = ProjectDao::getProject($projectId);
+				$project = $projects[0];
+			}
+			
+			$orgId = $project->getOrganisationId();
+			
+			if (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
+				return true;
+			}
+			
+			/*
+			 * In the case that a general user is uploading a segmentation task
+			 * the following will authorise that the user has claimed a segmentation task on this project
+			 */
+			
+			$hasUserSegmentationTask = FALSE;
+			/*
+			 * 18446744073709551615 the MaxBigInt limit SQL operation returns
+			 */
+			$userTasks = TaskDao::getUserTasks($userId, 18446744073709551615, 0);
+			$userTasksInProject = array();
+			
+			foreach($userTasks as $task) {
+				$testProjectId = $task->getProjectId();
+				$testTaskType = $task->getTaskType();
+				if($testProjectId == $projectId && $testTaskType = '1') {
+					$userTasksInProject[] = $task;
+				}				
+			}
+			
+			if($userTasksInProject != null && count($userTasksInProject) > 0) {
+						$hasUserSegmentationTask = TRUE;
+			}
+			
+			$A = $userTasksInProject;
+			$B = serialize($A);
+			error_log($B);
+			
+			if ($hasUserSegmentationTask) {
+				return true;
+			}
+			else {
+				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+	                    "The user does not have permission to acess the current resource");
+			}
+			
+		}
+		
+	}
+
+/*
+	 * Check for authorising users to create tasks. This function should be available to
+	 * orgainisation members, admins, and general users who have claimed a segmentation task on that project
+	 *  
+	 */
+    public static function authUserOrOrgForTaskCreationPassingTaskId($request, $response, $route)
+    {
+    	if(self::isloggedIn($request, $response, $route))
+		{
+	        $user = UserDao::getLoggedInUser();
+	        if (self::isSiteAdmin($user->getId())) {
+	        	return true;
+	        }
+			
+			$userId = $user->getId();
+			$params = $route->getParams();
+			
+			$taskId=$params['taskId'];
+	        if (!is_numeric($taskId) && strstr($taskId, '.')) {
+	                $taskId = explode('.', $taskId);
+	                $format = '.'.$taskId[1];
+	                $taskId = $taskId[0];
+	        }
+			
+            $task = null;
+			if($taskId != null) {
+				$tasks = TaskDao::getTask($taskId);
+				$task = $tasks[0];
+			}
+			$projectId = $task->getProjectId();
+			$project = null;
+			if ($projectId != null) {
+				$projects = ProjectDao::getProject($projectId);
+				$project = $projects[0];
+			}
+			
+			$orgId = $project->getOrganisationId();
+			
+			if (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
+				return true;
+			}
+			
+			/*
+			 * In the case that a general user is uploading a segmentation task
+			 * the following will authorise that the user has claimed a segmentation task on this project
+			 */
+			
+			$hasUserSegmentationTask = FALSE;
+			/*
+			 * 18446744073709551615 the MaxBigInt limit SQL operation returns
+			 */
+			$userTasks = TaskDao::getUserTasks($userId, 18446744073709551615, 0);
+			$userTasksInProject = array();
+			
+			foreach($userTasks as $task) {
+				$testProjectId = $task->getProjectId();
+				$testTaskType = $task->getTaskType();
+				if($testProjectId == $projectId && $testTaskType = '1') {
+					$userTasksInProject[] = $task;
+				}				
+			}
+			
+			if($userTasksInProject != null && count($userTasksInProject) > 0) {
+						$hasUserSegmentationTask = TRUE;
+			}
+			
+			$A = $userTasksInProject;
+			$B = serialize($A);
+			error_log($B);
+			
+			if ($hasUserSegmentationTask) {
+				return true;
+			}
+			else {
+				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+	                    "The user does not have permission to acess the current resource");
+			}
+			
+		}
+		
+	}
+    
+    
+    
     /*
 	 * Does the user Id match the Id of the resources owner
 	 * Or is it matching the Id of the organisations admin
@@ -299,42 +462,6 @@ class Middleware
 	                    "The user does not have permission to acess the current resource");
 			}
 		}	
-	}
-
-	// Is the user a member of the organisation that is creating the task
-	public static function authenticateUserCreateOrgTask($request, $response, $route)
-	{
-		if(self::isloggedIn($request, $response, $route))
-		{
-	        $user = UserDao::getLoggedInUser();
-	        if (self::isSiteAdmin($user->getId())) {
-	        	return true;
-	        }
-	        $userId = $user->getId();
-			$params = $route->getParams();
-			
-			$task = $request->getBody();
-			$format = $params['format'];
-            $client = new APIHelper($format);			
-            $task = $client->deserialize($task, "Task");
-			
-			$projectId = $task->getProjectId();
-			$project = null;
-			if ($projectId != null) {
-				$projects = ProjectDao::getProject($projectId);
-				$project = $projects[0];
-			}
-			
-			$orgId = $project->getOrganisationId();
-			
-			if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
-				return true;
-			}
-			else {
-				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
-	                    "The user does not have permission to acess the current resource");
-			}
-		}
 	}
 	
 	//Is the user a member of the Organisation who created the Task in question

@@ -35,9 +35,9 @@ class Tasks {
             $client = new APIHelper($format);
             $data = $client->deserialize($data, "Task");
             Dispatcher::sendResponce(null, TaskDao::create($data), null, $format);
-        }, 'createTask');
+        }, 'createTask', 'Middleware::authUserOrOrgForTaskCreation');
         
-        //
+        // GOMM
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/',
                                                         function ($taskId, $format = ".json") {
             
@@ -50,9 +50,9 @@ class Tasks {
             $client = new APIHelper($format);
             $data = $client->deserialize($data, "Task");
             Dispatcher::sendResponce(null, TaskDao::save($data), null, $format);
-        }, 'updateTask');
+        }, 'updateTask', 'Middleware::authUserOrOrgForTaskCreationPassingTaskId');
         
-		//
+		// GOMM
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:taskId/',
                                                             function ($taskId, $format = ".json") {
             
@@ -62,7 +62,7 @@ class Tasks {
                 $taskId = $taskId[0];
             }
             Dispatcher::sendResponce(null, TaskDao::delete($taskId), null, $format);
-        }, 'deleteTask');
+        }, 'deleteTask', 'Middleware::authUserOrOrgForTaskCreationPassingTaskId');
 		
 		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/prerequisites(:format)/',
@@ -70,7 +70,7 @@ class Tasks {
                 Dispatcher::sendResponce(null, TaskDao::getTaskPreReqs($taskId), null, $format);
         }, 'getTaskPreReqs', 'Middleware::authUserOrOrgForClaimedTask');
 		
-		//
+		// GOMM
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/prerequisites/:preReqId/',
             function ($taskId, $preReqId, $format = ".json") {
             if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
@@ -80,9 +80,9 @@ class Tasks {
             }
             
             Dispatcher::sendResponce(null, Upload::addTaskPreReq($taskId, $preReqId), null, $format);
-        }, 'addTaskPreReq');
+        }, 'addTaskPreReq', 'Middleware::authUserOrOrgForTaskCreationPassingTaskId');
 		
-		//
+		// GOMM
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:taskId/prerequisites/:preReqId/',
         function ($taskId, $preReqId, $format = ".json") {
             if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
