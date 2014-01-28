@@ -2589,6 +2589,19 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.hasUserClaimedSegmentationTask
+DROP PROCEDURE IF EXISTS `hasUserClaimedSegmentationTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `hasUserClaimedSegmentationTask`(IN `uID` INT, IN `pID` INT)
+BEGIN
+SELECT exists	 (	select 1
+                        FROM TaskClaims tc JOIN Tasks t ON tc.task_id = t.id
+                        WHERE `user_id` = uID
+                        AND `project_id` = pID
+                        AND `task-type_id` = 1
+                 ) as result;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.isAdmin
 DROP PROCEDURE IF EXISTS `isAdmin`;

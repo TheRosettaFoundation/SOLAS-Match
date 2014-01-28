@@ -461,6 +461,15 @@ class TaskDao
         $result = PDOWrapper::call("hasUserClaimedTask", $args);
         return $result[0]['result'];
     }
+	
+	public static function hasUserClaimedSegmentationTask($userId, $projectId)
+	{
+		$args = PDOWrapper::cleanse($userId)
+                .",".PDOWrapper::cleanse($projectId);
+        
+        $result = PDOWrapper::call("hasUserClaimedSegmentationTask", $args);
+        return $result[0]['result'];
+	}
 
     public static function taskIsClaimed($taskId)
     {

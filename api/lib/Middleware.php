@@ -149,27 +149,9 @@ class Middleware
 			/*
 			 * In the case that a general user is uploading a segmentation task
 			 * the following will authorise that the user has claimed a segmentation task on this project
-			 */
-			
-			$hasUserSegmentationTask = FALSE;
-			$userTasks = TaskDao::getUserTasks($userId);
-			$userTasksInProject = array();
-			
-			foreach($userTasks as $task) {
-				$testProjectId = $task->getProjectId();
-				$testTaskType = $task->getTaskType();
-				if($testProjectId == $projectId && $testTaskType = '1') {
-					$userTasksInProject[] = $task;
-				}				
-			}
-			
-			if($userTasksInProject != null && count($userTasksInProject) > 0) {
-						$hasUserSegmentationTask = TRUE;
-			}
-			
-			$A = $userTasksInProject;
-			$B = serialize($A);
-			error_log($B);
+			 */			
+			//$hasUserSegmentationTask = FALSE;			
+			$hasUserSegmentationTask = TaskDao::hasUserClaimedSegmentationTask($userId, $projectId);
 			
 			if ($hasUserSegmentationTask) {
 				return true;
@@ -229,26 +211,8 @@ class Middleware
 			 * In the case that a general user is uploading a segmentation task
 			 * the following will authorise that the user has claimed a segmentation task on this project
 			 */
-			
-			$hasUserSegmentationTask = FALSE;
-			$userTasks = TaskDao::getUserTasks($userId);
-			$userTasksInProject = array();
-			
-			foreach($userTasks as $task) {
-				$testProjectId = $task->getProjectId();
-				$testTaskType = $task->getTaskType();
-				if($testProjectId == $projectId && $testTaskType = '1') {
-					$userTasksInProject[] = $task;
-				}				
-			}
-			
-			if($userTasksInProject != null && count($userTasksInProject) > 0) {
-						$hasUserSegmentationTask = TRUE;
-			}
-			
-			$A = $userTasksInProject;
-			$B = serialize($A);
-			error_log($B);
+			//$hasUserSegmentationTask = FALSE;
+			$hasUserSegmentationTask = TaskDao::hasUserClaimedSegmentationTask($userId, $projectId);
 			
 			if ($hasUserSegmentationTask) {
 				return true;
