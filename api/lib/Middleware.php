@@ -650,46 +650,40 @@ class Middleware
 			$userId = $user->getId();
 			$params = $route->getParams();
 			
-			$review = $request->getBody();
 			$format = $params['format'];
             $client = new APIHelper($format);			
+			$review = $request->getBody();
             $review = $client->deserialize($review, "TaskReview");
-			$taskId = $review->getTaskId();
-			$projectId = $review->getProjectId();			
 			
 			$hasFollowupTask = FALSE;
 			/*
 			 * If the taskId is null this indicates the user is not reviewing a task but the project file itself
-			 * all users who have claimed a task on the project can review it esentialy but it may not be accessable through the UI for all cases 
+			 * all users who have claimed a task on the project can review it esentialy but it may not be 
+             * accessable through the UI for all cases
 			 */
-			if(!is_null($taskId)) {
-				$nextTasks = TaskDao::getTasksFromPreReq($taskId, $projectId);
-				$nextTask = $nextTasks[0];
+			if(!is_null($review->getTaskId())) {
+				$nextTasks = TaskDao::getTasksFromPreReq($review->getTaskId(), $review->getProjectId());
 				
-				if (!is_null($nextTask)) {
-					if (TaskDao::hasUserClaimedTask($userId, $nextTask->getId())) {
-						$hasFollowupTask = TRUE;
-					}
+                foreach ($nextTasks as $nextTask) {
+    				if (!is_null($nextTask) && TaskDao::hasUserClaimedTask($userId, $nextTask->getId())) {
+        				$hasFollowupTask = TRUE;
+                    }
 				}
-			}
-			else 
-			{				
+			} else {				
 				/*
 				 * 18446744073709551615 is the MaxBigInt in SQL this has give trouble in the past
 				 */
 				$userTasks = TaskDao::getUserTasks($userId, 18446744073709551615, 0);
 
 				foreach($userTasks as $task) {
-					$testProjectId = $task->getProjectId();
-					if($testProjectId == $projectId) {
+					if($task->getProjectId() == $review->getProjectId()) {
 						$hasFollowupTask = TRUE;
 					}
-					
 				}
 			}
 			
-			if ($projectId != null) {
-				$projects = ProjectDao::getProject($projectId);
+			if ($review->getProjectId() != null) {
+				$projects = ProjectDao::getProject($review->getProjectId());
 				$project = $projects[0];
 			}
 			
@@ -697,8 +691,7 @@ class Middleware
 			
 			if($hasFollowupTask || OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
 			 	return true;
-			}
-			else {
+			} else {
 	            Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
                 "The user does not have permission to acess the current resource");
 			}	
