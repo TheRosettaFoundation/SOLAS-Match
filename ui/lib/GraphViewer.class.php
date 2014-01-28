@@ -10,13 +10,15 @@ class GraphViewer
     private $graphBuilder;
     private $taskDao;
     private $projectDao;
+	const rectWidth=100; //extendible width of the rectangle that displays the task title and status  
+	const idSpacing=25;  //spacing between task id and the vertical bar next to it
 
     public function __construct($graph)
     {
         $this->model = $graph;
         $this->xPos = 10;
         $this->yPos = 10;
-        $this->iconWidth = 175;
+        $this->iconWidth = 175+self::rectWidth; //default size is 175, 175 + specified width
         $this->iconHeight = 75;
         $this->graphBuilder = new UIWorkflowBuilder();
         $this->taskDao = new TaskDao();
@@ -213,12 +215,12 @@ class GraphViewer
             $verticalNodeCount = 0;
             $horizontalNodeCount++;
             
-            $xRaster += $this->iconWidth + 100;
+            $xRaster += $this->iconWidth + 100+self::rectWidth/2;
             
             $currentLayer = $nextLayer;
             $nextLayer = array();
         }
-        $width = $horizontalNodeCount * ($this->iconWidth + 100);
+        $width = $horizontalNodeCount * ($this->iconWidth + 100+self::rectWidth/2);
         $height = $maxVNodeCount * ($this->iconHeight + 60);
         $this->yPos += $height + 20;
         $languageBox->setAttribute("width", $width);
@@ -249,7 +251,7 @@ class GraphViewer
         $taskTypeColour = Settings::get("ui.task_".$task->getTaskType()."_colour");
         $thisX = 0;
         $thisY = 0;
-        $itemWidth = $this->iconWidth;
+        $itemWidth = $this->iconWidth; 
         $itemHeight = $this->iconHeight;
         
         $rect = $doc->createElement("rect");
@@ -258,25 +260,25 @@ class GraphViewer
         $rect->setAttribute("y", $thisY);
         $rect->setAttribute("rx", 20);
         $rect->setAttribute("ry", 20);
-        $rect->setAttribute('width', $itemWidth);
+        $rect->setAttribute('width', $itemWidth+self::idSpacing); 
         $rect->setAttribute('height', $itemHeight);
         $rect->setAttribute('style', "fill:rgb(255, 255, 255);stroke:$taskTypeColour;stroke-width:4");
         $defs->appendChild($rect);
 
         $vLine = $doc->createElement("line");
         $vLine->setAttribute('id', "v-line_".$task->getId());
-        $vLine->setAttribute('x1', $thisX + 25);
+        $vLine->setAttribute('x1', $thisX + 25+self::idSpacing);
         $vLine->setAttribute('y1', $thisY);
-        $vLine->setAttribute('x2', $thisX + 25);
+        $vLine->setAttribute('x2', $thisX + 25+self::idSpacing);
         $vLine->setAttribute('y2', $thisY + $itemHeight);
         $vLine->setAttribute('style', "stroke:$taskTypeColour;stroke-width:4");
         $defs->appendChild($vLine);
         
         $hLine = $doc->createElement("line");
         $hLine->setAttribute('id', "h-line_".$task->getId());
-        $hLine->setAttribute('x1', $thisX + 25);
+        $hLine->setAttribute('x1', $thisX + 25+self::idSpacing);
         $hLine->setAttribute('y1', $thisY + ($itemHeight / 2));
-        $hLine->setAttribute('x2', $thisX + $itemWidth);
+        $hLine->setAttribute('x2', $thisX + $itemWidth+self::idSpacing);
         $hLine->setAttribute('y2', $thisY + ($itemHeight / 2));
         $hLine->setAttribute('style', "stroke:$taskTypeColour;stroke-width:4");
         $defs->appendChild($hLine);
@@ -287,7 +289,7 @@ class GraphViewer
         $component = $doc->createElement("rect");
         $component->setAttribute('x', 0);
         $component->setAttribute('y', 0);
-        $component->setAttribute('width', $this->iconWidth);
+        $component->setAttribute('width', $this->iconWidth+self::idSpacing-5); // -5 prevents from text overlapping with the border
         $component->setAttribute('height', $this->iconHeight);
         $clipPath->appendChild($component);
         $defs->appendChild($clipPath);
@@ -301,11 +303,13 @@ class GraphViewer
         
         $text = $doc->createElement("text", $task->getTitle());
         $text->setAttribute('id', "task-title_".$task->getId());
-        $text->setAttribute('x', $thisX + 30);
+        $text->setAttribute('x', $thisX + 30+self::idSpacing);
         $text->setAttribute('y', $thisY + 25);
         $text->setAttribute('clip-path', "url(#title-clip_".$task->getId().")");
         $defs->appendChild($text);
-        
+		
+		
+		
         $status = "";
         $taskStatusColour = "rgb(0, 0, 0)";
         switch ($task->getTaskStatus()) {
@@ -329,8 +333,9 @@ class GraphViewer
         
         $text = $doc->createElement("text", "Status: $status");
         $text->setAttribute('id', "task-status_".$task->getId());
-        $text->setAttribute('x', $thisX + 35);
+        $text->setAttribute('x', $thisX + 35+self::idSpacing);
         $text->setAttribute('y', $thisY + 60);
+		//$text->setAttribute('font-size', '10');
         $text->setAttribute('fill', $taskStatusColour);
         $text->setAttribute('clip-path', "url(#title-clip_".$task->getId().")");
         $defs->appendChild($text);
