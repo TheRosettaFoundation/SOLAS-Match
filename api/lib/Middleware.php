@@ -152,10 +152,7 @@ class Middleware
 			 */
 			
 			$hasUserSegmentationTask = FALSE;
-			/*
-			 * 18446744073709551615 the MaxBigInt limit SQL operation returns
-			 */
-			$userTasks = TaskDao::getUserTasks($userId, 18446744073709551615, 0);
+			$userTasks = TaskDao::getUserTasks($userId);
 			$userTasksInProject = array();
 			
 			foreach($userTasks as $task) {
@@ -234,10 +231,7 @@ class Middleware
 			 */
 			
 			$hasUserSegmentationTask = FALSE;
-			/*
-			 * 18446744073709551615 the MaxBigInt limit SQL operation returns
-			 */
-			$userTasks = TaskDao::getUserTasks($userId, 18446744073709551615, 0);
+			$userTasks = TaskDao::getUserTasks($userId);
 			$userTasksInProject = array();
 			
 			foreach($userTasks as $task) {
@@ -670,10 +664,7 @@ class Middleware
                     }
 				}
 			} else {				
-				/*
-				 * 18446744073709551615 is the MaxBigInt in SQL this has give trouble in the past
-				 */
-				$userTasks = TaskDao::getUserTasks($userId, 18446744073709551615, 0);
+				$userTasks = TaskDao::getUserTasks($userId);
 
 				foreach($userTasks as $task) {
 					if($task->getProjectId() == $review->getProjectId()) {
