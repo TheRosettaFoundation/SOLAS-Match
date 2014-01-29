@@ -41,4 +41,4 @@ class StaticAPI
 	}
 } 
 
-StaticAPI::init();`
+StaticAPI::init();
