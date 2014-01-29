@@ -31,11 +31,11 @@ class StaticAPI
                         'colour_1' => $task_1_colour,
                         'colour_2' => $task_2_colour,
                         'colour_3' => $task_3_colour,
-                        'colour_4'=>$task_4_colour
+                        'colour_4' => $task_4_colour
                     )
                 );
 
-                $data = json_encode($arr, JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES); 
+                $data = json_encode($arr, JSON_UNESCAPED_SLASHES); 
                 Dispatcher::sendResponce(null, $data, null, $format);
             }, 'conf',null);
 	}
