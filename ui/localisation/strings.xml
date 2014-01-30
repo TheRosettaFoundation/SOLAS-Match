@@ -180,6 +180,18 @@
     <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string> 
     <string name="common_what_type_of_emails">What type of e-mails am I receiving?</string>
     <string name="common_how_often_receiving_emails">How often am I receiving these e-mails?</string>        
+    <string name="common_january">January</string>
+    <string name="common_february">February</string>
+    <string name="common_march">March</string>
+    <string name="common_april">April</string>
+    <string name="common_may">May</string>
+    <string name="common_june">June</string>
+    <string name="common_july">July</string>
+    <string name="common_august">August</string>
+    <string name="common_september">September</string>
+    <string name="common_october">October</string>
+    <string name="common_november">November</string>
+    <string name="common_december">December</string>
     
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of %s.</string>
 	<string name="admin_banned_orgs_list_0">Are you sure you want to unban this Organisation and its members?</string>
@@ -373,12 +385,12 @@
 	<string name="project_create_11">You have reached the maximum number of target translation fields allowed</string>
     <string name="project_create_12">If checked, you will automatically track this project and receive e-mail notifications.</string>
     <string name="project_create_add_more_target_languages">Add More Target Languages</string>
-    <string name="project_create_13">Failed to create segmentation task</string>
+    <string name="project_create_13"><strong>Failed to create segmentation task:</strong></string>
     <string name="project_create_14">Failed to create translation task</string>
     <string name="project_create_15">Failed to create proofreading task</string>
     <string name="project_create_16">No project file uploaded</string>
     <string name="project_create_17">The project file you uploaded is empty</string>
-    <string name="project_create_failed_to_create_project">Failed to create project</string>
+    <string name="project_create_failed_to_create_project"><strong>Failed to create project</strong></string>
     <string name="project_create_18">The file extension has been changed to lower case.</string>
 	<string name="project_create_target_languages">Target Language(s)</string>
     <string name="project_create_19">The file you uploaded is in PDF format. PDF files are difficult to work with, are you sure you want to upload a PDF?</string>
@@ -394,7 +406,11 @@
     <string name="project_create_31">Project <strong>Title</strong> must be set.</string>
     <string name="project_create_32">Project <strong>Deadline</strong> must be set.</string>
     <string name="project_create_33">Project <strong>Description</strong> must be set.</string>
-
+    <string name="project_create_failed_project_track"><strong>Failed to track project:</strong> %s</string>
+    <string name="project_create_failed_project_deadlines"><strong>An error occured when calculating project deadlines:</strong> %s</string>
+    <string name="project_create_failed_upload_file"><strong>Failed to upload %s file:</strong> %s</string>
+    <string name="project_create_failed_track_task"><strong>Failed to track %s task:</strong> %s</string>
+    <string name="project_create_failed_add_prereq"><strong>Failed to add prerequisite to proofreading task:</strong> %s</string>
 
 	<string name="project_created_project_is_now_live">Project is now live!</string>
     <string name="project_created_success"><strong>Success</strong> - Your project has been uploaded.</string>

@@ -16,5 +16,3 @@ class HttpStatusEnum {
     const CONFLICT                  = 409;
     const UNSUPPORTED_MEDIA_TYPE    = 415;
 }
-
-?>

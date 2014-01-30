@@ -98,7 +98,7 @@ class TaskDao
               }
             }
           } else {
-            print("Error: createTask returned " + response.status.toString() + " " + response.statusText);
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
           }
           return task;
     });
@@ -113,8 +113,7 @@ class TaskDao
       if (response.status < 400) {
         return true;
       } else {
-        print("Error: addTaskPreReq returned " + response.status.toString() + " " + response.statusText);
-        return false;
+        throw "Error #" + response.status.toString() + " - " + response.statusText;
       }
     });
     return ret;
@@ -128,8 +127,7 @@ class TaskDao
       if (response.status < 400) {
         return true;
       } else {
-        print("Error: saveTaskFile returned " + response.status.toString() + " " + response.statusText);
-        return false;
+        throw "Error #" + response.status.toString() + " - " + response.statusText;
       }
     });
     return ret;
@@ -146,7 +144,7 @@ class TaskDao
               success = true;
             }
           } else {
-            print("Error: trackTask returned " + response.status.toString() + " " + response.statusText);
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
           }
           return success;
         });

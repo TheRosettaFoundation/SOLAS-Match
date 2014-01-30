@@ -56,12 +56,23 @@ class ProjectCreateForm extends PolymerElement
     project = new Project();
     project.tag = new List<Tag>();
     projectFileText = "";
+    localisation = new Localisation();
     languages = toObservable(new List<Language>());
     countries = toObservable(new List<Country>());
     DateTime currentDate = new DateTime.now();
     years = toObservable(new List<int>.generate(10, (int index) => index + currentDate.year, growable: false));
-    months = toObservable(["January", "February", "March", "April", "May", "June", "July", "August",
-                           "September", "October", "November", "December"]);
+    months = toObservable([localisation.getTranslation("common_january"), 
+                           localisation.getTranslation("common_february"), 
+                           localisation.getTranslation("common_march"), 
+                           localisation.getTranslation("common_april"), 
+                           localisation.getTranslation("common_may"), 
+                           localisation.getTranslation("common_june"), 
+                           localisation.getTranslation("common_july"), 
+                           localisation.getTranslation("common_august"),
+                           localisation.getTranslation("common_september"), 
+                           localisation.getTranslation("common_october"), 
+                           localisation.getTranslation("common_november"), 
+                           localisation.getTranslation("common_december")]);
     selectedMonth = currentDate.month - 1;
     monthLengths = new List<int>(12);
     monthLengths[0] = 31;
@@ -94,36 +105,33 @@ class ProjectCreateForm extends PolymerElement
   
   void enteredView()
   {
-    Loader.load().then((_) {
-      Settings settings = new Settings();
-      orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
-      localisation = new Localisation();
-      
-      ParagraphElement p = this.shadowRoot.querySelector("#source_text_desc");
-      p.children.clear();
-      p.appendHtml(localisation.getTranslation("project_create_6") + " " +
-          sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
-      
-      List<Future<bool>> loadedList = new List<Future<bool>>();
-      
-      loadedList.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
-        languages.addAll(langs);
-        return true;
-      }));
-      
-      loadedList.add(CountryDao.getAllCountries().then((List<Country> regions) {
-        countries.addAll(regions);
-        return true;
-      }));
-      
-      Future.wait(loadedList).then((List<bool> successList) {
-        successList.forEach((bool success) {
-          if (!success) {
-            print("Failed to load some data");
-          }
-        });
-        constructDynamicElements();
+    Settings settings = new Settings();
+    orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
+    
+    ParagraphElement p = this.shadowRoot.querySelector("#source_text_desc");
+    p.children.clear();
+    p.appendHtml(localisation.getTranslation("project_create_6") + " " +
+        sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
+    
+    List<Future<bool>> loadedList = new List<Future<bool>>();
+    
+    loadedList.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
+      languages.addAll(langs);
+      return true;
+    }));
+    
+    loadedList.add(CountryDao.getAllCountries().then((List<Country> regions) {
+      countries.addAll(regions);
+      return true;
+    }));
+    
+    Future.wait(loadedList).then((List<bool> successList) {
+      successList.forEach((bool success) {
+        if (!success) {
+          print("Failed to load some data");
+        }
       });
+      constructDynamicElements();
     });
   }
   
@@ -314,81 +322,83 @@ class ProjectCreateForm extends PolymerElement
             project.tag.add(tag);
           });
         }
-  
+        
         ProjectDao.createProject(project).then((Project pro) {
-          if (pro == null || pro.id == null || pro.id < 1) {
-            createProjectError = "Failed to create project";
-          } else {
-            project.id = pro.id;          
-            List<Future<bool>> successList = new List<Future<bool>>();
-            successList.add(uploadProjectFile().then((bool fileUploaded) {
-              Future<bool> ret;
-              if (fileUploaded) {
-                ret = createProjectTasks();
-              } else {
-                ret = new Future.value(false);
-              }
-              return ret;
-            }));
-            
-            if (trackProject) {
-              successList.add(ProjectDao.trackProject(project.id, userid));
-            }
-            
-            Future<bool> success = Future.wait(successList).then((List<bool> successes) {
-              bool ret = true;
-              successes.forEach((bool created) {
-                if (!created) {
-                  ret = false;
-                }
-              });
-              return ret;
-            }).catchError((error) {
-              print("An error occurred when evaluating project create success list: " + error.toString());
+          project.id = pro.id;
+          
+          List<Future<bool>> successList = new List<Future<bool>>();
+          Completer projectUploaded = new Completer();
+          successList.add(projectUploaded.future);
+          uploadProjectFile().then((bool success) {
+            Completer projectTasksSuccess = new Completer();
+            createProjectTasks().then((bool success) {
+              projectTasksSuccess.complete(true);
+            }).catchError((e) {
+              projectTasksSuccess.completeError(e);
             });
             
-            success.then((bool created) {
-              if (!created) {
-                print("some data failed, deleting project");
-                
-                if (createProjectError != null) {
-                  Timer.run(() {
-                    SpanElement span = this.shadowRoot.querySelector("#project_create_error");
-                    span.children.clear();
-                    span.appendHtml(createProjectError);
-                  });
-                }
-                
-                ProjectDao.deleteProject(project.id);
-                project.id = null;
-              } else {
-                ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
-                  Settings settings = new Settings();
-                  window.location.assign(settings.conf.urls.SiteLocation + "project/" 
-                      + project.id.toString() + "/view");
-                });
-              }
-            }).catchError((error) {
-              print("An error occured: " + error.toString());
+            projectTasksSuccess.future.then((bool s) {
+              projectUploaded.complete(true);
+            }).catchError((e) {
+              projectUploaded.completeError(e);
+            });
+          }).catchError((e) {
+            projectUploaded.completeError(e);
+          });
+          
+          /*Completer projectTasksSuccess = new Completer();
+          successList.add(projectTasksSuccess.future);
+          createProjectTasks().then((bool success) {
+            projectTasksSuccess.complete(true);
+          }).catchError((e) {
+            projectTasksSuccess.completeError(e);
+          });*/
+          
+          if (trackProject) {
+            Completer trackProjectSuccess = new Completer();
+            successList.add(trackProjectSuccess.future);
+            ProjectDao.trackProject(project.id, userid).then((bool success) {
+              trackProjectSuccess.complete(true);
+            }).catchError((e) {
+              trackProjectSuccess.completeError(
+                  sprintf(localisation.getTranslation("project_create_failed_project_track"), e.toString()));
             });
           }
+          
+          Future.wait(successList).then((List<bool> s) {
+            ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
+              Settings settings = new Settings();
+              window.location.assign(settings.conf.urls.SiteLocation + "project/" 
+                  + project.id.toString() + "/view");
+            }).catchError((error) {
+              createProjectError = sprintf(
+                  localisation.getTranslation("project_create_failed_project_deadlines"), error.toString());
+              
+              ProjectDao.deleteProject(project.id);
+              project.id = null;
+            });
+          }).catchError((e) {
+            print("Something went wrong, deleting project");
+            createProjectError = e;
+            
+            ProjectDao.deleteProject(project.id);
+            project.id = null;
+          });
+        }).catchError((e) {
+          createProjectError = sprintf(
+              localisation.getTranslation("project_create_failed_to_create_project"), e.toString());
         });
       } else {
         print("Invalid form input");
-        if (createProjectError != null) {
-          Timer.run(() {
-            SpanElement span = this.shadowRoot.querySelector("#project_create_error");
-            span.children.clear();
-            span.appendHtml(createProjectError);
-          });
-        }
       }
+    }).catchError((e) {
+      createProjectError = e;
     });
   }
   
   Future<bool> createProjectTasks()
   {
-    Future<bool> success;
+    Completer createProjectTasksComplete = new Completer();
     List<Task> createdTasks = new List<Task>();
     List<Future<bool>> successList = new List<Future<bool>>();
     Task templateTask = new Task();
@@ -420,84 +430,184 @@ class ProjectCreateForm extends PolymerElement
       bool translationRequired = translationCheckbox.checked;
       CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
       bool proofreadingRequired = proofreadingCheckbox.checked;
+      
       if (segmentationRequired) {
+        Completer segCreated = new Completer();
+        successList.add(segCreated.future);
         templateTask.taskType = TaskTypeEnum.SEGMENTATION.value;
-        successList.add(TaskDao.createTask(templateTask).then((Task segTask) {
-          bool ret;
-          if (segTask == null || segTask.id == null || segTask.id < 1) {
-            createProjectError = localisation.getTranslation("project_create_13");
-            ret = false;
-          } else {
-            createdTasks.add(segTask);
-            TaskDao.saveTaskFile(segTask.id, userid, projectFileText);
-            if (trackProject) {
-              TaskDao.trackTask(segTask.id, userid);
-            }
-            ret = true;
+        TaskDao.createTask(templateTask).then((Task segTask) {
+          createdTasks.add(segTask);
+          List<Future<bool>> segSuccess = new List<Future<bool>>();
+          Completer fileUploaded = new Completer();
+          segSuccess.add(fileUploaded.future);
+          TaskDao.saveTaskFile(segTask.id, userid, projectFileText).then((bool success) {
+            fileUploaded.complete(true);
+          }).catchError((e) {
+            fileUploaded.completeError(sprintf(
+                         localisation.getTranslation("project_create_failed_upload_file"), 
+                         [localisation.getTranslation("common_segmentation"), e.toString()]));
+          });
+          
+          if (trackProject) {
+            Completer trackingComplete = new Completer();
+            segSuccess.add(trackingComplete.future);
+            TaskDao.trackTask(segTask.id, userid).then((bool success) {
+              trackingComplete.complete(true);
+            }).catchError((e) {
+              trackingComplete.completeError(sprintf(
+                  localisation.getTranslation("project_create_failed_track_task"),
+                  [localisation.getTranslation("common_segmentation"), e.toString()]));
+            });
           }
-          return ret;
-        }));
+          
+          Future.wait(segSuccess).then((List<bool> success) {
+            segCreated.complete(true);
+          }).catchError((e) {
+            segCreated.completeError(e.toString());
+          });
+          
+        }).catchError((e) {
+          segCreated.completeError(localisation.getTranslation("project_create_13") + e.toString());
+        });
       } else {
         if (translationRequired) {
+          Completer transCreated = new Completer();
+          successList.add(transCreated.future);
+          
           templateTask.taskType = TaskTypeEnum.TRANSLATION.value;
-          successList.add(TaskDao.createTask(templateTask).then((Task transTask) {
-            Future<bool> ret;
-            if (transTask == null || transTask.id == null || transTask.id < 1) {
-              createProjectError = localisation.getTranslation("project_create_14");
-              ret = new Future.value(false);
-            } else {
-              createdTasks.add(transTask);
-              TaskDao.saveTaskFile(transTask.id, userid, projectFileText);
-              if (trackProject) {
-                TaskDao.trackTask(transTask.id, userid);
-              }
+          TaskDao.createTask(templateTask).then((Task transTask) {
+            createdTasks.add(transTask);
+            
+            List<Future<bool>> transSuccess = new List<Future<bool>>();
+            Completer fileUploaded = new Completer();
+            transSuccess.add(fileUploaded.future);
+            
+            TaskDao.saveTaskFile(transTask.id, userid, projectFileText).then((bool success) {
+              fileUploaded.complete(true);
+            }).catchError((e) {
+              fileUploaded.completeError(sprintf(
+                      localisation.getTranslation("project_create_failed_upload_file"), 
+                      [localisation.getTranslation("common_translation"), e.toString()]));
+            });
+            
+            if (trackProject) {
+              Completer trackingSuccess = new Completer();
+              transSuccess.add(trackingSuccess.future);
               
-              if (proofreadingRequired) {
-                templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
-                templateTask.targetLocale = transTask.targetLocale;
-                ret = new Future.sync(() => TaskDao.createTask(templateTask).then((Task proofTask) {
-                  Future<bool> ret;
-                  if (proofTask == null || proofTask.id == null || proofTask.id < 1) {
-                    createProjectError = localisation.getTranslation("project_create_15"); 
-                    ret = new Future.value(false);
-                  } else {
-                    createdTasks.add(proofTask);
-                    TaskDao.saveTaskFile(proofTask.id, userid, projectFileText);
-                    if (trackProject) {
-                      TaskDao.trackTask(proofTask.id, userid);
-                    }
-                    ret = new Future.sync(() => TaskDao.addTaskPreReq(proofTask.id, transTask.id)); 
-                  }
-                  return ret;
-                }));
-              } else {
-                ret = new Future.value(true);
-              }
+              TaskDao.trackTask(transTask.id, userid).then((bool success) {
+                trackingSuccess.complete(true);
+              }).catchError((e) {
+                trackingSuccess.completeError(sprintf(
+                    localisation.getTranslation("project_create_failed_track_task"),
+                    [localisation.getTranslation("common_translation"), e.toString()]));
+              });
             }
-            return ret;
-          }));
+            
+            if (proofreadingRequired) {
+              Completer proofCreated = new Completer();
+              transSuccess.add(proofCreated.future);
+              templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
+              templateTask.targetLocale = transTask.targetLocale;
+              TaskDao.createTask(templateTask).then((Task proofTask) {
+                createdTasks.add(proofTask);
+                
+                List<Future<bool>> proofSuccess = new List<Future<bool>>();
+                Completer proofUploaded = new Completer();
+                proofSuccess.add(proofUploaded.future);
+                
+                TaskDao.saveTaskFile(proofTask.id, userid, projectFileText).then((bool success) {
+                  proofUploaded.complete(true);
+                }).catchError((e) {
+                  proofUploaded.completeError(sprintf(
+                      localisation.getTranslation("project_create_failed_upload_file"), 
+                      [localisation.getTranslation("common_proofreading"), e.toString()]));
+                });
+                
+                if (trackProject) {
+                  Completer trackingProof = new Completer();
+                  proofSuccess.add(trackingProof.future);
+                  
+                  TaskDao.trackTask(proofTask.id, userid).then((bool success) {
+                    trackingProof.complete(true);
+                  }).catchError((e) {
+                    trackingProof.completeError(sprintf(
+                        localisation.getTranslation("project_create_failed_track_task"),
+                        [localisation.getTranslation("common_proofreading"), e.toString()]));
+                  });
+                }
+                
+                Completer preReqSuccess = new Completer();
+                proofSuccess.add(preReqSuccess.future);
+                TaskDao.addTaskPreReq(proofTask.id, transTask.id).then((bool success) {
+                  preReqSuccess.complete(true);
+                }).catchError((e) {
+                  preReqSuccess.completeError(sprintf(
+                      localisation.getTranslation("project_create_failed_add_prereq"), [e.toString()]));
+                });
+                
+                Future.wait(proofSuccess).then((List<bool> s) {
+                  proofCreated.complete(true);
+                }).catchError((e) {
+                  proofCreated.completeError(e.toString());
+                });
+              }).catchError((e) {
+                proofCreated.completeError(localisation.getTranslation("project_create_15") + e.toString());
+              });
+            }
+            
+            Future.wait(transSuccess).then((List<bool> s) {
+              transCreated.complete(true);
+            }).catchError((e) {
+              transCreated.completeError(e.toString());
+            });
+          }).catchError((e) {
+            transCreated.completeError(localisation.getTranslation("project_create_14") + e.toString());
+          });
         } else if (!translationRequired && proofreadingRequired) {
           templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
-          successList.add(TaskDao.createTask(templateTask).then((Task proofTask) {
-            bool ret;
-            if (proofTask == null || proofTask.id == null || proofTask.id < 1) {
-              createProjectError = localisation.getTranslation("project_create_15");
-              ret = false;
-            } else {
-              createdTasks.add(proofTask);
-              TaskDao.saveTaskFile(proofTask.id, userid, projectFileText);
-              if (trackProject) {
-                TaskDao.trackTask(proofTask.id, userid);
-              }
-              ret = true;
+          
+          Completer proofCreated = new Completer();
+          successList.add(proofCreated.future);
+          TaskDao.createTask(templateTask).then((Task proofTask) {
+            createdTasks.add(proofTask);
+            
+            List<Future<bool>> proofSuccess = new List<Future<bool>>();
+            Completer proofUploaded = new Completer();
+            proofSuccess.add(proofUploaded.future);
+            
+            TaskDao.saveTaskFile(proofTask.id, userid, projectFileText).then((bool success) {
+              proofUploaded.complete(true);
+            }).catchError((e) {
+              proofUploaded.completeError(sprintf(
+                  localisation.getTranslation("project_create_failed_upload_file"), 
+                  [localisation.getTranslation("common_proofreading"), e.toString()]));
+            });
+            
+            if (trackProject) {
+              Completer trackingProof = new Completer();
+              proofSuccess.add(trackingProof.future);
+              TaskDao.trackTask(proofTask.id, userid).then((bool success) {
+                trackingProof.complete(true);
+              }).catchError((e) {
+                trackingProof.completeError(sprintf(
+                    localisation.getTranslation("project_create_failed_track_task"),
+                    [localisation.getTranslation("common_proofreading"), e.toString()]));
+              });
             }
-            return ret;
-          }));
+            
+            Future.wait(proofSuccess).then((List<bool> s) {
+              proofCreated.complete(true);
+            }).catchError((e) {
+              proofCreated.completeError(e.toString());
+            });
+          }).catchError((e) {
+            proofCreated.completeError(localisation.getTranslation("project_create_15") + e.toString());
+          });
         }
       }
     }
     
-    success = Future.wait(successList).then((List<bool> createdList) {
+    Future.wait(successList).then((List<bool> createdList) {
       bool ret = true;
       createdList.forEach((bool created) {
         if (!created) {
@@ -505,9 +615,12 @@ class ProjectCreateForm extends PolymerElement
           ret = false;
         }
       });
-      return ret;
+      createProjectTasksComplete.complete(ret);
+    }).catchError((e) {
+      createProjectTasksComplete.completeError(e.toString());
     });
-    return success;
+    
+    return createProjectTasksComplete.future;
   }
   
   Future<bool> uploadProjectFile()
@@ -517,6 +630,10 @@ class ProjectCreateForm extends PolymerElement
       ProjectDao.uploadProjectFile(project.id, userid, filename, projectFileText)
         .then((bool success) {
           completer.complete(success);
+        }).catchError((e) {
+          completer.completeError(sprintf(
+              localisation.getTranslation("project_create_failed_upload_file"),
+              [localisation.getTranslation("common_project"), e]));
         });
     });
     return completer.future;
@@ -531,6 +648,7 @@ class ProjectCreateForm extends PolymerElement
     if (!files.isEmpty) {
       projectFile = files[0];
     }
+    
     validateFileInput().then((bool success) {
       FileReader reader = new FileReader();
       reader.onLoadEnd.listen((e) {
@@ -538,13 +656,16 @@ class ProjectCreateForm extends PolymerElement
         completer.complete(true);
       });
       reader.readAsArrayBuffer(projectFile);
+    }).catchError((e) {
+      completer.completeError(e);
     });
+    
     return completer.future;
   }
   
   Future<bool> validateInput()
   {
-    Future<bool> ret;
+    Completer<bool> validationCompleter = new Completer();
     bool success = true;
     //Validate Text Inputs
     if (project.title == '') {
@@ -699,39 +820,48 @@ class ProjectCreateForm extends PolymerElement
       success = false;
     }
     
-    //Validate targets
-    List<Language> targetLanguages = new List<Language>();
-    List<Country> targetCountries = new List<Country>();
-    for (int i = 0; i < targetCount; i++) {
-      CheckboxInputElement segmentationCheckbox = this.shadowRoot.querySelector("#segmentation_$i");
-      bool segmentationRequired = segmentationCheckbox.checked;
-      CheckboxInputElement translationCheckbox = this.shadowRoot.querySelector("#translation_$i");
-      bool translationRequired = translationCheckbox.checked;
-      CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
-      bool proofreadingRequired = proofreadingCheckbox.checked;
-      if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
-        createProjectError = localisation.getTranslation("project_create_29");
-        success = false;
+    try {
+      //Validate targets
+      List<Language> targetLanguages = new List<Language>();
+      List<Country> targetCountries = new List<Country>();
+      for (int i = 0; i < targetCount; i++) {
+        CheckboxInputElement segmentationCheckbox = this.shadowRoot.querySelector("#segmentation_$i");
+        bool segmentationRequired = segmentationCheckbox.checked;
+        CheckboxInputElement translationCheckbox = this.shadowRoot.querySelector("#translation_$i");
+        bool translationRequired = translationCheckbox.checked;
+        CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
+        bool proofreadingRequired = proofreadingCheckbox.checked;
+        if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
+          throw localisation.getTranslation("project_create_29");
+          success = false;
+        }
+        
+        SelectElement targetLanguageSelect = this.shadowRoot.querySelector("#target_language_$i");
+        SelectElement targetCountrySelect = this.shadowRoot.querySelector("#target_country_$i");
+        Language targetLang = languages[targetLanguageSelect.selectedIndex];
+        Country targetCountry = countries[targetCountrySelect.selectedIndex];
+        if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
+          throw localisation.getTranslation("project_create_28");
+          success = false;
+        } else {
+          targetLanguages.add(targetLang);
+          targetCountries.add(targetCountry);
+        }
       }
       
-      SelectElement targetLanguageSelect = this.shadowRoot.querySelector("#target_language_$i");
-      SelectElement targetCountrySelect = this.shadowRoot.querySelector("#target_country_$i");
-      Language targetLang = languages[targetLanguageSelect.selectedIndex];
-      Country targetCountry = countries[targetCountrySelect.selectedIndex];
-      if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
-        createProjectError = localisation.getTranslation("project_create_28");
-        success = false;
-      } else {
-        targetLanguages.add(targetLang);
-        targetCountries.add(targetCountry);
-      }
+      //Validate file input
+      validateFileInput().then((bool valid) {
+        if (success && valid) {
+          validationCompleter.complete(true);
+        } else {
+          validationCompleter.complete(false);
+        }
+      });
+    } catch (e) {
+      validationCompleter.completeError(e);
     }
-    //Validate file input
-    ret = new Future.sync(validateFileInput).then((bool valid) {
-      return success && valid;
-    });
     
-    return ret;
+    return validationCompleter.future;
   }
   
   Future<bool> validateFileInput()
@@ -742,9 +872,6 @@ class ProjectCreateForm extends PolymerElement
     FileList files = fileInput.files;
     if (!files.isEmpty) {
       projectFile = files[0];
-    }
-    if (projectFile == null) {
-      createProjectError = localisation.getTranslation("project_create_16");
     }
     
     if (projectFile != null) {
@@ -771,20 +898,16 @@ class ProjectCreateForm extends PolymerElement
               completer.complete(true);
             }
           } else {
-            createProjectError = localisation.getTranslation("project_create_20");
-            completer.complete(false);
+            completer.completeError(localisation.getTranslation("project_create_20"));
           }
         } else {
-          createProjectError = localisation.getTranslation("project_create_21");
-          completer.complete(false);
+          completer.completeError(localisation.getTranslation("project_create_21"));
         }
       } else {
-        createProjectError = localisation.getTranslation("project_create_17");
-        completer.complete(false);
+        completer.completeError(localisation.getTranslation("project_create_17"));
       }
     } else {
-      createProjectError = "No file uploaded";
-      completer.complete(false);
+      completer.completeError(localisation.getTranslation("project_create_16"));
     }
     
     return completer.future;
@@ -853,5 +976,17 @@ class ProjectCreateForm extends PolymerElement
       }
     }
     return ret;
+  }
+  
+  /*
+   * Automatically bound to changes on createProjectError
+   */
+  void createProjectErrorChanged(String oldValue)
+  {
+    Timer.run(() {
+      SpanElement span = this.shadowRoot.querySelector("#project_create_error");
+      span.children.clear();
+      span.appendHtml(createProjectError);
+    });
   }
 }
