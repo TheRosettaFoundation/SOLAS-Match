@@ -107,6 +107,163 @@ class Middleware
         }
     } 
     
+    
+    
+    /*
+	 * Check for authorising users to create tasks. This function should be available to
+	 * orgainisation members, admins, and general users who have claimed a segmentation task on that project
+	 *  
+	 */
+    public static function authUserOrOrgForTaskCreation($request, $response, $route)
+    {
+    	if(self::isloggedIn($request, $response, $route))
+		{
+	        $user = UserDao::getLoggedInUser();
+	        if (self::isSiteAdmin($user->getId())) {
+	        	return true;
+	        }
+			
+			$userId = $user->getId();
+			$params = $route->getParams();
+			
+			$task = $request->getBody();
+			$format = $params['format'];
+            $client = new APIHelper($format);			
+            $task = $client->deserialize($task, "Task");
+			
+			$projectId = $task->getProjectId();
+			
+			
+			$project = null;
+			if ($projectId != null) {
+				$projects = ProjectDao::getProject($projectId);
+				$project = $projects[0];
+			}
+			
+			$orgId = $project->getOrganisationId();
+			
+			if (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
+				return true;
+			}
+			
+			/*
+			 * In the case that a general user is uploading a segmentation task
+			 * the following will authorise that the user has claimed a segmentation task on this project
+			 */			
+			//$hasUserSegmentationTask = FALSE;			
+			$hasUserSegmentationTask = TaskDao::hasUserClaimedSegmentationTask($userId, $projectId);
+			
+			if ($hasUserSegmentationTask) {
+				return true;
+			}
+			else {
+				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+	                    "The user does not have permission to acess the current resource");
+			}
+			
+		}
+		
+	}
+
+/*
+	 * Check for authorising users to create tasks. This function should be available to
+	 * orgainisation members, admins, and general users who have claimed a segmentation task on that project
+	 *  
+	 */
+    public static function authUserOrOrgForTaskCreationPassingTaskId($request, $response, $route)
+    {
+    	if(self::isloggedIn($request, $response, $route))
+		{
+	        $user = UserDao::getLoggedInUser();
+	        if (self::isSiteAdmin($user->getId())) {
+	        	return true;
+	        }
+			
+			$userId = $user->getId();
+			$params = $route->getParams();
+			
+			$taskId=$params['taskId'];
+	        if (!is_numeric($taskId) && strstr($taskId, '.')) {
+	                $taskId = explode('.', $taskId);
+	                $format = '.'.$taskId[1];
+	                $taskId = $taskId[0];
+	        }
+			
+            $task = null;
+			if($taskId != null) {
+				$tasks = TaskDao::getTask($taskId);
+				$task = $tasks[0];
+			}
+			$projectId = $task->getProjectId();
+			$project = null;
+			if ($projectId != null) {
+				$projects = ProjectDao::getProject($projectId);
+				$project = $projects[0];
+			}
+			
+			$orgId = $project->getOrganisationId();
+			
+			if (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
+				return true;
+			}
+			
+			/*
+			 * In the case that a general user is uploading a segmentation task
+			 * the following will authorise that the user has claimed a segmentation task on this project
+			 */
+			//$hasUserSegmentationTask = FALSE;
+			$hasUserSegmentationTask = TaskDao::hasUserClaimedSegmentationTask($userId, $projectId);
+			
+			if ($hasUserSegmentationTask) {
+				return true;
+			}
+			else {
+				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+	                    "The user does not have permission to acess the current resource");
+			}
+			
+		}
+		
+	}
+    
+    
+    
+    /*
+	 * Does the user Id match the Id of the resources owner
+	 * Or is it matching the Id of the organisations admin
+	 */
+	public static function authUserOrAdminForOrg($request, $response, $route)
+    {
+    	if(self::isloggedIn($request, $response, $route))
+		{
+	        $user = UserDao::getLoggedInUser();
+	        if (self::isSiteAdmin($user->getId())) {
+	        	return true;
+	        }
+	        $params = $route->getParams();
+	        $userId=$params['userId'];
+	        if (!is_numeric($userId) && strstr($userId, '.')) {
+	                $userId = explode('.', $userId);
+	                $format = '.'.$userId[1];
+	                $userId = $userId[0];
+	        }
+			
+			$orgId=$params['orgId'];
+			if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                $orgId = explode('.', $orgId);
+                $format = '.'.$orgId[1];
+                $orgId = $orgId[0];
+            }
+			
+	        if ($userId=$user->getId() || AdminDao::isAdmin($userId, $orgId)) {
+	            return true;
+	        }else{
+	        	Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+	                    "The user does not have permission to acess the current resource");
+	        }
+        }
+    } 
+    
     public static function notFound()
     {
         Dispatcher::getDispatcher()->redirect(Dispatcher::getDispatcher()->urlFor('getLoginTemplate'));
@@ -217,7 +374,7 @@ class Middleware
 	                $orgId = $orgId[0];
 	            }			
 			}
-			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -255,7 +412,7 @@ class Middleware
 			}
 			
 			$orgId = $project->getOrganisationId();
-			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -263,42 +420,6 @@ class Middleware
 	                    "The user does not have permission to acess the current resource");
 			}
 		}	
-	}
-
-	// Is the user a member of the organisation that is creating the task
-	public static function authenticateUserCreateOrgTask($request, $response, $route)
-	{
-		if(self::isloggedIn($request, $response, $route))
-		{
-	        $user = UserDao::getLoggedInUser();
-	        if (self::isSiteAdmin($user->getId())) {
-	        	return true;
-	        }
-	        $userId = $user->getId();
-			$params = $route->getParams();
-			
-			$task = $request->getBody();
-			$format = $params['format'];
-            $client = new APIHelper($format);			
-            $task = $client->deserialize($task, "Task");
-			
-			$projectId = $task->getProjectId();
-			$project = null;
-			if ($projectId != null) {
-				$projects = ProjectDao::getProject($projectId);
-				$project = $projects[0];
-			}
-			
-			$orgId = $project->getOrganisationId();
-			
-			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
-				return true;
-			}
-			else {
-				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
-	                    "The user does not have permission to acess the current resource");
-			}
-		}
 	}
 	
 	//Is the user a member of the Organisation who created the Task in question
@@ -337,7 +458,7 @@ class Middleware
 			
 			$orgId = $project->getOrganisationId();
 			
-			if ($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -389,7 +510,7 @@ class Middleware
 			if($userId == $user->getId()) {
 				return true;
 			}
-			else if($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			else if($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -464,7 +585,7 @@ class Middleware
 			
     		$hasTask = TaskDao::hasUserClaimedTask($userId, $taskId);
 			
-			if($hasTask || OrganisationDao::isMember($orgId, $userId)) {
+			if($hasTask || OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
 			 	return true;
 			}
 			else {
@@ -474,7 +595,7 @@ class Middleware
 		}
 	}
 	
-	//Test if the User is a member of the Organisation that created the task or has worked on one of the tasks with this as a prerequisite
+	//Test if the User is a member of the Organisation that created the task or has worked on one of the tasks of which this is a prerequisite
 	public static function authenticateUserToSubmitReview($request, $response, $route)
 	{
 		if(self::isloggedIn($request, $response, $route))
@@ -487,45 +608,45 @@ class Middleware
 			$userId = $user->getId();
 			$params = $route->getParams();
 			
-			$review = $request->getBody();
 			$format = $params['format'];
             $client = new APIHelper($format);			
+			$review = $request->getBody();
             $review = $client->deserialize($review, "TaskReview");
-			$taskId = $review->getTaskId();			
-			if (!is_numeric($taskId) && strstr($taskId, '.')) {
-	                $taskId = explode('.', $taskId);
-	                $format = '.'.$taskId[1];
-	                $taskId = $taskId[0];
-	        }
-			$previousTasks = TaskDao::getTasksFromPreReq($taskId);
-			$hasTaskPreReq = FALSE;		
 			
-			if (!is_null($previousTasks)) {
-                foreach ($previousTasks as $taskObject) {
-                    if (TaskDao::hasUserClaimedTask($userId, $taskObject->getId())) {
-                        $hasTaskPreReq = TRUE;
+			$hasFollowupTask = FALSE;
+			/*
+			 * If the taskId is null this indicates the user is not reviewing a task but the project file itself
+			 * all users who have claimed a task on the project can review it esentialy but it may not be 
+             * accessable through the UI for all cases
+			 */
+			if(!is_null($review->getTaskId())) {
+				$nextTasks = TaskDao::getTasksFromPreReq($review->getTaskId(), $review->getProjectId());
+				
+                foreach ($nextTasks as $nextTask) {
+    				if (!is_null($nextTask) && TaskDao::hasUserClaimedTask($userId, $nextTask->getId())) {
+        				$hasFollowupTask = TRUE;
+                    }
+				}
+			} else {				
+				$userTasks = TaskDao::getUserTasks($userId);
+
+				foreach($userTasks as $task) {
+					if($task->getProjectId() == $review->getProjectId()) {
+						$hasFollowupTask = TRUE;
 					}
 				}
 			}
 			
-			$task = null;
-			if($taskId != null) {
-				$tasks = TaskDao::getTask($taskId);
-				$task = $tasks[0];
-			}
-			$projectId = $task->getProjectId();
-			$project = null;
-			if ($projectId != null) {
-				$projects = ProjectDao::getProject($projectId);
+			if ($review->getProjectId() != null) {
+				$projects = ProjectDao::getProject($review->getProjectId());
 				$project = $projects[0];
 			}
 			
 			$orgId = $project->getOrganisationId();
 			
-			if($hasTaskPreReq || OrganisationDao::isMember($orgId, $userId)) {
+			if($hasFollowupTask || OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
 			 	return true;
-			}
-			else {
+			} else {
 	            Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
                 "The user does not have permission to acess the current resource");
 			}	
@@ -571,7 +692,7 @@ class Middleware
 			}
 			
 			$orgId = $project->getOrganisationId();
-			if ($hasTask || ($orgId != null && OrganisationDao::isMember($orgId, $userId))) {
+			if ($hasTask || ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)))) {
 				return true;
 			}
 			else {
@@ -605,19 +726,20 @@ class Middleware
 			
 			$badge = null;
 			if ($badgeId != null) {
-			$badges = BadgeDao::getBadge($badgeId);
-			$badge = $badges[0];
+    			$badges = BadgeDao::getBadge($badgeId);
+	    		$badge = $badges[0];
 			}
 			
 			$orgId = $badge->getOwnerId();
+
 					
-			// currently this checks if the orgId is not Null
 			// cases where the orgId is null signify a system badge
-			// using this middleware function will lead to errors unless those are accounted for	
-			if($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			// badge ids 6, 7 and 8 refer to the user controlled system badges
+			if($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
-			}
-			else {
+			} elseif ($orgId == null && in_array($badgeId, array(6, 7, 8))) {
+                return true;
+            } else {
 	            Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
 	                    "The user does not have permission to acess the current resource");
 	        }
@@ -663,10 +785,13 @@ class Middleware
 			if($userId == $user->getId()) {
 				return true;
 			}
-			// currently this checks if the orgId is not Null
-			// cases where the orgId is null signify a system badge
-			// using this middleware function will lead to errors unless those are accounted for	
-			else if($orgId != null && OrganisationDao::isMember($orgId, $userId)) {
+			
+   			/*
+    		 * currently this checks if the orgId is not Null
+    		 * cases where the orgId is null signify a system badge
+    		 * using this middleware function will lead to errors unless those are accounted for
+    		 */
+			else if($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
 				return true;
 			}
 			else {
@@ -704,6 +829,44 @@ class Middleware
 			else {
 				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
 	                    "The user does not have permission to acess the current resource");
+			}
+		}
+	}
+	
+	/*
+	 * Test if the task the user is trying to claim has already been claimed
+	 * Prevents two claiments on the same task, admins will still be able to claim a task in all cases 
+	 */	
+	public static function authenticateTaskNotClaimed($request, $response, $route)
+	{
+		if(self::isloggedIn($request, $response, $route))
+		{
+	        $user = UserDao::getLoggedInUser();
+	        if (self::isSiteAdmin($user->getId())) {
+	        	return true;
+	        }
+			$params = $route->getParams();
+			
+			$task = $request->getBody();
+			$format = $params['format'];
+            $client = new APIHelper($format);			
+            $task = $client->deserialize($task, "Task");			
+			
+			$taskId = $task->getId();
+			
+			
+			$TaskIsUnclaimed = FALSE;
+			$possibleUser = TaskDao::getUserClaimedTask($taskId);
+			if(is_null($possibleUser)) {
+				$TaskIsUnclaimed = TRUE;
+			}
+						
+			if ($TaskIsUnclaimed) {
+				return true;
+			}
+			else {
+				Dispatcher::getDispatcher()->halt(HttpStatusEnum::FORBIDDEN, 
+	                    "Unable to claim task. This Task has been claimed by another user");
 			}
 		}
 	}
@@ -848,7 +1011,6 @@ class Middleware
 //        self::notFound();
 //    }
     
-   
     
     
     

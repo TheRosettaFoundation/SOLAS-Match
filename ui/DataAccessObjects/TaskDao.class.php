@@ -34,10 +34,16 @@ class TaskDao extends BaseDao
         return $response;
     }
 
-    public function getTopTasks($limit = null)
+    public function getTopTasks($limit = null, $offset = null)
     {
         $request = "{$this->siteApi}v0/tasks/topTasks";
-        $args=$limit ? array("limit" => $limit) : null;
+        $args = array();
+        if ($limit != null) {
+            $args['limit'] = $limit;
+        }
+        if ($offset != null) {
+            $args['offset'] = $offset;
+        }
         $response =$this->client->call(array("Task"), $request,HttpMethodEnum::GET, null, $args);
         return $response;
     }
@@ -194,11 +200,11 @@ class TaskDao extends BaseDao
                 $projectFileExtension = explode(".", $projectFileName);
                 $projectFileExtension = $projectFileExtension[count($projectFileExtension)-1];                                        
                 $projectMime = $projectFile->getMime();
-                throw new SolasMatchException(sprintf(Localisation::getTranslation(Strings::TASK_DAO_1), $projectFileExtension, $projectMime), $this->client->getResponseCode());                                 
+                throw new SolasMatchException(sprintf(Localisation::getTranslation(Strings::COMMON_ERROR_UPLOAD_1), $projectFileExtension, $projectMime), $this->client->getResponseCode());                                 
                 break;
             }
             case HttpStatusEnum::INTERNAL_SERVER_ERROR :
-                throw new SolasMatchException(Localisation::getTranslation(Strings::TASK_DAO_2), $this->client->getResponseCode());
+                throw new SolasMatchException(Localisation::getTranslation(Strings::COMMON_ERROR_UPLOAD_2), $this->client->getResponseCode());
                 break;                                
         }
     }

@@ -1,155 +1,6 @@
 <?php
 class Strings
 {
-    // Routehandler strings
-    
-    const ORG_ROUTEHANDLER_1 = "org_routehandler_1";
-    const ORG_ROUTEHANDLER_2 = "org_routehandler_2";
-    const ORG_ROUTEHANDLER_3 = "org_routehandler_3";
-    const ORG_ROUTEHANDLER_4 = "org_routehandler_4";
-    const ORG_ROUTEHANDLER_5 = "org_routehandler_5";
-    const ORG_ROUTEHANDLER_6 = "org_routehandler_6";
-    const ORG_ROUTEHANDLER_7 = "org_routehandler_7";
-    const ORG_ROUTEHANDLER_8 = "org_routehandler_8";
-    const ORG_ROUTEHANDLER_9 = "org_routehandler_9";
-    const ORG_ROUTEHANDLER_10 = "org_routehandler_10";
-    const ORG_ROUTEHANDLER_11 = "org_routehandler_11";
-    const ORG_ROUTEHANDLER_12 = "org_routehandler_12";
-    const ORG_ROUTEHANDLER_13 = "org_routehandler_13";
-    const ORG_ROUTEHANDLER_14 = "org_routehandler_14";
-    const ORG_ROUTEHANDLER_15 = "org_routehandler_15";
-    const ORG_ROUTEHANDLER_16 = "org_routehandler_16";
-    const ORG_ROUTEHANDLER_17 = "org_routehandler_17";
-    const ORG_ROUTEHANDLER_18 = "org_routehandler_18";
-    const ORG_ROUTEHANDLER_19 = "org_routehandler_19";
-    const ORG_ROUTEHANDLER_20 = "org_routehandler_20";
-    const ORG_ROUTEHANDLER_21 = "org_routehandler_21";
-    const ORG_ROUTEHANDLER_22 = "org_routehandler_22";
-    const ORG_ROUTEHANDLER_23 = "org_routehandler_23";
-    const ORG_ROUTEHANDLER_24 = "org_routehandler_24";
-    const ORG_ROUTEHANDLER_25 = "org_routehandler_25";
-    const ORG_ROUTEHANDLER_26 = "org_routehandler_26";
-    const ORG_ROUTEHANDLER_27 = "org_routehandler_27";
-    const ORG_ROUTEHANDLER_28 = "org_routehandler_28";
-    const ORG_ROUTEHANDLER_29 = "org_routehandler_29";
-    const ORG_ROUTEHANDLER_30 = "org_routehandler_30";
-    const ORG_ROUTEHANDLER_31 = "org_routehandler_31";
-    const ORG_ROUTEHANDLER_32 = "org_routehandler_32";
-    const ORG_ROUTEHANDLER_33 = "org_routehandler_33";
-    const ORG_ROUTEHANDLER_34 = "org_routehandler_34";
-    const ORG_ROUTEHANDLER_35 = "org_routehandler_35";
-    const ORG_ROUTEHANDLER_36 = "org_routehandler_36";
-    const ORG_ROUTEHANDLER_37 = "org_routehandler_37";
-    const ORG_ROUTEHANDLER_38 = "org_routehandler_38";
-    const ORG_ROUTEHANDLER_39 = "org_routehandler_39";
-    const ORG_ROUTEHANDLER_40 = "org_routehandler_40";
-    const ORG_ROUTEHANDLER_41 = "org_routehandler_41";
-
-    const PROJECT_ROUTEHANDLER_1 = "project_routehandler_1";
-    const PROJECT_ROUTEHANDLER_2 = "project_routehandler_2";
-    const PROJECT_ROUTEHANDLER_3 = "project_routehandler_3";
-    const PROJECT_ROUTEHANDLER_4 = "project_routehandler_4";
-    const PROJECT_ROUTEHANDLER_5 = "project_routehandler_5";
-    const PROJECT_ROUTEHANDLER_6 = "project_routehandler_6";
-    const PROJECT_ROUTEHANDLER_7 = "project_routehandler_7";
-    const PROJECT_ROUTEHANDLER_8 = "project_routehandler_8";
-    const PROJECT_ROUTEHANDLER_9 = "project_routehandler_9";
-    const PROJECT_ROUTEHANDLER_10 = "project_routehandler_10";
-    const PROJECT_ROUTEHANDLER_11 = "project_routehandler_11";
-    const PROJECT_ROUTEHANDLER_12 = "project_routehandler_12";
-    const PROJECT_ROUTEHANDLER_13 = "project_routehandler_13";
-    const PROJECT_ROUTEHANDLER_14 = "project_routehandler_14";
-    const PROJECT_ROUTEHANDLER_15 = "project_routehandler_15";
-    const PROJECT_ROUTEHANDLER_16 = "project_routehandler_16";
-    const PROJECT_ROUTEHANDLER_17 = "project_routehandler_17";
-    const PROJECT_ROUTEHANDLER_18 = "project_routehandler_18";
-    const PROJECT_ROUTEHANDLER_19 = "project_routehandler_19";
-    const PROJECT_ROUTEHANDLER_20 = "project_routehandler_20";
-    const PROJECT_ROUTEHANDLER_21 = "project_routehandler_21";
-
-    const TAG_ROUTEHANDLER_1 = "tag_routehandler_1";
-    const TAG_ROUTEHANDLER_2 = "tag_routehandler_2";
-    const TAG_ROUTEHANDLER_3 = "tag_routehandler_3";
-    const TAG_ROUTEHANDLER_4 = "tag_routehandler_4";
-
-    const TASK_ROUTEHANDLER_1 = "task_routehandler_1";
-    const TASK_ROUTEHANDLER_2 = "task_routehandler_2";
-    const TASK_ROUTEHANDLER_3 = "task_routehandler_3";
-    const TASK_ROUTEHANDLER_4 = "task_routehandler_4";
-    const TASK_ROUTEHANDLER_5 = "task_routehandler_5";
-    const TASK_ROUTEHANDLER_6 = "task_routehandler_6";
-    const TASK_ROUTEHANDLER_7 = "task_routehandler_7";
-    const TASK_ROUTEHANDLER_8 = "task_routehandler_8";
-    const TASK_ROUTEHANDLER_9 = "task_routehandler_9";
-    const TASK_ROUTEHANDLER_10 = "task_routehandler_10";
-    const TASK_ROUTEHANDLER_11 = "task_routehandler_11";
-    const TASK_ROUTEHANDLER_12 = "task_routehandler_12";
-    const TASK_ROUTEHANDLER_13 = "task_routehandler_13";
-    const TASK_ROUTEHANDLER_14 = "task_routehandler_14";
-    const TASK_ROUTEHANDLER_15 = "task_routehandler_15";
-    const TASK_ROUTEHANDLER_16 = "task_routehandler_16";
-    const TASK_ROUTEHANDLER_17 = "task_routehandler_17";
-    const TASK_ROUTEHANDLER_18 = "task_routehandler_18";
-    const TASK_ROUTEHANDLER_19 = "task_routehandler_19";
-    const TASK_ROUTEHANDLER_20 = "task_routehandler_20";
-    const TASK_ROUTEHANDLER_21 = "task_routehandler_21";
-    const TASK_ROUTEHANDLER_22 = "task_routehandler_22";
-    const TASK_ROUTEHANDLER_23 = "task_routehandler_23";
-    const TASK_ROUTEHANDLER_24 = "task_routehandler_24";
-    const TASK_ROUTEHANDLER_25 = "task_routehandler_25";
-    const TASK_ROUTEHANDLER_26 = "task_routehandler_26";
-    const TASK_ROUTEHANDLER_27 = "task_routehandler_27";
-    const TASK_ROUTEHANDLER_28 = "task_routehandler_28";
-    const TASK_ROUTEHANDLER_29 = "task_routehandler_29";
-    const TASK_ROUTEHANDLER_30 = "task_routehandler_30";
-    const TASK_ROUTEHANDLER_31 = "task_routehandler_31";
-    const TASK_ROUTEHANDLER_32 = "task_routehandler_32";
-    const TASK_ROUTEHANDLER_33 = "task_routehandler_33";
-    
-    const USER_ROUTEHANDLER_1 = "user_routehandler_1";
-    const USER_ROUTEHANDLER_2 = "user_routehandler_2";
-    const USER_ROUTEHANDLER_3 = "user_routehandler_3";
-    const USER_ROUTEHANDLER_4 = "user_routehandler_4";
-    const USER_ROUTEHANDLER_5 = "user_routehandler_5";
-    const USER_ROUTEHANDLER_6 = "user_routehandler_6";
-    const USER_ROUTEHANDLER_7 = "user_routehandler_7";
-    const USER_ROUTEHANDLER_8 = "user_routehandler_8";
-    const USER_ROUTEHANDLER_9 = "user_routehandler_8";
-    const USER_ROUTEHANDLER_10 = "user_routehandler_10";
-    const USER_ROUTEHANDLER_11 = "user_routehandler_11";
-    const USER_ROUTEHANDLER_12 = "user_routehandler_12";
-    const USER_ROUTEHANDLER_13 = "user_routehandler_13";
-    const USER_ROUTEHANDLER_14 = "user_routehandler_14";
-    const USER_ROUTEHANDLER_15 = "user_routehandler_15";
-    const USER_ROUTEHANDLER_16 = "user_routehandler_16";
-    const USER_ROUTEHANDLER_19 = "user_routehandler_19";    
-    
-    // UI DAO strings   
-    
-    const TASK_DAO_1 = "task_dao_1";
-    const TASK_DAO_2 = "task_dao_2";
-   
-    const USER_DAO_1 = "user_dao_1";
-    const USER_DAO_2 = "user_dao_2";
-    
-    // UI Lib Strings
-    
-    const MIDDLEWARE_1 = "middleware_1";
-    const MIDDLEWARE_2 = "middleware_2";
-    const MIDDLEWARE_3 = "middleware_3";
-    
-    const TEMPLATEHELPER_1 = "templatehelper_1";
-    const TEMPLATEHELPER_2 = "templatehelper_2";
-    const TEMPLATEHELPER_3 = "templatehelper_3";
-    const TEMPLATEHELPER_4 = "templatehelper_4";
-    const TEMPLATEHELPER_5 = "templatehelper_5";
-    const TEMPLATEHELPER_6 = "templatehelper_6";
-    const TEMPLATEHELPER_7 = "templatehelper_7";
-    const TEMPLATEHELPER_8 = "templatehelper_8";
-    const TEMPLATEHELPER_9 = "templatehelper_9";
-    const TEMPLATEHELPER_10 = "templatehelper_10";
-    
-
     // Smarty Template Strings
     const COMMON_FAQ ="common_faq";
     const COMMON_BANNED_BY = 'common_banned_by';
@@ -169,7 +20,6 @@ class Strings
     const COMMON_COUNTRY = 'common_country';
     const COMMON_HOME_PAGE = 'common_home_page';
     const COMMON_EMAIL = 'common_email';
-    const COMMON_EMAILS = 'common_emails';
     const COMMON_BIOGRAPHY = 'common_biography';
     const COMMON_REGIONAL_FOCUS = 'common_regional_focus';
     const COMMON_AFRICA = 'common_africa';
@@ -182,7 +32,6 @@ class Strings
     const COMMON_NAME = 'common_name';
     const COMMON_ORGANISATION_NAME = 'common_organisation_name';
     const COMMON_WARNING = 'common_warning';
-    const COMMON_CONGRATULATIONS = 'common_congratulations';
     const COMMON_DESCRIPTION = 'common_description';
     const COMMON_TITLE = 'common_title';
     const COMMON_DEADLINE = 'common_deadline';
@@ -193,7 +42,6 @@ class Strings
     const COMMON_ARCHIVE = 'common_archive';
     const COMMON_ADD_USER = 'common_add_user';
     const COMMON_IMPACT = 'common_impact';
-    const COMMON_TAG = 'common_tag';
     const COMMON_TAGS = 'common_tags';
     const COMMON_SOURCE_LANGUAGE = 'common_source_language';
     const COMMON_TARGET_LANGUAGE = 'common_target_language';
@@ -222,27 +70,20 @@ class Strings
     const COMMON_DESEGMENTATION_TASK = 'common_desegmentation_task';
     const COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS = 'common_please_fill_in_all_required_fields';
     const COMMON_PROVIDE_FEEDBACK = 'common_provide_feedback';
-    const COMMON_CLICK = 'common_click';
     const COMMON_HERE = 'common_here';
     const COMMON_CREATE_A_TRANSLATION_TASK_FOR_VOLUNTEER_TRANSLATORS_TO_PICK_UP = 'common_create_a_translation_task_for_volunteer_translators_to_pick_up';
     const COMMON_CREATE_A_PROOFREADING_TASK_FOR_EVALUATING_THE_TRANSLATION_PROVIDED_BY_A_VOLUNTEER = 'common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer';
     const COMMON_THANKS_FOR_PROVIDING_YOUR_TRANSLATION_FOR_THIS_TASK = 'common_thanks_for_providing_your_translation_for_this_task';
     const COMMON_MAXIMUM_FILE_SIZE_IS = 'common_maximum_file_size_is';
-    const COMMON_THIS_ORGANISATION = 'common_this_organisation';
     const COMMON_ASSIGN = 'common_assign';
     const COMMON_IT_IS_TIME_TO_DECIDE = 'common_it_is_time_to_decide';
     const COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE = 'common_no_just_bring_me_back_to_the_task_page';
     const COMMON_REVIEW_THIS_CHECKLIST_FOR_YOUR_DOWNLOADED_FILE = 'common_review_this_checklist_for_your_downloaded_file';
-    const COMMON_CAN_YOU = 'common_can_you';
-    const COMMON_OPEN_THE_FILE = 'common_open_the_file';
-    const COMMON_ON_YOUR_COMPUTER = 'common_on_your_computer';
-    const COMMON_CHECK_HOW_LONG_THE_FILE_IS = 'common_check_how_long_the_file_is';
     const COMMON_AFTER_DOWNLOADING = 'common_after_downloading';
     const COMMON_THIS_THIS_WHAT_YOU_NEED_TO_DO_AS_SOON_AS_POSSIBLE = 'common_this_this_what_you_need_to_do_as_soon_as_possible';
     const COMMON_WE_HAVE_ALSO_EMAILED_YOU_THESE_INSTRUCTIONS_TO = 'common_we_have_also_emailed_you_these_instructions_to';
     const COMMON_CANT_FIND_THE_FILE_ON_YOUR_DESKTOP = 'common_cant_find_the_file_on_your_desktop';
     const COMMON_DOWNLOAD_THE_FILE = 'common_download_the_file';
-    const COMMON_AND_SAVE_IT_TO_YOUR_DESKTOP = 'common_and_save_it_to_your_desktop';
     const COMMON_FROM = 'common_from';
     const COMMON_TO = 'common_to';
     const COMMON_ADDED = 'common_added';
@@ -258,7 +99,6 @@ class Strings
     const COMMON_TRACKING = 'common_tracking';
     const COMMON_UNPUBLISH = 'common_unpublish';
     const COMMON_PUBLISH = 'common_publish';
-    const COMMON_PROJECT_VIEW = 'common_project_view';
     const COMMON_NO_COMMENT_HAS_BEEN_LISTED = 'common_no_comment_has_been_listed';
     const COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED = 'common_no_description_has_been_listed';
     const COMMON_NO_IMPACT_HAS_BEEN_LISTED = 'No impact has been listed';
@@ -275,9 +115,7 @@ class Strings
     const COMMON_MOBILE_NUMBER = 'common_mobile_number';
     const COMMON_BUSINESS_NUMBER = 'common_business_number';
     const COMMON_JOB_TITLE = 'common_job_title';
-    const COMMON_BADGE = 'common_badge';
     const COMMON_BADGES = 'common_badges';
-    const COMMON_YOU_ARE_CURRENTLY_RECEIVING = 'common_you_are_currently_receiving';
     const COMMON_STRICT = 'common_strict';
     const COMMON_THE_LAST_EMAIL_WAS_SENT_ON = 'common_the_last_email_was_sent_on';
     const COMMON_NO_EMAILS_HAVE_BEEN_SENT_YET = 'common_no_emails_have_been_sent_yet';
@@ -301,9 +139,6 @@ class Strings
     const COMMON_CREATE_NEW_TASK = 'common_create_new_task';
     const COMMON_PROJECT_DESCRIPTION = 'common_project_description';
     const COMMON_DUE_BY = 'common_due_by';
-    const COMMON_AGO = 'common_ago';
-    const COMMON_PART_OF = 'common_part_of';
-    const COMMON_FOR = 'common_for';
     const COMMON_SOURCE = 'common_source';
     const COMMON_TARGET = 'common_target';
     const COMMON_RESET = 'common_reset';
@@ -316,12 +151,38 @@ class Strings
     const COMMON_ERROR = 'common_error';
     const COMMON_LOADING = 'common_loading';
     const COMMON_SIP = 'common_sip';
-    const COMMON_MISSING_DATA = 'common_missing_data';
     const COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE = "common_login_required_to_access_page";
     const COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED = "common_this_user_account_has_been_banned";
-
+    const COMMON_ASSIGN_BADGE = "common_assign_badge";
+    const COMMON_SUCCESSFULLY_ADDED_MEMBER = 'common_successfully_added_member';
+    const COMMON_INVALID_USERID = 'common_invalid_userid';
+    const COMMON_NO_VALID_EMAIL = 'common_no_valid_email';
+    const COMMON_ALL_FIELDS = 'common_all_fields';
+    const COMMON_ERROR_UPLOAD_1 = 'common_error_upload_1';
+    const COMMON_ERROR_UPLOAD_2 = 'common_error_upload_2';
+    const COMMON_ERROR_LOGIN_1 = 'common_error_login_1';
+    const COMMON_ERROR_LOGIN_2 = 'common_error_login_2';
+    const COMMON_ERROR_NOT_EXIST = 'common_error_not_exist';
+    const COMMON_ERROR_ALREADY_CLAIMED = 'common_error_already_claimed';
+    const COMMON_ERROR_CANNOT_RECLAIM = 'common_error_cannot_reclaim';    
+    const COMMON_ERROR_UNKNOWN_TASK_TYPE = 'common_error_unknown_task_type';
+    const COMMON_ERROR_LANGUAGE_CODE_EXPECTED = 'common_error_language_code_expected';
+    const COMMON_ERROR_UNABLE_TO_UPLOAD = 'common_error_unable_to_upload';
+    const COMMON_ERROR_FILE_TOO_LARGE = 'common_error_file_too_large';
+    const COMMON_ERROR_PARTIAL_UPLOAD = 'common_error_partial_upload';
+    const COMMON_ERROR_NO_FILE_SELECTED = 'common_error_no_file_selected';
+    const COMMON_ERROR_SERVER_MISSING_TEMP = 'common_error_server_missing_temp';
+    const COMMON_ERROR_SERVER_FAILED_WRITE_DISK = 'common_error_server_failed_write_disk';
+    const COMMON_ERROR_FILE_STOPPED_BY_EXTENSION = 'common_error_file_stopped_by_extension';
+    const COMMON_ERROR_FILE_INVALID_EMPTY = 'common_error_file_invalid_empty';
+    const COMMON_CAN_YOU_OPEN_FILE = 'common_can_you_open_file';
+    const COMMON_PART_OF_FOR = 'common_part_of_for';    
+    const COMMON_WHAT_TYPE_OF_EMAILS = 'common_what_type_of_emails';    
+    const COMMON_HOW_OFTEN_RECEIVING_EMAILS = 'common_how_often_receiving_emails';    
+    
     const ADMIN_BANNED_ORGS_LIST_ALL_BANNED_ORGANISATIONS_OF = 'admin_banned_orgs_list_all_banned_organisations_of';
     const ADMIN_BANNED_ORGS_LIST_0 = 'admin_banned_orgs_list_0';
+    
     const ADMIN_BANNED_USERS_LIST_ALL_BANNED_USERS_OF = 'admin_banned_users_list_all_banned_users_of';
     const ADMIN_BANNED_USERS_LIST_USER_DISPLAY_NAME = 'admin_banned_users_list_user_display_name';
     const ADMIN_BANNED_USERS_LIST_0 = 'admin_banned_users_list_0';
@@ -335,13 +196,11 @@ class Strings
     const SITE_ADMIN_DASHBOARD_ADMINISTRATION_DASHBOARD = 'site_admin_dashboard_administration_dashboard';
     const SITE_ADMIN_DASHBOARD_THE_SITE_ADMINISTRATORS_DASHBOARD = 'site_admin_dashboard_the_site_administrators_dashboard';
     const SITE_ADMIN_DASHBOARD_0 = 'site_admin_dashboard_0';
-    const SITE_ADMIN_DASHBOARD_ONLY_ADD_TRUSTED_USERS = 'site_admin_dashboard_only_add_trusted_users';
     const SITE_ADMIN_DASHBOARD_1 = 'site_admin_dashboard_1';
     const SITE_ADMIN_DASHBOARD_ADD_ADMIN = 'site_admin_dashboard_add_admin';
     const SITE_ADMIN_DASHBOARD_2 = 'site_admin_dashboard_2';
     const SITE_ADMIN_DASHBOARD_3 = 'site_admin_dashboard_3';
     const SITE_ADMIN_DASHBOARD_ORGANISATION_NAME_GOES_HERE = 'site_admin_dashboard_organisation_name_goes_here';
-    const SITE_ADMIN_DASHBOARD_PERMANENT = 'site_admin_dashboard_permanent';
     const SITE_ADMIN_DASHBOARD_BAN_REASON = 'site_admin_dashboard_ban_reason';
     const SITE_ADMIN_DASHBOARD_BAN_USER = 'site_admin_dashboard_ban_user';
     const SITE_ADMIN_DASHBOARD_4 = 'site_admin_dashboard_4';
@@ -349,10 +208,10 @@ class Strings
     const SITE_ADMIN_DASHBOARD_BAN_DURATION = 'site_admin_dashboard_ban_duration';
     const SITE_ADMIN_DASHBOARD_DELETE_USER = 'site_admin_dashboard_delete_user';
     const SITE_ADMIN_DASHBOARD_PERMANENTLY = 'site_admin_dashboard_permanently';
-    const SITE_ADMIN_DASHBOARD_DELETE_A_USER_FROM = 'site_admin_dashboard_delete_a_user_from';
     const SITE_ADMIN_DASHBOARD_5 = 'site_admin_dashboard_5';
     const SITE_ADMIN_DASHBOARD_SUCCESSFULLY_DELETED_USER = "site_admin_dashboard_successfully_deleted_user";
     const SITE_ADMIN_DASHBOARD_6 = "site_admin_dashboard_6";
+    const SITE_ADMIN_DASHBOARD_7 = "site_admin_dashboard_7";
 
     const BADGE_LIST_BADGE_LIST = 'badge_list_badge_list';
     const BADGE_LIST_ALL_AVAILABLE_BADGES_OF = 'badge_list_all_available_badges_of';
@@ -360,7 +219,11 @@ class Strings
 
     const CREATE_ORG_CREATE_AN_ORGANISATION = 'create_org_create_an_organisation';
     const CREATE_ORG_CREATE_YOUR_OWN_ORGANISATION = 'create_org_create_your_own_organisation';
-
+    const CREATE_ORG_1 = 'create_org_1';
+    const CREATE_ORG_2 = 'create_org_2';
+    const CREATE_ORG_3 = 'create_org_3';
+    const CREATE_ORG_4 = 'create_org_4';
+    
     const ORG_PRIVATE_PROFILE_0 = 'org_private_profile_0';
     const ORG_PRIVATE_PROFILE_PUBLIC_PROFILE = 'org_private_profile_public_profile';
     const ORG_PRIVATE_PROFILE_YOUR_ORGANISATION_NAME = 'org_private_profile_your_organisation_name';
@@ -369,6 +232,8 @@ class Strings
     const ORG_PRIVATE_PROFILE_UPDATE_ORGANISATION_DETAILS = 'org_private_profile_update_organisation_details';
     const ORG_PRIVATE_PROFILE_1 = 'org_private_profile_1';
     const ORG_PRIVATE_PROFILE_DELETE_ORGANISATION = 'org_private_profile_delete_organisation';
+    const ORG_PRIVATE_PROFILE_17 = 'org_private_profile_17';
+    const ORG_PRIVATE_PROFILE_18 = 'org_private_profile_18';
 
     const ORG_PUBLIC_PROFILE_AN_ORGANISATION_OF = 'org_public_profile_an_organisation_of';
     const ORG_PUBLIC_PROFILE_EDIT_ORGANISATION_DETAILS = 'org_public_profile_edit_organisation_details';
@@ -382,9 +247,7 @@ class Strings
     const ORG_PUBLIC_PROFILE_NO_REGIONAL_FOCUS_LISTED = 'org_public_profile_no_regional_focus_listed';
     const ORG_PUBLIC_PROFILE_0 = 'org_public_profile_0';
     const ORG_PUBLIC_PROFILE_CREATE_BADGE = 'org_public_profile_create_badge';
-    const ORG_PUBLIC_PROFILE_EDIT = 'org_public_profile_edit';
     const ORG_PUBLIC_PROFILE_EDIT_BADGE = 'org_public_profile_edit_badge';
-    const ORG_PUBLIC_PROFILE_ASSIGN_BADGE = 'org_public_profile_assign_badge';
     const ORG_PUBLIC_PROFILE_DELETE_BADGE = 'org_public_profile_delete_badge';
     const ORG_PUBLIC_PROFILE_1 = 'org_public_profile_1';
     const ORG_PUBLIC_PROFILE_2 = 'org_public_profile_2';
@@ -407,31 +270,43 @@ class Strings
     const ORG_PUBLIC_PROFILE_REVOKE_ADMINISTRATOR = 'org_public_profile_revoke_administrator';
     const ORG_PUBLIC_PROFILE_9 = 'org_public_profile_9';
     const ORG_PUBLIC_PROFILE_10 = 'org_public_profile_10';
+    const ORG_PUBLIC_PROFILE_11 = 'org_public_profile_11';
+    const ORG_PUBLIC_PROFILE_12 = 'org_public_profile_12';
+    const ORG_PUBLIC_PROFILE_13 = 'org_public_profile_13';
+    const ORG_PUBLIC_PROFILE_20 = 'org_public_profile_20';
+    const ORG_PUBLIC_PROFILE_21 = 'org_public_profile_21';
+    const ORG_PUBLIC_PROFILE_23 = 'org_public_profile_23';
+    const ORG_PUBLIC_PROFILE_24 = 'org_public_profile_24';
+    const ORG_PUBLIC_PROFILE_25 = 'org_public_profile_25';
+    const ORG_PUBLIC_PROFILE_26 = 'org_public_profile_26';
+    const ORG_PUBLIC_PROFILE_27 = 'org_public_profile_27';
+    const ORG_PUBLIC_PROFILE_28 = 'org_public_profile_28';
+
 
     const ORG_SEARCH_ORGANISATION_SEARCH = 'org_search_organisation_search';
     const ORG_SEARCH_0 = 'org_search_0';
     const ORG_SEARCH_SEARCH = 'org_search_search';
     const ORG_SEARCH_SEARCH_RESULTS = 'org_search_search_results';
-    const ORG_SEARCH_FOUND = 'org_search_found';
-    const ORG_SEARCH_MATCHES = 'org_search_matches';
-
-    const ORG_ASSIGN_BADGE_ASSIGN_A_BADGE = 'org_assign_badge_assign_a_badge';
-    const ORG_ASSIGN_BADGE_0 = 'org_assign_badge_0';
-    const ORG_ASSIGN_BADGE_1 = 'org_assign_badge_1';
-    const ORG_ASSIGN_BADGE_2 = 'org_assign_badge_2';
-
+    const ORG_SEARCH_34 = 'org_search_34';
+    
     const ORG_CREATE_BADGE_CREATE_ORGANISATION_BADGE = 'org_create_badge_create_organisation_badge';
     const ORG_CREATE_BADGE_BADGE_TITLE = 'org_create_badge_badge_title';
     const ORG_CREATE_BADGE_0 = 'org_create_badge_0';
     const ORG_CREATE_BADGE_CREATE_BADGE = 'org_create_badge_create_badge';
+    const ORG_CREATE_BADGE_33 = 'org_create_badge_33';
 
     const ORG_DASHBOARD_ORGANISATION_DASHBOARD = 'org_dashboard_organisation_dashboard';
     const ORG_DASHBOARD_0 = 'org_dashboard_0';
     const ORG_DASHBOARD_EDIT_ORGANISATION = 'org_dashboard_edit_organisation';
     const ORG_DASHBOARD_1 = 'org_dashboard_1';
     const ORG_DASHBOARD_ARCHIVE_PROJECT = 'org_dashboard_archive_project';
-    const ORG_DASHBOARD_2 = 'org_dashboard_2';
     const ORG_DASHBOARD_3 = 'org_dashboard_3';
+    const ORG_DASHBOARD_5 = 'org_dashboard_5';
+    const ORG_DASHBOARD_6 = 'org_dashboard_6';
+    const ORG_DASHBOARD_7 = 'org_dashboard_7';
+    const ORG_DASHBOARD_8 = 'org_dashboard_8';   
+    const ORG_DASHBOARD_9 = 'org_dashboard_9';
+    const ORG_DASHBOARD_10 = 'org_dashboard_10';
 
     const ORG_EDIT_BADGE_EDIT_ORGANISATION_BADGE_DETAILS = 'org_edit_badge_edit_organisation_badge_details';
     const ORG_EDIT_BADGE_BADGE_TITLE = 'org_edit_badge_badge_title';
@@ -441,28 +316,33 @@ class Strings
 
     const ORG_MANAGE_BADGE_MANAGE_BADGE = 'org_manage_badge_manage_badge';
     const ORG_MANAGE_BADGE_0 = 'org_manage_badge_0';
-    const ORG_MANAGE_BADGE_1 = 'org_manage_badge_1';
-    const ORG_MANAGE_BADGE_2 = 'org_manage_badge_2';
     const ORG_MANAGE_BADGE_3 = 'org_manage_badge_3';
     const ORG_MANAGE_BADGE_USERS_WITH_THIS_BADGE = 'org_manage_badge_users_with_this_badge';
     const ORG_MANAGE_BADGE_4 = 'org_manage_badge_4';
     const ORG_MANAGE_BADGE_REMOVE_BADGE = 'org_manage_badge_remove_badge';
     const ORG_MANAGE_BADGE_5 = 'org_manage_badge_5';
-    const ORG_MANAGE_BADGE_6 = 'org_manage_badge_6';
+    const ORG_MANAGE_BADGE_29 = 'org_manage_badge_29';
+    const ORG_MANAGE_BADGE_30 = 'org_manage_badge_30';
+    const ORG_MANAGE_BADGE_32 = 'org_manage_badge_32';
 
+    
     const ORG_REQUEST_QUEUE_0 = 'org_request_queue_0';
-    const ORG_REQUEST_QUEUE_1 = 'org_request_queue_1';
     const ORG_REQUEST_QUEUE_2 = 'org_request_queue_2';
-    const ORG_REQUEST_QUEUE_USERS_EMAIL_ADDRESS = 'org_request_queue_users_email_address';
+    const ORG_REQUEST_QUEUE_7 = 'org_request_queue_7';
 
     const ORG_TASK_REVIEW_REVIEW_THIS_COMPLETED_TASK = 'org_task_review_review_this_completed_task';
     const ORG_TASK_REVIEW_0 = 'org_task_review_0';
     const ORG_TASK_REVIEW_DOWNLOAD_OUTPUT_FILE = 'org_task_review_download_output_file';
     const ORG_TASK_REVIEW_REVIEW_THIS_FILE = 'org_task_review_review_this_file';
     const ORG_TASK_REVIEW_1 = 'org_task_review_1';
-    const ORG_TASK_REVIEW_2 = 'org_task_review_2';
     const ORG_TASK_REVIEW_THE_VOLUNTEER = 'org_task_review_the_volunteer';
-    const ORG_TASK_REVIEW_3 = 'org_task_review_3';
+    const ORG_TASK_REVIEW_35 = 'org_task_review_35';
+    const ORG_TASK_REVIEW_36 = 'org_task_review_36';
+    const ORG_TASK_REVIEW_37 = 'org_task_review_37';
+    const ORG_TASK_REVIEW_38 = 'org_task_review_38';
+    const ORG_TASK_REVIEW_39 = 'org_task_review_39';
+    const ORG_TASK_REVIEW_40 = 'org_task_review_40';
+    const ORG_TASK_REVIEW_41 = 'org_task_review_41';
 
     const ARCHIVED_PROJECTS_ARCHIVED_PROJECTS = 'archived_projects_archived_projects';
     const ARCHIVED_PROJECTS_0 = 'archived_projects_0';                
@@ -470,10 +350,11 @@ class Strings
     const PROJECT_ALTER_ALTER_PROJECT_DETAILS_HERE = 'project_alter_alter_project_details_here';
     const PROJECT_ALTER_VIEW_PROJECT_DETAILS = 'project_alter_view_project_details';
     const PROJECT_ALTER_UPDATE_PROJECT_DETAILS = 'project_alter_update_project_details';
+    const PROJECT_ALTER_11 = 'project_alter_11';
 
     const PROJECT_CREATE_CREATE_A_PROJECT = 'project_create_create_a_project';
-    const PROJECT_CREATE_0 = 'project_create_0';
     const PROJECT_CREATE_SOURCE_TEXT = 'project_create_source_text';
+    const PROJECT_CREATE_0 = 'project_create_0';
     const PROJECT_CREATE_1 = 'project_create_1';
     const PROJECT_CREATE_2 = 'project_create_2';
     const PROJECT_CREATE_3 = 'project_create_3';
@@ -491,17 +372,20 @@ class Strings
     const PROJECT_CREATE_12 = 'project_create_12';
     const PROJECT_CREATE_TARGET_LANGUAGES = 'project_create_target_languages';
     const PROJECT_CREATE_ADD_MORE_TARGET_LANGUAGES = 'project_create_add_more_target_languages';
+    const PROJECT_CREATE_23 = 'project_create_23';
+    const PROJECT_CREATE_25 = 'project_create_25';
+    const PROJECT_CREATE_26 = 'project_create_26';
+    const PROJECT_CREATE_27 = 'project_create_27';
+    const PROJECT_CREATE_28 = 'project_create_28';
+    const PROJECT_CREATE_29 = 'project_create_29';
+    
     const PROJECT_CREATED_PROJECT_IS_NOW_LIVE = 'project_created_project_is_now_live';
     const PROJECT_CREATED_SUCCESS = 'project_created_success';
-    const PROJECT_CREATED_0 = 'project_created_0';
     const PROJECT_CREATED_1 = 'project_created_1';
-    const PROJECT_CREATED_DASHBOARD = 'project_created_dashboard';
     const PROJECT_CREATED_2 = 'project_created_2';
-    const PROJECT_CREATED_3 = 'project_created_3';
     const PROJECT_CREATED_4 = 'project_created_4';
     const PROJECT_CREATED_5 = 'project_created_5';
     const PROJECT_CREATED_6 = 'project_created_6';
-
     const PROJECT_CREATED_BACK_TO_HOME_PAGE = 'project_created_back_to_home_page';
     const PROJECT_CREATED_CREATE_NEW_PROJECT = 'project_created_create_new_project';
 
@@ -509,39 +393,71 @@ class Strings
     const PROJECT_PROFILE_DISPLAY_WORDS = 'project_profile_display_words';
 
     const PROJECT_VIEW_OVERVIEW_OF_PROJECT_DETAILS = 'project_view_overview_of_project_details';
-    const PROJECT_VIEW_CREATED = 'project_view_created';
     const PROJECT_VIEW_PROJECT_DEADLINE = 'project_view_project_deadline';
     const PROJECT_VIEW_UNTRACK_PROJECT = 'project_view_untrack_project';
     const PROJECT_VIEW_TASKS = 'project_view_tasks';
     const PROJECT_VIEW_0 = 'project_view_0';
     const PROJECT_VIEW_LIST_VIEW = 'project_view_list_view';
     const PROJECT_VIEW_GRAPH_VIEW = 'project_view_graph_view';
-    const PROJECT_VIEW_PUBLISH = 'project_view_publish';
     const PROJECT_VIEW_ARCHIVE_DELETE = 'project_view_archive_delete';
-    const PROJECT_VIEW_UNTRACK = 'project_view_untrack';
-    const PROJECT_VIEW_TRACK = 'project_view_track';
     const PROJECT_VIEW_EDIT_TASK = 'project_view_edit_task';
     const PROJECT_VIEW_1 = 'project_view_1';
     const PROJECT_VIEW_2 = 'project_view_2';
     const PROJECT_VIEW_3 = 'project_view_3';
     const PROJECT_VIEW_4 = 'project_view_4';
     const PROJECT_VIEW_5 = 'project_view_5';
-    const PROJECT_VIEW_6 = 'project_view_6';
+    const PROJECT_VIEW_6 = 'project_view_6';    
+    const PROJECT_VIEW_7 = 'project_view_7';
+    const PROJECT_VIEW_8 = 'project_view_8';
+    const PROJECT_VIEW_9 = 'project_view_9';
+    const PROJECT_VIEW_10 = 'project_view_10';
+    const PROJECT_VIEW_11 = 'project_view_11';
+    const PROJECT_VIEW_12 = 'project_view_12';
+    const PROJECT_VIEW_13 = 'project_view_13';
+    const PROJECT_VIEW_14 = 'project_view_14';
+    const PROJECT_VIEW_15 = 'project_view_15';
+    const PROJECT_VIEW_16 = 'project_view_16';
+    const PROJECT_VIEW_17 = 'project_view_17';
+    const PROJECT_VIEW_18 = 'project_view_18';
+    
+    
+    const FAQ_FAQ = 'faq_faq';
+    const FAQ_V_Q1 = 'faq_v_q1';
+    const FAQ_V_Q2 = 'faq_v_q2';
+    const FAQ_V_Q3 = 'faq_v_q3';
+    const FAQ_V_Q4 = 'faq_v_q4';
+    const FAQ_V_Q5 = 'faq_v_q5';
+    const FAQ_V_Q6 = 'faq_v_q6';
+    const FAQ_V_Q7 = 'faq_v_q7';    
+    const FAQ_V_A1 = 'faq_v_a1';
+    const FAQ_V_A2 = 'faq_v_a2';
+    const FAQ_V_A3 = 'faq_v_a3';
+    const FAQ_V_A4 = 'faq_v_a4';
+    const FAQ_V_A5 = 'faq_v_a5';
+    const FAQ_V_A6 = 'faq_v_a6';
+    const FAQ_V_A7 = 'faq_v_a7';    
+    const FAQ_V_A7_2 = 'faq_v_a7_2';
+    const FAQ_V_A7_ALL = 'faq_v_a7_all';
+    const FAQ_V_A7_STRICT = 'faq_v_a7_strict';
+    const FAQ_O_Q1 = 'faq_o_q1';
+    const FAQ_O_Q2 = 'faq_o_q2';
+    const FAQ_O_Q3 = 'faq_o_q3';
+    const FAQ_O_Q4 = 'faq_o_q4';
+    const FAQ_O_Q5 = 'faq_o_q5';    
+    const FAQ_O_A1 = 'faq_o_a1';
+    const FAQ_O_A2 = 'faq_o_a2';
+    const FAQ_O_A3 = 'faq_o_a3';
+    const FAQ_O_A4 = 'faq_o_a4';
+    const FAQ_O_A5 = 'faq_o_a5';
 
     const PRIVACY_PRIVACY_POLICY = 'privacy_privacy_policy';
     const PRIVACY_0 = 'privacy_0';
-    const PRIVACY_1 = 'privacy_1';
     const PRIVACY_PERSONAL_IDENTIFICATION_INFORMATION = 'privacy_personal_identification_information';
     const PRIVACY_2 = 'privacy_2';
-    const PRIVACY_3 = 'privacy_3';
-    const PRIVACY_4 = 'privacy_4';
     const PRIVACY_NONPERSONAL_IDENTIFICATION_INFORMATION = 'privacy_nonpersonal_identification_information';
     const PRIVACY_5 = 'privacy_5';
-    const PRIVACY_6 = 'privacy_6';
     const PRIVACY_WEB_BROWSER_COOKIES = 'privacy_web_browser_cookies';
     const PRIVACY_7 = 'privacy_7';
-    const PRIVACY_8 = 'privacy_8';
-    const PRIVACY_9 = 'privacy_9';
     const PRIVACY_10 = 'privacy_10';
     const PRIVACY_11 = 'privacy_11';
     const PRIVACY_TO_PERSONALIZE_USER_EXPERIENCE = 'privacy_to_personalize_user_experience';
@@ -550,22 +466,14 @@ class Strings
     const PRIVACY_13 = 'privacy_13';
     const PRIVACY_TO_SEND_PERIODIC_EMAILS = 'privacy_to_send_periodic_emails';
     const PRIVACY_14 = 'privacy_14';
-    const PRIVACY_15 = 'privacy_15';
-    const PRIVACY_16 = 'privacy_16';
     const PRIVACY_17 = 'privacy_17';
     const PRIVACY_18 = 'privacy_18';
     const PRIVACY_SHARING_YOUR_PERSONAL_INFORMATION = 'privacy_sharing_your_personal_information';
     const PRIVACY_19 = 'privacy_19';
-    const PRIVACY_20 = 'privacy_20';
     const PRIVACY_21 = 'privacy_21';
     const PRIVACY_22 = 'privacy_22';
-    const PRIVACY_23 = 'privacy_23';
-    const PRIVACY_24 = 'privacy_24';
-    const PRIVACY_25 = 'privacy_25';
     const PRIVACY_26 = 'privacy_26';
     const PRIVACY_27 = 'privacy_27';
-    const PRIVACY_28 = 'privacy_28';
-    const PRIVACY_29 = 'privacy_29';
     const PRIVACY_CONTACTING_US = 'privacy_contacting_us';
     const PRIVACY_30 = 'privacy_30';
     const PRIVACY_31 = 'privacy_31';
@@ -573,8 +481,6 @@ class Strings
     const TERMS_TERMS_AND_CONDITIONS = 'terms_terms_and_conditions';
     const TERMS_TERMS = 'terms_terms';
     const TERMS_0 = 'terms_0';
-    const TERMS_1 = 'terms_1';
-    const TERMS_2 = 'terms_2';
     const TERMS_ORGANISATION_USE_OF = 'terms_organisation_use_of';
     const TERMS_3 = 'terms_3';
     const TERMS_ORGANISATION_USE_LICENSE = 'terms_organisation_use_license';
@@ -584,13 +490,9 @@ class Strings
     const TERMS_7 = 'terms_7';
     const TERMS_8 = 'terms_8';
     const TERMS_9 = 'terms_9';
-    const TERMS_10 = 'terms_10';
-    const TERMS_11 = 'terms_11';
-    const TERMS_12 = 'terms_12';
     const TERMS_13 = 'terms_13';
     const TERMS_14 = 'terms_14';
     const TERMS_15 = 'terms_15';
-    const TERMS_16 = 'terms_16';
     const TERMS_OFFENSIVE_CONTENT = 'terms_offensive_content';
     const TERMS_17 = 'terms_17';
     const TERMS_CONSTITUTES_CHILD_PORNOGRAPHY = 'terms_constitutes_child_pornography';
@@ -607,40 +509,27 @@ class Strings
     const TERMS_27 = 'terms_27';
     const TERMS_VOLUNTEER_USE_LICENSE = 'terms_volunteer_use_license';
     const TERMS_28 = 'terms_28';
-    const TERMS_29 = 'terms_29';
     const TERMS_30 = 'terms_30';
     const TERMS_31 = 'terms_31';
     const TERMS_32 = 'terms_32';
     const TERMS_33 = 'terms_33';
     const TERMS_34 = 'terms_34';
-    const TERMS_35 = 'terms_35';
     const TERMS_36 = 'terms_36';
-    const TERMS_37 = 'terms_37';
-    const TERMS_38 = 'terms_38';
     const TERMS_DISCLAIMER = 'terms_disclaimer';
     const TERMS_39 = 'terms_39';
-    const TERMS_40 = 'terms_40';
-    const TERMS_41 = 'terms_41';
     const TERMS_LIMITATIONS = 'terms_limitations';
     const TERMS_42 = 'terms_42';
-    const TERMS_43 = 'terms_43';
     const TERMS_REVISIONS_AND_ERRATA = 'terms_revisions_and_errata';
     const TERMS_44 = 'terms_44';
-    const TERMS_45 = 'terms_45';
-    const TERMS_46 = 'terms_46';
     const TERMS_LINKS = 'terms_links';
     const TERMS_47 = 'terms_47';
-    const TERMS_48 = 'terms_48';
     const TERMS_49 = 'terms_49';
     const TERMS_50 = 'terms_50';
-    const TERMS_51 = 'terms_51';
     const TERMS_GOVERNING_LAW = 'terms_governing_law';
     const TERMS_52 = 'terms_52';
     const TERMS_53 = 'terms_53';
     const TERMS_PRIVACY_POLICY = 'terms_privacy_policy';
     const TERMS_54 = 'terms_54';
-    const TERMS_55 = 'terms_55';
-    const TERMS_THE_FOLLOWING_OUTLINES_OUR = 'terms_the_following_outlines_our';
     const TERMS_56 = 'terms_56';
 
     const VIDEOS_VOLUNTEER_VIDEOS = 'videos_volunteer_videos';
@@ -665,6 +554,10 @@ class Strings
     const TAG_2 = 'tag_2';
     const TAG_NO_OPEN_TASKS = 'tag_no_open_tasks';
     const TAG_3 = 'tag_3';
+    const TAG_4 = 'tag_4';
+    const TAG_5 = 'tag_5';
+    const TAG_6 = 'tag_6';
+    const TAG_7 = 'tag_7';
 
     const TAGS_TOP_LIST_INC_POPULAR_TAGS = 'tags_top_list_inc_popular_tags';
     const TAGS_TOP_LIST_INC_MORE_TAGS = 'tags_top_list_inc_more_tags';
@@ -675,22 +568,21 @@ class Strings
     const ARCHIVED_TASKS_0 = 'archived_tasks_0';
 
     const CLAIMED_TASKS_CLAIMED_TASKS = 'claimed_tasks_claimed_tasks';
+    const CLAIMED_TASKS_CLAIMED_TASKS_2 = 'claimed_tasks_claimed_tasks_2';
     const CLAIMED_TASKS_TASK_REVIEWS = 'claimed_tasks_task_reviews';
     const CLAIMED_TASKS_0 = 'claimed_tasks_0';
     const CLAIMED_TASKS_NO_ACTIVE_TASKS_AVAILABLE = 'claimed_tasks_no_active_tasks_available';
-    const CLAIMED_TASKS_1 = 'claimed_tasks_1';
 
     const TASK_DESEGMENTATION_DESEGMENTATION_TASK_DETAILS = 'task_desegmentation_desegmentation_task_details';
     const TASK_DESEGMENTATION_DOWNLOAD = 'task_desegmentation_download';
     const TASK_DESEGMENTATION_0 = 'task_desegmentation_0';
-    const TASK_DESEGMENTATION_DOWNLOAD_HERE = 'task_desegmentation_download_here';
     const TASK_DESEGMENTATION_1 = 'task_desegmentation_1';
     const TASK_DESEGMENTATION_UPLOAD = 'task_desegmentation_upload';
     const TASK_DESEGMENTATION_2 = 'task_desegmentation_2';
-    const TASK_DESEGMENTATION_3 = 'task_desegmentation_3';
+    const TASK_DESEGMENTATION_4 = 'task_desegmentation_4';    
+    const TASK_DESEGMENTATION_5 = 'task_desegmentation_5';    
 
     const TASK_SEGMENTATION_0 = 'task_segmentation_0';
-    const TASK_SEGMENTATION_1 = 'task_segmentation_1';
     const TASK_SEGMENTATION_2 = 'task_segmentation_2';
     const TASK_SEGMENTATION_3 = 'task_segmentation_3';
     const TASK_SEGMENTATION_4 = 'task_segmentation_4';
@@ -699,6 +591,10 @@ class Strings
     const TASK_SEGMENTATION_6 = 'task_segmentation_6';
     const TASK_SEGMENTATION_UPLOAD_YOUR_SEGMENTED_FILE = 'task_segmentation_upload_your_segmented_file';
     const TASK_SEGMENTATION_SUBMIT_SEGMENTED_TASKS = 'task_segmentation_submit_segmented_tasks';
+    const TASK_SEGMENTATION_15 = 'task_segmentation_15';
+    const TASK_SEGMENTATION_16 = 'task_segmentation_16';
+    const TASK_SEGMENTATION_17 = 'task_segmentation_17';
+    const TASK_SEGMENTATION_18 = 'task_segmentation_18';
     const TASK_SEGMENTATION_7 = 'task_segmentation_7';
 
     const TASK_SIMPLE_UPLOAD_FINISHED_PROCESSING = 'task_simple_upload_finished_processing';
@@ -711,31 +607,34 @@ class Strings
     const TASK_SIMPLE_UPLOAD_2 = 'task_simple_upload_2';
     const TASK_SIMPLE_UPLOAD_3 = 'task_simple_upload_3';
     const TASK_SIMPLE_UPLOAD_4 = 'task_simple_upload_4';
-    const TASK_SIMPLE_UPLOAD_UPLOAD_AS = 'task_simple_upload_upload_as';
-    const TASK_SIMPLE_UPLOAD_TO_DOWNLOAD_THE = 'task_simple_upload_to_download_the';
-    const TASK_SIMPLE_UPLOAD_TO_REDOWNLOAD_THE = 'task_simple_upload_to_redownload_the';
     const TASK_SIMPLE_UPLOAD_ORIGINAL_TASK_FILE = 'task_simple_upload_original_task_file';
     const TASK_SIMPLE_UPLOAD_ORIGINAL_PROJECT_FILE = 'task_simple_upload_original_project_file';
     const TASK_SIMPLE_UPLOAD_LATEST_UPLOADED_FILE = 'task_simple_upload_latest_uploaded_file';
     const TASK_SIMPLE_UPLOAD_AS_XLIFF = 'task_simple_upload_as_xliff';
+    const TASK_SIMPLE_UPLOAD_5 = 'task_simple_upload_5';
+    const TASK_SIMPLE_UPLOAD_6 = 'task_simple_upload_6';
+    const TASK_SIMPLE_UPLOAD_7 = 'task_simple_upload_7';
+    const TASK_SIMPLE_UPLOAD_8 = 'task_simple_upload_8';
 
     const TASK_ALTER_ALTER_TASK_DETAILS_HERE = 'task_alter_alter_task_details_here';
     const TASK_ALTER_VIEW_TASK_DETAILS = 'task_alter_view_task_details';
     const TASK_ALTER_0 = 'task_alter_0';
     const TASK_ALTER_1 = 'task_alter_1';
-    const TASK_ALTER_2 = 'task_alter_2';
+    const TASK_ALTER_2 = 'task_alter_2';    
     const TASK_ALTER_YOU_CAN_ONLY_EDIT = 'task_alter_you_can_only_edit';
-    const TASK_ALTER_AND = 'task_alter_and';
     const TASK_ALTER_UPDATE_TASK_DETAILS = 'task_alter_update_task_details';
+    const TASK_ALTER_6 = 'task_alter_6';
+    const TASK_ALTER_7 = 'task_alter_7';
+    const TASK_ALTER_8 = 'task_alter_8';
+    const TASK_ALTER_9 = 'task_alter_9';
+
 
     const TASK_CLAIM_DESEGMENTATION_DESEGMENTATION_TASK = 'task_claim_desegmentation_desegmentation_task';
     const TASK_CLAIM_DESEGMENTATION_0 = 'task_claim_desegmentation_0';
     const TASK_CLAIM_DESEGMENTATION_1 = 'task_claim_desegmentation_1';
     const TASK_CLAIM_DESEGMENTATION_2 = 'task_claim_desegmentation_2';
     const TASK_CLAIM_DESEGMENTATION_3 = 'task_claim_desegmentation_3';
-    const TASK_CLAIM_DESEGMENTATION_ON_YOUR_COMPUTER = 'task_claim_desegmentation_on_your_computer';
     const TASK_CLAIM_DESEGMENTATION_4 = 'task_claim_desegmentation_4';
-    const TASK_CLAIM_DESEGMENTATION_5 = 'task_claim_desegmentation_5';
     const TASK_CLAIM_DESEGMENTATION_6 = 'task_claim_desegmentation_6';
     const TASK_CLAIM_DESEGMENTATION_7 = 'task_claim_desegmentation_7';
     const TASK_CLAIM_DESEGMENTATION_8 = 'task_claim_desegmentation_8';
@@ -744,7 +643,6 @@ class Strings
     const TASK_CLAIM_PROOFREADING_0 = 'task_claim_proofreading_0';
     const TASK_CLAIM_PROOFREADING_1 = 'task_claim_proofreading_1';
     const TASK_CLAIM_PROOFREADING_2 = 'task_claim_proofreading_2';
-    const TASK_CLAIM_PROOFREADING_THIS_FILE = 'task_claim_proofreading_this_file';
     const TASK_CLAIM_PROOFREADING_3 = 'task_claim_proofreading_3';
     const TASK_CLAIM_PROOFREADING_4 = 'task_claim_proofreading_4';
     const TASK_CLAIM_PROOFREADING_5 = 'task_claim_proofreading_5';
@@ -756,6 +654,7 @@ class Strings
     const TASK_CLAIM_SEGMENTATION_3 = 'task_claim_segmentation_3';
     const TASK_CLAIM_SEGMENTATION_4 = 'task_claim_segmentation_4';
     const TASK_CLAIM_SEGMENTATION_5 = 'task_claim_segmentation_5';
+    const TASK_CLAIM_SEGMENTATION_6 = 'task_claim_segmentation_6';
 
     const TASK_CLAIM_TRANSLATION_0 = 'task_claim_translation_0';
     const TASK_CLAIM_TRANSLATION_1 = 'task_claim_translation_1';
@@ -767,10 +666,8 @@ class Strings
     const TASK_CLAIMED_DESEGMENTATION_DESEGMENTATION_TASK_CLAIMED = 'task_claimed_desegmentation_desegmentation_task_claimed';
     const TASK_CLAIMED_DESEGMENTATION_0 = 'task_claimed_desegmentation_0';
     const TASK_CLAIMED_DESEGMENTATION_1 = 'task_claimed_desegmentation_1';
-    const TASK_CLAIMED_DESEGMENTATION_GO = 'task_claimed_desegmentation_go';
     const TASK_CLAIMED_DESEGMENTATION_2 = 'task_claimed_desegmentation_2';
     const TASK_CLAIMED_DESEGMENTATION_3 = 'task_claimed_desegmentation_3';
-    const TASK_CLAIMED_DESEGMENTATION_4 = 'task_claimed_desegmentation_4';
     const TASK_CLAIMED_DESEGMENTATION_WANT_TO_GET_STARTED = 'task_claimed_desegmentation_want_to_get_started';
     const TASK_CLAIMED_DESEGMENTATION_MERGE_FILES = 'task_claimed_desegmentation_merge_files';
     const TASK_CLAIMED_DESEGMENTATION_5 = 'task_claimed_desegmentation_5';
@@ -780,9 +677,7 @@ class Strings
     const TASK_CLAIMED_PROOFREADING_0 = 'task_claimed_proofreading_0';
     const TASK_CLAIMED_PROOFREADING_1 = 'task_claimed_proofreading_1';
     const TASK_CLAIMED_PROOFREADING_PROOFREAD_THE_FILE_IN = 'task_claimed_proofreading_proofread_the_file_in';
-    const TASK_CLAIMED_PROOFREADING_2 = 'task_claimed_proofreading_2';
     const TASK_CLAIMED_PROOFREADING_UPLOAD_THE_PROOFREAD_FILE = 'task_claimed_proofreading_upload_the_proofread_file';
-    const TASK_CLAIMED_PROOFREADING_3 = 'task_claimed_proofreading_3';
     const TASK_CLAIMED_PROOFREADING_4 = 'task_claimed_proofreading_4';
     const TASK_CLAIMED_PROOFREADING_UPLOAD_PROOFREAD_TASK = 'task_claimed_proofreading_upload_proofread_task';
 
@@ -790,23 +685,18 @@ class Strings
     const TASK_CLAIMED_SEGMENTATION_PLEASE_SEGMENT_IT = 'task_claimed_segmentation_please_segment_it';
     const TASK_CLAIMED_SEGMENTATION_0 = 'task_claimed_segmentation_0';
     const TASK_CLAIMED_SEGMENTATION_SEGMENT_THE_FILE = 'task_claimed_segmentation_segment_the_file';
-    const TASK_CLAIMED_SEGMENTATION_1 = 'task_claimed_segmentation_1';
     const TASK_CLAIMED_SEGMENTATION_2 = 'task_claimed_segmentation_2';
-    const TASK_CLAIMED_SEGMENTATION_3 = 'task_claimed_segmentation_3';
     const TASK_CLAIMED_SEGMENTATION_4 = 'task_claimed_segmentation_4';
     const TASK_CLAIMED_SEGMENTATION_UPLOAD_TASK_SEGMENTS = 'task_claimed_segmentation_upload_task_segments';
     const TASK_CLAIMED_SEGMENTATION_5 = 'task_claimed_segmentation_5'; 		
-
+    
     const TASK_CLAIMED_TRANSLATION_TRANSLATION_TASK_CLAIMED = 'task_claimed_translation_translation_task_claimed';
     const TASK_CLAIMED_TRANSLATION_PLEASE_TRANSLATE_IT = 'task_claimed_translation_please_translate_it';
     const TASK_CLAIMED_TRANSLATION_0 = 'task_claimed_translation_0';
     const TASK_CLAIMED_TRANSLATION_WE_NEED_YOUR_TRANSLATION = 'task_claimed_translation_we_need_your_translation';
-    const TASK_CLAIMED_TRANSLATION_2 = 'task_claimed_translation_2';
     const TASK_CLAIMED_TRANSLATION_TRANSLATE_THE_FILE_TO = 'task_claimed_translation_translate_the_file_to';
-    const TASK_CLAIMED_TRANSLATION_3 = 'task_claimed_translation_3';
     const TASK_CLAIMED_TRANSLATION_4 = 'task_claimed_translation_4';
     const TASK_CLAIMED_TRANSLATION_5 = 'task_claimed_translation_5';
-    const TASK_CLAIMED_TRANSLATION_6 = 'task_claimed_translation_6';
     const TASK_CLAIMED_TRANSLATION_UPLOAD_TRANSLATED_TASK = 'task_claimed_translation_upload_translated_task';
 
     const TASK_CREATE_FOR_PROJECT = 'task_create_for_project';
@@ -816,11 +706,11 @@ class Strings
     const TASK_CREATE_WORD_COUNT_TOOL = 'task_create_word_count_tool';
     const TASK_CREATE_3 = 'task_create_3';
     const TASK_CREATE_4 = 'task_create_4';
+    const TASK_CREATE_5 = 'task_create_5';
 
     const TASK_CREATED_TASK_IS_NOW_LIVE = 'task_created_task_is_now_live';
     const TASK_CREATED_0 = 'task_created_0';
     const TASK_CREATED_1 = 'task_created_1';
-    const TASK_CREATED_TASK_VIEW = 'task_created_task_view';
     const TASK_CREATED_2 = 'task_created_2';
     const TASK_CREATED_3 = 'task_created_3';
     const TASK_CREATED_4 = 'task_created_4';
@@ -832,6 +722,10 @@ class Strings
     const TASK_ORG_FEEDBACK_USER_FEEDBACK = 'task_org_feedback_user_feedback';
     const TASK_ORG_FEEDBACK_1 = 'task_org_feedback_1';
     const TASK_ORG_FEEDBACK_2 = 'task_org_feedback_2';
+    const TASK_ORG_FEEDBACK_3 = 'task_org_feedback_3';
+    const TASK_ORG_FEEDBACK_4 = 'task_org_feedback_4';
+    const TASK_ORG_FEEDBACK_5 = 'task_org_feedback_5';
+    const TASK_ORG_FEEDBACK_6 = 'task_org_feedback_6';
 
     const TASK_PROFILE_DISPLAY_ARCHIVED = 'task_profile_display_archived';
 
@@ -841,10 +735,9 @@ class Strings
     const TASK_REVIEW_MERGED = 'task_review_merged';
     const TASK_REVIEW_FORM_0 = 'task_review_form_0';
     const TASK_REVIEW_FORM_1 = 'task_review_form_1';
+    const TASK_REVIEW_FORM_RATING = 'task_review_form_rating';
     const TASK_REVIEW_FORM_CORRECTIONS = 'task_review_form_corrections';
     const TASK_REVIEW_FORM_2 = 'task_review_form_2';
-    const TASK_REVIEW_FORM_FEW_ERRORS = 'task_review_form_few_errors';
-    const TASK_REVIEW_FORM_A_LOT_OF_ERRORS = 'task_review_form_a_lot_of_errors';
     const TASK_REVIEW_FORM_3 = 'task_review_form_3';
     const TASK_REVIEW_FORM_SPELLING = 'task_review_form_spelling';
     const TASK_REVIEW_FORM_4 = 'task_review_form_4';
@@ -854,12 +747,20 @@ class Strings
     const TASK_REVIEW_FORM_6 = 'task_review_form_6';
     const TASK_REVIEW_FORM_GRAMMAR = 'task_review_form_grammar';
     const TASK_REVIEW_FORM_SKIP = 'task_review_form_skip';
+    const TASK_REVIEW_FORM_SUBMIT_REVIEW = 'task_review_form_submit_review';
 
     const TASK_REVIEW_PROVIDE_A_RATING = 'task_review_provide_a_rating';
     const TASK_REVIEW_0 = 'task_review_0';
     const TASK_REVIEW_1 = 'task_review_1';
     const TASK_REVIEW_2 = 'task_review_2';
     const TASK_REVIEW_3 = 'task_review_3';
+    const TASK_REVIEW_4 = 'task_review_4';
+    const TASK_REVIEW_5 = 'task_review_5';
+    const TASK_REVIEW_6 = 'task_review_6';
+    const TASK_REVIEW_7 = 'task_review_7';
+    const TASK_REVIEW_8 = 'task_review_8';
+    const TASK_REVIEW_9 = 'task_review_9';
+    const TASK_REVIEW_10 = 'task_review_10';
 
     const TASK_UPLOADED_0 = 'task_uploaded_0';
     const TASK_UPLOADED_1 = 'task_uploaded_1';
@@ -868,7 +769,6 @@ class Strings
     const TASK_UPLOADED_IS_COMPLETE = 'task_uploaded_is_complete';
     const TASK_UPLOADED_3 = 'task_uploaded_3';
     const TASK_UPLOADED_4 = 'task_uploaded_4';
-    const TASK_UPLOADED_THANK_YOU = 'task_uploaded_thank_you';
     const TASK_UPLOADED_5 = 'task_uploaded_5';
     const TASK_UPLOADED_FIND_A_NEW_TASK = 'task_uploaded_find_a_new_task';
 
@@ -876,11 +776,23 @@ class Strings
     const TASK_USER_FEEDBACK_0 = 'task_user_feedback_0';
     const TASK_USER_FEEDBACK_1 = 'task_user_feedback_1';
     const TASK_USER_FEEDBACK_2 = 'task_user_feedback_2';
+    const TASK_USER_FEEDBACK_3 = 'task_user_feedback_3';
+    const TASK_USER_FEEDBACK_4 = 'task_user_feedback_4';
+    const TASK_USER_FEEDBACK_5 = 'task_user_feedback_5';    
 
     const TASK_VIEW_DOWNLOAD_TASK = 'task_view_download_task';
     const TASK_VIEW_EDIT_TASK_DETAILS = 'task_view_edit_task_details';
-    const TASK_VIEW_SOURCE_DOCUMENT_PREVIEW = 'task_view_source_document_preview';
+    const TASK_VIEW_SOURCE_DOCUMENT_PREVIEW = 'task_view_source_document_preview';   
+    const TASK_VIEW_10 = 'task_view_10';
+    const TASK_VIEW_11 = 'task_view_11';
+    const TASK_VIEW_12 = 'task_view_12';
+    const TASK_VIEW_13 = 'task_view_13';
     const TASK_VIEW_0 = 'task_view_0';
+    const TASK_VIEW_1 = 'task_view_1';
+    const TASK_VIEW_2 = 'task_view_2';
+    const TASK_VIEW_3 = 'task_view_3';
+    const TASK_VIEW_4 = 'task_view_4';
+    const TASK_VIEW_5 = 'task_view_5';
 
     const EMAIL_VERIFICATION_EMAIL_VERIFICATION = 'email_verification_email_verification';
     const EMAIL_VERIFICATION_0 = 'email_verification_0';
@@ -892,6 +804,8 @@ class Strings
     const EMAIL_VERIFICATION_5 = 'email_verification_5';
     const EMAIL_VERIFICATION_6 = 'email_verification_6';
     const EMAIL_VERIFICATION_FINISH_REGISTRATION = 'email_verification_finish_registration';
+    const EMAIL_VERIFICATION_7 = 'email_verification_7';
+    const EMAIL_VERIFICATION_8 = 'email_verification_8';
 
     const LOGIN_LOG_IN_TO = 'login_log_in_to';
     const LOGIN_RESET_PASSWORD = 'login_reset_password';
@@ -899,26 +813,34 @@ class Strings
     const LOGIN_MORE_ABOUT_OPENID = 'login_more_about_openid';
     const LOGIN_0 = 'login_0';
     const LOGIN_SIGNIN = 'login_signin';
-
+    const LOGIN_1 = 'login_1';
+    const LOGIN_2 = 'login_2';
+    
     const PASSWORD_RESET_PASSWORD_RESET = 'password_reset_password_reset';
     const PASSWORD_RESET_RESET_YOUR_PASSWORD_HERE = 'password_reset_reset_your_password_here';
     const PASSWORD_RESET_NEW_PASSWORD = 'password_reset_new_password';
     const PASSWORD_RESET_CONFIRM_NEW_PASSWORD = 'password_reset_confirm_new_password';
     const PASSWORD_RESET_CHANGE_PASSWORD = 'password_reset_change_password';
+    const PASSWORD_RESET_1 = 'password_reset_1';
+    const PASSWORD_RESET_2 = 'password_reset_1';
+    const PASSWORD_RESET_3 = 'password_reset_1';
+    const PASSWORD_RESET_4 = 'password_reset_1';
+    const PASSWORD_RESET_5 = 'password_reset_1';
 
     const REGISTER_REGISTER_ON = 'register_register_on';
     const REGISTER_YOUR_EMAIL = 'register_your_email';
     const REGISTER_YOUR_PASSWORD = 'register_your_password';
+    const REGISTER_1 = 'register_1';
+    const REGISTER_2 = 'register_2';
+    const REGISTER_3 = 'register_3';
+    const REGISTER_4 = 'register_4';
 
     const USER_PRIVATE_PROFILE_PRIVATE_PROFILE = 'user_private_profile_private_profile';
     const USER_PRIVATE_PROFILE_0 = 'user_private_profile_0';
-    const USER_PRIVATE_PROFILE_1 = 'user_private_profile_1';
-    const USER_PRIVATE_PROFILE_DELETE_PROFILE = 'user_private_profile_delete_profile';
     const USER_PRIVATE_PROFILE_2 = 'user_private_profile_2';
     const USER_PRIVATE_PROFILE_PLEASE_NOTE = 'user_private_profile_please_note';
     const USER_PRIVATE_PROFILE_3 = 'user_private_profile_3';
     const USER_PRIVATE_PROFILE_4 = 'user_private_profile_4';
-    const USER_PRIVATE_PROFILE_5 = 'user_private_profile_5';
     const USER_PRIVATE_PROFILE_ADD_SECONDARY_LANGUAGE = 'user_private_profile_add_secondary_language';
     const USER_PRIVATE_PROFILE_TASK_TYPE_PREFERENCES = 'user_private_profile_task_type_preferences';
     const USER_PRIVATE_PROFILE_TRANSLATING = 'user_private_profile_translating';
@@ -947,8 +869,6 @@ class Strings
     const USER_PUBLIC_PROFILE_10 = 'user_public_profile_10';
     const USER_PUBLIC_PROFILE_LEAVE_ORGANISATION = 'user_public_profile_leave_organisation';
     const USER_PUBLIC_PROFILE_11 = 'user_public_profile_11';
-    const USER_PUBLIC_PROFILE_12 = 'user_public_profile_12';
-    const USER_PUBLIC_PROFILE_13 = 'user_public_profile_13';
     const USER_PUBLIC_PROFILE_14 = 'user_public_profile_14';
     const USER_PUBLIC_PROFILE_LIST_ALL_ARCHIVED_TASKS = 'user_public_profile_list_all_archived_tasks';
     const USER_PUBLIC_PROFILE_REFERENCE_EMAIL = 'user_public_profile_reference_email';
@@ -956,11 +876,15 @@ class Strings
     const USER_PUBLIC_PROFILE_15 = 'user_public_profile_15';
     const USER_PUBLIC_PROFILE_16 = 'user_public_profile_16';
     const USER_PUBLIC_PROFILE_REFERENCE_REQUEST_SUCCESS = 'user_public_profile_reference_request_success';
+    const USER_PUBLIC_PROFILE_17 = 'user_public_profile_17';
 
     const USER_RESET_PASSWORD_RESET_USER_PASSWORD = 'user_reset_password_reset_user_password';
     const USER_RESET_PASSWORD_0 = 'user_reset_password_0';
     const USER_RESET_PASSWORD_1 = 'user_reset_password_1';
     const USER_RESET_PASSWORD_SEND_REQUEST = 'user_reset_password_send_request';
+    const USER_RESET_PASSWORD_2 = 'user_reset_password_2';
+    const USER_RESET_PASSWORD_3 = 'user_reset_password_3';
+    const USER_RESET_PASSWORD_4 = 'user_reset_password_4';
 
     const USER_TASK_REVIEWS_0 = 'user_task_reviews_0';
     const USER_TASK_REVIEWS_1 = 'user_task_reviews_1';
@@ -971,10 +895,9 @@ class Strings
     const USER_TASK_STREAM_NOTIFICATION_EDIT_0 = 'user_task_stream_notification_edit_0';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_1 = 'user_task_stream_notification_edit_1';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_2 = 'user_task_stream_notification_edit_2';
-    const USER_TASK_STREAM_NOTIFICATION_EDIT_3 = 'user_task_stream_notification_edit_3';
-    const USER_TASK_STREAM_NOTIFICATION_EDIT_4 = 'user_task_stream_notification_edit_4';
+    const USER_TASK_STREAM_NOTIFICATION_EDIT_5 = 'user_task_stream_notification_edit_5';
+    const USER_TASK_STREAM_NOTIFICATION_EDIT_6 = 'user_task_stream_notification_edit_6';    
     const USER_TASK_STREAM_NOTIFICATION_EDIT_ALL = 'user_task_stream_notification_edit_all';
-    const USER_TASK_STREAM_NOTIFICATION_EDIT_NOTIFICATIONS = 'user_task_stream_notification_edit_notifications';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_NEVER = 'user_task_stream_notification_edit_never';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_DAILY = 'user_task_stream_notification_edit_daily';
     const USER_TASK_STREAM_NOTIFICATION_EDIT_WEEKLY = 'user_task_stream_notification_edit_weekly';
@@ -986,7 +909,6 @@ class Strings
     const FOOTER_PRIVACY_POLICY = 'footer_privacy_policy';
     const FOOTER_COMMUNITY_FORUM = 'footer_community_forum';
     const FOOTER_FEEDBACK = 'footer_feedback';
-    const FOOTER_IS_APPRECIATED = 'footer_is_appreciated';
     const FOOTER_POWERED_BY = 'footer_powered_by';
 
     const HEADER_HOME = 'header_home';
@@ -1005,20 +927,16 @@ class Strings
     const INDEX_ANY = 'index_any';
     const INDEX_FILTER_AVAILABLE_TASKS = 'index_filter_available_tasks';
     const INDEX_FILTER_TASK_STREAM = 'index_filter_task_stream';
-    const INDEX_2 = 'index_2';
-    const INDEX_3 = 'index_3';
-    const INDEX_NO_OPEN_TASKS = 'index_no_open_tasks';
-    const INDEX_4 = 'index_4';
     const INDEX_NO_TASKS_AVAILABLE = 'index_no_tasks_available';
-    const INDEX_5 = 'index_5';
     const INDEX_6 = 'index_6';
     const INDEX_REGISTER_NOW = 'index_register_now';
-    const INDEX_7 = 'index_7';
-	const INDEX_8 = 'index_8';
-	const INDEX_9 = "index_9";
-
-    const PAGINATION_PAGE = 'pagination_page';
-    const PAGINATION_OF = 'pagination_of';
+    const INDEX_8 = 'index_8';
+    const INDEX_9 = 'index_9';
+    const INDEX_ANY_TASK_TYPE = 'index_any_task_type';
+    const INDEX_ANY_SOURCE_LANGUAGE = 'index_any_source_language';
+    const INDEX_ANY_TARGET_LANGUAGE = 'index_any_target_langauge';
+    
+    const PAGINATION_PAGE_OF = 'pagination_page_of';
 
     const STATISTICS_STATISTICS = 'statistics_statistics';
     const STATISTICS_USERS = 'statistics_users';
@@ -1030,37 +948,10 @@ class Strings
     const STATISTICS_TASKS_WITH_PREREQUISITES = 'statistics_tasks_with_prerequisites';
     const STATISTICS_TASKS_ARCHIVED = 'statistics_tasks_archived';
     
-    const FAQ_FREQUENTLY_ASKED_QUESTIONS = 'faq_frequently_asked_questions';
     const FAQ_QUICKLINKS = 'faq_quicklinks';
     const FAQ_VOLUNTEERS= 'faq_volunteers';
     const FAQ_VOLUNTEER_QUESTIONS = 'faq_volunteer_questions';
     const FAQ_TERMS = "faq_terms";
-    const FAQ_1 = 'faq_1';
-    const FAQ_2 = 'faq_2';
-    const FAQ_3 = 'faq_3';
-    const FAQ_4 = 'faq_4';
-    const FAQ_5 = 'faq_5';
-    const FAQ_6 = 'faq_6';
-    const FAQ_7 = 'faq_7';
-    const FAQ_8 = 'faq_8';
-    const FAQ_9 = 'faq_9';
-    const FAQ_10 = 'faq_10';
-    const FAQ_11 = 'faq_11';
-    const FAQ_12 = 'faq_12';
-    const FAQ_13 = 'faq_13';
-    const FAQ_14 = 'faq_14';
-    const FAQ_15 = 'faq_15';
-    const FAQ_16 = 'faq_16';
-    const FAQ_17 = 'faq_17';
-    const FAQ_18 = 'faq_18';
-    const FAQ_19 = 'faq_19';
-    const FAQ_20 = 'faq_20';
-    const FAQ_21 = 'faq_21';
-    const FAQ_22 = 'faq_22';
-    const FAQ_23 = 'faq_23';
-    const FAQ_24 = 'faq_24';
-    const FAQ_25 = 'faq_25';
-    const FAQ_26 = 'faq_26';
     const FAQ_27 = 'faq_27';
     const FAQ_28 = 'faq_28';
     const FAQ_29 = 'faq_29';
@@ -1072,28 +963,6 @@ class Strings
     const FAQ_35 = 'faq_35';
     const FAQ_36 = 'faq_36';
     const FAQ_ORGANISATION_QUESTIONS = 'faq_organisation_questions';
-    const FAQ_37 = 'faq_37';
-    const FAQ_38 = 'faq_38';
-    const FAQ_39 = 'faq_39';
-    const FAQ_40 = 'faq_40';
-    const FAQ_41 = 'faq_41';
-    const FAQ_42 = 'faq_42';
-    const FAQ_43 = 'faq_43';
-    const FAQ_44 = 'faq_44';
-    const FAQ_45 = 'faq_45';
-    const FAQ_46 = 'faq_46';
-    const FAQ_47 = 'faq_47';
-    const FAQ_48 = 'faq_48';
-    const FAQ_49 = 'faq_49';
-    const FAQ_50 = 'faq_50';
-    const FAQ_51 = 'faq_51';
-    const FAQ_52 = 'faq_52';
-    const FAQ_53 = 'faq_53';
-    const FAQ_54 = 'faq_54';
-    const FAQ_55 = 'faq_55';
-    const FAQ_56 = 'faq_56';
-    const FAQ_57 = 'faq_57';
-    const FAQ_58 = 'faq_58';
     const FAQ_59 = 'faq_59';
     const FAQ_60 = 'faq_60';
     const FAQ_61 = 'faq_61';

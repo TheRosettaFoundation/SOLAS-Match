@@ -1,5 +1,4 @@
 .buildlog
 web/conf/conf.json
 web/out/
-web/packages/
-
+/packages

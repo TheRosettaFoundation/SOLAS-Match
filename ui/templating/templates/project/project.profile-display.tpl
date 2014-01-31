@@ -16,7 +16,7 @@
     </p>
 
     <p class="task_details">
-        {Localisation::getTranslation(Strings::COMMON_ADDED)} {TemplateHelper::timeSinceSqlTime($project->getCreatedTime())} {Localisation::getTranslation(Strings::COMMON_AGO)}
+        {sprintf(Localisation::getTranslation(Strings::COMMON_ADDED), {TemplateHelper::timeSinceSqlTime($project->getCreatedTime())})}
         &middot; {Localisation::getTranslation(Strings::PROJECT_PROFILE_DISPLAY_BY_PROJECT)}
         {if $task->getWordCount()}
                 &middot; {$task->getWordCount()|number_format} {Localisation::getTranslation(Strings::PROJECT_PROFILE_DISPLAY_WORDS)}

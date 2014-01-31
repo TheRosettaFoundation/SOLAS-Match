@@ -68,7 +68,7 @@ class TemplateHelper {
             case TaskTypeEnum::SEGMENTATION:
                 return Localisation::getTranslation(Strings::COMMON_SEGMENTATION_TASK);
             default:
-                return Localisation::getTranslation(Strings::TEMPLATEHELPER_1);
+                return Localisation::getTranslation(Strings::COMMON_ERROR_UNKNOWN_TASK_TYPE);
         }
     }
 
@@ -323,7 +323,7 @@ class TemplateHelper {
         $langDao = new LanguageDao();
         $language = $langDao->getLanguageByCode($languageCode);
         if (is_null(($language))) {
-            throw new InvalidArgumentException(Localisation::getTranslation(Strings::TEMPLATEHELPER_2));
+            throw new InvalidArgumentException(Localisation::getTranslation(Strings::COMMON_ERROR_LANGUAGE_CODE_EXPECTED));
         }
         return $language->getId();
     }
@@ -362,7 +362,7 @@ class TemplateHelper {
     {
         if (!self::isUploadedWithoutError($field_name)) {
             $error_message = self::fileUploadErrorMessage($_FILES[$field_name]["error"]);
-            throw new Exception(sprintf(Localisation::getTranslation(Strings::TEMPLATEHELPER_3), $error_message));
+            throw new Exception(sprintf(Localisation::getTranslation(Strings::COMMON_ERROR_UNABLE_TO_UPLOAD), $error_message));
         }
 
     }
@@ -384,21 +384,21 @@ class TemplateHelper {
         $max_file_size = self::maxFileSizeMB();
         switch ($error_code) {
             case UPLOAD_ERR_INI_SIZE :
-                return sprintf(Localisation::getTranslation(Strings::TEMPLATEHELPER_4), $max_file_size);
+                return sprintf(Localisation::getTranslation(Strings::COMMON_ERROR_FILE_TOO_LARGE), $max_file_size);
             case UPLOAD_ERR_FORM_SIZE :
-                return Localisation::getTranslation(Strings::TEMPLATEHELPER_4);
+                return Localisation::getTranslation(Strings::COMMON_ERROR_FILE_TOO_LARGE);
             case UPLOAD_ERR_PARTIAL :
-                return Localisation::getTranslation(Strings::TEMPLATEHELPER_5);
+                return Localisation::getTranslation(Strings::COMMON_ERROR_PARTIAL_UPLOAD);
             case UPLOAD_ERR_NO_FILE :
-                return Localisation::getTranslation(Strings::TEMPLATEHELPER_6);
+                return Localisation::getTranslation(Strings::COMMON_ERROR_NO_FILE_SELECTED);
             case UPLOAD_ERR_NO_TMP_DIR :
-                return Localisation::getTranslation(Strings::TEMPLATEHELPER_7);
+                return Localisation::getTranslation(Strings::COMMON_ERROR_SERVER_MISSING_TEMP);
             case UPLOAD_ERR_CANT_WRITE :
-                return Localisation::getTranslation(Strings::TEMPLATEHELPER_8);
+                return Localisation::getTranslation(Strings::COMMON_ERROR_SERVER_FAILED_WRITE_DISK);
             case UPLOAD_ERR_EXTENSION :
-                return Localisation::getTranslation(Strings::TEMPLATEHELPER_9);
+                return Localisation::getTranslation(Strings::COMMON_ERROR_FILE_STOPPED_BY_EXTENSION);
             default :
-                return Localisation::getTranslation(Strings::TEMPLATEHELPER_10);
+                return Localisation::getTranslation(Strings::COMMON_ERROR_FILE_INVALID_EMPTY);
         }
     }
 

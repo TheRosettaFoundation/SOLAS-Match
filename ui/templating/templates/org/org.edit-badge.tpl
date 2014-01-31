@@ -8,7 +8,7 @@
     {* {assign var="badge_id" value=$badge->getId()} *}
     <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="well" accept-charset="utf-8">
         <input type="hidden" name="badge_id" value="{$badge->getId()}" />    
-        <label for='title'><strong>{Localisation::getTranslation(Strings::ORG_EDIT_BADGE_BADGE_TITLE)}:</strong></label>
+        <label for='title'><strong>{Localisation::getTranslation(Strings::ORG_EDIT_BADGE_BADGE_TITLE)}</strong></label>
         <input type='text' name='title' id='title'
         {if $badge->getTitle() != ''}
             value='{$badge->getTitle()}'
@@ -16,7 +16,7 @@
             placeholder='{Localisation::getTranslation(Strings::ORG_EDIT_BADGE_0)}'
         {/if} /> 
 
-        <label for="description"><strong>{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}:</strong></label>
+        <label for="description"><strong>{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}</strong></label>
         <textarea name='description' cols='40' rows='5' {if $badge->getDescription() == ''} placeholder="{Localisation::getTranslation(Strings::ORG_EDIT_BADGE_1)}" {/if}
         >{if $badge->getDescription() != ''}{$badge->getDescription()}{/if}</textarea>
 

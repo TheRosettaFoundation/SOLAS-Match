@@ -9,9 +9,7 @@
 {include file="handle-flash-messages.tpl"}
 
 <p>
-    {assign var="translatorId" value=$translator->getId()}
-    {Localisation::getTranslation(Strings::ORG_TASK_REVIEW_THE_VOLUNTEER)}, <a href="{urlFor name="user-public-profile" options="user_id.$translatorId"}">
-    {$translator->getDisplayName()}</a>, {Localisation::getTranslation(Strings::ORG_TASK_REVIEW_2)}
+    {sprintf(Localisation::getTranslation(Strings::ORG_TASK_REVIEW_THE_VOLUNTEER), {urlFor name="user-public-profile" options="user_id.{$translator->getId()}"}, $translator->getDisplayName())}
 </p>
 
 {assign var="reviewedTask" value=$task}

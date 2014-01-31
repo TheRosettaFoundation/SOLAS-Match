@@ -7,7 +7,7 @@
     </div>
 
     <form class="well" method="post" action="{urlFor name="org-search"}" accept-charset="utf-8">
-        <label for="search_name"><strong>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}:</strong></label>
+        <label for="search_name"><strong>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}</strong></label>
         <input type="text" name="search_name" id="search_name" style="height: 20px" 
                 value="{if isset($searchedText)}{$searchedText}{/if}" />
         <br />
@@ -21,7 +21,7 @@
     {assign var="org_count" value=count($foundOrgs)}
     {if $org_count > 0}
         <p>
-            <h3>{Localisation::getTranslation(Strings::ORG_SEARCH_SEARCH_RESULTS)}: {Localisation::getTranslation(Strings::ORG_SEARCH_FOUND)} {$org_count} {Localisation::getTranslation(Strings::ORG_SEARCH_MATCHES)}</h3>    
+            <h3>{sprintf(Localisation::getTranslation(Strings::ORG_SEARCH_SEARCH_RESULTS), $org_count)}</h3>    
         </p>
             {foreach $foundOrgs as $org}
             <div class="row">
@@ -35,20 +35,20 @@
                 </div>
                 <div class="span8">
                     <p>
-                        <strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}:</strong><br/>
+                        <strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</strong><br/>
 
                         {if $org->getBiography() == ''}
-                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}.
+                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}
                         {else}                            
                             {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
                         {/if}
                     </p>
                     <p>
-                    <strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}:</strong><br/>
-                    {if $org->getHomePage() != "http://"}
+                    <strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}</strong><br/>
+                    {if $org->getHomePage() != "http://" && $org->getHomePage() != ''}
                         <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
                     {else}
-                        {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_HOME_PAGE_LISTED)}.
+                        {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_HOME_PAGE_LISTED)}
                     {/if}
                     </p>
                 </div>

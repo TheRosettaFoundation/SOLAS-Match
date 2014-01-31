@@ -1462,12 +1462,14 @@ BEGIN
 	if des='' then set des=null;end if;
 	if name='' then set name=null;end if;
 	if orgID='' then set orgID=null;end if;
-	SELECT * FROM Badges b 
-	where (b.id=id or id is null) and (b.owner_id=orgID or orgID is null) and (b.title=name or name is null) and (b.description=des or des is null);
 
+	SELECT * FROM Badges b 
+	    where (b.id=id or id is null) 
+        and (b.owner_id=orgID or orgID is null) 
+        and (b.title=name or name is null) 
+        and (b.description=des or des is null);
 END//
 DELIMITER ;
-
 
 
 -- Dumping structure for procedure Solas-Match-Dev.getBannedOrg

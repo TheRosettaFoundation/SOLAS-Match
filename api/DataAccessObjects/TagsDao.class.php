@@ -33,7 +33,8 @@ class TagsDao
         if (!$tag->hasId()) {
             return self::insert($tag);
         } else {
-            echo "Error: updating existing tag functionality not implemented."; die;
+            error_log("Error: updating existing tag functionality not implemented.");
+            die;
         }
     }
 

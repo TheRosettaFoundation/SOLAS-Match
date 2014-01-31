@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <h1 class="page-header" style="height: auto">
-        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
+        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
             {if $task->getTitle() != ''}
                 {$task->getTitle()}
             {else}

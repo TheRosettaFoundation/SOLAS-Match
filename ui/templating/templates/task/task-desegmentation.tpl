@@ -32,7 +32,7 @@
 
         {foreach from=$preReqTasks item=pTask}
             {assign var="pTaskId" value=$pTask->getId()}
-            <p>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_DOWNLOAD)} {$pTask->getTitle()} <a href="{urlFor name="download-task-latest-version" options="task_id.$pTaskId"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a></p>
+            <p>{sprintf(Localisation::getTranslation(Strings::TASK_DESEGMENTATION_4), {$pTask->getTitle()}, {urlFor name="download-task-latest-version" options="task_id.$pTaskId"})}</p>
         {/foreach}
         <p>
             You can download the <strong>original project file</strong> 
@@ -51,12 +51,11 @@
             <div class="alert">
                 <p>{Localisation::getTranslation(Strings::COMMON_THANKS_FOR_PROVIDING_YOUR_TRANSLATION_FOR_THIS_TASK)}
                 {if $org != null && $org->getName() != ''}
-                    {$org->getName()}
+                    {sprintf(Localisation::getTranslation(Strings::TASK_DESEGMENTATION_2), {$org->getName()})}
                 {else}
-                    {Localisation::getTranslation(Strings::COMMON_THIS_ORGANISATION)}
+                    {Localisation::getTranslation(Strings::TASK_DESEGMENTATION_5)}
                 {/if}
-                {Localisation::getTranslation(Strings::TASK_DESEGMENTATION_2)}</p>
-                <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{Localisation::getTranslation(Strings::TASK_DESEGMENTATION_2)}</p>
+                </p>                
             </div>
         {/if}
     </div>

@@ -1,6 +1,4 @@
-library SolasMatchDart;
-
-import "Locale.dart";
+part of SolasMatchDart;
 
 class User
 {

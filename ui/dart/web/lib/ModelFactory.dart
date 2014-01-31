@@ -1,15 +1,4 @@
-library SolasMatchDart;
-
-import "models/Badge.dart";
-import "models/Country.dart";
-import "models/Task.dart";
-import "models/Tag.dart";
-import "models/Locale.dart";
-import "models/Org.dart";
-import "models/Project.dart";
-import "models/Language.dart";
-import "models/User.dart";
-import "models/UserPersonalInformation.dart";
+part of SolasMatchDart;
 
 class ModelFactory
 {

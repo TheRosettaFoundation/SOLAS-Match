@@ -99,7 +99,7 @@ class GraphViewer
             $border->setAttribute('style', "fill-opacity:0;stroke:black;stroke-width:2");
             
             $titleText = "Project: ".$project->getTitle();
-            $projectTitle = $doc->createElement("text", $titleText);
+            $projectTitle = $doc->createElement("text", htmlspecialchars($titleText));
             $projectTitle->setAttribute('x', 10);
             $projectTitle->setAttribute('y', 20);
             $view->appendChild($projectTitle);
@@ -299,7 +299,7 @@ class GraphViewer
         $text->setAttribute('clip-path', "url(#title-clip_".$task->getId().")");
         $defs->appendChild($text);
         
-        $text = $doc->createElement("text", $task->getTitle());
+        $text = $doc->createElement("text", htmlspecialchars($task->getTitle()));
         $text->setAttribute('id', "task-title_".$task->getId());
         $text->setAttribute('x', $thisX + 30);
         $text->setAttribute('y', $thisY + 25);

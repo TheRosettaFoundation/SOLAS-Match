@@ -31,7 +31,7 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
         
         <!-- dart conf file location -->
-        <input type="hidden" id="ConfFileLocation" value="{urlFor name="home"}ui/dart/deploy/web/conf/conf.json" />
+        <input type="hidden" id="ConfFileLocation" value="{urlFor name="home"}ui/dart/web/conf/conf.json" />
 
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
@@ -103,7 +103,7 @@
                         {if isset($user)}
                             <li>
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                    <img src="{"http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g"}" alt="" />
+                                    <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        {$user->getDisplayName()}
                                 </a>
                             </li>

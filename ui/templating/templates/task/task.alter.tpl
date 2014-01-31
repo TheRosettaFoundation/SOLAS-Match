@@ -13,12 +13,12 @@
     {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
         <div class="alert alert-info">
             <h3>
-                <p>{Localisation::getTranslation(Strings::COMMON_NOTE)}:</p>
+                <p>{Localisation::getTranslation(Strings::COMMON_NOTE)}</p>
             </h3>            
             {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
                 <p>{Localisation::getTranslation(Strings::TASK_ALTER_0)} {Localisation::getTranslation(Strings::TASK_ALTER_1)}</p>
             {else if $task_status_id == TaskStatusEnum::COMPLETE}
-                <p>{Localisation::getTranslation(Strings::TASK_ALTER_2)} {Localisation::getTranslation(Strings::TASK_ALTER_YOU_CAN_ONLY_EDIT)} <strong>{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}</strong> {Localisation::getTranslation(Strings::TASK_ALTER_AND)} <strong>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}</strong>.</p>
+                <p>{Localisation::getTranslation(Strings::TASK_ALTER_2)} {Localisation::getTranslation(Strings::TASK_ALTER_YOU_CAN_ONLY_EDIT)}</p>
             {/if}
         </div>
     {/if}
@@ -28,15 +28,15 @@
             <tr align="center">
                 <td width="50%">
                     <div style="margin-bottom:20px;">
-                        <label for="title" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TITLE)}:</strong></label>
+                        <label for="title" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TITLE)}</strong></label>
                         <textarea wrap="soft" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()}</textarea>
                     </div>
                     <div style="margin-bottom:20px;">
-                        <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}:</strong></label>
+                        <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}</strong></label>
                         <textarea wrap="soft" cols="1" rows="6" name="impact" style="width: 400px">{$task->getComment()}</textarea>
                     </div>
                     <div style="margin-bottom:20px;">
-                        <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}:</strong></label>
+                        <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}</strong></label>
                         {if $deadline_error != ''}
                             <div class="alert alert-error">
                                 {$deadline_error}
@@ -50,12 +50,12 @@
                 </td>
                 <td>
                     <div style="margin-bottom:60px;">
-                        <label for="publishtask" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_PUBLISH_TASK)}:</strong></label>
-                        <p class="desc">{Localisation::getTranslation(Strings::COMMON_IF_CHECKED_TASKS_WILL_APPEAR_IN_THE_TASK_STREAM)}.</p>
+                        <label for="publishtask" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_PUBLISH_TASK)}</strong></label>
+                        <p class="desc">{Localisation::getTranslation(Strings::COMMON_IF_CHECKED_TASKS_WILL_APPEAR_IN_THE_TASK_STREAM)}</p>
                         <input type="checkbox" name="publishTask" value="1" checked="true" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
                     </div>
                     <p>
-                        <label for="target" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TARGET_LANGUAGE)}:</strong></label>
+                        <label for="target" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TARGET_LANGUAGE)}</strong></label>
                         <select name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
                             {foreach $languages as $language}
                                 {if $task->getTargetLocale()->getLanguageCode() == $language->getCode()}
@@ -88,7 +88,7 @@
                     {/if} 
                     <p style="margin-bottom:40px;"/>
 
-                    <label for="word_count" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}:</strong></label>
+                    <label for="word_count" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}</strong></label>
                     <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px" />
                 </td>             
             </tr>
@@ -108,10 +108,10 @@
             {/if}
             <tr>
                 <td colspan="2">
-                    <h2>{Localisation::getTranslation(Strings::COMMON_TASK_PREREQUISITES)}:</h2>
-                    <p class="desc">{Localisation::getTranslation(Strings::COMMON_ASSIGN_PREREQUISITES_FOR_THIS_TASK_IF_ANY)}.</p>
+                    <h2>{Localisation::getTranslation(Strings::COMMON_TASK_PREREQUISITES)}</h2>
+                    <p class="desc">{Localisation::getTranslation(Strings::COMMON_ASSIGN_PREREQUISITES_FOR_THIS_TASK_IF_ANY)}</p>
                     <p>
-                        {Localisation::getTranslation(Strings::COMMON_THESE_ARE_TASKS_THAT_MUST_BE_COMPLETED_BEFORE_THE_CURRENT_TASK_BECOMES_AVAILABLE)}.
+                        {Localisation::getTranslation(Strings::COMMON_THESE_ARE_TASKS_THAT_MUST_BE_COMPLETED_BEFORE_THE_CURRENT_TASK_BECOMES_AVAILABLE)}
                     </p>
                     <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all;" width="100%" >
                         <thead>

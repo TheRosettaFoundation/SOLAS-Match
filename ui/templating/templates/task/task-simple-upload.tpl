@@ -45,6 +45,7 @@
                 </div>
         {/if}
         {if $type_id == TaskTypeEnum::TRANSLATION}
+<<<<<<< HEAD
         
 	        <!--Added to test Pootle connection SIMPLESTRINGS-->
 	        <form method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
@@ -57,14 +58,17 @@
 	        </form>
         
             <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0)} {$filename}</h3>
+=======
+            <h3>{sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0), {$filename})}</h3>
+>>>>>>> develop
         {else}
-            <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0_PROOFREADING)} {$filename}</h3>
+            <h3>{sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0_PROOFREADING), {$filename})}</h3>
         {/if}   
         <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
                 <input type="hidden" name="task_id" value="{$task->getId()}"/>
                 <input type="file" name="{$fieldName}" id="{$fieldName}"/>
                 <p class="help-block">
-                        {Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS)} {$max_file_size}MB.
+                        {sprintf(Localisation::getTranslation(Strings::COMMON_MAXIMUM_FILE_SIZE_IS), {$max_file_size})}
                 </p> 
                 <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_UPLOAD)}</button>
             {if ($converter == "y")}
@@ -77,42 +81,38 @@
             <div class="alert">
                 <p>{Localisation::getTranslation(Strings::COMMON_THANKS_FOR_PROVIDING_YOUR_TRANSLATION_FOR_THIS_TASK)}
                 {if $org != null && $org->getName() != ''}
-                    {$org->getName()}
+                    {sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_1), {$org->getName()})}
                 {else}
-                    {Localisation::getTranslation(Strings::COMMON_THIS_ORGANISATION)}
+                    {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_8)}
                 {/if}
-                {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_1)}</p>
+                </p>
                 <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_2)}</p>
             </div>
         {/if}
 
         <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_3)} <small>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_4)}</small></h3>
         <br />
-        <p>
-            {Localisation::getTranslation(Strings::COMMON_CLICK)} <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">{Localisation::getTranslation(Strings::COMMON_HERE)}</a> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_DOWNLOAD_THE)}
-            <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_ORIGINAL_PROJECT_FILE)}</strong>.
+        <p>             
+            {sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_ORIGINAL_PROJECT_FILE), {"{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file"})}
         </p>
-        <p>{Localisation::getTranslation(Strings::COMMON_CLICK)}
-            <a href="{urlFor name="download-task" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>
-            {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_REDOWNLOAD_THE)} <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_ORIGINAL_TASK_FILE)}</strong>.
+        
+        <p>
+            {sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_ORIGINAL_TASK_FILE), {urlFor name="download-task" options="task_id.$task_id"})}
         </p> 
 
         {if ($converter == "y")}
-        <p>{Localisation::getTranslation(Strings::COMMON_CLICK)}
-            <a href="{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>   
-            {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_REDOWNLOAD_THE)} <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_ORIGINAL_TASK_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_AS_XLIFF)}
+        <p>  
+            {sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_ORIGINAL_TASK_FILE), {"{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true"})} - {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_AS_XLIFF)}
         </p>     
         {/if}  
 
-        <p>{Localisation::getTranslation(Strings::COMMON_CLICK)}
-            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>
-            {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_REDOWNLOAD_THE)} <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_LATEST_UPLOADED_FILE)}</strong>.
+        <p>
+            {sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_LATEST_UPLOADED_FILE), {urlFor name="download-task-latest-version" options="task_id.$task_id"})}
         </p> 
 
         {if ($converter == "y")}
-        <p>{Localisation::getTranslation(Strings::COMMON_CLICK)}
-            <a href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}?convertToXliff=true">{Localisation::getTranslation(Strings::COMMON_HERE)}</a>   
-            {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_TO_REDOWNLOAD_THE)} <strong>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_LATEST_UPLOADED_FILE)}</strong> {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_AS_XLIFF)}
+        <p>
+            {sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_LATEST_UPLOADED_FILE), {"{urlFor name="download-task-latest-version" options="task_id.$task_id"}?convertToXliff=true"})} - {Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_AS_XLIFF)}
         </p>     
         {/if}
     </div>

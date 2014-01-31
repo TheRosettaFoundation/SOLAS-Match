@@ -19,25 +19,23 @@ class Tasks {
     
     public static function init()
     {
-    	//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks(:format)/',
                                                         function ($format = ".json") {
             
             Dispatcher::sendResponce(null, TaskDao::getTask(), null, $format);
 		}, 'getTasks', null);			
-        //}, 'getTasks', 'Middleware::oAuth');        
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/tasks(:format)/',
                                                         function ($format = ".json") {
             
             $data=Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data, "Task");
-            Dispatcher::sendResponce(null, TaskDao::create($data), null, $format);
-        }, 'createTask');
+            
+            Dispatcher::sendResponce(null, TaskDao::save($data), null, $format);
+        }, 'createTask', 'Middleware::authUserOrOrgForTaskCreation');
         
-        //
+        
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/',
                                                         function ($taskId, $format = ".json") {
             
@@ -50,9 +48,10 @@ class Tasks {
             $client = new APIHelper($format);
             $data = $client->deserialize($data, "Task");
             Dispatcher::sendResponce(null, TaskDao::save($data), null, $format);
-        }, 'updateTask');
+        }, 'updateTask', 'Middleware::authUserOrOrgForTaskCreationPassingTaskId');
         
-		//
+
+
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:taskId/',
                                                             function ($taskId, $format = ".json") {
             
@@ -62,15 +61,14 @@ class Tasks {
                 $taskId = $taskId[0];
             }
             Dispatcher::sendResponce(null, TaskDao::delete($taskId), null, $format);
-        }, 'deleteTask');
+        }, 'deleteTask', 'Middleware::authUserOrOrgForTaskCreationPassingTaskId');
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/prerequisites(:format)/',
             function ($taskId, $format = ".json") {
                 Dispatcher::sendResponce(null, TaskDao::getTaskPreReqs($taskId), null, $format);
         }, 'getTaskPreReqs', 'Middleware::authUserOrOrgForClaimedTask');
 		
-		//
+
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/prerequisites/:preReqId/',
             function ($taskId, $preReqId, $format = ".json") {
             if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
@@ -80,9 +78,9 @@ class Tasks {
             }
             
             Dispatcher::sendResponce(null, Upload::addTaskPreReq($taskId, $preReqId), null, $format);
-        }, 'addTaskPreReq');
-		
-		//
+        }, 'addTaskPreReq', 'Middleware::authUserOrOrgForTaskCreationPassingTaskId');
+
+
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/tasks/:taskId/prerequisites/:preReqId/',
         function ($taskId, $preReqId, $format = ".json") {
             if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
@@ -91,10 +89,8 @@ class Tasks {
                 $preReqId = $preReqId[0];
             }
             Dispatcher::sendResponce(null, Upload::removeTaskPreReq($taskId, $preReqId), null, $format);
-            //Dispatcher::sendResponce(null, Upload::removeTaskPreReq($taskId, $preReqId), null, $format);
         }, 'removeTaskPreReq', 'Middleware::authenticateUserForOrgTask');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/archiveTask/:taskId/user/:userId/',
                                                         function ($taskId, $userId, $format = ".json") {
             if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -105,7 +101,6 @@ class Tasks {
             Dispatcher::sendResponce(null, TaskDao::moveToArchiveByID($taskId, $userId), null, $format);
         }, 'archiveTask');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/topTasks(:format)/',
                                                         function ($format = ".json") {
             
@@ -114,7 +109,6 @@ class Tasks {
             Dispatcher::sendResponce(null, TaskDao::getLatestAvailableTasks($limit, $offset), null, $format);
         }, 'getTopTasks',null);
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/',
                                                         function ($taskId, $format = ".json") {
 
@@ -146,30 +140,11 @@ class Tasks {
                     Dispatcher::sendResponce(null, TaskDao::submitReview($review), null, $format);
                 }, 'submitReview', 'Middleware::authenticateUserToSubmitReview');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/tags(:format)/',
                                                         function ($taskId, $format = ".json") {
             Dispatcher::sendResponce(null, TaskDao::getTags($taskId), null, $format);
         }, 'getTasksTags',null);
-//        
-//        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:id/tags(:format)/',
-//                                                        function ($id, $format = ".json") {
-//            $data = Dispatcher::getDispatcher()->request()->getBody();
-//            $client = new APIHelper($format);
-//            $data = $client->deserialize($data);
-//            $data = $client->cast("Task", $data);
-//            $result = TaskDao::updateTags($data);
-//            Dispatcher::sendResponce(null, array("result" => $result), null, $format);
-//        }, 'setTasksTags');
         
-        
-        //Consider Removing
-        Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/status(:format)/',
-                                                        function ($taskId, $format=".json") {
-            
-            Dispatcher::sendResponce(null, array("status message" => TaskDao::getTaskStatus($taskId)), null, $format);
-        }, 'getTaskStatus', 'Middleware::authUserOrOrgForClaimedTask');
-		
 		// Org Feedback, feedback sent from the organisation to the user who claimed the task
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/:taskId/orgFeedback(:format)/',
                 function ($taskId, $format = ".json") {
@@ -190,7 +165,6 @@ class Tasks {
                     Dispatcher::sendResponce(null, null, null, $format);
         }, 'sendUserFeedback', 'Middleware::authUserForClaimedTask');
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/file(:format)/',
                                                         function ($taskId, $format=".json") {
             
@@ -203,7 +177,6 @@ class Tasks {
             }
         }, 'getTaskFile',null);
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/saveFile/:taskId/:userId/',
                                                         function ($taskId, $userId, $format = ".json") {
             
@@ -231,8 +204,7 @@ class Tasks {
             
         }, 'saveTaskFile');
         
-        //
-         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/uploadOutputFile/:taskId/:userId/',
+        Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/tasks/uploadOutputFile/:taskId/:userId/',
                                                         function ($taskId, $userId, $format = ".json") {
              if (!is_numeric($userId) && strstr($userId, '.')) {
                 $userId = explode('.', $userId);
@@ -252,7 +224,6 @@ class Tasks {
             TaskDao::uploadOutputFile($task, $convert,$data,$userId,$filename);
         }, 'uploadOutputFile');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/version(:format)/',
                                                         function ($taskId, $format = ".json") {
             
@@ -260,7 +231,6 @@ class Tasks {
             Dispatcher::sendResponce(null, TaskDao::getLatestFileVersion($taskId, $userId), null, $format);
         }, 'getTaskVersion');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/info(:format)/',
                                                         function ($taskId, $format = ".json") {
             
@@ -269,7 +239,6 @@ class Tasks {
             Dispatcher::sendResponce(null, $taskMetadata, null, $format);
         }, 'getTaskInfo');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/claimed(:format)/', 
                                                         function ($taskId, $format = ".json") {
 
@@ -301,7 +270,6 @@ class Tasks {
             Dispatcher::sendResponce(null, array("result" => $result), null, $format);
         }, 'addTarget', 'Middleware::authenticateUserMembership');   
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/user(:format)/',
                                                         function ($taskId, $format = ".json") {
             
@@ -309,7 +277,6 @@ class Tasks {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserClaimedTask');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/timeClaimed(:format)/',
                                                         function ($taskId, $format = ".json") {
             

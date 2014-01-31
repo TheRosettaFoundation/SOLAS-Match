@@ -1,0 +1,269 @@
+ 
+[17/01/2014 12:21:03:291] Debug: Starting main thread 140533870892864 
+[17/01/2014 12:21:03:302] Debug: PluginLoader::Loading plugins from directory:  "/home/redray/workspace/build-SOLASMatchWorkerDaemon-Desktop-Debug/plugins" 
+[17/01/2014 12:21:03:302] Debug: PluginLoader::Found file  "libCorePlugin.so" 
+[17/01/2014 12:21:03:305] Debug: PluginLoader::Adding plugin  "libCorePlugin.so" 
+[17/01/2014 12:21:03:305] Debug: PluginLoader::Found file  "libEmailPlugin.so" 
+[17/01/2014 12:21:03:307] Debug: PluginLoader::Adding plugin  "libEmailPlugin.so" 
+[17/01/2014 12:21:03:308] Debug: PluginLoader::Found file  "libPluginScheduler.so" 
+[17/01/2014 12:21:03:308] Debug: PluginLoader::Adding plugin  "libPluginScheduler.so" 
+[17/01/2014 12:21:03:308] Debug: Plugins Loaded: starting workers... 
+[17/01/2014 12:21:03:309] Debug: EmailPlugin::Starting new Thread  140533766702848 
+[17/01/2014 12:21:03:309] Debug: CorePlugin::Starting new Thread  140533775095552 
+[17/01/2014 12:21:03:309] Debug: PluginScheduler::Starting new Thread  140533758310144 
+[17/01/2014 12:21:03:309] Debug: Running TaskQueueHandler on thread  140533544515328 
+[17/01/2014 12:21:03:309] Debug: Running UserQueueHandler on thread  140533536122624 
+[17/01/2014 12:21:03:310] Debug: Running ProjectQueueHandler on thread  140533527729920 
+[17/01/2014 12:21:03:317] Debug: ========== Printing Task =========== 
+[17/01/2014 12:21:03:317] Debug: Sending  "UserTaskScoreRequest"  to  "SOLAS_MATCH"  on topic  "tasks.score"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "12:15:00" 
+[17/01/2014 12:21:03:317] Debug: ==================================== 
+[17/01/2014 12:21:03:317] Debug: ========== Printing Task =========== 
+[17/01/2014 12:21:03:317] Debug: Sending  "DeadlineCheckRequest"  to  "SOLAS_MATCH"  on topic  "tasks.deadline.check"  every  1  day(s),  0  hour(s),  0  minute(s) and  0  second(s)  starting at  "07:05:00" 
+[17/01/2014 12:21:03:317] Debug: ==================================== 
+[17/01/2014 12:21:03:317] Debug: Run every day at same time 
+[17/01/2014 12:21:03:317] Debug: ========== Printing Task =========== 
+[17/01/2014 12:21:03:317] Debug: Sending  "StatisticsUpdateRequest"  to  "SOLAS_MATCH"  on topic  "users.statistics.update"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "09:00:00" 
+[17/01/2014 12:21:03:317] Debug: ==================================== 
+[17/01/2014 12:21:03:317] Debug: ========== Printing Task =========== 
+[17/01/2014 12:21:03:318] Debug: Sending  "UserTaskStreamNotificationRequest"  to  "SOLAS_MATCH"  on topic  "users.stream.notify"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "08:10:00" 
+[17/01/2014 12:21:03:318] Debug: ==================================== 
+[17/01/2014 12:21:03:523] Debug: Connecting to exchange  "SOLAS_MATCH" 
+[17/01/2014 12:21:03:965] Debug: EmailPlugin::Now consuming from  "SOLAS_MATCH"  exchange 
+[17/01/2014 12:21:04:968] Debug: Calculating user task scores 
+[17/01/2014 12:21:04:968] Debug: CalculateTaskScore: Starting new thread 
+[17/01/2014 12:21:05:044] Debug: "{2826e684-e8b1-4169-ab73-a86e2a55dfab}"  MySQL connection established 
+[17/01/2014 12:21:08:683] Debug: Publishing to exchnage  "SOLAS_MATCH"  on  "email.task.score" 
+[17/01/2014 12:21:08:720] Debug: CalcUserTaskScore::Finished publishing 
+[17/01/2014 12:21:08:720] Debug: Deleting MySQLHandler  "{2826e684-e8b1-4169-ab73-a86e2a55dfab}" 
+[17/01/2014 12:21:08:720] Debug: EmailPlugin::Received Message 
+[17/01/2014 12:21:08:721] Debug: EmailGenerator - Generating TaskScoreEmail 
+[17/01/2014 12:21:08:782] Debug: Getting message from queue 
+[17/01/2014 12:21:08:782] Debug: =============================== 
+[17/01/2014 12:21:08:782] Debug: Recipients:  ("user@host.com", "something@else.org") 
+[17/01/2014 12:21:08:782] Debug: Sender:  "'eoin.oconchuir.ul@gmail.com'" 
+[17/01/2014 12:21:08:782] Debug: Subject:  "SOLAS Match: User Task Score Results" 
+[17/01/2014 12:21:08:782] Debug: "" 
+[17/01/2014 12:21:08:782] Debug: ================================ 
+[17/01/2014 12:21:08:783] Debug: SMTP::Failed to connect to host 
+[17/01/2014 12:22:14:264] Debug: Starting main thread 140043896973120 
+[17/01/2014 12:22:14:265] Debug: PluginLoader::Loading plugins from directory:  "/home/redray/workspace/build-SOLASMatchWorkerDaemon-Desktop-Debug/plugins" 
+[17/01/2014 12:22:14:265] Debug: PluginLoader::Found file  "libCorePlugin.so" 
+[17/01/2014 12:22:14:268] Debug: PluginLoader::Adding plugin  "libCorePlugin.so" 
+[17/01/2014 12:22:14:268] Debug: PluginLoader::Found file  "libEmailPlugin.so" 
+[17/01/2014 12:22:14:270] Debug: PluginLoader::Adding plugin  "libEmailPlugin.so" 
+[17/01/2014 12:22:14:270] Debug: PluginLoader::Found file  "libPluginScheduler.so" 
+[17/01/2014 12:22:14:270] Debug: PluginLoader::Adding plugin  "libPluginScheduler.so" 
+[17/01/2014 12:22:14:270] Debug: Plugins Loaded: starting workers... 
+[17/01/2014 12:22:14:271] Debug: EmailPlugin::Starting new Thread  140043792783104 
+[17/01/2014 12:22:14:271] Debug: CorePlugin::Starting new Thread  140043801175808 
+[17/01/2014 12:22:14:271] Debug: PluginScheduler::Starting new Thread  140043716916992 
+[17/01/2014 12:22:14:271] Debug: Running TaskQueueHandler on thread  140043708524288 
+[17/01/2014 12:22:14:272] Debug: Running UserQueueHandler on thread  140043700131584 
+[17/01/2014 12:22:14:272] Debug: Running ProjectQueueHandler on thread  140043691738880 
+[17/01/2014 12:22:14:272] Debug: ========== Printing Task =========== 
+[17/01/2014 12:22:14:273] Debug: Sending  "UserTaskScoreRequest"  to  "SOLAS_MATCH"  on topic  "tasks.score"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "12:15:00" 
+[17/01/2014 12:22:14:273] Debug: ==================================== 
+[17/01/2014 12:22:14:273] Debug: ========== Printing Task =========== 
+[17/01/2014 12:22:14:273] Debug: Sending  "DeadlineCheckRequest"  to  "SOLAS_MATCH"  on topic  "tasks.deadline.check"  every  1  day(s),  0  hour(s),  0  minute(s) and  0  second(s)  starting at  "07:05:00" 
+[17/01/2014 12:22:14:273] Debug: ==================================== 
+[17/01/2014 12:22:14:273] Debug: Run every day at same time 
+[17/01/2014 12:22:14:273] Debug: ========== Printing Task =========== 
+[17/01/2014 12:22:14:273] Debug: Sending  "StatisticsUpdateRequest"  to  "SOLAS_MATCH"  on topic  "users.statistics.update"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "09:00:00" 
+[17/01/2014 12:22:14:273] Debug: ==================================== 
+[17/01/2014 12:22:14:273] Debug: ========== Printing Task =========== 
+[17/01/2014 12:22:14:273] Debug: Sending  "UserTaskStreamNotificationRequest"  to  "SOLAS_MATCH"  on topic  "users.stream.notify"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "08:10:00" 
+[17/01/2014 12:22:14:273] Debug: ==================================== 
+[17/01/2014 12:22:14:275] Debug: Connecting to exchange  "SOLAS_MATCH" 
+[17/01/2014 12:22:14:288] Debug: EmailPlugin::Now consuming from  "SOLAS_MATCH"  exchange 
+[17/01/2014 12:22:15:278] Debug: Calculating user task scores 
+[17/01/2014 12:22:15:278] Debug: CalculateTaskScore: Starting new thread 
+[17/01/2014 12:22:15:284] Debug: "{ab200694-6724-45cc-be62-d8b40ab9db2f}"  MySQL connection established 
+[17/01/2014 12:22:15:393] Debug: Publishing to exchnage  "SOLAS_MATCH"  on  "email.task.score" 
+[17/01/2014 12:22:15:395] Debug: CalcUserTaskScore::Finished publishing 
+[17/01/2014 12:22:15:395] Debug: Deleting MySQLHandler  "{ab200694-6724-45cc-be62-d8b40ab9db2f}" 
+[17/01/2014 12:22:15:540] Debug: EmailPlugin::Received Message 
+[17/01/2014 12:22:15:541] Debug: EmailGenerator - Generating TaskScoreEmail 
+[17/01/2014 12:22:15:586] Debug: Getting message from queue 
+[17/01/2014 12:22:15:587] Debug: =============================== 
+[17/01/2014 12:22:15:587] Debug: Recipients:  ("user@host.com", "something@else.org") 
+[17/01/2014 12:22:15:587] Debug: Sender:  "'eoin.oconchuir.ul@gmail.com'" 
+[17/01/2014 12:22:15:587] Debug: Subject:  "SOLAS Match: User Task Score Results" 
+[17/01/2014 12:22:15:587] Debug: "" 
+[17/01/2014 12:22:15:587] Debug: ================================ 
+[17/01/2014 12:22:15:587] Debug: SMTP::Failed to connect to host 
+[17/01/2014 12:24:16:485] Debug: Starting main thread 140381278238528 
+[17/01/2014 12:24:16:485] Debug: PluginLoader::Loading plugins from directory:  "/home/redray/workspace/build-SOLASMatchWorkerDaemon-Desktop-Debug/plugins" 
+[17/01/2014 12:24:16:485] Debug: PluginLoader::Found file  "libCorePlugin.so" 
+[17/01/2014 12:24:16:487] Debug: PluginLoader::Adding plugin  "libCorePlugin.so" 
+[17/01/2014 12:24:16:487] Debug: PluginLoader::Found file  "libEmailPlugin.so" 
+[17/01/2014 12:24:16:489] Debug: PluginLoader::Adding plugin  "libEmailPlugin.so" 
+[17/01/2014 12:24:16:489] Debug: PluginLoader::Found file  "libPluginScheduler.so" 
+[17/01/2014 12:24:16:489] Debug: PluginLoader::Adding plugin  "libPluginScheduler.so" 
+[17/01/2014 12:24:16:489] Debug: Plugins Loaded: starting workers... 
+[17/01/2014 12:24:16:490] Debug: PluginScheduler::Starting new Thread  140381031438080 
+[17/01/2014 12:24:16:490] Debug: CorePlugin::Starting new Thread  140381182441216 
+[17/01/2014 12:24:16:490] Debug: EmailPlugin::Starting new Thread  140381174048512 
+[17/01/2014 12:24:16:490] Debug: Running UserQueueHandler on thread  140381157263104 
+[17/01/2014 12:24:16:491] Debug: ========== Printing Task =========== 
+[17/01/2014 12:24:16:491] Debug: Sending  "UserTaskScoreRequest"  to  "SOLAS_MATCH"  on topic  "tasks.score"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "12:15:00" 
+[17/01/2014 12:24:16:491] Debug: ==================================== 
+[17/01/2014 12:24:16:491] Debug: ========== Printing Task =========== 
+[17/01/2014 12:24:16:491] Debug: Sending  "DeadlineCheckRequest"  to  "SOLAS_MATCH"  on topic  "tasks.deadline.check"  every  1  day(s),  0  hour(s),  0  minute(s) and  0  second(s)  starting at  "07:05:00" 
+[17/01/2014 12:24:16:491] Debug: ==================================== 
+[17/01/2014 12:24:16:491] Debug: Run every day at same time 
+[17/01/2014 12:24:16:491] Debug: ========== Printing Task =========== 
+[17/01/2014 12:24:16:491] Debug: Sending  "StatisticsUpdateRequest"  to  "SOLAS_MATCH"  on topic  "users.statistics.update"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "09:00:00" 
+[17/01/2014 12:24:16:491] Debug: ==================================== 
+[17/01/2014 12:24:16:491] Debug: ========== Printing Task =========== 
+[17/01/2014 12:24:16:491] Debug: Sending  "UserTaskStreamNotificationRequest"  to  "SOLAS_MATCH"  on topic  "users.stream.notify"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "08:10:00" 
+[17/01/2014 12:24:16:491] Debug: ==================================== 
+[17/01/2014 12:24:16:491] Debug: Running TaskQueueHandler on thread  140381165655808 
+[17/01/2014 12:24:16:495] Debug: Running ProjectQueueHandler on thread  140381148870400 
+[17/01/2014 12:24:16:499] Debug: Connecting to exchange  "SOLAS_MATCH" 
+[17/01/2014 12:24:16:509] Debug: EmailPlugin::Now consuming from  "SOLAS_MATCH"  exchange 
+[17/01/2014 12:24:17:503] Debug: Calculating user task scores 
+[17/01/2014 12:24:17:504] Debug: CalculateTaskScore: Starting new thread 
+[17/01/2014 12:24:17:510] Debug: "{c88c56fe-03e4-490d-a3b4-e73c543b8d1e}"  MySQL connection established 
+[17/01/2014 12:24:17:633] Debug: Publishing to exchnage  "SOLAS_MATCH"  on  "email.task.score" 
+[17/01/2014 12:24:17:635] Debug: CalcUserTaskScore::Finished publishing 
+[17/01/2014 12:24:17:635] Debug: Deleting MySQLHandler  "{c88c56fe-03e4-490d-a3b4-e73c543b8d1e}" 
+[17/01/2014 12:24:17:761] Debug: EmailPlugin::Received Message 
+[17/01/2014 12:24:17:761] Debug: EmailGenerator - Generating TaskScoreEmail 
+[17/01/2014 12:24:17:806] Debug: Getting message from queue 
+[17/01/2014 12:24:17:806] Debug: =============================== 
+[17/01/2014 12:24:17:806] Debug: Recipients:  ("user@host.com", "something@else.org") 
+[17/01/2014 12:24:17:806] Debug: Sender:  "'eoin.oconchuir.ul@gmail.com'" 
+[17/01/2014 12:24:17:806] Debug: Subject:  "SOLAS Match: User Task Score Results" 
+[17/01/2014 12:24:17:807] Debug: "" 
+[17/01/2014 12:24:17:807] Debug: ================================ 
+[17/01/2014 12:24:17:807] Debug: SMTP::Failed to connect to host 
+[17/01/2014 12:25:10:198] Debug: Starting main thread 140138123437888 
+[17/01/2014 12:25:10:198] Debug: PluginLoader::Loading plugins from directory:  "/home/redray/workspace/build-SOLASMatchWorkerDaemon-Desktop-Debug/plugins" 
+[17/01/2014 12:25:10:199] Debug: PluginLoader::Found file  "libCorePlugin.so" 
+[17/01/2014 12:25:10:201] Debug: PluginLoader::Adding plugin  "libCorePlugin.so" 
+[17/01/2014 12:25:10:201] Debug: PluginLoader::Found file  "libEmailPlugin.so" 
+[17/01/2014 12:25:10:203] Debug: PluginLoader::Adding plugin  "libEmailPlugin.so" 
+[17/01/2014 12:25:10:203] Debug: PluginLoader::Found file  "libPluginScheduler.so" 
+[17/01/2014 12:25:10:204] Debug: PluginLoader::Adding plugin  "libPluginScheduler.so" 
+[17/01/2014 12:25:10:204] Debug: Plugins Loaded: starting workers... 
+[17/01/2014 12:25:10:204] Debug: PluginScheduler::Starting new Thread  140137876637440 
+[17/01/2014 12:25:10:204] Debug: CorePlugin::Starting new Thread  140138027640576 
+[17/01/2014 12:25:10:205] Debug: ========== Printing Task =========== 
+[17/01/2014 12:25:10:205] Debug: Sending  "UserTaskScoreRequest"  to  "SOLAS_MATCH"  on topic  "tasks.score"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "12:15:00" 
+[17/01/2014 12:25:10:206] Debug: ==================================== 
+[17/01/2014 12:25:10:205] Debug: EmailPlugin::Starting new Thread  140138019247872 
+[17/01/2014 12:25:10:206] Debug: ========== Printing Task =========== 
+[17/01/2014 12:25:10:206] Debug: Sending  "DeadlineCheckRequest"  to  "SOLAS_MATCH"  on topic  "tasks.deadline.check"  every  1  day(s),  0  hour(s),  0  minute(s) and  0  second(s)  starting at  "07:05:00" 
+[17/01/2014 12:25:10:206] Debug: ==================================== 
+[17/01/2014 12:25:10:206] Debug: Run every day at same time 
+[17/01/2014 12:25:10:206] Debug: ========== Printing Task =========== 
+[17/01/2014 12:25:10:206] Debug: Sending  "StatisticsUpdateRequest"  to  "SOLAS_MATCH"  on topic  "users.statistics.update"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "09:00:00" 
+[17/01/2014 12:25:10:206] Debug: ==================================== 
+[17/01/2014 12:25:10:206] Debug: ========== Printing Task =========== 
+[17/01/2014 12:25:10:206] Debug: Sending  "UserTaskStreamNotificationRequest"  to  "SOLAS_MATCH"  on topic  "users.stream.notify"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "08:10:00" 
+[17/01/2014 12:25:10:206] Debug: ==================================== 
+[17/01/2014 12:25:10:207] Debug: Running TaskQueueHandler on thread  140137937762048 
+[17/01/2014 12:25:10:207] Debug: Running ProjectQueueHandler on thread  140137920976640 
+[17/01/2014 12:25:10:207] Debug: Running UserQueueHandler on thread  140137929369344 
+[17/01/2014 12:25:10:217] Debug: Connecting to exchange  "SOLAS_MATCH" 
+[17/01/2014 12:25:10:227] Debug: EmailPlugin::Now consuming from  "SOLAS_MATCH"  exchange 
+[17/01/2014 12:25:11:220] Debug: Calculating user task scores 
+[17/01/2014 12:25:11:220] Debug: CalculateTaskScore: Starting new thread 
+[17/01/2014 12:25:11:226] Debug: "{29710c36-4c98-4bb4-9676-29d06bad296d}"  MySQL connection established 
+[17/01/2014 12:25:11:351] Debug: Publishing to exchnage  "SOLAS_MATCH"  on  "email.task.score" 
+[17/01/2014 12:25:11:353] Debug: CalcUserTaskScore::Finished publishing 
+[17/01/2014 12:25:11:353] Debug: Deleting MySQLHandler  "{29710c36-4c98-4bb4-9676-29d06bad296d}" 
+[17/01/2014 12:25:11:481] Debug: EmailPlugin::Received Message 
+[17/01/2014 12:25:11:481] Debug: EmailGenerator - Generating TaskScoreEmail 
+[17/01/2014 12:25:11:525] Debug: Getting message from queue 
+[17/01/2014 12:25:11:525] Debug: =============================== 
+[17/01/2014 12:25:11:525] Debug: Recipients:  ("user@host.com", "something@else.org") 
+[17/01/2014 12:25:11:525] Debug: Sender:  "'eoin.oconchuir.ul@gmail.com'" 
+[17/01/2014 12:25:11:525] Debug: Subject:  "SOLAS Match: User Task Score Results" 
+[17/01/2014 12:25:11:525] Debug: "<h3>Score Calculation Complete</h3>
+
+
+
+<hr />
+<p> 
+    Calculated scores for 6 users and 6 tasks. 0
+    rows were updated in 0.127 seconds.
+</p>
+" 
+[17/01/2014 12:25:11:525] Debug: ================================ 
+[17/01/2014 12:25:11:526] Debug: SMTP::Failed to connect to host 
+[17/01/2014 12:28:20:731] Debug: EmailPlugin::Received Message 
+[17/01/2014 12:28:20:731] Debug: EmailGenerator: generating user reference email 
+[17/01/2014 12:28:20:732] Debug: "{1125f5f9-51ee-4f64-a73b-95510377ebd2}"  MySQL connection established 
+[17/01/2014 12:28:20:735] Debug: Deleting MySQLHandler  "{1125f5f9-51ee-4f64-a73b-95510377ebd2}" 
+[17/01/2014 12:28:20:825] Debug: Getting message from queue 
+[17/01/2014 12:28:20:825] Debug: =============================== 
+[17/01/2014 12:28:20:825] Debug: Recipients:  ("thegaelicdragon@gmail.com") 
+[17/01/2014 12:28:20:825] Debug: Sender:  "'eoin.oconchuir.ul@gmail.com'" 
+[17/01/2014 12:28:20:825] Debug: Subject:  "SOLAS Match: User Reference" 
+[17/01/2014 12:28:20:825] Debug: "" 
+[17/01/2014 12:28:20:825] Debug: ================================ 
+[17/01/2014 12:28:20:825] Debug: SMTP::Failed to connect to host 
+[17/01/2014 13:00:00:100] Debug: TimedTask::Process and Start 
+[17/01/2014 13:00:00:100] Debug: PluginScheduler::Processing task 
+[17/01/2014 13:00:00:103] Debug: Publishing to exchnage  "SOLAS_MATCH"  on  "users.statistics.update" 
+[17/01/2014 13:00:00:220] Debug: UserQueueHandler: Message received 
+[17/01/2014 13:00:00:220] Debug: Starting new Thread for statistics update 
+[17/01/2014 13:00:00:221] Debug: "{c1ce0d62-fb9c-48f9-acde-45c046290f68}"  MySQL connection established 
+[17/01/2014 13:00:01:115] Debug: Finished Statistics Update 
+[17/01/2014 13:00:01:115] Debug: Deleting MySQLHandler  "{c1ce0d62-fb9c-48f9-acde-45c046290f68}" 
+[17/01/2014 16:31:01:564] Debug: Starting main thread 140019785475904 
+[17/01/2014 16:31:01:579] Debug: PluginLoader::Loading plugins from directory:  "/home/redray/workspace/build-SOLASMatchWorkerDaemon-Desktop-Debug/plugins" 
+[17/01/2014 16:31:01:594] Debug: PluginLoader::Found file  "libCorePlugin.so" 
+[17/01/2014 16:31:01:642] Debug: PluginLoader::Adding plugin  "libCorePlugin.so" 
+[17/01/2014 16:31:01:642] Debug: PluginLoader::Found file  "libEmailPlugin.so" 
+[17/01/2014 16:31:01:775] Debug: PluginLoader::Adding plugin  "libEmailPlugin.so" 
+[17/01/2014 16:31:01:775] Debug: PluginLoader::Found file  "libPluginScheduler.so" 
+[17/01/2014 16:31:01:799] Debug: PluginLoader::Adding plugin  "libPluginScheduler.so" 
+[17/01/2014 16:31:01:799] Debug: Plugins Loaded: starting workers... 
+[17/01/2014 16:31:01:800] Debug: EmailPlugin::Starting new Thread  140019681285888 
+[17/01/2014 16:31:01:800] Debug: CorePlugin::Starting new Thread  140019689678592 
+[17/01/2014 16:31:01:800] Debug: Running TaskQueueHandler on thread  140019672893184 
+[17/01/2014 16:31:01:800] Debug: Running ProjectQueueHandler on thread  140019656107776 
+[17/01/2014 16:31:01:800] Debug: PluginScheduler::Starting new Thread  140019557725952 
+[17/01/2014 16:31:01:801] Debug: Running UserQueueHandler on thread  140019664500480 
+[17/01/2014 16:31:01:831] Debug: Connecting to exchange  "SOLAS_MATCH" 
+[17/01/2014 16:31:01:873] Debug: ========== Printing Task =========== 
+[17/01/2014 16:31:01:873] Debug: Sending  "UserTaskScoreRequest"  to  "SOLAS_MATCH"  on topic  "tasks.score"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "12:15:00" 
+[17/01/2014 16:31:01:873] Debug: ==================================== 
+[17/01/2014 16:31:01:873] Debug: ========== Printing Task =========== 
+[17/01/2014 16:31:01:873] Debug: Sending  "DeadlineCheckRequest"  to  "SOLAS_MATCH"  on topic  "tasks.deadline.check"  every  1  day(s),  0  hour(s),  0  minute(s) and  0  second(s)  starting at  "07:05:00" 
+[17/01/2014 16:31:01:873] Debug: ==================================== 
+[17/01/2014 16:31:01:873] Debug: Run every day at same time 
+[17/01/2014 16:31:01:873] Debug: ========== Printing Task =========== 
+[17/01/2014 16:31:01:873] Debug: Sending  "StatisticsUpdateRequest"  to  "SOLAS_MATCH"  on topic  "users.statistics.update"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "09:00:00" 
+[17/01/2014 16:31:01:873] Debug: ==================================== 
+[17/01/2014 16:31:01:873] Debug: ========== Printing Task =========== 
+[17/01/2014 16:31:01:873] Debug: Sending  "UserTaskStreamNotificationRequest"  to  "SOLAS_MATCH"  on topic  "users.stream.notify"  every  0  day(s),  1  hour(s),  0  minute(s) and  0  second(s)  starting at  "08:10:00" 
+[17/01/2014 16:31:01:873] Debug: ==================================== 
+[17/01/2014 16:31:01:886] Debug: EmailPlugin::Now consuming from  "SOLAS_MATCH"  exchange 
+[17/01/2014 16:31:02:833] Debug: Calculating user task scores 
+[17/01/2014 16:31:02:834] Debug: CalculateTaskScore: Starting new thread 
+[17/01/2014 16:31:03:183] Debug: "{609b2964-ef5a-40f0-aecd-5e48e5132b37}"  MySQL connection established 
+[17/01/2014 16:31:03:959] Debug: Publishing to exchnage  "SOLAS_MATCH"  on  "email.task.score" 
+[17/01/2014 16:31:03:961] Debug: CalcUserTaskScore::Finished publishing 
+[17/01/2014 16:31:03:961] Debug: Deleting MySQLHandler  "{609b2964-ef5a-40f0-aecd-5e48e5132b37}" 
+[17/01/2014 16:31:04:138] Debug: EmailPlugin::Received Message 
+[17/01/2014 16:31:04:138] Debug: EmailGenerator - Generating TaskScoreEmail 
+[17/01/2014 16:31:04:185] Debug: Getting message from queue 
+[17/01/2014 16:31:04:185] Debug: =============================== 
+[17/01/2014 16:31:04:185] Debug: Recipients:  ("user@host.com", "something@else.org") 
+[17/01/2014 16:31:04:185] Debug: Sender:  "'eoin.oconchuir.ul@gmail.com'" 
+[17/01/2014 16:31:04:185] Debug: Subject:  "SOLAS Match: User Task Score Results" 
+[17/01/2014 16:31:04:185] Debug: "<h3>Score Calculation Complete</h3>
+
+
+
+<hr />
+<p> 
+    Calculated scores for 6 users and 6 tasks. 0
+    rows were updated in 1.067 seconds.
+</p>
+" 
+[17/01/2014 16:31:04:185] Debug: ================================ 
+[17/01/2014 16:31:04:186] Debug: SMTP::Failed to connect to host 

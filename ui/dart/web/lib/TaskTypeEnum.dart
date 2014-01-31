@@ -1,4 +1,4 @@
-library SolasMatchDart;
+part of SolasMatchDart;
 
 class TaskTypeEnum
 {

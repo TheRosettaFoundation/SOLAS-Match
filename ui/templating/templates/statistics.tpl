@@ -1,5 +1,5 @@
 
-    <h3><i class="icon-info-sign"></i> {Settings::get('site.title')} {Localisation::getTranslation(Strings::STATISTICS_STATISTICS)}</h3>
+    <h3><i class="icon-info-sign"></i> {Settings::get('site.name')} {Localisation::getTranslation(Strings::STATISTICS_STATISTICS)}</h3>
     <table width="100%">
         <tr>
             <td>{Localisation::getTranslation(Strings::STATISTICS_USERS)}</td>
@@ -9,7 +9,7 @@
             </td>
         </tr>
         <tr>
-            <td>{Localisation::getTranslation(Strings::COMMON_ORGANISATIONS)}:</td>
+            <td>{Localisation::getTranslation(Strings::COMMON_ORGANISATIONS)}</td>
             <td></td>
             <td style="padding-left: 50px; text-align: right">
                 <strong>{$statsArray['Organisations']->getValue()}</strong>
@@ -65,14 +65,14 @@
             </td>
         </tr>
         <tr>
-            <td>{Localisation::getTranslation(Strings::COMMON_BADGES)}:</td>
+            <td>{Localisation::getTranslation(Strings::COMMON_BADGES)}</td>
             <td></td>
             <td style="padding-left: 50px; text-align: right">
                 <strong>{$statsArray['Badges']->getValue()}</strong>
             </td>
         </tr>        
         <tr>
-            <td>{Localisation::getTranslation(Strings::COMMON_TAGS)}:</td>
+            <td>{Localisation::getTranslation(Strings::COMMON_TAGS)}</td>
             <td></td>
             <td style="padding-left: 50px; text-align: right">
                 <strong>{$statsArray['Tags']->getValue()}</strong>

@@ -24,8 +24,7 @@
 
 {if isset($flash['info'])}
     <div class="alert alert-info">
-        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation(Strings::COMMON_NOTE)}: </strong>{$flash['info']}</p>
+        <p><strong>{Localisation::getTranslation(Strings::COMMON_NOTE)} </strong>{$flash['info']}</p>
     </div>
 {/if}
 
@@ -62,19 +61,15 @@
         <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
 
             {if isset($user)}
-                <div is="x-task-stream" user-id="{$user->getId()}" id="taskStream"></div>
+                <task-stream userid="{$user->getId()}"></task-stream>
             {else}
-                <div is="x-task-stream" user-id="0" id="taskStream"></div>
+                <task-stream userid="0"></task-stream>
             {/if}
-
-            <script type="text/javascript" src="{urlFor name="home"}ui/dart/deploy/web/packages/browser/dart.js"></script>
-            <script type="application/dart" src="{urlFor name="home"}ui/dart/deploy/web/Routes/Users/home.dart"></script>
-
 
             {if !isset($user)}
                 <div class="alert">
                     <p>{Localisation::getTranslation(Strings::INDEX_6)}</p>
-                    <p><a href="{urlFor name='register'}">{Localisation::getTranslation(Strings::INDEX_REGISTER_NOW)}</a> {Localisation::getTranslation(Strings::INDEX_7)}</p>
+                    <p>{sprintf(Localisation::getTranslation(Strings::INDEX_REGISTER_NOW), {urlFor name='register'})}</p>
                 </div>
             {/if}      
         </div>

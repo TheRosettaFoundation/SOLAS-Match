@@ -119,9 +119,7 @@ class IO {
                // TODO -> this die is to get around Slim's $app->reponse() header/body response.
                     // Is there a cleaner way to download files?
         }
-//        fclose ($fd);
-          die;
-        return;
+        die;
     }
     
     
@@ -176,6 +174,4 @@ class IO {
         }             
         return $result;
     }
-    
-    
 }

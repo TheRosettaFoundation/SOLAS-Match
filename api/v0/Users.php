@@ -17,7 +17,6 @@ class Users {
     
     public static function init()
     {		
-    	//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users(:format)/',
                                                         function ($format = ".json") {
             
@@ -44,7 +43,6 @@ class Users {
         	Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUser');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:userId/',
                                                         function ($userId, $format = ".json") {
             
@@ -58,7 +56,7 @@ class Users {
             Dispatcher::sendResponce(null, null, null, $format);
         }, 'deleteUser', 'Middleware::authUserOwnsResource');
 		
-		//returns the currently logged in user
+		//returns the currently logged in user based on oauth token
     	Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/getCurrentUser(:format)/',
 		function ($format = ".json") 
 		{
@@ -67,7 +65,6 @@ class Users {
 			
 		}, 'getCurrentUser', null);
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:uuid/registered(:format)/',
                 function ($uuid, $format = '.json')
                 {
@@ -75,7 +72,6 @@ class Users {
                     Dispatcher::sendResponce(null, $user, null, $format);
                 }, 'getRegisteredUser', null);
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:uuid/finishRegistration(:format)/',
                 function ($uuid, $format = '.json')
                 {
@@ -97,7 +93,6 @@ class Users {
                     }
                 }, 'finishRegistration', null);
 				
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/verified(:format)/',
                 function ($userId, $format = '.json')
                 {
@@ -105,7 +100,6 @@ class Users {
                     Dispatcher::sendResponce(null, $ret, null, $format);
                 }, 'isUserVerified', null);
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/leaveOrg/:userId/:orgId/',
                                                            function ($userId, $orgId, $format = ".json") {
             if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -118,7 +112,7 @@ class Users {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'userLeaveOrg', 'Middleware::authUserOwnsResource');        
+        }, 'userLeaveOrg', 'Middleware::authUserOrAdminForOrg');        
 
 		
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:userId/requestReference(:format)/',
@@ -128,7 +122,6 @@ class Users {
                     Dispatcher::sendResponce(null, null, null, $format);
                 }, "userRequestReference", 'Middleware::authUserOwnsResource');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/getByEmail/:email/',
                                                         function ($email, $format = ".json") {
             
@@ -219,7 +212,6 @@ class Users {
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'Badge');
-//            $data = $client->cast('Badge', $data);
             Dispatcher::sendResponce(null, BadgeDao::assignBadge($userId, $data->getId()), null, $format);
         }, 'addUserbadges');
 		
@@ -253,7 +245,6 @@ class Users {
             Dispatcher::sendResponce(null, BadgeDao::assignBadge($userId, $badgeId), null, $format);
         }, 'addUserbadgesByID', 'Middleware::authenticateUserForOrgBadge');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:userId/badges/:badgeId/',
                                                             function ($userId, $badgeId, $format = ".json") {
             if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
@@ -264,14 +255,12 @@ class Users {
             Dispatcher::sendResponce(null, BadgeDao::removeUserBadge($userId, $badgeId), null, $format);
         }, 'deleteUserbadgesByID', 'Middleware::authenticateUserOrOrgForOrgBadge');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/tags(:format)/',
                                                         function ($userId, $format = ".json") {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
             Dispatcher::sendResponce(null, UserDao::getUserTags($userId, $limit), null, $format);
         }, 'getUsertags');
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/taskStreamNotification(:format)/',
                 function ($userId, $format = ".json")
                 {
@@ -279,7 +268,6 @@ class Users {
                     Dispatcher::sendResponce(null, $data, null, $format);
                 }, 'getUserTaskStreamNotification', 'Middleware::authUserOwnsResource');
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:userId/taskStreamNotification(:format)/',
                 function ($userId, $format = ".json")
                 {
@@ -287,7 +275,6 @@ class Users {
                     Dispatcher::sendResponce(null, $ret, null, $format);
                 }, 'removeUserTaskStreamNotification', 'Middleware::authUserOwnsResource');
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:userId/taskStreamNotification(:format)/',
                 function ($userId, $format = ".json")
                 {
@@ -298,7 +285,6 @@ class Users {
                     Dispatcher::sendResponce(null, $ret, null, $format);
                 }, 'updateTaskStreamNotification', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/tasks(:format)/',
                                                         function ($userId, $format = ".json") {
             $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 10);
@@ -306,7 +292,6 @@ class Users {
             Dispatcher::sendResponce(null, TaskDao::getUserTasks($userId, $limit, $offset), null, $format);
         }, 'getUsertasks', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:userId/tasks(:format)/',
                                                         function ($userId, $format = ".json") {
             
@@ -316,9 +301,8 @@ class Users {
             Dispatcher::sendResponce(null, TaskDao::claimTask($data->getId(), $userId), null, $format);
             Notify::notifyUserClaimedTask($userId, $data->getId());
             Notify::notifyOrgClaimedTask($userId, $data->getId());
-        }, 'userClaimTask', 'Middleware::authUserOwnsResource');
+        }, 'userClaimTask', 'Middleware::authenticateTaskNotClaimed');
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:userId/tasks/:taskId/',
                                                         function ($userId, $taskId ,$format = ".json") {
              
@@ -331,7 +315,6 @@ class Users {
             Notify::sendTaskRevokedNotifications($taskId, $userId);
         }, 'userUnClaimTask', 'Middleware::authUserOrOrgForTask');
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/tasks/:taskId/review(:format)/',
                 function ($userId, $taskId, $format = '.json')
                 {
@@ -339,7 +322,6 @@ class Users {
                     Dispatcher::sendResponce(null, $reviews[0], null, $format);
                 }, 'getUserTaskReview', 'Middleware::authUserOrOrgForTask');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/topTasks(:format)/',
                                                         function ($userId, $format = ".json") {
                     
@@ -352,25 +334,24 @@ class Users {
             $filter = "";
             
             $taskType = '';
-            $sourceLanguage = '';
-            $targetLanguage = '';
+            $sourceLanguageCode = '';
+            $targetLanguageCode = '';
                     
             if (isset($filters['taskType']) && $filters['taskType'] != '') {
                 $taskType = $filters['taskType'];
             }
             if (isset($filters['sourceLanguage']) && $filters['sourceLanguage'] != '') {
-                $sourceLanguage = $filters['sourceLanguage'];
+                $sourceLanguageCode = $filters['sourceLanguage'];
             }
             if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
-                $targetLanguage = $filters['targetLanguage'];
+                $targetLanguageCode = $filters['targetLanguage'];
             }
             
             $dao = new TaskDao();
-            $data = $dao->getUserTopTasks($userId, $strict, $limit, $offset, $taskType, $sourceLanguage, $targetLanguage);
+            $data = $dao->getUserTopTasks($userId, $strict, $limit, $offset, $taskType, $sourceLanguageCode, $targetLanguageCode);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTopTasks',  "Middleware::isloggedIn");
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/archivedTasks(:format)/',
                                                         function ($userId, $format = ".json") {
             
@@ -392,7 +373,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserArchivedTaskMetaData', 'Middleware::authUserOrOrgForTask');     
         
-        // 
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:userId/',
                                                         function ($userId, $format = ".json") {
             if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -408,13 +388,11 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'updateUser', 'Middleware::authUserOwnsResource');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:userId/tags(:format)/',
                                                         function ($userId, $format = ".json"){
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'Tag');
-//            $data = $client->cast('Tag', $data);
             $data = UserDao::likeTag($userId, $data->getId());
             if (is_array($data)) {
                 $data = $data[0];
@@ -422,7 +400,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'addUsertag', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:userId/tags/:tagId/',
                                                         function ($userId, $tagId, $format = ".json") {
             if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -437,7 +414,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'addUserTagById', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:userId/tags/:tagId/',
                                                             function ($userId, $tagId, $format = ".json") {
             if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -452,7 +428,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'deleteUserTagById', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/trackedTasks(:format)/',
                                                         function ($userId, $format = ".json") {
             
@@ -460,18 +435,15 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTrackedTasks', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:userId/trackedTasks(:format)/',
                                                         function ($userId, $format=".json"){
             $data = Dispatcher::getDispatcher()->request()->getBody();
             $client = new APIHelper($format);
             $data = $client->deserialize($data,'Task');
-//            $data = $client->cast('Task', $data);
             $data = UserDao::trackTask($userId, $data->getId());
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'addUserTrackedTasks', 'Middleware::authUserOwnsResource');
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:userId/trackedTasks/:taskId/',
                                                         function ($userId, $taskId, $format = ".json") {
             
@@ -484,7 +456,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'addUserTrackedTasksById', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:userId/trackedTasks/:taskId/',
                                                             function ($userId, $taskId, $format = ".json") {
             
@@ -497,7 +468,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'deleteUserTrackedTasksById', 'Middleware::authUserOwnsResource');
         
-        // 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/email/:email/passwordResetRequest(:format)/',
                                                         function ($email, $format = ".json") {
             $data = UserDao::hasRequestedPasswordReset($email) ? 1 : 0;
@@ -505,14 +475,12 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'hasUserRequestedPasswordReset', null);
 		
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/email/:email/passwordResetRequest/time(:format)/',
                                                         function ($email, $format = ".json"){
             $resetRequest = UserDao::getPasswordResetRequests($email);
             Dispatcher::sendResponce(null, $resetRequest->getRequestTime(), null, $format);
         }, "PasswordResetRequestTime", null);
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/email/:email/passwordResetRequest(:format)/',
                                                         function ($email, $format=".json"){
             $user = UserDao::getUser(null, $email);
@@ -525,14 +493,12 @@ class Users {
             }
         }, 'createPasswordResetRequest', null);
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/projects(:format)/',
                                                         function ($userId, $format=".json"){
             $data = UserDao::getTrackedProjects($userId);
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserTrackedProjects', 'Middleware::authUserOwnsResource'); 
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:userId/projects/:projectId/',
                                                         function ($userId,$projectId, $format=".json"){
             if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -544,7 +510,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'userTrackProject', 'Middleware::authUserOwnsResource'); 
         
-		//
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/:userId/projects/:projectId/',
                                                         function ($userId,$projectId, $format=".json"){
             if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -556,7 +521,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'userUnTrackProject', 'Middleware::authUserOwnsResource'); 
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/personalInfo(:format)/',
                                                         function ($userId, $format = ".json") {
             
@@ -569,7 +533,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getUserPersonalInfo', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:userId/personalInfo(:format)/',
                                                         function ($userId, $format = ".json") {
             
@@ -587,7 +550,6 @@ class Users {
 
         }, 'createUserPersonalInfo', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::PUT, '/v0/users/:userId/personalInfo(:format)/',
                                                         function ($userId, $format = ".json") {
             if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -600,12 +562,9 @@ class Users {
             $data = $client->deserialize($data,'UserPersonalInformation');
             $data = UserDao::updatePersonalInfo($data);
             
-            error_log('>>'.$data);
-
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'updateUserPersonalInfo', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/:userId/secondaryLanguages(:format)/',
                                                         function ($userId, $format = ".json") {
             
@@ -619,7 +578,6 @@ class Users {
             Dispatcher::sendResponce(null, $data, null, $format);
         }, 'getSecondaryLanguages');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::POST, '/v0/users/:userId/secondaryLanguages(:format)/',
                                                         function ($userId, $format = ".json") {
             $data = Dispatcher::getDispatcher()->request()->getBody();
@@ -630,7 +588,6 @@ class Users {
 
         }, 'createSecondaryLanguage', 'Middleware::authUserOwnsResource');
         
-		// 
         Dispatcher::registerNamed(HttpMethodEnum::DELETE, '/v0/users/removeSecondaryLanguage/:userId/:languageCode/:countryCode/',
                                                         function ($userId,$languageCode,$countryCode, $format=".json"){
             if (strstr($countryCode, '.')) {

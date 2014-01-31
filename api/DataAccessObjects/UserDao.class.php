@@ -22,8 +22,6 @@ class UserDao
         // The access token is missing or invalid...
         catch (League\OAuth2\Server\Exception\InvalidAccessTokenException $e)
         {
-			// print_r($response);
-            //Dispatcher::getDispatcher()->halt(HttpStatusEnum::UNAUTHORIZED, $e->getMessage());
             return null;
         }
     } 
@@ -62,7 +60,9 @@ class UserDao
             $nativeLocale = $user->getNativeLocale();
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
-            BadgeDao::assignBadge($user->getId(), BadgeTypes::NATIVE_LANGUAGE);
+            if ($nativeLanguageCode != '' && $nativeCountryCode != '') {
+                BadgeDao::assignBadge($user->getId(), BadgeTypes::NATIVE_LANGUAGE);
+            }
         }
 
         if ($user->getBiography() != '') {
@@ -137,7 +137,6 @@ class UserDao
 
         if (AdminDao::isUserBanned($user->getId())) {
             self::logLoginAttempt($user->getId(), $email, 0);
-//            Notify::sendBannedLoginEmail($user->getId());
             throw new Exception(HttpStatusEnum::FORBIDDEN);
         }
 
@@ -775,5 +774,4 @@ class UserDao
         }
         return $ret;  
     }
-    
 }
