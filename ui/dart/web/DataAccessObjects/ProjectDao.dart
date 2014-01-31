@@ -35,9 +35,7 @@ class ProjectDao
           if (response.status < 400) {
             return true;
           } else {
-            print("Error: calculateProjectDeadlines returned " + 
-                response.status.toString() + " " + response.statusText);
-            return false;
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
           }
     });
     return ret;
@@ -55,7 +53,7 @@ class ProjectDao
               pro = ModelFactory.generateProjectFromMap(jsonParsed);
             }
           } else {
-            print("Error: createProject returned " + response.status.toString() + " " + response.statusText);
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
           }
           return pro;
         });
@@ -70,8 +68,7 @@ class ProjectDao
           if (response.status < 400) {
             return true;
           } else {
-            print("Error: deleteProject returned " + response.status.toString() + " " + response.statusText);
-            return false;
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
           }
         });
     return ret;
@@ -86,8 +83,7 @@ class ProjectDao
           if (response.status < 400) {
             return true;
           } else {
-            print("Error: uploadProjectFile returned " + response.status.toString() + " " + response.statusText);
-            return false;
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
           }
         });
     return ret;
@@ -101,8 +97,7 @@ class ProjectDao
           if (response.status < 400) {
             return true;
           } else {
-            print("Error: trackProject returned " + response.status.toString() + " " + response.statusText);
-            return false;
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
           }
         });
     return ret;

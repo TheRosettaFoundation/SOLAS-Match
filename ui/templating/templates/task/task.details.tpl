@@ -46,9 +46,9 @@
                     {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                         {Localisation::getTranslation(Strings::COMMON_UNCLAIMED)}
                     {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                        <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">{Localisation::getTranslation(Strings::COMMON_IN_PROGRESS)}</a>
+                        {Localisation::getTranslation(Strings::COMMON_IN_PROGRESS)}
                     {elseif $status_id == TaskStatusEnum::COMPLETE}
-                        <a href="{Settings::get("site.api")}v0/tasks/{$task_id}/file/?">{Localisation::getTranslation(Strings::COMMON_COMPLETE)}</a>
+                        {Localisation::getTranslation(Strings::COMMON_COMPLETE)}
                     {/if}
                 </td>
             {/if}

@@ -25,7 +25,12 @@ class Projects
                 $data=Dispatcher::getDispatcher()->request()->getBody();
                 $client = new APIHelper($format);
                 $data = $client->deserialize($data,'Project');
-                Dispatcher::sendResponce(null, ProjectDao::createUpdate($data), null, $format);
+                $project = ProjectDao::createUpdate($data);
+                if (!is_null($project) && $project->getId() > 0) {
+                    Dispatcher::sendResponce(null, $project, null, $format);
+                } else {
+                    Dispatcher::sendResponce(null, "Project details conflict with existing data", HttpStatusEnum::CONFLICT, $format);
+                }
             }, 'createProject', 'Middleware::authenticateUserMembership');
 		
         Dispatcher::registerNamed(HTTPMethodEnum::PUT, '/v0/projects/:projectId/',
