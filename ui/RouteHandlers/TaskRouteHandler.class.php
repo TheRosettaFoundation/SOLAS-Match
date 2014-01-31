@@ -422,20 +422,13 @@ class TaskRouteHandler
                     $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
                     $fileUploadMime = IO::detectMimeType(file_get_contents($_FILES[$fieldName]["tmp_name"]), $_FILES[$fieldName]["name"]);
 
-<<<<<<< HEAD
                     if(strcasecmp($fileUploadType,$projectFileType) != 0) {
-                        throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_3), $projectFileType));
-                    } else if($fileUploadMime != $projectFileMimeType) {
-                        throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_4), $projectFileType, $projectFileType));
+                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_5), $projectFileType));
+                	} else if($fileUploadMime != $projectFileMimeType) {
+                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_6), $projectFileType, $projectFileType));
                     }
                 } catch (Exception $e) {
                     $errorMessage = $e->getMessage();
-=======
-                if(strcasecmp($fileUploadType,$projectFileType) != 0) {
-                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_5), $projectFileType));
-                } else if($fileUploadMime != $projectFileMimeType) {
-                    throw new Exception(sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_6), $projectFileType, $projectFileType));
->>>>>>> develop
                 }
         
                 if (is_null($errorMessage)) {
@@ -447,15 +440,9 @@ class TaskRouteHandler
                         } else if ($post['submit'] == 'submit') {
                             $taskDao->uploadOutputFile($taskId, $userId, $filedata);
                         }
-                
-<<<<<<< HEAD
-                    } catch (Exception  $e) {
-                        $errorMessage = Localisation::getTranslation(Strings::TASK_ROUTEHANDLER_5) . $e->getMessage();
-                    }
-=======
-                } catch (Exception  $e) {
+                     } catch (Exception  $e) {
                     $errorMessage = Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_7) . $e->getMessage();
->>>>>>> develop
+                    }
                 }
 
                 if (is_null($errorMessage)) {

@@ -45,8 +45,7 @@
                 </div>
         {/if}
         {if $type_id == TaskTypeEnum::TRANSLATION}
-<<<<<<< HEAD
-        
+
 	        <!--Added to test Pootle connection SIMPLESTRINGS-->
 	        <form method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
     	        <h3>You can also translate this file using a third party tool</h3>
@@ -57,10 +56,8 @@
     	    	</p>
 	        </form>
         
-            <h3>{Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0)} {$filename}</h3>
-=======
             <h3>{sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0), {$filename})}</h3>
->>>>>>> develop
+
         {else}
             <h3>{sprintf(Localisation::getTranslation(Strings::TASK_SIMPLE_UPLOAD_0_PROOFREADING), {$filename})}</h3>
         {/if}   
