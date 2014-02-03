@@ -343,7 +343,7 @@ class Tasks {
 			$output = shell_exec($cmd);
 			
 			//chdir("{$filedumpLocation}Pootle/task-{$taskId}");
-			$cmd = "cp $fileInfo {$tempLocation}task-{$taskId}";
+			$cmd = "cp -f $fileInfo {$tempLocation}task-{$taskId}";
 			$cmd = escapeshellcmd($cmd);
 			$output = shell_exec($cmd);
 			//$filename = 'task'.$taskId.'.json';

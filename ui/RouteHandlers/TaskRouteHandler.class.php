@@ -241,7 +241,8 @@ class TaskRouteHandler
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             if ($post['submit'] = 'pootleBtn') {
-                $backlink = $app->urlFor("task", array('task_id' => $taskId));
+                $backlink = Settings::get("site.server").substr($app->urlFor("task", array('task_id' => $taskId)), 1);
+				error_log("Backlinlk: $backlink" );
                 $taskDao->createPootleProject($taskId, $userId, $backlink);
                 $app->flashNow("success", "Successfully created project on pootle. You will receive an email shortly with ".
                                             "a link to the pootle project");
