@@ -7,7 +7,6 @@ mb_internal_encoding("UTF-8");
 
 header("Content-Type:application/xhtml+xml;charset=UTF-8");
 
-
 SmartyView::$smartyDirectory = 'ui/vendor/smarty/smarty/distribution/libs';
 SmartyView::$smartyCompileDirectory = 'ui/templating/templates_compiled';
 SmartyView::$smartyTemplatesDirectory = 'ui/templating/templates';
@@ -122,15 +121,14 @@ require_once 'Common/protobufs/emails/OrgFeedback.php';
  */
 
 //Custom Slim Errors
- $app->error(function (\Exception $e) use ($app) 
-{
-    $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/slimError.showHide.js\"></script>";
-    $trace = str_replace("#","<br>",$e->getTraceAsString());
+$app->error(function (\Exception $e) use ($app) {
+    $extra_scripts = "<script type='text/javascript' src='{$app->urlFor("home")}ui/js/slimError.showHide.js'></script>";
+    $trace = str_replace('#', '<br>', $e->getTraceAsString());
     $app->view()->appendData(array(
-			  "exception" => $e,
-			  "trace" => $trace,
-			  "extra_scripts" => $extra_scripts,
-			  "referrer" => $app->request()->getReferrer()
+                "exception" => $e,
+                "trace" => $trace,
+                "extra_scripts" => $extra_scripts,
+                "referrer" => $app->request()->getReferrer()
     ));
     
     $app->render('SlimError.tpl');
@@ -138,7 +136,6 @@ require_once 'Common/protobufs/emails/OrgFeedback.php';
 
 function isValidPost(&$app)
 {
-    
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }
 
@@ -147,9 +144,10 @@ function isValidPost(&$app)
  * 
  * Given that we don't have object factories implemented, we'll initialise them directly here.
  */
-$app->hook('slim.before.dispatch', function () use ($app)
-{
-    if(!is_null($token =UserSession::getAccessToken()) && $token->getExpires() <  time())        UserSession::clearCurrentUserID();
+$app->hook('slim.before.dispatch', function () use ($app) {
+    if (!is_null($token = UserSession::getAccessToken()) && $token->getExpires() <  time()) {
+        UserSession::clearCurrentUserID();
+    }
     $userDao = new UserDao();
     if (!is_null(UserSession::getCurrentUserID())) {
         $current_user = $userDao->getUser(UserSession::getCurrentUserID());
@@ -163,7 +161,7 @@ $app->hook('slim.before.dispatch', function () use ($app)
             }
 
             $tasks = $userDao->getUserTasks(UserSession::getCurrentUserID());
-            if($tasks && count($tasks) > 0) {
+            if ($tasks && count($tasks) > 0) {
                 $app->view()->appendData(array(
                     "user_has_active_tasks" => true
                 ));

@@ -7,8 +7,12 @@ class AdminRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
         
-        $app->get("/admin/", array($middleware, "authenticateSiteAdmin"),
-        array($middleware, "isSiteAdmin"), array($this, "adminDashboard"))->via("POST")->name("site-admin-dashboard");
+        $app->get(
+            "/admin/",
+            array($middleware, "authenticateSiteAdmin"),
+            array($middleware, "isSiteAdmin"),
+            array($this, "adminDashboard")
+        )->via("POST")->name("site-admin-dashboard");
 
     }
     
@@ -17,20 +21,20 @@ class AdminRouteHandler
         $app = Slim::getInstance();
         $userId = UserSession::getCurrentUserID();
         
-        if($post = $app->request()->post()) {
+        if ($post = $app->request()->post()) {
             $userDao = new UserDao();
             $adminDao = new AdminDao();
-            if(isset($post['addAdmin'])) {
+            if (isset($post['addAdmin'])) {
                 $user = $userDao->getUserByEmail($post['userEmail']);
-                if(is_object($user)) {
+                if (is_object($user)) {
                     $adminDao->createSiteAdmin($user->getId());
                 }
             }
-            if(isset($post['revokeAdmin'])) {
+            if (isset($post['revokeAdmin'])) {
                 $adminDao->removeSiteAdmin($post['userId']);
             }
             
-            if(isset($post['banOrg']) && $post['orgName'] != '') {
+            if (isset($post['banOrg']) && $post['orgName'] != '') {
                 $orgDao = new OrganisationDao();
                 $bannedOrg = new BannedOrganisation();
                 $org = $orgDao->getOrganisationByName(urlencode($post['orgName']));
@@ -38,19 +42,23 @@ class AdminRouteHandler
                 $bannedOrg->setOrgId($org->getId());
                 $bannedOrg->setUserIdAdmin($userId);
                 $bannedOrg->setBanType($post['banTypeOrg']);
-                if(isset($post['banReasonOrg'])) $bannedOrg->setComment($post['banReasonOrg']);
+                if (isset($post['banReasonOrg'])) {
+                    $bannedOrg->setComment($post['banReasonOrg']);
+                }
                 $adminDao->banOrg($bannedOrg);
             }
-            if(isset($post['banUser']) && $post['userEmail'] != '') {
+            if (isset($post['banUser']) && $post['userEmail'] != '') {
                 $bannedUser = new BannedUser();
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 
                 $bannedUser->setUserId($user->getId());
                 $bannedUser->setUserIdAdmin($userId);
                 $bannedUser->setBanType($post['banTypeUser']);
-                if(isset($post['banReasonUser'])) $bannedUser->setComment($post['banReasonUser']);
+                if (isset($post['banReasonUser'])) {
+                    $bannedUser->setComment($post['banReasonUser']);
+                }
                 $adminDao->banUser($bannedUser);
-            }         
+            }
             
             if(isset($post['unBanOrg']) && $post['orgId'] != '') {
                 $adminDao->unBanOrg($post['orgId']);

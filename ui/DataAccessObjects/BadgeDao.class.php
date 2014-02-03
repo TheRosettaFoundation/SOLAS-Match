@@ -5,16 +5,14 @@ require_once __DIR__."/BaseDao.php";
 
 class BadgeDao extends BaseDao
 {
-
     public function __construct()
     {
         $this->client = new APIHelper(Settings::get("ui.api_format"));
         $this->siteApi = Settings::get("site.api");
     }
 
-    public function getBadge($id=null,$title=null,$discription=null)
+    public function getBadge($id = null, $title = null, $discription = null)
     {
-       
         $request = "{$this->siteApi}v0/badges/$id";
         $response =$this->client->call("Badge", $request);
         return $response;
@@ -38,7 +36,7 @@ class BadgeDao extends BaseDao
     public function createBadge($badge)
     {
         $request = "{$this->siteApi}v0/badges";
-        $response =$this->client->call("Badge", $request,HttpMethodEnum::POST, $badge);
+        $response = $this->client->call("Badge", $request, HttpMethodEnum::POST, $badge);
         return $response;
     }
 

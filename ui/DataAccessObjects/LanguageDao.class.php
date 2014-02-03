@@ -22,12 +22,15 @@ class LanguageDao extends BaseDao
     
     public function getLanguages()
     {
-        $languages = CacheHelper::getCached(CacheHelper::LANGUAGES, TimeToLiveEnum::MONTH, 
-                function($args){
-                    $request = "{$args[1]}v0/languages";
-                    return $args[0]->call(array("Language"), $request);
-                },
-            array($this->client, $this->siteApi));
+        $languages = CacheHelper::getCached(
+            CacheHelper::LANGUAGES,
+            TimeToLiveEnum::MONTH,
+            function ($args) {
+                $request = "{$args[1]}v0/languages";
+                return $args[0]->call(array("Language"), $request);
+            },
+            array($this->client, $this->siteApi)
+        );
         return $languages;
     }
 

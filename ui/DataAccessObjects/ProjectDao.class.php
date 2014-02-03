@@ -4,8 +4,7 @@ require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 
 class ProjectDao extends BaseDao
-{    
-    
+{
     public function __construct()
     {
         $this->client = new APIHelper(Settings::get("ui.api_format"));
@@ -18,8 +17,8 @@ class ProjectDao extends BaseDao
         $request = "{$this->siteApi}v0/projects/$id";
         if (!is_null($id)) {
             $ret = $this->client->call("Project", $request);
-            if($tags=$this->getProjectTags($id)){
-                foreach($tags as $tag){
+            if ($tags = $this->getProjectTags($id)) {
+                foreach ($tags as $tag) {
                     $ret->addTag($tag);
                 }
             }
@@ -49,7 +48,7 @@ class ProjectDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/projects/buildGraph/$projectId";
         $ret = $this->client->call("WorkflowGraph", $request);
-        return $ret; 
+        return $ret;
     }
 
     public function getProjectTags($projectId)
@@ -94,7 +93,7 @@ class ProjectDao extends BaseDao
 
     public function archiveProject($projectId, $userId)
     {
-        $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";  
+        $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
         $ret = $this->client->call("ArchivedProject", $request, HttpMethodEnum::PUT);
         return $ret;
     }
@@ -119,25 +118,26 @@ class ProjectDao extends BaseDao
         return $ret;
     }
     
-    public function saveProjectFile($id, $data, $filename,$userId)
+    public function saveProjectFile($id, $data, $filename, $userId)
     {
         $ret = null;
         $filename = urlencode($filename);
         $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
-        $ret = $this->client->call(null, $url, HttpMethodEnum::PUT, null, null, $data);     
+        $ret = $this->client->call(null, $url, HttpMethodEnum::PUT, null, null, $data);
         
         switch($this->client->getResponseCode()) {
             
-            default : return $ret;
+            default:
+                return $ret;
                 
-            case HttpStatusEnum::BAD_REQUEST :
-                throw new SolasMatchException($ret, $this->client->getResponseCode());                                 
-                break;          
-            
-            case HttpStatusEnum::CONFLICT :
+            case HttpStatusEnum::BAD_REQUEST:
                 throw new SolasMatchException($ret, $this->client->getResponseCode());
-                break;                                
-        }        
+                break;
+            
+            case HttpStatusEnum::CONFLICT:
+                throw new SolasMatchException($ret, $this->client->getResponseCode());
+                break;
+        }
     }
     
     public function getProjectFile($project_id)
@@ -145,15 +145,15 @@ class ProjectDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$project_id/file";
         $response = $this->client->call(null, $request);
-        return $response;        
+        return $response;
     }
     
     public function getProjectFileInfo($project_id)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/projects/$project_id/info";     
+        $request = "{$this->siteApi}v0/projects/$project_id/info";
         $ret = $this->client->call("ProjectFile", $request);
-        return $ret;        
+        return $ret;
     }
     
     public function deleteProjectTags($project_id)

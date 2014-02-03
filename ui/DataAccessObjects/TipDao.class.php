@@ -16,7 +16,7 @@ class TipDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/tips";
-        $ret = $this->client->call(null,$request);
+        $ret = $this->client->call(null, $request);
         return $ret;
     }
 }

@@ -5,7 +5,6 @@ require_once __DIR__."/BaseDao.php";
 
 class AdminDao extends BaseDao
 {
-
     public function __construct()
     {
         $this->client = new APIHelper(Settings::get("ui.api_format"));
@@ -13,14 +12,14 @@ class AdminDao extends BaseDao
     }
 
     public function getSiteAdmins()
-    {       
+    {
         $request = "{$this->siteApi}v0/admins";
         $response = $this->client->call(array("User"), $request);
         return $response;
     }
     
     public function getOrgAdmins($orgId)
-    {       
+    {
         $request = "{$this->siteApi}v0/admins/getOrgAdmins/$orgId";
         $response = $this->client->call(array("User"), $request);
         return $response;
@@ -69,14 +68,14 @@ class AdminDao extends BaseDao
         $request = "{$this->siteApi}v0/admins/getBannedUsers";
         $response = $this->client->call(array("BannedUser"), $request);
         return $response;
-    }    
+    }
     
     public function getBannedUser($userId)
     {
         $request = "{$this->siteApi}v0/admins/getBannedUser/$userId";
         $response = $this->client->call("BannedUser", $request);
         return $response;
-    }    
+    }
     
     public function getBannedOrgs()
     {

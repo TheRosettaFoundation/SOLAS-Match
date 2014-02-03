@@ -44,14 +44,17 @@ class TagDao extends BaseDao
     }
 
     public function getTopTags($limit = null)
-    {       
+    {
         $args=$limit ? array("limit" => $limit) : null;
-        $topTags = CacheHelper::getCached(CacheHelper::TOP_TAGS, TimeToLiveEnum::QUARTER_HOUR, 
-                function($args) {
-                    $request = "{$args[2]}v0/tags/topTags";
-                    return $args[1]->call(array("Tag"), $request, HttpMethodEnum::GET, null, $args[0]);
-                },
-            array($args,$this->client,$this->siteApi));
+        $topTags = CacheHelper::getCached(
+            CacheHelper::TOP_TAGS,
+            TimeToLiveEnum::QUARTER_HOUR,
+            function ($args) {
+                $request = "{$args[2]}v0/tags/topTags";
+                return $args[1]->call(array("Tag"), $request, HttpMethodEnum::GET, null, $args[0]);
+            },
+            array($args, $this->client, $this->siteApi)
+        );
         return $topTags;
     }
 
@@ -83,5 +86,4 @@ class TagDao extends BaseDao
         $response=$this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $response;
     }
-
 }

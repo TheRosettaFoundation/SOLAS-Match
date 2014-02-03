@@ -28,13 +28,15 @@ class CountryDao extends BaseDao
 
     public function getCountries()
     {
-        $countries = CacheHelper::getCached(CacheHelper::COUNTRIES, TimeToLiveEnum::MONTH, 
-                function($args){
-                    $request = "{$args[1]}v0/countries";
-                    return $args[0]->call(array("Country"), $request);
-                },
-            array($this->client, $this->siteApi));
+        $countries = CacheHelper::getCached(
+            CacheHelper::COUNTRIES,
+            TimeToLiveEnum::MONTH,
+            function ($args) {
+                $request = "{$args[1]}v0/countries";
+                return $args[0]->call(array("Country"), $request);
+            },
+            array($this->client, $this->siteApi)
+        );
         return $countries;
     }
-
 }

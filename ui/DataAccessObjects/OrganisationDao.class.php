@@ -4,7 +4,7 @@ require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 
 class OrganisationDao extends BaseDao
-{   
+{
     public function __construct()
     {
         $this->client = new APIHelper(Settings::get("ui.api_format"));
@@ -25,7 +25,7 @@ class OrganisationDao extends BaseDao
         $name = urlencode($name);
         $request = "{$this->siteApi}v0/orgs/getByName/$name";
         $ret = $this->client->call("Organisation", $request);
-        return $ret;       
+        return $ret;
     }
     
     public function searchForOrgByName($name)
@@ -33,7 +33,7 @@ class OrganisationDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/searchByName/$name";
         $ret = $this->client->call(array("Organisation"), $request);
-        return $ret;       
+        return $ret;
     }
     
     public function getOrganisations()
@@ -115,7 +115,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId";
-        $ret = $this->client->call(null,$request, HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
         return $ret;
     }
 

@@ -13,12 +13,15 @@ class StatisticsDao extends BaseDao
 
     public function getStats()
     {
-        $stats = CacheHelper::getCached(CacheHelper::STATISTICS, TimeToLiveEnum::HOUR, 
-                function($args){
-                    $request = "{$args[1]}v0/stats";
-                    return $args[0]->call(array("Statistic"), $request);
-                },
-            array($this->client, $this->siteApi));
+        $stats = CacheHelper::getCached(
+            CacheHelper::STATISTICS,
+            TimeToLiveEnum::HOUR,
+            function ($args) {
+                $request = "{$args[1]}v0/stats";
+                return $args[0]->call(array("Statistic"), $request);
+            },
+            array($this->client, $this->siteApi)
+        );
         return $stats;
     }
     

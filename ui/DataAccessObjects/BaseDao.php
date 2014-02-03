@@ -1,6 +1,7 @@
 <?php
 
-abstract class BaseDao {
+abstract class BaseDao
+{
     
     protected $client;
     protected $siteApi;
@@ -8,7 +9,5 @@ abstract class BaseDao {
     public function getClient()
     {
         return $this->client;
-    }    
+    }
 }
-
-?>

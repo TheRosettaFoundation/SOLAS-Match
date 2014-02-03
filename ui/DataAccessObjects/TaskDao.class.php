@@ -4,8 +4,7 @@ require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 
 class TaskDao extends BaseDao
-{    
-
+{
     public function __construct()
     {
         $this->client = new APIHelper(Settings::get("ui.api_format"));
@@ -44,14 +43,14 @@ class TaskDao extends BaseDao
         if ($offset != null) {
             $args['offset'] = $offset;
         }
-        $response =$this->client->call(array("Task"), $request,HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call(array("Task"), $request, HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
     public function getTaskTags($taskId, $limit = null)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";
-        $response =$this->client->call(array("Tag"), $request,HttpMethodEnum::GET, null);
+        $response = $this->client->call(array("Tag"), $request, HttpMethodEnum::GET, null);
         return $response;
     }
 
@@ -59,8 +58,8 @@ class TaskDao extends BaseDao
     public function getTaskFile($taskId, $version = 0, $convertToXliff = false)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/file";
-        $args=array("version" => $version,"convertToXliff"=>$convertToXliff);
-        $response =$this->client->call(null, $request,HttpMethodEnum::GET, null, $args);
+        $args = array("version" => $version,"convertToXliff"=>$convertToXliff);
+        $response = $this->client->call(null, $request, HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
@@ -75,15 +74,15 @@ class TaskDao extends BaseDao
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/info";
         $args = array("version" => $version);
-        $response =$this->client->call("TaskMetaData", $request,HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call("TaskMetaData", $request, HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
     public function isTaskClaimed($taskId, $userId = null)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/claimed";
-        $args=$userId ? array("userID" => $userId) : null;
-        $response =$this->client->call(null, $request,HttpMethodEnum::GET, null, $args);
+        $args = $userId ? array("userID" => $userId) : null;
+        $response = $this->client->call(null, $request, HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
@@ -105,14 +104,14 @@ class TaskDao extends BaseDao
     public function createTask($task)
     {
         $request = "{$this->siteApi}v0/tasks";
-        $response =$this->client->call("Task", $request,HttpMethodEnum::POST, $task);
+        $response = $this->client->call("Task", $request, HttpMethodEnum::POST, $task);
         return $response;
     }
 
     public function updateTask($task)
     {
         $request = "{$this->siteApi}v0/tasks/{$task->getId()}";
-        $response =$this->client->call("Task", $request,HttpMethodEnum::PUT, $task);
+        $response = $this->client->call("Task", $request, HttpMethodEnum::PUT, $task);
         return $response;
     }
 
@@ -155,7 +154,7 @@ class TaskDao extends BaseDao
         $feedbackData->setClaimantId($claimantId);
         $feedbackData->setFeedback($feedback);
         $request = "{$this->siteApi}v0/tasks/{$feedbackData->getTaskId()}/orgFeedback";
-        $response =$this->client->call(null,$request, HttpMethodEnum::PUT, $feedbackData);
+        $response = $this->client->call(null, $request, HttpMethodEnum::PUT, $feedbackData);
     }
 
     public function sendUserFeedback($taskId, $userId, $feedback)
@@ -165,7 +164,7 @@ class TaskDao extends BaseDao
         $feedbackData->setClaimantId($userId);
         $feedbackData->setFeedback($feedback);
         $request = "{$this->siteApi}v0/tasks/{$feedbackData->getTaskId()}/userFeedback";
-        $response =$this->client->call(null,$request, HttpMethodEnum::PUT, $feedbackData);
+        $response = $this->client->call(null, $request, HttpMethodEnum::PUT, $feedbackData);
     }
 
     public function submitReview($review)
@@ -186,26 +185,35 @@ class TaskDao extends BaseDao
             $args['convertFromXliff'] = $convert?1:0;
         }
 
-        $response = $this->client->call(null,$request, HttpMethodEnum::PUT, null, $args,$fileData);
+        $response = $this->client->call(null, $request, HttpMethodEnum::PUT, null, $args, $fileData);
         
         switch($this->client->getResponseCode()) {
-            case HttpStatusEnum::CREATED :                                        
+            case HttpStatusEnum::CREATED:
                 return;
-            case HttpStatusEnum::BAD_REQUEST : {
+            case HttpStatusEnum::BAD_REQUEST:
                 $projectDao = new ProjectDao();
                 $taskDao = new TaskDao();
                 $task = $taskDao->getTask($taskId);
                 $projectFile = $projectDao->getProjectFileInfo($task->getProjectId());
                 $projectFileName = $projectFile->getFileName();
                 $projectFileExtension = explode(".", $projectFileName);
-                $projectFileExtension = $projectFileExtension[count($projectFileExtension)-1];                                        
+                $projectFileExtension = $projectFileExtension[count($projectFileExtension)-1];
                 $projectMime = $projectFile->getMime();
-                throw new SolasMatchException(sprintf(Localisation::getTranslation(Strings::COMMON_ERROR_UPLOAD_1), $projectFileExtension, $projectMime), $this->client->getResponseCode());                                 
+                throw new SolasMatchException(
+                    sprintf(
+                        Localisation::getTranslation(Strings::COMMON_ERROR_UPLOAD_1),
+                        $projectFileExtension,
+                        $projectMime
+                    ),
+                    $this->client->getResponseCode()
+                );
                 break;
-            }
-            case HttpStatusEnum::INTERNAL_SERVER_ERROR :
-                throw new SolasMatchException(Localisation::getTranslation(Strings::COMMON_ERROR_UPLOAD_2), $this->client->getResponseCode());
-                break;                                
+            case HttpStatusEnum::INTERNAL_SERVER_ERROR:
+                throw new SolasMatchException(
+                    Localisation::getTranslation(Strings::COMMON_ERROR_UPLOAD_2),
+                    $this->client->getResponseCode()
+                );
+                break;
         }
     }
 
@@ -218,7 +226,7 @@ class TaskDao extends BaseDao
             $args= array('convertFromXliff' => $convert);
         }
         
-        $response = $this->client->call(null,$request, HttpMethodEnum::PUT, null, $args,$fileData);
+        $response = $this->client->call(null, $request, HttpMethodEnum::PUT, null, $args, $fileData);
     }
     
     public function getClaimedDate($taskId)
