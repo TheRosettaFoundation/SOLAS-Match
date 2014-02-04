@@ -320,7 +320,7 @@ class Tasks {
 			
 			
 			//FileLocation /home/redray/workspace/solas-match/uploads/proj-{Project Id}/task-{Task Id}/v-{Version Number}/<Filename>
-			$result[] = array(	'title' => $task->getTitle(), 
+			$result = array(	'title' => $task->getTitle(), 
 								'target_code' => $targetCode, 
 								'target_name' => $targetName, 
 								'source_code' => $sourceCode, 
@@ -330,7 +330,7 @@ class Tasks {
 								'backlink' => $baseUrl,
 								//'fileInfo' => $fileInfo,
 								'description' => $project->getDescription(), 
-								'task_id' => $taskId,
+								'task_id' => (int)$taskId,
 								'translation_filename' => $task_file_info['filename']);
 			
 			$json_String = json_encode($result);
