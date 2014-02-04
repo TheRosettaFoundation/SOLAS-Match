@@ -352,6 +352,11 @@ class Tasks {
 			fwrite($fp, $json_String);
 			fclose($fp);
 			//chdir($old_path);
+			if(file_exists("{$pootleLocation}task-{$taskId}")){
+			    $cmd = "rm -r {$pootleLocation}task-{$taskId}";
+                $cmd = escapeshellcmd($cmd);
+                $output = shell_exec($cmd);
+			}
 			
 			$cmd = "mv {$tempLocation}task-{$taskId} {$pootleLocation}";
 			$cmd = escapeshellcmd($cmd);
