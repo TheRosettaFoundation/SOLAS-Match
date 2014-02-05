@@ -4,9 +4,9 @@ abstract class Serializer
 {
     protected $format;
 
-    public abstract function serialize($data);
-    public abstract function deserialize($data,$type);
-    public abstract function getContentType();
+    abstract public function serialize($data);
+    abstract public function deserialize($data, $type);
+    abstract public function getContentType();
 
     public function getFormat()
     {
@@ -15,9 +15,9 @@ abstract class Serializer
 
     public function cast($destination, $sourceObject)
     {
-        if ( is_null($sourceObject)) {
+        if (is_null($sourceObject)) {
             return null;
-        }elseif(is_null($destination)){
+        } elseif (is_null($destination)) {
             return $sourceObject;
         }
         
@@ -32,7 +32,9 @@ abstract class Serializer
         }
         if (is_object($sourceObject)) {
             
-            if(get_class($destination)==get_class($sourceObject)) return $sourceObject;
+            if (get_class($destination) == get_class($sourceObject)) {
+                return $sourceObject;
+            }
             
             $sourceReflection = new ReflectionObject($sourceObject);
             $destinationReflection = new ReflectionObject($destination);
@@ -48,24 +50,31 @@ abstract class Serializer
                     if (is_array($value)) {
                         foreach ($value as $element) {
                             $index = array_search($element, $value);
-                            if(is_object($element)) {
+                            if (is_object($element)) {
                                 if (get_class($element) == "stdClass") {
-                                    if (preg_match("/@var\s+[\\\\a-zA-Z]*[\\\\]([^\s]+)[[]]/",
-                                                $propDest->getDocComment(), $matches)) {
+                                    $matched = preg_match(
+                                        "/@var\s+[\\\\a-zA-Z]*[\\\\]([^\s]+)[[]]/",
+                                        $propDest->getDocComment(),
+                                        $matches
+                                    );
+                                    if ($matched) {
                                         list( , $className) = $matches;
                                         $element = self::cast($className, $element);
                                     }
                                 }
                             }
-                                
                             $value[$index] = $element;
                         }
                     }
                         
-                    if(is_object($value)&&get_class($value)=="stdClass"){
-                        if (preg_match("/@var\s+[\\\\a-zA-Z]*[\\\\]([^\s]+)[[]]/",
-                                        $propDest->getDocComment(), $matches)) {        
-                            list( , $className) = $matches;             
+                    if (is_object($value) && get_class($value) == "stdClass") {
+                        $matched = preg_match(
+                            "/@var\s+[\\\\a-zA-Z]*[\\\\]([^\s]+)[[]]/",
+                            $propDest->getDocComment(),
+                            $matches
+                        );
+                        if ($matched) {
+                            list( , $className) = $matches;
                             $value = self::cast($className, $value);
                         }
                         $propDest->setValue($destination, null);

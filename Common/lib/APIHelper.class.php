@@ -9,7 +9,7 @@ require_once __DIR__."/ProtobufSerializer.class.php";
 
 class APIHelper
 {
-    private $_serializer;
+    private $serializer;
     private $responseCode;
     private $outputHeaders;
 
@@ -21,82 +21,95 @@ class APIHelper
         {
             default:
             case FormatEnum::JSON:
-                $this->_serializer = new JSONSerializer();
+                $this->serializer = new JSONSerializer();
                 break;
             case FormatEnum::XML:
-                $this->_serializer = new XMLSerializer();
+                $this->serializer = new XMLSerializer();
                 break;
             case FormatEnum::HTML:
-                $this->_serializer = new HTMLSerializer();
+                $this->serializer = new HTMLSerializer();
                 break;
             case FormatEnum::PHP:
-                $this->_serializer = new PHPSerializer();
+                $this->serializer = new PHPSerializer();
                 break;
             case FormatEnum::PROTOBUFS:
-                $this->_serializer = new ProtobufSerializer();
+                $this->serializer = new ProtobufSerializer();
                 break;
         }
     }
 
-    public function call($destination,$url, $method = HttpMethodEnum::GET,
-             $data = null, $query_args = array(), $file = null,$headers=null)
-    {
-
-        $url = $url.$this->_serializer->getFormat()."/?";
+    public function call(
+        $destination,
+        $url,
+        $method = HttpMethodEnum::GET,
+        $data = null,
+        $query_args = array(),
+        $file = null,
+        $headers = null
+    ) {
+        $url = $url.$this->serializer->getFormat()."/?";
         if (count($query_args) > 0) {
-            $first= true;
-            foreach ($query_args as $key=>$val){
-                if(!$first) $url.="&";                    
-                else $first=FALSE;
-                $url.="$key=$val";
+            $first = true;
+            foreach ($query_args as $key => $val) {
+                if (!$first) {
+                    $url .= "&";
+                } else {
+                    $first = false;
+                }
+                $url .= "$key=$val";
             }
         }
         $re = curl_init($url);
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
-        $lenght = 0;
+        $length = 0;
         if (!is_null($data) && "null" != $data) {
-            $data=$this->_serializer->serialize($data);
+            $data = $this->serializer->serialize($data);
             curl_setopt($re, CURLOPT_POSTFIELDS, $data);
-            $lenght=strlen($data);
+            $length = strlen($data);
         }
         
         if (!is_null($file)) {
-            $lenght=strlen($file);
+            $length = strlen($file);
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
 
         curl_setopt($re, CURLOPT_COOKIESESSION, true);
-        if(isset($_COOKIE['slim_session'])) curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");        
+        if (isset($_COOKIE['slim_session'])) {
+            curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");
+        }
         
         curl_setopt($re, CURLOPT_AUTOREFERER, true);
-        $token=UserSession::getAccessToken();
+        $token = UserSession::getAccessToken();
         $httpHeaders = array(
-                 $this->_serializer->getContentType()
-                ,'Expect:'
-                ,'Content-Length:'.$lenght
-                );
-        if(!is_null($token=UserSession::getAccessToken())) $httpHeaders[]= 'Authorization: Bearer '.$token->getToken();
-        if(!is_null($headers)) $httpHeaders=array_merge($httpHeaders, $headers);
+            $this->serializer->getContentType(),
+            'Expect:',
+            'Content-Length:'.$length
+        );
+        if (!is_null($token = UserSession::getAccessToken())) {
+            $httpHeaders[] = 'Authorization: Bearer '.$token->getToken();
+        }
+        if (!is_null($headers)) {
+            $httpHeaders = array_merge($httpHeaders, $headers);
+        }
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-        curl_setopt($re, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($re, CURLOPT_HEADER, true);
-        $res=curl_exec($re);
+        $res = curl_exec($re);
         $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
         $header = substr($res, 0, $header_size);
         $this->outputHeaders= http_parse_headers($header);
         $res = substr($res, $header_size);
-//        $sentHeaders = curl_getinfo($re);
         $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
         
         curl_close($re);
         
-        if(in_array($this->responseCode, $success)){
-            $response_data = $this->_serializer->deserialize($res,$destination);
-        }else throw new SolasMatchException($res, $this->responseCode);
-        
-
+        if (in_array($this->responseCode, $success)) {
+            $response_data = $this->serializer->deserialize($res, $destination);
+        } else {
+            throw new SolasMatchException($res, $this->responseCode);
+        }
         return $response_data;
     }
 
@@ -106,13 +119,13 @@ class APIHelper
         if (is_array($destination)) {
             if ($sourceObject) {
                 foreach ($sourceObject as $row) {
-                    $ret[] = $this->_serializer->cast($destination[0], $row);
+                    $ret[] = $this->serializer->cast($destination[0], $row);
                 }
             }
         } elseif (is_array($sourceObject)) {
-            $ret = $this->_serializer->cast($destination, $sourceObject[0]);
-        } else { 
-            $ret = $this->_serializer->cast($destination, $sourceObject);
+            $ret = $this->serializer->cast($destination, $sourceObject[0]);
+        } else {
+            $ret = $this->serializer->cast($destination, $sourceObject);
         }
 
         return $ret;
@@ -120,12 +133,12 @@ class APIHelper
 
     public function serialize($data)
     {
-        return $this->_serializer->serialize($data);
+        return $this->serializer->serialize($data);
     }
 
-    public function deserialize($data,$type)
+    public function deserialize($data, $type)
     {
-        return $this->_serializer->deserialize($data,$type);
+        return $this->serializer->deserialize($data, $type);
     }
 
     public static function getFormatFromString($format)
@@ -162,8 +175,8 @@ class APIHelper
     public function getContentType()
     {
         $ret = null;
-        if($this->_serializer) {
-            $ret = $this->_serializer->getContentType();
+        if ($this->serializer) {
+            $ret = $this->serializer->getContentType();
         }
         return $ret;
     }
@@ -180,30 +193,35 @@ class APIHelper
     
     
     // http://stackoverflow.com/a/1147952
-    private function system_extension_mime_types() {
+    private function systemExtensionMimeTypes()
+    {
         # Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
         $out = array();
         $file = fopen('/etc/mime.types', 'r');
-        while(($line = fgets($file)) !== false) {
+        while (($line = fgets($file)) !== false) {
             $line = trim(preg_replace('/#.*/', '', $line));
-            if(!$line)
+            if (!$line) {
                 continue;
+            }
             $parts = preg_split('/\s+/', $line);
-            if(count($parts) == 1)
+            if (count($parts) == 1) {
                 continue;
+            }
             $type = array_shift($parts);
-            foreach($parts as $part)
+            foreach ($parts as $part) {
                 $out[$part] = $type;
+            }
         }
         fclose($file);
         return $out;
     }
 
-    private function getMimeTypeFromSystem($ext) {
-   
+    private function getMimeTypeFromSystem($ext)
+    {
         static $types;
-        if(!isset($types))
-            $types = $this->system_extension_mime_types();
+        if (!isset($types)) {
+            $types = $this->systemExtensionMimeTypes();
+        }
   
         return isset($types[$ext]) ? $types[$ext] : null;
     }
@@ -222,7 +240,7 @@ class APIHelper
             ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
             ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
             ,"xlf"  => "application/xliff+xml"
-        );         
+        );
         
         $extension = explode(".", $filename);
         $extension =  strtolower($extension[count($extension)-1]);
@@ -231,25 +249,27 @@ class APIHelper
     }
 }
 
- if( !function_exists( 'http_parse_headers' ) ) {
-     function http_parse_headers( $header )
-     {
-         $retVal = array();
-         $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', $header));
-         foreach( $fields as $field ) {
-             if( preg_match('/([^:]+): (.+)/m', $field, $match) ) {
-                 $match[1] = preg_replace_callback('/(?<=^|[\x09\x20\x2D])./', 
-                         function ($m) {
-                            return strtoupper($m[0]);
-                         }, strtolower(trim($match[1])));
-                 if( isset($retVal[$match[1]]) ) {
-                     $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
-                 } else {
-                     $retVal[$match[1]] = trim($match[2]);
-                 }
-             }
-         }
-         return $retVal;
-     }
+if (!function_exists('http_parse_headers')) {
+    function http_parse_headers($header)
+    {
+        $retVal = array();
+        $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', $header));
+        foreach ($fields as $field) {
+            if (preg_match('/([^:]+): (.+)/m', $field, $match)) {
+                $match[1] = preg_replace_callback(
+                    '/(?<=^|[\x09\x20\x2D])./',
+                    function ($m) {
+                        return strtoupper($m[0]);
+                    },
+                    strtolower(trim($match[1]))
+                );
+                if (isset($retVal[$match[1]])) {
+                    $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
+                } else {
+                    $retVal[$match[1]] = trim($match[2]);
+                }
+            }
+        }
+        return $retVal;
+    }
 }
-
