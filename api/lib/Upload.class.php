@@ -103,7 +103,12 @@ class Upload {
         $projectFileInfo = ProjectDao::getProjectFileInfo($task->getProjectId());
         $projectFileMime = $projectFileInfo->getMime();
         
-        if($taskFileMime != $projectFileMime) throw new SolasMatchException("Invalid file content.", HttpStatusEnum::BAD_REQUEST);
+        if ($taskFileMime != $projectFileMime) {
+            throw new SolasMatchException(
+                "Invalid file content. Expected $projectFileMime but received $taskFileMime",
+                HttpStatusEnum::BAD_REQUEST
+            );
+        }
        
         if (is_null($version)){
             $version = TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id);

@@ -222,7 +222,7 @@ class Tasks {
             $convert = Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
             $data=Dispatcher::getDispatcher()->request()->getBody();
             TaskDao::uploadOutputFile($task, $convert,$data,$userId,$filename);
-        }, 'uploadOutputFile');
+        }, 'uploadOutputFile', null);       // Remove auth for Pootle tests
         
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/tasks/:taskId/version(:format)/',
                                                         function ($taskId, $format = ".json") {
