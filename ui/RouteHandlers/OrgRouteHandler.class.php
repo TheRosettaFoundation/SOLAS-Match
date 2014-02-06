@@ -4,7 +4,7 @@ class OrgRouteHandler
 {
     public function init()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $middleware = new Middleware();
 
         $app->get("/org/create/", array($middleware, "authUserIsLoggedIn")
@@ -15,9 +15,6 @@ class OrgRouteHandler
 
         $app->get("/org/:org_id/request/", array($middleware, "authUserIsLoggedIn")
         , array($this, "orgRequestMembership"))->name("org-request-membership");
-
-        $app->get("/org/:org_id/request/:user_id/:accept/", array($middleware, "authUserForOrg")
-        , array($this, "orgProcessRequest"))->name("org-process-request");
 
         $app->get("/org/:org_id/request/queue/", array($middleware, "authUserForOrg")
         , array($this, "orgRequestQueue"))->via("POST")->name("org-request-queue");
@@ -52,7 +49,7 @@ class OrgRouteHandler
 
     public function createOrg()
     {
-        $app = Slim::getInstance();   
+        $app = \Slim\Slim::getInstance();   
         
         if ($post = $app->request()->post()) {
             $nameErr = null;
@@ -117,7 +114,7 @@ class OrgRouteHandler
 
     public function orgDashboard()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $current_user_id    = UserSession::getCurrentUserID();
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
@@ -196,7 +193,7 @@ class OrgRouteHandler
 
     public function orgRequestMembership($org_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
 
@@ -218,7 +215,7 @@ class OrgRouteHandler
 
     public function orgRequestQueue($org_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $orgDao = new OrganisationDao();
         $userDao = new UserDao();
 
@@ -269,7 +266,7 @@ class OrgRouteHandler
 
     public function orgPrivateProfile($org_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $orgDao = new OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
         $userId = UserSession::getCurrentUserId();
@@ -326,7 +323,7 @@ class OrgRouteHandler
 
     public function orgPublicProfile($org_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $adminDao = new AdminDao();
         $orgDao = new OrganisationDao();
         $userDao = new UserDao();
@@ -485,7 +482,7 @@ class OrgRouteHandler
 
     public function orgManageBadge($org_id, $badge_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $badgeDao = new BadgeDao();
         $userDao = new UserDao();
 
@@ -538,7 +535,7 @@ class OrgRouteHandler
 
     public function orgCreateBadge($org_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $badgeDao = new BadgeDao();
 
         if (isValidPost($app)) {
@@ -564,7 +561,7 @@ class OrgRouteHandler
 
     public function orgSearch()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $orgDao = new OrganisationDao();
         $foundOrgs = array();
 
@@ -593,7 +590,7 @@ class OrgRouteHandler
     
     public function orgEditBadge($org_id, $badge_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $badgeDao = new BadgeDao();
 
         $badge = $badgeDao->getBadge($badge_id);
@@ -605,7 +602,7 @@ class OrgRouteHandler
 
     public function orgTaskComplete($orgId, $taskId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $claimant = $taskDao->getUserClaimedTask($taskId);
         $claimantProfile = "";
@@ -627,7 +624,7 @@ class OrgRouteHandler
 
     public function orgTaskReview($orgId, $taskId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $userDao = new UserDao();
 
@@ -737,7 +734,7 @@ class OrgRouteHandler
 
     public function orgTaskReviews($orgId, $taskId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $viewData = array();
         $taskDao = new TaskDao();
         $task = $taskDao->getTask($taskId);

@@ -8,7 +8,7 @@ class ProjectRouteHandler
 {
     public function init()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $middleware = new Middleware();     
         
         $app->get("/project/:project_id/view/", array($middleware, "authUserIsLoggedIn")
@@ -34,7 +34,7 @@ class ProjectRouteHandler
 
     public function test($projectId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $extra_scripts = "";
 
         $time = microtime();
@@ -74,7 +74,7 @@ class ProjectRouteHandler
   
     public function projectView($project_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $user_id = UserSession::getCurrentUserID();
         $projectDao = new ProjectDao();
         $taskDao = new TaskDao();
@@ -230,7 +230,7 @@ class ProjectRouteHandler
     
     public function projectAlter($project_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $deadlineError = '';
         $projectDao = new ProjectDao();
 
@@ -319,7 +319,7 @@ class ProjectRouteHandler
     
     public function projectCreate($org_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $user_id = UserSession::getCurrentUserID(); 
 
         $extraScripts = "
@@ -341,7 +341,7 @@ class ProjectRouteHandler
     
     public function projectCreated($project_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $projectDao = new ProjectDao();
         $project = $projectDao->getProject($project_id);        
         $org_id = $project->getOrganisationId();
@@ -356,7 +356,7 @@ class ProjectRouteHandler
     
     public function archiveProject($project_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $projectDao = new ProjectDao();
 
         $project = $projectDao->getProject($project_id);
@@ -374,7 +374,7 @@ class ProjectRouteHandler
     
     public function downloadProjectFile($projectId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $siteApi = Settings::get("site.api");
         $app->redirect("{$siteApi}v0/projects/$projectId/file/");
     }

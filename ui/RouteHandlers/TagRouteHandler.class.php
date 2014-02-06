@@ -4,7 +4,7 @@ class TagRouteHandler
 {
     public function init()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $middleware = new Middleware();
 
         $app->get("/all/tags/", array($middleware, "authUserIsLoggedIn")
@@ -19,7 +19,7 @@ class TagRouteHandler
 
     public function tagsList()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         $tagDao = new TagDao();
 
@@ -52,7 +52,7 @@ class TagRouteHandler
 
     public function tagSubscribe($id, $subscribe)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $tagDao = new TagDao();
         $userDao = new UserDao();
 
@@ -85,7 +85,7 @@ class TagRouteHandler
 
     public function tagDetails($id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $tagDao = new TagDao();
         $projectDao = new ProjectDao();
         $orgDao = new OrganisationDao();

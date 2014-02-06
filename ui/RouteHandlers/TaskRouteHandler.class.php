@@ -7,7 +7,7 @@ class TaskRouteHandler
 {
     public function init()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $middleware = new Middleware();
 
         $app->get("/tasks/archive/p/:page_no/", array($middleware, "authUserIsLoggedIn")
@@ -79,7 +79,7 @@ class TaskRouteHandler
 
     public function archivedTasks($page_no)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         $user_id = UserSession::getCurrentUserID();
         
@@ -121,7 +121,7 @@ class TaskRouteHandler
 
     public function claimedTasks($userId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         $user = $userDao->getUser($userId);
 
@@ -151,7 +151,7 @@ class TaskRouteHandler
 
     public function downloadTaskLatestVersion($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
 
         $task = $taskDao->getTask($task_id);
@@ -161,7 +161,7 @@ class TaskRouteHandler
 
     public function archiveTask($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
 
         $task = $taskDao->getTask($task_id);
@@ -179,7 +179,7 @@ class TaskRouteHandler
 
     public function downloadTask($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $convert = $app->request()->get("convertToXliff");
         $this->downloadTaskVersion($task_id, 0, $convert);
     }
@@ -189,7 +189,7 @@ class TaskRouteHandler
      */
     public function taskClaim($taskId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $userDao = new UserDao();
         $languageDao = new LanguageDao();
@@ -231,7 +231,7 @@ class TaskRouteHandler
 
     public function taskClaimed($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
 
         $task = $taskDao->getTask($task_id);
@@ -241,14 +241,14 @@ class TaskRouteHandler
 
     public function downloadTaskVersion($task_id, $version, $convert = 0)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $siteApi = Settings::get("site.api");
         $app->redirect("{$siteApi}v0/tasks/$task_id/file/?version=$version&convertToXliff=$convert");   
     }
 
     public function task($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
 
@@ -306,7 +306,7 @@ class TaskRouteHandler
 
     public function desegmentationTask($taskId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
 
@@ -380,7 +380,7 @@ class TaskRouteHandler
 
     public function taskSimpleUpload($taskId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $orgDao = new OrganisationDao();
@@ -468,7 +468,7 @@ class TaskRouteHandler
 
     public function taskUploaded($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $orgDao = new OrganisationDao();
@@ -489,7 +489,7 @@ class TaskRouteHandler
 
     public function taskAlter($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $currentTask = $taskDao->getTask($task_id);
@@ -702,7 +702,7 @@ class TaskRouteHandler
 
     public function taskView($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $userDao = new UserDao();
@@ -814,7 +814,7 @@ class TaskRouteHandler
 
     public function taskCreate($project_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $projectDao = new ProjectDao();
         $taskDao = new TaskDao();
         $user_id = UserSession::getCurrentUserID();
@@ -942,7 +942,7 @@ class TaskRouteHandler
 
     public function taskCreated($taskId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $task = $taskDao->getTask($taskId);
         $app->view()->appendData(array(
@@ -955,7 +955,7 @@ class TaskRouteHandler
     
     public function taskSegmentation($task_id)
     {  
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
 
@@ -1129,7 +1129,7 @@ class TaskRouteHandler
     
     public function taskOrgFeedback($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
@@ -1186,7 +1186,7 @@ class TaskRouteHandler
     
     public function taskUserFeedback($task_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $userDao = new UserDao();
@@ -1249,7 +1249,7 @@ class TaskRouteHandler
 
     public function taskReview($taskId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $userDao = new UserDao();
         $userId = UserSession::getCurrentUserID();

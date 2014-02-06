@@ -4,12 +4,7 @@
 
     "repositories": [
     {
-        "source": {
-            "name": "slim/extras",
-            "url": "git://github.com/codeguy/Slim-Extras.git",
-            "type": "git",
-            "reference": "master"
-        },
+        
         "type": "package",
         "package": {
             "name": "drslump/protobuf-php",
@@ -24,11 +19,7 @@
                 "files": ["library/DrSlump/Protobuf.php"]
             }
         }
-    },
-    {  
-        "type": "vcs",  
-        "url": "git@github.com:SeanMooney/Slim.git"  
-    }  
+    }
     ],
 
    "require-dev": {
@@ -37,13 +28,13 @@
 
     "require": {
         "fp/lightopenid" : "dev-master",
-        "slim/slim": "dev-1.6.3Fix",
-        "slim/extras": "1.0.*",
+        "slim/slim": "2.4.0",
+        "slim/views": "0.1.*",
         "smarty/smarty": "3.1.*",
         "drslump/protobuf-php": "*"
     },
     "autoload": {
-        "classmap": ["vendor/slim/extras/Views/SmartyView.php", "vendor/slim/slim/Slim/View.php"]
+        "classmap": ["vendor/slim/views/Slim/Views/Smarty.php","vendor/slim/slim/Slim/View.php"]
         
     },
 

@@ -4,21 +4,21 @@ class AdminRouteHandler
 {
     public function init()
     {
-        $app = Slim::getInstance();
+       
+        $app = \Slim\Slim::getInstance();
         $middleware = new Middleware();
-        
+		
+				          
         $app->get(
-            "/admin/",
-            array($middleware, "authenticateSiteAdmin"),
-            array($middleware, "isSiteAdmin"),
-            array($this, "adminDashboard")
+            "/admin/", 
+            array($middleware, "isSiteAdmin")
         )->via("POST")->name("site-admin-dashboard");
 
     }
     
     public function adminDashboard()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userId = UserSession::getCurrentUserID();
         
         if ($post = $app->request()->post()) {

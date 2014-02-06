@@ -4,7 +4,7 @@ class BadgeRouteHandler
 {
     public function init()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $middleware = new Middleware();
         
         $app->get("/badge/list/", array($middleware, "authUserIsLoggedIn")
@@ -13,7 +13,7 @@ class BadgeRouteHandler
 
     public function badgeList()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
 
         $org_list = array();
         $orgDao = new OrganisationDao();
