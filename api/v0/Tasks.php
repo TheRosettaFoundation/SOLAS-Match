@@ -317,7 +317,10 @@ class Tasks {
 			
 			$sourceCode = $sourceLocale->getLanguageCode().'_'.$sourceLocale->getCountryCode();
 			$sourceName = $sourceLocale->getLanguageName().' ('.$sourceLocale->getCountryName().')';
-			
+			$mime = 'po';
+            if ((strpos($task_file_info['content-type'],'xliff') !== false) || (strpos($task_file_info['content-type'],'xlf') !== false)) {
+                $mime = 'xlf';
+            }
 			
 			//FileLocation /home/redray/workspace/solas-match/uploads/proj-{Project Id}/task-{Task Id}/v-{Version Number}/<Filename>
 			$result = array(	'title' => $task->getTitle(), 
@@ -331,7 +334,8 @@ class Tasks {
 								//'fileInfo' => $fileInfo,
 								'description' => $project->getDescription(), 
 								'task_id' => (int)$taskId,
-								'translation_filename' => $task_file_info['filename']);
+								'translation_filename' => $task_file_info['filename'],
+                                'mime' => $mime);
 			
 			$json_String = json_encode($result);
 			
