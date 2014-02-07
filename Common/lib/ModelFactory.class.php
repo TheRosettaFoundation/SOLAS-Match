@@ -33,79 +33,79 @@ class ModelFactory
 
         switch($modelName)
         {
-            case "MembershipRequest" :
+            case "MembershipRequest":
                 $ret = ModelFactory::generateMembershipRequest($modelData);
                 break;
-            case "ArchivedTask" :
+            case "ArchivedTask":
                 $ret = ModelFactory::generateArchivedTask($modelData);
                 break;
-            case "PasswordReset" :
+            case "PasswordReset":
                 $ret = ModelFactory::generatePasswordReset($modelData);
                 break;
-            case "PasswordResetRequest" :
+            case "PasswordResetRequest":
                 $ret = ModelFactory::generatePasswordResetRequest($modelData);
                 break;
-            case "Register" :
+            case "Register":
                 $ret = ModelFactory::generateRegister($modelData);
                 break;
-            case "Country" :
+            case "Country":
                 $ret = ModelFactory::generateCountry($modelData);
                 break;
-            case "Language" :
+            case "Language":
                 $ret = ModelFactory::generateLanguage($modelData);
                 break;
-            case "Login" :
+            case "Login":
                 $ret = ModelFactory::generateLogin($modelData);
                 break;
-            case "Badge" :
+            case "Badge":
                 $ret = ModelFactory::generateBadge($modelData);
                 break;
-            case "Tag" :
+            case "Tag":
                 $ret = ModelFactory::generateTag($modelData);
                 break ;
-            case "Organisation" :
+            case "Organisation":
                 $ret = ModelFactory::generateOrganisation($modelData);
                 break;
-            case "TaskMetadata" :
+            case "TaskMetadata":
                 $ret = ModelFactory::generateTaskMetadata($modelData);
                 break;
-            case "User" :
+            case "User":
                 $ret = ModelFactory::generateUser($modelData);
                 break;
-            case "UserTaskStreamNotification" :
+            case "UserTaskStreamNotification":
                 $ret = ModelFactory::generateUserTaskStreamNotification($modelData);
                 break;
-            case "Task" :
+            case "Task":
                 $ret = ModelFactory::generateTask($modelData);
                 break;
-            case "TaskReview" :
+            case "TaskReview":
                 $ret = ModelFactory::generateTaskReview($modelData);
                 break;
-            case "Project" :
+            case "Project":
                 $ret = ModelFactory::generateProject($modelData);
                 break;
-            case "ArchivedProject" :
+            case "ArchivedProject":
                 $ret = ModelFactory::generateArchivedProject($modelData);
                 break;
-            case "Statistic" :
+            case "Statistic":
                 $ret = ModelFactory::generateStatistic($modelData);
                 break;
-            case "ProjectFile" :
+            case "ProjectFile":
                 $ret = ModelFactory::generateProjectFile($modelData);
                 break;
-            case "UserPersonalInformation" :
+            case "UserPersonalInformation":
                 $ret = ModelFactory::generateUserPersonalInformation($modelData);
                 break;
-            case "Locale" :
+            case "Locale":
                 $ret = ModelFactory::generateLocale($modelData);
                 break;
-            case "BannedUser" :
+            case "BannedUser":
                 $ret = ModelFactory::generateBannedUser($modelData);
                 break;
-            case "BannedOrganisation" :
+            case "BannedOrganisation":
                 $ret = ModelFactory::generateBannedOrganisation($modelData);
                 break;
-            default :
+            default:
                 echo "Unable to build model $modelName";
         }
 
@@ -183,7 +183,7 @@ class ModelFactory
         }
         if (isset($modelData['targetCountryCode'])) {
             $targetLocale->setCountryCode($modelData['targetCountryCode']);
-        }        
+        }
 
         $ret->setTargetLocale($targetLocale);
         
@@ -457,7 +457,7 @@ class ModelFactory
         if (isset($modelData['countryCode'])) {
             $locale->setCountryCode($modelData['countryCode']);
         }
-        if (isset($modelData['languageName']) && isset($modelData['languageCode']) && 
+        if (isset($modelData['languageName']) && isset($modelData['languageCode']) &&
                 (isset($modelData['countryName'])) && isset($modelData['countryCode'])) {
             $ret->setNativeLocale($locale);
         }
@@ -547,7 +547,7 @@ class ModelFactory
         }
         if (isset($modelData['targetCountryCode'])) {
             $targetLocale->setCountryCode($modelData['targetCountryCode']);
-        }        
+        }
 
         $ret->setTargetLocale($targetLocale);
         
@@ -601,34 +601,34 @@ class ModelFactory
         $ret = new Project();
         $sourceLocale = new Locale();
 
-        if(isset($modelData['id'])) {
+        if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
         }
-        if(isset($modelData['title'])) {
+        if (isset($modelData['title'])) {
             $ret->setTitle($modelData['title']);
         }
-        if(isset($modelData['description'])) {
+        if (isset($modelData['description'])) {
             $ret->setDescription($modelData['description']);
         }
-        if(isset($modelData['deadline'])) {
+        if (isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
-        if(isset($modelData['organisation_id'])) {
+        if (isset($modelData['organisation_id'])) {
             $ret->setOrganisationId($modelData['organisation_id']);
         }
-        if(isset($modelData['impact'])) {
+        if (isset($modelData['impact'])) {
             $ret->setImpact($modelData['impact']);
         }
-        if(isset($modelData['reference'])) {
+        if (isset($modelData['reference'])) {
             $ret->setReference($modelData['reference']);
         }
-        if(isset($modelData['word-count'])) {
+        if (isset($modelData['word-count'])) {
             $ret->setWordCount($modelData['word-count']);
         }
-        if(isset($modelData['created'])) {
+        if (isset($modelData['created'])) {
             $ret->setCreatedTime($modelData['created']);
         }
-        if(isset($modelData['status'])) {
+        if (isset($modelData['status'])) {
             $ret->setStatus($modelData['status']);
         }
         
@@ -656,31 +656,31 @@ class ModelFactory
         $ret = new ArchivedProject();
         $sourceLocale = new Locale();
 
-        if(isset($modelData['id'])) {
+        if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
         }
-        if(isset($modelData['title'])) {
+        if (isset($modelData['title'])) {
             $ret->setTitle($modelData['title']);
         }
-        if(isset($modelData['description'])) {
+        if (isset($modelData['description'])) {
             $ret->setDescription($modelData['description']);
         }
-        if(isset($modelData['impact'])) {
+        if (isset($modelData['impact'])) {
             $ret->setImpact($modelData['impact']);
         }
-        if(isset($modelData['deadline'])) {
+        if (isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
-        if(isset($modelData['organisation_id'])) {
+        if (isset($modelData['organisation_id'])) {
             $ret->setOrganisationId($modelData['organisation_id']);
         }
-        if(isset($modelData['reference'])) {
+        if (isset($modelData['reference'])) {
             $ret->setReference($modelData['reference']);
         }
-        if(isset($modelData['word-count'])) {
+        if (isset($modelData['word-count'])) {
             $ret->setWordCount($modelData['word-count']);
         }
-        if(isset($modelData['created'])) {
+        if (isset($modelData['created'])) {
             $ret->setCreatedTime($modelData['created']);
         }
         
@@ -697,7 +697,7 @@ class ModelFactory
             $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
         }
         
-        $ret->setSourceLocale($sourceLocale);     
+        $ret->setSourceLocale($sourceLocale);
        
         if (isset($modelData['user_id-archived'])) {
             $ret->setUserIdArchived($modelData['user_id-archived']);
@@ -729,10 +729,10 @@ class ModelFactory
     {
         $ret = new Statistic();
 
-        if(isset($modelData['name'])) {
+        if (isset($modelData['name'])) {
             $ret->setName($modelData['name']);
         }
-        if(isset($modelData['value'])) {
+        if (isset($modelData['value'])) {
             $ret->setValue($modelData['value']);
         }
         
@@ -744,19 +744,19 @@ class ModelFactory
     {
         $ret = new ProjectFile();
 
-        if(isset($modelData['project_id'])) {
+        if (isset($modelData['project_id'])) {
             $ret->setProjectId($modelData['project_id']);
         }
-        if(isset($modelData['filename'])) {
+        if (isset($modelData['filename'])) {
             $ret->setFilename($modelData['filename']);
         }
-        if(isset($modelData['file-token'])) {
+        if (isset($modelData['file-token'])) {
             $ret->setToken($modelData['file-token']);
         }
-        if(isset($modelData['user_id'])) {
+        if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
         }
-        if(isset($modelData['mime-type'])) {
+        if (isset($modelData['mime-type'])) {
             $ret->setMime($modelData['mime-type']);
         }
         
@@ -768,37 +768,37 @@ class ModelFactory
     {
         $ret = new UserPersonalInformation();
 
-        if(isset($modelData['id'])) {
+        if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
         }
-        if(isset($modelData['user_id'])) {
+        if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
         }
-        if(isset($modelData['first-name'])) {
+        if (isset($modelData['first-name'])) {
             $ret->setFirstName($modelData['first-name']);
         }
-        if(isset($modelData['last-name'])) {
+        if (isset($modelData['last-name'])) {
             $ret->setLastName($modelData['last-name']);
         }
-        if(isset($modelData['mobile-number'])) {
+        if (isset($modelData['mobile-number'])) {
             $ret->setMobileNumber($modelData['mobile-number']);
         }
-        if(isset($modelData['business-number'])) {
+        if (isset($modelData['business-number'])) {
             $ret->setBusinessNumber($modelData['business-number']);
         }
-        if(isset($modelData['sip'])) {
+        if (isset($modelData['sip'])) {
             $ret->setSip($modelData['sip']);
         }
-        if(isset($modelData['job-title'])) {
+        if (isset($modelData['job-title'])) {
             $ret->setJobTitle($modelData['job-title']);
         }
-        if(isset($modelData['address'])) {
+        if (isset($modelData['address'])) {
             $ret->setAddress($modelData['address']);
         }
-        if(isset($modelData['city'])) {
+        if (isset($modelData['city'])) {
             $ret->setCity($modelData['city']);
         }
-        if(isset($modelData['country'])) {
+        if (isset($modelData['country'])) {
             $ret->setCountry($modelData['country']);
         }
         
@@ -823,7 +823,7 @@ class ModelFactory
         }
         
         return $ret;
-    }    
+    }
     
     private static function generateBannedUser($modelData)
     {
@@ -846,7 +846,7 @@ class ModelFactory
         }
         
         return $ret;
-    } 
+    }
     
     private static function generateBannedOrganisation($modelData)
     {
@@ -869,5 +869,5 @@ class ModelFactory
         }
         
         return $ret;
-    } 
+    }
 }

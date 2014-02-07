@@ -1,6 +1,7 @@
 <?php
 
-class HttpStatusEnum {
+class HttpStatusEnum
+{
     const OK                        = 200;
     const CREATED                   = 201;
     const ACCEPTED                  = 202;

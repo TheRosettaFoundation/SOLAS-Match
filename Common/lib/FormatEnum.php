@@ -1,12 +1,7 @@
 <?php
 
-/**
- * Description of FormatEnum
- *
- * @author sean
- */
-
-class FormatEnum {
+class FormatEnum
+{
     const JSON      = 0;
     const XML       = 1;
     const HTML      = 2;

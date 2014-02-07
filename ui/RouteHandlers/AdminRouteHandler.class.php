@@ -60,41 +60,43 @@ class AdminRouteHandler
                 $adminDao->banUser($bannedUser);
             }
             
-            if(isset($post['unBanOrg']) && $post['orgId'] != '') {
+            if (isset($post['unBanOrg']) && $post['orgId'] != '') {
                 $adminDao->unBanOrg($post['orgId']);
             }
-            if(isset($post['unBanUser']) && $post['userId'] != '') {
+            if (isset($post['unBanUser']) && $post['userId'] != '') {
                 $adminDao->unBanUser($post['userId']);
-            } 
-            if(isset($post['deleteUser']) && $post['userEmail'] != '') {
+            }
+            if (isset($post['deleteUser']) && $post['userEmail'] != '') {
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 if (!is_null($user)) {
                     $userDao->deleteUser($user->getId());
-                    $app->flashNow("deleteSuccess", 
-                            Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_SUCCESSFULLY_DELETED_USER));
+                    $app->flashNow(
+                        "deleteSuccess",
+                        Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_SUCCESSFULLY_DELETED_USER)
+                    );
                 } else {
                     $app->flashNow("deleteError", Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_6));
                 }
-            } 
+            }
         }
         
         $adminDao = new AdminDao();
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
         
-        $adminList = $adminDao->getSiteAdmins();        
+        $adminList = $adminDao->getSiteAdmins();
         
         $bannedOrgList = $adminDao->getBannedOrgs();
-        if($bannedOrgList) {
-            foreach($bannedOrgList as $bannedOrg) {
+        if ($bannedOrgList) {
+            foreach ($bannedOrgList as $bannedOrg) {
                 $bannedOrg['org'] = $orgDao->getOrganisation($bannedOrg->getOrgId());
                 $bannedOrg['adminUser'] = $userDao->getUser($bannedOrg->getUserIdAdmin());
             }
         }
         
         $bannedUserList = $adminDao->getBannedUsers();
-        if($bannedUserList) {
-            foreach($bannedUserList as $bannedUser) {
+        if ($bannedUserList) {
+            foreach ($bannedUserList as $bannedUser) {
                 $bannedUser['user'] = $userDao->getUser($bannedUser->getUserId());
                 $bannedUser['adminUser'] = $userDao->getUser($bannedUser->getUserIdAdmin());
             }

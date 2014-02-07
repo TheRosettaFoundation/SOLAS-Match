@@ -5,21 +5,25 @@ class GraphViewer
     private $model;
     private $xPos;
     private $yPos;
-    private $iconWidth;
-    private $iconHeight;
     private $graphBuilder;
     private $taskDao;
     private $projectDao;
-	const rectWidth=100; //extendible width of the rectangle that displays the task title and status  
-	const idSpacing=25;  //spacing between task id and the vertical bar next to it
+    //width of the rectangle that displays the task title and status
+    const TASK_RECT_WIDTH = 325;
+    //height of the rectangle that displays the task title and status
+    const TASK_RECT_HEIGHT = 75;
+    //spacing between task id and the vertical bar next to it
+    const ID_SPACING = 50;
+    //Horizontal spacing between task boxes
+    const H_SPACING = 100;
+    //Vertical spacing between task boxes
+    const V_SPACING = 60;
 
     public function __construct($graph)
     {
         $this->model = $graph;
         $this->xPos = 10;
         $this->yPos = 10;
-        $this->iconWidth = 175+self::rectWidth; //default size is 175, 175 + specified width
-        $this->iconHeight = 75;
         $this->graphBuilder = new UIWorkflowBuilder();
         $this->taskDao = new TaskDao();
         $this->projectDao = new ProjectDao();
@@ -81,7 +85,7 @@ class GraphViewer
         $doc = new DOMDocument();
         $doc->formatOutput = true;
         if ($this->model) {
-            $viewWidth = 1150;
+            $viewWidth = 1675;
 
             $projectDao = new ProjectDao();
             $project = $projectDao->getProject($this->model->getProjectId());
@@ -132,10 +136,16 @@ class GraphViewer
                 $this->drawGraphFromNode($task, $doc, $defs);
 
                 $composite = $doc->createElement("use");
-                $composite->setAttribute('xlink:href', "#sub-graph_".$task->getTargetLocale()->getLanguageCode().
-                                                        "-".$task->getTargetLocale()->getCountryCode());
-                $composite->setAttribute('id', "graph_".$task->getTargetLocale()->getLanguageCode().
-                                                "-".$task->getTargetLocale()->getCountryCode());
+                $composite->setAttribute(
+                    'xlink:href',
+                    "#sub-graph_".$task->getTargetLocale()->getLanguageCode().
+                    "-".$task->getTargetLocale()->getCountryCode()
+                );
+                $composite->setAttribute(
+                    'id',
+                    "graph_".$task->getTargetLocale()->getLanguageCode().
+                    "-".$task->getTargetLocale()->getCountryCode()
+                );
                 $composite->setAttribute('x', 5);
                 $composite->setAttribute('y', $thisY);
 
@@ -152,7 +162,7 @@ class GraphViewer
             $div->appendChild($view);
             $doc->appendChild($div);
         } else {
-            echo "<p>Unable to build graph, model is null</p>";
+            echo "<p>Unable to build graph, model is null</p>";     // This should be replaced
         }
         foreach ($doc->childNodes as $child) {
             $ret .= $doc->saveXml($child);
@@ -170,17 +180,12 @@ class GraphViewer
         $yRaster = 10;
         
         $subGraph = $doc->createElement("g");
-        $subGraph->setAttribute('id', "sub-graph_".$rootTask->getTargetLocale()->getLanguageCode().
-                                        "-".$rootTask->getTargetLocale()->getCountryCode());
+        $subGraph->setAttribute(
+            'id',
+            "sub-graph_".$rootTask->getTargetLocale()->getLanguageCode().
+            "-".$rootTask->getTargetLocale()->getCountryCode()
+        );
         
-        $languageBox = $doc->createElement("rect");
-        $languageBox->setAttribute('id', "language-box_".$rootTask->getTargetLocale()->getLanguageCode().
-                                            "-".$rootTask->getTargetLocale()->getCountryCode());
-        $languageBox->setAttribute('x', 5);
-        $languageBox->setAttribute('y', $yRaster);
-        $languageBox->setAttribute('width', 1200);
-        $languageBox->setAttribute('height', 900);
-        $languageBox->setAttribute('style', "fill-opacity:0;stroke:black;stroke-width:2");
         $maxVNodeCount = 0;
         $verticalNodeCount = 0;
         $horizontalNodeCount = 0;
@@ -204,7 +209,7 @@ class GraphViewer
                 $composite->setAttribute('y', $yRaster + 40);
                 $subGraph->appendChild($composite);
                 
-                $yRaster += $this->iconHeight + 60;
+                $yRaster += self::TASK_RECT_HEIGHT + self::V_SPACING;
             }
             
             $yRaster = 10;
@@ -215,33 +220,50 @@ class GraphViewer
             $verticalNodeCount = 0;
             $horizontalNodeCount++;
             
-            $xRaster += $this->iconWidth + 100+self::rectWidth/2;
+            $xRaster += self::TASK_RECT_WIDTH + self::H_SPACING;
             
             $currentLayer = $nextLayer;
             $nextLayer = array();
         }
-        $width = $horizontalNodeCount * ($this->iconWidth + 100+self::rectWidth/2);
-        $height = $maxVNodeCount * ($this->iconHeight + 60);
+        $width = ($horizontalNodeCount * (self::TASK_RECT_WIDTH + self::H_SPACING)) - self::H_SPACING / 2;
+        $height = $maxVNodeCount * (self::TASK_RECT_HEIGHT + self::V_SPACING);
         $this->yPos += $height + 20;
+
+        $languageBox = $doc->createElement("rect");
+        $languageBox->setAttribute(
+            'id',
+            "language-box_".$rootTask->getTargetLocale()->getLanguageCode().
+            "-".$rootTask->getTargetLocale()->getCountryCode()
+        );
+        $languageBox->setAttribute('x', 5);
+        $languageBox->setAttribute('y', $yRaster);
+        $languageBox->setAttribute('style', "fill-opacity:0;stroke:black;stroke-width:2");
         $languageBox->setAttribute("width", $width);
         $languageBox->setAttribute("height", $height);
         $defs->appendChild($languageBox);
         
         $component = $doc->createElement("use");
         $att = $doc->createAttribute("xlink:href");
-        $att->value = "#language-box_".$rootTask->getTargetLocale()->getLanguageCode()."-".$rootTask->getTargetLocale()->getCountryCode();
+        $att->value = "#language-box_".$rootTask->getTargetLocale()->getLanguageCode().
+            "-".$rootTask->getTargetLocale()->getCountryCode();
         $component->appendChild($att);
         $subGraph->appendChild($component);
         $text = $doc->createElement("text", TemplateHelper::getLanguageAndCountry($task->getTargetLocale()));
-        $text->setAttribute('id', "text_".$rootTask->getTargetLocale()->getLanguageCode().
-                                    "-".$rootTask->getTargetLocale()->getCountryCode());
+        $text->setAttribute(
+            'id',
+            "text_".$rootTask->getTargetLocale()->getLanguageCode().
+            "-".$rootTask->getTargetLocale()->getCountryCode()
+        );
         $text->setAttribute('x', 10);
         $text->setAttribute('y', 25);
         $defs->appendChild($text);
         
         $component = $doc->createElement("use");
-        $component->setAttribute('xlink:href', "#text_".$rootTask->getTargetLocale()->getLanguageCode().
-                                                "-".$rootTask->getTargetLocale()->getCountryCode());
+        $component->setAttribute(
+            'xlink:href',
+            "#text_".$rootTask->getTargetLocale()->getLanguageCode().
+            "-".$rootTask->getTargetLocale()->getCountryCode()
+        );
         $subGraph->appendChild($component);
         $defs->appendChild($subGraph);
     }
@@ -251,8 +273,6 @@ class GraphViewer
         $taskTypeColour = Settings::get("ui.task_".$task->getTaskType()."_colour");
         $thisX = 0;
         $thisY = 0;
-        $itemWidth = $this->iconWidth; 
-        $itemHeight = $this->iconHeight;
         
         $rect = $doc->createElement("rect");
         $rect->setAttribute('id', "rect_".$task->getId());
@@ -260,26 +280,26 @@ class GraphViewer
         $rect->setAttribute("y", $thisY);
         $rect->setAttribute("rx", 20);
         $rect->setAttribute("ry", 20);
-        $rect->setAttribute('width', $itemWidth+self::idSpacing); 
-        $rect->setAttribute('height', $itemHeight);
+        $rect->setAttribute('width', self::TASK_RECT_WIDTH);
+        $rect->setAttribute('height', self::TASK_RECT_HEIGHT);
         $rect->setAttribute('style', "fill:rgb(255, 255, 255);stroke:$taskTypeColour;stroke-width:4");
         $defs->appendChild($rect);
 
         $vLine = $doc->createElement("line");
         $vLine->setAttribute('id', "v-line_".$task->getId());
-        $vLine->setAttribute('x1', $thisX + 25+self::idSpacing);
+        $vLine->setAttribute('x1', $thisX + self::ID_SPACING);
         $vLine->setAttribute('y1', $thisY);
-        $vLine->setAttribute('x2', $thisX + 25+self::idSpacing);
-        $vLine->setAttribute('y2', $thisY + $itemHeight);
+        $vLine->setAttribute('x2', $thisX + self::ID_SPACING);
+        $vLine->setAttribute('y2', $thisY + self::TASK_RECT_HEIGHT);
         $vLine->setAttribute('style', "stroke:$taskTypeColour;stroke-width:4");
         $defs->appendChild($vLine);
         
         $hLine = $doc->createElement("line");
         $hLine->setAttribute('id', "h-line_".$task->getId());
-        $hLine->setAttribute('x1', $thisX + 25+self::idSpacing);
-        $hLine->setAttribute('y1', $thisY + ($itemHeight / 2));
-        $hLine->setAttribute('x2', $thisX + $itemWidth+self::idSpacing);
-        $hLine->setAttribute('y2', $thisY + ($itemHeight / 2));
+        $hLine->setAttribute('x1', $thisX + self::ID_SPACING);
+        $hLine->setAttribute('y1', $thisY + (self::TASK_RECT_HEIGHT / 2));
+        $hLine->setAttribute('x2', $thisX + self::TASK_RECT_WIDTH);
+        $hLine->setAttribute('y2', $thisY + (self::TASK_RECT_HEIGHT / 2));
         $hLine->setAttribute('style', "stroke:$taskTypeColour;stroke-width:4");
         $defs->appendChild($hLine);
         
@@ -289,53 +309,47 @@ class GraphViewer
         $component = $doc->createElement("rect");
         $component->setAttribute('x', 0);
         $component->setAttribute('y', 0);
-        $component->setAttribute('width', $this->iconWidth+self::idSpacing-5); // -5 prevents from text overlapping with the border
-        $component->setAttribute('height', $this->iconHeight);
+        // -5 below prevents from text overlapping with the border
+        $component->setAttribute('width', self::TASK_RECT_WIDTH + self::ID_SPACING - 5);
+        $component->setAttribute('height', self::TASK_RECT_HEIGHT);
         $clipPath->appendChild($component);
         $defs->appendChild($clipPath);
         
         $text = $doc->createElement("text", $task->getId());
         $text->setAttribute('id', "task-id_".$task->getId());
         $text->setAttribute('x', $thisX + 5);
-        $text->setAttribute('y', $thisY + ($itemHeight / 2) + 3);
+        $text->setAttribute('y', $thisY + (self::TASK_RECT_HEIGHT / 2) + 3);
         $text->setAttribute('clip-path', "url(#title-clip_".$task->getId().")");
         $defs->appendChild($text);
         
         $text = $doc->createElement("text", htmlspecialchars($task->getTitle()));
         $text->setAttribute('id', "task-title_".$task->getId());
-        $text->setAttribute('x', $thisX + 30+self::idSpacing);
+        $text->setAttribute('x', $thisX + self::ID_SPACING + 5);
         $text->setAttribute('y', $thisY + 25);
         $text->setAttribute('clip-path', "url(#title-clip_".$task->getId().")");
         $defs->appendChild($text);
-		
-		
-		
+
         $status = "";
         $taskStatusColour = "rgb(0, 0, 0)";
         switch ($task->getTaskStatus()) {
             case (TaskStatusEnum::WAITING_FOR_PREREQUISITES):
                 $status = "Waiting";
-//                $taskStatusColour = "rgb(255, 50, 50)";
                 break;
             case (TaskStatusEnum::PENDING_CLAIM):
                 $status = "Pending Claim";
-//                $taskStatusColour = "rgb(230, 230, 230)";
                 break;
             case (TaskStatusEnum::IN_PROGRESS):
                 $status = "In Progress";
-//                $taskStatusColour = "rgb(150, 150, 255)";
                 break;
             case (TaskStatusEnum::COMPLETE):
                 $status = "Complete";
-//                $taskStatusColour = "rgb(20, 210, 20)";
                 break;
         }
         
         $text = $doc->createElement("text", "Status: $status");
         $text->setAttribute('id', "task-status_".$task->getId());
-        $text->setAttribute('x', $thisX + 35+self::idSpacing);
+        $text->setAttribute('x', $thisX + self::ID_SPACING + 5);
         $text->setAttribute('y', $thisY + 60);
-		//$text->setAttribute('font-size', '10');
         $text->setAttribute('fill', $taskStatusColour);
         $text->setAttribute('clip-path', "url(#title-clip_".$task->getId().")");
         $defs->appendChild($text);

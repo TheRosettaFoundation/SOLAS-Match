@@ -8,15 +8,17 @@ class Middleware
     {
         $app = Slim::getInstance();
         
-        $this->isUserBanned();        
+        $this->isUserBanned();
         if (!UserSession::getCurrentUserID()) {
-            UserSession::setReferer($app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo());
+            UserSession::setReferer(
+                $app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo()
+            );
             $app->flash('error', Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
             $app->redirect($app->urlFor('login'));
         }
 
         return true;
-    }    
+    }
     
     public static function notFound()
     {
@@ -27,21 +29,23 @@ class Middleware
     
     public function authenticateSiteAdmin()
     {
-        if(!$this->isSiteAdmin()) {
-            self::notFound();          
+        if (!$this->isSiteAdmin()) {
+            self::notFound();
         }
         return true;
     }
     
     private function isSiteAdmin()
     {
-        $this->isUserBanned(); 
-        if(is_null(UserSession::getCurrentUserID())) return false;
+        $this->isUserBanned();
+        if (is_null(UserSession::getCurrentUserID())) {
+            return false;
+        }
         $adminDao = new AdminDao();
         return $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
     }
 
-    public function authenticateUserForTask($request, $response, $route) 
+    public function authenticateUserForTask($request, $response, $route)
     {
         if ($this->isSiteAdmin()) {
             return true;
@@ -49,14 +53,14 @@ class Middleware
 
         $app = Slim::getInstance();
         $taskDao = new TaskDao();
-        $params = $route->getParams(); 
+        $params = $route->getParams();
 
         $this->authUserIsLoggedIn();
         $user_id = UserSession::getCurrentUserID();
         $claimant = null;
         if ($params !== null) {
             $task_id = $params['task_id'];
-            $claimant = $taskDao->getUserClaimedTask($task_id);             
+            $claimant = $taskDao->getUserClaimedTask($task_id);
         }
         if ($claimant) {
             if ($user_id != $claimant->getId()) {
@@ -66,7 +70,7 @@ class Middleware
         }
     }
 
-    public function authUserForOrg($request, $response, $route) 
+    public function authUserForOrg($request, $response, $route)
     {
         if ($this->isSiteAdmin()) {
             return true;
@@ -98,7 +102,7 @@ class Middleware
      *  Middleware for ensuring the current user belongs to the Org that uploaded the associated Task
      *  Used for altering task details
      */
-    public function authUserForOrgTask($request, $response, $route) 
+    public function authUserForOrgTask($request, $response, $route)
     {
         if ($this->isSiteAdmin()) {
             return true;
@@ -125,15 +129,15 @@ class Middleware
                             return true;
                         }
                     }
-                }                
+                }
             }
         }
        
         self::notFound();
-    } 
+    }
     
-    public function authUserForOrgProject($request, $response, $route) 
-    {                        
+    public function authUserForOrgProject($request, $response, $route)
+    {
         if ($this->isSiteAdmin()) {
             return true;
         }
@@ -144,22 +148,21 @@ class Middleware
         
         if ($params != null) {
             $user_id = UserSession::getCurrentUserID();
-            $project_id = $params['project_id'];   
+            $project_id = $params['project_id'];
             $userOrgs = $userDao->getUserOrgs($user_id);
-            $project = $projectDao->getProject($project_id); 
+            $project = $projectDao->getProject($project_id);
             $project_orgid = $project->getOrganisationId();
 
-            if($userOrgs) {
-                foreach($userOrgs as $org)
-                {                
-                    if($org->getId() == $project_orgid) {
+            if ($userOrgs) {
+                foreach ($userOrgs as $org) {
+                    if ($org->getId() == $project_orgid) {
                         return true;
                     }
                 }
             }
         }
         self::notFound();
-    }    
+    }
 
     public function authUserForTaskDownload($request, $response, $route)
     {
@@ -175,8 +178,9 @@ class Middleware
         if ($params != null) {
             $task_id = $params['task_id'];
             $task = $taskDao->getTask($task_id);
-//            if($taskDao->getUserClaimedTask($task_id) && $task->getStatus() != TaskStatusEnum::COMPLETE) return true;
-            if($taskDao->getUserClaimedTask($task_id)) return true;
+            if ($taskDao->getUserClaimedTask($task_id)) {
+                return true;
+            }
 
             $project = $projectDao->getProject($task->getProjectId());
             
@@ -191,7 +195,7 @@ class Middleware
                             return true;
                         }
                     }
-                }                
+                }
             }
         }
        
@@ -199,36 +203,43 @@ class Middleware
     }
     
     public function isUserBanned()
-    {        
-        $adminDao = new AdminDao();        
-        if($adminDao->isUserBanned(UserSession::getCurrentUserID())) {
+    {
+        $adminDao = new AdminDao();
+        if ($adminDao->isUserBanned(UserSession::getCurrentUserID())) {
             $app = Slim::getInstance();
             UserSession::destroySession();
             $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
             $app->redirect($app->urlFor('home'));
-        }       
+        }
     }
     
     public function isBlacklisted($request, $response, $route)
     {
         $isLoggedIn = $this->authUserIsLoggedIn();
-        if($isLoggedIn) {            
+        if ($isLoggedIn) {
             $params = $route->getParams();
-            if(!is_null($params)) {
+            if (!is_null($params)) {
                 $taskId = $params['task_id'];
                 $userDao = new UserDao();
                 $isBlackListed = $userDao->isBlacklistedForTask(UserSession::getCurrentUserID(), $taskId);
                 
-                if($isBlackListed) {
+                if ($isBlackListed) {
                     $taskDao = new TaskDao();
-                    $task = $taskDao->getTask($taskId);                    
+                    $task = $taskDao->getTask($taskId);
                     $app = Slim::getInstance();
-                    $app->flash('error', sprintf(Localisation::getTranslation(Strings::COMMON_ERROR_CANNOT_RECLAIM), $app->urlFor("task-claimed", array("task_id" => $taskId)), $task->getTitle()));
-                    $app->response()->redirect($app->urlFor('home'));   
+                    $app->flash(
+                        'error',
+                        sprintf(
+                            Localisation::getTranslation(Strings::COMMON_ERROR_CANNOT_RECLAIM),
+                            $app->urlFor("task-claimed", array("task_id" => $taskId)),
+                            $task->getTitle()
+                        )
+                    );
+                    $app->response()->redirect($app->urlFor('home'));
                 } else {
                     return true;
-                }                
+                }
             }
-        }        
+        }
     }
 }

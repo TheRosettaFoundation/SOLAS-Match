@@ -7,8 +7,11 @@ class BadgeRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
         
-        $app->get("/badge/list/", array($middleware, "authUserIsLoggedIn")
-        , array($this, "badgeList"))->name("badge-list");
+        $app->get(
+            "/badge/list/",
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, "badgeList")
+        )->name("badge-list");
     }
 
     public function badgeList()
@@ -21,7 +24,7 @@ class BadgeRouteHandler
         $badgeList = $badgeDao->getBadges();
         foreach ($badgeList as $badge) {
             if ($badge->getOwnerId() != null) {
-                $org = $orgDao->getOrganisation($badge->getOwnerId());;
+                $org = $orgDao->getOrganisation($badge->getOwnerId());
                 $org_list[$badge->getOwnerId()] = $org;
             }
         }

@@ -1,7 +1,7 @@
 <?php
 
-class Authentication {
-    
+class Authentication
+{
     public static function hashPassword($password, $nonce)
     {
         // Thanks to http://stackoverflow.com/questions/401656/secure-hash-and-salt-for-php-passwords/401684#401684

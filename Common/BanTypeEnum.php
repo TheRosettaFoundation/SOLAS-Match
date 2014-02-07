@@ -1,6 +1,7 @@
 <?php
 
-class BanTypeEnum {
+class BanTypeEnum
+{
     const DAY        = 1;
     const WEEK       = 2;
     const MONTH      = 3;

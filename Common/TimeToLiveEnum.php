@@ -1,6 +1,7 @@
 <?php
 
-class TimeToLiveEnum {
+class TimeToLiveEnum
+{
     const MINUTE        = 60;
     const FIVE_MINUTES  = 300;
     const QUARTER_HOUR  = 900;
@@ -11,5 +12,3 @@ class TimeToLiveEnum {
     const WEEK          = 604800; // 7 Days
     const MONTH         = 2592000; // 30 Days
 }
-
-?>

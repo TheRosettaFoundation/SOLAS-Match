@@ -1,6 +1,5 @@
 <?php
 
-//require_once __DIR__."/Serializer.class.php";
 require_once __DIR__."/XMLSerializer.class.php";
 
 class HTMLSerializer extends Serializer
@@ -15,16 +14,16 @@ class HTMLSerializer extends Serializer
 
     public function serialize($data)
     {
-        $ret = htmlspecialchars($this->xmlSerial->serialize($data),ENT_NOQUOTES);
+        $ret = htmlspecialchars($this->xmlSerial->serialize($data), ENT_NOQUOTES);
         return $ret;
     }
 
-    public function deserialize($data,$type)
+    public function deserialize($data, $type)
     {
         $ret = null;
         try {
             //WTF
-            $ret = $this->xmlSerial->deserialize(htmlspecialchars_decode($data,ENT_NOQUOTES), $type);
+            $ret = $this->xmlSerial->deserialize(htmlspecialchars_decode($data, ENT_NOQUOTES), $type);
         } catch (Exception $e) {
             echo "Failed to unserialize data: $data";
         }

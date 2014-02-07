@@ -19,7 +19,7 @@ abstract class WorkflowBuilder
     {
         $projectTasks = $this->getProjectTasks($projectId);
         $taskPreReqIds = array();
-        if ($projectTasks) {        
+        if ($projectTasks) {
             foreach ($projectTasks as $task) {
                 $taskPreReqs = $this->getTaskPreReqs($task->getId());
                 $taskPreReqIds[$task->getId()] = array();
@@ -28,7 +28,7 @@ abstract class WorkflowBuilder
                         $taskPreReqIds[$task->getId()][] = $preReq->getId();
                     }
                 }
-            }    
+            }
         }
         
         return $taskPreReqIds;
@@ -214,6 +214,6 @@ abstract class WorkflowBuilder
         echo "]</p>";
     }
 
-    protected abstract function getProjectTasks($projectId);
-    protected abstract function getTaskPreReqs($taskId);
+    abstract protected function getProjectTasks($projectId);
+    abstract protected function getTaskPreReqs($taskId);
 }

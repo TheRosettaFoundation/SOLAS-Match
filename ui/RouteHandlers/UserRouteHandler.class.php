@@ -15,36 +15,63 @@ class UserRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
 
-        $app->get("/", array($this, "home"))->via("POST")->name("home");
+        $app->get(
+            "/",
+            array($this, "home")
+        )->via("POST")->name("home");
 
-        $app->get("/register/", array($this, "register")
+        $app->get(
+            "/register/",
+            array($this, "register")
         )->via("GET", "POST")->name("register");
 
-        $app->get("/user/:uuid/verification/", array($this, 'emailVerification')
+        $app->get(
+            "/user/:uuid/verification/",
+            array($this, 'emailVerification')
         )->via('POST')->name('email-verification');
 
-        $app->get("/:uid/password/reset/", array($this, "passwordReset")
+        $app->get(
+            "/:uid/password/reset/",
+            array($this, "passwordReset")
         )->via("POST")->name("password-reset");
 
-        $app->get("/password/reset/", array($this, "passResetRequest")
+        $app->get(
+            "/password/reset/",
+            array($this, "passResetRequest")
         )->via("POST")->name("password-reset-request");
         
-        $app->get("/logout/", array($this, "logout"))->name("logout");
+        $app->get(
+            "/logout/",
+            array($this, "logout")
+        )->name("logout");
         
-        $app->get("/login/", array($this, "login")
+        $app->get(
+            "/login/",
+            array($this, "login")
         )->via("GET", "POST")->name("login");
 
-        $app->get("/:user_id/profile/", array($this, "userPublicProfile")
+        $app->get(
+            "/:user_id/profile/",
+            array($this, "userPublicProfile")
         )->via("POST")->name("user-public-profile");
 
-        $app->get("/:user_id/privateProfile/", array($middleware, "authUserIsLoggedIn"), 
-        array($this, "userPrivateProfile"))->via("POST")->name("user-private-profile");
+        $app->get(
+            "/:user_id/privateProfile/",
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, "userPrivateProfile")
+        )->via("POST")->name("user-private-profile");
 
-        $app->get("/:user_id/notification/stream/", array($middleware, "authUserIsLoggedIn"),
-        array($this, "editTaskStreamNotification"))->via("POST")->name("stream-notification-edit");
+        $app->get(
+            "/:user_id/notification/stream/",
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, "editTaskStreamNotification")
+        )->via("POST")->name("stream-notification-edit");
   
-        $app->get("/user/task/:task_id/reviews/", array($middleware, "authenticateUserForTask"),
-        array($this, "userTaskReviews"))->name("user-task-reviews");
+        $app->get(
+            "/user/task/:task_id/reviews/",
+            array($middleware, "authenticateUserForTask"),
+            array($this, "userTaskReviews")
+        )->name("user-task-reviews");
     }
     
     public function home()
@@ -56,23 +83,23 @@ class UserRouteHandler
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
         $orgDao = new OrganisationDao();
-        $userDao = new UserDao(); 
+        $userDao = new UserDao();
 
-        $use_statistics = Settings::get("site.stats"); 
+        $use_statistics = Settings::get("site.stats");
         if ($use_statistics == 'y') {
             $statsDao = new StatisticsDao();
-            $statistics = $statsDao->getStats();    
+            $statistics = $statsDao->getStats();
             $statsArray = null;
-            if($statistics) {
+            if ($statistics) {
                 $statsArray = array();
-                foreach($statistics as $stat) {
+                foreach ($statistics as $stat) {
                     $statsArray[$stat->getName()] = $stat;
                 }
             }
             $viewData["statsArray"] = $statsArray;
         }
         
-        $top_tags = $tagDao->getTopTags(10);        
+        $top_tags = $tagDao->getTopTags(10);
         $viewData["top_tags"] = $top_tags;
         $viewData["current_page"] = "home";
 
@@ -82,23 +109,23 @@ class UserRouteHandler
             $user_tags = $userDao->getUserTags($current_user_id);
             $viewData["user_tags"] = $user_tags;
         }
-		
+
         if ($current_user_id == null) {
             $app->flashNow('info', Localisation::getTranslation('index_dont_use_ie'));
         }
 
         $extra_scripts = "
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/home.dart.js\"></script>
-            ";
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/home.dart.js\"></script>
+";
         $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
 
         $viewData['extra_scripts'] = $extra_scripts;
 
-		$app->view()->appendData($viewData);
-		$app->render("index.tpl");
+        $app->view()->appendData($viewData);
+        $app->render("index.tpl");
     }
 
     public function videos()
@@ -118,17 +145,17 @@ class UserRouteHandler
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
                 $extra_scripts = "
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
-                    <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
+<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
                 $app->view()->appendData(array("extra_scripts" => $extra_scripts));
-            }   
-        }   
+            }
+        }
         $error = null;
         $warning = null;
         if (isValidPost($app)) {
             $post = $app->request()->post();
-            $temp = md5($post['email'].substr(Settings::get("session.site_key"),0,20));
+            $temp = md5($post['email'].substr(Settings::get("session.site_key"), 0, 20));
             UserSession::clearCurrentUserID();
             if (!TemplateHelper::isValidEmail($post['email'])) {
                 $error = Localisation::getTranslation(Strings::REGISTER_1);
@@ -142,7 +169,10 @@ class UserRouteHandler
             
             if (is_null($error)) {
                 $userDao->register($post['email'], $post['password']);
-                $app->flashNow("success", sprintf(Localisation::getTranslation(Strings::REGISTER_4), $app->urlFor("login")));
+                $app->flashNow(
+                    "success",
+                    sprintf(Localisation::getTranslation(Strings::REGISTER_4), $app->urlFor("login"))
+                );
             }
         }
         if ($error !== null) {
@@ -158,7 +188,10 @@ class UserRouteHandler
             $browser = $browserData['browser'];
             
             if ($browser == 'IE') {
-                $app->flashNow("info", Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9));
+                $app->flashNow(
+                    "info",
+                    Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9)
+                );
             }
         }
 
@@ -209,7 +242,7 @@ class UserRouteHandler
             $post = $app->request()->post();
 
             if (isset($post['new_password']) && TemplateHelper::isValidPassword($post['new_password'])) {
-                if (isset($post['confirmation_password']) && 
+                if (isset($post['confirmation_password']) &&
                         $post['confirmation_password'] == $post['new_password']) {
 
                     $response = $userDao->resetPassword($post['new_password'], $uid);
@@ -225,7 +258,7 @@ class UserRouteHandler
             } else {
                 $app->flashNow("error", Localisation::getTranslation(Strings::PASSWORD_RESET_5));
             }
-        }        
+        }
         $app->render("user/password-reset.tpl");
     }
 
@@ -247,14 +280,21 @@ class UserRouteHandler
                             $app->flash("success", Localisation::getTranslation(Strings::USER_RESET_PASSWORD_2));
                             $app->redirect($app->urlFor("home"));
                         } else {
-                            $app->flashNow("error", "Failed to request password reset, are you sure you entered your email ".
-                                        "address correctly?");
+                            $app->flashNow(
+                                "error",
+                                "Failed to request password reset, are you sure you entered your email ".
+                                "address correctly?"
+                            );
                         }
                     } else {
                         //get request time
                         $response = $userDao->getPasswordResetRequestTime($email);
                         if ($response != null) {
-                            $app->flashNow("info", Localisation::getTranslation(Strings::USER_RESET_PASSWORD_3), $response);
+                            $app->flashNow(
+                                "info",
+                                Localisation::getTranslation(Strings::USER_RESET_PASSWORD_3),
+                                $response
+                            );
                             //Send request
                             $userDao->requestPasswordReset($email);
                         }
@@ -287,9 +327,9 @@ class UserRouteHandler
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
                 $extra_scripts = "
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
-                    <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
+<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
                 $app->view()->appendData(array("extra_scripts" => $extra_scripts));
             }
         }
@@ -298,54 +338,65 @@ class UserRouteHandler
             if (isValidPost($app)) {
                 $post = $app->request()->post();
 
-                if (isset($post['login'])) {    
-                    if($user = $userDao->login($post['email'], $post['password'])) {
+                if (isset($post['login'])) {
+                    if ($user = $userDao->login($post['email'], $post['password'])) {
                         UserSession::setSession($user->getId());
-//                        UserSession::setHash(md5("{$user->getEmail()}:{$user->getDisplayName()}"));
-                    }                   
+                    }
                     $request = UserSession::getReferer();
                     UserSession::clearReferer();
-                    if($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
-                        $app->redirect( $request);
-                    } else $app->redirect($app->urlFor("home"));     
-                    
+                    if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                        $app->redirect($request);
+                    } else {
+                        $app->redirect($app->urlFor("home"));
+                    }
                 } elseif (isset($post['password_reset'])) {
                     $app->redirect($app->urlFor("password-reset-request"));
                 }
             } elseif ($app->request()->isPost() || $openid->mode) {
-                if($this->openIdLogin($openid, $app)){
+                if ($this->openIdLogin($openid, $app)) {
                     $request = UserSession::getReferer();
                     UserSession::clearReferer();
-                    if($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
-                        $app->redirect( $request);
-                    } else $app->redirect($app->urlFor("home"));                    
-                }  else {
-                    $app->redirect($app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID())));
+                    if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                        $app->redirect($request);
+                    } else {
+                        $app->redirect($app->urlFor("home"));
+                    }
+                } else {
+                    $app->redirect(
+                        $app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID()))
+                    );
                 }
             }
-			
-			// Added check to display info message to users on IE borwsers
-			$browserData = get_browser(null, true);
-			if (!is_null($browserData) && isset($browserData['browser'])) {
-				$browser = $browserData['browser'];
-			
-				if ($browser == 'IE') {
-	                $app->flashNow("info", Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9));
-	        	}
-			
-			}
-			
+
+            // Added check to display info message to users on IE borwsers
+            $browserData = get_browser(null, true);
+            if (!is_null($browserData) && isset($browserData['browser'])) {
+                $browser = $browserData['browser'];
+
+                if ($browser == 'IE') {
+                    $app->flashNow(
+                        "info",
+                        Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9)
+                    );
+                }
+            }
+
             $app->render("user/login.tpl");
         } catch (SolasMatchException $e) {
-            $error = sprintf(Localisation::getTranslation(Strings::LOGIN_1), $app->urlFor("login"), $app->urlFor("register"), $e->getMessage());            
+            $error = sprintf(
+                Localisation::getTranslation(Strings::LOGIN_1),
+                $app->urlFor("login"),
+                $app->urlFor("register"),
+                $e->getMessage()
+            );
             $app->flash("error", $error);
             $app->redirect($app->urlFor("login"));
-            echo $error;
+            echo $error;    // This is all kinds of wrong
         }
     }
     
     public function openIdLogin($openid, $app)
-    {       
+    {
         if (!$openid->mode) {
             try {
                 $openid->identity = $openid->data["openid_identifier"];
@@ -361,22 +412,27 @@ class UserRouteHandler
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
                 $userDao = new UserDao();
-                $temp =$retvals['contact/email'].substr(Settings::get("session.site_key"),0,20);
+                $temp = $retvals['contact/email'].substr(Settings::get("session.site_key"), 0, 20);
                 UserSession::clearCurrentUserID();
-                $user = $userDao->openIdLogin($retvals['contact/email'],md5($temp));
-                if(is_array($user)) $user = $user[0];
+                $user = $userDao->openIdLogin($retvals['contact/email'], md5($temp));
+                if (is_array($user)) {
+                    $user = $user[0];
+                }
                 $adminDao = new AdminDao();
-                if(!$adminDao->isUserBanned($user->getId())) {
+                if (!$adminDao->isUserBanned($user->getId())) {
                     UserSession::setSession($user->getId());
                 } else {
-                    $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
+                    $app->flash(
+                        'error',
+                        Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED)
+                    );
                     $app->redirect($app->urlFor('home'));
                 }
                 
             }
             return true;
         }
-    }        
+    }
 
     public static function userPrivateProfile($userId)
     {
@@ -393,10 +449,10 @@ class UserRouteHandler
         }
 
         $extraScripts = "
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/UserPrivateProfile.dart.js\"></script>
-            ";
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/UserPrivateProfile.dart.js\"></script>
+";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
 
         $app->view()->appendData(array(
@@ -418,29 +474,31 @@ class UserRouteHandler
         
         $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(UserSession::getCurrentUserID()));
         $user=null;
-        try{
+        try {
             CacheHelper::unCache(CacheHelper::GET_USER.$user_id);
             $user = $userDao->getUser($user_id);
-        }catch (SolasMatchException $e){
+        } catch (SolasMatchException $e) {
              $app->flash('error', Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
              $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo=null;
-        try{
+        try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
-        }catch(SolasMatchException $e){}
+        } catch (SolasMatchException $e) {
+            // should handle the error here or at least error_log it
+        }
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             
-            if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != ""){
+            if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != "") {
                 $badge_id = $post['badge_id'];
                 $userDao->removeUserBadge($user_id, $badge_id);
             }
                 
             if (isset($post['revoke'])) {
                 $org_id = $post['org_id'];
-                $userDao->leaveOrganisation($user_id, $org_id); 
-            } 
+                $userDao->leaveOrganisation($user_id, $org_id);
+            }
 
             if (isset($post['referenceRequest'])) {
                 $userDao->requestReferenceEmail($user_id);
@@ -455,13 +513,13 @@ class UserRouteHandler
         $secondaryLanguages = $userDao->getSecondaryLanguages($user_id);
 
         $orgList = array();
-        if($badges) {
+        if ($badges) {
             foreach ($badges as $badge) {
                 if ($badge->getOwnerId() != null) {
                     $org = $orgDao->getOrganisation($badge->getOwnerId());
                     $orgList[$badge->getOwnerId()] = $org;
                 }
-            }    
+            }
         }
        
         $org_creation = Settings::get("site.organisation_creation");
@@ -616,7 +674,7 @@ class UserRouteHandler
     public static function isLoggedIn()
     {
         return (!is_null(UserSession::getCurrentUserId()));
-    }     
+    }
 }
 
 $route_handler = new UserRouteHandler();

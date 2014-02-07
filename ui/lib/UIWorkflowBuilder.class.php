@@ -19,4 +19,3 @@ class UIWorkflowBuilder extends WorkflowBuilder
         return $taskPreReqs;
     }
 }
-

@@ -1,7 +1,7 @@
 <?php
 
-class Settings {
-
+class Settings
+{
     public static function get($var)
     {
         $settings = self::load(dirname(__FILE__).'/conf/conf.ini');

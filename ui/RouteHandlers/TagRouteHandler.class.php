@@ -7,14 +7,23 @@ class TagRouteHandler
         $app = Slim::getInstance();
         $middleware = new Middleware();
 
-        $app->get("/all/tags/", array($middleware, "authUserIsLoggedIn")
-        , array($this, "tagsList"))->via("POST")->name("tags-list");
+        $app->get(
+            "/all/tags/",
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, "tagsList")
+        )->via("POST")->name("tags-list");
 
-        $app->get("/tag/:id/:subscribe/", array($middleware, "authUserIsLoggedIn")
-        , array($this, "tagSubscribe"))->via("POST")->name("tag-subscribe");
+        $app->get(
+            "/tag/:id/:subscribe/",
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, "tagSubscribe")
+        )->via("POST")->name("tag-subscribe");
         
-        $app->get("/tag/:id/", array($middleware, "authUserIsLoggedIn")
-        , array($this, "tagDetails"))->via("POST")->name("tag-details");
+        $app->get(
+            "/tag/:id/",
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, "tagDetails")
+        )->via("POST")->name("tag-details");
     }
 
     public function tagsList()
@@ -45,7 +54,7 @@ class TagRouteHandler
             "user_tags" => $user_tags,
             "foundTags" => $foundTags,
             'searchedText'  => $name
-        )); 
+        ));
         
         $app->render("tag/tag-list.tpl");
     }
@@ -63,22 +72,31 @@ class TagRouteHandler
         $displayName = $current_user->getDisplayName();
         
         if ($subscribe == "true") {
-            $userLikeTag = $userDao->addUserTagById($user_id, $id);            
+            $userLikeTag = $userDao->addUserTagById($user_id, $id);
             if ($userLikeTag) {
                 $app->flash("success", sprintf(Localisation::getTranslation(Strings::TAG_4), $tag->getLabel()));
             } else {
-                $app->flash("error", sprintf(Localisation::getTranslation(Strings::TAG_5), $tag->getLabel(), $displayName));
-            }   
-        }   
+                $app->flash(
+                    "error",
+                    sprintf(Localisation::getTranslation(Strings::TAG_5), $tag->getLabel(), $displayName)
+                );
+            }
+        }
         
         if ($subscribe == "false") {
             $removedTag = $userDao->removeUserTag($user_id, $id);
             if ($removedTag) {
-                $app->flash("success", sprintf(Localisation::getTranslation(Strings::TAG_6), $tag->getLabel(), $displayName));
+                $app->flash(
+                    "success",
+                    sprintf(Localisation::getTranslation(Strings::TAG_6), $tag->getLabel(), $displayName)
+                );
             } else {
-                $app->flash("error", sprintf(Localisation::getTranslation(Strings::TAG_7), $tag->getLabel(), $displayName));
+                $app->flash(
+                    "error",
+                    sprintf(Localisation::getTranslation(Strings::TAG_7), $tag->getLabel(), $displayName)
+                );
             }
-        }   
+        }
         
         $app->response()->redirect($app->request()->getReferer());
     }
@@ -91,7 +109,7 @@ class TagRouteHandler
         $orgDao = new OrganisationDao();
         $userDao = new UserDao();
 
-        $tag = $tagDao->getTag($id);       
+        $tag = $tagDao->getTag($id);
         $label = $tag->getLabel();
         $tag_id = $tag->getId();
 
@@ -104,8 +122,7 @@ class TagRouteHandler
         $app->view()->setData('tasks', $tasks);
         
         if (UserRouteHandler::isLoggedIn()) {
-
-            $user_id = UserSession::getCurrentUserID();        
+            $user_id = UserSession::getCurrentUserID();
             $app->view()->appendData(array(
                     "user_id" => $user_id
             ));
@@ -114,12 +131,12 @@ class TagRouteHandler
             if ($user_tags && count($user_tags) > 0) {
                 $app->view()->appendData(array(
                         'user_tags' => $user_tags
-                )); 
+                ));
                 foreach ($user_tags as $userTag) {
                     if ($label == $userTag->getLabel()) {
                         $app->view()->appendData(array(
                            'subscribed' => true
-                        )); 
+                        ));
                     }
                 }
             }
@@ -128,16 +145,16 @@ class TagRouteHandler
         $numTaskTypes = Settings::get("ui.task_types");
         $taskTypeColours = array();
         
-        for($i=1; $i <= $numTaskTypes; $i++) {
+        for ($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
         }
 
         $top_tags= $tagDao->getTopTags(30);
         $app->view()->appendData(array(
-                 "tag" => $tag,
-                 "top_tags" => $top_tags,
-                 "taskTypeColours" => $taskTypeColours
-        )); 
+            "tag" => $tag,
+            "top_tags" => $top_tags,
+            "taskTypeColours" => $taskTypeColours
+        ));
         $app->render("tag/tag.tpl");
     }
 }
