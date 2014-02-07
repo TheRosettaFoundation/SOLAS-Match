@@ -1323,8 +1323,8 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `getAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `orgId` INT)
+    READS SQL DATA
 BEGIN
-
 	IF orgId = '' THEN SET orgId = NULL; END IF;	
 	
 	SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
@@ -1333,11 +1333,9 @@ BEGIN
             (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
             (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
             u.nonce,u.`created-time` 
-
         FROM Users u JOIN Admins a ON a.user_id = u.id 
-        
         WHERE (a.organisation_id is null or a.organisation_id = orgId);
-END //
+END//
 DELIMITER ;
 
 

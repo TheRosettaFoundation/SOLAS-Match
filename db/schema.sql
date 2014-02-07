@@ -1370,7 +1370,7 @@ BEGIN
         FROM Users u JOIN Admins a ON a.user_id = u.id 
         
         WHERE (a.organisation_id is null or a.organisation_id = orgId);
-END //
+END//
 DELIMITER ;
 
 
