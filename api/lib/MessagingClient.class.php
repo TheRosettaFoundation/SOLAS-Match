@@ -36,9 +36,7 @@ class MessagingClient
     public function init()
     {
         $ret=null;
-       
         $ret = $this->openConnection();
-       
         return $ret;
     }
 
@@ -48,10 +46,11 @@ class MessagingClient
 
         try {
             $this->connection = new AMQPConnection(
-                                    Settings::get('messaging.host'), 
-                                    Settings::get('messaging.port'), 
-                                    settings::get('messaging.username'), 
-                                    Settings::get('messaging.password'));
+                Settings::get('messaging.host'),
+                Settings::get('messaging.port'),
+                settings::get('messaging.username'),
+                Settings::get('messaging.password')
+            );
             if ($this->connection) {
                 $ret = true;
             }

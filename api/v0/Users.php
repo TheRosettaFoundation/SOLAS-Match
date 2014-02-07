@@ -142,7 +142,7 @@ class Users {
                 $data = $data[0];
             }
             Dispatcher::sendResponce(null, $data, null, $format);
-        }, 'getUserByEmail',  "Middleware::Registervalidation");
+        }, 'getUserByEmail',  "Middleware::registerValidation");
 		
 		// TEST
         Dispatcher::registerNamed(HttpMethodEnum::GET, '/v0/users/getClaimedTasksCount/:userId/',

@@ -4,8 +4,8 @@ require_once __DIR__."/../../Common/TaskStatusEnum.php";
 require_once __DIR__."/../../Common/TaskTypeEnum.php";
 require_once __DIR__."/Notify.class.php";
 
-class Upload {
-    
+class Upload
+{
     public static function maxFileSizeBytes()
     {
         $display_max_size = self::maxUploadSizeFromPHPSettings();
@@ -13,10 +13,13 @@ class Upload {
         switch (substr($display_max_size, -1)) {
             case 'G':
                 $display_max_size = $display_max_size * 1024;
+                // no break
             case 'M':
                 $display_max_size = $display_max_size * 1024;
+                // no break
             case 'K':
                 $display_max_size = $display_max_size * 1024;
+                break;
         }
         return $display_max_size;
     }
@@ -40,8 +43,10 @@ class Upload {
     {
         if (self::isPostTooLarge()) {
             $max_file_size = ini_get('post_max_size');
-            throw new Exception('Sorry, the file you tried uploading is too large. The max file size is ' .
-                    $max_file_size . '. Please consider saving the file in multiple smaller parts for upload.');
+            throw new Exception(
+                'Sorry, the file you tried uploading is too large. The max file size is '.
+                $max_file_size.'. Please consider saving the file in multiple smaller parts for upload.'
+            );
         }
 
         if (!self::isUploadedFile($field_name)) {
@@ -57,11 +62,11 @@ class Upload {
     /* Thanks to http://andrewcurioso.com/2010/06/detecting-file-size-overflow-in-php/ */
     private static function isPostTooLarge()
     {
-        return ( 
-                $_SERVER['REQUEST_METHOD'] == 'POST' && 
-                empty($_POST) &&
-                empty($_FILES) && 
-                $_SERVER['CONTENT_LENGTH'] > 0
+        return (
+            $_SERVER['REQUEST_METHOD'] == 'POST' &&
+            empty($_POST) &&
+            empty($_FILES) &&
+            $_SERVER['CONTENT_LENGTH'] > 0
         );
     }
 
@@ -97,29 +102,30 @@ class Upload {
         return $_FILES[$field_name]['error'] == UPLOAD_ERR_OK;
     }
 
-    public static function apiSaveFile($task, $user_id, $file, $filename, $version=null)
+    public static function apiSaveFile($task, $user_id, $file, $filename, $version = null)
     {
-        $taskFileMime = IO::detectMimeType($file, $filename);        
+        $taskFileMime = IO::detectMimeType($file, $filename);
         $projectFileInfo = ProjectDao::getProjectFileInfo($task->getProjectId());
         $projectFileMime = $projectFileInfo->getMime();
         
-        if($taskFileMime != $projectFileMime) throw new SolasMatchException("Invalid file content.", HttpStatusEnum::BAD_REQUEST);
+        if ($taskFileMime != $projectFileMime) {
+            throw new SolasMatchException("Invalid file content.", HttpStatusEnum::BAD_REQUEST);
+        }
        
-        if (is_null($version)){
+        if (is_null($version)) {
             $version = TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id);
         } else {
             $version = TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id, $version);
         }
         $upload_folder     = self::absoluteFolderPathForUpload($task, $version);
         if (!self::folderPathForUploadExists($task, $version)) {
-                self::createFolderForUpload($task, $version);
+            self::createFolderForUpload($task, $version);
         }
         $destination_path = self::absoluteFilePathForUpload($task, $version, $filename);
-        $ret = file_put_contents($destination_path, $file)?1:0;
+        $ret = file_put_contents($destination_path, $file) ? 1 : 0;
         Notify::sendTaskUploadNotifications($task->getId(), $version);
         return $ret;
     }
-       
         
     /*
      * For a named filename, save file that have been uploaded by form submission.
@@ -128,13 +134,15 @@ class Upload {
      */
     public static function saveSubmittedFile($form_file_field, $task, $user_id)
     {
-        /* 
+        /*
          * Right now we're assuming that there's one file, but I think it can also be
          * an array of multiple files.
          */
         if ($_FILES[$form_file_field]['error'] == UPLOAD_ERR_FORM_SIZE) {
-            throw new Exception('Sorry, the file you tried uploading is too large. Please choose a smaller file,
-                                or break the file into sub-parts.');
+            throw new Exception(
+                'Sorry, the file you tried uploading is too large. Please choose a smaller file, '.
+                'or break the file into sub-parts.'
+            );
         }
 
         $file_name 	= $_FILES[$form_file_field]['name'];
@@ -152,7 +160,6 @@ class Upload {
     public static function createFolderPath($task, $version = 0)
     {
         $upload_folder = self::absoluteFolderPathForUpload($task, $version);
-
         if (!self::folderPathForUploadExists($task, $version)) {
                 self::createFolderForUpload($task, $version);
         }
@@ -162,7 +169,7 @@ class Upload {
      * $files_file is the name of the parameter of the file we want to access
      * in the $_FILES global array.
      */
-    private static function saveSubmittedFileToFs($task, $file_name, $file_tmp_name, $version) 
+    private static function saveSubmittedFileToFs($task, $file_name, $file_tmp_name, $version)
     {
         $upload_folder = self::absoluteFolderPathForUpload($task, $version);
 
@@ -178,7 +185,7 @@ class Upload {
 
     private static function folderPathForUploadExists($task, $version)
     {
-        $folder = self::absoluteFolderPathForUpload($task, $version);;
+        $folder = self::absoluteFolderPathForUpload($task, $version);
         return is_dir($folder);
     }
 
@@ -203,8 +210,9 @@ class Upload {
     public static function absoluteFolderPathForUpload($task, $version)
     {
         if (!is_numeric($version) || $version < 0) {
-            throw new InvalidArgumentException("Cannot give an upload folder path as the version
-                                                    number was not specified.version = $version");
+            throw new InvalidArgumentException(
+                "Cannot give an upload folder path as the version number was not specified.version = $version"
+            );
         }
 
         $uploads_folder     = Settings::get('files.upload_path');
@@ -212,45 +220,41 @@ class Upload {
         $task_folder        = 'task-' . $task->getId();
         $version_folder     = 'v-' . $version;
 
-        return $uploads_folder 
-                . $project_folder . DIRECTORY_SEPARATOR 
-                . $task_folder . DIRECTORY_SEPARATOR 
-                . $version_folder;
+        return $uploads_folder.$project_folder.DIRECTORY_SEPARATOR.
+                $task_folder.DIRECTORY_SEPARATOR.$version_folder;
     }
     
-    public static function addTaskPreReq($id, $preReqId){
+    public static function addTaskPreReq($id, $preReqId)
+    {
         $taskDao = new TaskDao();
         $builder = new APIWorkflowBuilder();
-        
         $currentTask =  $taskDao->getTask($id);
         $projectId = $currentTask[0]->getProjectId();
-        
         $taskPreReqs = $builder->calculatePreReqArray($projectId);
 
-        if(!empty($taskPreReqs) && !in_array($preReqId, $taskPreReqs[$id])){
+        if (!empty($taskPreReqs) && !in_array($preReqId, $taskPreReqs[$id])) {
             $taskPreReqs[$id][] = $preReqId;
         
-            if($graph = $builder->parseAndBuild($taskPreReqs)) {
+            if ($graph = $builder->parseAndBuild($taskPreReqs)) {
                 $index = $builder->find($id, $graph);
                 $currentTaskNode = $graph->getAllNodes($index);
                 $task = $taskDao->getTask($id);
                 $task = $task[0];
-
                 $preReqTask = $taskDao->getTask($preReqId);
                 $taskDao->addTaskPreReq($id, $preReqId);
 
-                if($task->getTaskType() != TaskTypeEnum::DESEGMENTATION) {
-                    foreach($currentTaskNode->getPreviousList() as $nodeId) {
+                if ($task->getTaskType() != TaskTypeEnum::DESEGMENTATION) {
+                    foreach ($currentTaskNode->getPreviousList() as $nodeId) {
                         $preReq = $taskDao->getTask($nodeId);
-                        $preReq = $preReq[0];      
-                        if ($preReq->getTaskStatus() == TaskStatusEnum::COMPLETE 
+                        $preReq = $preReq[0];
+                        if ($preReq->getTaskStatus() == TaskStatusEnum::COMPLETE
                                 && $preReq->getTaskType() != TaskTypeEnum::SEGMENTATION) {
                             Upload::copyOutputFile($id, $preReqId);
-                        } 
+                        }
                     }
-                }            
+                }
             }
-        } 
+        }
     }
     
     public static function removeTaskPreReq($id, $preReqId)
@@ -258,24 +262,25 @@ class Upload {
         $taskDao = new TaskDao();
         $task = $taskDao->getTask($id);
         $task = $task[0];
-        
         $taskDao->removeTaskPreReq($id, $preReqId);
         $taskPreReqs = $taskDao->getTaskPreReqs($id);
         
-        if(is_array($taskPreReqs) && count($taskPreReqs > 0)) {
-            foreach($taskPreReqs as $taskPreReq) {
-                if($taskPreReq->getTaskStatus() == TaskStatusEnum::COMPLETE) {
+        if (is_array($taskPreReqs) && count($taskPreReqs > 0)) {
+            foreach ($taskPreReqs as $taskPreReq) {
+                if ($taskPreReq->getTaskStatus() == TaskStatusEnum::COMPLETE) {
                     Upload::copyOutputFile($id, $taskPreReq->getId());
                 }
             }
         } else {
             $projectDao = new ProjectDao();
-            
-            $projectId = $task->getProjectId();            
+            $projectId = $task->getProjectId();
             $projectFile = $projectDao->getProjectFile($projectId);
             $projectFileInfo = $projectDao->getProjectFileInfo($projectId, null, null, null, null);
 
-            file_put_contents(Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFileName()}", $projectFile);         
+            file_put_contents(
+                Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFileName()}",
+                $projectFile
+            );
         }
     }
     
@@ -291,8 +296,12 @@ class Upload {
         $preReqlatestFileVersion = TaskDao::getLatestFileVersion($preReqId);
         $preReqFileName = TaskDao::getFilename($preReqId, $preReqlatestFileVersion);
         $projectId= $task->getProjectId();
-        file_put_contents(Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName",
-                        file_get_contents(Settings::get("files.upload_path").
-                        "proj-$projectId/task-$preReqId/v-$preReqlatestFileVersion/$preReqFileName"));
-    }    
+        file_put_contents(
+            Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName",
+            file_get_contents(
+                Settings::get("files.upload_path").
+                "proj-$projectId/task-$preReqId/v-$preReqlatestFileVersion/$preReqFileName"
+            )
+        );
+    }
 }

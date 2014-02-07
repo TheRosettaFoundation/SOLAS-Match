@@ -8,15 +8,15 @@
 
 require_once __DIR__."/../../Common/Settings.class.php";
 
-class PDOWrapper {
-
-    public static   $unitTesting                = false;
-    private static  $instance                   = null;
-    private         $logfile                    = ''; 
-    private         $logging                    = false; // debug on or off
-    private         $show_errors                = false; // output errors. true/false
-    private         $show_sql                   = false; // turn off for production version.
-    private         $use_permanent_connection   = false;
+class PDOWrapper
+{
+    public static $unitTesting = false;
+    private static $instance = null;
+    private $logfile = '';
+    private $logging = false; // debug on or off
+    private $show_errors = false; // output errors. true/false
+    private $show_sql = false; // turn off for production version.
+    private $use_permanent_connection = false;
 
     // Do not change the variables below
     private $connection;
@@ -43,7 +43,7 @@ class PDOWrapper {
     private function init()
     {
         $this->initLogfile();
-        $ret = $this->openConnection();		  	
+        $ret = $this->openConnection();
         return $ret;
     }
     
@@ -68,7 +68,7 @@ class PDOWrapper {
     private function openConnection()
     {
         $conn = false;
-        $ret = false;       
+        $ret = false;
         $dbName = self::$unitTesting ? Settings::get('unit_test.database') : Settings::get('database.database');
         $server = self::$unitTesting ? Settings::get('unit_test.server') : Settings::get('database.server');
         $server_port = self::$unitTesting ? Settings::get('unit_test.port') : Settings::get('database.server_port');
@@ -76,13 +76,19 @@ class PDOWrapper {
         $password = self::$unitTesting ? Settings::get('unit_test.password') : Settings::get('database.password');
         
         if ($this->use_permanent_connection) {
-            $conn = new PDO("mysql:host=$server;dbname=$dbName;port=$server_port",
-                            $username, $password,
-                            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", PDO::ATTR_PERSISTENT => true));  
+            $conn = new PDO(
+                "mysql:host=$server;dbname=$dbName;port=$server_port",
+                $username,
+                $password,
+                array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", PDO::ATTR_PERSISTENT => true)
+            );
         } else {
-             $conn = new PDO("mysql:host=$server;dbname=$dbName;port=$server_port",
-                            $username, $password,
-                            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  
+             $conn = new PDO(
+                 "mysql:host=$server;dbname=$dbName;port=$server_port",
+                 $username,
+                 $password,
+                 array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+             );
         }
         
         unset($password);
@@ -150,7 +156,7 @@ class PDOWrapper {
     }
 
     public static function call($procedure, $procArgs)
-    {    
+    {
         $db = PDOWrapper::getInstance();
         if (!is_array($procArgs)) {
             $sql = "CALL $procedure ($procArgs)";
@@ -174,7 +180,7 @@ class PDOWrapper {
 
         if ($result = $conn->query($sql)) {
             foreach ($result as $row) {
-                $data[] = $row;                
+                $data[] = $row;
             }
         }
         return empty($data) ? false : $data;
@@ -188,10 +194,21 @@ class PDOWrapper {
         if (get_magic_quotes_gpc()) {
             $str = stripslashes($str);
         }
-        $special = array("\x00"=>'\x00', "\n"=>'\n', "\r"=>'\r', '"'=>'ʺ', '\\'=>'\\\\', "'"=>"\\'", '"'=>'\"', "\x1a"=>'\x1a');
+        $special = array(
+            "\x00" => '\x00',
+            "\n" => '\n',
+            "\r" => '\r',
+            '"' => 'ʺ',
+            '\\' => '\\\\',
+            "'" => "\\'",
+            '"' => '\"',
+            "\x1a" => '\x1a'
+        );
         foreach ($special as $key => $val) {
-           if(is_bool($str)) return $str?1:0;
-           $str = str_replace($key, $val, $str);
+            if (is_bool($str)) {
+                return $str ? 1 : 0;
+            }
+            $str = str_replace($key, $val, $str);
         }
 
         return $str;

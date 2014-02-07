@@ -22,7 +22,7 @@ require_once __DIR__."/../../Common/Requests/TaskUploadNotificationRequest.php";
 require_once __DIR__.'/../../Common/Requests/OrgCreatedNotificationRequest.php';
 require_once __DIR__.'/../../Common/protobufs/notifications/TaskRevokedNotification.php';
 
-class Notify 
+class Notify
 {
     public static function sendBannedLoginEmail($userId)
     {
@@ -31,8 +31,11 @@ class Notify
             $proto = new BannedLogin();
             $proto->setUserId($userId);
             $message = $messagingClient->createMessageFromProto($proto);
-            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                    $messagingClient->BannedLoginTopic);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->BannedLoginTopic
+            );
         }
     }
 
@@ -43,8 +46,11 @@ class Notify
             $messageProto = new EmailVerification();
             $messageProto->setUserId($userId);
             $message = $messagingClient->createMessageFromProto($messageProto);
-            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                    $messagingClient->EmailVerificationTopic);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->EmailVerificationTopic
+            );
         }
     }
 
@@ -53,8 +59,11 @@ class Notify
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
             $message = $messagingClient->createMessageFromProto($feedback);
-            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                    $messagingClient->OrgFeedbackTopic);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->OrgFeedbackTopic
+            );
         }
     }
 
@@ -65,8 +74,11 @@ class Notify
             $proto = new OrgCreatedNotificationRequest();
             $proto->setOrgId($orgId);
             $message = $client->createMessageFromProto($proto);
-            $client->sendTopicMessage($message, $client->MainExchange, 
-                    $client->OrgCreatedTopic);
+            $client->sendTopicMessage(
+                $message,
+                $client->MainExchange,
+                $client->OrgCreatedTopic
+            );
         }
     }
 
@@ -78,8 +90,11 @@ class Notify
             $proto->setUserId($userId);
             $proto->setBadgeId($badgeId);
             $message = $client->createMessageFromProto($proto);
-            $client->sendTopicMessage($message, $client->MainExchange,
-                    $client->UserBadgeAwardedTopic);
+            $client->sendTopicMessage(
+                $message,
+                $client->MainExchange,
+                $client->UserBadgeAwardedTopic
+            );
         }
     }
 
@@ -88,12 +103,15 @@ class Notify
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
             $message = $messagingClient->createMessageFromProto($feedback);
-            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                    $messagingClient->UserFeedbackTopic);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->UserFeedbackTopic
+            );
         }
     }
 
-    public static function notifyUserClaimedTask($userId, $taskId) 
+    public static function notifyUserClaimedTask($userId, $taskId)
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
@@ -101,9 +119,12 @@ class Notify
             $message_type->user_id = $userId;
             $message_type->task_id = $taskId;
             $message = $messagingClient->createMessageFromProto($message_type);
-            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
-                    $messagingClient->UserTaskClaimTopic);
-        } 
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->UserTaskClaimTopic
+            );
+        }
     }
 
     public static function sendPasswordResetEmail($user_id)
@@ -113,13 +134,15 @@ class Notify
             $message_type = new PasswordResetEmail();
             $message_type->setUserId($user_id);
             $message = $messagingClient->createMessageFromProto($message_type);
-            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
-                    $messagingClient->PasswordResetTopic);
-        } 
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->PasswordResetTopic
+            );
+        }
     }
 
     public static function notifyUserOrgMembershipRequest($user_id, $org_id, $accepted)
-
     {
         $org_dao = new OrganisationDao();
         $org = $org_dao->getOrg($org_id);
@@ -137,17 +160,23 @@ class Notify
                 $message_type->user_id = $user->getId();
                 $message_type->org_id = $org->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
-                $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
-                        $messagingClient->OrgMembershipAcceptedTopic);
+                $messagingClient->sendTopicMessage(
+                    $message,
+                    $messagingClient->MainExchange,
+                    $messagingClient->OrgMembershipAcceptedTopic
+                );
             } else {
                 $message_type = new OrgMembershipRefused();
                 $message_type->user_id = $user->getId();
                 $message_type->org_id = $org->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
-                $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
-                        $messagingClient->OrgMembershipRefusedTopic);
+                $messagingClient->sendTopicMessage(
+                    $message,
+                    $messagingClient->MainExchange,
+                    $messagingClient->OrgMembershipRefusedTopic
+                );
             }
-        } 
+        }
     }
 
     public static function notifyOrgClaimedTask($userId, $taskId)
@@ -162,8 +191,11 @@ class Notify
                 foreach ($subscribed_users as $user) {
                     $message_type->user_id = $user->getId();
                     $message = $messagingClient->createMessageFromProto($message_type);
-                    $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                            $messagingClient->TaskClaimedTopic);
+                    $messagingClient->sendTopicMessage(
+                        $message,
+                        $messagingClient->MainExchange,
+                        $messagingClient->TaskClaimedTopic
+                    );
                 }
             }
         }
@@ -177,8 +209,11 @@ class Notify
             $messageProto->setTaskId($taskId);
             $messageProto->setFileVersion($version);
             $message = $messagingClient->createMessageFromProto($messageProto);
-            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                    $messagingClient->TaskUploadNotificationTopic);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->TaskUploadNotificationTopic
+            );
         }
     }
 
@@ -192,10 +227,13 @@ class Notify
                 foreach ($subscribedUsers as $user) {
                     $message_type->user_id = $user->getId();
                     $message = $messagingClient->createMessageFromProto($message_type);
-                    $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                        $messagingClient->TaskArchivedTopic);
+                    $messagingClient->sendTopicMessage(
+                        $message,
+                        $messagingClient->MainExchange,
+                        $messagingClient->TaskArchivedTopic
+                    );
                 }
-            } 
+            }
         }
     }
 
@@ -207,8 +245,11 @@ class Notify
             $messageProto->setTaskId($taskId);
             $messageProto->setClaimantId($claimantId);
             $message = $client->createMessageFromProto($messageProto);
-            $client->sendTopicMessage($message, $client->MainExchange,
-                    $client->TaskRevokedTopic);
+            $client->sendTopicMessage(
+                $message,
+                $client->MainExchange,
+                $client->TaskRevokedTopic
+            );
         }
     }
 }

@@ -38,7 +38,7 @@ class IO {
     public function cleanseInputKeepHTML($str)
     {
         if (get_magic_quotes_gpc()) {
-                $str = stripslashes($str);
+            $str = stripslashes($str);
         }
         return $str;
     }
@@ -107,39 +107,39 @@ class IO {
      */
     public static function downloadFile($absoluteFilePath, $contentType)
     {
-        if (file_exists ($absoluteFilePath)) {
-                $fsize = filesize($absoluteFilePath);
-                $path_parts = pathinfo($absoluteFilePath);
-                header('Content-type: '.$contentType);
-                header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
-                header("Content-length: $fsize");
-                header("X-Frame-Options: ALLOWALL");
-                header("Cache-control: private"); //use this to open files directly
-                header("X-Sendfile: ".realpath($absoluteFilePath));
-               // TODO -> this die is to get around Slim's $app->reponse() header/body response.
-                    // Is there a cleaner way to download files?
+        if (file_exists($absoluteFilePath)) {
+            $fsize = filesize($absoluteFilePath);
+            $path_parts = pathinfo($absoluteFilePath);
+            header('Content-type: '.$contentType);
+            header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
+            header("Content-length: $fsize");
+            header("X-Frame-Options: ALLOWALL");
+            header("Cache-control: private"); //use this to open files directly
+            header("X-Sendfile: ".realpath($absoluteFilePath));
+            // TODO -> this die is to get around Slim's $app->reponse() header/body response.
+            // Is there a cleaner way to download files?
         }
         die;
     }
     
     
-    public static function downloadConvertedFile($absoluteFilePath, $contentType,$taskID)
+    public static function downloadConvertedFile($absoluteFilePath, $contentType, $taskID)
     {
-        if ($fd = fopen ($absoluteFilePath, "r")) {
-                $fsize = filesize($absoluteFilePath);
-                $path_parts = pathinfo($absoluteFilePath);
-                header('Content-type: '.$contentType);
-                header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
-                header("Content-length: $fsize");
-                header("X-Frame-Options: ALLOWALL");
-                header("Cache-control: private"); //use this to open files directly
-//                header("X-Sendfile: ".realpath($absoluteFilePath));
-                $file = file_get_contents($absoluteFilePath);
-                echo FormatConverter::convertToXliff($file,$taskID,$path_parts["basename"]);
-                die; // TODO -> this die is to get around Slim's $app->reponse() header/body response.
-                    // Is there a cleaner way to download files?
+        if ($fd = fopen($absoluteFilePath, "r")) {
+            $fsize = filesize($absoluteFilePath);
+            $path_parts = pathinfo($absoluteFilePath);
+            header('Content-type: '.$contentType);
+            header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
+            header("Content-length: $fsize");
+            header("X-Frame-Options: ALLOWALL");
+            header("Cache-control: private"); //use this to open files directly
+//          header("X-Sendfile: ".realpath($absoluteFilePath));
+            $file = file_get_contents($absoluteFilePath);
+            echo FormatConverter::convertToXliff($file, $taskID, $path_parts["basename"]);
+            die; // TODO -> this die is to get around Slim's $app->reponse() header/body response.
+            // Is there a cleaner way to download files?
         }
-        fclose ($fd);
+        fclose($fd);
         return;
     }
     
@@ -159,19 +159,19 @@ class IO {
             ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
             ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
             ,"xlf"  => "application/xliff+xml"
-        ); 
+        );
         
         $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mime = $finfo->buffer($file);    
+        $mime = $finfo->buffer($file);
         
         $extension = explode(".", $filename);
         $extension = $extension[count($extension)-1];
         
-        if(($mime == "application/zip" || ($extension == "xlf")) && array_key_exists($extension, $mimeMap)) {
+        if (($mime == "application/zip" || ($extension == "xlf")) && array_key_exists($extension, $mimeMap)) {
             $result = $mimeMap[$extension];
         } else {
             $result = $mime;
-        }             
+        }
         return $result;
     }
 }
