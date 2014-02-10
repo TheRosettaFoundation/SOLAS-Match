@@ -370,12 +370,14 @@ class ProjectRouteHandler
         $user_id = UserSession::getCurrentUserID();
 
         $extraScripts = "
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>".
-            "<script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\">".
-            "</script>".
-            "<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>".
-            "<script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Projects/ProjectCreate.dart.js\"></script>";
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Projects/ProjectCreate.dart.js\"></script>
+<span class=\"hidden\">
+";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Projects/ProjectCreateForm.html");
+        $extraScripts .= "</span>";
 
         $app->view()->appendData(array(
             "maxFileSize"   => TemplateHelper::maxFileSizeBytes(),

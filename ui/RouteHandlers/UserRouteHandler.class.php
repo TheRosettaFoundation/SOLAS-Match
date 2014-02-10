@@ -119,7 +119,7 @@ class UserRouteHandler
 <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
 <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
 <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/home.dart.js\"></script>
-<span style=\"display:none; visibility:hidden;\">
+<span class=\"hidden\">
 ";
         $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
         $extra_scripts .= "</span>";
@@ -454,8 +454,10 @@ class UserRouteHandler
 <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
 <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
 <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/UserPrivateProfile.dart.js\"></script>
+<span class=\"hidden\">
 ";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
+        $extraScripts .= "</span>";
 
         $app->view()->appendData(array(
             "user"              => $loggedInuser,
