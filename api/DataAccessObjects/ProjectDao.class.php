@@ -38,8 +38,8 @@ class ProjectDao
         TagsDao::updateTags($project->getId(), $project->getTagList());
         $project = ModelFactory::buildModel("Project", $result[0]);
         $projectTags = self::getTags($project->getId());
-        if($projectTags) {
-            foreach($projectTags as $tag) {
+        if ($projectTags) {
+            foreach ($projectTags as $tag) {
                 $project->addTag($tag);
             }
         }
@@ -54,16 +54,28 @@ class ProjectDao
             $proto = new CalculateProjectDeadlinesRequest();
             $proto->setProjectId($projectId);
             $message = $messagingClient->createMessageFromProto($proto);
-            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange,
-                    $messagingClient->CalculateProjectDeadlinesTopic);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->CalculateProjectDeadlinesTopic
+            );
         }
     }
     
-    public static function getProject($id=null, $title=null, $description=null, $impact=null, $deadline=null, $orgId=null,
-                                        $reference=null, $wordCount=null, $created=null, $countryCode=null, $languageCode=null)
-    {
+    public static function getProject(
+        $id = null,
+        $title = null,
+        $description = null,
+        $impact = null,
+        $deadline = null,
+        $orgId = null,
+        $reference = null,
+        $wordCount = null,
+        $created = null,
+        $countryCode = null,
+        $languageCode = null
+    ) {
         $projects = array();
-        
         $args = PDOWrapper::cleanseNull($id)
                 .",".PDOWrapper::cleanseNullOrWrapStr($title)
                 .",".PDOWrapper::cleanseNullOrWrapStr($description)
@@ -75,18 +87,15 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($created)
                 .",".PDOWrapper::cleanseNullOrWrapStr($countryCode)
                 .",".PDOWrapper::cleanseNullOrWrapStr($languageCode);
-        
         $result = PDOWrapper::call("getProject", $args);
-        if($result) {
-            foreach($result as $row) {
+        if ($result) {
+            foreach ($result as $row) {
                 $projects[] = ModelFactory::buildModel("Project", $row);
             }
         }
-
-        if(count($projects) == 0) {
+        if (count($projects) == 0) {
             $projects = null;
         }
-
         return $projects;
     }
 
@@ -94,20 +103,28 @@ class ProjectDao
     {
         $args = PDOWrapper::cleanseNull($projectId)
                 .",".PDOWrapper::cleanseNull($userId);
-        
-        $result = PDOWrapper::call("archiveProject", $args);        
-        if($result) {
+        $result = PDOWrapper::call("archiveProject", $args);
+        if ($result) {
             return ModelFactory::buildModel("ArchivedProject", $result[0]);
         } else {
             return null;
         }
     }
 
-    public static function getArchivedProject($id=null,$orgId=null, $title=null, $description=null, $impact=null, $deadline=null,  $reference=null,
-                                                $wordCount=null, $created=null, $archivedDate=null, $userIdArchived=null)
-    {
+    public static function getArchivedProject(
+        $id = null,
+        $orgId = null,
+        $title = null,
+        $description = null,
+        $impact = null,
+        $deadline = null,
+        $reference = null,
+        $wordCount = null,
+        $created = null,
+        $archivedDate = null,
+        $userIdArchived = null
+    ) {
         $projects = array();
-        
         $args = PDOWrapper::cleanseNull($id)
                 .",".PDOWrapper::cleanseNullOrWrapStr($title)
                 .",".PDOWrapper::cleanseNullOrWrapStr($description)
@@ -119,19 +136,15 @@ class ProjectDao
                 .",".PDOWrapper::cleanseWrapStr($created)
                 .",".PDOWrapper::cleanseNullOrWrapStr($archivedDate)
                 .",".PDOWrapper::cleanseNull($userIdArchived);
-        
         $result = PDOWrapper::call("getArchivedProject", $args);
-        
-        if($result) {           
-            foreach($result as $row) {
+        if ($result) {
+            foreach ($result as $row) {
                 $projects[] = ModelFactory::buildModel("ArchivedProject", $row);
             }
         }
-
-        if(count($projects) == 0) {
+        if (count($projects) == 0) {
             $projects = null;
         }
-        
         return $projects;
     }
 
@@ -142,16 +155,15 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNull($projectId)
                 .",null, null, null, null, null, null, null, null, null, null, null, null";
         $result = PDOWrapper::call("getTask", $args);
-        if($result) {
+        if ($result) {
             $tasks = array();
-            foreach($result as $row) {
+            foreach ($result as $row) {
                 $task = ModelFactory::buildModel("Task", $row);
-                if(is_object($task)) {
+                if (is_object($task)) {
                     $tasks[] = $task;
                 }
             }
         }
-
         return $tasks;
     }
     
@@ -173,7 +185,7 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNull($tagId);
         
         $result = PDOWrapper::call("removeProjectTag", $args);
-        if($result) {
+        if ($result) {
             return $result[0]['result'];
         } else {
             return null;
@@ -182,7 +194,7 @@ class ProjectDao
 
     public static function removeAllProjectTags($projectId)
     {
-        if($tags = self::getTags($projectId)) {
+        if ($tags = self::getTags($projectId)) {
             foreach ($tags as $tag) {
                 self::removeProjectTag($projectId, $tag->getId());
             }
@@ -200,30 +212,32 @@ class ProjectDao
     {
         $args = PDOWrapper::cleanseNull($projectId)
                 .",".PDOWrapper::cleanseNull($tagId);
-        
         $result = PDOWrapper::call("addProjectTag", $args);
-        if($result) {
+        if ($result) {
             return $result[0]['result'];
         } else {
             return null;
         }
     }
     
-    public static function getProjectFileInfo($project_id, $user_id=null, $filename=null, $token=null, $mime=null)
-    {        
+    public static function getProjectFileInfo(
+        $project_id,
+        $user_id = null,
+        $filename = null,
+        $token = null,
+        $mime = null
+    ) {
         $args = PDOWrapper::cleanseNull($project_id)
                 .",".PDOWrapper::cleanseNull($user_id)
                 .",".PDOWrapper::cleanseNullOrWrapStr($filename)
                 .",".PDOWrapper::cleanseNullOrWrapStr($token)
                 .",".PDOWrapper::cleanseNullOrWrapStr($mime);
-        
         $result = PDOWrapper::call("getProjectFile", $args);
-        
-        if($result) {
+        if ($result) {
             return ModelFactory::buildModel("ProjectFile", $result[0]);
         } else {
             return null;
-        }        
+        }
     }
     
     public static function getProjectFile($projectId)
@@ -234,22 +248,24 @@ class ProjectDao
         IO::downloadFile($source, $projectFileInfo->getMime());
     }
     
-    public static function saveProjectFile($projectId,$file,$filename,$userId)
+    public static function saveProjectFile($projectId, $file, $filename, $userId)
     {
         $destination =Settings::get("files.upload_path")."proj-$projectId/";
-        if(!file_exists($destination)) mkdir ($destination);
+        if (!file_exists($destination)) {
+            mkdir($destination);
+        }
         $mime = IO::detectMimeType($file, $filename);
         $apiHelper = new APIHelper(Settings::get("ui.api_format"));
-        $canonicalMime = $apiHelper->getCanonicalMime($filename);        
+        $canonicalMime = $apiHelper->getCanonicalMime($filename);
         if (!is_null($canonicalMime) && $mime != $canonicalMime) {
             $message = "The content type ($mime) of the file you are trying to upload does not";
             $message .= " match the content type ($canonicalMime) expected from its extension.";
             throw new SolasMatchException($message, HttpStatusEnum::BAD_REQUEST);
         }
-        $token=self::recordProjectFileInfo($projectId,$filename,$userId,$mime);
+        $token = self::recordProjectFileInfo($projectId, $filename, $userId, $mime);
         try {
             file_put_contents($destination.$token, $file);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
             throw new SolasMatchException($message, HttpStatusEnum::CONFLICT);
         }
@@ -257,7 +273,7 @@ class ProjectDao
         return $token;
     }
     
-    public static function recordProjectFileInfo($projectId,$filename,$userId, $mime)
+    public static function recordProjectFileInfo($projectId, $filename, $userId, $mime)
     {
         $token = $filename;//generate guid in future.
         $args = PDOWrapper::cleanseNull($projectId)
@@ -265,19 +281,30 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($filename)
                 .",".PDOWrapper::cleanseNullOrWrapStr($token)
                 .",".PDOWrapper::cleanseNullOrWrapStr($mime);
-        
-        $result = PDOWrapper::call("addProjectFile", $args);        
-        if($result[0]['result'] == "1") {            
+        $result = PDOWrapper::call("addProjectFile", $args);
+        if ($result[0]['result'] == "1") {
             return $token;
         } else {
             return null;
-        }        
+        }
     }
     
-    public static function getArchivedTask($projectId, $archiveId=null, $title=null, $comment=null, $deadline=null,
-            $wordCount=null, $createdTime=null, $sourceLanguageId=null, $targetLanguageId=null, $sourceCountryId=null,
-            $targetCountryId=null, $taskTypeId=null, $taskStatusId=null, $published=null)
-    {
+    public static function getArchivedTask(
+        $projectId,
+        $archiveId = null,
+        $title = null,
+        $comment = null,
+        $deadline = null,
+        $wordCount = null,
+        $createdTime = null,
+        $sourceLanguageId = null,
+        $targetLanguageId = null,
+        $sourceCountryId = null,
+        $targetCountryId = null,
+        $taskTypeId = null,
+        $taskStatusId = null,
+        $published = null
+    ) {
         $args = PDOWrapper::cleanseNull($archiveId)
                 .",".PDOWrapper::cleanseNull($projectId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($title)
@@ -292,33 +319,30 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNull($taskTypeId)
                 .",".PDOWrapper::cleanseNull($taskStatusId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($published);
-        
         $ret = null;
-        if ($result = PDOWrapper::call("getArchivedTask", $args)) { 
-           $ret = array();
+        if ($result = PDOWrapper::call("getArchivedTask", $args)) {
+            $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("ArchivedTask", $row);
             }
         }
-        return $ret; 
+        return $ret;
     }
     
     public static function deleteProjectTags($projectId)
     {
-        $args = PDOWrapper::cleanseNull($projectId);        
-           
-        if($result = PDOWrapper::call("deleteProjectTags", $args)) {
+        $args = PDOWrapper::cleanseNull($projectId);
+        if ($result = PDOWrapper::call("deleteProjectTags", $args)) {
             return $result[0]['result'];
         } else {
             return null;
         }
-    }   
+    }
     
     public static function delete($projectId)
     {
         $args = PDOWrapper::cleanseNull($projectId);
-        
-        if($result = PDOWrapper::call("deleteProject", $args)) {
+        if ($result = PDOWrapper::call("deleteProject", $args)) {
             return $result[0]['result'];
         } else {
             return null;

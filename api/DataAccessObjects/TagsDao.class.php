@@ -4,20 +4,19 @@ require_once __DIR__."/../../Common/models/Tag.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class TagsDao
-{        
-    public static function getTag($id=null, $label=null, $limit=30)
+{
+    public static function getTag($id = null, $label = null, $limit = 30)
     {
         $ret = null;
         $args = PDOWrapper::cleanseNull($id)
                 .",".PDOWrapper::cleanseNullOrWrapStr($label)
                 .",".PDOWrapper::cleanseNull($limit);
-        
-        if($result = PDOWrapper::call("getTag", $args)) {
+        if ($result = PDOWrapper::call("getTag", $args)) {
             $ret = array();
             foreach ($result as $tag) {
                 $ret[] = ModelFactory::buildModel("Tag", $tag);
             }
-        }        
+        }
         return $ret;
     }
 
@@ -41,9 +40,8 @@ class TagsDao
     private static function insert($tag)
     {
         $args = PDOWrapper::cleanseWrapStr($tag->getLabel());
-        
         $result = PDOWrapper::call("tagInsert", $args);
-        if($result) {
+        if ($result) {
             return ModelFactory::buildModel("Tag", $result[0]);
         } else {
             return null;
@@ -54,15 +52,14 @@ class TagsDao
     {
         $ret = null;
         $args = PDOWrapper::cleanseNull($limit);
-        
         if ($result = PDOWrapper::call("getTopTags", $args)) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = ModelFactory::buildModel("Tag", $row);
             }
         }
-        return $ret;           
-     }
+        return $ret;
+    }
 
     public static function delete($id)
     {
@@ -71,7 +68,7 @@ class TagsDao
             return $result[0]['result'];
         }
         return null;
-    }  
+    }
 
     public static function searchForTag($name)
     {
@@ -87,28 +84,30 @@ class TagsDao
     }
     
     public static function updateTags($projectId, $updatedProjectTagList)
-    {        
-        if($updatedProjectTagList) {
-            if(is_null($oldProjectTagList = ProjectDao::getTags($projectId))) $oldProjectTagList = array();
+    {
+        if ($updatedProjectTagList) {
+            if (is_null($oldProjectTagList = ProjectDao::getTags($projectId))) {
+                $oldProjectTagList = array();
+            }
             
             $tagsToRemove = array_udiff($oldProjectTagList, $updatedProjectTagList, 'TagsDao::compareTo');
 
-            if(!empty($tagsToRemove)) {                    
-                foreach($tagsToRemove as $removedTag) {
-                    ProjectDao::removeProjectTag($projectId, $removedTag->getId()); 
+            if (!empty($tagsToRemove)) {
+                foreach ($tagsToRemove as $removedTag) {
+                    ProjectDao::removeProjectTag($projectId, $removedTag->getId());
                 }
-            } 
+            }
 
             $tagsToAdd = array_udiff($updatedProjectTagList, $oldProjectTagList, 'TagsDao::compareTo');
 
-            if(!empty($tagsToAdd)) {                    
-                foreach($tagsToAdd as $newTag) {
-                    if($tagExists = TagsDao::getTag(null, $newTag->getLabel())) {
+            if (!empty($tagsToAdd)) {
+                foreach ($tagsToAdd as $newTag) {
+                    if ($tagExists = TagsDao::getTag(null, $newTag->getLabel())) {
                         ProjectDao::addProjectTag($projectId, $tagExists[0]->getId());
                     } else {
                         $tag = TagsDao::create($newTag->getLabel());
                         ProjectDao::addProjectTag($projectId, $tag->getId());
-                    } 
+                    }
                 }
             }
         }

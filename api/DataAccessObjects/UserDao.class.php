@@ -9,22 +9,20 @@ require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
 
 class UserDao
 {
-	
-	public static function getLoggedInUser()
+    
+    public static function getLoggedInUser()
     {
-		$resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
+        $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
         // Test for token existance and validity
         try {
             $resource->isValid(true);
-            $parts =explode(" ",$_SERVER['HTTP_AUTHORIZATION']);
+            $parts =explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
             return UserDao::getByOauthToken($parts[1]);
-        }
-        // The access token is missing or invalid...
-        catch (League\OAuth2\Server\Exception\InvalidAccessTokenException $e)
-        {
+        } catch (League\OAuth2\Server\Exception\InvalidAccessTokenException $e) {
+            //The access token is missing or invalid...
             return null;
         }
-    } 
+    }
     
     public static function create($email, $clear_password)
     {
@@ -55,8 +53,7 @@ class UserDao
         $userId = $user->getId();
         $nativeLanguageCode = null;
         $nativeCountryCode = null;
-        
-        if(!is_null($userId) && $user->hasNativeLocale()) {
+        if (!is_null($userId) && $user->hasNativeLocale()) {
             $nativeLocale = $user->getNativeLocale();
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
@@ -64,11 +61,9 @@ class UserDao
                 BadgeDao::assignBadge($user->getId(), BadgeTypes::NATIVE_LANGUAGE);
             }
         }
-
         if ($user->getBiography() != '') {
             BadgeDao::assignBadge($user->getId(), BadgeTypes::PROFILE_FILLER);
         }
-
         $args = PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
                 .",".PDOWrapper::cleanseNull($user->getNonce())
                 .",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword())
@@ -79,7 +74,7 @@ class UserDao
                 .",".PDOWrapper::cleanseNull($userId);
         
         $result = PDOWrapper::call('userInsertAndUpdate', $args);
-        if(!is_null($result)) {
+        if (!is_null($result)) {
             return ModelFactory::buildModel("User", $result[0]);
         } else {
             return null;
@@ -99,18 +94,21 @@ class UserDao
         $user = self::getUser(null, $email);
 
         if (!is_object($user)) {
-            throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect.
-                                                Please check the credentials used and try again.');
+            throw new InvalidArgumentException(
+                'Sorry, the password or username entered is incorrect. Please check the credentials used and try again.'
+            );
         }
 
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
-            throw new InvalidArgumentException('Sorry, the  password or username entered is incorrect.
-                                                Please check the credentials used and try again.');
+            throw new InvalidArgumentException(
+                'Sorry, the password or username entered is incorrect. Please check the credentials used and try again.'
+            );
         }
 
         if ($clear_password === '') {
-            throw new InvalidArgumentException('Sorry, an empty password is not allowed.
-                                                Please contact the site administrator for details');
+            throw new InvalidArgumentException(
+                'Sorry, an empty password is not allowed. Please contact the site administrator for details'
+            );
         }
 
         UserSession::setSession($user->getId());
@@ -121,16 +119,16 @@ class UserDao
     {
         $user = self::getUser(null, $email);
         
-        if(is_array($user)) {
+        if (is_array($user)) {
             $user = $user[0];
         }
         
-        if (!is_object($user)) {            
+        if (!is_object($user)) {
             self::logLoginAttempt(null, $email, 0);
             throw new Exception(HttpStatusEnum::NOT_FOUND);
-        }        
+        }
                 
-        if ( !self::isUserVerified($user->getId())) {
+        if (!self::isUserVerified($user->getId())) {
              self::logLoginAttempt($user->getId(), $email, 0);
              throw new Exception(HttpStatusEnum::UNAUTHORIZED);
         }
@@ -154,7 +152,7 @@ class UserDao
     {
         $user = self::getUser(null, $email);
         
-        if(is_array($user)) {
+        if (is_array($user)) {
             $user = $user[0];
         }
 
@@ -211,7 +209,7 @@ class UserDao
         return $ret;
     }
        
-    public static function openIdLogin($openid,$app)
+    public static function openIdLogin($openid, $app)
     {
         if (!$openid->mode) {
             try {
@@ -229,7 +227,9 @@ class UserDao
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
                 $user = self::getUser(null, $retvals['contact/email']);
-                if(is_array($user)) $user = $user[0];
+                if (is_array($user)) {
+                    $user = $user[0];
+                }
                 if (!is_object($user)) {
                     $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
                 }
@@ -275,7 +275,7 @@ class UserDao
         return $ret;
     }
 
-    public static function findOrganisationsUserBelongsTo($user_id) 
+    public static function findOrganisationsUserBelongsTo($user_id)
     {
         $ret = null;
         $args = PDOWrapper::cleanse($user_id);
@@ -306,7 +306,7 @@ class UserDao
         $ret = null;
         $args = PDOWrapper::cleanse($userId);
         if ($result = PDOWrapper::call("getUserTaskStreamNotification", $args)) {
-            $ret = ModelFactory::buildModel("UserTaskStreamNotification", $result[0]);;
+            $ret = ModelFactory::buildModel("UserTaskStreamNotification", $result[0]);
         }
         return $ret;
     }
@@ -339,7 +339,7 @@ class UserDao
         return $ret;
     }
 
-    public static function getUserTags($user_id, $limit=null)
+    public static function getUserTags($user_id, $limit = null)
     {
         $ret = null;
         $args = PDOWrapper::cleanse($user_id)
@@ -356,9 +356,17 @@ class UserDao
     }
     
 
-    public static function getUser($user_id=null, $email=null, $nonce=null, $password=null, $display_name=null, $biography=null
-                            , $native_language_id=null, $native_region_id=null, $created=null)
-    {
+    public static function getUser(
+        $user_id = null,
+        $email = null,
+        $nonce = null,
+        $password = null,
+        $display_name = null,
+        $biography = null,
+        $native_language_id = null,
+        $native_region_id = null,
+        $created = null
+    ) {
         $ret = null;
         $args = PDOWrapper::cleanseNull($user_id)
                 .",".PDOWrapper::cleanseNullOrWrapStr($display_name)
@@ -376,7 +384,7 @@ class UserDao
                 $ret[] = ModelFactory::buildModel("User", $row);
             }
         }
-        return $ret;        
+        return $ret;
     }
     
     /*
@@ -428,7 +436,7 @@ class UserDao
     /*
         Get list of tasks in User's notification list
     */
-    public static function getUserNotificationList($user_id) 
+    public static function getUserNotificationList($user_id)
     {
         $args = PDOWrapper::cleanseNull($user_id);
         if ($result = PDOWrapper::call('getUserNotifications', $args)) {
@@ -517,12 +525,12 @@ class UserDao
     public static function createPasswordReset($user)
     {
         $ret = null;
-        if(!self::hasRequestedPasswordReset($user->getEmail())) { 
+        if (!self::hasRequestedPasswordReset($user->getEmail())) {
             $uid = md5(uniqid(rand()));
             $ret = self::addPasswordResetRequest($uid, $user->getId());
         }
         return $ret;
-    }    
+    }
     
     /*
         Add password reset request to DB for this user
@@ -534,7 +542,7 @@ class UserDao
         
         $result = PDOWrapper::call("addPasswordResetRequest", $args);
         
-        if($result) {
+        if ($result) {
             return $result[0]['result'];
         } else {
             return null;
@@ -546,7 +554,7 @@ class UserDao
         $args = PDOWrapper::cleanse($user_id);
         $result = PDOWrapper::call("removePasswordResetRequest", $args);
         
-        if($result) {
+        if ($result) {
             return $result[0]['result'];
         } else {
             return null;
@@ -555,10 +563,10 @@ class UserDao
 
     /*
         Check if a user has requested a password reset
-    */    
+    */
     public static function hasRequestedPasswordReset($email)
     {
-        if(self::getPasswordResetRequests($email)) {
+        if (self::getPasswordResetRequests($email)) {
             return true;
         } else {
             return false;
@@ -568,22 +576,21 @@ class UserDao
     /*
         Get Password Reset Requests
     */
-    public static function getPasswordResetRequests($email, $uniqueId=null)
+    public static function getPasswordResetRequests($email, $uniqueId = null)
     {
         $args = PDOWrapper::cleanseNullOrWrapStr($uniqueId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($email);
-        
-        if($result = PDOWrapper::call("getPasswordResetRequests", $args)) {
-            return ModelFactory::buildModel("PasswordResetRequest", $result[0]);            
+        if ($result = PDOWrapper::call("getPasswordResetRequests", $args)) {
+            return ModelFactory::buildModel("PasswordResetRequest", $result[0]);
         } else {
             return null;
         }
-    }    
+    }
 
     public static function passwordReset($password, $key)
     {
         $reset_request = self::getPasswordResetRequests(null, $key);
-        if(is_null($reset_request->getUserId())) {
+        if (is_null($reset_request->getUserId())) {
             return 0;
         } elseif (self::changePassword($reset_request->getUserId(), $password)) {
             self::removePasswordResetRequest($reset_request->getUserId());
@@ -613,27 +620,28 @@ class UserDao
             $request = new UserReferenceEmail();
             $request->setUserId($userId);
             $message = $messagingClient->createMessageFromProto($request);
-            $messagingClient->sendTopicMessage($message, $messagingClient->MainExchange, 
-                    $messagingClient->UserReferenceRequestTopic);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->UserReferenceRequestTopic
+            );
         }
     }
 
-    public static function trackProject($projectID,$userID)
+    public static function trackProject($projectID, $userID)
     {
         $args = PDOWrapper::cleanse($projectID)
                 .",".PDOWrapper::cleanse($userID);
-        
         if ($result = PDOWrapper::call("userTrackProject", $args)) {
             return $result[0]["result"];
         }
         return null;
     }
     
-    public static function unTrackProject($projectID,$userID)
+    public static function unTrackProject($projectID, $userID)
     {
         $args = PDOWrapper::cleanse($projectID)
                 .",".PDOWrapper::cleanse($userID);
-        
         if ($result = PDOWrapper::call("userUnTrackProject", $args)) {
             return $result[0]["result"];
         }
@@ -642,17 +650,17 @@ class UserDao
     
     public static function createPersonalInfo($userInfo)
     {
-        return self::savePersonalInfo($userInfo);     
+        return self::savePersonalInfo($userInfo);
     }
             
     public static function updatePersonalInfo($userInfo)
     {
-        return self::savePersonalInfo($userInfo); 
+        return self::savePersonalInfo($userInfo);
     }
     
     private static function savePersonalInfo($userInfo)
     {
-        $ret = null;        
+        $ret = null;
         $args = PDOWrapper::cleanseNull($userInfo->getId())
                 .",".PDOWrapper::cleanseNull($userInfo->getUserId())
                 .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getFirstName())
@@ -664,17 +672,25 @@ class UserDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress())
                 .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity())
                 .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry());
-        
         if ($result = PDOWrapper::call("userPersonalInfoInsertAndUpdate", $args)) {
             $ret = ModelFactory::buildModel("UserPersonalInformation", $result[0]);
-            
         }
         return $ret;
     }
     
-    public static function getPersonalInfo($id, $userId=null, $firstName=null, $lastName=null, $mobileNumber=null,
-                            $businessNumber=null, $sip=null, $jobTitle=null, $address=null, $city=null, $country=null)
-    {
+    public static function getPersonalInfo(
+        $id,
+        $userId = null,
+        $firstName = null,
+        $lastName = null,
+        $mobileNumber = null,
+        $businessNumber = null,
+        $sip = null,
+        $jobTitle = null,
+        $address = null,
+        $city = null,
+        $country = null
+    ) {
         $ret = null;
         $args = PDOWrapper::cleanseNull($id)
                 .",".PDOWrapper::cleanseNull($userId)
@@ -692,7 +708,7 @@ class UserDao
             $ret = ModelFactory::buildModel("UserPersonalInformation", $result[0]);
             
         }
-        return $ret;        
+        return $ret;
     }
     
     public static function createSecondaryLanguage($userId, $locale)
@@ -701,29 +717,26 @@ class UserDao
         $args = PDOWrapper::cleanseNull($userId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($locale->getLanguageCode())
                 .",".PDOWrapper::cleanseNullOrWrapStr($locale->getCountryCode());
-        
         if ($result = PDOWrapper::call("userSecondaryLanguageInsert", $args)) {
             $ret = ModelFactory::buildModel("Locale", $result[0]);
         }
-
         if (count(self::getSecondaryLanguages($userId)) > 1) {
             BadgeDao::assignBadge($userId, BadgeTypes::POLYGLOT);
         }
         return $ret;
     }
     
-    public static function getSecondaryLanguages($userId=null)
+    public static function getSecondaryLanguages($userId = null)
     {
         $ret = null;
         $args = PDOWrapper::cleanseNull($userId);
         if ($result = PDOWrapper::call("getUserSecondaryLanguages", $args)) {
             $ret = array();
-            foreach($result as $locale) {
+            foreach ($result as $locale) {
                 $ret[] = ModelFactory::buildModel("Locale", $locale);
             }
-            
         }
-        return $ret;        
+        return $ret;
     }
     
     public static function deleteSecondaryLanguage($userId, $languageCode, $countryCode)
@@ -732,11 +745,10 @@ class UserDao
         $args = PDOWrapper::cleanseNull($userId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($languageCode)
                 .",".PDOWrapper::cleanseNullOrWrapStr($countryCode);
-        
         if ($result = PDOWrapper::call("deleteUserSecondaryLanguage", $args)) {
-            return $result[0]['result'];            
+            return $result[0]['result'];
         }
-        return $ret;        
+        return $ret;
     }
     
     public static function deleteUser($userId)
@@ -749,7 +761,7 @@ class UserDao
     {
         $args = PDOWrapper::cleanseNull($userId)
             .",".PDOWrapper::cleanseNullOrWrapStr($email)
-            .",".PDOWrapper::cleanseNull($loginSuccess);        
+            .",".PDOWrapper::cleanseNull($loginSuccess);
         PDOWrapper::call("userLoginInsert", $args);
     }
     
@@ -758,8 +770,8 @@ class UserDao
         $ret = null;
         $args = PDOWrapper::cleanseNull($userId)
                 .",".PDOWrapper::cleanseNull($taskId);
-        if($result = PDOWrapper::call("isUserBlacklistedForTask", $args)) {
-            return $result[0]['result'];            
+        if ($result = PDOWrapper::call("isUserBlacklistedForTask", $args)) {
+            return $result[0]['result'];
         }
         return $ret;
     }
@@ -772,6 +784,6 @@ class UserDao
         if ($result) {
             $ret = ModelFactory::buildModel("User", $result[0]);
         }
-        return $ret;  
+        return $ret;
     }
 }
