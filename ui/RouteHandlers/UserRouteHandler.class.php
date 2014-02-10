@@ -119,8 +119,10 @@ class UserRouteHandler
 <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
 <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
 <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/home.dart.js\"></script>
+<span style=\"display:none; visibility:hidden;\">
 ";
         $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
+        $extra_scripts .= "</span>";
 
         $viewData['extra_scripts'] = $extra_scripts;
 
