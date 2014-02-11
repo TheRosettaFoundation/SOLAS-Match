@@ -49,26 +49,6 @@ def main(argv):
     locFile.write(ET.tostring(root))
     print 'Output written to ', outputFile
 
-'''
-oldXml = ET.parse("strings_old.xml")
-newXml = ET.parse("strings_new.xml")
-root = ET.Element("strings")
-for stringElement in newXml.findall('string'):
-    xpathQuery = ".//string[@name='" + stringElement.get("name") + "']"
-    oldElement = oldXml.getroot().find(xpathQuery)
-    if oldElement is not None:
-        encoding = "UTF-8"
-        oldValue = ET.tostring(oldElement, encoding)
-        newValue = ET.tostring(stringElement, encoding)
-        if oldValue != newValue:
-            print "Adding string " + stringElement.get("name")
-            root.append(stringElement)
-    else:
-        root.append(stringElement)
-locFile = open("strings_diff.xml", "w")
-locFile.write(ET.tostring(root))
-'''
-
 if __name__ == "__main__":
    main(sys.argv[1:])
 
