@@ -27,12 +27,6 @@ class OrgRouteHandler
         )->name("org-request-membership");
 
         $app->get(
-            "/org/:org_id/request/:user_id/:accept/",
-            array($middleware, "authUserForOrg"),
-            array($this, "orgProcessRequest")
-        )->name("org-process-request");
-
-        $app->get(
             "/org/:org_id/request/queue/",
             array($middleware, "authUserForOrg"),
             array($this, "orgRequestQueue")
