@@ -162,7 +162,13 @@ class GraphViewer
             $div->appendChild($view);
             $doc->appendChild($div);
         } else {
-            echo "<p>Unable to build graph, model is null</p>";     // This should be replaced
+            $message = $doc->createElement("div");
+            $message->setAttribute("class", "alert alert-info");
+
+            $fragment = $doc->createDocumentFragment();
+            $fragment->appendXML(Localisation::getTranslation("project_view_failed_build_graph"));
+            $message->appendChild($fragment);
+            $doc->appendChild($message);
         }
         foreach ($doc->childNodes as $child) {
             $ret .= $doc->saveXml($child);
