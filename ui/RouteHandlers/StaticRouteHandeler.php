@@ -4,7 +4,9 @@ class StaticRouteHandeler
 {
     public function init()
     {
-        $app = Slim::getInstance();
+
+        $app = \Slim\Slim::getInstance(); 
+
         $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");
         $app->get("/static/terms/", array($this, "terms"))->name("terms");
         $app->get("/static/faq/", array($this, "faq"))->name("faq");
@@ -18,35 +20,37 @@ class StaticRouteHandeler
 
     public function privacy()
     {
-         $app = Slim::getInstance();
+         $app = \Slim\Slim::getInstance();
          $app->render("static/privacy.tpl");
     }
     
     public function terms()
     {
-         $app = Slim::getInstance();
+         $app = \Slim\Slim::getInstance();
          $app->render("static/terms.tpl");
     }
     
     public function faq()
     {
-         $app = Slim::getInstance();
+         $app = \Slim\Slim::getInstance();
          $app->view()->appendData(array('current_page' => 'faq'));
          $app->render("static/FAQ.tpl");
     }
     
     public function videos()
     {
-         $app = Slim::getInstance();
+         $app = \Slim\Slim::getInstance();
          $app->view()->setData("current_page", "videos");
          $app->render("static/videos.tpl");
     }
     
     public function siteLanguage()
     {
-        $app = Slim::getInstance();
+
+        $app = \Slim\Slim::getInstance(); 
         if ($post = $app->request()->post()) {
             if (isset($post['language'])) {
+
                 UserSession::setUserLanguage($post['language']);
             }
             $app->redirect($app->request()->getReferrer());
@@ -59,20 +63,22 @@ class StaticRouteHandeler
     {
         if (!is_null(UserSession::getCurrentUserID())) {
             $dao = new UserDao();
-            Slim::getInstance()->response()->body($dao->getUserDart(UserSession::getCurrentUserID()));
+
+            \Slim\Slim::getInstance()->response()->body($dao->getUserDart(UserSession::getCurrentUserID()));
         }
     }
     
     public function getUserHash()
     {
         if (!is_null(UserSession::getAccessToken())) {
-            Slim::getInstance()->response()->body(UserSession::getAccessToken()->getToken());
+            \Slim\Slim::getInstance()->response()->body(UserSession::getAccessToken()->getToken()); 
         }
     }
     
     public function getStrings()
     {
-        Slim::getInstance()->response()->body(Localisation::getStrings());
+        \Slim\Slim::getInstance()->response()->body(Localisation::getStrings());
+
     }
 }
 

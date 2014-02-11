@@ -12,7 +12,7 @@ class UserRouteHandler
 {
     public function init()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $middleware = new Middleware();
 
         $app->get(
@@ -76,7 +76,7 @@ class UserRouteHandler
     
     public function home()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $viewData = array();
         $langDao = new LanguageDao();
         $tagDao = new TagDao();
@@ -132,14 +132,14 @@ class UserRouteHandler
 
     public function videos()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $app->view()->appendData(array('current_page' => 'videos'));
         $app->render("videos.tpl");
     }
 
     public function register()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         
         $use_openid = Settings::get("site.openid");
@@ -202,7 +202,7 @@ class UserRouteHandler
 
     public function emailVerification($uuid)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
 
         $user = $userDao->getRegisteredUser($uuid);
@@ -229,7 +229,7 @@ class UserRouteHandler
 
     public function passwordReset($uid)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         
         $reset_request = $userDao->getPasswordResetRequest($uid);
@@ -266,7 +266,7 @@ class UserRouteHandler
 
     public function passResetRequest()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         
         if ($app->request()->isPost()) {
@@ -312,14 +312,14 @@ class UserRouteHandler
     
     public function logout()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         UserSession::destroySession();    //TODO revisit when oauth is in place
         $app->redirect($app->urlFor("home"));
     }
 
     public function login()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         
         $error = null;
@@ -438,7 +438,7 @@ class UserRouteHandler
 
     public static function userPrivateProfile($userId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         
         $userDao = new UserDao();
         $loggedInuser = $userDao->getUser(UserSession::getCurrentUserID());
@@ -471,7 +471,7 @@ class UserRouteHandler
 
     public static function userPublicProfile($user_id)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
         $adminDao = new AdminDao();
@@ -583,7 +583,7 @@ class UserRouteHandler
 
     public function editTaskStreamNotification($userId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $userDao = new UserDao();
 
         $user = $userDao->getUser($userId);
@@ -656,7 +656,7 @@ class UserRouteHandler
 
     public function userTaskReviews($taskId)
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
 
         $task = $taskDao->getTask($taskId);

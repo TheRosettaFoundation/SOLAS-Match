@@ -7,7 +7,8 @@ require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 
 class Middleware
 {
-    public static function isloggedIn ($request, $response, $route)
+
+    public static function isloggedIn ()
     {
         if (!is_null(UserDao::getLoggedInUser())) {
             return true;
@@ -20,7 +21,7 @@ class Middleware
         }
     }
       
-    public static function registerValidation ($request, $response, $route)
+    public static function registerValidation (\Slim\Route $route)
     {
         $params = $route->getParams();
         if (isset($params['email']) && isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])) {
@@ -46,14 +47,14 @@ class Middleware
                 );
             }
         } else {
-            self::authUserOwnsResource($request, $response, $route);
+            self::authUserOwnsResource($route);
         }
     }
     
     // Does the user Id match the Id of the resources owner
-    public static function authUserOwnsResource($request, $response, $route)
+    public static function authUserOwnsResource(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -78,9 +79,9 @@ class Middleware
      * Check for authorising users to create tasks. This function should be available to
      * orgainisation members, admins, and general users who have claimed a segmentation task on that project
      */
-    public static function authUserOrOrgForTaskCreation($request, $response, $route)
+    public static function authUserOrOrgForTaskCreation(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -88,7 +89,9 @@ class Middleware
             $userId = $user->getId();
             $params = $route->getParams();
             
-            $task = $request->getBody();
+            $app = \Slim\Slim::getInstance();
+			$req = $app->request;
+            $task = $req->getBody();
             $format = $params['format'];
             $client = new APIHelper($format);
             $task = $client->deserialize($task, "Task");
@@ -126,9 +129,9 @@ class Middleware
      * orgainisation members, admins, and general users who have claimed a segmentation task on that project
      *  
      */
-    public static function authUserOrOrgForTaskCreationPassingTaskId($request, $response, $route)
+    public static function authUserOrOrgForTaskCreationPassingTaskId(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -141,8 +144,7 @@ class Middleware
                 $taskId = explode('.', $taskId);
                 $format = '.'.$taskId[1];
                 $taskId = $taskId[0];
-            }
-            
+            } 
             $task = null;
             if ($taskId != null) {
                 $tasks = TaskDao::getTask($taskId);
@@ -177,12 +179,12 @@ class Middleware
     }
     
     /*
-     * Does the user Id match the Id of the resources owner
+<    * Does the user Id match the Id of the resources owner
      * Or is it matching the Id of the organisations admin
      */
-    public static function authUserOrAdminForOrg($request, $response, $route)
+    public static function authUserOrAdminForOrg(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -224,9 +226,9 @@ class Middleware
     }
 
     // Is the user a site admin
-    public static function authenticateSiteAdmin($request, $response, $route)
+    public static function authenticateSiteAdmin()
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -240,9 +242,9 @@ class Middleware
     }
     
     // Is the user a member of ANY Organisation
-    public static function authenticateUserMembership($request, $response, $route)
+    public static function authenticateUserMembership()
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -261,9 +263,9 @@ class Middleware
     }
     
     // Is the user an Admin of the Organisation releated to the request
-    public static function authenticateOrgAdmin($request, $response, $route)
+    public static function authenticateOrgAdmin(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -291,9 +293,9 @@ class Middleware
     }
     
     // Is the user a member of the Organisation related to the request
-    public static function authenticateOrgMember($request, $response, $route)
+    public static function authenticateOrgMember(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -321,9 +323,9 @@ class Middleware
     }
     
     // Is the user a member of the Organisation who created the Project in question
-    public static function authenticateUserForOrgProject($request, $response, $route)
+    public static function authenticateUserForOrgProject(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -359,9 +361,9 @@ class Middleware
     }
     
     //Is the user a member of the Organisation who created the Task in question
-    public static function authenticateUserForOrgTask($request, $response, $route)
+    public static function authenticateUserForOrgTask(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -405,9 +407,9 @@ class Middleware
 
     // Does the user id match the current user or does the current user
     // belong to the organisation that created the task in question
-    public static function authUserOrOrgForTask($request, $response, $route)
+    public static function authUserOrOrgForTask(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -455,9 +457,9 @@ class Middleware
     }
 
     // Has the User claimed the task
-    public static function authUserForClaimedTask($request, $response, $route)
+    public static function authUserForClaimedTask(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -484,9 +486,9 @@ class Middleware
     }
     
     //Is the User a member of the organisation that created the task or has the user claimed the task
-    public static function authUserOrOrgForClaimedTask($request, $response, $route)
+    public static function authUserOrOrgForClaimedTask(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -527,9 +529,9 @@ class Middleware
     
     //Test if the User is a member of the Organisation that created
     //the task or has worked on one of the tasks of which this is a prerequisite
-    public static function authenticateUserToSubmitReview($request, $response, $route)
+    public static function authenticateUserToSubmitReview(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -540,7 +542,9 @@ class Middleware
             
             $format = $params['format'];
             $client = new APIHelper($format);
-            $review = $request->getBody();
+            $app = \Slim\Slim::getInstance();			
+			$req = $app->request;
+			$review = $req->getBody();
             $review = $client->deserialize($review, "TaskReview");
             
             $hasFollowupTask = false;
@@ -585,9 +589,9 @@ class Middleware
     }
 
     // Has the User claimed a task on this project or is the user a member of the organisation that created the project
-    public static function authenticateUserOrOrgForProjectTask($request, $response, $route)
+    public static function authenticateUserOrOrgForProjectTask(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -634,9 +638,9 @@ class Middleware
     }
 
     //Is the current user a member of the Organisation who created the Badge in question
-    public static function authenticateUserForOrgBadge($request, $response, $route)
+    public static function authenticateUserForOrgBadge(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -679,9 +683,9 @@ class Middleware
 
     //Does the user id match the current user or is the current
     //user a member of the Organisation who created the Badge in question
-    public static function authenticateUserOrOrgForOrgBadge($request, $response, $route)
+    public static function authenticateUserOrOrgForOrgBadge(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -733,9 +737,9 @@ class Middleware
     }
     
     // Does User have required badge
-    public static function authenticateUserHasBadge($request, $response, $route)
+    public static function authenticateUserHasBadge(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
@@ -767,23 +771,23 @@ class Middleware
      * Test if the task the user is trying to claim has already been claimed
      * Prevents two claiments on the same task, admins will still be able to claim a task in all cases 
      */
-    public static function authenticateTaskNotClaimed($request, $response, $route)
+    public static function authenticateTaskNotClaimed(\Slim\Route $route)
     {
-        if (self::isloggedIn($request, $response, $route)) {
+        if (self::isloggedIn()) {
             $user = UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
             $params = $route->getParams();
-            
-            $task = $request->getBody();
+            $app = \Slim\Slim::getInstance();
+			$req = $app->request;
+            $task = $req->getBody();
             $format = $params['format'];
             $client = new APIHelper($format);
             $task = $client->deserialize($task, "Task");
             
             $taskId = $task->getId();
-            
-            
+         
             $TaskIsUnclaimed = false;
             $possibleUser = TaskDao::getUserClaimedTask($taskId);
             if (is_null($possibleUser)) {
