@@ -2550,11 +2550,11 @@ BEGIN
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
         AND (strict = 0 
             OR ((t.`language_id-source` IN 
-                        (SELECT language_id FROM Users WHERE user_id =  uID)
+                        (SELECT language_id FROM Users WHERE id =  uID)
                     OR t.`language_id-source` IN 
                         (SELECT language_id FROM UserSecondaryLanguages WHERE user_id =  uID))
                 AND (t.`language_id-target` IN 
-                        (SELECT language_id FROM Users WHERE user_id = uID)
+                        (SELECT language_id FROM Users WHERE id = uID)
                     OR t.`language_id-target` IN 
                         (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
              ORDER BY uts.score DESC limit offset, lim);
