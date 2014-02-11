@@ -7,12 +7,18 @@ mb_internal_encoding("UTF-8");
 
 header("Content-Type:application/xhtml+xml;charset=UTF-8");
 
-SmartyView::$smartyDirectory = 'ui/vendor/smarty/smarty/distribution/libs';
-SmartyView::$smartyCompileDirectory = 'ui/templating/templates_compiled';
-SmartyView::$smartyTemplatesDirectory = 'ui/templating/templates';
-SmartyView::$smartyExtensions = array(
-    'ui/vendor/slim/extras/Views/Extension/Smarty'
-);
+$app = new \Slim\Slim(array(
+    'debug' => false,
+    'view' => new \Slim\Views\Smarty(),
+    'mode' => 'development' // default is development.
+));
+
+$view = $app->view();
+$view->parserDirectory = 'ui/vendor/smarty/smarty/distribution/libs';
+$view->parserCompileDirectory = 'ui/templating/templates_compiled';
+$view->parserCacheDirectory = 'ui/templating/cache';
+$view->parserExtensions = array( 'ui/vendor/slim/views/Slim/Views/SmartyPlugins',);
+$view->setTemplatesDirectory('ui/templating/templates');
 
 \DrSlump\Protobuf::autoload();
 
@@ -22,11 +28,6 @@ SmartyView::$smartyExtensions = array(
 /**
  * Initiate the app. must be done before routes are required
  */
-$app = new Slim(array(
-    'debug' => false,
-    'view' => new SmartyView(),
-    'mode' => 'development' // default is development.
-));
 
 $app->configureMode('production', function () use ($app) {
     $app->config(array(
@@ -51,7 +52,7 @@ $app->configureMode('development', function () use ($app) {
     ));
 });
 
-$app->add(new  Slim_Middleware_SessionCookie(array(
+$app->add(new   \Slim\Middleware\SessionCookie(array(
     'expires' => Settings::get('site.cookie_timeout'),
     'path' => '/',
     'domain' => null,
@@ -124,6 +125,8 @@ require_once 'Common/protobufs/emails/OrgFeedback.php';
 $app->error(function (\Exception $e) use ($app) {
     $extra_scripts = "<script type='text/javascript' src='{$app->urlFor("home")}ui/js/slimError.showHide.js'></script>";
     $trace = str_replace('#', '<br>', $e->getTraceAsString());
+	
+	
     $app->view()->appendData(array(
                 "exception" => $e,
                 "trace" => $trace,

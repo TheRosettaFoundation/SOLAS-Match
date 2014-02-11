@@ -6,7 +6,7 @@ class Middleware
 {
     public function authUserIsLoggedIn()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         
         $this->isUserBanned();
         if (!UserSession::getCurrentUserID()) {
@@ -22,20 +22,12 @@ class Middleware
     
     public static function notFound()
     {
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $app->flash('error', Localisation::getTranslation(Strings::COMMON_ERROR_NOT_EXIST));
         $app->redirect($app->urlFor('home'));
     }
     
-    public function authenticateSiteAdmin()
-    {
-        if (!$this->isSiteAdmin()) {
-            self::notFound();
-        }
-        return true;
-    }
-    
-    private function isSiteAdmin()
+    public function isSiteAdmin()
     {
         $this->isUserBanned();
         if (is_null(UserSession::getCurrentUserID())) {
@@ -45,13 +37,13 @@ class Middleware
         return $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
     }
 
-    public function authenticateUserForTask($request, $response, $route)
+    public function authenticateUserForTask(\Slim\Route $route)
     {
         if ($this->isSiteAdmin()) {
             return true;
         }
 
-        $app = Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $params = $route->getParams();
 
@@ -70,18 +62,19 @@ class Middleware
         }
     }
 
-    public function authUserForOrg($request, $response, $route)
+
+    public function authUserForOrg(\Slim\Route $route) 
     {
         if ($this->isSiteAdmin()) {
             return true;
         }
-
+		
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
         $params = $route->getParams();
-        if ($params !== null) {
+	    if ($params !== null) {
             $org_id = $params['org_id'];
             if ($user_id) {
                 $user_orgs = $userDao->getUserOrgs($user_id);
@@ -102,7 +95,8 @@ class Middleware
      *  Middleware for ensuring the current user belongs to the Org that uploaded the associated Task
      *  Used for altering task details
      */
-    public function authUserForOrgTask($request, $response, $route)
+
+    public function authUserForOrgTask(\Slim\Route $route) 
     {
         if ($this->isSiteAdmin()) {
             return true;
@@ -136,8 +130,9 @@ class Middleware
         self::notFound();
     }
     
-    public function authUserForOrgProject($request, $response, $route)
-    {
+
+    public function authUserForOrgProject(\Slim\Route $route) 
+    {                        
         if ($this->isSiteAdmin()) {
             return true;
         }
@@ -164,7 +159,7 @@ class Middleware
         self::notFound();
     }
 
-    public function authUserForTaskDownload($request, $response, $route)
+    public function authUserForTaskDownload(\Slim\Route $route)
     {
         if ($this->isSiteAdmin()) {
             return true;
@@ -213,7 +208,7 @@ class Middleware
         }
     }
     
-    public function isBlacklisted($request, $response, $route)
+    public function isBlacklisted(\Slim\Route $route)
     {
         $isLoggedIn = $this->authUserIsLoggedIn();
         if ($isLoggedIn) {

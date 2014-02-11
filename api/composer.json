@@ -28,27 +28,22 @@
                     "files": ["library/DrSlump/Protobuf.php"]
                 }
             }
-        },
-        {  
-            "type": "vcs",  
-            "url": "git@github.com:SeanMooney/Slim.git"  
-        }  
+        }         
     ],
 
     "require-dev": {
             "phpunit/phpunit": "3.7.*"
     },
 
-
     "require": {
-        "slim/slim": "dev-1.6.3Fix",
+        "slim/slim": "2.4.0",
         "videlalvaro/php-amqplib": "dev-master",
         "drslump/protobuf-php": "*",
         "solas/oauth2-server": "dev-master"
     },
+    
     "autoload": {
-        "classmap": ["vendor/slim/slim/Slim/View.php"]
-        
+        "classmap": ["vendor/slim/slim/Slim/View.php"]    
     },
 
     "authors": [
