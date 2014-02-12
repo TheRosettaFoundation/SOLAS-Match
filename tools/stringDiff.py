@@ -39,12 +39,12 @@ def main(argv):
         oldElement = oldXml.getroot().find(xpathQuery)
         if oldElement is not None:
             encoding = "UTF-8"
-            oldValue = ET.tostring(oldElement, encoding)
-            newValue = ET.tostring(stringElement, encoding)
+            oldValue = ET.tostring(oldElement, encoding, "text").strip()
+            newValue = ET.tostring(stringElement, encoding, "text").strip()
             if oldValue != newValue:
                 root.append(stringElement)
-            else:
-                root.append(stringElement)
+        else:
+            root.append(stringElement)
     locFile = open(outputFile, "w")
     locFile.write(ET.tostring(root))
     print 'Output written to ', outputFile
