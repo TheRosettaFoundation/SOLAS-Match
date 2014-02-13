@@ -2,7 +2,6 @@
 
 require_once __DIR__.'/../../Common/lib/CacheHelper.class.php';
 require_once __DIR__.'/../../Common/TimeToLiveEnum.php';
-require_once __DIR__.'/../localisation/Strings.php';
 
 class Localisation
 {

@@ -1,15 +1,15 @@
 
 <div id="accordionBannedOrgs">
-    <h3>{sprintf(Localisation::getTranslation(Strings::ADMIN_BANNED_ORGS_LIST_ALL_BANNED_ORGANISATIONS_OF), $siteName)}</h3>
+    <h3>{sprintf(Localisation::getTranslation('admin_banned_orgs_list_all_banned_organisations_of'), $siteName)}</h3>
     <div name="bannedOrgList">
         <table class="table table-striped">
             <thead>
-                <th>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}</th>
-                <th>{Localisation::getTranslation(Strings::COMMON_BANNED_BY)}</th> 
-                <th>{Localisation::getTranslation(Strings::COMMON_BAN_DURATION)}</th>
-                <th>{Localisation::getTranslation(Strings::COMMON_BAN_REASON)}</th>
-                <th>{Localisation::getTranslation(Strings::COMMON_BANNED_DATE)}</th>
-                <th>{Localisation::getTranslation(Strings::COMMON_RESTORE)}</th>
+                <th>{Localisation::getTranslation('common_organisation_name')}</th>
+                <th>{Localisation::getTranslation('common_banned_by')}</th> 
+                <th>{Localisation::getTranslation('common_ban_duration')}</th>
+                <th>{Localisation::getTranslation('common_ban_reason')}</th>
+                <th>{Localisation::getTranslation('common_banned_date')}</th>
+                <th>{Localisation::getTranslation('common_restore')}</th>
             </thead>
             {foreach $bannedOrgList as $bannedOrg}
             <tr>
@@ -32,8 +32,8 @@
                     <form method="post" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}">
                         <i class="icon-upload icon-white" style="position:relative; right:-25px; top:1px;"></i>
                         <input type="hidden" name="orgId" value="{$bannedOrg->getOrgId()}" />
-                        <input type="submit" class='btn btn-primary' name="unBanOrg" value="    {Localisation::getTranslation(Strings::COMMON_RESTORE)}" 
-                       onclick="return confirm('{Localisation::getTranslation(Strings::ADMIN_BANNED_ORGS_LIST_0)}')"/>
+                        <input type="submit" class='btn btn-primary' name="unBanOrg" value="    {Localisation::getTranslation('common_restore')}" 
+                       onclick="return confirm('{Localisation::getTranslation('admin_banned_orgs_list_0')}')"/>
                     </form> 
                 </td>
             </tr>

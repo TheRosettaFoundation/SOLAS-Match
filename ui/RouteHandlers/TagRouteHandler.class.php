@@ -74,11 +74,11 @@ class TagRouteHandler
         if ($subscribe == "true") {
             $userLikeTag = $userDao->addUserTagById($user_id, $id);
             if ($userLikeTag) {
-                $app->flash("success", sprintf(Localisation::getTranslation(Strings::TAG_4), $tag->getLabel()));
+                $app->flash("success", sprintf(Localisation::getTranslation('tag_4'), $tag->getLabel()));
             } else {
                 $app->flash(
                     "error",
-                    sprintf(Localisation::getTranslation(Strings::TAG_5), $tag->getLabel(), $displayName)
+                    sprintf(Localisation::getTranslation('tag_5'), $tag->getLabel(), $displayName)
                 );
             }
         }
@@ -88,12 +88,12 @@ class TagRouteHandler
             if ($removedTag) {
                 $app->flash(
                     "success",
-                    sprintf(Localisation::getTranslation(Strings::TAG_6), $tag->getLabel(), $displayName)
+                    sprintf(Localisation::getTranslation('tag_6'), $tag->getLabel(), $displayName)
                 );
             } else {
                 $app->flash(
                     "error",
-                    sprintf(Localisation::getTranslation(Strings::TAG_7), $tag->getLabel(), $displayName)
+                    sprintf(Localisation::getTranslation('tag_7'), $tag->getLabel(), $displayName)
                 );
             }
         }

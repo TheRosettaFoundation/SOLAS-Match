@@ -13,7 +13,7 @@ class Middleware
             UserSession::setReferer(
                 $app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo()
             );
-            $app->flash('error', Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
+            $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor('login'));
         }
 
@@ -23,7 +23,7 @@ class Middleware
     public static function notFound()
     {
         $app = \Slim\Slim::getInstance();
-        $app->flash('error', Localisation::getTranslation(Strings::COMMON_ERROR_NOT_EXIST));
+        $app->flash('error', Localisation::getTranslation('common_error_not_exist'));
         $app->redirect($app->urlFor('home'));
     }
     
@@ -56,7 +56,7 @@ class Middleware
         }
         if ($claimant) {
             if ($user_id != $claimant->getId()) {
-                $app->flash('error', Localisation::getTranslation(Strings::COMMON_ERROR_ALREADY_CLAIMED));
+                $app->flash('error', Localisation::getTranslation('common_error_already_claimed'));
                 $app->redirect($app->urlFor('home'));
             }
         }
@@ -203,7 +203,7 @@ class Middleware
         if ($adminDao->isUserBanned(UserSession::getCurrentUserID())) {
             $app = Slim::getInstance();
             UserSession::destroySession();
-            $app->flash('error', Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED));
+            $app->flash('error', Localisation::getTranslation('common_this_user_account_has_been_banned'));
             $app->redirect($app->urlFor('home'));
         }
     }
@@ -225,7 +225,7 @@ class Middleware
                     $app->flash(
                         'error',
                         sprintf(
-                            Localisation::getTranslation(Strings::COMMON_ERROR_CANNOT_RECLAIM),
+                            Localisation::getTranslation('common_error_cannot_reclaim'),
                             $app->urlFor("task-claimed", array("task_id" => $taskId)),
                             $task->getTitle()
                         )

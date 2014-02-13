@@ -46,42 +46,42 @@
                     <a class="brand" href="{urlFor name='home'}">{Settings::get('site.name')}</a>
                     <ul class="nav">
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
-                            <a href="{urlFor name="home"}">{Localisation::getTranslation(Strings::HEADER_HOME)}</a>
+                            <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
                         </li> 
                         {if isset($user_is_organisation_member)||isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if} >
-                                 <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation(Strings::HEADER_DASHBOARD)}</a>
+                                 <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
                              </li>
                          {/if}
                         {if isset($user_has_active_tasks)}
                             {assign var="tmp_id" value=$user->getId()}
                             <li {if isset($current_page) && $current_page == 'claimed-tasks'}class="active" {/if}>
-                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}">{Localisation::getTranslation(Strings::HEADER_CLAIMED_TASKS)}</a>
+                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}">{Localisation::getTranslation('header_claimed_tasks')}</a>
                             </li>
                         {/if}
                         {if isset($user)}
                             {assign var="user_id" value=$user->getId()}
                             <li {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if}>
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{Localisation::getTranslation(Strings::HEADER_PROFILE)}</a>
+                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{Localisation::getTranslation('header_profile')}</a>
                             </li>
                         {/if}
                         {if isset($site_admin)}
                             {assign var="user_id" value=$user->getId()}
                             <li {if isset($current_page) && $current_page == 'site-admin-dashboard'}class="active" {/if}>
-                                <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation(Strings::HEADER_ADMIN)}</a>
+                                <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
                             </li>
                         {/if}
                             <li {if isset($current_page) && $current_page == 'videos'}class="active" {/if}>
-                                <a href="{urlFor name="videos"}">{Localisation::getTranslation(Strings::HEADER_VIDEOS)}</a>
+                                <a href="{urlFor name="videos"}">{Localisation::getTranslation('header_videos')}</a>
                             </li>
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
-                                <a href="{urlFor name="faq"}">{Localisation::getTranslation(Strings::COMMON_FAQ)}</a>
+                                <a href="{urlFor name="faq"}">{Localisation::getTranslation('common_faq')}</a>
                             </li>
                     </ul>
                     <ul class="nav pull-right" style="max-height: 38px">
                         {if isset($userNotifications)}   
                             <li>
-                                <a>{Localisation::getTranslation(Strings::HEADER_NOTIFICATIONS)}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
+                                <a>{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                             </li>
                         {/if}
                         <li>
@@ -108,11 +108,11 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{urlFor name="logout"}">{Localisation::getTranslation(Strings::HEADER_LOG_OUT)}</a>
+                                <a href="{urlFor name="logout"}">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                         {else}
-                            <li><a href="{urlFor name="register"}">{Localisation::getTranslation(Strings::COMMON_REGISTER)}</a></li>
-                            <li><a href="{urlFor name="login"}">{Localisation::getTranslation(Strings::COMMON_LOG_IN)}</a></li>
+                            <li><a href="{urlFor name="register"}">{Localisation::getTranslation('common_register')}</a></li>
+                            <li><a href="{urlFor name="login"}">{Localisation::getTranslation('common_log_in')}</a></li>
                         {/if}
                     </ul>
                 </div>

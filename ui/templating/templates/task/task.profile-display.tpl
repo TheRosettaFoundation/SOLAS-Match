@@ -7,40 +7,40 @@
             {$task->getTitle()}
         </h2>
         {if $type_id == TaskTypeEnum::SEGMENTATION}
-            <p>{Localisation::getTranslation(Strings::COMMON_TYPE)} 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_SEGMENTATION)}</span> 
+            <p>{Localisation::getTranslation('common_type')} 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation('common_segmentation')}</span> 
         {elseif $type_id == TaskTypeEnum::TRANSLATION}
-            <p>{Localisation::getTranslation(Strings::COMMON_TYPE)} 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation(Strings::COMMON_TRANSLATION)}</span>
+            <p>{Localisation::getTranslation('common_type')} 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation('common_translation')}</span>
         {elseif $type_id == TaskTypeEnum::PROOFREADING}
-            <p>{Localisation::getTranslation(Strings::COMMON_TYPE)} 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation(Strings::COMMON_PROOFREADING)}</span>
+            <p>{Localisation::getTranslation('common_type')} 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation('common_proofreading')}</span>
         {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-            <p>{Localisation::getTranslation(Strings::COMMON_TYPE)} 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_DESEGMENTATION)}</span>
+            <p>{Localisation::getTranslation('common_type')} 
+            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation')}</span>
         {/if}                
     </p>
 
     <p>
-        {Localisation::getTranslation(Strings::COMMON_FROM)} <strong>{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}</strong>
+        {Localisation::getTranslation('common_from')} <strong>{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}</strong>
     </p>   
 
     <p>
-        {Localisation::getTranslation(Strings::COMMON_TO)} <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
+        {Localisation::getTranslation('common_to')} <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
     </p>
     
     {if $task->getWordCount()}
-        <p>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)} <strong>{$task->getWordCount()|number_format}</strong></p>
+        <p>{Localisation::getTranslation('common_word_count')} <strong>{$task->getWordCount()|number_format}</strong></p>
     {/if}      
 	<p class="task_details">
-        {sprintf(Localisation::getTranslation(Strings::COMMON_ADDED), {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())})}
+        {sprintf(Localisation::getTranslation('common_added'), {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())})}
 	</p>
         
     <p>
-        {sprintf(Localisation::getTranslation(Strings::TASK_PROFILE_DISPLAY_ARCHIVED), {TemplateHelper::timeSinceSqlTime($task->getArchivedDate())})}
+        {sprintf(Localisation::getTranslation('task_profile_display_archived'), {TemplateHelper::timeSinceSqlTime($task->getArchivedDate())})}
     </p>
     <p>
-        {sprintf(Localisation::getTranslation(Strings::COMMON_DUE_BY), {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))})}
+        {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))})}
     </p>
 
     <p style="margin-bottom:40px;"/>        

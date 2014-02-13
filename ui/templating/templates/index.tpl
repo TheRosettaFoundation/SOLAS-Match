@@ -2,14 +2,14 @@
 
 {if !isset($user)}
     <div class="hero-unit">
-        <h1>{Localisation::getTranslation(Strings::INDEX_TRANSLATION_COMMONS)}</h1>
-        <p>{Localisation::getTranslation(Strings::INDEX_0)}</p>
+        <h1>{Localisation::getTranslation('index_translation_commons')}</h1>
+        <p>{Localisation::getTranslation('index_0')}</p>
         <p>
             <a class="btn btn-success btn-large" href="{urlFor name="register"}">
-                <i class="icon-star icon-white"></i> {Localisation::getTranslation(Strings::COMMON_REGISTER)}
+                <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_register')}
             </a>
             <a class="btn btn-primary btn-large" href="{urlFor name="login"}">
-                <i class="icon-share icon-white"></i> {Localisation::getTranslation(Strings::COMMON_LOG_IN)}
+                <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
             </a>
         </p>
     </div>
@@ -18,28 +18,28 @@
 {if isset($flash['error'])}
     <div class="alert alert-error">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{$flash['error']}</p>
+        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{$flash['error']}</p>
     </div>
 {/if}
 
 {if isset($flash['info'])}
     <div class="alert alert-info">
-        <p><strong>{Localisation::getTranslation(Strings::COMMON_NOTE)} </strong>{$flash['info']}</p>
+        <p><strong>{Localisation::getTranslation('common_note')} </strong>{$flash['info']}</p>
     </div>
 {/if}
 
 {if isset($flash['success'])}
     <div class="alert alert-success">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}! </strong>{$flash['success']}</p>
+        <p><strong>{Localisation::getTranslation('common_success')}! </strong>{$flash['success']}</p>
     </div>
 {/if}
 
     <div class="page-header">
         <h1>
-            {Localisation::getTranslation(Strings::INDEX_TRANSLATION_TASKS)} <small>{Localisation::getTranslation(Strings::INDEX_1)}</small>
+            {Localisation::getTranslation('index_translation_tasks')} <small>{Localisation::getTranslation('index_1')}</small>
             <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
-                <i class="icon-search icon-white"></i> {Localisation::getTranslation(Strings::COMMON_SEARCH_FOR_ORGANISATIONS)}
+                <i class="icon-search icon-white"></i> {Localisation::getTranslation('common_search_for_organisations')}
             </a>
         </h1>
     </div>
@@ -68,8 +68,8 @@
 
             {if !isset($user)}
                 <div class="alert">
-                    <p>{Localisation::getTranslation(Strings::INDEX_6)}</p>
-                    <p>{sprintf(Localisation::getTranslation(Strings::INDEX_REGISTER_NOW), {urlFor name='register'})}</p>
+                    <p>{Localisation::getTranslation('index_6')}</p>
+                    <p>{sprintf(Localisation::getTranslation('index_register_now'), {urlFor name='register'})}</p>
                 </div>
             {/if}      
         </div>

@@ -1,33 +1,33 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>{$task->getTitle()} <small>{Localisation::getTranslation(Strings::USER_TASK_REVIEWS_0)}</small></h1>
+    <h1>{$task->getTitle()} <small>{Localisation::getTranslation('user_task_reviews_0')}</small></h1>
 </div>
 
 <p>
-    {Localisation::getTranslation(Strings::USER_TASK_REVIEWS_1)}
-    {Localisation::getTranslation(Strings::USER_TASK_REVIEWS_2)}
-    {Localisation::getTranslation(Strings::USER_TASK_REVIEWS_3)}
+    {Localisation::getTranslation('user_task_reviews_1')}
+    {Localisation::getTranslation('user_task_reviews_2')}
+    {Localisation::getTranslation('user_task_reviews_3')}
 </p>
 
 <div class="well">
     {if count($reviews) == 0}
-        <span class="alert alert-info">{Localisation::getTranslation(Strings::USER_TASK_REVIEWS_4)}</span>
+        <span class="alert alert-info">{Localisation::getTranslation('user_task_reviews_4')}</span>
     {else}
         {assign var="count" value=1}
         {assign var="id" value=$task->getId()}
         {foreach $reviews as $review}
             <h2>Review #{$count}</h2>
             <p>
-                {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_0)}
+                {Localisation::getTranslation('task_review_form_0')}
                 <a href="{urlFor name="download-task-latest-version" options="task_id.$id"}">
-                    {Localisation::getTranslation(Strings::COMMON_HERE)}
+                    {Localisation::getTranslation('common_here')}
                 </a>.
             </p>
 
             <h3>
-                {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_CORRECTIONS)} 
-                <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_2)}</small>
+                {Localisation::getTranslation('task_review_form_corrections')} 
+                <small>{Localisation::getTranslation('task_review_form_2')}</small>
             </h3>
             <p>
                 <i> {Localisation::getTranslation("task_review_form_rating")}</i>
@@ -37,8 +37,8 @@
             </div>
 
             <h3>
-                {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_GRAMMAR)} 
-                <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_3)}</small>
+                {Localisation::getTranslation('task_review_form_grammar')} 
+                <small>{Localisation::getTranslation('task_review_form_3')}</small>
             </h3>
             <p>
                 <i> {Localisation::getTranslation("task_review_form_rating")}</i>
@@ -48,8 +48,8 @@
             </div>
 
             <h3>
-                {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_SPELLING)}
-                <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_4)}</small>
+                {Localisation::getTranslation('task_review_form_spelling')}
+                <small>{Localisation::getTranslation('task_review_form_4')}</small>
             </h3>
             <p>
                 <i> {Localisation::getTranslation("task_review_form_rating")}</i>
@@ -59,8 +59,8 @@
             </div>
 
             <h3>
-                {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_CONSISTENCY)}
-                <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_5)}</small>
+                {Localisation::getTranslation('task_review_form_consistency')}
+                <small>{Localisation::getTranslation('task_review_form_5')}</small>
             </h3>
             <p>
                 <i> {Localisation::getTranslation("task_review_form_rating")}</i>
@@ -70,13 +70,13 @@
             </div>
 
             <h3>
-                {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_COMMENT)}
-                <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_6)}</small>
+                {Localisation::getTranslation('task_review_form_comment')}
+                <small>{Localisation::getTranslation('task_review_form_6')}</small>
             </h3>
             {if $review->getComment() != ''}
                 <p>{$review->getComment()}</p>
             {else}
-                <p>{Localisation::getTranslation(Strings::COMMON_NO_COMMENT_HAS_BEEN_LISTED)}</p>
+                <p>{Localisation::getTranslation('common_no_comment_has_been_listed')}</p>
             {/if}
             {assign var="count" value=($count + 1)}
             <hr />

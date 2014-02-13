@@ -4,10 +4,10 @@
     <h2>{$project->getTitle()}</h2>
     <p>
         {if $project->getSourceLanguageCode()}
-            {Localisation::getTranslation(Strings::COMMON_FROM)} <strong>{TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}</strong>
+            {Localisation::getTranslation('common_from')} <strong>{TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}</strong>
         {/if}
         {if $project->getTargetLanguageCode()}
-            {Localisation::getTranslation(Strings::COMMON_TO)} <strong>{TemplateHelper::languageNameFromCode($project->getTargetLanguageCode())}</strong>
+            {Localisation::getTranslation('common_to')} <strong>{TemplateHelper::languageNameFromCode($project->getTargetLanguageCode())}</strong>
         {/if}                
 
         {foreach from=$project->getTags() item=tag}
@@ -16,10 +16,10 @@
     </p>
 
     <p class="task_details">
-        {sprintf(Localisation::getTranslation(Strings::COMMON_ADDED), {TemplateHelper::timeSinceSqlTime($project->getCreatedTime())})}
-        &middot; {Localisation::getTranslation(Strings::PROJECT_PROFILE_DISPLAY_BY_PROJECT)}
+        {sprintf(Localisation::getTranslation('common_added'), {TemplateHelper::timeSinceSqlTime($project->getCreatedTime())})}
+        &middot; {Localisation::getTranslation('project_profile_display_by_project')}
         {if $task->getWordCount()}
-                &middot; {$task->getWordCount()|number_format} {Localisation::getTranslation(Strings::PROJECT_PROFILE_DISPLAY_WORDS)}
+                &middot; {$task->getWordCount()|number_format} {Localisation::getTranslation('project_profile_display_words')}
         {/if}
         <p style="margin-bottom:30px;"/>
     </p>
