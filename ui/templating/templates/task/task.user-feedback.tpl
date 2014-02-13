@@ -6,20 +6,20 @@
         {if $task->getTitle() != ''}
             {$task->getTitle()}
         {else}
-            {Localisation::getTranslation(Strings::COMMON_TASK)} {$task->getId()}
+            {Localisation::getTranslation('common_task')} {$task->getId()}
         {/if}
         <small>
             <strong>
                 -
                 {assign var="type_id" value=$task->getTaskType()}
                 {if $type_id == TaskTypeEnum::SEGMENTATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_SEGMENTATION_TASK)}</span>
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation('common_segmentation_task')}</span>
                 {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation(Strings::COMMON_TRANSLATION_TASK)}</span>
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation('common_translation_task')}</span>
                 {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation(Strings::COMMON_PROOFREADING_TASK)}</span>
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation('common_proofreading_task')}</span>
                 {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation(Strings::COMMON_DESEGMENTATION_TASK)}</span>
+                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation_task')}</span>
                 {/if}
             </strong>
         </small>  
@@ -29,9 +29,9 @@
 
     <table class="table table-striped" width="100%">
         <thead>
-            <th width="25%">{Localisation::getTranslation(Strings::COMMON_SOURCE)}</th>
-            <th width="25%">{Localisation::getTranslation(Strings::COMMON_TARGET)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_TAGS)}</th>        
+            <th width="25%">{Localisation::getTranslation('common_source')}</th>
+            <th width="25%">{Localisation::getTranslation('common_target')}</th>
+            <th>{Localisation::getTranslation('common_tags')}</th>        
         </thead>
         <tbody>
             <tr>
@@ -45,7 +45,7 @@
                         <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                     {/foreach}
                 {else}
-                    <i>{Localisation::getTranslation(Strings::COMMON_THERE_ARE_NO_TAGS_ASSOCIATED_WITH_THIS_PROJECT)}</i>
+                    <i>{Localisation::getTranslation('common_there_are_no_tags_associated_with_this_project')}</i>
                 {/if}
                 </td>
             </tr>
@@ -55,9 +55,9 @@
     <div class="well">
         <table width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
-            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_TASK_COMMENT)}<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation('common_task_comment')}<hr/></th>
             <th/>
-            <th width="48%" align="left">{Localisation::getTranslation(Strings::COMMON_PROJECT_DESCRIPTION)}<hr/></th>
+            <th width="48%" align="left">{Localisation::getTranslation('common_project_description')}<hr/></th>
             </thead>
             <tbody>
                 <tr>
@@ -66,7 +66,7 @@
                         {if $task->getComment() != ''}
                             {$task->getComment()}
                         {else}
-                           {Localisation::getTranslation(Strings::COMMON_NO_COMMENT_HAS_BEEN_LISTED)}
+                           {Localisation::getTranslation('common_no_comment_has_been_listed')}
                         {/if}
                         </i>
                     </td>
@@ -76,7 +76,7 @@
                         {if $project->getDescription() != ''}
                             {$project->getDescription()}
                         {else}
-                            {Localisation::getTranslation(Strings::COMMON_NO_DESCRIPTION_HAS_BEEN_LISTED)}
+                            {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}
                         </i>
                     </td>
@@ -88,10 +88,10 @@
     
     <table class="table table-striped" width="100%">
         <thead>
-            <th>{Localisation::getTranslation(Strings::COMMON_ORGANISATION)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_CLAIMED_DATE)}</th> 
-            <th>{Localisation::getTranslation(Strings::COMMON_CLAIMED_BY)}</th> 
+            <th>{Localisation::getTranslation('common_organisation')}</th>
+            <th>{Localisation::getTranslation('common_deadline')}</th>
+            <th>{Localisation::getTranslation('common_claimed_date')}</th> 
+            <th>{Localisation::getTranslation('common_claimed_by')}</th> 
         </thead>
         <tbody>            
             <tr>
@@ -111,24 +111,24 @@
     <p style="margin-bottom: 40px"/>  
 
     <div class="well">
-        <strong>{Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_ORGANISATION_FEEDBACK)}</strong><hr/>    
+        <strong>{Localisation::getTranslation('task_user_feedback_organisation_feedback')}</strong><hr/>    
         <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" 
                 action="{urlFor name="task-user-feedback" options="task_id.{$task->getId()}"}" accept-charset="utf-8">
-            <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_0)} {Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_1)}."></textarea>
+            <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation('task_user_feedback_0')} {Localisation::getTranslation('task_user_feedback_1')}."></textarea>
             <p style="margin-bottom:30px;"/> 
 
             <span style="float: left; position: relative;">
                 <button type="submit" value="1" name="revokeTask" class="btn btn-inverse">
-                    <i class="icon-remove icon-white"></i> {Localisation::getTranslation(Strings::TASK_USER_FEEDBACK_2)}
+                    <i class="icon-remove icon-white"></i> {Localisation::getTranslation('task_user_feedback_2')}
                 </button>
             </span>
             <span style="float: right; position: relative;">
 
                 <button type="submit" value="Submit" name="submit" class="btn btn-success">
-                    <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_SUBMIT_FEEDBACK)}
+                    <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_submit_feedback')}
                 </button>        
                 <button type="reset" value="Reset" name="reset" class="btn btn-primary">
-                    <i class="icon-repeat icon-white"></i> {Localisation::getTranslation(Strings::COMMON_RESET)}
+                    <i class="icon-repeat icon-white"></i> {Localisation::getTranslation('common_reset')}
                 </button>
             </span>
         </form>

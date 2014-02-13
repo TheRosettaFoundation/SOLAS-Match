@@ -21,20 +21,20 @@
             {if $org->getName() != ''}
                 {$org->getName()}
             {else}
-                {Localisation::getTranslation(Strings::COMMON_ORGANISATION_PROFILE)}
+                {Localisation::getTranslation('common_organisation_profile')}
             {/if}
-            <small>{sprintf(Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_AN_ORGANISATION_OF), Settings::get("site.name"))}</small>
+            <small>{sprintf(Localisation::getTranslation('org_public_profile_an_organisation_of'), Settings::get("site.name"))}</small>
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
                 <div class="pull-right">
                     {if $isMember || $adminAccess}
                             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
-                            <i class="icon-wrench icon-white"></i> {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_EDIT_ORGANISATION_DETAILS)}
+                            <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
                         </a>
                     {/if}
                     {if !$isMember}
                         <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
-                            <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_REQUEST_MEMBERSHIP)}
+                            <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('org_public_profile_request_membership')}
                         </a>
                     {/if}
                 </div>
@@ -50,7 +50,7 @@
                     <div>
                         <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                             <thead>                
-                                <th align="left">{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}<hr/></th>
+                                <th align="left">{Localisation::getTranslation('common_home_page')}<hr/></th>
                             </thead>
                             <tbody>
                                 <tr>
@@ -58,7 +58,7 @@
                                         {if $org->getHomePage() != 'http://' && $org->getHomePage() != ''}
                                             <a href="{$org->getHomePage()}">{$org->getHomePage()}</a>
                                         {else}
-                                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_HOME_PAGE_LISTED)}
+                                            {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
                                         {/if}
                                     </td>
                                 </tr>
@@ -67,7 +67,7 @@
                                 </tr>
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}</strong><hr/>
+                                        <strong>{Localisation::getTranslation('common_address')}</strong><hr/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -75,7 +75,7 @@
                                         {if $org->getAddress() != ''}
                                             {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())}
                                         {else}
-                                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_ADDRESS_LISTED)}
+                                            {Localisation::getTranslation('org_public_profile_no_address_listed')}
                                         {/if}
                                     </td>  
                                 </tr>
@@ -84,7 +84,7 @@
                                 </tr>
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation(Strings::COMMON_CITY)}</strong><hr/>
+                                        <strong>{Localisation::getTranslation('common_city')}</strong><hr/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -92,7 +92,7 @@
                                         {if $org->getCity() != ''}
                                             {$org->getCity()}
                                         {else}
-                                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_CITY_LISTED)}
+                                            {Localisation::getTranslation('org_public_profile_no_city_listed')}
                                         {/if}
                                     </td>  
                                 </tr>
@@ -101,7 +101,7 @@
                                 </tr>
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}</strong><hr/>
+                                        <strong>{Localisation::getTranslation('common_country')}</strong><hr/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -109,7 +109,7 @@
                                         {if $org->getCountry() != ''}
                                             {$org->getCountry()}
                                         {else}
-                                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_COUNTRY_LISTED)}
+                                            {Localisation::getTranslation('org_public_profile_no_country_listed')}
                                         {/if}
                                     </td>  
                                 </tr>
@@ -122,7 +122,7 @@
                     <div>
                         <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                             <thead>                
-                                <th align="left" width="48%">{Localisation::getTranslation(Strings::COMMON_EMAIL)}<hr/></th>
+                                <th align="left" width="48%">{Localisation::getTranslation('common_email')}<hr/></th>
                             </thead>
                             <tbody>
                                  <tr>
@@ -130,7 +130,7 @@
                                         {if $org->getEmail() != ''}
                                             <a href="mailto:{$org->getEmail()}">{$org->getEmail()}</a>
                                         {else}
-                                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_EMAIL_LISTED)}
+                                            {Localisation::getTranslation('org_public_profile_no_email_listed')}
                                         {/if}
                                     </td>
                                 </tr>
@@ -139,7 +139,7 @@
                                 </tr>
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</strong><hr/>
+                                        <strong>{Localisation::getTranslation('common_biography')}</strong><hr/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -147,7 +147,7 @@
                                         {if $org->getBiography() != ''}
                                             {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
                                         {else}
-                                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}
+                                            {Localisation::getTranslation('org_public_profile_no_biography_listed')}
                                         {/if}
                                     </td>  
                                 </tr>
@@ -156,7 +156,7 @@
                                 </tr>
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation(Strings::COMMON_REGIONAL_FOCUS)}</strong><hr/>
+                                        <strong>{Localisation::getTranslation('common_regional_focus')}</strong><hr/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -164,7 +164,7 @@
                                         {if $org->getRegionalFocus() != ''}
                                             {$org->getRegionalFocus()}
                                         {else}
-                                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_REGIONAL_FOCUS_LISTED)}
+                                            {Localisation::getTranslation('org_public_profile_no_regional_focus_listed')}
                                         {/if}
                                     </td>  
                                 </tr>
@@ -180,14 +180,14 @@
                 
     <p style="margin-bottom: 60px" />         
     <h1 class="page-header">
-        {Localisation::getTranslation(Strings::COMMON_BADGES)}
-        <small>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_0)}</small>
+        {Localisation::getTranslation('common_badges')}
+        <small>{Localisation::getTranslation('org_public_profile_0')}</small>
 
         {if isset($user)}
 
             {if $isMember || $adminAccess}
                 <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-                    <i class="icon-star icon-white"></i> {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_CREATE_BADGE)}
+                    <i class="icon-star icon-white"></i> {Localisation::getTranslation('org_public_profile_create_badge')}
                 </a>
             {/if}
         {/if}
@@ -197,13 +197,13 @@
 {if $org_badges != NULL && count($org_badges) > 0}                
     <table class="table table-striped">
         <thead>            
-            <th style="text-align: left">{Localisation::getTranslation(Strings::COMMON_NAME)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}</th>
+            <th style="text-align: left">{Localisation::getTranslation('common_name')}</th>
+            <th>{Localisation::getTranslation('common_description')}</th>
 
             {if $isMember || $adminAccess}
-                <th>{Localisation::getTranslation(Strings::COMMON_EDIT)}</th>
-                <th>{Localisation::getTranslation(Strings::COMMON_ASSIGN)}</th>
-                <th>{Localisation::getTranslation(Strings::COMMON_DELETE)}</th>
+                <th>{Localisation::getTranslation('common_edit')}</th>
+                <th>{Localisation::getTranslation('common_assign')}</th>
+                <th>{Localisation::getTranslation('common_delete')}</th>
             {/if}
         </thead>
         <tbody>
@@ -220,19 +220,19 @@
                 {if ($isMember || $adminAccess) && isset($user)}
                     <td>
                         <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
-                            <i class="icon-wrench icon-black"></i> {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_EDIT_BADGE)}
+                            <i class="icon-wrench icon-black"></i> {Localisation::getTranslation('org_public_profile_edit_badge')}
                         </a>
                     </td>
                     <td>
                         <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
-                            <i class="icon-plus-sign icon-black"></i> {Localisation::getTranslation(Strings::COMMON_ASSIGN_BADGE)}
+                            <i class="icon-plus-sign icon-black"></i> {Localisation::getTranslation('common_assign_badge')}
                         </a>
                     </td>
                     <td>                        
                         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                             <input type="hidden" name="badge_id" value="{$badge_id}" />
-                            <input type="submit" class='btn btn-inverse' name="deleteBadge" value="    {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_DELETE_BADGE)}"
-                              onclick="return confirm('{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_1)}')" />                                 
+                            <input type="submit" class='btn btn-inverse' name="deleteBadge" value="    {Localisation::getTranslation('org_public_profile_delete_badge')}"
+                              onclick="return confirm('{Localisation::getTranslation('org_public_profile_1')}')" />                                 
                         </form> 
                         <i class="icon-fire icon-white" style="position:relative; right:44px; top:-40px;"></i> 
                     </td>  
@@ -244,7 +244,7 @@
 <br />
 {else}
     <p class="alert alert-info">
-        {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_2)}
+        {Localisation::getTranslation('org_public_profile_2')}
     </p>
     <p style="margin-bottom:20px;"></p>
 {/if}
@@ -253,11 +253,11 @@
 {if $isMember || $adminAccess}               
      <p style="margin-bottom: 40px" />         
      <h1 class="page-header">
-         {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_MEMBERSHIP_REQUESTS)}
-         <small>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_3)}</small>
+         {Localisation::getTranslation('org_public_profile_membership_requests')}
+         <small>{Localisation::getTranslation('org_public_profile_3')}</small>
 
              <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-                 <i class="icon-star icon-white"></i> {Localisation::getTranslation(Strings::COMMON_ADD_USER)}
+                 <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_add_user')}
              </a>
      </h1>                  
      <p style="margin-bottom: 40px" />               
@@ -265,10 +265,10 @@
      {if isset($membershipRequestUsers) && count($membershipRequestUsers) > 0}
          <table class="table table-striped">
              <thead>            
-                 <th style="text-align: left"><strong>{Localisation::getTranslation(Strings::COMMON_NAME)}</strong></th>
-                 <th><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</strong></th>
-                 <th>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_ACCEPT)}</th>
-                 <th>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_DENY)}</th>
+                 <th style="text-align: left"><strong>{Localisation::getTranslation('common_name')}</strong></th>
+                 <th><strong>{Localisation::getTranslation('common_biography')}</strong></th>
+                 <th>{Localisation::getTranslation('org_public_profile_accept')}</th>
+                 <th>{Localisation::getTranslation('org_public_profile_deny')}</th>
              </thead>
              <tbody>
              {foreach $membershipRequestUsers as $nonMember}
@@ -284,7 +284,7 @@
                          {if $nonMember->getBiography() != ''}
                              {TemplateHelper::uiCleanseNewlineAndTabs($nonMember->getBiography())}
                          {else}
-                             {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}
+                             {Localisation::getTranslation('org_public_profile_no_biography_listed')}
                          {/if}
                          </i>
                      </td>
@@ -305,7 +305,7 @@
          </table>   
      {else}
          <p class="alert alert-info">
-             {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_5)}
+             {Localisation::getTranslation('org_public_profile_5')}
          </p>
      {/if}
      <p style="margin-bottom: 40px" />               
@@ -314,18 +314,18 @@
 
 {if $isMember || $adminAccess}
     <h1 class="page-header">
-        {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_ORGANISATION_MEMBERS)}
-        <small>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_6)}</small>
+        {Localisation::getTranslation('org_public_profile_organisation_members')}
+        <small>{Localisation::getTranslation('org_public_profile_6')}</small>
     </h1>
     {if isset($orgMembers) && count($orgMembers) > 0}
         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
             <table class="table table-striped">
                 <thead>
-                    <th>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_MEMBER_TYPE)}</th>
-                    <th>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_USERNAME)}</th>
+                    <th>{Localisation::getTranslation('org_public_profile_member_type')}</th>
+                    <th>{Localisation::getTranslation('org_public_profile_username')}</th>
                     {if $adminAccess}
-                        <th>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_REMOVE_USER)}</th>
-                        <th>{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_ALTER_PERMISSIONS)}</th>
+                        <th>{Localisation::getTranslation('org_public_profile_remove_user')}</th>
+                        <th>{Localisation::getTranslation('org_public_profile_alter_permissions')}</th>
                     {/if}
                 </thead>
                 <tbody>
@@ -333,9 +333,9 @@
                         <tr>
                             <td>
                                 {if $member['orgAdmin']}
-                                    <span class="marker org-admin-marker">{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_ADMINISTRATOR)}</span>
+                                    <span class="marker org-admin-marker">{Localisation::getTranslation('org_public_profile_administrator')}</span>
                                 {else}
-                                    <span class="marker org-member-marker">{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_MEMBER)}</span >
+                                    <span class="marker org-member-marker">{Localisation::getTranslation('org_public_profile_member')}</span >
                                 {/if}
                             </td>
                             <td>
@@ -344,20 +344,20 @@
                         {if $adminAccess}
                             <td>
                                 <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse" 
-                                        onclick="return confirm('{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_7)}')">
-                                    <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_REVOKE_MEMBERSHIP)}
+                                        onclick="return confirm('{Localisation::getTranslation('org_public_profile_7')}')">
+                                    <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_public_profile_revoke_membership')}
                                 </button>
                             </td>
                             <td>
                                 {if $member['orgAdmin']}
                                     <button type="submit" name="revokeOrgAdmin" value="{$member->getId()}" class="btn btn-inverse" 
-                                            onclick="return confirm('{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_8)}')">
-                                            <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_REVOKE_ADMINISTRATOR)}
+                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_8')}')">
+                                            <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_public_profile_revoke_administrator')}
                                     </button>
                                 {else}
                                     <button type="submit" name="makeOrgAdmin" value="{$member->getId()}" class="btn btn-success" 
-                                            onclick="return confirm('{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_10)}')"> 
-                                            <i class="icon-star icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CREATE_ADMINISTRATOR)}
+                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_10')}')"> 
+                                            <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_administrator')}
                                     </button>
                                 {/if}
                             </td>
@@ -368,7 +368,7 @@
             </table>
         </form>
     {else}
-        <p class="alert alert-info">{Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_9)}</p>
+        <p class="alert alert-info">{Localisation::getTranslation('org_public_profile_9')}</p>
     {/if}
 {/if}
 

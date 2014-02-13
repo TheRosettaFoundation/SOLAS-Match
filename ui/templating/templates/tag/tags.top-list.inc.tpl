@@ -1,5 +1,5 @@
 {if isset($top_tags) AND is_array($top_tags) AND count($top_tags) > 0}
-    <h3><i class="icon-tags"></i> {Localisation::getTranslation(Strings::TAGS_TOP_LIST_INC_POPULAR_TAGS)}</h3>
+    <h3><i class="icon-tags"></i> {Localisation::getTranslation('tags_top_list_inc_popular_tags')}</h3>
     <ul class="nav nav-list unstyled">
         <li>
             {foreach $top_tags as $tag}
@@ -10,7 +10,7 @@
                 </div>            
             {/foreach}
             <div class="tag">
-                <a class="btn btn-primary btn-small" href="{urlFor name="tags-list"}"><i class="icon-list icon-white"></i> {Localisation::getTranslation(Strings::TAGS_TOP_LIST_INC_MORE_TAGS)}</a>
+                <a class="btn btn-primary btn-small" href="{urlFor name="tags-list"}"><i class="icon-list icon-white"></i> {Localisation::getTranslation('tags_top_list_inc_more_tags')}</a>
             </div>
         </li>
     </ul>

@@ -4,11 +4,11 @@
     <h1 class="page-header">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {$project->getTitle()}
-            <small>{Localisation::getTranslation(Strings::PROJECT_ALTER_ALTER_PROJECT_DETAILS_HERE)}</small>
+            <small>{Localisation::getTranslation('project_alter_alter_project_details_here')}</small>
         </span>
         <div class="pull-right">
             <a href="{urlFor name="project-view" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
-                <i class="icon-list icon-white"></i> {Localisation::getTranslation(Strings::PROJECT_ALTER_VIEW_PROJECT_DETAILS)}
+                <i class="icon-list icon-white"></i> {Localisation::getTranslation('project_alter_view_project_details')}
             </a>
         </div>
     </h1>
@@ -16,20 +16,20 @@
         <table width="100%">
             <tr align="center">
                 <td>
-                    <label for="title" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TITLE)}</strong></label>
+                    <label for="title" style="font-size: large"><strong>{Localisation::getTranslation('common_title')}</strong></label>
                     <textarea wrap="soft" cols="1" rows="4" name="title" style="width: 400px; margin-bottom: 40px">{$project->getTitle()}</textarea>
 
-                    <label for="description" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_DESCRIPTION)}</strong></label>
+                    <label for="description" style="font-size: large"><strong>{Localisation::getTranslation('common_description')}</strong></label>
                     <textarea wrap="soft" cols="1" rows="6" name="description" style="width: 400px; margin-bottom: 40px">{$project->getDescription()}</textarea>
                     
-                    <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_IMPACT)}</strong></label>
+                    <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation('common_impact')}</strong></label>
                     <textarea wrap="soft" cols="1" rows="4" name="impact" style="width: 400px; margin-bottom: 40px">{$project->getImpact()}</textarea>
                 </td>
                 <td>
-                    <label for="tags" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_TAGS)}</strong></label>
+                    <label for="tags" style="font-size: large"><strong>{Localisation::getTranslation('common_tags')}</strong></label>
                     <input id="tags" name="tags" value="{$tag_list}" style="width: 400px;  margin-bottom: 20px"/>
 
-                    <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}</strong></label>
+                    <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                     {if isset($deadlineError) && $deadlineError != ''}
                         <p class="alert alert-error">{$deadlineError}</p>
                     {/if}
@@ -40,7 +40,7 @@
 
                     {if isset($languages)}
                     <p>
-                        <label for="source" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_SOURCE_LANGUAGE)}</strong></label>
+                        <label for="source" style="font-size: large"><strong>{Localisation::getTranslation('common_source_language')}</strong></label>
                         <select name="sourceLanguage" id="sourceLanguage" style="width: 400px;">
                             {foreach $languages as $language}
                                 {if $project->getSourceLocale()->getLanguageCode() == $language->getCode()}
@@ -68,7 +68,7 @@
                     {/if}
                     <p style="margin-bottom:20px;"/>
 
-                    <label for="reference" style="font-size: large"><strong>{Localisation::getTranslation(Strings::COMMON_REFERENCE)}</strong></label>
+                    <label for="reference" style="font-size: large"><strong>{Localisation::getTranslation('common_reference')}</strong></label>
                     <textarea wrap="soft" cols="1" rows="4" name="reference" style="width: 400px">{$project->getReference()}</textarea>
                 </td>
             </tr>
@@ -81,14 +81,14 @@
                 <td>
                     <p style="margin-bottom:20px;"/>  
                     <a href='{urlFor name="org-dashboard"}' class='btn btn-danger'>
-                        <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CANCEL)}
+                        <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation('common_cancel')}
                     </a>
                     <p style="margin-bottom:20px;"/>  
                 </td>
                 <td>
                     <p style="margin-bottom:20px;"/>  
                     <button type="submit" value="Submit" name="submit" class="btn btn-primary">
-                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation(Strings::PROJECT_ALTER_UPDATE_PROJECT_DETAILS)}
+                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('project_alter_update_project_details')}
                     </button> 
                     <p style="margin-bottom:20px;"/>  
                 </td>

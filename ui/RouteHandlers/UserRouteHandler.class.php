@@ -160,12 +160,12 @@ class UserRouteHandler
             $temp = md5($post['email'].substr(Settings::get("session.site_key"), 0, 20));
             UserSession::clearCurrentUserID();
             if (!TemplateHelper::isValidEmail($post['email'])) {
-                $error = Localisation::getTranslation(Strings::REGISTER_1);
+                $error = Localisation::getTranslation('register_1');
             } elseif (!TemplateHelper::isValidPassword($post['password'])) {
-                $error = Localisation::getTranslation(Strings::REGISTER_2);
+                $error = Localisation::getTranslation('register_2');
             } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
                 if ($return = $userDao->isUserVerified($user->getId())) {
-                    $error = sprintf(Localisation::getTranslation(Strings::REGISTER_3), $app->urlFor("login"));
+                    $error = sprintf(Localisation::getTranslation('register_3'), $app->urlFor("login"));
                 }
             }
             
@@ -173,7 +173,7 @@ class UserRouteHandler
                 $userDao->register($post['email'], $post['password']);
                 $app->flashNow(
                     "success",
-                    sprintf(Localisation::getTranslation(Strings::REGISTER_4), $app->urlFor("login"))
+                    sprintf(Localisation::getTranslation('register_4'), $app->urlFor("login"))
                 );
             }
         }
@@ -192,7 +192,7 @@ class UserRouteHandler
             if ($browser == 'IE') {
                 $app->flashNow(
                     "info",
-                    Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9)
+                    Localisation::getTranslation('index_8').Localisation::getTranslation('index_9')
                 );
             }
         }
@@ -208,7 +208,7 @@ class UserRouteHandler
         $user = $userDao->getRegisteredUser($uuid);
 
         if (is_null($user)) {
-            $app->flash("error", Localisation::getTranslation(Strings::EMAIL_VERIFICATION_7));
+            $app->flash("error", Localisation::getTranslation('email_verification_7'));
             $app->redirect($app->urlFor("home"));
         }
 
@@ -217,7 +217,7 @@ class UserRouteHandler
             if (isset($post['verify'])) {
                 $userDao->finishRegistration($uuid);
                 UserSession::setSession($user->getId());
-                $app->flash("success", Localisation::getTranslation(Strings::EMAIL_VERIFICATION_8));
+                $app->flash("success", Localisation::getTranslation('email_verification_8'));
                 $app->redirect($app->urlFor("home"));
             }
         }
@@ -234,7 +234,7 @@ class UserRouteHandler
         
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
-            $app->flash("error", Localisation::getTranslation(Strings::PASSWORD_RESET_1));
+            $app->flash("error", Localisation::getTranslation('password_reset_1'));
             $app->redirect($app->urlFor("home"));
         }
         
@@ -249,16 +249,16 @@ class UserRouteHandler
 
                     $response = $userDao->resetPassword($post['new_password'], $uid);
                     if ($response) {
-                        $app->flash("success", Localisation::getTranslation(Strings::PASSWORD_RESET_2));
+                        $app->flash("success", Localisation::getTranslation('password_reset_1'));
                         $app->redirect($app->urlFor("home"));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::PASSWORD_RESET_3));
+                        $app->flashNow("error", Localisation::getTranslation('password_reset_1'));
                     }
                 } else {
-                    $app->flashNow("error", Localisation::getTranslation(Strings::PASSWORD_RESET_4));
+                    $app->flashNow("error", Localisation::getTranslation('password_reset_1'));
                 }
             } else {
-                $app->flashNow("error", Localisation::getTranslation(Strings::PASSWORD_RESET_5));
+                $app->flashNow("error", Localisation::getTranslation('password_reset_1'));
             }
         }
         $app->render("user/password-reset.tpl");
@@ -279,7 +279,7 @@ class UserRouteHandler
                     if (!$hasUserRequestedPwReset) {
                         //send request
                         if ($userDao->requestPasswordReset($email)) {
-                            $app->flash("success", Localisation::getTranslation(Strings::USER_RESET_PASSWORD_2));
+                            $app->flash("success", Localisation::getTranslation('user_reset_password_2'));
                             $app->redirect($app->urlFor("home"));
                         } else {
                             $app->flashNow(
@@ -294,7 +294,7 @@ class UserRouteHandler
                         if ($response != null) {
                             $app->flashNow(
                                 "info",
-                                Localisation::getTranslation(Strings::USER_RESET_PASSWORD_3),
+                                Localisation::getTranslation('user_reset_password_3'),
                                 $response
                             );
                             //Send request
@@ -303,7 +303,7 @@ class UserRouteHandler
                     }
 
                 } else {
-                    $app->flashNow("error", Localisation::getTranslation(Strings::USER_RESET_PASSWORD_4));
+                    $app->flashNow("error", Localisation::getTranslation('user_reset_password_4'));
                 }
             }
         }
@@ -378,7 +378,7 @@ class UserRouteHandler
                 if ($browser == 'IE') {
                     $app->flashNow(
                         "info",
-                        Localisation::getTranslation(Strings::INDEX_8).Localisation::getTranslation(Strings::INDEX_9)
+                        Localisation::getTranslation('index_8').Localisation::getTranslation('index_9')
                     );
                 }
             }
@@ -386,7 +386,7 @@ class UserRouteHandler
             $app->render("user/login.tpl");
         } catch (SolasMatchException $e) {
             $error = sprintf(
-                Localisation::getTranslation(Strings::LOGIN_1),
+                Localisation::getTranslation('login_1'),
                 $app->urlFor("login"),
                 $app->urlFor("register"),
                 $e->getMessage()
@@ -409,7 +409,7 @@ class UserRouteHandler
                 echo $e->getMessage();
             }
         } elseif ($openid->mode == "cancel") {
-            throw new InvalidArgumentException(Localisation::getTranslation(Strings::LOGIN_2));
+            throw new InvalidArgumentException(Localisation::getTranslation('login_2'));
         } else {
             $retvals= $openid->getAttributes();
             if ($openid->validate()) {
@@ -426,7 +426,7 @@ class UserRouteHandler
                 } else {
                     $app->flash(
                         'error',
-                        Localisation::getTranslation(Strings::COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED)
+                        Localisation::getTranslation('common_this_user_account_has_been_banned')
                     );
                     $app->redirect($app->urlFor('home'));
                 }
@@ -446,7 +446,7 @@ class UserRouteHandler
         CacheHelper::unCache(CacheHelper::GET_USER.$userId);
         
         if (!is_object($user)) {
-            $app->flash("error", Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
+            $app->flash("error", Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor("login"));
         }
 
@@ -482,7 +482,7 @@ class UserRouteHandler
             CacheHelper::unCache(CacheHelper::GET_USER.$user_id);
             $user = $userDao->getUser($user_id);
         } catch (SolasMatchException $e) {
-             $app->flash('error', Localisation::getTranslation(Strings::COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE));
+             $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
              $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo=null;
@@ -607,7 +607,7 @@ class UserRouteHandler
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
-                $app->flash("success", Localisation::getTranslation(Strings::USER_PUBLIC_PROFILE_17));
+                $app->flash("success", Localisation::getTranslation('user_public_profile_17'));
                 $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
             }
         }

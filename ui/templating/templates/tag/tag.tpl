@@ -2,17 +2,17 @@
 {include file="handle-flash-messages.tpl"}
 
     <div class="page-header">
-        <h1>{sprintf(Localisation::getTranslation(Strings::TAG_TASKS_RELATED_TO), $tag->getLabel())} <small>{Localisation::getTranslation(Strings::TAG_0)}</small>
+        <h1>{sprintf(Localisation::getTranslation('tag_tasks_related_to'), $tag->getLabel())} <small>{Localisation::getTranslation('tag_0')}</small>
              {if isset($user)}
                 {if isset($subscribed)}
                     <a href="{urlFor name="tag-subscribe" options="id.{$tag->getId()}|subscribe.false"}" class="pull-right btn btn-inverse"
-                        title="{Localisation::getTranslation(Strings::TAG_1)}">
-                        <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation(Strings::TAG_UNSUBSCRIBE)}
+                        title="{Localisation::getTranslation('tag_1')}">
+                        <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation('tag_unsubscribe')}
                     </a>
                 {else}
                     <a href="{urlFor name="tag-subscribe" options="id.{$tag->getId()}|subscribe.true"}" class="pull-right btn btn-primary"
-                        title="{Localisation::getTranslation(Strings::TAG_2)}">
-                        <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation(Strings::TAG_SUBSCRIBE_TO_TAG)}
+                        title="{Localisation::getTranslation('tag_2')}">
+                        <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('tag_subscribe_to_tag')}
                     </a>
                 {/if}
             {/if}           
@@ -29,7 +29,7 @@
                 </div>
             {else}
                 <div class="alert alert-warning">
-                    <strong>{Localisation::getTranslation(Strings::TAG_NO_OPEN_TASKS)}</strong> {Localisation::getTranslation(Strings::TAG_3)}
+                    <strong>{Localisation::getTranslation('tag_no_open_tasks')}</strong> {Localisation::getTranslation('tag_3')}
                 </div>
             {/if}
         </div>

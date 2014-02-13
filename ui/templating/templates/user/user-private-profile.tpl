@@ -7,19 +7,19 @@
         {if $profileUser->getDisplayName() != ''}
             {$profileUser->getDisplayName()}
         {else}
-            {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_PRIVATE_PROFILE)}
+            {Localisation::getTranslation('user_private_profile_private_profile')}
         {/if}
-        <small>{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_0)}</small><br>
+        <small>{Localisation::getTranslation('user_private_profile_0')}</small><br>
         <small>
-            {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}
+            {Localisation::getTranslation('common_denotes_a_required_field')}
         </small>
         </h1>
     </div>
 {/if}
 
 <div class="well alert-info">
-    <p><strong>{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_PLEASE_NOTE)}</strong></p>
-    <p>{Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_3)} {Localisation::getTranslation(Strings::USER_PRIVATE_PROFILE_4)}</p>
+    <p><strong>{Localisation::getTranslation('user_private_profile_please_note')}</strong></p>
+    <p>{Localisation::getTranslation('user_private_profile_3')} {Localisation::getTranslation('user_private_profile_4')}</p>
 </div>
     
 <user-private-profile-form userid="{$profileUser->getId()}"></user-private-profile-form>

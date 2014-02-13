@@ -126,16 +126,16 @@ class ProjectRouteHandler
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
                     if ($userTrackProject) {
-                        $app->flashNow("success", Localisation::getTranslation(Strings::PROJECT_VIEW_7));
+                        $app->flashNow("success", Localisation::getTranslation('project_view_7'));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::PROJECT_VIEW_8));
+                        $app->flashNow("error", Localisation::getTranslation('project_view_8'));
                     }
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
                     if ($userUntrackProject) {
-                        $app->flashNow("success", Localisation::getTranslation(Strings::PROJECT_VIEW_9));
+                        $app->flashNow("success", Localisation::getTranslation('project_view_9'));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation(Strings::PROJECT_VIEW_10));
+                        $app->flashNow("error", Localisation::getTranslation('project_view_10'));
                     }
                 }
             } elseif (isset($post['trackTask'])) {
@@ -150,12 +150,12 @@ class ProjectRouteHandler
                     if ($response) {
                         $app->flashNow(
                             "success",
-                            sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_11), $task_title)
+                            sprintf(Localisation::getTranslation('project_view_11'), $task_title)
                         );
                     } else {
                         $app->flashNow(
                             "error",
-                            sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_12), $task_title)
+                            sprintf(Localisation::getTranslation('project_view_12'), $task_title)
                         );
                     }
                 } else {
@@ -163,12 +163,12 @@ class ProjectRouteHandler
                     if ($response) {
                         $app->flashNow(
                             "success",
-                            sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_13), $task_title)
+                            sprintf(Localisation::getTranslation('project_view_13'), $task_title)
                         );
                     } else {
                         $app->flashNow(
                             "error",
-                            sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_14), $task_title)
+                            sprintf(Localisation::getTranslation('project_view_14'), $task_title)
                         );
                     }
                 }
@@ -178,7 +178,7 @@ class ProjectRouteHandler
                 $taskDao->deleteTask($post['task_id']);
                 $app->flashNow(
                     "success",
-                    sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_15), $task->getTitle())
+                    sprintf(Localisation::getTranslation('project_view_15'), $task->getTitle())
                 );
             }
 
@@ -186,7 +186,7 @@ class ProjectRouteHandler
                 $taskDao->archiveTask($post['task_id'], $user_id);
                 $app->flashNow(
                     "success",
-                    sprintf(Localisation::getTranslation(Strings::PROJECT_VIEW_16), $task->getTitle())
+                    sprintf(Localisation::getTranslation('project_view_16'), $task->getTitle())
                 );
             }
         }
@@ -287,7 +287,7 @@ class ProjectRouteHandler
                     $date = date("Y-m-d H:i:s", $validTime);
                     $project->setDeadline($date);
                 } else {
-                    $deadlineError = Localisation::getTranslation(Strings::PROJECT_ALTER_11);
+                    $deadlineError = Localisation::getTranslation('project_alter_11');
                 }
             }
             
@@ -415,12 +415,12 @@ class ProjectRouteHandler
         if ($archivedProject) {
             $app->flash(
                 "success",
-                sprintf(Localisation::getTranslation(Strings::ORG_DASHBOARD_9), $project->getTitle())
+                sprintf(Localisation::getTranslation('org_dashboard_9'), $project->getTitle())
             );
         } else {
             $app->flash(
                 "error",
-                sprintf(Localisation::getTranslation(Strings::ORG_DASHBOARD_10), $project->getTitle())
+                sprintf(Localisation::getTranslation('org_dashboard_10'), $project->getTitle())
             );
         }
         

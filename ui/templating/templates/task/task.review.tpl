@@ -1,14 +1,14 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>{Localisation::getTranslation(Strings::TASK_REVIEW_PROVIDE_A_RATING)} <small>{Localisation::getTranslation(Strings::TASK_REVIEW_0)}</small></h1>
+    <h1>{Localisation::getTranslation('task_review_provide_a_rating')} <small>{Localisation::getTranslation('task_review_0')}</small></h1>
 </div>
 
 {include file="handle-flash-messages.tpl"}
 
 <p>
-    {Localisation::getTranslation(Strings::TASK_REVIEW_1)} {Localisation::getTranslation(Strings::TASK_REVIEW_2)}
-    {$action} {Localisation::getTranslation(Strings::TASK_REVIEW_3)}
+    {Localisation::getTranslation('task_review_1')} {Localisation::getTranslation('task_review_2')}
+    {$action} {Localisation::getTranslation('task_review_3')}
 </p>
 
 {if isset($formAction)}
@@ -31,11 +31,11 @@
       
         {if !isset($review)}
             <button class="btn btn-primary" type="submit" name="submitReview">
-                <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_SUBMIT_REVIEW)}
+                <i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_review_form_submit_review')}
             </button>
         {/if}
         <button class="btn btn-inverse" type="submit" name="skip">
-            <i class="icon-circle-arrow-right icon-white"></i> {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_SKIP)}
+            <i class="icon-circle-arrow-right icon-white"></i> {Localisation::getTranslation('task_review_form_skip')}
         </button>
     {/if}
 {if isset($formAction)}

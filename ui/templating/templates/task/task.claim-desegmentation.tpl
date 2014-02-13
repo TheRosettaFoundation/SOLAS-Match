@@ -2,36 +2,36 @@
 
     <section>
         <div class="page-header">
-            <h1>{$task->getTitle()} <small>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_DESEGMENTATION_TASK)}</small></h1>
+            <h1>{$task->getTitle()} <small>{Localisation::getTranslation('task_claim_desegmentation_desegmentation_task')}</small></h1>
         </div>
     </section>
 
     <section>
-        <h2>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_0)} <small>{Localisation::getTranslation(Strings::COMMON_AFTER_DOWNLOADING)}</small></h2>
+        <h2>{Localisation::getTranslation('task_claim_desegmentation_0')} <small>{Localisation::getTranslation('common_after_downloading')}</small></h2>
         <hr />
-        <h3>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_1)} <small>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_2)}</small></h3>
+        <h3>{Localisation::getTranslation('task_claim_desegmentation_1')} <small>{Localisation::getTranslation('task_claim_desegmentation_2')}</small></h3>
         <p style="margin-bottom:20px;"></p>
         <ol>
             {if $taskMetadata->getContentType() != ''}
-                <li>{sprintf(Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_3), {$taskMetadata->getContentType()})}</li>
+                <li>{sprintf(Localisation::getTranslation('task_claim_desegmentation_3'), {$taskMetadata->getContentType()})}</li>
             {/if}
-            <li>{Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_4)}</li>
-            <li>{sprintf(Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_6), {$targetLanguage->getName()})}</li>
+            <li>{Localisation::getTranslation('task_claim_desegmentation_4')}</li>
+            <li>{sprintf(Localisation::getTranslation('task_claim_desegmentation_6'), {$targetLanguage->getName()})}</li>
         </ol>
     </section>
 
     <section>
-        <h3>{Localisation::getTranslation(Strings::COMMON_IT_IS_TIME_TO_DECIDE)}</h3>
+        <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>
         <p> 
-            {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_7)} {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_8)}
+            {Localisation::getTranslation('task_claim_desegmentation_7')} {Localisation::getTranslation('task_claim_desegmentation_8')}
         </p>
         <p> 
             <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                 <button type="submit" class="btn btn-primary">
-                    <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation(Strings::TASK_CLAIM_DESEGMENTATION_9)}
+                    <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('task_claim_desegmentation_9')}
                 </button>
                 <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn">
-                    <i class="icon-ban-circle icon-black"></i> {Localisation::getTranslation(Strings::COMMON_NO_JUST_BRING_ME_BACK_TO_THE_TASK_PAGE)}
+                    <i class="icon-ban-circle icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                 </a>
             </form>
         </p>

@@ -5,12 +5,12 @@
     {if $org->getName() != ''}
         {$org->getname()}
     {else}
-        {Localisation::getTranslation(Strings::COMMON_ORGANISATION_PROFILE)}
+        {Localisation::getTranslation('common_organisation_profile')}
     {/if}
-    <small>{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_0)}</small>
+    <small>{Localisation::getTranslation('org_private_profile_0')}</small>
     {assign var="org_id" value=$org->getId()}
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="pull-right btn btn-primary">
-            <i class="icon-list icon-white"></i> {Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_PUBLIC_PROFILE)}
+            <i class="icon-list icon-white"></i> {Localisation::getTranslation('org_private_profile_public_profile')}
             </a>
         </h1>
     </div>
@@ -26,27 +26,27 @@
             <tr valign="top" align="center"> 
                 <td width="50%">
                     
-                    <label for='displayName'><strong>{Localisation::getTranslation(Strings::COMMON_DISPLAY_NAME)}</strong></label>
+                    <label for='displayName'><strong>{Localisation::getTranslation('common_display_name')}</strong></label>
                     <input type='text' name='displayName' id='displayName' style="width: 80%"
                     {if $org->getName() != ''}
                        value="{$org->getName()}"
                     {else}
-                        placeholder='{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_YOUR_ORGANISATION_NAME)}' 
+                        placeholder='{Localisation::getTranslation('org_private_profile_your_organisation_name')}' 
                     {/if}
                     />
                     
-                    <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}</strong></label>
+                    <label for='address'><strong>{Localisation::getTranslation('common_address')}</strong></label>
                     <textarea name='address' cols='40' rows='7' style="width: 80%"
                     >{if $org->getAddress() != ''} {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())} {/if}</textarea>
                     
-                    <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}</strong></label>
+                    <label for='city'><strong>{Localisation::getTranslation('common_city')}</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%"
                     {if $org->getCity() != ''}
                          value="{$org->getCity()}"
                     {/if}
                     />
 
-                    <label for='country'><strong>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}</strong></label>
+                    <label for='country'><strong>{Localisation::getTranslation('common_country')}</strong></label>
                     <input type='text' name='country' id='country' style="width: 80%"
                     {if $org->getCountry() != ''}
                          value="{$org->getCountry()}"
@@ -56,7 +56,7 @@
                 </td>
                 <td width="50%">
                     
-                    <label for='homepage'><strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}</strong></label>
+                    <label for='homepage'><strong>{Localisation::getTranslation('common_home_page')}</strong></label>
                     <input type='text' name='homepage' id='homepage' style="width: 80%"
                     {if $org->getHomePage() != 'http://'}
                         value="{$org->getHomePage()}"
@@ -65,19 +65,19 @@
                     {/if}
                      /> 
                     
-                    <label for='email'><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}</strong></label>
+                    <label for='email'><strong>{Localisation::getTranslation('common_email')}</strong></label>
                     <input type='text' name='email' id='email' style="width: 80%"
                     {if $org->getEmail() != ''}
                          value="{$org->getEmail()}"
                     {else}
-                        placeholder='{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_ORGANISATIONEXAMPLECOM)}'
+                        placeholder='{Localisation::getTranslation('org_private_profile_organisationexamplecom')}'
                     {/if}
                     />   
                     
-                    <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</strong></label>
+                    <label for='biography'><strong>{Localisation::getTranslation('common_biography')}</strong></label>
                     <textarea name='biography' cols='40' rows='10' style="width: 80%" 
                     {if $org->getBiography() == ''}
-                        placeholder="{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_ENTER_ORGANISATION_BIOGRAPHY_HERE)}"
+                        placeholder="{Localisation::getTranslation('org_private_profile_enter_organisation_biography_here')}"
                     {/if}
                     >{if $org->getBiography() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}{/if}</textarea>
                     
@@ -86,19 +86,19 @@
             <tr>                
                 <td colspan="2" style="font-weight: bold; text-align: center; padding-bottom: 10px">
                     <hr/>
-                    {Localisation::getTranslation(Strings::COMMON_REGIONAL_FOCUS)}
+                    {Localisation::getTranslation('common_regional_focus')}
                 </td>
             </tr>  
             <tr align="center">
                 <td colspan="2">
                     <table> 
                         <thead>
-                            <th>{Localisation::getTranslation(Strings::COMMON_AFRICA)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_ASIA)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_AUSTRALIA)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_EUROPE)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_NORTH_AMERICA)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_SOUTH_AMERICA)}</th>                       
+                            <th>{Localisation::getTranslation('common_africa')}</th>
+                            <th>{Localisation::getTranslation('common_asia')}</th>
+                            <th>{Localisation::getTranslation('common_australia')}</th>
+                            <th>{Localisation::getTranslation('common_europe')}</th>
+                            <th>{Localisation::getTranslation('common_north_america')}</th>
+                            <th>{Localisation::getTranslation('common_south_america')}</th>                       
                         </thead>
                         <tr align="center">
                             <td style="width: 15%"><input id="africa" name="africa" type="checkbox" {if strstr($org->getRegionalFocus(), "Africa")} checked="true" {/if} /></td>   
@@ -118,12 +118,12 @@
             <tr>
                 <td colspan="2" align="center">
                     <button type='submit' class='btn btn-primary' name='updateOrgDetails'>
-                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_UPDATE_ORGANISATION_DETAILS)}
+                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('org_private_profile_update_organisation_details')}
                     </button>
                     {if isset($orgAdmin)}
                         <button type="submit" class="btn btn-inverse" value="{$org_id}" name="deleteId"
-                                onclick="return confirm('{Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_1)}');"> 
-                            <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::ORG_PRIVATE_PROFILE_DELETE_ORGANISATION)}
+                                onclick="return confirm('{Localisation::getTranslation('org_private_profile_1')}');"> 
+                            <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_private_profile_delete_organisation')}
                         </button>
                     {/if}
                 </td>

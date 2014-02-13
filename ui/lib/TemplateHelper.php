@@ -60,15 +60,15 @@ class TemplateHelper
     {
         switch ($taskTypeId) {
             case TaskTypeEnum::DESEGMENTATION:
-                return Localisation::getTranslation(Strings::COMMON_DESEGMENTATION_TASK);
+                return Localisation::getTranslation('common_desegmentation_task');
             case TaskTypeEnum::TRANSLATION:
-                return Localisation::getTranslation(Strings::COMMON_TRANSLATION_TASK);
+                return Localisation::getTranslation('common_translation_task');
             case TaskTypeEnum::PROOFREADING:
-                return Localisation::getTranslation(Strings::COMMON_PROOFREADING_TASK);
+                return Localisation::getTranslation('common_proofreading_task');
             case TaskTypeEnum::SEGMENTATION:
-                return Localisation::getTranslation(Strings::COMMON_SEGMENTATION_TASK);
+                return Localisation::getTranslation('common_segmentation_task');
             default:
-                return Localisation::getTranslation(Strings::COMMON_ERROR_UNKNOWN_TASK_TYPE);
+                return Localisation::getTranslation('common_error_unknown_task_type');
         }
     }
 
@@ -325,7 +325,7 @@ class TemplateHelper
         $language = $langDao->getLanguageByCode($languageCode);
         if (is_null(($language))) {
             throw new InvalidArgumentException(
-                Localisation::getTranslation(Strings::COMMON_ERROR_LANGUAGE_CODE_EXPECTED)
+                Localisation::getTranslation('common_error_language_code_expected')
             );
         }
         return $language->getId();
@@ -370,7 +370,7 @@ class TemplateHelper
             $error_message = self::fileUploadErrorMessage($_FILES[$field_name]["error"]);
             throw new Exception(
                 sprintf(
-                    Localisation::getTranslation(Strings::COMMON_ERROR_UNABLE_TO_UPLOAD),
+                    Localisation::getTranslation('common_error_unable_to_upload'),
                     $error_message
                 )
             );
@@ -393,21 +393,21 @@ class TemplateHelper
         $max_file_size = self::maxFileSizeMB();
         switch ($error_code) {
             case UPLOAD_ERR_INI_SIZE:
-                return sprintf(Localisation::getTranslation(Strings::COMMON_ERROR_FILE_TOO_LARGE), $max_file_size);
+                return sprintf(Localisation::getTranslation('common_error_file_too_large'), $max_file_size);
             case UPLOAD_ERR_FORM_SIZE:
-                return Localisation::getTranslation(Strings::COMMON_ERROR_FILE_TOO_LARGE);
+                return Localisation::getTranslation('common_error_file_too_large');
             case UPLOAD_ERR_PARTIAL:
-                return Localisation::getTranslation(Strings::COMMON_ERROR_PARTIAL_UPLOAD);
+                return Localisation::getTranslation('common_error_partial_upload');
             case UPLOAD_ERR_NO_FILE:
-                return Localisation::getTranslation(Strings::COMMON_ERROR_NO_FILE_SELECTED);
+                return Localisation::getTranslation('common_error_no_file_selected');
             case UPLOAD_ERR_NO_TMP_DIR:
-                return Localisation::getTranslation(Strings::COMMON_ERROR_SERVER_MISSING_TEMP);
+                return Localisation::getTranslation('common_error_server_missing_temp');
             case UPLOAD_ERR_CANT_WRITE:
-                return Localisation::getTranslation(Strings::COMMON_ERROR_SERVER_FAILED_WRITE_DISK);
+                return Localisation::getTranslation('common_error_server_failed_write_disk');
             case UPLOAD_ERR_EXTENSION:
-                return Localisation::getTranslation(Strings::COMMON_ERROR_FILE_STOPPED_BY_EXTENSION);
+                return Localisation::getTranslation('common_error_file_stopped_by_extension');
             default:
-                return Localisation::getTranslation(Strings::COMMON_ERROR_FILE_INVALID_EMPTY);
+                return Localisation::getTranslation('common_error_file_invalid_empty');
         }
     }
 

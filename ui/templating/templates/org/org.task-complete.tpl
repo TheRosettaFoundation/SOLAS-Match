@@ -2,7 +2,7 @@
 
 {assign var="taskId" value=$task->getId()}
 <div class="page-header">
-    <h1>{$task->getTitle()} <small>{Localisation::getTranslation(Strings::ORG_TASK_REVIEW_REVIEW_THIS_COMPLETED_TASK)}</small></h1>
+    <h1>{$task->getTitle()} <small>{Localisation::getTranslation('org_task_review_review_this_completed_task')}</small></h1>
 </div>
 
 <p>
@@ -11,17 +11,17 @@
     {else}
         {Localisation::getTranslation("org_task_review_claimant_unavailable")}
     {/if}
-    {Localisation::getTranslation(Strings::ORG_TASK_REVIEW_0)}
+    {Localisation::getTranslation('org_task_review_0')}
 </p>
 <p>
     <a class="btn btn-primary" href="{urlFor name="download-task-latest-version" options="task_id.$taskId"}">
-        <i class="icon-download icon-white"></i> {Localisation::getTranslation(Strings::ORG_TASK_REVIEW_DOWNLOAD_OUTPUT_FILE)}
+        <i class="icon-download icon-white"></i> {Localisation::getTranslation('org_task_review_download_output_file')}
     </a>
 </p>
 
 <h2 class="page-header">
-    {Localisation::getTranslation(Strings::ORG_TASK_REVIEW_REVIEW_THIS_FILE)}
-    <small>{Localisation::getTranslation(Strings::ORG_TASK_REVIEW_1)}</small>
+    {Localisation::getTranslation('org_task_review_review_this_file')}
+    <small>{Localisation::getTranslation('org_task_review_1')}</small>
 </h2>
 
 <p>Use the buttons below to provide a review for the current task or view reviews already provided for this task</p>

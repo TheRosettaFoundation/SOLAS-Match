@@ -2,12 +2,12 @@
 {if $reviewedTask->getId() != null}
     {assign var="id" value=$reviewedTask->getId()}
     <p>
-        {sprintf(Localisation::getTranslation(Strings::TASK_REVIEW_FORM_0), {urlFor name="download-task-latest-version" options="task_id.$id"})}
+        {sprintf(Localisation::getTranslation('task_review_form_0'), {urlFor name="download-task-latest-version" options="task_id.$id"})}
     </p>
 {else}
     {assign var="id" value=$reviewedTask->getProjectId()}
     <p>
-        {sprintf(Localisation::getTranslation(Strings::TASK_REVIEW_FORM_1), {urlFor name="download-project-file" options="project_id.$id"})}
+        {sprintf(Localisation::getTranslation('task_review_form_1'), {urlFor name="download-project-file" options="project_id.$id"})}
     </p>
 {/if}
 
@@ -19,8 +19,8 @@
     {assign var='readonly' value=""}
 {/if}
 <h3>
-    {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_CORRECTIONS)} 
-    <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_2)}</small>
+    {Localisation::getTranslation('task_review_form_corrections')} 
+    <small>{Localisation::getTranslation('task_review_form_2')}</small>
 </h3>
 <p><i>{Localisation::getTranslation("task_review_form_rating")}</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
@@ -35,10 +35,10 @@
     {assign var='readonly' value=""}
 {/if}
 <h3>
-    {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_GRAMMAR)} 
-    <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_3)}</small>
+    {Localisation::getTranslation('task_review_form_grammar')} 
+    <small>{Localisation::getTranslation('task_review_form_3')}</small>
 </h3>
-<p><i>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_RATING)}</i></p>
+<p><i>{Localisation::getTranslation('task_review_form_rating')}</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_grammar_{$id}" {$readonly}>
 </div>
@@ -51,10 +51,10 @@
     {assign var='readonly' value=""}
 {/if}
 <h3>
-    {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_SPELLING)}
-    <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_4)}</small>
+    {Localisation::getTranslation('task_review_form_spelling')}
+    <small>{Localisation::getTranslation('task_review_form_4')}</small>
 </h3>
-<p><i>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_RATING)}</i></p>
+<p><i>{Localisation::getTranslation('task_review_form_rating')}</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_spelling_{$id}" {$readonly}>
 </div>
@@ -67,10 +67,10 @@
     {assign var='readonly' value=""}
 {/if}
 <h3>
-    {Localisation::getTranslation(Strings::TASK_REVIEW_FORM_CONSISTENCY)}
-    <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_5)}</small>
+    {Localisation::getTranslation('task_review_form_consistency')}
+    <small>{Localisation::getTranslation('task_review_form_5')}</small>
 </h3>
-<p><i>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_RATING)}</i></p>
+<p><i>{Localisation::getTranslation('task_review_form_rating')}</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_consistency_{$id}" {$readonly}>
 </div>
@@ -78,16 +78,16 @@
 {if isset($review)}
 	{if !is_null($review->getComment())}
     	<h3>
-    		{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_COMMENT)}
-        	<small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_6)}</small>
+    		{Localisation::getTranslation('task_review_form_comment')}
+        	<small>{Localisation::getTranslation('task_review_form_6')}</small>
 		</h3>
     	<p>{$review->getComment()}</p>
     {/if}
 {else}
 
 	<h3>
-    	{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_COMMENT)}
-        <small>{Localisation::getTranslation(Strings::TASK_REVIEW_FORM_6)}</small>
+    	{Localisation::getTranslation('task_review_form_comment')}
+        <small>{Localisation::getTranslation('task_review_form_6')}</small>
 	</h3>
     <textarea name="comment_{$id}" cols='40' rows='10' style="width: 80%"></textarea>
 {/if}

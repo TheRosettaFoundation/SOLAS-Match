@@ -1,39 +1,39 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1>{Localisation::getTranslation(Strings::LOGIN_LOG_IN_TO)} {Settings::get('site.name')}</h1>
+            <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
     </div>
 
     {if isset($flash['error'])}
         <div class="alert alert-error">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-            <p><strong>{Localisation::getTranslation(Strings::COMMON_WARNING)}! </strong>{$flash['error']}</p>
+            <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{$flash['error']}</p>
         </div>
     {/if}
 
     {if isset($flash['info'])}
         <div class="alert alert-info">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-            <p><strong>{Localisation::getTranslation(Strings::COMMON_NOTE)}: </strong>{$flash['info']}</p>
+            <p><strong>{Localisation::getTranslation('common_note')}: </strong>{$flash['info']}</p>
         </div>
     {/if}
 
     {if isset($flash['success'])}
         <div class="alert alert-success">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-            <p><strong>{Localisation::getTranslation(Strings::COMMON_SUCCESS)}! </strong>{$flash['success']}</p>
+            <p><strong>{Localisation::getTranslation('common_success')}! </strong>{$flash['success']}</p>
         </div>
     {/if}
 
     {if isset($openid)&& ($openid==='n'||$openid==='h' )}
         <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
-            <label for="email"><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}</strong></label>
+            <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
             <input type="text" name="email" id="email"/>
-            <label for="password"><strong>{Localisation::getTranslation(Strings::COMMON_PASSWORD)}</strong></label>
+            <label for="password"><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password"/>
             <p>
-                <input type="submit" class="btn btn-primary" name="login" value="   {Localisation::getTranslation(Strings::COMMON_LOG_IN)}" />
-                <input type="submit" class="btn btn-inverse" name="password_reset" value="   {Localisation::getTranslation(Strings::LOGIN_RESET_PASSWORD)}" />
+                <input type="submit" class="btn btn-primary" name="login" value="   {Localisation::getTranslation('common_log_in')}" />
+                <input type="submit" class="btn btn-inverse" name="password_reset" value="   {Localisation::getTranslation('login_reset_password')}" />
                 <i class="icon-share icon-white" style="position:relative; right:200px;top:2px;"></i>
                 <i class="icon-exclamation-sign icon-white" style="position:relative; right:145px; top:2px;"></i>        
             </p>
@@ -45,19 +45,19 @@
         <form action="{urlFor name='login'}" method="post" id="openid_form">
             <input type="hidden" name="action" value="verify" />
             <fieldset>
-                <legend>{Localisation::getTranslation(Strings::COMMON_SIGNIN_OR_CREATE_NEW_ACCOUNT)}</legend>
+                <legend>{Localisation::getTranslation('common_signin_or_create_new_account')}</legend>
                 <div id="openid_choice">
-                    <p>{Localisation::getTranslation(Strings::COMMON_PLEASE_CLICK_YOUR_ACCOUNT_PROVIDER)}</p>
+                    <p>{Localisation::getTranslation('common_please_click_your_account_provider')}</p>
                     <div id="openid_btns"></div>
                 </div>
                 <div id="openid_input_area">
                     <input id="openid_identifier" name="openid_identifier" type="text" />
-                    <input id="openid_submit" type="submit" class="btn btn-primary" value="{Localisation::getTranslation(Strings::LOGIN_SIGNIN)}"/>
+                    <input id="openid_submit" type="submit" class="btn btn-primary" value="{Localisation::getTranslation('login_signin')}"/>
                 </div>
                 <noscript>
                     <p>
-                        {Localisation::getTranslation(Strings::COMMON_OPENID_IS_SERVICE_THAT_ALLOWS_YOU_TO_LOGON_TO_MANY_DIFFERENT_WEBSITES_USING_A_SINGLE_INDENTITY)}
-                        {sprintf(Localisation::getTranslation(Strings::LOGIN_0), "http://openid.net/what/", "http://openid.net/get/")}
+                        {Localisation::getTranslation('common_openid_is_service_that_allows_you_to_logon_to_many_different_websites_using_a_single_indentity')}
+                        {sprintf(Localisation::getTranslation('login_0'), "http://openid.net/what/", "http://openid.net/get/")}
                     </p>
                 </noscript>
             </fieldset>
