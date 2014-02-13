@@ -2,7 +2,7 @@
 class Strings
 {
     // Smarty Template Strings
-    const COMMON_FAQ ="common_faq";
+    const COMMON_FAQ ='common_faq';
     const COMMON_BANNED_BY = 'common_banned_by';
     const COMMON_BAN_DURATION = 'common_ban_duration';
     const COMMON_BAN_REASON = 'common_ban_reason';
@@ -151,9 +151,9 @@ class Strings
     const COMMON_ERROR = 'common_error';
     const COMMON_LOADING = 'common_loading';
     const COMMON_SIP = 'common_sip';
-    const COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE = "common_login_required_to_access_page";
-    const COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED = "common_this_user_account_has_been_banned";
-    const COMMON_ASSIGN_BADGE = "common_assign_badge";
+    const COMMON_LOGIN_REQUIRED_TO_ACCESS_PAGE = 'common_login_required_to_access_page';
+    const COMMON_THIS_USER_ACCOUNT_HAS_BEEN_BANNED = 'common_this_user_account_has_been_banned';
+    const COMMON_ASSIGN_BADGE = 'common_assign_badge';
     const COMMON_SUCCESSFULLY_ADDED_MEMBER = 'common_successfully_added_member';
     const COMMON_INVALID_USERID = 'common_invalid_userid';
     const COMMON_NO_VALID_EMAIL = 'common_no_valid_email';
@@ -209,9 +209,9 @@ class Strings
     const SITE_ADMIN_DASHBOARD_DELETE_USER = 'site_admin_dashboard_delete_user';
     const SITE_ADMIN_DASHBOARD_PERMANENTLY = 'site_admin_dashboard_permanently';
     const SITE_ADMIN_DASHBOARD_5 = 'site_admin_dashboard_5';
-    const SITE_ADMIN_DASHBOARD_SUCCESSFULLY_DELETED_USER = "site_admin_dashboard_successfully_deleted_user";
-    const SITE_ADMIN_DASHBOARD_6 = "site_admin_dashboard_6";
-    const SITE_ADMIN_DASHBOARD_7 = "site_admin_dashboard_7";
+    const SITE_ADMIN_DASHBOARD_SUCCESSFULLY_DELETED_USER = 'site_admin_dashboard_successfully_deleted_user';
+    const SITE_ADMIN_DASHBOARD_6 = 'site_admin_dashboard_6';
+    const SITE_ADMIN_DASHBOARD_7 = 'site_admin_dashboard_7';
 
     const BADGE_LIST_BADGE_LIST = 'badge_list_badge_list';
     const BADGE_LIST_ALL_AVAILABLE_BADGES_OF = 'badge_list_all_available_badges_of';
@@ -951,7 +951,7 @@ class Strings
     const FAQ_QUICKLINKS = 'faq_quicklinks';
     const FAQ_VOLUNTEERS= 'faq_volunteers';
     const FAQ_VOLUNTEER_QUESTIONS = 'faq_volunteer_questions';
-    const FAQ_TERMS = "faq_terms";
+    const FAQ_TERMS = 'faq_terms';
     const FAQ_27 = 'faq_27';
     const FAQ_28 = 'faq_28';
     const FAQ_29 = 'faq_29';

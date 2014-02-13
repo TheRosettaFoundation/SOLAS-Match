@@ -2,9 +2,9 @@
 
 <div class="page-header">
     <h1>
-        {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADMINISTRATION_DASHBOARD)}
+        {Localisation::getTranslation('site_admin_dashboard_administration_dashboard')}
         <small>
-            {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_THE_SITE_ADMINISTRATORS_DASHBOARD)}
+            {Localisation::getTranslation('site_admin_dashboard_the_site_administrators_dashboard')}
         </small>
      </h1>
 </div>
@@ -14,23 +14,23 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2"> 
-                    <label for="addAdmin"><h2>{Localisation::getTranslation(Strings::COMMON_CREATE_ADMINISTRATOR)}</h2></label>
+                    <label for="addAdmin"><h2>{Localisation::getTranslation('common_create_administrator')}</h2></label>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <p>{sprintf(Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_0), $siteName)}</p>
-                    <p><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_7)}</strong></p>
+                    <p>{sprintf(Localisation::getTranslation('site_admin_dashboard_0'), $siteName)}</p>
+                    <p><strong>{Localisation::getTranslation('site_admin_dashboard_7')}</strong></p>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}" style="width: 95%"/>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_1')}" style="width: 95%"/>
                 </td>
                 <td valign="top">
                     <button class="btn btn-success" type="submit" name="addAdmin" value="1">
                         <i class="icon-star icon-white"></i>
-                        {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ADD_ADMIN)}
+                        {Localisation::getTranslation('site_admin_dashboard_add_admin')}
                     </button>
                 </td>
             </tr>
@@ -47,38 +47,38 @@
         <table>
             <tr>
                 <td colspan="3"> 
-                    <label for="banOrganisation"><h2>{Localisation::getTranslation(Strings::COMMON_BAN_ORGANISATION)}</h2></label>
+                    <label for="banOrganisation"><h2>{Localisation::getTranslation('common_ban_organisation')}</h2></label>
                 </td>
             </tr>
             <tr>
                 <td colspan="3" style="padding-bottom: 20px">
-                    <p>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_2)}</p>
-                    <p><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_3)}</strong></p>
+                    <p>{Localisation::getTranslation('site_admin_dashboard_2')}</p>
+                    <p><strong>{Localisation::getTranslation('site_admin_dashboard_3')}</strong></p>
                 </td>
             </tr>
             <tr style="font-weight: bold">
-                <td>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}</td>
-                <td colspan="2"> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_DURATION)}</td>                
+                <td>{Localisation::getTranslation('common_organisation_name')}</td>
+                <td colspan="2"> {Localisation::getTranslation('site_admin_dashboard_ban_duration')}</td>                
             </tr>
             <tr>
                 <td width="40%">
-                    <input type="text" name="orgName" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_ORGANISATION_NAME_GOES_HERE)}" style="width: 96%"/>
+                    <input type="text" name="orgName" placeholder="{Localisation::getTranslation('site_admin_dashboard_organisation_name_goes_here')}" style="width: 96%"/>
                 </td>
                 <td width="25%">
                     <select name="banTypeOrg" style="width: 96%">
-                        <option value="{BanTypeEnum::DAY}">{Localisation::getTranslation(Strings::COMMON_DAY)}</option>
-                        <option value="{BanTypeEnum::WEEK}">{Localisation::getTranslation(Strings::COMMON_WEEK)}</option>
-                        <option value="{BanTypeEnum::MONTH}">{Localisation::getTranslation(Strings::COMMON_MONTH)}</option>
-                        <option value="{BanTypeEnum::PERMANENT}">{Localisation::getTranslation(Strings::COMMON_PERMANENT)}</option>
+                        <option value="{BanTypeEnum::DAY}">{Localisation::getTranslation('common_day')}</option>
+                        <option value="{BanTypeEnum::WEEK}">{Localisation::getTranslation('common_week')}</option>
+                        <option value="{BanTypeEnum::MONTH}">{Localisation::getTranslation('common_month')}</option>
+                        <option value="{BanTypeEnum::PERMANENT}">{Localisation::getTranslation('common_permanent')}</option>
                     </select>
                 </td>
                 <td align="center" valign="top">
-                    <button class="btn btn-danger" type="submit" name="banOrg" value="1"><i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation(Strings::COMMON_BAN_ORGANISATION)}</button>
+                    <button class="btn btn-danger" type="submit" name="banOrg" value="1"><i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation('common_ban_organisation')}</button>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">                    
-                    <label for='banReasonOrg'><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_REASON)}</strong></label>
+                    <label for='banReasonOrg'><strong>{Localisation::getTranslation('site_admin_dashboard_ban_reason')}</strong></label>
                     <textarea name='banReasonOrg' cols='40' rows='7' style="width: 99%"></textarea>
                 </td>
             </tr>
@@ -95,37 +95,37 @@
         <table>
             <tr>
                 <td colspan="3"> 
-                    <label for="banUser"><h2>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_USER)}</h2></label>
+                    <label for="banUser"><h2>{Localisation::getTranslation('site_admin_dashboard_ban_user')}</h2></label>
                 </td>
             </tr>
             <tr>
                 <td colspan="3" style="padding-bottom: 20px">
-                    {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_4)}
+                    {Localisation::getTranslation('site_admin_dashboard_4')}
                 </td>
             </tr>
             <tr style="font-weight: bold">
-                <td >{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_USER_EMAIL_ADDRESS)}</td>
-                <td colspan="2"> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_DURATION)}</td>                
+                <td >{Localisation::getTranslation('site_admin_dashboard_user_email_address')}</td>
+                <td colspan="2"> {Localisation::getTranslation('site_admin_dashboard_ban_duration')}</td>                
             </tr>
             <tr>
                 <td width="40%">
-                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}" style="width: 96%"/>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_1')}" style="width: 96%"/>
                 </td>
                 <td width="25%">
                     <select name="banTypeUser" style="width: 96%">
-                        <option value="{BanTypeEnum::DAY}">{Localisation::getTranslation(Strings::COMMON_DAY)}</option>
-                        <option value="{BanTypeEnum::WEEK}">{Localisation::getTranslation(Strings::COMMON_WEEK)}</option>
-                        <option value="{BanTypeEnum::MONTH}">{Localisation::getTranslation(Strings::COMMON_MONTH)}</option>
-                        <option value="{BanTypeEnum::PERMANENT}">{Localisation::getTranslation(Strings::COMMON_PERMANENT)}</option>
+                        <option value="{BanTypeEnum::DAY}">{Localisation::getTranslation('common_day')}</option>
+                        <option value="{BanTypeEnum::WEEK}">{Localisation::getTranslation('common_week')}</option>
+                        <option value="{BanTypeEnum::MONTH}">{Localisation::getTranslation('common_month')}</option>
+                        <option value="{BanTypeEnum::PERMANENT}">{Localisation::getTranslation('common_permanent')}</option>
                     </select>
                 </td>
                 <td align="center" valign="top">
-                    <button class="btn btn-danger" type="submit" name="banUser" value="1"><i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_USER)}</button>
+                    <button class="btn btn-danger" type="submit" name="banUser" value="1"><i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation('site_admin_dashboard_ban_user')}</button>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">                    
-                    <label for='banReasonUser'><strong>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_BAN_REASON)}</strong></label>
+                    <label for='banReasonUser'><strong>{Localisation::getTranslation('site_admin_dashboard_ban_reason')}</strong></label>
                     <textarea name='banReasonUser' cols='40' rows='7' style="width: 99%"></textarea>
                 </td>
             </tr>
@@ -142,7 +142,7 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2"> 
-                    <label for="deleteUser"><h2>{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_DELETE_USER)}</h2></label>
+                    <label for="deleteUser"><h2>{Localisation::getTranslation('site_admin_dashboard_delete_user')}</h2></label>
                 </td>
             </tr>
             {if isset($flash['deleteError'])}
@@ -161,16 +161,16 @@
             {/if}
             <tr>
                 <td colspan="2">
-                    {sprintf(Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_PERMANENTLY), $siteName)}
+                    {sprintf(Localisation::getTranslation('site_admin_dashboard_permanently'), $siteName)}
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_1)}" style="width: 95%"/>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_1')}" style="width: 95%"/>
                 </td>
                 <td valign="top">
-                    <button class="btn btn-inverse" type="submit" name="deleteUser" value="1" onclick="return confirm('{Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_5)}')"/>
-                        <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_DELETE_USER)}
+                    <button class="btn btn-inverse" type="submit" name="deleteUser" value="1" onclick="return confirm('{Localisation::getTranslation('site_admin_dashboard_5')}')"/>
+                        <i class="icon-fire icon-white"></i> {Localisation::getTranslation('site_admin_dashboard_delete_user')}
                     </button>
                 </td>
             </tr>

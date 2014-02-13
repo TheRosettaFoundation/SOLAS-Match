@@ -2,9 +2,9 @@
 
 <div class='page-header'>
     <h1>
-        {Localisation::getTranslation(Strings::BADGE_LIST_BADGE_LIST)}
+        {Localisation::getTranslation('badge_list_badge_list')}
         <small>
-            {sprintf(Localisation::getTranslation(Strings::BADGE_LIST_ALL_AVAILABLE_BADGES_OF), $siteName)}
+            {sprintf(Localisation::getTranslation('badge_list_all_available_badges_of'), $siteName)}
         </small>
     </h1>
 </div>
@@ -19,7 +19,7 @@
                 </a>: {$badgeEntry->getTitle()}
             </h3>
         {else}
-            <h3>{sprintf(Localisation::getTranslation(Strings::BADGE_LIST_BADGE), $siteName)} {$badgeEntry->getTitle()}</h3>
+            <h3>{sprintf(Localisation::getTranslation('badge_list_badge'), $siteName)} {$badgeEntry->getTitle()}</h3>
         {/if}
         <p>{$badgeEntry->getDescription()}</p>
         <p style="margin-bottom:20px;"></p>

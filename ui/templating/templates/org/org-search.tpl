@@ -2,18 +2,18 @@
 
     <div class="page-header">
         <h1>
-            {Localisation::getTranslation(Strings::ORG_SEARCH_ORGANISATION_SEARCH)} <small>{Localisation::getTranslation(Strings::ORG_SEARCH_0)}</small>
+            {Localisation::getTranslation('org_search_organisation_search')} <small>{Localisation::getTranslation('org_search_0')}</small>
         </h1>
     </div>
 
     <form class="well" method="post" action="{urlFor name="org-search"}" accept-charset="utf-8">
-        <label for="search_name"><strong>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)}</strong></label>
+        <label for="search_name"><strong>{Localisation::getTranslation('common_organisation_name')}</strong></label>
         <input type="text" name="search_name" id="search_name" style="height: 20px" 
                 value="{if isset($searchedText)}{$searchedText}{/if}" />
         <br />
-        <input type="submit" name="submit" value="    {Localisation::getTranslation(Strings::ORG_SEARCH_SEARCH)}" class="btn btn-primary" />
+        <input type="submit" name="submit" value="    {Localisation::getTranslation('org_search_search')}" class="btn btn-primary" />
         <i class="icon-search icon-white" style="position:relative; right:75px; top:2px;"></i>
-        <input type="submit" name="allOrgs" value="    {Localisation::getTranslation(Strings::COMMON_LIST_ALL)}" class="btn btn-inverse" />
+        <input type="submit" name="allOrgs" value="    {Localisation::getTranslation('common_list_all')}" class="btn btn-inverse" />
         <i class="icon-list icon-white" style="position:relative; right:75px; top:2px;"></i>
     </form>
 
@@ -21,7 +21,7 @@
     {assign var="org_count" value=count($foundOrgs)}
     {if $org_count > 0}
         <p>
-            <h3>{sprintf(Localisation::getTranslation(Strings::ORG_SEARCH_SEARCH_RESULTS), $org_count)}</h3>    
+            <h3>{sprintf(Localisation::getTranslation('org_search_search_results'), $org_count)}</h3>    
         </p>
             {foreach $foundOrgs as $org}
             <div class="row">
@@ -35,20 +35,20 @@
                 </div>
                 <div class="span8">
                     <p>
-                        <strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</strong><br/>
+                        <strong>{Localisation::getTranslation('common_biography')}</strong><br/>
 
                         {if $org->getBiography() == ''}
-                            {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_BIOGRAPHY_LISTED)}
+                            {Localisation::getTranslation('org_public_profile_no_biography_listed')}
                         {else}                            
                             {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
                         {/if}
                     </p>
                     <p>
-                    <strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}</strong><br/>
+                    <strong>{Localisation::getTranslation('common_home_page')}</strong><br/>
                     {if $org->getHomePage() != "http://" && $org->getHomePage() != ''}
                         <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
                     {else}
-                        {Localisation::getTranslation(Strings::ORG_PUBLIC_PROFILE_NO_HOME_PAGE_LISTED)}
+                        {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
                     {/if}
                     </p>
                 </div>

@@ -2,8 +2,8 @@
 
 <div class='page-header'>
     <h1>
-        {if isset($user) && $user->getDisplayName() != ''}{$user->getDisplayName()}'s {else} {Localisation::getTranslation(Strings::COMMON_YOUR)}{/if}
-        {Localisation::getTranslation(Strings::ARCHIVED_PROJECTS_ARCHIVED_PROJECTS)} <small>{Localisation::getTranslation(Strings::ARCHIVED_PROJECTS_0)}</small>
+        {if isset($user) && $user->getDisplayName() != ''}{$user->getDisplayName()}'s {else} {Localisation::getTranslation('common_your')}{/if}
+        {Localisation::getTranslation('archived_projects_archived_projects')} <small>{Localisation::getTranslation('archived_projects_0')}</small>
     </h1>
 </div>
 

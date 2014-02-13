@@ -1,12 +1,12 @@
 {include file="header.tpl"}
 
 <h1 class="page-header">
-    {Localisation::getTranslation(Strings::CREATE_ORG_CREATE_AN_ORGANISATION)}
+    {Localisation::getTranslation('create_org_create_an_organisation')}
     <small>
-        {Localisation::getTranslation(Strings::CREATE_ORG_CREATE_YOUR_OWN_ORGANISATION)}
+        {Localisation::getTranslation('create_org_create_your_own_organisation')}
     </small><br/>
     <small>
-        {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}
+        {Localisation::getTranslation('common_denotes_a_required_field')}
     </small>
 </h1>
 
@@ -16,7 +16,7 @@
                 <tr>
                     <td colspan="2">
                         <div class="alert alert-error">
-                            <h3>{Localisation::getTranslation(Strings::COMMON_PLEASE_FILL_IN_ALL_REQUIRED_FIELDS)}</h3>
+                            <h3>{Localisation::getTranslation('common_please_fill_in_all_required_fields')}</h3>
                             <ol>
                                 <li>{$nameErr}</li>
                             </ol>
@@ -27,28 +27,28 @@
             <tr valign="top" align="center"> 
                 <td width="50%">
                     
-                    <label for='orgName'><strong>{Localisation::getTranslation(Strings::COMMON_ORGANISATION_NAME)} <span style="color: red">*</span></strong></label>
+                    <label for='orgName'><strong>{Localisation::getTranslation('common_organisation_name')} <span style="color: red">*</span></strong></label>
                     <input type='text' name='orgName' id='orgName' style="width: 80%" {if isset($org)} value="{$org->getName()}" {/if}/>
                     
-                    <label for='address'><strong>{Localisation::getTranslation(Strings::COMMON_ADDRESS)}</strong></label>
+                    <label for='address'><strong>{Localisation::getTranslation('common_address')}</strong></label>
                     <textarea name='address' cols='40' rows='7' style="width: 80%">{if isset($org)} {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())} {/if}</textarea>
                     
-                    <label for='city'><strong>{Localisation::getTranslation(Strings::COMMON_CITY)}</strong></label>
+                    <label for='city'><strong>{Localisation::getTranslation('common_city')}</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%" {if isset($org)} value="{$org->getCity()}" {/if}/>
 
-                    <label for='country'><strong>{Localisation::getTranslation(Strings::COMMON_COUNTRY)}</strong></label>
+                    <label for='country'><strong>{Localisation::getTranslation('common_country')}</strong></label>
                     <input type='text' name='country' id='country' style="width: 80%" {if isset($org)} value="{$org->getCountry()}" {/if}/>
                     
                 </td>
                 <td width="50%">
                     
-                    <label for='homepage'><strong>{Localisation::getTranslation(Strings::COMMON_HOME_PAGE)}</strong></label>
+                    <label for='homepage'><strong>{Localisation::getTranslation('common_home_page')}</strong></label>
                     <input type='text' name='homepage' id='homepage' style="width: 80%" {if isset($org)} value="{$org->getHomePage()}" {/if}/> 
                     
-                    <label for='email'><strong>{Localisation::getTranslation(Strings::COMMON_EMAIL)}</strong></label>
+                    <label for='email'><strong>{Localisation::getTranslation('common_email')}</strong></label>
                     <input type='text' name='email' id='email' style="width: 80%"{if isset($org)} value="{$org->getEmail()}" {/if}/>   
                     
-                    <label for='biography'><strong>{Localisation::getTranslation(Strings::COMMON_BIOGRAPHY)}</strong></label>
+                    <label for='biography'><strong>{Localisation::getTranslation('common_biography')}</strong></label>
                     <textarea name='biography' cols='40' rows='10' style="width: 80%">{if isset($org)} {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())} {/if}</textarea>
                     
                 </td>
@@ -56,19 +56,19 @@
             <tr>                
                 <td colspan="2" style="font-weight: bold; text-align: center; padding-bottom: 10px">
                     <hr/>
-                    {Localisation::getTranslation(Strings::COMMON_REGIONAL_FOCUS)}
+                    {Localisation::getTranslation('common_regional_focus')}
                 </td>
             </tr>  
             <tr align="center">
                 <td colspan="2">
                     <table> 
                         <thead>
-                            <th>{Localisation::getTranslation(Strings::COMMON_AFRICA)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_ASIA)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_AUSTRALIA)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_EUROPE)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_NORTH_AMERICA)}</th>
-                            <th>{Localisation::getTranslation(Strings::COMMON_SOUTH_AMERICA)}</th>                       
+                            <th>{Localisation::getTranslation('common_africa')}</th>
+                            <th>{Localisation::getTranslation('common_asia')}</th>
+                            <th>{Localisation::getTranslation('common_australia')}</th>
+                            <th>{Localisation::getTranslation('common_europe')}</th>
+                            <th>{Localisation::getTranslation('common_north_america')}</th>
+                            <th>{Localisation::getTranslation('common_south_america')}</th>                       
                         </thead>
                         <tr align="center">
                             <td style="width: 15%"><input id="africa" name="africa" type="checkbox" {if isset($org)} {if strstr($org->getRegionalFocus(), "Africa")} checked {/if}{/if} /></td>   
@@ -88,7 +88,7 @@
             <tr>
                 <td colspan="2" align="center">
                     <button type="submit" name="submit" value="createOrg" class="btn btn-success">
-                        <i class="icon-star icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CREATE_ORGANISATION)}
+                        <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_organisation')}
                     </button>
                 </td>
             </tr>

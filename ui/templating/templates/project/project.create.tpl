@@ -3,9 +3,9 @@
     <div class="grid_8">
         <div class="page-header">
             <h1>
-                {Localisation::getTranslation(Strings::PROJECT_CREATE_CREATE_A_PROJECT)} <small>{Localisation::getTranslation(Strings::PROJECT_CREATE_0)}</small><br>   
+                {Localisation::getTranslation('project_create_create_a_project')} <small>{Localisation::getTranslation('project_create_0')}</small><br>   
                 <small>
-                    {Localisation::getTranslation(Strings::COMMON_DENOTES_A_REQUIRED_FIELD)}
+                    {Localisation::getTranslation('common_denotes_a_required_field')}
                 </small>
             </h1>
         </div>           

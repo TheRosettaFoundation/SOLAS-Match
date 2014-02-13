@@ -72,10 +72,10 @@ class AdminRouteHandler
                     $userDao->deleteUser($user->getId());
                     $app->flashNow(
                         "deleteSuccess",
-                        Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_SUCCESSFULLY_DELETED_USER)
+                        Localisation::getTranslation('site_admin_dashboard_successfully_deleted_user')
                     );
                 } else {
-                    $app->flashNow("deleteError", Localisation::getTranslation(Strings::SITE_ADMIN_DASHBOARD_6));
+                    $app->flashNow("deleteError", Localisation::getTranslation('site_admin_dashboard_6'));
                 }
             }
         }

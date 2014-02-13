@@ -2,7 +2,7 @@
 
     <div class="page-header" style="margin-bottom: 50px">
         <h1>
-            {Localisation::getTranslation(Strings::ORG_DASHBOARD_ORGANISATION_DASHBOARD)} <small>{Localisation::getTranslation(Strings::ORG_DASHBOARD_0)}</small>
+            {Localisation::getTranslation('org_dashboard_organisation_dashboard')} <small>{Localisation::getTranslation('org_dashboard_0')}</small>
         </h1>
     </div>
 
@@ -30,23 +30,23 @@
         </div>
         <div style="display: inline-block; float: right; font-weight: bold; font-size: large">
             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class="btn btn-primary">
-                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation(Strings::ORG_DASHBOARD_EDIT_ORGANISATION)}
+                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_dashboard_edit_organisation')}
             </a>
             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
-                <i class="icon-upload icon-white"></i> {Localisation::getTranslation(Strings::COMMON_CREATE_PROJECT)}
+                <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
             </a>  
         </div>
                 
         <hr />           
         <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; margin-bottom:50px">
         <thead>
-            <th>{Localisation::getTranslation(Strings::COMMON_TITLE)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_DEADLINE)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_STATUS)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_WORD_COUNT)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_CREATED)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_EDIT)}</th>
-            <th>{Localisation::getTranslation(Strings::COMMON_ARCHIVE)}</th>  
+            <th>{Localisation::getTranslation('common_title')}</th>
+            <th>{Localisation::getTranslation('common_deadline')}</th>
+            <th>{Localisation::getTranslation('common_status')}</th>
+            <th>{Localisation::getTranslation('common_word_count')}</th>
+            <th>{Localisation::getTranslation('common_created')}</th>
+            <th>{Localisation::getTranslation('common_edit')}</th>
+            <th>{Localisation::getTranslation('common_archive')}</th>  
         </thead>
         <tbody>
             
@@ -87,13 +87,13 @@
                     </td>
                     <td>
                         <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class="btn btn-small">
-                            <i class="icon-wrench icon-black"></i> {Localisation::getTranslation(Strings::COMMON_EDIT_PROJECT)}
+                            <i class="icon-wrench icon-black"></i> {Localisation::getTranslation('common_edit_project')}
                         </a>
                     </td>
                     <td>
                         <a href="{urlFor name="archive-project" options="project_id.$project_id"}" class="btn btn-inverse" 
-                            onclick="return confirm('{Localisation::getTranslation(Strings::ORG_DASHBOARD_1)}')">
-                            <i class="icon-fire icon-white"></i> {Localisation::getTranslation(Strings::ORG_DASHBOARD_ARCHIVE_PROJECT)}
+                            onclick="return confirm('{Localisation::getTranslation('org_dashboard_1')}')">
+                            <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_dashboard_archive_project')}
                         </a>
                     </td>
                 </tr>
@@ -101,7 +101,7 @@
         {else}
         <td colspan="7">
                 <p class="alert alert-info">
-                    {Localisation::getTranslation(Strings::ORG_DASHBOARD_3)}
+                    {Localisation::getTranslation('org_dashboard_3')}
                 </p>
             </td>
         {/if}
@@ -112,7 +112,7 @@
 
 {else}
     <div class="alert alert-warning">
-    <strong>{Localisation::getTranslation(Strings::COMMON_WHAT_HAPPENS_NOW)}?</strong> {Localisation::getTranslation(Strings::ORG_DASHBOARD_3)}
+    <strong>{Localisation::getTranslation('common_what_happens_now')}?</strong> {Localisation::getTranslation('org_dashboard_3')}
     </div>
 {/if}
 <p style="margin-bottom:60px;"/>
