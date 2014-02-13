@@ -7,65 +7,95 @@ require_once __DIR__.'/../localisation/Strings.php';
 class Localisation
 {
     public static $currentLanguage;
-    private static $doc;
-    private static $xPath;
+    private static $userLanguageDoc;
+    private static $defaultLanguageDoc;
     private static $ready = false;
     
     public static function init()
     {
         self::$ready = true;
         $userLang = UserSession::getUserLanguage();
+        $defaultLang = Settings::get('site.default_site_language_code');
+
+        self::$defaultLanguageDoc = new DOMDocument();
+        self::$defaultLanguageDoc->loadXML(
+            CacheHelper::getCached(
+                CacheHelper::SITE_LANGUAGE,
+                TimeToLiveEnum::HOUR,
+                'Localisation::fetchTranslationFile',
+                'strings.xml'
+            )
+        );
+
         if (!$userLang || strcasecmp(Settings::get('site.default_site_language_code'), $userLang) === 0) {
-            self::$currentLanguage = null;
+            self::$userLanguageDoc = null;
         } else {
-            self::$currentLanguage = $userLang;
-        }
-        self::$doc = new DOMDocument();
-        
-        if (is_null(self::$currentLanguage)) {
-            self::$doc->loadXML(
+            self::$userLanguageDoc = new DOMDocument();
+            self::$userLanguageDoc->loadXML(
                 CacheHelper::getCached(
-                    CacheHelper::SITE_LANGUAGE,
+                    CacheHelper::SITE_LANGUAGE.'_'.$userLang,
                     TimeToLiveEnum::HOUR,
                     'Localisation::fetchTranslationFile',
-                    'strings.xml'
-                )
-            );
-        } else {
-            self::$doc->loadXML(
-                CacheHelper::getCached(
-                    CacheHelper::SITE_LANGUAGE."_".self::$currentLanguage,
-                    TimeToLiveEnum::HOUR,
-                    'Localisation::fetchTranslationFile',
-                    "strings_".self::$currentLanguage.".xml"
+                    "strings_$userLang.xml"
                 )
             );
         }
     }
     
-    public static function getStrings()
+    public static function getDefaultStrings()
     {
         if (!self::$ready) {
             self::init();
         }
-        return self::$doc->saveXML(self::$doc->firstChild);
+        return self::$defaultLanguageDoc->saveXML(self::$defaultLanguageDoc->firstChild);
     }
 
+    public static function getUserStrings()
+    {
+        if (!self::$ready) {
+            self::init();
+        }
+
+        $ret = null;
+        if (self::$userLanguageDoc) {
+            $ret = self::$userLanguageDoc->saveXML(self::$userLanguageDoc->firstChild);
+        }
+        return $ret;
+    }
 
     public static function getTranslation($stringId)
     {
         if (!self::$ready) {
             self::init();
         }
-        self::$xPath = new DOMXPath(self::$doc);
-        $stringElement = self::$xPath->query("/resources/string[@name='$stringId']");
-        if ($stringElement->length == 0) {
-            error_log("Could not find/load: $stringId");
-            return "Could not find/load: $stringId";
+
+        $ret = '';
+        if (self::$userLanguageDoc != null) {
+            $xPath = new DOMXPath(self::$userLanguageDoc);
+            $stringElement = $xPath->query("/resources/string[@name='$stringId']");
+
+            if ($stringElement->length !== 0) {
+                $foundNode = self::$userLanguageDoc->saveXML($stringElement->item(0));
+                $foundNode = substr($foundNode, strpos($foundNode, ">")+1);
+                $ret = substr($foundNode, 0, strrpos($foundNode, "<"));
+            }
         }
-        $foundNode = self::$doc->saveXML($stringElement->item(0));
-        $foundNode = substr($foundNode, strpos($foundNode, ">")+1);
-        return substr($foundNode, 0, strrpos($foundNode, "<"));
+        
+        if ($ret == '') {
+            $xPath = new DOMXPath(self::$defaultLanguageDoc);
+            $stringElement = $xPath->query("/resources/string[@name='$stringId']");
+
+            if ($stringElement->length !== 0) {
+                $foundNode = self::$defaultLanguageDoc->saveXML($stringElement->item(0));
+                $foundNode = substr($foundNode, strpos($foundNode, ">")+1);
+                $ret = substr($foundNode, 0, strrpos($foundNode, "<"));
+            } else {
+                error_log("Could not find/load: $stringId");
+                $ret = "Could not find/load: $stringId";
+            }
+        }
+
+        return $ret;
     }
     
     public static function fetchTranslationFile($lang = "strings.xml")

@@ -12,7 +12,8 @@ class StaticRouteHandeler
         $app->get("/static/faq/", array($this, "faq"))->name("faq");
         $app->get("/static/videos/", array($this, "videos"))->name("videos");
         $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST")->name("siteLanguage");
-        $app->get("/static/getStrings/", array($this, "getStrings"))->name("staticGetStrings");
+        $app->get("/static/getDefaultStrings/", array($this, "getDefaultStrings"))->name("staticGetDefaultStrings");
+        $app->get("/static/getUserStrings/", array($this, "getUserStrings"))->name("staticGetUserStrings");
         $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
         $app->get("/static/getUserHash/", array($this, "getUserHash"))->name("staticGetUserHash");
         $app->notFound("Middleware::notFound");
@@ -50,7 +51,6 @@ class StaticRouteHandeler
         $app = \Slim\Slim::getInstance(); 
         if ($post = $app->request()->post()) {
             if (isset($post['language'])) {
-
                 UserSession::setUserLanguage($post['language']);
             }
             $app->redirect($app->request()->getReferrer());
@@ -75,10 +75,14 @@ class StaticRouteHandeler
         }
     }
     
-    public function getStrings()
+    public function getDefaultStrings()
     {
-        \Slim\Slim::getInstance()->response()->body(Localisation::getStrings());
+        \Slim\Slim::getInstance()->response()->body(Localisation::getDefaultStrings());
+    }
 
+    public function getUserStrings()
+    {
+        \Slim\Slim::getInstance()->response()->body(Localisation::getUserStrings());
     }
 }
 
