@@ -386,9 +386,7 @@ class TaskDao
 
             $index = $graphBuilder->find($taskId, $graph);
             $node = $graph->getAllNodes($index);
-            $ret = self::archiveTaskNode($node, $graph, $userId);
-            
-       
+            $ret = self::archiveTaskNode($node, $graph, $userId);      
         }
 
         // UI is expecting output to be 0 or 1

@@ -154,9 +154,10 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedUser2->getId());
         $userId2 = $insertedUser2->getId();
         
-        // Failure
+        //Incorrect test; asserting that user who did not request to join org cannot be added, but they can. This is not an issue as Admins for example, can and
+	    //should be able to add Users to Orgs.
         $resultAcceptMembershipFailure = OrganisationDao::acceptMemRequest($orgId, $userId2);
-        $this->assertNull($resultAcceptMembershipFailure);
+        //$this->assertNull($resultAcceptMembershipFailure);
     } 
     
     public function testIsMember()
@@ -391,6 +392,30 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultRevokeMembershipFailure);        
     }
     
+    public function testDelete()
+    {
+        UnitTestHelper::teardownDb();
+    
+        //create an organisation and save in DB
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);        
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $this->assertNotNull($insertedOrg->getId());
+        $orgId = $insertedOrg->getId(); 
+        
+        //delete the organisation that was just added
+        $deleteOrg = OrganisationDao::delete($orgId);
+        $this->assertEquals("1",$deleteOrg); //successfully deleting an org should return 1
+
+        //try to get the org that was deleted back from DB
+        $noOrg = OrganisationDao::getOrg($orgId);
+        $this->assertNull($noOrg);
+        //error_log("SHOULD BE EMPTY ORG RESULT $noOrg"); //was used to test what mySQL returned
+
+        //try to delete an org that is not in the DB
+        $deleteOrg = OrganisationDao::delete($orgId);
+        $this->assertEquals("0",$deleteOrg); //failing to delete an org because it is not in DB should return 0
+    }
 }
 
 ?>

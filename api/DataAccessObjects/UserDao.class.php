@@ -61,7 +61,8 @@ class UserDao
                 BadgeDao::assignBadge($user->getId(), BadgeTypes::NATIVE_LANGUAGE);
             }
         }
-        if ($user->getBiography() != '') {
+        //added "is not null check" to prevent errors
+        if (!is_null($userId) && $user->getBiography() != '') {
             BadgeDao::assignBadge($user->getId(), BadgeTypes::PROFILE_FILLER);
         }
         $args = PDOWrapper::cleanseNullOrWrapStr($user->getEmail())

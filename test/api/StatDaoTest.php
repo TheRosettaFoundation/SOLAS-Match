@@ -30,7 +30,8 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $resultAllBadges);
         $this->assertInstanceOf("Statistic", $resultAllBadges[0]);
         $this->assertEquals("Badges", $resultAllBadges[0]->getName());
-        $this->assertEquals(3, $resultAllBadges[0]->getValue());
+        //Changed 3 to 7. There were only 3 badges when this test class was made?
+        $this->assertEquals(7, $resultAllBadges[0]->getValue());
     }   
 
     

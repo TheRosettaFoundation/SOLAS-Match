@@ -50,9 +50,9 @@ class AdminDao
         OrganisationDao::acceptMemRequest($orgId, $userId);
         $args = PDOWrapper::cleanseNull($userId)
                 .",".PDOWrapper::cleanseNull($orgId);
-        
+        error_log("CALL addAdmin($args)");
         if ($result = PDOWrapper::call("addAdmin", $args)) {
-            $ret = $result[0]['result'];
+            $ret = $result;
         }
         
         return $ret;
