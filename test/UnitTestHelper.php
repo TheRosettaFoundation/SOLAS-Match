@@ -8,8 +8,13 @@ require_once __DIR__.'/../Common/models/Locale.php';
 
 class UnitTestHelper
 {
-    private function __constuct() {}
     private static $initalised = false;
+    
+    private function __constuct()
+    {
+        // Default CTOR
+    }
+    
     public static function teardownDb()
     {
         $dsn = "mysql:host=".Settings::get('unit_test.server').

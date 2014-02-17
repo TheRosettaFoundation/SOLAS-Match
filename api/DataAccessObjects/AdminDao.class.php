@@ -52,7 +52,7 @@ class AdminDao
                 .",".PDOWrapper::cleanseNull($orgId);
         error_log("CALL addAdmin($args)");
         if ($result = PDOWrapper::call("addAdmin", $args)) {
-            $ret = $result;
+            $ret = $result[0]['result'];
         }
         
         return $ret;
