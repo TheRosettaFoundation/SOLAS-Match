@@ -73,7 +73,7 @@ class UserDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode)
                 .",".PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode)
                 .",".PDOWrapper::cleanseNull($userId);
-        
+
         $result = PDOWrapper::call('userInsertAndUpdate', $args);
         if (!is_null($result)) {
             return ModelFactory::buildModel("User", $result[0]);

@@ -3663,113 +3663,103 @@ BEGIN
     if region='' then set region=null;end if;
 	
     -- if new user
-	if id is null and not exists(select * from Users u where u.email= email)then
+	if id is null and not exists(select * from Users u where u.email= email) then
 	-- set insert
-	set @countryID=null;
-	select c.id into @countryID from Countries c where c.code=region;
-	set @langID=null;
-	select l.id into @langID from Languages l where l.code=lang;
-        
+    	set @countryID=null;
+	    select c.id into @countryID from Countries c where c.code=region;
+    	set @langID=null;
+    	select l.id into @langID from Languages l where l.code=lang;
 	
-	insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
-              values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
-            call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
+        insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
+            values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
+        call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
 	
-        else 
-
-                if bio is not null 
-                and bio != (SELECT u.biography FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.biography FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then 
-                    update Users u set u.biography = bio
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+    else 
+        if bio is not null 
+            and bio != IFNULL(
+                (SELECT u.biography 
+                    FROM Users u 
+                    WHERE u.id = id),
+                '')
+        then 
+            update Users u 
+                set u.biography = bio
+                WHERE u.id = id;
 		end if;
                 
-
 		if lang is not null 
-                and (select l.id from Languages l where l.code=lang) != (SELECT u.language_id FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.language_id FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then update Users u set u.language_id = (select l.id from Languages l where l.code=lang)
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+            and (select l.id 
+                from Languages l 
+                where l.code=lang
+            ) != IFNULL(
+                (SELECT u.language_id 
+                    FROM Users u
+                    WHERE u.id = id),
+                '')
+        then 
+            update Users u 
+                set u.language_id = (select l.id from Languages l where l.code=lang)
+                WHERE u.id = id;
 		end if;
 
-
-                if region is not null 
-                and (select c.id from Countries c where c.code = region) != (SELECT u.country_id FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.country_id FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then update Users u set u.country_id = (select c.id from Countries c where c.code = region)
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+        if region is not null 
+            and (select c.id 
+                from Countries c 
+                where c.code = region
+            ) != IFNULL(
+                (SELECT u.country_id 
+                    FROM Users u 
+                    WHERE u.id = id),
+                '')
+        then 
+            update Users u 
+                set u.country_id = (select c.id from Countries c where c.code = region)
+                WHERE u.id = id;
 		end if;
 
-
-                if name is not null 
-                and name != (SELECT u.`display-name` FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.`display-name` FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then update Users u set u.`display-name` = name
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+        if name is not null 
+            and name != IFNULL(
+                (SELECT u.`display-name`
+                    FROM Users u 
+                    WHERE u.id = id),
+                '')
+        then 
+            update Users u 
+                set u.`display-name` = name
+                WHERE u.id = id;
 		end if;
 
-
-                if email is not null 
-                and email != (SELECT u.email FROM Users u 
-                WHERE (id is null or u.id = id))
-                
-                or (SELECT u.email FROM Users u 
-                WHERE (id is null or u.id = id)) is null
-
-                    then update Users u set u.email = email
-                    WHERE (id is null or u.id = id);
-
+        if email is not null 
+            and email != (SELECT u.email 
+                FROM Users u 
+                WHERE u.id = id)
+        then
+            update Users u 
+                set u.email = email
+                WHERE u.id = id;
 		end if;
 
-
-                if nonce is not null 
-                and nonce != (SELECT u.nonce FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.nonce FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then update Users u set u.nonce = nonce
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+        if nonce is not null 
+            and nonce != (SELECT u.nonce 
+                FROM Users u 
+                WHERE u.id = id)
+        then
+            update Users u
+                set u.nonce = nonce
+                WHERE u.id = id;
 		end if;
-
 		
-                if pass is not null 
-                and pass != (SELECT u.password FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.password FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
+        if pass is not null 
+            and pass != (SELECT u.password 
+                FROM Users u 
+                WHERE u.id = id)
+        then
+            update Users u
+                set u.password = pass
+                WHERE u.id = id;
+        end if;
 
-                    then update Users u set u.password = pass
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
-                end if;
-
-   	call getUser(id,null,null,null,null,null,null,null,null);
-
+       	call getUser(id,null,null,null,null,null,null,null,null);
 	end if;
 END//
 DELIMITER ;
