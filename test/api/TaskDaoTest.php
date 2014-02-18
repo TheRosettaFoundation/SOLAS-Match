@@ -25,19 +25,11 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId()); 
-        //$project->setId(100); //project had no id so id was set to null, so issues arose for tasks created below  
-        
         $insertedProject = ProjectDao::createUpdate($project);
         $this->assertInstanceOf("Project", $insertedProject); 
-        $this->assertNotNull($insertedProject->getId());
-        $blah = $project->getId();
-        error_log("PROJECT ID $blah");   
+        $this->assertNotNull($insertedProject->getId());  
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        $task->setId(45);
-        $blah2 = $task->getId();
-        error_log("TASK ID: $blah2");
-        
         // Success
         //was using missing create function, changed to save
         $insertedTask = TaskDao::save($task);
@@ -723,7 +715,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         error_log("End testGetUserArchivedTasks()");
     }
     
-    /* public function testGetTasksWithTag()
+    public function testGetTasksWithTag()
     {
         error_log("Begin testGetTasksWithTag()");
         UnitTestHelper::teardownDb();
@@ -767,7 +759,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
 //            $this->assertInstanceOf("Task", $task);
 //        }    
         error_log("End testGetTasksWithTag()");
-    }   */
+    }  
     
     public function testCheckTaskFileVersion()
     {
@@ -854,7 +846,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
     
 }
 
-$testCase = new TaskDaoTest();
-$testCase->testGetUserArchivedTasks();
+//$testCase = new TaskDaoTest();
+//$testCase->testGetUserArchivedTasks();
 //$testCase->testCheckTaskFileVersion();
 ?>

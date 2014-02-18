@@ -22,6 +22,7 @@ class UnitTestHelper
         $dsn1 = "mysql:host=".Settings::get('database.server').";dbname=".Settings::get('database.database').
                 ";port=".Settings::get('database.server_port');
         assert($dsn1 != $dsn && Settings::get('database.database') != Settings::get('unit_test.database'));
+        $schemaFile = 'schema.sql';
         
         PDOWrapper::$unitTesting = true;
         $conn = new PDO($dsn,
@@ -35,7 +36,7 @@ class UnitTestHelper
            $result=$conn->exec("CREATE DATABASE `".Settings::get('unit_test.database')."` /*!40100 CHARACTER SET utf8 COLLATE 'utf8_unicode_ci' */");
            $result=$conn->exec("use `".Settings::get('unit_test.database')."`");
            
-           $schema = file_get_contents(__DIR__.'/../db/schema-min.sql');
+           $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
            $schema = str_replace("DELIMITER //", "", $schema);
            $schema = str_replace("DELIMITER ;", "", $schema);
            $schema = str_replace("END//", "END;", $schema);
@@ -54,7 +55,7 @@ class UnitTestHelper
 
             foreach($tables as $table) $conn->exec("DELETE FROM $table[0]");
 
-            $schema = file_get_contents(__DIR__.'/../db/schema-min.sql');
+            $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
             $schema = str_replace("DELIMITER ;", "", $schema);
             $schema = str_replace("END//", "END;", $schema);

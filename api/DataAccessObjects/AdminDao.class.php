@@ -8,7 +8,8 @@ class AdminDao
     public static function getAdmins($orgId = null)
     {
         $ret = null;
-        $args= PDOWrapper::cleanseNullOrWrapStr($orgId);
+        //was wrongly using cleanseNullOrWrapStr
+        $args= PDOWrapper::cleanseNull($orgId);
         if ($result = PDOWrapper::call("getAdmin", $args)) {
             $ret = array();
             foreach ($result as $user) {
