@@ -41,9 +41,15 @@ def main(argv):
         englishElement = englishXml.getroot().find(xpathQuery)
         translatedValue = ET.tostring(stringElement, encoding, "text").strip()
         englishValue = ET.tostring(englishElement, encoding, "text").strip()
-        originalValue = ET.tostring(originalElement, encoding, "text").strip()
+        if originalElement is None:
+            originalValue = ''
+        else:
+            originalValue = ET.tostring(originalElement, encoding, "text").strip()
         if translatedValue != englishValue and translatedValue != originalValue:
-            originalElement.text = translatedValue
+            if originalElement is None:
+                originalXml.getroot().append(stringElement)
+            else:
+                originalElement.text = translatedValue
     locFile = open(originalFile, "w")
     locFile.write(ET.tostring(originalXml.getroot()))
     print "Finished. ", originalFile, " has been merged with ", translatedFile
