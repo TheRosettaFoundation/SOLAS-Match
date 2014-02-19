@@ -60,7 +60,7 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $orgId = $insertedOrg->getId();
         $this->assertNotNull($orgId);
         OrganisationDao::requestMembership($userId, $orgId);
-        Organisationdao::acceptMemRequest($orgId, $userId);
+        OrganisationDao::acceptMemRequest($orgId, $userId);
 
         AdminDao::addOrgAdmin($userId, $orgId);
         $adminsReturned = AdminDao::getAdmins();
@@ -101,7 +101,7 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $userId = $insertedUser->getId();
         $this->assertNotNull($userId);
         AdminDao::addSiteAdmin($userId);
-        $this->assertTrue(AdminDao::isAdmin($userId,null));
+        $this->assertEquals("1",AdminDao::isAdmin($userId,null));
     }
 }
 ?>

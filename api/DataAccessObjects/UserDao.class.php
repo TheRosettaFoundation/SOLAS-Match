@@ -259,6 +259,7 @@ class UserDao
         return (!is_null(UserSession::getCurrentUserId()));
     }
 
+    //Currently not implemented/in use?
     public static function belongsToRole($user, $role)
     {
         $ret = false;

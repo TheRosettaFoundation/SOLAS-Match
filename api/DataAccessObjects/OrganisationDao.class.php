@@ -142,7 +142,8 @@ class OrganisationDao
     public static function insertAndUpdate($org)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNullOrWrapStr($org->getId())
+        //was wrongly using cleanseNullOrWrapStr
+        $args = PDOWrapper::cleanseNull($org->getId())
                 .",".PDOWrapper::cleanseWrapStr($org->getHomePage())
                 .",".PDOWrapper::cleanseNullOrWrapStr($org->getName())
                 .",".PDOWrapper::cleanseNullOrWrapStr($org->getBiography())

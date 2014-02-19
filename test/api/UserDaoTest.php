@@ -92,10 +92,6 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("User", $getUpdatedUser[0]);
         $this->assertEquals($insertedUser->getId(), $getUpdatedUser[0]->getId());
         
-        $foo = $insertedUser->getDisplayName();
-        //$bar = $getUpdatedUser->getDisplayName();
-        error_log("INSERTED USER: $foo");
-        //error_log("GET UPDATED USER: $bar");
         $this->assertEquals($insertedUser->getDisplayName(), $getUpdatedUser[0]->getDisplayName());
         $this->assertEquals($insertedUser->getEmail(), $getUpdatedUser[0]->getEmail());
         $this->assertEquals($insertedUser->getBiography(), $getUpdatedUser[0]->getBiography());
@@ -429,7 +425,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isTrackingTask);
     }
   //TODO - retest function when issue is resolved
-  /*   public function testGetTrackedTasks()
+    public function testGetTrackedTasks()
     {
         UnitTestHelper::teardownDb();
         
@@ -463,7 +459,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $getTrackedTasks = UserDao::getTrackedTasks($insertedUser->getId());
         $this->assertCount(1, $getTrackedTasks);
         $this->assertInstanceOf("Task", $getTrackedTasks[0]);
-    } */
+    }
     
     public function testCreatePasswordResetRequest()
     {
@@ -477,6 +473,21 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $createPwResetRequest = UserDao::addPasswordResetRequest("asfjkosagijo".$insertedUser->getId(), $insertedUser->getId());
         $this->assertEquals("1", $createPwResetRequest);
+    }
+    
+    public function testHasRequestedPasswordReset()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $createPwResetRequest = UserDao::addPasswordResetRequest("asfjkosagijo".$insertedUser->getId(), $insertedUser->getId());
+        $this->assertEquals("1", $createPwResetRequest);
+        $hasPwResetReq = UserDao::hasRequestedPasswordReset($insertedUser->getEmail());
+        $this->assertTrue($hasPwResetReq);
     }
     
     public function testRemovePasswordResetRequest()
@@ -656,5 +667,29 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $isSubscribedToProject = UserDao::isSubscribedToProject($insertedUser->getId(), $insertedProject->getId());
         $this->assertEquals("1", $isSubscribedToProject);
+    }
+    
+    public function testGetUserTaskStreamNotification()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+        $insertedTask = TaskDao::save($task);
+        $this->assertInstanceOf("Task", $insertedTask);
+        $this->assertNotNull($insertedTask->getId());
     }
 }
