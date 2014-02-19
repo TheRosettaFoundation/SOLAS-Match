@@ -383,7 +383,6 @@ class TaskDao
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
 
         if ($graph) {
-
             $index = $graphBuilder->find($taskId, $graph);
             $node = $graph->getAllNodes($index);
             $ret = self::archiveTaskNode($node, $graph, $userId);      
@@ -424,7 +423,6 @@ class TaskDao
             $ret = self::archiveTask($node->getTaskId(), $userId);
             Notify::sendTaskArchivedNotifications($node->getTaskId(), $subscribedUsers);
         }
-        
 
         return $ret;
     }

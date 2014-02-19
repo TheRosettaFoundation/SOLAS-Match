@@ -188,18 +188,14 @@ class ModelFactory
         $ret->setTargetLocale($targetLocale);
         
         
-        if (isset($modelData['taskType'])) {
-            $ret->setTaskType($modelData['taskType']);
+        if (isset($modelData['taskType_id'])) {
+            $ret->setTaskType($modelData['taskType_id']);
         }
-        if (isset($modelData['taskStatus'])) {
-            $ret->setTaskStatus($modelData['taskStatus']);
+        if (isset($modelData['taskStatus_id'])) {
+            $ret->setTaskStatus($modelData['taskStatus_id']);
         }
         if (isset($modelData['published'])) {
             $ret->setPublished($modelData['published']);
-        }
-        
-        if (isset($modelData['archive-date'])) {
-            $ret->setArchiveDate($modelData['archive-date']);
         }
         
         if (isset($modelData['version'])) {

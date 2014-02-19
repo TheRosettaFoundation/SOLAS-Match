@@ -203,6 +203,19 @@ class UnitTestHelper
         return $projectFile;
     }  
 
+    public static function createTaskFileInfo(
+        $taskId,
+        $userId,
+        $filename = "dummy_file.txt",
+        $contentType = "text/plain",
+        $version = 0
+    ) {
+        return array(
+            "taskId" => $taskId,
+            "userId" => $userId,
+            "filename" => $filename,
+            "contentType" => $contentType,
+            "version" => $version
+        );
+    }
 }
-
-?>

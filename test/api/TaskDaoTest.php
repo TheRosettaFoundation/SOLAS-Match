@@ -666,7 +666,6 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
     
     public function testGetUserArchivedTasks()
     {
-        error_log("Begin testGetUserArchivedTasks()");
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
@@ -691,39 +690,56 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
 
         $translationTask = TaskDao::save($task);
         $this->assertInstanceOf("Task", $translationTask); 
+
+        //create task file info for non existant file
+        $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
+        TaskDao::recordFileUpload(
+            $fileInfo['taskId'],
+            $fileInfo['filename'],
+            $fileInfo['contentType'],
+            $fileInfo['userId'],
+            $fileInfo['version']
+        );
         
         $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         
-        //TaskDao::archiveTask() is a private function! atm it cannot be tested like this. will try
-        //TaskDao::moveToArchiveById() instead.
-        //The line below was $archivedTask = TaskDao::archiveTask($translationTask->getId(), $insertedUser->getId());
         $archivedTask = TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $archivedTask);
         
         // Success
         $userArchivedTasks = TaskDao::getUserArchivedTasks($insertedUser->getId());
+        $archivedTask = $userArchivedTasks[0];
         $this->assertCount(1, $userArchivedTasks);
-        $this->assertInstanceOf("ArchivedTask", $userArchivedTasks[0]);
-        $this->assertEquals($translationTask->getProjectId(), $userArchivedTasks[0]->getProjectId());
-        $this->assertEquals($translationTask->getTitle(), $userArchivedTasks[0]->getTitle());
-        $this->assertEquals($translationTask->getComment(), $userArchivedTasks[0]->getComment());
-        $this->assertEquals($translationTask->getDeadline(), $userArchivedTasks[0]->getDeadline());
-
-//        $this->assertEquals($translationTask->getSourceLocale()->getLanguageCode(), $userArchivedTasks[0]->getSourceLocale()->getLanguageCode());
-//        $this->assertEquals($translationTask->getSourceLocale()->getCountryCode(), $userArchivedTasks[0]->getSourceLocale()->getCountryCode());
-//        $this->assertEquals($translationTask->getTargetLocale()->getLanguageCode(), $userArchivedTasks[0]->getTargetLocale()->getLanguageCode());
-//        $this->assertEquals($translationTask->getTargetLocale()->getCountryCode(), $userArchivedTasks[0]->getTargetLocale()->getCountryCode());
-//        
-        $this->assertEquals($translationTask->getTaskType(), $userArchivedTasks[0]->getTaskType());
-        $this->assertEquals(3, $userArchivedTasks[0]->getTaskStatus()); // Claimed the task, so status changes
-        $this->assertEquals($translationTask->getPublished(), $userArchivedTasks[0]->getPublished());        
-        $this->assertNotNull($userArchivedTasks[0]->getArchiveUserId());
-        $this->assertNotNull($userArchivedTasks[0]->getArchiveDate());
-        error_log("End testGetUserArchivedTasks()");
+        $this->assertInstanceOf("ArchivedTask", $archivedTask);
+        $this->assertEquals($translationTask->getProjectId(), $archivedTask->getProjectId());
+        $this->assertEquals($translationTask->getTitle(), $archivedTask->getTitle());
+        $this->assertEquals($translationTask->getComment(), $archivedTask->getComment());
+        $this->assertEquals($translationTask->getDeadline(), $archivedTask->getDeadline());
+        $this->assertEquals(
+            $translationTask->getSourceLocale()->getLanguageCode(),
+            $archivedTask->getSourceLocale()->getLanguageCode()
+        );
+        $this->assertEquals(
+            $translationTask->getSourceLocale()->getCountryCode(),
+            $archivedTask->getSourceLocale()->getCountryCode()
+        );
+        $this->assertEquals(
+            $translationTask->getTargetLocale()->getLanguageCode(),
+            $archivedTask->getTargetLocale()->getLanguageCode()
+        );
+        $this->assertEquals(
+            $translationTask->getTargetLocale()->getCountryCode(),
+            $archivedTask->getTargetLocale()->getCountryCode()
+        );
+        $this->assertEquals($translationTask->getTaskType(), $archivedTask->getTaskType());
+        $this->assertEquals(3, $archivedTask->getTaskStatus()); // Claimed the task, so status changes
+        $this->assertEquals($translationTask->getPublished(), $archivedTask->getPublished());
+        //$this->assertNotNull($archivedTask->getArchiveUserId()); // This is not implemented (see issue #752)
+        $this->assertNotNull($archivedTask->getArchivedDate());
     }
     
-    /* public function testGetTasksWithTag()
+     public function testGetTasksWithTag()
     {
         error_log("Begin testGetTasksWithTag()");
         UnitTestHelper::teardownDb();
@@ -767,7 +783,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
 //            $this->assertInstanceOf("Task", $task);
 //        }    
         error_log("End testGetTasksWithTag()");
-    }   */
+    }   
     
     public function testCheckTaskFileVersion()
     {
@@ -853,8 +869,3 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
     }
     
 }
-
-$testCase = new TaskDaoTest();
-$testCase->testGetUserArchivedTasks();
-//$testCase->testCheckTaskFileVersion();
-?>
