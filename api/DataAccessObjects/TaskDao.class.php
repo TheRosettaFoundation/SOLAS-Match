@@ -378,6 +378,11 @@ class TaskDao
         $ret = false;
         $task = self::getTask($taskId);
         $task = $task[0];
+        
+        if(is_null($task)) {
+            error_log("Error: Task to archive is null");
+            return 0 ;
+        }
 
         $graphBuilder = new APIWorkflowBuilder();
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());

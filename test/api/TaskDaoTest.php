@@ -408,14 +408,23 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
-        //TaskDao::archiveTask() is a private function! atm it cannot be tested like this.
-        // Success
-        //$archiveTask = TaskDao::archiveTask($translationTask->getId(), $insertedUser->getId());
-        //$this->assertEquals("1", $archiveTask);
+        //create task file info for non existant file
+        $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
+        TaskDao::recordFileUpload(
+        $fileInfo['taskId'],
+        $fileInfo['filename'],
+        $fileInfo['contentType'],
+        $fileInfo['userId'],
+        $fileInfo['version']
+        );
         
+        // Success
+        $archiveTask = TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
+        $this->assertEquals("1", $archiveTask);
+        error_log("Archived task");
         // Failure
-        //$archiveTaskFailure = TaskDao::archiveTask($translationTask->getId(), $insertedUser->getId());
-        //$this->assertEquals("0", $archiveTaskFailure);
+        $archiveTaskFailure = TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
+        $this->assertEquals("0", $archiveTaskFailure);
         error_log("End testArchiveTask()");
     }
     
@@ -750,11 +759,9 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());    
         
-        // Failure
-        error_log("Getting Tasks with tag 999 (invalid tag id)");
+        // Function should fail (i.e. return null) so the assertNull should not fail
         $getTasksWithTagFailure = TaskDao::getTasksWithTag(999);
         $this->assertNull($getTasksWithTagFailure);
-        error_log("Failed to get Tasks with tag 999");
         
         $task = UnitTestHelper::createTask($insertedProject->getId(), null, "Task 1", "Task 1 Comment", "2022-03-29 16:30:00", 11111, null, TaskTypeEnum::TRANSLATION);
         $task2 = UnitTestHelper::createTask($insertedProject->getId(), null, "Task 2", "Task 2 Comment", "2021-03-29 16:30:00", 22222, null, TaskTypeEnum::TRANSLATION);        
