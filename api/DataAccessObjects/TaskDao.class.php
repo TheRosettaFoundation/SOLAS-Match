@@ -380,7 +380,6 @@ class TaskDao
         $task = $task[0];
         
         if(is_null($task)) {
-            error_log("Error: Task to archive is null");
             return 0 ;
         }
 

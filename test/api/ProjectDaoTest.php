@@ -189,7 +189,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
     }
     
     
-    /* public function testGetArchivedProject()
+    public function testGetArchivedProject()
     {
         UnitTestHelper::teardownDb();
         
@@ -238,7 +238,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         // Failure
         $resultGetArchivedProjectFailure = ProjectDao::getArchivedProject(99);
         $this->assertNull($resultGetArchivedProjectFailure);
-    } */
+    }
     
     public function testGetProjectTasks()
     {
@@ -256,10 +256,10 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $task2 = UnitTestHelper::createTask($insertedProject->getId(), null, "Task 2", "Task 2 Comment");        
 
-        $insertedTask = TaskDao::create($task);
+        $insertedTask = TaskDao::save($task);
         $this->assertInstanceOf("Task", $insertedTask);
         
-        $insertedTask2 = TaskDao::create($task2);
+        $insertedTask2 = TaskDao::save($task2);
         $this->assertInstanceOf("Task", $insertedTask2);
         
         // Success
@@ -355,6 +355,40 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         foreach($resultGetTags as $projectTag) {
             $this->assertInstanceOf("Tag", $projectTag);
         }
+    }
+    
+    public function testDeleteProjectTags()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $this->assertNotNull($insertedOrg->getId());
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($project->getId());
+        
+        //assert that there are tags associated with the project
+        $resultGetTags = ProjectDao::getTags($project->getId());
+        $this->assertCount(2, $resultGetTags);
+        foreach($resultGetTags as $projectTag) {
+            $this->assertInstanceOf("Tag", $projectTag);
+        }
+        
+        //assert that some project tags were deleted
+        $afterDeleteTags = ProjectDao::deleteProjectTags($project->getId());
+        $this->assertEquals("1",$afterDeleteTags);
+        
+        //assert that there are no project tags left after deleting all
+        $getTagsAfterDelete = ProjectDao::getTags($project->getId());
+        $this->assertNull($getTagsAfterDelete);
+        
+        //assert that a second call to deleteProjectTags() changes nothing.
+        $tryRedelete = ProjectDao::deleteProjectTags($project->getId());
+        $this->assertEquals("0",$tryRedelete);  
     }
     
     public function testRecordProjectFileInfo()

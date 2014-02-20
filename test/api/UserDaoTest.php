@@ -103,6 +103,19 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($insertedUser->getPassword(), $getUpdatedUser[0]->getPassword());   
     }
     
+    public function testDeleteUser()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $insertedUser = UserDao::create("testuser@example.com", "testpw");
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        UserDao::deleteUser($insertedUser->getId());
+        $getDeletedUser = UserDao::getUser($insertedUser->getId());
+        $this->assertNull($getDeletedUser);
+    }
+    
     public function testChangePassword()
     {
         UnitTestHelper::teardownDb();
@@ -691,5 +704,66 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $insertedTask = TaskDao::save($task);
         $this->assertInstanceOf("Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
+    }
+    
+    public function testCreatePersonalInfo()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
+        $insertedInfo = UserDao::createPersonalInfo($userInfo);
+        $this->assertInstanceOf("UserPersonalInformation",$insertedInfo);
+        $this->assertNotNull($insertedInfo->getId());
+    }
+    
+    public function testUpdatePersonalInfo()
+    {
+        UnitTestHelper::teardownDb();
+    
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+    
+        $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
+        $insertedInfo = UserDao::createPersonalInfo($userInfo);
+        $this->assertInstanceOf("UserPersonalInformation",$insertedInfo);
+        $this->assertNotNull($insertedInfo->getId());
+        
+        $insertedInfo->setFirstName("Roy");
+        $insertedInfo->setLastName("Jaeger");
+        $insertedInfo->setMobileNumber(55555221333);
+        $updatedInfo = UserDao::updatePersonalInfo($insertedInfo);
+        
+        //assert that updates were persisted to database
+        $this->assertEquals($insertedInfo->getFirstName(),$updatedInfo->getFirstName());
+        $this->assertEquals($insertedInfo->getLastName(),$updatedInfo->getLastName());
+        $this->assertEquals($insertedInfo->getMobileNumber(),$updatedInfo->getMobileNumber());
+    }
+    
+    public function testCreateSecondaryLanguage()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $user->getNativeLocale()->setLanguageCode("en");
+        $user->getNativeLocale()->setCountryCode("IE");
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $locale = new Locale();
+        $locale->setLanguageCode("ja");
+        $locale->setCountryCode("JP");
+        
+        $afterCreate = UserDao::createSecondaryLanguage($insertedUser->getId(),$locale);
+        $this->assertInstanceOf("Locale",$afterCreate);
+        $this->assertEquals($locale->getLanguageCode(),$afterCreate->getLanguageCode());
+        $this->assertEquals($locale->getCountryCode(),$afterCreate->getCountryCode());
     }
 }

@@ -750,7 +750,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table Solas-Match-Test.UserTaskScores
+-- Dumping structure for table Solas-Match-Test.UserTaskStreamNotifications
 CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
   `user_id` int(11) unsigned NOT NULL,
   `interval` int(10) unsigned NOT NULL,
@@ -1248,7 +1248,12 @@ DROP PROCEDURE IF EXISTS `deleteUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUser`(IN `userId` INT)
 BEGIN
-	DELETE FROM Users WHERE id = userId;
+    if EXISTS (select 1 from Users where Users.id = userid) then
+	    delete from Users where Users.id = userId;
+        select 1 as result;
+    else
+        select 0 as result;
+    end if;
 END//
 DELIMITER ;
 
@@ -3966,7 +3971,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.userSecondaryLanguageInsert
+-- Dumping structure for procedure Solas-Match-Test.getUserSecondaryLanguages
 DROP PROCEDURE IF EXISTS `getUserSecondaryLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserSecondaryLanguages`(IN `userId` INT)

@@ -92,9 +92,16 @@ class UnitTestHelper
     }
     
     // password = hash("sha512", "abcdefghikjlmnop")
-    public static function createUser($userId = null, $displayName = "User 1", $biography = "User 1 Bio", $email = "user1@test.com", $nonce = "123456789"
-            , $password = "2d5e2eb5e2d5b1358161c8418e2fd3f46a431452a724257907d4a3317677a99414463452507ef607941e14044363aab9669578ce5f9517cb36c9acb32f492393"
-            , $languageCode = null, $countryCode = null, $createdTime = null)
+    public static function createUser
+                            ($userId = null,
+                             $displayName = "User 1",
+                             $biography = "User 1 Bio",
+                             $email = "user1@test.com",
+                             $nonce = "123456789",
+                             $password = "2d5e2eb5e2d5b1358161c8418e2fd3f46a431452a724257907d4a3317677a99414463452507ef607941e14044363aab9669578ce5f9517cb36c9acb32f492393",
+                             $languageCode = null,
+                             $countryCode = null,
+                             $createdTime = null)
     {
         $locale = new Locale();
         $user = new User();
@@ -114,10 +121,50 @@ class UnitTestHelper
         return $user;
     }
     
+    public static function createUserPersonalInfo
+                            ($userId,
+                             $id = null,
+                             $firstName = "John",
+                             $lastName = "Doe",
+                             $mobileNumber = 333444666,
+                             $businessNumber = 42,
+                             $sip = "blahblahblah",
+                             $jobTitle = "Derp",
+                             $address = "This is a real place",
+                             $city = "Lightless City",
+                             $country = "Forgotten Land")
+    {
+        $userInfo = new UserPersonalInformation();
+        
+        $userInfo->setUserId($userId);
+        $userInfo->setId($id);
+        $userInfo->setFirstName($firstName);
+        $userInfo->setLastName($lastName);
+        $userInfo->setMobileNumber($mobileNumber);
+        $userInfo->setBusinessNumber($businessNumber);
+        $userInfo->setSip($sip);
+        $userInfo->setJobTitle($jobTitle);
+        $userInfo->setAddress($address);
+        $userInfo->setCity($city);
+        $userInfo->setCountry($country);
+        
+        return $userInfo ;
+    }
+    
     // Create default projects by specifying just the organisation id
-    public static function createProject($organisationId ,$id = null, $title = "Project 1", $description = "Project 1 Description",
-            $deadline = "2020-03-29 16:30:00", $impact = "Project 1 Impact", $reference = "Project 1 Reference",
-            $wordcount = 123456, $sourceCountryCode = "IE", $sourceLanguageCode = "en", $tags = array("Project", "Tags"), $createdTime = null)
+    public static function createProject
+                          ($organisationId,
+                           $id = null,
+                           $title = "Project 1",
+                           $description = "Project 1 Description",
+                           $deadline = "2020-03-29 16:30:00",
+                           $impact = "Project 1 Impact",
+                           $reference = "Project 1 Reference",
+                           $wordcount = 123456,
+                           $sourceCountryCode = "IE",
+                           $sourceLanguageCode = "en",
+                           $tags = array("Project", "Tags"),
+                           $createdTime = null)
     {
         $sourceLocale = new Locale();
         $project = new Project();  
