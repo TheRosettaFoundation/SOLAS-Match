@@ -326,6 +326,73 @@ class UserRouteHandler
         $openid = new LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
         $use_openid = Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
+        
+        if ($app->request()->isPost() || $openid->mode) {
+            $post = $app->request()->post();
+
+            if (isset($post['login'])) {
+                $user = null;
+                try {
+                    $user = $userDao->login($post['email'], $post['password']);
+                } catch (Exception $e) {
+                    $error = sprintf(
+                        Localisation::getTranslation('login_1'),
+                        $app->urlFor("login"),
+                        $app->urlFor("register"),
+                        $e->getMessage()
+                    );
+                    $app->flashNow('error', $error);
+                }
+                if (!is_null($user)) {
+                    UserSession::setSession($user->getId());
+                    $request = UserSession::getReferer();
+                    UserSession::clearReferer();
+                    if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                        $app->redirect($request);
+                    } else {
+                        $app->redirect($app->urlFor("home"));
+                    }
+                }
+            } elseif (isset($post['password_reset'])) {
+                $app->redirect($app->urlFor("password-reset-request"));
+            } else {
+                $loggedIn = false;
+                try {
+                    $loggedIn = $this->openIdLogin($openid, $app);
+                } catch (Exception $e) {
+                    $error = sprintf(
+                        Localisation::getTranslation('login_1'),
+                        $app->urlFor("login"),
+                        $app->urlFor("register"),
+                        $e->getMessage()
+                    );
+                    $app->flashNow('error', $error);
+                }
+                if ($loggedIn) {
+                    $request = UserSession::getReferer();
+                    UserSession::clearReferer();
+                    if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                        $app->redirect($request);
+                    } else {
+                        $app->redirect($app->urlFor("home"));
+                    }
+                }
+            }
+        }
+
+        // Added check to display info message to users on IE borwsers
+        $browserData = get_browser(null, true);
+        if (!is_null($browserData) && isset($browserData['browser'])) {
+            $browser = $browserData['browser'];
+
+            if ($browser == 'IE') {
+                $app->flashNow(
+                    "info",
+                    Localisation::getTranslation('index_8').Localisation::getTranslation('index_9')
+                );
+            }
+        }
+
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
                 $extra_scripts = "
@@ -336,82 +403,21 @@ class UserRouteHandler
             }
         }
         
-        try {
-            if (isValidPost($app)) {
-                $post = $app->request()->post();
-
-                if (isset($post['login'])) {
-                    if ($user = $userDao->login($post['email'], $post['password'])) {
-                        UserSession::setSession($user->getId());
-                    }
-                    $request = UserSession::getReferer();
-                    UserSession::clearReferer();
-                    if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
-                        $app->redirect($request);
-                    } else {
-                        $app->redirect($app->urlFor("home"));
-                    }
-                } elseif (isset($post['password_reset'])) {
-                    $app->redirect($app->urlFor("password-reset-request"));
-                }
-            } elseif ($app->request()->isPost() || $openid->mode) {
-                if ($this->openIdLogin($openid, $app)) {
-                    $request = UserSession::getReferer();
-                    UserSession::clearReferer();
-                    if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
-                        $app->redirect($request);
-                    } else {
-                        $app->redirect($app->urlFor("home"));
-                    }
-                } else {
-                    $app->redirect(
-                        $app->urlFor("user-public-profile", array("user_id" => UserSession::getCurrentUserID()))
-                    );
-                }
-            }
-
-            // Added check to display info message to users on IE borwsers
-            $browserData = get_browser(null, true);
-            if (!is_null($browserData) && isset($browserData['browser'])) {
-                $browser = $browserData['browser'];
-
-                if ($browser == 'IE') {
-                    $app->flashNow(
-                        "info",
-                        Localisation::getTranslation('index_8').Localisation::getTranslation('index_9')
-                    );
-                }
-            }
-
-            $app->render("user/login.tpl");
-        } catch (SolasMatchException $e) {
-            $error = sprintf(
-                Localisation::getTranslation('login_1'),
-                $app->urlFor("login"),
-                $app->urlFor("register"),
-                $e->getMessage()
-            );
-            $app->flash("error", $error);
-            $app->redirect($app->urlFor("login"));
-            echo $error;    // This is all kinds of wrong
-        }
+        $app->render("user/login.tpl");
     }
     
     public function openIdLogin($openid, $app)
     {
+        $ret = false;
         if (!$openid->mode) {
-            try {
-                $openid->identity = $openid->data["openid_identifier"];
-                $openid->required = array("contact/email");
-                $url = $openid->authUrl();
-                $app->redirect($openid->authUrl());
-            } catch (ErrorException $e) {
-                echo $e->getMessage();
-            }
+            $openid->identity = $openid->data["openid_identifier"];
+            $openid->required = array("contact/email");
+            $url = $openid->authUrl();
+            $app->redirect($openid->authUrl());
         } elseif ($openid->mode == "cancel") {
             throw new InvalidArgumentException(Localisation::getTranslation('login_2'));
         } else {
-            $retvals= $openid->getAttributes();
+            $retvals = $openid->getAttributes();
             if ($openid->validate()) {
                 $userDao = new UserDao();
                 $temp = $retvals['contact/email'].substr(Settings::get("session.site_key"), 0, 20);
@@ -432,8 +438,10 @@ class UserRouteHandler
                 }
                 
             }
-            return true;
+            $ret = true;
         }
+
+        return $ret;
     }
 
     public static function userPrivateProfile($userId)

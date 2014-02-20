@@ -40,7 +40,7 @@
         </form>
     {/if}
 
-    {if isset($openid)&& ($openid==='y'||$openid==='h' )}
+    {if isset($openid) && ($openid === 'y' || $openid === 'h')}
         <!-- Simple OpenID Selector -->
         <form action="{urlFor name='login'}" method="post" id="openid_form">
             <input type="hidden" name="action" value="verify" />

@@ -374,6 +374,7 @@ class UserDao extends BaseDao
             null,
             array("X-Custom-Authorization:$headerhash")
         );
+
         $headers = $this->client->getHeaders();
         if (isset($headers["X-Custom-Token"])) {
             UserSession::setAccessToken(
@@ -381,7 +382,6 @@ class UserDao extends BaseDao
             );
         }
         return $ret;
-        
     }
     
     public function login($email, $password)
