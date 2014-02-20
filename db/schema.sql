@@ -1248,7 +1248,7 @@ DROP PROCEDURE IF EXISTS `deleteUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUser`(IN `userId` INT)
 BEGIN
-    if EXISTS (select 1 from Users where Users.id = userid) then
+    if EXISTS (select 1 from Users where Users.id = userId) then
 	    delete from Users where Users.id = userId;
         select 1 as result;
     else
