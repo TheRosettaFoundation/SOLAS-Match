@@ -9,6 +9,8 @@ require_once __DIR__.'/../../api/DataAccessObjects/BadgeDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/TagsDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/TaskDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/ProjectDao.class.php';
+require_once __DIR__."/../../Common/NotificationIntervalEnum.class.php";
+require_once __DIR__."/../../Common/lib/Authentication.class.php";
 require_once __DIR__.'/../../Common/lib/BadgeTypes.class.php';
 require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
 require_once __DIR__.'/../UnitTestHelper.php';
@@ -129,6 +131,24 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceof("User", $userWithChangedPw);
         $this->assertNotEquals($insertedUser->getPassword(), $userWithChangedPw->getPassword());
         $this->assertNotEquals($insertedUser->getNonce(), $userWithChangedPw->getNonce());        
+    }
+    
+    public function testApiRegister()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $email = "foocoochoo@blah.com";
+        $pw = "password";
+        
+        $regUser = UserDao::apiRegister($email, $pw);
+        $this->assertInstanceOf("User",$regUser);
+        $this->assertEquals($email, $regUser->getEmail());
+        
+        //Get user's nonce and use it to generate the hashed password that is stored in $regUser and assert that this
+        //result does indeed match the password stored in $regUser
+        $nonce = $regUser->getNonce();
+        $hashpw = Authentication::hashPassword($pw, $nonce);
+        $this->assertEquals($regUser->getPassword(), $hashpw);
     }
     
     public function testFindOrganisationsUserBelongsTo()
@@ -438,7 +458,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isTrackingTask);
     }
   //TODO - retest function when issue is resolved
-    public function testGetTrackedTasks()
+    /* public function testGetTrackedTasks()
     {
         UnitTestHelper::teardownDb();
         
@@ -473,7 +493,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $getTrackedTasks);
         $this->assertInstanceOf("Task", $getTrackedTasks[0]);
     }
-    
+     */
     public function testCreatePasswordResetRequest()
     {
         UnitTestHelper::teardownDb();
@@ -704,6 +724,17 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $insertedTask = TaskDao::save($task);
         $this->assertInstanceOf("Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
+        
+        $notification = new UserTaskStreamNotification();
+        $notification->setUserId($insertedUser->getId());
+        $notification->setInterval(NotificationIntervalEnum::DAILY);
+        $notification->setStrict(false);
+        UserDao::requestTaskStreamNotification($notification);
+        
+        $getTsn = UserDao::getUserTaskStreamNotification($insertedUser->getId());
+        $this->assertInstanceOf("UserTaskStreamNotification", $getTsn);
+        $this->assertEquals($insertedUser->getId(), $getTsn->getUserId());
+        $this->assertEquals(NotificationIntervalEnum::DAILY, $getTsn->getInterval());
     }
     
     public function testCreatePersonalInfo()
@@ -717,7 +748,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         
         $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
         $insertedInfo = UserDao::createPersonalInfo($userInfo);
-        $this->assertInstanceOf("UserPersonalInformation",$insertedInfo);
+        $this->assertInstanceOf("UserPersonalInformation", $insertedInfo);
         $this->assertNotNull($insertedInfo->getId());
     }
     
@@ -746,6 +777,25 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($insertedInfo->getMobileNumber(),$updatedInfo->getMobileNumber());
     }
     
+    public function testGetPersonalInfo()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
+        $insertedInfo = UserDao::createPersonalInfo($userInfo);
+        $this->assertInstanceOf("UserPersonalInformation",$insertedInfo);
+        $this->assertNotNull($insertedInfo->getId());
+        
+        $getInfo = UserDao::getPersonalInfo($insertedInfo->getId());
+        $this->assertInstanceOf("UserPersonalInformation",$getInfo);
+        $this->assertEquals($insertedInfo,$getInfo);
+    }
+    
     public function testCreateSecondaryLanguage()
     {
         UnitTestHelper::teardownDb();
@@ -765,5 +815,83 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("Locale",$afterCreate);
         $this->assertEquals($locale->getLanguageCode(),$afterCreate->getLanguageCode());
         $this->assertEquals($locale->getCountryCode(),$afterCreate->getCountryCode());
+    }
+    
+    public function testGetSecondaryLanguages()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $user->getNativeLocale()->setLanguageCode("en");
+        $user->getNativeLocale()->setCountryCode("IE");
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $locale = new Locale();
+        $locale->setLanguageCode("ja");
+        $locale->setCountryCode("JP");
+        
+        $afterCreate = UserDao::createSecondaryLanguage($insertedUser->getId(),$locale);
+        $this->assertInstanceOf("Locale",$afterCreate);
+        $this->assertEquals($locale->getLanguageCode(),$afterCreate->getLanguageCode());
+        $this->assertEquals($locale->getCountryCode(),$afterCreate->getCountryCode());
+        
+        $locale2 = new Locale();
+        $locale2->setLanguageCode("ga");
+        $locale2->setCountryCode("IE");
+        
+        $afterCreate2 = UserDao::createSecondaryLanguage($insertedUser->getId(),$locale2);
+        $this->assertInstanceOf("Locale",$afterCreate2);
+        $this->assertEquals($locale2->getLanguageCode(),$afterCreate2->getLanguageCode());
+        $this->assertEquals($locale2->getCountryCode(),$afterCreate2->getCountryCode());
+        
+        $getSecondaryLangs = UserDao::getSecondaryLanguages($insertedUser->getId());
+        
+        $this->assertCount(2,$getSecondaryLangs);
+        foreach($getSecondaryLangs as $lang) {
+            $this->assertInstanceOf("Locale",$lang);
+        }
+    }
+    
+    public function testDeleteSecondaryLanguage()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $user->getNativeLocale()->setLanguageCode("en");
+        $user->getNativeLocale()->setCountryCode("IE");
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $locale = new Locale();
+        $locale->setLanguageCode("ja");
+        $locale->setCountryCode("JP");
+        
+        $afterCreate = UserDao::createSecondaryLanguage($insertedUser->getId(),$locale);
+        $this->assertInstanceOf("Locale",$afterCreate);
+        $this->assertEquals($locale->getLanguageCode(),$afterCreate->getLanguageCode());
+        $this->assertEquals($locale->getCountryCode(),$afterCreate->getCountryCode());
+        
+        $locale2 = new Locale();
+        $locale2->setLanguageCode("ga");
+        $locale2->setCountryCode("IE");
+        
+        $afterCreate2 = UserDao::createSecondaryLanguage($insertedUser->getId(),$locale2);
+        $this->assertInstanceOf("Locale",$afterCreate2);
+        $this->assertEquals($locale2->getLanguageCode(),$afterCreate2->getLanguageCode());
+        $this->assertEquals($locale2->getCountryCode(),$afterCreate2->getCountryCode());
+        
+        $afterDeleteLang = UserDao::deleteSecondaryLanguage($insertedUser->getId(),"ga","IE");
+        //assert that delete worked
+        $this->assertEquals("1",$afterDeleteLang);
+        $tryRedeleteLang = UserDao::deleteSecondaryLanguage($insertedUser->getId(),"ga","IE");
+        //assert that redelete attempt did nothing
+        $this->assertEquals("0",$tryRedeleteLang);
+        
+        $getLangs = UserDao::getSecondaryLanguages($insertedUser->getId());
+        $this->assertNotContains($locale2,$getLangs);
+        
     }
 }

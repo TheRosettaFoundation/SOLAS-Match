@@ -62,7 +62,8 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         OrganisationDao::requestMembership($userId, $orgId);
         OrganisationDao::acceptMemRequest($orgId, $userId);
 
-        AdminDao::addOrgAdmin($userId, $orgId);
+        $addedAdmin = AdminDao::addOrgAdmin($userId, $orgId);
+        $this->assertNotNull($addedAdmin);
         $adminsReturned = AdminDao::getAdmins();
         $this->assertEquals($userId, $adminsReturned[0]->getId()); //Failing, adminsReturned is null
     }
@@ -87,9 +88,10 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($user2Id);
 
         //Ban not being recorded in the db, why?
-        $bannedUser = new BannedUser($user2Id,$userId,BanTypeEnum::WEEK,"b&!!!!!",date("y/m/d"));
+        $bannedUser = new BannedUser($user2Id,$userId,BanTypeEnum::WEEK,"b&!!!!!");
         AdminDao::saveBannedUser($bannedUser);
-        $this->assertEquals("1",AdminDao::isUserBanned($user2Id));
+        $isBanned = AdminDao::isUserBanned($user2Id);
+        $this->assertEquals("1",$isBanned);
     }
 
     public function testIsAdmin()

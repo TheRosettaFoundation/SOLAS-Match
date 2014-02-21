@@ -259,24 +259,6 @@ class UserDao
         return (!is_null(UserSession::getCurrentUserId()));
     }
 
-    //Currently not implemented/in use?
-    public static function belongsToRole($user, $role)
-    {
-        $ret = false;
-        if ($role == 'translator') {
-            $ret = true;
-        } elseif ($role == 'organisation_member') {
-            $user_found = $this->find(array(
-                    'user_id' => $user->getUserId(),
-                    'role' => 'organisation_member'
-            ));
-            if (is_object($user_found)) {
-                $ret = true;
-            }
-        }
-        return $ret;
-    }
-
     public static function findOrganisationsUserBelongsTo($user_id)
     {
         $ret = null;
