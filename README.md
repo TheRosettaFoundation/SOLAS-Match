@@ -169,6 +169,12 @@ Configuration file
 5.  Under user session control, enter a long random string.
 6.  Under Files changes upload_path to 'uploads/'
 
+DART Configuration file
+-----------------------
+
+1.  Copy /ui/dart/web/conf.template.json to /ui/dart/web/conf.json
+2. 	Change "SOLASMatch" and "SiteLocation" to point to your own setup
+
 Git Pre-Commit Hook
 -------------------
 
@@ -198,8 +204,10 @@ Configure PHP
 Set file/folder permissions
 ---------------------------
 
-    chmod 777 ./app/uploads
+    chmod 777 ./uploads
     chmod 777 ./ui/templating/templates_compiled
+    chmod 777 ./ui/templating/cache
+    
 
 Install 960.css Grid System
 ---------------------------
