@@ -51,7 +51,7 @@ class AdminDao
         OrganisationDao::acceptMemRequest($orgId, $userId);
         $args = PDOWrapper::cleanseNull($userId)
                 .",".PDOWrapper::cleanseNull($orgId);
-        error_log("CALL addAdmin($args)");
+        
         if ($result = PDOWrapper::call("addAdmin", $args)) {
             $ret = $result[0]['result'];
         }
@@ -156,7 +156,7 @@ class AdminDao
                 .",".PDOWrapper::cleanseNull($bannedTypeId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($adminComment)
                 .",".PDOWrapper::cleanseNullOrWrapStr($bannedDate);
-        
+        error_log("CALL getBannedOrg($args)");
         if ($result = PDOWrapper::call("getBannedOrg", $args)) {
             $ret = array();
             foreach ($result as $bannedOrg) {

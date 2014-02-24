@@ -162,12 +162,23 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $insertedUser = UserDao::save($user);
         $this->assertInstanceOf("User", $insertedUser);
         
-        $task = UnitTestHelper::createTask($insertedProject->getId()); 
+        $task = UnitTestHelper::createTask($insertedProject->getId());
         $translationTask = TaskDao::save($task);
+        
+        //create task file info for non existant file
+        $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
+        TaskDao::recordFileUpload(
+        $fileInfo['taskId'],
+        $fileInfo['filename'],
+        $fileInfo['contentType'],
+        $fileInfo['userId'],
+        $fileInfo['version']
+        );
+        
         $this->assertInstanceOf("Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
-        //create task file info for non existant file
+        //create project file info for non existant file
         $file = UnitTestHelper::createProjectFile($insertedUser->getId(),$projectId);
         ProjectDao::recordProjectFileInfo(
         $file->getProjectId(),
@@ -176,16 +187,13 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $file->getMime()
         );
         
-        
-        error_log("Going to archive project...");
         // Success
         $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
-        $this->assertInstanceOf("ArchivedProject", $resultArchiveProject);
-        error_log("...archiving done");
+        $this->assertEquals("1", $resultArchiveProject);
                 
         // Failure        
         $resultArchiveProjectFailure = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
-        $this->assertNull($resultArchiveProjectFailure);
+        $this->assertEquals("0", $resultArchiveProjectFailure);
     }
     
     
@@ -199,13 +207,23 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());        
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);         
+        $this->assertInstanceOf("Project", $insertedProject);  
+        $projectId = $insertedProject->getId();       
     
         $user = UnitTestHelper::createUser();
         $insertedUser = UserDao::save($user);
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
 
+        //create project file info for non existant file
+        $file = UnitTestHelper::createProjectFile($insertedUser->getId(),$projectId);
+        ProjectDao::recordProjectFileInfo(
+        $file->getProjectId(),
+        $file->getFilename(),
+        $file->getUserId(),
+        $file->getMime()
+        );
+        
         $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertInstanceOf("ArchivedProject", $resultArchiveProject);
         

@@ -1127,7 +1127,7 @@ BEGIN
 	if adminComment='' then set adminComment=null;end if;
 	
 	IF NOT EXISTS (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) THEN
-		INSERT INTO BannedUsers (user_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
+		INSERT INTO BannedUsers (`user_id`,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
 		VALUES (userId, userIdAdmin, bannedTypeId, adminComment,NOW());
 	END IF;
 
@@ -1511,8 +1511,8 @@ BEGIN
 	if bannedDate='' then set bannedDate=null;end if;
 
     SELECT b.org_id, b.`user_id-admin`, 
-            (SELECT t.type FROM BannedTypes t WHERE t.id = b.bannedtype_id) AS bannedType, 
-            b.`comment`, b.`banned-date` 
+           b.bannedtype_id, b.`comment`,
+           b.`banned-date` 
     	FROM BannedOrganisations b 
 	    WHERE isNullOrEqual(b.org_id,orgId) 
         and isNullOrEqual(b.`user_id-admin`,userIdAdmin) 

@@ -5,6 +5,7 @@ require_once __DIR__.'/../api/lib/PDOWrapper.class.php';
 require_once __DIR__.'/../Common/TaskTypeEnum.php';
 require_once __DIR__.'/../Common/TaskStatusEnum.php';
 require_once __DIR__.'/../Common/models/Locale.php';
+require_once __DIR__.'/../Common/BanTypeEnum.php';
 
 class UnitTestHelper
 {
@@ -71,7 +72,11 @@ class UnitTestHelper
     
    
     // Create system badge by default
-    public static function createBadge($id = null, $title = "System Badge 1", $description = "System Badge 1 Description", $ownerId = null)
+    public static function createBadge(
+                $id = null,
+                $title = "System Badge 1",
+                $description = "System Badge 1 Description",
+                $ownerId = null)
     {       
         $newBadge = new Badge();      
         $newBadge->setId($id);
@@ -79,6 +84,27 @@ class UnitTestHelper
         $newBadge->setDescription($description);
         $newBadge->setOwnerId($ownerId);       
         return $newBadge;
+    }
+    public static function createBannedUser($userId, $userIdAdmin, $banType = BanTypeEnum::DAY, $comment = "FOOOO")
+    {
+        $bannedUser = new BannedUser();
+        $bannedUser->setUserId($userId);
+        $bannedUser->setUserIdAdmin($userIdAdmin);
+        $bannedUser->setBanType($banType);
+        $bannedUser->setComment($comment);
+        
+        return $bannedUser;
+    }
+    
+    public static function createBannedOrg($orgId, $userIdAdmin, $banType = BanTypeEnum::DAY, $comment = "FOOOO")
+    {
+        $bannedOrg = new BannedOrganisation();
+        $bannedOrg->setOrgId($orgId);
+        $bannedOrg->setUserIdAdmin($userIdAdmin);
+        $bannedOrg->setBanType($banType);
+        $bannedOrg->setComment($comment);
+        
+        return $bannedOrg;
     }
     
     public static function createOrg($id = null, $name = "Organisation 1", $biography = "Organisation Biography 1", $homepage = "http://www.organisation1.org")
