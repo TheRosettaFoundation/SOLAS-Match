@@ -173,7 +173,7 @@ DART Configuration file
 -----------------------
 
 1.  Copy /ui/dart/web/conf.template.json to /ui/dart/web/conf.json
-2. 	Change "SOLASMatch" and "SiteLocation" to point to your own setup
+2.  Change "SOLASMatch" and "SiteLocation" to point to your own setup
 
 Git Pre-Commit Hook
 -------------------
