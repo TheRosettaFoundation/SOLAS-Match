@@ -16,7 +16,7 @@ class UserDao
         // Test for token existance and validity
         try {
             $resource->isValid(true);
-            $parts =explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
+            $parts = explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
             return UserDao::getByOauthToken($parts[1]);
         } catch (League\OAuth2\Server\Exception\InvalidAccessTokenException $e) {
             //The access token is missing or invalid...
@@ -498,7 +498,6 @@ class UserDao
             $ret = array();
             foreach ($result as $row) {
                 $task = ModelFactory::buildModel("Task", $row);
-                $task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }

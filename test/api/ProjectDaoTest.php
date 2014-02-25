@@ -145,6 +145,42 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNull($resultGetProjectFailure);
     }
     
+    public function testDelete()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $this->assertNotNull($insertedOrg->getId());
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        
+        // Success
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
+        $this->assertEquals($project->getTitle(), $insertedProject->getTitle());
+        $this->assertEquals($project->getDescription(), $insertedProject->getDescription());
+        $this->assertEquals($project->getDeadline(), $insertedProject->getDeadline());
+        $this->assertEquals($project->getImpact(), $insertedProject->getImpact());
+        $this->assertEquals($project->getReference(), $insertedProject->getReference());
+        $this->assertEquals($project->getWordCount(), $insertedProject->getWordCount());
+        
+        $this->assertEquals(
+                $project->getSourceLocale()->getLanguageCode(),
+                $insertedProject->getSourceLocale()->getLanguageCode()
+                );
+        $this->assertEquals(
+                $project->getSourceLocale()->getCountryCode(),
+                $insertedProject->getSourceLocale()->getCountryCode());
+        
+        $afterDelete = ProjectDao::delete($insertedProject->getId());
+        $this->assertEquals("1", $afterDelete);
+        $tryRedelete = ProjectDao::delete($insertedProject->getId());
+        $this->assertEquals("0", $tryRedelete);
+    }
+    
     public function testArchiveProject()
     {
         UnitTestHelper::teardownDb();
@@ -225,7 +261,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         );
         
         $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
-        $this->assertInstanceOf("ArchivedProject", $resultArchiveProject);
+        $this->assertEquals("1", $resultArchiveProject);
         
         // Success
         $resultGetArchivedProject = ProjectDao::getArchivedProject($insertedProject->getId()

@@ -458,7 +458,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isTrackingTask);
     }
   //TODO - retest function when issue is resolved
-    /* public function testGetTrackedTasks()
+    public function testGetTrackedTasks()
     {
         UnitTestHelper::teardownDb();
         
@@ -492,8 +492,10 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $getTrackedTasks = UserDao::getTrackedTasks($insertedUser->getId());
         $this->assertCount(1, $getTrackedTasks);
         $this->assertInstanceOf("Task", $getTrackedTasks[0]);
+        $this->assertEquals($insertedTask->getId(), $getTrackedTasks[0]->getId());
+        $this->assertEquals($insertedTask->getTaskStatus(), $getTrackedTasks[0]->getTaskStatus());
     }
-     */
+    
     public function testCreatePasswordResetRequest()
     {
         UnitTestHelper::teardownDb();
@@ -735,6 +737,44 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("UserTaskStreamNotification", $getTsn);
         $this->assertEquals($insertedUser->getId(), $getTsn->getUserId());
         $this->assertEquals(NotificationIntervalEnum::DAILY, $getTsn->getInterval());
+    }
+    
+    public function testRemoveTaskStreamNotification()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+        $insertedTask = TaskDao::save($task);
+        $this->assertInstanceOf("Task", $insertedTask);
+        $this->assertNotNull($insertedTask->getId());
+        
+        $notification = new UserTaskStreamNotification();
+        $notification->setUserId($insertedUser->getId());
+        $notification->setInterval(NotificationIntervalEnum::DAILY);
+        $notification->setStrict(false);
+        UserDao::requestTaskStreamNotification($notification);
+        
+        $getTsn = UserDao::getUserTaskStreamNotification($insertedUser->getId());
+        $this->assertInstanceOf("UserTaskStreamNotification", $getTsn);
+        $this->assertEquals($insertedUser->getId(), $getTsn->getUserId());
+        $this->assertEquals(NotificationIntervalEnum::DAILY, $getTsn->getInterval());
+        
+        $removeTsn = UserDao::removeTaskStreamNotification($insertedUser->getId());
+        $this->assertTrue($removeTsn);
     }
     
     public function testCreatePersonalInfo()
