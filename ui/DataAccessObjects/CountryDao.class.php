@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\UI\DAO;
+
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 
@@ -8,8 +10,8 @@ class CountryDao extends BaseDao
 
     public function __construct()
     {
-        $this->client=new APIHelper(Settings::get("ui.api_format"));
-        $this->siteApi=Settings::get("site.api");
+        $this->client = new \APIHelper(\Settings::get("ui.api_format"));
+        $this->siteApi = \Settings::get("site.api");
     }
 
     public function getCountry($id)
@@ -28,9 +30,9 @@ class CountryDao extends BaseDao
 
     public function getCountries()
     {
-        $countries = CacheHelper::getCached(
-            CacheHelper::COUNTRIES,
-            TimeToLiveEnum::MONTH,
+        $countries = \CacheHelper::getCached(
+            \CacheHelper::COUNTRIES,
+            \TimeToLiveEnum::MONTH,
             function ($args) {
                 $request = "{$args[1]}v0/countries";
                 return $args[0]->call(array("Country"), $request);

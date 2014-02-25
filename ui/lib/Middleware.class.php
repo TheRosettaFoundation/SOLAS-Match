@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\UI\Lib;
+
+use \SolasMatch\UI\DAO as DAO;
+
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
 class Middleware
@@ -9,8 +13,8 @@ class Middleware
         $app = \Slim\Slim::getInstance();
         
         $this->isUserBanned();
-        if (!UserSession::getCurrentUserID()) {
-            UserSession::setReferer(
+        if (!\UserSession::getCurrentUserID()) {
+            \UserSession::setReferer(
                 $app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo()
             );
             $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
@@ -30,11 +34,11 @@ class Middleware
     public function isSiteAdmin()
     {
         $this->isUserBanned();
-        if (is_null(UserSession::getCurrentUserID())) {
+        if (is_null(\UserSession::getCurrentUserID())) {
             return false;
         }
-        $adminDao = new AdminDao();
-        return $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
+        $adminDao = new DAO\AdminDao();
+        return $adminDao->isSiteAdmin(\UserSession::getCurrentUserID());
     }
 
     public function authenticateUserForTask(\Slim\Route $route)
@@ -44,11 +48,11 @@ class Middleware
         }
 
         $app = \Slim\Slim::getInstance();
-        $taskDao = new TaskDao();
+        $taskDao = new DAO\TaskDao();
         $params = $route->getParams();
 
         $this->authUserIsLoggedIn();
-        $user_id = UserSession::getCurrentUserID();
+        $user_id = \UserSession::getCurrentUserID();
         $claimant = null;
         if ($params !== null) {
             $task_id = $params['task_id'];
@@ -69,10 +73,10 @@ class Middleware
             return true;
         }
 		
-        $userDao = new UserDao();
-        $orgDao = new OrganisationDao();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
 
-        $user_id = UserSession::getCurrentUserID();
+        $user_id = \UserSession::getCurrentUserID();
         $params = $route->getParams();
 	    if ($params !== null) {
             $org_id = $params['org_id'];
@@ -102,9 +106,9 @@ class Middleware
             return true;
         }
 
-        $taskDao = new TaskDao();
-        $projectDao = new ProjectDao();
-        $userDao = new UserDao();
+        $taskDao = new DAO\TaskDao();
+        $projectDao = new DAO\ProjectDao();
+        $userDao = new DAO\UserDao();
 
         $params= $route->getParams();
         if ($params != null) {
@@ -113,7 +117,7 @@ class Middleware
             $project = $projectDao->getProject($task->getProjectId());
             
             $org_id = $project->getOrganisationId();
-            $user_id = UserSession::getCurrentUserID();
+            $user_id = \UserSession::getCurrentUserID();
 
             if ($user_id) {
                 $user_orgs = $userDao->getUserOrgs($user_id);
@@ -138,11 +142,11 @@ class Middleware
         }
 
         $params = $route->getParams();
-        $userDao = new UserDao();
-        $projectDao = new ProjectDao();
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
         
         if ($params != null) {
-            $user_id = UserSession::getCurrentUserID();
+            $user_id = \UserSession::getCurrentUserID();
             $project_id = $params['project_id'];
             $userOrgs = $userDao->getUserOrgs($user_id);
             $project = $projectDao->getProject($project_id);
@@ -165,9 +169,9 @@ class Middleware
             return true;
         }
 
-        $taskDao = new TaskDao();
-        $projectDao = new ProjectDao();
-        $userDao = new UserDao();
+        $taskDao = new DAO\TaskDao();
+        $projectDao = new DAO\ProjectDao();
+        $userDao = new DAO\UserDao();
 
         $params= $route->getParams();
         if ($params != null) {
@@ -178,7 +182,6 @@ class Middleware
             }
 
             $project = $projectDao->getProject($task->getProjectId());
-            
             $org_id = $project->getOrganisationId();
             $user_id = UserSession::getCurrentUserID();
 
@@ -199,10 +202,10 @@ class Middleware
     
     public function isUserBanned()
     {
-        $adminDao = new AdminDao();
-        if ($adminDao->isUserBanned(UserSession::getCurrentUserID())) {
-            $app = Slim::getInstance();
-            UserSession::destroySession();
+        $adminDao = new DAO\AdminDao();
+        if ($adminDao->isUserBanned(\UserSession::getCurrentUserID())) {
+            $app = \Slim\Slim::getInstance();
+            \UserSession::destroySession();
             $app->flash('error', Localisation::getTranslation('common_this_user_account_has_been_banned'));
             $app->redirect($app->urlFor('home'));
         }
@@ -215,13 +218,13 @@ class Middleware
             $params = $route->getParams();
             if (!is_null($params)) {
                 $taskId = $params['task_id'];
-                $userDao = new UserDao();
-                $isBlackListed = $userDao->isBlacklistedForTask(UserSession::getCurrentUserID(), $taskId);
+                $userDao = new DAO\UserDao();
+                $isBlackListed = $userDao->isBlacklistedForTask(\UserSession::getCurrentUserID(), $taskId);
                 
                 if ($isBlackListed) {
-                    $taskDao = new TaskDao();
+                    $taskDao = new DAO\TaskDao();
                     $task = $taskDao->getTask($taskId);
-                    $app = Slim::getInstance();
+                    $app = \Slim\Slim::getInstance();
                     $app->flash(
                         'error',
                         sprintf(

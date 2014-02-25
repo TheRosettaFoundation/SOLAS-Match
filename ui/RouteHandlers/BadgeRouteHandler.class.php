@@ -1,11 +1,16 @@
 <?php
 
+namespace SolasMatch\UI\RouteHandlers;
+
+use \SolasMatch\UI\DAO as DAO;
+use \SolasMatch\UI\Lib as Lib;
+
 class BadgeRouteHandler
 {
     public function init()
     {
         $app = \Slim\Slim::getInstance();
-        $middleware = new Middleware();
+        $middleware = new Lib\Middleware();
         
         $app->get(
             "/badge/list/",
@@ -19,8 +24,8 @@ class BadgeRouteHandler
         $app = \Slim\Slim::getInstance();
 
         $org_list = array();
-        $orgDao = new OrganisationDao();
-        $badgeDao = new BadgeDao();
+        $orgDao = new DAO\OrganisationDao();
+        $badgeDao = new DAO\BadgeDao();
         $badgeList = $badgeDao->getBadges();
         foreach ($badgeList as $badge) {
             if ($badge->getOwnerId() != null) {
@@ -29,7 +34,7 @@ class BadgeRouteHandler
             }
         }
 
-        $siteName = Settings::get('site.name');
+        $siteName = \Settings::get('site.name');
 
         $app->view()->appendData(array(
                 "current_page"  => "badge-list",

@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\UI\Lib;
+
+use \SolasMatch\UI\DAO as DAO;
+
 class GraphViewer
 {
     private $model;
@@ -25,8 +29,8 @@ class GraphViewer
         $this->xPos = 10;
         $this->yPos = 10;
         $this->graphBuilder = new UIWorkflowBuilder();
-        $this->taskDao = new TaskDao();
-        $this->projectDao = new ProjectDao();
+        $this->taskDao = new DAO\TaskDao();
+        $this->projectDao = new DAO\ProjectDao();
     }
 
     public function generateDataScript()
@@ -42,7 +46,7 @@ class GraphViewer
             $nextLayer = array();
             
             $foundLanguages = array();
-            $taskDao = new TaskDao();
+            $taskDao = new DAO\TaskDao();
             while (count($currentLayer) > 0) {
                 foreach ($currentLayer as $taskId) {
                     $task = $taskDao->getTask($taskId);
@@ -82,12 +86,12 @@ class GraphViewer
     public function constructView()
     {
         $ret = "";
-        $doc = new DOMDocument();
+        $doc = new \DOMDocument();
         $doc->formatOutput = true;
         if ($this->model) {
             $viewWidth = 1675;
 
-            $projectDao = new ProjectDao();
+            $projectDao = new DAO\ProjectDao();
             $project = $projectDao->getProject($this->model->getProjectId());
 
             $view = $doc->createElement("svg");
@@ -276,7 +280,7 @@ class GraphViewer
 
     public function drawNode($task, $doc, &$defs)
     {
-        $taskTypeColour = Settings::get("ui.task_".$task->getTaskType()."_colour");
+        $taskTypeColour = \Settings::get("ui.task_".$task->getTaskType()."_colour");
         $thisX = 0;
         $thisY = 0;
         
@@ -338,16 +342,16 @@ class GraphViewer
         $status = "";
         $taskStatusColour = "rgb(0, 0, 0)";
         switch ($task->getTaskStatus()) {
-            case (TaskStatusEnum::WAITING_FOR_PREREQUISITES):
+            case (\TaskStatusEnum::WAITING_FOR_PREREQUISITES):
                 $status = "Waiting";
                 break;
-            case (TaskStatusEnum::PENDING_CLAIM):
+            case (\TaskStatusEnum::PENDING_CLAIM):
                 $status = "Pending Claim";
                 break;
-            case (TaskStatusEnum::IN_PROGRESS):
+            case (\TaskStatusEnum::IN_PROGRESS):
                 $status = "In Progress";
                 break;
-            case (TaskStatusEnum::COMPLETE):
+            case (\TaskStatusEnum::COMPLETE):
                 $status = "Complete";
                 break;
         }

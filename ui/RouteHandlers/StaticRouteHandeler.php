@@ -1,5 +1,10 @@
 <?php
 
+namespace SolasMatch\UI\RouteHandlers;
+
+use \SolasMatch\UI\DAO as DAO;
+use \SolasMatch\UI\Lib as Lib;
+
 class StaticRouteHandeler
 {
     public function init()
@@ -16,7 +21,7 @@ class StaticRouteHandeler
         $app->get("/static/getUserStrings/", array($this, "getUserStrings"))->name("staticGetUserStrings");
         $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
         $app->get("/static/getUserHash/", array($this, "getUserHash"))->name("staticGetUserHash");
-        $app->notFound("Middleware::notFound");
+        $app->notFound("\SolasMatch\UI\Lib\Middleware::notFound");
     }
 
     public function privacy()
@@ -51,38 +56,38 @@ class StaticRouteHandeler
         $app = \Slim\Slim::getInstance(); 
         if ($post = $app->request()->post()) {
             if (isset($post['language'])) {
-                UserSession::setUserLanguage($post['language']);
+                \UserSession::setUserLanguage($post['language']);
             }
             $app->redirect($app->request()->getReferrer());
         } else {
-            $app->response()->body(UserSession::getUserLanguage());
+            $app->response()->body(\UserSession::getUserLanguage());
         }
     }
     
     public function getUser()
     {
-        if (!is_null(UserSession::getCurrentUserID())) {
-            $dao = new UserDao();
+        if (!is_null(\UserSession::getCurrentUserID())) {
+            $dao = new DAO\UserDao();
 
-            \Slim\Slim::getInstance()->response()->body($dao->getUserDart(UserSession::getCurrentUserID()));
+            \Slim\Slim::getInstance()->response()->body($dao->getUserDart(\UserSession::getCurrentUserID()));
         }
     }
     
     public function getUserHash()
     {
-        if (!is_null(UserSession::getAccessToken())) {
-            \Slim\Slim::getInstance()->response()->body(UserSession::getAccessToken()->getToken()); 
+        if (!is_null(\UserSession::getAccessToken())) {
+            \Slim\Slim::getInstance()->response()->body(\UserSession::getAccessToken()->getToken()); 
         }
     }
     
     public function getDefaultStrings()
     {
-        \Slim\Slim::getInstance()->response()->body(Localisation::getDefaultStrings());
+        \Slim\Slim::getInstance()->response()->body(Lib\Localisation::getDefaultStrings());
     }
 
     public function getUserStrings()
     {
-        \Slim\Slim::getInstance()->response()->body(Localisation::getUserStrings());
+        \Slim\Slim::getInstance()->response()->body(Lib\Localisation::getUserStrings());
     }
 }
 

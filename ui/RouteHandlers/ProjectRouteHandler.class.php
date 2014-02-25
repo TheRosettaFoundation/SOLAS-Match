@@ -1,5 +1,10 @@
 <?php
 
+namespace SolasMatch\UI\RouteHandlers;
+
+use \SolasMatch\UI\DAO as DAO;
+use \SolasMatch\UI\Lib as Lib;
+
 require_once __DIR__."/../../Common/TaskTypeEnum.php";
 require_once __DIR__."/../../Common/TaskStatusEnum.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
@@ -9,7 +14,7 @@ class ProjectRouteHandler
     public function init()
     {
         $app = \Slim\Slim::getInstance();
-        $middleware = new Middleware();
+        $middleware = new Lib\Middleware();
         
         $app->get(
             "/project/:project_id/view/",
@@ -60,9 +65,9 @@ class ProjectRouteHandler
         $time = $time[1] + $time[0];
         $time1 = $time;
 
-        $projectDao = new ProjectDao();
+        $projectDao = new DAO\ProjectDao();
         $graph = $projectDao->getProjectGraph($projectId);
-        $viewer = new GraphViewer($graph);
+        $viewer = new Lib\GraphViewer($graph);
         $body = $viewer->constructView();
 
         $extra_scripts .= $viewer->generateDataScript();
@@ -94,11 +99,11 @@ class ProjectRouteHandler
     public function projectView($project_id)
     {
         $app = \Slim\Slim::getInstance();
-        $user_id = UserSession::getCurrentUserID();
-        $projectDao = new ProjectDao();
-        $taskDao = new TaskDao();
-        $userDao = new UserDao();
-        $orgDao = new OrganisationDao();
+        $user_id = \UserSession::getCurrentUserID();
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
 
         $project = $projectDao->getProject($project_id);
         $app->view()->setData("project", $project);
@@ -126,16 +131,16 @@ class ProjectRouteHandler
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
                     if ($userTrackProject) {
-                        $app->flashNow("success", Localisation::getTranslation('project_view_7'));
+                        $app->flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation('project_view_8'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('project_view_8'));
                     }
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
                     if ($userUntrackProject) {
-                        $app->flashNow("success", Localisation::getTranslation('project_view_9'));
+                        $app->flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation('project_view_10'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('project_view_10'));
                     }
                 }
             } elseif (isset($post['trackTask'])) {
@@ -150,12 +155,12 @@ class ProjectRouteHandler
                     if ($response) {
                         $app->flashNow(
                             "success",
-                            sprintf(Localisation::getTranslation('project_view_11'), $task_title)
+                            sprintf(Lib\Localisation::getTranslation('project_view_11'), $task_title)
                         );
                     } else {
                         $app->flashNow(
                             "error",
-                            sprintf(Localisation::getTranslation('project_view_12'), $task_title)
+                            sprintf(Lib\Localisation::getTranslation('project_view_12'), $task_title)
                         );
                     }
                 } else {
@@ -163,12 +168,12 @@ class ProjectRouteHandler
                     if ($response) {
                         $app->flashNow(
                             "success",
-                            sprintf(Localisation::getTranslation('project_view_13'), $task_title)
+                            sprintf(Lib\Localisation::getTranslation('project_view_13'), $task_title)
                         );
                     } else {
                         $app->flashNow(
                             "error",
-                            sprintf(Localisation::getTranslation('project_view_14'), $task_title)
+                            sprintf(Lib\Localisation::getTranslation('project_view_14'), $task_title)
                         );
                     }
                 }
@@ -178,7 +183,7 @@ class ProjectRouteHandler
                 $taskDao->deleteTask($post['task_id']);
                 $app->flashNow(
                     "success",
-                    sprintf(Localisation::getTranslation('project_view_15'), $task->getTitle())
+                    sprintf(Lib\Localisation::getTranslation('project_view_15'), $task->getTitle())
                 );
             }
 
@@ -186,7 +191,7 @@ class ProjectRouteHandler
                 $taskDao->archiveTask($post['task_id'], $user_id);
                 $app->flashNow(
                     "success",
-                    sprintf(Localisation::getTranslation('project_view_16'), $task->getTitle())
+                    sprintf(Lib\Localisation::getTranslation('project_view_16'), $task->getTitle())
                 );
             }
         }
@@ -195,7 +200,7 @@ class ProjectRouteHandler
         $project_tags = $projectDao->getProjectTags($project_id);
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         
-        $adminDao = new AdminDao();
+        $adminDao = new DAO\AdminDao();
         $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $adminDao->isSiteAdmin($user_id);
         
         if ($isOrgMember || $isAdmin) {
@@ -222,7 +227,7 @@ class ProjectRouteHandler
             }
 
             $graph = $projectDao->getProjectGraph($project_id);
-            $viewer = new GraphViewer($graph);
+            $viewer = new Lib\GraphViewer($graph);
             $graphView = $viewer->constructView();
 
             $extra_scripts = "";
@@ -230,11 +235,11 @@ class ProjectRouteHandler
             $extra_scripts .= file_get_contents(__DIR__."/../js/GraphHelper.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
 
-            $numTaskTypes = Settings::get("ui.task_types");
+            $numTaskTypes = \Settings::get("ui.task_types");
             $taskTypeColours = array();
 
             for ($i=1; $i <= $numTaskTypes; $i++) {
-                $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+                $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
             }
 
             $app->view()->appendData(array(
@@ -267,7 +272,7 @@ class ProjectRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $deadlineError = '';
-        $projectDao = new ProjectDao();
+        $projectDao = new DAO\ProjectDao();
 
         $project = $projectDao->getProject($project_id);
         if (isValidPost($app)) {
@@ -283,15 +288,15 @@ class ProjectRouteHandler
                 $project->setImpact($post['impact']);
             }
             if (isset($post['deadline'])) {
-                if ($validTime = TemplateHelper::isValidDateTime($post['deadline'])) {
+                if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
                     $date = date("Y-m-d H:i:s", $validTime);
                     $project->setDeadline($date);
                 } else {
-                    $deadlineError = Localisation::getTranslation('project_alter_11');
+                    $deadlineError = Lib\Localisation::getTranslation('project_alter_11');
                 }
             }
             
-            $sourceLocale = new Locale();
+            $sourceLocale = new \Locale();
             if (isset($post['sourceLanguage'])) {
                 $sourceLocale->setLanguageCode($post['sourceLanguage']);
             }
@@ -304,7 +309,7 @@ class ProjectRouteHandler
             $project->setSourceLocale($sourceLocale);
                         
             if (isset($post['tags'])) {
-                $tagLabels = TemplateHelper::separateTags($post['tags']);
+                $tagLabels = Lib\TemplateHelper::separateTags($post['tags']);
                 if ($tagLabels) {
                     $project->clearTag();
                     foreach ($tagLabels as $tagLabel) {
@@ -321,8 +326,8 @@ class ProjectRouteHandler
             }
         }
          
-        $languages = TemplateHelper::getLanguageList();
-        $countries = TemplateHelper::getCountryList();
+        $languages = Lib\TemplateHelper::getLanguageList();
+        $countries = Lib\TemplateHelper::getCountryList();
         
         $tags = $project->getTagList();
         $tag_list = "";
@@ -333,7 +338,7 @@ class ProjectRouteHandler
         }
 
         $tagList = "[";
-        $tagDao = new TagDao();
+        $tagDao = new DAO\TagDao();
         $tags = $tagDao->getTags(null);
         if ($tags) {
             foreach ($tags as $tag) {
@@ -367,7 +372,7 @@ class ProjectRouteHandler
     public function projectCreate($org_id)
     {
         $app = \Slim\Slim::getInstance();
-        $user_id = UserSession::getCurrentUserID();
+        $user_id = \UserSession::getCurrentUserID();
 
         $extraScripts = "
 <script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
@@ -380,7 +385,7 @@ class ProjectRouteHandler
         $extraScripts .= "</span>";
 
         $app->view()->appendData(array(
-            "maxFileSize"   => TemplateHelper::maxFileSizeBytes(),
+            "maxFileSize"   => Lib\TemplateHelper::maxFileSizeBytes(),
             "org_id"        => $org_id,
             "user_id"       => $user_id,
             "extra_scripts" => $extraScripts
@@ -391,7 +396,7 @@ class ProjectRouteHandler
     public function projectCreated($project_id)
     {
         $app = \Slim\Slim::getInstance();
-        $projectDao = new ProjectDao();
+        $projectDao = new DAO\ProjectDao();
         $project = $projectDao->getProject($project_id);
         $org_id = $project->getOrganisationId();
 
@@ -406,21 +411,21 @@ class ProjectRouteHandler
     public function archiveProject($project_id)
     {
         $app = \Slim\Slim::getInstance();
-        $projectDao = new ProjectDao();
+        $projectDao = new DAO\ProjectDao();
 
         $project = $projectDao->getProject($project_id);
-        $user_id = UserSession::getCurrentUserID();
+        $user_id = \UserSession::getCurrentUserID();
         $archivedProject = $projectDao->archiveProject($project_id, $user_id);
         
         if ($archivedProject) {
             $app->flash(
                 "success",
-                sprintf(Localisation::getTranslation('org_dashboard_9'), $project->getTitle())
+                sprintf(Lib\Localisation::getTranslation('org_dashboard_9'), $project->getTitle())
             );
         } else {
             $app->flash(
                 "error",
-                sprintf(Localisation::getTranslation('org_dashboard_10'), $project->getTitle())
+                sprintf(Lib\Localisation::getTranslation('org_dashboard_10'), $project->getTitle())
             );
         }
         
@@ -430,7 +435,7 @@ class ProjectRouteHandler
     public function downloadProjectFile($projectId)
     {
         $app = \Slim\Slim::getInstance();
-        $siteApi = Settings::get("site.api");
+        $siteApi = \Settings::get("site.api");
         $app->redirect("{$siteApi}v0/projects/$projectId/file/");
     }
 }

@@ -3,7 +3,7 @@
 //! The Administrator Data Access Object
 /*!
   A class for retrieving Admin related data from the database.
-  Used by the API Route Handlers for supply info requested through the API.
+  Used by the API Route Handlers to supply info requested through the API.
 */
 
 include_once __DIR__."/OrganisationDao.class.php";

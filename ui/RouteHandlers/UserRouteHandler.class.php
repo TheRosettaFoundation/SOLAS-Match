@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\UI\RouteHandlers;
+
+use \SolasMatch\UI\DAO as DAO;
+use \SolasMatch\UI\Lib as Lib;
 
 require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../../Common/models/Register.php";
@@ -13,7 +17,7 @@ class UserRouteHandler
     public function init()
     {
         $app = \Slim\Slim::getInstance();
-        $middleware = new Middleware();
+        $middleware = new Lib\Middleware();
 
         $app->get(
             "/",
@@ -78,16 +82,16 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $viewData = array();
-        $langDao = new LanguageDao();
-        $tagDao = new TagDao();
-        $taskDao = new TaskDao();
-        $projectDao = new ProjectDao();
-        $orgDao = new OrganisationDao();
-        $userDao = new UserDao();
+        $langDao = new DAO\LanguageDao();
+        $tagDao = new DAO\TagDao();
+        $taskDao = new DAO\TaskDao();
+        $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
+        $userDao = new DAO\UserDao();
 
-        $use_statistics = Settings::get("site.stats");
+        $use_statistics = \Settings::get("site.stats");
         if ($use_statistics == 'y') {
-            $statsDao = new StatisticsDao();
+            $statsDao = new DAO\StatisticsDao();
             $statistics = $statsDao->getStats();
             $statsArray = null;
             if ($statistics) {
@@ -103,7 +107,7 @@ class UserRouteHandler
         $viewData["top_tags"] = $top_tags;
         $viewData["current_page"] = "home";
 
-        $current_user_id = UserSession::getCurrentUserID();
+        $current_user_id = \UserSession::getCurrentUserID();
         
         if ($current_user_id != null) {
             $user_tags = $userDao->getUserTags($current_user_id);
@@ -111,7 +115,7 @@ class UserRouteHandler
         }
 
         if ($current_user_id == null) {
-            $app->flashNow('info', Localisation::getTranslation('index_dont_use_ie'));
+            $app->flashNow('info', Lib\Localisation::getTranslation('index_dont_use_ie'));
         }
 
         $extra_scripts = "
@@ -140,9 +144,9 @@ class UserRouteHandler
     public function register()
     {
         $app = \Slim\Slim::getInstance();
-        $userDao = new UserDao();
+        $userDao = new DAO\UserDao();
         
-        $use_openid = Settings::get("site.openid");
+        $use_openid = \Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
@@ -157,15 +161,15 @@ class UserRouteHandler
         $warning = null;
         if (isValidPost($app)) {
             $post = $app->request()->post();
-            $temp = md5($post['email'].substr(Settings::get("session.site_key"), 0, 20));
-            UserSession::clearCurrentUserID();
-            if (!TemplateHelper::isValidEmail($post['email'])) {
-                $error = Localisation::getTranslation('register_1');
-            } elseif (!TemplateHelper::isValidPassword($post['password'])) {
-                $error = Localisation::getTranslation('register_2');
+            $temp = md5($post['email'].substr(\Settings::get("session.site_key"), 0, 20));
+            \UserSession::clearCurrentUserID();
+            if (!Lib\TemplateHelper::isValidEmail($post['email'])) {
+                $error = Lib\Localisation::getTranslation('register_1');
+            } elseif (!Lib\TemplateHelper::isValidPassword($post['password'])) {
+                $error = Lib\Localisation::getTranslation('register_2');
             } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
                 if ($return = $userDao->isUserVerified($user->getId())) {
-                    $error = sprintf(Localisation::getTranslation('register_3'), $app->urlFor("login"));
+                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->urlFor("login"));
                 }
             }
             
@@ -173,7 +177,7 @@ class UserRouteHandler
                 $userDao->register($post['email'], $post['password']);
                 $app->flashNow(
                     "success",
-                    sprintf(Localisation::getTranslation('register_4'), $app->urlFor("login"))
+                    sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
                 );
             }
         }
@@ -192,7 +196,7 @@ class UserRouteHandler
             if ($browser == 'IE') {
                 $app->flashNow(
                     "info",
-                    Localisation::getTranslation('index_8').Localisation::getTranslation('index_9')
+                    Lib\Localisation::getTranslation('index_8').Lib\Localisation::getTranslation('index_9')
                 );
             }
         }
@@ -203,12 +207,12 @@ class UserRouteHandler
     public function emailVerification($uuid)
     {
         $app = \Slim\Slim::getInstance();
-        $userDao = new UserDao();
+        $userDao = new DAO\UserDao();
 
         $user = $userDao->getRegisteredUser($uuid);
 
         if (is_null($user)) {
-            $app->flash("error", Localisation::getTranslation('email_verification_7'));
+            $app->flash("error", Lib\Localisation::getTranslation('email_verification_7'));
             $app->redirect($app->urlFor("home"));
         }
 
@@ -216,8 +220,8 @@ class UserRouteHandler
             $post = $app->request()->post();
             if (isset($post['verify'])) {
                 $userDao->finishRegistration($uuid);
-                UserSession::setSession($user->getId());
-                $app->flash("success", Localisation::getTranslation('email_verification_8'));
+                \UserSession::setSession($user->getId());
+                $app->flash("success", Lib\Localisation::getTranslation('email_verification_8'));
                 $app->redirect($app->urlFor("home"));
             }
         }
@@ -230,11 +234,11 @@ class UserRouteHandler
     public function passwordReset($uid)
     {
         $app = \Slim\Slim::getInstance();
-        $userDao = new UserDao();
+        $userDao = new DAO\UserDao();
         
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
-            $app->flash("error", Localisation::getTranslation('password_reset_1'));
+            $app->flash("error", Lib\Localisation::getTranslation('password_reset_1'));
             $app->redirect($app->urlFor("home"));
         }
         
@@ -243,22 +247,22 @@ class UserRouteHandler
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
 
-            if (isset($post['new_password']) && TemplateHelper::isValidPassword($post['new_password'])) {
+            if (isset($post['new_password']) && Lib\TemplateHelper::isValidPassword($post['new_password'])) {
                 if (isset($post['confirmation_password']) &&
                         $post['confirmation_password'] == $post['new_password']) {
 
                     $response = $userDao->resetPassword($post['new_password'], $uid);
                     if ($response) {
-                        $app->flash("success", Localisation::getTranslation('password_reset_1'));
+                        $app->flash("success", Lib\Localisation::getTranslation('password_reset_1'));
                         $app->redirect($app->urlFor("home"));
                     } else {
-                        $app->flashNow("error", Localisation::getTranslation('password_reset_1'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
                     }
                 } else {
-                    $app->flashNow("error", Localisation::getTranslation('password_reset_1'));
+                    $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
                 }
             } else {
-                $app->flashNow("error", Localisation::getTranslation('password_reset_1'));
+                $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
             }
         }
         $app->render("user/password-reset.tpl");
@@ -267,7 +271,7 @@ class UserRouteHandler
     public function passResetRequest()
     {
         $app = \Slim\Slim::getInstance();
-        $userDao = new UserDao();
+        $userDao = new DAO\UserDao();
         
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -279,7 +283,7 @@ class UserRouteHandler
                     if (!$hasUserRequestedPwReset) {
                         //send request
                         if ($userDao->requestPasswordReset($email)) {
-                            $app->flash("success", Localisation::getTranslation('user_reset_password_2'));
+                            $app->flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
                             $app->redirect($app->urlFor("home"));
                         } else {
                             $app->flashNow(
@@ -294,7 +298,7 @@ class UserRouteHandler
                         if ($response != null) {
                             $app->flashNow(
                                 "info",
-                                Localisation::getTranslation('user_reset_password_3'),
+                                Lib\Localisation::getTranslation('user_reset_password_3'),
                                 $response
                             );
                             //Send request
@@ -303,7 +307,7 @@ class UserRouteHandler
                     }
 
                 } else {
-                    $app->flashNow("error", Localisation::getTranslation('user_reset_password_4'));
+                    $app->flashNow("error", Lib\Localisation::getTranslation('user_reset_password_4'));
                 }
             }
         }
@@ -313,18 +317,18 @@ class UserRouteHandler
     public function logout()
     {
         $app = \Slim\Slim::getInstance();
-        UserSession::destroySession();    //TODO revisit when oauth is in place
+        \UserSession::destroySession();    //TODO revisit when oauth is in place
         $app->redirect($app->urlFor("home"));
     }
 
     public function login()
     {
         $app = \Slim\Slim::getInstance();
-        $userDao = new UserDao();
+        $userDao = new DAO\UserDao();
         
         $error = null;
-        $openid = new LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
-        $use_openid = Settings::get("site.openid");
+        $openid = new \LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
+        $use_openid = \Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
         
         if ($app->request()->isPost() || $openid->mode) {
@@ -336,7 +340,7 @@ class UserRouteHandler
                     $user = $userDao->login($post['email'], $post['password']);
                 } catch (Exception $e) {
                     $error = sprintf(
-                        Localisation::getTranslation('login_1'),
+                        Lib\Localisation::getTranslation('login_1'),
                         $app->urlFor("login"),
                         $app->urlFor("register"),
                         $e->getMessage()
@@ -344,9 +348,9 @@ class UserRouteHandler
                     $app->flashNow('error', $error);
                 }
                 if (!is_null($user)) {
-                    UserSession::setSession($user->getId());
-                    $request = UserSession::getReferer();
-                    UserSession::clearReferer();
+                    \UserSession::setSession($user->getId());
+                    $request = \UserSession::getReferer();
+                    \UserSession::clearReferer();
                     if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                         $app->redirect($request);
                     } else {
@@ -361,7 +365,7 @@ class UserRouteHandler
                     $loggedIn = $this->openIdLogin($openid, $app);
                 } catch (Exception $e) {
                     $error = sprintf(
-                        Localisation::getTranslation('login_1'),
+                        Lib\Localisation::getTranslation('login_1'),
                         $app->urlFor("login"),
                         $app->urlFor("register"),
                         $e->getMessage()
@@ -369,8 +373,8 @@ class UserRouteHandler
                     $app->flashNow('error', $error);
                 }
                 if ($loggedIn) {
-                    $request = UserSession::getReferer();
-                    UserSession::clearReferer();
+                    $request = \UserSession::getReferer();
+                    \UserSession::clearReferer();
                     if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                         $app->redirect($request);
                     } else {
@@ -388,7 +392,7 @@ class UserRouteHandler
             if ($browser == 'IE') {
                 $app->flashNow(
                     "info",
-                    Localisation::getTranslation('index_8').Localisation::getTranslation('index_9')
+                    Lib\Localisation::getTranslation('index_8').Lib\Localisation::getTranslation('index_9')
                 );
             }
         }
@@ -415,24 +419,24 @@ class UserRouteHandler
             $url = $openid->authUrl();
             $app->redirect($openid->authUrl());
         } elseif ($openid->mode == "cancel") {
-            throw new InvalidArgumentException(Localisation::getTranslation('login_2'));
+            throw new InvalidArgumentException(Lib\Localisation::getTranslation('login_2'));
         } else {
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
-                $userDao = new UserDao();
-                $temp = $retvals['contact/email'].substr(Settings::get("session.site_key"), 0, 20);
-                UserSession::clearCurrentUserID();
+                $userDao = new DAO\UserDao();
+                $temp = $retvals['contact/email'].substr(\Settings::get("session.site_key"), 0, 20);
+                \UserSession::clearCurrentUserID();
                 $user = $userDao->openIdLogin($retvals['contact/email'], md5($temp));
                 if (is_array($user)) {
                     $user = $user[0];
                 }
-                $adminDao = new AdminDao();
+                $adminDao = new DAO\AdminDao();
                 if (!$adminDao->isUserBanned($user->getId())) {
-                    UserSession::setSession($user->getId());
+                    \UserSession::setSession($user->getId());
                 } else {
                     $app->flash(
                         'error',
-                        Localisation::getTranslation('common_this_user_account_has_been_banned')
+                        Lib\Localisation::getTranslation('common_this_user_account_has_been_banned')
                     );
                     $app->redirect($app->urlFor('home'));
                 }
@@ -448,13 +452,13 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         
-        $userDao = new UserDao();
-        $loggedInuser = $userDao->getUser(UserSession::getCurrentUserID());
+        $userDao = new DAO\UserDao();
+        $loggedInuser = $userDao->getUser(\UserSession::getCurrentUserID());
         $user = $userDao->getUser($userId);
-        CacheHelper::unCache(CacheHelper::GET_USER.$userId);
+        \CacheHelper::unCache(\CacheHelper::GET_USER.$userId);
         
         if (!is_object($user)) {
-            $app->flash("error", Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor("login"));
         }
 
@@ -480,23 +484,23 @@ class UserRouteHandler
     public static function userPublicProfile($user_id)
     {
         $app = \Slim\Slim::getInstance();
-        $userDao = new UserDao();
-        $orgDao = new OrganisationDao();
-        $adminDao = new AdminDao();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
+        $adminDao = new DAO\AdminDao();
         
-        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(UserSession::getCurrentUserID()));
+        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(\UserSession::getCurrentUserID()));
         $user=null;
         try {
-            CacheHelper::unCache(CacheHelper::GET_USER.$user_id);
+            \CacheHelper::unCache(\CacheHelper::GET_USER.$user_id);
             $user = $userDao->getUser($user_id);
-        } catch (SolasMatchException $e) {
-             $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+        } catch (\SolasMatchException $e) {
+             $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
              $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo=null;
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
-        } catch (SolasMatchException $e) {
+        } catch (\SolasMatchException $e) {
             // should handle the error here or at least error_log it
         }
         if ($app->request()->isPost()) {
@@ -534,25 +538,25 @@ class UserRouteHandler
             }
         }
        
-        $org_creation = Settings::get("site.organisation_creation");
+        $org_creation = \Settings::get("site.organisation_creation");
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
 
         $app->view()->appendData(array("badges" => $badges,
-                                    "orgList"=> $orgList,
-                                    "user_orgs" => $user_orgs,
-                                    "current_page" => "user-profile",
-                                    "archivedJobs" => $archivedJobs,
-                                    "user_tags" => $user_tags,
-                                    "this_user" => $user,
-                                    "extra_scripts" => $extra_scripts,
-                                    "org_creation" => $org_creation,
-                                    "userPersonalInfo" => $userPersonalInfo,
-                                    "secondaryLanguages" => $secondaryLanguages
+            "orgList"=> $orgList,
+            "user_orgs" => $user_orgs,
+            "current_page" => "user-profile",
+            "archivedJobs" => $archivedJobs,
+            "user_tags" => $user_tags,
+            "this_user" => $user,
+            "extra_scripts" => $extra_scripts,
+            "org_creation" => $org_creation,
+            "userPersonalInfo" => $userPersonalInfo,
+            "secondaryLanguages" => $secondaryLanguages
         ));
                 
-        if (UserSession::getCurrentUserID() == $user_id) {
+        if (\UserSession::getCurrentUserID() == $user_id) {
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
             $lastSent = null;
@@ -561,28 +565,28 @@ class UserRouteHandler
             if ($notifData) {
                 $interval = $notifData->getInterval();
                 switch ($interval) {
-                    case NotificationIntervalEnum::DAILY:
+                    case \NotificationIntervalEnum::DAILY:
                         $interval = "daily";
                         break;
-                    case NotificationIntervalEnum::WEEKLY:
+                    case \NotificationIntervalEnum::WEEKLY:
                         $interval = "weekly";
                         break;
-                    case NotificationIntervalEnum::MONTHLY:
+                    case \NotificationIntervalEnum::MONTHLY:
                         $interval = "monthly";
                         break;
                 }
 
                 if ($notifData->getLastSent() != null) {
-                    $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
+                    $lastSent = date(\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
                 }
 
                 $strict = $notifData->getStrict();
             }
             $app->view()->appendData(array(
-                        "interval"       => $interval,
-                        "lastSent"       => $lastSent,
-                        "strict"         => $strict,
-                        "private_access" => true
+                "interval"       => $interval,
+                "lastSent"       => $lastSent,
+                "strict"         => $strict,
+                "private_access" => true
             ));
         }
                     
@@ -592,7 +596,7 @@ class UserRouteHandler
     public function editTaskStreamNotification($userId)
     {
         $app = \Slim\Slim::getInstance();
-        $userDao = new UserDao();
+        $userDao = new DAO\UserDao();
 
         $user = $userDao->getUser($userId);
 
@@ -604,7 +608,7 @@ class UserRouteHandler
                 if ($post['interval'] == 0) {
                     $success = $userDao->removeTaskStreamNotification($userId);
                 } else {
-                    $notifData = new UserTaskStreamNotification();
+                    $notifData = new \UserTaskStreamNotification();
                     $notifData->setUserId($userId);
                     $notifData->setInterval($post['interval']);
                     if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
@@ -615,7 +619,7 @@ class UserRouteHandler
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
-                $app->flash("success", Localisation::getTranslation('user_public_profile_17'));
+                $app->flash("success", Lib\Localisation::getTranslation('user_public_profile_17'));
                 $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
             }
         }
@@ -626,19 +630,19 @@ class UserRouteHandler
         if ($notifData) {
             $interval = $notifData->getInterval();
             switch ($interval) {
-                case NotificationIntervalEnum::DAILY:
+                case \NotificationIntervalEnum::DAILY:
                     $interval = "daily";
                     break;
-                case NotificationIntervalEnum::WEEKLY:
+                case \NotificationIntervalEnum::WEEKLY:
                     $interval = "weekly";
                     break;
-                case NotificationIntervalEnum::MONTHLY:
+                case \NotificationIntervalEnum::MONTHLY:
                     $interval = "monthly";
                     break;
             }
             
             if ($notifData->getLastSent() != null) {
-                $lastSent = date(Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
+                $lastSent = date(\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
             }
 
             if ($notifData->hasStrict()) {
@@ -648,15 +652,15 @@ class UserRouteHandler
             }
 
             $app->view()->appendData(array(
-                        "interval"  => $interval,
-                        "intervalId"=> $notifData->getInterval(),
-                        "lastSent"  => $lastSent,
-                        'strict'    => $strict
+                "interval"  => $interval,
+                "intervalId"=> $notifData->getInterval(),
+                "lastSent"  => $lastSent,
+                'strict'    => $strict
             ));
         }
 
         $app->view()->appendData(array(
-                    "user" => $user
+            "user" => $user
         ));
 
         $app->render("user/user.task-stream-notification-edit.tpl");
@@ -665,7 +669,7 @@ class UserRouteHandler
     public function userTaskReviews($taskId)
     {
         $app = \Slim\Slim::getInstance();
-        $taskDao = new TaskDao();
+        $taskDao = new DAO\TaskDao();
 
         $task = $taskDao->getTask($taskId);
         $reviews = $taskDao->getTaskReviews($taskId);
@@ -675,17 +679,12 @@ class UserRouteHandler
         $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
 
         $app->view()->appendData(array(
-                    'task'          => $task,
-                    'reviews'       => $reviews,
-                    'extra_scripts' => $extra_scripts
+            'task'          => $task,
+            'reviews'       => $reviews,
+            'extra_scripts' => $extra_scripts
         ));
 
         $app->render("user/user.task-reviews.tpl");
-    }
-
-    public static function isLoggedIn()
-    {
-        return (!is_null(UserSession::getCurrentUserId()));
     }
 }
 

@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\UI\Lib;
+
+use \SolasMatch\UI\DAO as DAO;
+
 require_once __DIR__.'/../../Common/lib/CacheHelper.class.php';
 require_once __DIR__.'/../../Common/TimeToLiveEnum.php';
 
@@ -13,28 +17,28 @@ class Localisation
     public static function init()
     {
         self::$ready = true;
-        $userLang = UserSession::getUserLanguage();
-        $defaultLang = Settings::get('site.default_site_language_code');
+        $userLang = \UserSession::getUserLanguage();
+        $defaultLang = \Settings::get('site.default_site_language_code');
 
-        self::$defaultLanguageDoc = new DOMDocument();
+        self::$defaultLanguageDoc = new \DOMDocument();
         self::$defaultLanguageDoc->loadXML(
-            CacheHelper::getCached(
-                CacheHelper::SITE_LANGUAGE,
-                TimeToLiveEnum::HOUR,
-                'Localisation::fetchTranslationFile',
+            \CacheHelper::getCached(
+                \CacheHelper::SITE_LANGUAGE,
+                \TimeToLiveEnum::HOUR,
+                __NAMESPACE__.'\Localisation::fetchTranslationFile',
                 'strings.xml'
             )
         );
 
-        if (!$userLang || strcasecmp(Settings::get('site.default_site_language_code'), $userLang) === 0) {
+        if (!$userLang || strcasecmp(\Settings::get('site.default_site_language_code'), $userLang) === 0) {
             self::$userLanguageDoc = null;
         } else {
-            self::$userLanguageDoc = new DOMDocument();
+            self::$userLanguageDoc = new \DOMDocument();
             self::$userLanguageDoc->loadXML(
-                CacheHelper::getCached(
-                    CacheHelper::SITE_LANGUAGE.'_'.$userLang,
-                    TimeToLiveEnum::HOUR,
-                    'Localisation::fetchTranslationFile',
+                \CacheHelper::getCached(
+                    \CacheHelper::SITE_LANGUAGE.'_'.$userLang,
+                    \TimeToLiveEnum::HOUR,
+                    __NAMESPACE__.'\Localisation::fetchTranslationFile',
                     "strings_$userLang.xml"
                 )
             );
@@ -70,7 +74,7 @@ class Localisation
 
         $ret = '';
         if (self::$userLanguageDoc != null) {
-            $xPath = new DOMXPath(self::$userLanguageDoc);
+            $xPath = new \DOMXPath(self::$userLanguageDoc);
             $stringElement = $xPath->query("/resources/string[@name='$stringId']");
 
             if ($stringElement->length !== 0) {
@@ -81,7 +85,7 @@ class Localisation
         }
         
         if ($ret == '') {
-            $xPath = new DOMXPath(self::$defaultLanguageDoc);
+            $xPath = new \DOMXPath(self::$defaultLanguageDoc);
             $stringElement = $xPath->query("/resources/string[@name='$stringId']");
 
             if ($stringElement->length !== 0) {
@@ -107,13 +111,13 @@ class Localisation
         $matches = array();
         $locales = array();
         $filePaths = glob(__DIR__."/../localisation/strings_*.xml");
-        $langDao = new LanguageDao();
-        $locales[] = $langDao->getLanguageByCode(Settings::get('site.default_site_language_code'));
+        $langDao = new DAO\LanguageDao();
+        $locales[] = $langDao->getLanguageByCode(\Settings::get('site.default_site_language_code'));
         foreach ($filePaths as $filePath) {
             preg_match('/_(.*)\.xml/', realpath($filePath), $matches);
-            $lang = CacheHelper::getCached(
-                CacheHelper::LOADED_LANGUAGES."_$matches[1]",
-                TimeToLiveEnum::QUARTER_HOUR,
+            $lang = \CacheHelper::getCached(
+                \CacheHelper::LOADED_LANGUAGES."_$matches[1]",
+                \TimeToLiveEnum::QUARTER_HOUR,
                 array($langDao, 'getLanguageByCode'),
                 $matches[1]
             );
@@ -122,5 +126,10 @@ class Localisation
             }
         }
         return $locales;
+    }
+
+    public static function registerWithSmarty()
+    {
+        \Slim\Slim::getInstance()->view()->getInstance()->registerClass('Localisation', __NAMESPACE__.'\Localisation');
     }
 }

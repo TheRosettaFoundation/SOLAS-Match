@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\UI\DAO;
+
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/lib/CacheHelper.class.php";
 require_once __DIR__."/../../Common/TimeToLiveEnum.php";
@@ -10,8 +12,8 @@ class LanguageDao extends BaseDao
     
     public function __construct()
     {
-        $this->client = new APIHelper(Settings::get("ui.api_format"));
-        $this->siteApi = Settings::get("site.api");
+        $this->client = new \APIHelper(\Settings::get("ui.api_format"));
+        $this->siteApi = \Settings::get("site.api");
     }
 
     public function getLanguage($id)
@@ -22,9 +24,9 @@ class LanguageDao extends BaseDao
     
     public function getLanguages()
     {
-        $languages = CacheHelper::getCached(
-            CacheHelper::LANGUAGES,
-            TimeToLiveEnum::MONTH,
+        $languages = \CacheHelper::getCached(
+            \CacheHelper::LANGUAGES,
+            \TimeToLiveEnum::MONTH,
             function ($args) {
                 $request = "{$args[1]}v0/languages";
                 return $args[0]->call(array("Language"), $request);

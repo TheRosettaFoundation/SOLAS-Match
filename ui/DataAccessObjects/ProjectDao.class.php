@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\UI\DAO;
+
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 
@@ -7,8 +9,8 @@ class ProjectDao extends BaseDao
 {
     public function __construct()
     {
-        $this->client = new APIHelper(Settings::get("ui.api_format"));
-        $this->siteApi = Settings::get("site.api");
+        $this->client = new \APIHelper(\Settings::get("ui.api_format"));
+        $this->siteApi = \Settings::get("site.api");
     }
 
     public function getProject($id)
@@ -63,7 +65,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects";
-        $ret = $this->client->call("Project", $request, HttpMethodEnum::POST, $project);
+        $ret = $this->client->call("Project", $request, \HttpMethodEnum::POST, $project);
         return $ret;
     }
     
@@ -71,7 +73,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$projectId";
-        $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
         return $ret;
     }
 
@@ -79,7 +81,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/{$project->getId()}";
-        $ret = $this->client->call("Project", $request, HttpMethodEnum::PUT, $project);
+        $ret = $this->client->call("Project", $request, \HttpMethodEnum::PUT, $project);
         return $ret;
     }
 
@@ -87,14 +89,14 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$projectId/calculateDeadlines";
-        $ret = $this->client->call(null, $request, HttpMethodEnum::POST);
+        $ret = $this->client->call(null, $request, \HttpMethodEnum::POST);
         return $ret;
     }
 
     public function archiveProject($projectId, $userId)
     {
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
-        $ret = $this->client->call("ArchivedProject", $request, HttpMethodEnum::PUT);
+        $ret = $this->client->call("ArchivedProject", $request, \HttpMethodEnum::PUT);
         return $ret;
     }
 
@@ -123,19 +125,19 @@ class ProjectDao extends BaseDao
         $ret = null;
         $filename = urlencode($filename);
         $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
-        $ret = $this->client->call(null, $url, HttpMethodEnum::PUT, null, null, $data);
+        $ret = $this->client->call(null, $url, \HttpMethodEnum::PUT, null, null, $data);
         
         switch($this->client->getResponseCode()) {
             
             default:
                 return $ret;
                 
-            case HttpStatusEnum::BAD_REQUEST:
-                throw new SolasMatchException($ret, $this->client->getResponseCode());
+            case \HttpStatusEnum::BAD_REQUEST:
+                throw new \SolasMatchException($ret, $this->client->getResponseCode());
                 break;
             
-            case HttpStatusEnum::CONFLICT:
-                throw new SolasMatchException($ret, $this->client->getResponseCode());
+            case \HttpStatusEnum::CONFLICT:
+                throw new \SolasMatchException($ret, $this->client->getResponseCode());
                 break;
         }
     }
@@ -160,7 +162,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$project_id/deleteTags";
-        $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
         return $ret;
     }
 }

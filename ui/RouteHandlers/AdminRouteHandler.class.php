@@ -1,13 +1,16 @@
 <?php
 
+namespace SolasMatch\UI\RouteHandlers;
+
+use \SolasMatch\UI\DAO as DAO;
+use \SolasMatch\UI\Lib as Lib;
+
 class AdminRouteHandler
 {
     public function init()
     {
-       
         $app = \Slim\Slim::getInstance();
-        $middleware = new Middleware();
-		
+        $middleware = new Lib\Middleware();
 				          
         $app->get(
             "/admin/", 
@@ -20,11 +23,11 @@ class AdminRouteHandler
     public function adminDashboard()
     {
         $app = \Slim\Slim::getInstance();
-        $userId = UserSession::getCurrentUserID();
+        $userId = \UserSession::getCurrentUserID();
         
         if ($post = $app->request()->post()) {
-            $userDao = new UserDao();
-            $adminDao = new AdminDao();
+            $userDao = new DAO\UserDao();
+            $adminDao = new DAO\AdminDao();
             if (isset($post['addAdmin'])) {
                 $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
@@ -37,7 +40,7 @@ class AdminRouteHandler
             
             if (isset($post['banOrg']) && $post['orgName'] != '') {
                 $orgDao = new OrganisationDao();
-                $bannedOrg = new BannedOrganisation();
+                $bannedOrg = new \BannedOrganisation();
                 $org = $orgDao->getOrganisationByName(urlencode($post['orgName']));
                 
                 $bannedOrg->setOrgId($org->getId());
@@ -73,17 +76,17 @@ class AdminRouteHandler
                     $userDao->deleteUser($user->getId());
                     $app->flashNow(
                         "deleteSuccess",
-                        Localisation::getTranslation('site_admin_dashboard_successfully_deleted_user')
+                        Lib\Localisation::getTranslation('site_admin_dashboard_successfully_deleted_user')
                     );
                 } else {
-                    $app->flashNow("deleteError", Localisation::getTranslation('site_admin_dashboard_6'));
+                    $app->flashNow("deleteError", Lib\Localisation::getTranslation('site_admin_dashboard_6'));
                 }
             }
         }
         
-        $adminDao = new AdminDao();
-        $userDao = new UserDao();
-        $orgDao = new OrganisationDao();
+        $adminDao = new DAO\AdminDao();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
         
         $adminList = $adminDao->getSiteAdmins();
         
@@ -103,7 +106,7 @@ class AdminRouteHandler
             }
         }
 
-        $siteName = Settings::get("site.name");
+        $siteName = \Settings::get("site.name");
      
         $extra_scripts = "";
         $extra_scripts .= file_get_contents(__DIR__."/../js/site-admin.dashboard.js");

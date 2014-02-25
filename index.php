@@ -1,11 +1,58 @@
 <?php
 
-require_once __DIR__."/ui/vendor/autoload.php";
-require_once 'Common/Settings.class.php';
-
 mb_internal_encoding("UTF-8");
 
 header("Content-Type:application/xhtml+xml;charset=UTF-8");
+
+require_once __DIR__."/ui/vendor/autoload.php";
+
+\DrSlump\Protobuf::autoload();
+
+require_once 'Common/Settings.class.php';
+require_once 'Common/HttpMethodEnum.php';
+require_once 'Common/BanTypeEnum.php';
+require_once 'Common/NotificationIntervalEnum.class.php';
+require_once 'Common/lib/ModelFactory.class.php';
+require_once 'Common/lib/BadgeTypes.class.php';
+require_once 'Common/lib/UserSession.class.php';
+
+require_once 'ui/lib/Middleware.class.php';
+require_once 'ui/lib/TemplateHelper.php';
+require_once 'ui/lib/GraphViewer.class.php';
+require_once 'ui/lib/UIWorkflowBuilder.class.php';
+require_once 'ui/lib/Localisation.php';
+
+require_once 'Common/models/User.php';
+require_once 'Common/models/Tag.php';
+require_once 'Common/models/Task.php';
+require_once 'Common/models/Organisation.php';
+require_once 'Common/models/Badge.php';
+require_once 'Common/models/Language.php';
+require_once 'Common/models/Country.php';
+require_once 'Common/models/TaskMetadata.php';
+require_once 'Common/models/MembershipRequest.php';
+require_once 'Common/models/UserTaskStreamNotification.php';
+require_once 'Common/models/TaskReview.php';
+
+require_once 'Common/protobufs/emails/EmailMessage.php';
+require_once 'Common/protobufs/emails/UserFeedback.php';
+require_once 'Common/protobufs/emails/OrgFeedback.php';
+
+require_once 'ui/DataAccessObjects/AdminDao.class.php';
+require_once 'ui/DataAccessObjects/BadgeDao.class.php';
+require_once 'ui/DataAccessObjects/CountryDao.class.php';
+require_once 'ui/DataAccessObjects/LanguageDao.class.php';
+require_once 'ui/DataAccessObjects/UserDao.class.php';
+require_once 'ui/DataAccessObjects/TaskDao.class.php';
+require_once 'ui/DataAccessObjects/TagDao.class.php';
+require_once 'ui/DataAccessObjects/OrganisationDao.class.php';
+require_once 'ui/DataAccessObjects/StatisticsDao.class.php';
+require_once 'ui/DataAccessObjects/ProjectDao.class.php';
+require_once 'ui/DataAccessObjects/TipDao.class.php';
+
+/**
+ * Initiate the app. must be done before routes are required
+ */
 
 $app = new \Slim\Slim(array(
     'debug' => false,
@@ -19,15 +66,6 @@ $view->parserCompileDirectory = 'ui/templating/templates_compiled';
 $view->parserCacheDirectory = 'ui/templating/cache';
 $view->parserExtensions = array( 'ui/vendor/slim/views/Slim/Views/SmartyPlugins',);
 $view->setTemplatesDirectory('ui/templating/templates');
-
-\DrSlump\Protobuf::autoload();
-
-// Can we get away from the app's old system?
-//require('app/includes/smarty.php');
-
-/**
- * Initiate the app. must be done before routes are required
- */
 
 $app->configureMode('production', function () use ($app) {
     $app->config(array(
@@ -52,7 +90,7 @@ $app->configureMode('development', function () use ($app) {
     ));
 });
 
-$app->add(new   \Slim\Middleware\SessionCookie(array(
+$app->add(new \Slim\Middleware\SessionCookie(array(
     'expires' => Settings::get('site.cookie_timeout'),
     'path' => '/',
     'domain' => null,
@@ -64,22 +102,11 @@ $app->add(new   \Slim\Middleware\SessionCookie(array(
     'cipher_mode' => MCRYPT_MODE_CBC
 )));
 
+// Register static classes so they can be used in smarty templates
+\SolasMatch\UI\Lib\Localisation::registerWithSmarty();
+\SolasMatch\UI\Lib\TemplateHelper::registerWithSmarty();
 
-
-//TODO remove all requires bar RoutHandlers
-require_once 'Common/HttpMethodEnum.php';
-require_once 'Common/BanTypeEnum.php';
-require_once 'Common/NotificationIntervalEnum.class.php';
-require_once 'Common/lib/ModelFactory.class.php';
-require_once 'Common/lib/BadgeTypes.class.php';
-require_once 'Common/lib/UserSession.class.php';
-
-require_once 'ui/lib/Middleware.class.php';
-require_once 'ui/lib/TemplateHelper.php';
-require_once 'ui/lib/GraphViewer.class.php';
-require_once 'ui/lib/UIWorkflowBuilder.class.php';
-require_once 'ui/lib/Localisation.php';
-
+// Include and initialize RouteHandlers
 require_once 'ui/RouteHandlers/AdminRouteHandler.class.php';
 require_once 'ui/RouteHandlers/UserRouteHandler.class.php';
 require_once 'ui/RouteHandlers/OrgRouteHandler.class.php';
@@ -89,49 +116,16 @@ require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
 require_once 'ui/RouteHandlers/ProjectRouteHandler.class.php';
 require_once 'ui/RouteHandlers/StaticRouteHandeler.php';
 
-require_once 'ui/DataAccessObjects/AdminDao.class.php';
-require_once 'ui/DataAccessObjects/BadgeDao.class.php';
-require_once 'ui/DataAccessObjects/CountryDao.class.php';
-require_once 'ui/DataAccessObjects/LanguageDao.class.php';
-require_once 'ui/DataAccessObjects/UserDao.class.php';
-require_once 'ui/DataAccessObjects/TaskDao.class.php';
-require_once 'ui/DataAccessObjects/TagDao.class.php';
-require_once 'ui/DataAccessObjects/OrganisationDao.class.php';
-require_once 'ui/DataAccessObjects/StatisticsDao.class.php';
-require_once 'ui/DataAccessObjects/ProjectDao.class.php';
-require_once 'ui/DataAccessObjects/TipDao.class.php';
-
-require_once 'Common/models/User.php';
-require_once 'Common/models/Tag.php';
-require_once 'Common/models/Task.php';
-require_once 'Common/models/Organisation.php';
-require_once 'Common/models/Badge.php';
-require_once 'Common/models/Language.php';
-require_once 'Common/models/Country.php';
-require_once 'Common/models/TaskMetadata.php';
-require_once 'Common/models/MembershipRequest.php';
-require_once 'Common/models/UserTaskStreamNotification.php';
-require_once 'Common/models/TaskReview.php';
-
-require_once 'Common/protobufs/emails/EmailMessage.php';
-require_once 'Common/protobufs/emails/UserFeedback.php';
-require_once 'Common/protobufs/emails/OrgFeedback.php';
-
-/**
- * Start the session
- */
-
 //Custom Slim Errors
 $app->error(function (\Exception $e) use ($app) {
     $extra_scripts = "<script type='text/javascript' src='{$app->urlFor("home")}ui/js/slimError.showHide.js'></script>";
-    $trace = str_replace('#', '<br>', $e->getTraceAsString());
-	
+    $trace = str_replace('#', '<br \>', $e->getTraceAsString());
 	
     $app->view()->appendData(array(
-                "exception" => $e,
-                "trace" => $trace,
-                "extra_scripts" => $extra_scripts,
-                "referrer" => $app->request()->getReferrer()
+        "exception" => $e,
+        "trace" => $trace,
+        "extra_scripts" => $extra_scripts,
+        "referrer" => $app->request()->getReferrer()
     ));
     
     $app->render('SlimError.tpl');
@@ -142,16 +136,11 @@ function isValidPost(&$app)
     return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
 }
 
-/**
- * Set up application objects
- * 
- * Given that we don't have object factories implemented, we'll initialise them directly here.
- */
 $app->hook('slim.before.dispatch', function () use ($app) {
     if (!is_null($token = UserSession::getAccessToken()) && $token->getExpires() <  time()) {
         UserSession::clearCurrentUserID();
     }
-    $userDao = new UserDao();
+    $userDao = new SolasMatch\UI\DAO\UserDao();
     if (!is_null(UserSession::getCurrentUserID())) {
         $current_user = $userDao->getUser(UserSession::getCurrentUserID());
         if (!is_null($current_user)) {
@@ -169,7 +158,7 @@ $app->hook('slim.before.dispatch', function () use ($app) {
                     "user_has_active_tasks" => true
                 ));
             }
-            $adminDao = new AdminDao();
+            $adminDao = new SolasMatch\UI\DAO\AdminDao();
             $isAdmin = $adminDao->isSiteAdmin(UserSession::getCurrentUserID());
             if ($isAdmin) {
                 $app->view()->appendData(array(
@@ -182,7 +171,7 @@ $app->hook('slim.before.dispatch', function () use ($app) {
         }
     }
     $app->view()->appendData(array(
-        'locs' => Localisation::loadTranslationFiles()
+        'locs' => \SolasMatch\UI\Lib\Localisation::loadTranslationFiles()
     ));
 });
 

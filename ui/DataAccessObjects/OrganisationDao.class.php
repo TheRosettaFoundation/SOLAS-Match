@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\UI\DAO;
+
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 
@@ -7,8 +9,8 @@ class OrganisationDao extends BaseDao
 {
     public function __construct()
     {
-        $this->client = new APIHelper(Settings::get("ui.api_format"));
-        $this->siteApi = Settings::get("site.api");
+        $this->client = new \APIHelper(\Settings::get("ui.api_format"));
+        $this->siteApi = \Settings::get("site.api");
     }
     
     public function getOrganisation($id)
@@ -96,7 +98,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs";
-        $ret = $this->client->call("Organisation", $request, HttpMethodEnum::POST, $org);
+        $ret = $this->client->call("Organisation", $request, \HttpMethodEnum::POST, $org);
         
         $adminDao = new AdminDao();
         $adminDao->createOrgAdmin($userId, $ret->getId());
@@ -107,7 +109,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
-        $ret = $this->client->call("Organisation", $request, HttpMethodEnum::PUT, $org);
+        $ret = $this->client->call("Organisation", $request, \HttpMethodEnum::PUT, $org);
         return $ret;
     }
 
@@ -115,7 +117,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId";
-        $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
         return $ret;
     }
 
@@ -123,7 +125,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $ret = $this->client->call(null, $request, HttpMethodEnum::POST);
+        $ret = $this->client->call(null, $request, \HttpMethodEnum::POST);
         return $ret;
     }
 
@@ -131,7 +133,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
+        $ret = $this->client->call(null, $request, \HttpMethodEnum::PUT);
         return $ret;
     }
 
@@ -139,13 +141,13 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/addMember/".urlencode($email)."/$orgId";
-        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
+        $ret = $this->client->call(null, $request, \HttpMethodEnum::PUT);
         return $ret;
     }
 
     public function rejectMembershipRequest($orgId, $userId)
     {
         $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $this->client->call(null, $request, HttpMethodEnum::DELETE);
+        $this->client->call(null, $request, \HttpMethodEnum::DELETE);
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
+namespace SolasMatch\UI\DAO;
+
 abstract class BaseDao
 {
-    
     protected $client;
     protected $siteApi;
     
