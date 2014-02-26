@@ -106,7 +106,7 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNull($userId);
         $result = PDOWrapper::call("archiveProject", $args);
         if ($result) {
-            return $result[0];
+            return $result[0]['result'];
         } else {
             return "0";
         }
