@@ -78,11 +78,11 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         
         $task->setPublished(0);
         
-//        $i = 0;
-//        foreach($insertedProject->getTag() as $tag) {
-//            $task->setTag($tag, $i);
-//            $i++;
-//        }
+        //$i = 0;
+        //foreach($insertedProject->getTag() as $tag) {
+        //  $task->setTag($tag, $i);
+        //  $i++;
+        //}
         $task->setTaskStatus(3);
         $task->setTaskType(3);        
         $task->setCreatedTime("2030-07-14 12:24:02");
@@ -125,10 +125,12 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedTask->getId());
         
         // Success
-        $retrievedTask = TaskDao::getTask($task->getId(),$task->getProjectId(), $task->getTitle(),$task->getWordCount(),
-                $task->getSourceLocale()->getLanguageCode(),$task->getTargetLocale()->getLanguageCode(),$task->getCreatedTime(),
-                $task->getSourceLocale()->getCountryCode(),$task->getTargetLocale()->getCountryCode(),$task->getComment(),$task->getTaskType(),
-                $task->getTaskStatus(),$task->getPublished(),$task->getDeadline());
+        $retrievedTask = TaskDao::getTask(
+            $task->getId(), $task->getProjectId(), $task->getTitle(), $task->getWordCount(),
+            $task->getSourceLocale()->getLanguageCode(), $task->getTargetLocale()->getLanguageCode(), $task->getCreatedTime(),
+            $task->getSourceLocale()->getCountryCode(), $task->getTargetLocale()->getCountryCode(), $task->getComment(), $task->getTaskType(),
+            $task->getTaskStatus(), $task->getPublished(), $task->getDeadline()
+        );
         
         $this->assertInstanceOf("Task", $retrievedTask[0]);
         $this->assertEquals($insertedTask->getId(), $retrievedTask[0]->getId());
@@ -285,7 +287,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $taskPreReqs = TaskDao::getTaskPreReqs($proofReadingTask->getId());
         $this->assertCount(2, $taskPreReqs);
-        foreach($taskPreReqs as $task) {
+        foreach ($taskPreReqs as $task) {
             $this->assertInstanceOf("Task", $task);
         }
     }
@@ -319,7 +321,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $latestTasks = TaskDao::getLatestAvailableTasks();
         $this->assertCount(2, $latestTasks);
-        foreach($latestTasks as $task) {
+        foreach ($latestTasks as $task) {
             $this->assertInstanceOf("Task", $task);
         }
     }
@@ -353,9 +355,9 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         
         // Success
         //added additional 4 parameters that are required. perhaps they were not used in the function when these tests were first made
-        $userTopTasks = TaskDao::getUserTopTasks($insertedUser->getId(), false, 30,0,TaskTypeEnum::TRANSLATION,null,null);
+        $userTopTasks = TaskDao::getUserTopTasks($insertedUser->getId(), false, 30, 0, TaskTypeEnum::TRANSLATION, null, null);
         $this->assertCount(2, $userTopTasks);
-        foreach($userTopTasks as $task) {
+        foreach ($userTopTasks as $task) {
             $this->assertInstanceOf("Task", $task);
         }
     }
@@ -387,11 +389,11 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         //create task file info for non existant file
         $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
         TaskDao::recordFileUpload(
-        $fileInfo['taskId'],
-        $fileInfo['filename'],
-        $fileInfo['contentType'],
-        $fileInfo['userId'],
-        $fileInfo['version']
+            $fileInfo['taskId'],
+            $fileInfo['filename'],
+            $fileInfo['contentType'],
+            $fileInfo['userId'],
+            $fileInfo['version']
         );
         
         // Success
@@ -610,7 +612,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         $hasClaimedSeg = TaskDao::hasUserClaimedSegmentationTask($insertedUser->getId(), $insertedProject->getId());
-        $this->assertEquals("1",$hasClaimedSeg);
+        $this->assertEquals("1", $hasClaimedSeg);
     }
     
     public function testGetClaimedTime()
@@ -645,6 +647,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         
         $getClaimedTime = TaskDao::getClaimedTime($translationTask->getId());
         //assert the times are equal, give or take 2 seconds
+        //                  Expected    Actual               Failure message    Allowed difference
         $this->assertEquals($theTime, strtotime($getClaimedTime), "FAILUUUURRRE", 2);
     }
     
@@ -688,9 +691,50 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         // Success        
         $userTasks = TaskDao::getUserTasks($insertedUser->getId());
         $this->assertCount(2, $userTasks);
-        foreach($userTasks as $task) {
+        foreach ($userTasks as $task) {
             $this->assertInstanceOf("Task", $task);
         }
+    }
+    
+    public function testGetUserTasksCount()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        // Failure
+        $userTasksFailure = TaskDao::getUserTasks($insertedUser->getId());
+        $this->assertNull($userTasksFailure);
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId(), null, "Task 1", "Task 1 Comment", "2021-03-29 16:30:00", 11111, null, TaskTypeEnum::TRANSLATION);
+        $task2 = UnitTestHelper::createTask($insertedProject->getId(), null, "Task 2", "Task 2 Comment", "2022-03-29 16:30:00", 22222, null, TaskTypeEnum::TRANSLATION);
+        
+        $translationTask = TaskDao::save($task);
+        $this->assertInstanceOf("Task", $translationTask);
+        
+        $translationTask2 = TaskDao::save($task2);
+        $this->assertInstanceOf("Task", $translationTask2);
+        
+        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $this->assertEquals("1", $claimTask);
+        
+        $claimTask2 = TaskDao::claimTask($translationTask2->getId(), $insertedUser->getId());
+        $this->assertEquals("1", $claimTask2);
+        
+        $userTaskCount = TaskDao::getUserTasksCount($insertedUser->getId());
+        $this->assertEquals("2", $userTaskCount);
     }
     
     public function testGetUserArchivedTasks()
@@ -776,7 +820,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId(),null,"MY PROJECT");        
+        $project = UnitTestHelper::createProject($insertedOrg->getId(), null, "MY PROJECT");        
         $insertedProject = ProjectDao::createUpdate($project);
         $this->assertInstanceOf("Project", $insertedProject); 
         $this->assertNotNull($insertedProject->getId());
@@ -805,7 +849,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         // Success          
         $getTasksWithTag = TaskDao::getTasksWithTag($tag->getId());
         $this->assertCount(2, $getTasksWithTag);
-        foreach($getTasksWithTag as $task) {
+        foreach ($getTasksWithTag as $task) {
             $this->assertInstanceOf("Task", $task);
         }
     }  
@@ -920,9 +964,9 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("1", $trackTask2);
         
         $subbedUsers = TaskDao::getSubscribedUsers($task->getId());
-        $this->assertCount(2,$subbedUsers);
+        $this->assertCount(2, $subbedUsers);
         
-        foreach($subbedUsers as $sub) {
+        foreach ($subbedUsers as $sub) {
             $this->assertInstanceOf("User", $sub);
         }
         $this->assertEquals($insertedUser->getId(), $subbedUsers[0]->getId());

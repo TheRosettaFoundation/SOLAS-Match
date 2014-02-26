@@ -12,7 +12,8 @@ require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
 require_once __DIR__.'/../UnitTestHelper.php';
 
 class BadgeDaoTest extends PHPUnit_Framework_TestCase
-{    
+{
+    
     public function testCreateSystemBadge()
     {
         UnitTestHelper::teardownDb();
@@ -25,7 +26,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedBadge->getId());
         
         $this->assertEquals($systemBadge->getTitle(), $insertedBadge->getTitle());
-        $this->assertEquals($systemBadge->getDescription() , $insertedBadge->getDescription());
+        $this->assertEquals($systemBadge->getDescription(), $insertedBadge->getDescription());
         $this->assertEquals($systemBadge->getOwnerId(), $insertedBadge->getOwnerId());
     }
     
@@ -45,7 +46,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         
         $insertedBadge->setTitle("Updated Inserted System Badge");
         $insertedBadge->setDescription("Updated Inserted System Badge Description");
-        $insertedBadge->setOwnerId(NULL);
+        $insertedBadge->setOwnerId(null);
         
         // Success
         $updatedBadge = BadgeDao::insertAndUpdateBadge($insertedBadge);
@@ -64,7 +65,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $allBadges = BadgeDao::getBadge();
         // Success
         $this->assertGreaterThanOrEqual(3, count($allBadges));        
-        foreach($allBadges as $badge) {
+        foreach ($allBadges as $badge) {
             $this->assertInstanceOf("Badge", $badge);
         }
     }
@@ -79,8 +80,8 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();       
                 
-        $orgBadge1 = UnitTestHelper::createBadge(NULL, "Org Badge 1", "Org Badge 1 Description", $orgId);
-        $orgBadge2 = UnitTestHelper::createBadge(NULL, "Org Badge 2", "Org Badge 2 Description", $orgId);
+        $orgBadge1 = UnitTestHelper::createBadge(null, "Org Badge 1", "Org Badge 1 Description", $orgId);
+        $orgBadge2 = UnitTestHelper::createBadge(null, "Org Badge 2", "Org Badge 2 Description", $orgId);
         
         $insertedBadge1 = BadgeDao::insertAndUpdateBadge($orgBadge1);
         $this->assertInstanceOf("Badge", $insertedBadge1);
@@ -90,11 +91,11 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $orgBadges = BadgeDao::getOrgBadges($orgId);        
         $this->assertCount(2, $orgBadges);
-        foreach($orgBadges as $badge) {
+        foreach ($orgBadges as $badge) {
             $this->assertInstanceOf("Badge", $badge);
         }        
         
-        $org2 = UnitTestHelper::createOrg(NULL, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
+        $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
         $insertedOrg2 = OrganisationDao::insertAndUpdate($org2);
         $this->assertInstanceOf("Organisation", $insertedOrg2);
         $this->assertNotNull($insertedOrg2->getId());
@@ -113,8 +114,8 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
 
         $insertedUser = UserDao::save($user);
-	$userID = $insertedUser->getId();
-	//error_log("USER ID IN TESTASSIGN: $userID");
+           $userID = $insertedUser->getId();
+           //error_log("USER ID IN TESTASSIGN: $userID");
 
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
@@ -127,10 +128,10 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $resultAssignBadge = BadgeDao::assignBadge($insertedUser->getId(), $insertedBadge->getId());
         $this->assertEquals("1", $resultAssignBadge);
-	$blah = $insertedBadge->getId();
-	error_log("INSERTED BADGE ID: $blah");        
+           $blah = $insertedBadge->getId();
+           error_log("INSERTED BADGE ID: $blah");        
         
-        $badge2 = UnitTestHelper::createBadge(NULL, "Badge 2", "Badge 2 Description", NULL);
+        $badge2 = UnitTestHelper::createBadge(null, "Badge 2", "Badge 2 Description", null);
         
         // Failure
         //$resultAssignBadgeFailure = BadgeDao::assignBadge($insertedUser->getId(), $badge2->getId());
@@ -153,7 +154,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
 
-        $badge = UnitTestHelper::createBadge(NULL, "Test Remove Badge", "Testing Remove badge", $insertedOrg->getId());
+        $badge = UnitTestHelper::createBadge(null, "Test Remove Badge", "Testing Remove badge", $insertedOrg->getId());
         $insertedBadge = BadgeDao::insertAndUpdateBadge($badge);
         $this->assertInstanceOf("Badge", $insertedBadge);
         $this->assertNotNull($insertedBadge->getId());
@@ -166,7 +167,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $resultRemove = BadgeDao::removeUserBadge($userId, $badgeId);
         $this->assertEquals("1", $resultRemove);
         
-        $badge2 = UnitTestHelper::createBadge(NULL, "Test Remove Badge 2", "Testing Remove badge 2", NULL);
+        $badge2 = UnitTestHelper::createBadge(null, "Test Remove Badge 2", "Testing Remove badge 2", null);
         $insertedBadge2 = BadgeDao::insertAndUpdateBadge($badge2);
         $this->assertInstanceOf("Badge", $insertedBadge2);
         $this->assertNotNull($insertedBadge2->getId());
@@ -215,7 +216,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $resultValidate = BadgeDao::validateUserBadge($insertedUser->getId(), $insertedBadge->getId());
         $this->assertEquals("1", $resultValidate);   
         
-        $badge2 = UnitTestHelper::createBadge(99, "Badge 2", "Badge 2 Description", NULL);
+        $badge2 = UnitTestHelper::createBadge(99, "Badge 2", "Badge 2 Description", null);
         
         // Failure
         $resultValidateFailure = BadgeDao::validateUserBadge($insertedUser->getId(), $badge2->getId());

@@ -11,7 +11,8 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 
 class OrganisationDaoTest extends PHPUnit_Framework_TestCase
-{    
+{
+    
     public function testInsertOrg()
     {
         UnitTestHelper::teardownDb();        
@@ -61,42 +62,42 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         $orgId = $insertedOrg->getId();
         
         // Success
-        $resultFoundOrg = OrganisationDao::getOrg($orgId, NULL, NULL, NULL);
+        $resultFoundOrg = OrganisationDao::getOrg($orgId, null, null, null);
         $this->assertInstanceOf("Organisation", $resultFoundOrg[0]);
         
         // Failure
-        $resultFoundOrgFailure = OrganisationDao::getOrg(99, NULL, NULL, NULL);
+        $resultFoundOrgFailure = OrganisationDao::getOrg(99, null, null, null);
         $this->assertNull($resultFoundOrgFailure);
         
         // Success
-        $resultFoundOrgByName = OrganisationDao::getOrg($orgId, $org->getName(), NULL, NULL);
+        $resultFoundOrgByName = OrganisationDao::getOrg($orgId, $org->getName(), null, null);
         $this->assertInstanceOf("Organisation", $resultFoundOrgByName[0]);
         
         // Failure
-        $resultFoundOrgByNameFailure = OrganisationDao::getOrg($orgId, "x", NULL, NULL);
+        $resultFoundOrgByNameFailure = OrganisationDao::getOrg($orgId, "x", null, null);
         $this->assertNull($resultFoundOrgByNameFailure);
         
-        $resultFoundOrgByBio = OrganisationDao::getOrg($orgId, NULL, NULL, $org->getBiography());
+        $resultFoundOrgByBio = OrganisationDao::getOrg($orgId, null, null, $org->getBiography());
         $this->assertInstanceOf("Organisation", $resultFoundOrgByBio[0]);
         
-        $resultFoundOrgByHomePage = OrganisationDao::getOrg($orgId, NULL, $org->getHomePage(), NULL );
+        $resultFoundOrgByHomePage = OrganisationDao::getOrg($orgId, null, $org->getHomePage(), null );
         $this->assertInstanceOf("Organisation", $resultFoundOrgByHomePage[0]);
         
         $resultFoundOrgByAll = OrganisationDao::getOrg($orgId, $org->getName(), $org->getHomePage(), $org->getBiography());
         $this->assertInstanceOf("Organisation", $resultFoundOrgByAll[0]);
         
-        $org2 = UnitTestHelper::createOrg(NULL, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
+        $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
         $insertedOrg2 = OrganisationDao::insertAndUpdate($org2);
         $this->assertInstanceOf("Organisation", $insertedOrg2);        
         
-        $resultFoundAllOrgs = OrganisationDao::getOrg(NULL, NULL, NULL, NULL);
+        $resultFoundAllOrgs = OrganisationDao::getOrg(null, null, null, null);
         $this->assertCount(2, $resultFoundAllOrgs);
-        foreach($resultFoundAllOrgs as $org) {
+        foreach ($resultFoundAllOrgs as $org) {
             $this->assertInstanceOf("Organisation", $org);
         }
         
         // Failure
-        $resultNoOrgFound = OrganisationDao::getOrg(99, NULL, NULL, NULL);
+        $resultNoOrgFound = OrganisationDao::getOrg(99, null, null, null);
         $this->assertNull($resultNoOrgFound);
     } 
     
@@ -148,14 +149,14 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         $resultAcceptMembership = OrganisationDao::acceptMemRequest($orgId, $userId);
         $this->assertEquals("1", $resultAcceptMembership);
         
-        $user2 = UnitTestHelper::createUser(NULL, "User 2", "User 2 Bio", "user2@test.com");
+        $user2 = UnitTestHelper::createUser(null, "User 2", "User 2 Bio", "user2@test.com");
         $insertedUser2 = UserDao::save($user2);
         $this->assertInstanceOf("User", $insertedUser2);    
         $this->assertNotNull($insertedUser2->getId());
         $userId2 = $insertedUser2->getId();
         
         //Incorrect test; asserting that user who did not request to join org cannot be added, but they can. This is not an issue as Admins for example, can and
-	    //should be able to add Users to Orgs.
+           //should be able to add Users to Orgs.
         $resultAcceptMembershipFailure = OrganisationDao::acceptMemRequest($orgId, $userId2);
         //$this->assertNull($resultAcceptMembershipFailure);
     } 
@@ -244,7 +245,7 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         $resultAcceptMembership = OrganisationDao::acceptMemRequest($orgId, $userId);
         $this->assertEquals("1", $resultAcceptMembership);
         
-        $user2 = UnitTestHelper::createUser(NULL, "User 2", "User 2 Bio", "user2@test.com");
+        $user2 = UnitTestHelper::createUser(null, "User 2", "User 2 Bio", "user2@test.com");
         $insertedUser2 = UserDao::save($user2);
         $this->assertInstanceOf("User", $insertedUser2);    
         $this->assertNotNull($insertedUser2->getId());
@@ -259,7 +260,7 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $resultOrgMembers = OrganisationDao::getOrgMembers($orgId);
         $this->assertCount(2, $resultOrgMembers);
-        foreach($resultOrgMembers as $member) {
+        foreach ($resultOrgMembers as $member) {
             $this->assertInstanceOf("User", $member);
         }    
         
@@ -277,14 +278,14 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $org2 = UnitTestHelper::createOrg(NULL, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
+        $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
         $insertedOrg2 = OrganisationDao::insertAndUpdate($org2);
         $this->assertInstanceOf("Organisation", $insertedOrg2);
         
         // Success
         $resultFoundOrgs = OrganisationDao::searchForOrg("organisation");
         $this->assertCount(2, $resultFoundOrgs);
-        foreach($resultFoundOrgs as $foundOrg) {
+        foreach ($resultFoundOrgs as $foundOrg) {
             $this->assertInstanceOf("Organisation", $foundOrg);
         }
         
@@ -312,7 +313,7 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         $resultRequestMembership = OrganisationDao::requestMembership($userId, $orgId);
         $this->assertEquals("1", $resultRequestMembership);
         
-        $user2 = UnitTestHelper::createUser(NULL, "User 2", "User 2 Bio", "user2@test.com");
+        $user2 = UnitTestHelper::createUser(null, "User 2", "User 2 Bio", "user2@test.com");
         $insertedUser2 = UserDao::save($user2);
         $this->assertInstanceOf("User", $insertedUser2);    
         $this->assertNotNull($insertedUser2->getId());
@@ -324,7 +325,7 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $resultGetMembershipRequests = OrganisationDao::getMembershipRequests($orgId);
         $this->assertCount(2, $resultGetMembershipRequests);
-        foreach($resultGetMembershipRequests as $request) {
+        foreach ($resultGetMembershipRequests as $request) {
             $this->assertInstanceOf("MembershipRequest", $request);
         }
         
@@ -405,7 +406,7 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         
         //delete the organisation that was just added
         $deleteOrg = OrganisationDao::delete($orgId);
-        $this->assertEquals("1",$deleteOrg); //successfully deleting an org should return 1
+        $this->assertEquals("1", $deleteOrg); //successfully deleting an org should return 1
 
         //try to get the org that was deleted back from DB
         $noOrg = OrganisationDao::getOrg($orgId);
@@ -414,7 +415,7 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
 
         //try to delete an org that is not in the DB
         $deleteOrg = OrganisationDao::delete($orgId);
-        $this->assertEquals("0",$deleteOrg); //failing to delete an org because it is not in DB should return 0
+        $this->assertEquals("0", $deleteOrg); //failing to delete an org because it is not in DB should return 0
     }
 }
 

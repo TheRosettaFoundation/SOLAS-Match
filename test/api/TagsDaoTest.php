@@ -51,7 +51,7 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
         // Success - All Tags
         $resultGetAllTags = TagsDao::getTag();
         $this->assertCount(2, $resultGetAllTags);
-        foreach($resultGetAllTags as $tag) {
+        foreach ($resultGetAllTags as $tag) {
             $this->assertInstanceOf("Tag", $tag);
             $this->assertNotNull($tag->getId());
             $this->assertNotNull($tag->getLabel());
@@ -75,8 +75,10 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("Project", $insertedProject); 
         $this->assertNotNull($insertedProject->getId());
         
-        $project2 = UnitTestHelper::createProject($insertedOrg->getId(), null, "Project 2", "Project 2 Description", "2020-03-29 16:30:00",
-                "Project 2 Impact", "Project 2 Reference", 123456, "IE", "en", array("Project", "Tags", "Extra", "More"));        
+        $project2 = UnitTestHelper::createProject(
+            $insertedOrg->getId(), null, "Project 2", "Project 2 Description", "2020-03-29 16:30:00",
+            "Project 2 Impact", "Project 2 Reference", 123456, "IE", "en", array("Project", "Tags", "Extra", "More")
+        );        
         $insertedProject2 = ProjectDao::createUpdate($project2);
         $this->assertInstanceOf("Project", $insertedProject2); 
         $this->assertNotNull($insertedProject2->getId());
@@ -85,7 +87,7 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $successTopTags = TagsDao::getTopTags();
         $this->assertCount(4, $successTopTags);
-        foreach($successTopTags as $tag) {
+        foreach ($successTopTags as $tag) {
             $this->assertInstanceOf("Tag", $tag);
             $this->assertNotNull($tag->getId());
             $this->assertNotNull($tag->getLabel());

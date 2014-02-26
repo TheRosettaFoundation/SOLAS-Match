@@ -32,7 +32,7 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
 
-        $user = UnitTestHelper::createUser(null, "Bob", "blah"," foo@coo.com");
+        $user = UnitTestHelper::createUser(null, "Bob", "blah", " foo@coo.com");
         $insertedUser = UserDao::save($user);
         $userId = $insertedUser->getId();
         $this->assertNotNull($userId);
@@ -88,17 +88,16 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $adminsReturned = AdminDao::getAdmins($orgId);
         $this->assertEquals($userId, $adminsReturned[0]->getId());
         
-        AdminDao::removeOrgAdmin($userId,$orgId);
+        AdminDao::removeOrgAdmin($userId, $orgId);
         $admins = AdminDao::getAdmins($orgId);
         $this->assertNull($admins);
     }
 
     public function testSaveBannedUser()
-
     {
         UnitTestHelper::teardownDb();
 
-        $user = UnitTestHelper::createUser(null, "Bob", "blah"," foo@coo.com");
+        $user = UnitTestHelper::createUser(null, "Bob", "blah", " foo@coo.com");
         $insertedUser = UserDao::save($user);
         $userId = $insertedUser->getId();
         $this->assertNotNull($userId);
@@ -113,17 +112,17 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($user2Id);
 
         //Ban the user
-        $bannedUser = UnitTestHelper::createBannedUser($user2Id ,$userId, BanTypeEnum::WEEK, "b&!!!!");
+        $bannedUser = UnitTestHelper::createBannedUser($user2Id, $userId, BanTypeEnum::WEEK, "b&!!!!");
         AdminDao::saveBannedUser($bannedUser);
         $isBanned = AdminDao::isUserBanned($user2Id);
-        $this->assertEquals("1",$isBanned);
+        $this->assertEquals("1", $isBanned);
     }
     
     public function testGetBannedUser()
     {
         UnitTestHelper::teardownDb();
         
-        $user = UnitTestHelper::createUser(null, "Bob", "blah"," foo@coo.com");
+        $user = UnitTestHelper::createUser(null, "Bob", "blah", " foo@coo.com");
         $insertedUser = UserDao::save($user);
         $userId = $insertedUser->getId();
         $this->assertNotNull($userId);
@@ -132,17 +131,17 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($admins);
         $this->assertEquals($userId, $admins[0]->getId());
         
-        $user2 = UnitTestHelper::createUser(null, "John", "blah"," blah@coo.com");
+        $user2 = UnitTestHelper::createUser(null, "John", "blah", " blah@coo.com");
         $insertedUser2 = UserDao::save($user);
         $user2Id = $insertedUser2->getId();
         $this->assertNotNull($user2Id);
         
-        $bannedUser = UnitTestHelper::createBannedUser($user2Id, $userId, BanTypeEnum::WEEK ,"b&!!!!");
+        $bannedUser = UnitTestHelper::createBannedUser($user2Id, $userId, BanTypeEnum::WEEK, "b&!!!!");
         AdminDao::saveBannedUser($bannedUser);
         $isBanned = AdminDao::isUserBanned($user2Id);
-        $this->assertEquals("1",$isBanned);
+        $this->assertEquals("1", $isBanned);
         
-        $getBannedUser = AdminDao::getBannedUser($user2Id,$userId);
+        $getBannedUser = AdminDao::getBannedUser($user2Id, $userId);
         $this->assertInstanceOf("BannedUser", $getBannedUser[0]);
         $this->assertEquals($bannedUser->getUserId(), $getBannedUser[0]->getUserId());
         $this->assertEquals($bannedUser->getUserIdAdmin(), $getBannedUser[0]->getUserIdAdmin());
@@ -154,7 +153,7 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
         
-        $user = UnitTestHelper::createUser(null, "Bob", "blah"," foo@coo.com");
+        $user = UnitTestHelper::createUser(null, "Bob", "blah", " foo@coo.com");
         $insertedUser = UserDao::save($user);
         $userId = $insertedUser->getId();
         $this->assertNotNull($userId);
@@ -169,7 +168,7 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($user2Id);
         
         //Ban the user
-        $bannedUser = UnitTestHelper::createBannedUser($user2Id ,$userId, BanTypeEnum::WEEK, "b&!!!!");
+        $bannedUser = UnitTestHelper::createBannedUser($user2Id, $userId, BanTypeEnum::WEEK, "b&!!!!");
         AdminDao::saveBannedUser($bannedUser);
         $isBanned = AdminDao::isUserBanned($user2Id);
         $this->assertEquals("1", $isBanned);
@@ -201,7 +200,7 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $bannedOrg = UnitTestHelper::createBannedOrg($orgId, $userId);
         AdminDao::saveBannedOrg($bannedOrg);
         $isBanned = AdminDao::isOrgBanned($orgId);
-        $this->assertEquals("1",$isBanned);
+        $this->assertEquals("1", $isBanned);
     }
     
     public function testGetBannedOrg()
@@ -226,9 +225,9 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $bannedOrg = UnitTestHelper::createBannedOrg($orgId, $userId);
         AdminDao::saveBannedOrg($bannedOrg);
         $isBanned = AdminDao::isOrgBanned($orgId);
-        $this->assertEquals("1",$isBanned);
+        $this->assertEquals("1", $isBanned);
         
-        $getBannedOrg = AdminDao::getBannedOrg($orgId,$userId);
+        $getBannedOrg = AdminDao::getBannedOrg($orgId, $userId);
         $this->assertInstanceOf("BannedOrganisation", $getBannedOrg[0]);
         $this->assertEquals($bannedOrg->getOrgId(), $getBannedOrg[0]->getOrgId());
         $this->assertEquals($bannedOrg->getUserIdAdmin(), $getBannedOrg[0]->getUserIdAdmin());
@@ -258,23 +257,23 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $bannedOrg = UnitTestHelper::createBannedOrg($orgId, $userId);
         AdminDao::saveBannedOrg($bannedOrg);
         $isBanned = AdminDao::isOrgBanned($orgId);
-        $this->assertEquals("1",$isBanned);
+        $this->assertEquals("1", $isBanned);
         
         AdminDao::unBanOrg($orgId);
         $isBanned = AdminDao::isOrgBanned($orgId);
-        $this->assertEquals("0",$isBanned);
+        $this->assertEquals("0", $isBanned);
     }
     
     public function testIsAdmin()
     {
         UnitTestHelper::teardownDb();
 
-        $user = UnitTestHelper::createUser(null, "John", "blah"," blah@coo.com");
+        $user = UnitTestHelper::createUser(null, "John", "blah", " blah@coo.com");
         $insertedUser = UserDao::save($user);
         $userId = $insertedUser->getId();
         $this->assertNotNull($userId);
         AdminDao::addSiteAdmin($userId);
-        $this->assertEquals("1",AdminDao::isAdmin($userId,null));
+        $this->assertEquals("1", AdminDao::isAdmin($userId, null));
     }
 }
 ?>

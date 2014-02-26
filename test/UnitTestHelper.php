@@ -26,35 +26,41 @@ class UnitTestHelper
         $schemaFile = 'schema.sql';
         
         PDOWrapper::$unitTesting = true;
-        $conn = new PDO($dsn,
-                        Settings::get('unit_test.username'), Settings::get('unit_test.password'),
-                        array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));         
+        $conn = new PDO(
+            $dsn,
+            Settings::get('unit_test.username'), Settings::get('unit_test.password'),
+            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+        );         
         unset($dsn);
         unset($dsn1);
-        if(!self::$initalised){
+        if (!self::$initalised) {
            
-           $result=$conn->exec("drop database `".Settings::get('unit_test.database')."`");
-           $result=$conn->exec("CREATE DATABASE `".Settings::get('unit_test.database')."` /*!40100 CHARACTER SET utf8 COLLATE 'utf8_unicode_ci' */");
-           $result=$conn->exec("use `".Settings::get('unit_test.database')."`");
+            $result=$conn->exec("drop database `".Settings::get('unit_test.database')."`");
+            $result=$conn->exec("CREATE DATABASE `".Settings::get('unit_test.database')."` /*!40100 CHARACTER SET utf8 COLLATE 'utf8_unicode_ci' */");
+            $result=$conn->exec("use `".Settings::get('unit_test.database')."`");
            
-           $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
-           $schema = str_replace("DELIMITER //", "", $schema);
-           $schema = str_replace("DELIMITER ;", "", $schema);
-           $schema = str_replace("END//", "END;", $schema);
+            $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
+            $schema = str_replace("DELIMITER //", "", $schema);
+            $schema = str_replace("DELIMITER ;", "", $schema);
+            $schema = str_replace("END//", "END;", $schema);
            
-           $result=$conn->exec($schema);
-           $schema = file_get_contents(__DIR__.'/../db/languages.sql');
-           $result=$conn->exec($schema);
-           $schema = file_get_contents(__DIR__.'/../db/country_codes.sql');
-           $result=$conn->exec($schema);
+            $result=$conn->exec($schema);
+            $schema = file_get_contents(__DIR__.'/../db/languages.sql');
+            $result=$conn->exec($schema);
+            $schema = file_get_contents(__DIR__.'/../db/country_codes.sql');
+            $result=$conn->exec($schema);
 
-           self::$initalised=true;
+            self::$initalised=true;
         } else {
             $result=$conn->exec("use `".Settings::get('unit_test.database')."`");
-            $tables = $conn->query("SELECT t.TABLE_NAME FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA='Unit-Test'
-                                    AND t.TABLE_NAME NOT IN('Languages','Countries', 'TaskTypes', 'TaskStatus')");
+            $tables = $conn->query(
+                "SELECT t.TABLE_NAME FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA='Unit-Test'
+                                    AND t.TABLE_NAME NOT IN('Languages','Countries', 'TaskTypes', 'TaskStatus')"
+            );
 
-            foreach($tables as $table) $conn->exec("DELETE FROM $table[0]");
+            foreach ($tables as $table) {
+                $conn->exec("DELETE FROM $table[0]"); 
+            }
 
             $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
@@ -73,11 +79,11 @@ class UnitTestHelper
    
     // Create system badge by default
     public static function createBadge(
-                $id = null,
-                $title = "System Badge 1",
-                $description = "System Badge 1 Description",
-                $ownerId = null)
-    {       
+        $id = null,
+        $title = "System Badge 1",
+        $description = "System Badge 1 Description",
+        $ownerId = null
+    ) {       
         $newBadge = new Badge();      
         $newBadge->setId($id);
         $newBadge->setTitle($title);
@@ -119,16 +125,16 @@ class UnitTestHelper
     
     // password = hash("sha512", "abcdefghikjlmnop")
     public static function createUser
-                            ($userId = null,
-                             $displayName = "User 1",
-                             $biography = "User 1 Bio",
-                             $email = "user1@test.com",
-                             $nonce = "123456789",
-                             $password = "2d5e2eb5e2d5b1358161c8418e2fd3f46a431452a724257907d4a3317677a99414463452507ef607941e14044363aab9669578ce5f9517cb36c9acb32f492393",
-                             $languageCode = null,
-                             $countryCode = null,
-                             $createdTime = null)
-    {
+       ($userId = null,
+        $displayName = "User 1",
+        $biography = "User 1 Bio",
+        $email = "user1@test.com",
+        $nonce = "123456789",
+        $password = "2d5e2eb5e2d5b1358161c8418e2fd3f46a431452a724257907d4a3317677a99414463452507ef607941e14044363aab9669578ce5f9517cb36c9acb32f492393",
+        $languageCode = null,
+        $countryCode = null,
+        $createdTime = null
+    ) {
         $locale = new Locale();
         $user = new User();
         
@@ -148,18 +154,18 @@ class UnitTestHelper
     }
     
     public static function createUserPersonalInfo
-                            ($userId,
-                             $id = null,
-                             $firstName = "John",
-                             $lastName = "Doe",
-                             $mobileNumber = 333444666,
-                             $businessNumber = 42,
-                             $sip = "blahblahblah",
-                             $jobTitle = "Derp",
-                             $address = "This is a real place",
-                             $city = "Lightless City",
-                             $country = "Forgotten Land")
-    {
+       ($userId,
+        $id = null,
+        $firstName = "John",
+        $lastName = "Doe",
+        $mobileNumber = 333444666,
+        $businessNumber = 42,
+        $sip = "blahblahblah",
+        $jobTitle = "Derp",
+        $address = "This is a real place",
+        $city = "Lightless City",
+        $country = "Forgotten Land"
+    ) {
         $userInfo = new UserPersonalInformation();
         
         $userInfo->setUserId($userId);
@@ -179,19 +185,19 @@ class UnitTestHelper
     
     // Create default projects by specifying just the organisation id
     public static function createProject
-                          ($organisationId,
-                           $id = null,
-                           $title = "Project 1",
-                           $description = "Project 1 Description",
-                           $deadline = "2020-03-29 16:30:00",
-                           $impact = "Project 1 Impact",
-                           $reference = "Project 1 Reference",
-                           $wordcount = 123456,
-                           $sourceCountryCode = "IE",
-                           $sourceLanguageCode = "en",
-                           $tags = array("Project", "Tags"),
-                           $createdTime = null)
-    {
+       ($organisationId,
+        $id = null,
+        $title = "Project 1",
+        $description = "Project 1 Description",
+        $deadline = "2020-03-29 16:30:00",
+        $impact = "Project 1 Impact",
+        $reference = "Project 1 Reference",
+        $wordcount = 123456,
+        $sourceCountryCode = "IE",
+        $sourceLanguageCode = "en",
+        $tags = array("Project", "Tags"),
+        $createdTime = null
+    ) {
         $sourceLocale = new Locale();
         $project = new Project();  
         
@@ -209,14 +215,14 @@ class UnitTestHelper
         
         //disabled tag related code to avoid issues arising from use of updateTags function
         $projectTagList = array();
-        foreach($tags as $tagLabel) {
+        foreach ($tags as $tagLabel) {
             $tag = new Tag();
             $tag->setLabel($tagLabel);
-           $projectTagList[] = $tag;
+            $projectTagList[] = $tag;
         }
         $projectTags = TagsDao::updateTags($project->getId(), $projectTagList);
         
-        foreach($projectTags as $projectTag) {
+        foreach ($projectTags as $projectTag) {
             $project->addTag($projectTag);
         }
         
@@ -225,11 +231,23 @@ class UnitTestHelper
         return $project;
     }
     
-    public static function createTask($projectId, $id = null, $title = "Task 1", $comment = "Task 1 Comment", $deadline = "2020-03-29 16:30:00",
-            $wordcount = 123456, $tags = null, $type = TaskTypeEnum::TRANSLATION, $status = TaskStatusEnum::PENDING_CLAIM,
-            $sourceCountryCode = "IE", $sourceLanguageCode = "en", $targetCountryCode = "FR", $targetLanguageCode = "fr",
-            $published = 1, $createdTime = null)
-    {
+    public static function createTask
+       ($projectId,
+        $id = null,
+        $title = "Task 1",
+        $comment = "Task 1 Comment",
+        $deadline = "2020-03-29 16:30:00",
+        $wordcount = 123456, 
+        $tags = null,
+        $type = TaskTypeEnum::TRANSLATION,
+        $status = TaskStatusEnum::PENDING_CLAIM,
+        $sourceCountryCode = "IE",
+        $sourceLanguageCode = "en", 
+        $targetCountryCode = "FR",
+        $targetLanguageCode = "fr",
+        $published = 1,
+        $createdTime = null
+    ) {
         $task = new Task();
         $task->setId($id);
         $task->setProjectId($projectId);
@@ -253,21 +271,25 @@ class UnitTestHelper
         $task->setPublished($published);
         $task->setCreatedTime($createdTime);
         
-//        $i = 0;
-//        $taskTag = new Tag();
-//        foreach($tags as $tagLabel) {            
-//            $taskTag->setId($i+100);
-//            $taskTag->setLabel($tagLabel[0]);
-//            $task->addTag($taskTag);
-//            $i++;
-//        }
+        //        $i = 0;
+        //        $taskTag = new Tag();
+        //        foreach ($tags as $tagLabel) {            
+        //            $taskTag->setId($i+100);
+        //            $taskTag->setLabel($tagLabel[0]);
+        //            $task->addTag($taskTag);
+        //            $i++;
+        //        }
         
         return $task;
     }
 
-    public static function createProjectFile($userId, $projectid, $filename = "createProjectFileTest.txt",
-            $mime = "createProjectFileTest.txt", $token = "text/plain")
-    {
+    public static function createProjectFile
+       ($userId, 
+        $projectid,
+        $filename = "createProjectFileTest.txt",
+        $mime = "createProjectFileTest.txt",
+        $token = "text/plain"
+    ) {
         $projectFile = new ProjectFile();
         $projectFile->setUserId($userId);
         $projectFile->setProjectId($projectid);
@@ -277,8 +299,8 @@ class UnitTestHelper
         return $projectFile;
     }  
 
-    public static function createTaskFileInfo(
-        $taskId,
+    public static function createTaskFileInfo
+       ($taskId,
         $userId,
         $filename = "dummy_file.txt",
         $contentType = "text/plain",

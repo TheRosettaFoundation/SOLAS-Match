@@ -41,7 +41,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         
         $projectTags = $insertedProject->getTagList();
         $this->assertCount(2, $projectTags);
-        foreach($projectTags as $tag) {
+        foreach ($projectTags as $tag) {
             $this->assertInstanceOf("Tag", $tag);
         }
         
@@ -63,7 +63,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $insertedProject = ProjectDao::createUpdate($project);
         $this->assertInstanceOf("Project", $insertedProject);          
         
-        $org2 = UnitTestHelper::createOrg(NULL, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
+        $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
         $insertedOrg2 = OrganisationDao::insertAndUpdate($org2);
         $this->assertInstanceOf("Organisation", $insertedOrg2);
         $this->assertNotNull($insertedOrg2->getId());
@@ -81,7 +81,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $insertedProject->setSourceLocale($sourceLocale);  
         
         $newTags = array("Updated Project", "Updated Tags");
-        foreach($newTags as $tagLabel) {
+        foreach ($newTags as $tagLabel) {
             $insertedProject->addTag(TagsDao::create($tagLabel));
         }
         
@@ -103,7 +103,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
 
         $projectTagsAfterUpdate = $updatedProject->getTag();
         $this->assertCount(4, $projectTagsAfterUpdate);
-        foreach($projectTagsAfterUpdate as $tag) {
+        foreach ($projectTagsAfterUpdate as $tag) {
             $this->assertInstanceOf("Tag", $tag);
         }
         
@@ -125,17 +125,9 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("Project", $insertedProject); 
         
         // Success
-        $resultGetProject = ProjectDao::getProject($insertedProject->getId()
-                                                   ,$project->getTitle()
-                                                   ,$project->getDescription()
-                                                   ,$project->getImpact()
-                                                   ,$project->getDeadline()                
-                                                   ,$project->getOrganisationId()
-                                                   ,$project->getReference()
-                                                   ,$project->getWordCount()
-                                                   ,$insertedProject->getCreatedTime()
-                                                   ,$project->getSourceLocale()->getCountryCode()
-                                                   ,$project->getSourceLocale()->getLanguageCode());
+        $resultGetProject = ProjectDao::getProject(
+            $insertedProject->getId(), $project->getTitle(), $project->getDescription(), $project->getImpact(), $project->getDeadline(), $project->getOrganisationId(), $project->getReference(), $project->getWordCount(), $insertedProject->getCreatedTime(), $project->getSourceLocale()->getCountryCode(), $project->getSourceLocale()->getLanguageCode()
+        );
         
         $this->assertCount(1, $resultGetProject);
         $this->assertInstanceOf("Project", $resultGetProject[0]);        
@@ -168,12 +160,13 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($project->getWordCount(), $insertedProject->getWordCount());
         
         $this->assertEquals(
-                $project->getSourceLocale()->getLanguageCode(),
-                $insertedProject->getSourceLocale()->getLanguageCode()
-                );
+            $project->getSourceLocale()->getLanguageCode(),
+            $insertedProject->getSourceLocale()->getLanguageCode()
+        );
         $this->assertEquals(
-                $project->getSourceLocale()->getCountryCode(),
-                $insertedProject->getSourceLocale()->getCountryCode());
+            $project->getSourceLocale()->getCountryCode(),
+            $insertedProject->getSourceLocale()->getCountryCode()
+        );
         
         $afterDelete = ProjectDao::delete($insertedProject->getId());
         $this->assertEquals("1", $afterDelete);
@@ -204,23 +197,23 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         //create task file info for non existant file
         $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
         TaskDao::recordFileUpload(
-        $fileInfo['taskId'],
-        $fileInfo['filename'],
-        $fileInfo['contentType'],
-        $fileInfo['userId'],
-        $fileInfo['version']
+            $fileInfo['taskId'],
+            $fileInfo['filename'],
+            $fileInfo['contentType'],
+            $fileInfo['userId'],
+            $fileInfo['version']
         );
         
         $this->assertInstanceOf("Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         //create project file info for non existant file
-        $file = UnitTestHelper::createProjectFile($insertedUser->getId(),$projectId);
+        $file = UnitTestHelper::createProjectFile($insertedUser->getId(), $projectId);
         ProjectDao::recordProjectFileInfo(
-        $file->getProjectId(),
-        $file->getFilename(),
-        $file->getUserId(),
-        $file->getMime()
+            $file->getProjectId(),
+            $file->getFilename(),
+            $file->getUserId(),
+            $file->getMime()
         );
         
         // Success
@@ -252,29 +245,21 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedUser->getId());
 
         //create project file info for non existant file
-        $file = UnitTestHelper::createProjectFile($insertedUser->getId(),$projectId);
+        $file = UnitTestHelper::createProjectFile($insertedUser->getId(), $projectId);
         ProjectDao::recordProjectFileInfo(
-        $file->getProjectId(),
-        $file->getFilename(),
-        $file->getUserId(),
-        $file->getMime()
+            $file->getProjectId(),
+            $file->getFilename(),
+            $file->getUserId(),
+            $file->getMime()
         );
         
         $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $resultArchiveProject);
         
         // Success
-        $resultGetArchivedProject = ProjectDao::getArchivedProject($insertedProject->getId()
-                                                                   ,$insertedProject->getTitle()
-                                                                   ,$insertedProject->getDescription()
-                                                                   ,$insertedProject->getImpact()
-                                                                   ,$insertedProject->getDeadline()
-                                                                   ,$insertedProject->getOrganisationId()
-                                                                   ,$insertedProject->getReference()
-                                                                   ,$insertedProject->getWordCount()
-                                                                   ,$insertedProject->getCreatedTime()
-                                                                   ,$resultArchiveProject->getArchivedDate()
-                                                                   ,$resultArchiveProject->getUserIdArchived());        
+        $resultGetArchivedProject = ProjectDao::getArchivedProject(
+            $insertedProject->getId(), $insertedProject->getTitle(), $insertedProject->getDescription(), $insertedProject->getImpact(), $insertedProject->getDeadline(), $insertedProject->getOrganisationId(), $insertedProject->getReference(), $insertedProject->getWordCount(), $insertedProject->getCreatedTime(), $resultArchiveProject->getArchivedDate(), $resultArchiveProject->getUserIdArchived()
+        );        
         $this->assertCount(1, $resultGetArchivedProject);
         $this->assertInstanceOf("ArchivedProject", $resultGetArchivedProject[0]);
         $resultGetArchivedProject = $resultGetArchivedProject[0];
@@ -284,8 +269,8 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($insertedProject->getImpact(), $resultGetArchivedProject->getImpact());
         $this->assertEquals($insertedProject->getReference(), $resultGetArchivedProject->getReference());
         $this->assertEquals($insertedProject->getWordCount(), $resultGetArchivedProject->getWordCount());
-//        $this->assertEquals($insertedProject->getSourceCountryCode(), $resultGetArchivedProject->getCountryCode());
-//        $this->assertEquals($insertedProject->getSourceLanguageCode(), $resultGetArchivedProject->getLanguageCode());
+        //        $this->assertEquals($insertedProject->getSourceCountryCode(), $resultGetArchivedProject->getCountryCode());
+        //        $this->assertEquals($insertedProject->getSourceLanguageCode(), $resultGetArchivedProject->getLanguageCode());
         $this->assertNotNull($resultGetArchivedProject->getArchivedDate());
         $this->assertNotNull($resultGetArchivedProject->getUserIdArchived());
         
@@ -319,7 +304,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $resultGetProjectTasks = ProjectDao::getProjectTasks($insertedProject->getId());
         $this->assertCount(2, $resultGetProjectTasks);
-        foreach($resultGetProjectTasks as $task) {
+        foreach ($resultGetProjectTasks as $task) {
             $this->assertInstanceOf("Task", $task);
         }
         
@@ -406,7 +391,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         
         $resultGetTags = ProjectDao::getTags($project->getId());
         $this->assertCount(2, $resultGetTags);
-        foreach($resultGetTags as $projectTag) {
+        foreach ($resultGetTags as $projectTag) {
             $this->assertInstanceOf("Tag", $projectTag);
         }
     }
@@ -428,13 +413,13 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         //assert that there are tags associated with the project
         $resultGetTags = ProjectDao::getTags($project->getId());
         $this->assertCount(2, $resultGetTags);
-        foreach($resultGetTags as $projectTag) {
+        foreach ($resultGetTags as $projectTag) {
             $this->assertInstanceOf("Tag", $projectTag);
         }
         
         //assert that some project tags were deleted
         $afterDeleteTags = ProjectDao::deleteProjectTags($project->getId());
-        $this->assertEquals("1",$afterDeleteTags);
+        $this->assertEquals("1", $afterDeleteTags);
         
         //assert that there are no project tags left after deleting all
         $getTagsAfterDelete = ProjectDao::getTags($project->getId());
@@ -442,7 +427,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         
         //assert that a second call to deleteProjectTags() changes nothing.
         $tryRedelete = ProjectDao::deleteProjectTags($project->getId());
-        $this->assertEquals("0",$tryRedelete);  
+        $this->assertEquals("0", $tryRedelete);  
     }
     
     public function testRecordProjectFileInfo()

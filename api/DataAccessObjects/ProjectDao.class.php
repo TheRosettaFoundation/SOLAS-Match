@@ -193,15 +193,6 @@ class ProjectDao
         }
     }
 
-    public static function removeAllProjectTags($projectId)
-    {
-        if ($tags = self::getTags($projectId)) {
-            foreach ($tags as $tag) {
-                self::removeProjectTag($projectId, $tag->getId());
-            }
-        }
-    }
-
     public static function addProjectTags($projectId, $projectTags)
     {
         foreach ($projectTags as $tag) {

@@ -21,7 +21,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         // Success - Total 12 Statistics
         $resultAllStatistics = StatDao::getStatistics(null);
         $this->assertCount(12, $resultAllStatistics);
-        foreach($resultAllStatistics as $stat) {
+        foreach ($resultAllStatistics as $stat) {
             $this->assertInstanceOf("Statistic", $stat);
         }
         
