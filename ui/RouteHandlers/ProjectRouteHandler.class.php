@@ -275,7 +275,7 @@ class ProjectRouteHandler
         $projectDao = new DAO\ProjectDao();
 
         $project = $projectDao->getProject($project_id);
-        if (isValidPost($app)) {
+        if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
             
             if (isset($post['title'])) {

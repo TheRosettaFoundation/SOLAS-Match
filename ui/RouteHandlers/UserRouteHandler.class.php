@@ -159,7 +159,7 @@ class UserRouteHandler
         }
         $error = null;
         $warning = null;
-        if (isValidPost($app)) {
+        if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
             $temp = md5($post['email'].substr(\Settings::get("session.site_key"), 0, 20));
             \UserSession::clearCurrentUserID();

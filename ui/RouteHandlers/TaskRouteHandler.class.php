@@ -214,6 +214,7 @@ class TaskRouteHandler
 
         $viewData = array('thisUser' => $user);
         $viewData['extra_scripts'] = $extra_scripts;
+        $viewData['current_page'] = 'claimed-tasks';
 
         $app->view()->appendData($viewData);
         $app->render("task/claimed-tasks.tpl");
@@ -638,7 +639,7 @@ class TaskRouteHandler
       
         $app->view()->setData("task", $task);
         
-        if (isValidPost($app)) {
+        if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
            
             if ($task->getTaskStatus() < \TaskStatusEnum::IN_PROGRESS) {
