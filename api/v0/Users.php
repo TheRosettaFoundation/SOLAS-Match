@@ -1,15 +1,23 @@
 <?php
 
+namespace SolasMatch\API\V0;
+
+use \SolasMatch\API\DAO as DAO;
+use \SolasMatch\API\Lib as Lib;
+use \SolasMatch\API as API;
+
 /**
  * Description of Users
  *
  * @author sean
  */
 
+require_once __DIR__.'/../../Common/models/OAuthResponce.php';
+require_once __DIR__."/../../Common/models/PasswordResetRequest.php";
+require_once __DIR__."/../../Common/models/PasswordReset.php";
 require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
-require_once __DIR__."/../lib/NotificationTypes.class.php";
 require_once __DIR__."/../lib/Middleware.php";
 
 
@@ -17,18 +25,18 @@ class Users
 {
     public static function init()
     {
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users(:format)/',
             function ($format = ".json") {
-                Dispatcher::sendResponce(null, "display all users", null, $format);
+                API\Dispatcher::sendResponse(null, "display all users", null, $format);
             },
             'getUsers',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/',
             function ($userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -36,7 +44,7 @@ class Users
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                $data = UserDao::getUser($userId);
+                $data = DAO\UserDao::getUser($userId);
                 if (is_array($data)) {
                     $data = $data[0];
                 }
@@ -44,13 +52,13 @@ class Users
                     $data->setPassword(null);
                     $data->setNonce(null);
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUser'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/users/:userId/',
             function ($userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -58,77 +66,246 @@ class Users
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                UserDao::deleteUser($userId);
-                Dispatcher::sendResponce(null, null, null, $format);
+                DAO\UserDao::deleteUser($userId);
+                API\Dispatcher::sendResponse(null, null, null, $format);
             },
             'deleteUser',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
         //returns the currently logged in user based on oauth token
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/getCurrentUser(:format)/',
             function ($format = ".json") {
-                $user = UserDao::getLoggedInUser();
-                Dispatcher::sendResponce(null, $user, null, $format);
+                $user = DAO\UserDao::getLoggedInUser();
+                API\Dispatcher::sendResponse(null, $user, null, $format);
             },
             'getCurrentUser',
             null
         );
-        
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
+            '/v0/users/login(:format)/',
+            function ($format = ".json") {
+                $data = new \Login();
+                $data->setEmail("sample@example.com");
+                $data->setPassword("sample_password");
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'getLoginTemplate',
+            null
+        );
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
+            '/v0/users/login(:format)/',
+            function ($format = ".json") {
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
+                $data = $client->deserialize($data, "Login");
+                $params= array();
+                try {
+                    $data = DAO\UserDao::apiLogin($data->getEmail(), $data->getPassword());
+                    if (!is_null($data)) {
+                        $server = API\Dispatcher::getOauthServer();
+                        $responce = $server->getGrantType('password')->completeFlow(
+                            array("client_id" => $data->getId(), "client_secret" => $data->getPassword())
+                        );
+                        $oAuthResponce = new \OAuthResponce();
+                        $oAuthResponce->setToken($responce['access_token']);
+                        $oAuthResponce->setTokenType($responce['token_type']);
+                        $oAuthResponce->setExpires($responce['expires']);
+                        $oAuthResponce->setExpiresIn($responce['expires_in']);
+                        $data->setPassword(null);
+                        $data->setNonce(null);
+                    }
+                    API\Dispatcher::sendResponse(null, $data, null, $format, $oAuthResponce);
+                } catch (Exception $e) {
+                    API\Dispatcher::sendResponse(null, $e->getMessage(), \HttpStatusEnum::UNAUTHORIZED, $format);
+                }
+            },
+            'login',
+            null
+        );
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
+            '/v0/users/login/openidLogin/:email/',
+            function ($email, $format = ".json") {
+                if (isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])) {
+                    $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
+                    if (!is_numeric($email) && strstr($email, '.')) {
+                        $temp = array();
+                        $temp = explode('.', $email);
+                        $lastIndex = sizeof($temp)-1;
+                        if ($lastIndex > 1) {
+                            $format='.'.$temp[$lastIndex];
+                            $email = $temp[0];
+                            for ($i = 1; $i < $lastIndex; $i++) {
+                                $email = "{$email}.{$temp[$i]}";
+                            }
+                        }
+                    }
+                    $openidHash = md5($email.substr(\Settings::get("session.site_key"), 0, 20));
+                    if ($headerHash != $openidHash) {
+                        API\Dispatcher::getDispatcher()->halt(
+                            \HttpStatusEnum::FORBIDDEN,
+                            "The Autherization header does not match the current ".
+                            "user or the user does not have permission to acess the current resource"
+                        );
+                    }
+                }
+                $data = DAO\UserDao::getUser(null, $email);
+                if (is_array($data)) {
+                    $data = $data[0];
+                }
+                $oAuthResponce = null;
+                if (is_null($data)) {
+                    $data = DAO\UserDao::apiRegister($email, md5($email));
+                    if (is_array($data) && isset($data[0])) {
+                        $data=$data[0];
+                    }
+                    DAO\UserDao::finishRegistration($data->getId());
+                }
+                $server = API\Dispatcher::getOauthServer();
+                $responce = $server->getGrantType('password')->completeFlow(
+                    array("client_id" => $data->getId(), "client_secret" => $data->getPassword())
+                );
+                $oAuthResponce = new \OAuthResponce();
+                $oAuthResponce->setToken($responce['access_token']);
+                $oAuthResponce->setTokenType($responce['token_type']);
+                $oAuthResponce->setExpires($responce['expires']);
+                $oAuthResponce->setExpiresIn($responce['expires_in']);
+                API\Dispatcher::sendResponse(null, $data, null, $format, $oAuthResponce);
+            },
+            'openidLogin',
+            null
+        );
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
+            '/v0/users/passwordReset(:format)/',
+            function ($format = ".json") {
+                $data = \ModelFactory::buildModel("PasswordReset", array());
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'getResetTemplate'
+        );
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
+            '/v0/users/passwordReset/:key/',
+            function ($key, $format = ".json") {
+                if (!is_numeric($key) && strstr($key, '.')) {
+                    $key = explode('.', $key);
+                    $format = '.'.$key[1];
+                    $key = $key[0];
+                }
+                $data = DAO\UserDao::getPasswordResetRequests(null, $key);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'getResetRequest',
+            null
+        );
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
+            '/v0/users/passwordReset(:format)/',
+            function ($format = ".json") {
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
+                $data = $client->deserialize($data, 'PasswordReset');
+                $result = DAO\UserDao::passwordReset($data->getPassword(), $data->getKey());
+                API\Dispatcher::sendResponse(null, $result, null, $format);
+            },
+            'resetPassword',
+            null
+        );
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
+            '/v0/users/register(:format)/',
+            function ($format = ".json") {
+                $data = new \Register();
+                $data->setPassword("test");
+                $data->setEmail("test@test.rog");
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'getRegisterTemplate',
+            null
+        );
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
+            '/v0/users/register(:format)/',
+            function ($format = ".json") {
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
+                $data = $client->deserialize($data, "Register");
+                $data = DAO\UserDao::apiRegister($data->getEmail(), $data->getPassword());
+                if (is_array($data) && isset($data[0])) {
+                    $data = $data[0];
+                }
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'register',
+            null
+        );
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:uuid/registered(:format)/',
             function ($uuid, $format = '.json') {
-                $user = UserDao::getRegisteredUser($uuid);
-                Dispatcher::sendResponce(null, $user, null, $format);
+                $user = DAO\UserDao::getRegisteredUser($uuid);
+                API\Dispatcher::sendResponse(null, $user, null, $format);
             },
             'getRegisteredUser',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/users/:uuid/finishRegistration(:format)/',
             function ($uuid, $format = '.json') {
-                $user = UserDao::getRegisteredUser($uuid);
+                $user = DAO\UserDao::getRegisteredUser($uuid);
                 if ($user != null) {
-                    $ret = UserDao::finishRegistration($user->getId());
-                    $server = Dispatcher::getOauthServer();
+                    $ret = DAO\UserDao::finishRegistration($user->getId());
+                    $server = API\Dispatcher::getOauthServer();
                     $response = $server->getGrantType('password')->completeFlow(
                         array(
                             "client_id"=>$user->getId(),
                             "client_secret"=>$user->getPassword()
                         )
                     );
-                    $oAuthResponse = new OAuthResponce();
+                    $oAuthResponse = new \OAuthResponce();
                     $oAuthResponse->setToken($response['access_token']);
                     $oAuthResponse->setTokenType($response['token_type']);
                     $oAuthResponse->setExpires($response['expires']);
                     $oAuthResponse->setExpiresIn($response['expires_in']);
-                    Dispatcher::sendResponce(null, $ret, null, $format, $oAuthResponse);
+                    API\Dispatcher::sendResponse(null, $ret, null, $format, $oAuthResponse);
                 } else {
-                    Dispatcher::sendResponce(null, "Invalid UUID", HttpStatusEnum::UNAUTHORIZED, $format);
+                    API\Dispatcher::sendResponse(null, "Invalid UUID", \HttpStatusEnum::UNAUTHORIZED, $format);
                 }
             },
             'finishRegistration',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/verified(:format)/',
             function ($userId, $format = '.json') {
-                $ret = UserDao::isUserVerified($userId);
-                Dispatcher::sendResponce(null, $ret, null, $format);
+                $ret = DAO\UserDao::isUserVerified($userId);
+                API\Dispatcher::sendResponse(null, $ret, null, $format);
             },
             'isUserVerified',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/users/leaveOrg/:userId/:orgId/',
             function ($userId, $orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -136,29 +313,29 @@ class Users
                     $format = '.'.$orgId[1];
                     $orgId = $orgId[0];
                 }
-                $data = OrganisationDao::revokeMembership($orgId, $userId);
+                $data = DAO\OrganisationDao::revokeMembership($orgId, $userId);
                 if (is_array($data)) {
                     $data = $data[0];
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'userLeaveOrg',
-            'Middleware::authUserOrAdminForOrg'
+            '\SolasMatch\API\Lib\Middleware::authUserOrAdminForOrg'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/users/:userId/requestReference(:format)/',
             function ($userId, $format = ".json") {
-                UserDao::requestReference($userId);
-                Dispatcher::sendResponce(null, null, null, $format);
+                DAO\UserDao::requestReference($userId);
+                API\Dispatcher::sendResponse(null, null, null, $format);
             },
             "userRequestReference",
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/getByEmail/:email/',
             function ($email, $format = ".json") {
                 if (!is_numeric($email) && strstr($email, '.')) {
@@ -173,18 +350,18 @@ class Users
                         }
                     }
                 }
-                $data = UserDao::getUser(null, $email);
+                $data = DAO\UserDao::getUser(null, $email);
                 if (is_array($data)) {
                     $data = $data[0];
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserByEmail',
-            "Middleware::registerValidation"
+            "\SolasMatch\API\Lib\Middleware::registerValidation"
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/getClaimedTasksCount/:userId/',
             function ($userId, $format = '.json') {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -192,15 +369,15 @@ class Users
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                $data = TaskDao::getUserTasksCount($userId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\TaskDao::getUserTasksCount($userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserClaimedTasksCount',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/subscribedToTask/:userId/:taskId/',
             function ($userId, $taskId, $format = ".json") {
                 if (!is_numeric($taskId) && strstr($taskId, '.')) {
@@ -208,14 +385,14 @@ class Users
                     $format = '.'.$taskId[1];
                     $taskId = $taskId[0];
                 }
-                Dispatcher::sendResponce(null, UserDao::isSubscribedToTask($userId, $taskId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\UserDao::isSubscribedToTask($userId, $taskId), null, $format);
             },
             'userSubscribedToTask',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/subscribedToProject/:userId/:projectId/',
             function ($userId, $projectId, $format = ".json") {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -223,14 +400,14 @@ class Users
                     $format = '.'.$projectId[1];
                     $projectId = $projectId[0];
                 }
-                Dispatcher::sendResponce(null, UserDao::isSubscribedToProject($userId, $projectId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\UserDao::isSubscribedToProject($userId, $projectId), null, $format);
             },
             'userSubscribedToProject',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/isBlacklistedForTask/:userId/:taskId/',
             function ($userId, $taskId, $format = ".json") {
                 if (!is_numeric($taskId) && strstr($taskId, '.')) {
@@ -238,43 +415,43 @@ class Users
                     $format = '.'.$taskId[1];
                     $taskId = $taskId[0];
                 }
-                Dispatcher::sendResponce(null, UserDao::isBlacklistedForTask($userId, $taskId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\UserDao::isBlacklistedForTask($userId, $taskId), null, $format);
             },
             'isBlacklistedForTask'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/orgs(:format)/',
             function ($userId, $format = ".json") {
-                Dispatcher::sendResponce(null, UserDao::findOrganisationsUserBelongsTo($userId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\UserDao::findOrganisationsUserBelongsTo($userId), null, $format);
             },
             'getUserOrgs'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/badges(:format)/',
             function ($userId, $format = ".json") {
-                Dispatcher::sendResponce(null, UserDao::getUserBadges($userId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\UserDao::getUserBadges($userId), null, $format);
             },
             'getUserbadges'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/users/:userId/badges(:format)/',
             function ($userId, $format = ".json") {
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, 'Badge');
-                Dispatcher::sendResponce(null, BadgeDao::assignBadge($userId, $data->getId()), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\BadgeDao::assignBadge($userId, $data->getId()), null, $format);
             },
             'addUserbadges'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/users/assignBadge/:email/:badgeId/',
             function ($email, $badgeId, $format = ".json") {
                 if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
@@ -283,19 +460,19 @@ class Users
                     $badgeId = $badgeId[0];
                 }
                 $ret = false;
-                $user = UserDao::getUser(null, $email);
+                $user = DAO\UserDao::getUser(null, $email);
                 if (count($user) > 0) {
                     $user = $user[0];
-                    $ret = BadgeDao::assignBadge($user->getId(), $badgeId);
+                    $ret = DAO\BadgeDao::assignBadge($user->getId(), $badgeId);
                 }
-                Dispatcher::sendResponce(null, $ret, null, $format);
+                API\Dispatcher::sendResponse(null, $ret, null, $format);
             },
             "assignBadge",
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/users/:userId/badges/:badgeId/',
             function ($userId, $badgeId, $format = ".json") {
                 if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
@@ -303,14 +480,14 @@ class Users
                      $format = '.'.$badgeId[1];
                      $badgeId = $badgeId[0];
                 }
-                Dispatcher::sendResponce(null, BadgeDao::assignBadge($userId, $badgeId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\BadgeDao::assignBadge($userId, $badgeId), null, $format);
             },
             'addUserbadgesByID',
-            'Middleware::authenticateUserForOrgBadge'
+            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/users/:userId/badges/:badgeId/',
             function ($userId, $badgeId, $format = ".json") {
                 if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
@@ -318,87 +495,87 @@ class Users
                     $format = '.'.$badgeId[1];
                     $badgeId = $badgeId[0];
                 }
-                Dispatcher::sendResponce(null, BadgeDao::removeUserBadge($userId, $badgeId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\BadgeDao::removeUserBadge($userId, $badgeId), null, $format);
             },
             'deleteUserbadgesByID',
-            'Middleware::authenticateUserOrOrgForOrgBadge'
+            '\SolasMatch\API\Lib\Middleware::authenticateUserOrOrgForOrgBadge'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/tags(:format)/',
             function ($userId, $format = ".json") {
-                $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, null);
-                Dispatcher::sendResponce(null, UserDao::getUserTags($userId, $limit), null, $format);
+                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, null);
+                API\Dispatcher::sendResponse(null, DAO\UserDao::getUserTags($userId, $limit), null, $format);
             },
             'getUsertags'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/taskStreamNotification(:format)/',
             function ($userId, $format = ".json") {
-                $data = UserDao::getUserTaskStreamNotification($userId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::getUserTaskStreamNotification($userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserTaskStreamNotification',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/users/:userId/taskStreamNotification(:format)/',
             function ($userId, $format = ".json") {
-                $ret = UserDao::removeTaskStreamNotification($userId);
-                Dispatcher::sendResponce(null, $ret, null, $format);
+                $ret = DAO\UserDao::removeTaskStreamNotification($userId);
+                API\Dispatcher::sendResponse(null, $ret, null, $format);
             },
             'removeUserTaskStreamNotification',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/users/:userId/taskStreamNotification(:format)/',
             function ($userId, $format = ".json") {
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, 'UserTaskStreamNotification');
-                $ret = UserDao::requestTaskStreamNotification($data);
-                Dispatcher::sendResponce(null, $ret, null, $format);
+                $ret = DAO\UserDao::requestTaskStreamNotification($data);
+                API\Dispatcher::sendResponse(null, $ret, null, $format);
             },
             'updateTaskStreamNotification',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/tasks(:format)/',
             function ($userId, $format = ".json") {
-                $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 10);
-                $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
-                Dispatcher::sendResponce(null, TaskDao::getUserTasks($userId, $limit, $offset), null, $format);
+                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, 10);
+                $offset = API\Dispatcher::clenseArgs('offset', \HttpMethodEnum::GET, 0);
+                API\Dispatcher::sendResponse(null, DAO\TaskDao::getUserTasks($userId, $limit, $offset), null, $format);
             },
             'getUsertasks',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/users/:userId/tasks(:format)/',
             function ($userId, $format = ".json") {
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, 'Task');
-                Dispatcher::sendResponce(null, TaskDao::claimTask($data->getId(), $userId), null, $format);
-                Notify::notifyUserClaimedTask($userId, $data->getId());
-                Notify::notifyOrgClaimedTask($userId, $data->getId());
+                API\Dispatcher::sendResponse(null, DAO\TaskDao::claimTask($data->getId(), $userId), null, $format);
+                Lib\Notify::notifyUserClaimedTask($userId, $data->getId());
+                Lib\Notify::notifyOrgClaimedTask($userId, $data->getId());
             },
             'userClaimTask',
-            'Middleware::authenticateTaskNotClaimed'
+            '\SolasMatch\API\Lib\Middleware::authenticateTaskNotClaimed'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/users/:userId/tasks/:taskId/',
             function ($userId, $taskId, $format = ".json") {
                 if (!is_numeric($taskId) && strstr($taskId, '.')) {
@@ -406,33 +583,33 @@ class Users
                     $format = '.'.$taskId[1];
                     $taskId = $taskId[0];
                 }
-                Dispatcher::sendResponce(null, TaskDao::unClaimTask($taskId, $userId), null, $format);
-                Notify::sendTaskRevokedNotifications($taskId, $userId);
+                API\Dispatcher::sendResponse(null, DAO\TaskDao::unClaimTask($taskId, $userId), null, $format);
+                Lib\Notify::sendTaskRevokedNotifications($taskId, $userId);
             },
             'userUnClaimTask',
-            'Middleware::authUserOrOrgForTask'
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/tasks/:taskId/review(:format)/',
             function ($userId, $taskId, $format = '.json') {
-                $reviews = TaskDao::getTaskReviews(null, $taskId, $userId);
-                Dispatcher::sendResponce(null, $reviews[0], null, $format);
+                $reviews = DAO\TaskDao::getTaskReviews(null, $taskId, $userId);
+                API\Dispatcher::sendResponse(null, $reviews[0], null, $format);
             },
             'getUserTaskReview',
-            'Middleware::authUserOrOrgForTask'
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/topTasks(:format)/',
             function ($userId, $format = ".json") {
-                $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
-                $offset = Dispatcher::clenseArgs('offset', HttpMethodEnum::GET, 0);
-                $filter = Dispatcher::clenseArgs('filter', HttpMethodEnum::GET, '');
-                $strict = Dispatcher::clenseArgs('strict', HttpMethodEnum::GET, false);
-                $filters = APIHelper::parseFilterString($filter);
+                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, 5);
+                $offset = API\Dispatcher::clenseArgs('offset', \HttpMethodEnum::GET, 0);
+                $filter = API\Dispatcher::clenseArgs('filter', \HttpMethodEnum::GET, '');
+                $strict = API\Dispatcher::clenseArgs('strict', \HttpMethodEnum::GET, false);
+                $filters = \APIHelper::parseFilterString($filter);
                 $filter = "";
                 $taskType = '';
                 $sourceLanguageCode = '';
@@ -446,7 +623,7 @@ class Users
                 if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
                     $targetLanguageCode = $filters['targetLanguage'];
                 }
-                $dao = new TaskDao();
+                $dao = new DAO\TaskDao();
                 $data = $dao->getUserTopTasks(
                     $userId,
                     $strict,
@@ -456,25 +633,25 @@ class Users
                     $sourceLanguageCode,
                     $targetLanguageCode
                 );
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserTopTasks',
-            "Middleware::isloggedIn"
+            "\SolasMatch\API\Lib\Middleware::isloggedIn"
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/archivedTasks(:format)/',
             function ($userId, $format = ".json") {
-                $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
-                $data = TaskDao::getUserArchivedTasks($userId, $limit);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, 5);
+                $data = DAO\TaskDao::getUserArchivedTasks($userId, $limit);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserArchivedTasks'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/archivedTasks/:taskId/archiveMetaData(:format)/',
             function ($userId, $taskId, $format = ".json") {
                 if (!is_numeric($taskId) && strstr($taskId, '.')) {
@@ -482,15 +659,15 @@ class Users
                     $format = '.'.$taskId[1];
                     $taskId = $taskId[0];
                 }
-                $data = TaskDao::getArchivedTaskMetaData($taskId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\TaskDao::getArchivedTaskMetaData($taskId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserArchivedTaskMetaData',
-            'Middleware::authUserOrOrgForTask'
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/users/:userId/',
             function ($userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -498,36 +675,36 @@ class Users
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, 'User');
                 $data->setId($userId);
-                $data = UserDao::save($data);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::save($data);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'updateUser',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/users/:userId/tags(:format)/',
             function ($userId, $format = ".json") {
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, 'Tag');
-                $data = UserDao::likeTag($userId, $data->getId());
+                $data = DAO\UserDao::likeTag($userId, $data->getId());
                 if (is_array($data)) {
                     $data = $data[0];
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'addUsertag',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/users/:userId/tags/:tagId/',
             function ($userId, $tagId, $format = ".json") {
                 if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -535,18 +712,18 @@ class Users
                     $format = '.'.$tagId[1];
                     $tagId = $tagId[0];
                 }
-                $data = UserDao::likeTag($userId, $tagId);
+                $data = DAO\UserDao::likeTag($userId, $tagId);
                 if (is_array($data)) {
                     $data = $data[0];
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'addUserTagById',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/users/:userId/tags/:tagId/',
             function ($userId, $tagId, $format = ".json") {
                 if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -554,43 +731,43 @@ class Users
                     $format = '.'.$tagId[1];
                     $tagId = $tagId[0];
                 }
-                $data = UserDao::removeTag($userId, $tagId);
+                $data = DAO\UserDao::removeTag($userId, $tagId);
                 if (is_array($data)) {
                     $data = $data[0];
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'deleteUserTagById',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/trackedTasks(:format)/',
             function ($userId, $format = ".json") {
-                $data=UserDao::getTrackedTasks($userId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::getTrackedTasks($userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserTrackedTasks',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/users/:userId/trackedTasks(:format)/',
             function ($userId, $format = ".json") {
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, 'Task');
-                $data = UserDao::trackTask($userId, $data->getId());
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::trackTask($userId, $data->getId());
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'addUserTrackedTasks',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/users/:userId/trackedTasks/:taskId/',
             function ($userId, $taskId, $format = ".json") {
                 if (!is_numeric($taskId) && strstr($taskId, '.')) {
@@ -598,15 +775,15 @@ class Users
                     $format = '.'.$taskId[1];
                     $taskId = $taskId[0];
                 }
-                $data = UserDao::trackTask($userId, $taskId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::trackTask($userId, $taskId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'addUserTrackedTasksById',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/users/:userId/trackedTasks/:taskId/',
             function ($userId, $taskId, $format = ".json") {
                 if (!is_numeric($taskId) && strstr($taskId, '.')) {
@@ -614,65 +791,65 @@ class Users
                     $format = '.'.$taskId[1];
                     $taskId = $taskId[0];
                 }
-                $data=UserDao::ignoreTask($userId, $taskId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::ignoreTask($userId, $taskId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'deleteUserTrackedTasksById',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/email/:email/passwordResetRequest(:format)/',
             function ($email, $format = ".json") {
-                $data = UserDao::hasRequestedPasswordReset($email) ? 1 : 0;
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::hasRequestedPasswordReset($email) ? 1 : 0;
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'hasUserRequestedPasswordReset',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/email/:email/passwordResetRequest/time(:format)/',
             function ($email, $format = ".json") {
-                $resetRequest = UserDao::getPasswordResetRequests($email);
-                Dispatcher::sendResponce(null, $resetRequest->getRequestTime(), null, $format);
+                $resetRequest = DAO\UserDao::getPasswordResetRequests($email);
+                API\Dispatcher::sendResponse(null, $resetRequest->getRequestTime(), null, $format);
             },
             "PasswordResetRequestTime",
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/users/email/:email/passwordResetRequest(:format)/',
             function ($email, $format = ".json") {
-                $user = UserDao::getUser(null, $email);
+                $user = DAO\UserDao::getUser(null, $email);
                 $user = $user[0];
                 if ($user) {
-                    Dispatcher::sendResponce(null, UserDao::createPasswordReset($user), null, $format);
-                    Notify::sendPasswordResetEmail($user->getId());
+                    API\Dispatcher::sendResponse(null, DAO\UserDao::createPasswordReset($user), null, $format);
+                    Lib\Notify::sendPasswordResetEmail($user->getId());
                 } else {
-                    Dispatcher::sendResponce(null, null, null, $format);
+                    API\Dispatcher::sendResponse(null, null, null, $format);
                 }
             },
             'createPasswordResetRequest',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/projects(:format)/',
             function ($userId, $format = ".json") {
-                $data = UserDao::getTrackedProjects($userId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::getTrackedProjects($userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserTrackedProjects',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/users/:userId/projects/:projectId/',
             function ($userId, $projectId, $format = ".json") {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -680,15 +857,15 @@ class Users
                     $format = '.'.$projectId[1];
                     $projectId = $projectId[0];
                 }
-                $data = UserDao::trackProject($projectId, $userId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::trackProject($projectId, $userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'userTrackProject',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/users/:userId/projects/:projectId/',
             function ($userId, $projectId, $format = ".json") {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -696,15 +873,15 @@ class Users
                     $format = '.'.$projectId[1];
                     $projectId = $projectId[0];
                 }
-                $data = UserDao::unTrackProject($projectId, $userId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::unTrackProject($projectId, $userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'userUnTrackProject',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/personalInfo(:format)/',
             function ($userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -712,15 +889,15 @@ class Users
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                $data = UserDao::getPersonalInfo(null, $userId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::getPersonalInfo(null, $userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserPersonalInfo',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/users/:userId/personalInfo(:format)/',
             function ($userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -728,17 +905,17 @@ class Users
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, "UserPersonalInformation");
-                Dispatcher::sendResponce(null, UserDao::createPersonalInfo($data), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\UserDao::createPersonalInfo($data), null, $format);
             },
             'createUserPersonalInfo',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/users/:userId/personalInfo(:format)/',
             function ($userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -746,18 +923,18 @@ class Users
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, 'UserPersonalInformation');
-                $data = UserDao::updatePersonalInfo($data);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::updatePersonalInfo($data);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'updateUserPersonalInfo',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/users/:userId/secondaryLanguages(:format)/',
             function ($userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -765,27 +942,27 @@ class Users
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                $data = UserDao::getSecondaryLanguages($userId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::getSecondaryLanguages($userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getSecondaryLanguages'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/users/:userId/secondaryLanguages(:format)/',
             function ($userId, $format = ".json") {
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, "Locale");
-                Dispatcher::sendResponce(null, UserDao::createSecondaryLanguage($userId, $data), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\UserDao::createSecondaryLanguage($userId, $data), null, $format);
             },
             'createSecondaryLanguage',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/users/removeSecondaryLanguage/:userId/:languageCode/:countryCode/',
             function ($userId, $languageCode, $countryCode, $format = ".json") {
                 if (strstr($countryCode, '.')) {
@@ -793,11 +970,11 @@ class Users
                     $format = '.'.$countryCode[1];
                     $countryCode = $countryCode[0];
                 }
-                $data = UserDao::deleteSecondaryLanguage($userId, $languageCode, $countryCode);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::deleteSecondaryLanguage($userId, $languageCode, $countryCode);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'deleteSecondaryLanguage',
-            'Middleware::authUserOwnsResource'
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
     }
 }

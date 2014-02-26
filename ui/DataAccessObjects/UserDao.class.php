@@ -366,7 +366,7 @@ class UserDao extends BaseDao
     public function openIdLogin($email, $headerhash)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/login/openidLogin/$email";
+        $request = "{$this->siteApi}v0/users/login/openidLogin/$email";
         $ret = $this->client->call(
             "User",
             $request,
@@ -392,7 +392,7 @@ class UserDao extends BaseDao
         $login = new \Login();
         $login->setEmail($email);
         $login->setPassword($password);
-        $request = "{$this->siteApi}v0/login";
+        $request = "{$this->siteApi}v0/users/login";
         try {
             $ret = $this->client->call("User", $request, \HttpMethodEnum::POST, $login);
         } catch (\SolasMatchException $e) {
@@ -429,7 +429,7 @@ class UserDao extends BaseDao
     public function getPasswordResetRequest($key)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/passwordReset/$key";
+        $request = "{$this->siteApi}v0/users/passwordReset/$key";
         $ret = $this->client->call("PasswordResetRequest", $request);
         return $ret;
     }
@@ -440,7 +440,7 @@ class UserDao extends BaseDao
         $passwordReset = new \PasswordReset();
         $passwordReset->setPassword($password);
         $passwordReset->setKey($key);
-        $request = "{$this->siteApi}v0/passwordReset";
+        $request = "{$this->siteApi}v0/users/passwordReset";
         $ret = $this->client->call(null, $request, \HttpMethodEnum::POST, $passwordReset);
         return $ret;
     }
@@ -451,7 +451,7 @@ class UserDao extends BaseDao
         $registerData = new \Register();
         $registerData->setEmail($email);
         $registerData->setPassword($password);
-        $request = "{$this->siteApi}v0/register";
+        $request = "{$this->siteApi}v0/users/register";
         $ret = $this->client->call("User", $request, \HttpMethodEnum::POST, $registerData);
         return $ret;
     }

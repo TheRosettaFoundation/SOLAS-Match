@@ -1,18 +1,20 @@
 <?php
 
+namespace SolasMatch\API\Lib;
+
 require_once __DIR__."/../../Common/lib/WorkflowBuilder.class.php";
 
-class APIWorkflowBuilder extends WorkflowBuilder
+class APIWorkflowBuilder extends \WorkflowBuilder
 {
     protected function getProjectTasks($projectId)
     {
-        $dao = new TaskDao();
+        $dao = new \SolasMatch\API\DAO\TaskDao();
         return $dao->getTask(null, $projectId);
     }
 
     protected function getTaskPreReqs($taskId)
     {
-        $dao = new TaskDao();
+        $dao = new \SolasMatch\API\DAO\TaskDao();
         return $dao->getTaskPreReqs($taskId);
     }
 }

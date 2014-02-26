@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\API\DAO;
+
+use \SolasMatch\API\Lib as Lib;
+
 //! The Badge Data Access Object for the API
 /*!
   A class for setting and retrieving Badge related data from the database.
@@ -23,15 +27,15 @@ class BadgeDao
     */
     public static function getBadge($badgeId = null, $title = null, $description = null, $ownerId = null)
     {
-        $args = PDOWrapper::cleanseNull($badgeId)
-                .",".PDOWrapper::cleanseNullOrWrapStr($title)
-                .",".PDOWrapper::cleanseNullOrWrapStr($description)
-                .",".PDOWrapper::cleanseNull($ownerId);
+        $args = Lib\PDOWrapper::cleanseNull($badgeId).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($title).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($description).",".
+            Lib\PDOWrapper::cleanseNull($ownerId);
         
-        if ($result = PDOWrapper::call("getBadge", $args)) {
+        if ($result = Lib\PDOWrapper::call("getBadge", $args)) {
             $badges = array();
             foreach ($result as $badge) {
-                $badges[] = ModelFactory::buildModel("Badge", $badge);
+                $badges[] = \ModelFactory::buildModel("Badge", $badge);
             }
             return $badges;
         }
@@ -47,13 +51,13 @@ class BadgeDao
     */
     public static function insertAndUpdateBadge($badge)
     {
-        $args = PDOWrapper::cleanseNullOrWrapStr($badge->getId())
-                .",".PDOWrapper::cleanseNull($badge->getOwnerId())
-                .",".PDOWrapper::cleanseNullOrWrapStr($badge->getTitle())
-                .",".PDOWrapper::cleanseNullOrWrapStr($badge->getDescription());
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($badge->getId()).",".
+            Lib\PDOWrapper::cleanseNull($badge->getOwnerId()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($badge->getTitle()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($badge->getDescription());
         
-        if ($result = PDOWrapper::call("badgeInsertAndUpdate", $args)) {
-            return ModelFactory::buildModel("Badge", $result[0]);
+        if ($result = Lib\PDOWrapper::call("badgeInsertAndUpdate", $args)) {
+            return \ModelFactory::buildModel("Badge", $result[0]);
         } else {
             return null;
         }
@@ -68,11 +72,11 @@ class BadgeDao
     public static function getOrgBadges($orgId)
     {
         $ret = null;
-        $args = "null,null,null,".PDOWrapper::cleanseNull($orgId);
-        if ($badge_array = PDOWrapper::call("getBadge", $args)) {
+        $args = "null,null,null,".Lib\PDOWrapper::cleanseNull($orgId);
+        if ($badge_array = Lib\PDOWrapper::call("getBadge", $args)) {
             $ret = array();
             foreach ($badge_array as $badge) {
-                $ret[] = ModelFactory::buildModel("Badge", $badge);
+                $ret[] = \ModelFactory::buildModel("Badge", $badge);
             }
         }
         return $ret;
@@ -87,11 +91,11 @@ class BadgeDao
     */
     public static function assignBadge($userId, $badgeId)
     {
-        $args = PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNull($badgeId);
+        $args = Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNull($badgeId);
         if (!$validation = self::validateUserBadge($userId, $badgeId)) {
-            Notify::sendUserAssignedBadgeEmail($userId, $badgeId);
-            if ($result = PDOWrapper::call("assignBadge", $args)) {
+            Lib\Notify::sendUserAssignedBadgeEmail($userId, $badgeId);
+            if ($result = Lib\PDOWrapper::call("assignBadge", $args)) {
                 return $result[0]["result"];
             }
         }
@@ -107,9 +111,9 @@ class BadgeDao
     */
     public static function removeUserBadge($userId, $badgeId)
     {
-        $args = PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNull($badgeId);
-        $result = PDOWrapper::call("removeUserBadge", $args);
+        $args = Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNull($badgeId);
+        $result = Lib\PDOWrapper::call("removeUserBadge", $args);
         return $result[0]["result"];
     }
     
@@ -121,8 +125,8 @@ class BadgeDao
     */
     public static function deleteBadge($badgeId)
     {
-        $args = PDOWrapper::cleanseNull($badgeId);
-        if ($result = PDOWrapper::call("deleteBadge", $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($badgeId);
+        if ($result = Lib\PDOWrapper::call("deleteBadge", $args)) {
             return $result[0]["result"];
         }
         return 0;
@@ -136,9 +140,9 @@ class BadgeDao
     */
     public static function validateUserBadge($userId, $badgeId)
     {
-        $args = PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNull($badgeId);
-        $result = PDOWrapper::call("userHasBadge", $args);
+        $args = Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNull($badgeId);
+        $result = Lib\PDOWrapper::call("userHasBadge", $args);
         return $result[0]['result'];
     }
 }

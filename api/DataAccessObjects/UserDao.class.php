@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\API\DAO;
+
+use \SolasMatch\API\Lib as Lib;
+
 require_once __DIR__."/../../Common/models/User.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/Authentication.class.php";
@@ -9,16 +13,15 @@ require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
 
 class UserDao
 {
-    
     public static function getLoggedInUser()
     {
-        $resource = new League\OAuth2\Server\Resource(new League\OAuth2\Server\Storage\PDO\Session());
+        $resource = new \League\OAuth2\Server\Resource(new \League\OAuth2\Server\Storage\PDO\Session());
         // Test for token existance and validity
         try {
             $resource->isValid(true);
-            $parts =explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
-            return UserDao::getByOauthToken($parts[1]);
-        } catch (League\OAuth2\Server\Exception\InvalidAccessTokenException $e) {
+            $parts = explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
+            return self::getByOauthToken($parts[1]);
+        } catch (\League\OAuth2\Server\Exception\InvalidAccessTokenException $e) {
             //The access token is missing or invalid...
             return null;
         }
@@ -26,9 +29,9 @@ class UserDao
     
     public static function create($email, $clear_password)
     {
-        $nonce = Authentication::generateNonce();
-        $password = Authentication::hashPassword($clear_password, $nonce);
-        $user = new User();
+        $nonce = \Authentication::generateNonce();
+        $password = \Authentication::hashPassword($clear_password, $nonce);
+        $user = new \User();
         $user->setEmail($email);
         $user->setNonce($nonce);
         $user->setPassword($password);
@@ -39,8 +42,8 @@ class UserDao
     {
         $user = self::getUser($user_id);
 
-        $nonce = Authentication::generateNonce();
-        $pass = Authentication::hashPassword($password, $nonce);
+        $nonce = \Authentication::generateNonce();
+        $pass = \Authentication::hashPassword($password, $nonce);
 
         $user[0]->setNonce($nonce);
         $user[0]->setPassword($pass);
@@ -58,34 +61,32 @@ class UserDao
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
             if ($nativeLanguageCode != '' && $nativeCountryCode != '') {
-                BadgeDao::assignBadge($user->getId(), BadgeTypes::NATIVE_LANGUAGE);
+                BadgeDao::assignBadge($user->getId(), \BadgeTypes::NATIVE_LANGUAGE);
             }
         }
         if ($user->getBiography() != '') {
-            BadgeDao::assignBadge($user->getId(), BadgeTypes::PROFILE_FILLER);
+            BadgeDao::assignBadge($user->getId(), \BadgeTypes::PROFILE_FILLER);
         }
-        $args = PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
-                .",".PDOWrapper::cleanseNull($user->getNonce())
-                .",".PDOWrapper::cleanseNullOrWrapStr($user->getPassword())
-                .",".PDOWrapper::cleanseNullOrWrapStr($user->getBiography())
-                .",".PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName())
-                .",".PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode)
-                .",".PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode)
-                .",".PDOWrapper::cleanseNull($userId);
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
+            Lib\PDOWrapper::cleanseNull($user->getNonce()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode).",".
+            Lib\PDOWrapper::cleanseNull($userId);
         
-        $result = PDOWrapper::call('userInsertAndUpdate', $args);
+        $result = Lib\PDOWrapper::call('userInsertAndUpdate', $args);
         if (!is_null($result)) {
-            return ModelFactory::buildModel("User", $result[0]);
+            return \ModelFactory::buildModel("User", $result[0]);
         } else {
             return null;
         }
     }
 
-
     private static function clearPasswordMatchesUsersPassword($user, $clear_password)
     {
-        $hashed_input_password = Authentication::hashPassword($clear_password, $user->getNonce());
-        
+        $hashed_input_password = \Authentication::hashPassword($clear_password, $user->getNonce());
         return $hashed_input_password == $user->getPassword();
     }
 
@@ -94,24 +95,24 @@ class UserDao
         $user = self::getUser(null, $email);
 
         if (!is_object($user)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Sorry, the password or username entered is incorrect. Please check the credentials used and try again.'
             );
         }
 
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Sorry, the password or username entered is incorrect. Please check the credentials used and try again.'
             );
         }
 
         if ($clear_password === '') {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Sorry, an empty password is not allowed. Please contact the site administrator for details'
             );
         }
 
-        UserSession::setSession($user->getId());
+        \UserSession::setSession($user->getId());
         return true;
     }
 
@@ -125,22 +126,22 @@ class UserDao
         
         if (!is_object($user)) {
             self::logLoginAttempt(null, $email, 0);
-            throw new Exception(HttpStatusEnum::NOT_FOUND);
+            throw new \Exception(\HttpStatusEnum::NOT_FOUND);
         }
                 
         if (!self::isUserVerified($user->getId())) {
              self::logLoginAttempt($user->getId(), $email, 0);
-             throw new Exception(HttpStatusEnum::UNAUTHORIZED);
+             throw new \Exception(\HttpStatusEnum::UNAUTHORIZED);
         }
 
         if (AdminDao::isUserBanned($user->getId())) {
             self::logLoginAttempt($user->getId(), $email, 0);
-            throw new Exception(HttpStatusEnum::FORBIDDEN);
+            throw new \Exception(\HttpStatusEnum::FORBIDDEN);
         }
 
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
             self::logLoginAttempt($user->getId(), $email, 0);
-            throw new Exception(HttpStatusEnum::NOT_FOUND);
+            throw new \Exception(\HttpStatusEnum::NOT_FOUND);
         }
         
         self::logLoginAttempt($user->getId(), $email, 1);
@@ -160,7 +161,7 @@ class UserDao
             $user = self::create($email, $clear_password);
             if ($verificationRequired) {
                 self::registerUser($user->getId());
-                Notify::sendEmailVerification($user->getId());
+                Lib\Notify::sendEmailVerification($user->getId());
             }
         }
         return $user;
@@ -170,10 +171,9 @@ class UserDao
     {
         $ret = null;
         $uid = md5(uniqid(rand()));
-        $args = PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNullOrWrapStr($uid);
-        
-        $result = PDOWrapper::call("registerUser", $args);
+        $args = Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($uid);
+        $result = Lib\PDOWrapper::call("registerUser", $args);
         if ($result) {
             $ret = $result[0]['result'];
         }
@@ -182,19 +182,19 @@ class UserDao
 
     public static function finishRegistration($userId)
     {
-        $args = PDOWrapper::cleanseNull($userId);
-        $response = PDOWrapper::call('finishRegistration', $args);
-        BadgeDao::assignBadge($userId, BadgeTypes::REGISTERED);
+        $args = Lib\PDOWrapper::cleanseNull($userId);
+        $response = Lib\PDOWrapper::call('finishRegistration', $args);
+        BadgeDao::assignBadge($userId, \BadgeTypes::REGISTERED);
         return $response[0]['result'];
     }
 
     public static function getRegisteredUser($uuid)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNullOrWrapStr($uuid);
-        $result = PDOWrapper::call('getRegisteredUser', $args);
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($uuid);
+        $result = Lib\PDOWrapper::call('getRegisteredUser', $args);
         if ($result) {
-            $ret = ModelFactory::buildModel("User", $result[0]);
+            $ret = \ModelFactory::buildModel("User", $result[0]);
         }
         return $ret;
     }
@@ -202,8 +202,8 @@ class UserDao
     public static function isUserVerified($userId)
     {
         $ret = '0';
-        $args = PDOWrapper::cleanseNull($userId);
-        if ($result = PDOWrapper::call('isUserVerified', $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($userId);
+        if ($result = Lib\PDOWrapper::call('isUserVerified', $args)) {
             $ret = $result[0]['result'];
         }
         return $ret;
@@ -221,7 +221,7 @@ class UserDao
                 echo $e->getMessage();
             }
         } elseif ($openid->mode == 'cancel') {
-            throw new InvalidArgumentException('User has canceled authentication!');
+            throw new \InvalidArgumentException('User has canceled authentication!');
             return false;
         } else {
             $retvals = $openid->getAttributes();
@@ -233,7 +233,7 @@ class UserDao
                 if (!is_object($user)) {
                     $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
                 }
-                UserSession::setSession($user->getId());
+                \UserSession::setSession($user->getId());
             }
             return true;
         }
@@ -241,13 +241,13 @@ class UserDao
 
     public static function logout()
     {
-        UserSession::destroySession();
+        \UserSession::destroySession();
     }
 
     public static function getCurrentUser()
     {
         $ret = null;
-        if ($user_id = UserSession::getCurrentUserId()) {
+        if ($user_id = \UserSession::getCurrentUserId()) {
                 $ret = self::getUser($user_id);
         }
         return $ret;
@@ -255,7 +255,7 @@ class UserDao
 
     public static function isLoggedIn()
     {
-        return (!is_null(UserSession::getCurrentUserId()));
+        return (!is_null(\UserSession::getCurrentUserId()));
     }
 
     public static function belongsToRole($user, $role)
@@ -265,8 +265,8 @@ class UserDao
             $ret = true;
         } elseif ($role == 'organisation_member') {
             $user_found = $this->find(array(
-                    'user_id' => $user->getUserId(),
-                    'role' => 'organisation_member'
+                'user_id' => $user->getUserId(),
+                'role' => 'organisation_member'
             ));
             if (is_object($user_found)) {
                 $ret = true;
@@ -278,11 +278,11 @@ class UserDao
     public static function findOrganisationsUserBelongsTo($user_id)
     {
         $ret = null;
-        $args = PDOWrapper::cleanse($user_id);
-        if ($result = PDOWrapper::call("findOrganisationsUserBelongsTo", $args)) {
+        $args = Lib\PDOWrapper::cleanse($user_id);
+        if ($result = Lib\PDOWrapper::call("findOrganisationsUserBelongsTo", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("Organisation", $row);
+                $ret[] = \ModelFactory::buildModel("Organisation", $row);
             }
         }
         return $ret;
@@ -291,11 +291,11 @@ class UserDao
     public static function getUserBadges($user_id)
     {
         $ret = null;
-        $args = PDOWrapper::cleanse($user_id);
-        if ($result = PDOWrapper::call("getUserBadges", $args)) {
+        $args = Lib\PDOWrapper::cleanse($user_id);
+        if ($result = Lib\PDOWrapper::call("getUserBadges", $args)) {
             $ret = array();
             foreach ($result as $badge) {
-                $ret[] = ModelFactory::buildModel("Badge", $badge);
+                $ret[] = \ModelFactory::buildModel("Badge", $badge);
             }
         }
         return $ret;
@@ -304,9 +304,9 @@ class UserDao
     public static function getUserTaskStreamNotification($userId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanse($userId);
-        if ($result = PDOWrapper::call("getUserTaskStreamNotification", $args)) {
-            $ret = ModelFactory::buildModel("UserTaskStreamNotification", $result[0]);
+        $args = Lib\PDOWrapper::cleanse($userId);
+        if ($result = Lib\PDOWrapper::call("getUserTaskStreamNotification", $args)) {
+            $ret = \ModelFactory::buildModel("UserTaskStreamNotification", $result[0]);
         }
         return $ret;
     }
@@ -314,8 +314,8 @@ class UserDao
     public static function removeTaskStreamNotification($userId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanse($userId);
-        if ($result = PDOWrapper::call('removeTaskStreamNotification', $args)) {
+        $args = Lib\PDOWrapper::cleanse($userId);
+        if ($result = Lib\PDOWrapper::call('removeTaskStreamNotification', $args)) {
             $ret = true;
         }
         return $ret;
@@ -324,16 +324,16 @@ class UserDao
     public static function requestTaskStreamNotification($request)
     {
         $ret = 0;
-        $args = PDOWrapper::cleanse($request->getUserId()).', '.
-                PDOWrapper::cleanse($request->getInterval()).', ';
+        $args = Lib\PDOWrapper::cleanse($request->getUserId()).', '.
+                Lib\PDOWrapper::cleanse($request->getInterval()).', ';
         if ($request->getStrict()) {
             $strict = 1;
         } else {
             $strict = 0;
         }
-        $args .= PDOWrapper::cleanse($strict);
+        $args .= Lib\PDOWrapper::cleanse($strict);
         
-        if ($result = PDOWrapper::call("userTaskStreamNotificationInsertAndUpdate", $args)) {
+        if ($result = Lib\PDOWrapper::call("userTaskStreamNotificationInsertAndUpdate", $args)) {
             $ret = 1;
         }
         return $ret;
@@ -342,20 +342,17 @@ class UserDao
     public static function getUserTags($user_id, $limit = null)
     {
         $ret = null;
-        $args = PDOWrapper::cleanse($user_id)
-                .",".PDOWrapper::cleanseNull($limit);
-        
-        if ($result = PDOWrapper::call("getUserTags", $args)) {
+        $args = Lib\PDOWrapper::cleanse($user_id).",".
+            Lib\PDOWrapper::cleanseNull($limit);
+        if ($result = Lib\PDOWrapper::call("getUserTags", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("Tag", $row);
+                $ret[] = \ModelFactory::buildModel("Tag", $row);
             }
         }
-
         return $ret;
     }
     
-
     public static function getUser(
         $user_id = null,
         $email = null,
@@ -368,20 +365,20 @@ class UserDao
         $created = null
     ) {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($user_id)
-                .",".PDOWrapper::cleanseNullOrWrapStr($display_name)
-                .",".PDOWrapper::cleanseNullOrWrapStr($email)
-                .",".PDOWrapper::cleanseNullOrWrapStr($password)
-                .",".PDOWrapper::cleanseNullOrWrapStr($biography)
-                .",".PDOWrapper::cleanseNull($nonce)
-                .",".PDOWrapper::cleanseNull($created)
-                .",".PDOWrapper::cleanseNull($native_language_id)
-                .",".PDOWrapper::cleanseNull($native_region_id);
+        $args = Lib\PDOWrapper::cleanseNull($user_id).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($display_name).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($email).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($password).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($biography).",".
+            Lib\PDOWrapper::cleanseNull($nonce).",".
+            Lib\PDOWrapper::cleanseNull($created).",".
+            Lib\PDOWrapper::cleanseNull($native_language_id).",".
+            Lib\PDOWrapper::cleanseNull($native_region_id);
         
-        if ($result = PDOWrapper::call("getUser", $args)) {
+        if ($result = Lib\PDOWrapper::call("getUser", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("User", $row);
+                $ret[] = \ModelFactory::buildModel("User", $row);
             }
         }
         return $ret;
@@ -393,11 +390,11 @@ class UserDao
     public static function getUsersWithBadge($badge_ID)
     {
         $ret = null;
-        $args = PDOWrapper::cleanse($badge_ID);
-        if ($result = PDOWrapper::call("getUsersWithBadge", $args)) {
+        $args = Lib\PDOWrapper::cleanse($badge_ID);
+        if ($result = Lib\PDOWrapper::call("getUsersWithBadge", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("User", $row);
+                $ret[] = \ModelFactory::buildModel("User", $row);
             }
         }
         return $ret;
@@ -408,10 +405,10 @@ class UserDao
     */
     public static function likeTag($user_id, $tag_id)
     {
-        $args = PDOWrapper::cleanse($user_id)
-                .",".PDOWrapper::cleanse($tag_id);
+        $args = Lib\PDOWrapper::cleanse($user_id).",".
+            Lib\PDOWrapper::cleanse($tag_id);
         
-        if ($result = PDOWrapper::call("userLikeTag", $args)) {
+        if ($result = Lib\PDOWrapper::call("userLikeTag", $args)) {
             return $result[0]['result'];
         } else {
             return null;
@@ -423,10 +420,10 @@ class UserDao
     */
     public static function removeTag($user_id, $tag_id)
     {
-        $args = PDOWrapper::cleanse($user_id)
-                .",".PDOWrapper::cleanse($tag_id);
+        $args = Lib\PDOWrapper::cleanse($user_id).",".
+            Lib\PDOWrapper::cleanse($tag_id);
         
-        if ($result = PDOWrapper::call("removeUserTag", $args)) {
+        if ($result = Lib\PDOWrapper::call("removeUserTag", $args)) {
             return $result[0]['result'];
         } else {
             return null;
@@ -438,8 +435,8 @@ class UserDao
     */
     public static function getUserNotificationList($user_id)
     {
-        $args = PDOWrapper::cleanseNull($user_id);
-        if ($result = PDOWrapper::call('getUserNotifications', $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($user_id);
+        if ($result = Lib\PDOWrapper::call('getUserNotifications', $args)) {
             return $result;
         } else {
             return null;
@@ -451,10 +448,10 @@ class UserDao
     */
     public static function isSubscribedToTask($user_id, $task_id)
     {
-        $args = PDOWrapper::cleanse($user_id)
-                .",".PDOWrapper::cleanse($task_id);
+        $args = Lib\PDOWrapper::cleanse($user_id).",".
+            Lib\PDOWrapper::cleanse($task_id);
         
-        if ($result = PDOWrapper::call('userSubscribedToTask', $args)) {
+        if ($result = Lib\PDOWrapper::call('userSubscribedToTask', $args)) {
             return $result[0]['result'];
         } else {
             return null;
@@ -466,10 +463,10 @@ class UserDao
     */
     public static function isSubscribedToProject($user_id, $project_id)
     {
-        $args = PDOWrapper::cleanse($user_id)
-                .",".PDOWrapper::cleanse($project_id);
+        $args = Lib\PDOWrapper::cleanse($user_id).",".
+            Lib\PDOWrapper::cleanse($project_id);
         
-        if ($result = PDOWrapper::call('userSubscribedToProject', $args)) {
+        if ($result = Lib\PDOWrapper::call('userSubscribedToProject', $args)) {
             return $result[0]['result'];
         } else {
             return null;
@@ -481,10 +478,10 @@ class UserDao
     */
     public static function trackTask($user_id, $task_id)
     {
-        $args = PDOWrapper::cleanseNull($user_id)
-                .",".PDOWrapper::cleanseNull($task_id);
+        $args = Lib\PDOWrapper::cleanseNull($user_id).",".
+            Lib\PDOWrapper::cleanseNull($task_id);
         
-        if ($result = PDOWrapper::call("UserTrackTask", $args)) {
+        if ($result = Lib\PDOWrapper::call("UserTrackTask", $args)) {
             return $result[0]['result'];
         } else {
             return null;
@@ -496,10 +493,10 @@ class UserDao
     */
     public static function ignoreTask($user_id, $task_id)
     {
-        $args = PDOWrapper::cleanseNull($user_id)
-                .",".PDOWrapper::cleanseNull($task_id);
+        $args = Lib\PDOWrapper::cleanseNull($user_id).",".
+            Lib\PDOWrapper::cleanseNull($task_id);
         
-        if ($result = PDOWrapper::call("userUnTrackTask", $args)) {
+        if ($result = Lib\PDOWrapper::call("userUnTrackTask", $args)) {
             return $result[0]['result'];
         } else {
             return null;
@@ -509,11 +506,11 @@ class UserDao
     public static function getTrackedTasks($user_id)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($user_id);
-        if ($result = PDOWrapper::call("getUserTrackedTasks", $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($user_id);
+        if ($result = Lib\PDOWrapper::call("getUserTrackedTasks", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $task = ModelFactory::buildModel("Task", $row);
+                $task = \ModelFactory::buildModel("Task", $row);
                 $task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
@@ -537,10 +534,9 @@ class UserDao
     */
     public static function addPasswordResetRequest($unique_id, $user_id)
     {
-        $args = PDOWrapper::cleanseWrapStr($unique_id)
-                .",".PDOWrapper::cleanse($user_id);
-        
-        $result = PDOWrapper::call("addPasswordResetRequest", $args);
+        $args = Lib\PDOWrapper::cleanseWrapStr($unique_id).",".
+            Lib\PDOWrapper::cleanse($user_id);
+        $result = Lib\PDOWrapper::call("addPasswordResetRequest", $args);
         
         if ($result) {
             return $result[0]['result'];
@@ -551,8 +547,8 @@ class UserDao
 
     public static function removePasswordResetRequest($user_id)
     {
-        $args = PDOWrapper::cleanse($user_id);
-        $result = PDOWrapper::call("removePasswordResetRequest", $args);
+        $args = Lib\PDOWrapper::cleanse($user_id);
+        $result = Lib\PDOWrapper::call("removePasswordResetRequest", $args);
         
         if ($result) {
             return $result[0]['result'];
@@ -578,10 +574,10 @@ class UserDao
     */
     public static function getPasswordResetRequests($email, $uniqueId = null)
     {
-        $args = PDOWrapper::cleanseNullOrWrapStr($uniqueId)
-                .",".PDOWrapper::cleanseNullOrWrapStr($email);
-        if ($result = PDOWrapper::call("getPasswordResetRequests", $args)) {
-            return ModelFactory::buildModel("PasswordResetRequest", $result[0]);
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($uniqueId).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($email);
+        if ($result = Lib\PDOWrapper::call("getPasswordResetRequests", $args)) {
+            return \ModelFactory::buildModel("PasswordResetRequest", $result[0]);
         } else {
             return null;
         }
@@ -602,11 +598,11 @@ class UserDao
     
     public static function getTrackedProjects($user_id)
     {
-        $args = PDOWrapper::cleanse($user_id);
-        if ($result = PDOWrapper::call("getTrackedProjects", $args)) {
+        $args = Lib\PDOWrapper::cleanse($user_id);
+        if ($result = Lib\PDOWrapper::call("getTrackedProjects", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("Project", $row);
+                $ret[] = \ModelFactory::buildModel("Project", $row);
             }
             return $ret;
         }
@@ -615,9 +611,9 @@ class UserDao
 
     public static function requestReference($userId)
     {
-        $messagingClient = new MessagingClient();
+        $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
-            $request = new UserReferenceEmail();
+            $request = new \UserReferenceEmail();
             $request->setUserId($userId);
             $message = $messagingClient->createMessageFromProto($request);
             $messagingClient->sendTopicMessage(
@@ -630,9 +626,9 @@ class UserDao
 
     public static function trackProject($projectID, $userID)
     {
-        $args = PDOWrapper::cleanse($projectID)
-                .",".PDOWrapper::cleanse($userID);
-        if ($result = PDOWrapper::call("userTrackProject", $args)) {
+        $args = Lib\PDOWrapper::cleanse($projectID).",".
+            Lib\PDOWrapper::cleanse($userID);
+        if ($result = Lib\PDOWrapper::call("userTrackProject", $args)) {
             return $result[0]["result"];
         }
         return null;
@@ -640,9 +636,9 @@ class UserDao
     
     public static function unTrackProject($projectID, $userID)
     {
-        $args = PDOWrapper::cleanse($projectID)
-                .",".PDOWrapper::cleanse($userID);
-        if ($result = PDOWrapper::call("userUnTrackProject", $args)) {
+        $args = Lib\PDOWrapper::cleanse($projectID).",".
+            Lib\PDOWrapper::cleanse($userID);
+        if ($result = Lib\PDOWrapper::call("userUnTrackProject", $args)) {
             return $result[0]["result"];
         }
         return null;
@@ -661,19 +657,19 @@ class UserDao
     private static function savePersonalInfo($userInfo)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($userInfo->getId())
-                .",".PDOWrapper::cleanseNull($userInfo->getUserId())
-                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getFirstName())
-                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getLastName())
-                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getMobileNumber())
-                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getBusinessNumber())
-                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getSip())
-                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getJobTitle())
-                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress())
-                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity())
-                .",".PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry());
-        if ($result = PDOWrapper::call("userPersonalInfoInsertAndUpdate", $args)) {
-            $ret = ModelFactory::buildModel("UserPersonalInformation", $result[0]);
+        $args = Lib\PDOWrapper::cleanseNull($userInfo->getId()).",".
+            Lib\PDOWrapper::cleanseNull($userInfo->getUserId()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getFirstName()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getLastName()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getMobileNumber()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getBusinessNumber()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getSip()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getJobTitle()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry());
+        if ($result = Lib\PDOWrapper::call("userPersonalInfoInsertAndUpdate", $args)) {
+            $ret = \ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }
         return $ret;
     }
@@ -692,21 +688,19 @@ class UserDao
         $country = null
     ) {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($id)
-                .",".PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNullOrWrapStr($firstName)
-                .",".PDOWrapper::cleanseNullOrWrapStr($lastName)
-                .",".PDOWrapper::cleanseNullOrWrapStr($mobileNumber)
-                .",".PDOWrapper::cleanseNullOrWrapStr($businessNumber)
-                .",".PDOWrapper::cleanseNullOrWrapStr($sip)
-                .",".PDOWrapper::cleanseNullOrWrapStr($jobTitle)
-                .",".PDOWrapper::cleanseNullOrWrapStr($address)
-                .",".PDOWrapper::cleanseNullOrWrapStr($city)
-                .",".PDOWrapper::cleanseNullOrWrapStr($country);
-        
-        if ($result = PDOWrapper::call("getUserPersonalInfo", $args)) {
-            $ret = ModelFactory::buildModel("UserPersonalInformation", $result[0]);
-            
+        $args = Lib\PDOWrapper::cleanseNull($id).",".
+            Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($firstName).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($lastName).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($mobileNumber).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($businessNumber).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sip).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($jobTitle).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($address).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($city).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($country);
+        if ($result = Lib\PDOWrapper::call("getUserPersonalInfo", $args)) {
+            $ret = \ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }
         return $ret;
     }
@@ -714,14 +708,14 @@ class UserDao
     public static function createSecondaryLanguage($userId, $locale)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNullOrWrapStr($locale->getLanguageCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($locale->getCountryCode());
-        if ($result = PDOWrapper::call("userSecondaryLanguageInsert", $args)) {
-            $ret = ModelFactory::buildModel("Locale", $result[0]);
+        $args = Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($locale->getLanguageCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($locale->getCountryCode());
+        if ($result = Lib\PDOWrapper::call("userSecondaryLanguageInsert", $args)) {
+            $ret = \ModelFactory::buildModel("Locale", $result[0]);
         }
         if (count(self::getSecondaryLanguages($userId)) > 1) {
-            BadgeDao::assignBadge($userId, BadgeTypes::POLYGLOT);
+            BadgeDao::assignBadge($userId, \BadgeTypes::POLYGLOT);
         }
         return $ret;
     }
@@ -729,11 +723,11 @@ class UserDao
     public static function getSecondaryLanguages($userId = null)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($userId);
-        if ($result = PDOWrapper::call("getUserSecondaryLanguages", $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($userId);
+        if ($result = Lib\PDOWrapper::call("getUserSecondaryLanguages", $args)) {
             $ret = array();
             foreach ($result as $locale) {
-                $ret[] = ModelFactory::buildModel("Locale", $locale);
+                $ret[] = \ModelFactory::buildModel("Locale", $locale);
             }
         }
         return $ret;
@@ -742,10 +736,10 @@ class UserDao
     public static function deleteSecondaryLanguage($userId, $languageCode, $countryCode)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNullOrWrapStr($languageCode)
-                .",".PDOWrapper::cleanseNullOrWrapStr($countryCode);
-        if ($result = PDOWrapper::call("deleteUserSecondaryLanguage", $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($languageCode).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($countryCode);
+        if ($result = Lib\PDOWrapper::call("deleteUserSecondaryLanguage", $args)) {
             return $result[0]['result'];
         }
         return $ret;
@@ -753,24 +747,24 @@ class UserDao
     
     public static function deleteUser($userId)
     {
-        $args = PDOWrapper::cleanseNull($userId);
-        PDOWrapper::call("deleteUser", $args);
+        $args = Lib\PDOWrapper::cleanseNull($userId);
+        Lib\PDOWrapper::call("deleteUser", $args);
     }
     
     private static function logLoginAttempt($userId, $email, $loginSuccess)
     {
-        $args = PDOWrapper::cleanseNull($userId)
-            .",".PDOWrapper::cleanseNullOrWrapStr($email)
-            .",".PDOWrapper::cleanseNull($loginSuccess);
-        PDOWrapper::call("userLoginInsert", $args);
+        $args = Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($email).",".
+            Lib\PDOWrapper::cleanseNull($loginSuccess);
+        Lib\PDOWrapper::call("userLoginInsert", $args);
     }
     
     public static function isBlacklistedForTask($userId, $taskId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNull($taskId);
-        if ($result = PDOWrapper::call("isUserBlacklistedForTask", $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNull($taskId);
+        if ($result = Lib\PDOWrapper::call("isUserBlacklistedForTask", $args)) {
             return $result[0]['result'];
         }
         return $ret;
@@ -779,10 +773,10 @@ class UserDao
     public static function getByOauthToken($token)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNullOrWrapStr($token);
-        $result = PDOWrapper::call('getUserByOAuthToken', $args);
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($token);
+        $result = Lib\PDOWrapper::call('getUserByOAuthToken', $args);
         if ($result) {
-            $ret = ModelFactory::buildModel("User", $result[0]);
+            $ret = \ModelFactory::buildModel("User", $result[0]);
         }
         return $ret;
     }

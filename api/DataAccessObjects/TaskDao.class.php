@@ -1,15 +1,16 @@
 <?php
 
+namespace SolasMatch\API\DAO;
+
+use \SolasMatch\API\Lib as Lib;
+
 require_once __DIR__."/../../Common/Requests/UserTaskScoreRequest.php";
-require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/models/Task.php";
-require_once __DIR__."/../../api/lib/Upload.class.php";
+include_once __DIR__."/../../Common/lib/SolasMatchException.php";
+require_once __DIR__."/../lib/PDOWrapper.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
-require_once __DIR__."/../lib/NotificationTypes.class.php";
 require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
-include_once __DIR__."/../../Common/lib/SolasMatchException.php";
-
 
 /**
  * Task Document Access Object for manipulating tasks.
@@ -37,24 +38,24 @@ class TaskDao
         $deadline = null
     ) {
         $tasks = array();
-        $args = PDOWrapper::cleanseNull($taskId)
-                .",".PDOWrapper::cleanseNull($projectId)
-                .",".PDOWrapper::cleanseNullOrWrapStr($title)
-                .",".PDOWrapper::cleanseNull($wordCount)
-                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode)
-                .",".PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode)
-                .",".PDOWrapper::cleanseNullOrWrapStr($createdTime)
-                .",".PDOWrapper::cleanseNullOrWrapStr($sourceCountryCode)
-                .",".PDOWrapper::cleanseNullOrWrapStr($targetCountryCode)
-                .",".PDOWrapper::cleanseNullOrWrapStr($comment)
-                .",".PDOWrapper::cleanseNull($taskTypeId)
-                .",".PDOWrapper::cleanseNull($taskStatusId)
-                .",".PDOWrapper::cleanseNull($published)
-                .",".PDOWrapper::cleanseNullOrWrapStr($deadline);
-        $result = PDOWrapper::call("getTask", $args);
+        $args = Lib\PDOWrapper::cleanseNull($taskId).",".
+            Lib\PDOWrapper::cleanseNull($projectId).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($title).",".
+            Lib\PDOWrapper::cleanseNull($wordCount).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($createdTime).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceCountryCode).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($targetCountryCode).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($comment).",".
+            Lib\PDOWrapper::cleanseNull($taskTypeId).",".
+            Lib\PDOWrapper::cleanseNull($taskStatusId).",".
+            Lib\PDOWrapper::cleanseNull($published).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($deadline);
+        $result = Lib\PDOWrapper::call("getTask", $args);
         if ($result) {
             foreach ($result as $row) {
-                $tasks[] = ModelFactory::buildModel("Task", $row);
+                $tasks[] = \ModelFactory::buildModel("Task", $row);
             }
         }
         if (sizeof($tasks) == 0) {
@@ -83,15 +84,15 @@ class TaskDao
     public static function submitReview($review)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($review->getProjectId())
-                .",".PDOWrapper::cleanseNull($review->getTaskId())
-                .",".PDOWrapper::cleanseNull($review->getUserId())
-                .",".PDOWrapper::cleanseNull($review->getCorrections())
-                .",".PDOWrapper::cleanseNull($review->getGrammar())
-                .",".PDOWrapper::cleanseNull($review->getSpelling())
-                .",".PDOWrapper::cleanseNull($review->getConsistency())
-                .",".PDOWrapper::cleanseNullOrWrapStr($review->getComment());
-        $result = PDOWrapper::call('submitTaskReview', $args);
+        $args = Lib\PDOWrapper::cleanseNull($review->getProjectId()).",".
+            Lib\PDOWrapper::cleanseNull($review->getTaskId()).",".
+            Lib\PDOWrapper::cleanseNull($review->getUserId()).",".
+            Lib\PDOWrapper::cleanseNull($review->getCorrections()).",".
+            Lib\PDOWrapper::cleanseNull($review->getGrammar()).",".
+            Lib\PDOWrapper::cleanseNull($review->getSpelling()).",".
+            Lib\PDOWrapper::cleanseNull($review->getConsistency()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($review->getComment());
+        $result = Lib\PDOWrapper::call('submitTaskReview', $args);
         if ($result) {
             $ret = $result[0]['result'];
         }
@@ -109,20 +110,20 @@ class TaskDao
         $consistency = null,
         $comment = null
     ) {
-        $args = PDOWrapper::cleanseNull($projectId)
-                .",".PDOWrapper::cleanseNull($taskId)
-                .",".PDOWrapper::cleanseNull($userId)
-                .",".PDOWrapper::cleanseNull($corrections)
-                .",".PDOWrapper::cleanseNull($grammar)
-                .",".PDOWrapper::cleanseNull($spelling)
-                .",".PDOWrapper::cleanseNull($consistency)
-                .",".PDOWrapper::cleanseNullOrWrapStr($comment);
+        $args = Lib\PDOWrapper::cleanseNull($projectId).",".
+            Lib\PDOWrapper::cleanseNull($taskId).",".
+            Lib\PDOWrapper::cleanseNull($userId).",".
+            Lib\PDOWrapper::cleanseNull($corrections).",".
+            Lib\PDOWrapper::cleanseNull($grammar).",".
+            Lib\PDOWrapper::cleanseNull($spelling).",".
+            Lib\PDOWrapper::cleanseNull($consistency).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($comment);
         $reviews = null;
-        $result = PDOWrapper::call("getTaskReviews", $args);
+        $result = Lib\PDOWrapper::call("getTaskReviews", $args);
         if ($result) {
             $reviews = array();
             foreach ($result as $row) {
-                $reviews[] = ModelFactory::buildModel('TaskReview', $row);
+                $reviews[] = \ModelFactory::buildModel('TaskReview', $row);
             }
         }
 
@@ -139,7 +140,7 @@ class TaskDao
         $task_file_info = self::getTaskFileInfo($task->getId());
         
         //Get the file path to original upload
-        $old_file_path = Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
+        $old_file_path = Lib\Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
         
         //Remove ID so a new one will be created
         $task->setId(null);
@@ -156,8 +157,8 @@ class TaskDao
         
         //Get the new path the file can be found at
         $file_info = self::getTaskFileInfo($task);
-        $new_file_path = Upload::absoluteFilePathForUpload($task, 0, $file_info['filename']);
-        Upload::createFolderPath($task);
+        $new_file_path = Lib\Upload::absoluteFilePathForUpload($task, 0, $file_info['filename']);
+        Lib\Upload::createFolderPath($task);
         if (!copy($old_file_path, $new_file_path)) {
             $error = "Failed to copy file to new location";
             return 0;
@@ -169,22 +170,22 @@ class TaskDao
     {
         $sourceLocale = $task->getSourceLocale();
         $targetLocale = $task->getTargetLocale();
-        $args = PDOWrapper::cleanseNull($task->getId())
-                .",".PDOWrapper::cleanseNull($task->getProjectId())
-                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
-                .",".PDOWrapper::cleanseNull($task->getWordCount())
-                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
-                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
-                .",".PDOWrapper::cleanseNull($task->getTaskType())
-                .",".PDOWrapper::cleanseNull($task->getTaskStatus())
-                .",".PDOWrapper::cleanse($task->getPublished());
-        $result= PDOWrapper::call("taskInsertAndUpdate", $args);
+        $args = Lib\PDOWrapper::cleanseNull($task->getId()).",".
+            Lib\PDOWrapper::cleanseNull($task->getProjectId()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()).",".
+            Lib\PDOWrapper::cleanseNull($task->getWordCount()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getComment()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()).",".
+            Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
+            Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
+            Lib\PDOWrapper::cleanse($task->getPublished());
+        $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
         if ($result) {
-            $task = ModelFactory::buildModel('Task', $result);
+            $task = \ModelFactory::buildModel('Task', $result);
         } else {
             return null;
         }
@@ -192,18 +193,18 @@ class TaskDao
     
     public static function delete($TaskId)
     {
-        $args = PDOWrapper::cleanseNull($TaskId);
-        $result= PDOWrapper::call("deleteTask", $args);
+        $args = Lib\PDOWrapper::cleanseNull($TaskId);
+        $result = Lib\PDOWrapper::call("deleteTask", $args);
         return $result[0]["result"];
     }
 
     private static function calculateTaskScore($taskId)
     {
-        $use_backend = Settings::get('site.backend');
+        $use_backend = \Settings::get('site.backend');
         if (strcasecmp($use_backend, "y") == 0) {
-            $mMessagingClient = new MessagingClient();
+            $mMessagingClient = new Lib\MessagingClient();
             if ($mMessagingClient->init()) {
-                $request = new UserTaskScoreRequest();
+                $request = new \UserTaskScoreRequest();
                 $request->setTaskId($taskId);
                 $message = $mMessagingClient->createMessageFromProto($request);
                 $mMessagingClient->sendTopicMessage(
@@ -224,12 +225,12 @@ class TaskDao
     public static function getTags($taskId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($taskId);
+        $args = Lib\PDOWrapper::cleanseNull($taskId);
         
-        if ($result = PDOWrapper::call("getTaskTags", $args)) {
+        if ($result = Lib\PDOWrapper::call("getTaskTags", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("Tag", $row);
+                $ret[] = \ModelFactory::buildModel("Tag", $row);
             }
         }
         return $ret;
@@ -239,22 +240,22 @@ class TaskDao
     {
         $sourceLocale = $task->getSourceLocale();
         $targetLocale = $task->getTargetLocale();
-        $args = "null"
-                .",".PDOWrapper::cleanseNull($task->getProjectId())
-                .",".PDOWrapper::cleanseNullOrWrapStr($task->getTitle())
-                .",".PDOWrapper::cleanseNull($task->getWordCount())
-                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($task->getComment())
-                .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode())
-                .",".PDOWrapper::cleanseNullOrWrapStr($task->getDeadline())
-                .",".PDOWrapper::cleanseNull($task->getTaskType())
-                .",".PDOWrapper::cleanseNull($task->getTaskStatus())
-                .",".PDOWrapper::cleanseNull($task->getPublished());
-        $result = PDOWrapper::call("taskInsertAndUpdate", $args);
+        $args = "null ,".
+            Lib\PDOWrapper::cleanseNull($task->getProjectId()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()).",".
+            Lib\PDOWrapper::cleanseNull($task->getWordCount()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getComment()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()).",".
+            Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
+            Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
+            Lib\PDOWrapper::cleanseNull($task->getPublished());
+        $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
         if ($result) {
-            $task = ModelFactory::buildModel("Task", $result[0]);
+            $task = \ModelFactory::buildModel("Task", $result[0]);
         } else {
             $task = null;
         }
@@ -263,11 +264,11 @@ class TaskDao
     public static function getTaskPreReqs($taskId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($taskId);
-        if ($result = PDOWrapper::call("getTaskPreReqs", $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($taskId);
+        if ($result = Lib\PDOWrapper::call("getTaskPreReqs", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("Task", $row);
+                $ret[] = \ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -276,11 +277,11 @@ class TaskDao
     public static function getTasksFromPreReq($taskId, $projectId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($taskId).",".PDOWrapper::cleanseNull($projectId);
-        if ($result = PDOWrapper::call("getTasksFromPreReq", $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($taskId).",".Lib\PDOWrapper::cleanseNull($projectId);
+        if ($result = Lib\PDOWrapper::call("getTasksFromPreReq", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("Task", $row);
+                $ret[] = \ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -288,32 +289,30 @@ class TaskDao
 
     public static function addTaskPreReq($taskId, $preReqId)
     {
-        $args = PDOWrapper::cleanseNull($taskId)
-                .",".PDOWrapper::cleanseNull($preReqId);
-        
-        $result = PDOWrapper::call("addTaskPreReq", $args);
+        $args = Lib\PDOWrapper::cleanseNull($taskId).",".
+            Lib\PDOWrapper::cleanseNull($preReqId);
+        $result = Lib\PDOWrapper::call("addTaskPreReq", $args);
         return $result[0]["result"];
     }
 
     public static function removeTaskPreReq($taskId, $preReqId)
     {
-        $args = PDOWrapper::cleanseNull($taskId)
-                .",".PDOWrapper::cleanseNull($preReqId);
-        
-        $result = PDOWrapper::call("removeTaskPreReq", $args);
+        $args = Lib\PDOWrapper::cleanseNull($taskId).",".
+            Lib\PDOWrapper::cleanseNull($preReqId);
+        $result = Lib\PDOWrapper::call("removeTaskPreReq", $args);
         return $result[0]["result"];
     }
 
     public static function getLatestAvailableTasks($limit = 15, $offset = 0)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($limit).', '.
-                PDOWrapper::cleanseNull($offset);
+        $args = Lib\PDOWrapper::cleanseNull($limit).', '.
+                Lib\PDOWrapper::cleanseNull($offset);
         
-        if ($r = PDOWrapper::call("getLatestAvailableTasks", $args)) {
+        if ($r = Lib\PDOWrapper::call("getLatestAvailableTasks", $args)) {
             $ret = array();
             foreach ($r as $row) {
-                $ret[]= ModelFactory::buildModel("Task", $row);
+                $ret[] = \ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -332,7 +331,7 @@ class TaskDao
         $targetLanguageCode
     ) {
         $ret = false;
-        $args = PDOWrapper::cleanse($userId).", ";
+        $args = Lib\PDOWrapper::cleanse($userId).", ";
 
         if ($strict) {
             $args .= "1, ";
@@ -340,18 +339,18 @@ class TaskDao
             $args .= "0, ";
         }
         
-        $args .= PDOWrapper::cleanseNullOrWrapStr($limit).', '.
-                PDOWrapper::cleanseNull($offset).', ';
+        $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                Lib\PDOWrapper::cleanseNull($offset).', ';
         
-        $args .=  PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
-        $args .=  PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        $args .=  PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
 
-        if ($result = PDOWrapper::call("getUserTopTasks", $args)) {
+        if ($result = Lib\PDOWrapper::call("getUserTopTasks", $args)) {
 
             $ret = array();
             foreach ($result as $row) {
-                 $ret[] = ModelFactory::buildModel("Task", $row);
+                 $ret[] = \ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -361,13 +360,13 @@ class TaskDao
     public static function getTasksWithTag($tagId, $limit = 15)
     {
         $ret = null;
-        $args = PDOWrapper::cleanse($tagId)
-                .",".PDOWrapper::cleanse($limit);
+        $args = Lib\PDOWrapper::cleanse($tagId).",".
+            Lib\PDOWrapper::cleanse($limit);
                 
-        if ($result= PDOWrapper::call("getTaggedTasks", $args)) {
+        if ($result = Lib\PDOWrapper::call("getTaggedTasks", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                    $ret[] = ModelFactory::buildModel("Task", $row);
+                    $ret[] = \ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -379,7 +378,7 @@ class TaskDao
         $task = self::getTask($taskId);
         $task = $task[0];
 
-        $graphBuilder = new APIWorkflowBuilder();
+        $graphBuilder = new Lib\APIWorkflowBuilder();
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
 
         if ($graph) {
@@ -408,13 +407,13 @@ class TaskDao
         $task = self::getTask($node->getTaskId());
         $dependantNodes = $node->getNextList();
         if (count($dependantNodes) > 0) {
-            $builder = new APIWorkflowBuilder();
+            $builder = new Lib\APIWorkflowBuilder();
             foreach ($dependantNodes as $dependantId) {
                 $dTask = self::getTask($dependantId);
                 $index = $builder->find($dependantId, $graph);
                 $dependant = $graph->getAllNodes($index);
                 $preReqs = $dependant->getPreviousList();
-                if ((count($preReqs) == 2 && $dTask->getTaskType() == TaskTypeEnum::DESEGMENTATION) ||
+                if ((count($preReqs) == 2 && $dTask->getTaskType() == \TaskTypeEnum::DESEGMENTATION) ||
                         count($preReqs) == 1) {
                     $ret = $ret && (self::archiveTaskNode($dependant, $graph, $userId));
                 }
@@ -424,19 +423,18 @@ class TaskDao
         if ($ret) {
             $subscribedUsers = self::getSubscribedUsers($node->getTaskId());
             $ret = self::archiveTask($node->getTaskId(), $userId);
-            Notify::sendTaskArchivedNotifications($node->getTaskId(), $subscribedUsers);
+            Lib\Notify::sendTaskArchivedNotifications($node->getTaskId(), $subscribedUsers);
         }
         
-
         return $ret;
     }
 
     private static function archiveTask($taskId, $userId)
     {
-        $args = PDOWrapper::cleanseNull($taskId)
-                .",".PDOWrapper::cleanseNull($userId);
+        $args = Lib\PDOWrapper::cleanseNull($taskId).",".
+            Lib\PDOWrapper::cleanseNull($userId);
         
-        $result = PDOWrapper::call("archiveTask", $args);
+        $result = Lib\PDOWrapper::call("archiveTask", $args);
         if ($result[0]['result']) {
             self::delete($taskId);
         }
@@ -445,55 +443,53 @@ class TaskDao
         
     public static function claimTask($taskId, $userId)
     {
-        $args = PDOWrapper::cleanse($taskId)
-                .",".PDOWrapper::cleanse($userId);
-        
-        $ret = PDOWrapper::call("claimTask", $args);
+        $args = Lib\PDOWrapper::cleanse($taskId).",".
+            Lib\PDOWrapper::cleanse($userId);
+        $ret = Lib\PDOWrapper::call("claimTask", $args);
         return $ret[0]['result'];
     }
     
     public static function unClaimTask($taskId, $userId)
     {
-        $args = PDOWrapper::cleanse($taskId)
-                .",".PDOWrapper::cleanse($userId);
-        
-        $ret = PDOWrapper::call("unClaimTask", $args);
+        $args = Lib\PDOWrapper::cleanse($taskId).",".
+            Lib\PDOWrapper::cleanse($userId);
+        $ret = Lib\PDOWrapper::call("unClaimTask", $args);
         return $ret[0]['result'];
     }
 
     public static function hasUserClaimedTask($userId, $taskId)
     {
-        $args = PDOWrapper::cleanse($taskId)
-                .",".PDOWrapper::cleanse($userId);
-        $result = PDOWrapper::call("hasUserClaimedTask", $args);
+        $args = Lib\PDOWrapper::cleanse($taskId).",".
+            Lib\PDOWrapper::cleanse($userId);
+        $result = Lib\PDOWrapper::call("hasUserClaimedTask", $args);
         return $result[0]['result'];
     }
 
     public static function hasUserClaimedSegmentationTask($userId, $projectId)
     {
-        $args = PDOWrapper::cleanse($userId)
-            .",".PDOWrapper::cleanse($projectId);
-        $result = PDOWrapper::call("hasUserClaimedSegmentationTask", $args);
+        $args = Lib\PDOWrapper::cleanse($userId).",".
+            Lib\PDOWrapper::cleanse($projectId);
+        $result = Lib\PDOWrapper::call("hasUserClaimedSegmentationTask", $args);
         return $result[0]['result'];
     }
     
     public static function taskIsClaimed($taskId)
     {
-        $args = PDOWrapper::cleanse($taskId);
-        $result =  PDOWrapper::call("taskIsClaimed", $args);
+        $args = Lib\PDOWrapper::cleanse($taskId);
+        $result = Lib\PDOWrapper::call("taskIsClaimed", $args);
         return $result[0]['result'];
     }
     
     public static function getUserTasks($userId, $limit = null, $offset = 0)
     {
-        $args = PDOWrapper::cleanse($userId).
-                ', '.PDOWrapper::cleanseNull($limit).
-                ', '.PDOWrapper::cleanseNull($offset);
-        $result = PDOWrapper::call("getUserTasks", $args);
+        $args = Lib\PDOWrapper::cleanse($userId).', '.
+            Lib\PDOWrapper::cleanseNull($limit).', '.
+            Lib\PDOWrapper::cleanseNull($offset);
+        $result = Lib\PDOWrapper::call("getUserTasks", $args);
         if ($result) {
             $tasks = array();
             foreach ($result as $taskData) {
-                $tasks[] = ModelFactory::buildModel("Task", $taskData);
+                $tasks[] = \ModelFactory::buildModel("Task", $taskData);
             }
             return $tasks;
         } else {
@@ -503,20 +499,20 @@ class TaskDao
 
     public static function getUserTasksCount($userId)
     {
-        $args = PDOWrapper::cleanse($userId);
-        $result = PDOWrapper::call("getUserTasksCount", $args);
+        $args = Lib\PDOWrapper::cleanse($userId);
+        $result = Lib\PDOWrapper::call("getUserTasksCount", $args);
         return $result[0]['result'];
     }
     
     public static function getUserArchivedTasks($userId, $limit = 10)
     {
-        $args = PDOWrapper::cleanse($userId)
-                .",".PDOWrapper::cleanse($limit);
-        $result = PDOWrapper::call("getUserArchivedTasks", $args);
+        $args = Lib\PDOWrapper::cleanse($userId).",".
+            Lib\PDOWrapper::cleanse($limit);
+        $result = Lib\PDOWrapper::call("getUserArchivedTasks", $args);
         if ($result) {
             $tasks = array();
             foreach ($result as $taskData) {
-                $tasks[] = ModelFactory::buildModel("ArchivedTask", $taskData);
+                $tasks[] = \ModelFactory::buildModel("ArchivedTask", $taskData);
             }
             return $tasks;
         } else {
@@ -530,11 +526,11 @@ class TaskDao
     public static function getSubscribedUsers($taskId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($taskId);
-        if ($result = PDOWrapper::call('getSubscribedUsers', $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($taskId);
+        if ($result = Lib\PDOWrapper::call('getSubscribedUsers', $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("User", $row);
+                $ret[] = \ModelFactory::buildModel("User", $row);
             }
         }
         return $ret;
@@ -558,12 +554,12 @@ class TaskDao
         }
         $task_file_info = self::getTaskFileInfo($taskId, $version);
         if (empty($task_file_info)) {
-            throw new Exception("Task file info not set for.");
+            throw new \Exception("Task file info not set for.");
         }
 
-        $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
+        $absolute_file_path = Lib\Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
         $file_content_type = $task_file_info['content-type'];
-        IO::downloadFile($absolute_file_path, $file_content_type);
+        Lib\IO::downloadFile($absolute_file_path, $file_content_type);
     }
     
     public static function downloadConvertedTask($taskId, $version = 0)
@@ -578,40 +574,40 @@ class TaskDao
         $task_file_info = self::getTaskFileInfo($taskID, $version);
 
         if (empty($task_file_info)) {
-            throw new Exception("Task file info not set for.");
+            throw new \Exception("Task file info not set for.");
         }
 
-        $absolute_file_path = Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
+        $absolute_file_path = Lib\Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
         $file_content_type = $task_file_info['content-type'];
-        IO::downloadConvertedFile($absolute_file_path, $file_content_type, $taskID);
+        Lib\IO::downloadConvertedFile($absolute_file_path, $file_content_type, $taskID);
     }
     
     public static function getUserClaimedTask($taskId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanse($taskId);
-        if ($result = PDOWrapper::call('getUserClaimedTask', $args)) {
-            $ret = ModelFactory::buildModel("User", $result[0]);
+        $args = Lib\PDOWrapper::cleanse($taskId);
+        if ($result = Lib\PDOWrapper::call('getUserClaimedTask', $args)) {
+            $ret = \ModelFactory::buildModel("User", $result[0]);
         }
         return $ret;
     }
     
     public static function checkTaskFileVersion($taskId, $userId = null)
     {
-        $args = PDOWrapper::cleanse($taskId)
-                .",".PDOWrapper::cleanseNull($userId);
-        $result = PDOWrapper::call("getLatestFileVersion", $args);
+        $args = Lib\PDOWrapper::cleanse($taskId).", ".
+            Lib\PDOWrapper::cleanseNull($userId);
+        $result = Lib\PDOWrapper::call("getLatestFileVersion", $args);
         return $result[0]['latest_version'] > 0;
     }
     
     public static function recordFileUpload($taskId, $filename, $content_type, $userId, $version = null)
     {
-        $args = PDOWrapper::cleanseNull($taskId)
-                .",".PDOWrapper::cleanseWrapStr($filename)
-                .",".PDOWrapper::cleanseWrapStr($content_type)
-                .",".PDOWrapper::cleanseNull($userId)
-                .','.PDOWrapper::cleanseNull($version);
-        if ($result = PDOWrapper::call("recordFileUpload", $args)) {
+        $args = Lib\PDOWrapper::cleanseNull($taskId).", ".
+            Lib\PDOWrapper::cleanseWrapStr($filename).", ".
+            Lib\PDOWrapper::cleanseWrapStr($content_type).", ".
+            Lib\PDOWrapper::cleanseNull($userId).', '.
+            Lib\PDOWrapper::cleanseNull($version);
+        if ($result = Lib\PDOWrapper::call("recordFileUpload", $args)) {
             return $result[0]['version'];
         } else {
             return null;
@@ -621,10 +617,9 @@ class TaskDao
     public static function getTaskFileInfo($taskId, $version = 0)
     {
         $ret = false;
-        $args = PDOWrapper::cleanse($taskId)
-                .",".PDOWrapper::cleanse($version)
-                .",null, null, null, null";
-        if ($r = PDOWrapper::call("getTaskFileMetaData", $args)) {
+        $args = Lib\PDOWrapper::cleanse($taskId).", ".
+            Lib\PDOWrapper::cleanse($version).", null, null, null, null";
+        if ($r = Lib\PDOWrapper::call("getTaskFileMetaData", $args)) {
             $file_info = array();
             foreach ($r[0] as $key => $value) {
                 if (!is_numeric($key)) {
@@ -638,10 +633,9 @@ class TaskDao
     
     public static function getFilename($taskId, $version)
     {
-        $args = PDOWrapper::cleanse($taskId)
-                .",".PDOWrapper::cleanse($version)
-                .",null, null, null, null";
-        if ($r = PDOWrapper::call("getTaskFileMetaData", $args)) {
+        $args = Lib\PDOWrapper::cleanse($taskId).", ".
+            Lib\PDOWrapper::cleanse($version).", null, null, null, null";
+        if ($r = Lib\PDOWrapper::call("getTaskFileMetaData", $args)) {
             return $r[0]['filename'];
         } else {
             return null;
@@ -650,10 +644,10 @@ class TaskDao
 
     public static function getLatestFileVersion($taskId, $userId = null)
     {
-        $args = PDOWrapper::cleanse($taskId)
-                .",".PDOWrapper::cleanseNull($userId);
+        $args = Lib\PDOWrapper::cleanse($taskId).",".
+            Lib\PDOWrapper::cleanseNull($userId);
         $ret = null;
-        if ($result = PDOWrapper::call("getLatestFileVersion", $args)) {
+        if ($result = Lib\PDOWrapper::call("getLatestFileVersion", $args)) {
             if (is_numeric($result[0]['latest_version'])) {
                 $ret = intval($result[0]['latest_version']);
             }
@@ -665,26 +659,26 @@ class TaskDao
     {
         $success = null;
         if ($convert) {
-            $success = Upload::apiSaveFile(
+            $success = Lib\Upload::apiSaveFile(
                 $task,
                 $userId,
-                FormatConverter::convertFromXliff($file),
+                Lib\FormatConverter::convertFromXliff($file),
                 $filename,
                 $version
             );
         } else {
             //touch this and you will die painfully sinisterly sean :)
-            $success = Upload::apiSaveFile($task, $userId, $file, $filename, $version);
+            $success = Lib\Upload::apiSaveFile($task, $userId, $file, $filename, $version);
         }
         if (!$success) {
-            throw new SolasMatchException("Failed to write file data.", HttpStatusEnum::INTERNAL_SERVER_ERROR);
+            throw new \SolasMatchException("Failed to write file data.", \HttpStatusEnum::INTERNAL_SERVER_ERROR);
         }
     }
     
     public static function uploadOutputFile($task, $convert, &$file, $userId, $filename)
     {
         self::uploadFile($task, $convert, $file, null, $userId, $filename);
-        $graphBuilder = new APIWorkflowBuilder();
+        $graphBuilder = new Lib\APIWorkflowBuilder();
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
         if ($graph) {
             $index = $graphBuilder->find($task->getId(), $graph);
@@ -700,8 +694,8 @@ class TaskDao
     public static function getClaimedTime($taskId)
     {
         $ret = null;
-        $args = PDOWrapper::cleanse($taskId);
-        if ($result = PDOWrapper::call('getTaskClaimedTime', $args)) {
+        $args = Lib\PDOWrapper::cleanse($taskId);
+        if ($result = Lib\PDOWrapper::call('getTaskClaimedTime', $args)) {
             $ret = $result[0]['result'];
         }
         return $ret;

@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\API\Lib;
+
 /**
  * Description of PDOWrapper
  *
@@ -29,10 +31,10 @@ class PDOWrapper
         // Set up the connection
         $this->logging = (strlen($this->logfile)>0) ? true : false;
         if ($this->logging) {
-            $this->logfile = Settings::get('database.log_file'); // full path to debug logfile. Use only in debug mode!
+            $this->logfile = \Settings::get('database.log_file'); // full path to debug logfile. Use only in debug mode!
         }
-        $this->show_errors = (Settings::get('database.show_errors') == 'y') ? true : false;
-        $this->show_sql = (Settings::get('database.show_sql') == 'y') ? true : false;
+        $this->show_errors = (\Settings::get('database.show_errors') == 'y') ? true : false;
+        $this->show_sql = (\Settings::get('database.show_sql') == 'y') ? true : false;
         $this->init();
     }
 
@@ -69,25 +71,25 @@ class PDOWrapper
     {
         $conn = false;
         $ret = false;
-        $dbName = self::$unitTesting ? Settings::get('unit_test.database') : Settings::get('database.database');
-        $server = self::$unitTesting ? Settings::get('unit_test.server') : Settings::get('database.server');
-        $server_port = self::$unitTesting ? Settings::get('unit_test.port') : Settings::get('database.server_port');
-        $username = self::$unitTesting ? Settings::get('unit_test.username') : Settings::get('database.username');
-        $password = self::$unitTesting ? Settings::get('unit_test.password') : Settings::get('database.password');
+        $dbName = self::$unitTesting ? \Settings::get('unit_test.database') : \Settings::get('database.database');
+        $server = self::$unitTesting ? \Settings::get('unit_test.server') : \Settings::get('database.server');
+        $server_port = self::$unitTesting ? \Settings::get('unit_test.port') : \Settings::get('database.server_port');
+        $username = self::$unitTesting ? \Settings::get('unit_test.username') : \Settings::get('database.username');
+        $password = self::$unitTesting ? \Settings::get('unit_test.password') : \Settings::get('database.password');
         
         if ($this->use_permanent_connection) {
-            $conn = new PDO(
+            $conn = new \PDO(
                 "mysql:host=$server;dbname=$dbName;port=$server_port",
                 $username,
                 $password,
-                array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", PDO::ATTR_PERSISTENT => true)
+                array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", \PDO::ATTR_PERSISTENT => true)
             );
         } else {
-             $conn = new PDO(
+             $conn = new \PDO(
                  "mysql:host=$server;dbname=$dbName;port=$server_port",
                  $username,
                  $password,
-                 array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+                 array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
              );
         }
         

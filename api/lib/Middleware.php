@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\API\Lib;
+
+use \SolasMatch\API\DAO as DAO;
+
 require_once __DIR__."/../DataAccessObjects/AdminDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../DataAccessObjects/OrganisationDao.class.php";
@@ -10,11 +14,11 @@ class Middleware
 
     public static function isloggedIn ()
     {
-        if (!is_null(UserDao::getLoggedInUser())) {
+        if (!is_null(DAO\UserDao::getLoggedInUser())) {
             return true;
         } else {
-            Dispatcher::getDispatcher()->halt(
-                HttpStatusEnum::FORBIDDEN,
+            \Dispatcher::getDispatcher()->halt(
+                \HttpStatusEnum::FORBIDDEN,
                 "The Autherization header does not match the current user or ".
                 "the user does not have permission to acess the current resource"
             );
@@ -26,23 +30,23 @@ class Middleware
         $params = $route->getParams();
         if (isset($params['email']) && isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])) {
             $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
-            $email =$params['email'];
+            $email = $params['email'];
             if (!is_numeric($email) && strstr($email, '.')) {
                 $temp = array();
                 $temp = explode('.', $email);
                 $lastIndex = sizeof($temp)-1;
                 if ($lastIndex > 1) {
-                    $format='.'.$temp[$lastIndex];
+                    $format = '.'.$temp[$lastIndex];
                     $email = $temp[0];
                     for ($i = 1; $i < $lastIndex; $i++) {
                         $email = "{$email}.{$temp[$i]}";
                     }
                 }
             }
-            $openidHash = md5($email.substr(Settings::get("session.site_key"), 0, 20));
-            if ($headerHash!=$openidHash) {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+            $openidHash = md5($email.substr(\Settings::get("session.site_key"), 0, 20));
+            if ($headerHash != $openidHash) {
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -55,20 +59,20 @@ class Middleware
     public static function authUserOwnsResource(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
             $params = $route->getParams();
-            $userId=$params['userId'];
+            $userId = $params['userId'];
             if (!is_numeric($userId) && strstr($userId, '.')) {
                 $userId = explode('.', $userId);
                 $format = '.'.$userId[1];
                 $userId = $userId[0];
             }
-            if ($userId!=$user->getId()) {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+            if ($userId != $user->getId()) {
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -82,7 +86,7 @@ class Middleware
     public static function authUserOrOrgForTaskCreation(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -93,31 +97,31 @@ class Middleware
 			$req = $app->request;
             $task = $req->getBody();
             $format = $params['format'];
-            $client = new APIHelper($format);
+            $client = new \APIHelper($format);
             $task = $client->deserialize($task, "Task");
             $projectId = $task->getProjectId();
             
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
+                $projects = DAO\ProjectDao::getProject($projectId);
                 $project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
             
-            if (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
+            if (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             }
             /*
              * In the case that a general user is uploading a segmentation task
              * the following will authorise that the user has claimed a segmentation task on this project
              */
-            $hasUserSegmentationTask = TaskDao::hasUserClaimedSegmentationTask($userId, $projectId);
+            $hasUserSegmentationTask = DAO\TaskDao::hasUserClaimedSegmentationTask($userId, $projectId);
             
             if ($hasUserSegmentationTask) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -132,14 +136,14 @@ class Middleware
     public static function authUserOrOrgForTaskCreationPassingTaskId(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
             $userId = $user->getId();
             $params = $route->getParams();
             
-            $taskId=$params['taskId'];
+            $taskId = $params['taskId'];
             if (!is_numeric($taskId) && strstr($taskId, '.')) {
                 $taskId = explode('.', $taskId);
                 $format = '.'.$taskId[1];
@@ -147,17 +151,17 @@ class Middleware
             } 
             $task = null;
             if ($taskId != null) {
-                $tasks = TaskDao::getTask($taskId);
+                $tasks = DAO\TaskDao::getTask($taskId);
                 $task = $tasks[0];
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
+                $projects = DAO\ProjectDao::getProject($projectId);
                 $project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
-            if (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
+            if (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             }
             
@@ -165,13 +169,13 @@ class Middleware
              * In the case that a general user is uploading a segmentation task
              * the following will authorise that the user has claimed a segmentation task on this project
              */
-            $hasUserSegmentationTask = TaskDao::hasUserClaimedSegmentationTask($userId, $projectId);
+            $hasUserSegmentationTask = DAO\TaskDao::hasUserClaimedSegmentationTask($userId, $projectId);
             
             if ($hasUserSegmentationTask) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -179,13 +183,13 @@ class Middleware
     }
     
     /*
-<    * Does the user Id match the Id of the resources owner
+     * Does the user Id match the Id of the resources owner
      * Or is it matching the Id of the organisations admin
      */
     public static function authUserOrAdminForOrg(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -204,11 +208,11 @@ class Middleware
                 $orgId = $orgId[0];
             }
             
-            if ($userId=$user->getId() || AdminDao::isAdmin($userId, $orgId)) {
+            if ($userId=$user->getId() || DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -217,24 +221,24 @@ class Middleware
     
     public static function notFound()
     {
-        Dispatcher::getDispatcher()->redirect(Dispatcher::getDispatcher()->urlFor('getLoginTemplate'));
+        \Dispatcher::getDispatcher()->redirect(\Dispatcher::getDispatcher()->urlFor('notFound'));
     }
     
     private static function isSiteAdmin($userId)
     {
-        return AdminDao::isAdmin($userId, null);
+        return DAO\AdminDao::isAdmin($userId, null);
     }
 
     // Is the user a site admin
     public static function authenticateSiteAdmin()
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             } else {
-                 Dispatcher::getDispatcher()->halt(
-                     HttpStatusEnum::FORBIDDEN,
+                 \Dispatcher::getDispatcher()->halt(
+                     \HttpStatusEnum::FORBIDDEN,
                      "The user does not have permission to acess the current resource"
                  );
             }
@@ -245,17 +249,17 @@ class Middleware
     public static function authenticateUserMembership()
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
             $userId = $user->getId();
-            $userOrgList = UserDao::findOrganisationsUserBelongsTo($userId);
+            $userOrgList = DAO\UserDao::findOrganisationsUserBelongsTo($userId);
             if ($userOrgList != null && count($userOrgList) > 0) {
                 return true;
             } else {
-                 Dispatcher::getDispatcher()->halt(
-                     HttpStatusEnum::FORBIDDEN,
+                 \Dispatcher::getDispatcher()->halt(
+                     \HttpStatusEnum::FORBIDDEN,
                      "The user does not have permission to acess the current resource"
                  );
             }
@@ -266,7 +270,7 @@ class Middleware
     public static function authenticateOrgAdmin(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -281,11 +285,11 @@ class Middleware
                     $orgId = $orgId[0];
                 }
             }
-            if ($orgId != null && AdminDao::isAdmin($userId, $orgId)) {
+            if ($orgId != null && DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -296,7 +300,7 @@ class Middleware
     public static function authenticateOrgMember(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -311,11 +315,11 @@ class Middleware
                     $orgId = $orgId[0];
                 }
             }
-            if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
+            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -326,7 +330,7 @@ class Middleware
     public static function authenticateUserForOrgProject(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -344,16 +348,16 @@ class Middleware
             }
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
+                $projects = DAO\ProjectDao::getProject($projectId);
                 $project = $projects[0];
             }
             
             $orgId = $project->getOrganisationId();
-            if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
+            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -364,7 +368,7 @@ class Middleware
     public static function authenticateUserForOrgTask(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -383,22 +387,22 @@ class Middleware
             
             $task = null;
             if ($taskId != null) {
-                $tasks = TaskDao::getTask($taskId);
+                $tasks = DAO\TaskDao::getTask($taskId);
                 $task = $tasks[0];
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
+                $projects = DAO\ProjectDao::getProject($projectId);
                 $project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
             
-            if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
+            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -410,7 +414,7 @@ class Middleware
     public static function authUserOrOrgForTask(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -431,13 +435,13 @@ class Middleware
             
             $task = null;
             if ($taskId != null) {
-                $tasks = TaskDao::getTask($taskId);
+                $tasks = DAO\TaskDao::getTask($taskId);
                 $task = $tasks[0];
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
+                $projects = DAO\ProjectDao::getProject($projectId);
                 $project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
@@ -445,11 +449,11 @@ class Middleware
             if ($userId == $user->getId()) {
                 return true;
             } elseif ($orgId != null &&
-                    (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
+                    (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -460,7 +464,7 @@ class Middleware
     public static function authUserForClaimedTask(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -473,12 +477,12 @@ class Middleware
                 $taskId = $taskId[0];
             }
             
-            $hasTask = TaskDao::hasUserClaimedTask($userId, $taskId);
+            $hasTask = DAO\TaskDao::hasUserClaimedTask($userId, $taskId);
             if ($hasTask) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -489,7 +493,7 @@ class Middleware
     public static function authUserOrOrgForClaimedTask(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -504,23 +508,23 @@ class Middleware
             
             $task = null;
             if ($taskId != null) {
-                $tasks = TaskDao::getTask($taskId);
+                $tasks = DAO\TaskDao::getTask($taskId);
                 $task = $tasks[0];
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
+                $projects = DAO\ProjectDao::getProject($projectId);
                 $project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
-            $hasTask = TaskDao::hasUserClaimedTask($userId, $taskId);
+            $hasTask = DAO\TaskDao::hasUserClaimedTask($userId, $taskId);
             
-            if ($hasTask || OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
+            if ($hasTask || DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -532,7 +536,7 @@ class Middleware
     public static function authenticateUserToSubmitReview(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -541,7 +545,7 @@ class Middleware
             $params = $route->getParams();
             
             $format = $params['format'];
-            $client = new APIHelper($format);
+            $client = new \APIHelper($format);
             $app = \Slim\Slim::getInstance();			
 			$req = $app->request;
 			$review = $req->getBody();
@@ -554,15 +558,15 @@ class Middleware
              * accessable through the UI for all cases
              */
             if (!is_null($review->getTaskId())) {
-                $nextTasks = TaskDao::getTasksFromPreReq($review->getTaskId(), $review->getProjectId());
+                $nextTasks = DAO\TaskDao::getTasksFromPreReq($review->getTaskId(), $review->getProjectId());
                 
                 foreach ($nextTasks as $nextTask) {
-                    if (!is_null($nextTask) && TaskDao::hasUserClaimedTask($userId, $nextTask->getId())) {
+                    if (!is_null($nextTask) && DAO\TaskDao::hasUserClaimedTask($userId, $nextTask->getId())) {
                         $hasFollowupTask = true;
                     }
                 }
             } else {
-                $userTasks = TaskDao::getUserTasks($userId);
+                $userTasks = DAO\TaskDao::getUserTasks($userId);
 
                 foreach ($userTasks as $task) {
                     if ($task->getProjectId() == $review->getProjectId()) {
@@ -572,16 +576,16 @@ class Middleware
             }
             
             if ($review->getProjectId() != null) {
-                $projects = ProjectDao::getProject($review->getProjectId());
+                $projects = DAO\ProjectDao::getProject($review->getProjectId());
                 $project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
             
-            if ($hasFollowupTask || OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
+            if ($hasFollowupTask || DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -592,7 +596,7 @@ class Middleware
     public static function authenticateUserOrOrgForProjectTask(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -608,11 +612,11 @@ class Middleware
                     $projectId = $projectId[0];
                 }
             }
-            $tasks = ProjectDao::getProjectTasks($projectId);
+            $tasks = DAO\ProjectDao::getProjectTasks($projectId);
             $hasTask = false;
             if (!is_null($tasks)) {
                 foreach ($tasks as $taskObject) {
-                    if (TaskDao::hasUserClaimedTask($userId, $taskObject->getId())) {
+                    if (DAO\TaskDao::hasUserClaimedTask($userId, $taskObject->getId())) {
                         $hasTask = true;
                     }
                 }
@@ -620,17 +624,17 @@ class Middleware
                         
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
+                $projects = DAO\ProjectDao::getProject($projectId);
                 $project = $projects[0];
             }
             
             $orgId = $project->getOrganisationId();
             if ($hasTask || ($orgId != null &&
-                        (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)))) {
+                        (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)))) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -641,7 +645,7 @@ class Middleware
     public static function authenticateUserForOrgBadge(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -660,7 +664,7 @@ class Middleware
             
             $badge = null;
             if ($badgeId != null) {
-                $badges = BadgeDao::getBadge($badgeId);
+                $badges = DAO\BadgeDao::getBadge($badgeId);
                 $badge = $badges[0];
             }
             $orgId = $badge->getOwnerId();
@@ -668,13 +672,13 @@ class Middleware
             // cases where the orgId is null signify a system badge
             // badge ids 6, 7 and 8 refer to the user controlled system badges
             // maybe we could move them to a class as consts or a function
-            if ($orgId != null && (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
+            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } elseif ($orgId == null && in_array($badgeId, array(6, 7, 8))) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -686,7 +690,7 @@ class Middleware
     public static function authenticateUserOrOrgForOrgBadge(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -711,7 +715,7 @@ class Middleware
             
             $badge = null;
             if ($badgeId != null) {
-                $badges = BadgeDao::getBadge($badgeId);
+                $badges = DAO\BadgeDao::getBadge($badgeId);
                 $badge = $badges[0];
             }
             
@@ -720,7 +724,7 @@ class Middleware
             if ($userId == $user->getId()) {
                 return true;
             } elseif ($orgId != null &&
-                    (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId))) {
+                    (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 /*
                  * currently this checks if the orgId is not Null
                  * cases where the orgId is null signify a system badge
@@ -728,8 +732,8 @@ class Middleware
                  */
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -740,7 +744,7 @@ class Middleware
     public static function authenticateUserHasBadge(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -756,11 +760,11 @@ class Middleware
                     $badgeId = $badgeId[0];
                 }
             }
-            if ($badgeId != null && BadgeDao::validateUserBadge($userId, $badgeId)) {
+            if ($badgeId != null && DAO\BadgeDao::validateUserBadge($userId, $badgeId)) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -774,7 +778,7 @@ class Middleware
     public static function authenticateTaskNotClaimed(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
-            $user = UserDao::getLoggedInUser();
+            $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
@@ -783,13 +787,13 @@ class Middleware
 			$req = $app->request;
             $task = $req->getBody();
             $format = $params['format'];
-            $client = new APIHelper($format);
+            $client = new \APIHelper($format);
             $task = $client->deserialize($task, "Task");
             
             $taskId = $task->getId();
          
             $TaskIsUnclaimed = false;
-            $possibleUser = TaskDao::getUserClaimedTask($taskId);
+            $possibleUser = DAO\TaskDao::getUserClaimedTask($taskId);
             if (is_null($possibleUser)) {
                 $TaskIsUnclaimed = true;
             }
@@ -797,8 +801,8 @@ class Middleware
             if ($TaskIsUnclaimed) {
                 return true;
             } else {
-                Dispatcher::getDispatcher()->halt(
-                    HttpStatusEnum::FORBIDDEN,
+                \Dispatcher::getDispatcher()->halt(
+                    \HttpStatusEnum::FORBIDDEN,
                     "Unable to claim task. This Task has been claimed by another user"
                 );
             }

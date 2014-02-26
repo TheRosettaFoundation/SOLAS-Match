@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\API\Lib;
+
+use \SolasMatch\API\DAO as DAO;
+
 require_once __DIR__."/../../Common/TaskStatusEnum.php";
 require_once __DIR__."/../../Common/TaskTypeEnum.php";
 require_once __DIR__."/Notify.class.php";
@@ -43,19 +47,19 @@ class Upload
     {
         if (self::isPostTooLarge()) {
             $max_file_size = ini_get('post_max_size');
-            throw new Exception(
+            throw new \Exception(
                 'Sorry, the file you tried uploading is too large. The max file size is '.
                 $max_file_size.'. Please consider saving the file in multiple smaller parts for upload.'
             );
         }
 
         if (!self::isUploadedFile($field_name)) {
-            throw new Exception('You did not upload a file. Please try again.');
+            throw new \Exception('You did not upload a file. Please try again.');
         }
 
         if (!self::isUploadedWithoutError($field_name)) {
             $error_message = self::fileUploadErrorMessage($_FILES[$form_file_field]['error']);
-            throw new Exception('Sorry, we were not able to upload your file. Error: ' . $error_message);
+            throw new \Exception('Sorry, we were not able to upload your file. Error: ' . $error_message);
         }
     }
 
@@ -105,19 +109,19 @@ class Upload
     public static function apiSaveFile($task, $user_id, $file, $filename, $version = null)
     {
         $taskFileMime = IO::detectMimeType($file, $filename);
-        $projectFileInfo = ProjectDao::getProjectFileInfo($task->getProjectId());
+        $projectFileInfo = DAO\ProjectDao::getProjectFileInfo($task->getProjectId());
         $projectFileMime = $projectFileInfo->getMime();
         
         if ($taskFileMime != $projectFileMime) {
-            throw new SolasMatchException("Invalid file content.", HttpStatusEnum::BAD_REQUEST);
+            throw new \SolasMatchException("Invalid file content.", \HttpStatusEnum::BAD_REQUEST);
         }
        
         if (is_null($version)) {
-            $version = TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id);
+            $version = DAO\TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id);
         } else {
-            $version = TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id, $version);
+            $version = DAO\TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id, $version);
         }
-        $upload_folder     = self::absoluteFolderPathForUpload($task, $version);
+        $upload_folder = self::absoluteFolderPathForUpload($task, $version);
         if (!self::folderPathForUploadExists($task, $version)) {
             self::createFolderForUpload($task, $version);
         }
@@ -139,7 +143,7 @@ class Upload
          * an array of multiple files.
          */
         if ($_FILES[$form_file_field]['error'] == UPLOAD_ERR_FORM_SIZE) {
-            throw new Exception(
+            throw new \Exception(
                 'Sorry, the file you tried uploading is too large. Please choose a smaller file, '.
                 'or break the file into sub-parts.'
             );
@@ -147,7 +151,7 @@ class Upload
 
         $file_name 	= $_FILES[$form_file_field]['name'];
         $file_tmp_name 	= $_FILES[$form_file_field]['tmp_name'];
-        $version 	= TaskDao::recordFileUpload($task->getId(), $file_name, $_FILES[$form_file_field]['type'], $user_id);
+        $version 	= DAO\TaskDao::recordFileUpload($task->getId(), $file_name, $_FILES[$form_file_field]['type'], $user_id);
         $version        = $version[0]['version'];
         $upload_folder 	= self::absoluteFolderPathForUpload($task, $version);
 
@@ -179,7 +183,7 @@ class Upload
 
         $destination_path = self::absoluteFilePathForUpload($task, $version, $file_name);
         if (move_uploaded_file($file_tmp_name, $destination_path) == false) {
-            throw new Exception('Could not save uploaded file.');
+            throw new \Exception('Could not save uploaded file.');
         }
     }
 
@@ -197,7 +201,7 @@ class Upload
         if (self::folderPathForUploadExists($task, $version)) {
             return true;
         } else {
-            throw new Exception('Could not create the folder for the file upload. Check permissions.');
+            throw new \Exception('Could not create the folder for the file upload. Check permissions.');
         }
     }
 
@@ -210,15 +214,15 @@ class Upload
     public static function absoluteFolderPathForUpload($task, $version)
     {
         if (!is_numeric($version) || $version < 0) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 "Cannot give an upload folder path as the version number was not specified.version = $version"
             );
         }
 
-        $uploads_folder     = Settings::get('files.upload_path');
-        $project_folder     = 'proj-' . $task->getProjectId();
-        $task_folder        = 'task-' . $task->getId();
-        $version_folder     = 'v-' . $version;
+        $uploads_folder = \Settings::get('files.upload_path');
+        $project_folder = 'proj-' . $task->getProjectId();
+        $task_folder = 'task-' . $task->getId();
+        $version_folder = 'v-' . $version;
 
         return $uploads_folder.$project_folder.DIRECTORY_SEPARATOR.
                 $task_folder.DIRECTORY_SEPARATOR.$version_folder;
@@ -226,7 +230,7 @@ class Upload
     
     public static function addTaskPreReq($id, $preReqId)
     {
-        $taskDao = new TaskDao();
+        $taskDao = new DAO\TaskDao();
         $builder = new APIWorkflowBuilder();
         $currentTask =  $taskDao->getTask($id);
         $projectId = $currentTask[0]->getProjectId();
@@ -243,12 +247,12 @@ class Upload
                 $preReqTask = $taskDao->getTask($preReqId);
                 $taskDao->addTaskPreReq($id, $preReqId);
 
-                if ($task->getTaskType() != TaskTypeEnum::DESEGMENTATION) {
+                if ($task->getTaskType() != \TaskTypeEnum::DESEGMENTATION) {
                     foreach ($currentTaskNode->getPreviousList() as $nodeId) {
                         $preReq = $taskDao->getTask($nodeId);
                         $preReq = $preReq[0];
-                        if ($preReq->getTaskStatus() == TaskStatusEnum::COMPLETE
-                                && $preReq->getTaskType() != TaskTypeEnum::SEGMENTATION) {
+                        if ($preReq->getTaskStatus() == \TaskStatusEnum::COMPLETE
+                                && $preReq->getTaskType() != \TaskTypeEnum::SEGMENTATION) {
                             Upload::copyOutputFile($id, $preReqId);
                         }
                     }
@@ -259,7 +263,7 @@ class Upload
     
     public static function removeTaskPreReq($id, $preReqId)
     {
-        $taskDao = new TaskDao();
+        $taskDao = new DAO\TaskDao();
         $task = $taskDao->getTask($id);
         $task = $task[0];
         $taskDao->removeTaskPreReq($id, $preReqId);
@@ -267,18 +271,18 @@ class Upload
         
         if (is_array($taskPreReqs) && count($taskPreReqs > 0)) {
             foreach ($taskPreReqs as $taskPreReq) {
-                if ($taskPreReq->getTaskStatus() == TaskStatusEnum::COMPLETE) {
+                if ($taskPreReq->getTaskStatus() == \TaskStatusEnum::COMPLETE) {
                     Upload::copyOutputFile($id, $taskPreReq->getId());
                 }
             }
         } else {
-            $projectDao = new ProjectDao();
+            $projectDao = new DAO\ProjectDao();
             $projectId = $task->getProjectId();
             $projectFile = $projectDao->getProjectFile($projectId);
             $projectFileInfo = $projectDao->getProjectFileInfo($projectId, null, null, null, null);
 
             file_put_contents(
-                Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFileName()}",
+                \Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFileName()}",
                 $projectFile
             );
         }
@@ -286,20 +290,20 @@ class Upload
     
     private static function copyOutputFile($id, $preReqId)
     {
-        $taskDao = new TaskDao();
+        $taskDao = new DAO\TaskDao();
         $task = $taskDao->getTask($id);
         $task = $task[0];
         
         $preReqTask = $taskDao->getTask($preReqId);
         $preReqTask = $preReqTask[0];
         
-        $preReqlatestFileVersion = TaskDao::getLatestFileVersion($preReqId);
-        $preReqFileName = TaskDao::getFilename($preReqId, $preReqlatestFileVersion);
+        $preReqlatestFileVersion = DAO\TaskDao::getLatestFileVersion($preReqId);
+        $preReqFileName = DAO\TaskDao::getFilename($preReqId, $preReqlatestFileVersion);
         $projectId= $task->getProjectId();
         file_put_contents(
-            Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName",
+            \Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName",
             file_get_contents(
-                Settings::get("files.upload_path").
+                \Settings::get("files.upload_path").
                 "proj-$projectId/task-$preReqId/v-$preReqlatestFileVersion/$preReqFileName"
             )
         );

@@ -1,5 +1,10 @@
 <?php
 
+namespace SolasMatch\API\V0;
+
+use \SolasMatch\API\DAO as DAO;
+use \SolasMatch\API as API;
+
 /**
  * Description of Tags
  *
@@ -12,38 +17,38 @@ class Tags
 {
     public static function init()
     {
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/tags(:format)/',
             function ($format = ".json") {
-                $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 20);
-                $topTags = Dispatcher::clenseArgs('topTags', HttpMethodEnum::GET, false);
+                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, 20);
+                $topTags = API\Dispatcher::clenseArgs('topTags', \HttpMethodEnum::GET, false);
                 if ($topTags) {
-                    Dispatcher::sendResponce(null, TagsDao::getTopTags($limit), null, $format);
+                    API\Dispatcher::sendResponse(null, DAO\TagsDao::getTopTags($limit), null, $format);
                 } else {
-                    Dispatcher::sendResponce(null, TagsDao::getTag(null, null, $limit), null, $format);
+                    API\Dispatcher::sendResponse(null, DAO\TagsDao::getTag(null, null, $limit), null, $format);
                 }
             },
             'getTags',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/tags(:format)/',
             function ($format = ".json") {
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data=$client->deserialize($data, "Tag");
                 $data->setId(null);
-                Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\TagsDao::save($data), null, $format);
             },
             'createTag',
-            'Middleware::authenticateUserForOrgTask'
+            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/tags/getByLabel/:tagLabel/',
             function ($tagLabel, $format = ".json") {
                 if (!is_numeric($tagLabel) && strstr($tagLabel, '.')) {
@@ -58,18 +63,18 @@ class Tags
                         }
                     }
                 }
-                $data = TagsDao::getTag(null, $label);
+                $data = DAO\TagsDao::getTag(null, $label);
                 if (is_array($data)) {
                     $data = $data[0];
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getTagByLabel',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/tags/search/:tagName/',
             function ($tagName, $format = '.json') {
                 if (!is_numeric($tagName) && strstr($tagName, '.')) {
@@ -84,27 +89,27 @@ class Tags
                         }
                     }
                 }
-                $ret = TagsDao::searchForTag($tagName);
-                Dispatcher::sendResponce(null, $ret, null, $format);
+                $ret = DAO\TagsDao::searchForTag($tagName);
+                API\Dispatcher::sendResponse(null, $ret, null, $format);
             },
             'searchForTag',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/tags/topTags(:format)/',
             function ($format = ".json") {
-                $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 30);
-                $data= TagsDao::getTopTags($limit);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, 30);
+                $data= DAO\TagsDao::getTopTags($limit);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getTopTags',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/tags/:tagId/',
             function ($tagId, $format = ".json") {
                 if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -112,18 +117,18 @@ class Tags
                     $format = '.'.$tagId[1];
                     $tagId = $tagId[0];
                 }
-                $data = TagsDao::getTag($tagId);
+                $data = DAO\TagsDao::getTag($tagId);
                 if (is_array($data)) {
                     $data = $data[0];
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getTag',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/tags/:tagId/',
             function ($tagId, $format = ".json") {
                 if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -131,16 +136,16 @@ class Tags
                     $format = '.'.$tagId[1];
                     $tagId = $tagId[0];
                 }
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, "Tag");
-                Dispatcher::sendResponce(null, TagsDao::save($data), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\TagsDao::save($data), null, $format);
             },
             'updateTag'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/tags/:tagId/',
             function ($tagId, $format = ".json") {
                 if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -148,18 +153,18 @@ class Tags
                     $format = '.'.$tagId[1];
                     $tagId = $tagId[0];
                 }
-                Dispatcher::sendResponce(null, TagsDao::delete($tagId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\TagsDao::delete($tagId), null, $format);
             },
             'deleteTag',
-            'Middleware::authenticateSiteAdmin'
+            '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/tags/:tagId/tasks(:format)/',
             function ($tagId, $format = ".json") {
-                $limit = Dispatcher::clenseArgs('limit', HttpMethodEnum::GET, 5);
-                Dispatcher::sendResponce(null, TaskDao::getTasksWithTag($tagId, $limit), null, $format);
+                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, 5);
+                API\Dispatcher::sendResponse(null, DAO\TaskDao::getTasksWithTag($tagId, $limit), null, $format);
             },
             'getTaskForTag'
         );

@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\API\Lib;
+
 /**
  * Input/Output including parsing input, and formatting output for URLs.
  */
@@ -161,7 +163,7 @@ class IO {
             ,"xlf"  => "application/xliff+xml"
         );
         
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->buffer($file);
         
         $extension = explode(".", $filename);

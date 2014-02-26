@@ -1,7 +1,9 @@
 <?php
 
-use PhpAmqpLib\Connection\AMQPConnection;
-use PhpAmqpLib\Message\AMQPMessage;
+namespace SolasMatch\API\Lib;
+
+use \PhpAmqpLib\Connection\AMQPConnection;
+use \PhpAmqpLib\Message\AMQPMessage;
 
 class MessagingClient
 {
@@ -46,10 +48,10 @@ class MessagingClient
 
         try {
             $this->connection = new AMQPConnection(
-                Settings::get('messaging.host'),
-                Settings::get('messaging.port'),
-                settings::get('messaging.username'),
-                Settings::get('messaging.password')
+                \Settings::get('messaging.host'),
+                \Settings::get('messaging.port'),
+                \settings::get('messaging.username'),
+                \Settings::get('messaging.password')
             );
             if ($this->connection) {
                 $ret = true;

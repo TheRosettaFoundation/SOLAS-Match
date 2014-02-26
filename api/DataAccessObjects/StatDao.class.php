@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\API\DAO;
+
+use \SolasMatch\API\Lib as Lib;
+
 /**
  * Description of StatDao
  *
@@ -12,12 +16,12 @@ class StatDao
     public static function getStatistics($name)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNullOrWrapStr($name);
-        $result = PDOWrapper::call('getStatistics', $args);
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($name);
+        $result = Lib\PDOWrapper::call('getStatistics', $args);
         if ($result) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("Statistic", $row);
+                $ret[] = \ModelFactory::buildModel("Statistic", $row);
             }
         }
         return $ret;
@@ -25,61 +29,61 @@ class StatDao
     
     public static function updateArchivedProjects()
     {
-        PDOWrapper::call("statsUpdateArchivedProjects", "");
+        Lib\PDOWrapper::call("statsUpdateArchivedProjects", "");
     }
     
     public static function updateArchivedTasks()
     {
-        PDOWrapper::call("statsUpdateArchivedTasks", "");
+        Lib\PDOWrapper::call("statsUpdateArchivedTasks", "");
     }
     
     public static function updateBadges()
     {
-        PDOWrapper::call("statsUpdateBadges", "");
+        Lib\PDOWrapper::call("statsUpdateBadges", "");
     }
     
     public static function updateClaimedTasks()
     {
-        PDOWrapper::call("statsUpdateClaimedTasks", "");
+        Lib\PDOWrapper::call("statsUpdateClaimedTasks", "");
     }
     
     public static function updateOrganisations()
     {
-        PDOWrapper::call("statsUpdateOrganisations", "");
+        Lib\PDOWrapper::call("statsUpdateOrganisations", "");
     }
     
     public static function updateOrgMemberRequests()
     {
-        PDOWrapper::call("statsUpdateOrgMemberRequests", "");
+        Lib\PDOWrapper::call("statsUpdateOrgMemberRequests", "");
     }
     
     public static function updateProjects()
     {
-        PDOWrapper::call("statsUpdateProjects", "");
+        Lib\PDOWrapper::call("statsUpdateProjects", "");
     }
     
     public static function updateTags()
     {
-        PDOWrapper::call("statsUpdateTags", "");
+        Lib\PDOWrapper::call("statsUpdateTags", "");
     }
     
     public static function updateTasks()
     {
-        PDOWrapper::call("statsUpdateTasks", "");
+        Lib\PDOWrapper::call("statsUpdateTasks", "");
     }
     
     public static function updateTasksWithPreReqs()
     {
-        PDOWrapper::call("statsUpdateTasksWithPreReqs", "");
+        Lib\PDOWrapper::call("statsUpdateTasksWithPreReqs", "");
     }
     
     public static function updateUnclaimedTasks()
     {
-        PDOWrapper::call("statsUpdateUnclaimedTasks", "");
+        Lib\PDOWrapper::call("statsUpdateUnclaimedTasks", "");
     }
     
     public static function updateUsers()
     {
-        PDOWrapper::call("statsUpdateUsers", "");
+        Lib\PDOWrapper::call("statsUpdateUsers", "");
     }
 }

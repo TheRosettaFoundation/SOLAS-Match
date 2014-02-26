@@ -723,7 +723,7 @@ class OrgRouteHandler
         $app = \Slim\Slim::getInstance();
         $badgeDao = new DAO\BadgeDao();
 
-        if (isValidPost($app)) {
+        if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
             
             if ($post['title'] == "" || $post['description'] == "") {

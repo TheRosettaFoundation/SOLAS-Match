@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\API\Lib;
+
 include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/models/Language.php";
 require_once __DIR__."/../../Common/models/Country.php";
@@ -38,7 +40,7 @@ class Languages
             PDOWrapper::cleanseNullOrWrapStr($code).", ".
             PDOWrapper::cleanseNullOrWrapStr($name)
         );
-        return ModelFactory::buildModel("Language", $result[0]);
+        return \ModelFactory::buildModel("Language", $result[0]);
     }
 
     public static function getCountry($id, $code, $name)
@@ -49,14 +51,14 @@ class Languages
             PDOWrapper::cleanseNullOrWrapStr($code).", ".
             PDOWrapper::cleanseNullOrWrapStr($name)
         );
-        return ModelFactory::buildModel("Country", $result[0]);
+        return \ModelFactory::buildModel("Country", $result[0]);
     }
 
     public static function getLanguageList()
     {
         $languages = array();
         foreach (PDOWrapper::call("getLanguages", "") as $lcid) {
-            $languages[] = ModelFactory::buildModel("Language", $lcid);
+            $languages[] = \ModelFactory::buildModel("Language", $lcid);
         }
 
         return $languages;
@@ -68,7 +70,7 @@ class Languages
         if ($result = PDOWrapper::call("getActiveLanguages", "")) {
             $languages = array();
             foreach ($result as $row) {
-                $languages[] = ModelFactory::buildModel("Language", $row);
+                $languages[] = \ModelFactory::buildModel("Language", $row);
             }
         }
         return $languages;
@@ -80,7 +82,7 @@ class Languages
         if ($result = PDOWrapper::call("getActiveSourceLanguages", "")) {
             $languages = array();
             foreach ($result as $row) {
-                $languages[] = ModelFactory::buildModel("Language", $row);
+                $languages[] = \ModelFactory::buildModel("Language", $row);
             }
         }
         return $languages;
@@ -92,7 +94,7 @@ class Languages
         if ($result = PDOWrapper::call("getActiveTargetLanguages", "")) {
             $languages = array();
             foreach ($result as $row) {
-                $languages[] = ModelFactory::buildModel("Language", $row);
+                $languages[] = \ModelFactory::buildModel("Language", $row);
             }
         }
         return $languages;
@@ -102,7 +104,7 @@ class Languages
     {
         $countries = array();
         foreach (PDOWrapper::call("getCountries", "") as $lcid) {
-            $countries[] = ModelFactory::buildModel('Country', $lcid);
+            $countries[] = \ModelFactory::buildModel('Country', $lcid);
         }
         return $countries;
     }
@@ -125,7 +127,7 @@ class Languages
     public static function ensureLanguageIdIsValid($language_id)
     {
         if (!self::isValidLanguageId($language_id)) {
-            throw new InvalidArgumentException('A valid language id was expected.');
+            throw new \InvalidArgumentException('A valid language id was expected.');
         }
     }
 
@@ -133,7 +135,7 @@ class Languages
     {
         $language_id = self::languageIdFromName($language_name);
         if (is_null(($language_id))) {
-            throw new InvalidArgumentException('A valid language name was expected.');
+            throw new \InvalidArgumentException('A valid language name was expected.');
         }
         return $language_id;
     }

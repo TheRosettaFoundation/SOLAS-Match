@@ -1,5 +1,9 @@
 <?php
 
+namespace SolasMatch\API\Lib;
+
+use \SolasMatch\API\DAO as DAO;
+
 require_once __DIR__."/MessagingClient.class.php";
 require_once __DIR__."/../../Common/Settings.class.php";
 require_once __DIR__."/../vendor/autoload.php";
@@ -28,7 +32,7 @@ class Notify
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
-            $proto = new BannedLogin();
+            $proto = new \BannedLogin();
             $proto->setUserId($userId);
             $message = $messagingClient->createMessageFromProto($proto);
             $messagingClient->sendTopicMessage(
@@ -43,7 +47,7 @@ class Notify
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
-            $messageProto = new EmailVerification();
+            $messageProto = new \EmailVerification();
             $messageProto->setUserId($userId);
             $message = $messagingClient->createMessageFromProto($messageProto);
             $messagingClient->sendTopicMessage(
@@ -71,7 +75,7 @@ class Notify
     {
         $client = new MessagingClient();
         if ($client->init()) {
-            $proto = new OrgCreatedNotificationRequest();
+            $proto = new \OrgCreatedNotificationRequest();
             $proto->setOrgId($orgId);
             $message = $client->createMessageFromProto($proto);
             $client->sendTopicMessage(
@@ -86,7 +90,7 @@ class Notify
     {
         $client = new MessagingClient();
         if ($client->init()) {
-            $proto = new UserBadgeAwardedEmail();
+            $proto = new \UserBadgeAwardedEmail();
             $proto->setUserId($userId);
             $proto->setBadgeId($badgeId);
             $message = $client->createMessageFromProto($proto);
@@ -115,7 +119,7 @@ class Notify
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
-            $message_type = new UserTaskClaim();
+            $message_type = new \UserTaskClaim();
             $message_type->user_id = $userId;
             $message_type->task_id = $taskId;
             $message = $messagingClient->createMessageFromProto($message_type);
@@ -131,7 +135,7 @@ class Notify
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
-            $message_type = new PasswordResetEmail();
+            $message_type = new \PasswordResetEmail();
             $message_type->setUserId($user_id);
             $message = $messagingClient->createMessageFromProto($message_type);
             $messagingClient->sendTopicMessage(
@@ -144,11 +148,11 @@ class Notify
 
     public static function notifyUserOrgMembershipRequest($user_id, $org_id, $accepted)
     {
-        $org_dao = new OrganisationDao();
+        $org_dao = new DAO\OrganisationDao();
         $org = $org_dao->getOrg($org_id);
         $org = $org[0];
         
-        $user_dao = new UserDao();
+        $user_dao = new DAO\UserDao();
         $user = $user_dao->getUser($user_id);
         $user = $user[0];
 
@@ -156,7 +160,7 @@ class Notify
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
             if ($accepted) {
-                $message_type = new OrgMembershipAccepted();
+                $message_type = new \OrgMembershipAccepted();
                 $message_type->user_id = $user->getId();
                 $message_type->org_id = $org->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
@@ -166,7 +170,7 @@ class Notify
                     $messagingClient->OrgMembershipAcceptedTopic
                 );
             } else {
-                $message_type = new OrgMembershipRefused();
+                $message_type = new \OrgMembershipRefused();
                 $message_type->user_id = $user->getId();
                 $message_type->org_id = $org->getId();
                 $message = $messagingClient->createMessageFromProto($message_type);
@@ -181,11 +185,11 @@ class Notify
 
     public static function notifyOrgClaimedTask($userId, $taskId)
     {
-        $subscribed_users = TaskDao::getSubscribedUsers($taskId);
+        $subscribed_users = DAO\TaskDao::getSubscribedUsers($taskId);
         if (count($subscribed_users) > 0) {
             $messagingClient = new MessagingClient();
             if ($messagingClient->init()) {
-                $message_type = new TaskClaimed();
+                $message_type = new \TaskClaimed();
                 $message_type->task_id = $taskId;
                 $message_type->translator_id = $userId;
                 foreach ($subscribed_users as $user) {
@@ -205,7 +209,7 @@ class Notify
     {
         $messagingClient = new MessagingClient();
         if ($messagingClient->init()) {
-            $messageProto = new TaskUploadNotificationRequest();
+            $messageProto = new \TaskUploadNotificationRequest();
             $messageProto->setTaskId($taskId);
             $messageProto->setFileVersion($version);
             $message = $messagingClient->createMessageFromProto($messageProto);
@@ -222,7 +226,7 @@ class Notify
         if (count($subscribedUsers) > 0) {
             $messagingClient = new MessagingClient();
             if ($messagingClient->init()) {
-                $message_type = new TaskArchived();
+                $message_type = new \TaskArchived();
                 $message_type->task_id = $taskId;
                 foreach ($subscribedUsers as $user) {
                     $message_type->user_id = $user->getId();
@@ -241,7 +245,7 @@ class Notify
     {
         $client = new MessagingClient();
         if ($client->init()) {
-            $messageProto = new TaskRevokedNotification();
+            $messageProto = new \TaskRevokedNotification();
             $messageProto->setTaskId($taskId);
             $messageProto->setClaimantId($claimantId);
             $message = $client->createMessageFromProto($messageProto);

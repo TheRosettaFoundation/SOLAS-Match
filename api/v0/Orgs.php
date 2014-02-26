@@ -1,5 +1,11 @@
 <?php
 
+namespace SolasMatch\API\V0;
+
+use \SolasMatch\API\DAO as DAO;
+use \SolasMatch\API\Lib as Lib;
+use \SolasMatch\API as API;
+
 /**
  * Description of Orgs
  *
@@ -14,43 +20,43 @@ class Orgs
 {
     public static function init()
     {
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs(:format)/',
             function ($format = ".json") {
-                Dispatcher::sendResponce(null, OrganisationDao::getOrg(), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrg(), null, $format);
             },
             'getOrgs'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/orgs(:format)/',
             function ($format = ".json") {
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, "Organisation");
                 $data->setId(null);
-                $org = OrganisationDao::insertAndUpdate($data);
-                $user = UserDao::getLoggedInUser();
+                $org = DAO\OrganisationDao::insertAndUpdate($data);
+                $user = DAO\UserDao::getLoggedInUser();
                 if (!is_null($org) && $org->getId() > 0) {
-                    OrganisationDao::acceptMemRequest($org->getId(), $user->getId());
-                    AdminDao::addOrgAdmin($user->getId(), $org->getId());
-                    if (!AdminDao::isAdmin($user->getId(), $org->getId())) {
-                        OrganisationDao::delete($org->getId());
+                    DAO\OrganisationDao::acceptMemRequest($org->getId(), $user->getId());
+                    DAO\AdminDao::addOrgAdmin($user->getId(), $org->getId());
+                    if (!DAO\AdminDao::isAdmin($user->getId(), $org->getId())) {
+                        DAO\OrganisationDao::delete($org->getId());
                     }
                 }
-                Dispatcher::sendResponce(null, $org, null, $format);
+                API\Dispatcher::sendResponse(null, $org, null, $format);
                 if (!is_null($org) && $org->getId() > 0) {
-                    Notify::sendOrgCreatedNotifications($org->getId());
+                    Lib\Notify::sendOrgCreatedNotifications($org->getId());
                 }
             },
             'createOrg',
-            'Middleware::isloggedIn'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/orgs/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -58,18 +64,18 @@ class Orgs
                     $format = '.'.$orgId[1];
                     $orgId = $orgId[0];
                 }
-                $data = Dispatcher::getDispatcher()->request()->getBody();
-                $client = new APIHelper($format);
+                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $client = new \APIHelper($format);
                 $data = $client->deserialize($data, "Organisation");
                 $data->setId($orgId);
-                Dispatcher::sendResponce(null, OrganisationDao::insertAndUpdate($data), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdate($data), null, $format);
             },
             'updateOrg',
-            'Middleware::authenticateOrgAdmin'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/orgs/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -77,14 +83,14 @@ class Orgs
                     $format = '.'.$orgId[1];
                     $orgId = $orgId[0];
                 }
-                Dispatcher::sendResponce(null, OrganisationDao::delete($orgId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::delete($orgId), null, $format);
             },
             'deleteOrg',
-            'Middleware::authenticateOrgAdmin'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -92,18 +98,18 @@ class Orgs
                     $format = '.'.$orgId[1];
                     $orgId = $orgId[0];
                 }
-                $data = OrganisationDao::getOrg($orgId);
+                $data = DAO\OrganisationDao::getOrg($orgId);
                 if (is_array($data)) {
                     $data = $data[0];
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getOrg',
             null
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/isMember/:orgId/:userId/',
             function ($orgId, $userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -111,14 +117,14 @@ class Orgs
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                $data = OrganisationDao::isMember($orgId, $userId);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\OrganisationDao::isMember($orgId, $userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'isMember'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/getByName/:name/',
             function ($name, $format = ".json") {
                 if (!is_numeric($name) && strstr($name, '.')) {
@@ -133,15 +139,15 @@ class Orgs
                         }
                     }
                 }
-                $data= OrganisationDao::getOrg(null, urldecode($name));
+                $data= DAO\OrganisationDao::getOrg(null, urldecode($name));
                 $data = $data[0];
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getOrgByName'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/searchByName/:name/',
             function ($name, $format = ".json") {
                 if (!is_numeric($name) && strstr($name, '.')) {
@@ -156,22 +162,22 @@ class Orgs
                         }
                     }
                 }
-                $data= OrganisationDao::searchForOrg(urldecode($name));
+                $data= DAO\OrganisationDao::searchForOrg(urldecode($name));
                 if (!is_array($data) && !is_null($data)) {
                     $data = array($data);
                 }
-                Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'searchByName'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/:orgId/projects(:format)/',
             function ($orgId, $format = '.json') {
-                Dispatcher::sendResponce(
+                API\Dispatcher::sendResponse(
                     null,
-                    ProjectDao::getProject(null, null, null, null, null, $orgId),
+                    DAO\ProjectDao::getProject(null, null, null, null, null, $orgId),
                     null,
                     $format
                 );
@@ -179,17 +185,17 @@ class Orgs
             'getOrgProjects'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/:orgId/archivedProjects(:format)/',
             function ($orgId, $format = '.json') {
-                Dispatcher::sendResponce(null, ProjectDao::getArchivedProject(null, $orgId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedProject(null, $orgId), null, $format);
             },
             'getOrgArchivedProjects'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/:orgId/archivedProjects/:projectId/',
             function ($orgId, $projectId, $format = '.json') {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -197,50 +203,50 @@ class Orgs
                     $format = '.'.$projectId[1];
                     $projectId = $projectId[0];
                 }
-                $data=ProjectDao::getArchivedProject($projectId, $orgId);
-                Dispatcher::sendResponce(null, $data[0], null, $format);
+                $data=DAO\ProjectDao::getArchivedProject($projectId, $orgId);
+                API\Dispatcher::sendResponse(null, $data[0], null, $format);
             },
             'getOrgArchivedProject'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/:orgId/archivedProjects/:projectId/tasks(:format)/',
             function ($orgId, $projectId, $format = '.json') {
-                Dispatcher::sendResponce(null, ProjectDao::getArchivedTask($projectId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedTask($projectId), null, $format);
             },
             'getOrgArchivedProjectTasks'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/:orgId/badges(:format)/',
             function ($orgId, $format = ".json") {
-                Dispatcher::sendResponce(null, BadgeDao::getOrgBadges($orgId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\BadgeDao::getOrgBadges($orgId), null, $format);
             },
             'getOrgBadges'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/:orgId/members(:format)/',
             function ($orgId, $format = ".json") {
-                Dispatcher::sendResponce(null, OrganisationDao::getOrgMembers($orgId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrgMembers($orgId), null, $format);
             },
             'getOrgMembers'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::GET,
             '/v0/orgs/:orgId/requests(:format)/',
             function ($orgId, $format = ".json") {
-                Dispatcher::sendResponce(null, OrganisationDao::getMembershipRequests($orgId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getMembershipRequests($orgId), null, $format);
             },
             'getMembershipRequests'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::POST,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
             '/v0/orgs/:orgId/requests/:uid/',
             function ($orgId, $uid, $format = ".json") {
                 if (!is_numeric($uid) && strstr($uid, '.')) {
@@ -248,13 +254,13 @@ class Orgs
                     $format = '.'.$uid[1];
                     $uid = $uid[0];
                 }
-                Dispatcher::sendResponce(null, OrganisationDao::requestMembership($uid, $orgId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::requestMembership($uid, $orgId), null, $format);
             },
             'createMembershipRequests'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/orgs/:orgId/requests/:uid/',
             function ($orgId, $uid, $format = ".json") {
                 if (!is_numeric($uid)&& strstr($uid, '.')) {
@@ -262,15 +268,15 @@ class Orgs
                     $format = '.'.$uid[1];
                     $uid = $uid[0];
                 }
-                Dispatcher::sendResponce(null, OrganisationDao::acceptMemRequest($orgId, $uid), null, $format);
-                Notify::notifyUserOrgMembershipRequest($uid, $orgId, true);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::acceptMemRequest($orgId, $uid), null, $format);
+                Lib\Notify::notifyUserOrgMembershipRequest($uid, $orgId, true);
             },
             'acceptMembershipRequests',
-            'Middleware::authenticateOrgMember'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember'
         );
 
-        Dispatcher::registerNamed(
-            HttpMethodEnum::PUT,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::PUT,
             '/v0/orgs/addMember/:email/:orgId/',
             function ($email, $orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -279,19 +285,19 @@ class Orgs
                     $orgId = $orgId[0];
                 }
                 $ret = false;
-                $user = UserDao::getUser(null, $email);
+                $user = DAO\UserDao::getUser(null, $email);
                 if (count($user) > 0) {
                     $user = $user[0];
-                    $ret = OrganisationDao::acceptMemRequest($orgId, $user->getId());
+                    $ret = DAO\OrganisationDao::acceptMemRequest($orgId, $user->getId());
                 }
-                Dispatcher::sendResponce(null, $ret, null, $format);
+                API\Dispatcher::sendResponse(null, $ret, null, $format);
             },
             'addMember',
-            'Middleware::authenticateOrgMember'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember'
         );
         
-        Dispatcher::registerNamed(
-            HttpMethodEnum::DELETE,
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::DELETE,
             '/v0/orgs/:orgId/requests/:uid/',
             function ($orgId, $uid, $format = ".json") {
                 if (!is_numeric($uid) && strstr($uid, '.')) {
@@ -299,11 +305,11 @@ class Orgs
                     $format = '.'.$uid[1];
                     $uid = $uid[0];
                 }
-                Dispatcher::sendResponce(null, OrganisationDao::refuseMemRequest($orgId, $uid), null, $format);
-                Notify::notifyUserOrgMembershipRequest($uid, $orgId, false);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::refuseMemRequest($orgId, $uid), null, $format);
+                Lib\Notify::notifyUserOrgMembershipRequest($uid, $orgId, false);
             },
             'rejectMembershipRequests',
-            'Middleware::authenticateOrgMember'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember'
         );
     }
 }

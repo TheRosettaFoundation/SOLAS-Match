@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\API\Lib;
+
 /*
     This class is used to read humorous tips from a file
     on the local FS and select one for display
