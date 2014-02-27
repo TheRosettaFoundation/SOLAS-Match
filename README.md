@@ -145,9 +145,9 @@ Set up the MySQL database
 
 1. Set up a MySQL database.
 2. Create a user with all permissions.
-3. Import ./app/db/schema.sql (using phpMyAdmin, for example.)
-4. Import ./app/db/languages.sql (using phpMyAdmin, for example.)
-5. Import ./app/db/countries.sql (using phpMyAdmin, for example.)
+3. Import ./db/schema.sql (using phpMyAdmin, for example.)
+4. Import ./db/languages.sql (using phpMyAdmin, for example.)
+5. Import ./db/country_codes.sql (using phpMyAdmin, for example.)
 6. Import ./api/vendor/solas/oauth2-server/sql/mysql.sql (using phpMyAdmin, for example.)
     
 GRANT EXECUTE, PROCESS, SELECT, SHOW DATABASES, SHOW VIEW, DELETE, INSERT, UPDATE, LOCK TABLES  ON *.* TO 'tester'@'localhost';
@@ -166,13 +166,13 @@ Configuration file
 	    - setting openid='n' will configure the applicataion to fall back to its internal login mechanisium.
 	    - setting openid='h' will enable hybrid login.(both login options will be avaiable to the user).
        2. for more reliable openid support install php5-curl. sudo apt-get install php5-curl(fixes issue with google/yahoo connection reset).
-5.  Under user session control, enter a long random string.
+5.  Under session, enter a long random string in the site_key field.
 6.  Under Files changes upload_path to 'uploads/'
 
 DART Configuration file
 -----------------------
 
-1.  Copy /ui/dart/web/conf.template.json to /ui/dart/web/conf.json
+1.  Copy /ui/dart/web/conf/conf.template.json to /ui/dart/web/conf/conf.json
 2.  Change "SOLASMatch" and "SiteLocation" to point to your own setup
 
 Git Pre-Commit Hook
