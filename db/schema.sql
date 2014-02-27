@@ -987,9 +987,9 @@ BEGIN
 		DELETE FROM Projects WHERE id=projectId;
 		
 		COMMIT;
-	    SELECT 1 AS archivedResult;
+	    SELECT 1 AS result;
    ELSE
-      SELECT 0 AS archivedResult;
+      SELECT 0 AS result;
    END IF;	
 	  
 END//
