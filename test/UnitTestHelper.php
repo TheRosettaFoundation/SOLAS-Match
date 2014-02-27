@@ -287,8 +287,8 @@ class UnitTestHelper
        ($userId, 
         $projectid,
         $filename = "createProjectFileTest.txt",
-        $mime = "createProjectFileTest.txt",
-        $token = "text/plain"
+        $mime =  "text/plain",
+        $token = "createProjectFileTest.txt"
     ) {
         $projectFile = new ProjectFile();
         $projectFile->setUserId($userId);

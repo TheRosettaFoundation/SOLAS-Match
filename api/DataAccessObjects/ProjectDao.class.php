@@ -104,6 +104,7 @@ class ProjectDao
     {
         $args = PDOWrapper::cleanseNull($projectId)
                 .",".PDOWrapper::cleanseNull($userId);
+        
         $result = PDOWrapper::call("archiveProject", $args);
         if ($result) {
             return $result[0]['result'];
@@ -123,7 +124,9 @@ class ProjectDao
         $wordCount = null,
         $created = null,
         $archivedDate = null,
-        $userIdArchived = null
+        $userIdArchived = null,
+        $lCode = null,
+        $cCode = null
     ) {
         $projects = array();
         $args = PDOWrapper::cleanseNull($id)
@@ -136,7 +139,10 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($wordCount)
                 .",".PDOWrapper::cleanseWrapStr($created)
                 .",".PDOWrapper::cleanseNullOrWrapStr($archivedDate)
-                .",".PDOWrapper::cleanseNull($userIdArchived);
+                .",".PDOWrapper::cleanseNull($userIdArchived)
+                .",".PDOWrapper::cleanseNullOrWrapStr($lCode)
+                .",".PDOWrapper::cleanseNullOrWrapStr($cCode);
+                
         $result = PDOWrapper::call("getArchivedProject", $args);
         if ($result) {
             foreach ($result as $row) {

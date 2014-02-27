@@ -220,9 +220,9 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $resultArchiveProject);
                 
-        // Failure        
-        //$resultArchiveProjectFailure = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
-        //$this->assertEquals("0", $resultArchiveProjectFailure);
+        // Failure
+        $resultArchiveProjectFailure = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
+        $this->assertEquals("0", $resultArchiveProjectFailure);
     }
     
     
@@ -272,14 +272,16 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $resultGetArchivedProject = ProjectDao::getArchivedProject(
             $insertedProject->getId(),
+            $insertedProject->getOrganisationId(),
             $insertedProject->getTitle(), 
             $insertedProject->getDescription(),
             $insertedProject->getImpact(),
             $insertedProject->getDeadline(),
-            $insertedProject->getOrganisationId(),
             $insertedProject->getReference(),
             $insertedProject->getWordCount(),
-            $insertedProject->getCreatedTime()
+            $insertedProject->getCreatedTime(),
+            date("Y-m-d H:i:s"),
+            $insertedUser->getId() 
         );
         
         $this->assertCount(1, $resultGetArchivedProject);
@@ -509,4 +511,5 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNull($resultGetProjectFileInfoFailure);
     }
 }
+
 ?>

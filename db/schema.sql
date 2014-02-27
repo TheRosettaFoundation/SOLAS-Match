@@ -1401,6 +1401,9 @@ BEGIN
     set @lID=null;
     set @cID=null;
 
+    SELECT id INTO @lID FROM Languages WHERE code = lCode;
+    SELECT id INTO @cID FROM Countries WHERE code = cCode;
+
     SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, 
         (select code from Languages l where l.id = p.language_id) as language_id, 
         (select code from Countries c where c.id = p.country_id) as country_id, 
@@ -1413,9 +1416,12 @@ BEGIN
         and (p.description= descr or descr is null) 
         and (p.impact=imp or imp is null)
         and (p.deadline=deadlineTime or deadlineTime is null or deadlineTime='0000-00-00 00:00:00') 
-        and (p.organisation_id=orgId or orgId is null) and (p.reference=ref or ref is null)
-        and (p.`word-count`=wordCount or wordCount is null) and (p.created = createdTime or createdTime is null) 
-        and (p.language_id=@lID or @lID is null) and (p.country_id = @cID or @cID is null)
+        and (p.organisation_id=orgId or orgId is null) 
+        and (p.reference=ref or ref is null)
+        and (p.`word-count`=wordCount or wordCount is null) 
+        and (p.created = createdTime or createdTime is null) 
+        and (@lID is null or p.language_id=@lID)
+        and (@cID is null or p.country_id = @cID)
         and (m.`archived-date`=archiveDate or archiveDate is null or archiveDate='0000-00-00 00:00:00') 
         and (m.`user_id-archived`= archiverId or archiverId is null);
 
