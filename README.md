@@ -145,10 +145,10 @@ Set up the MySQL database
 
 1. Set up a MySQL database.
 2. Create a user with all permissions.
-3. Import ./app/db/schema.sql (using phpMyAdmin, for example.)
-4. Import ./app/db/languages.sql (using phpMyAdmin, for example.)
-5. Import ./app/db/countries.sql (using phpMyAdmin, for example.)
-6. Import ./api/vendor/solas/oauth2-server/sql/mysql.sql (using phpMyAdmin, for example.)
+3. Import ./api/vendor/league/oauth2-server/sql/mysql.sql (using phpMyAdmin, for example.)
+4. Import ./app/db/schema.sql (using phpMyAdmin, for example.)
+5. Import ./app/db/languages.sql (using phpMyAdmin, for example.)
+6. Import ./app/db/countries.sql (using phpMyAdmin, for example.)
     
 GRANT EXECUTE, PROCESS, SELECT, SHOW DATABASES, SHOW VIEW, DELETE, INSERT, UPDATE, LOCK TABLES  ON *.* TO 'tester'@'localhost';
 FLUSH PRIVILEGES;

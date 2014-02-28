@@ -19,6 +19,9 @@ require_once __DIR__."/../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../Common/lib/UserSession.class.php";
 require_once __DIR__."/../Common/HttpMethodEnum.php";
 require_once __DIR__."/../Common/HttpStatusEnum.php";
+require_once __DIR__."/OAuth2/Client.php";
+require_once __DIR__."/OAuth2/Scope.php";
+require_once __DIR__."/OAuth2/Session.php";
 
 class Dispatcher {
     
@@ -74,7 +77,9 @@ class Dispatcher {
             new \League\OAuth2\Server\Storage\PDO\Scope()
         );
         self::$oauthServer->setAccessTokenTTL(\Settings::get('site.oauth_timeout'));
-        self::$oauthServer->addGrantType(new \League\OAuth2\Server\Grant\Password(self::$oauthServer));
+        $passwordGrant = new \League\OAuth2\Server\Grant\Password();
+        $passwordGrant->setVerifyCredentialsCallback("\SolasMatch\API\DAO\UserDao::apiLogin");
+        self::$oauthServer->addGrantType($passwordGrant);
     }
     
     public static function getOauthServer()

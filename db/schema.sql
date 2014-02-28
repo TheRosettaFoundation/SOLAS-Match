@@ -12,6 +12,18 @@ SET FOREIGN_KEY_CHECKS=0;
 
 /*--------------------------------------------------start of tables--------------------------------*/
 
+-- Changing collation of OAuth tables to match ours
+ALTER TABLE oauth_clients CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE oauth_client_endpoints CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE oauth_sessions CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE oauth_session_access_tokens CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE oauth_session_authcodes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE oauth_session_redirects CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE oauth_session_refresh_tokens CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE oauth_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE oauth_session_token_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE oauth_session_authcode_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+
 -- Dumping structure for table Solas-Match-Test.Admins
 CREATE TABLE IF NOT EXISTS `Admins` (
 	`user_id` INT(10) UNSIGNED NOT NULL,
@@ -2316,6 +2328,28 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getUserByOAuthToken
+DROP PROCEDURE IF EXISTS `getUserByOAuthToken`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserByOAuthToken`(IN `accessToken` CHAR(40))
+    READS SQL DATA
+BEGIN
+    SELECT u.id,u.`display-name`, u.email, u.password, u.biography,
+        (select `en-name` from Languages l where l.id = u.`language_id`) as `languageName`,
+        (select code from Languages l where l.id = u.`language_id`) as `languageCode`,
+        (select `en-name` from Countries c where c.id = u.`country_id`) as `countryName`,
+        (select code from Countries c where c.id = u.`country_id`) as `countryCode`,
+        u.nonce, u.`created-time`
+        FROM Users u
+        JOIN oauth_sessions sessions
+        ON u.id = sessions.owner_id
+        JOIN oauth_session_access_tokens tokens
+        ON sessions.id = tokens.session_id
+        WHERE tokens.access_token = accessToken;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
@@ -2710,6 +2744,261 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Test.oauthAssociateAccessToken
+DROP PROCEDURE IF EXISTS `oauthAssociateAccessToken`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateAccessToken`(IN `sessionId` INT, IN `accessToken` CHAR(40), IN `expireTime` INT)
+    MODIFIES SQL DATA
+BEGIN
+    INSERT INTO oauth_session_access_tokens (session_id, access_token, access_token_expires)
+        VALUES (sessionId, accessToken, expireTime);
+    SELECT LAST_INSERT_ID();
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthAssociateAuthCode
+DROP PROCEDURE IF EXISTS `oauthAssociateAuthCode`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateAuthCode`(IN `sessionId` INT, IN `authCode` CHAR(40), IN `expireTime` INT)
+    MODIFIES SQL DATA
+BEGIN
+    INSERT INTO oauth_session_authcodes (session_id, auth_code, auth_code_expires)
+        VALUEs (sessionId, authCode, expireTime);
+    SELECT LAST_INSERT_ID();
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthAssociateAuthCodeScope
+DROP PROCEDURE IF EXISTS `oauthAssociateAuthCodeScope`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateAuthCodeScope`(IN `authCodeId` INT, IN `scopeId` INT)
+    MODIFIES SQL DATA
+BEGIN
+    INSERT INTO `oauth_session_authcode_scopes` (`oauth_session_authcode_id`, `scope_id`)
+        VALUES (authCodeId, scopeId);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthAssociateRedirectUri
+DROP PROCEDURE IF EXISTS `oauthAssociateRedirectUri`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateRedirectUri`(IN `sessionId` INT, IN `redirectUri` VARCHAR(255))
+    MODIFIES SQL DATA
+BEGIN
+    INSERT INTO oauth_session_redirects (session_id, redirect_uri)
+        VALUES (sessionId, redirectUri);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthAssociateRefreshToken
+DROP PROCEDURE IF EXISTS `oauthAssociateRefreshToken`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateRefreshToken`(IN `accessTokenId` INT, IN `refreshToken` CHAR(40), IN `expireTime` INT, IN `clientId` CHAR(40))
+    MODIFIES SQL DATA
+BEGIN
+    INSERT INTO oauth_session_refresh_tokens (session_access_token_id, refresh_token, refresh_token_expires, client_id)
+        VALUES (accessTokenId, refreshToken, expireTime, clientId);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthAssociateScope
+DROP PROCEDURE IF EXISTS `oauthAssociateScope`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateScope`(IN `accessTokenId` INT, IN `scopeId` INT)
+    MODIFIES SQL DATA
+BEGIN
+    INSERT INTO `oauth_session_token_scopes` (session_access_token_id, scope_id)
+        VALUES (accessTokenId, scopeId);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthCreateSession
+DROP PROCEDURE IF EXISTS `oauthCreateSession`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthCreateSession`(IN `clientId` CHAR(40), IN `ownerType` ENUM('user', 'client'), IN `ownerId` VARCHAR(255))
+    MODIFIES SQL DATA
+BEGIN
+    INSERT INTO oauth_sessions (client_id, owner_type, owner_id)
+        VALUES (clientId, ownerType, ownerId);
+    SELECT LAST_INSERT_ID();
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthDeleteSession
+DROP PROCEDURE IF EXISTS `oauthDeleteSession`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthDeleteSession`(IN `clientId` CHAR(40), IN `ownerType` ENUM('user', 'client'), IN `ownerId` VARCHAR(255))
+    MODIFIES SQL DATA
+BEGIN
+    DELETE FROM oauth_sessions
+        WHERE client_id = clientId
+        AND owner_type = ownerType
+        AND owner_id = ownerId;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthGetAccessToken
+DROP PROCEDURE IF EXISTS `oauthGetAccessToken`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetAccessToken`(IN `accessTokenId` INT)
+    READS SQL DATA
+BEGIN
+    SELECT *
+        FROM `oauth_session_access_tokens`
+        WHERE id = accessTokenId;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthGetAuthCodeScopes
+DROP PROCEDURE IF EXISTS `oauthGetAuthCodeScopes`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetAuthCodeScopes`(IN `authCodeId` INT)
+    READS SQL DATA
+BEGIN
+    SELECT scope_id
+        FROM `oauth_session_authcode_scopes`
+        WHERE oauth_session_authcode_id = authCodeId;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthGetClient
+DROP PROCEDURE IF EXISTS `oauthGetClient`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetClient`(IN `clientId` CHAR(40), IN `clientSecret` CHAR(40), IN `redirectUri` VARCHAR(255))
+    READS SQL DATA
+BEGIN
+    IF clientSecret = '' then
+        SET clientSecret = NULL;
+    END IF;
+    IF redirectUri = '' then
+        SET redirectUri = NULL;
+    END IF;
+
+    SELECT `oauth_clients`.id, `oauth_clients`.secret, `oauth_client_endpoints`.redirect_uri, `oauth_clients`.name, `oauth_clients`.auto_approve
+        FROM `oauth_clients`
+        JOIN `oauth_client_endpoints`
+        ON `oauth_clients`.id = `oauth_client_endpoints`.client_id
+        WHERE `oauth_clients`.id = clientId
+        AND (clientSecret IS NULL OR `oauth_clients`.secret = clientSecret)
+        AND (redirectUri IS NULL OR `oauth_client_endpoints`.redirect_uri = redirectUri);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthGetScope
+DROP PROCEDURE IF EXISTS `oauthGetScope`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetScope`(IN `requestedScope` VARCHAR(255))
+    READS SQL DATA
+BEGIN
+    SELECT *
+        FROM oauth_scopes
+        WHERE scope = requestedScope;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthGetScopes
+DROP PROCEDURE IF EXISTS `oauthGetScopes`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetScopes`(IN `accessToken` VARCHAR(40))
+    READS SQL DATA
+BEGIN
+    SELECT oauth_scopes.*
+        FROM oauth_session_token_scopes
+        JOIN oauth_session_access_tokens
+        ON oauth_session_access_tokens.`id` = `oauth_session_token_scopes`.`session_access_token_id`
+        JOIN oauth_scopes
+        ON oauth_scopes.id = `oauth_session_token_scopes`.scope_id
+        WHERE access_token = accessToken;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthRemoveAuthCode
+DROP PROCEDURE IF EXISTS `oauthRemoveAuthCode`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthRemoveAuthCode`(IN `sessionId` INT)
+    MODIFIES SQL DATA
+BEGIN
+    DELETE FROM oauth_session_authcodes
+        WHERE session_id = sessionId;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthRemoveRefreshToken
+DROP PROCEDURE IF EXISTS `oauthRemoveRefreshToken`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthRemoveRefreshToken`(IN `refreshToken` CHAR(40))
+    MODIFIES SQL DATA
+BEGIN
+    DELETE FROM `oauth_session_refresh_tokens`
+        WHERE refresh_token = refreshToken;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthValidateAccessToken
+DROP PROCEDURE IF EXISTS `oauthValidateAccessToken`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthValidateAccessToken`(IN `accessToken` CHAR(40))
+    READS SQL DATA
+BEGIN
+    SELECT session_id, sessions.`client_id`, sessions.`owner_id`, sessions.`owner_type`
+        FROM `oauth_session_access_tokens`
+        JOIN oauth_sessions sessions
+        ON sessions.id = session_id
+        WHERE access_token = accessToken
+        AND access_token_expires >= UNIX_TIMESTAMP(NOW());
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthValidateAuthCode
+DROP PROCEDURE IF EXISTS `oauthValidateAuthCode`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthValidateAuthCode`(IN `clientId` CHAR(40), IN `redirectUri` VARCHAR(255), IN `authCode` CHAR(40))
+    READS SQL DATA
+BEGIN
+    SELECT sessions.id AS session_id, authcodes.id AS authcode_id
+        FROM oauth_sessions as sessions
+        JOIN oauth_session_authcodes as authcodes
+        ON authcodes.`session_id` = sessions.id
+        JOIN oauth_session_redirects as redirects
+        ON redirects.`session_id` = sessions.id
+        WHERE sessions.client_id = clientId
+        AND authcodes.`auth_code` = authCode
+        AND authcodes.`auth_code_expires` >= UNIX_TIMESTAMP(NOW())
+        AND redirects.`redirect_uri` = redirectUri;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.oauthValidateRefreshToken
+DROP PROCEDURE IF EXISTS `oauthValidateRefreshToken`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthValidateRefreshToken`(IN `refreshToken` CHAR(40), IN `clientId` CHAR(40))
+    READS SQL DATA
+BEGIN
+    SELECT session_access_token_id
+        FROM `oauth_session_refresh_tokens`
+        WHERE refresh_token = refreshToken
+        AND refresh_token_expires >= UNIX_TIMESTAMP(NOW())
+        AND client_id = clientId;
+END//
+DELIMITER ;
 
 
 -- Dumping structure for procedure Solas-Match-Test.organisationInsertAndUpdate

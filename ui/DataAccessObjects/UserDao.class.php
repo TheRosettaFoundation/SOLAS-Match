@@ -35,7 +35,7 @@ class UserDao extends BaseDao
                 $request = "{$args[2]}v0/users/$args[1]";
                 return $args[0]->call("User", $request);
             },
-            array($this->client, $userId,$this->siteApi)
+            array($this->client, $userId, $this->siteApi)
         );
         return $ret;
     }
@@ -393,8 +393,12 @@ class UserDao extends BaseDao
         $login->setEmail($email);
         $login->setPassword($password);
         $request = "{$this->siteApi}v0/users/login";
+        $queryArgs = array(
+            'client_id' => \Settings::get('oauth.client_id'),
+            'client_secret' => \Settings::get('oauth.client_secret')
+        );
         try {
-            $ret = $this->client->call("User", $request, \HttpMethodEnum::POST, $login);
+            $ret = $this->client->call("User", $request, \HttpMethodEnum::POST, $login, $queryArgs);
         } catch (\SolasMatchException $e) {
             switch($e->getCode()) {
 

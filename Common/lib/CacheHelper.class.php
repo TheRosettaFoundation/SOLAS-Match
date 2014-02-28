@@ -14,8 +14,13 @@ class CacheHelper
     {
         $ret= null;
         if (!apc_exists($key)) {
-            $ret = is_null($args) ? call_user_func($function) : call_user_func($function, $args);
-            apc_add($key, $ret, $ttl);
+            try {
+                $ret = is_null($args) ? call_user_func($function) : call_user_func($function, $args);
+                apc_add($key, $ret, $ttl);
+            } catch (Exception $e) {
+                error_log("Failed to add to cache ".$e->getMessage());
+                $ret = null;
+            }
         } else {
             $ret= apc_fetch($key);
         }

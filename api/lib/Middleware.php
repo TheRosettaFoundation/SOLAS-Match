@@ -3,6 +3,7 @@
 namespace SolasMatch\API\Lib;
 
 use \SolasMatch\API\DAO as DAO;
+use \SolasMatch\API\Dispatcher;
 
 require_once __DIR__."/../DataAccessObjects/AdminDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
@@ -17,7 +18,7 @@ class Middleware
         if (!is_null(DAO\UserDao::getLoggedInUser())) {
             return true;
         } else {
-            \Dispatcher::getDispatcher()->halt(
+            Dispatcher::getDispatcher()->halt(
                 \HttpStatusEnum::FORBIDDEN,
                 "The Autherization header does not match the current user or ".
                 "the user does not have permission to acess the current resource"
@@ -45,7 +46,7 @@ class Middleware
             }
             $openidHash = md5($email.substr(\Settings::get("session.site_key"), 0, 20));
             if ($headerHash != $openidHash) {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -71,7 +72,7 @@ class Middleware
                 $userId = $userId[0];
             }
             if ($userId != $user->getId()) {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -120,7 +121,7 @@ class Middleware
             if ($hasUserSegmentationTask) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -174,7 +175,7 @@ class Middleware
             if ($hasUserSegmentationTask) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -211,7 +212,7 @@ class Middleware
             if ($userId=$user->getId() || DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -221,7 +222,7 @@ class Middleware
     
     public static function notFound()
     {
-        \Dispatcher::getDispatcher()->redirect(\Dispatcher::getDispatcher()->urlFor('notFound'));
+        Dispatcher::getDispatcher()->redirect(Dispatcher::getDispatcher()->urlFor('notFound'));
     }
     
     private static function isSiteAdmin($userId)
@@ -237,7 +238,7 @@ class Middleware
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             } else {
-                 \Dispatcher::getDispatcher()->halt(
+                 Dispatcher::getDispatcher()->halt(
                      \HttpStatusEnum::FORBIDDEN,
                      "The user does not have permission to acess the current resource"
                  );
@@ -258,7 +259,7 @@ class Middleware
             if ($userOrgList != null && count($userOrgList) > 0) {
                 return true;
             } else {
-                 \Dispatcher::getDispatcher()->halt(
+                 Dispatcher::getDispatcher()->halt(
                      \HttpStatusEnum::FORBIDDEN,
                      "The user does not have permission to acess the current resource"
                  );
@@ -288,7 +289,7 @@ class Middleware
             if ($orgId != null && DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -318,7 +319,7 @@ class Middleware
             if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -356,7 +357,7 @@ class Middleware
             if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -401,7 +402,7 @@ class Middleware
             if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -452,7 +453,7 @@ class Middleware
                     (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -481,7 +482,7 @@ class Middleware
             if ($hasTask) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -523,7 +524,7 @@ class Middleware
             if ($hasTask || DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -584,7 +585,7 @@ class Middleware
             if ($hasFollowupTask || DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -633,7 +634,7 @@ class Middleware
                         (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)))) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -677,7 +678,7 @@ class Middleware
             } elseif ($orgId == null && in_array($badgeId, array(6, 7, 8))) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -732,7 +733,7 @@ class Middleware
                  */
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -763,7 +764,7 @@ class Middleware
             if ($badgeId != null && DAO\BadgeDao::validateUserBadge($userId, $badgeId)) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
@@ -801,7 +802,7 @@ class Middleware
             if ($TaskIsUnclaimed) {
                 return true;
             } else {
-                \Dispatcher::getDispatcher()->halt(
+                Dispatcher::getDispatcher()->halt(
                     \HttpStatusEnum::FORBIDDEN,
                     "Unable to claim task. This Task has been claimed by another user"
                 );

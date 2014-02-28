@@ -338,7 +338,7 @@ class UserRouteHandler
                 $user = null;
                 try {
                     $user = $userDao->login($post['email'], $post['password']);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $error = sprintf(
                         Lib\Localisation::getTranslation('login_1'),
                         $app->urlFor("login"),

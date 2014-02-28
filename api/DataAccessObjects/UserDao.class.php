@@ -13,18 +13,21 @@ require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
 
 class UserDao
 {
-    public static function getLoggedInUser()
+    public static function getLoggedInUser($token = null)
     {
-        $resource = new \League\OAuth2\Server\Resource(new \League\OAuth2\Server\Storage\PDO\Session());
-        // Test for token existance and validity
-        try {
-            $resource->isValid(true);
-            $parts = explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
-            return self::getByOauthToken($parts[1]);
-        } catch (\League\OAuth2\Server\Exception\InvalidAccessTokenException $e) {
-            //The access token is missing or invalid...
-            return null;
+        if (is_null($token)) {
+            try {
+                $resource = new \League\OAuth2\Server\Resource(new \League\OAuth2\Server\Storage\PDO\Session());
+                // Test for token existance and validity
+                $resource->isValid(true);
+                $parts = explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
+                $token = $parts[1];
+            } catch (\League\OAuth2\Server\Exception\InvalidAccessTokenException $e) {
+                //The access token is missing or invalid...
+                return null;
+            }
         }
+        return self::getByOAuthToken($token);
     }
     
     public static function create($email, $clear_password)
@@ -146,7 +149,7 @@ class UserDao
         
         self::logLoginAttempt($user->getId(), $email, 1);
 
-        return $user;
+        return $user->getId();
     }
 
     public static function apiRegister($email, $clear_password, $verificationRequired = true)
@@ -770,7 +773,7 @@ class UserDao
         return $ret;
     }
     
-    public static function getByOauthToken($token)
+    public static function getByOAuthToken($token)
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($token);

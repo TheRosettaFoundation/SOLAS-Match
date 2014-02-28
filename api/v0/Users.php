@@ -105,24 +105,25 @@ class Users
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new \APIHelper($format);
                 $data = $client->deserialize($data, "Login");
-                $params= array();
+                $params = array();
+                $params['client_id'] = API\Dispatcher::clenseArgs('client_id', \HttpMethodEnum::GET, null);
+                $params['client_secret'] = API\Dispatcher::clenseArgs('client_secret', \HttpMethodEnum::GET, null);
+                $params['username'] = $data->getEmail();
+                $params['password'] = $data->getPassword();
                 try {
-                    $data = DAO\UserDao::apiLogin($data->getEmail(), $data->getPassword());
-                    if (!is_null($data)) {
-                        $server = API\Dispatcher::getOauthServer();
-                        $responce = $server->getGrantType('password')->completeFlow(
-                            array("client_id" => $data->getId(), "client_secret" => $data->getPassword())
-                        );
-                        $oAuthResponce = new \OAuthResponce();
-                        $oAuthResponce->setToken($responce['access_token']);
-                        $oAuthResponce->setTokenType($responce['token_type']);
-                        $oAuthResponce->setExpires($responce['expires']);
-                        $oAuthResponce->setExpiresIn($responce['expires_in']);
-                        $data->setPassword(null);
-                        $data->setNonce(null);
-                    }
-                    API\Dispatcher::sendResponse(null, $data, null, $format, $oAuthResponce);
-                } catch (Exception $e) {
+                    $server = API\Dispatcher::getOauthServer();
+                    $response = $server->getGrantType('password')->completeFlow($params);
+                    $oAuthResponse = new \OAuthResponce();
+                    $oAuthResponse->setToken($response['access_token']);
+                    $oAuthResponse->setTokenType($response['token_type']);
+                    $oAuthResponse->setExpires($response['expires']);
+                    $oAuthResponse->setExpiresIn($response['expires_in']);
+
+                    $user = DAO\UserDao::getLoggedInUser($response['access_token']);
+                    $user->setPassword(null);
+                    $user->setNonce(null);
+                    API\Dispatcher::sendResponse(null, $user, null, $format, $oAuthResponse);
+                } catch (\Exception $e) {
                     API\Dispatcher::sendResponse(null, $e->getMessage(), \HttpStatusEnum::UNAUTHORIZED, $format);
                 }
             },
@@ -165,13 +166,16 @@ class Users
                 if (is_null($data)) {
                     $data = DAO\UserDao::apiRegister($email, md5($email));
                     if (is_array($data) && isset($data[0])) {
-                        $data=$data[0];
+                        $data = $data[0];
                     }
                     DAO\UserDao::finishRegistration($data->getId());
                 }
                 $server = API\Dispatcher::getOauthServer();
                 $responce = $server->getGrantType('password')->completeFlow(
-                    array("client_id" => $data->getId(), "client_secret" => $data->getPassword())
+                    array(
+                        "client_id" => $data->getId(),
+                        "client_secret" => $data->getPassword()
+                    )
                 );
                 $oAuthResponce = new \OAuthResponce();
                 $oAuthResponce->setToken($responce['access_token']);
