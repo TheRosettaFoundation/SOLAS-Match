@@ -4,7 +4,6 @@
 
     "repositories": [
     {
-        
         "type": "package",
         "package": {
             "name": "drslump/protobuf-php",

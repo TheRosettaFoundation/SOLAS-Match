@@ -14,7 +14,6 @@ class Client implements ClientInterface
         $args = PDOWrapper::cleanseNullOrWrapStr($clientId).",".
             PDOWrapper::cleanseNullOrWrapStr($clientSecret).",".
             PDOWrapper::cleanseNullOrWrapStr($redirectUri);
-        error_log("Call oauthGetClient($args)");
         if($result = PDOWrapper::call("oauthGetClient", $args)) {
             $result = $result[0];
             return array(

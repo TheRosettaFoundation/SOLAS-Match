@@ -3,7 +3,7 @@
 namespace SolasMatch\API\V0;
 
 use \SolasMatch\API\DAO as DAO;
-use \SolasMatch\API as API;
+use \SolasMatch\API\Dispatcher;
 
 /**
  * Description of StaticAPI
@@ -20,7 +20,7 @@ class StaticAPI
         /*
          * This API function returns dart-configuration in json format.
          */
-        API\Dispatcher::registerNamed(
+        Dispatcher::registerNamed(
             \HttpMethodEnum::GET,
             '/v0/static/dart/conf(:format)/',
             function ($format = ".json") {
@@ -43,24 +43,24 @@ class StaticAPI
                     )
                 );
                 $data = json_encode($arr, JSON_UNESCAPED_SLASHES);
-                API\Dispatcher::sendResponse(null, $data, null, $format);
+                Dispatcher::sendResponse(null, $data, null, $format);
             },
             'conf',
             null
         );
 
-        API\Dispatcher::registerNamed(
+        Dispatcher::registerNamed(
             \HttpMethodEnum::GET,
             '/v0/stats(:format)/',
             function ($format = ".json") {
                 $data = DAO\StatDao::getStatistics('');
-                API\Dispatcher::sendResponse(null, $data, null, $format);
+                Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getStatistics',
             null
         );
 
-        API\Dispatcher::registerNamed(
+        Dispatcher::registerNamed(
             \HttpMethodEnum::GET,
             '/v0/stats/:name/',
             function ($name, $format = ".json") {
@@ -70,26 +70,26 @@ class StaticAPI
                     $name = $name[0];
                 }
                 $data = DAO\StatDao::getStatistics($name);
-                API\Dispatcher::sendResponse(null, $data, null, $format);
+                Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getStatisticByName',
             null
         );
 
-        API\Dispatcher::registerNamed(
+        Dispatcher::registerNamed(
             \HttpMethodEnum::GET,
             '/v0/tips(:format)/',
             function ($format = ".json") {
-                API\Dispatcher::sendResponse(null, Lib\TipSelector::selectTip(), null, $format);
+                Dispatcher::sendResponse(null, Lib\TipSelector::selectTip(), null, $format);
             },
             'getTip'
         );
 
-        API\Dispatcher::registerNamed(
+        Dispatcher::registerNamed(
             \HttpMethodEnum::GET,
             '/v0/static/notFound(:format)/',
             function ($format = '.json') {
-                API\Dispatcher::sendResponse(null, "404 Not Found", 404, $format);
+                Dispatcher::sendResponse(null, "404 Not Found", 404, $format);
             },
             'notFound',
             null

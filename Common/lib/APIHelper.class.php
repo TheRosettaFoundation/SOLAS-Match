@@ -97,7 +97,7 @@ class APIHelper
         $res = curl_exec($re);
         $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
         $header = substr($res, 0, $header_size);
-        $this->outputHeaders= http_parse_headers($header);
+        $this->outputHeaders = http_parse_headers($header);
         $res = substr($res, $header_size);
         $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);

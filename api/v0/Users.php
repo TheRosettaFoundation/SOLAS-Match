@@ -102,14 +102,14 @@ class Users
             \HttpMethodEnum::POST,
             '/v0/users/login(:format)/',
             function ($format = ".json") {
-                $data = API\Dispatcher::getDispatcher()->request()->getBody();
+                $body = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new \APIHelper($format);
-                $data = $client->deserialize($data, "Login");
+                $loginData = $client->deserialize($body, "Login");
                 $params = array();
                 $params['client_id'] = API\Dispatcher::clenseArgs('client_id', \HttpMethodEnum::GET, null);
                 $params['client_secret'] = API\Dispatcher::clenseArgs('client_secret', \HttpMethodEnum::GET, null);
-                $params['username'] = $data->getEmail();
-                $params['password'] = $data->getPassword();
+                $params['username'] = $loginData->getEmail();
+                $params['password'] = $loginData->getPassword();
                 try {
                     $server = API\Dispatcher::getOauthServer();
                     $response = $server->getGrantType('password')->completeFlow($params);
@@ -123,6 +123,8 @@ class Users
                     $user->setPassword(null);
                     $user->setNonce(null);
                     API\Dispatcher::sendResponse(null, $user, null, $format, $oAuthResponse);
+                } catch (\SolasMatchException $e) {
+                    API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode(), $format);
                 } catch (\Exception $e) {
                     API\Dispatcher::sendResponse(null, $e->getMessage(), \HttpStatusEnum::UNAUTHORIZED, $format);
                 }
@@ -133,58 +135,68 @@ class Users
 
         API\Dispatcher::registerNamed(
             \HttpMethodEnum::GET,
-            '/v0/users/login/openidLogin/:email/',
-            function ($email, $format = ".json") {
-                if (isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])) {
-                    $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
-                    if (!is_numeric($email) && strstr($email, '.')) {
-                        $temp = array();
-                        $temp = explode('.', $email);
-                        $lastIndex = sizeof($temp)-1;
-                        if ($lastIndex > 1) {
-                            $format='.'.$temp[$lastIndex];
-                            $email = $temp[0];
-                            for ($i = 1; $i < $lastIndex; $i++) {
-                                $email = "{$email}.{$temp[$i]}";
-                            }
-                        }
+            '/v0/users/:email/auth/code(:format)/',
+            function ($email, $format = '.json') {
+                $user = DAO\UserDao::getUser(null, $email);
+                if ($user) {
+                    $user = $user[0];
+                } else {
+                    DAO\UserDao::apiRegister($email, md5($email), false);
+                    $user = DAO\UserDao::getUser(null, $email);
+                    $user = $user[0];
+                    DAO\UserDao::finishRegistration($user->getId());
+                }
+                $params = array();
+                try {
+                    if (DAO\AdminDao::isUserBanned($user->getId())) {
+                        throw new \Exception("User is banned");
                     }
-                    $openidHash = md5($email.substr(\Settings::get("session.site_key"), 0, 20));
-                    if ($headerHash != $openidHash) {
-                        API\Dispatcher::getDispatcher()->halt(
-                            \HttpStatusEnum::FORBIDDEN,
-                            "The Autherization header does not match the current ".
-                            "user or the user does not have permission to acess the current resource"
+                    $server = API\Dispatcher::getOauthServer();
+                    $authCodeGrant = $server->getGrantType('authorization_code');
+                    $params = $authCodeGrant->checkAuthoriseParams();
+                    $authCode = $authCodeGrant->newAuthoriseRequest('user', $user->getId(), $params);
+                } catch (\Exception $e) {
+                    if (!isset($params['redirect_uri'])) {
+                        API\Dispatcher::getDispatcher()->redirect(
+                            API\Dispatcher::getDispatcher()->request()->getReferrer().
+                            "?error=auth_failed&error_message={$e->getMessage()}"
+                        );
+                    } else {
+                        API\Dispatcher::getDispatcher()->redirect(
+                            $params['redirect_uri']."?error=auth_failed&error_message={$e->getMessage()}"
                         );
                     }
                 }
-                $data = DAO\UserDao::getUser(null, $email);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
-                $oAuthResponce = null;
-                if (is_null($data)) {
-                    $data = DAO\UserDao::apiRegister($email, md5($email));
-                    if (is_array($data) && isset($data[0])) {
-                        $data = $data[0];
-                    }
-                    DAO\UserDao::finishRegistration($data->getId());
-                }
-                $server = API\Dispatcher::getOauthServer();
-                $responce = $server->getGrantType('password')->completeFlow(
-                    array(
-                        "client_id" => $data->getId(),
-                        "client_secret" => $data->getPassword()
-                    )
-                );
-                $oAuthResponce = new \OAuthResponce();
-                $oAuthResponce->setToken($responce['access_token']);
-                $oAuthResponce->setTokenType($responce['token_type']);
-                $oAuthResponce->setExpires($responce['expires']);
-                $oAuthResponce->setExpiresIn($responce['expires_in']);
-                API\Dispatcher::sendResponse(null, $data, null, $format, $oAuthResponce);
+                API\Dispatcher::getDispatcher()->redirect($params['redirect_uri']."?code=$authCode");
             },
-            'openidLogin',
+            'getAuthCode',
+            null
+        );
+
+        API\Dispatcher::registerNamed(
+            \HttpMethodEnum::POST,
+            '/v0/users/authCode/login(:format)/',
+            function ($format = '.json') {
+                try {
+                    $server = API\Dispatcher::getOauthserver();
+                    $authCodeGrant = $server->getGrantType('authorization_code');
+                    $accessToken = $authCodeGrant->completeFlow();
+
+                    $oAuthToken = new \OAuthResponce();
+                    $oAuthToken->setToken($accessToken['access_token']);
+                    $oAuthToken->setTokenType($accessToken['token_type']);
+                    $oAuthToken->setExpires($accessToken['expires']);
+                    $oAuthToken->setExpiresIn($accessToken['expires_in']);
+
+                    $user = DAO\UserDao::getLoggedInUser($accessToken['access_token']);
+                    $user->setPassword(null);
+                    $user->setNonce(null);
+                    API\Dispatcher::sendResponse(null, $user, null, $format, $oAuthToken);
+                } catch (\Exception $e) {
+                    API\Dispatcher::sendResponse(null, $e->getMessage(), \HttpStatusEnum::BAD_REQUEST, $format);
+                }
+            },
+            'getAccessToken',
             null
         );
 
@@ -248,11 +260,8 @@ class Users
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new \APIHelper($format);
                 $data = $client->deserialize($data, "Register");
-                $data = DAO\UserDao::apiRegister($data->getEmail(), $data->getPassword());
-                if (is_array($data) && isset($data[0])) {
-                    $data = $data[0];
-                }
-                API\Dispatcher::sendResponse(null, $data, null, $format);
+                $registered = DAO\UserDao::apiRegister($data->getEmail(), $data->getPassword());
+                API\Dispatcher::sendResponse(null, $registered, null, $format);
             },
             'register',
             null
@@ -276,19 +285,7 @@ class Users
                 $user = DAO\UserDao::getRegisteredUser($uuid);
                 if ($user != null) {
                     $ret = DAO\UserDao::finishRegistration($user->getId());
-                    $server = API\Dispatcher::getOauthServer();
-                    $response = $server->getGrantType('password')->completeFlow(
-                        array(
-                            "client_id"=>$user->getId(),
-                            "client_secret"=>$user->getPassword()
-                        )
-                    );
-                    $oAuthResponse = new \OAuthResponce();
-                    $oAuthResponse->setToken($response['access_token']);
-                    $oAuthResponse->setTokenType($response['token_type']);
-                    $oAuthResponse->setExpires($response['expires']);
-                    $oAuthResponse->setExpiresIn($response['expires_in']);
-                    API\Dispatcher::sendResponse(null, $ret, null, $format, $oAuthResponse);
+                    API\Dispatcher::sendResponse(null, $ret, null, $format);
                 } else {
                     API\Dispatcher::sendResponse(null, "Invalid UUID", \HttpStatusEnum::UNAUTHORIZED, $format);
                 }

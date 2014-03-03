@@ -363,29 +363,6 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function openIdLogin($email, $headerhash)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/login/openidLogin/$email";
-        $ret = $this->client->call(
-            "User",
-            $request,
-            \HttpMethodEnum::GET,
-            null,
-            null,
-            null,
-            array("X-Custom-Authorization:$headerhash")
-        );
-
-        $headers = $this->client->getHeaders();
-        if (isset($headers["X-Custom-Token"])) {
-            \UserSession::setAccessToken(
-                $this->client->deserialize(base64_decode($headers["X-Custom-Token"]), 'OAuthResponce')
-            );
-        }
-        return $ret;
-    }
-    
     public function login($email, $password)
     {
         $ret = null;
@@ -401,21 +378,23 @@ class UserDao extends BaseDao
             $ret = $this->client->call("User", $request, \HttpMethodEnum::POST, $login, $queryArgs);
         } catch (\SolasMatchException $e) {
             switch($e->getCode()) {
-
                 case \HttpStatusEnum::NOT_FOUND:
                     throw new \SolasMatchException(Lib\Localisation::getTranslation('common_error_login_1'));
-
+                    break;
                 case \HttpStatusEnum::UNAUTHORIZED:
+                    // TODO: Resend verification email
                     throw new \SolasMatchException(Lib\Localisation::getTranslation('common_error_login_2'));
-
+                    break;
                 case \HttpStatusEnum::FORBIDDEN:
                     $userDao = new UserDao();
                     $user = $userDao->getUserByEmail($email);
-
                     $adminDao = new AdminDao();
                     $bannedUser = $adminDao->getBannedUser($user->getId());
-                    throw new \SolasMatchException("{$bannedUser->getComment()}");
-                    
+                    throw new \SolasMatchException(
+                        Lib\Localisation::getTranslation("common_this_user_account_has_been_banned").' '.
+                        $bannedUser->getComment()
+                    );
+                    break;
                 default:
                     throw $e;
             }
@@ -428,6 +407,54 @@ class UserDao extends BaseDao
             );
         }
         return $ret;
+    }
+
+    public function requestAuthCode($email)
+    {
+        $app = \Slim\Slim::getInstance();
+        $redirectUri = '';
+        if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+            $redirectUri = 'https://';
+        } else {
+            $redirectUri = 'http://';
+        }
+        $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
+
+        $request = "{$this->siteApi}v0/users/$email/auth/code/?".
+            'client_id='.\Settings::get('oauth.client_id').'&'.
+            "redirect_uri=$redirectUri&".
+            'response_type=code';
+
+        $app->redirect($request);
+    }
+
+    public function loginWithAuthCode($authCode)
+    {
+        $app = \Slim\Slim::getInstance();
+        $request = "{$this->siteApi}v0/users/authCode/login";
+
+        $redirectUri = '';
+        if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+            $redirectUri = 'https://';
+        } else {
+            $redirectUri = 'http://';
+        }
+        $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
+
+        $postArgs = 'client_id='.\Settings::get('oauth.client_id').'&'.
+            'client_secret='.\Settings::get('oauth.client_secret').'&'.
+            "redirect_uri=$redirectUri&".
+            "code=$authCode";
+
+        $user = $this->client->call('User', $request, \HttpMethodEnum::POST, $postArgs);
+        $headers = $this->client->getHeaders();
+        if (isset($headers["X-Custom-Token"])) {
+            \UserSession::setAccessToken(
+                $this->client->deserialize(base64_decode($headers["X-Custom-Token"]), 'OAuthResponce')
+            );
+        }
+
+        return $user;
     }
 
     public function getPasswordResetRequest($key)
@@ -456,25 +483,19 @@ class UserDao extends BaseDao
         $registerData->setEmail($email);
         $registerData->setPassword($password);
         $request = "{$this->siteApi}v0/users/register";
-        $ret = $this->client->call("User", $request, \HttpMethodEnum::POST, $registerData);
-        return $ret;
+        $registered = $this->client->call(null, $request, \HttpMethodEnum::POST, $registerData);
+        if ($registered) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function finishRegistration($uuid)
     {
         $request = "{$this->siteApi}v0/users/$uuid/finishRegistration";
         $resp = $this->client->call(null, $request, \HttpMethodEnum::POST);
-        $headers = $this->client->getHeaders();
-        if (isset($headers["X-Custom-Token"])) {
-            \UserSession::setAccessToken(
-                $this->client->deserialize(
-                    base64_decode(
-                        $headers["X-Custom-Token"]
-                    ),
-                    'OAuthResponce'
-                )
-            );
-        }
+        return $resp;
     }
 
     public function getRegisteredUser($registrationId)

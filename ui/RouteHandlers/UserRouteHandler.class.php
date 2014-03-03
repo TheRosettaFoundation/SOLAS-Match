@@ -168,17 +168,26 @@ class UserRouteHandler
             } elseif (!Lib\TemplateHelper::isValidPassword($post['password'])) {
                 $error = Lib\Localisation::getTranslation('register_2');
             } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
-                if ($return = $userDao->isUserVerified($user->getId())) {
+                if ($userDao->isUserVerified($user->getId())) {
                     $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->urlFor("login"));
+                } else {
+                    $error = "User is not verified";
+                    // notify user that they are not yet verified an resent verification email
                 }
             }
             
             if (is_null($error)) {
-                $userDao->register($post['email'], $post['password']);
-                $app->flashNow(
-                    "success",
-                    sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
-                );
+                if ($userDao->register($post['email'], $post['password'])) {
+                    $app->flashNow(
+                        "success",
+                        sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
+                    );
+                } else {
+                    $app->flashNow(
+                        'error',
+                        'Failed to register'
+                    );
+                }
             }
         }
         if ($error !== null) {
@@ -219,10 +228,12 @@ class UserRouteHandler
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             if (isset($post['verify'])) {
-                $userDao->finishRegistration($uuid);
-                \UserSession::setSession($user->getId());
-                $app->flash("success", Lib\Localisation::getTranslation('email_verification_8'));
-                $app->redirect($app->urlFor("home"));
+                if ($userDao->finishRegistration($uuid)) {
+                    $app->flash('success', Lib\Localisation::getTranslation('email_verification_8'));
+                } else {
+                    $app->flash('error', 'Failed to finish registration');  // TODO: remove inline text
+                }
+                $app->redirect($app->urlFor('login'));
             }
         }
 
@@ -360,9 +371,8 @@ class UserRouteHandler
             } elseif (isset($post['password_reset'])) {
                 $app->redirect($app->urlFor("password-reset-request"));
             } else {
-                $loggedIn = false;
                 try {
-                    $loggedIn = $this->openIdLogin($openid, $app);
+                    $this->openIdLogin($openid, $app);
                 } catch (Exception $e) {
                     $error = sprintf(
                         Lib\Localisation::getTranslation('login_1'),
@@ -372,15 +382,36 @@ class UserRouteHandler
                     );
                     $app->flashNow('error', $error);
                 }
-                if ($loggedIn) {
-                    $request = \UserSession::getReferer();
-                    \UserSession::clearReferer();
-                    if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
-                        $app->redirect($request);
-                    } else {
-                        $app->redirect($app->urlFor("home"));
-                    }
+            }
+        } else {
+            $authCode = $app->request()->get('code');
+            if (!is_null($authCode)) {
+                // Exchange auth code for access token
+                $user = null;
+                try {
+                    $user = $userDao->loginWithAuthCode($authCode);
+                } catch (\Exception $e) {
+                    $error = sprintf(
+                        Lib\Localisation::getTranslation('login_1'),
+                        $app->urlFor("login"),
+                        $app->urlFor("register"),
+                        $e->getMessage()
+                    );
+                    $app->flash('error', $error);
+                    $app->redirect($app->urlFor('login'));
                 }
+                \UserSession::setSession($user->getId());
+                $request = \UserSession::getReferer();
+                \UserSession::clearReferer();
+                if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                    $app->redirect($request);
+                } else {
+                    $app->redirect($app->urlFor("home"));
+                }
+            }
+            $error = $app->request()->get('error');
+            if (!is_null($error)) {
+                $app->flashNow('error', $app->request()->get('error_message'));
             }
         }
 
@@ -412,7 +443,6 @@ class UserRouteHandler
     
     public function openIdLogin($openid, $app)
     {
-        $ret = false;
         if (!$openid->mode) {
             $openid->identity = $openid->data["openid_identifier"];
             $openid->required = array("contact/email");
@@ -423,29 +453,11 @@ class UserRouteHandler
         } else {
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
+                // Request Auth code and redirect
                 $userDao = new DAO\UserDao();
-                $temp = $retvals['contact/email'].substr(\Settings::get("session.site_key"), 0, 20);
-                \UserSession::clearCurrentUserID();
-                $user = $userDao->openIdLogin($retvals['contact/email'], md5($temp));
-                if (is_array($user)) {
-                    $user = $user[0];
-                }
-                $adminDao = new DAO\AdminDao();
-                if (!$adminDao->isUserBanned($user->getId())) {
-                    \UserSession::setSession($user->getId());
-                } else {
-                    $app->flash(
-                        'error',
-                        Lib\Localisation::getTranslation('common_this_user_account_has_been_banned')
-                    );
-                    $app->redirect($app->urlFor('home'));
-                }
-                
+                $userDao->requestAuthCode($retvals['contact/email']);
             }
-            $ret = true;
         }
-
-        return $ret;
     }
 
     public static function userPrivateProfile($userId)

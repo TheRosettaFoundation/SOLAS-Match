@@ -80,6 +80,7 @@ class Dispatcher {
         $passwordGrant = new \League\OAuth2\Server\Grant\Password();
         $passwordGrant->setVerifyCredentialsCallback("\SolasMatch\API\DAO\UserDao::apiLogin");
         self::$oauthServer->addGrantType($passwordGrant);
+        self::$oauthServer->addGrantType(new \League\OAuth2\Server\Grant\AuthCode());
     }
     
     public static function getOauthServer()

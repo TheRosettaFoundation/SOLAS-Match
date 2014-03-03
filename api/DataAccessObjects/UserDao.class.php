@@ -129,22 +129,22 @@ class UserDao
         
         if (!is_object($user)) {
             self::logLoginAttempt(null, $email, 0);
-            throw new \Exception(\HttpStatusEnum::NOT_FOUND);
+            throw new \SolasMatchException("Unable to find user", \HttpStatusEnum::NOT_FOUND);
         }
                 
         if (!self::isUserVerified($user->getId())) {
              self::logLoginAttempt($user->getId(), $email, 0);
-             throw new \Exception(\HttpStatusEnum::UNAUTHORIZED);
+             throw new \SolasMatchException("Account is unverified", \HttpStatusEnum::UNAUTHORIZED);
         }
 
         if (AdminDao::isUserBanned($user->getId())) {
             self::logLoginAttempt($user->getId(), $email, 0);
-            throw new \Exception(\HttpStatusEnum::FORBIDDEN);
+            throw new \SolasMatchException('user is banned', \HttpStatusEnum::FORBIDDEN);
         }
 
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
             self::logLoginAttempt($user->getId(), $email, 0);
-            throw new \Exception(\HttpStatusEnum::NOT_FOUND);
+            throw new \SolasMatchException('Unable to find user', \HttpStatusEnum::NOT_FOUND);
         }
         
         self::logLoginAttempt($user->getId(), $email, 1);
@@ -154,8 +154,8 @@ class UserDao
 
     public static function apiRegister($email, $clear_password, $verificationRequired = true)
     {
+        $ret = null;
         $user = self::getUser(null, $email);
-        
         if (is_array($user)) {
             $user = $user[0];
         }
@@ -166,8 +166,11 @@ class UserDao
                 self::registerUser($user->getId());
                 Lib\Notify::sendEmailVerification($user->getId());
             }
+            if ($user) {
+                $ret = '1';
+            }
         }
-        return $user;
+        return $ret;
     }
 
     private static function registerUser($userId)

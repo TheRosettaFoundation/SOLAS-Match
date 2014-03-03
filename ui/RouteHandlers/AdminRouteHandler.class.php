@@ -52,7 +52,7 @@ class AdminRouteHandler
                 $adminDao->banOrg($bannedOrg);
             }
             if (isset($post['banUser']) && $post['userEmail'] != '') {
-                $bannedUser = new BannedUser();
+                $bannedUser = new \BannedUser();
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 
                 $bannedUser->setUserId($user->getId());

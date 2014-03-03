@@ -107,7 +107,7 @@ class Session implements SessionInterface
     {
         $args = PDOWrapper::cleanseNullOrWrapStr($refreshToken).",".
             PDOWrapper::cleanseNullOrWrapStr($clientId);
-        if($result = PDOWrapper::call("oauthValidateRefreshToken", $args)) {
+        if ($result = PDOWrapper::call("oauthValidateRefreshToken", $args)) {
              return $result[0]['session_access_token_id'];
         } else {
             return false;
@@ -117,7 +117,7 @@ class Session implements SessionInterface
     public function getAccessToken($accessTokenId)
     {
         $args = PDOWrapper::cleanseNull($accessTokenId);
-        if($result = PDOWrapper::call("oauthGetAccessToken", $args)) {
+        if ($result = PDOWrapper::call("oauthGetAccessToken", $args)) {
              return $result[0];
         } else {
             return false;
@@ -134,10 +134,10 @@ class Session implements SessionInterface
     public function getAuthCodeScopes($oauthSessionAuthCodeId)
     {
         $args = PDOWrapper::cleanseNull($oauthSessionAuthCodeId);
-        if($result = PDOWrapper::call("oauthGetAuthCodeScopes", $args)) {
-             return $result;
+        if ($result = PDOWrapper::call("oauthGetAuthCodeScopes", $args)) {
+            return $result;
         } else {
-            return false; 
+            return array();
         } 
     }
 
@@ -151,7 +151,7 @@ class Session implements SessionInterface
     public function getScopes($accessToken)
     {
         $args = PDOWrapper::cleanseNullOrWrapStr($accessToken);
-        if($result = PDOWrapper::call("oauthGetScopes", $args)) {
+        if ($result = PDOWrapper::call("oauthGetScopes", $args)) {
              return $result;
         } else {
             return array();
