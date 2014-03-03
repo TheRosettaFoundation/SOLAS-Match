@@ -139,8 +139,7 @@ class UnitTestHelper
         $biography = "User 1 Bio",
         $email = "user1@test.com",
         $nonce = "123456789",
-        $password = "2d5e2eb5e2d5b1358161c8418e2fd3f46a431452a724257907d4a3317677a99414463452507ef607"
-        ".941e14044363aab9669578ce5f9517cb36c9acb32f492393",
+        $password = "2d5e2eb5e2d5b1358161c8418e2fd3f46a431452a724257907d4a3317677a99414463452507ef607941e14044363aab9669578ce5f9517cb36c9acb32f492393",
         $languageCode = null,
         $countryCode = null,
         $createdTime = null
