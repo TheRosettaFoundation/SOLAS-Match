@@ -1352,13 +1352,13 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getAdmin
-DROP PROCEDURE IF EXISTS `getAdmin`;
+-- Dumping structure for procedure Solas-Match-Dev.getAdmins
+DROP PROCEDURE IF EXISTS `getAdmins`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `orgId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmins`(IN `orgId` INT)
 BEGIN
 
-	IF orgId = '' THEN SET orgId = NULL; END IF;	
+	IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;	
 	
 	SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
             (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
@@ -1373,6 +1373,58 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getAdmin
+DROP PROCEDURE IF EXISTS `getAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+
+	IF userId = null OR userId = '' THEN SET userId = NULL; END IF;
+	IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;	
+	
+	IF userId IS NOT null AND orgId IS NOT null THEN
+		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
+		    u.nonce,u.`created-time` 
+
+		FROM Users u JOIN Admins a ON a.user_id = u.id 
+		WHERE a.user_id = userId AND a.organisation_id = orgId;
+	ELSEIF userId IS NOT null AND orgId IS null THEN
+		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
+		    u.nonce,u.`created-time` 
+
+		FROM Users u JOIN Admins a ON a.user_id = u.id 
+		WHERE a.user_id = userId AND a.organisation_id is null;
+	ELSEIF userId IS null AND orgId IS NOT null THEN
+		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
+		    u.nonce,u.`created-time` 
+
+		FROM Users u JOIN Admins a ON a.user_id = u.id 
+		WHERE a.organisation_id = orgId;
+	ELSEIF userId IS null AND orgId IS null THEN
+		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
+		    u.nonce,u.`created-time` 
+
+		FROM Users u JOIN Admins a ON a.user_id = u.id 
+		WHERE (a.organisation_id is null or a.organisation_id = orgId);
+	END IF;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure trommonsUpdateTest.getArchivedProject
 DROP PROCEDURE IF EXISTS `getArchivedProject`;

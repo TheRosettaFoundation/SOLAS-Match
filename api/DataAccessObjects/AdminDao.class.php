@@ -5,10 +5,11 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class AdminDao
 {
-    public static function getAdmins($orgId = null)
+    public static function getAdmins($userId = null, $orgId = null)
     {
         $ret = null;
-        $args= PDOWrapper::cleanseNullOrWrapStr($orgId);
+        $args= PDOWrapper::cleanseNullOrWrapStr($userId)
+                .",".PDOWrapper::cleanseNullOrWrapStr($orgId);
         if ($result = PDOWrapper::call("getAdmin", $args)) {
             $ret = array();
             foreach ($result as $user) {
