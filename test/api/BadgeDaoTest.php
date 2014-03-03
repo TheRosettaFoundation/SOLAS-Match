@@ -21,7 +21,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $systemBadge = UnitTestHelper::createBadge();
         
         // Success
-        $insertedBadge = BadgeDao::insertAndUpdateBadge($systemBadge);        
+        $insertedBadge = BadgeDao::insertAndUpdateBadge($systemBadge);
         $this->assertInstanceOf("Badge", $insertedBadge);
         $this->assertNotNull($insertedBadge->getId());
         
@@ -32,11 +32,11 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
     
     public function testUpdateSystemBadge()
     {
-        UnitTestHelper::teardownDb(); 
+        UnitTestHelper::teardownDb();
         
-        $newBadge = UnitTestHelper::createBadge();        
+        $newBadge = UnitTestHelper::createBadge();
      
-        $insertedBadge = BadgeDao::insertAndUpdateBadge($newBadge);        
+        $insertedBadge = BadgeDao::insertAndUpdateBadge($newBadge);
         $this->assertInstanceOf("Badge", $insertedBadge);
         $this->assertNotNull($insertedBadge->getId());
         
@@ -60,11 +60,11 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
     
     public function testGetAllBadges()
     {
-        UnitTestHelper::teardownDb();        
+        UnitTestHelper::teardownDb();
      
         $allBadges = BadgeDao::getBadge();
         // Success
-        $this->assertGreaterThanOrEqual(3, count($allBadges));        
+        $this->assertGreaterThanOrEqual(3, count($allBadges));
         foreach ($allBadges as $badge) {
             $this->assertInstanceOf("Badge", $badge);
         }
@@ -72,13 +72,13 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
     
     public function testGetOrgBadges()
     {
-        UnitTestHelper::teardownDb();        
+        UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
-        $orgId = $insertedOrg->getId();       
+        $orgId = $insertedOrg->getId();
                 
         $orgBadge1 = UnitTestHelper::createBadge(null, "Org Badge 1", "Org Badge 1 Description", $orgId);
         $orgBadge2 = UnitTestHelper::createBadge(null, "Org Badge 2", "Org Badge 2 Description", $orgId);
@@ -89,21 +89,21 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("Badge", $insertedBadge2);
 
         // Success
-        $orgBadges = BadgeDao::getOrgBadges($orgId);        
+        $orgBadges = BadgeDao::getOrgBadges($orgId);
         $this->assertCount(2, $orgBadges);
         foreach ($orgBadges as $badge) {
             $this->assertInstanceOf("Badge", $badge);
-        }        
+        }
         
         $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
         $insertedOrg2 = OrganisationDao::insertAndUpdate($org2);
         $this->assertInstanceOf("Organisation", $insertedOrg2);
         $this->assertNotNull($insertedOrg2->getId());
-        $orgId2 = $insertedOrg2->getId(); 
+        $orgId2 = $insertedOrg2->getId();
         
         // Failure
         $orgBadgesFailure = BadgeDao::getOrgBadges($orgId2);
-        $this->assertNull($orgBadgesFailure);        
+        $this->assertNull($orgBadgesFailure);
 
     }
     
@@ -129,7 +129,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $resultAssignBadge = BadgeDao::assignBadge($insertedUser->getId(), $insertedBadge->getId());
         $this->assertEquals("1", $resultAssignBadge);
            $blah = $insertedBadge->getId();
-           error_log("INSERTED BADGE ID: $blah");        
+           error_log("INSERTED BADGE ID: $blah");
         
         $badge2 = UnitTestHelper::createBadge(null, "Badge 2", "Badge 2 Description", null);
         
@@ -143,7 +143,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
      
-        $org = UnitTestHelper::createOrg();        
+        $org = UnitTestHelper::createOrg();
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
@@ -183,12 +183,12 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         
         $badge = UnitTestHelper::createBadge();
         $insertedBadge = BadgeDao::insertAndUpdateBadge($badge);
-        $this->assertInstanceOf("Badge", $insertedBadge);        
-        $this->assertNotNull($insertedBadge->getId());       
+        $this->assertInstanceOf("Badge", $insertedBadge);
+        $this->assertNotNull($insertedBadge->getId());
         
         // Success
         $resultDelete = BadgeDao::deleteBadge($insertedBadge->getId());
-        $this->assertEquals("1", $resultDelete);  
+        $this->assertEquals("1", $resultDelete);
         
         // Failure
         $resultDeleteFailure = BadgeDao::deleteBadge($insertedBadge->getId());
@@ -197,7 +197,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
     
     public function testValidateUserBadge()
     {
-        UnitTestHelper::teardownDb();        
+        UnitTestHelper::teardownDb();
 
         $user = UnitTestHelper::createUser();
         $insertedUser = UserDao::save($user);
@@ -206,7 +206,7 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         
         $badge = UnitTestHelper::createBadge();
         $insertedBadge = BadgeDao::insertAndUpdateBadge($badge);
-        $this->assertInstanceOf("Badge", $insertedBadge);    
+        $this->assertInstanceOf("Badge", $insertedBadge);
         $this->assertNotNull($insertedBadge->getId());
         
         $userAssignedBadge = BadgeDao::assignBadge($insertedUser->getId(), $insertedBadge->getId());
@@ -214,14 +214,12 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         
         // Success
         $resultValidate = BadgeDao::validateUserBadge($insertedUser->getId(), $insertedBadge->getId());
-        $this->assertEquals("1", $resultValidate);   
+        $this->assertEquals("1", $resultValidate);
         
         $badge2 = UnitTestHelper::createBadge(99, "Badge 2", "Badge 2 Description", null);
         
         // Failure
         $resultValidateFailure = BadgeDao::validateUserBadge($insertedUser->getId(), $badge2->getId());
-        $this->assertEquals("0", $resultValidateFailure);    
+        $this->assertEquals("0", $resultValidateFailure);
     }
-
 }
-?>

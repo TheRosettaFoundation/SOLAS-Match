@@ -32,7 +32,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("Badges", $resultAllBadges[0]->getName());
         //Changed 3 to 7. There were only 3 badges when this test class was made?
         $this->assertEquals(7, $resultAllBadges[0]->getValue());
-    }   
+    }
 
     
     public function testUpdateArchivedProjects()
@@ -44,7 +44,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalArchivedProjects);
         $this->assertInstanceOf("Statistic", $totalArchivedProjects[0]);
         $this->assertEquals("ArchivedProjects", $totalArchivedProjects[0]->getName());
-        $this->assertEquals(0, $totalArchivedProjects[0]->getValue());        
+        $this->assertEquals(0, $totalArchivedProjects[0]->getValue());
     }
     
     public function testUpdateArchivedTasks()
@@ -56,7 +56,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalArchivedTasks);
         $this->assertInstanceOf("Statistic", $totalArchivedTasks[0]);
         $this->assertEquals("ArchivedTasks", $totalArchivedTasks[0]->getName());
-        $this->assertEquals(0, $totalArchivedTasks[0]->getValue());        
+        $this->assertEquals(0, $totalArchivedTasks[0]->getValue());
     }
     
     public function testUpdateBadges()
@@ -68,7 +68,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalBadges);
         $this->assertInstanceOf("Statistic", $totalBadges[0]);
         $this->assertEquals("Badges", $totalBadges[0]->getName());
-        $this->assertEquals(3, $totalBadges[0]->getValue());    
+        $this->assertEquals(3, $totalBadges[0]->getValue());
     }
     
     public function testUpdateClaimedTasks()
@@ -80,7 +80,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalClaimedTasks);
         $this->assertInstanceOf("Statistic", $totalClaimedTasks[0]);
         $this->assertEquals("ClaimedTasks", $totalClaimedTasks[0]->getName());
-        $this->assertEquals(0, $totalClaimedTasks[0]->getValue());    
+        $this->assertEquals(0, $totalClaimedTasks[0]->getValue());
     }
     
     public function testUpdateOrganisations()
@@ -92,7 +92,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalOrgs);
         $this->assertInstanceOf("Statistic", $totalOrgs[0]);
         $this->assertEquals("Organisations", $totalOrgs[0]->getName());
-        $this->assertEquals(0, $totalOrgs[0]->getValue());    
+        $this->assertEquals(0, $totalOrgs[0]->getValue());
     }
     
     public function testUpdateOrgMemberRequests()
@@ -104,7 +104,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalOrgMemberRequests);
         $this->assertInstanceOf("Statistic", $totalOrgMemberRequests[0]);
         $this->assertEquals("OrgMembershipRequests", $totalOrgMemberRequests[0]->getName());
-        $this->assertEquals(0, $totalOrgMemberRequests[0]->getValue());    
+        $this->assertEquals(0, $totalOrgMemberRequests[0]->getValue());
     }
     
     public function testUpdateProjects()
@@ -116,7 +116,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalProjects);
         $this->assertInstanceOf("Statistic", $totalProjects[0]);
         $this->assertEquals("Projects", $totalProjects[0]->getName());
-        $this->assertEquals(0, $totalProjects[0]->getValue());    
+        $this->assertEquals(0, $totalProjects[0]->getValue());
     }
     
     public function testUpdateTags()
@@ -128,7 +128,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalTags);
         $this->assertInstanceOf("Statistic", $totalTags[0]);
         $this->assertEquals("Tags", $totalTags[0]->getName());
-        $this->assertEquals(0, $totalTags[0]->getValue());    
+        $this->assertEquals(0, $totalTags[0]->getValue());
     }
     
     public function testUpdateTasks()
@@ -140,7 +140,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalTasks);
         $this->assertInstanceOf("Statistic", $totalTasks[0]);
         $this->assertEquals("Tasks", $totalTasks[0]->getName());
-        $this->assertEquals(0, $totalTasks[0]->getValue());    
+        $this->assertEquals(0, $totalTasks[0]->getValue());
     }
     
     public function testUpdateTasksWithPreReqs()
@@ -152,7 +152,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalTasksWithPreReqs);
         $this->assertInstanceOf("Statistic", $totalTasksWithPreReqs[0]);
         $this->assertEquals("TasksWithPreReqs", $totalTasksWithPreReqs[0]->getName());
-        $this->assertEquals(0, $totalTasksWithPreReqs[0]->getValue());    
+        $this->assertEquals(0, $totalTasksWithPreReqs[0]->getValue());
     }
     
     public function testUpdateUnclaimedTasks()
@@ -164,7 +164,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalUnclaimedTasks);
         $this->assertInstanceOf("Statistic", $totalUnclaimedTasks[0]);
         $this->assertEquals("UnclaimedTasks", $totalUnclaimedTasks[0]->getName());
-        $this->assertEquals(0, $totalUnclaimedTasks[0]->getValue());    
+        $this->assertEquals(0, $totalUnclaimedTasks[0]->getValue());
     }
     
     public function testUpdateUsers()
@@ -176,7 +176,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalUsers);
         $this->assertInstanceOf("Statistic", $totalUsers[0]);
         $this->assertEquals("Users", $totalUsers[0]->getName());
-        $this->assertEquals(0, $totalUsers[0]->getValue());    
+        $this->assertEquals(0, $totalUsers[0]->getValue());
     }
     
     
@@ -195,7 +195,4 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         StatDao::updateUnclaimedTasks();
         StatDao::updateUsers();
     }
-    
 }
-
-?>

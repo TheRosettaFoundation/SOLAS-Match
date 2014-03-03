@@ -276,4 +276,3 @@ class AdminDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("1", AdminDao::isAdmin($userId, null));
     }
 }
-?>

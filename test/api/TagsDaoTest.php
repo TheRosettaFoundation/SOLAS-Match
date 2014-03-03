@@ -15,32 +15,32 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
     
     public function testInsertTag()
     {
-        UnitTestHelper::teardownDb(); 
+        UnitTestHelper::teardownDb();
         
         // Success
-        $resultCreateTag = TagsDao::create("test");    
+        $resultCreateTag = TagsDao::create("test");
         $this->assertInstanceOf("Tag", $resultCreateTag);
         $this->assertNotNull($resultCreateTag->getId());
         $this->assertEquals("test", $resultCreateTag->getLabel());
         
         // Failure
-        $resultCreateTag2 = TagsDao::create("test");    
+        $resultCreateTag2 = TagsDao::create("test");
         $this->assertNull($resultCreateTag2);
     }
     
     public function testGetTag()
     {
-        UnitTestHelper::teardownDb();        
+        UnitTestHelper::teardownDb();
         
         // Failure - No Tags
         $resultGetAllTagsFailure = TagsDao::getTag();
         $this->assertNull($resultGetAllTagsFailure);
         
-        $resultCreateTag = TagsDao::create("test");    
+        $resultCreateTag = TagsDao::create("test");
         $this->assertInstanceOf("Tag", $resultCreateTag);
         
-        $resultCreateTag2 = TagsDao::create("test2");    
-        $this->assertInstanceOf("Tag", $resultCreateTag2);        
+        $resultCreateTag2 = TagsDao::create("test2");
+        $this->assertInstanceOf("Tag", $resultCreateTag2);
         
         // Success - Single Tag
         $resultGetTag = TagsDao::getTag(null, "test");
@@ -60,7 +60,7 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
     
     public function testGetTopTags()
     {
-        UnitTestHelper::teardownDb(); 
+        UnitTestHelper::teardownDb();
         
         // Failure - No Top Tags in the System
         $topTagsFailure = TagsDao::getTopTags();
@@ -70,17 +70,26 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject); 
+        $this->assertInstanceOf("Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $project2 = UnitTestHelper::createProject(
-            $insertedOrg->getId(), null, "Project 2", "Project 2 Description", "2020-03-29 16:30:00",
-            "Project 2 Impact", "Project 2 Reference", 123456, "IE", "en", array("Project", "Tags", "Extra", "More")
-        );        
+            $insertedOrg->getId(),
+            null,
+            "Project 2",
+            "Project 2 Description",
+            "2020-03-29 16:30:00",
+            "Project 2 Impact",
+            "Project 2 Reference",
+            123456,
+            "IE",
+            "en",
+            array("Project", "Tags", "Extra", "More")
+        );
         $insertedProject2 = ProjectDao::createUpdate($project2);
-        $this->assertInstanceOf("Project", $insertedProject2); 
+        $this->assertInstanceOf("Project", $insertedProject2);
         $this->assertNotNull($insertedProject2->getId());
         
         
@@ -92,13 +101,13 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
             $this->assertNotNull($tag->getId());
             $this->assertNotNull($tag->getLabel());
         }
-    }    
+    }
     
     public function testDeleteTag()
     {
-        UnitTestHelper::teardownDb(); 
+        UnitTestHelper::teardownDb();
         
-        $resultCreateTag = TagsDao::create("test");    
+        $resultCreateTag = TagsDao::create("test");
         $this->assertInstanceOf("Tag", $resultCreateTag);
         $this->assertNotNull($resultCreateTag->getId());
         
@@ -108,8 +117,6 @@ class TagsDaoTest extends PHPUnit_Framework_TestCase
         
         // Failure
         $resultDeleteTag2 = TagsDao::delete($resultCreateTag->getId());
-        $this->assertEquals("0", $resultDeleteTag2);        
+        $this->assertEquals("0", $resultDeleteTag2);
     }
-
 }
-?>
