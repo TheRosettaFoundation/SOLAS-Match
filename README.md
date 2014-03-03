@@ -149,6 +149,7 @@ Set up the MySQL database
 4. Import ./app/db/schema.sql (using phpMyAdmin, for example.)
 5. Import ./app/db/languages.sql (using phpMyAdmin, for example.)
 6. Import ./app/db/countries.sql (using phpMyAdmin, for example.)
+7. Add the a new entry to the oauth_clients table for your web client using the client_id and client_secret defined in the conf file.
     
 GRANT EXECUTE, PROCESS, SELECT, SHOW DATABASES, SHOW VIEW, DELETE, INSERT, UPDATE, LOCK TABLES  ON *.* TO 'tester'@'localhost';
 FLUSH PRIVILEGES;
@@ -168,6 +169,7 @@ Configuration file
        2. for more reliable openid support install php5-curl. sudo apt-get install php5-curl(fixes issue with google/yahoo connection reset).
 5.  Under user session control, enter a long random string.
 6.  Under Files changes upload_path to 'uploads/'
+7.  Under oauth generate two random strings for the web client id and secret
 
 Git Pre-Commit Hook
 -------------------
