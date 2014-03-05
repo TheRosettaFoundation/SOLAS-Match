@@ -402,7 +402,22 @@ class UserDao
         }
         return $ret;
     }
-    
+
+    /*
+     * Checks if a user has a particular badge
+    */
+    public static function userHasBadge($badge_ID, $user_id)
+    {
+        $args = PDOWrapper::cleanse($badge_ID)
+                .",".PDOWrapper::cleanse($user_id);
+        
+        if ($result = PDOWrapper::call('userHasBadge', $args)) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
+
     /*
         Add the tag to a list of the user's preferred tags
     */

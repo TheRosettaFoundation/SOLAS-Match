@@ -96,6 +96,28 @@ class Badges
             },
             'getUsersWithBadge'
         );
+        
+        /*
+         * Checks if a user has a particular badge
+         */
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/badges/:badgeId/:userId/',
+            function ($badgeId, $userId, $format = ".json") {
+                if (!is_numeric($userId)&& strstr($userId, '.')) {
+                    $userId = explode('.', $userId);
+                    $format = '.'.$userId[1];
+                    $userId = $userId[0];
+                }
+                $data = UserDao::userHasBadge($badgeId, $userId);
+                if (is_array($data)) {
+                    $data = $data[0];
+                }
+                Dispatcher::sendResponce(null, $data, null, $format);
+            },
+            'userHasBadge'
+        );
+
     }
 }
 Badges::init();

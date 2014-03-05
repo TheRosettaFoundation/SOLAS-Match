@@ -2626,6 +2626,23 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getUserWithBadge
+DROP PROCEDURE IF EXISTS `getUserWithBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserWithBadge`(IN `id` INT)
+BEGIN
+	SELECT Users.id,Users.`display-name`,Users.email,Users.password,Users.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = Users.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = Users.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = Users.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = Users.`country_id`) AS `countryCode`, 
+		    Users.nonce,Users.`created-time`
+	    FROM Users JOIN UserBadges ON Users.id = UserBadges.user_id
+    	WHERE UserBadges.user_id = uID AND UserBadges.badge_id = bID;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.hasUserClaimedTask
 DROP PROCEDURE IF EXISTS `hasUserClaimedTask`;
 DELIMITER //
