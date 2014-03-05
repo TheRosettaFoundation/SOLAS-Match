@@ -416,7 +416,6 @@ class OrganisationDaoTest extends PHPUnit_Framework_TestCase
         //try to get the org that was deleted back from DB
         $noOrg = OrganisationDao::getOrg($orgId);
         $this->assertNull($noOrg);
-        //error_log("SHOULD BE EMPTY ORG RESULT $noOrg"); //was used to test what mySQL returned
 
         //try to delete an org that is not in the DB
         $deleteOrg = OrganisationDao::delete($orgId);

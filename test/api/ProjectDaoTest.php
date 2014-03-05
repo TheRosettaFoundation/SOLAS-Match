@@ -287,7 +287,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
             $file->getUserId(),
             $file->getMime()
         );
-        
+                
         $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $resultArchiveProject);
         
@@ -305,6 +305,8 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
             date("Y-m-d H:i:s"),
             $insertedUser->getId()
         );
+        
+        print_r($resultGetArchivedProject);
         
         $this->assertCount(1, $resultGetArchivedProject);
         $this->assertInstanceOf("ArchivedProject", $resultGetArchivedProject[0]);
@@ -566,3 +568,6 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNull($resultGetProjectFileInfoFailure);
     }
 }
+
+$testCase = new ProjectDaoTest();
+$testCase->testGetArchivedProject();

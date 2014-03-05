@@ -115,7 +115,6 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
 
         $insertedUser = UserDao::save($user);
            $userID = $insertedUser->getId();
-           //error_log("USER ID IN TESTASSIGN: $userID");
 
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
@@ -129,7 +128,6 @@ class BadgeDaoTest extends PHPUnit_Framework_TestCase
         $resultAssignBadge = BadgeDao::assignBadge($insertedUser->getId(), $insertedBadge->getId());
         $this->assertEquals("1", $resultAssignBadge);
            $blah = $insertedBadge->getId();
-           error_log("INSERTED BADGE ID: $blah");
         
         $badge2 = UnitTestHelper::createBadge(null, "Badge 2", "Badge 2 Description", null);
         

@@ -68,7 +68,7 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $totalBadges);
         $this->assertInstanceOf("Statistic", $totalBadges[0]);
         $this->assertEquals("Badges", $totalBadges[0]->getName());
-        $this->assertEquals(3, $totalBadges[0]->getValue());
+        $this->assertEquals(7, $totalBadges[0]->getValue());
     }
     
     public function testUpdateClaimedTasks()

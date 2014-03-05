@@ -1405,25 +1405,29 @@ BEGIN
     SELECT id INTO @cID FROM Countries WHERE code = cCode;
 
     SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, 
-        (select code from Languages l where l.id = p.language_id) as language_id, 
-        (select code from Countries c where c.id = p.country_id) as country_id, 
+        (select `en-name` from Languages l where l.id = p.language_id) as sourceLanguageName,            
+        (select code from Languages l where l.id = p.language_id) as sourceLanguageCode,
+        (select `en-name` from Countries c where c.id = p.country_id) as sourceCountryName, 
+        (select code from Countries c where c.id = p.country_id) as sourceCountryCode, 
         m.`archived-date`, m.`user_id-archived` 
 
     FROM ArchivedProjects p JOIN ArchivedProjectsMetadata m ON p.id = m.archivedProject_id 
 
-    WHERE (p.id= projectId or projectId is null) 
-        and (p.title=titleText or titleText is null) 
-        and (p.description= descr or descr is null) 
-        and (p.impact=imp or imp is null)
-        and (p.deadline=deadlineTime or deadlineTime is null or deadlineTime='0000-00-00 00:00:00') 
-        and (p.organisation_id=orgId or orgId is null) 
-        and (p.reference=ref or ref is null)
-        and (p.`word-count`=wordCount or wordCount is null) 
-        and (p.created = createdTime or createdTime is null) 
+    WHERE (projectId is null or p.id= projectId) 
+        and (titleText is null or p.title=titleText) 
+        and (descr is null or p.description= descr) 
+        and (imp is null or p.impact=imp)
+        and (deadlineTime is null or p.deadline=deadlineTime or deadlineTime='0000-00-00 00:00:00') 
+        and (orgId is null or p.organisation_id=orgId) 
+        and (ref is null or p.reference=ref)
+        and (wordCount is null or p.`word-count`=wordCount) 
+        and (createdTime is null or p.created = createdTime)
+        and (lCode is null or @lID=lCode)
+        and (cCode is null or @cID=cCode)
         and (@lID is null or p.language_id=@lID)
         and (@cID is null or p.country_id = @cID)
-        and (m.`archived-date`=archiveDate or archiveDate is null or archiveDate='0000-00-00 00:00:00') 
-        and (m.`user_id-archived`= archiverId or archiverId is null);
+        and (archiveDate is null or m.`archived-date`=archiveDate or archiveDate='0000-00-00 00:00:00') 
+        and (archiverId is null or m.`user_id-archived`= archiverId);
 
 END//
 DELIMITER ;

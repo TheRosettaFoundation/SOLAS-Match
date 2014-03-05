@@ -32,7 +32,7 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime())
                 .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
                 .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode());
-        //error_log("CALL projectInsertAndUpdate($args)");
+        
         $result = PDOWrapper::call("projectInsertAndUpdate", $args);
         $project->setId($result[0]['id']);
 
